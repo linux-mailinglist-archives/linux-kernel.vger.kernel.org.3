@@ -2,135 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383375518EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E405518FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242078AbiFTMch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S242668AbiFTMdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241905AbiFTMcb (ORCPT
+        with ESMTP id S240332AbiFTMdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:32:31 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF83E031
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:32:29 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LRTWM3Tfyz1KC5x;
-        Mon, 20 Jun 2022 20:30:23 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 20 Jun 2022 20:32:27 +0800
-Subject: Re: [PATCH v2 2/3] mm/swapfile: fix possible data races of
- inuse_pages
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     Muchun Song <songmuchun@bytedance.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Qian Cai <quic_qiancai@quicinc.com>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220608144031.829-1-linmiaohe@huawei.com>
- <20220608144031.829-3-linmiaohe@huawei.com>
- <87edzjrcq8.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <13414d6a-9e72-fb6c-f0a8-8b83ba0455de@huawei.com>
- <YrA8kxavqsDfH5R7@FVFYT0MHHV2J.usts.net>
- <09ffac27-7fe9-0977-cb33-30433e78e662@huawei.com>
-Message-ID: <b61771ad-9daa-741e-27e4-fdb50a7c5e38@huawei.com>
-Date:   Mon, 20 Jun 2022 20:32:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 20 Jun 2022 08:33:00 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3CCBF1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:32:58 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eo8so14977396edb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UDlZOOyQdcNu04vWkuOzesBNpGjux8CrCm9cWVOIx24=;
+        b=zQ1FvVojJxROAc1xXxm+Q6cBQ7SGQl0HPdbo12uBjLljHYHp3EYPKPj2BiOT7I3HD1
+         xjEPTKhkQtk1STTWMoge8lIfpjZNp2wugI1qPpsvda68JgAfKc71C4vnlRGrqqAzP4c9
+         J883NpqgMB5f+SR8ZKBvnp9zDKPBu3O6N4dEWny9Ge4i/d172YuID0ea9s5BO3MFOQKO
+         BENntZOjJci5jUckZhfwYjTkBCLzIBp9GeTwjLK4IXhLEt2gJxVcpTbwuOtDTc+ZMdTK
+         7eiA/MJ27BjcGvjmq8rxM2VQrSsV1Fm/V2LvGhmJ1A3N1jeAKFXtz8fldr1HkQR2Uirv
+         M7sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UDlZOOyQdcNu04vWkuOzesBNpGjux8CrCm9cWVOIx24=;
+        b=CDpgfCOYofLADqn+GOuWhEuj4EpJYEVM1yRWkVnHWbz/JntpnyBgYxckv55PyBagwR
+         fLhmr6CO2JBbsTJ3qPoJz1Dd3ImI8hPmb6lVKNNq5UTTY4pihXS3dfsoEjFEOZHASaqN
+         2Q7tZNS3C44rrUiEpxfcDFKnNDyNWkhOVXdoEHYPVwQ1HQ3Q7bL+cgalMRT/Jx4CnNH4
+         Q1Ym/MaDvPF40PlNS59Hk/AALkG12/qxLpqLBw0v7djgQMt7FKwN0LxK0grjVWDcmYYw
+         xFW3YRU1ndTjw9Wr4NPjFqVl53ubusm2LCM+MFcm/FQsIGMw3OPzRenIlbydFOvzZnYB
+         vGmQ==
+X-Gm-Message-State: AJIora8MFTkz9N+BYA1l/oDxquP79+A1nYyoj7cblP+6ioOsN4SNyUDs
+        US9BsB55HcVtpbx2ek7f90YIwQ==
+X-Google-Smtp-Source: AGRyM1t9fgr1zoTLwtaWq0ssCaBkm8DpxdEBpv4kn21sr0j0OBPkidHuMRMK80YULvQJL6Af2+vclg==
+X-Received: by 2002:a05:6402:294c:b0:435:2155:fbe8 with SMTP id ed12-20020a056402294c00b004352155fbe8mr29002964edb.256.1655728377499;
+        Mon, 20 Jun 2022 05:32:57 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a23-20020a1709063a5700b0070efa110afcsm5847013ejf.83.2022.06.20.05.32.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 05:32:56 -0700 (PDT)
+Message-ID: <0d0ef565-9579-31ca-7f9a-7b3c0e7bc090@linaro.org>
+Date:   Mon, 20 Jun 2022 14:32:55 +0200
 MIME-Version: 1.0
-In-Reply-To: <09ffac27-7fe9-0977-cb33-30433e78e662@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1] ARM: dts: am33xx: Fix MMCHS0 dma properties
 Content-Language: en-US
+To:     YuTong Chang <mtwget@gmail.com>, bcousson@baylibre.com
+Cc:     tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220620121900.5196-1-mtwget@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220620121900.5196-1-mtwget@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/20 20:23, Miaohe Lin wrote:
-> On 2022/6/20 17:23, Muchun Song wrote:
->> On Mon, Jun 20, 2022 at 05:04:50PM +0800, Miaohe Lin wrote:
->>> On 2022/6/20 15:54, Huang, Ying wrote:
->>>> Miaohe Lin <linmiaohe@huawei.com> writes:
->>>>
->>>>> si->inuse_pages could still be accessed concurrently now. The plain reads
->>>>> outside si->lock critical section, i.e. swap_show and si_swapinfo, which
->>>>> results in data races. But these should be ok because they're just used
->>>>> for showing swap info.
->>>>>
->>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>>>> Reviewed-by: David Hildenbrand <david@redhat.com>
->>>>> ---
->>>>>  mm/swapfile.c | 4 ++--
->>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/mm/swapfile.c b/mm/swapfile.c
->>>>> index d2bead7b8b70..3fa26f6971e9 100644
->>>>> --- a/mm/swapfile.c
->>>>> +++ b/mm/swapfile.c
->>>>> @@ -2646,7 +2646,7 @@ static int swap_show(struct seq_file *swap, void *v)
->>>>>  	}
->>>>>  
->>>>>  	bytes = si->pages << (PAGE_SHIFT - 10);
->>>>> -	inuse = si->inuse_pages << (PAGE_SHIFT - 10);
->>>>> +	inuse = READ_ONCE(si->inuse_pages) << (PAGE_SHIFT - 10);
->>>>>  
->>>>>  	file = si->swap_file;
->>>>>  	len = seq_file_path(swap, file, " \t\n\\");
->>>>> @@ -3265,7 +3265,7 @@ void si_swapinfo(struct sysinfo *val)
->>>>>  		struct swap_info_struct *si = swap_info[type];
->>>>>  
->>>>>  		if ((si->flags & SWP_USED) && !(si->flags & SWP_WRITEOK))
->>>>> -			nr_to_be_unused += si->inuse_pages;
->>>>> +			nr_to_be_unused += READ_ONCE(si->inuse_pages);
->>>>>  	}
->>>>>  	val->freeswap = atomic_long_read(&nr_swap_pages) + nr_to_be_unused;
->>>>>  	val->totalswap = total_swap_pages + nr_to_be_unused;
->>>>
->>>> READ_ONCE() should be paired with WRITE_ONCE().  So, change the writer
->>>> side too?
->>>
->>> READ_ONCE() is used to fix the complaint of concurrent accessing to si->inuse_pages from KCSAN here.
->>> The similar commit is 218209487c3d ("mm/swapfile: fix data races in try_to_unuse()"). IMHO, it's fine
->>
->> I think the fix 218209487c3d is incomplete. The write side in swap_range_free() should
->> also be fixed. Otherwise, IIUC, it cannot stop KCSAN complaining.
+On 20/06/2022 14:19, YuTong Chang wrote:
+> According to technical manual(table 11-24), the DMA of MMCHS0 should be
+> direct mapped.
 > 
-> I tend to agree with you. READ_ONCE() should be paired with WRITE_ONCE() theoretically. But WRITTE_ONCE()
-> is ignored while the commit is introduced. Add Qian Cai for helping verify it. It's very kind of @Qian Cai
-> if he could tell us whether WRITTE_ONCE() is ignored deliberately.
+> Signed-off-by: YuTong Chang <mtwget@gmail.com>
 
-Update the email address of Qian Cai.
+This should be v2, not v1. You already sent a v1.
 
-> 
-> Thanks all of you. :)
-> 
->>
->>> to see a not-uptodate value of si->inuse_pages because it's just used for showing swap info. So
->>> WRITE_ONCE() is not obligatory. Or am I miss something?
->>>
->>>>
->>>> Best Regards,
->>>> Huang, Ying
->>>
->>> Thanks!
->>>
->>>> .
->>>>
->>>
->>>
->> .
->>
-> 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+> ---
+> v1: Cleaned up coding style and addressed review comments
+> 
+>  arch/arm/boot/dts/am33xx-l4.dtsi | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/am33xx-l4.dtsi b/arch/arm/boot/dts/am33xx-l4.dtsi
+> index 7da42a5b959c..7e50fe633d8a 100644
+> --- a/arch/arm/boot/dts/am33xx-l4.dtsi
+> +++ b/arch/arm/boot/dts/am33xx-l4.dtsi
+> @@ -1502,8 +1502,7 @@ SYSC_OMAP2_SOFTRESET |
+>  			mmc1: mmc@0 {
+>  				compatible = "ti,am335-sdhci";
+>  				ti,needs-special-reset;
+> -				dmas = <&edma_xbar 24 0 0
+> -					&edma_xbar 25 0 0>;
+> +				dmas = <&edma 24 0>, <&edma 25 0>;
+>  				dma-names = "tx", "rx";
+>  				interrupts = <64>;
+>  				reg = <0x0 0x1000>;
+
+
+Best regards,
+Krzysztof

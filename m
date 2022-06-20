@@ -2,147 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2583D55134E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3212155134A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240052AbiFTIur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S239765AbiFTIuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239375AbiFTIuo (ORCPT
+        with ESMTP id S240012AbiFTIu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:50:44 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BA312D1D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:50:42 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25K6NdjA013171;
-        Mon, 20 Jun 2022 08:50:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=JrBfPbX9rEcyHKhZ9PcSbuuCt1egGYhBWgM8xQNyktQ=;
- b=PAbbmEqpbwhfJHf/SJ4S2k21tDV/tHYaXapAIjz9tmXoG0AxT9a9476UFGAV5mBr6dhI
- 72GzvYJa+RhdFshbfB4m9+i6UIfeYJa/LyIDJzz5aBIeIsW7/JIbVWRLJbt3oJ94YoD8
- OIHOCK7LW4IIqqZPqCH/6/9H2tQ/Gae6JpJNeaQTAK+SdA6coIEmSVuo6J1pkd+t1mjk
- KpG8zdP6iWtHlebSS2aOYAY/pyy+4yZA3wZrOYClec51MVV5RWKno2aeDgK+ZEGMK3pE
- eLVdD8a1Cy6JJ59Vf9nekkfvTWNBzE9iAWXsJ9/cIoyXq4Lkt3alN79XoOiGJESyxejg Gw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs54cjs5g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jun 2022 08:50:13 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25K8jpdI002821;
-        Mon, 20 Jun 2022 08:50:13 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2171.outbound.protection.outlook.com [104.47.58.171])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtkftbsrp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jun 2022 08:50:13 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XZW9olU2f+y6AsAsvWdqtiPGknd8rDe+ZXOdSJ3Q1q7E4Qaas3qQ7iQDDSuhI8V9cH6vkWJ5wrVsv74OfKVjU0NRVvMyj0/1IJu0gzi3YYkyzqGmue2Tq8t+5VJkNr2uCkHjgcFUbupHhQUx1ISNkKdipxNSpztfsXaaSjl0tkZ/CDkSYTNEtKqUQ1PUIvRidVPINoZOH9+u1ZtGbedzcWMwX/RqqEl4uK/Mo9zYUn/i/5qQeDp4TABWlAEjklm52/jUjrAAJIwBpjpQ8PJPtW3gj4FmVpH92ATr+PhzAji28bra2KuJxLEIakL6rHK/eSBIrAQExQszOVu2XlapxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JrBfPbX9rEcyHKhZ9PcSbuuCt1egGYhBWgM8xQNyktQ=;
- b=mMB/MYZ7jlIqIO7pdAxZYk4dqlBfJTDcYMQjaLIR/XRdAMgQvWeI+UaH1Vz8JNVRQ7L4WJcwpr3aN2BW9vylgvaQ9m9IRYYYKxD/vSIyjIN/C3BPXg3/Fv0GQqEmBEdcDqohswTg9QEDXKZf1h1+qvAGjfDMiDz2SQMCxjBQvzPXjGCEeGHqB9Rgl8ohCfQIj9uyWA9jsPqapUP/b2xVRKSy3Ih+A1VqvD2rE+KowM2/96Ml4mVqX1+pk913nihq7kG5/b9QICMfr4iIAgH4P9CGu6X0ruI3HYWZGVciWYJKRHK7GlAH3IkxxsbULl8GG1GJLg0MUDhQZ2k1PgGJrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 20 Jun 2022 04:50:28 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CCE12D05
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:50:25 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t25so16124456lfg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JrBfPbX9rEcyHKhZ9PcSbuuCt1egGYhBWgM8xQNyktQ=;
- b=IZNlyiBh6UKxNdaWurnsbJVavGbRylaB7CzDS63viaNqeO9Nas5nb/I7V1PLhqtoE7KSs4rT1MifVcRCGI94aF2F6j2vEsb3ui8jQ10NtMonGnqlzzmMvmRhMarXCWvc1bx1dyIAV7VnK4MEIshY9hrBcEguaU2RfokuQU9qAJY=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BYAPR10MB2710.namprd10.prod.outlook.com
- (2603:10b6:a02:b5::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.19; Mon, 20 Jun
- 2022 08:50:11 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5353.018; Mon, 20 Jun 2022
- 08:50:11 +0000
-Date:   Mon, 20 Jun 2022 11:49:49 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Souptick Joarder <jrdr.linux@gmail.com>
-Cc:     martyn@welchs.me.uk, manohar.vanga@gmail.com,
-        gregkh@linuxfoundation.org, alexandre.belloni@bootlin.com,
-        rafael@kernel.org, mathieu.poirier@linaro.org,
-        u.kleine-koenig@pengutronix.de, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] vme: Added NULL check for bridge
-Message-ID: <20220620084949.GG16517@kadam>
-References: <20220619070645.100947-1-jrdr.linux@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220619070645.100947-1-jrdr.linux@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0035.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::19)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aORH+F9A3lVDL8oYX/qeIaZfQ9gEPRL7wZifmFpJLWg=;
+        b=nh31U/C501CtniSos35VWwXeTq8PZlZ14OAJUyxe18rSyDRu0KdBJKwquKBzf/nXPl
+         NT61mtH0dQqsxsysNR6DC1wDNT4xm6IeN0c3uptsga2V22ApkSVZqLlbS3WfsQa0PWJ0
+         x+QPpgj+jvFKxoaWq9rvLVjjkxQO9RNdSdl4jQXvT07WG3ctfGHZiqQ7QcoG62IReuQa
+         24DAsN/oo6ItzHF4E0DH5DH9WC+KyeooFTR3UeftUr6QbKuZUGVK52yEq5f97G3CrqDl
+         aLf3DhVCetimcNJmDp98wXYYyQe60Z1UwxOG3BI6QbUEPoQr9To5W0LSnirQEmHDSLOS
+         o5MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aORH+F9A3lVDL8oYX/qeIaZfQ9gEPRL7wZifmFpJLWg=;
+        b=cAfLV4Gln25R9ZeWKTYt2nbgNwc3EyzEs8GM1sRKyPV1cgVNOLZY+XJ1lH6WclbxCf
+         TTR2UO5acJRkqvtSoUNIMI8aaEazwl09UJHLwNJrgthVoqjofPJOIGnNOacLzumLFNV8
+         CJ2lLqMeFs6DXxDxijHPFrAnTsfLK3Js5l474gFTGliui20OvZzEPpdtp5CLGhWLUNVw
+         vKHPvnxozZQ+n6/5Mh6k1/8KP1IPhSii2ZvngOb50J4U3RKQLzf1nbG/9L975Wdvyv47
+         ahHKaLi0G1HF6f1fkLLA7M9y6hOnIqLZe4J/lv0T2C3+/3Fj4QvtQLZVud2BIm0mGBdw
+         xLEg==
+X-Gm-Message-State: AJIora/WAjP/EbiIb9u9roOyW4ggakIa1B6XBb5EDuOfw4xZtNw7IzKQ
+        43u9HXa1zXnvCKbwVT4YC2Q7pPgLqEL8mKLAZsjaOw==
+X-Google-Smtp-Source: AGRyM1v2ZbOiKUkpgfBS5LiCYpUWZQxg2hNNm7bfOcyACvMRtlQWi2ZiGITj7BVYZcwNRdIAQSDu7iY485bOe02MrqQ=
+X-Received: by 2002:ac2:4f11:0:b0:479:3554:79d with SMTP id
+ k17-20020ac24f11000000b004793554079dmr12913290lfr.417.1655715023225; Mon, 20
+ Jun 2022 01:50:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e0ce2b1b-2fce-494d-5760-08da5299e25f
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2710:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR10MB2710AA880011FB973F6833178EB09@BYAPR10MB2710.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zIW18ZCqvJzHkbLqr2c/xwAahch5ev/M0virZ1F6e5WWhxtyjpn3SFAKsR5pap4NgbuxbYIxYDoB8mrc06FChiZ6AYVsbnKODYhnDq/+YWL0XlLWdIVpiQgMhIEUm04gquVreh+0yakpwguMwxXhc/Eb4vM0VceB9YMLmW0IkFkvMQdgPPZ/ufTKJ8C78gFdqN5vGzhE50kvoSFXhAuhHVwmaQSbyMI0BBJJSkBQBGJreykMrpWxgKm7k0dy3MsaY0HZS3de84sYts13gKZbPrmY1K/6d3NCWZzHstklaYUc8oZzZU+LULVvqix2triyYSGthcckNmv6ZsyRy+Q4SqZkcxLmtS7gZVJzRhRupQDJYam4BGD5MvakqjAfBDA9jW8T7avSSmA3vdaU6HJ0yAa42nCsoTwagczU16ab5f5z93Zrp5qIpoXfJYBPExvkj3DolGCPrpTASS1h/Pa4vwHozLlSX+IbAwlp7n2TxwU9G0zntzvjK3F9oqE9kMswbVBhVlVZEMsrKEU6n8jio9yD8QJxDC7md7YZuZrJcgLocGXzEGNUjbMZros00Mw65gUTaPeVyoWor/QBKqos3pVfApcpDo9GTi3ysKzg6nAwBpd0Kei96mL40L1uEHVgHyRIUCDyJB9FXtaj5AD3uOkB8SzmK0QUiPu3OOzbxIxB0TFxg+iiQ76eE91Z9HHDoKP9NYjFyg2BHuIL1mTcwA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(366004)(376002)(346002)(39860400002)(396003)(52116002)(4326008)(44832011)(86362001)(8676002)(6916009)(6506007)(6486002)(9686003)(66556008)(38350700002)(2906002)(6512007)(66476007)(66946007)(26005)(7416002)(8936002)(186003)(478600001)(38100700002)(6666004)(83380400001)(5660300002)(316002)(33656002)(41300700001)(1076003)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hvoRPbaCmmcAqLciS09xgSnJp6DV5UcS8CwY55mEoFRd76Mc8O6AL22cE3PC?=
- =?us-ascii?Q?Hb6iZ2KzDK1vwOb7A+p0OG/LdtBE3vNg1PzEDB62PIpv30CnruoiiHKQExxG?=
- =?us-ascii?Q?KRn7ajG8AY9Wz/wo+TUICFeR3YG5BpW+pSoT182Y2suMwLFJPd2wjS/E37Hs?=
- =?us-ascii?Q?UcsVKxMh8EgOkQq6/JapQSoEBH2gR6aWVIW0EToaUtz/JencwRtWSeuxRShN?=
- =?us-ascii?Q?Daff8Lyiae7PlZa6x9Yu9fnJhXsBlvT0emzdLWd2lDdWbAadoTZPz97K0d1W?=
- =?us-ascii?Q?5RqZQ02Y+LlGxT+P/zvqigb41TZWSL1S4EiqWrwF7HoQ7lMvvm7+B1eqLUEp?=
- =?us-ascii?Q?37VzXR2AsdFkx4DcpnlyytK05mtdZ91V9i6xJaY8SISy/1nRty7a2ywiM/6d?=
- =?us-ascii?Q?Ly+v50wTWS1Y5iVtkCXNDqmQ47jVc8smGeCMZ2nGLBvLUHUU64GRCP8MiQuI?=
- =?us-ascii?Q?8uCthOIIMYcmpAX08KBLgHmpmXAGp/ZW1pAzWaAnJ9aXrTK/UKT4wZ1sdAHO?=
- =?us-ascii?Q?1MZI6eEIkFixEX8vyUAYbS3J5VjW5h4fKdL4zkh41aVUWeEZW7bzpce5Il4O?=
- =?us-ascii?Q?KOR2J2vF4uSjUdnShNzsPGCn2Lh7tYxKIppLrnZdlT7+vCdkFRfLPYy8O7UY?=
- =?us-ascii?Q?GAZM+Vog56tYieyobdN9GA6Tw1OHSzMRveBC0K0MDMvH/uWtXekUeiAp0+cP?=
- =?us-ascii?Q?HNZhOoB2l6BWVwohrVfgnuzg/MV3jF4F/tN/y8gz0cUXrr9vktjyiBtrIAqs?=
- =?us-ascii?Q?hbR4VboNDPgPy5MDJ8JV73D1+E1Ar3cmKgwPs1vmupFmC6G0Pv9yC6Tx51yu?=
- =?us-ascii?Q?IJht7Q2v1A2rqP1a4HCcU8KLHIcra5r/CUersDSQhNLh/HjrGa9ML1AziFGq?=
- =?us-ascii?Q?5rAzNOGdbYKFqCZJZiNpsp28/s2rNJVLONNHxV5sdsQ/mtLFXowoUJPplimw?=
- =?us-ascii?Q?fbijqS4FZ8Q4OYJxobgFSK7iDsZJBmakNmiWsh+/3+m3w84+REpHB6y5j9xx?=
- =?us-ascii?Q?8VXA85v+x7VTOAwmikYuULEIrzEKX5cyLNgdkFspiP9iOT//U104T2Zw0Tob?=
- =?us-ascii?Q?0Zk61LMQf58VkD8xRCVgfuXOK+2p02o+bH4Nr6skEhi68VDVMA4dCLbTvhuQ?=
- =?us-ascii?Q?xFpn8HddZIvQgXh2xDHelJ64/31trVr8qj6z6TF0b1/dDDK3fGlmdfn/s+5J?=
- =?us-ascii?Q?IYxCqAhG2T+MNV+U/Oi0Z9iqGcOCnIGfYQzz5s1otVR5h9uG9mgRqpFualpe?=
- =?us-ascii?Q?txwg4CJE774ehMHqlVoYqFqj4wq+ic5B/lEI9KL0MrvumL4KzPDaYsnDlB1t?=
- =?us-ascii?Q?6M0wSazx0XY7kvibHmuW6rglMT3RkCZ6ZtPfjwkB+KSA2jd7SlOGLd1BQOA6?=
- =?us-ascii?Q?6Jnu1XnNtKUJa4qRJnHr23SKekgSmRokYpBV/VV3o7zKV/eOrpGyM9mfTDnL?=
- =?us-ascii?Q?IF2cBYEgixLnW6F8HOb4Yv+cPeiWwh8co7n/B9jkfxOOkCWEXxJvfjsjyBXk?=
- =?us-ascii?Q?5YKAnsVyV+McbwMmvreKKOVA1TV9AxEMBrqz/wscjzMFrRYukAe5Ixd0jfjV?=
- =?us-ascii?Q?2K7FKOqfM4qORSf9DDGJsSCjZEWd5YiluIxBtX7Ob3dwVC6Y2FIXJSl7t+93?=
- =?us-ascii?Q?NlSjW32I2b/Vr0WMC7zqz86fTa1/xGoLdaxmMKKOtlHvbdm5eEtACZGpp3SI?=
- =?us-ascii?Q?rbkBTtcEKdicrDL9dzO0f043pw7FxC5+i4GoEnIuuEy2PXQs36UHGE2Rsgh8?=
- =?us-ascii?Q?r8wsVo3fDdu3BpuRWbCGNGzNsJTEaos=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0ce2b1b-2fce-494d-5760-08da5299e25f
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 08:50:11.3187
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QnAv1WjpkbJavfYKv4qyynePLE8kquKeodImfR+duZqU6dm+MQNyyKEpQvDXaa3MbyciYKaNBP2MfQL6ouIuWKkRm6gSwKHYi7E6Mqffsow=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2710
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-20_04:2022-06-17,2022-06-20 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 adultscore=0 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206200041
-X-Proofpoint-GUID: 21V1oU1jxoLQS2XaqJQ7eD4DDMHUMi-L
-X-Proofpoint-ORIG-GUID: 21V1oU1jxoLQS2XaqJQ7eD4DDMHUMi-L
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <000000000000d90a8005e1b7d62b@google.com> <YrAiNACivHyPXvSU@infradead.org>
+In-Reply-To: <YrAiNACivHyPXvSU@infradead.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 20 Jun 2022 10:50:11 +0200
+Message-ID: <CACT4Y+YmyOMq1exWFy2z9fqfXcrzxB8yvWEo9gcXHfiS+Oa4FQ@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in relay_open_buf
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     syzbot <syzbot+4fe838aeddc9710946ca@syzkaller.appspotmail.com>,
+        axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        rostedt@goodmis.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,42 +69,552 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 12:36:45PM +0530, Souptick Joarder wrote:
-> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
-> 
-> Kernel test robot throws below warning ->
-> drivers/staging/vme_user/vme.c:662:20: warning: dereference
-> of NULL 'bridge' [CWE-476] [-Wanalyzer-null-dereference]
-> 
-> Added a NULL check.
-> 
-> Reported-by: Kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> ---
->  drivers/staging/vme_user/vme.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/vme_user/vme.c b/drivers/staging/vme_user/vme.c
-> index b5555683a069..ede774f2fe5a 100644
-> --- a/drivers/staging/vme_user/vme.c
-> +++ b/drivers/staging/vme_user/vme.c
-> @@ -659,7 +659,7 @@ ssize_t vme_master_read(struct vme_resource *resource, void *buf, size_t count,
->  	struct vme_master_resource *image;
->  	size_t length;
->  
-> -	if (!bridge->master_read) {
-> +	if (bridge && !bridge->master_read) {
+/\/\/\/\/\/\/\/\/\/\/\/\On Mon, 20 Jun 2022 at 09:31, Christoph
+Hellwig <hch@infradead.org> wrote:
+>
+> This looks pretty odd to me.  I can't really see anything that
+> would cause an atomic context (spinlock, irq disabling) anywhere near
+> blk_trace_ioctl.
+>
+> On Sat, Jun 18, 2022 at 05:16:23AM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    6012273897fe Add linux-next specific files for 20220615
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=16406cb0080000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b4154677977b1776
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=4fe838aeddc9710946ca
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+4fe838aeddc9710946ca@syzkaller.appspotmail.com
+> >
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 1, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
 
-This patch does not help anything.  If "bridge" is NULL here then the
-kernel will just crash later in the function.  Smatch complains about it
-now:
+/\/\/\/\/\/\/\/\/\/\/\/\
 
-drivers/staging/vme_user/vme.c:688 vme_master_read() error: we previously assumed 'bridge' could be null (see line 666)
+Maybe this is the unclosed left-over disable?
 
-However, I don't believe that bridge can actually be NULL here.  We do
-not write code just to silence that static checker false positives.  Fix
-the checker instead.
 
-regards,
-dan carpenter
-
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Not tainted 5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 1, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 1, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 1, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 2, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: Unable to access opcode bytes at RIP 0x7f29330890df.
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 2, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: Unable to access opcode bytes at RIP 0x7f29330890df.
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 2, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: Unable to access opcode bytes at RIP 0x7f29330890df.
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 2, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: Unable to access opcode bytes at RIP 0x7f29330890df.
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 2, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  relay_alloc_buf kernel/relay.c:124 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x2a7/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: Unable to access opcode bytes at RIP 0x7f29330890df.
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> > preempt_count: 2, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > 2 locks held by syz-executor.5/10461:
+> >  #0: ffff888146a4f718 (&q->debugfs_mutex){+.+.}-{3:3}, at: blk_trace_ioctl+0xa9/0x270 kernel/trace/blktrace.c:735
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open kernel/relay.c:518 [inline]
+> >  #1: ffffffff8bdee228 (relay_channels_mutex){+.+.}-{3:3}, at: relay_open+0x389/0xa00 kernel/relay.c:477
+> > Preemption disabled at:
+> > [<ffffffff81bc96e5>] rmqueue_pcplist mm/page_alloc.c:3813 [inline]
+> > [<ffffffff81bc96e5>] rmqueue mm/page_alloc.c:3858 [inline]
+> > [<ffffffff81bc96e5>] get_page_from_freelist+0x455/0x3a20 mm/page_alloc.c:4293
+> > CPU: 0 PID: 10461 Comm: syz-executor.5 Tainted: G        W         5.19.0-rc2-next-20220615-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9823
+> >  might_alloc include/linux/sched/mm.h:274 [inline]
+> >  prepare_alloc_pages+0x3d8/0x570 mm/page_alloc.c:5290
+> >  __alloc_pages+0x145/0x510 mm/page_alloc.c:5501
+> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+> >  __get_free_pages+0x8/0x40 mm/page_alloc.c:5561
+> >  kasan_populate_vmalloc_pte mm/kasan/shadow.c:271 [inline]
+> >  kasan_populate_vmalloc_pte+0x25/0x160 mm/kasan/shadow.c:262
+> >  apply_to_pte_range mm/memory.c:2648 [inline]
+> >  apply_to_pmd_range mm/memory.c:2692 [inline]
+> >  apply_to_pud_range mm/memory.c:2728 [inline]
+> >  apply_to_p4d_range mm/memory.c:2764 [inline]
+> >  __apply_to_page_range+0x68c/0x1030 mm/memory.c:2798
+> >  alloc_vmap_area+0xacf/0x1d30 mm/vmalloc.c:1625
+> >  __get_vm_area_node+0x142/0x3f0 mm/vmalloc.c:2483
+> >  get_vm_area_caller mm/vmalloc.c:2536 [inline]
+> >  vmap+0x131/0x330 mm/vmalloc.c:2831
+> >  relay_alloc_buf kernel/relay.c:129 [inline]
+> >  relay_create_buf kernel/relay.c:165 [inline]
+> >  relay_open_buf.part.0+0x4b2/0xc00 kernel/relay.c:387
+> >  relay_open_buf kernel/relay.c:384 [inline]
+> >  relay_open kernel/relay.c:520 [inline]
+> >  relay_open+0x4fb/0xa00 kernel/relay.c:477
+> >  do_blk_trace_setup+0x4bc/0xb60 kernel/trace/blktrace.c:559
+> >  __blk_trace_setup+0xca/0x180 kernel/trace/blktrace.c:599
+> >  blk_trace_ioctl+0x13b/0x270 kernel/trace/blktrace.c:740
+> >  blkdev_ioctl+0x181/0x800 block/ioctl.c:603
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > RIP: 0033:0x7f2933089109
+> > Code: Unable to access opcode bytes at RIP 0x7f29330890df.
+> > RSP: 002b:00007f2934150168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 00007f293319bf60 RCX: 00007f2933089109
+> > RDX: 0000000020000080 RSI: 00000000c0481273 RDI: 0000000000000003
+> > RBP: 00007f29330e305d R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > R13: 00007ffe5646271f R14: 00007f2934150300 R15: 0000000000022000
+> >  </TASK>
+> > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 10461, name: syz-executor.5
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> ---end quoted text---
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/YrAiNACivHyPXvSU%40infradead.org.

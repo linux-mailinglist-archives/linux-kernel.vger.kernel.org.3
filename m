@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28401551A89
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D665551B48
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244479AbiFTNHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S1343640AbiFTNMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244922AbiFTNEJ (ORCPT
+        with ESMTP id S1343555AbiFTNJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:04:09 -0400
+        Mon, 20 Jun 2022 09:09:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D4D193CC;
-        Mon, 20 Jun 2022 05:59:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9801419F87;
+        Mon, 20 Jun 2022 06:04:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71D9F61530;
-        Mon, 20 Jun 2022 12:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D997C3411C;
-        Mon, 20 Jun 2022 12:59:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A922614B7;
+        Mon, 20 Jun 2022 13:02:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 416E9C341C4;
+        Mon, 20 Jun 2022 13:02:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729953;
-        bh=FRIHHuVh15uysefwcHw6kzr8sXWetG0k9h7RAVWZX90=;
+        s=korg; t=1655730173;
+        bh=qEy4V33i095KMXuxf5xsHkQ9fh3VFVQEGjpEnWXcaEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UsRoBfzfciZ1PJ6zJFXkJvPp5P2gOHVMVJyoXS3Ka0DGi3QyH3E/BEjTdFhqPlYCL
-         Nl89GwS6sDiC1wF9UwxzNJUa+P7176np+dZeIT59e972x+bPVXz5nxLkjyVzyGeAAw
-         OdZG7otTr9MYkaj9x2kfKVGlfcYIzVKNbPhquCOg=
+        b=UHtzSCOXVStPvPUHxz4ddl3qVCK0lVfII1RokAh/OYd3mHzj7RePqyd+RrkHvzTYw
+         NLavX+qat6zSjeIS70RmYj0Jcd3H3DaIcB4FrqM81OhJigOJ241lZRy3J9bm8a2htJ
+         Qv04GeaCPbiWd9oCeeQNVFYFJJz03FAz0t2SK9tE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.18 129/141] ext4: make variable "count" signed
+        stable@vger.kernel.org,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 44/84] drm/i915/reset: Fix error_state_read ptr + offset use
 Date:   Mon, 20 Jun 2022 14:51:07 +0200
-Message-Id: <20220620124733.369503971@linuxfoundation.org>
+Message-Id: <20220620124722.193328085@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+References: <20220620124720.882450983@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +57,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ding Xiang <dingxiang@cmss.chinamobile.com>
+From: Alan Previn <alan.previn.teres.alexis@intel.com>
 
-commit bc75a6eb856cb1507fa907bf6c1eda91b3fef52f upstream.
+[ Upstream commit c9b576d0c7bf55aeae1a736da7974fa202c4394d ]
 
-Since dx_make_map() may return -EFSCORRUPTED now, so change "count" to
-be a signed integer so we can correctly check for an error code returned
-by dx_make_map().
+Fix our pointer offset usage in error_state_read
+when there is no i915_gpu_coredump but buf offset
+is non-zero.
 
-Fixes: 46c116b920eb ("ext4: verify dir block before splitting it")
-Cc: stable@kernel.org
-Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
-Link: https://lore.kernel.org/r/20220530100047.537598-1-dingxiang@cmss.chinamobile.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This fixes a kernel page fault can happen when
+multiple tests are running concurrently in a loop
+and one is producing engine resets and consuming
+the i915 error_state dump while the other is
+forcing full GT resets. (takes a while to trigger).
+
+The dmesg call trace:
+
+[ 5590.803000] BUG: unable to handle page fault for address:
+               ffffffffa0b0e000
+[ 5590.803009] #PF: supervisor read access in kernel mode
+[ 5590.803013] #PF: error_code(0x0000) - not-present page
+[ 5590.803016] PGD 5814067 P4D 5814067 PUD 5815063 PMD 109de4067
+               PTE 0
+[ 5590.803022] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[ 5590.803026] CPU: 5 PID: 13656 Comm: i915_hangman Tainted: G U
+                    5.17.0-rc5-ups69-guc-err-capt-rev6+ #136
+[ 5590.803033] Hardware name: Intel Corporation Alder Lake Client
+                    Platform/AlderLake-M LP4x RVP, BIOS ADLPFWI1.R00.
+                    3031.A02.2201171222	01/17/2022
+[ 5590.803039] RIP: 0010:memcpy_erms+0x6/0x10
+[ 5590.803045] Code: fe ff ff cc eb 1e 0f 1f 00 48 89 f8 48 89 d1
+                     48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3
+                     66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4
+                     c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20
+                     72 7e 40 38 fe
+[ 5590.803054] RSP: 0018:ffffc90003a8fdf0 EFLAGS: 00010282
+[ 5590.803057] RAX: ffff888107ee9000 RBX: ffff888108cb1a00
+               RCX: 0000000000000f8f
+[ 5590.803061] RDX: 0000000000001000 RSI: ffffffffa0b0e000
+               RDI: ffff888107ee9071
+[ 5590.803065] RBP: 0000000000000000 R08: 0000000000000001
+               R09: 0000000000000001
+[ 5590.803069] R10: 0000000000000001 R11: 0000000000000002
+               R12: 0000000000000019
+[ 5590.803073] R13: 0000000000174fff R14: 0000000000001000
+               R15: ffff888107ee9000
+[ 5590.803077] FS: 00007f62a99bee80(0000) GS:ffff88849f880000(0000)
+               knlGS:0000000000000000
+[ 5590.803082] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 5590.803085] CR2: ffffffffa0b0e000 CR3: 000000010a1a8004
+               CR4: 0000000000770ee0
+[ 5590.803089] PKRU: 55555554
+[ 5590.803091] Call Trace:
+[ 5590.803093] <TASK>
+[ 5590.803096] error_state_read+0xa1/0xd0 [i915]
+[ 5590.803175] kernfs_fop_read_iter+0xb2/0x1b0
+[ 5590.803180] new_sync_read+0x116/0x1a0
+[ 5590.803185] vfs_read+0x114/0x1b0
+[ 5590.803189] ksys_read+0x63/0xe0
+[ 5590.803193] do_syscall_64+0x38/0xc0
+[ 5590.803197] entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 5590.803201] RIP: 0033:0x7f62aaea5912
+[ 5590.803204] Code: c0 e9 b2 fe ff ff 50 48 8d 3d 5a b9 0c 00 e8 05
+                     19 02 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25
+                     18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff
+                     ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
+[ 5590.803213] RSP: 002b:00007fff5b659ae8 EFLAGS: 00000246
+               ORIG_RAX: 0000000000000000
+[ 5590.803218] RAX: ffffffffffffffda RBX: 0000000000100000
+               RCX: 00007f62aaea5912
+[ 5590.803221] RDX: 000000000008b000 RSI: 00007f62a8c4000f
+               RDI: 0000000000000006
+[ 5590.803225] RBP: 00007f62a8bcb00f R08: 0000000000200010
+               R09: 0000000000101000
+[ 5590.803229] R10: 0000000000000001 R11: 0000000000000246
+               R12: 0000000000000006
+[ 5590.803233] R13: 0000000000075000 R14: 00007f62a8acb010
+               R15: 0000000000200000
+[ 5590.803238] </TASK>
+[ 5590.803240] Modules linked in: i915 ttm drm_buddy drm_dp_helper
+                        drm_kms_helper syscopyarea sysfillrect sysimgblt
+                        fb_sys_fops prime_numbers nfnetlink br_netfilter
+                        overlay mei_pxp mei_hdcp x86_pkg_temp_thermal
+                        coretemp kvm_intel snd_hda_codec_hdmi snd_hda_intel
+                        snd_intel_dspcfg snd_hda_codec snd_hwdep
+                        snd_hda_core snd_pcm mei_me mei fuse ip_tables
+                        x_tables crct10dif_pclmul e1000e crc32_pclmul ptp
+                        i2c_i801 ghash_clmulni_intel i2c_smbus pps_core
+                        [last unloa ded: ttm]
+[ 5590.803277] CR2: ffffffffa0b0e000
+[ 5590.803280] ---[ end trace 0000000000000000 ]---
+
+Fixes: 0e39037b3165 ("drm/i915: Cache the error string")
+Signed-off-by: Alan Previn <alan.previn.teres.alexis@intel.com>
+Reviewed-by: John Harrison <John.C.Harrison@Intel.com>
+Signed-off-by: John Harrison <John.C.Harrison@Intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220311004311.514198-2-alan.previn.teres.alexis@intel.com
+(cherry picked from commit 3304033a1e69cd81a2044b4422f0d7e593afb4e6)
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/namei.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/i915_sysfs.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -1929,7 +1929,8 @@ static struct ext4_dir_entry_2 *do_split
- 			struct dx_hash_info *hinfo)
- {
- 	unsigned blocksize = dir->i_sb->s_blocksize;
--	unsigned count, continued;
-+	unsigned continued;
-+	int count;
- 	struct buffer_head *bh2;
- 	ext4_lblk_t newblock;
- 	u32 hash2;
+diff --git a/drivers/gpu/drm/i915/i915_sysfs.c b/drivers/gpu/drm/i915/i915_sysfs.c
+index 45d32ef42787..ac40a95374d3 100644
+--- a/drivers/gpu/drm/i915/i915_sysfs.c
++++ b/drivers/gpu/drm/i915/i915_sysfs.c
+@@ -500,7 +500,14 @@ static ssize_t error_state_read(struct file *filp, struct kobject *kobj,
+ 	struct device *kdev = kobj_to_dev(kobj);
+ 	struct drm_i915_private *i915 = kdev_minor_to_i915(kdev);
+ 	struct i915_gpu_coredump *gpu;
+-	ssize_t ret;
++	ssize_t ret = 0;
++
++	/*
++	 * FIXME: Concurrent clients triggering resets and reading + clearing
++	 * dumps can cause inconsistent sysfs reads when a user calls in with a
++	 * non-zero offset to complete a prior partial read but the
++	 * gpu_coredump has been cleared or replaced.
++	 */
+ 
+ 	gpu = i915_first_error_state(i915);
+ 	if (IS_ERR(gpu)) {
+@@ -512,8 +519,10 @@ static ssize_t error_state_read(struct file *filp, struct kobject *kobj,
+ 		const char *str = "No error state collected\n";
+ 		size_t len = strlen(str);
+ 
+-		ret = min_t(size_t, count, len - off);
+-		memcpy(buf, str + off, ret);
++		if (off < len) {
++			ret = min_t(size_t, count, len - off);
++			memcpy(buf, str + off, ret);
++		}
+ 	}
+ 
+ 	return ret;
+-- 
+2.35.1
+
 
 

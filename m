@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDB8551885
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0C8551890
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242436AbiFTMNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S242515AbiFTMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 08:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242284AbiFTMNg (ORCPT
+        with ESMTP id S242406AbiFTMNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:13:36 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FF2186CE;
-        Mon, 20 Jun 2022 05:13:31 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so2110890pju.1;
-        Mon, 20 Jun 2022 05:13:31 -0700 (PDT)
+        Mon, 20 Jun 2022 08:13:37 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D90D186C2;
+        Mon, 20 Jun 2022 05:13:35 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id r1so9557292plo.10;
+        Mon, 20 Jun 2022 05:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l21bPVpEqABT+p9DbqMiBD/g5N8ETVurA2tsuMO34hA=;
-        b=E2bhiLOLaQX5Id+mOKVw35/T0Y9neY7K+kld8cSStB4XWpwiXkJm/zKzA5JRLTpSoO
-         ACwJo1lh2EVAYVa/qa7YYY/U3srMBuYgBqJVS+Q0G3pdYRe9uISqdahsAY75nLKbNywt
-         mbOgUEq/hzLO0m7M4FwzB0H+1OBuTnK+98d7mWYqgMeOr7VguG6ksT8NSqt/E4XVA79h
-         0inUqtXrg1cUh+mV0PPu1b1/Oi1v1BmNYKIiw3x8UOYVGg3R4VRpg+j8DhqDnsYuBR/i
-         1NRCv+hxaZs17yiodGO2Lq9g6L+b6NUAIEiEzaA4XYQIX7K6/H7FoI/fcnFEK9uNgIRX
-         4a5g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=X8oaiAKxAOnyKxeq8pXjdS3ucgnot6WTv7IYYMvN1bw=;
+        b=Mzv/1B5KER1Tzc4pyAmUxXiI6bmnUBq1YFxVhaYUIeT26QLOa5jqYfnQLXYIA3aDmO
+         Pb+HICFg+g8AWPnTple1LWm3AjYOyYP8Gk28IYWzX/CwPgM8X8L93i/ayTNcpAj/B2H3
+         dPiLTSqV5xcmzU17t82tRf8e6IfjYbW65/YC+0GqdcYoQ2EsR7qD9rE5WdPLLtTcLgvX
+         ungWGu53GgJAi48pQTRIs0Q4b7hbiTqSgqfopKttbRP8M57xHpb8XKQf7IKbX2bVh/Cp
+         //6xIuVPD+9nV+JaDMJ0gMVD8E14i+mHQwX50fnRkGs1Sz9tP22u+VUGSs/g8J84c1FM
+         XujA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l21bPVpEqABT+p9DbqMiBD/g5N8ETVurA2tsuMO34hA=;
-        b=tEIIsOLcXaEu4/nH4UVTXqZ+DjtJ1cAb8HEukDqQLB3S30E7LuQ1+QDTk7y/Pt2OQA
-         u5lGByszWuNyPr7k+mKUdKgjdz0mbtQYPtH3ZFFRXxoLYQtG9ab7yoBjbKZiUNMEOcD1
-         brscOG8mlPdLYtF4byKSssFOrSCucxtDvS9DKTZboNyCurG7zzeyY9tj8FuWfv1w/UkW
-         xjfx81Mr6ZOmatoJFnETKXa0mgR0K7X6wmUfX9F+q0z+6Xr8bUlxLoHcD7nbZB2WkHJy
-         MC0Y5+lRO4ote9SNagRdXigbeSzdEYNphAM4C4cDK/OdQSVxpmtxA6NM4OmD+8i0oI7R
-         W5sQ==
-X-Gm-Message-State: AJIora8eHuAJ5RSqmP6XRKnyCAeiHeG2WMivyk9aTCovqN5HzQLTlSZW
-        MHmvP3qxpVyeNF+E425aU+VeNcghWq4=
-X-Google-Smtp-Source: AGRyM1ujMyJeWJesnMMfpgqQBJHnW1Xr43RT5QrR9fedG1YoY/0E4PA7jJloa1A527gt4UwHIcXfMg==
-X-Received: by 2002:a17:902:ce87:b0:163:fc5e:398b with SMTP id f7-20020a170902ce8700b00163fc5e398bmr22960947plg.125.1655727211055;
-        Mon, 20 Jun 2022 05:13:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=X8oaiAKxAOnyKxeq8pXjdS3ucgnot6WTv7IYYMvN1bw=;
+        b=kNYLA2AyF9S+lxFCsvVm/IF13RgYMu00VmeIZhbE2ZP0aaf7YJRG+EAvn13uRzHZ1u
+         MOI0PEDs5i0c3SDkP37POg+DsEkH0DtJhFIXcFcXUx1ILYLIaT97zjdEPrttun5ix6PS
+         sqxbt31zg9Z5gndwmGSEBL7I0yrxgNqPu59q4KWLFeNUvfzYfU6osoM28b6OyV3f42RT
+         8tXkk0IVYtJ+fLN5hfZ9gtFIuG2X57dnor63yprFibWnnMX9taRHY6VMdjo6Pfm/e6Xz
+         p4tnatLkU96WSnlIWPk84ejnc879fvjFfWo/QT1Wo3GHkcvONE13G6ey//2GlQV3U+oT
+         euRg==
+X-Gm-Message-State: AJIora88o+bqOiAS8ift1mQqRyjqDKF72l5HYpHoxSElTA1XjYPHp90E
+        zFbtXtMcxxGUbRcqXbadsCiBU2d0kSw=
+X-Google-Smtp-Source: AGRyM1sfkYcvWWS2M0tpjoFsHoSPXYou3curuP6O7pouA98HaOchiXcq29VsVpNh60ufyWtUHGOlCQ==
+X-Received: by 2002:a17:90b:388f:b0:1e8:57db:443 with SMTP id mu15-20020a17090b388f00b001e857db0443mr26500027pjb.52.1655727215152;
+        Mon, 20 Jun 2022 05:13:35 -0700 (PDT)
 Received: from linux-server-us.. ([172.247.46.202])
-        by smtp.gmail.com with ESMTPSA id a2-20020a624d02000000b0051e7b6ec81dsm8946987pfb.108.2022.06.20.05.13.30
+        by smtp.gmail.com with ESMTPSA id a2-20020a624d02000000b0051e7b6ec81dsm8946987pfb.108.2022.06.20.05.13.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 05:13:30 -0700 (PDT)
+        Mon, 20 Jun 2022 05:13:34 -0700 (PDT)
 From:   YuTong Chang <mtwget@gmail.com>
 To:     bcousson@baylibre.com
 Cc:     tony@atomide.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         YuTong Chang <mtwget@gmail.com>
-Subject: [PATCH v1 0/1] ARM: dts: am33xx: Fix MMCHS0 dma properties
-Date:   Mon, 20 Jun 2022 05:13:25 -0700
-Message-Id: <20220620121326.5122-1-mtwget@gmail.com>
+Subject: [PATCH v1 1/1] ARM: dts: am33xx: Fix MMCHS0 dma properties
+Date:   Mon, 20 Jun 2022 05:13:26 -0700
+Message-Id: <20220620121326.5122-2-mtwget@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220620121326.5122-1-mtwget@gmail.com>
+References: <20220620121326.5122-1-mtwget@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,15 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+According to technical manual(table 11-24), the DMA of MMCHS0 should be
+direct mapped.
+
+Signed-off-by: YuTong Chang <mtwget@gmail.com>
 ---
-v1: Cleaned up coding style and addressed review comments
-
-YuTong Chang (1):
-  ARM: dts: am33xx: Fix MMCHS0 dma properties
-
  arch/arm/boot/dts/am33xx-l4.dtsi | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/arch/arm/boot/dts/am33xx-l4.dtsi b/arch/arm/boot/dts/am33xx-l4.dtsi
+index 7da42a5b959c..7e50fe633d8a 100644
+--- a/arch/arm/boot/dts/am33xx-l4.dtsi
++++ b/arch/arm/boot/dts/am33xx-l4.dtsi
+@@ -1502,8 +1502,7 @@ SYSC_OMAP2_SOFTRESET |
+ 			mmc1: mmc@0 {
+ 				compatible = "ti,am335-sdhci";
+ 				ti,needs-special-reset;
+-				dmas = <&edma_xbar 24 0 0
+-					&edma_xbar 25 0 0>;
++				dmas = <&edma 24 0>, <&edma 25 0>;
+ 				dma-names = "tx", "rx";
+ 				interrupts = <64>;
+ 				reg = <0x0 0x1000>;
 -- 
 2.36.1
 

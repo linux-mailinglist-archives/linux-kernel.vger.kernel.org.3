@@ -2,129 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE91655166C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E389C551671
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 12:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241123AbiFTK6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 06:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S241194AbiFTK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 06:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241323AbiFTK6f (ORCPT
+        with ESMTP id S241116AbiFTK7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 06:58:35 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6F5DD7;
-        Mon, 20 Jun 2022 03:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655722713; x=1687258713;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vpL39t3xJejS0Bc6qv3jVN1E/qqa66dF3rn6N+6Zg0U=;
-  b=VCOAYqRVZ09Ip/tllDIfGdc+GRGKH2LkpVnWe3jeBhJxzBMQzq1uY4Ks
-   K0hEUtnp/uOmlVzjjLJd0c436GNup5bSaXKsh5vC8JC+QODGKwUO42Jwx
-   Pktel0Cez4aAFELcm//EYbDliCqUfrAhtiDv2tLSsZuN/SJ52eD6NP9dh
-   sok5bK1iRk98cxECEWYAS3uEjPYVlWi5ebxp6jcCzYmZX4jT2xmKzF8g0
-   lGlWmaEeWY2h+Q2Atc+8U1bnOmmhK3W89aXQducCnPIcJDntdVBfobXKw
-   9Gl5XM3blgFXvAMlwv3CF/hzMyEXTePS9wpB7LveFeR0a5AL2d1puo1io
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260297379"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260297379"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:58:33 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="689402203"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:58:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3F6x-000kHu-Dx;
-        Mon, 20 Jun 2022 13:58:27 +0300
-Date:   Mon, 20 Jun 2022 13:58:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH v8 5/6] serial: Support for RS-485 multipoint addresses
-Message-ID: <YrBS03ymAWVajy7e@smile.fi.intel.com>
-References: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
- <20220620064030.7938-6-ilpo.jarvinen@linux.intel.com>
+        Mon, 20 Jun 2022 06:59:09 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C721177
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:59:09 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id g8-20020a92cda8000000b002d15f63967eso7233691ild.21
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 03:59:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=gmiHrG7AcXh3/tITNWynMJAiaeeqqBA+HCgt9kHTQNA=;
+        b=WP8U13yY1fENEkOm5ezw7VvJF+IwwbrXVJBviAp/8Ktvu5pxgYW9hh+aNWBHDKr4Al
+         zM56yUgzNVBxhDUR5bFaJq54Y1PaqYURUK9Jk6Es2c0+1NNK7hOkkfWBYQGppoTk0Ds5
+         XDH0xS1z7VZljALujGvgybRMOlxj2dxGj5LvN5RT5guSW7v9xAlCcM9xKUlAdM2crX1i
+         2NkHOWWuMhYifvgd3j6gCMNvlunNGJAugUAl50MIoL7C8uOTVp05TUwEf+Q3PV9IR5ze
+         tOAN6+OJosaqTbAefkOEqw8Uyfk/gdKL9QBqzLb1URqEgu/zFtyPx5hCIHR1Glh3ts+J
+         801A==
+X-Gm-Message-State: AJIora98i4v8apDpA6ynV+h6UhSVyjQgUlE8mU9JFjAvATpMyz7/WV3T
+        YlD7XFNpEEQAFrOOX4t6cmN1E+fyjAthhCfe7/BxojgVdY58
+X-Google-Smtp-Source: AGRyM1s/pD/h5v27g7oixRSZYs3veVbJs+UfzWlPALCHrvnDDSGD3dZcHEtGjFA2km6jIg2qVQdJBv6CxiVqdBSfNMoNtcfi7iCX
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220620064030.7938-6-ilpo.jarvinen@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1a6b:b0:2d3:ae9f:112f with SMTP id
+ w11-20020a056e021a6b00b002d3ae9f112fmr13253844ilv.187.1655722748573; Mon, 20
+ Jun 2022 03:59:08 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 03:59:08 -0700
+In-Reply-To: <20220620103954.441-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004680c905e1defece@google.com>
+Subject: Re: [syzbot] kernel BUG in binder_alloc_deferred_release
+From:   syzbot <syzbot+58b51ac2b04e388ab7b0@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 09:40:29AM +0300, Ilpo Järvinen wrote:
-> Add support for RS-485 multipoint addressing using 9th bit [*]. The
-> addressing mode is configured through ->rs485_config().
-> 
-> ADDRB in termios indicates 9th bit addressing mode is enabled. In this
-> mode, 9th bit is used to indicate an address (byte) within the
-> communication line. ADDRB can only be enabled/disabled through
-> ->rs485_config() that is also responsible for setting the destination and
-> receiver (filter) addresses.
+Hello,
 
-> The changes to serial_rs485 struct were test built with a few traps to
-> detect mislayouting on archs lkp/0day builts for (all went fine):
->   BUILD_BUG_ON(((&rs485.delay_rts_after_send) + 1) != &rs485.padding[0]);
->   BUILD_BUG_ON(&rs485.padding[1] != &rs485.padding1[0]);
->   BUILD_BUG_ON(sizeof(rs485) != ((u8 *)(&rs485.padding[4]) -
-> 				 ((u8 *)&rs485.flags) + sizeof(__u32)));
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-You may add static_asserts() for the above mentioned cases.
+Reported-and-tested-by: syzbot+58b51ac2b04e388ab7b0@syzkaller.appspotmail.com
 
-> [*] Technically, RS485 is just an electronic spec and does not itself
-> specify the 9th bit addressing mode but 9th bit seems at least
-> "semi-standard" way to do addressing with RS485.
+Tested on:
 
-...
+commit:         60122738 Add linux-next specific files for 20220615
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1110d24bf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b4154677977b1776
+dashboard link: https://syzkaller.appspot.com/bug?extid=58b51ac2b04e388ab7b0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15e9aed8080000
 
-> -	__u32	padding[5];		/* Memory is cheap, new structs
-> -					   are a royal PITA .. */
-> +	union {
-> +		/* v1 */
-> +		__u32	padding[5];		/* Memory is cheap, new structs are a pain */
-> +
-> +		/* v2 (adds addressing mode fields) */
-
-How user space will inform a kernel that it's trying v2?
-
-Usually when we have a union, it should be accompanied with the enum or version
-or something to tell which part of it is in use. I can imagine that in this case
-it's implied by the IOCTL parameters that never should be used on a garbage.
-
-Either add a commit message / UAPI comment or add a version field or ...?
-
-> +		struct {
-> +			__u8	addr_recv;
-> +			__u8	addr_dest;
-> +			__u8	padding0[2];
-> +			__u32	padding1[4];
-> +		};
-> +	};
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Note: testing is done by a robot and is best-effort only.

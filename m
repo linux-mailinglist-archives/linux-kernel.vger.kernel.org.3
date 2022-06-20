@@ -2,222 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0434552174
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC48552179
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243889AbiFTPpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S244263AbiFTPpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241246AbiFTPpB (ORCPT
+        with ESMTP id S237399AbiFTPpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:45:01 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3561AD9A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655739900; x=1687275900;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kwFyPrcXQzBzBHOmxRRGZvhaz2P5fQm59g0ZK8s9EH0=;
-  b=STPYeZpS7inmAbImlzBJmBF0QdjAbTdNz/PmyADFQz7Jop57wkXASZnN
-   r62XNh+e632rEp0Nt55Mik5kqN0VGzFiVSY0gLV0XjTsLHRK42eQING0/
-   7Tv+FAUc/p0+8Vbtl1Z+L53WxCVqlV+s+5wOtPPXyCeZyMeM0w1kEz1Qe
-   Xi8ICha/PgnYzUVq4sk1RBQtrJVg8j7n8jcBtbflvbQKUTLnH/6wSheHe
-   uYvRp0DMbNQKdE5hmDfkJTKXWKdDS8lGt73I3MzTLTX7H60iwzEc6PkR0
-   cb6qmUt00/a7zLnvWz4lNmdYCKGkHlTYXaQIlMIrOwADfW1p8ZRYSB8QK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="305362732"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="305362732"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 08:44:59 -0700
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="689517521"
-Received: from jwtschan-mobl.amr.corp.intel.com (HELO [10.209.124.185]) ([10.209.124.185])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 08:44:59 -0700
-Message-ID: <efb2cdab-289b-8757-fe5e-5348519b0474@linux.intel.com>
-Date:   Mon, 20 Jun 2022 08:44:58 -0700
+        Mon, 20 Jun 2022 11:45:47 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F681AD90;
+        Mon, 20 Jun 2022 08:45:47 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z7so15664158edm.13;
+        Mon, 20 Jun 2022 08:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rtXs7kbTYAIaKi3cLmcvhvj9LjGI2rwhz07by3dGrtw=;
+        b=o7uHxiffDFsN/YBO0yimv8zrjf4lJWvAom/17OgGBiyzz9vkUlTwm/Yl+lT2ayjGLt
+         fQuiblU8f0NtWxmZ7jTefJ8YUTJjE9zZCmgUQ+nmzGwMuZSXP3n0tcdgHSHss6EEY6HQ
+         p7MJJvUcpuN+VxY0UbBg/MKvxLyLmq9h5EtPGHjQSy4G7w3K5Me1wxwbsYCz2HFEZbBt
+         8fAEmVqwZ0hXFW65E9vqjcYo4fyPjKuQpyNGDaqnegWAvmsw+QYqKDQA7+R2qWCTksSD
+         HZYQAPyfnyM+oyKQxv2cROwVDXJLocQv5j3Wf7J0V0JP4tiJklL76weWDDVBckK8E/+z
+         QOJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rtXs7kbTYAIaKi3cLmcvhvj9LjGI2rwhz07by3dGrtw=;
+        b=VQr4t5gOS+AQyJvJIkC5Z7NXkgM+WXf/Adi8lTHGCGqN/uXRG5LIMKkTSooqPL5C11
+         TT3e3ANHWSEzaXqo9+oN9/8Hp2p8x3gsoJpfEwCkDPNZ7ms37TRZVxA7P6hqIgMRxDgx
+         6wisRCQwZkUhYMr76z/DsxOpLAf3BMCkUbSwXSNquVYekpMxosHY+i+hpuNcP8ACzc7R
+         d2cuwmpYi8TrZVovVSQP1k1Gl9E37yb8+LDFJsjEbHJbpKpQTrf/HITG/Q/m3615kMNn
+         9u8yd2I8PC1eCWRWe/D1xCRgARP4lS85B4AN52FG4jm2WL/KbBUAbncDhPUIZlE9m/Qq
+         iWuA==
+X-Gm-Message-State: AJIora+6l1gCcIjHAWxRNdiOMDfyv4id2UPJKsLPpS2I0VCMA5RaIMB7
+        ynX6KDU7PRep6eo2b/8unNA=
+X-Google-Smtp-Source: AGRyM1ujDQR9aZvv3au2jdETK0nvvmjLOG/uM1D6E/NFkZ1eQPLzbujTK+tJbCgfSYF28qMpSIQJmw==
+X-Received: by 2002:a50:fb86:0:b0:435:7f5d:4cb5 with SMTP id e6-20020a50fb86000000b004357f5d4cb5mr8942887edq.163.1655739945357;
+        Mon, 20 Jun 2022 08:45:45 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id f20-20020a17090631d400b0071c6dc728b2sm5895943ejf.86.2022.06.20.08.45.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 08:45:44 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 17:45:42 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Kartik <kkartik@nvidia.com>, robh+dt@kernel.org,
+        krzk+dt@kernel.org, jonathanh@nvidia.com, spujar@nvidia.com,
+        akhilrajeev@nvidia.com, rgumasta@nvidia.com, pshete@nvidia.com,
+        vidyas@nvidia.com, mperttunen@nvidia.com, mkumard@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 0/6] Add watchdog timer support for Tegra186/194/234 SoCs
+Message-ID: <YrCWJpfobojqjhBw@orome>
+References: <1649924738-17990-1-git-send-email-kkartik@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH v8 2/5] x86/tdx: Add TDX Guest event notify interrupt
- support
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org,
-        "Nakajima, Jun" <jun.nakajima@intel.com>
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <78873cc1db47ba00a4c01f38290521c1a6072820.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <78873cc1db47ba00a4c01f38290521c1a6072820.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="b82/QUJKb3XK5kW+"
+Content-Disposition: inline
+In-Reply-To: <1649924738-17990-1-git-send-email-kkartik@nvidia.com>
+User-Agent: Mutt/2.2.4 (c3baa83e) (2022-04-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-+ Jun
+--b82/QUJKb3XK5kW+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/20/22 5:33 AM, Kai Huang wrote:
-> On Wed, 2022-06-08 at 19:52 -0700, Kuppuswamy Sathyanarayanan wrote:
->> Host-guest event notification via configured interrupt vector is useful
->> in cases where a guest makes an asynchronous request and needs a
->> callback from the host to indicate the completion or to let the host
->> notify the guest about events like device removal. One usage example is,
->> callback requirement of GetQuote asynchronous hypercall.
-> 
-> Although this paragraph is from GHCI spec, IMHO it is not very helpful.  In
-> fact, I think this paragraph is not that right and should be removed from GHCI.
-> The reason is such event notification from VMM in cases like "device removal" is
-> too vague.  There's no _specification_ in GHCI around which "device removal"
-> should VMM inject such event.  For instance, I _think_ the Qemu enumerated ACPI-
-> based hotplug should continue to work in TD.
+On Thu, Apr 14, 2022 at 01:55:32PM +0530, Kartik wrote:
+> The native timers IP block found on Tegra SoCs implements a watchdog
+> timer that can be used to recover from system hangs. This series of
+> patches adds support for watchdog timers available on Tegra186,
+> Tegra194 and Tegra234 SOC's.
+>=20
+> To keep the history intact, I added Tegra234 driver change as separate.
+> The original patchset is an old one authored by Thierry.
+>=20
+> Kartik (4):
+>   dt-bindings: timer: Add Tegra186 & Tegra234 Timer
+>   clocksource/drivers/timer-tegra186: Add support for Tegra234 SoC
+>   arm64: tegra: Enable native timers on Tegra186
+>   arm64: tegra: Enable native timers on Tegra234
+>=20
+> Thierry Reding (2):
+>   clocksource: Add Tegra186 timers support
+>   arm64: tegra: Enable native timers on Tegra194
+>=20
+>  .../bindings/timer/nvidia,tegra186-timer.yaml | 116 ++++
+>  arch/arm64/boot/dts/nvidia/tegra186.dtsi      |   2 +-
+>  arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  16 +
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  22 +
+>  drivers/clocksource/Kconfig                   |   8 +
+>  drivers/clocksource/Makefile                  |   1 +
+>  drivers/clocksource/timer-tegra186.c          | 514 ++++++++++++++++++
+>  7 files changed, 678 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra1=
+86-timer.yaml
+>  create mode 100644 drivers/clocksource/timer-tegra186.c
 
-Yes. It just says that it *can* be used to signal a device removal. It is just
-an example for where it can be used. But I agree that such a use case is vague.
-If it makes it better, I am fine with removing it.
+Hi Daniel, Thomas,
 
-Copied from sec 3.5 TDG.VP.VMCALL<SetupEventNotifyInterrupt>:
+any comments on this from the clocksource side of things? So far the
+only comments have been on the bindings, so if there's nothing else on
+the driver bits, Kartik could go ahead and send a v2 so that we can
+hopefully get this into v5.20.
 
-"Example of an operation that can use the event notify is the host
-VMM signaling a device removal to the TD, in response to which a TD may
-unload a device driver."
+Thanks,
+Thierry
 
-> 
-> That being said, if a TD has multiple devices, it cannot know whether the VMM
-> will inject the removal event via the vector set by SetupEventNotifyInterrupt. 
-> And for the same device in the same TD, different VMMs may use different way to
-> notify its removal.
+--b82/QUJKb3XK5kW+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-As per current design, If it is used for device removal, I think all registered
-device drivers will get the notification and the individual device driver has
-to check whether it is applicable for them.
+-----BEGIN PGP SIGNATURE-----
 
-If the SetupEventNotifyInterrupt TDVMCALL specification is extended to specify
-the exact device or use case detail, then it can optimize the implementation.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmKwliMACgkQ3SOs138+
+s6E+Ig//TlC+iFALnyPKXJqWBopRzUbPKeVZT+qb4Ucj/j9QjI95xY4uKiH5HPqU
+IMgYuTVNezbsvh5H9bFGA1anEH2Wxq77e9C1CfC+Ym/mDl/ZuHPkTPPXmWUe0EoH
+CvaaIpvLwlpaQ2Sl/E2h9hUdt2a4tkZKLQxwJGlNFJCAilof4w/dgy98QH/N2Kmr
+wy+SEKRPEVP4DJrb+UB80NiOa0KuIGPAuXpPy0mtB07rhEI9mVPnD86gacPtQvzW
+Pprae5BS0/YJi0zNUu5QdPrA7H3ga0Fp7HBSneKqJK/FSkvPGtHjw7wK1M7xL1uy
+phC9b0aTHOAWzUKoYF9qua2DI5W5QPx+JwXbhENA4moa4lgXAVJM/SosVgsfdCMA
+pBboodHeABtqOqcbOIlKyNn0b1d1aaJcp+KUgl5pmLDIJplSVZwSei+UtQ5lT2U7
++SPl6j02tkpw/ovjEebjypr1Fg02GHzf1LcMoSVvWcjvRzmWkPhNHrBs/7mgTLub
++eCEA04y5fuhsMDpAHhB7dRplbtOzp0KZVFnWYE+vV3+FGw2KHQeWkXf1UU2I74s
+z0AlEU/6BbNCZqI1j5Ach3C7BvAYAoMOOfH9XJ/O500ukgCZpfsvDHjIZDaxSzdk
+IlaGkYjkkmWHuUf0+wL4cLEV6JVN3RSPG62rBkL89eghfM61j+U=
+=9Pgv
+-----END PGP SIGNATURE-----
 
-> 
-> It seems GetQuote is the only user of SetupEventNotifyInterrupt.  Maybe we
-> should just declare it is for GetQuote.
-
-Ok.
-
-> 
-> Isaku, what do you think?  Does this make sense?
-> 
->>
->> In TDX guest, SetupEventNotifyInterrupt hypercall can be used by the
->> guest to specify which interrupt vector to use as an event-notify
->> vector to the VMM. Details about the SetupEventNotifyInterrupt
->> hypercall can be found in TDX Guest-Host Communication Interface
->> (GHCI) Specification, sec 3.5 "VP.VMCALL<SetupEventNotifyInterrupt>".
->> Add a tdx_hcall_set_notify_intr() helper function to implement the
->> SetupEventNotifyInterrupt hypercall.
-> 
-> As you also used "can" above, the GHCI only says the VMM _CAN_ inject the vector
-> set by SetupEventNotifyInterrupt, but not must (3.3 TDG.VP.VMCALL<GetQuote>). 
-> This means theoretically TD should implement pooling mode in case VMM doesn't
-> support injecting event via vector done by SetupEventNotifyInterrupt?
-
-Yes. But GetQuote specification does not talk about the pooling mode
-use case as well. So I think it is just a wording confusion.
-
-> 
-> Perhaps we should update the GHCI spec to use must..
-
-Ok.
-
-> 
->>
->> Reserve 0xec IRQ vector address for TDX guest to receive the event
->> completion notification from VMM. Also add related IDT handler to
->> process the notification event.
-> 
-> Here lacks why we need to choose to reserve a system vector.  For instance, why
-> we cannot choose to use device IRQ way which only requires one vector on one
-
-As you have explained below, as per current spec, it just expects a system
-vector.
-
-> cpu.  As you can see reserving a system vector isn't ideal especially for
-> attestation as it is not a frequent operation.  It is wasteful of using IRQ
-
-I agree that event notification is currently only used for attestation. But I
-think in future there could be other use cases for it. If the intention is just
-to use it for attestation, then we can just modify the GetQuote TDVMCALL to pass
-the vector address, and there is no need for new TDVMCALL. I think the intention
-here is to have generic method for VMM to notify TD about some events. I am not
-clear about the possible future use cases, so I cannot comment on frequency of
-its use.
-
-Jun, any comments?
-
-
-
-> resource especially on server systems with a lot of CPUs.
-
-FWIW, this reservation is protected with CONFIG_INTEL_TDX_GUEST. So it will be
-reserved only for TDX use case.
-
-
-> 
-> The reason is SetupEventNotifyInterrupt TDVMCALL only has one argument, which is
-> vector, but cannot specify which CPU that the VMM should inject the event to. 
-> The GHCI spec doesn't say which CPU the VMM should inject to (i.e. must inject
-> to the CPU on which SetupEventNotifyInterrupt is called), so we can only assume
-> VMM can inject to any CPU.
-> 
-> Btw, x86 maintainers,
-> 
-> I'd like to check with you to see whether we should improve the existing
-> SetupEventNotifyInterrupt so we can choose to use request_irq() style for
-> attestation.  Using request_irq() means we don't need to reserve a system
-> vector, but can allocate a vector dynamically when needed.
-> 
-> Assuming we update SetupEventNotifyInterrupt to also allow TD to specify which
-> CPU (i.e. via APICID) to inject (along with the vector), my understanding is we
-> can use below way (idea only) to dynamically allocate a vector on one CPU when
-> attestation is needed:
-> 
-> 
-> 	int cpu, vector;
-> 	int irq;
-> 
-> 	// request an IRQ, and prevent it from being migrated
-> 	irq = __irq_domain_alloc_irqs(x86_vector_domain, 0, 1, ...);
-> 	request_irq(irq, ...);
-> 	
-> 	// get vector, cpu from irq
-> 
-> 	TDVMCALL<SetupEventNotifyInterrupt>(vector, 
-> 		apic->cpu_present_to_apidid(cpu));
-> 	
-> Is this reasonable? If yes, is it worth to do?
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+--b82/QUJKb3XK5kW+--

@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5A25517E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DE25517DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 13:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241231AbiFTL5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 07:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S241984AbiFTL4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 07:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241436AbiFTL5a (ORCPT
+        with ESMTP id S231272AbiFTL4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 07:57:30 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C8B17E1D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:57:30 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id r66so4150832pgr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 04:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9C+hw/LDK0fNwXiLPN2w98TPlBfCZarzlx/DbOVjVR4=;
-        b=kynoLGne7zsBPZJecBRrJPiyLchBLvmtNMel3lqaLJ13AK4Ko0E25y341pPgT+IcMc
-         7RRMUMgoFr5ipH5k1btOHMgvMdRZfzZerPlUy5svd8/xgUxJoP2mElEwnhrLSzI7bMPA
-         OylnVImfJ9YVaaM4BgVEswf6ktREpWRHBooCgmaUTUOySb9uvO2cXF5MtGAZbgMcEfNz
-         Xzc84ZGcOpAJtH9hWmRCo4vB63jETIRcKyXdNxPzkDjwGIdExTQ3Pie9B5Xtg3z3H9fz
-         n9WPeyddmKQqSIkjm3+EG4jAleiH1oAumH8+oiuvl68wn4ixeCJYmx06lC83ywu9zyns
-         Hjag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9C+hw/LDK0fNwXiLPN2w98TPlBfCZarzlx/DbOVjVR4=;
-        b=YFnXPSO84BNCiRbsn6edN7Q5h25rmRWOGZhctZ6dxV8QH6/32louEII1B5RdLIUwv/
-         AP75OSDxYYuNyYYuQnr4J81iAIJTl1NOzXbkm96iypCeQt+5n9pKeNF3jepiU9eiqadw
-         9kPeyK7fSdCnUS9I4gZQVFBc96TSf3RUbiDSQ90j6zEu7JO+/yzcTRaoGcDnw34zwiv4
-         Qe+al3nAOxXazcLUpPsgEGz3orl8EaG7QRwmJdTff5EtzxM16OMBNkf69rxcaPLq3Tbk
-         Ys8VGElqj6GbvQABip5mzQKRjG0Bj5a/bLIcBfAlgsi4FVMxGlVA8CX3yrvsB5vV4kpV
-         hYDA==
-X-Gm-Message-State: AJIora9H+awqtxvIczzK4e2tGqvfLTp/qYhvlACR9RgO1XriCBi0PA+G
-        KZeNNs/lT4KVnRcdfVMCsag=
-X-Google-Smtp-Source: AGRyM1uzKXry+gURZQst1vKjzwX7SOs+3xu91J4k8AyY31VrvU7Tzr8QKFS0h2NZ/vGmblST1v1Y5Q==
-X-Received: by 2002:a65:6e96:0:b0:3fd:c8b7:5fa6 with SMTP id bm22-20020a656e96000000b003fdc8b75fa6mr21049752pgb.569.1655726249529;
-        Mon, 20 Jun 2022 04:57:29 -0700 (PDT)
-Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.250])
-        by smtp.gmail.com with ESMTPSA id mm21-20020a17090b359500b001ec86a0490csm4539154pjb.32.2022.06.20.04.57.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 Jun 2022 04:57:29 -0700 (PDT)
-From:   qixiaoyu1 <qxy65535@gmail.com>
-X-Google-Original-From: qixiaoyu1 <qixiaoyu1@xiaomi.com>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, liuchao12@xiaomi.com,
-        qxy65535@gmail.com, qixiaoyu1 <qixiaoyu1@xiaomi.com>
-Subject: [PATCH v3 2/2] resize.f2fs: update man page for options -i, -s and -V
-Date:   Mon, 20 Jun 2022 19:56:29 +0800
-Message-Id: <20220620115629.9169-2-qixiaoyu1@xiaomi.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620115629.9169-1-qixiaoyu1@xiaomi.com>
-References: <5627a654-d605-6840-a133-e583c804aadd@kernel.org>
- <20220620115629.9169-1-qixiaoyu1@xiaomi.com>
+        Mon, 20 Jun 2022 07:56:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2865617E03;
+        Mon, 20 Jun 2022 04:56:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DA00A21B73;
+        Mon, 20 Jun 2022 11:56:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655726195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+wkpLj1K+yPjMRJxi8utxl0ln69LqNl6bk/oJMw1gi4=;
+        b=g5wKTYdSVahRen1Xx4ZVdANCmeFmjoi1EBy2+EXhQj5rhUeouBHw0KBx+D3YR3oHBfcIyj
+        28t+BypWrSMddQIJPVhLC3xnTIm/70iAMX4vIpK2Lc6JiiGwBE/wWM8fGcKY6LOUIe1RrX
+        26nadAcchEElh1vnT54ytH/5QTS8iZo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655726195;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+wkpLj1K+yPjMRJxi8utxl0ln69LqNl6bk/oJMw1gi4=;
+        b=8OP+PeX7Ag28Hlzm51S2jXkO8equavYlE3ZtDEYXl+ptjPVEPWhEB31PHL8TPGL1WXTi0Z
+        PjfrpXODVaW6/RDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C7FD7134CA;
+        Mon, 20 Jun 2022 11:56:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0lWkMHNgsGIKEQAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 20 Jun 2022 11:56:35 +0000
+Message-ID: <22bedb25-63ee-3106-f37d-b4ef19ac9e6f@suse.de>
+Date:   Mon, 20 Jun 2022 13:56:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     John Garry <john.garry@huawei.com>,
+        Bart Van Assche <bvanassche@acm.org>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
+        linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        chenxiang66@hisilicon.com
+References: <1654770559-101375-4-git-send-email-john.garry@huawei.com>
+ <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
+ <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
+ <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
+ <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
+ <c702f06e-b7da-92be-3c4f-5dd405600235@opensource.wdc.com>
+ <ecfb0694-21b8-55b4-c9b8-5e738f59ce8d@huawei.com>
+ <98fa010d-3555-a82b-e960-f47aeeb38151@opensource.wdc.com>
+ <7b046321-fdb3-33f0-94a0-78a25cbbe02e@suse.de>
+ <9de5ed1b-e874-28ac-0532-cd5420892064@opensource.wdc.com>
+ <20220620090543.GA13643@lst.de>
+ <41fa0f12-cdcf-f2c4-7366-1abd04312f1f@opensource.wdc.com>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
+ handling
+In-Reply-To: <41fa0f12-cdcf-f2c4-7366-1abd04312f1f@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
----
- man/resize.f2fs.8 | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+On 6/20/22 13:24, Damien Le Moal wrote:
+> On 6/20/22 18:05, Christoph Hellwig wrote:
+>> On Mon, Jun 20, 2022 at 06:02:30PM +0900, Damien Le Moal wrote:
+>>> So reserving a tag/req to be able to do NCQ at the cost of max qd being 31
+>>> works for that. We could keep max qd at 32 by creating one more "fake" tag
+>>> and having a request for it, that is, having the fake tag visible to the
+>>> block layer as a reserved tag, as John's series is doing, but for the
+>>> reserved tags, we actually need to use an effective tag (qc->hw_tag) when
+>>> issuing the commands. And for that, we can reuse the tag of one of the
+>>> failed commands.
+>>
+>> Take a look at the magic flush request in blk-flush.c, which is
+>> preallocated but borrows a tag from the request that wants a pre- or
+>> post-flush.  The logic is rather ugly, but maybe it might actually
+>> become cleaner by generalizing it a bit.
+> 
+> Thanks. Will check.
+> I am also looking at scsi_unjam_host() and scsi_eh_get_sense(). These
+> reuse a scsi command to do eh operations. So I could use that too, modulo
+> making it work outside of eh context to keep the command flow intact.
+> 
 
-diff --git a/man/resize.f2fs.8 b/man/resize.f2fs.8
-index a4b6cd7..3288760 100644
---- a/man/resize.f2fs.8
-+++ b/man/resize.f2fs.8
-@@ -17,6 +17,15 @@ resize.f2fs \- resize filesystem size
- .B \-o
- .I overprovision-ratio-percentage
- ]
-+[
-+.B \-i
-+]
-+[
-+.B \-s
-+]
-+[
-+.B \-V
-+]
- .I device
- .SH DESCRIPTION
- .B resize.f2fs
-@@ -44,6 +53,15 @@ Specify the percentage of the volume that will be used as overprovision area.
- This area is hidden to users, and utilized by F2FS cleaner. If not specified, the
- best number will be assigned automatically according to the partition size.
- .TP
-+.BI \-i
-+Enable extended node bitmap.
-+.TP
-+.BI \-s
-+Enable safe resize.
-+.TP
-+.BI \-V
-+Print the version number and exit.
-+.TP
- .SH AUTHOR
- This version of
- .B resize.f2fs
+Tsk. I was hoping to be able to remove it (especially 
+scsi_eh_get_sense()), but looks as if we actually do need it.
+But it might be not a bad idea to have scsi_eh_get_sense() to run 
+independent on the SCSI EH stuff; returning with a sense code is not 
+necessary an error, so there are reasons for not always invoking SCSI EH.
+
+Cheers,
+
+Hannes
 -- 
-2.36.1
-
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

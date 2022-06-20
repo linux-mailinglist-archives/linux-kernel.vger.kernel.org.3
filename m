@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A445519C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00885551CA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243922AbiFTNEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S1345969AbiFTN2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243877AbiFTNCN (ORCPT
+        with ESMTP id S1344778AbiFTNZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:02:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44EB18343;
-        Mon, 20 Jun 2022 05:57:33 -0700 (PDT)
+        Mon, 20 Jun 2022 09:25:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D841AF25;
+        Mon, 20 Jun 2022 06:10:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FB4E614EB;
-        Mon, 20 Jun 2022 12:57:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149D5C3411B;
-        Mon, 20 Jun 2022 12:57:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9308B811BF;
+        Mon, 20 Jun 2022 13:05:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9DCC3411B;
+        Mon, 20 Jun 2022 13:05:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729852;
-        bh=HR7GqMWbL932M9kWU/TdhBn86PFa6YN1adQ5FdOgz6Y=;
+        s=korg; t=1655730318;
+        bh=SG0d8nWr1NNbbxqYsCX7Km3fIjZdag3mvPeMHmSGtAs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mk9TvBBzPCRuwVSLkvohPobZ5ksiZjXF36wS1EYp4a8/eD6Mu3P2k6uXouqRgoiUr
-         H6BeEwokncE0Cn4sshNcYM6iU6ZegRf+dJwAFyk8BzhGrN+RpKatUV2ujNXwOj5tQe
-         uoYY05nSBEwLxrLPf+2/HH7ixTEF7+PVxpmDtRE8=
+        b=pzkWEp+7nXNQjOFDi2KodghsLpXr9fPVPaTLquxj1EUSL0Oot0BxAXJuQZyutPsKM
+         Gu5dKnHDz6rul1jQtM9GVnjgK6AkE7oMzqnUOmIaUCppEjWqZLep+LlA1Pwr18iBuo
+         PfGt+itfUdIEw9OWOjW9/jMcHpKqO3x8hS0xPqMk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 096/141] irqchip/realtek-rtl: Fix refcount leak in map_interrupts
-Date:   Mon, 20 Jun 2022 14:50:34 +0200
-Message-Id: <20220620124732.382809166@linuxfoundation.org>
+        stable@vger.kernel.org, Lang Yu <Lang.Yu@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 016/106] drm/amdkfd: add pinned BOs to kfd_bo_list
+Date:   Mon, 20 Jun 2022 14:50:35 +0200
+Message-Id: <20220620124724.867369793@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
+References: <20220620124724.380838401@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Lang Yu <Lang.Yu@amd.com>
 
-[ Upstream commit eff4780f83d0ae3e5b6c02ff5d999dc4c1c5c8ce ]
+[ Upstream commit 4fac4fcf4500bce515b0f32195e7bb86aa0246c6 ]
 
-of_find_node_by_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-This function doesn't call of_node_put() in error path.
-Call of_node_put() directly after of_property_read_u32() to cover
-both normal path and error path.
+The kfd_bo_list is used to restore process BOs after
+evictions. As page tables could be destroyed during
+evictions, we should also update pinned BOs' page tables
+during restoring to make sure they are valid.
 
-Fixes: 9f3a0f34b84a ("irqchip: Add support for Realtek RTL838x/RTL839x interrupt controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220601080930.31005-7-linmq006@gmail.com
+So for pinned BOs,
+1, Validate them and update their page tables.
+2, Don't add eviction fence for them.
+
+v2:
+ - Don't handle pinned ones specially in BO validation.(Felix)
+
+Signed-off-by: Lang Yu <Lang.Yu@amd.com>
+Acked-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-realtek-rtl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
-index 50a56820c99b..56bf502d9c67 100644
---- a/drivers/irqchip/irq-realtek-rtl.c
-+++ b/drivers/irqchip/irq-realtek-rtl.c
-@@ -134,9 +134,9 @@ static int __init map_interrupts(struct device_node *node, struct irq_domain *do
- 		if (!cpu_ictl)
- 			return -EINVAL;
- 		ret = of_property_read_u32(cpu_ictl, "#interrupt-cells", &tmp);
-+		of_node_put(cpu_ictl);
- 		if (ret || tmp != 1)
- 			return -EINVAL;
--		of_node_put(cpu_ictl);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+index ab36cce59d2e..21c02f817a84 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+@@ -1828,9 +1828,6 @@ int amdgpu_amdkfd_gpuvm_map_gtt_bo_to_kernel(struct kgd_dev *kgd,
+ 		return -EINVAL;
+ 	}
  
- 		cpu_int = be32_to_cpup(imap + 2);
- 		if (cpu_int > 7 || cpu_int < 2)
+-	/* delete kgd_mem from kfd_bo_list to avoid re-validating
+-	 * this BO in BO's restoring after eviction.
+-	 */
+ 	mutex_lock(&mem->process_info->lock);
+ 
+ 	ret = amdgpu_bo_reserve(bo, true);
+@@ -1853,7 +1850,6 @@ int amdgpu_amdkfd_gpuvm_map_gtt_bo_to_kernel(struct kgd_dev *kgd,
+ 
+ 	amdgpu_amdkfd_remove_eviction_fence(
+ 		bo, mem->process_info->eviction_fence);
+-	list_del_init(&mem->validate_list.head);
+ 
+ 	if (size)
+ 		*size = amdgpu_bo_size(bo);
+@@ -2399,12 +2395,15 @@ int amdgpu_amdkfd_gpuvm_restore_process_bos(void *info, struct dma_fence **ef)
+ 	process_info->eviction_fence = new_fence;
+ 	*ef = dma_fence_get(&new_fence->base);
+ 
+-	/* Attach new eviction fence to all BOs */
++	/* Attach new eviction fence to all BOs except pinned ones */
+ 	list_for_each_entry(mem, &process_info->kfd_bo_list,
+-		validate_list.head)
++		validate_list.head) {
++		if (mem->bo->tbo.pin_count)
++			continue;
++
+ 		amdgpu_bo_fence(mem->bo,
+ 			&process_info->eviction_fence->base, true);
+-
++	}
+ 	/* Attach eviction fence to PD / PT BOs */
+ 	list_for_each_entry(peer_vm, &process_info->vm_list_head,
+ 			    vm_list_node) {
 -- 
 2.35.1
 

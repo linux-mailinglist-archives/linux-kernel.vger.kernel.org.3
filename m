@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E37955135B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73639551360
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240155AbiFTIwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S240112AbiFTIv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240094AbiFTIvq (ORCPT
+        with ESMTP id S240086AbiFTIvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:51:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A788612D1F;
-        Mon, 20 Jun 2022 01:51:45 -0700 (PDT)
+        Mon, 20 Jun 2022 04:51:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9430112D17;
+        Mon, 20 Jun 2022 01:51:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E6A4B80EFB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31A136131F;
         Mon, 20 Jun 2022 08:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23ACDC341C6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93498C3411B;
         Mon, 20 Jun 2022 08:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1655715103;
-        bh=R7BbkoAkXH1dj6TeELpY6vsOEzi80ZOjGxIPiK4mS90=;
+        bh=cCjUEpE4tfIxUY7qbHwYPFmyW8LE7YJOL0Ay7McEbUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DirDM6NNuTFmWgGKnGApS71tlQDKtkZj/PQcG3AFxWvIYhRyf1x8vedhiEkJ8G0nW
-         hWW2V/mL7dnG2vB1wFyL+rxLI+Rk53EFf6/8Ai3wWfO0suo5fe3U9sSGGvJ9kUJ9MT
-         K/epnA4TTYuaEphwZkEDxp9MvqdC7GWI+DcRnhMxcPkv7zk2xw9VC4V9klAO/AgyNk
-         PpNFdhrT7Jl2QZ6zFxqQAhN/Jo6KtNi6EN848ZaK5Fe0k/LIqscJ9kkFG8wkGku5IP
-         z+4BF/s2DKRFp8i87lwmCiYSZPYCTY+p+0vLW27TaS5MFFutQzMX8j1jBqM9KJcJgZ
-         SaJrLbBgn/DCg==
+        b=dm0/aXPSCdIe5fFAcnEXeV2Q7piESuUbsNFC2P+SvXd81ncfYwcdAVpqd1xFXqj+z
+         zPguwFDRIXFEiyXDdGLkozp1ELag7EqtWZeGmy+SGbFZFXgZ0LWIjM7KJeb37w9G0u
+         YZX65z6VUnlw2phm9MsTiEn+a6bxvPCOx1NE/z2IRluK4qumxHNOHA8deMOvZxCBBC
+         ias7s0eESCiu46WLcNsOs5Xn4DaWbkfpZ9Abl5rADZBZiPAMH+DRlYMgvlY1tmtolo
+         4TdzHTtqbt0NeR1E/xtB5URHLPQ9glTKa7SUA3FKzPqIo9JUiDV1naGf4HVYbXORYK
+         r+hhVGVqdWVqA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1o3D8F-0005To-LQ; Mon, 20 Jun 2022 10:51:39 +0200
+        id 1o3D8F-0005Tq-No; Mon, 20 Jun 2022 10:51:39 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 1/2] Input: usbtouchscreen - suppress empty array warnings
-Date:   Mon, 20 Jun 2022 10:46:27 +0200
-Message-Id: <20220620084628.20894-2-johan@kernel.org>
+Subject: [PATCH 2/2] Input: usbtouchscreen - add driver_info sanity check
+Date:   Mon, 20 Jun 2022 10:46:28 +0200
+Message-Id: <20220620084628.20894-3-johan@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220620084628.20894-1-johan@kernel.org>
 References: <20220620084628.20894-1-johan@kernel.org>
@@ -57,42 +57,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When compile-testing the USB touchscreen driver without enabling any of
-the device type options the usbtouch_dev_info array ends up being empty,
-something which triggers compiler warning with -Warray-bounds
-(gcc-11.3.0).
-
-drivers/input/touchscreen/usbtouchscreen.c: In function 'usbtouch_probe':
-drivers/input/touchscreen/usbtouchscreen.c:1668:16:warning: array subscript <unknown> is outside array bounds of 'struct usbtouch_device_info[0]' [-Warray-bounds]
- 1668 |         type = &usbtouch_dev_info[id->driver_info];
-
-Suppress the warnings by making sure that the array is always non-empty.
+Add a sanity check on the device id-table driver_info field to make sure
+we never access a type structure (and function pointers) outside of the
+device info array (e.g. if someone fails to ifdef a device-id entry).
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/input/touchscreen/usbtouchscreen.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/input/touchscreen/usbtouchscreen.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/input/touchscreen/usbtouchscreen.c b/drivers/input/touchscreen/usbtouchscreen.c
-index 43c521f50c85..6683554f0e92 100644
+index 6683554f0e92..f90acbeea74f 100644
 --- a/drivers/input/touchscreen/usbtouchscreen.c
 +++ b/drivers/input/touchscreen/usbtouchscreen.c
-@@ -128,6 +128,7 @@ enum {
- 	DEVTYPE_NEXIO,
- 	DEVTYPE_ELO,
- 	DEVTYPE_ETOUCH,
-+	DEVTYPE_COUNT
- };
+@@ -1656,6 +1656,9 @@ static int usbtouch_probe(struct usb_interface *intf,
+ 	if (id->driver_info == DEVTYPE_IGNORE)
+ 		return -ENODEV;
  
- #define USB_DEVICE_HID_CLASS(vend, prod) \
-@@ -1379,6 +1380,7 @@ static struct usbtouch_device_info usbtouch_dev_info[] = {
- 		.read_data	= etouch_read_data,
- 	},
- #endif
-+	[DEVTYPE_COUNT] = { }	/* Make sure array is non-empty */
- };
- 
- 
++	if (id->driver_info >= DEVTYPE_COUNT)
++		return -EINVAL;
++
+ 	endpoint = usbtouch_get_input_endpoint(intf->cur_altsetting);
+ 	if (!endpoint)
+ 		return -ENXIO;
 -- 
 2.35.1
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA08551B8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A445519C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbiFTNKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S243922AbiFTNEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244229AbiFTNF7 (ORCPT
+        with ESMTP id S243877AbiFTNCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:05:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E121A07B;
-        Mon, 20 Jun 2022 06:00:32 -0700 (PDT)
+        Mon, 20 Jun 2022 09:02:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44EB18343;
+        Mon, 20 Jun 2022 05:57:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1C74B81092;
-        Mon, 20 Jun 2022 13:00:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02C2CC385A5;
-        Mon, 20 Jun 2022 13:00:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FB4E614EB;
+        Mon, 20 Jun 2022 12:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149D5C3411B;
+        Mon, 20 Jun 2022 12:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730030;
-        bh=qnm/YDjo2s4fsdCnB7Jke8TXknhEE2RqTeqz5jj5/QY=;
+        s=korg; t=1655729852;
+        bh=HR7GqMWbL932M9kWU/TdhBn86PFa6YN1adQ5FdOgz6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2wKeWWlzmf7AfwXSom8p8ScQhondcEmUg2W6kSIiOhY1DDcua7m65Oz+frxZKpBiU
-         aa/c+2Tiodu3/punNnT4plKEMx+1YnJCWbO33myJJ1CyjHhrZv86+hQCts2ljKShVx
-         57tXMg1PJKsKPYJzD/J8L1OIk2XOKGDnLFrcDYsc=
+        b=Mk9TvBBzPCRuwVSLkvohPobZ5ksiZjXF36wS1EYp4a8/eD6Mu3P2k6uXouqRgoiUr
+         H6BeEwokncE0Cn4sshNcYM6iU6ZegRf+dJwAFyk8BzhGrN+RpKatUV2ujNXwOj5tQe
+         uoYY05nSBEwLxrLPf+2/HH7ixTEF7+PVxpmDtRE8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 11/84] ASoC: cs42l52: Correct TLV for Bypass Volume
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 096/141] irqchip/realtek-rtl: Fix refcount leak in map_interrupts
 Date:   Mon, 20 Jun 2022 14:50:34 +0200
-Message-Id: <20220620124721.224405642@linuxfoundation.org>
+Message-Id: <20220620124732.382809166@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 91e90c712fade0b69cdff7cc6512f6099bd18ae5 ]
+[ Upstream commit eff4780f83d0ae3e5b6c02ff5d999dc4c1c5c8ce ]
 
-The Bypass Volume is accidentally using a -6dB minimum TLV rather than
-the correct -60dB minimum. Add a new TLV to correct this.
+of_find_node_by_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+This function doesn't call of_node_put() in error path.
+Call of_node_put() directly after of_property_read_u32() to cover
+both normal path and error path.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220602162119.3393857-5-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 9f3a0f34b84a ("irqchip: Add support for Realtek RTL838x/RTL839x interrupt controller")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220601080930.31005-7-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/cs42l52.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-realtek-rtl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/cs42l52.c b/sound/soc/codecs/cs42l52.c
-index 750e6c923512..38223641bdf6 100644
---- a/sound/soc/codecs/cs42l52.c
-+++ b/sound/soc/codecs/cs42l52.c
-@@ -137,6 +137,8 @@ static DECLARE_TLV_DB_SCALE(mic_tlv, 1600, 100, 0);
+diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
+index 50a56820c99b..56bf502d9c67 100644
+--- a/drivers/irqchip/irq-realtek-rtl.c
++++ b/drivers/irqchip/irq-realtek-rtl.c
+@@ -134,9 +134,9 @@ static int __init map_interrupts(struct device_node *node, struct irq_domain *do
+ 		if (!cpu_ictl)
+ 			return -EINVAL;
+ 		ret = of_property_read_u32(cpu_ictl, "#interrupt-cells", &tmp);
++		of_node_put(cpu_ictl);
+ 		if (ret || tmp != 1)
+ 			return -EINVAL;
+-		of_node_put(cpu_ictl);
  
- static DECLARE_TLV_DB_SCALE(pga_tlv, -600, 50, 0);
- 
-+static DECLARE_TLV_DB_SCALE(pass_tlv, -6000, 50, 0);
-+
- static DECLARE_TLV_DB_SCALE(mix_tlv, -5150, 50, 0);
- 
- static DECLARE_TLV_DB_SCALE(beep_tlv, -56, 200, 0);
-@@ -351,7 +353,7 @@ static const struct snd_kcontrol_new cs42l52_snd_controls[] = {
- 			      CS42L52_SPKB_VOL, 0, 0x40, 0xC0, hl_tlv),
- 
- 	SOC_DOUBLE_R_SX_TLV("Bypass Volume", CS42L52_PASSTHRUA_VOL,
--			      CS42L52_PASSTHRUB_VOL, 0, 0x88, 0x90, pga_tlv),
-+			      CS42L52_PASSTHRUB_VOL, 0, 0x88, 0x90, pass_tlv),
- 
- 	SOC_DOUBLE("Bypass Mute", CS42L52_MISC_CTL, 4, 5, 1, 0),
- 
+ 		cpu_int = be32_to_cpup(imap + 2);
+ 		if (cpu_int > 7 || cpu_int < 2)
 -- 
 2.35.1
 

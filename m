@@ -2,88 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8655526F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2BC5526F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343744AbiFTWZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S243664AbiFTWZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243528AbiFTWZJ (ORCPT
+        with ESMTP id S242768AbiFTWZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:25:09 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2FC13E3F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:25:08 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3177e60d980so92025707b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n93C0vcaJqb78FIO6WlUdPQXhs8rR4PY+fl82JmPDc8=;
-        b=C41COq2xSle1WN6qys6phrTq+MeWSo6vh/QF8YYwrjVNtthF9sph75HfeYsMzf58JA
-         BbcRURv/bfmvJpxT9slwyKhGCDjpFO4jRrE4EqhAvqzmE9KbBLXs/8PyUzo+8YYvdRwr
-         xqmac0GESk2+14P6gEACxsxDmRWFMr6WbPeUE2pJ8XbhoADmomx61p7SGQ8n+XB/uY8f
-         cP1uIFNX6nSLfGkcd8cTkCCIdXtOCrKWiywtsupj3Bcvo1ZOxGQPnwdJKYSo1gwpo0cA
-         lHEz6z6a/s9KS96l3t62vf8TYVKyHRJSJut9CqZTsosVGu5uDx6tjSoneXyftw9WJK5A
-         t+Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n93C0vcaJqb78FIO6WlUdPQXhs8rR4PY+fl82JmPDc8=;
-        b=Eup2sbI0RE8Yjk5CfqckeF/zeR+VULxUDYkH7h6hUGZaMMrfZ2H+S2fTntlCMDLNVW
-         l0v7Qt2jJlyAFvW7ir+M29OIVddGxrDfs+j1B7VfzdXrhOhUgvBWWyzXUOv28oO7t0Zd
-         /Kfmhg9cxHx88Q3P3JoXDdRrbei+UEJvhrwBNHJ0BT018o/TH5xcXullZ0cJGlppK2nI
-         4gitIePVZvVFnkegCjO6aA1MV99pe9RDPZn6e9462Bxr2H+UslZXViZxAgWmFooYYWuG
-         88PHXuOP7fRywQHpTWFhWjYpe6AEf12TQFGXT7vjzAUThGEfBNO1kEv+48hK7c1Ebps4
-         bNbA==
-X-Gm-Message-State: AJIora8A/VhV9+PHzYTNlyotJMCItRvv5tygXngbrReADCwIy2P93vZR
-        A6Zb8jgdWocFPLVS/rM333G11M0Xzk2kEZVqoz0=
-X-Google-Smtp-Source: AGRyM1tyRDWf1K91HpEWmpwV6SK4VX1oKf4umwNM6lWgTPMe9Ap4zjLbUs3lpNr9969Hy6e7qauG1rZUxVQZEEzeOhc=
-X-Received: by 2002:a81:5a86:0:b0:314:1495:8491 with SMTP id
- o128-20020a815a86000000b0031414958491mr29754232ywb.419.1655763908195; Mon, 20
- Jun 2022 15:25:08 -0700 (PDT)
+        Mon, 20 Jun 2022 18:25:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340A113E3F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:25:07 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3E74E1F9D0;
+        Mon, 20 Jun 2022 22:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655763905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PJ0iztHxsK8a+Ha9h5rHbJfy+QtzjyiswzEJIkBJEYg=;
+        b=Lou7oJk0l21cmXaZoH5uz/345ApgwxkXV3JrYfjJ3Fxse7kAMVwnYzhoECxQEy7NK1+TbP
+        lvceRmr6MG7ZQUkmE76xbGdfFvw6NMBdnu8FetBVz9b1z5vhSDp0F/ndcTT5qKnxx5WPb5
+        50+tyeKnw/McWVROCIfEKqCSuUOrSzg=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A38E02C141;
+        Mon, 20 Jun 2022 22:25:04 +0000 (UTC)
+Date:   Tue, 21 Jun 2022 00:25:01 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] printk/console: Enable console kthreads only when there
+ is no boot console left
+Message-ID: <YrDzvX1fXWn5hMWL@alley>
+References: <20220619204949.50d9154d@thinkpad>
+ <87r13kwawb.fsf@jogness.linutronix.de>
+ <20220620112936.48fcb2a4@thinkpad>
+ <YrBdjVwBOVgLfHyb@alley>
+ <CAHk-=wgdquXVVE37CZooVK4X+YdSa7XoGtjr71CEYh8UsdKUow@mail.gmail.com>
+ <YrCDNqsPrY+Hs9ju@alley>
+ <YrCO04oNncE1xF5K@alley>
+ <CAHk-=whBSrixcBVoWGnU0eoaksp82gnQ9_1jMNZsCzhLXEgEpw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220618015642.5958-1-jrdr.linux@gmail.com> <_2lEhqJcf7dWZ9gxUFTqACIgfM7O6Mnus7HdamgrIT3zwLBiP7Quzy9MLnuFk5EYQAobBEa9UwI-1SSgEhmsncVEsKai10xWlJk8LvRs-W0=@emersion.fr>
-In-Reply-To: <_2lEhqJcf7dWZ9gxUFTqACIgfM7O6Mnus7HdamgrIT3zwLBiP7Quzy9MLnuFk5EYQAobBEa9UwI-1SSgEhmsncVEsKai10xWlJk8LvRs-W0=@emersion.fr>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 20 Jun 2022 18:24:57 -0400
-Message-ID: <CADnq5_PrraeJ+ffvegLMWEowz2fUizGqBkwnAPYiK3fmV4E7jw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Remove unused variable 'abo'
-To:     Simon Ser <contact@emersion.fr>
-Cc:     Souptick Joarder <jrdr.linux@gmail.com>,
-        Kernel test robot <lkp@intel.com>,
-        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
-        Jude Shih <shenshih@amd.com>, xinhui pan <Xinhui.Pan@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "Kazlauskas, Nicholas" <nicholas.kazlauskas@amd.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, Wayne Lin <Wayne.Lin@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whBSrixcBVoWGnU0eoaksp82gnQ9_1jMNZsCzhLXEgEpw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I sent out the same patch last week.  I just pushed it to drm-misc-next.
-
-Thanks!
-
-Alex
-
-On Sat, Jun 18, 2022 at 1:38 AM Simon Ser <contact@emersion.fr> wrote:
+On Mon 2022-06-20 14:10:20, Linus Torvalds wrote:
+> On Mon, Jun 20, 2022 at 10:14 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > The console kthreads uncovered several races in console drivers.
+> 
+> I really want to make it clear that this was NOT some kind of "races
+> in drivers".
 >
-> Reviewed-by: Simon Ser <contact@emersion.fr>
+> Console drivers may very well  have intentionally avoided taking locks
+> for console output, since the printk output was supposed to be
+> serialized by printk.
+> 
+> Don't try to make this some kind of "buggy drivers" thing. This is on
+> printk, not on anything else.
+
+OK, I see that uart_console_write() is used by
+early_serial8250_write() without port->lock. It means that it is
+racy against serial8250_console_write(). It might
+cause problems reported by this thread. And you are
+right that it has never been used in parallel before the kthreads.
+
+But I believe that it might cause real problems. serial8250_console_write()
+takes port->lock to get serialized against other operations on the
+port. And there might be some when the same port is added as
+a proper serial console.
+
+Today I found that probe_baud() is called from
+serial8250_console_setup() without port->lock. It does reads and
+writes. I believe that it might break with the earlycon.
+
+Also the commit 589f892ac8ef244e47c5a ("serial: meson:
+acquire port->lock in startup()") fixes a race between
+meson_serial_port_write() and meson_uart_startup(), where
+meson_serial_port_write() is used by both early and proper
+console driver. The problem was there even without kthreads.
+They just made it more visible.
+
+My colleagues familiar with ARM told me that they heard about
+boot freezes with early consoles before threads. The kthreads
+allow to reproduce and fix them. In the end, they make the early
+consoles more reliable.
+
+
+> Assuming this solves all issues, I'm ok with this approach, but I
+> really want this to be clearly about printk being buggy, no "blame the
+> drivers" garbage.
+>
+> And if there are other issues coming up, we revert the whole thing entirely.
+> 
+> Because printk is too important to play games with, and too important
+> to try to blame drivers.
+
+I take printk() really seriously. And I definitely do not want
+to wave out problems as others problem.
+
+I do not want to release 5.19 with broken printk(). But the kthreads
+solve real bugs where printk() put the system into knees. I want
+to invest much more time on improving them and fixing related
+problems. Unfortunately, linux-next was not able to catch
+the recently reported problems and we were not able to fix them
+in advance.
+
+All the recent fixes were generic and should make printk() with
+kthreads much more reliable. I can't be sure if it will be enough.
+I could only say that I am going to fix any new ones.
+
+Of course, if people continue reporting problems, we would need
+to revert it for 5.19. But I would really like to give it another
+chance later.
+
+Best Regards,
+Petr

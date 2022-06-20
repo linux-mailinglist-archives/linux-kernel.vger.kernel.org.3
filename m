@@ -2,114 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9875A552376
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C879A5523CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 20:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244771AbiFTSDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 14:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S245335AbiFTSYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 14:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243532AbiFTSDB (ORCPT
+        with ESMTP id S243531AbiFTSYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 14:03:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65605FEA;
-        Mon, 20 Jun 2022 11:03:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655748181; x=1687284181;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x8BZ6rEd02p7RqBzPoWUxgCGm2AKrcMcXu+ufZqgmgI=;
-  b=kB5hgjCtCn1nWVe+PuCLyl+9+YtXGURv5UYEYpqRTysSD7vqFkqOVBgd
-   Iq04jOTBrA2fsE3EauuFxhu7BV7c1FNKY7wVoqP1Bfs7CMpgybtST+HH4
-   6Z0Qlt6RQlgx7CphuE6E0OdO5HeGZXgFjXf4vkcZuLWMy7OKnuBO6M7oY
-   zAqA640y7SFv1nBO6Jd39GSneeFkwSF6k7jPr+AJeP4yo7w43aZPbIRQ0
-   TqP4J2xyGaVE5paAuScMj3XD8HEv5JYE/b6z/qQ3stPuLnXoQb1QYjOS5
-   QtmQeHbmqEP3DXzg1BLsrK87085kFgZVGn6vzuPJNkM7WxfU/mjS8W/TN
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="281006164"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="281006164"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 11:03:00 -0700
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="654783673"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 11:02:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3Lha-000kay-VH;
-        Mon, 20 Jun 2022 21:00:42 +0300
-Date:   Mon, 20 Jun 2022 21:00:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        hkallweit1@gmail.com, gjb@semihalf.com, jaz@semihalf.com,
-        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
-        upstream@semihalf.com
-Subject: Re: [net-next: PATCH 11/12] net: dsa: mv88e6xxx: switch to
- device_/fwnode_ APIs
-Message-ID: <YrC1ymfSJ3nxWw4B@smile.fi.intel.com>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-12-mw@semihalf.com>
+        Mon, 20 Jun 2022 14:24:39 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAAF13FB1;
+        Mon, 20 Jun 2022 11:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=QGRD7oCFnD0lIO8/JoEbhbSbKlBmQoT6/CM5t/z0lq0=;
+        b=Rs0lnhxnt3PHGmfTFT8RdCyWPbeC/GTAAC+g29x5fJw/dxVOCPw266tV9uvNUPHix4i4btMiu88C4
+         A5OQYk0qlWdBU1Szg1ykmtSXYPZEsQYNagcXSyWf6iZx8owf2JriIBi9g0zi6NhSkJ01N9RqE0hCcS
+         r6tokCRsaijAGiC5WAgwfvHHv9lpuYq3VtWlrMV1yHLdidEw0UmHKSnNyKWS0ewe5NzlvvjTzDm+8J
+         +EvGfTqVGII//YbHHQUq8/0G/OCzeT4l1tZaJMNH/JE+CA0FtMyRKxdJZW9wZ2ZKr6h+wtip80FByO
+         imu4dfAEm1FifFLE3i9m/SI2nFD0tFg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000008,0.008251)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.076561), Hit: No, Details: v2.40.0; Id: 15.52k3tn.1g615nd38.16l4n; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([178.70.36.174])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 20 Jun 2022 21:24:15 +0300
+Date:   Mon, 20 Jun 2022 21:01:06 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     corbet@lwn.net, devicetree@vger.kernel.org, hao.wu@intel.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-doc@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdf@kernel.org, robh+dt@kernel.org, system@metrotek.ru,
+        trix@redhat.com, yilun.xu@intel.com
+Subject: Re: [PATCH v20 0/4] Microchip Polarfire FPGA manager
+Message-ID: <20220620180106.a5o53zr2waxkoay6@x260>
+References: <20220620100745.yxjmq2qtsicxlrgn@h-e2.ddg>
+ <20220620105747.2145347-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220620150225.1307946-12-mw@semihalf.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220620105747.2145347-1-conor.dooley@microchip.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 05:02:24PM +0200, Marcin Wojtas wrote:
-> In order to support both ACPI and DT, modify the generic
-> DSA code to use device_/fwnode_ equivalent routines.
-> No functional change is introduced by this patch.
-
-...
-
->  	int err;
+On Mon, Jun 20, 2022 at 11:57:48AM +0100, Conor Dooley wrote:
+> I had a quick check in -next and there's an entry for the BMC
+> driver there.
+> How about the following? I put you as R, but clearly if you want to be
+> maintainer then you are *more than* qualified.
+> Feel free to edit the patch if so, either is fine by me.
+> You can tack this onto a v21 if you have more changes or I can resend
+> standalone once the driver is merged.
+> 
+> Thanks,
+> Conor.
+> 
+> From: Conor Dooley <conor.dooley@microchip.com>
+> Date: Mon, 20 Jun 2022 11:46:19 +0100
+> Subject: [PATCH] MAINTAINERS: add polarfire fpga programmer drivers
+> Add a MAINTAINERS entry for the newly added PolarFire (MPF) SPI slave
+> programming driver.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  MAINTAINERS | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 168e0af869a7..60ab3c4bf65d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7869,6 +7869,14 @@ S:	Maintained
+>  F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+>  F:	drivers/fpga/intel-m10-bmc-sec-update.c
 >  
-> -	if (!np && !pdata)
-> +	if (!fwnode && !pdata)
->  		return -EINVAL;
+> +FPGA PolarFire Drivers
+> +M:	Conor Dooley <conor.dooley@microchip.com>
+> +R:	Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> +L:	linux-fpga@vger.kernel.org
+> +S:	Supported
+> +F:	Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> +F:	drivers/fpga/microchip-spi.c
+> +
+>  FPU EMULATOR
+>  M:	Bill Metzenthen <billm@melbpc.org.au>
+>  S:	Maintained
+> 
+> base-commit: 07dc787be2316e243a16a33d0a9b734cd9365bd3
+> -- 
+> 2.36.1
+> 
 
-Sounds like redundant check
-
-	if (pdata)
-		...
-	else
-		compat_info = ...
-	if (!compat_info)
-		return -EINVAL
-
-?
-
-> -	if (np)
-> -		compat_info = of_device_get_match_data(dev);
-> +	if (fwnode)
-> +		compat_info = device_get_match_data(dev);
->  
->  	if (pdata) {
-
-Missed 'else' even in the original code (see above)?
-
->  		compat_info = pdata_device_get_match_data(dev);
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Ok, I'll add this to v21, but I'll wait for a review on fpga-mgr changes
+first.
 

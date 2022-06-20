@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2F05524BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B045524BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245140AbiFTTmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S245256AbiFTTmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 15:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244958AbiFTTl4 (ORCPT
+        with ESMTP id S244994AbiFTTl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:41:56 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD4C1C903
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:41:54 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id me5so23100174ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:41:54 -0700 (PDT)
+        Mon, 20 Jun 2022 15:41:57 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9691C906
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:41:55 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id ej4so12560207edb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 12:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=fCTXIeOE8EYyJX+yccprUNjJQJBvAsANz2KSm73ZYi0=;
-        b=AdWOGV6w3OmqRe1jktiA7QUN8Mte+Krh7B59LBppkiRmdg/qUkT/VEnSKLNtQN77N1
-         /2ONMOc1UOD5nIIKWa6c6hNcZOB1fsr4GYQiMFossAGqvCuNCiIEmrGA9LpgY34jhVUM
-         30ql9Z1rW0s/0HUcIwq5HyCGa8S5j3jxZoJIXJZ/injvG8xilbC2s9LQWElscPyAVUDU
-         syBWjLw8YB/S0aV+VrAZvBrrI8O+i6vXhTlwzU33hz8dSw6k7Zq93vz/7RBscJmWd3e6
-         QjpYFq2X51rWyAMYW+K4QMeeMJMBhHlv+4oWBcD2HHcnvikTKTHOujtG6iV6GjZtNLOF
-         J3QQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BD2K7uCUP5dok9v4o4ZAMCXR8riujRp1lXhSmgAvB6k=;
+        b=qYp7jWPBOQveUWXbMZbeVbgD0pvgR6tUgsDeYpg/GOmLU1qHibic5/2o0hmmlHZEhR
+         FR7ja/xAwd6q3GluLtHQpfgMNn631a1kjrm2q6gnMIPm7StTpxnYLzrpA0u1N2cqNPo/
+         6FfOLdjrymRE0ytAL2W2jF/SJFmLWQdL55JK6Bv1z3ZzndzCFEERLrHW4AXlRi4+hfYL
+         vsTd5CsZsHoTU/4guDufko7ndWGSW95HUBfe5ay2UxYN/9dkfq2DkRghYAyH5TXv3iov
+         Ui7vV2qIagW3YCMCvjDDdUbWOV05RYs/IBlvGqNglSpw3gvd6Nn+2e4qKhsBbXCdPMdE
+         3X4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fCTXIeOE8EYyJX+yccprUNjJQJBvAsANz2KSm73ZYi0=;
-        b=VwOXLMtl3fmZb3v4zcn//v2WL56RXbPPPIhw8rTINbkSG0s0w9UcbJafHDj2kSQVES
-         Z/SkBmeO02IWX3u34LoHNi8aRZuyI81xpZdNe3Y0ltI/RXIV0kZGaIaKvymNNfpEbVJe
-         3AmAgV2ZHqdtOUBOTjkL20YUiMTk2inVgwxGh96Y8sT3qRwkHJ+iaGb9apYWZfZfGvbU
-         vV9bg8VbLQBG7nKe3uOU+GOoEWsQOYAzPRb+GJSnzdc0wiqT4nFRd2gEWXJrTzBh2ZHh
-         oNkytNeI65If/OmDkAHyLOQu8gq+cDNEzH6MP3rI5Nqf/fJMwff9JLdmY7qNMOuW1H9j
-         ZpSw==
-X-Gm-Message-State: AJIora+d9EBWILJxZIf3RKQxDprYkOE5vBLBe+bF6NbQ8tdBBfxJewv6
-        9dHBNE6CdZ9H74MLHF7BIx113jojTZeoMA==
-X-Google-Smtp-Source: AGRyM1ueHJ7b3vXZ5WxPitGOeO7WLvd6p7/za5Ndb6bVOKW/fPqsuJ47ThBLkBxZFFmvkh+fqRKIYg==
-X-Received: by 2002:a17:907:8a08:b0:711:d26d:71d with SMTP id sc8-20020a1709078a0800b00711d26d071dmr22642482ejc.622.1655754112672;
-        Mon, 20 Jun 2022 12:41:52 -0700 (PDT)
+        bh=BD2K7uCUP5dok9v4o4ZAMCXR8riujRp1lXhSmgAvB6k=;
+        b=rrAm+AHjcSG4cOVfYPv0FmbG5x/D8XDkFkL/MBsw8wyMIb7EsbDL/f3TwplIPynvUg
+         87pxISKc6+zo6AGXtNMN3jnX1aS8O5vsQzj/mPvBso2Z5cvwAyhgProKl5eQI6Lj6Sa/
+         jpXEAjyAMhTTblFGkIUBBqoe3SNuJx4zI1BgbaDQ5FT0nNb8B8T+okQ7fLuqOFfsYXKh
+         4hns3Z+mKwRlVeWAJo/TiOai4fw7rbN8bmgC+QLtUkXvWCb4Fq4zWEsbqgUM4R7Bu8cV
+         ZmW59+G9tFWr2tocKqWBJXW1U6kUCqM+rF6eAzcLFoNPpfxys05Y//x4Mskv8PsRXyRf
+         Pn4g==
+X-Gm-Message-State: AJIora9zuIHuZMB7uZPB1oQovNjAqiZ6i2fQj1wxl/k9C9sWtwetECrg
+        gVQ8SVC+5TJuA7CpKszRVA0b2iBswRRjqw==
+X-Google-Smtp-Source: AGRyM1te9qOkyQHPGL03EdBd5i6YTU8bw2VKzaLGiOy/wv55cMbP/u2aCb2uzcWelSv1ne6sXhBPzw==
+X-Received: by 2002:aa7:dad6:0:b0:435:7a44:7480 with SMTP id x22-20020aa7dad6000000b004357a447480mr11446491eds.138.1655754113839;
+        Mon, 20 Jun 2022 12:41:53 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o18-20020a056402439200b0042fbc23bfcesm11448549edc.46.2022.06.20.12.41.51
+        by smtp.gmail.com with ESMTPSA id o18-20020a056402439200b0042fbc23bfcesm11448549edc.46.2022.06.20.12.41.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 12:41:52 -0700 (PDT)
+        Mon, 20 Jun 2022 12:41:53 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        krzysztof.kozlowski@linaro.org
-Subject: Re: (subset) [PATCH 1/6] dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630 compatibles
-Date:   Mon, 20 Jun 2022 21:41:45 +0200
-Message-Id: <165575403865.144830.16144353813959937892.b4-ty@linaro.org>
+To:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
+Cc:     robh@kernel.org
+Subject: Re: [PATCH] dt-bindings: soc: qcom,rpmh-rsc: simplify qcom,tcs-config
+Date:   Mon, 20 Jun 2022 21:41:46 +0200
+Message-Id: <165575403864.144830.16783731313509244481.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220505113802.243301-1-krzysztof.kozlowski@linaro.org>
-References: <20220505113802.243301-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220426110757.80603-1-krzysztof.kozlowski@linaro.org>
+References: <20220426110757.80603-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -73,16 +73,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 May 2022 13:37:57 +0200, Krzysztof Kozlowski wrote:
-> Document compatibles for QFPROM used on IPQ8064 and SDM630.  They are
-> compatible with generic QFPROM fallback.
+On Tue, 26 Apr 2022 13:07:57 +0200, Krzysztof Kozlowski wrote:
+> The schema for "qcom,tcs-config" property can be a little bit simpler,
+> without the need of defining each item.  Also move the description of
+> each part of "qcom,tcs-config" tupple to the tupple items description.
 > 
 > 
 
 Applied, thanks!
 
-[1/6] dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630 compatibles
-      https://git.kernel.org/krzk/linux-dt/c/7e03a2c01ca378a52ac33c288bdfddb245ee2b7a
+[1/1] dt-bindings: soc: qcom,rpmh-rsc: simplify qcom,tcs-config
+      https://git.kernel.org/krzk/linux-dt/c/d9709fdb20ba6cc252a08743a1a787d1313a09e9
 
 Best regards,
 -- 

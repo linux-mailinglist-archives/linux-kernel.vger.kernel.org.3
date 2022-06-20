@@ -2,123 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E4E551026
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCCD551028
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 08:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238413AbiFTGPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 02:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
+        id S238631AbiFTGQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 02:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbiFTGPu (ORCPT
+        with ESMTP id S233453AbiFTGQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 02:15:50 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2D263BC
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 23:15:49 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1o3AhO-0007Pt-KS; Mon, 20 Jun 2022 08:15:46 +0200
-Message-ID: <f6359e71-5516-5b04-ca35-6a4870456cec@leemhuis.info>
-Date:   Mon, 20 Jun 2022 08:15:45 +0200
+        Mon, 20 Jun 2022 02:16:13 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5404BBF48;
+        Sun, 19 Jun 2022 23:16:12 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id DA9576732D; Mon, 20 Jun 2022 08:16:07 +0200 (CEST)
+Date:   Mon, 20 Jun 2022 08:16:07 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, hch@lst.de, samuel@sholland.org,
+        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        drew@beagleboard.org, rdunlap@infradead.org,
+        Atish Patra <atish.patra@wdc.com>
+Subject: Re: [PATCH 3/4] riscv: Implement Zicbom-based cache management
+ operations
+Message-ID: <20220620061607.GB10485@lst.de>
+References: <20220619203212.3604485-1-heiko@sntech.de> <20220619203212.3604485-4-heiko@sntech.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] x86/pat: fix x86_has_pat_wp()
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     jbeulich@suse.com, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20220503132207.17234-1-jgross@suse.com>
- <20220503132207.17234-2-jgross@suse.com>
- <fb0eadee-1d45-f414-eda4-a87f01eeb57a@suse.com>
- <effc0c6a-9e4d-b503-e4ba-6c8d2da72699@leemhuis.info>
- <c5515533-29a9-9e91-5a36-45f00f25b37b@suse.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <c5515533-29a9-9e91-5a36-45f00f25b37b@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1655705749;385cc5f6;
-X-HE-SMSGID: 1o3AhO-0007Pt-KS
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220619203212.3604485-4-heiko@sntech.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.06.22 07:30, Juergen Gross wrote:
-> On 20.06.22 07:22, Thorsten Leemhuis wrote:
->> On 14.06.22 17:09, Juergen Gross wrote:
->>> On 03.05.22 15:22, Juergen Gross wrote:
->>>> x86_has_pat_wp() is using a wrong test, as it relies on the normal
->>>> PAT configuration used by the kernel. In case the PAT MSR has been
->>>> setup by another entity (e.g. BIOS or Xen hypervisor) it might return
->>>> false even if the PAT configuration is allowing WP mappings.
->>>>
->>>> Fixes: 1f6f655e01ad ("x86/mm: Add a x86_has_pat_wp() helper")
->>>> Signed-off-by: Juergen Gross <jgross@suse.com>
->>>> ---
->>>>    arch/x86/mm/init.c | 3 ++-
->>>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
->>>> index d8cfce221275..71e182ebced3 100644
->>>> --- a/arch/x86/mm/init.c
->>>> +++ b/arch/x86/mm/init.c
->>>> @@ -80,7 +80,8 @@ static uint8_t __pte2cachemode_tbl[8] = {
->>>>    /* Check that the write-protect PAT entry is set for
->>>> write-protect */
->>>>    bool x86_has_pat_wp(void)
->>>>    {
->>>> -    return __pte2cachemode_tbl[_PAGE_CACHE_MODE_WP] ==
->>>> _PAGE_CACHE_MODE_WP;
->>>> +    return
->>>> __pte2cachemode_tbl[__cachemode2pte_tbl[_PAGE_CACHE_MODE_WP]] ==
->>>> +           _PAGE_CACHE_MODE_WP;
->>>>    }
->>>>      enum page_cache_mode pgprot2cachemode(pgprot_t pgprot)
->>>
->>> x86 maintainers, please consider taking this patch, as it is fixing
->>> a real bug. Patch 2 of this series can be dropped IMO.
->>
->> Juergen, can you help me out here please. Patch 2 afaics was supposed to
->> fix this regression I'm tracking:
->> https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
-> No, patch 2 wasn't covering all needed cases.
+On Sun, Jun 19, 2022 at 10:32:11PM +0200, Heiko Stuebner wrote:
+> +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
+> +#define ARCH_DMA_MINALIGN L1_CACHE_BYTES
+> +#endif
 
-Ahh, happens. Thx for the info.
+This needs to be greater or equal to riscv_cbom_block_size, but the
+core code requires a compile time constant here.  So we'll need a big
+fat comment here, and panic if riscv_cbom_block_size is >
+L1_CACHE_BYTES/ARCH_DMA_MINALIGN in the code that queries
+riscv_cbom_block_size.
 
->> Is Patch 1 alone enough to fix it? Or is there a different fix for it?
-> Patch 1 is fixing a different issue (it is lacking any maintainer
-> feedback, though).
-> 
-> This patch of Jan should do the job, but it seems to be stuck, too:
-> https://lore.kernel.org/lkml/9385fa60-fa5d-f559-a137-6608408f88b0@suse.com/
+Note that the arm64 folks are looking into making this variable or
+killing it off in this current form, so things might be getting better
+soon.
 
-Ahh. Fun fact: that was on my list of things to prod, too.
+> +void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+> +			      enum dma_data_direction dir)
+> +{
+> +	void *vaddr = phys_to_virt(paddr);
+> +
+> +	switch (dir) {
+> +	case DMA_TO_DEVICE:
+> +		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+> +		break;
+> +	case DMA_FROM_DEVICE:
+> +		ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+> +		break;
 
->> Or is there some other solution to finally fix that regressions that
->> ideally should have been fixed weeks ago already?
-> 
-> I agree it should have been fixed quite some time now, but the x86
-> maintainers don't seem to be interested in those stuck patches. :-(
-> 
-> Maybe I should take a different approach:
-> 
-> x86 maintainers, please speak up if you NAK (or Ack) any of above two
-> patches.
-> In case you don't NAK or take the patches, I'm inclined to carry them via
-> the Xen tree to get the issues fixed.
+For this also see:
 
-Yeah, I'd be really glad if we could find a solution for this situation
-and get it finally fixed in mainline and backported to stable.
+https://lore.kernel.org/all/20220606152150.GA31568@willie-the-truck/
 
-Ciao, Thorsten
+and
+
+https://lore.kernel.org/linux-arm-kernel/20220610151228.4562-1-will@kernel.org/T/
+
+> +void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> +		const struct iommu_ops *iommu, bool coherent)
+> +{
+> +	dev->dma_coherent = coherent;
+> +}
+
+This probably wants a sanity check warn if coherent if false without
+any support for cache flushing as that will cause data corruption.

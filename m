@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126B6551D19
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A333551A43
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348616AbiFTNp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S244114AbiFTNDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349319AbiFTNoT (ORCPT
+        with ESMTP id S243823AbiFTNBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:44:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0586C2CC9C;
-        Mon, 20 Jun 2022 06:16:16 -0700 (PDT)
+        Mon, 20 Jun 2022 09:01:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40EA1CFD4;
+        Mon, 20 Jun 2022 05:57:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF3A660FEF;
-        Mon, 20 Jun 2022 13:15:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD77AC3411B;
-        Mon, 20 Jun 2022 13:15:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D04EB811BD;
+        Mon, 20 Jun 2022 12:57:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5F2C3411B;
+        Mon, 20 Jun 2022 12:57:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730956;
-        bh=N/NIA5jKRGapFcBKcTH4xUISDWf3g0Dhrm0AZVeEJeU=;
+        s=korg; t=1655729832;
+        bh=EwPaBTg4uRgoErXhKRZXM6RnPI0iuAxbfKZUuX7aFNk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7ndhfkzF2hFrMtf862CQtgAvyvms9kEDuR7wp+X+XEOtM0F//P2ih9wklTxpA82j
-         QLCQGbHQP70KU03eWGELiegYTYWXIouKr4am80wfP2492gSIAVdwUw8UA5KmfQfD3u
-         ioSPiggmXOOoJlQXEJsN3jjYoxpptU5IhTUQQB+g=
+        b=LL4WlYy/t4ask9RJWhjHjPGJk6PhWVNcIHulxszQoQqm7IkXzBTcC5E+8Lm8uP1oP
+         /KAnXsF/OgNFF8Yr55bS9pJmd3Jzx1Ug0XCKe/85z18AmUyP8GxwvINm574yEJTzf4
+         Leoq8P+tfbPwG+QTJfOQzuYEL4l5qSy2IGiqCCd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 106/240] random: round-robin registers as ulong, not u32
-Date:   Mon, 20 Jun 2022 14:50:07 +0200
-Message-Id: <20220620124742.086819101@linuxfoundation.org>
+        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 070/141] net: hns3: dont push link state to VF if unalive
+Date:   Mon, 20 Jun 2022 14:50:08 +0200
+Message-Id: <20220620124731.606158757@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
-References: <20220620124737.799371052@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Jian Shen <shenjian15@huawei.com>
 
-commit da3951ebdcd1cb1d5c750e08cd05aee7b0c04d9a upstream.
+[ Upstream commit 283847e3ef6dbf79bf67083b5ce7b8033e8b6f34 ]
 
-When the interrupt handler does not have a valid cycle counter, it calls
-get_reg() to read a register from the irq stack, in round-robin.
-Currently it does this assuming that registers are 32-bit. This is
-_probably_ the case, and probably all platforms without cycle counters
-are in fact 32-bit platforms. But maybe not, and either way, it's not
-quite correct. This commit fixes that to deal with `unsigned long`
-rather than `u32`.
+It's unnecessary to push link state to unalive VF, and the VF will
+query link state from PF when it being start works.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 18b6e31f8bf4 ("net: hns3: PF add support for pushing link status to VFs")
+Signed-off-by: Jian Shen <shenjian15@huawei.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/random.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1256,15 +1256,15 @@ int random_online_cpu(unsigned int cpu)
- }
- #endif
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+index 5d1615e27a1c..c8c99ab60ec1 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+@@ -3384,6 +3384,12 @@ static int hclge_set_vf_link_state(struct hnae3_handle *handle, int vf,
+ 	link_state_old = vport->vf_info.link_state;
+ 	vport->vf_info.link_state = link_state;
  
--static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
-+static unsigned long get_reg(struct fast_pool *f, struct pt_regs *regs)
- {
--	u32 *ptr = (u32 *)regs;
-+	unsigned long *ptr = (unsigned long *)regs;
- 	unsigned int idx;
- 
- 	if (regs == NULL)
- 		return 0;
- 	idx = READ_ONCE(f->reg_idx);
--	if (idx >= sizeof(struct pt_regs) / sizeof(u32))
-+	if (idx >= sizeof(struct pt_regs) / sizeof(unsigned long))
- 		idx = 0;
- 	ptr += idx++;
- 	WRITE_ONCE(f->reg_idx, idx);
++	/* return success directly if the VF is unalive, VF will
++	 * query link state itself when it starts work.
++	 */
++	if (!test_bit(HCLGE_VPORT_STATE_ALIVE, &vport->state))
++		return 0;
++
+ 	ret = hclge_push_vf_link_status(vport);
+ 	if (ret) {
+ 		vport->vf_info.link_state = link_state_old;
+-- 
+2.35.1
+
 
 

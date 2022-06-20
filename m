@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26361551C80
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3440F551B8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244532AbiFTNLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
+        id S1345815AbiFTNbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245155AbiFTNIe (ORCPT
+        with ESMTP id S1346932AbiFTN3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:08:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1251A396;
-        Mon, 20 Jun 2022 06:01:44 -0700 (PDT)
+        Mon, 20 Jun 2022 09:29:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD36245BC;
+        Mon, 20 Jun 2022 06:12:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D209DB811BC;
-        Mon, 20 Jun 2022 13:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F5BBC341C4;
-        Mon, 20 Jun 2022 13:00:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AE12B811C4;
+        Mon, 20 Jun 2022 13:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67DEC3411B;
+        Mon, 20 Jun 2022 13:06:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730059;
-        bh=YFpkXxofjvxu68cWU9xKi/Y3Nj0hNqjzwEXHA38rjIc=;
+        s=korg; t=1655730386;
+        bh=fYqEYfMpMmnw3A/eQFnbEnCAsansYVE/WSANxNzwF+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X0g4HowaVXUEiIxsVhUDVK5M46UxOxUVZzoeM50wpsrnysYN4788dc3SLgY43SC1v
-         +BGKZZEBp9O4ctr4IqdRmFZRe+W90MxMuhQVkkHMC7GNEHQSKd4SP6HEBQg4154cNv
-         ovm4Qbduc1XJ/MVgMLISv8Vjg/8XuQxpFsnD/Sw8=
+        b=Y5RJgDCSrnqc9PNj4Rx9M6IxcHm+1q9pxVLlFtopE0pxoCoXoxTlKK52sGYKL67ww
+         Z18b0btTh/JFWrCV/i6jSqSB6PkinuAlOe5dOzIcuNuriXjdPZZ85eSZH0Dq39s9ml
+         Xn8UfXT+XVWIKKGQDUHrI5c6LL+Ikpj9c5uYvtrM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH 5.10 03/84] bpf: Fix incorrect memory charge cost calculation in stack_map_alloc()
+        stable@vger.kernel.org,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        Jasdeep Dhillon <jdhillon@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Sherry Wang <YAO.WANG1@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 007/106] drm/amd/display: Read Golden Settings Table from VBIOS
 Date:   Mon, 20 Jun 2022 14:50:26 +0200
-Message-Id: <20220620124720.987134562@linuxfoundation.org>
+Message-Id: <20220620124724.604637952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
+References: <20220620124724.380838401@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,49 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuntao Wang <ytcoode@gmail.com>
+From: Sherry Wang <YAO.WANG1@amd.com>
 
-commit b45043192b3e481304062938a6561da2ceea46a6 upstream.
+[ Upstream commit 4b81dd2cc6f4f4e8cea0ed6ee8d5193a8ae14a72 ]
 
-This is a backport of the original upstream patch for 5.4/5.10.
+[Why]
+Dmub read AUX_DPHY_RX_CONTROL0 from Golden Setting Table,
+but driver will set it to default value 0x103d1110, which
+causes issue in some case
 
-The original upstream patch has been applied to 5.4/5.10 branches, which
-simply removed the line:
+[How]
+Remove the driver code, use the value set by dmub in
+dp_aux_init
 
-  cost += n_buckets * (value_size + sizeof(struct stack_map_bucket));
-
-This is correct for upstream branch but incorrect for 5.4/5.10 branches,
-as the 5.4/5.10 branches do not have the commit 370868107bf6 ("bpf:
-Eliminate rlimit-based memory accounting for stackmap maps"), so the
-bpf_map_charge_init() function has not been removed.
-
-Currently the bpf_map_charge_init() function in 5.4/5.10 branches takes a
-wrong memory charge cost, the
-
-  attr->max_entries * (sizeof(struct stack_map_bucket) + (u64)value_size))
-
-part is missing, let's fix it.
-
-Cc: <stable@vger.kernel.org> # 5.4.y
-Cc: <stable@vger.kernel.org> # 5.10.y
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+Reviewed-by: Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Acked-by: Jasdeep Dhillon <jdhillon@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Sherry Wang <YAO.WANG1@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/stackmap.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_dio_link_encoder.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -121,7 +121,8 @@ static struct bpf_map *stack_map_alloc(u
- 		return ERR_PTR(-E2BIG);
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_dio_link_encoder.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_dio_link_encoder.c
+index b0892443fbd5..c7c27a605f15 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_dio_link_encoder.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_dio_link_encoder.c
+@@ -168,9 +168,7 @@ void enc31_hw_init(struct link_encoder *enc)
+ 	AUX_RX_PHASE_DETECT_LEN,  [21,20] = 0x3 default is 3
+ 	AUX_RX_DETECTION_THRESHOLD [30:28] = 1
+ */
+-	AUX_REG_WRITE(AUX_DPHY_RX_CONTROL0, 0x103d1110);
+-
+-	AUX_REG_WRITE(AUX_DPHY_TX_CONTROL, 0x21c7a);
++	// dmub will read AUX_DPHY_RX_CONTROL0/AUX_DPHY_TX_CONTROL from vbios table in dp_aux_init
  
- 	cost = n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
--	err = bpf_map_charge_init(&mem, cost);
-+	err = bpf_map_charge_init(&mem, cost + attr->max_entries *
-+			   (sizeof(struct stack_map_bucket) + (u64)value_size));
- 	if (err)
- 		return ERR_PTR(err);
- 
+ 	//AUX_DPHY_TX_REF_CONTROL'AUX_TX_REF_DIV HW default is 0x32;
+ 	// Set AUX_TX_REF_DIV Divider to generate 2 MHz reference from refclk
+-- 
+2.35.1
+
 
 

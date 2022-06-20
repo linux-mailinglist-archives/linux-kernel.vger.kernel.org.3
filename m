@@ -2,171 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A62551EFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D3F551F03
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242871AbiFTOgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S244838AbiFTOhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343791AbiFTOgY (ORCPT
+        with ESMTP id S243890AbiFTOhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 10:36:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF555045F;
-        Mon, 20 Jun 2022 06:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3nJ8UIdQ3wJLLObnCPDGMrY/Ip+7bRcAjuoN/EdmAzQ=; b=BgcfAC5G1x9v3ZsuqGDv6IbiMk
-        ZensPvnmQlxLWC/RMXWgjaM3c32cIOyVCIA4/hwZlar71cmE+1xhhCheXlefGq+k/tMUoFA8B5aSy
-        DtBzrvA03mNvi6u8dBmiCPKdGmgxXbeIb8wVjg1k+zzwPMNQFwDyo7ZH7803XsVJPTp/Y4PC4SWXM
-        gCIg1Vzhgvk9b12W+D+Xbjku0EhdIHB5Lvt0QxnLwbUT1+AZEp5E8c3t3ttTKZmL/83KdLsk0WGGw
-        setMcQWvm6OdFg8iSC2+7BcP50SFU2LrFLYNTACZcjc3PXMoPgKiqiAciqKSn/Q7/cRy7Lr4aC0Yb
-        Y2dTZVdw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o3HoE-005CUg-Bp; Mon, 20 Jun 2022 13:51:18 +0000
-Date:   Mon, 20 Jun 2022 14:51:18 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: linux-next: build failures after merge of the mm tree
-Message-ID: <YrB7Vq/WlGK99fxz@casper.infradead.org>
-References: <20220620164246.0d3f7784@canb.auug.org.au>
- <CAMZfGtWmGOr1LRBnKGVeqP8p47xyaA0ny_rotdHmgLx8DOk6xg@mail.gmail.com>
+        Mon, 20 Jun 2022 10:37:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB55132A;
+        Mon, 20 Jun 2022 06:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655733124; x=1687269124;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PUT5CK/O9Y7UPcpvAOlSgvIIEYYbeJdLfqrP84iYTYY=;
+  b=j3Dxtu2zAywFiLCs9thH2bf/KFV3dhbQiNw75/iyZnlWRWeyoL6mwDST
+   BbC1lNfO7yc30TVLLigTkyRC5aMo4G7byLapc+g30u+BZwwQfgPb8Txfm
+   Cj6NHAvMG8NweYgT9vHtHdRFmA+DeQCOCENDqox0Qbvz4W74KxI+KPtwC
+   czfdLxiel58qgo7wCcMDZQVMZsS27Z2YjWkbMwLZXHW/M7vg0GTOTE/j8
+   RGTwpVPRnUDEyy5ZGX2JO3xDwSkN2bDvvHaFDKkq7gl7Fzdg+HJoeOMoY
+   Pc6VRs6tIQEOil2eOJhpJ/5wXLpHlnyXdYJ6UYS9bDfYgOrO03Mgu/P1S
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280956337"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="280956337"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 06:52:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="714632355"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga004.jf.intel.com with ESMTP; 20 Jun 2022 06:51:57 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25KDptUA005326;
+        Mon, 20 Jun 2022 14:51:55 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>
+Subject: Re: [alobakin:bitops 3/7] block/elevator.c:222:9: sparse: sparse: cast from restricted req_flags_t
+Date:   Mon, 20 Jun 2022 15:51:46 +0200
+Message-Id: <20220620135146.2628908-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+References: <202206191726.wq70mbMK-lkp@intel.com> <20220617144031.2549432-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZfGtWmGOr1LRBnKGVeqP8p47xyaA0ny_rotdHmgLx8DOk6xg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 03:11:31PM +0800, Muchun Song wrote:
-> Thanks for your report. It is fixed in thread [1].
+From: kernel test robot <lkp@intel.com>
+Date: Sun, 19 Jun 2022 17:20:05 +0800
+
+Also, could someone please help me with this? I don't get what went
+wrong with sparse, it's not even some new code, just moving old
+stuff.
+
+> tree:   https://github.com/alobakin/linux bitops
+> head:   9bd39b17ce49d350eed93a031e0da6389067013e
+> commit: 521611f961a7dda92eefa26e1afd3914c06af64e [3/7] bitops: unify non-atomic bitops prototypes across architectures
+> config: mips-randconfig-s031-20220619 (https://download.01.org/0day-ci/archive/20220619/202206191726.wq70mbMK-lkp@intel.com/config)
+> compiler: mips64el-linux-gcc (GCC) 11.3.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-30-g92122700-dirty
+>         # https://github.com/alobakin/linux/commit/521611f961a7dda92eefa26e1afd3914c06af64e
+>         git remote add alobakin https://github.com/alobakin/linux
+>         git fetch --no-tags alobakin bitops
+>         git checkout 521611f961a7dda92eefa26e1afd3914c06af64e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
 > 
-> https://lore.kernel.org/all/20220619133851.68184-3-songmuchun@bytedance.com/ [1]
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> 
+> sparse warnings: (new ones prefixed by >>)
+>    command-line: note: in included file:
+>    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+>    builtin:0:0: sparse: this was the original definition
+>    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+>    builtin:0:0: sparse: this was the original definition
+>    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+>    builtin:0:0: sparse: this was the original definition
+>    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+>    builtin:0:0: sparse: this was the original definition
+>    block/elevator.c: note: in included file (through include/linux/bitops.h, include/linux/kernel.h):
+>    include/asm-generic/bitops/generic-non-atomic.h:29:9: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:30:9: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:32:10: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:32:16: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:27:1: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:38:9: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:39:9: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:41:10: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:41:16: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:36:1: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:56:9: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:57:9: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:59:10: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:59:15: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:54:1: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:74:9: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:75:9: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:76:9: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:78:10: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:78:14: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:78:20: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:79:17: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:79:23: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:79:9: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:72:1: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:94:9: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:95:9: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:96:9: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:98:10: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:98:14: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:98:21: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:99:17: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:99:23: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:99:9: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:92:1: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:106:9: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:107:9: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:108:9: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:110:10: sparse: sparse: unreplaced symbol 'p'
+>    include/asm-generic/bitops/generic-non-atomic.h:110:14: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:110:20: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:111:17: sparse: sparse: unreplaced symbol 'old'
+>    include/asm-generic/bitops/generic-non-atomic.h:111:23: sparse: sparse: unreplaced symbol 'mask'
+>    include/asm-generic/bitops/generic-non-atomic.h:111:9: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:104:1: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:127:9: sparse: sparse: unreplaced symbol 'return'
+>    include/asm-generic/bitops/generic-non-atomic.h:120:1: sparse: sparse: unreplaced symbol 'return'
+> >> block/elevator.c:222:9: sparse: sparse: cast from restricted req_flags_t
+> 
+> vim +222 block/elevator.c
+> 
+> 9817064b68fef7 Jens Axboe        2006-07-28  217  
+> 70b3ea056f3074 Jens Axboe        2016-12-07  218  void elv_rqhash_add(struct request_queue *q, struct request *rq)
+> 9817064b68fef7 Jens Axboe        2006-07-28  219  {
+> b374d18a4bfce7 Jens Axboe        2008-10-31  220  	struct elevator_queue *e = q->elevator;
+> 9817064b68fef7 Jens Axboe        2006-07-28  221  
+> 9817064b68fef7 Jens Axboe        2006-07-28 @222  	BUG_ON(ELV_ON_HASH(rq));
+> 242d98f077ac0a Sasha Levin       2012-12-17  223  	hash_add(e->hash, &rq->hash, rq_hash_key(rq));
+> e806402130c9c4 Christoph Hellwig 2016-10-20  224  	rq->rq_flags |= RQF_HASHED;
+> 9817064b68fef7 Jens Axboe        2006-07-28  225  }
+> bd166ef183c263 Jens Axboe        2017-01-17  226  EXPORT_SYMBOL_GPL(elv_rqhash_add);
+> 9817064b68fef7 Jens Axboe        2006-07-28  227  
+> 
+> :::::: The code at line 222 was first introduced by commit
+> :::::: 9817064b68fef7e4580c6df1ea597e106b9ff88b [PATCH] elevator: move the backmerging logic into the elevator core
+> 
+> :::::: TO: Jens Axboe <axboe@suse.de>
+> :::::: CC: Jens Axboe <axboe@nelson.home.kernel.dk>
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
-No, it's a different problem.  I suggest dropping/reverting
-
-https://lore.kernel.org/linux-mm/20220617175020.717127-20-willy@infradead.org/
-
-> On Mon, Jun 20, 2022 at 2:42 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
-> > failed like this:
-> >
-> > In file included from arch/x86/include/asm/page.h:86,
-> >                  from arch/x86/include/asm/thread_info.h:12,
-> >                  from include/linux/thread_info.h:60,
-> >                  from arch/x86/include/asm/preempt.h:7,
-> >                  from include/linux/preempt.h:78,
-> >                  from include/linux/spinlock.h:55,
-> >                  from include/linux/mmzone.h:8,
-> >                  from include/linux/gfp.h:6,
-> >                  from include/linux/slab.h:15,
-> >                  from include/linux/crypto.h:20,
-> >                  from arch/x86/kernel/asm-offsets.c:9:
-> > include/linux/mm.h: In function 'destroy_large_folio':
-> > include/asm-generic/memory_model.h:35:21: error: implicit declaration of function 'page_to_section'; did you mean 'present_section'? [-Werror=implicit-function-declaration]
-> >    35 |         int __sec = page_to_section(__pg);                      \
-> >       |                     ^~~~~~~~~~~~~~~
-> > include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
-> >    40 | ({      unsigned long __pfn = (pfn);                    \
-> >       |                                ^~~
-> > include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
-> >    52 | #define page_to_pfn __page_to_pfn
-> >       |                     ^~~~~~~~~~~~~
-> > include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
-> >   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
-> >       |                                      ^~~~~~~~~~~
-> > include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
-> >   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
-> >       |                                 ^~~~~~~~
-> > include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
-> >   928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
-> >       |                                      ^~~~~~~~~~
-> > In file included from include/linux/memcontrol.h:20,
-> >                  from include/linux/swap.h:9,
-> >                  from include/linux/suspend.h:5,
-> >                  from arch/x86/kernel/asm-offsets.c:13:
-> > include/linux/mm.h: At top level:
-> > include/linux/mm.h:1556:29: error: conflicting types for 'page_to_section'; have 'long unsigned int(const struct page *)'
-> >  1556 | static inline unsigned long page_to_section(const struct page *page)
-> >       |                             ^~~~~~~~~~~~~~~
-> > In file included from arch/x86/include/asm/page.h:86,
-> >                  from arch/x86/include/asm/thread_info.h:12,
-> >                  from include/linux/thread_info.h:60,
-> >                  from arch/x86/include/asm/preempt.h:7,
-> >                  from include/linux/preempt.h:78,
-> >                  from include/linux/spinlock.h:55,
-> >                  from include/linux/mmzone.h:8,
-> >                  from include/linux/gfp.h:6,
-> >                  from include/linux/slab.h:15,
-> >                  from include/linux/crypto.h:20,
-> >                  from arch/x86/kernel/asm-offsets.c:9:
-> > include/asm-generic/memory_model.h:35:21: note: previous implicit declaration of 'page_to_section' with type 'int()'
-> >    35 |         int __sec = page_to_section(__pg);                      \
-> >       |                     ^~~~~~~~~~~~~~~
-> > include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
-> >    40 | ({      unsigned long __pfn = (pfn);                    \
-> >       |                                ^~~
-> > include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
-> >    52 | #define page_to_pfn __page_to_pfn
-> >       |                     ^~~~~~~~~~~~~
-> > include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
-> >   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
-> >       |                                      ^~~~~~~~~~~
-> > include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
-> >   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
-> >       |                                 ^~~~~~~~
-> > include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
-> >   928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
-> >       |                                      ^~~~~~~~~~
-> > cc1: some warnings being treated as errors
-> >
-> > Caused by commit (I think)
-> >
-> >   d3b90b76e101 ("mm: convert destroy_compound_page() to destroy_large_folio()")
-> >
-> > I have reverted these commits fot today:
-> >
-> > 56629699b3dd mm/swap: convert __delete_from_swap_cache() to a folio
-> > e5085f2cc241 mm/swap: convert delete_from_swap_cache() to take a folio
-> > 169f02f4efb1 mm: convert page_swap_flags to folio_swap_flags
-> > d3b90b76e101 mm: convert destroy_compound_page() to destroy_large_folio()
-> >
-> > Then I got:
-> >
-> > mm/hugetlb_vmemmap.c: In function 'vmemmap_optimizable_pages':
-> > mm/hugetlb_vmemmap.c:110:24: error: implicit declaration of function 'sparse_decode_mem_map' [-Werror=implicit-function-declaration]
-> >   110 |         vmemmap_page = sparse_decode_mem_map(ms->section_mem_map,
-> >       |                        ^~~~~~~~~~~~~~~~~~~~~
-> > mm/hugetlb_vmemmap.c:110:22: warning: assignment to 'struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-> >   110 |         vmemmap_page = _sparsedecode_mem_map(ms->section_mem_map,
-> >       |                      ^
-> > cc1: some warnings being treated as errors
-> >
-> > from my arm64 defconfig build.
-> >
-> > Caused by commit
-> >
-> >   10a768735470 ("mm: memory_hotplug: make hugetlb_optimize_vmemmap compatible with memmap_on_memory")
-> >
-> > So I gave up and used the mm tree from next-20220617 for today.
-> > --
-> > Cheers,
-> > Stephen Rothwell
+Thanks,
+Olek

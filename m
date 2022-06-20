@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A72A551B38
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5492B551AF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344539AbiFTNZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S1344838AbiFTNZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346037AbiFTNYT (ORCPT
+        with ESMTP id S1345926AbiFTNYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:24:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249EB19294;
-        Mon, 20 Jun 2022 06:09:39 -0700 (PDT)
+        Mon, 20 Jun 2022 09:24:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50FA237D9;
+        Mon, 20 Jun 2022 06:09:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58E37B811D7;
-        Mon, 20 Jun 2022 13:08:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 971A8C3411B;
-        Mon, 20 Jun 2022 13:08:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2720060ABA;
+        Mon, 20 Jun 2022 13:09:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24488C341C0;
+        Mon, 20 Jun 2022 13:08:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730517;
-        bh=KRnyYm02/M04mY5xe4aX4sVWRy2Xqe+5jAymsdFwhho=;
+        s=korg; t=1655730539;
+        bh=uEpUtwXwDKVwNJL5fKwFW99VGHu3YWKGDMYGzY2woJg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0Hx6Q5D8YXxjh+ZDyWZOrllW4wnBx7Wywg0bGrhmv0UFKmspkQkWFcR8emCIpV39c
-         NJlDvjChvIv6Z2ZfZXhY8CWR2jLbyRaj8mu/knjYdHDi3QcJx3gL+bz3NCl5sHrA5d
-         Cez/yBu+JY1ix/rWboGC6Ek4rr6UpkNKdvV2ZMAM=
+        b=LwjrxOKNw0M65RIWn2JOmg5cvlVjQ5Eu8ylNfiWLouHONRuTP3GJYVLUxsYpQzRNF
+         J8cyUqxiWtV4phaaNkmB5ZsDzaPIOiUeFAYlCV9yA5eTSrdRJMhsHIcnAi5xQIOvfF
+         bcF+WWvoKNKB9Sjvpm1/JHzNtFweAx/UXV9X8SU8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 070/106] certs/blacklist_hashes.c: fix const confusion in certs blacklist
-Date:   Mon, 20 Jun 2022 14:51:29 +0200
-Message-Id: <20220620124726.473560315@linuxfoundation.org>
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.15 071/106] init: Initialize noop_backing_dev_info early
+Date:   Mon, 20 Jun 2022 14:51:30 +0200
+Message-Id: <20220620124726.503235304@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
 References: <20220620124724.380838401@linuxfoundation.org>
@@ -56,47 +57,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 6a1c3767d82ed8233de1263aa7da81595e176087 ]
+[ Upstream commit 4bca7e80b6455772b4bf3f536dcbc19aac424d6a ]
 
-This file fails to compile as follows:
+noop_backing_dev_info is used by superblocks of various
+pseudofilesystems such as kdevtmpfs. After commit 10e14073107d
+("writeback: Fix inode->i_io_list not be protected by inode->i_lock
+error") this broke because __mark_inode_dirty() started to access more
+fields from noop_backing_dev_info and this led to crashes inside
+locked_inode_to_wb_and_lock_list() called from __mark_inode_dirty().
+Fix the problem by initializing noop_backing_dev_info before the
+filesystems get mounted.
 
-  CC      certs/blacklist_hashes.o
-certs/blacklist_hashes.c:4:1: error: ignoring attribute ‘section (".init.data")’ because it conflicts with previous ‘section (".init.rodata")’ [-Werror=attributes]
-    4 | const char __initdata *const blacklist_hashes[] = {
-      | ^~~~~
-In file included from certs/blacklist_hashes.c:2:
-certs/blacklist.h:5:38: note: previous declaration here
-    5 | extern const char __initconst *const blacklist_hashes[];
-      |                                      ^~~~~~~~~~~~~~~~
-
-Apply the same fix as commit 2be04df5668d ("certs/blacklist_nohashes.c:
-fix const confusion in certs blacklist").
-
-Fixes: 734114f8782f ("KEYS: Add a system blacklist keyring")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Reviewed-by: Mickaël Salaün <mic@linux.microsoft.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Fixes: 10e14073107d ("writeback: Fix inode->i_io_list not be protected by inode->i_lock error")
+Reported-and-tested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Reported-and-tested-by: Alexandru Elisei <alexandru.elisei@arm.com>
+Reported-and-tested-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- certs/blacklist_hashes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/init.c         |  2 ++
+ include/linux/backing-dev.h |  2 ++
+ mm/backing-dev.c            | 11 ++---------
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
-index 344892337be0..d5961aa3d338 100644
---- a/certs/blacklist_hashes.c
-+++ b/certs/blacklist_hashes.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "blacklist.h"
+diff --git a/drivers/base/init.c b/drivers/base/init.c
+index a9f57c22fb9e..dab8aa5d2888 100644
+--- a/drivers/base/init.c
++++ b/drivers/base/init.c
+@@ -8,6 +8,7 @@
+ #include <linux/init.h>
+ #include <linux/memory.h>
+ #include <linux/of.h>
++#include <linux/backing-dev.h>
  
--const char __initdata *const blacklist_hashes[] = {
-+const char __initconst *const blacklist_hashes[] = {
- #include CONFIG_SYSTEM_BLACKLIST_HASH_LIST
- 	, NULL
- };
+ #include "base.h"
+ 
+@@ -20,6 +21,7 @@
+ void __init driver_init(void)
+ {
+ 	/* These are the core pieces */
++	bdi_init(&noop_backing_dev_info);
+ 	devtmpfs_init();
+ 	devices_init();
+ 	buses_init();
+diff --git a/include/linux/backing-dev.h b/include/linux/backing-dev.h
+index ac7f231b8825..eed9a98eae0d 100644
+--- a/include/linux/backing-dev.h
++++ b/include/linux/backing-dev.h
+@@ -121,6 +121,8 @@ int bdi_set_max_ratio(struct backing_dev_info *bdi, unsigned int max_ratio);
+ 
+ extern struct backing_dev_info noop_backing_dev_info;
+ 
++int bdi_init(struct backing_dev_info *bdi);
++
+ /**
+  * writeback_in_progress - determine whether there is writeback in progress
+  * @wb: bdi_writeback of interest
+diff --git a/mm/backing-dev.c b/mm/backing-dev.c
+index 02ff66f86358..02c9d5c7276e 100644
+--- a/mm/backing-dev.c
++++ b/mm/backing-dev.c
+@@ -229,20 +229,13 @@ static __init int bdi_class_init(void)
+ }
+ postcore_initcall(bdi_class_init);
+ 
+-static int bdi_init(struct backing_dev_info *bdi);
+-
+ static int __init default_bdi_init(void)
+ {
+-	int err;
+-
+ 	bdi_wq = alloc_workqueue("writeback", WQ_MEM_RECLAIM | WQ_UNBOUND |
+ 				 WQ_SYSFS, 0);
+ 	if (!bdi_wq)
+ 		return -ENOMEM;
+-
+-	err = bdi_init(&noop_backing_dev_info);
+-
+-	return err;
++	return 0;
+ }
+ subsys_initcall(default_bdi_init);
+ 
+@@ -784,7 +777,7 @@ static void cgwb_remove_from_bdi_list(struct bdi_writeback *wb)
+ 
+ #endif	/* CONFIG_CGROUP_WRITEBACK */
+ 
+-static int bdi_init(struct backing_dev_info *bdi)
++int bdi_init(struct backing_dev_info *bdi)
+ {
+ 	int ret;
+ 
 -- 
 2.35.1
 

@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A93C550FB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 07:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B264550FB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 07:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbiFTFZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 01:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S238248AbiFTF2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 01:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiFTFZg (ORCPT
+        with ESMTP id S229517AbiFTF2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 01:25:36 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B18DF2B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 22:25:35 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id fd6so10735227edb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 22:25:34 -0700 (PDT)
+        Mon, 20 Jun 2022 01:28:35 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B8C65E0;
+        Sun, 19 Jun 2022 22:28:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iTyxMGysFvLVjw1ty4gwMbVdKBXhcL1xQssE1M7jQRs=;
-        b=hr/i+COcpVsTSVEVRXmn8BToF7wohakO0101jRn9kRrjM38xXFv36ueZmUYFeF7tMs
-         MhQf0KBvD+ufRlJDSD8p+HhwOg1IatNHX5ROaL5G3WIA4Bc/XVrN1sotSR3iUwscYf9w
-         zs6/fyN9LhYXinNOiVjFzKY1HepGVgu2Gb5jc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iTyxMGysFvLVjw1ty4gwMbVdKBXhcL1xQssE1M7jQRs=;
-        b=cSM/KV3RB/lcLRB09eMgpHbhfMzvDqOygzmZgrkDCXR1GgVBUC/aTgqsLQGx0FuQ/9
-         8bUzTsI1hiCNrHTciooeqYsjGoEh96i7QyUh0CyktZLd7sYh0gWYR5H7/AxqYRoX+laG
-         4tH/iAg+x72md3O8aYJ2tWyD0C0YCsLBxUyKWbpkc2I3fg92fG9m7cWhaP8qjHAQbX9h
-         rXxwO3VtQRT8JMQ5BDjvk3hHBuTbsia4b3Rv39CAelR1fxtQPfP7yzR5RMbzsV8JlS64
-         dgb9U/bYwHd5AqfR9YsoSA+u/Nlx0X3akkdOVyhctmcSctrpTW6PzZG2L/YhwSTR2ZNK
-         Ngsw==
-X-Gm-Message-State: AJIora/hdd2ZX8HbOf24AZ7qLQjsWfe4eGiYMML+mDyp4fbEmhg+Wzx8
-        ruJ3owOP5Bzs6uAspXzD3UhmbzptzkB1nD7Be5fbKg==
-X-Google-Smtp-Source: AGRyM1ve6GEVbjnEdneKcnH6buKWIMD7xtxtHnE/K2tR9nDrr6cM5g2g7pzOhyL1GqvCL7sj+U4/HpOoO6q4bsSD2TU=
-X-Received: by 2002:a05:6402:4303:b0:435:833a:16ed with SMTP id
- m3-20020a056402430300b00435833a16edmr2517462edc.248.1655702733588; Sun, 19
- Jun 2022 22:25:33 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655702914; x=1687238914;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=T7T+kDGwEa3D8uh0wfPSGFas0nzg7PYcxffUQVD9kqs=;
+  b=sZD2VYHHsatuNQ3uhSSFxiKvXmfyy0j9tFUjzy+Tpiyt3UDvhmjCZDVG
+   ghT7ZJiCtMdi9tvDVK4YXcYB917gd40J8e0S2AQ1NuwXI9qZAYjnBG9sh
+   Tkynh31jHtYNAcixACWHicY+TixdsQNIIrjp624hgNcLyAXFaJrfQLSSF
+   A=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 19 Jun 2022 22:28:33 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 22:28:32 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 19 Jun 2022 22:28:32 -0700
+Received: from [10.50.53.124] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 19 Jun
+ 2022 22:28:28 -0700
+Message-ID: <eccbb030-97f7-3a6c-958e-05adcdca6210@quicinc.com>
+Date:   Mon, 20 Jun 2022 10:58:24 +0530
 MIME-Version: 1.0
-References: <20220618072929.28783-1-yunfei.dong@mediatek.com> <CAGXv+5EFkZ6-bvu68dV4hr795+N3tAwbXYg5WCJp+Zd+pf1Aqw@mail.gmail.com>
-In-Reply-To: <CAGXv+5EFkZ6-bvu68dV4hr795+N3tAwbXYg5WCJp+Zd+pf1Aqw@mail.gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 20 Jun 2022 13:25:22 +0800
-Message-ID: <CAGXv+5E2wULkB7_u_H7jFAi6Jk2AvUcfOJdzOp_5m2b4n3shww@mail.gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Initialize decoder parameters
- after getting dec_capability
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
+        <quic_jprakash@quicinc.com>
+References: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1655200111-18357-7-git-send-email-quic_c_skakit@quicinc.com>
+ <YquZRcuRCrdF+Q1z@google.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+In-Reply-To: <YquZRcuRCrdF+Q1z@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,37 +74,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 12:54 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+
+On 6/17/2022 2:27 AM, Lee Jones wrote:
+> On Tue, 14 Jun 2022, Satya Priya wrote:
 >
-> On Sat, Jun 18, 2022 at 3:29 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
-> >
-> > Need to get dec_capability from scp first, then initialize decoder
-> > supported format and other parameters according to dec_capability value.
-> >
-> > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+>> Use i2c_new_dummy_device() to register pm8008-regulator
+>> client present at a different address space, instead of
+>> defining a separate DT node. This avoids calling the probe
+>> twice for the same chip, once for each client pm8008-infra
+>> and pm8008-regulator.
+>>
+>> As a part of this define pm8008_regmap_init() to do regmap
+>> init for both the clients and define pm8008_get_regmap() to
+>> pass the regmap to the regulator driver.
+>>
+>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>> ---
+>> Changes in V15:
+>>   - None.
+>>
+>> Changes in V14:
+>>   - None.
+>>
+>> Changes in V13:
+>>   - None.
+>>
+>>   drivers/mfd/qcom-pm8008.c       | 34 ++++++++++++++++++++++++++++++++--
+>>   include/linux/mfd/qcom_pm8008.h |  9 +++++++++
+>>   2 files changed, 41 insertions(+), 2 deletions(-)
+>>   create mode 100644 include/linux/mfd/qcom_pm8008.h
+>>
+>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+>> index 569ffd50..55e2a8e 100644
+>> --- a/drivers/mfd/qcom-pm8008.c
+>> +++ b/drivers/mfd/qcom-pm8008.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/interrupt.h>
+>>   #include <linux/irq.h>
+>>   #include <linux/irqdomain.h>
+>> +#include <linux/mfd/qcom_pm8008.h>
+>>   #include <linux/module.h>
+>>   #include <linux/of_device.h>
+>>   #include <linux/of_platform.h>
+>> @@ -57,6 +58,7 @@ enum {
+>>   
+>>   struct pm8008_data {
+>>   	struct device *dev;
+>> +	struct regmap *regulators_regmap;
+>>   	int irq;
+>>   	struct regmap_irq_chip_data *irq_data;
+>>   };
+>> @@ -150,6 +152,12 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
+>>   	.max_register	= 0xFFFF,
+>>   };
+>>   
+>> +struct regmap *pm8008_get_regmap(const struct pm8008_data *chip)
+>> +{
+>> +	return chip->regulators_regmap;
+>> +}
+>> +EXPORT_SYMBOL_GPL(pm8008_get_regmap);
+> Seems like abstraction for the sake of abstraction.
 >
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> Why not do the dereference inside the regulator driver?
+
+
+To derefer this in the regulator driver, we need to have the pm8008_data 
+struct definition in the qcom_pm8008 header file.
+
+I think it doesn't look great to have only that structure in header and 
+all other structs and enum in the mfd driver.
+
+
+>>   static int pm8008_init(struct regmap *regmap)
+>>   {
+>>   	int rc;
+>> @@ -217,11 +225,25 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+>>   	return 0;
+>>   }
+>>   
+>> +static struct regmap *pm8008_regmap_init(struct i2c_client *client,
+>> +							struct pm8008_data *chip)
+>> +{
+>> +	struct regmap *regmap;
+>> +
+>> +	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
+>> +	if (!regmap)
+>> +		return NULL;
+>> +
+>> +	i2c_set_clientdata(client, chip);
+>> +	return regmap;
+>> +}
+> This function seems superfluous.
 >
-> Tested on MT8183 on mainline 20220617-next with the vcodec-dec DT node
-> copied from the ChromeOS v5.10 kernel.
+> It's only called once and it contains a single call.
+
+
+No, It is being called twice. To avoid repetitive code, I've added this 
+subroutine.
+
+
+> Just pop the call directly into probe.
 >
-> This fixes an issue where the first attempt to enumerate formats on the
-> device right after boot returns an empty list.
-
-BTW, this should have a Fixes tag.
-
-Either
-
-Fixes: 7a7ae26fd458 ("media: mediatek: vcodec: support stateless VP8 decoding")
-
-which looks like the first instance of when firmware capability really is
-considered, or
-
-Fixes: fd00d90330d1 ("media: mtk-vcodec: vdec: move stateful ops into
-their own file")
-
-which matches when ctx->dev->vdec_pdata->init_vdec_params(ctx) was first added.
-
-
-ChenYu
+>>   static int pm8008_probe(struct i2c_client *client)
+>>   {
+>>   	int rc;
+>>   	struct pm8008_data *chip;
+>>   	struct gpio_desc *reset_gpio;
+>> +	struct i2c_client *regulators_client;
+>>   	struct regmap *regmap;
+>>   
+>>   	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+>> @@ -229,11 +251,19 @@ static int pm8008_probe(struct i2c_client *client)
+>>   		return -ENOMEM;
+>>   
+>>   	chip->dev = &client->dev;
+>> -	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
+>> +	regmap = pm8008_regmap_init(client, chip);
+>>   	if (!regmap)
+>>   		return -ENODEV;
+>>   
+>> -	i2c_set_clientdata(client, chip);
+>> +	regulators_client = i2c_new_dummy_device(client->adapter, client->addr + 1);
+>> +	if (IS_ERR(regulators_client)) {
+>> +		dev_err(&client->dev, "can't attach client\n");
+>> +		return PTR_ERR(regulators_client);
+>> +	}
+>> +
+>> +	chip->regulators_regmap = pm8008_regmap_init(regulators_client, chip);
+>> +	if (!chip->regulators_regmap)
+>> +		return -ENODEV;
+>>   
+>>   	reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_LOW);
+>>   	if (IS_ERR(reset_gpio))
+>> diff --git a/include/linux/mfd/qcom_pm8008.h b/include/linux/mfd/qcom_pm8008.h
+>> new file mode 100644
+>> index 0000000..3814bff
+>> --- /dev/null
+>> +++ b/include/linux/mfd/qcom_pm8008.h
+>> @@ -0,0 +1,9 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +// Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+>> +#ifndef __QCOM_PM8008_H__
+>> +#define __QCOM_PM8008_H__
+>> +
+>> +struct pm8008_data;
+>> +struct regmap *pm8008_get_regmap(const struct pm8008_data *chip);
+>> +
+>> +#endif

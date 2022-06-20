@@ -2,51 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65442551E8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F05551E0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351210AbiFTOM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S1349613AbiFTNwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351766AbiFTOKB (ORCPT
+        with ESMTP id S1350844AbiFTNt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 10:10:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB245FAE;
-        Mon, 20 Jun 2022 06:28:12 -0700 (PDT)
+        Mon, 20 Jun 2022 09:49:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B55530F49;
+        Mon, 20 Jun 2022 06:18:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A3D70CE13A1;
-        Mon, 20 Jun 2022 13:12:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383AFC3411C;
-        Mon, 20 Jun 2022 13:12:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 630B660AC0;
+        Mon, 20 Jun 2022 13:12:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C7AEC3411B;
+        Mon, 20 Jun 2022 13:12:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730727;
-        bh=GJEvmm0l5VojvZkUC7HS1kwILy77gq+L2fepE8lunsM=;
+        s=korg; t=1655730749;
+        bh=i3hMr2zvbLMfhNtdbaivhSFl4gNmB97jXjyHRJ9vF78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FwfcCnC0ZqQuurBPU2k/ztcOLYEF3Kerrj7JZb1cSKcYMr51HwNhZjSLKqHvJdlHo
-         DWspy/kpbpCkCg/U8TKFi2doBY/BW2Op/c3+c51MRYBHnAvnPm8IZP4CRNmDAJttNF
-         qqTr6/aqHaKTtHu08GJMcdF7lfCWgrSkJlBXHwyE=
+        b=OuyRd5/J2meuuyILZQZdRzUcynzoTfu0kpFhzoa14Yn2WzMWrt95QkzuDB3C+E6HO
+         8NEqkDEqn+IR0JvAWlR/4l2SxIvlq0NKRBFRbb5exFH+Fd6DTLbfrapwnobRVlmqd5
+         EoyFVdYmzcxd29D4pG3ebCuqbAUWvzMoGvXTOYGA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        x86@kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 038/240] random: remove unused irq_flags argument from add_interrupt_randomness()
-Date:   Mon, 20 Jun 2022 14:48:59 +0200
-Message-Id: <20220620124739.026500646@linuxfoundation.org>
+Subject: [PATCH 5.4 044/240] random: use IS_ENABLED(CONFIG_NUMA) instead of ifdefs
+Date:   Mon, 20 Jun 2022 14:49:05 +0200
+Message-Id: <20220620124739.317913384@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
 References: <20220620124737.799371052@linuxfoundation.org>
@@ -64,104 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 703f7066f40599c290babdb79dd61319264987e9 upstream.
+commit 7b87324112df2e1f9b395217361626362dcfb9fb upstream.
 
-Since commit
-   ee3e00e9e7101 ("random: use registers from interrupted code for CPU's w/o a cycle counter")
+Rather than an awkward combination of ifdefs and __maybe_unused, we can
+ensure more source gets parsed, regardless of the configuration, by
+using IS_ENABLED for the CONFIG_NUMA conditional code. This makes things
+cleaner and easier to follow.
 
-the irq_flags argument is no longer used.
+I've confirmed that on !CONFIG_NUMA, we don't wind up with excess code
+by accident; the generated object file is the same.
 
-Remove unused irq_flags.
-
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Dexuan Cui <decui@microsoft.com>
-Cc: H. Peter Anvin <hpa@zytor.com>
-Cc: Haiyang Zhang <haiyangz@microsoft.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: K. Y. Srinivasan <kys@microsoft.com>
-Cc: Stephen Hemminger <sthemmin@microsoft.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wei Liu <wei.liu@kernel.org>
-Cc: linux-hyperv@vger.kernel.org
-Cc: x86@kernel.org
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Acked-by: Wei Liu <wei.liu@kernel.org>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/mshyperv.c |    2 +-
- drivers/char/random.c          |    4 ++--
- drivers/hv/vmbus_drv.c         |    2 +-
- include/linux/random.h         |    2 +-
- kernel/irq/handle.c            |    2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/char/random.c |   32 ++++++++++++--------------------
+ 1 file changed, 12 insertions(+), 20 deletions(-)
 
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -82,7 +82,7 @@ __visible void __irq_entry hv_stimer0_ve
- 	inc_irq_stat(hyperv_stimer0_count);
- 	if (hv_stimer0_handler)
- 		hv_stimer0_handler();
--	add_interrupt_randomness(HYPERV_STIMER0_VECTOR, 0);
-+	add_interrupt_randomness(HYPERV_STIMER0_VECTOR);
- 	ack_APIC_irq();
- 
- 	exiting_irq();
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -200,7 +200,7 @@
-  *	void add_device_randomness(const void *buf, unsigned int size);
-  * 	void add_input_randomness(unsigned int type, unsigned int code,
-  *                                unsigned int value);
-- *	void add_interrupt_randomness(int irq, int irq_flags);
-+ *	void add_interrupt_randomness(int irq);
-  * 	void add_disk_randomness(struct gendisk *disk);
-  *	void add_hwgenerator_randomness(const char *buffer, size_t count,
-  *					size_t entropy);
-@@ -1273,7 +1273,7 @@ static __u32 get_reg(struct fast_pool *f
- 	return *ptr;
+@@ -760,7 +760,6 @@ static int credit_entropy_bits_safe(stru
+ 
+ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+ 
+-#ifdef CONFIG_NUMA
+ /*
+  * Hack to deal with crazy userspace progams when they are all trying
+  * to access /dev/urandom in parallel.  The programs are almost
+@@ -768,7 +767,6 @@ static DECLARE_WAIT_QUEUE_HEAD(crng_init
+  * their brain damage.
+  */
+ static struct crng_state **crng_node_pool __read_mostly;
+-#endif
+ 
+ static void invalidate_batched_entropy(void);
+ static void numa_crng_init(void);
+@@ -816,7 +814,7 @@ static bool __init crng_init_try_arch_ea
+ 	return arch_init;
  }
  
--void add_interrupt_randomness(int irq, int irq_flags)
-+void add_interrupt_randomness(int irq)
+-static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
++static void crng_initialize_secondary(struct crng_state *crng)
  {
- 	struct entropy_store	*r;
- 	struct fast_pool	*fast_pool = this_cpu_ptr(&irq_randomness);
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -1303,7 +1303,7 @@ static void vmbus_isr(void)
- 			tasklet_schedule(&hv_cpu->msg_dpc);
+ 	memcpy(&crng->state[0], "expand 32-byte k", 16);
+ 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
+@@ -867,7 +865,6 @@ static void crng_finalize_init(struct cr
  	}
- 
--	add_interrupt_randomness(HYPERVISOR_CALLBACK_VECTOR, 0);
-+	add_interrupt_randomness(HYPERVISOR_CALLBACK_VECTOR);
  }
+ 
+-#ifdef CONFIG_NUMA
+ static void do_numa_crng_init(struct work_struct *work)
+ {
+ 	int i;
+@@ -894,29 +891,24 @@ static DECLARE_WORK(numa_crng_init_work,
+ 
+ static void numa_crng_init(void)
+ {
+-	schedule_work(&numa_crng_init_work);
++	if (IS_ENABLED(CONFIG_NUMA))
++		schedule_work(&numa_crng_init_work);
+ }
+ 
+ static struct crng_state *select_crng(void)
+ {
+-	struct crng_state **pool;
+-	int nid = numa_node_id();
+-
+-	/* pairs with cmpxchg_release() in do_numa_crng_init() */
+-	pool = READ_ONCE(crng_node_pool);
+-	if (pool && pool[nid])
+-		return pool[nid];
+-
+-	return &primary_crng;
+-}
+-#else
+-static void numa_crng_init(void) {}
++	if (IS_ENABLED(CONFIG_NUMA)) {
++		struct crng_state **pool;
++		int nid = numa_node_id();
++
++		/* pairs with cmpxchg_release() in do_numa_crng_init() */
++		pool = READ_ONCE(crng_node_pool);
++		if (pool && pool[nid])
++			return pool[nid];
++	}
+ 
+-static struct crng_state *select_crng(void)
+-{
+ 	return &primary_crng;
+ }
+-#endif
  
  /*
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -35,7 +35,7 @@ static inline void add_latent_entropy(vo
- 
- extern void add_input_randomness(unsigned int type, unsigned int code,
- 				 unsigned int value) __latent_entropy;
--extern void add_interrupt_randomness(int irq, int irq_flags) __latent_entropy;
-+extern void add_interrupt_randomness(int irq) __latent_entropy;
- 
- extern void get_random_bytes(void *buf, int nbytes);
- extern int wait_for_random_bytes(void);
---- a/kernel/irq/handle.c
-+++ b/kernel/irq/handle.c
-@@ -188,7 +188,7 @@ irqreturn_t handle_irq_event_percpu(stru
- 
- 	retval = __handle_irq_event_percpu(desc, &flags);
- 
--	add_interrupt_randomness(desc->irq_data.irq, flags);
-+	add_interrupt_randomness(desc->irq_data.irq);
- 
- 	if (!noirqdebug)
- 		note_interrupt(desc, retval);
+  * crng_fast_load() can be called by code in the interrupt service
 
 

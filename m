@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D38552573
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A0C55255E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344704AbiFTUJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S1344296AbiFTUJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344273AbiFTUIG (ORCPT
+        with ESMTP id S1344097AbiFTUIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:08:06 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144E11D0F7;
-        Mon, 20 Jun 2022 13:07:02 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id z17so6380192wmi.1;
-        Mon, 20 Jun 2022 13:07:02 -0700 (PDT)
+        Mon, 20 Jun 2022 16:08:22 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF4F21249;
+        Mon, 20 Jun 2022 13:07:11 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso6197188wml.1;
+        Mon, 20 Jun 2022 13:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oqx3v8Sb2M8GmsYA5Ky+XV9uouybbnIvgB5+4WCQaEA=;
-        b=I9SWwmkbAS0twwPt8IX4E7bPDCP7aUbF2QrdWQqioO/YT8vPWDbo5jafFWHLiMIjc6
-         1mw/0Uimpyz3cUcNIuL1gNMxnkzOwuSG3edxomlaxXv/3L99G0JTdAg4POHGrEyB2REH
-         3lIDZKKJ3rfCVWbTQEoaG7JmB0gDKFGBeqb20JXEMuxvSMR5CHUbycRO4F8LKhZqPuhZ
-         YEBHTx15YFCjU5hxF8mncOccOzTdEdvUtBMGeSXsVkIqDI9MxnDbvI8sGUw4c4kcM2YR
-         yU4ZYgDnXaav8BMzDiccmgOUBiOIkEhH4tyXriDpDiHGnyleHXKRGyMCZfOTYeUkSsCw
-         fC3w==
+        bh=rzfzyKEVoJaKFIv88YU1vTCrVQJBpK7ii1ptmDvGvSE=;
+        b=qBJcC0LrxQSAdxyKj5Dt7HUFUmjMISoYgjBHUUClNbIz3vAp9h4I6Lqto2o/8nRZZx
+         +mUtIMCKQ+xDXPL3Fzv7A9LsfxQhVJy+J3jisVRnKW/heO0ptBVZJfGA10gsSJrLxZO+
+         MObbJW6hGStsGnZRd48uGh/4qGcgNShaBsFXlaMlKP83cLUJ5mnOfQscQbtReaFC3JVv
+         djWshs0XGTygSwTV7AEfyGWiz4kJ7raOzjYloQWDqDDB2Jm1I+3fzts9p4jEUGs+ylCU
+         BlkyfP5HaSiXqAYXZ7zggOUoAuRHWYspwGWZ2TzWqacHn9MVYPY2Vzt3RKPNhtN644ir
+         H1Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oqx3v8Sb2M8GmsYA5Ky+XV9uouybbnIvgB5+4WCQaEA=;
-        b=6W1Zg7dSszVMt2Xf0Ew94307ABMRJEKd72RIYk3msRjJVOslMU0Y1dfbjXOgYzXwAX
-         OnbOop6mFkDcyTa28mGcvt7IXQ0Hkbv+Y3lWNRFCgxcJ548waH4YJ4ElidONXxz55cma
-         HuTWD4+6c75RjWmoQPXSnPC5TY4YX/M8cFcaXMMkun+FFhed9chgHhEgkuWk4cqe11Mg
-         O43Pp7FrSO6UeHrb85UKK0sH+EzLEHA7VyUKIl12YYkct5rAsfWRKtwz78Xfr7rVsgmp
-         K7PXzehVeVpdvEt1IvYAE26klxT6b4WaMqWR2zr7jak0HuOu9yUcG04fPbuCeM9vrS8n
-         h0yw==
-X-Gm-Message-State: AJIora8y3WV4OwbU84c5igyYaundRYZY3CdfcVtVsho8XxcfrwwSyDA2
-        AcI1N9x647g+l8nh+1kDaMY=
-X-Google-Smtp-Source: AGRyM1swymX/u49DBHMJPPyC7OgnYJ7zcAJGoTucjUXlwJwy4Cy1b+UW+TJYIq67rmm7OR5jau1T3g==
-X-Received: by 2002:a05:600c:5112:b0:397:53f5:e15b with SMTP id o18-20020a05600c511200b0039753f5e15bmr26726456wms.93.1655755622524;
-        Mon, 20 Jun 2022 13:07:02 -0700 (PDT)
+        bh=rzfzyKEVoJaKFIv88YU1vTCrVQJBpK7ii1ptmDvGvSE=;
+        b=AXBLqiyJ0uqNIm7UWWbRALy7woyYwMVrW29TZ2C56HzZ1+H9jEnU1EDQAlzdQbA9hv
+         U9xymh5oJzy5efgoe4uiMLfQH+mzs+ZlFgf5YkmQewVBFpujhlwhWZxw6nBGo3KVr0w6
+         pf85W9Zn4AGJ/qFPGqwxW8klC7lJlkKAjY+aLTHgEvQzg51/AsyA/MD+dzbXPjbsi6DP
+         mMqXL+K65eWydj7cWSSCEvWmsveJv1gQG/Fq7zy/YfI+faa6f/UPzePXs9QRm/qgokbg
+         W+qUqAFzJo7WssJHt9wA9ZoSJ/vqXByrljl7G8G7Iy1hY9m4/9bmgFm1H8y9UKNXQGQS
+         7sLQ==
+X-Gm-Message-State: AOAM533OefxMhXvocSFrVLin1zJg6Gfg9t/jbWTUS+fd/KdV+mYSClKO
+        oxD5QZjldw0Tci5yQQ96yvI=
+X-Google-Smtp-Source: ABdhPJyInyenW+OvDrbjpJKIaFUgNOigofr86k1OtUqbh4EqGuM90WNh58WAi7KJRkr+4OM3pXCRPQ==
+X-Received: by 2002:a1c:4c13:0:b0:39c:5a6b:8540 with SMTP id z19-20020a1c4c13000000b0039c5a6b8540mr36262410wmf.106.1655755624155;
+        Mon, 20 Jun 2022 13:07:04 -0700 (PDT)
 Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id a17-20020adffad1000000b0021b8749728dsm8178971wrs.73.2022.06.20.13.07.01
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c1c1300b0039c5645c60fsm28045293wms.3.2022.06.20.13.07.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:01 -0700 (PDT)
+        Mon, 20 Jun 2022 13:07:03 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 30/49] mfd: 88pm800: replace irqchip mask_invert with unmask_base
-Date:   Mon, 20 Jun 2022 21:06:25 +0100
-Message-Id: <20220620200644.1961936-31-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 31/49] mfd: max14577: replace irqchip mask_invert with unmask_base
+Date:   Mon, 20 Jun 2022 21:06:26 +0100
+Message-Id: <20220620200644.1961936-32-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -87,26 +87,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 An inverted mask register can be described more directly
 as an unmask register.
 
+Also drop useless mask_invert flag from the pmic irq chip.
+
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/mfd/88pm800.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/mfd/max14577.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/mfd/88pm800.c b/drivers/mfd/88pm800.c
-index eaf9845633b4..6d1192db13c1 100644
---- a/drivers/mfd/88pm800.c
-+++ b/drivers/mfd/88pm800.c
-@@ -398,9 +398,8 @@ static struct regmap_irq_chip pm800_irq_chip = {
- 
- 	.num_regs = 4,
- 	.status_base = PM800_INT_STATUS1,
--	.mask_base = PM800_INT_ENA_1,
-+	.unmask_base = PM800_INT_ENA_1,
- 	.ack_base = PM800_INT_STATUS1,
--	.mask_invert = 1,
- };
- 
- static int pm800_pages_init(struct pm80x_chip *chip)
+diff --git a/drivers/mfd/max14577.c b/drivers/mfd/max14577.c
+index 6c487fa14e9c..7a501dcc48f6 100644
+--- a/drivers/mfd/max14577.c
++++ b/drivers/mfd/max14577.c
+@@ -209,8 +209,7 @@ static const struct regmap_irq max14577_irqs[] = {
+ static const struct regmap_irq_chip max14577_irq_chip = {
+ 	.name			= "max14577",
+ 	.status_base		= MAX14577_REG_INT1,
+-	.mask_base		= MAX14577_REG_INTMASK1,
+-	.mask_invert		= true,
++	.unmask_base		= MAX14577_REG_INTMASK1,
+ 	.num_regs		= 3,
+ 	.irqs			= max14577_irqs,
+ 	.num_irqs		= ARRAY_SIZE(max14577_irqs),
+@@ -239,8 +238,7 @@ static const struct regmap_irq max77836_muic_irqs[] = {
+ static const struct regmap_irq_chip max77836_muic_irq_chip = {
+ 	.name			= "max77836-muic",
+ 	.status_base		= MAX14577_REG_INT1,
+-	.mask_base		= MAX14577_REG_INTMASK1,
+-	.mask_invert		= true,
++	.unmask_base		= MAX14577_REG_INTMASK1,
+ 	.num_regs		= 3,
+ 	.irqs			= max77836_muic_irqs,
+ 	.num_irqs		= ARRAY_SIZE(max77836_muic_irqs),
+@@ -255,7 +253,6 @@ static const struct regmap_irq_chip max77836_pmic_irq_chip = {
+ 	.name			= "max77836-pmic",
+ 	.status_base		= MAX77836_PMIC_REG_TOPSYS_INT,
+ 	.mask_base		= MAX77836_PMIC_REG_TOPSYS_INT_MASK,
+-	.mask_invert		= false,
+ 	.num_regs		= 1,
+ 	.irqs			= max77836_pmic_irqs,
+ 	.num_irqs		= ARRAY_SIZE(max77836_pmic_irqs),
 -- 
 2.35.1
 

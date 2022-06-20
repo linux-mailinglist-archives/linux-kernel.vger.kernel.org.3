@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A2D552721
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAB955272C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344203AbiFTWvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S236639AbiFTWwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236325AbiFTWvb (ORCPT
+        with ESMTP id S1344301AbiFTWvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:51:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA436193FF;
-        Mon, 20 Jun 2022 15:51:30 -0700 (PDT)
+        Mon, 20 Jun 2022 18:51:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939351CFF5;
+        Mon, 20 Jun 2022 15:51:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8609261377;
-        Mon, 20 Jun 2022 22:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C6AC3411B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39FC5B81648;
+        Mon, 20 Jun 2022 22:51:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB24C3411C;
         Mon, 20 Jun 2022 22:51:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655765489;
-        bh=+YDomq1JbpU1cTyl2aMrZb8rRzcO4wsZsjbv08+dOoY=;
+        s=k20201202; t=1655765490;
+        bh=itABiS+6bfg1NTOpoC0+1FdfGW1G9cPkCW8NoD1VfvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sxXKwJBWG4W5qPpryO8+xqbv60ARCzB1fmBWmn1ORbit6EhxtDRRl5vgRWWlxiXdX
-         DG7kt0oByEjUbymSGbdSSaxG79Os8YGFgdmjR2e+tJBB0AIFURgFueIU3N6HcZq/7t
-         D2wkoNo4Q4rOAdY+2J7oVpcIzXZam7xWl4WS6YMbcKRZi55LTUEDLWLRungF9Z2Czz
-         cUQLvs9VYq+byhkd8MXFlZnNeqc5fUJAN3Lb79QJ8U1o9+QPaNPv4mrYEu6abIJ/ZO
-         g7irDHz0fDM7awq8x/QykWX/FIDwX80gAuwGIM402T1Zjbjmz3/9DZUALyRlVxRoND
-         68kNr42sFbLjg==
+        b=tNaxXy8bV1X9UCTHYDFHtUuJPod+atNci6hnfCwtNJtRSp8wbq7xzhY4NRA50X6I0
+         TX6EZlvlfJtbcLz37hT/gX7fnZk4H/RkGqwxpvdAPGjSDy+D4fNt4ApspfXf2mRldN
+         YqjsFH1WxORfIKWXc2qQnCsc3KUmAcTyLIGz7Nh3foSw/31Rk7KTreyeeFZZ8stjrq
+         KZg27FfB0mTBxyG9M3X++98wjeEm36sMMWbUlGAn5BHbd9NYKsXVxlA1ygdqD0meZ2
+         0J1M7cVAcPojBhKMzsjMqGSk0IsJbwZGhLEKo7JXK0mPRid8ePuGltgXXIJCDg4syq
+         lKDkhOift1YjA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 930C55C05B9; Mon, 20 Jun 2022 15:51:29 -0700 (PDT)
+        id 959CF5C0093; Mon, 20 Jun 2022 15:51:29 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
@@ -41,9 +41,9 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         Brian Foster <bfoster@redhat.com>,
         Dave Chinner <david@fromorbit.com>,
         Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>
-Subject: [PATCH rcu 01/12] rcu: Make normal polling GP be more precise about sequence numbers
-Date:   Mon, 20 Jun 2022 15:51:17 -0700
-Message-Id: <20220620225128.3842050-1-paulmck@kernel.org>
+Subject: [PATCH rcu 02/12] rcu: Provide a get_completed_synchronize_rcu() function
+Date:   Mon, 20 Jun 2022 15:51:18 -0700
+Message-Id: <20220620225128.3842050-2-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
 References: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
@@ -59,20 +59,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, poll_state_synchronize_rcu() uses rcu_seq_done() to check
-whether the specified grace period has completed.  However, rcu_seq_done()
-does a simple comparison that reserves have of the sequence-number space
-for uncompleted grace periods.  This has the unfortunate side-effect
-of not handling sequence-number wrap gracefully.  Of course, one can
-argue that if someone has already waited for half of the full range of
-grace periods, they can wait for the other half, but why wait at all in
-this case?
+It is currently up to the caller to handle stale return values from
+get_state_synchronize_rcu().  If poll_state_synchronize_rcu() returned
+true once, a grace period has elapsed, regardless of the fact that counter
+wrap might cause some future poll_state_synchronize_rcu() invocation to
+return false.  For example, the caller might store a separate flag that
+indicates whether some previous call to poll_state_synchronize_rcu()
+determined that the relevant grace period had already ended.
 
-This commit therefore creates a rcu_seq_done_exact() that counts as
-uncompleted only the two grace periods during which the sequence number
-might have been handed out, while still being uncompleted.  This way,
-if sequence-number wrap happens to hit that range, at most two additional
-grace periods need be waited for.
+This approach works, but it requires extra storage and is easy to get
+wrong.  This commit therefore introduces a get_completed_synchronize_rcu()
+that returns a cookie that causes poll_state_synchronize_rcu() to always
+return true.  This already-completed cookie can be stored in place of the
+cookie that previously caused poll_state_synchronize_rcu() to return true.
+It can also be used to flag a given structure as not having been exposed
+to readers, and thus not requiring a grace period to elapse.
 
 This commit is in preparation for polled expedited grace periods.
 
@@ -84,55 +85,99 @@ Cc: Al Viro <viro@zeniv.linux.org.uk>
 Cc: Ian Kent <raven@themaw.net>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/rcu.h  | 12 ++++++++++++
- kernel/rcu/tree.c |  4 ++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ include/linux/rcupdate.h |  1 +
+ kernel/rcu/rcu.h         |  3 +++
+ kernel/rcu/tiny.c        |  4 ++--
+ kernel/rcu/tree.c        |  3 ++-
+ kernel/rcu/update.c      | 13 +++++++++++++
+ 5 files changed, 21 insertions(+), 3 deletions(-)
 
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index 1a32036c918cd..7f12daa4708b1 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -41,6 +41,7 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func);
+ void rcu_barrier_tasks(void);
+ void rcu_barrier_tasks_rude(void);
+ void synchronize_rcu(void);
++unsigned long get_completed_synchronize_rcu(void);
+ 
+ #ifdef CONFIG_PREEMPT_RCU
+ 
 diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 4916077119f3f..0adb55941aeb3 100644
+index 0adb55941aeb3..32291f4eefde9 100644
 --- a/kernel/rcu/rcu.h
 +++ b/kernel/rcu/rcu.h
-@@ -119,6 +119,18 @@ static inline bool rcu_seq_done(unsigned long *sp, unsigned long s)
- 	return ULONG_CMP_GE(READ_ONCE(*sp), s);
+@@ -23,6 +23,9 @@
+ #define RCU_SEQ_CTR_SHIFT	2
+ #define RCU_SEQ_STATE_MASK	((1 << RCU_SEQ_CTR_SHIFT) - 1)
+ 
++/* Low-order bit definition for polled grace-period APIs. */
++#define RCU_GET_STATE_COMPLETED	0x1
++
+ extern int sysctl_sched_rt_runtime;
+ 
+ /*
+diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+index 340b3f8b090d4..dbee6bea67269 100644
+--- a/kernel/rcu/tiny.c
++++ b/kernel/rcu/tiny.c
+@@ -58,7 +58,7 @@ void rcu_qs(void)
+ 		rcu_ctrlblk.donetail = rcu_ctrlblk.curtail;
+ 		raise_softirq_irqoff(RCU_SOFTIRQ);
+ 	}
+-	WRITE_ONCE(rcu_ctrlblk.gp_seq, rcu_ctrlblk.gp_seq + 1);
++	WRITE_ONCE(rcu_ctrlblk.gp_seq, rcu_ctrlblk.gp_seq + 2);
+ 	local_irq_restore(flags);
  }
  
-+/*
-+ * Given a snapshot from rcu_seq_snap(), determine whether or not a
-+ * full update-side operation has occurred, but do not allow the
-+ * (ULONG_MAX / 2) safety-factor/guard-band.
-+ */
-+static inline bool rcu_seq_done_exact(unsigned long *sp, unsigned long s)
-+{
-+	unsigned long cur_s = READ_ONCE(*sp);
-+
-+	return ULONG_CMP_GE(cur_s, s) || ULONG_CMP_LT(cur_s, s - (2 * RCU_SEQ_STATE_MASK + 1));
-+}
-+
- /*
-  * Has a grace period completed since the time the old gp_seq was collected?
-  */
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index c25ba442044a6..ec28e259774e7 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3911,7 +3911,7 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);
-  *
-  * Yes, this function does not take counter wrap into account.
-  * But counter wrap is harmless.  If the counter wraps, we have waited for
-- * more than 2 billion grace periods (and way more on a 64-bit system!).
-+ * more than a billion grace periods (and way more on a 64-bit system!).
-  * Those needing to keep oldstate values for very long time periods
-  * (many hours even on 32-bit systems) should check them occasionally
-  * and either refresh them or set a flag indicating that the grace period
-@@ -3924,7 +3924,7 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);
+@@ -213,7 +213,7 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);
   */
  bool poll_state_synchronize_rcu(unsigned long oldstate)
  {
--	if (rcu_seq_done(&rcu_state.gp_seq, oldstate)) {
-+	if (rcu_seq_done_exact(&rcu_state.gp_seq, oldstate)) {
+-	return READ_ONCE(rcu_ctrlblk.gp_seq) != oldstate;
++	return oldstate == RCU_GET_STATE_COMPLETED || READ_ONCE(rcu_ctrlblk.gp_seq) != oldstate;
+ }
+ EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu);
+ 
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index ec28e259774e7..46cfceea87847 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3924,7 +3924,8 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);
+  */
+ bool poll_state_synchronize_rcu(unsigned long oldstate)
+ {
+-	if (rcu_seq_done_exact(&rcu_state.gp_seq, oldstate)) {
++	if (oldstate == RCU_GET_STATE_COMPLETED ||
++	    rcu_seq_done_exact(&rcu_state.gp_seq, oldstate)) {
  		smp_mb(); /* Ensure GP ends before subsequent accesses. */
  		return true;
  	}
+diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+index fc7fef5756064..2e93acad1e31f 100644
+--- a/kernel/rcu/update.c
++++ b/kernel/rcu/update.c
+@@ -516,6 +516,19 @@ int rcu_cpu_stall_suppress_at_boot __read_mostly; // !0 = suppress boot stalls.
+ EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress_at_boot);
+ module_param(rcu_cpu_stall_suppress_at_boot, int, 0444);
+ 
++/**
++ * get_completed_synchronize_rcu - Return a pre-completed polled state cookie
++ *
++ * Returns a value that will always be treated by functions like
++ * poll_state_synchronize_rcu() as a cookie whose grace period has already
++ * completed.
++ */
++unsigned long get_completed_synchronize_rcu(void)
++{
++	return RCU_GET_STATE_COMPLETED;
++}
++EXPORT_SYMBOL_GPL(get_completed_synchronize_rcu);
++
+ #ifdef CONFIG_PROVE_RCU
+ 
+ /*
 -- 
 2.31.1.189.g2e36527f23
 

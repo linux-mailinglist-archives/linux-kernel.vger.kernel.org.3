@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF3F551E21
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B0E551DBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 16:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351896AbiFTOKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 10:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S1350169AbiFTOGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 10:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354643AbiFTN7o (ORCPT
+        with ESMTP id S1355010AbiFTOAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:59:44 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D0A3A729;
-        Mon, 20 Jun 2022 06:25:35 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so10304996pjz.1;
-        Mon, 20 Jun 2022 06:25:35 -0700 (PDT)
+        Mon, 20 Jun 2022 10:00:04 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D453B3FF
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:26:05 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gl15so21108472ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:26:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1SRZahO4w5J/q1AxamwHmWbo+QN6jL4DplQ3GJck67Q=;
-        b=Yfz4kPN4Epxgld8RHdqX+DgMerLlPdZE2q1himsiKuhf+pOrqaCXF8BhF9LkVvWOnp
-         9aXDpNUMjqDP+82FNjGLrCpz8XBIMlgUIZw2WdbxWL48Sz7rts4aspIOwQkX/wqVFqPf
-         1J7wxlGwBSpxXBF4KejzRbs6XS/AkIeWCESXqSTQ8od47R9NnNgkxObeM+ef65Cw4L/q
-         kMUTu32cmMNnlmV2j9suedht7lBl3hqCkNmCOAMTt8lVcqqgRKI9Rg4gacWUxgnzxf0I
-         685KjzIxFwQuWdGBYc+wHHr6gV2zI8MQ/jhb8nevWRqiiInmgJjnHsmihePlazOzcsxz
-         cLRA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=bpkWVggJ3SSUB8ub063CuI93Ce8O0+lE1lmNavRnw/U=;
+        b=vf/iYq9DpWz4A9mtQbIq4dg+t8LKJf93XXM3RhHu/GHf8CYhssYFp7miEDq8W3c0Fl
+         ao9NKWI8A9jq+Wqb9JkOCjf8/oHc586a8exo/yPyJOIAJYRswYbEIVrewpvjuMlRtcvv
+         CR2QfMue63UCqJArO6q+SMYpJU29d83H0Y4S3k4lRaNiJfkVVV+UQKz+CexOvxuCeTG4
+         J2cmK7WlOvb3TKiyEKJPwCvZfsJf16/vT1Q/NVQxUA/mGWCtzshY4I4coUYNN45IWdZB
+         txhWZkWbpQZVWpTXCWROu1N2Z/L2MPY552xGOi2ehwrJs2e5+4AwlYX3UwATMOxwmph/
+         PQOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1SRZahO4w5J/q1AxamwHmWbo+QN6jL4DplQ3GJck67Q=;
-        b=DMmspJqnRLn0ajafL6qe5KJiN8AKBl3YCz1kynwnk2jZrP6IyMkZMe0lK2PMjG0kEt
-         NAhQoRU2uuh4D9OU4JssM9+0g6aV1/2yICDzfeWS9GNChfwwS1NsLMV06z7fyq542fdE
-         MroRUQDiAfAFeISouoTxe+9aBdcFNQgFLi4RA+8oolmwH8dgaKrzeZ7m8ae76fObvXjp
-         KZIs+4ivKGwcjwUZyCJc9pWuSG7zykz0qoqUO7MhCHu8JwAXGukPd6JxenH8zy9ediDI
-         Z38sJSooNpH5lbEx3RTQN/s4yRFcZrspeebW4rDqacI64a3NW0q5+MpWHdReTiTvZSIn
-         MtWg==
-X-Gm-Message-State: AJIora+RFshZHVa4qWdnRgUu96LapxCED+BAQPOlYXBpD7mMxHDPx4T/
-        v/KqV2w+f1WMbw/1bVW4HXw=
-X-Google-Smtp-Source: AGRyM1sriAMqD/tVrcUsQCeNd2USxuUFdiLg7orv2BCCs0tunNFnqevMKSGN2qUHWs8/wkImAEhsJQ==
-X-Received: by 2002:a17:90b:1bc7:b0:1e8:317d:6b3b with SMTP id oa7-20020a17090b1bc700b001e8317d6b3bmr26630225pjb.136.1655731534551;
-        Mon, 20 Jun 2022 06:25:34 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090a694600b001ec839fff50sm4829562pjm.34.2022.06.20.06.25.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 06:25:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f8520fac-28b3-0d8d-4d27-25463978b2ec@roeck-us.net>
-Date:   Mon, 20 Jun 2022 06:25:31 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Drop wrong dependency to
- INTEL_SOC_PMIC
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=bpkWVggJ3SSUB8ub063CuI93Ce8O0+lE1lmNavRnw/U=;
+        b=uvNvh6Tr/GbMwj8EEbgKxXN6c+hR0Aul5HECzZrbCW57HoewxYWe8nHNDL8qwg7QVx
+         kurFpb5yKhu1iBVdCvJhMN31F+InDMBVXuxrDOHae+ftB3p9qjsLrTcNtEwG4ccLhUnB
+         +LQTU70qT0BYz9e3sf+uKGwSHy6XrB80uFe+QVrgNqlRKqKB/3xO5logjYrxV6h//vNJ
+         1H+pguE8x8mUagHdRygooin8l2oduswc80puuwYY6JTxGh1230G2cahSEWb1NpEF/aR/
+         wJEEcpSFGNhKXDJmpi7WltvIEG0FSlYyJxK5d/DzhOya7K2YHE8/JhUjEI/OimuPTWyj
+         73yg==
+X-Gm-Message-State: AJIora/C5lf+uYb84Z/64e1fwCyPd1kQeB8gThxlacJpE3UC9yXaR2Bm
+        1kqx31gy3Vu3q23pLXNGnLNKsw==
+X-Google-Smtp-Source: AGRyM1tYluEdJ+vnziL1SXQxMswnUz9oRFxNhv0bgVtToC+Hn6byz6Ji9EoyHK15pGGwLp0yY3CCvA==
+X-Received: by 2002:a17:907:97c9:b0:71d:67ea:42ca with SMTP id js9-20020a17090797c900b0071d67ea42camr13845804ejc.7.1655731563861;
+        Mon, 20 Jun 2022 06:26:03 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id h7-20020a17090634c700b006febce7081esm6063456ejb.177.2022.06.20.06.26.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 06:26:03 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 14:25:39 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Yang Shen <shenyang39@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-accelerators@lists.ozlabs.org
+Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
+Message-ID: <YrB1U29QVHcKV3g8@myrica>
+References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
+ <Yqn3spLZHpAkQ9Us@myrica>
+ <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
+ <YqrmdKNrYTCiS/MC@myrica>
+ <d90e8ea5-2f18-2eda-b4b2-711083aa7ecd@linaro.org>
+ <53b9acef-ad32-d0aa-fa1b-a7cb77a0d088@linaro.org>
+ <1fab1f9a-5c6c-8190-829b-4bacf15eb306@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1fab1f9a-5c6c-8190-829b-4bacf15eb306@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 03:43, Andy Shevchenko wrote:
-> Intel SoC PMIC is a generic name for all PMICs that are used
-> on Intel platforms. In particular, INTEL_SOC_PMIC kernel configuration
-> option refers to Crystal Cove PMIC, which has never been a part
-> of any Intel Broxton hardware. Drop wrong dependency from Kconfig.
+On Fri, Jun 17, 2022 at 10:23:13PM +0800, Zhangfei Gao wrote:
+> @@ -312,12 +345,20 @@ static ssize_t available_instances_show(struct device
+> *dev,
+>                      char *buf)
+>  {
+>      struct uacce_device *uacce = to_uacce_device(dev);
+> +    ssize_t ret;
 > 
-> Note, the correct dependency is satisfied via ACPI PMIC OpRegion driver,
-> which the Type-C depends on.
-> 
-> Fixes: d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
-> Reported-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> -    if (!uacce->ops->get_available_instances)
+> -        return -ENODEV;
+> +    mutex_lock(&uacce_mutex);
+> +    if (!uacce->ops || !uacce->ops->get_available_instances) {
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Doesn't the sysfs group go away with uacce_remove()?  We shouldn't need
+this check
 
-> ---
->   drivers/usb/typec/tcpm/Kconfig | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 557f392fe24d..073fd2ea5e0b 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -56,7 +56,6 @@ config TYPEC_WCOVE
->   	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
->   	depends on ACPI
->   	depends on MFD_INTEL_PMC_BXT
-> -	depends on INTEL_SOC_PMIC
->   	depends on BXT_WC_PMIC_OPREGION
->   	help
->   	  This driver adds support for USB Type-C on Intel Broxton platforms
-
+Thanks,
+Jean

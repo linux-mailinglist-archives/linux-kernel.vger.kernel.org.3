@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0141552577
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA3C55259F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345010AbiFTUKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 16:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S1344284AbiFTULe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344144AbiFTUI6 (ORCPT
+        with ESMTP id S1344282AbiFTUJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 16:08:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A58921E05;
-        Mon, 20 Jun 2022 13:07:31 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id v14so16099470wra.5;
-        Mon, 20 Jun 2022 13:07:31 -0700 (PDT)
+        Mon, 20 Jun 2022 16:09:00 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537DF21E16;
+        Mon, 20 Jun 2022 13:07:33 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id o8so16104302wro.3;
+        Mon, 20 Jun 2022 13:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dqZEE7XdviwRWITP3iO6UBVL417kMvPw/5cpdhOCnY0=;
-        b=TIaLYM+7aLuuRlXrQlapwog96FVtU0ooWGOQ047CVxq6/eBhXYieIqxwCcMXfW3g6t
-         f+HGuhXPfSxIelrPnYEN7OU7peoZLJxZnRXDaJcr5fL+fEf69btKbTF4tAUZNYQyHScv
-         iwtpLeRs+BLtCQHpOHV5HTtcb+smm2n5XiEw9va+rWEPvmpRhr9uihWsn8c3AWaKo2tu
-         ixhGNtLy3TSWF+J6E4waInzEuxA2ck3ipVwp4MrV2tbNe0NS3OQkYDrzOC8k9atTsxJT
-         71CeVTVSDdBpYrNOzHBu5VTgwxnGKG7OS+jOMILWiKTmwhHwDvjmfpRNJ4UZ4pzCshkj
-         2pww==
+        bh=rFP2epvfooKrZpPFT8BKKDNI28ulsq6H0dBYSPgFoyk=;
+        b=AjebCnrCn0roYHEXtZUSrMTMzWgreVkEMmGmWHB4aW5MqCKA4G4WAtMmLhSH/wSD9O
+         hErB+wW/nmuyZcj6VsVAhDUiCzXy1A0InOSiMOhVg1zOo944NV//bnCbQ2Nfq/Wvm/4X
+         gHuja0BV7C29XQ21FTvJ66Q4m2HHGHfjAfbDNfzOus4oL46kEV7W/Ut/DNWQxw6A0wN3
+         MaclksZzjz+wgvfYM3RiCRmGkMi+n+Veo8oqESntYKECZMRtvsRVSUdWqg/UzoMptmRp
+         DOSCYB+7UcRMW3szUyAX5e47sGuNfYYpbyhUPLebUPzr6yz1Frjd0ZNrD8flYUO0+4T7
+         n+iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dqZEE7XdviwRWITP3iO6UBVL417kMvPw/5cpdhOCnY0=;
-        b=hbvN7P/TkiJh54n0ndNJPWNP70ONEq2WGN4vtIDDenuMUmrSFmq+uJETdloTobBw+x
-         a5+zM8huJwbRh2eptO/V1nqvqiCarv+htn/x+eHuVIRB7+Es1reKiqMivF/xWpjTyQZ9
-         kB7ARB/ZARNMKVpQ6bJBoB2rBRZhDjRl9RT/fAKTmC18FYbWrsPdIJ47TUhdwnoUapn0
-         K/qk+lSj18mvdUu1GwsCxZGSUX3/pL2VJe1/ZMCaw09kQKiO9/aNi5n/OJmX1dIHeTar
-         w+ZSbjuW1gI6pAixeMnyVvGV72aP56le1EiqgSCLpQv3MFoXNXX/QkaTZkLmbbpx162A
-         W1jA==
-X-Gm-Message-State: AJIora8clNhyjBraSHh1OV15ZDrjojPsvhZRkZvtvzLFzbaeBth0LwWK
-        MKiSB73zrO0UejVxtqKbnFI=
-X-Google-Smtp-Source: AGRyM1t7fF9oWyoFMD4Gd1xha3GDwq5quNlzvF+7I8uqpwdkfaVZSf+y3kr/8cPcMtmBqNLfvwIwNg==
-X-Received: by 2002:a5d:5885:0:b0:218:3d12:e0eb with SMTP id n5-20020a5d5885000000b002183d12e0ebmr24861338wrf.510.1655755642796;
-        Mon, 20 Jun 2022 13:07:22 -0700 (PDT)
+        bh=rFP2epvfooKrZpPFT8BKKDNI28ulsq6H0dBYSPgFoyk=;
+        b=m2PZwAKxSBFM29cdZs60Qvi1i/8UCO/KbK7InycUNlGZtaiD17J9ovFjPWph5VAF6Q
+         blWNzyx1nWQpTl0LsKsQE0xcG4ioZHg67VfIVu6YzYDAR6mqKYp6Phi9c/b2nOPn/zhx
+         QEt7m6pBAB3eLsDSNI8UWWNbrKY2zqZwnLn4QBl2G9zq2UcGcazBk89+y594Ax+EzEfn
+         vj3/1j3wxAIbO6si80Rj6g180SzFyrHd2CuV8R3VW0NU8Hts7VhqBySe1cYvJ3o3jsjs
+         rcP7g48NVPAJjTNwXoQ6de0cZyWE7fWL9Imal1u+N85WIx970TkJ0YDU1Y2Au3aAPoQx
+         B7Qg==
+X-Gm-Message-State: AJIora/62Qns/+mRDfFxNahq3W0E/MMMhNvMLTxm8trSibQzG0ALov3y
+        wP+2qmbRW88yMZ+w9820p7k=
+X-Google-Smtp-Source: AGRyM1tPhWdLWdfyykUlpNJ3PSEDMPtwatE94NYU/Ih24mSrC9Dy3BbzCPtCbJhpEUzIutMTZqJdog==
+X-Received: by 2002:a05:6000:10d0:b0:21b:8ffb:80ad with SMTP id b16-20020a05600010d000b0021b8ffb80admr6433209wrx.444.1655755644354;
+        Mon, 20 Jun 2022 13:07:24 -0700 (PDT)
 Received: from localhost (92.40.169.63.threembb.co.uk. [92.40.169.63])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05600c014a00b0039ee51fda45sm12789702wmm.2.2022.06.20.13.07.21
+        by smtp.gmail.com with ESMTPSA id o20-20020a1c7514000000b0039c4ec6fdacsm15898561wmc.40.2022.06.20.13.07.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 13:07:22 -0700 (PDT)
+        Mon, 20 Jun 2022 13:07:23 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -67,9 +67,9 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         alsa-devel@alsa-project.org
-Subject: [PATCH 42/49] mfd: qcom-pm8008: Fix broken mask/unmask in irq chip
-Date:   Mon, 20 Jun 2022 21:06:37 +0100
-Message-Id: <20220620200644.1961936-43-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 43/49] mfd: qcom-pm8008: Enable mask_writeonly flag for irq chip
+Date:   Mon, 20 Jun 2022 21:06:38 +0100
+Message-Id: <20220620200644.1961936-44-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -84,35 +84,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Swap mask_base and unmask_base, and drop the broken_mask_unmask
-flag since we're now expecting the registers to have their usual
-behavior.
+The PM8008 has separate set and clear registers for controlling
+its interrupt masks. These are likely volatile registers which
+read as 0, and writing a '1' bit sets or clears the corresponding
+bit in the mask register.
+
+The PM8008's regmap config doesn't enable a cache, so all register
+access is already volatile. Adding the mask_writeonly flag should
+reduce bus traffic by avoiding a read-modify-write on the mask
+set/clear registers.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/mfd/qcom-pm8008.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/mfd/qcom-pm8008.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index 18095e72714e..7bc6becfe7f4 100644
+index 7bc6becfe7f4..c778f2f87a17 100644
 --- a/drivers/mfd/qcom-pm8008.c
 +++ b/drivers/mfd/qcom-pm8008.c
-@@ -45,8 +45,8 @@ enum {
- #define PM8008_GPIO2_ADDR	PM8008_PERIPH_3_BASE
- 
- #define PM8008_STATUS_BASE	(PM8008_PERIPH_0_BASE | INT_LATCHED_STS_OFFSET)
--#define PM8008_MASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_SET_OFFSET)
--#define PM8008_UNMASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_CLR_OFFSET)
-+#define PM8008_MASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_CLR_OFFSET)
-+#define PM8008_UNMASK_BASE	(PM8008_PERIPH_0_BASE | INT_EN_SET_OFFSET)
- #define PM8008_TYPE_BASE	(PM8008_PERIPH_0_BASE | INT_SET_TYPE_OFFSET)
- #define PM8008_ACK_BASE		(PM8008_PERIPH_0_BASE | INT_LATCHED_CLR_OFFSET)
- #define PM8008_POLARITY_HI_BASE	(PM8008_PERIPH_0_BASE | INT_POL_HIGH_OFFSET)
-@@ -141,7 +141,6 @@ static struct regmap_irq_chip pm8008_irq_chip = {
+@@ -141,6 +141,7 @@ static struct regmap_irq_chip pm8008_irq_chip = {
  	.status_base		= PM8008_STATUS_BASE,
  	.mask_base		= PM8008_MASK_BASE,
  	.unmask_base		= PM8008_UNMASK_BASE,
--	.broken_mask_unmask	= true,
++	.mask_writeonly		= true,
  	.ack_base		= PM8008_ACK_BASE,
  	.config_base		= pm8008_config_regs,
  	.num_config_bases	= ARRAY_SIZE(pm8008_config_regs),

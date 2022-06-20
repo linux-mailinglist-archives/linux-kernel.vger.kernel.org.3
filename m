@@ -2,226 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75691551805
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A59E551880
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 14:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242144AbiFTMCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        id S242539AbiFTMMD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 08:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241801AbiFTMBz (ORCPT
+        with ESMTP id S242682AbiFTMLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:01:55 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115E918380;
-        Mon, 20 Jun 2022 05:01:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655726511; x=1687262511;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=5QGbhm9C7gWqxuEx/F8GGgPigApO9W/BwDv0Y85WGaY=;
-  b=zCbTR9Dwvob0vRWSmRFFhvD3vOWWsGs8qExi8banercTdAVBFJtK9KCw
-   zixqjizBlvWsA37YSrqa2WmWZhiQ5lDC+j15AoClP6JZ3UhsIVt7Cn+6c
-   aFRVfGYT6DcE1/TNmUOlyY9zVP3dBR674yqhWHamsHOphJe2OAOaDZtN2
-   w=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 20 Jun 2022 05:01:50 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 05:01:50 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 05:01:49 -0700
-Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 05:01:44 -0700
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        "Tao Zhang" <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Hao Zhang" <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>
-Subject: [PATCH v11 7/9] dt-bindings: arm: Adds CoreSight TPDA hardware definitions
-Date:   Mon, 20 Jun 2022 20:00:59 +0800
-Message-ID: <20220620120101.2906-8-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220620120101.2906-1-quic_jinlmao@quicinc.com>
-References: <20220620120101.2906-1-quic_jinlmao@quicinc.com>
+        Mon, 20 Jun 2022 08:11:46 -0400
+Received: from mail.pgj.campeche.gob.mx (unknown [187.157.28.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61163193C0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 05:11:33 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id B64AB1BC0EC2;
+        Mon, 20 Jun 2022 06:49:20 -0500 (CDT)
+Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
+        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id fBvVGXrZzFTC; Mon, 20 Jun 2022 06:49:16 -0500 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 6EE461BC0F29;
+        Mon, 20 Jun 2022 06:49:14 -0500 (CDT)
+X-Virus-Scanned: amavisd-new at pgj.campeche.gob.mx
+Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
+        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id o7AXOcIOAhyz; Mon, 20 Jun 2022 06:49:12 -0500 (CDT)
+Received: from mail.pgj.campeche.gob.mx (mail.pgj.campeche.gob.mx [172.24.1.108])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id E1B551BC0F21;
+        Mon, 20 Jun 2022 06:49:09 -0500 (CDT)
+Date:   Mon, 20 Jun 2022 06:49:09 -0500 (CDT)
+From:   =?utf-8?B?0YHQuNGB0YLQtdC80Ysg0LDQtNC80LjQvdC40YHRgtGA0LDRgtC+0YA=?= 
+        <vfgcontrolinterno@pgj.campeche.gob.mx>
+Reply-To: sistemassadmins@mail2engineer.com
+Message-ID: <601683541.97389.1655725749868.JavaMail.zimbra@pgj.campeche.gob.mx>
+Subject: 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+X-Originating-IP: [172.24.1.254]
+X-Mailer: Zimbra 8.8.15_GA_4304 (zclient/8.8.15_GA_4304)
+Thread-Index: vrnnYTy5GeyPFWngM/YPXVIvuG1GiQ==
+Thread-Topic: 
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,KHOP_HELO_FCRDNS,MISSING_HEADERS,
+        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,REPLYTO_WITHOUT_TO_CC,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 T_SPF_HELO_TEMPERROR SPF: test of HELO record failed
+        *      (temperror)
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  1.0 MISSING_HEADERS Missing To: header
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [187.157.28.107 listed in wl.mailspike.net]
+        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
+        *      dynamic-looking rDNS
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds new coresight-tpda.yaml file describing the bindings required
-to define tpda in the device trees.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
-Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
----
- .../bindings/arm/qcom,coresight-tpda.yaml     | 111 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 112 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
-new file mode 100644
-index 000000000000..eb9bfc5f93a2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
-@@ -0,0 +1,111 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/qcom,coresight-tpda.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Trace, Profiling and Diagnostics Aggregator - TPDA
-+
-+description: |
-+  TPDAs are responsible for packetization and timestamping of data sets
-+  utilizing the MIPI STPv2 packet protocol. Pulling data sets from one or
-+  more attached TPDM and pushing the resultant (packetized) data out a
-+  master ATB interface. Performing an arbitrated ATB interleaving (funneling)
-+  task for free-flowing data from TPDM (i.e. CMB and DSB data set flows).
-+
-+maintainers:
-+  - Mao Jinlong <quic_jinlmao@quicinc.com>
-+  - Tao Zhang <quic_taozha@quicinc.com>
-+
-+# Need a custom select here or 'arm,primecell' will match on lots of nodes
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - qcom,coresight-tpda
-+  required:
-+    - compatible
-+
-+properties:
-+  $nodename:
-+    pattern: "^tpda(@[0-9a-f]+)$"
-+  compatible:
-+    items:
-+      - const: qcom,coresight-tpda
-+      - const: arm,primecell
-+
-+  reg:
-+    minItems: 1
-+    maxItems: 2
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: apb_pclk
-+
-+  in-ports:
-+    type: object
-+    description: |
-+      Input connections from TPDM to TPDA
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+  out-ports:
-+    type: object
-+    description: |
-+      Output connections from the TPDA to legacy CoreSight trace bus.
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port:
-+        description:
-+          Output connection from the TPDA to legacy CoreSight Trace bus.
-+        $ref: /schemas/graph.yaml#/properties/port
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - in-ports
-+  - out-ports
-+
-+additionalProperties: false
-+
-+examples:
-+  # minimum tpda definition.
-+  - |
-+    tpda@6004000 {
-+       compatible = "qcom,coresight-tpda", "arm,primecell";
-+       reg = <0x6004000 0x1000>;
-+
-+       clocks = <&aoss_qmp>;
-+       clock-names = "apb_pclk";
-+
-+       in-ports {
-+         #address-cells = <1>;
-+         #size-cells = <0>;
-+
-+        port@0 {
-+          reg = <0>;
-+          tpda_qdss_0_in_tpdm_dcc: endpoint {
-+            remote-endpoint =
-+              <&tpdm_dcc_out_tpda_qdss_0>;
-+            };
-+        };
-+      };
-+
-+       out-ports {
-+         port {
-+                 tpda_qdss_out_funnel_in0: endpoint {
-+                    remote-endpoint =
-+                    <&funnel_in0_in_tpda_qdss>;
-+                  };
-+          };
-+       };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5666b4ef26a1..07bf601df92b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1983,6 +1983,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
- F:	Documentation/ABI/testing/sysfs-bus-coresight-devices-*
- F:	Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
- F:	Documentation/devicetree/bindings/arm/coresight-cti.yaml
-+F:	Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
- F:	Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
- F:	Documentation/devicetree/bindings/arm/coresight.txt
- F:	Documentation/devicetree/bindings/arm/ete.yaml
--- 
-2.17.1
+внимания;
 
+Ваши сообщения превысил лимит памяти, который составляет 5 Гб, определенных администратором, который в настоящее время работает на 10.9GB, Вы не сможете отправить или получить новую почту, пока вы повторно не проверить ваш почтовый ящик почты. Чтобы восстановить работоспособность Вашего почтового ящика, отправьте следующую информацию
+ниже:
+
+имя:
+Имя пользователя:
+пароль:
+Подтверждение пароля:
+Адрес электронной почты:
+телефон:
+
+Если вы не в состоянии перепроверить сообщения, ваш почтовый ящик будет
+отключен!
+
+Приносим извинения за неудобства.
+Проверочный код: RU:5143nnf.RU
+Почты технической поддержки © 2022

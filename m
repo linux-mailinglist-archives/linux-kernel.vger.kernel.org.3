@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160305524E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494FA5524E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239052AbiFTT5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S240567AbiFTT6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 15:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiFTT5J (ORCPT
+        with ESMTP id S229866AbiFTT6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:57:09 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042B41CFE0;
-        Mon, 20 Jun 2022 12:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655755028; x=1687291028;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=nVkMDtelBSqwtUPvbeoUxnRHGUYm0P0IpqSZEn/Amv8=;
-  b=rcx6VCKq3Rle7fK8pXctneZkX05SbpJIwBaqR7BSJGmlC5d+9QWKsDjG
-   xy4ihlozYsL1sHFZTgbeQ2wKGhWbXGYHSGkctbKPWTuC9EEoLV2MIByGc
-   aZforBPhfLDHQNVKWnS2ITIVEmdr9OJ6pjJP/eHNO5gW8pI0x4BH5r6eQ
-   M=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jun 2022 12:57:07 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 12:57:07 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 12:57:07 -0700
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
- 2022 12:57:06 -0700
-Message-ID: <c93aa921-b327-fdf4-adae-f0dd77e8789e@quicinc.com>
-Date:   Mon, 20 Jun 2022 13:57:05 -0600
+        Mon, 20 Jun 2022 15:58:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CDAFEE;
+        Mon, 20 Jun 2022 12:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655755081; x=1687291081;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZfYn+aWsfiJ7ahDwnRVWivlOmNHjzzAzXpYC7fuiG8k=;
+  b=G+zD9CPdY+EaeRO6ujlsW2Fy4WtNejt+A/m0+V9Zz0GL1TVc+1AcsEb/
+   0RFTR8HAReO1IrgO6l5e1Hr3HYxQQqSaZsy1MMUU17NrC0WVuBuY9nUd5
+   ZgDAfy90amLZRi96CUcWbPQ4wOCG/UJ2AIGWrSfY+v1UQr7KfpRJ6/cp6
+   m1JGNhM4DaT/ZJv9xEyaLMdOdHr9lWm3KNe8ynd5zMGewOL9eH0gRrXlJ
+   wZR5pYtT8vCTwUuCu6ifu3wXomguBQM2Dec1pURA8nITxE/mjuPoMnFrK
+   E8RBl1kywhWc7obeszdkutVKZ3K529T/7iYN6NJpVPd0k9o7Rq3J7yEvK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="278737287"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="278737287"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 12:57:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="620214268"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Jun 2022 12:57:55 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3NX0-000Vn9-M7;
+        Mon, 20 Jun 2022 19:57:54 +0000
+Date:   Tue, 21 Jun 2022 03:57:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     guoren@kernel.org, palmer@rivosinc.com, arnd@arndb.de,
+        peterz@infradead.org, longman@redhat.com, boqun.feng@gmail.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V5] riscv: Add qspinlock support
+Message-ID: <202206210303.Vjl4rpPv-lkp@intel.com>
+References: <20220620155404.1968739-1-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
- power down
-Content-Language: en-US
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>,
-        <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
- <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
-In-Reply-To: <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620155404.1968739-1-guoren@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,172 +66,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/2022 7:54 AM, Jeffrey Hugo wrote:
-> On 6/9/2022 7:43 AM, Qiang Yu wrote:
->> EP tends to read MSI address/data once and cache them after BME is set.
->> So host should avoid changing MSI address/data after BME is set.
->>
->> In pci reset function, host invokes free_irq(), which also clears MSI
->> address/data in EP's PCIe config space. If the invalid address/data
->> are cached and used by EP, MSI triggered by EP wouldn't be received by
->> host, because an invalid MSI data is sent to an invalid MSI address.
->>
->> To fix this issue, after host runs request_irq() successfully during
->> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
->> request_irq()/free_irq() when we want to power on and power down MHI.
->> Meanwhile, Host should invoke free_irq() when mhi host driver is
->> removed.
-> 
-> I don't think this works for hotplug, nor cases where there are multiple 
-> MHI devices on the system.
-> 
-> The EP shouldn't be caching this information for multiple reasons. 
-> Masking the MSIs, disabling the MSIs, changing the address when the 
-> affinity changes, etc.
-> 
-> It really feels like we are solving the problem in the wrong place.
-> 
-> Right now, this gets a NACK from me.
-> 
->>
->> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
->> ---
->>   drivers/bus/mhi/host/init.c        | 31 +++++++++++++++++++++++++++++++
->>   drivers/bus/mhi/host/pci_generic.c |  2 ++
->>   drivers/bus/mhi/host/pm.c          |  4 ++--
->>   3 files changed, 35 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
->> index cbb86b2..48cb093 100644
->> --- a/drivers/bus/mhi/host/init.c
->> +++ b/drivers/bus/mhi/host/init.c
->> @@ -18,6 +18,7 @@
->>   #include <linux/slab.h>
->>   #include <linux/vmalloc.h>
->>   #include <linux/wait.h>
->> +#include <linux/irq.h>
-> 
-> Should be in alphabetical order
-> 
->>   #include "internal.h"
->>   static DEFINE_IDA(mhi_controller_ida);
->> @@ -168,6 +169,22 @@ int mhi_init_irq_setup(struct mhi_controller 
->> *mhi_cntrl)
->>       unsigned long irq_flags = IRQF_SHARED | IRQF_NO_SUSPEND;
->>       int i, ret;
->> +    /*
->> +     * if irq[0] has action, it represents all MSI IRQs have been
->> +     * requested, so we just need to enable them.
->> +     */
-> 
-> This seems like an assumption about how the interrupts are allocated and 
-> assigned that may not hold true for all devices.
+Hi,
 
-Ah, I see.  This goes to the assumption that the BHI interrupt is always 
-line 0, even though as far as I am aware, the spec doesn't require that. 
-  The comment could be clearer I think.
+I love your patch! Yet something to improve:
 
-> 
->> +    if (irq_has_action(mhi_cntrl->irq[0])) {
->> +        enable_irq(mhi_cntrl->irq[0]);
->> +
->> +        for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->> +            if (mhi_event->offload_ev)
->> +                continue;
->> +
->> +            enable_irq(mhi_cntrl->irq[mhi_event->irq]);
->> +        }
->> +        return 0;
->> +    }
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on linus/master v5.19-rc2 next-20220617]
+[cannot apply to tip/locking/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Please no.  This overloads the function to have two different behaviors, 
-and it doesn't match the inline disables.
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-qspinlock-support/20220620-235653
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220621/202206210303.Vjl4rpPv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/326f4a13941845b6ef1c4f4eaba049fe265f52bf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-qspinlock-support/20220620-235653
+        git checkout 326f4a13941845b6ef1c4f4eaba049fe265f52bf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
-Since you have inline disables, I would prefer inline enables so that 
-the code is "balanced".
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->> +
->>       /* if controller driver has set irq_flags, use it */
->>       if (mhi_cntrl->irq_flags)
->>           irq_flags = mhi_cntrl->irq_flags;
->> @@ -179,6 +196,11 @@ int mhi_init_irq_setup(struct mhi_controller 
->> *mhi_cntrl)
->>                      "bhi", mhi_cntrl);
->>       if (ret)
->>           return ret;
->> +    /*
->> +     * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
->> +     * so disable it explicitly.
->> +     */
->> +    disable_irq(mhi_cntrl->irq[0]);
->>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->>           if (mhi_event->offload_ev)
->> @@ -200,6 +222,8 @@ int mhi_init_irq_setup(struct mhi_controller 
->> *mhi_cntrl)
->>                   mhi_cntrl->irq[mhi_event->irq], i);
->>               goto error_request;
->>           }
->> +
->> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>       }
->>       return 0;
->> @@ -1003,8 +1027,14 @@ int mhi_register_controller(struct 
->> mhi_controller *mhi_cntrl,
->>       mhi_create_debugfs(mhi_cntrl);
->> +    ret = mhi_init_irq_setup(mhi_cntrl);
->> +    if (ret)
->> +        goto error_setup_irq;
->> +
->>       return 0;
->> +error_setup_irq:
->> +    mhi_destroy_debugfs(mhi_cntrl);
->>   err_release_dev:
->>       put_device(&mhi_dev->dev);
->>   err_ida_free:
->> @@ -1027,6 +1057,7 @@ void mhi_unregister_controller(struct 
->> mhi_controller *mhi_cntrl)
->>       struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
->>       unsigned int i;
->> +    mhi_deinit_free_irq(mhi_cntrl);
->>       mhi_destroy_debugfs(mhi_cntrl);
->>       destroy_workqueue(mhi_cntrl->hiprio_wq);
->> diff --git a/drivers/bus/mhi/host/pci_generic.c 
->> b/drivers/bus/mhi/host/pci_generic.c
->> index 6fbc591..60020d0 100644
->> --- a/drivers/bus/mhi/host/pci_generic.c
->> +++ b/drivers/bus/mhi/host/pci_generic.c
->> @@ -945,6 +945,8 @@ static void mhi_pci_remove(struct pci_dev *pdev)
->>       mhi_unregister_controller(mhi_cntrl);
->>       pci_disable_pcie_error_reporting(pdev);
->> +
->> +    pci_free_irq_vectors(pdev);
+All error/warnings (new ones prefixed by >>):
 
-This seems like a random change that should be in a different patch. 
-Why is it included here?
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:62:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:7:
+>> arch/riscv/include/asm/atomic.h:299:1: error: expected expression
+   ATOMIC_OPS()
+   ^
+   arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+           ATOMIC_OP(int,   , 4)
+           ^
+   arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+           return __xchg_relaxed(&(v->counter), n, size);                  \
+                  ^
+   arch/riscv/include/asm/cmpxchg.h:21:3: note: expanded from macro '__xchg_relaxed'
+                   u32 temp;                                               \
+                   ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:62:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:7:
+>> arch/riscv/include/asm/atomic.h:299:1: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+   arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+           ATOMIC_OP(int,   , 4)
+           ^
+   arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+           return __xchg_relaxed(&(v->counter), n, size);                  \
+                  ^
+   arch/riscv/include/asm/cmpxchg.h:31:28: note: expanded from macro '__xchg_relaxed'
+                           : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
+                                                   ^
+   include/linux/string.h:159:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:62:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:7:
+>> arch/riscv/include/asm/atomic.h:299:1: error: invalid lvalue in asm output
+   ATOMIC_OPS()
+   ^~~~~~~~~~~~
+   arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+           ATOMIC_OP(int,   , 4)
+           ^~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+           return __xchg_relaxed(&(v->counter), n, size);                  \
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/cmpxchg.h:31:28: note: expanded from macro '__xchg_relaxed'
+                           : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
+                                                   ^~~~
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:62:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:13:
+   In file included from include/linux/atomic.h:7:
+>> arch/riscv/include/asm/atomic.h:299:1: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+   arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+           ATOMIC_OP(int,   , 4)
+           ^
+   arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+           return __xchg_relaxed(&(v->counter), n, size);                  \
+                  ^
+   arch/riscv/include/asm/cmpxchg.h:22:7: note: expanded from macro '__xchg_relaxed'
+                   u32 shif = ((ulong)__ptr & 2) ? 16 : 0;                 \
+                       ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+                   a3 = a->sig[3]; a2 = a->sig[2];                         \
+                        ^      ~
 
->>   }
->>   static void mhi_pci_shutdown(struct pci_dev *pdev)
->> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
->> index dc2e8ff..190231c 100644
->> --- a/drivers/bus/mhi/host/pm.c
->> +++ b/drivers/bus/mhi/host/pm.c
->> @@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct 
->> mhi_controller *mhi_cntrl)
->>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->>           if (mhi_event->offload_ev)
->>               continue;
->> -        free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
->> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>           tasklet_kill(&mhi_event->task);
->>       }
->> @@ -1182,7 +1182,7 @@ void mhi_power_down(struct mhi_controller 
->> *mhi_cntrl, bool graceful)
->>       /* Wait for shutdown to complete */
->>       flush_work(&mhi_cntrl->st_worker);
->> -    free_irq(mhi_cntrl->irq[0], mhi_cntrl);
->> +    disable_irq(mhi_cntrl->irq[0]);
->>   }
->>   EXPORT_SYMBOL_GPL(mhi_power_down);
-> 
-> 
 
+vim +299 arch/riscv/include/asm/atomic.h
+
+fab957c11efe2f Palmer Dabbelt 2017-07-10  298  
+5ce6c1f3535fa8 Andrea Parri   2018-03-09 @299  ATOMIC_OPS()
+fab957c11efe2f Palmer Dabbelt 2017-07-10  300  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

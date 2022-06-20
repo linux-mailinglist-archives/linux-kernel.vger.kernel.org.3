@@ -2,132 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D88552858
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D75C55285E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 01:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245483AbiFTXbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 19:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S239594AbiFTXmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 19:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244221AbiFTXbb (ORCPT
+        with ESMTP id S237257AbiFTXmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 19:31:31 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511E51274C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 16:31:29 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a11so4756154ljb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 16:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1CFkBJOtdGheyOUeX2yPaN3vtsNkY5WbEiLu1iujMTs=;
-        b=c4HGipQeXgKwPcs43aMkdi5K3w74ldx4cPKh57/kJpEQTehk3R/ApwGMNcAHO0Tdv1
-         KZcLI3O9sYzcsqENTulejrJsKyKbECVvxjRTj8MwTSKDp1iU1F7fJ2jwGzYLCZFmtPp4
-         lFpffbNNQ5kIHynvctCZjyLfHRPhdPZUxsbvm5i7v/Zvk2CJq/t7YLnFaTCwfsHe0C1u
-         onkG1TkN4yM9IuLPlUwYVfnTQ+SgsNSxQG59fnew9BzNwu2V8ik0qxv07FfJ9pMmGQCZ
-         MOhJ+CKSFEtbEffaaaZ+krJRh1TGny3Kr9jJAXaWLOUE2a6Ym3yzB1vBdIepC5L74Xwb
-         6g6Q==
+        Mon, 20 Jun 2022 19:42:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B5DE1B7A4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 16:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655768553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=loNrawDUVj3mdCQPJAzyrH5o/8r/aVwsRAwGWDR9o6c=;
+        b=bjdQ8xuntHW6wIp9VUyDF81TJL7DcwUemt393mErnP9TYLgAcFmoC+kT78nCXVPfG22pxb
+        iXJCQljrayI5hKOJH5iULJdOZjFiaNzQDld3tcbAkmn0+YuJvqbfQqLSKY8fO9gaoE+AAu
+        lPZCReRTu5l2z/HpKmjAPH37MQB+SLs=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-izl9joKEPu-0QuAdIzbgzw-1; Mon, 20 Jun 2022 19:42:32 -0400
+X-MC-Unique: izl9joKEPu-0QuAdIzbgzw-1
+Received: by mail-pf1-f200.google.com with SMTP id bq15-20020a056a000e0f00b00524c3c1a3cdso4562590pfb.17
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 16:42:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1CFkBJOtdGheyOUeX2yPaN3vtsNkY5WbEiLu1iujMTs=;
-        b=0Yxa7dayVLMn9EyNJXD7GNo7i6draVMIhao3yYCJCwSbQTPlTZfxORExeBU9kJlNyq
-         OSL8Vu4Vcse0gSejPBwCHbU76MpLPHN1Ygftzi0h3MDOqqUMQpCg4/6/O3VoaDULLWJa
-         0j5p7irRuFwBYVSe00qk8o7oQjypiJDbPXoI/0vpMgVi173uSZ9RX6bMu08D5J6BNYN7
-         mbdVYSTDC4yITafxlwGik+0v8QHXFuQQGKspNhCp92eZe4MUK5EzEKSMqczaD80XLjCG
-         qJxmtpviKB0Lng0KvndCnsjmClJ1mHMEGG/OkDNBhovaCYbojrneAFO4K77xC9rTWKOW
-         VxBA==
-X-Gm-Message-State: AJIora/+W3JsGDshYfcZt8h60yo+wl7pIpHE8FZ96k77girUoq/KOhiR
-        bgj8idTXJiFW31YbO0C30nOsA5cLz8BLql54t6IuiA==
-X-Google-Smtp-Source: AGRyM1sbnZzfwsCxwOZ4fl03m/sbkmCz2JnOCvW0MwaN6F99qEiBqmCOunyhbakJlEfMe1w/RrfFHKde5cExa9fFVm4=
-X-Received: by 2002:a2e:a58d:0:b0:25a:6348:9595 with SMTP id
- m13-20020a2ea58d000000b0025a63489595mr6680735ljp.72.1655767887614; Mon, 20
- Jun 2022 16:31:27 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=loNrawDUVj3mdCQPJAzyrH5o/8r/aVwsRAwGWDR9o6c=;
+        b=JkhUx8PrXScKZrOWFVPPL5g0Pyw7KSXmiaGTe1S7d5gWyeflX7H64sjak8qfgPhhGX
+         3e8pakvly+2CVuS8TWUzzsdydjM58KWb37RddF3nRm/nKgRZq9ahCvCxFDNAdPNmgGcD
+         B9oFsgaHCV81XyoHOLbUX3YsZPon/gQoeDD5IgnupVLqQC/+CNjiZbJyr+P3iL4uQRa1
+         eoOakcZAgqICORm+F0pbmYSbWnBmHo2A2qylRzy1KqXOVQzX9wjcLUk4hfNKJAKYWwP7
+         roFqezJ4Uqw+aJFawcbXrILh2Q3sslcrzZCP7/Yo4VhYg543UKbFK/II1Bpln7nQ+j9J
+         xpbw==
+X-Gm-Message-State: AJIora+2paDsSdLGkqPlqbh5ZNGeiIiPmeW8BOmMoNTZG7YEr4uibbEB
+        as+xHan44gUuI3pvRr0ikPmRkvkqBaGqcyWWoW7tIukDCzkeMjSG6eSIlNSl09qC0gPEKB93RVP
+        eR+0u5QtiZcl2oEdKFvdM/FGQXWpgBfPc2lbnyjj5HEOqcv1OEFhUjGesr9T5WNYTjWv0vqc5Yg
+        ==
+X-Received: by 2002:a05:6a00:a06:b0:51e:47f5:79ad with SMTP id p6-20020a056a000a0600b0051e47f579admr27112522pfh.53.1655768550190;
+        Mon, 20 Jun 2022 16:42:30 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vORMwzs8V7+LrHTlliRKYxkGiU/vCdiqyLc8Q5/6bM9DBCI5Hbys8gcn5U1fwE/tmqG8fLOg==
+X-Received: by 2002:a05:6a00:a06:b0:51e:47f5:79ad with SMTP id p6-20020a056a000a0600b0051e47f579admr27112494pfh.53.1655768549770;
+        Mon, 20 Jun 2022 16:42:29 -0700 (PDT)
+Received: from [10.72.12.43] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id q23-20020a17090a065700b001ec9ae91e30sm3437393pje.12.2022.06.20.16.42.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 16:42:29 -0700 (PDT)
+Subject: Re: [PATCH 3/3] mm: Clear page->private when splitting or migrating a
+ page
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220619151143.1054746-1-willy@infradead.org>
+ <20220619151143.1054746-4-willy@infradead.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <88cbf01f-a82e-f527-b343-73f85cc6f1c8@redhat.com>
+Date:   Tue, 21 Jun 2022 07:42:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-11-mw@semihalf.com>
- <YrC9KpEuYCgHv14l@lunn.ch>
-In-Reply-To: <YrC9KpEuYCgHv14l@lunn.ch>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Tue, 21 Jun 2022 01:31:17 +0200
-Message-ID: <CAPv3WKeHpB0v1udzSAjm3QnRoCaVTUqiOa7f_MvAbgMOWDDEAg@mail.gmail.com>
-Subject: Re: [net-next: PATCH 10/12] net: dsa: add ACPI support
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220619151143.1054746-4-willy@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 20 cze 2022 o 20:32 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
->
-> >  static int dsa_port_parse_dsa(struct dsa_port *dp)
-> >  {
-> > +     /* Cascade switch connection is not supported in ACPI world. */
-> > +     if (is_acpi_node(dp->fwnode)) {
-> > +             dev_warn(dp->ds->dev,
-> > +                      "DSA type is not supported with ACPI, disable po=
-rt #%d\n",
-> > +                      dp->index);
-> > +             dp->type =3D DSA_PORT_TYPE_UNUSED;
-> > +             return 0;
-> > +     }
-> > +
->
-> Did you try this? I'm not sure it will work correctly. When a switch
-> registers with the DSA core, the core will poke around in DT and fill
-> in various bits of information, including the DSA links. Once that has
-> completed, the core will look at all the switches registered so far
-> and try to determine if it has a complete set, i.e, it has both ends
-> of all DSA links. If it does have a complete set, it then calls the
-> setup methods on each switch, and gets them configured. If it finds it
-> does not have a complete setup, it does nothing, waiting for the next
-> switch to register.
->
-> So if somebody passed an ACPI description with multiple switches, it
-> is likely to call the setup methods as soon as the first switch is
-> registered. And it might call those same setup methods a second time,
-> when the second switch registers, on both switches. And when the third
-> switch registers, it will probably call the setup methods yet again on
-> all the switches....
->
-> You will have a much safer system if you return -EINVAL if you find a
-> DSA link in ACPI. That should abort the switch probe.
->
 
-I only set a single port to "dsa" label to check if this condition is
-entered. I see 2 devices in the arm64 tree (fsl-lx2160a-bluebox3.dts
-and armada-3720-turris-mox.dts) that support cascade switches via
-"link" property. I don't have access to real life setup (and those
-seem to not support ACPI anyway...).
+On 6/19/22 11:11 PM, Matthew Wilcox (Oracle) wrote:
+> In our efforts to remove uses of PG_private, we have found folios with
+> the private flag clear and folio->private not-NULL.  That is the root
+> cause behind 642d51fb0775 ("ceph: check folio PG_private bit instead
+> of folio->private").  It can also affect a few other filesystems that
+> haven't yet reported a problem.
+>
+> compaction_alloc() can return a page with uninitialised page->private,
+> and rather than checking all the callers of migrate_pages(), just zero
+> page->private after calling get_new_page().  Similarly, the tail pages
+> from split_huge_page() may also have an uninitialised page->private.
+>
+> Reported-by: Xiubo Li <xiubli@redhat.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>   mm/huge_memory.c | 1 +
+>   mm/migrate.c     | 1 +
+>   2 files changed, 2 insertions(+)
+>
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index f7248002dad9..9b31a50217b5 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2377,6 +2377,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>   			page_tail);
+>   	page_tail->mapping = head->mapping;
+>   	page_tail->index = head->index + tail;
+> +	page_tail->private = NULL;
+>   
+>   	/* Page flags must be visible before we make the page non-compound. */
+>   	smp_wmb();
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index e51588e95f57..6c1ea61f39d8 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1106,6 +1106,7 @@ static int unmap_and_move(new_page_t get_new_page,
+>   	if (!newpage)
+>   		return -ENOMEM;
+>   
+> +	newpage->private = 0;
+>   	rc = __unmap_and_move(page, newpage, force, mode);
+>   	if (rc == MIGRATEPAGE_SUCCESS)
+>   		set_page_owner_migrate_reason(newpage, reason);
 
-In case this temporarily would remain as unsupported feature, I agree
--EINVAL is a safer solution.
+Test this patch by reverting my previous patch for many times yesterday, 
+and it worked well for me till now. I will test it more to see whether 
+there are other cases could cause the crash.
 
-Thanks,
-Marcin
+Tested-by: Xiubo Li <xiubli@redhat.com>
+
+-- Xiubo
+
+
+

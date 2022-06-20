@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096AB5513EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D323F5513F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239391AbiFTJQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S240665AbiFTJRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240127AbiFTJQY (ORCPT
+        with ESMTP id S236337AbiFTJQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:16:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE99DEF0;
-        Mon, 20 Jun 2022 02:16:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CF0561FAC7;
-        Mon, 20 Jun 2022 09:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655716582; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xkZ/s7WtxAVkUPGyFHjjsumLTjVdh8+OYxSihbuC8vY=;
-        b=AT4AJuShz4HqBI2nlNRveK+IXlQV8HIOKAgtrR2dlMOMs20lwZHTyCbhE5eEk8tI/cG/fj
-        quaiOztyq0SMOWroxPTUcgPBBHEEwj6WJHy+ROUkSs/TpDjBAUgInuK1DliqMkKE/IOTfX
-        BqL6WAPrDjNpcJ7KOac8i/pepCoiIE0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655716582;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xkZ/s7WtxAVkUPGyFHjjsumLTjVdh8+OYxSihbuC8vY=;
-        b=hQzyTiyG7q8KmJWCAEayXC6ZF4/JTsIl4bU+RsHupP/su5ogfLFj+IAglbIHxtqzPUIhsL
-        feoOPgyoZEA8q6Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A6ACE134CA;
-        Mon, 20 Jun 2022 09:16:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3sI0KOY6sGKXPgAAMHmgww
-        (envelope-from <hare@suse.de>); Mon, 20 Jun 2022 09:16:22 +0000
-Message-ID: <97f428d0-8039-709c-f632-db1acc9a4315@suse.de>
-Date:   Mon, 20 Jun 2022 11:16:22 +0200
+        Mon, 20 Jun 2022 05:16:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872DD101E6;
+        Mon, 20 Jun 2022 02:16:50 -0700 (PDT)
+X-UUID: 36eef338cfb74a14ab06673e7c6a772d-20220620
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:14f07526-6b8b-4088-ae29-c2bd702ee75f,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:14f07526-6b8b-4088-ae29-c2bd702ee75f,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:2f7effe9-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:a7e4c246682a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 36eef338cfb74a14ab06673e7c6a772d-20220620
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 401679810; Mon, 20 Jun 2022 17:16:43 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 20 Jun 2022 17:16:42 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 20 Jun 2022 17:16:41 +0800
+Message-ID: <485c9b07fb2a60635e7cd52e710af872733fcff9.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: dsp: mediatek: Use meaningful names
+ for mbox
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>, YC Hung <yc.hung@mediatek.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <sound-open-firmware@alsa-project.org>,
+        <alsa-devel@alsa-project.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 20 Jun 2022 17:16:41 +0800
+In-Reply-To: <3830efc5-298d-7887-5718-2cb2a7ad4895@linaro.org>
+References: <20220616073042.13229-1-tinghan.shen@mediatek.com>
+         <20220616073042.13229-2-tinghan.shen@mediatek.com>
+         <629e761b-e3ad-0861-1937-ad660a8a900b@linaro.org>
+         <af32751dd7013a96dac5d165c35e132fda87f2ac.camel@mediatek.com>
+         <3830efc5-298d-7887-5718-2cb2a7ad4895@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 5/5] blk-mq: Drop 'reserved' member of busy_tag_iter_fn
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, bvanassche@acm.org, hch@lst.de,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com
-Cc:     linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nbd@other.debian.org
-References: <1655463320-241202-1-git-send-email-john.garry@huawei.com>
- <1655463320-241202-6-git-send-email-john.garry@huawei.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <1655463320-241202-6-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,37 +86,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 12:55, John Garry wrote:
-> We no longer use the 'reserved' member in for any iter function so it
-> may be dropped.
-> 
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> ---
->   block/blk-mq-debugfs.c              |  2 +-
->   block/blk-mq-tag.c                  | 13 +++++--------
->   block/blk-mq.c                      | 10 ++++------
->   drivers/block/mtip32xx/mtip32xx.c   |  6 +++---
->   drivers/block/nbd.c                 |  2 +-
->   drivers/infiniband/ulp/srp/ib_srp.c |  3 +--
->   drivers/nvme/host/core.c            |  2 +-
->   drivers/nvme/host/fc.c              |  3 +--
->   drivers/nvme/host/nvme.h            |  2 +-
->   drivers/scsi/aacraid/comminit.c     |  2 +-
->   drivers/scsi/aacraid/linit.c        |  2 +-
->   drivers/scsi/fnic/fnic_scsi.c       | 12 ++++--------
->   drivers/scsi/hosts.c                | 14 ++++++--------
->   drivers/scsi/mpi3mr/mpi3mr_os.c     | 16 ++++------------
->   include/linux/blk-mq.h              |  2 +-
->   include/scsi/scsi_host.h            |  2 +-
->   16 files changed, 36 insertions(+), 57 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Hi Krzysztof,
 
-Cheers,
+On Mon, 2022-06-20 at 10:51 +0200, Krzysztof Kozlowski wrote:
+> On 20/06/2022 08:40, Tinghan Shen wrote:
+> > Hi Krzysztof,
+> > 
+> > On Thu, 2022-06-16 at 06:55 -0700, Krzysztof Kozlowski wrote:
+> > > On 16/06/2022 00:30, Tinghan Shen wrote:
+> > > > Rename mbox according to actions instead of 'mbox0' and 'mbox1'.
+> > > > 
+> > > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > > > ---
+> > > >  .../devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml   | 10 +++++-----
+> > > >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> > > > b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> > > > index b7e68b0dfa13..ca8d8661f872 100644
+> > > > --- a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> > > > +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> > > > @@ -50,13 +50,13 @@ properties:
+> > > >  
+> > > >    mboxes:
+> > > >      items:
+> > > > -      - description: ipc reply between host and audio DSP.
+> > > > -      - description: ipc request between host and audio DSP.
+> > > > +      - description: mailbox for receiving audio DSP requests.
+> > > > +      - description: mailbox for transmitting requests to audio DSP.
+> > > >  
+> > > >    mbox-names:
+> > > >      items:
+> > > > -      - const: mbox0
+> > > > -      - const: mbox1
+> > > > +      - const: rx
+> > > > +      - const: tx
+> > > >  
+> > > 
+> > > Commit msg lacks important piece - do you break any users with this? Do
+> > > you have any users of this binding?
+> > > 
+> > > 
+> > > Best regards,
+> > > Krzysztof
+> > 
+> > The 8195 dsp node, which uses this binding, has not yet been added to the 8195 devicetree.
+> 
+> Could you mention it in the commit msg? Such one sentence is enough.
+> 
+> With commit msg extended:
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> 
+> Best regards,
+> Krzysztof
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+No problem. I'll udpate commit message at next version.
+
+
+Thanks,
+TingHan
+
+
+

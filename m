@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3754C5519EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D5A551C8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbiFTMxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 08:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S1346581AbiFTNfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241511AbiFTMxI (ORCPT
+        with ESMTP id S1346234AbiFTNci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 08:53:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4598CD11B;
-        Mon, 20 Jun 2022 05:53:07 -0700 (PDT)
+        Mon, 20 Jun 2022 09:32:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716262611B;
+        Mon, 20 Jun 2022 06:12:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BB59B811A6;
-        Mon, 20 Jun 2022 12:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 685A8C3411B;
-        Mon, 20 Jun 2022 12:53:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22DCE60EAA;
+        Mon, 20 Jun 2022 13:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F82C3411B;
+        Mon, 20 Jun 2022 13:12:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655729584;
-        bh=osKyJ1+KTbP33abJvrFOEn7PkpMGgyBTQRpahpLYjcc=;
+        s=korg; t=1655730762;
+        bh=zNnGyQKQ8bSieruIRVG06sPilEvShfmToYjcQp7RmIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PpBlVjuv5IZdpi9pVyLov2O70llMCEYFl6auDUe8o+pKCTrAjYxwJZZDqLD71JxZK
-         WvyP45Q2cjnSro5sOE/PDM5+EIt0NLskwflppN9enz06cb7XCxP8iNTSTn2iMTbAIk
-         EKMlUjmmCF/dAUqEOrODQc9HsGOtHSxq8WxyBmIc=
+        b=e8pxtFD/Gzbx99147FMEgWoQnCSCfnz3q+KH6NhghZbne5oiNAoLAxo8cKUxmCRvK
+         ptkErh8wweq9IBkfVHRUDUZOiV4UdRZDpOJ8ZhW6yT37OxluhagoH//4yu2FFOTylT
+         Cirby8ehyr+fTGZ5csNi1LkqLjiqRBFvTLr8Gm2Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philip Yang <Philip.Yang@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 010/141] drm/amdkfd: Use mmget_not_zero in MMU notifier
-Date:   Mon, 20 Jun 2022 14:49:08 +0200
-Message-Id: <20220620124729.823328758@linuxfoundation.org>
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 048/240] random: dont reset crng_init_cnt on urandom_read()
+Date:   Mon, 20 Jun 2022 14:49:09 +0200
+Message-Id: <20220620124739.517590556@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-References: <20220620124729.509745706@linuxfoundation.org>
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+References: <20220620124737.799371052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philip Yang <Philip.Yang@amd.com>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit fa582c6f3684ac0098a9d02ddf0ed52a02b37127 ]
+commit 6c8e11e08a5b74bb8a5cdd5cbc1e5143df0fba72 upstream.
 
-MMU notifier callback may pass in mm with mm->mm_users==0 when process
-is exiting, use mmget_no_zero to avoid accessing invalid mm in deferred
-list work after mm is gone.
+At the moment, urandom_read() (used for /dev/urandom) resets crng_init_cnt
+to zero when it is called at crng_init<2. This is inconsistent: We do it
+for /dev/urandom reads, but not for the equivalent
+getrandom(GRND_INSECURE).
 
-Signed-off-by: Philip Yang <Philip.Yang@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+(And worse, as Jason pointed out, we're only doing this as long as
+maxwarn>0.)
+
+crng_init_cnt is only read in crng_fast_load(); it is relevant at
+crng_init==0 for determining when to switch to crng_init==1 (and where in
+the RNG state array to write).
+
+As far as I understand:
+
+ - crng_init==0 means "we have nothing, we might just be returning the same
+   exact numbers on every boot on every machine, we don't even have
+   non-cryptographic randomness; we should shove every bit of entropy we
+   can get into the RNG immediately"
+ - crng_init==1 means "well we have something, it might not be
+   cryptographic, but at least we're not gonna return the same data every
+   time or whatever, it's probably good enough for TCP and ASLR and stuff;
+   we now have time to build up actual cryptographic entropy in the input
+   pool"
+ - crng_init==2 means "this is supposed to be cryptographically secure now,
+   but we'll keep adding more entropy just to be sure".
+
+The current code means that if someone is pulling data from /dev/urandom
+fast enough at crng_init==0, we'll keep resetting crng_init_cnt, and we'll
+never make forward progress to crng_init==1. It seems to be intended to
+prevent an attacker from bruteforcing the contents of small individual RNG
+inputs on the way from crng_init==0 to crng_init==1, but that's misguided;
+crng_init==1 isn't supposed to provide proper cryptographic security
+anyway, RNG users who care about getting secure RNG output have to wait
+until crng_init==2.
+
+This code was inconsistent, and it probably made things worse - just get
+rid of it.
+
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/char/random.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-index 3b8856b4cece..5979335d7afd 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-@@ -2286,6 +2286,8 @@ svm_range_cpu_invalidate_pagetables(struct mmu_interval_notifier *mni,
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1832,7 +1832,6 @@ urandom_read_nowarn(struct file *file, c
+ static ssize_t
+ urandom_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
+ {
+-	unsigned long flags;
+ 	static int maxwarn = 10;
  
- 	if (range->event == MMU_NOTIFY_RELEASE)
- 		return true;
-+	if (!mmget_not_zero(mni->mm))
-+		return true;
- 
- 	start = mni->interval_tree.start;
- 	last = mni->interval_tree.last;
-@@ -2312,6 +2314,7 @@ svm_range_cpu_invalidate_pagetables(struct mmu_interval_notifier *mni,
+ 	if (!crng_ready() && maxwarn > 0) {
+@@ -1840,9 +1839,6 @@ urandom_read(struct file *file, char __u
+ 		if (__ratelimit(&urandom_warning))
+ 			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
+ 				  current->comm, nbytes);
+-		spin_lock_irqsave(&primary_crng.lock, flags);
+-		crng_init_cnt = 0;
+-		spin_unlock_irqrestore(&primary_crng.lock, flags);
  	}
  
- 	svm_range_unlock(prange);
-+	mmput(mni->mm);
- 
- 	return true;
- }
--- 
-2.35.1
-
+ 	return urandom_read_nowarn(file, buf, nbytes, ppos);
 
 

@@ -2,50 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CD2551210
+	by mail.lfdr.de (Postfix) with ESMTP id DEB2B551211
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239721AbiFTICM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
+        id S239777AbiFTICh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239007AbiFTICK (ORCPT
+        with ESMTP id S239740AbiFTICd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:02:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1CA1114D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:02:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 20 Jun 2022 04:02:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F0011178;
+        Mon, 20 Jun 2022 01:02:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFBC6122A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183D7C3411B;
-        Mon, 20 Jun 2022 08:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655712128;
-        bh=DwhU0/KxtnYlqxZj35So4aWeWj3iqMidFqPyuGEWOsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nCl1xAjYaSjiD2yiORDCzx4gxd/Q1ObwVxYAlnPd4KDTvk4uR3JvCEfiAaigmwOHh
-         kboBiyjYZDBKr1ti6TSy02x09OWEoPtBDztSNmtdC+Lgu/+mCHlh7vdItt0U9X3ZCp
-         8ITi4zITqaFhkBANt3N8buI2jQoI1XKRnQEdr+KM=
-Date:   Mon, 20 Jun 2022 10:02:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Souptick Joarder <jrdr.linux@gmail.com>
-Cc:     martyn@welchs.me.uk, manohar.vanga@gmail.com,
-        alexandre.belloni@bootlin.com, rafael@kernel.org,
-        mathieu.poirier@linaro.org, u.kleine-koenig@pengutronix.de,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, Kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] vme: Added NULL check for bridge
-Message-ID: <YrApfbtMD56WwpIm@kroah.com>
-References: <20220619070645.100947-1-jrdr.linux@gmail.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B65B91F383;
+        Mon, 20 Jun 2022 08:02:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655712150; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K3mIJEfos5FRczXq+evNYHSc2VMl3bK+FlH80Aaf4S4=;
+        b=KG1ieZI3RKMCFozBnOgTGpV3xZogNkS7Q1rTjxmOTTDqxH2mG/t8MCit3Al4wh2LFIX77W
+        AvYsx0ICW34GwE+I3iI7UITSDrhH+cJbdyVusEIcJpD9pJQEA3IQnQopQ+tiWkvngHWbeF
+        tA1MMaLwlyVLwwTYPAWHE51AlXA4WXk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655712150;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K3mIJEfos5FRczXq+evNYHSc2VMl3bK+FlH80Aaf4S4=;
+        b=L5DmlH7Jm9YSeMGt37pfXDDG0KMrtRlgYLsEtgsHRuRzWyY1IvB6J26q9D+zHKxSBg+5r0
+        4QuYubwK4ylsW9Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C61F13638;
+        Mon, 20 Jun 2022 08:02:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7G3cJZYpsGLsFwAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 20 Jun 2022 08:02:30 +0000
+Message-ID: <c2ae8f65-5570-fdad-3b3a-c00bb10c98c8@suse.de>
+Date:   Mon, 20 Jun 2022 10:02:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220619070645.100947-1-jrdr.linux@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
+        hch@lst.de
+Cc:     linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        chenxiang66@hisilicon.com
+References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
+ <1654770559-101375-4-git-send-email-john.garry@huawei.com>
+ <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
+ <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
+ <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
+ <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
+ handling
+In-Reply-To: <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,34 +85,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 12:36:45PM +0530, Souptick Joarder wrote:
-> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+On 6/15/22 09:35, John Garry wrote:
+> On 15/06/2022 00:43, Damien Le Moal wrote:
+>> On 6/15/22 03:20, Bart Van Assche wrote:
+>>> On 6/13/22 00:01, Damien Le Moal wrote:
+>>>> On 6/9/22 19:29, John Garry wrote:
+>>>>> +    /*
+>>>>> +     * This determines how many commands the HBA will set aside
+>>>>> +     * for internal commands. This number will be added to
+>>>>> +     * @can_queue to calcumate the maximum number of simultaneous
+>>>>
+>>>> s/calcumate/calculate
+>>>>
+>>>> But this is weird. For SATA, can_queue is 32. Having reserved commands,
+>>>> that number needs to stay the same. We cannot have more than 32 tags.
+>>>> I think keeping can_queue as the max queue depth with at most
+>>>> nr_reserved_cmds tags reserved is better.
+>>>>
+>>>>> +     * commands sent to the host.
+>>>>> +     */
+>>>>> +    int nr_reserved_cmds;
+>>>
+>>> +1 for Damien's request. I also prefer to keep can_queue as the maximum
+>>> queue depth, whether or not nr_reserved_cmds has been set.
+>>
+>> For non SATA drives, I still think that is a good idea. However, for 
+>> SATA,
+>> we always have the internal tag command that is special. With John's
+>> change, it would have to be reserved but that means we are down to 31 max
+>> QD,
 > 
-> Kernel test robot throws below warning ->
-> drivers/staging/vme_user/vme.c:662:20: warning: dereference
-> of NULL 'bridge' [CWE-476] [-Wanalyzer-null-dereference]
+> My intention is to keep regular tag depth at 32 for SATA. We add an 
+> extra tag as a reserved tag. Indeed, this is called a 'tag', but it's 
+> just really the placeholder for what will be the ATA_TAG_INTERNAL request.
 > 
-> Added a NULL check.
+> About how we set scsi_host.can_queue, in this series we set .can_queue 
+> as max regular tags, and the handling is as follows:
 > 
-> Reported-by: Kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> ---
->  drivers/staging/vme_user/vme.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> scsi_mq_setup_tags():
+> tag_set->queue_depth = shost->can_queue + shost->nr_reserved_cmds
+> tag_set->reserved_tags = shost->nr_reserved_cmds
 > 
-> diff --git a/drivers/staging/vme_user/vme.c b/drivers/staging/vme_user/vme.c
-> index b5555683a069..ede774f2fe5a 100644
-> --- a/drivers/staging/vme_user/vme.c
-> +++ b/drivers/staging/vme_user/vme.c
-> @@ -659,7 +659,7 @@ ssize_t vme_master_read(struct vme_resource *resource, void *buf, size_t count,
->  	struct vme_master_resource *image;
->  	size_t length;
->  
-> -	if (!bridge->master_read) {
-> +	if (bridge && !bridge->master_read) {
+> So we honour the rule that blk_mq_tag_set.queue_depth is the total tag 
+> depth, including reserved.
+> 
+> Incidentally I think Christoph prefers to keep .can_queue at total max 
+> tags including reserved:
+> https://lore.kernel.org/linux-scsi/337339b7-6f4a-a25c-f11c-7f701b42d6a8@suse.de/ 
+> 
+> 
+>> so going backward several years... That internal tag for ATA does not
+>> need to be reserved since this command is always used when the drive is
+>> idle and no other NCQ commands are on-going.
+> 
+> So do you mean that ATA_TAG_INTERNAL qc is used for other commands apart 
+> from internal commands?
+> 
+Well.
 
-How can bridge ever be NULL here?
+The problem is that 'ATA_TAG_INTERNAL' currently is overloaded to
+a) signal internal commands
+b) 'magic' tag when looking up commands
 
-thanks,
+My proposal would be to separate these use-cases, and use a flag (eg 
+ATA_QCFLAG_INTERNAL) to determine internal commands.
 
-greg k-h
+The we'll be needing an internal tag-lookup map
+(NCQ tag -> blk-mq tag) for ata_qc_from_tag() to retrieve the command 
+corresponding to a driver tag.
+
+I guess we'll need that anyway with libsas, as there we're working with 
+a budget tag which has no relationship with the NCQ tag whatsoever ...
+
+But with that we can kill 'ATA_TAG_INTERNAL', and let the driver figure 
+out how to allocate internal tags.
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

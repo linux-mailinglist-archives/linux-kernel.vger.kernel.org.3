@@ -2,66 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD3455271A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0AE55271C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 00:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245467AbiFTWsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 18:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S1343912AbiFTWtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 18:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiFTWsM (ORCPT
+        with ESMTP id S245713AbiFTWtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 18:48:12 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6BC15A09;
-        Mon, 20 Jun 2022 15:48:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5B68DCE17AC;
-        Mon, 20 Jun 2022 22:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE3BC3411B;
-        Mon, 20 Jun 2022 22:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655765288;
-        bh=F1MFlX9p99cf5xJ+vWIrpSxEkV+myAxGug3dmZFii1k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EscGU+l1+yRofgP4Cbam5CzzW4Y0q/yc/CAFQ2GCNZIjVdIN+keCY1ZDzpmQ7rC5G
-         b1tmiQIMOl4plRI5KT5knyDGriY9DvFmHmV2a8RiyMyxjQLvEoYwhTkT5DD/QMXw5O
-         K5zTMPm0iLeVpiwtsoxa5PoMLUnhUnoaVS9gHZ7zuNRO3dIl0gOlbp4PPfp9Ywy9K4
-         5ZQ0bgwagU9J/ZNuSDxznJIlE0vh1tbwYcQSYOrB0Zcd5cX9hCklAbrBbHPmypwVMA
-         jj/p5wogBKvWJ5ZppCKu6mg6sySqQzJc1NRM167f92EILJMjJN7xuN3esiexia9zBm
-         lds8vhAHci3cQ==
-Received: by mail-ua1-f54.google.com with SMTP id 75so2813161uav.9;
-        Mon, 20 Jun 2022 15:48:08 -0700 (PDT)
-X-Gm-Message-State: AJIora+urMeHrFHmdY1dBIbnA0P4MivqMxa8EpgnoPXJvgTCrigUBp+b
-        /H4rUhSB4jVlh7lNu5e3XbO/9KBzb8eVTMEz8mg=
-X-Google-Smtp-Source: AGRyM1sRx1+JA8cZQ05e7AUt1+f+8rCbotdZ08KaW9u7r0MGfLB3MMfclBmsXUd+QhSL8qbBsXd4XqT7NzihUgJyA84=
-X-Received: by 2002:a9f:23c2:0:b0:365:958:e807 with SMTP id
- 60-20020a9f23c2000000b003650958e807mr8884819uao.114.1655765287621; Mon, 20
- Jun 2022 15:48:07 -0700 (PDT)
+        Mon, 20 Jun 2022 18:49:08 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE581705F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:49:06 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id m125-20020a1ca383000000b0039c63fe5f64so6367267wme.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 15:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hy0Xdesz3zE5Os2cbPhgUWle+TPKNOoLmrTtPiHUQEo=;
+        b=ZYwDRlfKOOYKL+WIoMVmcZBHfH2hZEk5UjfT4f00kyzA1TsSsZ+LLvooOGasTgLcId
+         /NSAyz9yGyNuvDaS+3NY3LrQJux2Kre3iqsxIzfjtaHz8yP2JPfiqTY0iIx54VZsLF75
+         Bzqxx5NujcXuLdNFG/rKZtgfRcfumIOzcQjIFXgkYjJoapiB7NEOxkt7XIo+thbkpsDZ
+         AXPYAD+vnORi81F2kP1c7A3xKDez+YBlJvfQsHH8b+VCDdx2BVjR6HFF0zFQyv0Thecj
+         nsZQUG8VQSsn6ub9nbGGdLWLOvXLQCQP14tjSUiP3G3d/xo+501S04egjJ0MAwRhGLpS
+         4+cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hy0Xdesz3zE5Os2cbPhgUWle+TPKNOoLmrTtPiHUQEo=;
+        b=j6iQexTonITVYBXxT+4XvIq5AteDDhMcSznskPbPUs7u0i9bC06k4oOOEt0HAqsDuE
+         whpjgp4jI/LzqOYFICGUMxXDyl7bK+Nx6BqBaZgd8Pu/+rqjWdr8zJuWB7typd/kReqT
+         F2fxo4Hzy301Ro3o8t+QqngFqQj1gHV3YzXf/0IWbqNGKfQ5SjZpxP1mIRBS1Ff5vuNN
+         BtYyZ85QvEDjKSZWYMn1fAufmOlZs6zlan8NwwzfEmXbcsqCdWJpiuhk9DCAnwAHEtYa
+         en6+dSk7imR9MF4WoEQlVyV+w0PjXOaffhQldKVfoau/EpVcoLDx1hL+AVOVxS2catcd
+         ZF/A==
+X-Gm-Message-State: AJIora+aI2tpqWxD9og6/a/heDUqF7z/t6Ul35FBylcrqQlEf8RVg+cU
+        dTtKN6YjEjNX30Ks0Bd4A3LvjA==
+X-Google-Smtp-Source: AGRyM1sWkC5yVB3Vh70iYg5zpUyg3STH8l29UNOqYvK+YL6zEEjsIRVCZulowHoh/WC9YX4xPFr8HA==
+X-Received: by 2002:a05:600c:4f51:b0:39c:7f6c:a8d6 with SMTP id m17-20020a05600c4f5100b0039c7f6ca8d6mr26961636wmq.143.1655765344601;
+        Mon, 20 Jun 2022 15:49:04 -0700 (PDT)
+Received: from [192.168.2.222] ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id g9-20020a5d6989000000b0020c5253d8dcsm14187651wru.40.2022.06.20.15.49.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 15:49:03 -0700 (PDT)
+Message-ID: <a2d85598-76d1-c9dc-d50d-e5aa815997cf@conchuod.ie>
+Date:   Mon, 20 Jun 2022 23:49:01 +0100
 MIME-Version: 1.0
-References: <20220620155404.1968739-1-guoren@kernel.org> <CAK8P3a2enbvE9a5V=JpUFt7FfyDGLQHTWTszibqqLVoeiMAo5Q@mail.gmail.com>
- <f6513b4f-ef62-fd40-b031-27c9b7f57e00@redhat.com>
-In-Reply-To: <f6513b4f-ef62-fd40-b031-27c9b7f57e00@redhat.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 21 Jun 2022 06:47:56 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSQ17YQ41G+e0TBp2njPzx4LBGZw0GhyKCBqDW5AAuYaw@mail.gmail.com>
-Message-ID: <CAJF2gTSQ17YQ41G+e0TBp2njPzx4LBGZw0GhyKCBqDW5AAuYaw@mail.gmail.com>
-Subject: Re: [PATCH V5] riscv: Add qspinlock support
-To:     Waiman Long <longman@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
+ spi-{r,t}x-bus-width for dwc-ssi
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Conor.Dooley@microchip.com, fancer.lancer@gmail.com
+Cc:     airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
+        sam@ravnborg.org, Eugeniy.Paltsev@synopsys.com, vkoul@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org, daniel.lezcano@linaro.org,
+        palmer@dabbelt.com, palmer@rivosinc.com, tglx@linutronix.de,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        masahiroy@kernel.org, geert@linux-m68k.org, niklas.cassel@wdc.com,
+        dillon.minfei@gmail.com, jee.heng.sia@intel.com,
+        joabreu@synopsys.com, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220618123035.563070-1-mail@conchuod.ie>
+ <20220618123035.563070-7-mail@conchuod.ie>
+ <20220620205654.g7fyipwytbww5757@mobilestation>
+ <61b0fb86-078d-0262-b142-df2984ce0f97@microchip.com>
+ <9a1fcb40-9267-d8e6-b3b6-3b03fd789822@opensource.wdc.com>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <9a1fcb40-9267-d8e6-b3b6-3b03fd789822@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,60 +90,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 5:16 AM Waiman Long <longman@redhat.com> wrote:
->
->
-> On 6/20/22 16:42, Arnd Bergmann wrote:
-> > On Mon, Jun 20, 2022 at 5:54 PM <guoren@kernel.org> wrote:
-> >>> +config RISCV_USE_QUEUED_SPINLOCKS
-> >> +       bool "Using queued spinlock instead of ticket-lock"
-> > Maybe we can just make ARCH_USE_QUEUED_SPINLOCKS
-> > user visible and give users the choice between the two generic
-> > implementations across all architectures that support the qspinlock
-> > variant.
-> >
-> > In arch/riscv, you'd then just have a
-> >
-> >          select ARCH_HAVE_QUEUED_SPINLOCKS
-> >
-> > diff --git a/arch/riscv/include/asm/spinlock.h
-> > b/arch/riscv/include/asm/spinlock.h
-> >> new file mode 100644
-> >> index 000000000000..fd3fd09cff52
-> >> --- /dev/null
-> >> +++ b/arch/riscv/include/asm/spinlock.h
-> >> @@ -0,0 +1,12 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0 */
-> >> +#ifndef __ASM_SPINLOCK_H
-> >> +#define __ASM_SPINLOCK_H
-> >> +
-> >> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> >> +#include <asm/qspinlock.h>
-> >> +#include <asm/qrwlock.h>
-> >> +#else
-> >> +#include <asm-generic/spinlock.h>
-> >> +#endif
-> >> +
-> > Along the same lines:
-> >
-> > I think I'd prefer the header changes to be done in the asm-generic
-> > version of this file, so this can be shared across all architectures
-> > that want to give the choice between ticket and queued spinlock.
->
-> I concur. Qspinlock is only needed if we want to support systems with a
-> large number of CPUs. For systems with a small number of CPUs. It
-> doesn't matter if qspinlock or the ticket lock is being used.
-RISC-V has had NUMA scenario. Think two AI chips with CCIX ports, they
-could be flexibly connected when needed.
-
->
-> Cheers,
-> Longman
->
 
 
--- 
-Best Regards
- Guo Ren
+On 20/06/2022 23:46, Damien Le Moal wrote:
+> On 6/21/22 06:06, Conor.Dooley@microchip.com wrote:
+>> On 20/06/2022 21:56, Serge Semin wrote:
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>
+>>> On Sat, Jun 18, 2022 at 01:30:28PM +0100, Conor Dooley wrote:
+>>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>>
+>>>> snps,dwc-ssi-1.01a has a single user - the Canaan k210, which uses a
+>>>> width of 4 for spi-{r,t}x-bus-width. Update the binding to reflect
+>>>> this.
+>>>>
+>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>>> ---
+>>>>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 48 ++++++++++++++-----
+>>>>  1 file changed, 35 insertions(+), 13 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+>>>> index e25d44c218f2..f2b9e3f062cd 100644
+>>>> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+>>>> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+>>>> @@ -135,19 +135,41 @@ properties:
+>>>>        of the designware controller, and the upper limit is also subject to
+>>>>        controller configuration.
+>>>>
+>>>> -patternProperties:
+>>>> -  "^.*@[0-9a-f]+$":
+>>>> -    type: object
+>>>> -    properties:
+>>>> -      reg:
+>>>> -        minimum: 0
+>>>> -        maximum: 3
+>>>> -
+>>>> -      spi-rx-bus-width:
+>>>> -        const: 1
+>>>> -
+>>>> -      spi-tx-bus-width:
+>>>> -        const: 1
+>>>> +if:
+>>>> +  properties:
+>>>> +    compatible:
+>>>> +      contains:
+>>>> +        const: snps,dwc-ssi-1.01a
+>>>> +
+>>>> +then:
+>>>> +  patternProperties:
+>>>> +    "^.*@[0-9a-f]+$":
+>>>> +      type: object
+>>>> +      properties:
+>>>> +        reg:
+>>>> +          minimum: 0
+>>>> +          maximum: 3
+>>>> +
+>>>> +        spi-rx-bus-width:
+>>>> +          const: 4
+>>>> +
+>>>> +        spi-tx-bus-width:
+>>>> +          const: 4
+>>>> +
+>>>> +else:
+>>>> +  patternProperties:
+>>>> +    "^.*@[0-9a-f]+$":
+>>>> +      type: object
+>>>> +      properties:
+>>>> +        reg:
+>>>> +          minimum: 0
+>>>> +          maximum: 3
+>>>> +
+>>>> +        spi-rx-bus-width:
+>>>> +          const: 1
+>>>> +
+>>>> +        spi-tx-bus-width:
+>>>> +          const: 1
+>>>
+>>> You can just use a more relaxed constraint "enum: [1 2 4 8]" here
+>>
+>> 8 too? sure.
+>>
+>>> irrespective from the compatible string. The modern DW APB SSI
+>>> controllers of v.4.* and newer also support the enhanced SPI Modes too
+>>> (Dual, Quad and Octal). Since the IP-core version is auto-detected at
+>>> run-time there is no way to create a DT-schema correctly constraining
+>>> the Rx/Tx SPI bus widths. So let's keep the
+>>> compatible-string-independent "patternProperties" here but just extend
+>>> the set of acceptable "spi-rx-bus-width" and "spi-tx-bus-width"
+>>> properties values.
+>>
+>> SGTM!
+>>
+>>>
+>>> Note the DW APB SSI/AHB SSI driver currently doesn't support the
+>>> enhanced SPI modes. So I am not sure whether the multi-lines Rx/Tx SPI
+>>> bus indeed works for Canaan K210 AHB SSI controller. AFAICS from the
+>>> DW APB SSI v4.01a manual the Enhanced SPI mode needs to be properly
+>>> activated by means of the corresponding CSR. So most likely the DW AHB
+>>> SSI controllers need some specific setups too.
+>>
+>> hmm, well I'll leave that up to people that have Canaan hardware!
+> 
+> I will test this series.
+> 
 
-ML: https://lore.kernel.org/linux-csky/
+Cool, thanks.
+I'll try to get a respin out tomorrow w/ the memory node "unfixed".
+Conor.
+
+>> Thanks,
+>> Conor.
+>>
+>>>
+>>> -Sergey
+>>>
+>>>>
+>>>>  unevaluatedProperties: false
+>>>>
+>>>> --
+>>>> 2.36.1
+>>>>
+>>
+> 
+> 

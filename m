@@ -2,270 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D2B551CD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02475551BE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345388AbiFTN1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S1345077AbiFTN1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346351AbiFTNYa (ORCPT
+        with ESMTP id S1346426AbiFTNYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:24:30 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20629.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925818E33
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 06:09:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eZwPCLygMlWbLTs4fJOCCHcWa5nOOR6+FuybdyPWXAyn4iSMLwdiIMlUduJoMKs5kSWl1uD9Qv2leeEkDIrb3PTwFD7g1vVLB3Fpx6Mw6ID5EciGkf/8uxLiNQgYAKESGJm/lQ19jQDcTvf1p4btqs9ekmmOfzRDwBgDSCih+bYxOq4N7ewQ9ggj7QdZFDbE+D/8k0WRrXUXPz/jKkQq08ZMHcfjcobf7fY4fvLnsap+xxfreQXwyDlq8DA5c7fcDbHTTCO6aR7GktDWTCCfxEZFdU0R5D7XdxFiBujlrcSFiGrEMTpzav5EWTf2sFE6ggDGtIWLsXGDfFtmjDKzag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+W+KtAU4KtrmKWjHHAZVHfUH4kDnIXudhCyFUb40GlM=;
- b=IdbrA2nIIXrUE5nNM2q0sGVNV4JUadZ620cOLPZ5uyoezNgvdrpENdc1dwNGWIUTThiy5+mUw+uYHEfHitIcMTja4BXRPQ/loXG1tS9lX+F7G3D0d7PyPjabKVNyLj5dVwN5CCSLmlswwgF52i0IVd2Y7QfEaEv6E/HhbipY1GdNPo3gIGvNTDGsyagzHGaaujJjV9PMINlVwv1m+wZENAZXX3rZBwkgDfpoZuHzDBrr222uGmsX5DvAgZ6zO2Zvb9xKyR3M/gAlRsQwgFj7OWLOJps9gVsSz0/FCcGx1spuU+sf7LuumHzQO/1yREKFl1VzWfwy4PPvTZl139tHlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+W+KtAU4KtrmKWjHHAZVHfUH4kDnIXudhCyFUb40GlM=;
- b=erasSKzuVug/ceznl5Lu2icZqPAZkscNzzuAyJbs5ytj0Vo3ZU1SPzvKH8D9HKXHwKNci3ssiXPiZEDnNjRBi2rNqeFwqw15fuOW8snYZgC2sxvcqTrLzr1AX+iCNBIGjEsqLiU6KoBCDIkKP07omuf3N8g8XT/dAZ/9HsaYYptrfAyzwcXH2fGKGNwCOOsAqzdZRLUNoJMLqUwA9cziyOfx9JRHiTv7A9HxSo5Li1q0fIQhqw7dBcPQkVlvZhwXLWNeK8Lk/irgmHO7bIJcOCcBzIPgt9Uh6LbpaDTVBoNvhgZT5xpG5ijZ9+bwiTw34V57mSHkgoyiIQksZdCDSw==
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- DM6PR12MB4089.namprd12.prod.outlook.com (2603:10b6:5:213::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.15; Mon, 20 Jun 2022 13:09:32 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::4c43:6ebe:1190:b398]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::4c43:6ebe:1190:b398%6]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
- 13:09:31 +0000
-From:   Eli Cohen <elic@nvidia.com>
-To:     Jason Wang <jasowang@redhat.com>
-CC:     eperezma <eperezma@redhat.com>, mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>
-Subject: RE: [PATCH RFC 1/3] vdpa/mlx5: Implement susupend virtqueue callback
-Thread-Topic: [PATCH RFC 1/3] vdpa/mlx5: Implement susupend virtqueue callback
-Thread-Index: AQHYgYTkTliWOpB96kOSr0QNR5ihrK1YBCQAgABGFKA=
-Date:   Mon, 20 Jun 2022 13:09:31 +0000
-Message-ID: <DM8PR12MB54004277F21D682A3EE6D1C1ABB09@DM8PR12MB5400.namprd12.prod.outlook.com>
-References: <20220616132725.50599-1-elic@nvidia.com>
- <20220616132725.50599-2-elic@nvidia.com>
- <CACGkMEue-X8-u0Z=EwUbBSV6vmomwNy52Tot3Zf+0pu4Pztutg@mail.gmail.com>
-In-Reply-To: <CACGkMEue-X8-u0Z=EwUbBSV6vmomwNy52Tot3Zf+0pu4Pztutg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 96cd480c-ba0b-410b-9384-08da52be1d7f
-x-ms-traffictypediagnostic: DM6PR12MB4089:EE_
-x-microsoft-antispam-prvs: <DM6PR12MB40895A590CEC91F1C68ABFCCABB09@DM6PR12MB4089.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: P4zAp9OhfK+C6wFwowNDOyShiTldZWXTDgICJH+IRFWDyL4muZjtEiXUllYMmtLkYxOB2c4r2gOEaigVNn7E5WMEJs+x76gdevXzcRftRraf47MHLCGQJtUzTm3K711QRo9C+rAMH8Jw7T1RG4t9hu8Sos/EgPeADnRkerJTst55QQmsEPwYXZfnTmeub/udSQ49VQADoPWa6g4Q2RYLzFxi6fjPeJYF39TODMisn+va3IgV11hiiP0Y1VVx8d0ctgNAvs96c7ZSZzEfkkyRCxDbJNVouuB9+2et49ur3epWxf4Mhxa2g3hbsprfYoaRt9xJM4kFN3ht6TB/4jX4WcMNuMCCFzcRwFmDWuKKALwP6VA7olzXGHs5I0jsQWkijLya4hNHtCU0/iH93GCT/tJLJ2qFPSMuGmTVqr4ofVKgpibsln3fi4r9FvxrysEfgPL4ESL1emDVAtn+LbbDpG1d5a78q5Oq+WWrGgcKFQabG+uFDFyYM/t9NZ9wU2ejYWsveciX0OC4IfooPlvy1inT6jnQA2Ge7bFUL2I0zjvY8jRB+8bmQ0D9yV7a94t0CTQ+VNL0Ye2w14U0PjNOFfGImUp01OmTp5S7H84L7jV75NAFBcOJG5ledodJld9pLzVHABckupgwgUTjWXVORh/SP7nHxytYfHl28hTBFFnaDS73nzGy37oKpCTuXTY3FC7O9TcuvQ5E8/sOUP1I+Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(38070700005)(41300700001)(186003)(107886003)(38100700002)(66446008)(66476007)(66556008)(316002)(66946007)(64756008)(4326008)(8676002)(6916009)(83380400001)(76116006)(54906003)(26005)(71200400001)(6506007)(7696005)(8936002)(53546011)(478600001)(5660300002)(52536014)(33656002)(122000001)(9686003)(86362001)(2906002)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S3RjM2k1NWh1Wm4veFpvV0M4UGRmNzdETUR0RlBXSE44K01FdlJTRmV1djhx?=
- =?utf-8?B?WDRuR3dkK0V4Njhla3g0dEtvMnVEMHlEZlhIaVlDbmRRbHh1QU1mQit2RXVW?=
- =?utf-8?B?b2NFNTdvaEtVaVJOdlpHV0svQmpQUDgyRkg2U25QVStxd1NOUXRPR1dBYmVq?=
- =?utf-8?B?Q3BXVGpTaXVnVXhuOUgxTzRDbU9TdTkrWTM0VE0wRXYxbDNZVWlyRTRLM2VO?=
- =?utf-8?B?cDRvY3U3a1BILzhqNmhtQVFkU3UxOHVDaWZ2eFBxczhEN3VrRjlmR25DaGt2?=
- =?utf-8?B?YTlmcnFiTVlDQXEzc1hiOVJtVGpxSHJBem1Fa1grS2owTDhtTlpCYVVKeWFt?=
- =?utf-8?B?c1ZNN2J6N3kvcDQyUGplMjBwSFdSTWdLOW1Ca0ZweTAzclcxcTNiUnhrR01I?=
- =?utf-8?B?WXg2d0kyWFhXWmNCWGdlRENLRm1vZXUyZVpjdEN2TU1uY3ZUMm1nVk1NWmtq?=
- =?utf-8?B?Mm5rZnhlb2pDaTJldlZvaUZjRVE2T3E3UllNaTRPbjZlS2RNQ3pscjcvSzcy?=
- =?utf-8?B?WFRFVkdRR1ZkbzJKQWMzaUNPSUNSYXZ2RDdMZXd6OVlFYmRoR3JWYVdwbHJM?=
- =?utf-8?B?Qis0UkM3THlJbkFqeDRIQ2Qxc2JIRS9Fd3FkUkI5WVR0UGExOCthSGxWZjBM?=
- =?utf-8?B?N0c2Q01EaE42ZGJzQjF5ZW5WRVR5WHluV3ZZbGdPVkZ0Nnc0RS9ZMjlXOXpy?=
- =?utf-8?B?K3ptY2NCekk0M2w4SGNwdm1ES3ZXcE5XRUNKLy9QdWJhTEJoNFN5SU9UTVBJ?=
- =?utf-8?B?VEM1TFMwRHB5ZDVwRXRKNUs2ODN2NHBEYzNXeHZ2MENXdVFhK3pwYnM1MXNZ?=
- =?utf-8?B?YWMzOHhTMXlNQWpnZmtjeEliTG1FMVBTSStYL0FiR0J0WGxSQU9EWGNTSUNN?=
- =?utf-8?B?ZDM1MHdXQXViWG50RmwxWHRFdCtrMEo1Y2h6Wlp6d3o2R1Zva0oxVWd6dmd2?=
- =?utf-8?B?WVpWUFZvOXBpcldUckdvanlUUEE5eHBkVXZYbW0rSjhWVEhqZ25OcS90V25N?=
- =?utf-8?B?cW5QVXZjRmxjNm5ldkIzQW9PSGt3aWlwUE1WTjNndkV3QkQ3Q3pyRTR6eTB4?=
- =?utf-8?B?UktmaytzZmFsUVNSK0JGS0VzOW44RVNIL29Ba0Frc3QrTTJqUzQzQm5xL0Jq?=
- =?utf-8?B?dy90azRIYktGTGJ0QUhRQzJtQmFIQy9ZZi8yUW5WYmluSFpFdnQwUThUN3pL?=
- =?utf-8?B?Vm4wL1VHYy8vOVFQVzUrQUFEUVBqcTd6MXROOG03UmR0amRsL3R5c3EyYmFN?=
- =?utf-8?B?eTl0bkgycjQ2VTRWd1NCZkVLSmtmMUsxR0VhWDE1LzVmTzFUVGcwWUh4TFBh?=
- =?utf-8?B?Nk1XRUdPZis4N0NLTjN5QUIvekxrR21EalBEaUZGbUljellmZWUycC9nM1M1?=
- =?utf-8?B?cEV6bDluMy9kbU9hOUpkV1dyYTNRYWZjU1dIY3ovdjVSMU8wUUhMMDU4RUlQ?=
- =?utf-8?B?TEo3Umd1dDVEeVJZZW5LWWhjemwzT09oaFQwOGYvMkdCV3gyYi9lbmdkbWtq?=
- =?utf-8?B?UFhMNm1DMmIyOWkzL1prMVNaVkpKdXErS3Izd0lLTHFWY01SajNMNkU5aHda?=
- =?utf-8?B?VGJheG9GcTZMbVdGejJLL0twMlRqUDVkMFh0Z1Y3V2xTTHRqc2E0bnFrMFVR?=
- =?utf-8?B?MytOKy9UVmVZY1liemMzLzRQQ0p6d1V4Z1RLMnM4UFMxMFhHSEx5c1dGYXQ2?=
- =?utf-8?B?RksyTlViM1RxTkRpVWtFS2o3NUdHT3VvTko5Wnp6T2JOdE53cWVBWEhQVS96?=
- =?utf-8?B?UGpzQUx5aHNMaG8zT0Vnd2dnUWtnSys4dzk1eDZnTGp4eTYyS1FMeU00ZzAx?=
- =?utf-8?B?NWVWUFJnREZLNnEvZmpBenh1LzNEeGhUMlNDTFYxMy9JcGJuR0ZkRW9USUlO?=
- =?utf-8?B?Y21YQkxqQlZNd3MrVVp2YlJBUVFJNVJLSUkxY1hNU0tnWU8zOFdHR09NSTFl?=
- =?utf-8?B?K3k1c1Z6YTZFVGh0TzdWZW5JSnNsUEhTeWxjM0dWMENtUDdhUlRpNTZvekc0?=
- =?utf-8?B?S2pnK0l1U3dCRFM5c2tGMElzRWJiTGRVMS9jY2kyL21zQ1N4dVJyZFlaZnlz?=
- =?utf-8?B?bmwzMWlGd1FaMy92Y24xWllwZmZYQVB4NWVIdndXWkJwY0ZIK21JSXRTdmcw?=
- =?utf-8?B?TTFwUE4zM1BuQVlSUThFL0lzWjl1UHRveStBelA4VTh3MnNZak5ScmpiejI4?=
- =?utf-8?B?bTdQN3paa0tNRThuZ1c1bU51WjRMaCtMS0ZCRExKTjZyRGhGMWVFV3VQMGVW?=
- =?utf-8?B?TzdESmFqU09za2pkamdaR24rKzlWcFZXN2UwYzJEZVBMTS94Y2VpY3M5dHRu?=
- =?utf-8?Q?KX2gUPlrA4Vuim3H/m?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 20 Jun 2022 09:24:38 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFF81A389;
+        Mon, 20 Jun 2022 06:09:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kq6so20978684ejb.11;
+        Mon, 20 Jun 2022 06:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HQNnWPsziPC1SmS5aZTp0Suc53ezplFzfg3ZbuVfw7M=;
+        b=JAm4CNB1mieJHG28GtsoulU5qJktSuTperR7nsyCe+Jc2fJpXkaCEDSdi24RGydEvS
+         fuLAoRvFMIPTj5GzzEzxjazgquyP0XluN1pJAyM5pSdmPWwlt7fKrmK9lcTj/FjWe+Q6
+         lpOKysnDWcByVg9rTRCiMn2D7vnT6OYueapPoLwwmeKSfHjH1L/sUWTMI2UiKaKuRdqV
+         IztH6jXwzGqlVTgDJ7RXZmOFVDjTKNP/a4ldeYUaxvXi5278Re4XT53IeO6oTpWOPtI/
+         L7pP4dre5dSkc30RQOuxQT2VJXFueVcgp//dXm/e/6ZKM+ywVtw5dxbIhBwd5Uu0CQSo
+         ZOBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HQNnWPsziPC1SmS5aZTp0Suc53ezplFzfg3ZbuVfw7M=;
+        b=IMHod6RN8ONoy3t/JIY83to3ZyE6CWAE3JYdZF9hn6dYzJ05Z/wZd9Z168t/Yu/b95
+         cK52lx9/E5jSOOWuUfb3R8nuqxEmzzX5BQOHPMOzuvs1G/GspoysZtw64h9oVwH3wjqe
+         DmHSan8/GQ2TIBAkJaUt3k4Jq0vVcycOrh1gyg5JQV84jluvEO8p/QyWPnf5kLQF+cTN
+         0ZEd9ZiLGqZWUA0LoEc9OuWk7V/uqTndP4idQFE44bshOrqkoy4Q+lsdlpE4bLNTcHDm
+         KXskS1GcOmnOOuDpbwdDPa8/OotANPxz4WWex4+iBUDWEGHSTDxoyaAfpriad/HJzYL2
+         0rCg==
+X-Gm-Message-State: AJIora+MHVIhRm5yE2kQv07Gg8zjb+mzIvvIaqiJrGL5ODsjYxTZy8c+
+        wKPKvSGF58AvNqx6suMt/RQ=
+X-Google-Smtp-Source: AGRyM1u+8kf+6IMcIYUy52H9mYA44RaQlKO499WuZ8oDezmfoRb5xFw+7LFlrBwsnuxmpsV7d3wclA==
+X-Received: by 2002:a17:906:72d4:b0:712:1fa8:a685 with SMTP id m20-20020a17090672d400b007121fa8a685mr20303254ejl.709.1655730586456;
+        Mon, 20 Jun 2022 06:09:46 -0700 (PDT)
+Received: from [192.168.0.24] (80.174.78.229.dyn.user.ono.com. [80.174.78.229])
+        by smtp.gmail.com with ESMTPSA id eg40-20020a05640228a800b004356d82b129sm6067638edb.80.2022.06.20.06.09.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 06:09:45 -0700 (PDT)
+Message-ID: <49b8723e-bc5f-6119-cf9f-047a856f5b6e@gmail.com>
+Date:   Mon, 20 Jun 2022 15:09:42 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96cd480c-ba0b-410b-9384-08da52be1d7f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2022 13:09:31.7885
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0rjEcR4UAl6VX2K6e6wHwADtV7/P2sNeVykqWz8hNxOJP3RO3ziXINQdH33EYSl7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4089
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v20 0/6] Add mutex support for MDP
+Content-Language: en-US
+To:     "moudy.ho" <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
+        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
+        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        cellopoint.kai@gmail.com
+References: <20220610063424.7800-1-moudy.ho@mediatek.com>
+ <5f53e0a4-f6d5-f9be-222b-e6361b837071@gmail.com>
+ <a982aa2fb069e498ee259e43501025936b005091.camel@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <a982aa2fb069e498ee259e43501025936b005091.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2Fu
-Z0ByZWRoYXQuY29tPg0KPiBTZW50OiBNb25kYXksIEp1bmUgMjAsIDIwMjIgMTE6NTYgQU0NCj4g
-VG86IEVsaSBDb2hlbiA8ZWxpY0BudmlkaWEuY29tPg0KPiBDYzogZXBlcmV6bWEgPGVwZXJlem1h
-QHJlZGhhdC5jb20+OyBtc3QgPG1zdEByZWRoYXQuY29tPjsgdmlydHVhbGl6YXRpb24gPHZpcnR1
-YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5kYXRpb24ub3JnPjsgbGludXgtDQo+IGtlcm5lbCA8
-bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IFNpLVdlaSBMaXUgPHNpLXdlaS5saXVAb3Jh
-Y2xlLmNvbT47IFBhcmF2IFBhbmRpdCA8cGFyYXZAbnZpZGlhLmNvbT4NCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCBSRkMgMS8zXSB2ZHBhL21seDU6IEltcGxlbWVudCBzdXN1cGVuZCB2aXJ0cXVldWUg
-Y2FsbGJhY2sNCj4gDQo+IE9uIFRodSwgSnVuIDE2LCAyMDIyIGF0IDk6MjcgUE0gRWxpIENvaGVu
-IDxlbGljQG52aWRpYS5jb20+IHdyb3RlOg0KPiA+DQo+ID4gSW1wbGVtZW50IHRoZSBzdXNwZW5k
-IGNhbGxiYWNrIGFsbG93aW5nIHRvIHN1c3BlbmQgdGhlIHZpcnRxdWV1ZXMgc28NCj4gPiB0aGV5
-IHN0b3AgcHJvY2Vzc2luZyBkZXNjcmlwdG9ycy4gVGhpcyBpcyByZXF1aXJlZCB0byBhbGxvdyB0
-aGUgc2hhZG93DQo+ID4gdmlydHF1ZXVlIHRvIGtpY2sgaW4uDQo+ID4NCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBFbGkgQ29oZW4gPGVsaWNAbnZpZGlhLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy92
-ZHBhL21seDUvbmV0L21seDVfdm5ldC5jICB8IDY4ICsrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrLQ0KPiA+ICBpbmNsdWRlL2xpbnV4L21seDUvbWx4NV9pZmNfdmRwYS5oIHwgIDggKysrKw0K
-PiA+ICAyIGZpbGVzIGNoYW5nZWQsIDc1IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4g
-Pg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4NV92bmV0LmMgYi9k
-cml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4NV92bmV0LmMNCj4gPiBpbmRleCBmYjBiMjNlNzEzODMu
-LmVhNGJjOGEwY2QyNSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4
-NV92bmV0LmMNCj4gPiArKysgYi9kcml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4NV92bmV0LmMNCj4g
-PiBAQCAtODk1LDYgKzg5NSw3IEBAIHN0YXRpYyBpbnQgY3JlYXRlX3ZpcnRxdWV1ZShzdHJ1Y3Qg
-bWx4NV92ZHBhX25ldCAqbmRldiwgc3RydWN0IG1seDVfdmRwYV92aXJ0cXVlDQo+ID4gICAgICAg
-ICBpZiAoZXJyKQ0KPiA+ICAgICAgICAgICAgICAgICBnb3RvIGVycl9jbWQ7DQo+ID4NCj4gPiAr
-ICAgICAgIG12cS0+Zndfc3RhdGUgPSBNTFg1X1ZJUlRJT19ORVRfUV9PQkpFQ1RfU1RBVEVfSU5J
-VDsNCj4gPiAgICAgICAgIGtmcmVlKGluKTsNCj4gPiAgICAgICAgIG12cS0+dmlydHFfaWQgPSBN
-TFg1X0dFVChnZW5lcmFsX29ial9vdXRfY21kX2hkciwgb3V0LCBvYmpfaWQpOw0KPiA+DQo+ID4g
-QEAgLTkyMiw2ICs5MjMsNyBAQCBzdGF0aWMgdm9pZCBkZXN0cm95X3ZpcnRxdWV1ZShzdHJ1Y3Qg
-bWx4NV92ZHBhX25ldCAqbmRldiwgc3RydWN0IG1seDVfdmRwYV92aXJ0cQ0KPiA+ICAgICAgICAg
-ICAgICAgICBtbHg1X3ZkcGFfd2FybigmbmRldi0+bXZkZXYsICJkZXN0cm95IHZpcnRxdWV1ZSAw
-eCV4XG4iLCBtdnEtPnZpcnRxX2lkKTsNCj4gPiAgICAgICAgICAgICAgICAgcmV0dXJuOw0KPiA+
-ICAgICAgICAgfQ0KPiA+ICsgICAgICAgbXZxLT5md19zdGF0ZSA9IE1MWDVfVklSVElPX05FVF9R
-X09CSkVDVF9OT05FOw0KPiA+ICAgICAgICAgdW1lbXNfZGVzdHJveShuZGV2LCBtdnEpOw0KPiA+
-ICB9DQo+ID4NCj4gPiBAQCAtMTEyMSw2ICsxMTIzLDIwIEBAIHN0YXRpYyBpbnQgcXVlcnlfdmly
-dHF1ZXVlKHN0cnVjdCBtbHg1X3ZkcGFfbmV0ICpuZGV2LCBzdHJ1Y3QgbWx4NV92ZHBhX3ZpcnRx
-dWV1DQo+ID4gICAgICAgICByZXR1cm4gZXJyOw0KPiA+ICB9DQo+ID4NCj4gPiArc3RhdGljIGJv
-b2wgaXNfdmFsaWRfc3RhdGVfY2hhbmdlKGludCBvbGRzdGF0ZSwgaW50IG5ld3N0YXRlKQ0KPiA+
-ICt7DQo+ID4gKyAgICAgICBzd2l0Y2ggKG9sZHN0YXRlKSB7DQo+ID4gKyAgICAgICBjYXNlIE1M
-WDVfVklSVElPX05FVF9RX09CSkVDVF9TVEFURV9JTklUOg0KPiA+ICsgICAgICAgICAgICAgICBy
-ZXR1cm4gbmV3c3RhdGUgPT0gTUxYNV9WSVJUSU9fTkVUX1FfT0JKRUNUX1NUQVRFX1JEWTsNCj4g
-PiArICAgICAgIGNhc2UgTUxYNV9WSVJUSU9fTkVUX1FfT0JKRUNUX1NUQVRFX1JEWToNCj4gPiAr
-ICAgICAgICAgICAgICAgcmV0dXJuIG5ld3N0YXRlID09IE1MWDVfVklSVElPX05FVF9RX09CSkVD
-VF9TVEFURV9TVVNQRU5EOw0KPiA+ICsgICAgICAgY2FzZSBNTFg1X1ZJUlRJT19ORVRfUV9PQkpF
-Q1RfU1RBVEVfU1VTUEVORDoNCj4gPiArICAgICAgIGNhc2UgTUxYNV9WSVJUSU9fTkVUX1FfT0JK
-RUNUX1NUQVRFX0VSUjoNCj4gPiArICAgICAgIGRlZmF1bHQ6DQo+ID4gKyAgICAgICAgICAgICAg
-IHJldHVybiBmYWxzZTsNCj4gPiArICAgICAgIH0NCj4gPiArfQ0KPiA+ICsNCj4gPiAgc3RhdGlj
-IGludCBtb2RpZnlfdmlydHF1ZXVlKHN0cnVjdCBtbHg1X3ZkcGFfbmV0ICpuZGV2LCBzdHJ1Y3Qg
-bWx4NV92ZHBhX3ZpcnRxdWV1ZSAqbXZxLCBpbnQgc3RhdGUpDQo+ID4gIHsNCj4gPiAgICAgICAg
-IGludCBpbmxlbiA9IE1MWDVfU1RfU1pfQllURVMobW9kaWZ5X3ZpcnRpb19uZXRfcV9pbik7DQo+
-ID4gQEAgLTExMzAsNiArMTE0NiwxMiBAQCBzdGF0aWMgaW50IG1vZGlmeV92aXJ0cXVldWUoc3Ry
-dWN0IG1seDVfdmRwYV9uZXQgKm5kZXYsIHN0cnVjdCBtbHg1X3ZkcGFfdmlydHF1ZQ0KPiA+ICAg
-ICAgICAgdm9pZCAqaW47DQo+ID4gICAgICAgICBpbnQgZXJyOw0KPiA+DQo+ID4gKyAgICAgICBp
-ZiAobXZxLT5md19zdGF0ZSA9PSBNTFg1X1ZJUlRJT19ORVRfUV9PQkpFQ1RfTk9ORSkNCj4gPiAr
-ICAgICAgICAgICAgICAgcmV0dXJuIDA7DQo+ID4gKw0KPiA+ICsgICAgICAgaWYgKCFpc192YWxp
-ZF9zdGF0ZV9jaGFuZ2UobXZxLT5md19zdGF0ZSwgc3RhdGUpKQ0KPiA+ICsgICAgICAgICAgICAg
-ICByZXR1cm4gLUVJTlZBTDsNCj4gPiArDQo+ID4gICAgICAgICBpbiA9IGt6YWxsb2MoaW5sZW4s
-IEdGUF9LRVJORUwpOw0KPiA+ICAgICAgICAgaWYgKCFpbikNCj4gPiAgICAgICAgICAgICAgICAg
-cmV0dXJuIC1FTk9NRU07DQo+ID4gQEAgLTE5OTEsNiArMjAxMyw3IEBAIHN0YXRpYyB2b2lkIG1s
-eDVfdmRwYV9zZXRfdnFfcmVhZHkoc3RydWN0IHZkcGFfZGV2aWNlICp2ZGV2LCB1MTYgaWR4LCBi
-b29sIHJlYWR5DQo+ID4gICAgICAgICBzdHJ1Y3QgbWx4NV92ZHBhX2RldiAqbXZkZXYgPSB0b19t
-dmRldih2ZGV2KTsNCj4gPiAgICAgICAgIHN0cnVjdCBtbHg1X3ZkcGFfbmV0ICpuZGV2ID0gdG9f
-bWx4NV92ZHBhX25kZXYobXZkZXYpOw0KPiA+ICAgICAgICAgc3RydWN0IG1seDVfdmRwYV92aXJ0
-cXVldWUgKm12cTsNCj4gPiArICAgICAgIGludCBlcnI7DQo+ID4NCj4gPiAgICAgICAgIGlmICgh
-bXZkZXYtPmFjdHVhbF9mZWF0dXJlcykNCj4gPiAgICAgICAgICAgICAgICAgcmV0dXJuOw0KPiA+
-IEBAIC0yMDA0LDggKzIwMjcsMTYgQEAgc3RhdGljIHZvaWQgbWx4NV92ZHBhX3NldF92cV9yZWFk
-eShzdHJ1Y3QgdmRwYV9kZXZpY2UgKnZkZXYsIHUxNiBpZHgsIGJvb2wgcmVhZHkNCj4gPiAgICAg
-ICAgIH0NCj4gPg0KPiA+ICAgICAgICAgbXZxID0gJm5kZXYtPnZxc1tpZHhdOw0KPiA+IC0gICAg
-ICAgaWYgKCFyZWFkeSkNCj4gPiArICAgICAgIGlmICghcmVhZHkpIHsNCj4gPiAgICAgICAgICAg
-ICAgICAgc3VzcGVuZF92cShuZGV2LCBtdnEpOw0KPiA+ICsgICAgICAgfSBlbHNlIHsNCj4gPiAr
-ICAgICAgICAgICAgICAgZXJyID0gbW9kaWZ5X3ZpcnRxdWV1ZShuZGV2LCBtdnEsIE1MWDVfVklS
-VElPX05FVF9RX09CSkVDVF9TVEFURV9SRFkpOw0KPiA+ICsgICAgICAgICAgICAgICBpZiAoZXJy
-KSB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgbWx4NV92ZHBhX3dhcm4obXZkZXYsICJt
-b2RpZnkgVlEgJWQgdG8gcmVhZHkgZmFpbGVkICglZClcbiIsIGlkeCwgZXJyKTsNCj4gPiArICAg
-ICAgICAgICAgICAgICAgICAgICByZWFkeSA9IGZhbHNlOw0KPiA+ICsgICAgICAgICAgICAgICB9
-DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+DQo+ID4gICAgICAgICBtdnEtPnJlYWR5ID0gcmVh
-ZHk7DQo+ID4gIH0NCj4gPiBAQCAtMjczMiw2ICsyNzYzLDM5IEBAIHN0YXRpYyBpbnQgbWx4NV92
-ZHBhX2dldF92ZW5kb3JfdnFfc3RhdHMoc3RydWN0IHZkcGFfZGV2aWNlICp2ZGV2LCB1MTYgaWR4
-LA0KPiA+ICAgICAgICAgcmV0dXJuIGVycjsNCj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyB2b2lk
-IG1seDVfdmRwYV9jdnFfc3VzcGVuZChzdHJ1Y3QgbWx4NV92ZHBhX2RldiAqbXZkZXYsIGJvb2wg
-c3VzcGVuZCkNCj4gPiArew0KPiA+ICsgICAgICAgc3RydWN0IG1seDVfY29udHJvbF92cSAqY3Zx
-Ow0KPiA+ICsNCj4gPiArICAgICAgIGlmICghKG12ZGV2LT5hY3R1YWxfZmVhdHVyZXMgJiBCSVRf
-VUxMKFZJUlRJT19ORVRfRl9DVFJMX1ZRKSkpDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybjsN
-Cj4gPiArDQo+ID4gKyAgICAgICBjdnEgPSAmbXZkZXYtPmN2cTsNCj4gPiArICAgICAgIGN2cS0+
-cmVhZHkgPSAhc3VzcGVuZDsNCj4gPiArfQ0KPiANCj4gSXQgbG9va3MgdG8gbWUgd2UgbmVlZCB0
-byBzeW5jaHJvbml6ZSB0aGlzIHdpdGggcmVzbG9jay4gQW5kIHRoaXMNCj4gcHJvYmFibHkgZGVz
-ZXJ2ZSBhIGRlZGljYXRlZCBmaXguDQo+IA0KDQpJdCdzIGFscmVhZHkgYmVpbmcgaGVsZCBieSBt
-bHg1X3ZkcGFfc3VzcGVuZA0KDQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IG1seDVfdmRwYV9zdXNw
-ZW5kKHN0cnVjdCB2ZHBhX2RldmljZSAqdmRldiwgYm9vbCBzdXNwZW5kKQ0KPiA+ICt7DQo+ID4g
-KyAgICAgICBzdHJ1Y3QgbWx4NV92ZHBhX2RldiAqbXZkZXYgPSB0b19tdmRldih2ZGV2KTsNCj4g
-PiArICAgICAgIHN0cnVjdCBtbHg1X3ZkcGFfbmV0ICpuZGV2ID0gdG9fbWx4NV92ZHBhX25kZXYo
-bXZkZXYpOw0KPiA+ICsgICAgICAgc3RydWN0IG1seDVfdmRwYV92aXJ0cXVldWUgKm12cTsNCj4g
-PiArICAgICAgIGludCBpOw0KPiA+ICsNCj4gPiArICAgICAgIGlmICghc3VzcGVuZCkgew0KPiA+
-ICsgICAgICAgICAgICAgICBtbHg1X3ZkcGFfd2FybihtdmRldiwgIlJlc3VtZSBvZiB2aXJ0cXVl
-dWVzIGlzIG5vdCBzdXBwb3J0ZWRcbiIpOw0KPiA+ICsgICAgICAgICAgICAgICByZXR1cm4gLUVP
-UE5PVFNVUFA7DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+ICsgICAgICAgZG93bl93cml0ZSgm
-bmRldi0+cmVzbG9jayk7DQo+ID4gKyAgICAgICBmb3IgKGkgPSAwOyBpIDwgbmRldi0+Y3VyX251
-bV92cXM7IGkrKykgew0KPiA+ICsgICAgICAgICAgICAgICBtdnEgPSAmbmRldi0+dnFzW2ldOw0K
-PiA+ICsgICAgICAgICAgICAgICBzdXNwZW5kX3ZxKG5kZXYsIG12cSk7DQo+ID4gKyAgICAgICB9
-DQo+ID4gKyAgICAgICBtbHg1X3ZkcGFfY3ZxX3N1c3BlbmQobXZkZXYsIHN1c3BlbmQpOw0KPiAN
-Cj4gRG8gd2UgbmVlZCB0byBzeW5jaHJvbml6ZSB3aXRoIHRoZSBjYXJyaWVyIHdvcmsgaGVyZT8g
-T3RoZXJ3aXNlIHdlIG1heQ0KPiBnZXQgY29uZmlnIG5vdGlmaWNhdGlvbiBhZnRlciBzdXNwZW5k
-aW5nLg0KPiANCg0KQXJlIHlvdSBzYXlpbmcgd2Ugc2hvdWxkIG5vdCBhbGxvdyBjYXJyaWVyIHVw
-ZGF0ZXMgYWZ0ZXIgdGhlIFZRcyBoYXZlIGJlZW4gc3VzcGVuZGVkPw0KTGluayBzdGF0ZSBzaG91
-bGQgbm90IGJlIHJlbGF0ZWQgdG8gc3VzcGVuc2lvbiBvZiBWUXMuDQoNCj4gPiArICAgICAgIHVw
-X3dyaXRlKCZuZGV2LT5yZXNsb2NrKTsNCj4gPiArICAgICAgIHJldHVybiAwOw0KPiA+ICt9DQo+
-ID4gKw0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IHZkcGFfY29uZmlnX29wcyBtbHg1X3ZkcGFf
-b3BzID0gew0KPiA+ICAgICAgICAgLnNldF92cV9hZGRyZXNzID0gbWx4NV92ZHBhX3NldF92cV9h
-ZGRyZXNzLA0KPiA+ICAgICAgICAgLnNldF92cV9udW0gPSBtbHg1X3ZkcGFfc2V0X3ZxX251bSwN
-Cj4gPiBAQCAtMjc2Miw2ICsyODI2LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB2ZHBhX2NvbmZp
-Z19vcHMgbWx4NV92ZHBhX29wcyA9IHsNCj4gPiAgICAgICAgIC5nZXRfZ2VuZXJhdGlvbiA9IG1s
-eDVfdmRwYV9nZXRfZ2VuZXJhdGlvbiwNCj4gPiAgICAgICAgIC5zZXRfbWFwID0gbWx4NV92ZHBh
-X3NldF9tYXAsDQo+ID4gICAgICAgICAuZnJlZSA9IG1seDVfdmRwYV9mcmVlLA0KPiA+ICsgICAg
-ICAgLnN1c3BlbmQgPSBtbHg1X3ZkcGFfc3VzcGVuZCwNCj4gDQo+IEkgZG9uJ3Qgc2VlIHRoZSB2
-RFBBIGJ1cyBwYXRjaCB0byBlbmFibGUgdGhpcyBtZXRob2QuIE9yIGFueXRoaW5nIEkgbWlzc2Vk
-IGhlcmU/DQo+IA0KPiBUaGFua3MNCj4gDQo+ID4gIH07DQo+ID4NCj4gPiAgc3RhdGljIGludCBx
-dWVyeV9tdHUoc3RydWN0IG1seDVfY29yZV9kZXYgKm1kZXYsIHUxNiAqbXR1KQ0KPiA+IEBAIC0y
-ODI3LDYgKzI4OTIsNyBAQCBzdGF0aWMgdm9pZCBpbml0X212cXMoc3RydWN0IG1seDVfdmRwYV9u
-ZXQgKm5kZXYpDQo+ID4gICAgICAgICAgICAgICAgIG12cS0+aW5kZXggPSBpOw0KPiA+ICAgICAg
-ICAgICAgICAgICBtdnEtPm5kZXYgPSBuZGV2Ow0KPiA+ICAgICAgICAgICAgICAgICBtdnEtPmZ3
-cXAuZncgPSB0cnVlOw0KPiA+ICsgICAgICAgICAgICAgICBtdnEtPmZ3X3N0YXRlID0gTUxYNV9W
-SVJUSU9fTkVUX1FfT0JKRUNUX05PTkU7DQo+ID4gICAgICAgICB9DQo+ID4gICAgICAgICBmb3Ig
-KDsgaSA8IG5kZXYtPm12ZGV2Lm1heF92cXM7IGkrKykgew0KPiA+ICAgICAgICAgICAgICAgICBt
-dnEgPSAmbmRldi0+dnFzW2ldOw0KPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L21seDUv
-bWx4NV9pZmNfdmRwYS5oIGIvaW5jbHVkZS9saW51eC9tbHg1L21seDVfaWZjX3ZkcGEuaA0KPiA+
-IGluZGV4IDQ0MTRlZDViNmVkMi4uNDIzNTYyZjM5ZDNjIDEwMDY0NA0KPiA+IC0tLSBhL2luY2x1
-ZGUvbGludXgvbWx4NS9tbHg1X2lmY192ZHBhLmgNCj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L21s
-eDUvbWx4NV9pZmNfdmRwYS5oDQo+ID4gQEAgLTE1MCw2ICsxNTAsMTQgQEAgZW51bSB7DQo+ID4g
-ICAgICAgICBNTFg1X1ZJUlRJT19ORVRfUV9PQkpFQ1RfU1RBVEVfRVJSICAgICAgPSAweDMsDQo+
-ID4gIH07DQo+ID4NCj4gPiArLyogVGhpcyBpbmRpY2F0ZXMgdGhhdCB0aGUgb2JqZWN0IHdhcyBu
-b3QgY3JlYXRlZCBvciBoYXMgYWxyZWFkeWkNCj4gPiArICogYmVlbiBkZXNyb3llZC4gSXQgaXMg
-dmVyeSBzYWZlIHRvIGFzc3VtZSB0aGF0IHRoaXMgb2JqZWN0IHdpbGwgbmV2ZXINCj4gPiArICog
-aGF2ZSBzbyBtYW55IHN0YXRlcw0KPiA+ICsgKi8NCj4gPiArZW51bSB7DQo+ID4gKyAgICAgICBN
-TFg1X1ZJUlRJT19ORVRfUV9PQkpFQ1RfTk9ORSA9IDB4ZmZmZmZmZmYNCj4gPiArfTsNCj4gPiAr
-DQo+ID4gIGVudW0gew0KPiA+ICAgICAgICAgTUxYNV9SUVRDX0xJU1RfUV9UWVBFX1JRICAgICAg
-ICAgICAgPSAweDAsDQo+ID4gICAgICAgICBNTFg1X1JRVENfTElTVF9RX1RZUEVfVklSVElPX05F
-VF9RICA9IDB4MSwNCj4gPiAtLQ0KPiA+IDIuMzUuMQ0KPiA+DQoNCg==
+
+
+On 20/06/2022 03:36, moudy.ho wrote:
+> On Fri, 2022-06-17 at 15:54 +0200, Matthias Brugger wrote:
+>>
+>> On 10/06/2022 08:34, Moudy Ho wrote:
+>>> Change since V19:
+>>> - Reduce parameters pass to function "mtk_mutex_write_sof"
+>>>     to avoid redundant action.
+>>>
+>>> Change since V18:
+>>> - Rebase on v5.19-rc1
+>>> - Remove unnecessary functions:
+>>>     "mtk_mutex_set_mod", "mtk_mutex_clear_mod",
+>>>     "mtk_mutex_set_sof" and "mtk_mutex_clear_sof", and export
+>>>     "mtk_mutex_write_mod" and "mtk_mutex_write_sof" to
+>>>     set MOD/SOF directly.
+>>> - Remove unnecessary SOF tables and add new enumerations of SOF
+>>> instead.
+>>> - Adjust the error checking for CMDQ operations.
+>>>
+>>> Change since V17:
+>>> - Rebase on v5.18-rc6
+>>> - Fix undeclared identifier causing compilation to fail.
+>>>
+>>> Change since V16:
+>>> - Rebase on v5.18-rc4
+>>> - Fix misplacement of definition "CONFIG_MTK_CMDQ" which
+>>>     caused compilation error when CMD is not supported.
+>>>
+>>> Change since V15:
+>>> - Rebase on linux-next.
+>>> - As suggested by Angelo, split common parts into independent
+>>> functions to
+>>>     make functions more concise.
+>>> - Based on safety considerations, increase the returned error
+>>> number and
+>>>     message to facilitate error handling.
+>>>
+>>> Change since V14:
+>>> - Rebase on linux-next.
+>>> - Add new SOF and MOD table for general interface to integrate the
+>>> requirement
+>>>     of different modules.
+>>> - Remove unnecessary MOD structure.
+>>> - By Rob Herring's suggestion, revise the description of
+>>>     "mediatek,gce-client-reg" in MUTEX dt-bindings.
+>>> - Delete the redundant definition of MTK_MUTEX_ENABLE and modify
+>>> corresponding
+>>>     function.
+>>>
+>>> Change since V13:
+>>> - Rebase on linux-next tag:next-20220316
+>>> - Adjust the MUTEX MOD table structure and corresponding functions.
+>>> - Adjust the definition style about 8183 MDP MOD.
+>>> - Remove redundant definitions and enumerations.
+>>> - Adjust the CMDQ operation in MUTEX to be backward compatible
+>>>
+>>> Change since V12:
+>>> - Rebase on linux-next
+>>> - Remove ISP related settings in MMSYS
+>>> - Removed CMDQ operations previously used by MDP in MMSYS
+>>> - Move mediatek MUTEX dt-binding path
+>>> - Add additional property in MUTEX for CMDQ operations
+>>>
+>>> Change since V11:
+>>> - Rebase on v5.17-rc6.
+>>>
+>>> [1]:
+>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next*soc&id=5f9b5b757e44de47ebdc116c14b90e3cc8bc7acb__;Lw!!CTRNKA9wMg0ARbw!xbP5nA78eRJ8wIp4yFgD5aE4jwxaKHyasyrDibJyg6s4V_rFBmX96_JR5DQsUzWs$
+>>>   
+>>> [2]:
+>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next*soc&id=831785f0e5b919c29e1bc5f9a74e9ebd38289e24__;Lw!!CTRNKA9wMg0ARbw!xbP5nA78eRJ8wIp4yFgD5aE4jwxaKHyasyrDibJyg6s4V_rFBmX96_JR5AuVaksc$
+>>>   
+>>> [3]:
+>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next*soc&id=15f1768365aed810826a61fef4a744437aa5b426__;Lw!!CTRNKA9wMg0ARbw!xbP5nA78eRJ8wIp4yFgD5aE4jwxaKHyasyrDibJyg6s4V_rFBmX96_JR5NwN4SIb$
+>>>   
+>>>
+>>> Change since v10:
+>>> - For some ISP application scenarios, such as preview and recording
+>>>     at the same time.
+>>>     The routing table needs to be discarded, and the calculation
+>>> result
+>>>     on the SCP side is used to write a suitable mux setting for
+>>>     1 input and 2 output.
+>>> - Adjust the GCE client register parsing method to avoid redundant
+>>> warning logs.
+>>>
+>>> Change since v9:
+>>> - Add API for MDP getting mutex mod.
+>>>
+>>> Hi,
+>>>
+>>> This patch splits mmsys and mutex settings from Media Data Path 3
+>>> (MDP3),
+>>> and original mailling list list below:
+>>>
+> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/cover/20211201095031.31606-1-moudy.ho@mediatek.com/__;!!CTRNKA9wMg0ARbw!xbP5nA78eRJ8wIp4yFgD5aE4jwxaKHyasyrDibJyg6s4V_rFBmX96_JR5Ov7mlf5$
+>>>   
+>>> Corresponding settings and interfaces are added for MDP operation
+>>> in the
+>>> mmsys and mutex drivers, which increases the independence of the
+>>> modules
+>>>
+>>> Moudy Ho (6):
+>>>     soc: mediatek: mutex: add common interface for modules setting
+>>>     soc: mediatek: mutex: add 8183 MUTEX MOD settings for MDP
+>>>     dt-bindings: soc: mediatek: move out common module from display
+>>> folder
+>>>     dt-bindings: soc: mediatek: add gce-client-reg for MUTEX
+>>>     dts: arm64: mt8183: add GCE client property for Mediatek MUTEX
+>>
+>> If fixed the commit subject to arm64: dts: mt8183...
+>> Whole series applied,
+>>
+>> Thanks!
+>>
+> 
+> Hi Matthias,
+> 
+> Thanks for the correction, I'll fix it as soon as possible.
+
+I already fixed that when I took the series. No action from your side needed.
+
+Regards,
+Matthias
+
+> 
+> Regards,
+> Moudy
+> 
+>>>     soc: mediatek: mutex: add functions that operate registers by
+>>> CMDQ
+>>>
+>>>    .../mediatek/mediatek,mutex.yaml              |  14 ++-
+>>>    arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   1 +
+>>>    drivers/soc/mediatek/mtk-mutex.c              | 119
+>>> +++++++++++++++++-
+>>>    include/linux/soc/mediatek/mtk-mutex.h        |  27 ++++
+>>>    4 files changed, 159 insertions(+), 2 deletions(-)
+>>>    rename Documentation/devicetree/bindings/{display =>
+>>> soc}/mediatek/mediatek,mutex.yaml (81%)
+>>>
+> 

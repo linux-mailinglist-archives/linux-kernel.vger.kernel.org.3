@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF2C5513A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5387855139B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 11:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240259AbiFTJCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 05:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S240268AbiFTJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 05:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240235AbiFTJCR (ORCPT
+        with ESMTP id S240269AbiFTJCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:02:17 -0400
+        Mon, 20 Jun 2022 05:02:30 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A54B10FEF
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:02:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A822D12AD7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:02:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655715735;
+        s=mimecast20190719; t=1655715747;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3oC8M92pTSBQLwsvQ/DdmAywS1769N+d4WC6nyEqgEw=;
-        b=SaDb4BYigxmV1S54vDWdMxBLO6wwkVkctKN+4K8RWbZaMBya3nWmG0wMTVbwO7T7p2I/q8
-        Fze7oIkrUinudSZtnQ/aVxGvRlkAeqHrhbwU1b4GjJ8kxxVjbR/dipKo+8V6s2A5PsrTtz
-        PNYADF+s4Kyc8yuDVzCVYYEmuyI/pKA=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8KutNP87mEdmzVEh5HM6usoc+W6jsUHdBwtS1GSPQBo=;
+        b=aQpKkbgPN7uB3DpApubyvo+ggvnOpt25o2q8+4L1SxP1lNrbxTkq2H3ImK9cXto8GjaYRJ
+        bT0C2e/nZ1rAgfbOt+rXAvstCUEAyAPuOHRIJY+LsckVD23v68brTNJ4ZA6XjyAj8vq5qx
+        R4NnEE/vYIKB8kmCULY04SvQuPqE5VU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-reXMxR8yOsi5TV-2PUwQEw-1; Mon, 20 Jun 2022 05:02:14 -0400
-X-MC-Unique: reXMxR8yOsi5TV-2PUwQEw-1
-Received: by mail-qv1-f70.google.com with SMTP id x18-20020a0ce252000000b004703cbb92ebso3980083qvl.21
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:02:14 -0700 (PDT)
+ us-mta-26-wM7ftj6eNcKK0JOP-BaK0Q-1; Mon, 20 Jun 2022 05:02:18 -0400
+X-MC-Unique: wM7ftj6eNcKK0JOP-BaK0Q-1
+Received: by mail-ed1-f71.google.com with SMTP id v7-20020a056402348700b004351fb80abaso8190978edc.14
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 02:02:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3oC8M92pTSBQLwsvQ/DdmAywS1769N+d4WC6nyEqgEw=;
-        b=kvyV49GbZBsabQj690iVnUGPoti98OCGu6rEfGmmXGJ7SXkgvGmb0hJUqgBSkXhZoC
-         fcxxbd24kp+s/rDWT69cUQM/thiXIcy18ViGAEOPjpVsuPNO681KNJurg3F9F63WryXV
-         +LcivwIPm7PxDpQA9D/FcGfEoga4nnWe2sH0zZT5CwEQe4bPo6LdruqK38vU6LUVWHFQ
-         qTE9Z7g7wkiM02nPqxZN+uTVwX30jv4TqaTTEhPUdS4g9cCdpoUsT5zdY4FHp77w0Q+p
-         8WTy8FxNj8xJxNfcbIYThX0q7Q502uNL3uFrVx7LQkqGCNnm6/v83Bcb8jnrpLgKV13h
-         /HfQ==
-X-Gm-Message-State: AJIora/iCjnAnOSkvJQ8wVdCSHOj4YkhPcSVypVEBGu8uXCp1aB6rcBt
-        Xbc6h9KWmcPduENTjpNx006IE2J5vTUGlYde0hnFbFhR0sg9dcKlwib54RYdf+gjgeLcikEumfh
-        qF7l+PjmS0Jkt1tMTGVZheSz+JL5hNMbrWahUCPJa
-X-Received: by 2002:ac8:598f:0:b0:305:8f8:2069 with SMTP id e15-20020ac8598f000000b0030508f82069mr19115184qte.370.1655715733824;
-        Mon, 20 Jun 2022 02:02:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tAa9U4CMoq7Ys+i1Ho3m8PkG1+MHDe/RYYehVChHlW7eVEdAjvqQbtH1gRqyfvYJX1s9ZZ5T+KklLeqjZc2fc=
-X-Received: by 2002:ac8:598f:0:b0:305:8f8:2069 with SMTP id
- e15-20020ac8598f000000b0030508f82069mr19115161qte.370.1655715733601; Mon, 20
- Jun 2022 02:02:13 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8KutNP87mEdmzVEh5HM6usoc+W6jsUHdBwtS1GSPQBo=;
+        b=ZizOMN4DpMtCz+VzDSYh5N1kKXXUSDsaNo+7n8aWF68bVjVglAUVgdrxtC3LMNlX3i
+         Qoj8H7L30QhfRaDIeWdXOr3TOBXowUJLfmEczYe+2hjdO/gkF00LAiVaPo3tdV9tcDRW
+         jdEQBvDiNESJycHVn632qLxgAneraPRIDCUSM5Hjy3rVpUXivaQjkA6V6L7v+/pvguKb
+         VdthXGvVwsNuVSLVEW/7a2d8emKgrm1YOa6vT/6DChTOQvDrRfJcK53FwZPRfBdZYv+0
+         a3BFMEBJ+Lwf3kh5SG9IPWtsE0XHpe60IG8FZyCYCE8W10F41FdFdFYctuyUiETj4K8S
+         /eDA==
+X-Gm-Message-State: AJIora/xHfqhx1PdwoCzApFFSxX//51z9pEhsa2X1zz0GbU0Azk22E+B
+        O3I+LlG1pif0+ijERTHHMGhV/iEe/U7BS6OnQ9nj+QiAULXdNGk1KPW/kMp++j6spEACxiqldEw
+        nJGddL24wAK2DJ5xt0kwUdXZP
+X-Received: by 2002:a17:906:649b:b0:711:fde7:be43 with SMTP id e27-20020a170906649b00b00711fde7be43mr20472757ejm.294.1655715737165;
+        Mon, 20 Jun 2022 02:02:17 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tPXmAbToR3ak+wgdkzp7EGRsPgSxWRRwgKsNkupEZuHxwRpIFG37n4x3C4s+uvJ5cIxrZtDA==
+X-Received: by 2002:a17:906:649b:b0:711:fde7:be43 with SMTP id e27-20020a170906649b00b00711fde7be43mr20472737ejm.294.1655715736936;
+        Mon, 20 Jun 2022 02:02:16 -0700 (PDT)
+Received: from [10.87.1.19] ([145.15.244.207])
+        by smtp.gmail.com with ESMTPSA id q23-20020a170906b29700b00708e906faecsm5560653ejz.124.2022.06.20.02.02.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 02:02:16 -0700 (PDT)
+Message-ID: <a1decfb3-fd32-a8d1-e627-23430099565a@redhat.com>
+Date:   Mon, 20 Jun 2022 11:02:15 +0200
 MIME-Version: 1.0
-References: <20220616132725.50599-1-elic@nvidia.com> <20220616132725.50599-4-elic@nvidia.com>
- <CACGkMEsc+MCsRq6aA1vLXE3OJ0buX-0g73qaz72Px-ismfMKLA@mail.gmail.com>
-In-Reply-To: <CACGkMEsc+MCsRq6aA1vLXE3OJ0buX-0g73qaz72Px-ismfMKLA@mail.gmail.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Mon, 20 Jun 2022 11:01:37 +0200
-Message-ID: <CAJaqyWdnuX0KLu7j3M4ovtW=N5kFObgaU3z2hu4xoRXY5Fk+aQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 3/3] vdpa/mlx5: Disable VLAN support to support live migration
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Eli Cohen <elic@nvidia.com>, mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1] staging: r8188eu: an incorrect return value made the
+ function always return fail
+Content-Language: en-US
+To:     Kate Hsuan <hpa@redhat.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220620085413.948265-1-hpa@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220620085413.948265-1-hpa@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 10:48 AM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Thu, Jun 16, 2022 at 9:28 PM Eli Cohen <elic@nvidia.com> wrote:
-> >
-> > Current qemu code does not support live migration for devices supporting
-> > VLAN. Disable it.
->
-> This looks like a bug that we need to fix in Qemu.
->
+Hi Kate,
 
-Not a but, but a lack of a feature :). Each cvq command needs new code
-to inject it at the destination, and only set mac cmd is implemented
-at the moment. Only to start simple.
+Good catch!
 
-Thanks!
+On 6/20/22 10:54, Kate Hsuan wrote:
+> Since _SUCCESS (1) and _FAIL (0) are used to indicate the status of the
+> functions. The previous commit 8ae7bf782eacad803f752c83a183393b0a67127b
 
-> Thanks
->
-> >
-> > Note: this patch is provided just to enable testing with current qemu.
-> >
-> > Signed-off-by: Eli Cohen <elic@nvidia.com>
-> > ---
-> >  drivers/vdpa/mlx5/net/mlx5_vnet.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > index 34bd81cb697c..1568cfdf07e6 100644
-> > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > @@ -2172,7 +2172,6 @@ static u64 get_supported_features(struct mlx5_core_dev *mdev)
-> >         mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_MQ);
-> >         mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_STATUS);
-> >         mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_MTU);
-> > -       mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_CTRL_VLAN);
-> >
-> >         return mlx_vdpa_features;
-> >  }
-> > --
-> > 2.35.1
-> >
->
+This is the commit hash from one of the stable series backports, you
+should always use the commit hash from Linus' master branch which is
+f94b47c6bde6 and the format for referencing commits in a commit-message is:
+
+commit <12 char hash> ("commit subject")
+
+so in this case this should have been:
+
+commit f94b47c6bde6 ("staging: r8188eu: add check for kzalloc")
+
+Note that checkpatch.pl would have complained about the wrong format
+(but not the wrong hash)
+
+> fixed and prevented dereferencing a NULL pointer through checking the
+> return pointer. The NULL pointer check work properly but the return
+> values (-ENOMEM on fail and 0 on success). This work fixed the return
+> values to make sure the caller function will return the correct status.
+> 
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2097526
+> Signed-off-by: Kate Hsuan <hpa@redhat.com>
+
+This should have a fixes tag:
+
+Fixes: f94b47c6bde6 ("staging: r8188eu: add check for kzalloc")
+
+But while looking up the torvalds/master branch hash I noticed
+someone alreayd beat you to it. Linus' master already has
+a fix for this:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/staging/r8188eu?id=5b7419ae1d208cab1e2826d473d8dab045aa75c7
+
+So this patch can be dropped since it is a duplicate.
+
+Regards,
+
+hans
+
+
+
+> ---
+>  drivers/staging/r8188eu/core/rtw_xmit.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index f4e9f6102539..2f8720db21d9 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -180,10 +180,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+>  	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
+>  
+>  	res = rtw_alloc_hwxmits(padapter);
+> -	if (res) {
+> -		res = _FAIL;
+> +	if (res == _FAIL)
+>  		goto exit;
+> -	}
+>  
+>  	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+>  
+> @@ -1510,7 +1508,7 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
+>  
+>  	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
+>  	if (!pxmitpriv->hwxmits)
+> -		return -ENOMEM;
+> +		return _FAIL;
+>  
+>  	hwxmits = pxmitpriv->hwxmits;
+>  
+> @@ -1528,7 +1526,7 @@ int rtw_alloc_hwxmits(struct adapter *padapter)
+>  	} else {
+>  	}
+>  
+> -	return 0;
+> +	return _SUCCESS;
+>  }
+>  
+>  void rtw_free_hwxmits(struct adapter *padapter)
 

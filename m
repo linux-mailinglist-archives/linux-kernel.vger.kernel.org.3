@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEE355129E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B52F5512A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbiFTIXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S239662AbiFTIXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239911AbiFTIXd (ORCPT
+        with ESMTP id S239768AbiFTIXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:23:33 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA2F0105;
-        Mon, 20 Jun 2022 01:23:30 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxaeR8LrBiO65OAA--.25988S2;
-        Mon, 20 Jun 2022 16:23:24 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] libbpf: Include linux/log2.h to use is_power_of_2()
-Date:   Mon, 20 Jun 2022 16:23:24 +0800
-Message-Id: <1655713404-7133-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9BxaeR8LrBiO65OAA--.25988S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyrZFWDuFWUGF43KrWUCFg_yoW8tw4DpF
-        4DCr18Gr1rWr15ZFyDuF1F93y5K3W7WFW7KFy7GryjvwnIqFsrXr1qyFnI9r13W395Ww15
-        ArWY9ryUZr1UX3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8ZwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bwYFZUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 20 Jun 2022 04:23:52 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A3E28D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:23:48 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id um5so4603946ejb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3Ros44lxzdc9H034iRq9XjLHdkZr6Zmv5Tm2gUHzb4k=;
+        b=F85Durofj7HACsatoRDfeiLEib0a64WUvlROiLKAKCR23NLMEShsxw9VNc2reTh5B6
+         nEn4sUrddK9p57eJkJ26U8cXd0w5NdmweBPdoopqjZbsTVRGQiudD2dcC36iMk2tVD81
+         yl8EcvBRXwKvfnhlm/ofgKE4Jm0m4c54ZNdmwlTjxrw4+VQLs8hQlBL4T4COv8K7yJ1Z
+         7Y/eQmFlnxlpM3hNHnKwpldLgxG2BQH+d2eSM0EhR3Rqd2QNnuFwIuDQp5/j4LWWCiM1
+         nlu3ZFcIaiHq94YrBwbOcIc1BrdBeH1N17YfmPP5oJYEiTYLn54nPBLdg+BECWfqs0Bw
+         OZYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3Ros44lxzdc9H034iRq9XjLHdkZr6Zmv5Tm2gUHzb4k=;
+        b=vOyZHCkfWMk7pg1jorD2Jb8+IsE7ByH4f8qyLwLV1OmLIVXzM5Es5ZKXCljQLKhwnz
+         jb2s4UKvP6dTHzw8UP0esUcU0hu5fJ/d7HTQxgQEYXlfmK0g4vW+FNzwRt5znbucoyn8
+         Fozij4FiZqs2jUCJGBsu0V9bLVebk4bb3DruVbOYi1dV7dR5xqNorJDLo27rEBqfc0XZ
+         jD3/L/32H4XafDOPicBdoOgcPFYszgSyRG/OhqfgjHrBLgFFqXGigaJUwkuoQSShotFa
+         50lmieTi6thATlbPO6mAzqARfk0VNXJEcRbi92K+9DnkiEifyQ2MrUrhclkkOPDnjNEc
+         65aw==
+X-Gm-Message-State: AJIora+DpEiQWQk5Tf3iT9krgDDP0Y92Zfs7JcTZgOpk3a67OsOF/AFF
+        oruzQGC5Cj00OUMues8abQ7JEg==
+X-Google-Smtp-Source: AGRyM1vAjBf1TjIa/EZdSqh6SpnZpGgdVyfpMQp7XUD/Ztd8tGugtH+zYZB5r7Hj++TdtJOvMarXZw==
+X-Received: by 2002:a17:906:778b:b0:712:e477:8f33 with SMTP id s11-20020a170906778b00b00712e4778f33mr19958626ejm.42.1655713427224;
+        Mon, 20 Jun 2022 01:23:47 -0700 (PDT)
+Received: from [192.168.0.207] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170906840900b006fec56a80a8sm5452387ejx.115.2022.06.20.01.23.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 01:23:46 -0700 (PDT)
+Message-ID: <14fe8f15-e91f-45e0-39e2-7ae0d5f2ea64@linaro.org>
+Date:   Mon, 20 Jun 2022 10:23:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 10/18] dt-bindings: reset: npcm: Add support for
+ NPCM8XX
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220619151225.209029-1-tmaimon77@gmail.com>
+ <20220619151225.209029-11-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220619151225.209029-11-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-is_power_of_2() is already defined in tools/include/linux/log2.h [1],
-so no need to define it again in tools/lib/bpf/libbpf_internal.h, so
-just include linux/log2.h directly.
+On 19/06/2022 17:12, Tomer Maimon wrote:
+> Add binding document and device tree binding constants for Nuvoton BMC
+> NPCM8XX reset controller.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
-[1] https://lore.kernel.org/bpf/20220619171248.GC3362@bug/
 
-Suggested-by: Pavel Machek <pavel@ucw.cz>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/lib/bpf/libbpf.c          | 2 +-
- tools/lib/bpf/libbpf_internal.h | 6 +-----
- tools/lib/bpf/linker.c          | 2 +-
- 3 files changed, 3 insertions(+), 7 deletions(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 49e359c..5252e51 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5131,7 +5131,7 @@ static size_t adjust_ringbuf_sz(size_t sz)
- 	 * a power-of-2 multiple of kernel's page size. If user diligently
- 	 * satisified these conditions, pass the size through.
- 	 */
--	if ((sz % page_sz) == 0 && is_pow_of_2(sz / page_sz))
-+	if ((sz % page_sz) == 0 && is_power_of_2(sz / page_sz))
- 		return sz;
- 
- 	/* Otherwise find closest (page_sz * power_of_2) product bigger than
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index a1ad145..021946a 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -13,6 +13,7 @@
- #include <limits.h>
- #include <errno.h>
- #include <linux/err.h>
-+#include <linux/log2.h>
- #include <fcntl.h>
- #include <unistd.h>
- #include "libbpf_legacy.h"
-@@ -582,9 +583,4 @@ struct bpf_link * usdt_manager_attach_usdt(struct usdt_manager *man,
- 					   const char *usdt_provider, const char *usdt_name,
- 					   __u64 usdt_cookie);
- 
--static inline bool is_pow_of_2(size_t x)
--{
--	return x && (x & (x - 1)) == 0;
--}
--
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index 4ac02c2..b2edb5f 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -719,7 +719,7 @@ static int linker_sanity_check_elf(struct src_obj *obj)
- 			return -EINVAL;
- 		}
- 
--		if (sec->shdr->sh_addralign && !is_pow_of_2(sec->shdr->sh_addralign))
-+		if (sec->shdr->sh_addralign && !is_power_of_2(sec->shdr->sh_addralign))
- 			return -EINVAL;
- 		if (sec->shdr->sh_addralign != sec->data->d_align)
- 			return -EINVAL;
--- 
-2.1.0
 
+Best regards,
+Krzysztof

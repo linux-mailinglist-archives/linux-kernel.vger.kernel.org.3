@@ -2,204 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4BA550DEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8AC550DEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbiFTAeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S237545AbiFTAe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234884AbiFTAeG (ORCPT
+        with ESMTP id S237518AbiFTAe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:34:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6FE64D8;
-        Sun, 19 Jun 2022 17:34:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LR9cn5ssGz4xXg;
-        Mon, 20 Jun 2022 10:34:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655685242;
-        bh=XYrTSyLWg2AFPQRTLYk09ow8SjdYYKMi0gid5hZ4uD4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=duaL0ouuYhuOOEkW3Dq+J3iOUdebscrRtIa12Rx9G4ACbdZwwDWVmQUe+77gyNg8i
-         Zn3vA25V31JJfAMUn8qBgaM/NrKE+WjndOffrVltEaejvPCDvjIbbJwNk0ikxq0uHP
-         yavmkYCkWjAP05KIJsx0emOq56VcW17OHVsSRed7jZosBh8bAyZNie2ILOAlNJnWQc
-         DUzQOjfh0MdH8XQ3iUEMVodXs0OC7IQbHoprpPE2orGIrOpoEdeywDUf7WtNIFbQho
-         lPMpRzcd6h/E7Tl28vpJU3RNoH+Z03n4/etO7Y8uNDxRQS/fVCrLbJlGe4zxO02luW
-         X5cqgR7RVRHVQ==
-Date:   Mon, 20 Jun 2022 10:34:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the libata tree
-Message-ID: <20220620103400.6b03f8d9@canb.auug.org.au>
+        Sun, 19 Jun 2022 20:34:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0120D64D8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:34:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655685296; x=1687221296;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bRwOrL3zS4/DTbu+XdtxLOCJrOogVrjj6ICT6KYMsqg=;
+  b=FlptYWKCckgZ1QhdyrCxVm5BhhjFV6XTA+UFcuyx4jSCvgoSdq+aT5yA
+   +BC//KXMi0qGvSYTPV4v8/Hl6R0Cx9/Rl6666hwDwH4d2CWcPqIhYOVqm
+   GF2Iv2jJTzM9T8pF55F4SCnWH9mUnfglBQbXfp3w5cVzppXnY6fWPRMaw
+   2q/7Gus4FD0zh1VGBEf0yYKTPMv3Q5wbA0ffGR7HmN/USObcVfC9L0T8O
+   w7cypSSI/QkLYRyXuWZKDeOyMZ92jroPyTspkbtYbgMll2wBEWb7rEoLL
+   bS5BefKgQ5zCm7wdwN2zU9TOCa3H8DR9NXBlEV3LW04RGZwksy8/zeCVj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277322108"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="277322108"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 17:34:55 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="832865028"
+Received: from lgao7-mobl2.ccr.corp.intel.com (HELO [10.255.31.74]) ([10.255.31.74])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 17:34:52 -0700
+Message-ID: <8dacfbe6-3f00-c61e-49e1-712c369a2285@linux.intel.com>
+Date:   Mon, 20 Jun 2022 08:34:50 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rJPnq34a.us=_zyvi_8w_lF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v8 04/11] iommu: Add sva iommu_domain support
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>
+References: <20220607014942.3954894-1-baolu.lu@linux.intel.com>
+ <20220607014942.3954894-5-baolu.lu@linux.intel.com>
+ <20220609202540.GD33363@araj-dh-work>
+ <a78c5bd0-a9f2-2a6d-3099-8d03c123fa93@linux.intel.com>
+ <BN9PR11MB52765DEC46616F67185B1F1F8CAF9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB52765DEC46616F67185B1F1F8CAF9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/rJPnq34a.us=_zyvi_8w_lF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022/6/17 15:43, Tian, Kevin wrote:
+>> From: Baolu Lu
+>> Sent: Friday, June 10, 2022 3:16 PM
+>>>
+>>>> +#define __IOMMU_DOMAIN_HOST_VA	(1U << 5)  /* Host CPU virtual
+>> address */
+>>>
+>>> Do you mean general CPU VA? or Host CPU VA, I'm reading the latter as
+>> 2nd
+>>> stage?
+>>
+>> Host CPU VA. In the near future, we will add another flag _GUEST_VA, so
+>> that the shared page table types are distiguished.
+> 
+> How does the kernel knows that an user page table translates guest VA?
+> IMHO I don't think the kernel should care about it except managing
+> all the aspects related to the user page table itself...
 
-Hi all,
+Okay.
 
-After merging the libata tree, today's linux-next build (powercp
-ppc64_defconfig) produced this warning:
+> 
+>>
+>>>
+>>>> +
+>>>>    /*
+>>>>     * This are the possible domain-types
+>>>>     *
+>>>> @@ -86,15 +89,24 @@ struct iommu_domain_geometry {
+>>>>    #define IOMMU_DOMAIN_DMA_FQ
+>> 	(__IOMMU_DOMAIN_PAGING |	\
+>>>>    				 __IOMMU_DOMAIN_DMA_API |	\
+>>>>    				 __IOMMU_DOMAIN_DMA_FQ)
+>>>> +#define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SHARED |
+>> 	\
+>>>> +				 __IOMMU_DOMAIN_HOST_VA)
+>>>
+>>> Doesn't shared automatically mean CPU VA? Do we need another flag?
+>>
+>> Yes. Shared means CPU VA, but there're many types. Besides above two, we
+>> also see the shared KVM/EPT.
+>>
+> 
+> Will the two sharing scenarios share any common code? If not then
+> having a separate flag bit is meaningless.
 
-In file included from include/linux/device.h:15,
-                 from arch/powerpc/include/asm/io.h:27,
-                 from include/linux/io.h:13,
-                 from include/linux/irq.h:20,
-                 from arch/powerpc/include/asm/hardirq.h:6,
-                 from include/linux/hardirq.h:11,
-                 from include/linux/highmem.h:11,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/blkdev.h:9,
-                 from drivers/ata/pata_macio.c:18:
-drivers/ata/pata_macio.c: In function 'pmac_macio_calc_timing_masks':
-drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of=
- type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wformat=
-=3D]
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~
-include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
-  129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);       =
-     \
-      |                                         ^~~
-include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
-  163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_AR=
-GS__); \
-      |                                             ^~~~~~~
-drivers/ata/pata_macio.c:1031:9: note: in expansion of macro 'dev_dbg'
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |         ^~~~~~~
-drivers/ata/pata_macio.c:1031:52: note: format string is defined here
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |                                                  ~~^
-      |                                                    |
-      |                                                    long unsigned int
-      |                                                  %x
-In file included from include/linux/device.h:15,
-                 from arch/powerpc/include/asm/io.h:27,
-                 from include/linux/io.h:13,
-                 from include/linux/irq.h:20,
-                 from arch/powerpc/include/asm/hardirq.h:6,
-                 from include/linux/hardirq.h:11,
-                 from include/linux/highmem.h:11,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/blkdev.h:9,
-                 from drivers/ata/pata_macio.c:18:
-drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of=
- type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wformat=
-=3D]
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~
-include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
-  129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);       =
-     \
-      |                                         ^~~
-include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
-  163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_AR=
-GS__); \
-      |                                             ^~~~~~~
-drivers/ata/pata_macio.c:1031:9: note: in expansion of macro 'dev_dbg'
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |         ^~~~~~~
-drivers/ata/pata_macio.c:1031:63: note: format string is defined here
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |                                                             ~~^
-      |                                                               |
-      |                                                               long =
-unsigned int
-      |                                                             %x
-In file included from include/linux/device.h:15,
-                 from arch/powerpc/include/asm/io.h:27,
-                 from include/linux/io.h:13,
-                 from include/linux/irq.h:20,
-                 from arch/powerpc/include/asm/hardirq.h:6,
-                 from include/linux/hardirq.h:11,
-                 from include/linux/highmem.h:11,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/blkdev.h:9,
-                 from drivers/ata/pata_macio.c:18:
-drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of=
- type 'long unsigned int', but argument 6 has type 'unsigned int' [-Wformat=
-=3D]
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~
-include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
-  129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);       =
-     \
-      |                                         ^~~
-include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
-  163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_AR=
-GS__); \
-      |                                             ^~~~~~~
-drivers/ata/pata_macio.c:1031:9: note: in expansion of macro 'dev_dbg'
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |         ^~~~~~~
-drivers/ata/pata_macio.c:1031:73: note: format string is defined here
- 1031 |         dev_dbg(priv->dev, "Supported masks: PIO=3D%lx, MWDMA=3D%lx=
-, UDMA=3D%lx\n",
-      |                                                                    =
-   ~~^
-      |                                                                    =
-     |
-      |                                                                    =
-     long unsigned int
-      |                                                                    =
-   %x
+So far, I haven't seen the need for common code. I've ever thought about
+the common notifier callback for page table entry update of SVA and KVM.
+But there has been no feasible plan.
 
-Introduced by commit
+> 
+> It might be more straightforward to be:
+> 
+> #define IOMMU_DOMAIN_SVA	__IOMMU_DOMAIN_SVA
+> #define IOMMU_DOMAIN_KVM __IOMMU_DOMAIN_KVM
+> #define IOMMU_DOMAIN_USER __IOMMU_DOMAIN_USER
 
-  f0a6d77b351c ("ata: make transfer mode masks *unsigned int*")
+I am okay with this and we can add some shared bits later if we need to
+consolidate any code.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/rJPnq34a.us=_zyvi_8w_lF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKvwHgACgkQAVBC80lX
-0Gxv1wf/Uv39UOVcDl3NlTfPJ0+6q0ChNv5dAgtvq3qLiMarkPcsrVxK+FQSWqny
-sOLWyKO8TMWg+WzprqcH13ADeFBZNsUHVXFwkqUOJgpZF7Mm2z8vE6JJSFHRkq31
-dVzrwD2IxClulkuvHxpsbLaQJBhTxSutOZreoNcAk5ahI4bjlAfJX1qAMCboPPDb
-2RCTIu8/pm4mp+FLRZv8X06iPofYxu2e8kRlCvXIUTM1Ly1yWzbAel60R2WfjLTV
-1BKr4T3CQiyVOZfQdX8HXCj0G2T3P/kY2OBXWRhUNq4/IsZAw+yWA5HmJ5AZqrkS
-MsoArYjaKNTHz3g0KbxWcsqtKUVmAg==
-=1V5m
------END PGP SIGNATURE-----
-
---Sig_/rJPnq34a.us=_zyvi_8w_lF--
+--
+Best regards,
+baolu

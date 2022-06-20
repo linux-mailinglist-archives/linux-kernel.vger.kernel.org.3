@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5C45524E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 21:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F785524EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 22:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241899AbiFTT7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 15:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S242574AbiFTUC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 16:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiFTT7T (ORCPT
+        with ESMTP id S229553AbiFTUCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 15:59:19 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C1362DB;
-        Mon, 20 Jun 2022 12:59:18 -0700 (PDT)
+        Mon, 20 Jun 2022 16:02:14 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C8D1CB0F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:02:13 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id s124so14720736oia.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 13:02:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655755159; x=1687291159;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zLK8JRmjPUYY12xma+OCv7DTnOA0Wyo6DRgV4BXT040=;
-  b=kTbdJhW4w2pwGlUzxXYqIZnWk59lO5vxEuh8EgUSGHPowT5wNeOLahlm
-   7t2DkSyTlCo+/WC/LsBU5mfqXgI0eAZT69Q2u31LUn8MvPT5A8l7N4j3y
-   F7cO0rdw+2eZeojNZTsZB1oIGw232n939G4CKSUUL51w9NlcNikklUmuP
-   s=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 20 Jun 2022 12:59:18 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 12:59:18 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 20 Jun 2022 12:59:17 -0700
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
- 2022 12:59:16 -0700
-Message-ID: <0ad762f2-5acb-cfd1-efca-ff83f97f978d@quicinc.com>
-Date:   Mon, 20 Jun 2022 13:59:16 -0600
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XZYTVNN3OTIFAKlJr31QtDNYvtTZSjURUEwd4yxlavE=;
+        b=IuJJXPocprRwnIMc5qD8E0ArJ9j4zrbdncIaUPN6SHFiyJROFTTfiQ4fWadbPTup+d
+         lyXWq7eKwk76iJz90VgOMKvpLQ1Q7j+RygtKUZlFCS13F4apJfy5w3oKi2E0DDQZrUSl
+         WLro7uhGls+p++NMILOPKPMgqoViBBF/qn5cBIZGBRMX3B6MJyK+iZYAaaPsSrN+V9Dj
+         OPz1wpegOSVmr6xAGV8+VH9H+cY7zmsg5KSSPNtuqtqvNyevVQwFWmdO4E9Bf5sBRGE8
+         0aZLFqQvK9xh8V/8+DXbLTehnUl3/6HSJK+oladrYWSbISfHb6tl2EWBJaPWWD1GUHhG
+         D3Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XZYTVNN3OTIFAKlJr31QtDNYvtTZSjURUEwd4yxlavE=;
+        b=wn09gfg+rv45bGMvgleF8z02Hl2guZ3qfwVKZbpC/jZ0XIpTzpUkoMK3m/izoA7z3f
+         /kEE2lZVWjXMO0clY0GZ7wnxgKOdBToNiLCFz7nR105JixP2wtvNiONJu/W2z50eUNPe
+         xmOpxsfktieu05mkhdd9i+0b1KFqWoejuMP32MNMQM9YLApyF7A0NwXpnJvaHWo0WiOI
+         C89fcQ+6aUzRlEPzqykM10ihDUKgiJ7YQd8tD5fSchuuqNbvxARawib6s+zeKb1m3Ghr
+         Kj+R4D54Em0IbU904G0wa+jlvq8TUsO8TycbjcCZ2kKuAJnQfzP1ISqAConLyEXPl7qQ
+         4jqA==
+X-Gm-Message-State: AOAM532D41M440MRdSUpt9rZts9LMmkUQIEuJKleDlRTjvMYxmVMvbka
+        ri6NUEvBUaeW5QzJTwxM+RlroZvJqds=
+X-Google-Smtp-Source: ABdhPJzUcP6Xsquvvp31yhoKLnPS5U+zovKalrAzvTPyCdjqjdcvxUC1lxc61U6Ui+Crb/cWMQdINg==
+X-Received: by 2002:a05:6808:1999:b0:32f:2fc:aed1 with SMTP id bj25-20020a056808199900b0032f02fcaed1mr17560674oib.255.1655755332744;
+        Mon, 20 Jun 2022 13:02:12 -0700 (PDT)
+Received: from [192.168.1.108] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id s204-20020aca45d5000000b0032f662af5d5sm7928355oia.1.2022.06.20.13.02.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 13:02:11 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <3a73a59c-29a1-5f96-ad0b-476c46587fcd@lwfinger.net>
+Date:   Mon, 20 Jun 2022 15:02:10 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
- power down
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/2] get rid of useless header file
 Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     Qiang Yu <quic_qianyu@quicinc.com>, <quic_hemantk@quicinc.com>,
-        <loic.poulain@linaro.org>, <mhi@lists.linux.dev>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_cang@quicinc.com>
-References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
- <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
- <9659ecb9-9727-a146-e286-d28d656483c3@quicinc.com>
- <9a11394d-f7df-e549-8afb-0834f7d30202@quicinc.com>
- <8eceb966-b5c1-8913-ac97-95348f92650d@quicinc.com>
- <b3f5e49d-8917-79ab-8f59-29ad6cec3973@quicinc.com>
- <20220615211621.GD3606@thinkpad>
- <1c48ef5b-65c0-501d-db55-714a8a4388b2@quicinc.com>
- <20220616205936.GG2889@thinkpad>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20220616205936.GG2889@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Nam Cao <namcaov@gmail.com>, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        phil@philpotter.co.uk, paskripkin@gmail.com
+References: <cover.1655745123.git.namcaov@gmail.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <cover.1655745123.git.namcaov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,139 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/2022 2:59 PM, Manivannan Sadhasivam wrote:
-> On Thu, Jun 16, 2022 at 09:53:34AM -0600, Jeffrey Hugo wrote:
->> On 6/15/2022 3:16 PM, Manivannan Sadhasivam wrote:
->>> On Mon, Jun 13, 2022 at 07:07:02AM -0600, Jeffrey Hugo wrote:
->>>> On 6/12/2022 7:48 PM, Qiang Yu wrote:
->>>>>
->>>>> On 6/10/2022 10:00 PM, Jeffrey Hugo wrote:
->>>>>> On 6/9/2022 9:21 PM, Qiang Yu wrote:
->>>>>>> On 6/9/2022 9:54 PM, Jeffrey Hugo wrote:
->>>>>>>
->>>>>>>> On 6/9/2022 7:43 AM, Qiang Yu wrote:
->>>>>>>>> EP tends to read MSI address/data once and cache them
->>>>>>>>> after BME is set.
->>>>>>>>> So host should avoid changing MSI address/data after BME is set.
->>>>>>>>>
->>>>>>>>> In pci reset function, host invokes free_irq(), which also clears MSI
->>>>>>>>> address/data in EP's PCIe config space. If the invalid address/data
->>>>>>>>> are cached and used by EP, MSI triggered by EP wouldn't be received by
->>>>>>>>> host, because an invalid MSI data is sent to an invalid MSI address.
->>>>>>>>>
->>>>>>>>> To fix this issue, after host runs request_irq() successfully during
->>>>>>>>> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
->>>>>>>>> request_irq()/free_irq() when we want to power on and power down MHI.
->>>>>>>>> Meanwhile, Host should invoke free_irq() when mhi host driver is
->>>>>>>>> removed.
->>>>>>>>
->>>>>>>> I don't think this works for hotplug, nor cases where there
->>>>>>>> are multiple MHI devices on the system.
->>>>>>>>
->>>>>>>> The EP shouldn't be caching this information for multiple
->>>>>>>> reasons. Masking the MSIs, disabling the MSIs, changing the
->>>>>>>> address when the affinity changes, etc.
->>>>>>>>
->>>>>>>> It really feels like we are solving the problem in the wrong place.
->>>>>>>>
->>>>>>>> Right now, this gets a NACK from me.
->>>>>>>>
->>>>>>> After free_irq(), MSI is still enabled but MSI address and data
->>>>>>> are cleared. So there is a chance that device initiates MSI
->>>>>>> using zero address. How to fix this race conditions.
->>>>>>
->>>>>> On what system is MSI still enabled?  I just removed the AIC100
->>>>>> controller on an random x86 system, and lspci is indicating MSIs are
->>>>>> disabled -
->>>>>>
->>>>>> Capabilities: [50] MSI: Enable- Count=32/32 Maskable+ 64bit+
->>>>>
->>>>> system: Ubuntu18.04, 5.4.0-89-generic,  Intel(R) Core(TM) i7-6700 CPU @
->>>>> 3.40GHz
->>>>>
->>>>> After removing MHI driver, I also see MSI enable is cleared.  But I
->>>>> don't think free_irq clears it. I add log before free_irq and after
->>>>> free_irq as following show:
->>>>>
->>>>> [62777.625111] msi cap before free irq
->>>>> [62777.625125] msi control=0x1bb, address=0xfee00318, data=0x0
->>>>> [62777.625301] msi cap after free irq
->>>>> [62777.625313] msi control=0x1bb, address=0x0, data=0x0
->>>>> [62777.625496] mhi-pci-generic 0000:01:00.0: mhi_pci_remove end of line,
->>>>> block 90 secs.
->>>>> # lspci -vvs 01:00.0
->>>>>            Capabilities: [50] MSI: Enable+ Count=8/32 Maskable+ 64bit+
->>>>>                    Address: 0000000000000000  Data: 0000
->>>>>                    Masking: ffffffff  Pending: 00000000
->>>>
->>>> At this point, the MSI functionality is still enabled, but every MSI is
->>>> masked out (Masking), so per the PCIe spec, the endpoint may not trigger a
->>>> MSI to the host.  The device advertises that it supports maskable MSIs
->>>> (Maskable+), so this is appropiate.
->>>>
->>>> If your device can still send a MSI at this point, then it violates the PCIe
->>>> spec.
->>>>
->>>> disable_irq() will not help you with this as it will do the same thing.
->>>>
->>>> I still think you are trying to fix an issue in the wrong location (host vs
->>>> EP), and causing additional issues by doing so.
->>>>
->>>
->>> Irrespective of caching the MSI data in endpoint, I'd like to get rid of
->>> request_irq/free_irq during the mhi_{power_down/power_up} time. As like the MHI
->>> endpoint stack, we should just do disable/enable irq. Because, the MHI device
->>> may go down several times while running and we do not want to deallocate the
->>> IRQs all the time. And if the device gets removed, ultimately the MHI driver
->>> will get removed and we are fine while loading it back (even if MSI count
->>> changes).
->>>
->>> I didn't had time to look into the patch in detail but I'm in favour of
->>> accepting the proposal.
->>>
->>> @Jeff: Any specific issue you are seeing with hotplug etc...?
->>
->> Perhaps I'm getting confused by the commit text of this change.
->>
->> The issue described is that we free the irq, and then the EP sends a MSI,
->> and the host doesn't receive it.  To me, that is expected.  The host doesn't
->> care about the irq anymore because it freed it, therefore it would be
->> expected that the host doesn't receive the irq.  So, the described issue is
->> not an issue since it is expected behavior from what I can tell.
->>
->> The proposed fix, is to disable the interrupts, and not free them until the
->> driver is removed.  I interpret removing the driver as "rmmod mhi".  Based
->> on this, the problem I see is a scenario where we have N devices in a
->> system, and one device is hotplugged.  On hotplug, we would want to clean up
->> all resources (free irq), but according to the description, we need to rmmod
->> mhi, which is both not automatic and also affects the other N-1 devices
->> which are presumed to be operational.
+On 6/20/22 12:19, Nam Cao wrote:
+> The stuffs in basic_types.h are either not used, or already defined in
+> the kernel. Get rid of it.
 > 
-> No. When the PCI device gets removed during runtime, the remove() callback will
-> get called with relevant "struct pci_dev" and that should take care of all
-> resource cleanup for that particular device (including free_irq).
-
-That is what I expected, so I was confused.  Seems like we are on the 
-same page now.
-
-> You do not need to manually rmmod the driver as that will be done by the
-> hotplug driver when there are no devices making use of it. And yes, the commit
-> message needs to be changed. >
->>
->> Now, if we throw all of that out the window, and say that the goal is to
->> register the irqs when the controller is registered, free them when the
->> controller is unregistered, and enable/disable based on power up/down as a
->> optimization, that could be sane.  If that is what this change is attempting
->> to do, it is not what the commit text describes.
->>
->> Under the assumption that you want the optimization I just described, I will
->> re-review the code next week when I get back from my travel. Assuming the
->> implementation is good (other than what I've already pointed out), I think
->> the commit text needs to be rewritten.
->>
->> Does that clarify things for you?
+> Nam Cao (2):
+>    staging: r8188eu: replace N_BYTE_ALIGMENT with ALIGN
+>    staging: r8188eu: remove basic_types.h
 > 
-> Yep!
+>   drivers/staging/r8188eu/core/rtw_recv.c       |  2 +-
+>   drivers/staging/r8188eu/core/rtw_xmit.c       |  6 +++---
+>   drivers/staging/r8188eu/hal/rtl8188eu_recv.c  |  2 +-
+>   drivers/staging/r8188eu/include/basic_types.h | 19 -------------------
+>   .../staging/r8188eu/include/osdep_service.h   |  1 -
+>   drivers/staging/r8188eu/os_dep/xmit_linux.c   |  2 +-
+>   6 files changed, 6 insertions(+), 26 deletions(-)
+>   delete mode 100644 drivers/staging/r8188eu/include/basic_types.h
+> 
 
-Reviewed, with additional comments.  I guess I remove my NACK, but there 
-is a lot to address with v2.
+For future patch sets, please include the "staging: r8188eu:" part of the 
+subject of the cover letter. It makes it easier to sort out the rest of the 
+patches; however,it is not necessary to resubmit this one.
+
+The two patchesw are fine.
+
+Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
+
+Thanks,
+
+Larry

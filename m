@@ -2,78 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECE75520DB
+	by mail.lfdr.de (Postfix) with ESMTP id 726045520DA
 	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 17:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243499AbiFTP1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 11:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S243658AbiFTP1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 11:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbiFTP1h (ORCPT
+        with ESMTP id S240728AbiFTP1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Jun 2022 11:27:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07531198;
-        Mon, 20 Jun 2022 08:27:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 880EEB81210;
-        Mon, 20 Jun 2022 15:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CACFC3411B;
-        Mon, 20 Jun 2022 15:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655738852;
-        bh=C160ci2Jg/MpBwPywHpQUs6DyohwjJWURvf3+rO7Gk4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s1HGH3mQcRoX+mNi/4tHHGxCNMQ1nHYEjBZhMp+Do+RBgGPC8+bAYHo8/U6E3ClmS
-         SA69tjtH53L5ejhbO4yMOO4CX6o7+fMy9IZlUPoka4dgkstqmWWZWZlO03Kmp1Wyla
-         +t1ZBl8LLLWsjmtK9K5fQzlyNVkq4NM4Vi4TVnSaOpsjc2zcFm8FCcNSNFTkhaZf3l
-         smZjMh+TWQwRwy3HSqgwIbne/OvyfMUSZrpoPT2xsOJWBeMNTJoa8r+7MuSxK2w7Rb
-         rzUszD5a81ct93P5Ax80i2Y/bMoMpbx29RBcOhIHHDwEhlm9ZLhbAzkZJFOfqgB6Tx
-         9l62jW8mbiO0A==
-Date:   Mon, 20 Jun 2022 09:27:28 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Leo Savernik <l.savernik@aon.at>,
-        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [bugzilla-daemon@kernel.org: [Bug 216147] New: NVMe quirk needed
- for multiple Micron MTFDKBA2T0TFH SSDs]
-Message-ID: <YrCR4Bjcto09kJyQ@kbusch-mbp.dhcp.thefacebook.com>
-References: <20220619132039.GA1243474@bhelgaas>
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFB7CF
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 08:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655738857; x=1687274857;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8giL0qZv3yIElRFo4fVuIKMG5Tx+3XAwog7jJ8DWOI8=;
+  b=HGkMJcnYqjyHGcfkEv9R5gWI7r/GfJbsj335jnSYq/mkbOYAkmQM2dCk
+   3vvCql/v97NP8gOKVfVQTb0QQlme9PrT5cqogQ1ihUHpp6QwywejCbPF1
+   l43OIZm+ja0RXfq9UAse40B7N9Zrt5qh7sNtIfHKmGfitQqGcW/hbsXmt
+   nChCpq1pO+p6PNxdeQHPn0N8eulkIspqJHOZj21DouHK4VmMVomYQoX+P
+   /bResCgQwRNdFk2odYv1DpuxmCGgUqHGKi/eIWTAjvhLsmUXEoVkqDCmn
+   UwTKGL3BNAnSl3I0wg4rmQfJ5qxuTmXGYNZmdaigeyQv1zAMue583PoAO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="280654134"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="280654134"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 08:27:36 -0700
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="561998169"
+Received: from echeresh-mobl1.amr.corp.intel.com (HELO [10.209.15.145]) ([10.209.15.145])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 08:27:36 -0700
+Message-ID: <63ccccac-2aa7-8850-9cd3-a8b7b89e1872@intel.com>
+Date:   Mon, 20 Jun 2022 08:27:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220619132039.GA1243474@bhelgaas>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] x86/pat: fix x86_has_pat_wp()
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@alien8.de>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, jbeulich@suse.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-2-jgross@suse.com> <YrBLU2C5cJoalnax@zn.tnic>
+ <1cfde4bf-241f-d94c-ffd7-2a11cf9aa1f2@suse.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <1cfde4bf-241f-d94c-ffd7-2a11cf9aa1f2@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 08:20:39AM -0500, Bjorn Helgaas wrote:
-> The proposed patch itself (also see attachment):
+On 6/20/22 03:41, Juergen Gross wrote:
+>> But I'm only guessing - this needs a *lot* more elaboration and
+>> explanation why exactly this is needed.
 > 
-> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-> index b925a5f4afc3..2e5c33f3b868 100644
-> --- a/drivers/nvme/host/pci.c
-> +++ b/drivers/nvme/host/pci.c
-> @@ -3372,5 +3372,7 @@ static const struct pci_device_id nvme_id_table[] = {
-> NVME_QUIRK_128_BYTES_SQES |
->                                 NVME_QUIRK_NO_DEEPEST_PS |
->                                 NVME_QUIRK_IGNORE_DEV_SUBNQN, },
-> +       { PCI_DEVICE(0x1344, 0x5407), /* Micron Technology Inc NVMe SSD */
-> +               .driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN },
->         { PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
->         { 0, }
->  };
+> I will correct the code and update the commit message.
 
-Coould you send this as an actual patch to the mailing list so we can include
-it in the next pull request?
+It would also be great to cover the end-user-visible impact of the bug
+and the fix.  It _looks_ like it will probably only affect an SEV
+system's ability to read some EFI data.  That will presumably be pretty
+bad because it ends up reading from an encrypted mapping instead of a
+decrypted one.
+
+The
+
+	pr_warn("failed to early memremap...
+
+is (counterintuitively) what is wanted here.
+
+Right?

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E16551B19
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC21551A92
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343499AbiFTNMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S244047AbiFTNHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245692AbiFTNJV (ORCPT
+        with ESMTP id S244927AbiFTNEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:09:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E59228;
-        Mon, 20 Jun 2022 06:03:52 -0700 (PDT)
+        Mon, 20 Jun 2022 09:04:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B93D193D3;
+        Mon, 20 Jun 2022 05:59:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A417B811C6;
-        Mon, 20 Jun 2022 13:02:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF10C3411B;
-        Mon, 20 Jun 2022 13:02:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19F636153E;
+        Mon, 20 Jun 2022 12:59:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B47C3411C;
+        Mon, 20 Jun 2022 12:59:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655730144;
-        bh=M/2gDY7ZzNb/oAKKkhfnwbKWyEObv/vJS66e1WXjz3U=;
+        s=korg; t=1655729963;
+        bh=udKYPvsT06cU8qjZ5wf0OQiIZyQGn9ezzGJ2iwG8vDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mtAKoeoyxJm+z56H8a5RQFrb4coUfhZn2x+dg/eIz2hnOzuQThMYn9k+mpms/RasT
-         g9bAoRwn9aBHcSg1ZQbL+ZPGmjaF49M8G5gIbxREupa2e4YcYwc5CVacxzzZ8XoeeO
-         7bQRfeXJ0lweJI+M3tjxdpEzQdXlqbvKyVW9+GIs=
+        b=p94pYMxqcvWaVAzcjPBjP9sQBuI7/zlGVynt3fbPKw5M3/+qPH0nAr3PUIP4gqu8I
+         ykXNU0+otEwM+R0hBVTJOhJ5/Cd7a28wE79dGQwYv02dRyFqjCgYpbBApBO1s/eamc
+         KfCTq2H4VTbgu8hAk7Lpkwv5iXT4ypa9fsaQ0KPQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 47/84] mlxsw: spectrum_cnt: Reorder counter pools
+        stable@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 5.18 132/141] KVM: arm64: Dont read a HW interrupt pending state in user context
 Date:   Mon, 20 Jun 2022 14:51:10 +0200
-Message-Id: <20220620124722.280423006@linuxfoundation.org>
+Message-Id: <20220620124733.459739098@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +54,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+From: Marc Zyngier <maz@kernel.org>
 
-[ Upstream commit 4b7a632ac4e7101ceefee8484d5c2ca505d347b3 ]
+commit 2cdea19a34c2340b3aa69508804efe4e3750fcec upstream.
 
-Both RIF and ACL flow counters use a 24-bit SW-managed counter address to
-communicate which counter they want to bind.
+Since 5bfa685e62e9 ("KVM: arm64: vgic: Read HW interrupt pending state
+from the HW"), we're able to source the pending bit for an interrupt
+that is stored either on the physical distributor or on a device.
 
-In a number of Spectrum FW releases, binding a RIF counter is broken and
-slices the counter index to 16 bits. As a result, on Spectrum-2 and above,
-no more than about 410 RIF counters can be effectively used. This
-translates to 205 netdevices for which L3 HW stats can be enabled. (This
-does not happen on Spectrum-1, because there are fewer counters available
-overall and the counter index never exceeds 16 bits.)
+However, this state is only available when the vcpu is loaded,
+and is not intended to be accessed from userspace. Unfortunately,
+the GICv2 emulation doesn't provide specific userspace accessors,
+and we fallback with the ones that are intended for the guest,
+with fatal consequences.
 
-Binding counters to ACLs does not have this issue. Therefore reorder the
-counter allocation scheme so that RIF counters come first and therefore get
-lower indices that are below the 16-bit barrier.
+Add a new vgic_uaccess_read_pending() accessor for userspace
+to use, build on top of the existing vgic_mmio_read_pending().
 
-Fixes: 98e60dce4da1 ("Merge branch 'mlxsw-Introduce-initial-Spectrum-2-support'")
-Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Link: https://lore.kernel.org/r/20220613125017.2018162-1-idosch@nvidia.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Eric Auger <eric.auger@redhat.com>
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
+Tested-by: Eric Auger <eric.auger@redhat.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Fixes: 5bfa685e62e9 ("KVM: arm64: vgic: Read HW interrupt pending state from the HW")
+Link: https://lore.kernel.org/r/20220607131427.1164881-2-maz@kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/kvm/vgic/vgic-mmio-v2.c |    4 ++--
+ arch/arm64/kvm/vgic/vgic-mmio.c    |   19 ++++++++++++++++---
+ arch/arm64/kvm/vgic/vgic-mmio.h    |    3 +++
+ 3 files changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h b/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h
-index a68d931090dd..15c8d4de8350 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h
-+++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_cnt.h
-@@ -8,8 +8,8 @@
- #include "spectrum.h"
+--- a/arch/arm64/kvm/vgic/vgic-mmio-v2.c
++++ b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
+@@ -417,11 +417,11 @@ static const struct vgic_register_region
+ 		VGIC_ACCESS_32bit),
+ 	REGISTER_DESC_WITH_BITS_PER_IRQ(GIC_DIST_PENDING_SET,
+ 		vgic_mmio_read_pending, vgic_mmio_write_spending,
+-		NULL, vgic_uaccess_write_spending, 1,
++		vgic_uaccess_read_pending, vgic_uaccess_write_spending, 1,
+ 		VGIC_ACCESS_32bit),
+ 	REGISTER_DESC_WITH_BITS_PER_IRQ(GIC_DIST_PENDING_CLEAR,
+ 		vgic_mmio_read_pending, vgic_mmio_write_cpending,
+-		NULL, vgic_uaccess_write_cpending, 1,
++		vgic_uaccess_read_pending, vgic_uaccess_write_cpending, 1,
+ 		VGIC_ACCESS_32bit),
+ 	REGISTER_DESC_WITH_BITS_PER_IRQ(GIC_DIST_ACTIVE_SET,
+ 		vgic_mmio_read_active, vgic_mmio_write_sactive,
+--- a/arch/arm64/kvm/vgic/vgic-mmio.c
++++ b/arch/arm64/kvm/vgic/vgic-mmio.c
+@@ -226,8 +226,9 @@ int vgic_uaccess_write_cenable(struct kv
+ 	return 0;
+ }
  
- enum mlxsw_sp_counter_sub_pool_id {
--	MLXSW_SP_COUNTER_SUB_POOL_FLOW,
- 	MLXSW_SP_COUNTER_SUB_POOL_RIF,
-+	MLXSW_SP_COUNTER_SUB_POOL_FLOW,
- };
+-unsigned long vgic_mmio_read_pending(struct kvm_vcpu *vcpu,
+-				     gpa_t addr, unsigned int len)
++static unsigned long __read_pending(struct kvm_vcpu *vcpu,
++				    gpa_t addr, unsigned int len,
++				    bool is_user)
+ {
+ 	u32 intid = VGIC_ADDR_TO_INTID(addr, 1);
+ 	u32 value = 0;
+@@ -248,7 +249,7 @@ unsigned long vgic_mmio_read_pending(str
+ 						    IRQCHIP_STATE_PENDING,
+ 						    &val);
+ 			WARN_RATELIMIT(err, "IRQ %d", irq->host_irq);
+-		} else if (vgic_irq_is_mapped_level(irq)) {
++		} else if (!is_user && vgic_irq_is_mapped_level(irq)) {
+ 			val = vgic_get_phys_line_level(irq);
+ 		} else {
+ 			val = irq_is_pending(irq);
+@@ -263,6 +264,18 @@ unsigned long vgic_mmio_read_pending(str
+ 	return value;
+ }
  
- int mlxsw_sp_counter_alloc(struct mlxsw_sp *mlxsw_sp,
--- 
-2.35.1
-
++unsigned long vgic_mmio_read_pending(struct kvm_vcpu *vcpu,
++				     gpa_t addr, unsigned int len)
++{
++	return __read_pending(vcpu, addr, len, false);
++}
++
++unsigned long vgic_uaccess_read_pending(struct kvm_vcpu *vcpu,
++					gpa_t addr, unsigned int len)
++{
++	return __read_pending(vcpu, addr, len, true);
++}
++
+ static bool is_vgic_v2_sgi(struct kvm_vcpu *vcpu, struct vgic_irq *irq)
+ {
+ 	return (vgic_irq_is_sgi(irq->intid) &&
+--- a/arch/arm64/kvm/vgic/vgic-mmio.h
++++ b/arch/arm64/kvm/vgic/vgic-mmio.h
+@@ -149,6 +149,9 @@ int vgic_uaccess_write_cenable(struct kv
+ unsigned long vgic_mmio_read_pending(struct kvm_vcpu *vcpu,
+ 				     gpa_t addr, unsigned int len);
+ 
++unsigned long vgic_uaccess_read_pending(struct kvm_vcpu *vcpu,
++					gpa_t addr, unsigned int len);
++
+ void vgic_mmio_write_spending(struct kvm_vcpu *vcpu,
+ 			      gpa_t addr, unsigned int len,
+ 			      unsigned long val);
 
 

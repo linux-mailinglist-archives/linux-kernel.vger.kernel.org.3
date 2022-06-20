@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0CE5521C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530A55521CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 18:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243302AbiFTQCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 12:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
+        id S243696AbiFTQDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 12:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiFTQCo (ORCPT
+        with ESMTP id S229487AbiFTQDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 12:02:44 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89B01E3DB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:02:41 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id n20so15259531ejz.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 09:02:41 -0700 (PDT)
+        Mon, 20 Jun 2022 12:03:13 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917ED55B7;
+        Mon, 20 Jun 2022 09:03:12 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id es26so14057666edb.4;
+        Mon, 20 Jun 2022 09:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y87tteo65fPwP2KFKjtu1f8D6jluauyBet2xHwdc9hM=;
+        b=VR3IMy6yFhkhF+Q30NdfXuDFk3tjHrqKWSO+wnLWXXxkIfXXClXX9moyzub2GN2nJz
+         pUSCytPYZ12S+zqdkDFpO/wGdif8G9wzbRgutHvGAo44/Fymw9ZIZGW7aUBnhuVONkmQ
+         N7W0XZJbzUypzqXEFLlb3mDVJtN933rbP+lGPYU+hs+izpOwqw6tXx1IFohl427Xo8eI
+         zc91bUn3sQK/OClztUyOH5uz65T/VzkXZhWCgCSQ1a37JWUUISw50xYTb1LPSGU8XNGW
+         246gVosXHJbvwznd00lpEScKmt+lsisGS3L8tKKcOYovyVDHcvXDDce0e/1QxXvUV6H2
+         409Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yiYvbLnEekkvWxxpYdJMuyxTp22cuJMd+CcZym4RkP8=;
-        b=8Io3myc4BsuCaBvU76r0Ge7droQ7+yjZ1YsxMdCILZXZDr1DTdeZyXYaCtnzzMsk6E
-         nZdnnyHRcZHZisMZtibJc+zPYlPmGrOGnOGC2RsOKuFq+qG04+I1fIMs8sjpQ0oj1Fl5
-         3zUUOMD0EpD9OhCiCIzB3r6ILee+UpjAMejFe/SKJ8RzyaIbNkWWWlskfhHh+qO+sQ03
-         2MXOKhN1lbrYhBXdQM3xjpgVzzEGNm6TbKhX9iI240tP0aN1axsPc/TyOE7Z0LyleauS
-         6fPZt9HJ1YAqOsECv4Eigpn0TXt1q/YirhG46dydB11u/cxQekUQ47c6Oz8kXVbhIG7v
-         zkEw==
-X-Gm-Message-State: AJIora95T4ZzNThkv5cS5pj79P55VLiFGdjW+0CkNCCMtoajDbh4PbdB
-        SCbc9rpwuOA9VYFtSHNoPneSltW//PamSASMnEHkWQ==
-X-Google-Smtp-Source: AGRyM1tpkik6QOauWuHQl27t7x5EusPr6YTpYq0PbQVCRCctMDzLlhDChkanCU7DArjU4vwDpqZ+dO/wN+WNIvSS0eY=
-X-Received: by 2002:a17:907:72d2:b0:703:9177:7d1f with SMTP id
- du18-20020a17090772d200b0070391777d1fmr21377212ejc.144.1655740960182; Mon, 20
- Jun 2022 09:02:40 -0700 (PDT)
+        bh=Y87tteo65fPwP2KFKjtu1f8D6jluauyBet2xHwdc9hM=;
+        b=tFX7g59SuhAprzzoK5ZOKFSa7HaORzNoadaw6GVC8b5ROHP1rT8ORn8NIvA1BNdYxm
+         2mYwLchlJdPnN3UdtrXb5tfd7H3ZIKdXmtsPiUescYz60mQVck0M7p83B+aOFIeTjMIA
+         KCOJtD0LhzL47hX9fI2pBbMGZ4wFsGla1h2h2T0Iec9JSubmJZDre7RwD9vnCnG9QJBa
+         fB2/YSKGhrqqFXVtS3PhrAZjE2+uRTKYKuO9HHtSFi3zVyViX7IjdjN0+NNrnZW7umR7
+         pG2xeP5cw5g0MWpWPWYniuiAX63CB+wkEXwtbtPqJBiUWBS+lq2UEKVQxLkwrT+m9I0a
+         ap2w==
+X-Gm-Message-State: AJIora+BNoWFRR3QTolrNWOGgWh2x1W5f/Hn1Zi51tvymcphGCHdP3uF
+        ona9tB5+KGllUf/lMtgP/JBpdDR8UD9a1jfcMmk=
+X-Google-Smtp-Source: AGRyM1sPd0yc0qBXEGBRSSGH98qQAXbevPA3SWgu7Rg29DcdeRsUnYNbYNOVihlJ4XvBCDoajC5mrLHwD0cfMGzcvsI=
+X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
+ o16-20020a056402439000b0042e0b7ee9acmr30648861edc.97.1655740991082; Mon, 20
+ Jun 2022 09:03:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620124729.509745706@linuxfoundation.org>
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-From:   Justin Forbes <jforbes@fedoraproject.org>
-Date:   Mon, 20 Jun 2022 11:02:29 -0500
-Message-ID: <CAFxkdArwJoMEKGjmJFu_tc+-sA8g4j+wGR=_7Bb708+T-3dPEw@mail.gmail.com>
-Subject: Re: [PATCH 5.18 000/141] 5.18.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220307141955.28040-1-alifer.m@variscite.com>
+ <CAHp75Vf=vQd5-PGPu3Pcx9bhKSfhdnYDOSOmZKQZQ+bxVkpmYg@mail.gmail.com> <AM6PR08MB4376058D3FFB4139E9292EE8FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
+In-Reply-To: <AM6PR08MB4376058D3FFB4139E9292EE8FFB09@AM6PR08MB4376.eurprd08.prod.outlook.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 20 Jun 2022 18:02:34 +0200
+Message-ID: <CAHp75VdDDhMgQ_oiHGA1m8TQmP+F6neT_KG=UKqsEe9P96HbHw@mail.gmail.com>
+Subject: Re: [PATCH] driver: pca953x: avoid error message when resuming
+To:     Pierluigi Passaro <pierluigi.p@variscite.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Alifer Willians de Moraes <alifer.m@variscite.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Eran Matityahu <eran.m@variscite.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Francesco Ferraro <francesco.f@variscite.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 7:55 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.18.6 release.
-> There are 141 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.6-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Jun 20, 2022 at 4:18 PM Pierluigi Passaro
+<pierluigi.p@variscite.com> wrote:
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+...
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+> > > Avoids the error messages "pca953x 1-0020: failed reading register"
+> > > when resuming from suspend using gpio-key attached to pca9534.
+> > Thanks for your report and fix. My comments below.
+> > First of all, how many of them do you get and why is it a problem?
+>
+> The number of occurrences depends on the time required to I2C bus to fully wake-up.
+> It's not a real problem, but the message may lead to think about a real I2C problem.
+
+Wolfram, do we have any mechanisms that guarantees that I2C traffic is
+not going on a semi-woken up host controller?
+
+Writing this, I'm in doubt this patch is a fix we want. Wouldn't it
+just hide the real issue with some resume ordering?
+
+...
+
+> > > +       int is_in_suspend;
+> > Usually we call it is_suspended or so, check existing code by `git
+> > grep ...`. And it can be boolean.
+>
+> Do you mean soomething like in drivers/gpio/gpio-omap.c ?
+
+I believe almost any from the list `git grep -nl -w is_suspended` will suffice.
+
+-- 
+With Best Regards,
+Andy Shevchenko

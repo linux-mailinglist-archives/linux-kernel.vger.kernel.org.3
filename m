@@ -2,44 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3848551224
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE50755122D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 10:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbiFTIHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 04:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S238900AbiFTIIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 04:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbiFTIHP (ORCPT
+        with ESMTP id S232762AbiFTIIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:07:15 -0400
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD92D213
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:07:08 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id PGC00101;
-        Mon, 20 Jun 2022 16:07:01 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
- 15.1.2308.27; Mon, 20 Jun 2022 16:07:02 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] virtio_ring: Optimize duplicate judgment codes for virtqueue_add_split
-Date:   Mon, 20 Jun 2022 04:06:56 -0400
-Message-ID: <20220620080656.1559-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 20 Jun 2022 04:08:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0370511174
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 01:08:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655712528; x=1687248528;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=LQztEc1EBzzs8KWwqzXaMQMFrLTcUbledaOBZycBMFo=;
+  b=SmIPV+XaKv++k6gohoSsiwye781zg4cMjcEWxkoo8eP6ZeUkyZoLYPC6
+   +9blVW4tUDGZh4wLW9rEpw8IKL2kXKXj6XEPeV1cVZOeNcnhbFu3FhAp/
+   O3oo4XdJcCNdpP9xfJ5/F8cEpTivAzvIZNvIyZGdq/xxw68Z18nwKJ9aR
+   M61wsnzHm+DS7bEqTHn8HbR92zG7RnNImRAVZHRYq61tlxfj203ZbWFpy
+   FUrgQwuantRpXJ7xJa6mX3Uk/hg9rubJZIQFl0ycfGXbC1KEnGYZ8cIRW
+   6jCCpubslwc5U0I51fpgUtBMhdSaLFUCk3Ybo52tjfsvQjBb0Ledz/XcS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260264856"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="260264856"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 01:08:47 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="833004001"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 01:08:46 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] mm/swap: remove swap_cache_info statistics
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+        <20220608144031.829-4-linmiaohe@huawei.com>
+Date:   Mon, 20 Jun 2022 16:08:42 +0800
+In-Reply-To: <20220608144031.829-4-linmiaohe@huawei.com> (Miaohe Lin's message
+        of "Wed, 8 Jun 2022 22:40:31 +0800")
+Message-ID: <87a6a7rc39.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   20226201607012893fc8a5ca814948df10f459f10d27a
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,47 +61,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We combine repeated judgments about indirect in one place
+Miaohe Lin <linmiaohe@huawei.com> writes:
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- drivers/virtio/virtio_ring.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+> swap_cache_info are not statistics that could be easily used to tune system
+> performance because they are not easily accessile. Also they can't provide
+> really useful info when OOM occurs. Remove these statistics can also help
+> mitigate unneeded global swap_cache_info cacheline contention.
+>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/swap_state.c | 17 -----------------
+>  1 file changed, 17 deletions(-)
+>
+> diff --git a/mm/swap_state.c b/mm/swap_state.c
+> index 0a2021fc55ad..41c6a6053d5c 100644
+> --- a/mm/swap_state.c
+> +++ b/mm/swap_state.c
+> @@ -59,24 +59,11 @@ static bool enable_vma_readahead __read_mostly = true;
+>  #define GET_SWAP_RA_VAL(vma)					\
+>  	(atomic_long_read(&(vma)->swap_readahead_info) ? : 4)
+>  
+> -#define INC_CACHE_INFO(x)	data_race(swap_cache_info.x++)
+> -#define ADD_CACHE_INFO(x, nr)	data_race(swap_cache_info.x += (nr))
+> -
+> -static struct {
+> -	unsigned long add_total;
+> -	unsigned long del_total;
+> -	unsigned long find_success;
+> -	unsigned long find_total;
+> -} swap_cache_info;
+> -
+>  static atomic_t swapin_readahead_hits = ATOMIC_INIT(4);
+>  
+>  void show_swap_cache_info(void)
+>  {
+>  	printk("%lu pages in swap cache\n", total_swapcache_pages());
+> -	printk("Swap cache stats: add %lu, delete %lu, find %lu/%lu\n",
+> -		swap_cache_info.add_total, swap_cache_info.del_total,
+> -		swap_cache_info.find_success, swap_cache_info.find_total);
+>  	printk("Free swap  = %ldkB\n",
+>  		get_nr_swap_pages() << (PAGE_SHIFT - 10));
+>  	printk("Total swap = %lukB\n", total_swap_pages << (PAGE_SHIFT - 10));
+> @@ -133,7 +120,6 @@ int add_to_swap_cache(struct page *page, swp_entry_t entry,
+>  		address_space->nrpages += nr;
+>  		__mod_node_page_state(page_pgdat(page), NR_FILE_PAGES, nr);
+>  		__mod_lruvec_page_state(page, NR_SWAPCACHE, nr);
+> -		ADD_CACHE_INFO(add_total, nr);
+>  unlock:
+>  		xas_unlock_irq(&xas);
+>  	} while (xas_nomem(&xas, gfp));
+> @@ -172,7 +158,6 @@ void __delete_from_swap_cache(struct page *page,
+>  	address_space->nrpages -= nr;
+>  	__mod_node_page_state(page_pgdat(page), NR_FILE_PAGES, -nr);
+>  	__mod_lruvec_page_state(page, NR_SWAPCACHE, -nr);
+> -	ADD_CACHE_INFO(del_total, nr);
+>  }
+>  
+>  /**
+> @@ -348,12 +333,10 @@ struct page *lookup_swap_cache(swp_entry_t entry, struct vm_area_struct *vma,
+>  	page = find_get_page(swap_address_space(entry), swp_offset(entry));
+>  	put_swap_device(si);
+>  
+> -	INC_CACHE_INFO(find_total);
+>  	if (page) {
+>  		bool vma_ra = swap_use_vma_readahead();
+>  		bool readahead;
+>  
+> -		INC_CACHE_INFO(find_success);
+>  		/*
+>  		 * At the moment, we don't support PG_readahead for anon THP
+>  		 * so let's bail out rather than confusing the readahead stat.
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 13a7348cedff..331fa3cf5be7 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -582,23 +582,19 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
- 					 total_sg * sizeof(struct vring_desc),
- 					 VRING_DESC_F_INDIRECT,
- 					 false);
-+		vq->free_head = vq->split.desc_extra[head].next;
-+		vq->split.desc_state[head].indir_desc = desc;
-+	} else {
-+		/* Update free pointer */
-+		vq->free_head = i;
-+		vq->split.desc_state[head].indir_desc = ctx;
- 	}
- 
- 	/* We're using some buffers from the free list. */
- 	vq->vq.num_free -= descs_used;
- 
--	/* Update free pointer */
--	if (indirect)
--		vq->free_head = vq->split.desc_extra[head].next;
--	else
--		vq->free_head = i;
--
- 	/* Store token and indirect buffer state. */
- 	vq->split.desc_state[head].data = data;
--	if (indirect)
--		vq->split.desc_state[head].indir_desc = desc;
--	else
--		vq->split.desc_state[head].indir_desc = ctx;
- 
- 	/* Put entry in available array (but don't update avail->idx until they
- 	 * do sync). */
--- 
-2.27.0
+This looks reasonable.  And if we want to do some statistics for swap
+cache in the future, we can use BPF, that is even more convenient.
 
+Acked-by: "Huang, Ying" <ying.huang@intel.com>
+
+Best Regards,
+Huang, Ying

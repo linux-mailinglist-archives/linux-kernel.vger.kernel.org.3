@@ -2,155 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB8F550EF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AF9550EF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 05:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbiFTD3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 23:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S237905AbiFTDbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 23:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237878AbiFTD3j (ORCPT
+        with ESMTP id S235284AbiFTDbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 23:29:39 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D876249;
-        Sun, 19 Jun 2022 20:29:37 -0700 (PDT)
-X-UUID: 6044d4ae9b2a415eade352b1ed265ef6-20220620
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:8e2cf951-ce8b-47aa-b497-87933e53de16,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:8e2cf951-ce8b-47aa-b497-87933e53de16,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:6939f5e9-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:3cc8a5dd8204,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 6044d4ae9b2a415eade352b1ed265ef6-20220620
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1014500687; Mon, 20 Jun 2022 11:29:27 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 20 Jun 2022 11:29:26 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 20 Jun 2022 11:29:26 +0800
-Message-ID: <94b03604c81794ea811e106802a03b888ceb57c3.camel@mediatek.com>
-Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 20 Jun 2022 11:29:25 +0800
-In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
-         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 19 Jun 2022 23:31:45 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C3E6264
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:31:44 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id s37so9057166pfg.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 20:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=J5hsVa7sKWySaqWB9vABMNQ1qHx6W6r1URjIt5Q2cJA=;
+        b=EpVZdVaPP/2/hfyxOlCmUcUO5i31my7rXtSrH/YRuZ8UnQWpCCcJCB6HjVM9UMINnq
+         Y11CrGR/LdHtayHyRS7kqm5eBZT8dolgH5Vdl94HVvOLXSIYw9ij5VKIqlmF9KsnnmLA
+         IZKkZApj9D81hSoOj8UAmAkC28lFyKplTApJEgQMV3QJUaQx+xhV/2Qm/mRsCHZTj2Ti
+         0+A1M0jAUVF9hzduuwB7ZxijwH0YQm9/vgqXdpUtueDeWse3vO0rQ5V6q1q5uPW2zZzL
+         FP0EtZxDLUD/zb/9o//+q8avo27guCq9stpJm+0LBRiiq4s9Z1RPMmnd9sai6814Sj68
+         8NVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=J5hsVa7sKWySaqWB9vABMNQ1qHx6W6r1URjIt5Q2cJA=;
+        b=m+m7N6UM1lp9LMx7f94ZmNYdtG+4C/jfCMjOJHO/ZeyBuxA+JSg2rc06ROs3gfsQJv
+         ORzeLyC0vclFv0WUdodM5HcTad7MNcVpROy3COdOiihicJwJ18FP65YXp7pwT4qIuwNd
+         axpbToTEVaY5LE+keMbsXyOBdfN3RM1geYQJ9CePQ51XG92kum20uCmmk4iHi7f0rPGz
+         1kctyUQ/UfSv2Xanq2wxvVCuQ8GBm7bpXqt2Kb/Z0SEw6w4qJhZAWDn5m+ses2eiq5Mo
+         uhMUMuDg54vozFONoJC7nZksIHEHRNKffT36onMV6S+TUDRHVS/friFi03Er7ZoTu4sG
+         gJ6g==
+X-Gm-Message-State: AJIora/gTz7UHvTCX4qY6UT6wm02TyaKIKhXAOvHfjjXB0sc0SvVlfsk
+        EB9qASbe7oWcV52s7t/iAOqXXodPzhnnng==
+X-Google-Smtp-Source: AGRyM1v0jI+swv2AvbUHLapd2TYU1gff/sjYtMyF7Z+P0ayi706N92H1FrJ7ei/qWMrBaYkcJT2/2Q==
+X-Received: by 2002:a05:6a00:179b:b0:51b:f51f:992e with SMTP id s27-20020a056a00179b00b0051bf51f992emr22423913pfg.60.1655695903918;
+        Sun, 19 Jun 2022 20:31:43 -0700 (PDT)
+Received: from ubuntu ([175.124.254.119])
+        by smtp.gmail.com with ESMTPSA id j16-20020a17090a7e9000b001e2afd35791sm7066180pjl.18.2022.06.19.20.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 20:31:43 -0700 (PDT)
+Date:   Sun, 19 Jun 2022 20:31:39 -0700
+From:   Hyunwoo Kim <imv4bel@gmail.com>
+To:     mingo@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] sched: Fix __cond_resched annotation typo
+Message-ID: <20220620033139.GA674930@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+I think I found a minor typo.
 
-On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+It seems natural to end with "." rather than ",".
 
-[snip]
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+---
+ include/linux/sched.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +
-> +static void mtk_dp_set_color_depth(struct mtk_dp *mtk_dp, u32
-> color_depth)
-
-In the whole driver, the color_depth would only be DP_MSA_MISC_8_BPC,
-so remove the parameter color_depth and fix the color depth to
-DP_MSA_MISC_8_BPC in this function.
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index c46f3a63b758..5cbced81133c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2030,7 +2030,7 @@ static inline int test_tsk_need_resched(struct task_struct *tsk)
+  * cond_resched() and cond_resched_lock(): latency reduction via
+  * explicit rescheduling in places that are safe. The return
+  * value indicates whether a reschedule was done in fact.
+- * cond_resched_lock() will drop the spinlock before scheduling,
++ * cond_resched_lock() will drop the spinlock before scheduling.
+  */
+ #if !defined(CONFIG_PREEMPTION) || defined(CONFIG_PREEMPT_DYNAMIC)
+ extern int __cond_resched(void);
+-- 
+2.25.1
 
 Regards,
-CK
-
-> +{
-> +	u32 val;
-> +
-> +	mtk_dp->info.depth = color_depth;
-> +
-> +	/* Update MISC0 */
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
-> +			   color_depth, DP_TEST_BIT_DEPTH_MASK);
-> +
-> +	switch (color_depth) {
-> +	case DP_MSA_MISC_6_BPC:
-> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_6BIT;
-> +		break;
-> +	case DP_MSA_MISC_8_BPC:
-> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT;
-> +		break;
-> +	case DP_MSA_MISC_10_BPC:
-> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_10BIT;
-> +		break;
-> +	case DP_MSA_MISC_12_BPC:
-> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_12BIT;
-> +		break;
-> +	case DP_MSA_MISC_16_BPC:
-> +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_16BIT;
-> +		break;
-> +	default:
-> +		drm_warn(mtk_dp->drm_dev, "Unsupported color depth
-> %d\n",
-> +			 color_depth);
-> +		return;
-> +	}
-> +
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C, val,
-> +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
-> +}
-> +
-
+Hyunwoo Kim

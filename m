@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2E6550F74
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E73550F76
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 06:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbiFTEnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 00:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S237672AbiFTEoT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 00:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbiFTEnD (ORCPT
+        with ESMTP id S229908AbiFTEoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 00:43:03 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707DB60CF
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:43:02 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id 128so2171238pfv.12
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:43:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XuPCzTzhcmOZzHOmk2sFdgEFNoZlfvJu9dKlztxiN/Y=;
-        b=v2uTas0ITpi6sQ50rCEMiLgEQR9vCoVW8ykoCP10v0VHG7XLW9lbVQXcTERpNEkdBl
-         yQGU3U23/U+g3a64sDok8eq+zzWMr1dnUcDpvansrDgbrCg66FWQZYKvva4AkLKbMWoZ
-         8dbbX8Fo4bmY8KFxhOYkNuHZ4W/pEwF7wYX3oXNGZOBY+UaVRJxNT2sFIonlJAR7ap7p
-         OgV3hh4RJGh+onEG9mQKJvwMGM0HVbp/asqZxsudKFOh9bK3xv/cW+v4aatOIlIzpg4K
-         IrpKKR7Yu+MwA/BgE54nYrAlkva2582Ea+Pn9asSrhQCryKo/YKsWFb4cZUuWTPMCA8H
-         s8Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XuPCzTzhcmOZzHOmk2sFdgEFNoZlfvJu9dKlztxiN/Y=;
-        b=XeAbnkjDkopevIY60AwhAcoOlBbMpZj01bnE7qKnDvMomzHuFFvs0G1dQ537HBxvP1
-         rZAZZjQstmMyLoGhBZitqnZv9L6HRk9tzB2HYTmeVaw8YH/qBmcmUJ0f4sviDdbwOCBC
-         7R1JaiRYOJZlp/BSTtvmMLlhwH3w/IJPc+CzJzzrl4pZjSoCbpz2rqaxcOzAUn2a9E/g
-         DzIX3yjeEIs3g+p4xvDKrBJt41d/EGmt9mbvfR89er40GnQ6EhjOOeC+/yTrbbRxWuVb
-         uAIpq/Z44PLDA9ickDif94uR03+9cgcdmjpgI5BInol9+5NC/2xVDPdts1uwnL/9jPwc
-         Dyzw==
-X-Gm-Message-State: AJIora+59lG3OkIdK5DPNQ8hPpKnN20Puk08YqF8rJTlgL9c0xgXFn+o
-        roSQvvNlcFWRcoWXCkD3o7RgbA==
-X-Google-Smtp-Source: AGRyM1u9VfNHrad/tqs9W/bOQOD4E8u6NsMRQEd+0M8Qya2WVZ9s43KSlqXGkWaUUjAwmTx+ToXCLw==
-X-Received: by 2002:a05:6a00:198c:b0:51c:7547:58e0 with SMTP id d12-20020a056a00198c00b0051c754758e0mr22239590pfl.82.1655700181896;
-        Sun, 19 Jun 2022 21:43:01 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id h2-20020a170902f70200b0015e8d4eb231sm7527303plo.123.2022.06.19.21.43.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 21:43:01 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 10:12:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     rafael@kernel.org, matthias.bgg@gmail.com,
-        rex-bc.chen@mediatek.com, jia-wei.chang@mediatek.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] cpufreq: Add MT8186 to cpufreq-dt-platdev blocklist
-Message-ID: <20220620044251.ice5qcuw26utmups@vireshk-i7>
-References: <20220617110926.90313-1-angelogioacchino.delregno@collabora.com>
+        Mon, 20 Jun 2022 00:44:17 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33501A446
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 21:44:16 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-166-e-ku6nOkPGGi772ICmkLdQ-1; Mon, 20 Jun 2022 05:44:13 +0100
+X-MC-Unique: e-ku6nOkPGGi772ICmkLdQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 20 Jun 2022 05:44:10 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 20 Jun 2022 05:44:10 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kent Overstreet' <kent.overstreet@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "pmladek@suse.com" <pmladek@suse.com>
+CC:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "willy@infradead.org" <willy@infradead.org>
+Subject: RE: [PATCH v4 01/34] lib/printbuf: New data structure for printing
+ strings
+Thread-Topic: [PATCH v4 01/34] lib/printbuf: New data structure for printing
+ strings
+Thread-Index: AQHYhD6p9ckAsWkCSk+0B0i5FtmPu61XsWog
+Date:   Mon, 20 Jun 2022 04:44:10 +0000
+Message-ID: <f0808aaee9ac4b088121c0fbe7e18f0d@AcuMS.aculab.com>
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <20220620004233.3805-2-kent.overstreet@gmail.com>
+In-Reply-To: <20220620004233.3805-2-kent.overstreet@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617110926.90313-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,34 +67,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17-06-22, 13:09, AngeloGioacchino Del Regno wrote:
-> This SoC shall use the mediatek-cpufreq driver, or the system will
-> crash upon any clock scaling request: add it to the cpufreq-dt-platdev
-> blocklist.
+From: Kent Overstreet
+> Sent: 20 June 2022 01:42
 > 
-> Fixes: 39b360102f3a ("cpufreq: mediatek: Add support for MT8186")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> This adds printbufs: a printbuf points to a char * buffer and knows the
+> size of the output buffer as well as the current output position.
+> 
+> Future patches will be adding more features to printbuf, but initially
+> printbufs are targeted at refactoring and improving our existing code in
+> lib/vsprintf.c - so this initial printbuf patch has the features
+> required for that.
+> 
+> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > ---
+>  include/linux/printbuf.h | 122 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 122 insertions(+)
+>  create mode 100644 include/linux/printbuf.h
 > 
-> v2: Moved fixes tag on top of SoB (oops!), added Matthias' R-b
-> 
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 96de1536e1cb..2c96de3f2d83 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -127,6 +127,7 @@ static const struct of_device_id blocklist[] __initconst = {
->  	{ .compatible = "mediatek,mt8173", },
->  	{ .compatible = "mediatek,mt8176", },
->  	{ .compatible = "mediatek,mt8183", },
-> +	{ .compatible = "mediatek,mt8186", },
->  	{ .compatible = "mediatek,mt8365", },
->  	{ .compatible = "mediatek,mt8516", },
+> diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
+> new file mode 100644
+> index 0000000000..8186c447ca
+> --- /dev/null
+> +++ b/include/linux/printbuf.h
+> @@ -0,0 +1,122 @@
+> +/* SPDX-License-Identifier: LGPL-2.1+ */
+> +/* Copyright (C) 2022 Kent Overstreet */
+> +
+> +#ifndef _LINUX_PRINTBUF_H
+> +#define _LINUX_PRINTBUF_H
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/string.h>
+> +
+> +/*
+> + * Printbufs: String buffer for outputting (printing) to, for vsnprintf
+> + */
+> +
+> +struct printbuf {
+> +	char			*buf;
+> +	unsigned		size;
+> +	unsigned		pos;
 
-Applied. Thanks.
+No naked unsigneds.
 
--- 
-viresh
+> +};
+> +
+> +/*
+> + * Returns size remaining of output buffer:
+> + */
+> +static inline unsigned printbuf_remaining_size(struct printbuf *out)
+> +{
+> +	return out->pos < out->size ? out->size - out->pos : 0;
+> +}
+> +
+> +/*
+> + * Returns number of characters we can print to the output buffer - i.e.
+> + * excluding the terminating nul:
+> + */
+> +static inline unsigned printbuf_remaining(struct printbuf *out)
+> +{
+> +	return out->pos < out->size ? out->size - out->pos - 1 : 0;
+> +}
+
+Those two are so similar mistakes will be make.
+You can also just return negatives when the buffer has overlowed
+and get the callers to test < or <= as required.
+
+I also wonder it is necessary to count the total length
+when the buffer isn't long enough?
+Unless there is a real pressing need for it I'd not bother.
+Setting pos == size (after writing the '\0') allows
+overflow be detected without most of the dangers.
+
+> +
+> +static inline unsigned printbuf_written(struct printbuf *out)
+> +{
+> +	return min(out->pos, out->size);
+
+That excludes the '\0' for short buffers but includes
+it for overlong ones.
+
+> +}
+> +
+> +/*
+> + * Returns true if output was truncated:
+> + */
+> +static inline bool printbuf_overflowed(struct printbuf *out)
+> +{
+> +	return out->pos >= out->size;
+> +}
+> +
+> +static inline void printbuf_nul_terminate(struct printbuf *out)
+> +{
+> +	if (out->pos < out->size)
+> +		out->buf[out->pos] = 0;
+> +	else if (out->size)
+> +		out->buf[out->size - 1] = 0;
+> +}
+> +
+> +static inline void __prt_char(struct printbuf *out, char c)
+> +{
+> +	if (printbuf_remaining(out))
+> +		out->buf[out->pos] = c;
+
+At this point it is (should be) always safe to add the '\0'.
+Doing so would save the extra conditionals later on.
+
+> +	out->pos++;
+> +}
+> +
+> +static inline void prt_char(struct printbuf *out, char c)
+> +{
+> +	__prt_char(out, c);
+> +	printbuf_nul_terminate(out);
+> +}
+> +
+> +static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
+> +{
+> +	unsigned i, can_print = min(n, printbuf_remaining(out));
+> +
+> +	for (i = 0; i < can_print; i++)
+> +		out->buf[out->pos++] = c;
+> +	out->pos += n - can_print;
+> +}
+> +
+> +static inline void prt_chars(struct printbuf *out, char c, unsigned n)
+> +{
+> +	__prt_chars(out, c, n);
+> +	printbuf_nul_terminate(out);
+> +}
+> +
+> +static inline void prt_bytes(struct printbuf *out, const void *b, unsigned n)
+> +{
+> +	unsigned i, can_print = min(n, printbuf_remaining(out));
+> +
+> +	for (i = 0; i < can_print; i++)
+> +		out->buf[out->pos++] = ((char *) b)[i];
+> +	out->pos += n - can_print;
+> +
+> +	printbuf_nul_terminate(out);
+
+jeepers - that can be written so much better.
+Something like:
+	unsigned int i, pos = out->pos;
+	int space = pos - out->size - 1;
+	char *tgt = out->buf + pos;
+	const char *src = b;
+	out->pos = pos + n;
+
+	if (space <= 0)
+		return;
+	if (n > space)
+		n = space;
+
+	for (i = 0; i < n; i++)
+		tgt[i] = src[i];
+	tgt[1] = 0;
+
+> +}
+> +
+> +static inline void prt_str(struct printbuf *out, const char *str)
+> +{
+> +	prt_bytes(out, str, strlen(str));
+
+Do you really need to call strlen() and then process
+the buffer byte by byte?
+
+	David
+
+> +}
+> +
+> +static inline void prt_hex_byte(struct printbuf *out, u8 byte)
+> +{
+> +	__prt_char(out, hex_asc_hi(byte));
+> +	__prt_char(out, hex_asc_lo(byte));
+> +	printbuf_nul_terminate(out);
+> +}
+> +
+> +static inline void prt_hex_byte_upper(struct printbuf *out, u8 byte)
+> +{
+> +	__prt_char(out, hex_asc_upper_hi(byte));
+> +	__prt_char(out, hex_asc_upper_lo(byte));
+> +	printbuf_nul_terminate(out);
+> +}
+> +
+> +#define PRINTBUF_EXTERN(_buf, _size)			\
+> +((struct printbuf) {					\
+> +	.buf	= _buf,					\
+> +	.size	= _size,				\
+> +})
+> +
+> +#endif /* _LINUX_PRINTBUF_H */
+> --
+> 2.36.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

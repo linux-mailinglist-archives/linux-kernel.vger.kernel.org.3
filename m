@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B252551D60
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCD8551A5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 15:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349118AbiFTNvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 09:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S244406AbiFTNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 09:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349313AbiFTNsj (ORCPT
+        with ESMTP id S244553AbiFTNDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 09:48:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74EBBCE;
-        Mon, 20 Jun 2022 06:17:51 -0700 (PDT)
+        Mon, 20 Jun 2022 09:03:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA041E3DB;
+        Mon, 20 Jun 2022 05:58:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CB1E606DC;
-        Mon, 20 Jun 2022 13:17:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BBFC3411B;
-        Mon, 20 Jun 2022 13:17:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7AB061449;
+        Mon, 20 Jun 2022 12:58:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C508EC341C6;
+        Mon, 20 Jun 2022 12:58:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655731071;
-        bh=sbrL44tMkKlNhB/ubeCGu9MeR5vV2zIzvhWF5VTfUMs=;
+        s=korg; t=1655729890;
+        bh=KJ2SapzxlRMwj2wOaVCg3xVM4XQkTl/+A3xCbWmz0Ww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cAMGYY5uRoRnjd84Mb0z9thu/60S3svqTq1N4Et2b5A+781qNcMZv1uFgD0nvEpm5
-         1rPYQOBjYNODC9Gwb+qJv0cuKbbNLq0Y/JU1+oaFsVLyiUXb1w0gti2e1ZqzDZ1i2T
-         5p/A05kCEbMxoLbswLumzKU3psowcj2ZZum8iNlU=
+        b=zwq3XoJsTtp50Jks7sEpSIi/toPXX7nGAUAiNuyAAsOP3jUp1TSmktnyDZAfRGRFQ
+         gwL5V/eDfCrlfyEZdy5mqNJpj10m5aldQgqlZSqrF4i7EzJ5WtxM0J0jS5LTpkETFt
+         ijYG5DoavehZLo2jZ2SW/ucOxbsY1Tlj3cB7qR5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 143/240] sparc: use fallback for random_get_entropy() instead of zero
-Date:   Mon, 20 Jun 2022 14:50:44 +0200
-Message-Id: <20220620124743.153369434@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Miaoqian Lin <linmq006@gmail.com>
+Subject: [PATCH 5.18 107/141] usb: dwc2: Fix memory leak in dwc2_hcd_init
+Date:   Mon, 20 Jun 2022 14:50:45 +0200
+Message-Id: <20220620124732.706983940@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
-References: <20220620124737.799371052@linuxfoundation.org>
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
+References: <20220620124729.509745706@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit ac9756c79797bb98972736b13cfb239fd2cffb79 upstream.
+commit 3755278f078460b021cd0384562977bf2039a57a upstream.
 
-In the event that random_get_entropy() can't access a cycle counter or
-similar, falling back to returning 0 is really not the best we can do.
-Instead, at least calling random_get_entropy_fallback() would be
-preferable, because that always needs to return _something_, even
-falling back to jiffies eventually. It's not as though
-random_get_entropy_fallback() is super high precision or guaranteed to
-be entropic, but basically anything that's not zero all the time is
-better than returning zero all the time.
+usb_create_hcd will alloc memory for hcd, and we should
+call usb_put_hcd to free it when platform_get_resource()
+fails to prevent memory leak.
+goto error2 label instead error1 to fix this.
 
-This is accomplished by just including the asm-generic code like on
-other architectures, which means we can get rid of the empty stub
-function here.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: David S. Miller <davem@davemloft.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: 856e6e8e0f93 ("usb: dwc2: check return value after calling platform_get_resource()")
+Cc: stable <stable@kernel.org>
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220530085413.44068-1-linmq006@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/sparc/include/asm/timex_32.h |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/usb/dwc2/hcd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/sparc/include/asm/timex_32.h
-+++ b/arch/sparc/include/asm/timex_32.h
-@@ -9,8 +9,6 @@
- 
- #define CLOCK_TICK_RATE	1193180 /* Underlying HZ */
- 
--/* XXX Maybe do something better at some point... -DaveM */
--typedef unsigned long cycles_t;
--#define get_cycles()	(0)
-+#include <asm-generic/timex.h>
- 
- #endif
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -5190,7 +5190,7 @@ int dwc2_hcd_init(struct dwc2_hsotg *hso
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!res) {
+ 		retval = -EINVAL;
+-		goto error1;
++		goto error2;
+ 	}
+ 	hcd->rsrc_start = res->start;
+ 	hcd->rsrc_len = resource_size(res);
 
 

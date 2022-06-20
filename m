@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD73550E15
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6612550E14
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Jun 2022 02:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237821AbiFTAnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Jun 2022 20:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S237965AbiFTAnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Jun 2022 20:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237722AbiFTAnH (ORCPT
+        with ESMTP id S237747AbiFTAnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:43:07 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F300A2725
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:52 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id c144so6864144qkg.11
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:52 -0700 (PDT)
+        Sun, 19 Jun 2022 20:43:08 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1466585
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id d128so6880176qkg.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Jun 2022 17:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=K9eoCaahKKF8GPcnHNvxh314XQP7M2mbXnjspgXSnVM=;
-        b=kzWZ14UhWQpr2qaOlYS9QzrKiCUW6Xki1/EC5YcTuk5f5Mk9/O4KLB0qiX8Ne65In/
-         CmjidGpj819sto9/TLGGZUjJKfvvwrmOFdiMD/9uWzMgdeK7tfjDZkqutc+4PAEotN2v
-         s7GlrUlWfy8+xJ2pmBRxTpwR8JDtUYuzd47cbQL8pc/+33zJ6IRYXnIm/5CsjhSY6HQn
-         F/0au4BW21jw3kHihRksYnCPYw/0rff3z+YAT4juNJkTsUJAf8rLZp/RPy/fVltfOyFs
-         C0LLJvdJYnIPwGuJxVS4z0qr1Ce8p79jMu0IOjuO1gZptsD5LxffMCQzXk8MpOtyklAH
-         Vd7A==
+        bh=fmnZsBS7ICfhtPbFVJE00Af049vTUvEMSfkA9G33Z+Y=;
+        b=FS+p1cBlMgrvZr0p4b+tva3wEIao0KwdEJw4GNGD0MkRDG+Q78eE9bMbYmNKtz1DFW
+         GYcGcOEivpoUJV4yz/3AMofzVI9M8D5IHkPwmR43g0hZNzL2RqObGCtM+s3hyXdZq783
+         xLNOzqLaOM6J7c3kv6aoM5vBqMw0zgVGzD2LoWbaO7xkjPaZXtnuAlFvKDfkD8uYtTZd
+         ZRCJVXDTZy/0Ev8v0CWU9Eb7XNDiYE0PjEzKuUhKWCrILL/AKr1H5WNdMMggHtDpzHM/
+         clj7iSjtJR+pHdqJp9SNzOJ7LOOnh768E6/lULh9I5d3iDT6/zzudxsdIJHoxuM45QLq
+         OktA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=K9eoCaahKKF8GPcnHNvxh314XQP7M2mbXnjspgXSnVM=;
-        b=kNesjNbch9cDpnMKVKgBFLBCzYBUYGtoYKmnCsKXw4f4CMqWFCcF0hyHzvB3V6IxzD
-         T8Apw515L4SQtICiwDIMlOKmrtkOmzgUPwSgyPFm5PkYiXDaYSXRfPVaPiYQBeYRSQVs
-         wD9ouOvUz6FFqzx3AkQ8MrGpDvBFI4uD7DfDy0+iiHmTfHgV0mYhqF5DvBV0LMm9rWOl
-         blGDSgafOmSyDxE4c1fm7Mx1hMvzgBYPE03/RRrVISHuOFH0u5GdyWilGdEAxONVe4Gj
-         KcsSc4crXhsuIEAkmfVIR/LkgKBDcgS11IoL5k9bIBhb5S32I0FlCOOZAlIPYLxqXIsf
-         Usdw==
-X-Gm-Message-State: AJIora80YvA2cSjws/3E9AO293JxlvzzW2Fo8hqtM0QpI3SgNNvM1cXK
-        tHjTMUfSCYpkl/1YtF6jF/ArtCRvCdXaHwg=
-X-Google-Smtp-Source: AGRyM1sMZcU2iV/7Pecfr7pTe2lv/4b97s6iQX0qqt/h/ZDOAxOF/7yxG51Ro60SoZQ5zTofSHExNw==
-X-Received: by 2002:a37:9fc9:0:b0:6a6:c16b:e634 with SMTP id i192-20020a379fc9000000b006a6c16be634mr14842818qke.230.1655685771574;
-        Sun, 19 Jun 2022 17:42:51 -0700 (PDT)
+        bh=fmnZsBS7ICfhtPbFVJE00Af049vTUvEMSfkA9G33Z+Y=;
+        b=tttIGVoLdvN6moR2cU9O/Uyey8/Vx9xnmIBxY5KMiAWYszEfOq7TmUereCavKq0c5V
+         HbZMPMTRY2uZTO/BjBdz2VqjhASSIRgfqS4pzF1Acw8rLr+sC/TFRCf2LXnWKjDYLpu3
+         Fpi20Yzo1mMBHQCL2XwPj2qN7HXEPfY6SUSibUy2idxk8C+V6PRRBJSl88bmTxLoJZQr
+         DnxtPS/B3FRNO3gUp70bKPUKs1rEoJIutiNojNBsANnjlntw3TEv2I6eGnBkMa5n61jt
+         UMl8UUNjulT4vJTTLsw+/DZWOGXAwHc4/tyGuUsmAAnbwgIOg4i8Gjxq5DGOeVsNhxb+
+         oHQg==
+X-Gm-Message-State: AJIora/wMfd6uOj+IEwhJMxMnBE/rqLV+7rZoaSwk5tkhREARFaI/wYx
+        YKPAe+5ohGCu93wPdRVnjJCt9tYmMZ3Vae8=
+X-Google-Smtp-Source: AGRyM1tBmrxf1indi/uvJgmAPcm0cBP3mfXeFK9mluLQyQy1jfh9ZCHnRGgEBFB8u9JlPE8+z6ipmw==
+X-Received: by 2002:a05:620a:d94:b0:6a6:6c9c:c7ec with SMTP id q20-20020a05620a0d9400b006a66c9cc7ecmr14807435qkl.221.1655685772861;
+        Sun, 19 Jun 2022 17:42:52 -0700 (PDT)
 Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id u3-20020a05620a454300b006a69ee117b6sm11144854qkp.97.2022.06.19.17.42.50
+        by smtp.gmail.com with ESMTPSA id i21-20020a05620a405500b0069fe1dfbeffsm11316870qko.92.2022.06.19.17.42.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 17:42:50 -0700 (PDT)
+        Sun, 19 Jun 2022 17:42:52 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, rostedt@goodmis.org,
         enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
         willy@infradead.org
-Subject: [PATCH v4 08/34] lib/printbuf: Tabstops, indenting
-Date:   Sun, 19 Jun 2022 20:42:07 -0400
-Message-Id: <20220620004233.3805-9-kent.overstreet@gmail.com>
+Subject: [PATCH v4 09/34] lib/printbuf: Unit specifiers
+Date:   Sun, 19 Jun 2022 20:42:08 -0400
+Message-Id: <20220620004233.3805-10-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
 References: <20220620004233.3805-1-kent.overstreet@gmail.com>
@@ -71,238 +71,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds two new features to printbuf for structured formatting:
+This adds options to printbuf for specifying whether units should be
+printed raw (default) or with human readable units, and for controlling
+whether human-readable units should be base 2 (default), or base 10.
 
- - Indent level: the indent level, as a number of spaces, may be
-   increased with pr_indent_add() and decreased with pr_indent_sub().
+This also adds new helpers that obey these options:
 
-   Subsequent lines, when started with pr_newline() (not "\n", although
-   that may change) will then be intended according to the current
-   indent level. This helps with pretty-printers that structure a large
-   amonut of data across multiple lines and multiple functions.
+ - pr_human_readable_u64
+ - pr_human_readable_s64
+These obey printbuf->si_units
 
- - Tabstops: Tabstops may be set by assigning to the printbuf->tabstops
-   array.
-
-   Then, pr_tab() may be used to advance to the next tabstop, printing
-   as many spaces as required - leaving previous output left justified
-   to the previous tabstop. pr_tab_rjust() advances to the next tabstop
-   but inserts the spaces just after the previous tabstop - right
-   justifying the previously-outputted text to the next tabstop.
+ - pr_units_u64
+ - pr_units_s64
+These obey both printbuf-human_readable_units and printbuf->si_units
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- include/linux/printbuf.h |  30 ++++++++++
- lib/printbuf.c           | 125 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 155 insertions(+)
+ include/linux/printbuf.h | 15 +++++++++++
+ lib/printbuf.c           | 57 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
 diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
-index 382863afa7..1e43c47891 100644
+index 1e43c47891..5100287eed 100644
 --- a/include/linux/printbuf.h
 +++ b/include/linux/printbuf.h
-@@ -36,6 +36,23 @@
-  * memory allocation failure we usually don't want to bail out and unwind - we
-  * want to print what we've got, on a best-effort basis. But code that does want
-  * to return -ENOMEM may check printbuf.allocation_failure.
+@@ -53,11 +53,20 @@
+  *
+  * Make sure you use prt_newline() instead of \n in the format string for indent
+  * level and tabstops to work corretly.
 + *
-+ * Indenting, tabstops:
-+ *
-+ * To aid is writing multi-line pretty printers spread across multiple
-+ * functions, printbufs track the current indent level.
-+ *
-+ * printbuf_indent_push() and printbuf_indent_pop() increase and decrease the current indent
-+ * level, respectively.
-+ *
-+ * To use tabstops, set printbuf->tabstops[]; they are in units of spaces, from
-+ * start of line. Once set, prt_tab() will output spaces up to the next tabstop.
-+ * prt_tab_rjust() will also advance the current line of text up to the next
-+ * tabstop, but it does so by shifting text since the previous tabstop up to the
-+ * next tabstop - right justifying it.
-+ *
-+ * Make sure you use prt_newline() instead of \n in the format string for indent
-+ * level and tabstops to work corretly.
++ * Output units: printbuf->units exists to tell pretty-printers how to output
++ * numbers: a raw value (e.g. directly from a superblock field), as bytes, or as
++ * human readable bytes. prt_units() obeys it.
   */
  
  #include <linux/kernel.h>
-@@ -45,18 +62,29 @@ struct printbuf {
+ #include <linux/string.h>
+ 
++enum printbuf_si {
++	PRINTBUF_UNITS_2,	/* use binary powers of 2^10 */
++	PRINTBUF_UNITS_10,	/* use powers of 10^3 (standard SI) */
++};
++
+ struct printbuf {
  	char			*buf;
  	unsigned		size;
- 	unsigned		pos;
-+	unsigned		last_newline;
-+	unsigned		last_field;
-+	unsigned		indent;
- 	/*
- 	 * If nonzero, allocations will be done with GFP_ATOMIC:
- 	 */
+@@ -71,6 +80,8 @@ struct printbuf {
  	u8			atomic;
  	bool			allocation_failure:1;
  	bool			heap_allocated:1;
-+	u8			tabstop;
-+	u8			tabstops[4];
++	enum printbuf_si	si_units:1;
++	bool			human_readable_units:1;
+ 	u8			tabstop;
+ 	u8			tabstops[4];
  };
+@@ -84,6 +95,10 @@ void printbuf_indent_add(struct printbuf *, unsigned);
+ void printbuf_indent_sub(struct printbuf *, unsigned);
+ void prt_tab(struct printbuf *);
+ void prt_tab_rjust(struct printbuf *);
++void prt_human_readable_u64(struct printbuf *, u64);
++void prt_human_readable_s64(struct printbuf *, s64);
++void prt_units_u64(struct printbuf *, u64);
++void prt_units_s64(struct printbuf *, s64);
  
- int printbuf_make_room(struct printbuf *, unsigned);
- const char *printbuf_str(const struct printbuf *);
- void printbuf_exit(struct printbuf *);
- 
-+void prt_newline(struct printbuf *);
-+void printbuf_indent_add(struct printbuf *, unsigned);
-+void printbuf_indent_sub(struct printbuf *, unsigned);
-+void prt_tab(struct printbuf *);
-+void prt_tab_rjust(struct printbuf *);
-+
  /* Initializer for a heap allocated printbuf: */
  #define PRINTBUF ((struct printbuf) { .heap_allocated = true })
- 
-@@ -187,6 +215,8 @@ static inline void printbuf_reset(struct printbuf *buf)
- {
- 	buf->pos		= 0;
- 	buf->allocation_failure	= 0;
-+	buf->indent		= 0;
-+	buf->tabstop		= 0;
- }
- 
- /**
 diff --git a/lib/printbuf.c b/lib/printbuf.c
-index 8c70128e31..a7f80f63ca 100644
+index a7f80f63ca..553f89ebc1 100644
 --- a/lib/printbuf.c
 +++ b/lib/printbuf.c
-@@ -12,6 +12,11 @@
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/err.h>
  #include <linux/slab.h>
++#include <linux/string_helpers.h>
  #include <linux/printbuf.h>
  
-+static inline size_t printbuf_linelen(struct printbuf *buf)
-+{
-+	return buf->pos - buf->last_newline;
-+}
-+
- int printbuf_make_room(struct printbuf *out, unsigned extra)
- {
- 	unsigned new_size;
-@@ -69,3 +74,123 @@ void printbuf_exit(struct printbuf *buf)
- 	}
+ static inline size_t printbuf_linelen(struct printbuf *buf)
+@@ -194,3 +195,59 @@ void prt_tab_rjust(struct printbuf *buf)
+ 	buf->tabstop++;
  }
- EXPORT_SYMBOL(printbuf_exit);
-+
-+void prt_newline(struct printbuf *buf)
-+{
-+	unsigned i;
-+
-+	printbuf_make_room(buf, 1 + buf->indent);
-+
-+	__prt_char(buf, '\n');
-+
-+	buf->last_newline	= buf->pos;
-+
-+	for (i = 0; i < buf->indent; i++)
-+		__prt_char(buf, ' ');
-+
-+	printbuf_nul_terminate(buf);
-+
-+	buf->last_field		= buf->pos;
-+	buf->tabstop = 0;
-+}
-+EXPORT_SYMBOL(prt_newline);
+ EXPORT_SYMBOL(prt_tab_rjust);
 +
 +/**
-+ * printbuf_indent_add - add to the current indent level
++ * prt_human_readable_u64 - Print out a u64 in human readable units
 + *
-+ * @buf: printbuf to control
-+ * @spaces: number of spaces to add to the current indent level
-+ *
-+ * Subsequent lines, and the current line if the output position is at the start
-+ * of the current line, will be indented by @spaces more spaces.
++ * Units of 2^10 (default) or 10^3 are controlled via @buf->si_units
 + */
-+void printbuf_indent_add(struct printbuf *buf, unsigned spaces)
++void prt_human_readable_u64(struct printbuf *buf, u64 v)
 +{
-+	if (WARN_ON_ONCE(buf->indent + spaces < buf->indent))
-+		spaces = 0;
-+
-+	buf->indent += spaces;
-+	while (spaces--)
-+		prt_char(buf, ' ');
++	printbuf_make_room(buf, 10);
++	buf->pos += string_get_size(v, 1, !buf->si_units,
++				    buf->buf + buf->pos,
++				    printbuf_remaining_size(buf));
 +}
-+EXPORT_SYMBOL(printbuf_indent_add);
++EXPORT_SYMBOL(prt_human_readable_u64);
 +
 +/**
-+ * printbuf_indent_sub - subtract from the current indent level
++ * prt_human_readable_s64 - Print out a s64 in human readable units
 + *
-+ * @buf: printbuf to control
-+ * @spaces: number of spaces to subtract from the current indent level
-+ *
-+ * Subsequent lines, and the current line if the output position is at the start
-+ * of the current line, will be indented by @spaces less spaces.
++ * Units of 2^10 (default) or 10^3 are controlled via @buf->si_units
 + */
-+void printbuf_indent_sub(struct printbuf *buf, unsigned spaces)
++void prt_human_readable_s64(struct printbuf *buf, s64 v)
 +{
-+	if (WARN_ON_ONCE(spaces > buf->indent))
-+		spaces = buf->indent;
-+
-+	if (buf->last_newline + buf->indent == buf->pos) {
-+		buf->pos -= spaces;
-+		printbuf_nul_terminate(buf);
-+	}
-+	buf->indent -= spaces;
++	if (v < 0)
++		prt_char(buf, '-');
++	prt_human_readable_u64(buf, abs(v));
 +}
-+EXPORT_SYMBOL(printbuf_indent_sub);
++EXPORT_SYMBOL(prt_human_readable_s64);
 +
 +/**
-+ * prt_tab - Advance printbuf to the next tabstop
++ * prt_units_u64 - Print out a u64 according to printbuf unit options
 + *
-+ * @buf: printbuf to control
-+ *
-+ * Advance output to the next tabstop by printing spaces.
++ * Units are either raw (default), or human reabable units (controlled via
++ * @buf->human_readable_units)
 + */
-+void prt_tab(struct printbuf *out)
++void prt_units_u64(struct printbuf *out, u64 v)
 +{
-+	int spaces = max_t(int, 0, out->tabstops[out->tabstop] - printbuf_linelen(out));
-+
-+	BUG_ON(out->tabstop > ARRAY_SIZE(out->tabstops));
-+
-+	prt_chars(out, ' ', spaces);
-+
-+	out->last_field = out->pos;
-+	out->tabstop++;
++	if (out->human_readable_units)
++		prt_human_readable_u64(out, v);
++	else
++		prt_printf(out, "%llu", v);
 +}
-+EXPORT_SYMBOL(prt_tab);
++EXPORT_SYMBOL(prt_units_u64);
 +
 +/**
-+ * prt_tab_rjust - Advance printbuf to the next tabstop, right justifying
-+ * previous output
++ * prt_units_s64 - Print out a s64 according to printbuf unit options
 + *
-+ * @buf: printbuf to control
-+ *
-+ * Advance output to the next tabstop by inserting spaces immediately after the
-+ * previous tabstop, right justifying previously outputted text.
++ * Units are either raw (default), or human reabable units (controlled via
++ * @buf->human_readable_units)
 + */
-+void prt_tab_rjust(struct printbuf *buf)
++void prt_units_s64(struct printbuf *out, s64 v)
 +{
-+	BUG_ON(buf->tabstop > ARRAY_SIZE(buf->tabstops));
-+
-+	if (printbuf_linelen(buf) < buf->tabstops[buf->tabstop]) {
-+		unsigned move = buf->pos - buf->last_field;
-+		unsigned shift = buf->tabstops[buf->tabstop] -
-+			printbuf_linelen(buf);
-+
-+		printbuf_make_room(buf, shift);
-+
-+		if (buf->last_field + shift < buf->size)
-+			memmove(buf->buf + buf->last_field + shift,
-+				buf->buf + buf->last_field,
-+				min(move, buf->size - 1 - buf->last_field - shift));
-+
-+		if (buf->last_field < buf->size)
-+			memset(buf->buf + buf->last_field, ' ',
-+			       min(shift, buf->size - buf->last_field));
-+
-+		buf->pos += shift;
-+		printbuf_nul_terminate(buf);
-+	}
-+
-+	buf->last_field = buf->pos;
-+	buf->tabstop++;
++	if (v < 0)
++		prt_char(out, '-');
++	prt_units_u64(out, abs(v));
 +}
-+EXPORT_SYMBOL(prt_tab_rjust);
++EXPORT_SYMBOL(prt_units_s64);
 -- 
 2.36.1
 

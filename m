@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED51B553D5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80013553D52
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356050AbiFUVOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        id S1355224AbiFUVP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355931AbiFUVN0 (ORCPT
+        with ESMTP id S1356700AbiFUVOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:13:26 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4B433353
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:00:14 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 128so7185985pfv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hFqBmB+kt0rtaIPaQ9KZ5LuoFwIj2x82PzqkrWEtyKU=;
-        b=TNa3pSTndKVSyB2tGrJa9c+jY2RecssGJr47JZaCbPMcVuC5JrbHKKt4/sTBfy52GX
-         ZoLBBfUJo0HpLu6z4QDbh3mMi+ILoX65eJSlThihVfGNx2lz7CcWiy6CJwW5sKxAk5V0
-         kHbpvT1+WcXU6+Jgx5jvCPwMXIALyfuHX8Nc8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hFqBmB+kt0rtaIPaQ9KZ5LuoFwIj2x82PzqkrWEtyKU=;
-        b=akphiS87hLLFS9FAPjC6OzAAcDI51hhU6tZdymUEZDqMk96xXwqhtN4dNhEol7I8R1
-         KDM9j+07uF4eUdsScylNHoZIVAHHR/msdmUW/HCrFxJh+EP2hMQOdTBVouv3rRdh1+rc
-         AtBbdN1p03+3HqivfbyXnJBzTNSEhq8eitcKP+mUH77oxa5B18f0jI7f+7bfcOfmynn9
-         XEMpyfYNVPLZkJZzTlHMPRICPUUaZT43pVJzbyoPcJGi3upxHgzgYcE2mcSboOdD/YmQ
-         K3TMPI6IJi4ePnvpS2WhILeXodg6N9ysPoyvh9Pz+x0CCspbPrks6Qy0xl7hD+pBCc4h
-         ZN0g==
-X-Gm-Message-State: AJIora8bt1pganPeyk+yf4EtPR9iwyZM7CwFDNBaCDEW7eRWhNBd55J1
-        2HAqZmlN2KWK7faOjzFpb+j9KQ==
-X-Google-Smtp-Source: AGRyM1vS1WHRdTIT9IYRs+xx+wXkAMDh2br3ATVm9QvwiP+IUHXwkOKN9l90zBOq2MpUpC4k5ZJgrQ==
-X-Received: by 2002:a63:1e0e:0:b0:3f6:4dce:918b with SMTP id e14-20020a631e0e000000b003f64dce918bmr28558117pge.53.1655845214448;
-        Tue, 21 Jun 2022 14:00:14 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x139-20020a627c91000000b0050dc7628196sm6251408pfc.112.2022.06.21.14.00.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 14:00:14 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 14:00:13 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v2 4/9] efi: pstore: Omit efivars caching EFI varstore
- access layer
-Message-ID: <202206211357.C66CD742E5@keescook>
-References: <20220621153623.3786960-1-ardb@kernel.org>
- <20220621153623.3786960-5-ardb@kernel.org>
+        Tue, 21 Jun 2022 17:14:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FA3344D7;
+        Tue, 21 Jun 2022 14:01:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EB9660E17;
+        Tue, 21 Jun 2022 21:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80709C3411C;
+        Tue, 21 Jun 2022 21:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655845263;
+        bh=WT4SOxCLaIR0gYHkVAL25jmyZOnuo2xSnBmePJjtpcw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=l5PqjmlAOTto2xaG15RwrnEcOogpugolWBH0n4c3mOytGz46EH8i/lhp5y4BVI8IE
+         qbQnOSFqxn2oB3xSWSVE0KgOtWEoifbD4+i/GcnZkXgKn7FAHoR+AcZ+VyK8+Jy40B
+         l4g+duaq4NnY4yknd9ia9kuLwynS5qO2SstmrlYre5i9KlQa0jviCAgRIvnhZTv6jZ
+         kdWLDB+VA7kGaZVNp+xBcEl1J88HdAXIiEm5uK6qOep9DjbBW/TqzvW1z5/RRPixEl
+         6OZAc1LmnG/vd7bIFF1snYLc7xgMMMlnOvXgz4B5/aLCdqVvC116Nnofj+Q5A51Awf
+         9CNWe+Us1XcaQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 184435C0AE0; Tue, 21 Jun 2022 14:01:03 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 14:01:03 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org
+Subject: Re: [PATCH rcu 11/12] torture: Flush printk() buffers before
+ powering off
+Message-ID: <20220621210103.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620225814.GA3842995@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225817.3843106-11-paulmck@kernel.org>
+ <8735fyc42v.fsf@jogness.linutronix.de>
+ <20220620232838.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <87v8suphdy.fsf@jogness.linutronix.de>
+ <20220621181335.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <87ilotagdw.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621153623.3786960-5-ardb@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <87ilotagdw.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 05:36:18PM +0200, Ard Biesheuvel wrote:
-> Avoid the efivars layer and simply call the newly introduced EFI
-> varstore helpers instead. This simplifies the code substantially, and
-> also allows us to remove some hacks in the shared efivars layer that
-> were added for efi-pstore specifically.
+On Tue, Jun 21, 2022 at 10:58:27PM +0206, John Ogness wrote:
+> On 2022-06-21, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > The patch below will cause rcutorture to implicitly test this
+> > functionality, unless told otherwise, for example, by using the
+> > --bootargs "torture.printk_shutdown_bug_workaround" kvm.sh
+> > argument.
+> >
+> > Thoughts?
 > 
-> Since we don't store the name of the associated EFI variable into each
-> pstore record when enumerating them, we have to guess the variable name
-> it was constructed from at deletion time, since we no longer keep a
-> shadow copy of the variable store. To make this a bit more exact, store
-> the CRC-32 of the ASCII name into the pstore record's ECC region so we
-> can use it later to make an educated guess regarding the name of the EFI
-> variable.
+> I feel like this is dirtying the torture.* bootarg namespace a
+> bit. Also, I am not sure how useful it is as a dynamic option. I assume
+> that users would generally avoid using it, so its very existence might
+> just be more noise in the documentation and code. It is an unusual
+> feature:
+> 
+> "In case some bug shows up, here is a flag to avoid it."
+> 
+> I personally would just drop the patch and rely on a correctly
+> functional kernel. But I am also not an rcutorture user. If _you_ think
+> that such a flag is useful, feel free to include the patch.
 
-I wonder if pstore_record should have a "private" field for backends to
-use? That seems like it solve the need for overloading the ecc field,
-and allow for arbitrarily more information to be stored (i.e. store full
-efi var name instead of an easily-colliding crc32?)
+Fair points!
 
--- 
-Kees Cook
+The main value to me is to avoid me having to pile through code to relearn
+the incantation pr_flush(1000, true).  Which, now that you mention it,
+could be dealt with by adding a comment:
+
+	// pr_flush(1000, true); // If needed to flush printk() buffers.
+
+This definitely will not go into the upcoming merge window, so there is
+plenty of time to give it some thought.
+
+> > commit 204bf1e2a5a2fb68c15b4b64793ad0896db6f705
+> > Author: Paul E. McKenney <paulmck@kernel.org>
+> > Date:   Tue Jun 21 11:02:25 2022 -0700
+> >
+> >     torture: Optionally flush printk() buffers before powering off
+> >     
+> >     The rcutorture test suite produces quite a bit of console output at
+> >     the end of a test.  This means that the new-in-2022 printk() kthreads
+> >     are likely to be in the process of flushing output at the time of the
+> >     torture_shutdown() function's call to kernel_power_off().  Normally,
+> >     rcutorture relies on printk() to flush any pending output upon shutdown,
+> >     the better to detect bugs in this area, for example, the one introduced
+> >     by 8e274732115f ("printk: extend console_lock for per-console locking").
+> >     However, once such a bug is detected and reported, it is necessary to
+> >     test the rest of the system, without noise from the already-reported bug.
+> >     
+> >     This commit therefore adds a torture.printk_shutdown_bug_workaround
+> >     kernel parameter, which causes torture_shutdown() to invoke pr_flush(),
+> >     and print an informative message on the console, immediately before
+> >     invoking kernel_power_off().  When this kernel parameter is not specified,
+> >     it is up to printk() to flush its own buffers.
+> >     
+> >     Suggested-by: John Ogness <john.ogness@linutronix.de>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> Reviewed-by: John Ogness <john.ogness@linutronix.de>
+
+Thank you!
+
+							Thanx, Paul

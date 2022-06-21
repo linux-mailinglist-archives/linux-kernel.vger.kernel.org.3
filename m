@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5BD5530E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5635530E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348707AbiFULbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S1349377AbiFULdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiFULbh (ORCPT
+        with ESMTP id S229668AbiFULc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:31:37 -0400
+        Tue, 21 Jun 2022 07:32:58 -0400
 Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683D9B7F5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:31:31 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1655811081tarqjyg8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC1A396
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:32:54 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1655811164tal19zhj
 Received: from ubuntu.localdomain ( [106.117.99.68])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 19:31:16 +0800 (CST)
+        id ; Tue, 21 Jun 2022 19:32:37 +0800 (CST)
 X-QQ-SSF: 0100000000700040B000B00A0000000
-X-QQ-FEAT: FD+6NgJX7e4dWuNFedCyJOrBBS+15CwHkrSPEzAmeeApVBXGEbQudpw2IhfYs
-        wKMlCgsqqQaSp+gEZXUJZX5fAsZr5v7B5Vn5zSyYTJycZCiX0GX4j61rZnvtNeX4MB8XsNh
-        tFWdokoOtHZHsVP6hdi8K6TYs1NnOryavYpvQhy+dQn+4sggdoGVQpYKMK5Lbg5IHvVJH/m
-        fY7+GcgGFzn2HV8gC2/6dizizp93nmCY4oipH23WXlz8KOgtc6jHbX/iW9nibsHLoh1TnYJ
-        oMqmewSVh4NekyMmtlNXbGlCa8eYPQgTf5uyMmWZs9K7q/89t5yX+CWlqZlcOBmHHJAdyX0
-        eftQqxP34H9PnG/Vak=
+X-QQ-FEAT: ZHWZeLXy+8d2xuswuyUwRi0lS84veAPfD6Hezb0MfVUM+ugSTumRnET3T1Yk3
+        EYFF/an33BSniNIqs89pyDNLXWfNAWQ+jqYXe4IW2NpwK3FcYWvKX+hgfO8o5PXAN/l0N/j
+        vMXHKqblTjZfRCpcJwCHfoQJXxECYVT7qmrrWErWN6FXEby5stq1LXGTYZskBvlw7at8KiF
+        Lf53+44eAqHJSk74ag1cm2pZPObUfeLb1y4gVPIWomiBMqZE5Sd2iUOpO3YhuS8eO3q8khH
+        SazdqzbI/I+HO19KBZr+pAwAi+WpOr1TKfQFxR4fhaopp57+vOlHh3gLuEMlTDdYz+ffMP1
+        0aSgsfJvjphvdyw/uu4Fvf/wXejmA==
 X-QQ-GoodBg: 0
 From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     agk@redhat.com, snitzer@kernel.or, dm-devel@redhat.com
+To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com
 Cc:     linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
 Subject: [PATCH] dm raid: drop unexpected word "the" in the comments
-Date:   Tue, 21 Jun 2022 19:31:14 +0800
-Message-Id: <20220621113114.98823-1-jiangjian@cdjrlc.com>
+Date:   Tue, 21 Jun 2022 19:32:34 +0800
+Message-Id: <20220621113234.99140-1-jiangjian@cdjrlc.com>
 X-Mailer: git-send-email 2.17.1
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10

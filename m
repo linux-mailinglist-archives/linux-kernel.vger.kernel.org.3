@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E42552A71
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A65C552A79
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343981AbiFUF0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 01:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S1344660AbiFUFfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 01:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiFUFZ6 (ORCPT
+        with ESMTP id S229761AbiFUFfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 01:25:58 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DE42124D;
-        Mon, 20 Jun 2022 22:25:57 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id go6so7206511pjb.0;
-        Mon, 20 Jun 2022 22:25:57 -0700 (PDT)
+        Tue, 21 Jun 2022 01:35:20 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C4B2181B;
+        Mon, 20 Jun 2022 22:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cObR3+olODnsmHmG40dfcNk9dBbtTD141Doa/y8coxE=;
-        b=PvwRqUb/i0fSGKPftsQ1EvcaFh/v7AmSfz9FHt3LB3+HaYe1qYVdiWY7uytiwvhrTe
-         e/p0JBYfwfrESybD/kF8zC2YB6Zw/Ks1YLOYYfxOAOesk3BJ7wk804AQueWCJ/5G+HIs
-         PqVuLMupqclywDPFvkLlFTHSh9/t0N2HPdPcdjx5BMTVJtS0VWV5zcs6WOjuoUFdBk4C
-         +CAfKP5RL6GtltSasWefoTZrHOgJZEGgS2tokYZeuqUn2MhPdkY2bHmHyQi8UsXJPApX
-         QmCCQg+THKWzM4+Dk5lKdbc5ss5Zqa6F1sPGdTJUpQG490CDchrRqgsWfI+eIM8Pc7IC
-         Ehpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cObR3+olODnsmHmG40dfcNk9dBbtTD141Doa/y8coxE=;
-        b=esmXdKEm3YMfN5Ei3BSGemTGNjayVqm0pSlAbMXJx1fqE4vLiXHCLQhfB/Yder1Tmn
-         Ae3Gu926ZEkSKHZx9bhZKhyd7BUtzJLPs5jLtlDa82ZvAQbr3GCga0GZe3lboV4oRNIN
-         2qk7gU9RJEr5Hri3jmPB832kuADq+QxqC7ZMKpFllKfOaBo2YiUhW4nYIswi8qMmDzHK
-         LzXa8/rFww6+AjuHxW0BYB3Kh3eFf5UFlYmsfsjXmwz15EUOy0CUnEOd3i2mQXWo8zgl
-         9sctWTD+JRUuWufekkud1s2u2UAmeJGIdkw/u3qTcGARwzz9qYbfZlf7oRLcBm+I8Mgy
-         7HHg==
-X-Gm-Message-State: AJIora8EqU09NKxhrzdSbpEtF3L85Dn0c0Ag7brP9ZO8t0KuzE0mstTH
-        4fFV04AgAg/wiREFM/Ld79A=
-X-Google-Smtp-Source: AGRyM1ui1Et9aDTy1aPasyfHl0qi1yawDAg9J/fOvbEllSGx9hNYepdkFsTxzGb3ysKQqfPu197Y5A==
-X-Received: by 2002:a17:90b:4b10:b0:1ea:fa1a:feb5 with SMTP id lx16-20020a17090b4b1000b001eafa1afeb5mr26854018pjb.205.1655789157389;
-        Mon, 20 Jun 2022 22:25:57 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id g23-20020a17090a579700b001eaec814132sm10966488pji.3.2022.06.20.22.25.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 22:25:56 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Mark Zhang <markzhang@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Weihang Li <liweihang@huawei.com>,
-        Wenpeng Liang <liangwenpeng@huawei.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] RDMA/cm: Fix memory leak in ib_cm_insert_listen
-Date:   Tue, 21 Jun 2022 09:25:44 +0400
-Message-Id: <20220621052546.4821-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655789718; x=1687325718;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jxYs77w82kG4F9iMmzULoGawmt1nSz58YBjgnbMIT9o=;
+  b=FsiYOFEAWMw2C0jCs/IpIFR8e7BRcHC10zylajEVyiaNgGItXtRuV/cV
+   r3uT8BvbM5i6S7HhpmSirUUa/Y+Aa4PKsQXVNyDBcl6wEYgOHzZ4MJNCU
+   YLzcIRWRqtLrrlqHEQRuBu97zJJVKJPCE3JPh27ueH8zGEv2FXDXB/8ME
+   M=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jun 2022 22:35:18 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 22:30:04 -0700
+Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
+ 2022 22:30:01 -0700
+Message-ID: <87c17e9a-565a-d717-3534-83a4c506b984@quicinc.com>
+Date:   Tue, 21 Jun 2022 10:59:58 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH rcu 01/12] rcu: Decrease FQS scan wait time in case of
+ callback overloading
+Content-Language: en-US
+To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        <rostedt@goodmis.org>
+References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
+ <20220620222032.3839547-1-paulmck@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20220620222032.3839547-1-paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cm_alloc_id_priv() allocates resource for cm_id_priv.
-when cm_init_listen() fails, it doesn't free it,
-leading to memory leak. call ib_destroy_cm_id() to fix this.
 
-Fixes: 98f67156a80f ("RDMA/cm: Simplify establishing a listen cm_id")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/infiniband/core/cm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/core/cm.c b/drivers/infiniband/core/cm.c
-index 1c107d6d03b9..b985e0d9bc05 100644
---- a/drivers/infiniband/core/cm.c
-+++ b/drivers/infiniband/core/cm.c
-@@ -1252,8 +1252,10 @@ struct ib_cm_id *ib_cm_insert_listen(struct ib_device *device,
- 		return ERR_CAST(cm_id_priv);
- 
- 	err = cm_init_listen(cm_id_priv, service_id, 0);
--	if (err)
-+	if (err) {
-+		ib_destroy_cm_id(&cm_id_priv->id);
- 		return ERR_PTR(err);
-+	}
- 
- 	spin_lock_irq(&cm_id_priv->lock);
- 	listen_id_priv = cm_insert_listen(cm_id_priv, cm_handler);
--- 
-2.25.1
+On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
+> The force-quiesce-state loop function rcu_gp_fqs_loop() checks for
+> callback overloading and does an immediate initial scan for idle CPUs
+> if so.  However, subsequent rescans will be carried out at as leisurely a
+> rate as they always are, as specified by the rcutree.jiffies_till_next_fqs
+> module parameter.  It might be tempting to just continue immediately
+> rescanning, but this turns the RCU grace-period kthread into a CPU hog.
+> It might also be tempting to reduce the time between rescans to a single
+> jiffy, but this can be problematic on larger systems.
+> 
+> This commit therefore divides the normal time between rescans by three,
+> rounding up.  Thus a small system running at HZ=1000 that is suffering
+> from callback overload will wait only one jiffy instead of the normal
+> three between rescans.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>   kernel/rcu/tree.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index c25ba442044a6..c19d5926886fb 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1993,6 +1993,11 @@ static noinline_for_stack void rcu_gp_fqs_loop(void)
+>   			WRITE_ONCE(rcu_state.jiffies_kick_kthreads,
+>   				   jiffies + (j ? 3 * j : 2));
+>   		}
+> +		if (rcu_state.cbovld) {
+> +			j = (j + 2) / 3;
+> +			if (j <= 0)
+> +				j = 1;
+> +		}
 
+We update 'j' here, after setting rcu_state.jiffies_force_qs
+
+     WRITE_ONCE(rcu_state.jiffies_force_qs, jiffies + j)
+
+So, we return from swait_event_idle_timeout_exclusive after 1/3 time 
+duration.
+
+     swait_event_idle_timeout_exclusive(rcu_state.gp_wq,
+				 rcu_gp_fqs_check_wake(&gf), j);
+
+This can result in !timer_after check to return false and we will
+enter the 'else' (stray signal block) code?
+
+This might not matter for first 2 fqs loop iterations, where 
+RCU_GP_FLAG_OVLD is set in 'gf', but subsequent iterations won't benefit
+from this patch?
+
+
+if (!time_after(rcu_state.jiffies_force_qs, jiffies) ||
+	(gf & (RCU_GP_FLAG_FQS | RCU_GP_FLAG_OVLD))) {
+			...
+} else {
+	/* Deal with stray signal. */
+}
+
+
+So, do we need to move this calculation above the 'if' block which sets 
+rcu_state.jiffies_force_qs?
+		if (!ret) {
+
+			WRITE_ONCE(rcu_state.jiffies_force_qs, jiffies +
+						j);...
+		}
+
+Thanks
+Neeraj
+
+>   		trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq,
+>   				       TPS("fqswait"));
+>   		WRITE_ONCE(rcu_state.gp_state, RCU_GP_WAIT_FQS);

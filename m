@@ -2,152 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909E0552FFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B39552F7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345243AbiFUKpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
+        id S229889AbiFUKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349091AbiFUKNZ (ORCPT
+        with ESMTP id S1349264AbiFUKNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:13:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E729286D6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655806405; x=1687342405;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=mR5Un6+9WKGYeywFJRvZiZCin9Uu7YE1gj2wX8VDPHE=;
-  b=FXibfh9HV9WY5pUfCY1SBaOyWZde+hf7EsFcBR0F5dbDqvY0JdE//tti
-   cNTuOHEktTfmH5Z4KyKg/g3+bPjnrVSDz2C9ShQwhYcRfzBjDb0SW/Axi
-   8Wt1hYHJyIxBDIMFcjwpOO2BpdZhI4O10tlAt9+BA85/Z3/IL+DxR+4eZ
-   7VTuvtNOZNU7Njxa6ekvEQeQiG1utRVoggNgmJowsQGSWXhpqx+A92JgZ
-   v+K0vV4xS5gKfb/OJoA50uLLnQ8TeWyuwjIEgk+/bF4u3KaZUXzUtHPGg
-   CD4kD+VpnFVAiN3KGoZgLW1vzy85rhbGZZrkBHU9lcCQrw80d1lYeiHnA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="305525615"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="305525615"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:13:24 -0700
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="591589620"
-Received: from rgrotewx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.35.153])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:13:21 -0700
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Gow <davidgow@google.com>,
-        =?utf-8?Q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, magalilemes00@gmail.com,
-        David Airlie <airlied@linux.ie>,
-        =?utf-8?Q?Ma=C3=ADra?= Canal <maira.canal@usp.br>,
-        Daniel Latypov <dlatypov@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        tales.aparecida@gmail.com, Isabella Basso <isabbasso@riseup.net>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Subject: Re: [PATCH v4 1/3] drm/rect: Add DRM_RECT_INIT() macro
-In-Reply-To: <045f480b-9f47-6f10-9e5d-4436335b272e@suse.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220620160640.3790-1-jose.exposito89@gmail.com>
- <20220620160640.3790-2-jose.exposito89@gmail.com>
- <CABVgOSmPfxdcxuU6xtuT2sN75ivs+Atgmt=2PNcdWqnMcrnbEQ@mail.gmail.com>
- <045f480b-9f47-6f10-9e5d-4436335b272e@suse.de>
-Date:   Tue, 21 Jun 2022 13:13:18 +0300
-Message-ID: <87fsjys4sh.fsf@intel.com>
+        Tue, 21 Jun 2022 06:13:36 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CF1286D6;
+        Tue, 21 Jun 2022 03:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655806416; x=1687342416;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GuUZYGJCCDafvKSE0MKW/woRSLQp5QhRHAaV0w9BCYk=;
+  b=pOAyqK8FRo4NFzBJupF5QkMivX9vGkRVg4ymXLWsZoylc87CmogGoJ/h
+   LO/IX1GRFwnjASWKMW7XZXpcrisCgRnTTPI7BHKQJgo5STr8+7IBZpgZE
+   sW22/VxOsmIO7tqNq9qn3qb2qbuRMZKy+y1jB30dqU5ilSs38/93hlmPY
+   I=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Jun 2022 03:13:35 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:13:35 -0700
+Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 21 Jun
+ 2022 03:13:32 -0700
+Message-ID: <248317a0-2ef4-c619-15b5-84e2b62aab5e@quicinc.com>
+Date:   Tue, 21 Jun 2022 15:43:30 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH rcu 12/12] srcu: Block less aggressively for expedited
+ grace periods
+Content-Language: en-US
+To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        <rostedt@goodmis.org>, Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
+ <20220620222032.3839547-12-paulmck@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20220620222032.3839547-12-paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Hi
->
-> Am 21.06.22 um 11:38 schrieb David Gow:
->> On Tue, Jun 21, 2022 at 12:06 AM Jos=C3=A9 Exp=C3=B3sito
->> <jose.exposito89@gmail.com> wrote:
->>>
->>> Add a helper macro to initialize a rectangle from x, y, width and
->>> height information.
->>>
->>> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
->>> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
->>> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
->>> ---
->>=20
->> This looks good to me, though I have one minor concern about the macro
->> name. (But if it's okay with the DRM folks, which it seems to be, I
->> won't object.)
->>=20
->> Either way,
->> Reviewed-by: David Gow <davidgow@google.com>
->>=20
->>>   include/drm/drm_rect.h | 16 ++++++++++++++++
->>>   1 file changed, 16 insertions(+)
->>>
->>> diff --git a/include/drm/drm_rect.h b/include/drm/drm_rect.h
->>> index 6f6e19bd4dac..e8d94fca2703 100644
->>> --- a/include/drm/drm_rect.h
->>> +++ b/include/drm/drm_rect.h
->>> @@ -47,6 +47,22 @@ struct drm_rect {
->>>          int x1, y1, x2, y2;
->>>   };
->>>
->>> +/**
->>> + * DRM_RECT_INIT - initialize a rectangle from x/y/w/h
->>> + * @x: x coordinate
->>> + * @y: y coordinate
->>> + * @w: width
->>> + * @h: height
->>> + *
->>> + * RETURNS:
->>> + * A new rectangle of the specified size.
->>> + */
->>> +#define DRM_RECT_INIT(x, y, w, h) ((struct drm_rect){ \
->>> +               .x1 =3D (x), \
->>> +               .y1 =3D (y), \
->>> +               .x2 =3D (x) + (w), \
->>> +               .y2 =3D (y) + (h) })
->>> +
->>=20
->> My only slight concern here is that it might be a little bit confusing
->> that a macro called DRM_RECT_INIT() accepts x/y/w/h, whereas the
->> actual struct drm_rect is x1/y1/x2/y2. If the macro were called
->> something like DRM_RECT_INIT_FROM_XYWH() or similar.
->
-> The existing drm_rect_init() function uses xywh arguments. So the=20
-> current name is consistent with existing practice. I don't think we=20
-> refer to x2,y2 much, if ever.
 
-Agreed, and if we initialized with x1,y1,x2,y2 we wouldn't need the
-function/macro in the first place.
 
-BR,
-Jani.
+On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
+> Commit 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> from consuming CPU") fixed a problem where a long-running expedited SRCU
+> grace period could block kernel live patching.  It did so by giving up
+> on expediting once a given SRCU expedited grace period grew too old.
+> 
+> Unfortunately, this added excessive delays to boots of embedded systems
+> running on qemu that use the ARM IORT RMR feature.  This commit therefore
+> makes the transition away from expediting less aggressive, increasing
+> the per-grace-period phase number of non-sleeping polls of readers from
+> one to three and increasing the required grace-period age from one jiffy
+> (actually from zero to one jiffies) to two jiffies (actually from one
+> to two jiffies).
+> 
+> Fixes: 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers from consuming CPU")
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Reported-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+> Reported-by: chenxiang (M)" <chenxiang66@hisilicon.com>
+> Cc: Shameerali Kolothum Thodi  <shameerali.kolothum.thodi@huawei.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Link: https://lore.kernel.org/all/20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org/
+> ---
 
->
-> Best regards
-> Thomas
->
->>=20
->>=20
->>>   /**
->>>    * DRM_RECT_FMT - printf string for &struct drm_rect
->>>    */
->>> --
->>> 2.25.1
->>>
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+
+
+Thanks
+Neeraj
+
+>   kernel/rcu/srcutree.c | 20 +++++++++++++-------
+>   1 file changed, 13 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index 50ba70f019dea..0db7873f4e95b 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+>   
+>   #define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
+>   #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
+> -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase consecutive no-delay instances.
+> +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
+>   #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
+>   
+>   /*
+> @@ -522,16 +522,22 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+>    */
+>   static unsigned long srcu_get_delay(struct srcu_struct *ssp)
+>   {
+> +	unsigned long gpstart;
+> +	unsigned long j;
+>   	unsigned long jbase = SRCU_INTERVAL;
+>   
+>   	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+>   		jbase = 0;
+> -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
+> -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
+> -	if (!jbase) {
+> -		WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> -		if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
+> -			jbase = 1;
+> +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
+> +		j = jiffies - 1;
+> +		gpstart = READ_ONCE(ssp->srcu_gp_start);
+> +		if (time_after(j, gpstart))
+> +			jbase += j - gpstart;
+> +		if (!jbase) {
+> +			WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> +			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
+> +				jbase = 1;
+> +		}
+>   	}
+>   	return jbase > SRCU_MAX_INTERVAL ? SRCU_MAX_INTERVAL : jbase;
+>   }

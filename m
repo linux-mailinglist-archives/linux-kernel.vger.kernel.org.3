@@ -2,196 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6275539C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DD85539C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351403AbiFUSxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 14:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S1351718AbiFUSxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 14:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbiFUSxg (ORCPT
+        with ESMTP id S1351521AbiFUSxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 14:53:36 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404211180E;
-        Tue, 21 Jun 2022 11:53:35 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id x75so10818916qkb.12;
-        Tue, 21 Jun 2022 11:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jhBWONv0sRk0PO6NOho0MICFxLYjmPHqytEaDgbHoM0=;
-        b=d1P+wZRsxn/ODj3bCIwRGZIvpv1YLgkrDLwtKc4SdcAkb90TBay3UmcRk1vnvOmt1O
-         uQ0z3AhP5gu+zxvJneezJ/x27evsDfWwHq8TEwrGkukKhgM3Did1e4BDFAHwJOtYw1hO
-         W83VTz0RKF+ri1D955w7vGzyEiCBMcpw6n3wkj4mm8vB96vhDkUWWz9JUJKGPl7qltQw
-         bij56P0l/gzY52GEbIIZP3nasnAIoQJU1pQadU8irOxYw6x75DxsnKKryTDpUMlnL8Pn
-         GvGyHyCeX5BozYk6XFJM9bQSaqqZAdwvE/ECbCIQ5CiEUjQmsdcSuyIWoe1o+HRyUkK2
-         7R3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jhBWONv0sRk0PO6NOho0MICFxLYjmPHqytEaDgbHoM0=;
-        b=v+2Lv1RApt67hRSgcujuA/ClaCmZERioZkrVqHOMFWzHAaeyon8CDdi/PA3NHFLeCK
-         n5CtPUu98y1jkThx6kQNNrVYpPkLptiufdRSh7/v4NxNFw8HGGxEOuPwGseVS/Km4KrI
-         rvTsNrmGdVZcOFQrmXfZp5YYWRAcCO5PxZo4M7dRjBb4xxBo2y9X1SLu/V6hSuQ9VxjK
-         G31kbDzjghdmmZtx+V4qLpvac29PgzuJxaXrJhOlEHfFDcmOatCsSM/ThtvLxZvr31W1
-         2QwznYAwdmpKx/bW+IeSoH6Z2bGFVkcTvSExTVR2regB+I3GdhSdc8aO4cJhARMQsFqm
-         CtwQ==
-X-Gm-Message-State: AJIora8uRyxNPVKyWV2954AUd53Kh5S6gk0Nlzejvlc/U/1xPgJOL8S1
-        hPSE2ntX6fED0cwKLxRU2fStq84m+2SHhwb1veKAwRbRyYGbPw==
-X-Google-Smtp-Source: AGRyM1sw7lbXUZfP6EAxcQ//+3RxPj9seN6z//cr+z98y/tqVjbv/xAxi9lBZGkz3w/HuA6qN073RBay+DheVRya+gs=
-X-Received: by 2002:a05:620a:2450:b0:6a6:d264:2b88 with SMTP id
- h16-20020a05620a245000b006a6d2642b88mr20725040qkn.25.1655837614432; Tue, 21
- Jun 2022 11:53:34 -0700 (PDT)
+        Tue, 21 Jun 2022 14:53:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916A412ACD;
+        Tue, 21 Jun 2022 11:53:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 375D86170D;
+        Tue, 21 Jun 2022 18:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF49C3411C;
+        Tue, 21 Jun 2022 18:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655837620;
+        bh=+khD1q8RhpxPqrvYCBaL5xyl6Uw1nYGFYmqhJyFMJ+k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OypHFChoCPYE3niL5+cCNkjXQBktRM8PcAF9WPGY1TBZGHj/zHW5srbRdaWcBojKQ
+         Xqp2T9EVzX89bujTo1tZWbGddZyF3aAPrMqXDqYU/g+ONjEb3b+AVyVbLkW1ltyQS7
+         HZwQaCA8NLhe6F8GpHdX0sAv0gtt9QT+OO20/oJYqJvAA/PdLef/Nn73lGU9+4Mt5L
+         xuRU1CHD7vjxFKl0Zp3WF1fm251p8BGrVEICb8/oeujViCeSLF+ydG/N0AA/z9BSJ6
+         /rG4Ve8or+iK4kzZ5LY2pLPv/nA//c3eTrg5RSZgpr4H5UZ+K98HqLZVpq8Zal1cNE
+         EhkqpdvllX9jQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2D93D5C09AF; Tue, 21 Jun 2022 11:53:40 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 11:53:40 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Will Deacon <will@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH RESEND v1 0/2] docs/memory-barriers.txt: Fix confusing
+ name of 'data dependency barrier'
+Message-ID: <20220621185340.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <a84435e4-5342-f886-4388-e4c5909298a7@gmail.com>
 MIME-Version: 1.0
-References: <20220621112330.448754-1-robimarko@gmail.com> <CAA8EJpoPJKVteUdsxOVH5THH_vqwBrdSn=hkbW4oWmpw+Mjdmg@mail.gmail.com>
-In-Reply-To: <CAA8EJpoPJKVteUdsxOVH5THH_vqwBrdSn=hkbW4oWmpw+Mjdmg@mail.gmail.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 21 Jun 2022 20:53:23 +0200
-Message-ID: <CAOX2RU4N26weZU4bBTsJ+zuDZnNoW6_UxNKwfSii0LDed9p1_A@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     svarbanov@mm-sol.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
-        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        johan+linaro@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a84435e4-5342-f886-4388-e4c5909298a7@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 19:29, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Tue, 21 Jun 2022 at 14:23, Robert Marko <robimarko@gmail.com> wrote:
-> >
-> > IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
-> > cause the system to hang as its using DBI registers in the .init
-> > and those are only accesible after phy_power_on().
-> >
-> > So solve this by splitting the DBI read/writes to .post_init.
-> >
-> > Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
->
-> Any elaboration for the Fixes tag? I think the follow one is more
-> logical, isn't it?
->
-> Fixes: 5d76117f070d ("PCI: qcom: Add support for IPQ8074 PCIe controller")
+On Mon, Jun 20, 2022 at 05:16:04PM +0900, Akira Yokosawa wrote:
+> I used Paul's old email address in RFC and v1.  My bad.
+> Sorry for making noise to other recipients.
+> 
+> Paul, please see RFC [1] for the discussion so far.
+> There was no response to v1.
 
-Hi,
-My logic was that it was working before the commit a0fd361db8e5 as it
-moved PHY init
-later and indirectly broke IPQ8074 gen2.
+Thank you for resending, Akira!  I have queued it, and also support
+the general consensus for creating a "historical" section.
 
-Regards,
-Robert
->
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> > Changes in v2:
-> > * Rebase onto next-20220621
-> > ---
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
-> >  1 file changed, 28 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 51fed83484af..da6d79d61397 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
-> >         struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
-> >         struct dw_pcie *pci = pcie->pci;
-> >         struct device *dev = pci->dev;
-> > -       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> >         int i, ret;
-> > -       u32 val;
-> >
-> >         for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
-> >                 ret = reset_control_assert(res->rst[i]);
-> > @@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
-> >                 goto err_clk_aux;
-> >         }
-> >
-> > +       return 0;
-> > +
-> > +err_clk_aux:
-> > +       clk_disable_unprepare(res->ahb_clk);
-> > +err_clk_ahb:
-> > +       clk_disable_unprepare(res->axi_s_clk);
-> > +err_clk_axi_s:
-> > +       clk_disable_unprepare(res->axi_m_clk);
-> > +err_clk_axi_m:
-> > +       clk_disable_unprepare(res->iface);
-> > +err_clk_iface:
-> > +       /*
-> > +        * Not checking for failure, will anyway return
-> > +        * the original failure in 'ret'.
-> > +        */
-> > +       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
-> > +               reset_control_assert(res->rst[i]);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
-> > +{
-> > +       struct dw_pcie *pci = pcie->pci;
-> > +       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> > +       u32 val;
-> > +
-> >         writel(SLV_ADDR_SPACE_SZ,
-> >                 pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
-> >
-> > @@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
-> >                 PCI_EXP_DEVCTL2);
-> >
-> >         return 0;
-> > -
-> > -err_clk_aux:
-> > -       clk_disable_unprepare(res->ahb_clk);
-> > -err_clk_ahb:
-> > -       clk_disable_unprepare(res->axi_s_clk);
-> > -err_clk_axi_s:
-> > -       clk_disable_unprepare(res->axi_m_clk);
-> > -err_clk_axi_m:
-> > -       clk_disable_unprepare(res->iface);
-> > -err_clk_iface:
-> > -       /*
-> > -        * Not checking for failure, will anyway return
-> > -        * the original failure in 'ret'.
-> > -        */
-> > -       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
-> > -               reset_control_assert(res->rst[i]);
-> > -
-> > -       return ret;
-> >  }
-> >
-> >  static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
-> > @@ -1598,6 +1605,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
-> >  static const struct qcom_pcie_ops ops_2_3_3 = {
-> >         .get_resources = qcom_pcie_get_resources_2_3_3,
-> >         .init = qcom_pcie_init_2_3_3,
-> > +       .post_init = qcom_pcie_post_init_2_3_3,
-> >         .deinit = qcom_pcie_deinit_2_3_3,
-> >         .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> >  };
-> > --
-> > 2.36.1
-> >
->
->
+							Thanx, Paul
+
+> -----
+> 
+> Hi all,
+> 
+> This is a revised patch set of RFC [1].
+> 
+> Discussion so far is about possible follow-up improvements,
+> so I hereby submit this set as a "v1".
+> 
+> Changes since RFC [1]:
+> 
+>   - Rename title of Patch 1/2.
+>   - Remove note on the rename of section "DATA DEPENDENCY BARRIER".
+>     Rational in the changelog should suffice.
+>   - Wordsmith by self review.
+>   - Add Patch 2/2 (fixup of long lines).
+> 
+> [1]: https://lore.kernel.org/linux-doc/cc2c7885-ac75-24f3-e18a-e77f97c91b4c@gmail.com/ # RFC
+> 
+> For your convenience, diff of "v1 1/2" vs RFC is appended below.
+> 
+> Following is the explanation of background in RFC (with typo fixes):
+> -------------------------------------------------------------------
+> This is a response to Michael's report back in last November [2].
+> 
+> [2]: "data dependency naming inconsistency":
+>      https://lore.kernel.org/r/20211011064233-mutt-send-email-mst@kernel.org/
+> 
+> In the thread, I suggested removing all the explanations of "data dependency
+> barriers", which Paul thought was reasonable.
+> 
+> However, such removal would require involved rewrites in the infamously
+> hard-to-grasp document, which is beyond my capability.
+> I have become more inclined to just substitute "data dependency barrier"
+> with "address-dependency barrier" considering that READ_ONCE() still has
+> an implicit address-dependency barrier.
+> 
+> This patch set is the result of such an attempt.
+> 
+> Note: I made a mistake in the thread above. Kernel APIs for explicit data
+> dependency barriers were removed in v5.9.
+> I was confused the removal with the addition of the barrier to Alpha's
+> READ_ONCE() in v4.15.
+> 
+> diff of "v1 1/2" vs RFC
+> ------------------------------------------------------------------
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index 306afa1f9347..bdbea3cc66a3 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -391,8 +391,8 @@ Memory barriers come in four basic varieties:
+>       memory system as time progresses.  All stores _before_ a write barrier
+>       will occur _before_ all the stores after the write barrier.
+>  
+> -     [!] Note that write barriers should normally be paired with read- or address-
+> -     dependency barriers; see the "SMP barrier pairing" subsection.
+> +     [!] Note that write barriers should normally be paired with read or
+> +     address-dependency barriers; see the "SMP barrier pairing" subsection.
+>  
+>  
+>   (2) Address-dependency barriers (historical).
+> @@ -561,17 +561,14 @@ As of v4.15 of the Linux kernel, an smp_mb() was added to READ_ONCE() for
+>  DEC Alpha, which means that about the only people who need to pay attention
+>  to this section are those working on DEC Alpha architecture-specific code
+>  and those working on READ_ONCE() itself.  For those who need it, and for
+> -those who are interested in the history, here is the story of address-
+> -dependency barriers.
+> +those who are interested in the history, here is the story of
+> +address-dependency barriers.
+>  
+> -[!] The title of this section was renamed from "DATA DEPENDENCY BARRIERS"
+> -to prevent developer confusion as "data dependencies" usually refers to
+> -load-to-store data dependencies.
+> -While address dependencies are observed in both load-to-load and load-to-
+> -store relations, address-dependency barriers concern only load-to-load
+> -situations.
+> +[!] While address dependencies are observed in both load-to-load and
+> +load-to-store relations, address-dependency barriers are not necessary
+> +for load-to-store situations.
+>  
+> -The usage requirements of address-dependency barriers are a little subtle, and
+> +The requirement of address-dependency barriers is a little subtle, and
+>  it's not always obvious that they're needed.  To illustrate, consider the
+>  following sequence of events:
+>  
+> @@ -602,8 +599,8 @@ While this may seem like a failure of coherency or causality maintenance, it
+>  isn't, and this behaviour can be observed on certain real CPUs (such as the DEC
+>  Alpha).
+>  
+> -To deal with this, an implicit address-dependency barrier of READ_ONCE()
+> -or better must be inserted between the address load and the data load:
+> +To deal with this, READ_ONCE() provides an implicit address-dependency
+> +barrier since kernel release v4.15:
+>  
+>  	CPU 1		      CPU 2
+>  	===============	      ===============
+> @@ -659,11 +656,9 @@ can be used to record rare error conditions and the like, and the CPUs'
+>  naturally occurring ordering prevents such records from being lost.
+>  
+>  
+> -Note well that the ordering provided by an address or a data dependency is local to
+> +Note well that the ordering provided by an address dependency is local to
+>  the CPU containing it.  See the section on "Multicopy atomicity" for
+>  more information.
+>  
+> ---------------------------------------------------------------------
+> 
+>         Thanks, Akira
 > --
-> With best wishes
-> Dmitry
+> Akira Yokosawa (2):
+>   docs/memory-barriers.txt: Fix confusing name of 'data dependency
+>     barrier'
+>   docs/memory-barriers.txt: Fixup long lines
+> 
+>  Documentation/memory-barriers.txt | 177 ++++++++++++++++--------------
+>  1 file changed, 95 insertions(+), 82 deletions(-)
+> 
+> 
+> base-commit: c09ca10d879bae4a8df842dbe8d6bd8b87830633
+> -- 
+> 2.25.1
+> 

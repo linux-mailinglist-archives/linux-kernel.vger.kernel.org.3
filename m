@@ -2,53 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81DD552895
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 02:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334FF552897
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 02:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242593AbiFUAUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 20:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S244872AbiFUAUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 20:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiFUAUL (ORCPT
+        with ESMTP id S236389AbiFUAUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 20:20:11 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A001B7A2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 17:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=+YmNWCks1/dJwdziGRo9iF81qlkyopZV7A3y12cRD8Q=; b=jmkMy0ad2ZGddc0G6w2baHEa2t
-        Nq8Lj3XdxuW/EOYuKhhfkWYOgVLAo+YSJVC2RQr7CRtMsp+J1ZZnlbgEXcE1ukfIit1L1QzkPvjbg
-        jnc2jmGG9O7Pri8bwjX44ZNU0sJ5zzMCjCNkQm4tptRwlc+HuYko7EYUpU7UbudzT0hTMC7YCD0AP
-        +x/RSXsYIwJWPmE0l+4mxwo5KeXGrbDKLWTl8LQUTZ2CW4GjP38xMtqB52QfRMOTQOVGehVrd18CX
-        taoBu/yjO7E6uVhqee4tUsxZkfPa1kMxr0X1hmEbpLFPqCXM3ME3KlsmU7jUk1Qq4g+5rkj0Qg6mM
-        PcbPuqCA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o3RbE-00A1Mv-VO; Tue, 21 Jun 2022 00:19:08 +0000
-Message-ID: <0225146b-9331-8ed2-3e14-24441f4eb298@infradead.org>
-Date:   Mon, 20 Jun 2022 17:18:28 -0700
+        Mon, 20 Jun 2022 20:20:19 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282DB1BE9B;
+        Mon, 20 Jun 2022 17:20:18 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 5CAA33200993;
+        Mon, 20 Jun 2022 20:20:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 20 Jun 2022 20:20:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1655770813; x=
+        1655857213; bh=vW0Q8UBusbFNOQTYDIkgMBtPXU57mzxz1Jy7DV8VqXM=; b=g
+        Z2v+FeIl/R179S49hPK7ezv0qkGxo3x3g384vICa8jdyY9vOI80guXH3QQp8LCDz
+        BuSo/Ysh6LmttnTMgJx9zHC0Gz54BK8Arnw0fzsSr1dSZSp2VjAJyp9xgOivqVHB
+        ygbqtTyMtCtMReVxfwhHCWaSIZHhQX1uu2P3caDPd2CTamt2ZgYqBhC2Wlk3oYzZ
+        UrbpBEeHWS1Slt2I8d+1pvUQ2iHrzpRQ2xHkPSk6AtKB1IOFBBeDGp/v+VkK/3KW
+        UlELy2kMfpyNoTmnpTn8vjOn/1m+nReKunJLyLzVOGNYmWimViLYI8AsWzD6BckZ
+        eOa6jLyaqC3c6ZMT8vkPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655770813; x=
+        1655857213; bh=vW0Q8UBusbFNOQTYDIkgMBtPXU57mzxz1Jy7DV8VqXM=; b=Y
+        d5bj5fN3EcyKCmlXVADWmtgdl3X9bx4bkapdJXL6bNBmoKT8D7NEQM2bnZOMbQeP
+        gsqic+8V7GKvrWzU/Zn3yrWTU5WmdYkmCa/a7mBNlQxvbzsXwg7M89Hd+36ZHAZE
+        Vm0nGl66m/r0C+3+OjCFNrpPOweCvzEhJ1+8FFAUln/a3gH+0qUCvQh9F/GqHxas
+        zh3UD3K2263CgBRL/mhadQcUwgDm69kMYVLNWVQjpbU0QeCNQ9owwGmKFn/ZEnD1
+        03/9P7ADqCTab0IldtFdUXZlH3a91h7p9xSxhJOxNXgL4mXSu4C7NrCHUCv12jGl
+        l9oIEyGlmhHGP8Y7WF9sQ==
+X-ME-Sender: <xms:vA6xYk0lZZmfDyoDRcHlLobupJgD2IChFPbtqoeWN0Z-_bMQ5-UCLQ>
+    <xme:vA6xYvErhqCs88Q-1Cz3v9amsjPo1fZs9XxYv6BhrcwxItPJNbODoMmMaq0BmOVLI
+    MD0GWWLsAonTF1StA>
+X-ME-Received: <xmr:vA6xYs6TJ1wruMeVPxSs3YLzc4AGbHtHrYGm2PQ59Yf8b5Ht5e8q5LhHS_o4sSfmQYVc6UXwBypRok50cY8jT1uEe4t03sv1j2KkO503BzfmRAHDFfd-w3QBSw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedtvefhheehgfdvkeetffeludeuudehudeuvddtveelleekvedv
+    uedviefhkeeuheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:vQ6xYt1ucPZEn-qArIj4S5h5zMu_p2I5OKEaRrOR5zYWOOfPhugSow>
+    <xmx:vQ6xYnGGeQdxmqeSCZWt_hKhFiPJ7RZMSgcPZx8Zhg3LBsZ7bVvgTQ>
+    <xmx:vQ6xYm9gmszPTGtrWP2TbWT8N5hQKjPUNw3NJOvuBkb_CYneWiSpIQ>
+    <xmx:vQ6xYoM5iBdf-o23s6zlNO1FWPDNuf5SpLKpfBH9zp-zKTBQVes2UQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Jun 2022 20:20:12 -0400 (EDT)
+Subject: Re: [PATCH] dmaengine: sun6i: Set the maximum segment size
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20220617034209.57337-1-samuel@sholland.org>
+ <3494277.R56niFO833@kista>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <c0c27494-99ea-969d-ff6c-a21f110ed3e8@sholland.org>
+Date:   Mon, 20 Jun 2022 19:20:11 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 4/6] rslib: Fix kernel-doc style for rs_modnn()
+In-Reply-To: <3494277.R56niFO833@kista>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Zhang Boyang <zhangboyang.id@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>
-References: <20220620062015.15612-1-zhangboyang.id@gmail.com>
- <20220620062015.15612-5-zhangboyang.id@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220620062015.15612-5-zhangboyang.id@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,35 +90,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jernej,
 
-
-On 6/19/22 23:20, Zhang Boyang wrote:
-> This patch fixes the style of kernel-doc of rs_modnn().
+On 6/20/22 1:28 PM, Jernej Škrabec wrote:
+> Dne petek, 17. junij 2022 ob 05:42:09 CEST je Samuel Holland napisal(a):
+>> The sun6i DMA engine supports segment sizes up to 2^25-1 bytes. This is
+>> explicitly stated in newer SoC documentation (H6, D1), and it is implied
+>> in older documentation by the 25-bit width of the "bytes left in the
+>> current segment" register field.
 > 
-> Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
+> At least A10 user manual says 128k max in description for Byte Counter 
+> register (0x100+N*0x20+0xC), although field size is defined as 23:0, but that's 
+> still less than 2^25-1. A20 supports only 128k too according to manual. New 
+> quirk should be introduced for this.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks for checking this. A10 and A20 use a separate driver (sun4i-dma). That
+driver will also benefit from setting the max segment size, so I will send a
+patch for it.
 
-Thanks.
+I think all of the variants supported by sun6i-dma have the same segment size
+capability, so no quirk is needed here.
 
-> ---
->  include/linux/rslib.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Regards,
+Samuel
+
+>>
+>> Exposing the real segment size limit (instead of the 64k default)
+>> reduces the number of SG list segments needed for a transaction.
+>>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>> Tested on A64, verified that the maximum ALSA PCM period increased, and
+>> that audio playback still worked.
+>>
+>>  drivers/dma/sun6i-dma.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/dma/sun6i-dma.c b/drivers/dma/sun6i-dma.c
+>> index b7557f437936..1425f87d97b7 100644
+>> --- a/drivers/dma/sun6i-dma.c
+>> +++ b/drivers/dma/sun6i-dma.c
+>> @@ -9,6 +9,7 @@
+>>  
+>>  #include <linux/clk.h>
+>>  #include <linux/delay.h>
+>> +#include <linux/dma-mapping.h>
+>>  #include <linux/dmaengine.h>
+>>  #include <linux/dmapool.h>
+>>  #include <linux/interrupt.h>
+>> @@ -1334,6 +1335,8 @@ static int sun6i_dma_probe(struct platform_device 
+> *pdev)
+>>  	INIT_LIST_HEAD(&sdc->pending);
+>>  	spin_lock_init(&sdc->lock);
+>>  
+>> +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(25));
+>> +
+>>  	dma_cap_set(DMA_PRIVATE, sdc->slave.cap_mask);
+>>  	dma_cap_set(DMA_MEMCPY, sdc->slave.cap_mask);
+>>  	dma_cap_set(DMA_SLAVE, sdc->slave.cap_mask);
+>> -- 
+>> 2.35.1
+>>
+>>
 > 
-> diff --git a/include/linux/rslib.h b/include/linux/rslib.h
-> index cd0b5a7a5698..e92923fff3bc 100644
-> --- a/include/linux/rslib.h
-> +++ b/include/linux/rslib.h
-> @@ -107,7 +107,8 @@ struct rs_control *init_rs_non_canonical(int symsize, int (*func)(int),
->  /* Release a rs control structure */
->  void free_rs(struct rs_control *rs);
->  
-> -/** modulo replacement for galois field arithmetics
-> +/**
-> + * rs_modnn() - Modulo replacement for galois field arithmetics
->   *
->   *  @rs:	Pointer to the RS codec
->   *  @x:		the value to reduce
+> 
 
--- 
-~Randy

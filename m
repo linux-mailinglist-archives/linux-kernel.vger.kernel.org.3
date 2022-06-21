@@ -2,191 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17851552A15
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99667552A17
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235991AbiFUEMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 00:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
+        id S239210AbiFUENN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 00:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbiFUEMw (ORCPT
+        with ESMTP id S243817AbiFUENG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 00:12:52 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C35D19019;
-        Mon, 20 Jun 2022 21:12:50 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id CB03632004F8;
-        Tue, 21 Jun 2022 00:12:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 21 Jun 2022 00:12:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1655784768; x=
-        1655871168; bh=YFC9enACBq9N/iDDvL+ELyNOFTG6bJu/nZay/ScaEg4=; b=C
-        1M85zd3eSzPbPbrqJLqJf9XGPjCp5qspTW0Pb2G5upYU2zzPTmqd1H/GkSDF4R2h
-        jTVkPgJvlPCbUT6D66cr5MOagfZp8/qJ7gT7m6CH/IPz1QgwP5kmuhn2pcMJ+Bjq
-        wF3m6DwBEx8ZkjB9ljR1S07Y371FLj2Rk4NejXkBpjEyR1qdIpmSmNNV/St6FPaX
-        Axq3ihYYd9b+xHhWwlk4BM9Ze4n+fNrYaOeJYCXxsgDruW8N2Niew1cwoZ7I6oOe
-        ZmRbDc5CSGn+GXqrjbz/U4POJ0yx9yl+FXAEafjH5TgkODpPrvBLIzxVO3B5T9mK
-        mnzQnlTfPmlOth79Drw5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655784768; x=
-        1655871168; bh=YFC9enACBq9N/iDDvL+ELyNOFTG6bJu/nZay/ScaEg4=; b=O
-        eb/c7KAsWiuQnepLqcYmFDJjhF1toXYwtArej8zdAYFOE4m6yXPYTKUgH8DFUAXT
-        CBCYQPUEnqhlY9h1iOeG4lFU8VqoZAYJxlU7Jwkwkangi5r3GhyuXcvc3bhvgydU
-        mEodnq47L0sIIQoNhDYj9+sLqkfddMBdepKvDioqFEr/DwquVHV9bQr55sUgy3YQ
-        d7U/L0jmpEC4IUz0LR/iiWEp+ZahM5L7hGyFEk1uB6mC4kkJPZ0fC4MUanPnu48s
-        TROyoixs26PBdxrFpylGlkzEiwvXMr0HmCLvWfVor5suPMHuhfpg/NFBxmvb0SUu
-        hnuE4vdC8TYCbD8YSqzXA==
-X-ME-Sender: <xms:P0WxYjYjZ3ggPBjDznWxsI_xY88tokEBwsrabMSJZbYDlkUfkHjB_A>
-    <xme:P0WxYiaeSn9xZHM91Omj9O1gEj1CeUlw5Cuo0NzXTt25cdmRtiwHvXnk406dSw7cn
-    QmbkPp8P_YOomyrMw>
-X-ME-Received: <xmr:P0WxYl_SQ_N1Ya67JdJFmg_rf_xGTABdGNn7CMC8qhixECYKAfFfJkvMhccd-js5zOaVINHxk5Hz_cVuzOKI1qZUC1w3ocUErsyvNebn47IxdQZUMxleYYhEmg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:P0WxYppYWRlEAXkE22DXCaxNCPu73OOgNvnNwi2VBHxTiY3YPJpGlQ>
-    <xmx:P0WxYurZ4IZK3fxEpNCPDQwbYfqJ8qv1cVEohuIkX23OpSkliM2ADA>
-    <xmx:P0WxYvSgI8J-br5kRUO6Z23iXeq7YmrJ52h-uo2E3zH7WsIDnIGfyg>
-    <xmx:QEWxYqcQmHZbcl19fcgCPek4ZOHVkFaKzIR8XNo3U8HDxpcmdvJ9AQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Jun 2022 00:12:47 -0400 (EDT)
-Subject: Re: [PATCH v4 2/4] Input: pinephone-keyboard - Add PinePhone keyboard
- driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input <linux-input@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ondrej Jirman <x@xff.cz>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev
-References: <20220618165747.55709-1-samuel@sholland.org>
- <20220618165747.55709-3-samuel@sholland.org>
- <CAHp75VcXNTxusT5N_8JvYWMhUyY_sAUzTcT3h0hz2bAawv6ThQ@mail.gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <2e6499b8-d8f4-b63a-689b-1e93aca7c210@sholland.org>
-Date:   Mon, 20 Jun 2022 23:12:46 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 21 Jun 2022 00:13:06 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8525FF1;
+        Mon, 20 Jun 2022 21:13:01 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so6577260wml.2;
+        Mon, 20 Jun 2022 21:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gWNf4zISviT0O075eMDft6o66p0iSBmP3yoC2k9L30s=;
+        b=f3qrhg5kivwoN62pkQbcd4DuX9n8K9cZ9BP+ptY1tWJ7tZgQg2er1cSs3AjXP+UnYt
+         6cRh3QvedL01Pw75eXfsUtFhueMSqxX6taL4E1ArDFBhODwSRhIgog7UVQhkPn3J8AQp
+         zNN0wastumrL5Gq5bfrcqREF5fOFhezoDvKrdUlYlGK5bX42VKGqBdTBaP9jztvuKQfG
+         a4AtS9szMHVcLXh7b+ClVSoLfANQKtf6voqXV4k1sQcynXBCA8WwIkaoaNWpZ7u6INe6
+         jyuTWFAxheiqlEEnosdoDxMd7fCNGPTpg3qSeX9eLpy2xH9Zi4GsIPX1mqQ4MgHlIGLP
+         pxrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gWNf4zISviT0O075eMDft6o66p0iSBmP3yoC2k9L30s=;
+        b=76gYYefFPp1liKfPXZtUCcsmNU1XrZpBAKXG5Oo29zu/gjfmn97mjL7na5hpVmixSA
+         WdybxzKpO6FC/8FJijeMVuCTZUj/cJHLW0zrOB5rU2Fmwnk4lhoD/wgSGyoz7ZVQhd5Y
+         sCs3x/tZ91eCNAngocMZTkT0aOm8BrlKalQ7BRRFuPM9CkREzJ4UljM1r4xd0896gVAs
+         zFmWFdMpbcPxAdZnZ03N8eJkUN8ymV4+EZhfrW7/0L8i7ECi1JwWasUcyzrE5J3BzvPF
+         Ec34NFVp+FuebY+x5aqwm3ifiNC/flqILeeTZAtQ0Rj1Qy4zmWogCZgnQyxSwNlthbK7
+         fCvA==
+X-Gm-Message-State: AOAM531cVaKHyFY2thC1SuYpy+cfJstbItKsLaxdbjvHzSLTxcqc+S+4
+        r72NkX0FkOrgdT8L07qKUpM=
+X-Google-Smtp-Source: ABdhPJy1EcK1Ls78Ofn6WTxbw21kuLZhIFxSHu84kK9NBQ1319q3BRU7LTTnK4saL8kgvjS2sRwCpA==
+X-Received: by 2002:a7b:cc94:0:b0:39c:4507:e806 with SMTP id p20-20020a7bcc94000000b0039c4507e806mr38807711wma.91.1655784780332;
+        Mon, 20 Jun 2022 21:13:00 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id bt28-20020a056000081c00b0020fcc655e4asm14349200wrb.5.2022.06.20.21.12.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 21:12:59 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Vinod Koul <vkoul@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: Re: [PATCH] dmaengine: sun6i: Set the maximum segment size
+Date:   Tue, 21 Jun 2022 06:12:53 +0200
+Message-ID: <1793109.atdPhlSkOF@kista>
+In-Reply-To: <c0c27494-99ea-969d-ff6c-a21f110ed3e8@sholland.org>
+References: <20220617034209.57337-1-samuel@sholland.org> <3494277.R56niFO833@kista> <c0c27494-99ea-969d-ff6c-a21f110ed3e8@sholland.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VcXNTxusT5N_8JvYWMhUyY_sAUzTcT3h0hz2bAawv6ThQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/22 6:43 AM, Andy Shevchenko wrote:
-> On Sat, Jun 18, 2022 at 7:10 PM Samuel Holland <samuel@sholland.org> wrote:
->>
->> The official Pine64 PinePhone keyboard case contains a matrix keypad and
->> a MCU which runs a libre firmware. Add support for its I2C interface.
-> 
-> ...
-> 
->> +#include <linux/crc8.h>
->> +#include <linux/i2c.h>
->> +#include <linux/input/matrix_keypad.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/module.h>
->> +#include <linux/regulator/consumer.h>
-> 
-> Missed
-> types.h
-> 
-> ...
-> 
->> +#define PPKB_ROWS                      6
->> +#define PPKB_COLS                      12
-> 
-> ...
-> 
->> +       for (col = 0; col < PPKB_COLS; ++col) {
->> +               u8 old = old_buf[1 + col];
->> +               u8 new = new_buf[1 + col];
->> +               u8 changed = old ^ new;
->> +
->> +               if (!changed)
->> +                       continue;
->> +
->> +               for (row = 0; row < PPKB_ROWS; ++row) {
->> +                       u8 mask = BIT(row);
->> +                       u8 value = new & mask;
->> +                       unsigned short code;
->> +                       bool fn_state;
->> +
->> +                       if (!(changed & mask))
->> +                               continue;
->> +
->> +                       /*
->> +                        * Save off the FN key state when the key was pressed,
->> +                        * and use that to determine the code during a release.
->> +                        */
->> +                       fn_state = value ? ppkb->fn_pressed : ppkb->fn_state[col] & mask;
->> +                       if (fn_state)
->> +                               ppkb->fn_state[col] ^= mask;
-> 
-> Can't it be converted to use bitmap APIs?
+Dne torek, 21. junij 2022 ob 02:20:11 CEST je Samuel Holland napisal(a):
+> Hi Jernej,
+>=20
+> On 6/20/22 1:28 PM, Jernej =C5=A0krabec wrote:
+> > Dne petek, 17. junij 2022 ob 05:42:09 CEST je Samuel Holland napisal(a):
+> >> The sun6i DMA engine supports segment sizes up to 2^25-1 bytes. This is
+> >> explicitly stated in newer SoC documentation (H6, D1), and it is impli=
+ed
+> >> in older documentation by the 25-bit width of the "bytes left in the
+> >> current segment" register field.
+> >=20
+> > At least A10 user manual says 128k max in description for Byte Counter=
+=20
+> > register (0x100+N*0x20+0xC), although field size is defined as 23:0, bu=
+t=20
+that's=20
+> > still less than 2^25-1. A20 supports only 128k too according to manual.=
+=20
+New=20
+> > quirk should be introduced for this.
+>=20
+> Thanks for checking this. A10 and A20 use a separate driver (sun4i-dma).=
+=20
+That
+> driver will also benefit from setting the max segment size, so I will sen=
+d a
+> patch for it.
+>=20
+> I think all of the variants supported by sun6i-dma have the same segment=
+=20
+size
+> capability, so no quirk is needed here.
 
-This is a 2D matrix, with one byte per column, and one bit per row. There are
-only 6 rows, so two bits per byte are unused. Converting this to the bitmap API
-would unnecessarily complicate things.
+Ah, yes. Then this patch is:
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
->> +               }
->> +       }
-> 
-> ...
-> 
->> +static int ppkb_set_scan(struct i2c_client *client, bool enable)
->> +{
->> +       struct device *dev = &client->dev;
->> +       int ret, val;
->> +
->> +       ret = i2c_smbus_read_byte_data(client, PPKB_SYS_CONFIG);
->> +       if (ret < 0) {
->> +               dev_err(dev, "Failed to read config: %d\n", ret);
->> +               return ret;
->> +       }
->> +
->> +       if (enable)
->> +               val = ret & ~PPKB_SYS_CONFIG_DISABLE_SCAN;
->> +       else
->> +               val = ret | PPKB_SYS_CONFIG_DISABLE_SCAN;
->> +       ret = i2c_smbus_write_byte_data(client, PPKB_SYS_CONFIG, val);
->> +       if (ret) {
->> +               dev_err(dev, "Failed to write config: %d\n", ret);
-> 
->> +               return ret;
->> +       }
->> +
->> +       return 0;
-> 
-> return ret;
+Best regards,
+Jernej
 
-The "return 0" pattern is idiomatic, and more diff-friendly when adding error
-handling or more operations. But I don't have that strong of an opinion on it.
+>=20
+> Regards,
+> Samuel
+>=20
+> >>
+> >> Exposing the real segment size limit (instead of the 64k default)
+> >> reduces the number of SG list segments needed for a transaction.
+> >>
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> >> ---
+> >> Tested on A64, verified that the maximum ALSA PCM period increased, and
+> >> that audio playback still worked.
+> >>
+> >>  drivers/dma/sun6i-dma.c | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/drivers/dma/sun6i-dma.c b/drivers/dma/sun6i-dma.c
+> >> index b7557f437936..1425f87d97b7 100644
+> >> --- a/drivers/dma/sun6i-dma.c
+> >> +++ b/drivers/dma/sun6i-dma.c
+> >> @@ -9,6 +9,7 @@
+> >> =20
+> >>  #include <linux/clk.h>
+> >>  #include <linux/delay.h>
+> >> +#include <linux/dma-mapping.h>
+> >>  #include <linux/dmaengine.h>
+> >>  #include <linux/dmapool.h>
+> >>  #include <linux/interrupt.h>
+> >> @@ -1334,6 +1335,8 @@ static int sun6i_dma_probe(struct platform_devic=
+e=20
+> > *pdev)
+> >>  	INIT_LIST_HEAD(&sdc->pending);
+> >>  	spin_lock_init(&sdc->lock);
+> >> =20
+> >> +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(25));
+> >> +
+> >>  	dma_cap_set(DMA_PRIVATE, sdc->slave.cap_mask);
+> >>  	dma_cap_set(DMA_MEMCPY, sdc->slave.cap_mask);
+> >>  	dma_cap_set(DMA_SLAVE, sdc->slave.cap_mask);
+> >> --=20
+> >> 2.35.1
+> >>
+> >>
+> >=20
+> >=20
+>=20
+>=20
 
-Regards,
-Samuel
+

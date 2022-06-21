@@ -2,143 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8040955325B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4C3553267
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350613AbiFUMoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S1350804AbiFUMpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350394AbiFUMoT (ORCPT
+        with ESMTP id S1350334AbiFUMox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:44:19 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC3412ACF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:44:17 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id c13so14721797eds.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uc5jJq0YvTzf8BEPMUgKkXPq5VOMLMXDxdKkAuvbItk=;
-        b=o51LpaWxCfqFP3YFV66q9y40X5oK1xKmN9I5bVSTSRV3Ue6tOFTcBotGnOvkcAkeSG
-         JWEuMhVcnHIviKxc+2GgZkmiJALfB8BlzdsSAe9d20F8H7fO+62VPXNVWD6oCHGgSY8z
-         +ZaSdxgU7R8eKt8KP2ie6HuPRGZLlefknuUK+XhMdmuN9BzV+/SoJcwr2WzdOdm8mD+P
-         oOAOGMlX7iy9zhl2MwrL/HOldGCYQTm5hksNGhq7ZKoy6UmGkQYA2mlbK//z5hPyWKzj
-         tcjVSqEmXu6NfJapXTca1fVPcZPXpmCcyGKBi2VwY5afvx6bXrBW4VmYoynDOk946vf4
-         Fwmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uc5jJq0YvTzf8BEPMUgKkXPq5VOMLMXDxdKkAuvbItk=;
-        b=drVivs2MLHEN+t63+C6LTAqLQPTtlp7mUspuWclclBf8sLKNawsMA/HRX7nsEpBkLC
-         ptlaz29T0P8vJPmo2wySJ4p47ozdfJ2Mr+K7LWU8p6DITpRfd4p/FrLzIDxdYTYJYl8w
-         g10iNedHcHP+D7qVZnuk69njdm8MiFNB4d0PNKTB5PZPvtelsJm6isa4mxCAqYvXtxdZ
-         zHkG3oa2RNvKZgEEdKpElwTfhLjVd5gW5Hoh0h5b44XAQuZB2qfrooYrDoBkBl8jaUxm
-         Dcz5XfOLxAqHWk/KcrJSpro8Q55aRpPmLgLliZ8tm1wL5dTv2Nehp1CT5FA4jiJdU8Zn
-         p/nA==
-X-Gm-Message-State: AJIora/sK0TNEuLBLpg6lTOatPhbwVf1mFX2kr7wDwHGzVbRfCpddBYm
-        FF78HxS7aTkplEIPeYOVaIMOGg==
-X-Google-Smtp-Source: AGRyM1tUrw283B/iLAAXe1suE6fsNV78cf2NHCU5hHUcZcigWaiVbjFyK+RkskC+/2DrTKT7yzUUeQ==
-X-Received: by 2002:a05:6402:5c9:b0:420:aac6:257b with SMTP id n9-20020a05640205c900b00420aac6257bmr34794630edx.128.1655815456285;
-        Tue, 21 Jun 2022 05:44:16 -0700 (PDT)
-Received: from [192.168.0.220] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b006fe8c831632sm7585849ejh.73.2022.06.21.05.44.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 05:44:15 -0700 (PDT)
-Message-ID: <4a58c6c4-be0e-e56c-2498-a14ba46b508d@linaro.org>
-Date:   Tue, 21 Jun 2022 14:44:14 +0200
+        Tue, 21 Jun 2022 08:44:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD294192BF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:44:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09B6E165C;
+        Tue, 21 Jun 2022 05:44:51 -0700 (PDT)
+Received: from [10.57.85.30] (unknown [10.57.85.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0EAD03F534;
+        Tue, 21 Jun 2022 05:44:48 -0700 (PDT)
+Message-ID: <45ef3221-8f27-0ae7-8cd9-48575812d797@arm.com>
+Date:   Tue, 21 Jun 2022 13:44:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
-Content-Language: en-US
-To:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>
-Cc:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-References: <f9a877ce-1e18-90f9-67e5-b6e67b3b4156@linaro.org>
- <8d806fc9-0067-2c8d-ec41-13787c7644a2@linaro.org>
- <20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p7>
- <20220614012713epcms2p810386a5137fbcf6aefc41fe086badc0b@epcms2p8>
- <20220620075548epcms2p61182d9d7f41fadb1eb139b349bf7486d@epcms2p6>
- <CGME20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p2>
- <20220621074244epcms2p23cb631babfb87e5abb416467fb66e521@epcms2p2>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220621074244epcms2p23cb631babfb87e5abb416467fb66e521@epcms2p2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] drm/sun4i: Add DMA mask and segment size
+Content-Language: en-GB
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mripard@kernel.org,
+        wens@csie.org
+Cc:     airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220620181333.650301-1-jernej.skrabec@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220620181333.650301-1-jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 09:42, Wangseok Lee wrote:
->>>  
->>>  samsung,syscon-bus-s-fsys:
->>>    description:
->>>      Phandle to bus-s path of fsys block, this register
->>>      are used for enabling bus-s.
->>>    $ref: /schemas/types.yaml#/definitions/phandle
->>>  
->>>  samsung,syscon-bus-p-fsys:
->>>    description:
->>>      Phandle to bus-p path of fsys block, this register
->>>      are used for enabling bus-p.
->>>    $ref: /schemas/types.yaml#/definitions/phandle
->>
->> This two look unspecific and hacky workaround for missing drivers. Looks
->> like instead of implementing interconnect or clock driver, you decided
->> to poke some other registers. Why this cannot be an interconnect driver?
->>
->>
+On 2022-06-20 19:13, Jernej Skrabec wrote:
+> Kernel occasionally complains that there is mismatch in segment size
+> when trying to render HW decoded videos and rendering them directly with
+> sun4i DRM driver. Following message can be observed on H6 SoC:
 > 
-> bus-s, bus-p is a register that exists in the sysreg of the fsys block.
-> It is the same block as "fsys-sysreg" but is separated separately in
-> hardware.
+> [  184.298308] ------------[ cut here ]------------
+> [  184.298326] DMA-API: sun4i-drm display-engine: mapping sg segment longer than device claims to support [len=6144000] [max=65536]
+> [  184.298364] WARNING: CPU: 1 PID: 382 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2b0/0x350
+> [  184.322997] CPU: 1 PID: 382 Comm: ffmpeg Not tainted 5.19.0-rc1+ #1331
+> [  184.329533] Hardware name: Tanix TX6 (DT)
+> [  184.333544] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  184.340512] pc : debug_dma_map_sg+0x2b0/0x350
+> [  184.344882] lr : debug_dma_map_sg+0x2b0/0x350
+> [  184.349250] sp : ffff800009f33a50
+> [  184.352567] x29: ffff800009f33a50 x28: 0000000000010000 x27: ffff000001b86c00
+> [  184.359725] x26: ffffffffffffffff x25: ffff000005d8cc80 x24: 0000000000000000
+> [  184.366879] x23: ffff80000939ab18 x22: 0000000000000001 x21: 0000000000000001
+> [  184.374031] x20: 0000000000000000 x19: ffff0000018a7410 x18: ffffffffffffffff
+> [  184.381186] x17: 0000000000000000 x16: 0000000000000000 x15: ffffffffffffffff
+> [  184.388338] x14: 0000000000000001 x13: ffff800009534e86 x12: 6f70707573206f74
+> [  184.395493] x11: 20736d69616c6320 x10: 000000000000000a x9 : 0000000000010000
+> [  184.402647] x8 : ffff8000093b6d40 x7 : ffff800009f33850 x6 : 000000000000000c
+> [  184.409800] x5 : ffff0000bf997940 x4 : 0000000000000000 x3 : 0000000000000027
+> [  184.416953] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000003960e80
+> [  184.424106] Call trace:
+> [  184.426556]  debug_dma_map_sg+0x2b0/0x350
+> [  184.430580]  __dma_map_sg_attrs+0xa0/0x110
+> [  184.434687]  dma_map_sgtable+0x28/0x4c
+> [  184.438447]  vb2_dc_dmabuf_ops_map+0x60/0xcc
+> [  184.442729]  __map_dma_buf+0x2c/0xd4
+> [  184.446321]  dma_buf_map_attachment+0xa0/0x130
+> [  184.450777]  drm_gem_prime_import_dev+0x7c/0x18c
+> [  184.455410]  drm_gem_prime_fd_to_handle+0x1b8/0x214
+> [  184.460300]  drm_prime_fd_to_handle_ioctl+0x2c/0x40
+> [  184.465190]  drm_ioctl_kernel+0xc4/0x174
+> [  184.469123]  drm_ioctl+0x204/0x420
+> [  184.472534]  __arm64_sys_ioctl+0xac/0xf0
+> [  184.476474]  invoke_syscall+0x48/0x114
+> [  184.480240]  el0_svc_common.constprop.0+0x44/0xec
+> [  184.484956]  do_el0_svc+0x2c/0xc0
+> [  184.488283]  el0_svc+0x2c/0x84
+> [  184.491354]  el0t_64_sync_handler+0x11c/0x150
+> [  184.495723]  el0t_64_sync+0x18c/0x190
+> [  184.499397] ---[ end trace 0000000000000000 ]---
+> 
+> Fix that by setting DMA mask and segment size.
+> 
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> ---
+> Changes from v1:
+> - added comment
+> - updated commit message with kernel report
+> 
+>   drivers/gpu/drm/sun4i/sun4i_drv.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
+> index 275f7e4a03ae..f135a6b3cadb 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_drv.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
+> @@ -7,6 +7,7 @@
+>    */
+>   
+>   #include <linux/component.h>
+> +#include <linux/dma-mapping.h>
+>   #include <linux/kfifo.h>
+>   #include <linux/module.h>
+>   #include <linux/of_graph.h>
+> @@ -367,6 +368,13 @@ static int sun4i_drv_probe(struct platform_device *pdev)
+>   
+>   	INIT_KFIFO(list.fifo);
+>   
+> +	/*
+> +	 * DE2 and DE3 cores actually supports 40-bit addresses, but
+> +	 * driver does not.
+> +	 */
+> +	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
 
-Two points here:
-1. If it is in FSYS, why it cannot be accessed with samsung,fsys-sysreg?
-2. If it is only register, shuld be described like this. You must
-describe item:
-https://elixir.bootlin.com/linux/v5.18-rc1/source/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml#L42
+Nit: this one is a number, not a bitmask, so UINT_MAX would be more 
+appropriate semantically.
 
-> So, get resource is performed separately from "fsys-sysreg".
-> They set pcie slave, dbi related control settings,
-> naming "bus-x" seems to be interconnect.
-> I will add this description to property.
-> I don't think it need to use the interconnect driver,
-> so please let me know your opinion.
+Thanks,
+Robin.
 
-Please document both in the bindings and in the driver usage of this
-register. Writing there "0" or "1" is not enough. If the documentation
-is good, I am fine with it. If the explanation is obfuscated/not
-sufficient, it will look like avoiding to implement a driver, which I
-don't want to accept.
-
-Best regards,
-Krzysztof
+> +
+>   	for (i = 0;; i++) {
+>   		struct device_node *pipeline = of_parse_phandle(np,
+>   								"allwinner,pipelines",

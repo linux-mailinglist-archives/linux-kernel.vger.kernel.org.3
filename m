@@ -2,115 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DC0553099
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC3B5530C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiFULT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S1349405AbiFULXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348927AbiFULTZ (ORCPT
+        with ESMTP id S1349938AbiFULXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:19:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9072E2A26D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:19:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3759821B6D;
-        Tue, 21 Jun 2022 11:19:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655810361; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mjLwPmpJnhDmfPFonZ2bEdmvEUUUxw2WLPLCTpbJgCQ=;
-        b=eAcpnsUCpFz5owZAKas2AsZMY7TGKDykmDZTyrLoICMlF+6V/mBKwE+VJzBTM/jrhHtjVc
-        VvE2OgdBh1mPxPTra6rPZt7d1BidVTsTI3G1+dp/rXMQzWneIMcxhb6b50PTsQ00/+ByCB
-        VB7r+BoRHYbC9OZjnig4tUbPHpN2N5o=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DBA812C141;
-        Tue, 21 Jun 2022 11:19:19 +0000 (UTC)
-Date:   Tue, 21 Jun 2022 13:19:19 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] printk/console: Enable console kthreads only when
- there is no boot console left
-Message-ID: <20220621111919.GD7891@pathway.suse.cz>
-References: <20220621090900.GB7891@pathway.suse.cz>
- <YrGMYk0LsbKewzPU@google.com>
+        Tue, 21 Jun 2022 07:23:36 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCC038A4;
+        Tue, 21 Jun 2022 04:23:35 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id es26so17201750edb.4;
+        Tue, 21 Jun 2022 04:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7QvLRXiq8Bnt0eVtULkdQpLTyiJt3SvSjod+5Ee1wHE=;
+        b=HMxM/aSlAuvaJsppaX7ddSubVt1WRfhY6JdmStM/lact7dWcIhwpBX7cz+FHKMJm6t
+         2HupTlKSz0UHEjqwnyxZx1HOJvnoyAivxWsEi8kTIgPsxu1mTbRYGAeE+twEt/wBycAi
+         m5+u5LKdDaif2kZxbUni7KGQKiXxONlXDlYtafEwt0gNn743reBmGHcJEmwoNig4EL1E
+         OttNdoPwbVgtBrnRtgy0NSUxQamjNPKlTrSyI8FeVJrVEpYglXBfg07kVMwnNMGj8xa5
+         DWzkvQHd5JFDkfY807CwqOe+f0w2VsRZHtJrh+eBTSxHDqKBljSoq6QPqOO2pg3r3Ii+
+         2DCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7QvLRXiq8Bnt0eVtULkdQpLTyiJt3SvSjod+5Ee1wHE=;
+        b=yPHTSrdhiapBHqipRWmZGQhW923uPCq7wwF9VggDMqXhrrvmrg9ETVyDZMZGhlS9qD
+         KeIFJHXc7cT/ZuxJyZ/hb2jst9Mo9M753qZZCOGPZpEdCeIykwMVt4Zi8i/IaNdYTH67
+         bFyzykRHbdQSfQ/y1y5AxHrFRkpUc15frD2GUsL8ZDjcKXdLE3T25I6JnkEDQ49ssuYo
+         DcnurzBwLwRGqBPdRtFUEcbOmF/mrfrYjs3GJerkr2JYUj5fxJJgPyY12esuMK+SNpaD
+         T2nx6cG2CKC2C2FVKp9F+JnvBPHF5rit1/vmSuWUfQRDFXU3WAwhzNS/SEufIkCXMzbt
+         D4rg==
+X-Gm-Message-State: AJIora/KPA0CNtLffWlacGOMQ3SVnFYpvPUERNBvsFybBFVWjkeLJP8X
+        hpfRJslqL+jH0oNfoQAr3Ik=
+X-Google-Smtp-Source: AGRyM1sL1ZkhLrEB/tV8w83l9vV8GuWECpMuHhwAq6ozTvxgrj1WCBu30JWPo8tUpOaWLX9Cpm7q7g==
+X-Received: by 2002:a05:6402:5388:b0:435:71b:5d44 with SMTP id ew8-20020a056402538800b00435071b5d44mr34535569edb.364.1655810614370;
+        Tue, 21 Jun 2022 04:23:34 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-99-158.xnet.hr. [88.207.99.158])
+        by smtp.googlemail.com with ESMTPSA id a12-20020a50858c000000b0042617ba638esm12394840edh.24.2022.06.21.04.23.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 04:23:33 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     svarbanov@mm-sol.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, p.zabel@pengutronix.de,
+        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johan+linaro@kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
+Date:   Tue, 21 Jun 2022 13:23:30 +0200
+Message-Id: <20220621112330.448754-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrGMYk0LsbKewzPU@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-06-21 18:16:18, Sergey Senozhatsky wrote:
-> On (22/06/21 11:09), Petr Mladek wrote:
-> > Threaded console printing does not take into consideration that boot
-> > consoles may be accessing the same hardware as normal consoles and thus
-> > must not be called in parallel.
-> > 
-> > Since it is currently not possible to identify which consoles are
-> > accessing the same hardware, delay threaded console printing activation
-> > until it is known that there are no boot consoles registered.
-> > 
-> > Link: https://lore.kernel.org/r/20220619204949.50d9154d@thinkpad
-> > Link: https://lore.kernel.org/r/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
-> > Link: https://lore.kernel.org/r/20220619204949.50d9154d@thinkpad
-> > Reported-by: Marek Behún <kabel@kernel.org>
-> > [john.ogness@linutronix.de: Better description of the problem.]
-> > Signed-off-by: Petr Mladek <pmladek@suse.com>
-> > Tested-by: Marek Behún <kabel@kernel.org>
-> 
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
+cause the system to hang as its using DBI registers in the .init
+and those are only accesible after phy_power_on().
 
-Thanks.
+So solve this by splitting the DBI read/writes to .post_init.
 
-> > -static int __init printk_activate_kthreads(void)
-> > -{
-> > -	struct console *con;
-> >  
-> > -	console_lock();
-> > -	printk_kthreads_available = true;
-> > -	for_each_console(con)
-> > -		printk_start_kthread(con);
-> > -	console_unlock();
-> > +	/*
-> > +	 * Boot consoles may be accessing the same hardware as normal
-> > +	 * consoles and thus must not be called in parallel. Therefore
-> > +	 * only activate threaded console printing if it is known that
-> > +	 * there are no boot consoles registered.
-> > +	 */
-> > +	if (no_bootcon)
-> > +		printk_activate_kthreads();
-> 
-> A quick question. Here we still can have bootcon which can unregistered
-> later, right? Do you think it'll make sense to check if printing kthreads
-> can be safely started and start them if so (if no CON_BOOT found and kthreads
-> are not already created) at the end of unregister_console()?
+Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+Changes in v2:
+* Rebase onto next-20220621
+---
+ drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
+ 1 file changed, 28 insertions(+), 20 deletions(-)
 
-Yeah, that's my plan how to optimize it in the future. I just
-wanted to do something simple and be on the safe side for 5.19.
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index 51fed83484af..da6d79d61397 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+ 	struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
+ 	struct dw_pcie *pci = pcie->pci;
+ 	struct device *dev = pci->dev;
+-	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+ 	int i, ret;
+-	u32 val;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
+ 		ret = reset_control_assert(res->rst[i]);
+@@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+ 		goto err_clk_aux;
+ 	}
+ 
++	return 0;
++
++err_clk_aux:
++	clk_disable_unprepare(res->ahb_clk);
++err_clk_ahb:
++	clk_disable_unprepare(res->axi_s_clk);
++err_clk_axi_s:
++	clk_disable_unprepare(res->axi_m_clk);
++err_clk_axi_m:
++	clk_disable_unprepare(res->iface);
++err_clk_iface:
++	/*
++	 * Not checking for failure, will anyway return
++	 * the original failure in 'ret'.
++	 */
++	for (i = 0; i < ARRAY_SIZE(res->rst); i++)
++		reset_control_assert(res->rst[i]);
++
++	return ret;
++}
++
++static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
++{
++	struct dw_pcie *pci = pcie->pci;
++	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
++	u32 val;
++
+ 	writel(SLV_ADDR_SPACE_SZ,
+ 		pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
+ 
+@@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+ 		PCI_EXP_DEVCTL2);
+ 
+ 	return 0;
+-
+-err_clk_aux:
+-	clk_disable_unprepare(res->ahb_clk);
+-err_clk_ahb:
+-	clk_disable_unprepare(res->axi_s_clk);
+-err_clk_axi_s:
+-	clk_disable_unprepare(res->axi_m_clk);
+-err_clk_axi_m:
+-	clk_disable_unprepare(res->iface);
+-err_clk_iface:
+-	/*
+-	 * Not checking for failure, will anyway return
+-	 * the original failure in 'ret'.
+-	 */
+-	for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+-		reset_control_assert(res->rst[i]);
+-
+-	return ret;
+ }
+ 
+ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+@@ -1598,6 +1605,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
+ static const struct qcom_pcie_ops ops_2_3_3 = {
+ 	.get_resources = qcom_pcie_get_resources_2_3_3,
+ 	.init = qcom_pcie_init_2_3_3,
++	.post_init = qcom_pcie_post_init_2_3_3,
+ 	.deinit = qcom_pcie_deinit_2_3_3,
+ 	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+ };
+-- 
+2.36.1
 
-Best Regards,
-Petr

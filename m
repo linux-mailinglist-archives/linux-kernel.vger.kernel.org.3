@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8DB552A85
+	by mail.lfdr.de (Postfix) with ESMTP id 31707552A83
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345318AbiFUFfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 01:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S1345340AbiFUFfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 01:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344382AbiFUFfm (ORCPT
+        with ESMTP id S1343970AbiFUFfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Jun 2022 01:35:42 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E5F21E28
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC83321E29
         for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:35:40 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id q140so12111634pgq.6
+Received: by mail-pj1-x1036.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso12251126pja.2
         for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:35:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Mr7cpuqmRn6xpaNrj0168JJ9U51NmQAWQUP19BgumiU=;
-        b=M25eIGtflDF6vpDzQphXIkpeUIYdc+hIfRGepH8xAPaOCGfFS4y+9ga/xWp+bpdFyJ
-         pxQ56zgOmn77/2mluGl7W5pyqP8ZO2bnT8R2YMumgz8CSODhpwmyTHX7ZID/oyeREN3a
-         r8sizf92J6ZFiAjX+j7Gki5el8v3BjUFmXO9o=
+        bh=xXd1KzPN8325jLEKqOHa0b97rFoJeR8zNzYO50dB/a0=;
+        b=E8H0HEG0SkeqLSPJ5+Xw3E9cZxyrmj0Nbd1K1Fa2wAnuJnzVbtu1o/pnQg/CdLqZCC
+         f9hqYL537CXY/WAhu5F8n85FuyPvxwkQCPWU6CotlqEyvtDb1GbJBEhF0dVr+zayK84X
+         rme/A/zVPD2oNfqmRY5mULRjX7t+WieQ8l0Bc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Mr7cpuqmRn6xpaNrj0168JJ9U51NmQAWQUP19BgumiU=;
-        b=KUAPE7iiDTdwtOnapEB0fYnoyVz0ef8SNgHiMlcVRMfx5FwvzWLOFDISE75HadG4kB
-         kQShy5tNwbPVUA97Z+HVxhdFFsD5GFYMotG/vpK5yZRpKdFVMZks+Jg16tAkpbhRjEBb
-         MuziYFXG+9uqlF9Y7lmFaRMDLQmlk53YaOrydBEIoFaq61yv3b/fZWFqHxDtSlIEWBaU
-         /ipe9sGaHrRbhYh7a7ePQx8dt1ADbOT/BTb5GepujIUCP/LOWrDklImWTcsh1F8SOQYy
-         J1fWqzzoRLqiGu+9mb6oXQxmAigkIySsB1RB33Bd6GoXqFC/OdZC/WF6mLQmR70Mnzqq
-         1nIQ==
-X-Gm-Message-State: AJIora/QSPGQmX8wY8IYFx2npU4IzMojjrSJDb/GtfUa6k5JNXSiBhsH
-        5mf3Oftl8ZhPBGgxjGS6duT06YthZefeMQ==
-X-Google-Smtp-Source: AGRyM1sKiNCr9wo6OiAP+abgdfm9ByOFLSfK3Ky459A42M/fL6qODyYaySFvG/ImFcnUmK+5AzshRA==
-X-Received: by 2002:a63:ff0c:0:b0:3fd:29dd:c478 with SMTP id k12-20020a63ff0c000000b003fd29ddc478mr24429571pgi.291.1655789738983;
-        Mon, 20 Jun 2022 22:35:38 -0700 (PDT)
+        bh=xXd1KzPN8325jLEKqOHa0b97rFoJeR8zNzYO50dB/a0=;
+        b=rFxT5gzO1mIYi/XS3/PR9M/u8U1qEBe0FZR32L/eYpi5j5kF4JsupzTtg3zuxAcNAd
+         NP7oBt8NNjf6Hm7LJ6sZOW2XoJ4DSCguVYwbfV5k/RWbfjDoHfhbYTGw2epttO5ypV+N
+         N4npQzsIs/OlGSWassW9k5nswLG0f139aXTpUEhTA5HgnZb7CTc7g1lkwiiXArw2UNcf
+         4dopub7xg5Szj5QCA5AF9+pPeSaniy5DBLu2RjlgRqYGA/qZitHWg6RxasPmt4kukmat
+         qwCU03xH33rI73W219+ak1Myl4yiTd0W+VkNAJu9I2z5d/5w+s9lPddN5Uhn9FvNOlIN
+         gobQ==
+X-Gm-Message-State: AJIora9+V2iwhf1S0IFmKs0RjhZeV1KoKocKH58J1P7Swq/+1MwwFhpj
+        bspK+PLWXGnedHLcY98hVyXitJYsZ3l78w==
+X-Google-Smtp-Source: AGRyM1tuIfAE7/FnfAc3YajmkxHscQMyRYRW+ACuiMAk2eTVzdQlHZlXlRpWcB6uB9j3aIgtsmUwew==
+X-Received: by 2002:a17:90b:4f4a:b0:1e3:49c9:aab0 with SMTP id pj10-20020a17090b4f4a00b001e349c9aab0mr41780809pjb.223.1655789740306;
+        Mon, 20 Jun 2022 22:35:40 -0700 (PDT)
 Received: from joebar-glaptop.lan (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
-        by smtp.gmail.com with ESMTPSA id k7-20020a63ab47000000b00408af01cb42sm10061676pgp.81.2022.06.20.22.35.37
+        by smtp.gmail.com with ESMTPSA id k7-20020a63ab47000000b00408af01cb42sm10061676pgp.81.2022.06.20.22.35.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 22:35:38 -0700 (PDT)
+        Mon, 20 Jun 2022 22:35:39 -0700 (PDT)
 From:   "Joseph S. Barrera III" <joebar@chromium.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Stephen Boyd <swboyd@chromium.org>,
@@ -56,9 +56,9 @@ Cc:     Stephen Boyd <swboyd@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH v9 3/5] arm64: dts: qcom: sc7180: Add mrbland dts files
-Date:   Mon, 20 Jun 2022 22:33:49 -0700
-Message-Id: <20220620223345.v9.3.I71176ebf7e5aebddb211f00e805b32c08376d1be@changeid>
+Subject: [PATCH v9 4/5] arm64: dts: qcom: sc7180: Add pazquel dts files
+Date:   Mon, 20 Jun 2022 22:33:50 -0700
+Message-Id: <20220620223345.v9.4.I41e2c2dc12961fe000ebc4d4ef6f0bc5da1259ea@changeid>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220621053351.650431-1-joebar@chromium.org>
 References: <20220621053351.650431-1-joebar@chromium.org>
@@ -74,455 +74,308 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mrbland is a trogdor-based board. These dts files are copies from
-the downstream Chrome OS 5.4 kernel, but with downstream bits removed.
+Pazquel is a trogdor-based board. These dts files are unchanged copies
+from the downstream Chrome OS 5.4 kernel.
 
 Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
 ---
 
-(no changes since v7)
-
-Changes in v7:
-- Restore mrbland patch.
-- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
-- Simplify spi0/spi6 labeling (d277cab7afc7).
+Changes in v9:
+- Restore two lines accidentally removed from ap_sar_sensor.
 - Simplify trackpad enabling (51d30402be75).
 
-Changes in v6:
-- Remove mrbland patch.
+Changes in v7:
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Remove #include of <arm/cros-ec-keyboard.dtsi>.
+- Accidentally removed two lines from ap_sar_sensor.
 
-Changes in v5:
-- Replace _ in node name with -
-- Order nodes by name.
-- Add comment that compatible will be filled in per-board.
+Changes in v6:
+- Copy changes to ap_sar_sensor from v5.4.
+- Add #include of <arm/cros-ec-keyboard.dtsi>.
 
 Changes in v4:
-- Add missing version history
+- Fix description (no downstream bits removed).
+- Add missing version history.
 
-Changes in v2:
-- Add word wrapping to patch description.
-- Remove "Author" from patch description.
-- Fix whitespace around "en_pp3300_dx_edp".
+Changes in v3:
+- First inclusion in series.
 
  arch/arm64/boot/dts/qcom/Makefile             |   4 +
- .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 ++
- .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 ++
- .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  53 +++
- .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 ++
- .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 ++
- .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 344 ++++++++++++++++++
- 7 files changed, 491 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+ .../sc7180-trogdor-pazquel-lte-parade.dts     |  22 ++
+ .../qcom/sc7180-trogdor-pazquel-lte-ti.dts    |  22 ++
+ .../qcom/sc7180-trogdor-pazquel-parade.dts    |  17 ++
+ .../dts/qcom/sc7180-trogdor-pazquel-ti.dts    |  17 ++
+ .../boot/dts/qcom/sc7180-trogdor-pazquel.dtsi | 221 ++++++++++++++++++
+ 6 files changed, 303 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
 
 diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 7268086f66e8..5cfd6316768c 100644
+index 5cfd6316768c..dc26704dfe34 100644
 --- a/arch/arm64/boot/dts/qcom/Makefile
 +++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -75,6 +75,10 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-r9.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r4.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r9.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-auo.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-boe.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-auo.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-boe.dtb
+@@ -79,6 +79,10 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-auo.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-boe.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-auo.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-boe.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-parade.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-ti.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-parade.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-ti.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1-lte.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
 new file mode 100644
-index 000000000000..2767817fb053
+index 000000000000..ecedab8d1662
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
 @@ -0,0 +1,22 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Mrbland board device tree source
++ * Google Pazquel board device tree source
 + *
 + * Copyright 2021 Google LLC.
-+ *
-+ * SKU: 0x0 => 0
-+ *  - bits 7..4: Panel ID: 0x0 (AUO)
 + */
 +
 +/dts-v1/;
 +
-+#include "sc7180-trogdor-mrbland-rev0.dtsi"
++#include "sc7180.dtsi"
++#include "sc7180-trogdor-parade-ps8640.dtsi"
++#include "sc7180-trogdor-pazquel.dtsi"
++#include "sc7180-trogdor-lte-sku.dtsi"
 +
 +/ {
-+	model = "Google Mrbland rev0 AUO panel board";
-+	compatible = "google,mrbland-rev0-sku0", "qcom,sc7180";
++	model = "Google Pazquel (Parade,LTE)";
++	compatible = "google,pazquel-sku4", "qcom,sc7180";
 +};
 +
-+&panel {
-+	compatible = "auo,b101uan08.3";
++&ap_sar_sensor_i2c {
++	status = "okay";
 +};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
 new file mode 100644
-index 000000000000..711485574a03
+index 000000000000..7863191d92f5
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
 @@ -0,0 +1,22 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Mrbland board device tree source
++ * Google Pazquel board device tree source
 + *
 + * Copyright 2021 Google LLC.
-+ *
-+ * SKU: 0x10 => 16
-+ *  - bits 7..4: Panel ID: 0x1 (BOE)
 + */
 +
 +/dts-v1/;
 +
-+#include "sc7180-trogdor-mrbland-rev0.dtsi"
++#include "sc7180.dtsi"
++#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
++#include "sc7180-trogdor-pazquel.dtsi"
++#include "sc7180-trogdor-lte-sku.dtsi"
 +
 +/ {
-+	model = "Google Mrbland rev0 BOE panel board";
-+	compatible = "google,mrbland-rev0-sku16", "qcom,sc7180";
++	model = "Google Pazquel (TI,LTE)";
++	compatible = "google,pazquel-sku0", "google,pazquel-sku2", "qcom,sc7180";
 +};
 +
-+&panel {
-+	compatible = "boe,tv101wum-n53";
++&ap_sar_sensor_i2c {
++	status = "okay";
 +};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
 new file mode 100644
-index 000000000000..7bc8402c018e
+index 000000000000..fc53b221b3b6
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
-@@ -0,0 +1,53 @@
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
+@@ -0,0 +1,17 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Mrbland board device tree source
++ * Google Pazquel board device tree source
 + *
-+ * Copyright 2021 Google LLC.
-+ *
++ * Copyright 2022 Google LLC.
 + */
 +
 +/dts-v1/;
 +
-+#include "sc7180-trogdor-mrbland.dtsi"
-+
-+&avdd_lcd {
-+	gpio = <&tlmm 80 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&panel {
-+	enable-gpios = <&tlmm 76 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&v1p8_mipi {
-+	gpio = <&tlmm 81 GPIO_ACTIVE_HIGH>;
-+};
-+
-+/* PINCTRL - modifications to sc7180-trogdor-mrbland.dtsi */
-+&avdd_lcd_en {
-+	pinmux {
-+		pins = "gpio80";
-+	};
-+
-+	pinconf {
-+		pins = "gpio80";
-+	};
-+};
-+
-+&mipi_1800_en {
-+	pinmux {
-+		pins = "gpio81";
-+	};
-+
-+	pinconf {
-+		pins = "gpio81";
-+	};
-+};
-+&vdd_reset_1800 {
-+	pinmux {
-+		pins = "gpio76";
-+	};
-+
-+	pinconf {
-+		pins = "gpio76";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
-new file mode 100644
-index 000000000000..275313ef7554
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Mrbland board device tree source
-+ *
-+ * Copyright 2021 Google LLC.
-+ *
-+ * SKU: 0x600 => 1536
-+ *  - bits 11..8: Panel ID: 0x6 (AUO)
-+ */
-+
-+/dts-v1/;
-+
-+#include "sc7180-trogdor-mrbland.dtsi"
++#include "sc7180.dtsi"
++#include "sc7180-trogdor-parade-ps8640.dtsi"
++#include "sc7180-trogdor-pazquel.dtsi"
 +
 +/ {
-+	model = "Google Mrbland rev1+ AUO panel board";
-+	compatible = "google,mrbland-sku1536", "qcom,sc7180";
++	model = "Google Pazquel (Parade)";
++	compatible = "google,pazquel-sku5", "qcom,sc7180";
 +};
-+
-+&panel {
-+	compatible = "auo,b101uan08.3";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
 new file mode 100644
-index 000000000000..87c6b6c30b5e
+index 000000000000..4431b83c2acb
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
-@@ -0,0 +1,24 @@
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
+@@ -0,0 +1,17 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Mrbland board device tree source
++ * Google Pazquel board device tree source
 + *
 + * Copyright 2021 Google LLC.
-+ *
-+ * SKU: 0x300 => 768
-+ *  - bits 11..8: Panel ID: 0x3 (BOE)
 + */
 +
 +/dts-v1/;
 +
-+#include "sc7180-trogdor-mrbland.dtsi"
++#include "sc7180.dtsi"
++#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
++#include "sc7180-trogdor-pazquel.dtsi"
 +
 +/ {
-+	model = "Google Mrbland (rev1 - 2) BOE panel board";
-+	/* Uses ID 768 on rev1 and 1024 on rev2+ */
-+	compatible = "google,mrbland-sku1024", "google,mrbland-sku768",
-+		"qcom,sc7180";
++	model = "Google Pazquel (TI)";
++	compatible = "google,pazquel-sku1", "qcom,sc7180";
 +};
-+
-+&panel {
-+	compatible = "boe,tv101wum-n53";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
 new file mode 100644
-index 000000000000..33d1d8a29038
+index 000000000000..5485f50f89ad
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-@@ -0,0 +1,344 @@
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+@@ -0,0 +1,221 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Mrbland board device tree source
++ * Google Pazquel board device tree source
 + *
 + * Copyright 2021 Google LLC.
 + */
-+
-+/dts-v1/;
 +
 +#include "sc7180-trogdor.dtsi"
 +
-+/* This board only has 1 USB Type-C port. */
-+/delete-node/ &usb_c1;
++&ap_sar_sensor {
++	compatible = "semtech,sx9324";
++	semtech,ph0-pin = <1 3 3>;
++	semtech,ph1-pin = <3 1 3>;
++	semtech,ph2-pin = <1 3 3>;
++	semtech,ph3-pin = <0 0 0>;
++	semtech,ph01-resolution = <1024>;
++	semtech,ph23-resolution = <1024>;
++	semtech,startup-sensor = <1>;
++	semtech,ph01-proxraw-strength = <3>;
++	semtech,ph23-proxraw-strength = <1>;
++	semtech,avg-pos-strength = <128>;
++	semtech,input-analog-gain = <0>;
++	semtech,cs-idle-sleep = "gnd";
 +
-+/ {
-+	avdd_lcd: avdd-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "avdd_lcd";
-+
-+		gpio = <&tlmm 88 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&avdd_lcd_en>;
-+
-+		vin-supply = <&pp5000_a>;
-+	};
-+
-+	avee_lcd: avee-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "avee_lcd";
-+
-+		gpio = <&tlmm 21 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&avee_lcd_en>;
-+
-+		vin-supply = <&pp5000_a>;
-+	};
-+
-+	v1p8_mipi: v1p8-mipi {
-+		compatible = "regulator-fixed";
-+		regulator-name = "v1p8_mipi";
-+
-+		gpio = <&tlmm 86 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&mipi_1800_en>;
-+
-+		vin-supply = <&pp3300_a>;
-+	};
++	/delete-property/ svdd-supply;
++	vdd-supply = <&pp1800_prox>;
 +};
 +
-+&backlight {
-+	pwms = <&cros_ec_pwm 0>;
-+};
-+
-+&camcc {
-+	status = "okay";
-+};
-+
-+&dsi0 {
-+
-+	panel: panel@0 {
-+		/* Compatible will be filled in per-board */
-+		reg = <0>;
-+		enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
++/delete-node/&trackpad;
++&ap_tp_i2c {
++	trackpad: trackpad@15 {
++		status = "okay";
++		compatible = "hid-over-i2c";
++		reg = <0x15>;
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&vdd_reset_1800>;
-+		avdd-supply = <&avdd_lcd>;
-+		avee-supply = <&avee_lcd>;
-+		pp1800-supply = <&v1p8_mipi>;
-+		pp3300-supply = <&pp3300_dx_edp>;
-+		backlight = <&backlight>;
-+		rotation = <270>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			port@0 {
-+				reg = <0>;
-+				panel_in: endpoint {
-+					remote-endpoint = <&dsi0_out>;
-+				};
-+			};
-+		};
-+	};
-+
-+	ports {
-+		port@1 {
-+			endpoint {
-+				remote-endpoint = <&panel_in>;
-+				data-lanes = <0 1 2 3>;
-+			};
-+		};
-+	};
-+};
-+
-+&gpio_keys {
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+	clock-frequency = <400000>;
-+
-+	ap_ts: touchscreen@5d {
-+		compatible = "goodix,gt7375p";
-+		reg = <0x5d>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
++		pinctrl-0 = <&tp_int_odl>;
 +
 +		interrupt-parent = <&tlmm>;
-+		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++		interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
 +
-+		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
++		vcc-supply = <&pp3300_fp_tp>;
++		post-power-on-delay-ms = <100>;
++		hid-descr-addr = <0x0001>;
 +
-+		vdd-supply = <&pp3300_ts>;
++		wakeup-source;
 +	};
 +};
 +
-+&pp1800_uf_cam {
-+	status = "okay";
++&keyboard_controller {
++	function-row-physmap = <
++		MATRIX_KEY(0x00, 0x02, 0)	/* T1 */
++		MATRIX_KEY(0x03, 0x02, 0)	/* T2 */
++		MATRIX_KEY(0x02, 0x02, 0)	/* T3 */
++		MATRIX_KEY(0x01, 0x02, 0)	/* T4 */
++		MATRIX_KEY(0x03, 0x04, 0)	/* T5 */
++		MATRIX_KEY(0x02, 0x04, 0)	/* T6 */
++		MATRIX_KEY(0x01, 0x04, 0)	/* T7 */
++		MATRIX_KEY(0x02, 0x09, 0)	/* T8 */
++		MATRIX_KEY(0x01, 0x09, 0)	/* T9 */
++		MATRIX_KEY(0x00, 0x04, 0)	/* T10 */
++	>;
++	linux,keymap = <
++		MATRIX_KEY(0x00, 0x02, KEY_BACK)
++		MATRIX_KEY(0x03, 0x02, KEY_REFRESH)
++		MATRIX_KEY(0x02, 0x02, KEY_ZOOM)
++		MATRIX_KEY(0x01, 0x02, KEY_SCALE)
++		MATRIX_KEY(0x03, 0x04, KEY_SYSRQ)
++		MATRIX_KEY(0x02, 0x04, KEY_BRIGHTNESSDOWN)
++		MATRIX_KEY(0x01, 0x04, KEY_BRIGHTNESSUP)
++		MATRIX_KEY(0x02, 0x09, KEY_MUTE)
++		MATRIX_KEY(0x01, 0x09, KEY_VOLUMEDOWN)
++		MATRIX_KEY(0x00, 0x04, KEY_VOLUMEUP)
++		CROS_STD_MAIN_KEYMAP
++	>;
 +};
 +
-+&pp1800_wf_cam {
-+	status = "okay";
++&panel {
++	compatible = "edp-panel";
 +};
 +
-+&pp2800_uf_cam {
-+	status = "okay";
++&pp3300_dx_edp {
++	gpio = <&tlmm 67 GPIO_ACTIVE_HIGH>;
 +};
 +
-+&pp2800_wf_cam {
-+	status = "okay";
-+};
-+
-+&wifi {
-+	qcom,ath10k-calibration-variant = "GO_MRBLAND";
-+};
-+
-+/*
-+ * No eDP on this board but it's logically the same signal so just give it
-+ * a new name and assign the proper GPIO.
-+ */
-+pp3300_disp_on: &pp3300_dx_edp {
-+	gpio = <&tlmm 85 GPIO_ACTIVE_HIGH>;
-+};
-+
-+/* PINCTRL - modifications to sc7180-trogdor.dtsi */
-+
-+/*
-+ * No eDP on this board but it's logically the same signal so just give it
-+ * a new name and assign the proper GPIO.
-+ */
-+
-+tp_en: &en_pp3300_dx_edp {
++&en_pp3300_dx_edp {
 +	pinmux {
-+		pins = "gpio85";
++		pins = "gpio67";
 +	};
 +
 +	pinconf {
-+		pins = "gpio85";
++		pins = "gpio67";
 +	};
 +};
 +
 +/* PINCTRL - board-specific pinctrl */
 +
 +&tlmm {
-+	gpio-line-names = "HUB_RST_L",
++	gpio-line-names = "TP_INT_ODL",
 +			  "AP_RAM_ID0",
 +			  "AP_SKU_ID2",
 +			  "AP_RAM_ID1",
 +			  "",
 +			  "AP_RAM_ID2",
-+			  "UF_CAM_EN",
-+			  "WF_CAM_EN",
++			  "AP_TP_I2C_SDA",
++			  "AP_TP_I2C_SCL",
 +			  "TS_RESET_L",
 +			  "TS_INT_L",
 +			  "",
-+			  "",
++			  "EDP_BRIJ_IRQ",
 +			  "AP_EDP_BKLTEN",
-+			  "UF_CAM_MCLK",
-+			  "WF_CAM_CLK",
 +			  "",
 +			  "",
-+			  "UF_CAM_SDA",
-+			  "UF_CAM_SCL",
-+			  "WF_CAM_SDA",
-+			  "WF_CAM_SCL",
-+			  "AVEE_LCD_EN",
++			  "EDP_BRIJ_I2C_SDA",
++			  "EDP_BRIJ_I2C_SCL",
++			  "HUB_RST_L",
++			  "",
++			  "",
++			  "",
++			  "",
 +			  "",
 +			  "AMP_EN",
-+			  "",
-+			  "",
-+			  "",
++			  "P_SENSOR_INT_L",
++			  "AP_SAR_SENSOR_SDA",
++			  "AP_SAR_SENSOR_SCL",
 +			  "",
 +			  "HP_IRQ",
-+			  "WF_CAM_RST_L",
-+			  "UF_CAM_RST_L",
-+			  "AP_BRD_ID2",
 +			  "",
++			  "",
++			  "AP_BRD_ID2",
++			  "BRIJ_SUSPEND",
 +			  "AP_BRD_ID0",
 +			  "AP_H1_SPI_MISO",
 +			  "AP_H1_SPI_MOSI",
 +			  "AP_H1_SPI_CLK",
 +			  "AP_H1_SPI_CS_L",
-+			  "BT_UART_CTS",
-+			  "BT_UART_RTS",
-+			  "BT_UART_TXD",
-+			  "BT_UART_RXD",
++			  "",
++			  "",
++			  "",
++			  "",
 +			  "H1_AP_INT_ODL",
 +			  "",
 +			  "UART_AP_TX_DBG_RX",
@@ -533,7 +386,7 @@ index 000000000000..33d1d8a29038
 +			  "AMP_BCLK",
 +			  "AMP_LRCLK",
 +			  "AMP_DIN",
-+			  "PEN_DET_ODL",
++			  "",
 +			  "HP_BCLK",
 +			  "HP_LRCLK",
 +			  "HP_DOUT",
@@ -552,39 +405,34 @@ index 000000000000..33d1d8a29038
 +			   * call it BIOS_FLASH_WP_L.
 +			   */
 +			  "AP_FLASH_WP_L",
-+			  "",
++			  "EN_PP3300_DX_EDP",
 +			  "AP_SPI_CS0_L",
 +			  "",
 +			  "",
 +			  "",
 +			  "",
-+			  "WLAN_SW_CTRL",
-+			  "",
-+			  "REPORT_E",
-+			  "",
-+			  "ID0",
-+			  "",
-+			  "ID1",
 +			  "",
 +			  "",
++			  "UIM2_DATA",
++			  "UIM2_CLK",
++			  "UIM2_RST",
++			  "UIM2_PRESENT",
++			  "UIM1_DATA",
++			  "UIM1_CLK",
++			  "UIM1_RST",
 +			  "",
 +			  "CODEC_PWR_EN",
 +			  "HUB_EN",
-+			  "TP_EN",
-+			  "MIPI_1.8V_EN",
-+			  "VDD_RESET_1.8V",
-+			  "AVDD_LCD_EN",
++			  "",
++			  "",
++			  "",
++			  "",
 +			  "",
 +			  "AP_SKU_ID1",
 +			  "AP_RST_REQ",
 +			  "",
 +			  "AP_BRD_ID1",
 +			  "AP_EC_INT_L",
-+			  "SDM_GRFC_3",
-+			  "",
-+			  "",
-+			  "BOOT_CONFIG_4",
-+			  "BOOT_CONFIG_2",
 +			  "",
 +			  "",
 +			  "",
@@ -592,70 +440,23 @@ index 000000000000..33d1d8a29038
 +			  "",
 +			  "",
 +			  "",
-+			  "BOOT_CONFIG_3",
-+			  "WCI2_LTE_COEX_TXD",
-+			  "WCI2_LTE_COEX_RXD",
++			  "",
++			  "",
++			  "EDP_BRIJ_EN",
 +			  "",
 +			  "",
 +			  "",
 +			  "",
-+			  "FORCED_USB_BOOT_POL",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
 +			  "AP_TS_PEN_I2C_SDA",
 +			  "AP_TS_PEN_I2C_SCL",
 +			  "DP_HOT_PLUG_DET",
 +			  "EC_IN_RW_ODL";
-+
-+	avdd_lcd_en: avdd-lcd-en {
-+		pinmux {
-+			pins = "gpio88";
-+			function = "gpio";
-+		};
-+
-+		pinconf {
-+			pins = "gpio88";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+	};
-+
-+	avee_lcd_en: avee-lcd-en {
-+		pinmux {
-+			pins = "gpio21";
-+			function = "gpio";
-+		};
-+
-+		pinconf {
-+			pins = "gpio21";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+	};
-+
-+	mipi_1800_en: mipi-1800-en {
-+		pinmux {
-+			pins = "gpio86";
-+			function = "gpio";
-+		};
-+
-+		pinconf {
-+			pins = "gpio86";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+	};
-+
-+	vdd_reset_1800: vdd-reset-1800 {
-+		pinmux {
-+			pins = "gpio87";
-+			function = "gpio";
-+		};
-+
-+		pinconf {
-+			pins = "gpio87";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+	};
 +};
 -- 
 2.31.0

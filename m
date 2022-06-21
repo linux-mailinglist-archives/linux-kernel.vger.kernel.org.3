@@ -2,168 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153D655293F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AF9552942
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245676AbiFUCKp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 22:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S238705AbiFUCM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242831AbiFUCKn (ORCPT
+        with ESMTP id S232327AbiFUCMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:10:43 -0400
-Received: from relay4.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF2E1EC62
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:10:42 -0700 (PDT)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id C4A4C61081;
-        Tue, 21 Jun 2022 02:10:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id F267A32;
-        Tue, 21 Jun 2022 02:10:38 +0000 (UTC)
-Message-ID: <c1a92cf059fc9a3c395d87b11e9f757f5ec1ff6a.camel@perches.com>
-Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-From:   Joe Perches <joe@perches.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "willy@infradead.org" <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>
-Date:   Mon, 20 Jun 2022 19:10:38 -0700
-In-Reply-To: <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
-         <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
-         <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
-         <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
-         <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
-         <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Mon, 20 Jun 2022 22:12:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773545F7B;
+        Mon, 20 Jun 2022 19:12:53 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LRqhR35TgzSgyM;
+        Tue, 21 Jun 2022 10:09:27 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 21 Jun 2022 10:12:50 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 21 Jun 2022 10:12:49 +0800
+Subject: Re: [PATCH 5.10 00/84] 5.10.124-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220620124720.882450983@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <58b41fde-2b1d-4ccb-235e-572beb635e54@huawei.com>
+Date:   Tue, 21 Jun 2022 10:12:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: F267A32
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: ddwoawxpcobobp4d4tcbgu83yqtpn9bi
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18Xz7rjAxOO7jXBkzbfuwKRIweIFY8sohA=
-X-HE-Tag: 1655777438-450937
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-20 at 18:26 -0700, Joe Perches wrote:
-> On Mon, 2022-06-20 at 20:57 -0400, Kent Overstreet wrote:
-> > On Mon, Jun 20, 2022 at 05:38:51PM -0700, Joe Perches wrote:
-> > > On Mon, 2022-06-20 at 11:07 -0400, Kent Overstreet wrote:
-> > > > On Mon, Jun 20, 2022 at 04:19:31AM +0000, David Laight wrote:
-> > > > > I really think that is a bad idea.
-> > > > > printk() already uses a lot of stack, anything doing a recursive
-> > > > > call is just making that worse.
-> > > > > Especially since these calls can often be in error paths
-> > > > > which are not often tested and can already be on deep stacks.
-> > > > 
-> > > > We went over this before - this patch series drastically reduces stack usage of
-> > > > sprintf by eliminating a bunch of stack allocated buffers. Do try to keep up...
-> > > 
-> > > I generally agree with David.
-> > > 
-> > > I think Kent has not provided data that this actually _reduces_
-> > > stack usage.
-> > 
-> > I think the people who are comfortable with reading C can discern that when
-> > large stack allocated character arrays are deleted, frame size and stack usage
-> > go down.
+
+
+On 2022/6/20 20:50, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.124 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I am very comfortable reading C.
+> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
+> Anything received after that time might be too late.
 > 
-> You have not provided any data.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.124-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-In a brief looking around at stack uses in vsprintf, I believe
-this is the largest stack declaration there.
+Tested on arm64 and x86 for 5.10.124-rc1,
 
-Especially since KSYM_NAME_LEN was increased to 512 by 
-commit 394dffa6680c ("kallsyms: increase maximum kernel symbol length to 512")
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.124-rc1
+Commit: dfe40094a275c7d172a34fa3ad984649b36c2c88
+Compiler: gcc version 7.3.0 (GCC)
 
-Perhaps this stack declaration should instead be an alloc/free
-as it can be quite large.
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9095
+passed: 9095
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-I suppose one could quibble about the kzalloc vs kmalloc or the nominally
-unnecessary initialization of sym.
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9095
+passed: 9095
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-I think this makes sense though and it reduces the #ifdef uses too.
----
- lib/vsprintf.c | 41 ++++++++++++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 17 deletions(-)
-
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index c414a8d9f1ea9..30113a30fd88a 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -980,30 +980,37 @@ char *symbol_string(char *buf, char *end, void *ptr,
- 		    struct printf_spec spec, const char *fmt)
- {
- 	unsigned long value;
--#ifdef CONFIG_KALLSYMS
--	char sym[KSYM_SYMBOL_LEN];
--#endif
-+	char *sym = NULL;
- 
- 	if (fmt[1] == 'R')
- 		ptr = __builtin_extract_return_addr(ptr);
- 	value = (unsigned long)ptr;
- 
--#ifdef CONFIG_KALLSYMS
--	if (*fmt == 'B' && fmt[1] == 'b')
--		sprint_backtrace_build_id(sym, value);
--	else if (*fmt == 'B')
--		sprint_backtrace(sym, value);
--	else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
--		sprint_symbol_build_id(sym, value);
--	else if (*fmt != 's')
--		sprint_symbol(sym, value);
--	else
--		sprint_symbol_no_offset(sym, value);
-+	if (IS_ENABLED(CONFIG_KALLSYMS) &&
-+	    (sym = kzalloc(KSYM_SYMBOL_LEN, GFP_NOWAIT | __GFP_NOWARN))) {
-+		char *rtn;
-+
-+		if (*fmt == 'B' && fmt[1] == 'b')
-+			sprint_backtrace_build_id(sym, value);
-+		else if (*fmt == 'B')
-+			sprint_backtrace(sym, value);
-+		else if (*fmt == 'S' &&
-+			 (fmt[1] == 'b' ||
-+			  (fmt[1] == 'R' && fmt[2] == 'b')))
-+			sprint_symbol_build_id(sym, value);
-+		else if (*fmt != 's')
-+			sprint_symbol(sym, value);
-+		else
-+			sprint_symbol_no_offset(sym, value);
-+
-+		rtn = string_nocheck(buf, end, sym, spec);
-+
-+		kfree(sym);
-+
-+		return rtn;
-+	}
- 
--	return string_nocheck(buf, end, sym, spec);
--#else
- 	return special_hex_number(buf, end, value, sizeof(void *));
--#endif
- }
- 
- static const struct printf_spec default_str_spec = {
-
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

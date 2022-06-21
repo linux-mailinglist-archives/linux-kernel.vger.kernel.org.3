@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D1C552E98
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AC9552E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349060AbiFUJix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S1349171AbiFUJi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349041AbiFUJir (ORCPT
+        with ESMTP id S1348984AbiFUJiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:38:47 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D76627175
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:38:46 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso8995779wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:38:46 -0700 (PDT)
+        Tue, 21 Jun 2022 05:38:52 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9206426AF4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:38:51 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e25so14206324wrc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iiYDMb25u9E0kdh4tjgpZhyjltvqJ/xSe7VCUenKLGE=;
-        b=NzfEgVsvUyBOw19ysEIZ2ZijfJ+gor+hiReib2mhC+x0cQc92Zmvb6KI961IGYCpjB
-         oLlQXNVMWSF7ZzyNHa8VJe1wpeXVa018engc/W06pd99K1ag0tuhU5ckSQbsTDZaTycG
-         d3ElhCRJY5qPfuIW7tq6ENi6VKsbLu9yuSHVB/EAQGfrEUrB7YEVofy4ErJ31eyhM/7Y
-         PsGpg9nIE2tRfgmZ/8dUJ+QfviWPyFn1pWuXWOF2fdemQIGbPbYygRpw/pb+ZIftTKsz
-         3QHgWwunrN+3RNSt9f/UvrbOUR7E3APb7SZvABecjBLHwjZgfKSOOipvQVWNa9GQ4wzL
-         /F2A==
+        bh=pK09V1QvsW9PL+B7qdNkmv6ZxZCTPizN7NIrsG9qPfQ=;
+        b=Pnp9JwXKDJ6dzYKG0CzScUVnRlTxHcWkWdOo2GZD07Hi94SVFpmx393vWIc/azVHJ7
+         tQAffTfQsqVG9p2S5YePuTWMkO1FbNgDGmRJQbztQ5b6JGRR8k5QvIGkWC2OfJjJB1cP
+         SvkXJX+5sEsg+hFZje+gVGzbBHTiZOH4ecAfPraJfU325+sfXnThgqwf/5QUpHFrzAU9
+         feFCN/SaoLm3V4YFZFLuJPq0hj9cVsYMUowmixHlC8djVXct+jSwBfPm0ahmL//uAT0k
+         Wvd7FxZ8ai4AX4KAQwrel54BEJTTu34u6A2ScHh/L6XojsSrRK3GpZ+bhcpXMDBlcjMA
+         rKfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iiYDMb25u9E0kdh4tjgpZhyjltvqJ/xSe7VCUenKLGE=;
-        b=sf2oI/KeoU9ZEST2s1AAe4cyBvZu8Fa6aTVlyLN5xvIxzcsP1inGJXo3ddLt5+G91q
-         DdbYLlCRqSLvvfKagwpSbKIP479noB8ZiqnRmEvtbQeXWt4Vcaiatv8fbBoW+njluXzU
-         C9K5vQ+nfRUKpZmROp52c8CjOz6+I3I2kbjZoi8eYcVrRURMWYW8ILIhxSZtzLvGnZkS
-         Q0a99rSE9Y6vjL8hDqdFBp1QWxArKTX7JrcMtG7Lq5oCUKDQQwPBgXQcnb2CNiT15zhw
-         v3XlnD2NQlxNJ4VD5hfjcUR1XOFde80JoDEuJLbw9OC69pAFVedoq+1y9NBEnLUyYQ6b
-         5Nsw==
-X-Gm-Message-State: AOAM530yh/cbaUQl5bekjUMfQ09US+vyd0TAH+1rEj9DAvUnxyQ2gRyO
-        maHgH+xc1aWhO52eVBFX6hlbYzoRl8DPgaj4c8kcRw==
-X-Google-Smtp-Source: ABdhPJwTHofpmOSIaU6nuTZiYCVo8t0WXtDq/8OyIrHTzJ5w2YzZPp4o8NdJ3c2Enyc+y7QQqDBorPuvt8d4H9ps5Dk=
-X-Received: by 2002:a05:600c:294a:b0:39c:4df5:f825 with SMTP id
- n10-20020a05600c294a00b0039c4df5f825mr39662307wmd.55.1655804324611; Tue, 21
- Jun 2022 02:38:44 -0700 (PDT)
+        bh=pK09V1QvsW9PL+B7qdNkmv6ZxZCTPizN7NIrsG9qPfQ=;
+        b=u6ERGj8M066Vo7JbRhUDYVl8iBHuE3fzK9+fARejhcMc2VqEz3/ydiavt5ZkW+BnA8
+         G1cCByEp82ks1i0WDTIRS5fNXNZsZ9ijpCwoGW3lQzrpQ/3eHu4X4zNZbxIDhUrtC3iY
+         ujIA0jB25PORuod8uN3DRTBzISsCPkBO0GEklmhp9deWQxE0CYTyrAkWoZk9PHsGu1To
+         JYviE/K0gS2qQSSdF6vMV31uuFHy6zlT6N3mJx1pJbwyiue6N3OPVaWbrpNOennMpSO4
+         eqdbjs8yG5htNIwkQqcaqaerWMjvxRacDrXqsd18i/eoWVahxtOfwe2lny0bADx95Mp+
+         x5LQ==
+X-Gm-Message-State: AJIora/3LcMGhcGQju8+zNrIaJCvOiYJ8ctWwJM95zdbzMrWwbTBxYEw
+        g3Bu1MiAXUcojk+gnm8I1zZahwUJ4rrjW2SX8e3A4g==
+X-Google-Smtp-Source: AGRyM1ugUOzpMtUNsfOLrwu28tigS/dKQaGBmHUUMimGgweUL2qustBJ6GIYQ8lz1BNRAZQgMq+mOBGI0HRjf793cos=
+X-Received: by 2002:a5d:648e:0:b0:217:d2cb:d6b2 with SMTP id
+ o14-20020a5d648e000000b00217d2cbd6b2mr27246664wri.433.1655804329941; Tue, 21
+ Jun 2022 02:38:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620160640.3790-1-jose.exposito89@gmail.com> <20220620160640.3790-3-jose.exposito89@gmail.com>
-In-Reply-To: <20220620160640.3790-3-jose.exposito89@gmail.com>
+References: <20220620160640.3790-1-jose.exposito89@gmail.com> <20220620160640.3790-4-jose.exposito89@gmail.com>
+In-Reply-To: <20220620160640.3790-4-jose.exposito89@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 21 Jun 2022 17:38:33 +0800
-Message-ID: <CABVgOSmntjTF3fU9NJ_qwxbOYKudjud4Sey_v8F8UFMX5KgYQA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
+Date:   Tue, 21 Jun 2022 17:38:38 +0800
+Message-ID: <CABVgOS=nmio08_==bOhXK1qLBoGVBO9=7A9srcp6PBUS06CTqA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] drm/doc: Add KUnit documentation
 To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
 Cc:     Javier Martinez Canillas <javierm@redhat.com>,
         Daniel Latypov <dlatypov@google.com>,
@@ -65,9 +65,10 @@ Cc:     Javier Martinez Canillas <javierm@redhat.com>,
         Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
         KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009e25d905e1f1fc5d"
+        boundary="000000000000ed87d905e1f1fcb2"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -79,321 +80,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009e25d905e1f1fc5d
+--000000000000ed87d905e1f1fcb2
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Tue, Jun 21, 2022 at 12:06 AM Jos=C3=A9 Exp=C3=B3sito
 <jose.exposito89@gmail.com> wrote:
 >
-> Test the conversion from XRGB8888 to RGB332.
+> Explain how to run the KUnit tests present in the DRM subsystem and
+> clarify why the UML-only options were not added to the configuration
+> file present in drivers/gpu/drm/.kunitconfig [1] [2].
 >
-> What is tested?
+> [1] https://lore.kernel.org/dri-devel/CABVgOSn8i=3DLO5p7830h2XU1Jgg0KrN0q=
+TnxkOMhf1oTgxjaKKw@mail.gmail.com/
+> [2] https://lore.kernel.org/dri-devel/CAGS_qxqpiCim_sy1LDK7PLwVgWf-LKW+uN=
+FTGM=3DT7ydk-dYcEw@mail.gmail.com/
 >
->  - Different values for the X in XRGB8888 to make sure it is ignored
->  - Different clip values: Single pixel and full and partial buffer
->  - Well known colors: White, black, red, green, blue, magenta, yellow
->    and cyan
->  - Other colors: Randomly picked
->  - Destination pitch
->
-> How to run the tests?
->
->  $ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/tes=
-ts \
->          --kconfig_add CONFIG_VIRTIO_UML=3Dy \
->          --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy
->
-> Suggested-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 > Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
 > ---
 
-These tests all pass properly on my system, and look good to me from a
-KUnit point of view. Thanks very much.
+This looks good (and doesn't seem to introduce any 'make htmldocs'
+build issues on my machine).
 
-A couple of small notes below, which you can take or leave as you
-wish: they mostly focus on potential future tests.
+You could also mention that using --arch=3Dx86_64 (or similar) instead
+of the UML options is another, equally viable option for running the
+tests. That'd make it more obvious how to run on different
+architectures: UML, while a good default, is quite different to other
+architectures in not having any PCI support out-of-the-box.
 
-Regardless,
+(Maybe we should make the --arch=3Dum default config include these
+options? Or have um-pci as another architecture. We did decide not to
+bother with SMP and x86, though...)
+
+Regardless, this is
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  drivers/gpu/drm/Kconfig                       |  16 ++
->  drivers/gpu/drm/Makefile                      |   1 +
->  drivers/gpu/drm/tests/.kunitconfig            |   3 +
->  drivers/gpu/drm/tests/Makefile                |   3 +
->  .../gpu/drm/tests/drm_format_helper_test.c    | 161 ++++++++++++++++++
->  5 files changed, 184 insertions(+)
->  create mode 100644 drivers/gpu/drm/tests/.kunitconfig
->  create mode 100644 drivers/gpu/drm/tests/Makefile
->  create mode 100644 drivers/gpu/drm/tests/drm_format_helper_test.c
->
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index 22e7fa48d693..6c2256e8474b 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -70,6 +70,22 @@ config DRM_DEBUG_SELFTEST
->
->           If in doubt, say "N".
->
-> +config DRM_KUNIT_TEST
-> +       tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
-> +       depends on DRM && KUNIT=3Dy
-> +       select DRM_KMS_HELPER
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This builds unit tests for DRM. This option is not useful for
-> +         distributions or general kernels, but only for kernel
-> +         developers working on DRM and associated drivers.
-> +
-> +         For more information on KUnit and unit tests in general,
-> +         please refer to the KUnit documentation in
-> +         Documentation/dev-tools/kunit/.
-> +
-> +         If in doubt, say "N".
-> +
->  config DRM_KMS_HELPER
->         tristate
->         depends on DRM
-> diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-> index 13ef240b3d2b..db8ffcf4e048 100644
-> --- a/drivers/gpu/drm/Makefile
-> +++ b/drivers/gpu/drm/Makefile
-> @@ -76,6 +76,7 @@ obj-$(CONFIG_DRM_KMS_HELPER) +=3D drm_kms_helper.o
->  #
->
->  obj-$(CONFIG_DRM_DEBUG_SELFTEST) +=3D selftests/
-> +obj-$(CONFIG_DRM_KUNIT_TEST) +=3D tests/
->
->  obj-$(CONFIG_DRM_MIPI_DBI) +=3D drm_mipi_dbi.o
->  obj-$(CONFIG_DRM_MIPI_DSI) +=3D drm_mipi_dsi.o
-> diff --git a/drivers/gpu/drm/tests/.kunitconfig b/drivers/gpu/drm/tests/.=
-kunitconfig
-> new file mode 100644
-> index 000000000000..6ec04b4c979d
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/.kunitconfig
-> @@ -0,0 +1,3 @@
-> +CONFIG_KUNIT=3Dy
-> +CONFIG_DRM=3Dy
-> +CONFIG_DRM_KUNIT_TEST=3Dy
-> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makef=
-ile
-> new file mode 100644
-> index 000000000000..2c8273796d9d
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +obj-$(CONFIG_DRM_KUNIT_TEST) +=3D drm_format_helper_test.o
-> diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu=
-/drm/tests/drm_format_helper_test.c
-> new file mode 100644
-> index 000000000000..98583bf56044
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-> @@ -0,0 +1,161 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +
-> +#include <kunit/test.h>
-> +
-> +#include <drm/drm_device.h>
-> +#include <drm/drm_file.h>
-> +#include <drm/drm_format_helper.h>
-> +#include <drm/drm_fourcc.h>
-> +#include <drm/drm_framebuffer.h>
-> +#include <drm/drm_gem_framebuffer_helper.h>
-> +#include <drm/drm_mode.h>
-> +#include <drm/drm_print.h>
-> +#include <drm/drm_rect.h>
-> +
-> +#include "../drm_crtc_internal.h"
-> +
-> +#define TEST_BUF_SIZE 50
-> +
-> +struct xrgb8888_to_rgb332_case {
-> +       const char *name;
-> +       unsigned int pitch;
-> +       unsigned int dst_pitch;
-> +       struct drm_rect clip;
-> +       const u32 xrgb8888[TEST_BUF_SIZE];
-> +       const u8 expected[4 * TEST_BUF_SIZE];
-
-Why is this 4*TEST_BUF_SIZE if there are the same number of pixels
-(which in rgb332 are 8-bit, not 32-bit) as in xrgb8888. I see there's
-a pitch test, which does need some extra memory, but not a full 4
-times (less than double, by the looks of things). Having this be 4 *
-implies (to me) that the aim is to have the same total memory
-available between xrgb8888 and expected, which doesn't seem to need to
-be the case. Maybe make this 2 * or similar?
-
-Relatedly, if instead of naming this 'expected', it were named rgb332,
-it'd be possible to extend this struct to add other formats expected
-values, and test several formats with the same list of test inputs.
-(dst_pitch would probably need to become dst_pitch_rgb332 eventually,
-too). This is all something which could wait for a later patch, but is
-food for thought. I'd love to see an xrgb8888_to_rgb565 test at some
-point, too.
-
-
-> +};
-> +
-> +static struct xrgb8888_to_rgb332_case xrgb8888_to_rgb332_cases[] =3D {
-> +       {
-> +               .name =3D "single_pixel_source_buffer",
-> +               .pitch =3D 1 * 4,
-> +               .dst_pitch =3D 0,
-> +               .clip =3D DRM_RECT_INIT(0, 0, 1, 1),
-> +               .xrgb8888 =3D { 0x01FF0000 },
-> +               .expected =3D { 0xE0 },
-> +       },
-> +       {
-> +               .name =3D "single_pixel_clip_rectangle",
-> +               .pitch =3D 2 * 4,
-> +               .dst_pitch =3D 0,
-> +               .clip =3D DRM_RECT_INIT(1, 1, 1, 1),
-> +               .xrgb8888 =3D {
-> +                       0x00000000, 0x00000000,
-> +                       0x00000000, 0x10FF0000,
-> +               },
-> +               .expected =3D { 0xE0 },
-> +       },
-> +       {
-> +               /* Well known colors: White, black, red, green, blue, mag=
-enta,
-> +                * yellow and cyan. Different values for the X in XRGB888=
-8 to
-> +                * make sure it is ignored. Partial clip area.
-> +                */
-> +               .name =3D "well_known_colors",
-> +               .pitch =3D 4 * 4,
-> +               .dst_pitch =3D 0,
-> +               .clip =3D DRM_RECT_INIT(1, 1, 2, 4),
-> +               .xrgb8888 =3D {
-> +                       0x00000000, 0x00000000, 0x00000000, 0x00000000,
-> +                       0x00000000, 0x11FFFFFF, 0x22000000, 0x00000000,
-> +                       0x00000000, 0x33FF0000, 0x4400FF00, 0x00000000,
-> +                       0x00000000, 0x550000FF, 0x66FF00FF, 0x00000000,
-> +                       0x00000000, 0x77FFFF00, 0x8800FFFF, 0x00000000,
-> +               },
-> +               .expected =3D {
-> +                       0xFF, 0x00,
-> +                       0xE0, 0x1C,
-> +                       0x03, 0xE3,
-> +                       0xFC, 0x1F,
-> +               },
-> +       },
-> +       {
-> +               /* Randomly picked colors. Full buffer within the clip ar=
-ea. */
-> +               .name =3D "destination_pitch",
-> +               .pitch =3D 3 * 4,
-> +               .dst_pitch =3D 5,
-> +               .clip =3D DRM_RECT_INIT(0, 0, 3, 3),
-> +               .xrgb8888 =3D {
-> +                       0xA10E449C, 0xB1114D05, 0xC1A80303,
-> +                       0xD16C7073, 0xA20E449C, 0xB2114D05,
-> +                       0xC2A80303, 0xD26C7073, 0xA30E449C,
-> +               },
-> +               .expected =3D {
-> +                       0x0A, 0x08, 0xA0, 0x00, 0x00,
-> +                       0x6D, 0x0A, 0x08, 0x00, 0x00,
-> +                       0xA0, 0x6D, 0x0A, 0x00, 0x00,
-> +               },
-> +       },
-> +};
-> +
-> +/*
-> + * conversion_buf_size - Return the destination buffer size required to =
-convert
-> + * between formats.
-> + * @dst_format: destination buffer pixel format (DRM_FORMAT_*)
-> + * @dst_pitch: Number of bytes between two consecutive scanlines within =
-dst
-> + * @clip: Clip rectangle area to convert
-> + *
-> + * Returns:
-> + * The size of the destination buffer or negative value on error.
-> + */
-> +static size_t conversion_buf_size(u32 dst_format, unsigned int dst_pitch=
-,
-> +                                 const struct drm_rect *clip)
-> +{
-> +       const struct drm_format_info *dst_fi =3D drm_format_info(dst_form=
-at);
-> +
-> +       if (!dst_fi)
-> +               return -EINVAL;
-> +
-> +       if (!dst_pitch)
-> +               dst_pitch =3D drm_rect_width(clip) * dst_fi->cpp[0];
-> +
-> +       return dst_pitch * drm_rect_height(clip);
-> +}
-> +
-> +static void xrgb8888_to_rgb332_case_desc(struct xrgb8888_to_rgb332_case =
-*t,
-> +                                        char *desc)
-> +{
-> +       strscpy(desc, t->name, KUNIT_PARAM_DESC_SIZE);
-> +}
-> +
-> +KUNIT_ARRAY_PARAM(xrgb8888_to_rgb332, xrgb8888_to_rgb332_cases,
-> +                 xrgb8888_to_rgb332_case_desc);
-> +
-> +static void xrgb8888_to_rgb332_test(struct kunit *test)
-> +{
-> +       const struct xrgb8888_to_rgb332_case *params =3D test->param_valu=
-e;
-> +       size_t dst_size;
-> +       __u8 *dst =3D NULL;
-> +
-> +       struct drm_framebuffer fb =3D {
-> +               .format =3D drm_format_info(DRM_FORMAT_XRGB8888),
-> +               .pitches =3D { params->pitch, 0, 0 },
-> +       };
-> +
-> +       dst_size =3D conversion_buf_size(DRM_FORMAT_RGB332, params->dst_p=
-itch,
-> +                                      &params->clip);
-> +       KUNIT_ASSERT_GT(test, dst_size, 0);
-> +
-> +       dst =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dst);
-> +
-> +       drm_fb_xrgb8888_to_rgb332(dst, params->dst_pitch, params->xrgb888=
-8,
-> +                                 &fb, &params->clip);
-> +       KUNIT_EXPECT_EQ(test, memcmp(dst, params->expected, dst_size), 0)=
-;
-> +}
-> +
-> +static struct kunit_case drm_format_helper_test_cases[] =3D {
-> +       KUNIT_CASE_PARAM(xrgb8888_to_rgb332_test,
-> +                        xrgb8888_to_rgb332_gen_params),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite drm_format_helper_test_suite =3D {
-> +       .name =3D "drm_format_helper_test",
-> +       .test_cases =3D drm_format_helper_test_cases,
-> +};
-> +
-> +kunit_test_suite(drm_format_helper_test_suite);
-> +
-> +MODULE_DESCRIPTION("KUnit tests for the drm_format_helper APIs");
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>");
-> --
-> 2.25.1
->
-
---0000000000009e25d905e1f1fc5d
+--000000000000ed87d905e1f1fcb2
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -460,14 +188,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDw
-EBYTPTejkIAyC4X5WuinxcuvLA3p0NVL6s4XyLvWVzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA2MjEwOTM4NDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBF
+yCxvTrVyuL/4Z8+apkp59ftnJtcArcXgV9947PvIHTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA2MjEwOTM4NTBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAG6lEF9IQ0ccg5zoatSdJ
-CaYcQsm3WlU0lN65VMP6mYe2yoDxJV1SGVHjSlVxnM5Xr46Z5rsSCguJcXSy7hgEBG9IIOdtIH60
-CuBj3tNsh9pPgWnPr/onEKyHG1oyqzty1cJzJPlitUA3nRg3YKF5TAzUEZMCiHZ3/HRTuAJyDmQH
-fwc8aYhVxijSU0yWlE5B3LmpeJPQvj036a0OqkkvONKV0FbBFZaBTBWNJkf8+KxvAQSBmEVfQI3m
-U7InQKI6nAe34rduehjqvrWO7f3Ptj7PPi/YHQgZqfNCF8ANtHN5qlM/aQ4yyP71BKdB1NDgzLNA
-IMbkV7hdV7+/MGo9kw==
---0000000000009e25d905e1f1fc5d--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAXYSOz6pgWiXaCb2WUYdo
++/VSM517L+H+4kyMAMkO5wL7TB6X383N+5iXD4qi1h01AL/mN7E3r/HJGpWv0Li4ODis5P3OA+d4
+pYtswYB8x6DOTYj5g1qbQc3GN4mTJFYuTzLLZLBRizL+c5fVjJW2YLGvp+6VCvJAzd6K6Wuq6+0a
+ysZSdYRlWYwvt/dP39F+VJAKnTNF88P5SqTzx4JKndsLqMeKcfLCX2aT/PzRnQBWd/lzXR36Jfao
+tO7J+AyYrlUnQHxPqDY3D1QR6tatF0JYbalQ8O17MiXaopXNrqR4qDC3DL6U5jJOHbmSc5tXm7FG
+o6k7Xx789iHGK4VqzA==
+--000000000000ed87d905e1f1fcb2--

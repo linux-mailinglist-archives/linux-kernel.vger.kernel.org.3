@@ -2,91 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6C15529C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5D55529BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344116AbiFUD3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S1343774AbiFUDdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbiFUD31 (ORCPT
+        with ESMTP id S236585AbiFUDdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:29:27 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E83C0D;
-        Mon, 20 Jun 2022 20:29:24 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so12039773pjz.1;
-        Mon, 20 Jun 2022 20:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=01kfdT8VhX9fZeOdUph2r75J3bo1wqhueoWm263xMZw=;
-        b=edxKPW7HtIaWtqawvjHKcyfU+Jki5bjcA8RSYkfHEogh7RfpdBOdR8gsPW8AKArYfG
-         pH0GOfMrYO1P75nhR2n2zi3qwSSvbN9CuLJtMrQHaD+bd61s2fI+w3tUN5bI7qbULBta
-         7gsdBDeQLYqZbR/kIU0Y0K91dn936tGiyu2XaTOpiXtDk8rljTaWaANWFgI23lNkMDKt
-         quDGi+c4vDdTYN1UsX87Z47gvEGIQ6j/VmXv9HuRFy/M9k4JzxiirscjfxQixE+rSEiC
-         s5xBdVI/HDBdW2n3FjmxKGcD/jsEKh8FZJAWWqDdPpTNksIliLgJh6SsbuBDgYMYvJsp
-         Vc3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=01kfdT8VhX9fZeOdUph2r75J3bo1wqhueoWm263xMZw=;
-        b=e5IO4N9cgDZUK8FYHWeT6KQ+8VGeIhbsSaUPpf6/HF72UqVcnlSWp+cn4gaR/kbdgq
-         /btck4FXbzqnlAVh3mwBsX5iP3NFoJesm66c/VzyaJmtcg7CW9taBFNRnJcI6+17Y8I4
-         n8bCI7EtkQJBRRN3LxnM2V2DDzRXaaMFEE8p+utDMWM+fgoM+LFUsL31ZSyumXywnRWQ
-         wSmPEIJwdthxtJA1zIuFk/PcWDSVPj0SujlrzQaM6NkWc04aC+TfrpdRBXR3Y/3B4jVs
-         3x7nXuOldrevc0fNM+dPJt4lYSGPGEsQ2JK7ogdO+UefQKzpcGmpQhRotgNc9DQONsWa
-         9ZUw==
-X-Gm-Message-State: AJIora+M/N7lT56voef2h/lj5ib5mEWlJiAXfL48h1uOgaAvYbEGk6xS
-        29MF+nMWHObLTfOaqMOpd+8=
-X-Google-Smtp-Source: AGRyM1sTe2jFdFfQeCq32PiysHcb8FbKPawNpenySXf1cLBds2xEv8Ovx5nBev0zhZgEaSSBRuVpTg==
-X-Received: by 2002:a17:90b:1a86:b0:1e8:2b80:5e07 with SMTP id ng6-20020a17090b1a8600b001e82b805e07mr30518286pjb.31.1655782163726;
-        Mon, 20 Jun 2022 20:29:23 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-25.three.co.id. [180.214.232.25])
-        by smtp.gmail.com with ESMTPSA id jh21-20020a170903329500b0016a109c7606sm5480275plb.259.2022.06.20.20.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 20:29:22 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id F00C3103829; Tue, 21 Jun 2022 10:29:18 +0700 (WIB)
-Date:   Tue, 21 Jun 2022 10:29:18 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/106] 5.15.49-rc1 review
-Message-ID: <YrE7DvlRvHxzCWT5@debian.me>
-References: <20220620124724.380838401@linuxfoundation.org>
+        Mon, 20 Jun 2022 23:33:21 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C5D13E28;
+        Mon, 20 Jun 2022 20:33:20 -0700 (PDT)
+X-UUID: 64d3c4cebbfe4b8396f85f412526225c-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:ffc33452-a15c-49e5-b1b3-744c3e7da423,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:ffc33452-a15c-49e5-b1b3-744c3e7da423,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:5c8b0538-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:824c3d2edc51,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 64d3c4cebbfe4b8396f85f412526225c-20220621
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 574788623; Tue, 21 Jun 2022 11:33:16 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 21 Jun 2022 11:33:16 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 11:33:16 +0800
+Message-ID: <76d86558adba1e043e50ab0e18403038450b8099.camel@mediatek.com>
+Subject: Re: [PATCH v12 14/14] drm/mediatek: dpi: Add matrix_sel helper
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 21 Jun 2022 11:33:15 +0800
+In-Reply-To: <20220620121028.29234-15-rex-bc.chen@mediatek.com>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+         <20220620121028.29234-15-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 02:50:19PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.49 release.
-> There are 106 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi, Bo-Chen:
+
+On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
+> From: Guillaume Ranquet <granquet@baylibre.com>
 > 
+> Matrix selection is a new feature for both dpi and dpintf of MT8195.
+> Add a mtk_dpi_matrix_sel() helper to update the DPI_MATRIX_SET
+> register depending on the color format.
 
-Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
-armv7 with neon FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
+Describe more about what this do.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c      | 29
+> +++++++++++++++++++++++++
+>  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
+>  2 files changed, 32 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 220e9b18e2cd..8a9151cb1622 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -135,6 +135,7 @@ struct mtk_dpi_conf {
+>  	u32 channel_swap_shift;
+>  	u32 yuv422_en_bit;
+>  	u32 csc_enable_bit;
+> +	bool matrx_sel_support;
+>  };
+>  
+>  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
+> u32 mask)
+> @@ -398,6 +399,31 @@ static void mtk_dpi_config_disable_edge(struct
+> mtk_dpi *dpi)
+>  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
+> EDGE_SEL_EN);
+>  }
+>  
+> +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
+> +			       enum mtk_dpi_out_color_format format)
+> +{
+> +	u32 matrix_sel = 0;
+> +
+> +	if (!dpi->conf->matrx_sel_support) {
+> +		dev_info(dpi->dev, "matrix_sel is not supported.\n");
 
--- 
-An old man doll... just what I always wanted! - Clara
+So for this SoC, there would be something wrong? I still does not
+understand what this feature is.
+
+static const struct of_device_id mtk_dpi_of_ids[] = {
+	{ .compatible = "mediatek,mt2701-dpi",
+	  .data = &mt2701_conf,
+	},
+	{ .compatible = "mediatek,mt8173-dpi",
+	  .data = &mt8173_conf,
+	},
+	{ .compatible = "mediatek,mt8183-dpi",
+	  .data = &mt8183_conf,
+	},
+	{ .compatible = "mediatek,mt8192-dpi",
+	  .data = &mt8192_conf,
+	},
+	{ },
+};
+
+> +		return;
+> +	}
+> +
+> +	switch (format) {
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
+> +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
+> +		if (dpi->mode.hdisplay <= 720)
+> +			matrix_sel = 0x2;
+
+Symbolize 0x2.
+
+> +		break;
+> +	default:
+
+If format is MTK_DPI_COLOR_FORMAT_YCBCR_422 first, then format change
+to MTK_DPI_COLOR_FORMAT_RGB and matrix_sel would still be 0x2. Is this
+correct?
+
+Regards,
+CK
+
+> +		break;
+> +	}
+> +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
+> INT_MATRIX_SEL_MASK);
+> +}
+> +
+>  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+>  					enum mtk_dpi_out_color_format
+> format)
+>  {
+> @@ -405,6 +431,7 @@ static void mtk_dpi_config_color_format(struct
+> mtk_dpi *dpi,
+>  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+>  		mtk_dpi_config_yuv422_enable(dpi, false);
+>  		mtk_dpi_config_csc_enable(dpi, true);
+> +		mtk_dpi_matrix_sel(dpi, format);
+>  		if (dpi->conf->swap_input_support)
+>  			mtk_dpi_config_swap_input(dpi, false);
+>  		mtk_dpi_config_channel_swap(dpi,
+> MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+> @@ -412,6 +439,7 @@ static void mtk_dpi_config_color_format(struct
+> mtk_dpi *dpi,
+>  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+>  		mtk_dpi_config_yuv422_enable(dpi, true);
+>  		mtk_dpi_config_csc_enable(dpi, true);
+> +		mtk_dpi_matrix_sel(dpi, format);
+>  		if (dpi->conf->swap_input_support)
+>  			mtk_dpi_config_swap_input(dpi, true);
+>  		else
+> @@ -951,6 +979,7 @@ static const struct mtk_dpi_conf
+> mt8195_dpintf_conf = {
+>  	.channel_swap_shift = DPINTF_CH_SWAP,
+>  	.yuv422_en_bit = DPINTF_YUV422_EN,
+>  	.csc_enable_bit = DPINTF_CSC_ENABLE,
+> +	.matrx_sel_support = true,
+>  };
+>  
+>  static int mtk_dpi_probe(struct platform_device *pdev)
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> index f7f0272dbd6a..96c117202d0d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> @@ -230,4 +230,7 @@
+>  #define EDGE_SEL_EN			BIT(5)
+>  #define H_FRE_2N			BIT(25)
+>  
+> +#define DPI_MATRIX_SET		0xB4
+> +#define INT_MATRIX_SEL_MASK	(0x1F << 0)
+> +
+>  #endif /* __MTK_DPI_REGS_H */
+

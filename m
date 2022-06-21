@@ -2,110 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A2C552983
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CA7552987
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344578AbiFUCqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 22:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S1344664AbiFUCvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbiFUCqf (ORCPT
+        with ESMTP id S232725AbiFUCvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:46:35 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D0A1C927
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:46:35 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id h5so6399058ili.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=n0ZsIsM1hSR8SGvAfAtb7KID3gwNumol7V8bVZdmf0c=;
-        b=EZZD1iIODzbzmjZQH98fxiXZR/QSLe1jSJpBpvZhmHGUL35fiA9n+Q763NWlgMS1sR
-         jb2K+13zcsA0FClskwO/JXlts6b8KH/TnE1BKXF/TOxwcntXz0CtFSmiKZDjBQRvGGCg
-         bpIXVtcMfX9DjxaE1xFQpyMpjvwaFYivZNhRlaNk/QfYEZ5+KNp6VAfJArtUJKT6rAj+
-         uJDGuqe32rQQuimSePJLRap0K0VvOqATjUpMIoi2m/sdb942Co1voe0//FXm+x4kcC+M
-         7fnJrgb+ErkS3O+VHB7dYMRlsm4RL/HURqBhbhKrPe7a9Tw3Os5Wzzo3m3ZztC/bLq9y
-         3JeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=n0ZsIsM1hSR8SGvAfAtb7KID3gwNumol7V8bVZdmf0c=;
-        b=ef2gkkomu+A6hFZUM6R4i7VuK2Mos5U6sOyPRbIWi2/ra8k3CMoiEcovmDK86qYQY8
-         Y+IBLavN1P3ig9aEEIn0nx/XlwIRaSgbh1tQ9NaCgZ9icz+76E7UvG/Z792gCj1YIG6j
-         QePyhH89XMWrRJ4/KuPLWkgnSAAdG9sWrp2EBs33V/rbZFyAzOIrvAMcj3K3NTP3pkIy
-         hf+CDReY5PdS+2pNvrQz48OtZW+dg2snQyr/K+6l5s57u8IhYeKBrfAHZc6vQkGtgesP
-         HU3Kz0nh5Uv6oP38mOZIT06hFy38t61Bb7JuAWubQd5PatRVMX9hP4cU5vZzZ0Sn5s8o
-         6Xqg==
-X-Gm-Message-State: AJIora8LLdIhVyZw+eanz0teZtcT17k757WE7V7LY5MY9TlG9RJLg9CP
-        khP+SWBORjLyS5gXHlKG/t3Ep+29GHEqwVCMSfg=
-X-Google-Smtp-Source: AGRyM1uOcgAoNIHrtAKB0jOSkrlpxkoN+kKY6aQBqLn5XVcXMu7pRmUCaGexdfqf+YEivorkJA5UxwK8ajAbFJujePM=
-X-Received: by 2002:a05:6e02:17ca:b0:2d3:e6bf:7724 with SMTP id
- z10-20020a056e0217ca00b002d3e6bf7724mr15059355ilu.312.1655779594570; Mon, 20
- Jun 2022 19:46:34 -0700 (PDT)
+        Mon, 20 Jun 2022 22:51:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A8C1DA68;
+        Mon, 20 Jun 2022 19:51:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD318B811BD;
+        Tue, 21 Jun 2022 02:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D80CC385A2;
+        Tue, 21 Jun 2022 02:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655779895;
+        bh=irQwJk9q3lj6Mb5+MUo1cwVgd5N9WsMo25ESc2zJ6J0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u9DRq3KoIUNrONpYTo1qOYf+0isutq+d5XZWuib5HhoWZ/ihZ99wcxCi7oWYJN3io
+         isOYv+aPiOknPA+T6J5of/banzXpnT+DUA0R+te1QsGV431NTk9fEOliNr9WwZ0Oaq
+         BeI3JLdUZHhHAWnaEdCNNbROimEc0V+J9i1OKGjvpIjeZ2cPY12ZGTjhUDD5y1zpl8
+         TxwbfpliGoYEc17Y9PkG5LK7Nh2aJPy7a2jLouLvCAlL12UuojjnvVvPBToyzx47PX
+         LWupqkzWE01Cu2zAsshPpkQN+kFAQckBkHgMXTVSJGdSwk50Aa30j4KNwUPmpSP+Xa
+         n90pycj5G7oAg==
+Received: by mail-yb1-f172.google.com with SMTP id i7so4525199ybe.11;
+        Mon, 20 Jun 2022 19:51:35 -0700 (PDT)
+X-Gm-Message-State: AJIora8Q9l5hXp6WOfZYftACKy4tUDuplzx+0SNK1bEvLZYRnH5Ks7cm
+        MSZEh7LLrrqBT6+Lqy8dgK6ZZ/i65n38WQbutik=
+X-Google-Smtp-Source: AGRyM1tXaEkWud44fl8OhCVPrRToQwsjs7ndHVzk7shodMzOvpkTKmiKcC4qpJLkG3P+e8gCuTh7QgATXlGGDBChqOE=
+X-Received: by 2002:a05:6902:b:b0:668:e2a0:5c2 with SMTP id
+ l11-20020a056902000b00b00668e2a005c2mr13741839ybh.389.1655779894668; Mon, 20
+ Jun 2022 19:51:34 -0700 (PDT)
 MIME-Version: 1.0
-From:   noman pouigt <variksla@gmail.com>
-Date:   Mon, 20 Jun 2022 19:46:23 -0700
-Message-ID: <CAES_P+_aC4cHMB3Tn0pz13_gKCpXs=efeae2JBvEPOK5zidYnA@mail.gmail.com>
-Subject: ASoC: SOF: Race condition in ipc.c
-To:     Mark Brown <broonie@kernel.org>, liam.r.girdwood@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, yangyingliang@huawei.com,
-        alsa-devel@alsa-project.org, sound-open-firmware@alsa-project.org,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        peter.ujfalusi@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, rander.wang@intel.com
+References: <20220520235758.1858153-1-song@kernel.org> <YrBV8darrlmUnrHR@ziqianlu-Dell-Optiplex7000>
+ <CAPhsuW5oqJKHUr6wwbFyC8DFyawKr8djuv5Bjk7FEQ5dnKDGyw@mail.gmail.com> <YrEfghUwr+IO2MM1@ziqianlu-Dell-Optiplex7000>
+In-Reply-To: <YrEfghUwr+IO2MM1@ziqianlu-Dell-Optiplex7000>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 20 Jun 2022 19:51:24 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4eAm9QrAxhZMJu-bmvHnjWjuw86gFZzTHRaMEaeFhAxw@mail.gmail.com>
+Message-ID: <CAPhsuW4eAm9QrAxhZMJu-bmvHnjWjuw86gFZzTHRaMEaeFhAxw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 0/8] bpf_prog_pack followup
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Folks,
+On Mon, Jun 20, 2022 at 6:32 PM Aaron Lu <aaron.lu@intel.com> wrote:
+>
+> On Mon, Jun 20, 2022 at 09:03:52AM -0700, Song Liu wrote:
+> > Hi Aaron,
+> >
+> > On Mon, Jun 20, 2022 at 4:12 AM Aaron Lu <aaron.lu@intel.com> wrote:
+> > >
+> > > Hi Song,
+> > >
+> > > On Fri, May 20, 2022 at 04:57:50PM -0700, Song Liu wrote:
+> > >
+> > > ... ...
+> > >
+> > > > The primary goal of bpf_prog_pack is to reduce iTLB miss rate and reduce
+> > > > direct memory mapping fragmentation. This leads to non-trivial performance
+> > > > improvements.
+> > > >
+> > > > For our web service production benchmark, bpf_prog_pack on 4kB pages
+> > > > gives 0.5% to 0.7% more throughput than not using bpf_prog_pack.
+> > > > bpf_prog_pack on 2MB pages 0.6% to 0.9% more throughput than not using
+> > > > bpf_prog_pack. Note that 0.5% is a huge improvement for our fleet. I
+> > > > believe this is also significant for other companies with many thousand
+> > > > servers.
+> > > >
+> > >
+> > > I'm evaluationg performance impact due to direct memory mapping
+> > > fragmentation and seeing the above, I wonder: is the performance improve
+> > > mostly due to prog pack and hugepage instead of less direct mapping
+> > > fragmentation?
+> > >
+> > > I can understand that when progs are packed together, iTLB miss rate will
+> > > be reduced and thus, performance can be improved. But I don't see
+> > > immediately how direct mapping fragmentation can impact performance since
+> > > the bpf code are running from the module alias addresses, not the direct
+> > > mapping addresses IIUC?
+> >
+> > You are right that BPF code runs from module alias addresses. However, to
+> > protect text from overwrites, we use set_memory_x() and set_memory_ro()
+> > for the BPF code. These two functions will set permissions for all aliases
+> > of the memory, including the direct map, and thus cause fragmentation of
+> > the direct map. Does this make sense?
+>
+> Guess I didn't make it clear.
+>
+> I understand that set_memory_XXX() will cause direct mapping split and
+> thus, fragmented. What is not clear to me is, how much impact does
+> direct mapping fragmentation have on performance, in your case and in
+> general?
+>
+> In your case, I guess the performance gain is due to code gets packed
+> together and iTLB gets reduced. When code are a lot, packing them
+> together as a hugepage is a further gain. In the meantime, direct
+> mapping split (or not) seems to be a side effect of this packing, but it
+> doesn't have a direct impact on performance.
+>
+> One thing I can imagine is, when an area of direct mapping gets splited
+> due to permission reason, when that reason is gone(like module unload
+> or bpf code unload), those areas will remain fragmented and that can
+> cause later operations that touch these same areas using more dTLBs
+> and that can be bad for performance, but it's hard to say how much
+> impact this can cause though.
 
-I have borrowed part of SOF architecture for my own DSP
-framework development as the memory on the DSP is
-extremely small and wouldn't be able to support SOF.
-
-Currently I am running into a race condition as below:
-
-CPU                                            DSP
-PCM_TRIGGER_START
-sof_ipc_send_msg ---->
-
-                                      <------Immediate ACK
-ipc3_wait_tx_done
-(wait_event_timeout)
-                                      <------ POSITION update
-
-snd_pcm_period_elapsed
-
-
-As you can see TRIGGER_START didn't even finish
-and waiting for it to complete in ipc3_wait_tx_done
-function. However, before it could complete the position
-interrupt was issued which results in calling period_elapsed
-function.
-
-In order to fix this I assume below is called in SOF framework:
-schedule_work(&spcm->stream[substream->stream].period_elapsed_work);
-
-How is this design working? If the interrupt is coming too fast
-from the DSP than the associated function with this schedule_work
-will not get called as the scheduler will not get time to schedule the
-workqueue and elapsed function will not be called thereby not increasing
-the hw_ptr. How is the flow control for data transfer achieved?
-
-I am facing the above problem in my design.
-
-I am wondering if I can simply add one more IPC command(don't call
-wait_event_interruptible for this) after TRIGGER_START to start the
-streaming.This way schedule_work for updating period_elapsed function
-can be avoided and it can be called in an interrupt context.
+Yes, we have data showing the direct mapping remaining fragmented
+can cause non-trivial performance degradation. For our web workload,
+the difference is in the order of 1%.
 
 Thanks,
-Variksla
+Song

@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A564552DC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9D5552DC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347762AbiFUJBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S1346652AbiFUJAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348757AbiFUI72 (ORCPT
+        with ESMTP id S245168AbiFUJAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:59:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B32E1C;
-        Tue, 21 Jun 2022 01:59:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E88361548;
-        Tue, 21 Jun 2022 08:59:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4116C3411C;
-        Tue, 21 Jun 2022 08:59:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655801966;
-        bh=AB66Enb7R4KQGpkDyB/YlDU5O1cc0YNqXbOPRX++uow=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lyL3yW2NWKl7RDcU49EKOYTAcavL5+mfzufzfEbko+by7cetSpJ4FQLXycevhzeEs
-         eYgQbrkll+UVn6jqlCel/Uu1Bah7uAzIDcuGmJwSglPyguRbmBcGPhLvaR4Dz1EDSG
-         y+ReuXhPgmpPG0DpCvB2fXsP3sKsygYtjx4IV3K6TOnMpswfjX4UH+omoPqg+7yTL1
-         b1cDr9PcN/PMEMqRBOvRDtLQaHJIllasUvU1UznyvcV1B7pLgO67NuyP+w+ewV+UQO
-         IhBKKHV//Wnp64MpzC9V2yIrpbrx7LJc1nOSRmDde4C9Exju4+jWALxzzJJ+Fu95ue
-         LshYBa9fwiUIw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3ZjE-0001d1-0M; Tue, 21 Jun 2022 10:59:20 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        charles-yeh@prolific.com.tw, Charles Yeh <charlesyeh522@gmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] USB: serial: pl2303: add support for more HXN (G) types
-Date:   Tue, 21 Jun 2022 10:58:55 +0200
-Message-Id: <20220621085855.6252-1-johan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 21 Jun 2022 05:00:37 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C80E1C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655802037; x=1687338037;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Pf/6YbHLJ8co/KQOaEDZAh/A6J4z8F3wIA7jYJ7Pb7o=;
+  b=TV9kWU6m6o/22y3TQBqNTvDMfUAR1GvZPH7cqkoMtcsFZQay91os5pl9
+   yn59GgtTDy1oF3EEiea3AzoJfMQZV/QgNsI4A8St8gi5m8YOZKUXdTvt2
+   72eyxV2t/zxFTgmHgZCu6v6FuU84EBKSNrc5oFge0CfzIW8J5J188Se8z
+   feZLLC3oE2oHRm3lKInN2C0k9A1xGS2swEL/351i0TJYPWemYgdCEokGN
+   bYRl7WDELHBqOwdFlzpFYLhmnwxUo1Bl/DEbEQjjbYeSezhpjiMjQq6x0
+   n5ujr+nko0DToNKEYg9aLrf3bPmZombzXBB07uum2bToMMYZzPEFhTXwM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="280800707"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="280800707"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 02:00:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="676910281"
+Received: from lkp-server01.sh.intel.com (HELO e0735e231192) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 02:00:11 -0700
+Received: from kbuild by e0735e231192 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3Zk2-00006z-BB;
+        Tue, 21 Jun 2022 09:00:10 +0000
+Date:   Tue, 21 Jun 2022 16:59:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.17.y 765/3797] drivers/iio/accel/mma8452.o:
+ warning: objtool: mma8452_read_raw()+0x4c: unreachable instruction
+Message-ID: <202206211623.fpXGOLeA-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for further HXN (G) type devices (GT variant, GL variant, GS
-variant and GR) and document the bcdDevice mapping.
+Hi Hans,
 
-Note that the TA and TB types use the same bcdDevice as some GT and GE
-variants, respectively, but that the HX status request can be used to
-determine which is which.
+FYI, the error/warning still remains.
 
-Also note that we currently do not distinguish between the various HXN
-(G) types in the driver but that this may change eventually (e.g. when
-adding GPIO support).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+head:   eed68052d2016d9f96d6656435099762608120e3
+commit: 0646c782086f2a6081186a9898d40ea8886b8ade [765/3797] iio: mma8452: Fix probe failing when an i2c_device_id is used
+config: x86_64-randconfig-a003-20220620 (https://download.01.org/0day-ci/archive/20220621/202206211623.fpXGOLeA-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=0646c782086f2a6081186a9898d40ea8886b8ade
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.17.y
+        git checkout 0646c782086f2a6081186a9898d40ea8886b8ade
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/
 
-Reported-by: Charles Yeh <charlesyeh522@gmail.com>
-Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
-Cc: stable@vger.kernel.org	# 5.13
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/pl2303.c | 29 +++++++++++++++++------------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 3506c47e1eef..40b1ab3d284d 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -436,22 +436,27 @@ static int pl2303_detect_type(struct usb_serial *serial)
- 		break;
- 	case 0x200:
- 		switch (bcdDevice) {
--		case 0x100:
-+		case 0x100:	/* GC */
- 		case 0x105:
-+			return TYPE_HXN;
-+		case 0x300:	/* GT / TA */
-+			if (pl2303_supports_hx_status(serial))
-+				return TYPE_TA;
-+			fallthrough;
- 		case 0x305:
-+		case 0x400:	/* GL */
- 		case 0x405:
-+			return TYPE_HXN;
-+		case 0x500:	/* GE / TB */
-+			if (pl2303_supports_hx_status(serial))
-+				return TYPE_TB;
-+			fallthrough;
-+		case 0x505:
-+		case 0x600:	/* GS */
- 		case 0x605:
--			/*
--			 * Assume it's an HXN-type if the device doesn't
--			 * support the old read request value.
--			 */
--			if (!pl2303_supports_hx_status(serial))
--				return TYPE_HXN;
--			break;
--		case 0x300:
--			return TYPE_TA;
--		case 0x500:
--			return TYPE_TB;
-+		case 0x700:	/* GR */
-+		case 0x705:
-+			return TYPE_HXN;
- 		}
- 		break;
- 	}
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/accel/mma8452.o: warning: objtool: mma8452_read_raw()+0x4c: unreachable instruction
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5143552C19
+	by mail.lfdr.de (Postfix) with ESMTP id 78AA2552C18
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347369AbiFUHcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        id S1347500AbiFUHcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347340AbiFUHb0 (ORCPT
+        with ESMTP id S1344693AbiFUHb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:31:26 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB8E55B4;
+        Tue, 21 Jun 2022 03:31:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B024E65E3;
         Tue, 21 Jun 2022 00:30:13 -0700 (PDT)
-X-UUID: 01e1ff8363a644c184c44494230c6e3d-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:5fa9aa91-79bc-4c2d-b7d5-795172691410,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:5fa9aa91-79bc-4c2d-b7d5-795172691410,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:7ff716ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:f9b7bab6489e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 01e1ff8363a644c184c44494230c6e3d-20220621
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1686115936; Tue, 21 Jun 2022 15:30:09 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 21 Jun 2022 15:30:07 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 15:30:07 +0800
-Message-ID: <72f2458be7440100d1309c72d5e51e14bc2e5436.camel@mediatek.com>
-Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 15:30:07 +0800
-In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
-         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5B2541F9C6;
+        Tue, 21 Jun 2022 07:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655796612; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U4DTymAJzJ+35tPlIxji4RhmkYgZWhkrVnEK1homBN0=;
+        b=xDXlEOxSp1VNq0dGCbuV8cBqopmOOBe+A2BB5vgty35t9Pc/P9Zy4i4FWvAzDXkWFKrVsH
+        pB3OKphPeQk5Zzg0nAX5T+R8q37T1TUR75oNH/oCzzYq2pELsarXQyJu0C2STfbnRBlrsk
+        YcOuN/YP1HGwMUimbind212F/PcAhB8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655796612;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U4DTymAJzJ+35tPlIxji4RhmkYgZWhkrVnEK1homBN0=;
+        b=hnBmxj3WK/dvg/U4SLwzrQISzWAXPwW72yyFMPep1j5ut5MiSRm/2ycY7Kw53Tm92v7F1T
+        uO3z7yVLSQtDwOAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26E8613638;
+        Tue, 21 Jun 2022 07:30:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5lt1CIRzsWIJZwAAMHmgww
+        (envelope-from <jslaby@suse.cz>); Tue, 21 Jun 2022 07:30:12 +0000
+Message-ID: <14c9839b-c015-69c1-84f0-a99d03877005@suse.cz>
+Date:   Tue, 21 Jun 2022 09:30:11 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+References: <20220616104541.16289-1-jslaby@suse.cz>
+ <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
+ <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
+ <CA+icZUUSTcrJqZB-gwNYt5objVg1J5+Ous6_hof0_A6eVCM-Kg@mail.gmail.com>
+ <CAKwvOdmb5xdF70TzNp=4STCpzkGh16FnuKE1KbdzDhHt=OuRFA@mail.gmail.com>
+From:   Jiri Slaby <jslaby@suse.cz>
+In-Reply-To: <CAKwvOdmb5xdF70TzNp=4STCpzkGh16FnuKE1KbdzDhHt=OuRFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,67 +83,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
-
-On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On 17. 06. 22, 18:32, Nick Desaulniers wrote:
+> On Fri, Jun 17, 2022 at 3:35 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>
+>> On Fri, Jun 17, 2022 at 12:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>>
+>>> On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>>>
+>>>> On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>>>>>
+>>>>> Until the link-vmlinux.sh split (cf. the commit below), the linker was
+>>>>> run with jobserver set in MAKEFLAGS. After the split, the command in
+>>>>> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+>>>>> is lost.
+>>>>>
+>>>>> Restore it as linkers working in parallel (esp. the LTO ones) make a use
+>>>>> of it.
 > 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+> TBH, I agree with Masahiro. I didn't understand this comment "esp. the
+> LTO ones."  Jiri, can you clarify what you mean here?
 
-[snip]
+Sure. clang is not the only compiler/linker that can handle kernel ;). 
+So while rebasing gcc-LTO-kernel-patches to 5.19-rc (to upstream them 
+later), this broke. See:
+https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/lto-wrapper.cc;h=26e06e77be4e0afb2bc3e913062a9c51cab5d205;hb=HEAD#l1336
 
-> +
-> +/* multiple of 0.27Gbps */
-> +enum mtk_dp_linkrate {
-> +	MTK_DP_LINKRATE_RBR = 0x6,
-> +	MTK_DP_LINKRATE_HBR = 0xA,
-> +	MTK_DP_LINKRATE_HBR2 = 0x14,
-> +	MTK_DP_LINKRATE_HBR25 = 0x19,
-> +	MTK_DP_LINKRATE_HBR3 = 0x1E,
-> +};
+gcc really parses MAKEFLAGS and looks for "--jobserver-auth=" there, if 
+one passes specifies -flto=jobserver.
 
-Use the definition in drm_dp.h:
-
-/* Link Configuration */
-#define	DP_LINK_BW_SET		            0x100
-# define DP_LINK_RATE_TABLE		    0x00    /* eDP 1.4 */
-# define DP_LINK_BW_1_62		    0x06
-# define DP_LINK_BW_2_7			    0x0a
-# define DP_LINK_BW_5_4			    0x14    /* 1.2 */
-# define DP_LINK_BW_8_1			    0x1e    /* 1.4 */
-# define DP_LINK_BW_10                      0x01    /* 2.0 128b/132b
-Link Layer */
-# define DP_LINK_BW_13_5                    0x04    /* 2.0 128b/132b
-Link Layer */
-# define DP_LINK_BW_20                      0x02    /* 2.0 128b/132b
-Link Layer */
-
-Regards,
-CK
-
-> 
-> 
-
+thanks,
+-- 
+js
+suse labs

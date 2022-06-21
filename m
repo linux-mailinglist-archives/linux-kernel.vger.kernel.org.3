@@ -2,131 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907BC553498
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F068C5534A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351399AbiFUOgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
+        id S1351821AbiFUOgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349502AbiFUOgE (ORCPT
+        with ESMTP id S229748AbiFUOgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:36:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 329B61C93F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655822162;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RSGBimivEze+n4dtbXJkxFNriZUPEE36wmWbROM+6Dg=;
-        b=FLBQ8Sw/gJBz/iLRCkOrlLaloCBrjuJd/6sXYKqjeVTDYeGK5nRwPeSJumRD1mYt7wsaxT
-        o3HxonE0tCRzcYXfLRbBJNCBEaW1cTLhVFGhwZaGSTDCzlk8seSNLikqy5Vsv249WN9YvO
-        aY/lAuPO2ukG9A1m6Wsc4MdVEP3JuDE=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-q3rKiIGcNxW4UwhIeW6YSg-1; Tue, 21 Jun 2022 10:36:00 -0400
-X-MC-Unique: q3rKiIGcNxW4UwhIeW6YSg-1
-Received: by mail-ed1-f69.google.com with SMTP id g8-20020a056402090800b00433940d207eso11154598edz.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:36:00 -0700 (PDT)
+        Tue, 21 Jun 2022 10:36:48 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9024970
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:36:47 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id v1so27901785ejg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=GJLwzs2N2pKacf0ZdpQ3Wu/SeO3mykpG6QqRYLAhfmk=;
+        b=N6BE6BxVqA8S6MZ6jXtPrW+5fvbwqzTVoAHhh3M6wcy6Cp3FV3fMh6BLMAvKVNnIfu
+         N3CoCOxglGEajhXHoucNcwECSyZ/r+5cwTJu0HYMEaNbYQEZAXIf0ZLUR3VVuqXCKy/M
+         +cPfNworLHTQ6NGyNeJOo4OYiEmoloxSMmG7tq/orOseY2bXZvl0/T7T3dv/VDsT6jP5
+         TF8L4ho8OddkWkPEJ/HtUuM8JU1NqfqYsQpQdrNW+1GuxdhOSAKbdjT6TtYj82lAIH68
+         avk9dDAYHsqPI4Kwg6aZPdtWGSyJDDhDzeVgox8yE0RAvGFjz6ykgpn2s6NlcobiiEBB
+         LnJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RSGBimivEze+n4dtbXJkxFNriZUPEE36wmWbROM+6Dg=;
-        b=1Hr5c7nWYGY7GbHV3APfXrwfPTlmihCcI6dt1MwPJcXEFpLLwQIDbOUqnBoeRJnZAg
-         sTVs7gMn4nRwFJW6P8pLJDLuzT3xxwhwbmSwYbLGAbL21DomID+gkPJyyn3c8dFJgoiX
-         OeQqECmlkZmOE+Shr1tbB6RfExHfmSxZGqE3zBqpCoK9NCSWKpLuIr5YhQL4+jyO6NNG
-         Yu5U1SG6LVQ/+xVwhYs5tCvOSbzd02ff/54RnYl4GN6l8xTOpBrE+DEJzt5Ylq+Ktek7
-         V5mM98VyD22ejbLqsVTypOoxfX1PpiQTcfD4xLFawWwMXMT4hyk9wtXpJYUQkGppow/o
-         y2Ig==
-X-Gm-Message-State: AJIora80Zg9pk1bjEjnhvNbxLBIqySnminfDYvFAHdKI3neftifHO/R7
-        xEJeOpXZSkyKkRafOhqmmvBNIBZkzSrudBaRtEZB3IhIDL0cq8O+3cYn/bj6xxIlbcZzE8vohyE
-        sKpaJYlP9zsjBYji8FjVeRo3/1HmSZf5T2cu+aCpk
-X-Received: by 2002:a05:6402:2694:b0:42d:e05d:3984 with SMTP id w20-20020a056402269400b0042de05d3984mr35354887edd.419.1655822159528;
-        Tue, 21 Jun 2022 07:35:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uccH1oXNG8W/n8lbN+i3vqJggxl37Nh59lCOkVkXH4xWIJYiQHe8SQW9WE7sOdkib7dRLLvyzpRWt0vZP3Vfk=
-X-Received: by 2002:a05:6402:2694:b0:42d:e05d:3984 with SMTP id
- w20-20020a056402269400b0042de05d3984mr35354874edd.419.1655822159382; Tue, 21
- Jun 2022 07:35:59 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=GJLwzs2N2pKacf0ZdpQ3Wu/SeO3mykpG6QqRYLAhfmk=;
+        b=KkfyT3ekNPa9g/ETX9MhgfVu8dhbeI2HAwKa2wvGHTE8kUIBPpjJvaCQPzlBDbn+il
+         Va2Llqp0/11cHwsiEzizXDqy3RUwe/z8AqyjnFBGwQgnegNNLbj9IEdb1ruKgVEMCciL
+         Zyiu4Y5zPCiQVlwETJrllH53N+FR6AjZ6tGT2Ir4kcW185LLssGD6YVDGfGVe/71NL6s
+         dQd0Wu4c5zlAIo9aUdpL06yQeJ4giMY+ftbaKWwj4mqKmtJNbu01aAFuJEe36MwJeiMq
+         6RTaXAju9TseeacjTCK9+pvAYmY0cLrQ2KkPKgmCqUpb4wUPXkjhxr9nMtHHr/ac1sGq
+         VSHA==
+X-Gm-Message-State: AJIora+3jKwA/+Ailm8aC90b3Lkf2ESAXD9b76okuzPS5J9NlYpGtFdJ
+        tOfGl5JT+uJ90JHANMGRliwIHNGvTkWm0Jo4+AICkoNZebbCfsmh1uw=
+X-Google-Smtp-Source: AGRyM1sgOphI4tXDIE/cP6e1t4c0owyLW5pNlViUlFMGQUq41Aw+paKFZiYauH2ZneR1k5TX7rpbx+1VF9WS4NhuzOI=
+X-Received: by 2002:a17:906:9b96:b0:711:d21c:1b0b with SMTP id
+ dd22-20020a1709069b9600b00711d21c1b0bmr26352742ejc.365.1655822205405; Tue, 21
+ Jun 2022 07:36:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620131618.952133-1-vdronov@redhat.com> <23bc9020-4519-65ba-725e-e7efd226c192@infradead.org>
-In-Reply-To: <23bc9020-4519-65ba-725e-e7efd226c192@infradead.org>
-From:   Vlad Dronov <vdronov@redhat.com>
-Date:   Tue, 21 Jun 2022 16:35:47 +0200
-Message-ID: <CAMusb+SaCeFe9maPZEE3JuaF1Q18=zj_Ljb0+HeNABKQwAa+mg@mail.gmail.com>
-Subject: Re: [PATCH] crypto: fips - make proc files report fips module name
- and version
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simo Sorce <simo@redhat.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Tue, 21 Jun 2022 22:36:04 +0800
+Message-ID: <CAD-N9QVVKUDFKMSxUc-smcz0B_7PrjN3DPku+cDM3ZKDn0XLBA@mail.gmail.com>
+Subject: Unitialized Variable and Null Pointer Dereference bug in gb_bootrom_get_firmware
+To:     vireshk@kernel.org, Johan Hovold <johan@kernel.org>,
+        elder@kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi maintainers,
 
-On Mon, Jun 20, 2022 at 11:40 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 6/20/22 06:16, Vladis Dronov wrote:
-> > diff --git a/crypto/Kconfig b/crypto/Kconfig
-> > index 1d44893a997b..082ff03d9f6c 100644
-> > --- a/crypto/Kconfig
-> > +++ b/crypto/Kconfig
-> > @@ -33,6 +33,27 @@ config CRYPTO_FIPS
-> >         certification.  You should say no unless you know what
-> >         this is.
-> >
-> > +config CRYPTO_FIPS_NAME
-> > +     string "FIPS Module Name"
-> > +     default "Linux Kernel Cryptographic API"
-> > +     depends on (CRYPTO_FIPS)
->
-> No parentheses.
->
-> > +     help
-> > +       This option sets the FIPS Module name reported by the Crypto API via
-> > +       the /proc/sys/crypto/fips_name file.
-> > +
-> > +config CRYPTO_FIPS_CUSTOM_VERSION
-> > +     bool "Use Custom FIPS Module Version"
-> > +     depends on (CRYPTO_FIPS)
->
-> Ditto.
->
-> > +     default n
-> > +
-> > +config CRYPTO_FIPS_VERSION
-> > +     string "FIPS Module Version"
-> > +     default "(none)"
-> > +     depends on (CRYPTO_FIPS_CUSTOM_VERSION)
->
-> Ditto.
->
-> > +     help
-> > +       This option provides the ability to override the FIPS Module Version.
-> > +       By default the KERNELRELEASE value is used.
->
-> --
-> ~Randy
+I would like to send one bug report.
 
-Oh dang, indeed. Thanks, Randy.
+In gb_bootrom_get_firmware, if the first branch is satisfied, it will
+go to queue_work, leading to the dereference of uninitialized const
+variable "fw". If the second branch is satisfied, it will go to unlock
+with fw as NULL pointer, leading to a NULL Pointer Dereference.
 
-Let me post v2 to this same thread to reduce separate threads.
+The Fixes commit should be [1], introducing the dereference of "fw" in
+the error handling code.
 
-Best regards,
-Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Engineer
+I am not sure how to fix this bug. Any comment on removing the
+dereference of fw?
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a4293e1d4e6416477976ee3bd248589d3fc4bb19
+
+--
+My best regards to you.
+
+     No System Is Safe!
+     Dongliang Mu

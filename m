@@ -2,84 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3643552D57
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEB8552D5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiFUIp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
+        id S1347633AbiFUIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiFUIpz (ORCPT
+        with ESMTP id S230456AbiFUIrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:45:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB9D26553;
-        Tue, 21 Jun 2022 01:45:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0974F1F966;
-        Tue, 21 Jun 2022 08:45:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655801153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7pouBC4i764FgZXOuJ6SFkbk2xa1PZt6dSFI3XEoLes=;
-        b=BxLNshCDBQRc4XmBU9sLjI5ynrIOKZzeUOi0zGyby68AWR+NLDKh1gQWWSjQmyLNWRb+W0
-        dy0bLKDuzMCdi110ykiH+iFiyHYjXJJ9LzLM8QxvKgjLk/ggBpz5iUtfZUkwmUxpm4jxDI
-        CIeoXXpEVaSAUBtAywORVhvrAqEkhoM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655801153;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7pouBC4i764FgZXOuJ6SFkbk2xa1PZt6dSFI3XEoLes=;
-        b=k6ybPuTnlEi+J6ckMb+UuqBX0ObNoZVxlTDbFsuZr7WGvkpdlP8i7LXSwEWQ9sn0i6kP5E
-        tdUC8b/eV67CtfCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3B6C13A88;
-        Tue, 21 Jun 2022 08:45:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qHp9M0CFsWJvEAAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 21 Jun 2022 08:45:52 +0000
-Message-ID: <cc1028ad-bd51-dea7-9f3d-fb954416b9fa@suse.de>
-Date:   Tue, 21 Jun 2022 10:45:52 +0200
+        Tue, 21 Jun 2022 04:47:01 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA792610D;
+        Tue, 21 Jun 2022 01:46:59 -0700 (PDT)
+X-UUID: ec8775581713496298f9786b6bb3f920-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:49656c31-03b5-4dac-916c-58014802bba8,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:2
+X-CID-META: VersionHash:b14ad71,CLOUDID:dfd9a12d-1756-4fa3-be7f-474a6e4be921,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:4,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: ec8775581713496298f9786b6bb3f920-20220621
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1524695954; Tue, 21 Jun 2022 16:46:55 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 21 Jun 2022 16:46:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 16:46:53 +0800
+Message-ID: <7a581fd59a68a292a0acc0c17173cc3ae62612f0.camel@mediatek.com>
+Subject: Re: [PATCH v12 10/14] drm/mediatek: dpi: Add dpintf support
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 21 Jun 2022 16:46:53 +0800
+In-Reply-To: <0862532b568f7e13b89b6537928efd518a2971a3.camel@mediatek.com>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+         <20220620121028.29234-11-rex-bc.chen@mediatek.com>
+         <0862532b568f7e13b89b6537928efd518a2971a3.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 2/3] scsi: BusLogic remove bus_to_virt
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
-References: <20220617125750.728590-1-arnd@kernel.org>
- <20220617125750.728590-3-arnd@kernel.org>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220617125750.728590-3-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,116 +69,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 14:57, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, 2022-06-21 at 10:32 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
 > 
-> The BusLogic driver is the last remaining driver that relies on the
-> deprecated bus_to_virt() function, which in turn only works on a few
-> architectures, and is incompatible with both swiotlb and iommu support.
+> On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
+> > From: Guillaume Ranquet <granquet@baylibre.com>
+> > 
+> > dpintf is the displayport interface hardware unit. This unit is
+> > similar
+> > to dpi and can reuse most of the code.
+> > 
+> > This patch adds support for mt8195-dpintf to this dpi driver. Main
+> > differences are:
+> >  - 4 pixels for one round for dp_intf while dpi is 1 pixel for one
+> > round.
+> >    Therefore, pixel clock and timing parameter should be divided by
+> > 4
+> > for
+> >    dp_intf.
+> >  - Some features/functional components are not available for dpintf
+> >    which are now excluded from code execution once is_dpintf is
+> > set.
+> >    The main difference is some parts of hardware design between
+> > dp_intf
+> >    and dpi.
+> >  - Some register contents differ slightly between the two
+> > components.
+> > To
+> >    work around this I added register bits/masks with a DPINTF_
+> > prefix
+> >    and use them where different.
+> > 
+> > Based on a separate driver for dpintf created by
+> > Jitao shi <jitao.shi@mediatek.com>.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > [Bo-Chen: Modify reviewers' comments.]
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c          | 65
+> > +++++++++++++++++++--
+> >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h     | 13 +++++
+> >  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  4 ++
+> >  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  1 +
+> >  drivers/gpu/drm/mediatek/mtk_drm_drv.c      |  3 +
+> >  5 files changed, 82 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index e186870ba3bc..2717b1741b7a 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -126,6 +126,7 @@ struct mtk_dpi_conf {
+> >  	const u32 *output_fmts;
+> >  	u32 num_output_fmts;
+> >  	bool is_ck_de_pol;
+> > +	bool is_dpintf;
+> >  	bool swap_input_support;
+> >  	/* Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and VSYNC_PORCH
+> > (no shift) */
+> >  	u32 dimension_mask;
+> > @@ -513,6 +514,14 @@ static int mtk_dpi_set_display_mode(struct
+> > mtk_dpi *dpi,
+> >  	pll_rate = clk_get_rate(dpi->tvd_clk);
+> >  
+> >  	vm.pixelclock = pll_rate / factor;
+> > +
+> > +	/*
+> > +	 * For dp_intf, we need to divide clock by 4 because it's
+> > +	 * 4 pixels for one round while dpi is 1 pixel for one round.
+> > +	 */
+> > +	if (dpi->conf->is_dpintf)
+> > +		vm.pixelclock /= 4;
 > 
-> Before commit 391e2f25601e ("[SCSI] BusLogic: Port driver to 64-bit."),
-> the driver had a dependency on x86-32, presumably because of this
-> problem. However, the change introduced another bug that made it still
-> impossible to use the driver on any 64-bit machine.
-> 
-> This was in turn fixed in commit 56f396146af2 ("scsi: BusLogic: Fix
-> 64-bit system enumeration error for Buslogic"), 8 years later, which
-> shows that there are not a lot of users.
-> 
-> Maciej is still using the driver on 32-bit hardware, and Khalid mentioned
-> that the driver works with the device emulation used in VirtualBox
-> and VMware. Both of those only emulate it for Windows 2000 and older
-> operating systems that did not ship with the better LSI logic driver.
-> 
-> Do a minimum fix that searches through the list of descriptors to find
-> one that matches the bus address. This is clearly as inefficient as
-> was indicated in the code comment about the lack of a bus_to_virt()
-> replacement. A better fix would likely involve changing out the entire
-> descriptor allocation for a simpler one, but that would be much
-> more invasive.
-> 
-> Cc: Maciej W. Rozycki <macro@orcam.me.uk>
-> Cc: Matt Wang <wwentao@vmware.com>
-> Cc: Khalid Aziz <khalid@gonehiking.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   drivers/scsi/BusLogic.c | 27 ++++++++++++++++-----------
->   drivers/scsi/Kconfig    |  2 +-
->   2 files changed, 17 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-> index a897c8f914cf..d057abfcdd5c 100644
-> --- a/drivers/scsi/BusLogic.c
-> +++ b/drivers/scsi/BusLogic.c
-> @@ -2515,12 +2515,26 @@ static int blogic_resultcode(struct blogic_adapter *adapter,
->   	return (hoststatus << 16) | tgt_status;
->   }
->   
-> +/*
-> + * turn the dma address from an inbox into a ccb pointer
-> + * This is rather inefficient.
-> + */
-> +static struct blogic_ccb *
-> +blogic_inbox_to_ccb(struct blogic_adapter *adapter, struct blogic_inbox *inbox)
-> +{
-> +	struct blogic_ccb *ccb;
-> +
-> +	for (ccb = adapter->all_ccbs; ccb; ccb = ccb->next_all)
-> +		if (inbox->ccb == ccb->dma_handle)
-> +			break;
-> +
-> +	return ccb;
-> +}
->   
->   /*
->     blogic_scan_inbox scans the Incoming Mailboxes saving any
->     Incoming Mailbox entries for completion processing.
->   */
-> -
->   static void blogic_scan_inbox(struct blogic_adapter *adapter)
->   {
->   	/*
-> @@ -2540,16 +2554,7 @@ static void blogic_scan_inbox(struct blogic_adapter *adapter)
->   	enum blogic_cmplt_code comp_code;
->   
->   	while ((comp_code = next_inbox->comp_code) != BLOGIC_INBOX_FREE) {
-> -		/*
-> -		   We are only allowed to do this because we limit our
-> -		   architectures we run on to machines where bus_to_virt(
-> -		   actually works.  There *needs* to be a dma_addr_to_virt()
-> -		   in the new PCI DMA mapping interface to replace
-> -		   bus_to_virt() or else this code is going to become very
-> -		   innefficient.
-> -		 */
-> -		struct blogic_ccb *ccb =
-> -			(struct blogic_ccb *) bus_to_virt(next_inbox->ccb);
-> +		struct blogic_ccb *ccb = blogic_inbox_to_ccb(adapter, adapter->next_inbox);
->   		if (comp_code != BLOGIC_CMD_NOTFOUND) {
->   			if (ccb->status == BLOGIC_CCB_ACTIVE ||
->   					ccb->status == BLOGIC_CCB_RESET) {
-> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-> index cf75588a2587..56bdc08d0b77 100644
-> --- a/drivers/scsi/Kconfig
-> +++ b/drivers/scsi/Kconfig
-> @@ -513,7 +513,7 @@ config SCSI_HPTIOP
->   
->   config SCSI_BUSLOGIC
->   	tristate "BusLogic SCSI support"
-> -	depends on PCI && SCSI && VIRT_TO_BUS
-> +	depends on PCI && SCSI
->   	help
->   	  This is support for BusLogic MultiMaster and FlashPoint SCSI Host
->   	  Adapters. Consult the SCSI-HOWTO, available from
+> I this this should define dpi->conf->round_pixels rather than dpi-
+> > conf->is_dpintf.
 
-CCB handling in the driver is ugly anyway, so that'll be good enough.
+ok, I will use this config and drop is_dpintf.
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> > +
+> >  	if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
+> >  	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE))
+> >  		clk_set_rate(dpi->pixel_clk, vm.pixelclock * 2);
+> > @@ -534,6 +543,17 @@ static int mtk_dpi_set_display_mode(struct
+> > mtk_dpi *dpi,
+> >  	hsync.sync_width = vm.hsync_len;
+> >  	hsync.back_porch = vm.hback_porch;
+> >  	hsync.front_porch = vm.hfront_porch;
+> > +
+> > +	/*
+> > +	 * For dp_intf, we need to divide everything by 4 because it's
+> > +	 * 4 pixels for one round while dpi is 1 pixel for one round.
+> > +	 */
+> > +	if (dpi->conf->is_dpintf) {
+> > +		hsync.sync_width = vm.hsync_len / 4;
+> > +		hsync.back_porch = vm.hback_porch / 4;
+> > +		hsync.front_porch = vm.hfront_porch / 4;
+> > +	}
+> 
+> Ditto.
+> 
+> > +
+> >  	hsync.shift_half_line = false;
+> >  	vsync_lodd.sync_width = vm.vsync_len;
+> >  	vsync_lodd.back_porch = vm.vback_porch;
+> > @@ -575,11 +595,16 @@ static int mtk_dpi_set_display_mode(struct
+> > mtk_dpi *dpi,
+> >  	mtk_dpi_config_channel_limit(dpi);
+> >  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+> >  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+> > -	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+> >  	mtk_dpi_config_color_format(dpi, dpi->color_format);
+> > -	mtk_dpi_config_2n_h_fre(dpi);
+> > -	mtk_dpi_dual_edge(dpi);
+> > -	mtk_dpi_config_disable_edge(dpi);
+> > +	if (dpi->conf->is_dpintf) {
+> 
+> Separate this to an independent patch and give a better config name
+> rather than dpi->conf->is_dpintf.
+> 
 
-Cheers,
+this is separate config.
+I will modify like this:
+add new config "input_2pixel" for input two pixels in this patch:
+mtk_dpi_mask(dpi, DPI_CON, DPINTF_INPUT_2P_EN,
+			     DPINTF_INPUT_2P_EN);
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+and create another patch to add config "support_direct_pin"
+this config is only used for dpi which could be directly connect to
+pins while dp_intf is not.
+
++       if (dpi->conf->support_direct_pin) {
++               mtk_dpi_config_yc_map(dpi, dpi->yc_map);
++               mtk_dpi_config_2n_h_fre(dpi);
++               mtk_dpi_dual_edge(dpi);
++               mtk_dpi_config_disable_edge(dpi);
++       }
+
+BRs,
+Bo-Chen
+> > +		mtk_dpi_mask(dpi, DPI_CON, DPINTF_INPUT_2P_EN,
+> > +			     DPINTF_INPUT_2P_EN);
+> > +	} else {
+> > +		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+> > +		mtk_dpi_config_2n_h_fre(dpi);
+> > +		mtk_dpi_dual_edge(dpi);
+> > +		mtk_dpi_config_disable_edge(dpi);
+> > +	}
+> >  	mtk_dpi_sw_reset(dpi, false);
+> >  
+> >  	return 0;
+> > @@ -817,6 +842,16 @@ static unsigned int
+> > mt8183_calculate_factor(int
+> > clock)
+> >  		return 2;
+> >  }
+> >  
+> 
+> [snip]
+> 
+> >  
+> >  #define EDGE_SEL_EN			BIT(5)
+> >  #define H_FRE_2N			BIT(25)
+> > +
+> 
+> This seems not related to dpintf support.
+> 
+> Regards,
+> CK
+> 
+> >  #endif /* __MTK_DPI_REGS_H */
+> > 
+> 
+> 
+

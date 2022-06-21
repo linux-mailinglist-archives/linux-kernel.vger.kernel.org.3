@@ -2,79 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E9D5528A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 02:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EF05528AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 02:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243269AbiFUAi7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 20:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S241831AbiFUAqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 20:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235324AbiFUAi5 (ORCPT
+        with ESMTP id S230172AbiFUAqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 20:38:57 -0400
-Received: from relay3.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A61510FE8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 17:38:56 -0700 (PDT)
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id B538D20FDD;
-        Tue, 21 Jun 2022 00:38:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 254A08000A;
-        Tue, 21 Jun 2022 00:38:52 +0000 (UTC)
-Message-ID: <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
-Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-From:   Joe Perches <joe@perches.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        David Laight <David.Laight@ACULAB.COM>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "willy@infradead.org" <willy@infradead.org>
-Date:   Mon, 20 Jun 2022 17:38:51 -0700
-In-Reply-To: <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
-         <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
-         <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Mon, 20 Jun 2022 20:46:37 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6003511165;
+        Mon, 20 Jun 2022 17:46:36 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id r1so11112671plo.10;
+        Mon, 20 Jun 2022 17:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kfW4jPhuSgL94gvC3yRJRQn2UmXzlt8h4GK6K6xG86M=;
+        b=UbYWE8WLqjqk73ZyugA2RHs6BaQuRMX56bnjmET6XxE1T3kLCjtuVckAYo9DTWckJS
+         02phKdJRyGaTLNEPXKAgx4jwrbKxdc8ZgCC2SQCcDSma3n5N8/fdtOc27iW7K0UPyiow
+         XboFp/DXT4W35hHSOkO2rmMUYF0tbPeKFqmZwfSAeqeWBpXPMqqSkCAFrK63k51uBwqd
+         2Pk4D3qyctnAy5BSFZYwiP7Ji/DakE8TeRTB+9XivXVIpjLSdNVY3G8lpmPlcryQCak7
+         R2hIWKcC9sfcJjQu21N7Ae7Oj//6EZ0Bs7x8jigTOhWP5Mi3BAAwhDp+E/SFUUs3nL9A
+         sePw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=kfW4jPhuSgL94gvC3yRJRQn2UmXzlt8h4GK6K6xG86M=;
+        b=PATkzMphA8Jq+myzSP3KR/W4KTmljpAxb39nTWrnAc/9BOmODP8LQbhOU2i0MRcBHu
+         d0W+G87Bxs38yGHagaIbUIdBD0spz0kzBzLqGQQHCyamsxzuGBdGATQjphpVU+poFYrM
+         VkHwLN3xX6191KjjwFelmItOumh5XK8zX06/DZCewM9WrIPIuguyqlpIN74bKS4iQbEq
+         UU5d9mshYCgkDDaL57p8rRUOyqxQX83dHu6Y4ETxOir9dwGq6RYBPg6BIhI/mUCpjwex
+         6yQd7c6MMGfeAKgot4wOFP4fXTS21ZO7ZJdCmYY7zJFtmEVcyiNg6UulkQRzEzrCOD6k
+         bzDQ==
+X-Gm-Message-State: AJIora8g0tWjM5H+b/iDa9j0cTY+6GxwYcP+5KhDKcOKhLLTTRqtQygv
+        axrSR9tmcf45OyW79kXu/ys=
+X-Google-Smtp-Source: AGRyM1sheycciPkiXSsF6a+Q19JGWJUii3if430vKfmQ21m60EDcLuuxjrftxTTlW/BiUceiv9+pbw==
+X-Received: by 2002:a17:90b:2246:b0:1ec:aa2c:8edc with SMTP id hk6-20020a17090b224600b001ecaa2c8edcmr8314467pjb.14.1655772395845;
+        Mon, 20 Jun 2022 17:46:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bg17-20020a056a001f9100b00518b4cfbbe0sm9542850pfb.203.2022.06.20.17.46.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 17:46:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 20 Jun 2022 17:46:34 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.4 000/240] 5.4.200-rc1 review
+Message-ID: <20220621004634.GA2242037@roeck-us.net>
+References: <20220620124737.799371052@linuxfoundation.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 4q1qktg797qyt7kwq1opekn7fu3or1wu
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 254A08000A
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18iuMOlb5rJsZQ4wQ5Qfk4CeiXDod72ZqY=
-X-HE-Tag: 1655771932-377534
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620124737.799371052@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-20 at 11:07 -0400, Kent Overstreet wrote:
-> On Mon, Jun 20, 2022 at 04:19:31AM +0000, David Laight wrote:
-> > I really think that is a bad idea.
-> > printk() already uses a lot of stack, anything doing a recursive
-> > call is just making that worse.
-> > Especially since these calls can often be in error paths
-> > which are not often tested and can already be on deep stacks.
+On Mon, Jun 20, 2022 at 02:48:21PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.200 release.
+> There are 240 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> We went over this before - this patch series drastically reduces stack usage of
-> sprintf by eliminating a bunch of stack allocated buffers. Do try to keep up...
+> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
+> Anything received after that time might be too late.
+> 
 
-I generally agree with David.
+Build results:
+	total: 161 pass: 161 fail: 0
+Qemu test results:
+	total: 449 pass: 449 fail: 0
 
-I think Kent has not provided data that this actually _reduces_
-stack usage.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Converting stack variables to call stack frames does not necessarily
-reduce overall stack usage when the stack frame plus any locally
-used stack in the called function is added together.
-
+Guenter

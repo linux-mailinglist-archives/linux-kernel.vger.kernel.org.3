@@ -2,76 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314B3553A04
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA6A553A07
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352946AbiFUTJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S1352970AbiFUTKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbiFUTJc (ORCPT
+        with ESMTP id S237330AbiFUTKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:09:32 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CAC20F43
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:09:31 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id b7so16591659ljr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=N+CKs/MdDNeIXKqg/peSNpt0QR5CtVV30OB0kmctgDo=;
-        b=iVhfwHhIa9Vk3yrDkSkHcZx/O3qpbd2ezkl8qQ4XdCT/Xs3kIzsJcHm3DqCuTVsih8
-         wfVBF8ZzUPz0+jaAyqo7q7yO1PZY6xQN3CIWGoIJy0IkKTmKw2j3wo2Noh4v5vlgbpyz
-         CBeSxZM6LZ8dPVUor1RYuYAUJMXKW6Wp3d1Lnmu9VFbKRlSZ6cW2Q1BSQJRtA/xjW1NT
-         vTB2SWE0cO1f3i/6uO1FWfN4aQzZI/I1dh65neWwtpzv9Ln15OaCOYBVvmJW1AmqCriY
-         vF1aC1WMJywpkKwuOIaQcOVAYtsl8nB7JZ+DCifAN/Vj8wniUshXwCX36hDZQ8nHbPvS
-         j9YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N+CKs/MdDNeIXKqg/peSNpt0QR5CtVV30OB0kmctgDo=;
-        b=awbxO/FSsFnPMzaKTOFQM9AnxDTkdaI5T5QTUXj+Sv9pxKvgRedXCZ4VvGdcad+1eB
-         MmLYJK8bmUdpqLaikqo36DOgMIZ/zxpb2XBIakuhWDVtRp3khFB+cXVWrkJcU33z68vJ
-         W6s8Yr2OrlFBW1tY0icWyp4maszC31CL9urBCCTYMmbbcVSDfkmO4HQEJhMHk0AOdPjU
-         0RSTNDEbnW3Qha7e0HyFXpdQyWSyJK/xJZeVTsQB+Cb8uKdcT3lwIQcrYoqY6zlqXR7v
-         rL535KAG7sVsaGZO/QnKhCigiNCAoU0qJRuke9N0THrS63BvYcebObq4ES5ZktKRfdd6
-         YY/g==
-X-Gm-Message-State: AJIora81mjv/oxzYbNrccR+kYngyBbfOImAc+EYWIGbMca5Bk1DHk+1x
-        1DAtJ0H8mzcNAKqf6TuIujEEyg==
-X-Google-Smtp-Source: AGRyM1t+UYNo3yqTQePlymhYwIBugeRmXDicBMI65qLJgLc+UfeGqSNklac9iZwD27zQld3rOaXzZQ==
-X-Received: by 2002:a2e:2c0e:0:b0:25a:6b43:eff8 with SMTP id s14-20020a2e2c0e000000b0025a6b43eff8mr6782427ljs.299.1655838569854;
-        Tue, 21 Jun 2022 12:09:29 -0700 (PDT)
-Received: from [192.168.43.7] ([188.162.64.230])
-        by smtp.gmail.com with ESMTPSA id l30-20020a19495e000000b00479019e1b66sm2269713lfj.39.2022.06.21.12.09.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 12:09:29 -0700 (PDT)
-Message-ID: <fbf04495-7831-f1a8-5832-8927cde7cda6@linaro.org>
-Date:   Tue, 21 Jun 2022 22:09:27 +0300
+        Tue, 21 Jun 2022 15:10:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F130E2A94C;
+        Tue, 21 Jun 2022 12:10:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655838610; x=1687374610;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=q5lkSZYGMhUVLUD1y8XgQ6GVWz2Y7+JfJKiVN+E6OZE=;
+  b=VwvOieK3/wNCOOY24EdSaVOWhfgEwcfxhEzBDEmB58TMsioxhTzukR5Z
+   W8Q9YvT3y4a5ScIPzmUlUw1jWBaZcE04p06hgJqLjzOmfeihYXkJmsZNo
+   eVTJ/s4WnFLjlyYyQf+hYzwsajv9vR19lz01+TOJAROVq/ZoIMBgxXLQ0
+   P/Lw74bPJO988tIc3egFAiEmgzOmI7QrkMimrhxQ2pd/0xYDDg65woPvx
+   iy2+Tr/i+qk4joikg17jg8R01Q9EmMyPLaqtlCY5pHITKU3Hndxf5mqEO
+   FxScP+vLgtd7gL6xDRyEEtbWLlnVFX0a4QVzoJVY21GXNTux6JXybolPg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="277762769"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="277762769"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 12:10:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="620603138"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga001.jf.intel.com with ESMTP; 21 Jun 2022 12:10:10 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 21 Jun 2022 12:10:10 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 21 Jun 2022 12:10:09 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Tue, 21 Jun 2022 12:10:09 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Tue, 21 Jun 2022 12:10:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qk6nW02rMqEqNARCCIvjoNiuxvk94UFAHUOWbHvek1ZC+6H/mJq0ECX80TqxA0gBeN0T9pKYxlqBGELpuj/qeNrjYeJSx1Kqgf8IFHEstDXrAcjRc+U752TUWod+mIChl5cyT9aKN+S2lpu3AxepLJMscR3Es+JRTlkrWoKtSpUQoNb6xHznBy0Min5AM0gNDeQK+8P8IVEGlqi6QM90aUtZ0dJWFgEhnhoE8copDU2iam2HoWctbfLimhFt50G6fEQBmrROG2Q9I8D7976l4Li2drjFaxjPME3qMNqQs4VH32/3WKDuPCQYuwpfwgbPhUMhlopOtNoogjzv3g2Ydg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nSUNDWoVF6M5RSKCNgbezV0a8l+bz1lbqxuh8/GJf5s=;
+ b=Rwnol1lAog3OU5Pw/GZ27JTRTN/L4KJqyMMim17s3ErUhZVrgenwRZ+ft8Ky2LeMSxpStDaGolEy7modXEMQf6lc14D1LcOHfPmjPGFX6jyuCiIBBQG48iBPTzotsQ18nHNMJITDtZ8dlNrHCoYoBlfXqUtriSDxClM2W5L2bnU8pfJ/o6JZxAmeDwfIcl52TeP0Y0fZpmV57jUMUK2uRqHnftBYbd6ddtm3L8fUhQd6U2/VBMATlwN3ZIwES6XydJVxRj50lgSBBoqWZJOoRuO9vk4GO/yc3SRGLkB9mZy7/Smmh8d96cF3kzkXCrH8+53O/D8Mf6tny+algLs3NA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by CY4PR1101MB2231.namprd11.prod.outlook.com
+ (2603:10b6:910:1f::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.20; Tue, 21 Jun
+ 2022 19:10:07 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::f50c:6e72:c8aa:8dbf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::f50c:6e72:c8aa:8dbf%7]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
+ 19:10:07 +0000
+Date:   Tue, 21 Jun 2022 12:10:03 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>, <ira.weiny@intel.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+CC:     Ira Weiny <ira.weiny@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: RE: [PATCH V11 5/8] cxl/port: Read CDAT table
+Message-ID: <62b2178bdcf5d_89207294ac@dwillia2-xfh.notmuch>
+References: <20220610202259.3544623-1-ira.weiny@intel.com>
+ <20220610202259.3544623-6-ira.weiny@intel.com>
+ <62ad1fb69d742_8920729490@dwillia2-xfh.notmuch>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <62ad1fb69d742_8920729490@dwillia2-xfh.notmuch>
+X-ClientProxiedBy: CO1PR15CA0067.namprd15.prod.outlook.com
+ (2603:10b6:101:20::11) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [v3 5/5] drm/msm/disp/dpu1: add PSR support for eDP interface in
- dpu driver
-Content-Language: en-GB
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>, y@qualcomm.com,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com
-References: <y> <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
- <1655808800-3996-6-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1655808800-3996-6-git-send-email-quic_vpolimer@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f8511487-cdb2-4c97-1cf9-08da53b9a74d
+X-MS-TrafficTypeDiagnostic: CY4PR1101MB2231:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <CY4PR1101MB2231E085A3909344D1603A13C6B39@CY4PR1101MB2231.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Dap9qtuBDZSNoendpnlwCBvx4xKGwKGcfP/GCQA/4Klp39x+yR20HZvTf4a8DHpeyL40M8bmEwRMHqzYU8igYqKkvb97NFkDeH62o+sz1F69kjsskyKgoPmGxCLFHUM0kfqG5mTNHrtFJTwn1cWXjScWppccFinXSzdLQI9hUREjLqgeXu6Yp/7DLiJ9phfCEtVxQN88lnB62eQcuHhDOevMHa6NNtc40EdyXz8ih4FZeMpXRXJbTpOtQ27UQcsEGBibxfukN49jUyka5i8ZPRxyP0zbxPLu8ItWEhX+k9XjLHxHBNLjgZJj4kDpJ3QjMr3T4s69QPAn/amaTu4uxJEbrlCeNLvdvb6iOPZfGinEKicyJ7oV/RDeeJTH+KdZ+nRHQuRwua4VJjkUmcdtlmwvHSxFo0VRyrdPi0g+TFmJQlAPr1lhs0/75w5tHJqrZB+JI4kjjl6hPJUEZBH22mAKH5ZHElTG4lpNAxnLpjoJXNyZhtKK/vgkBYi7xIvRUOWyJg2Cth8D3kOoAqCfCbjBY2q5c201M9NsAoCedJpRfa7YtFR/Iitkb+Scefw4rHQez4IKwT/8Ifen75WB2uBJv8GAJT6M4g7CYFsJTJDMmO6NR6W8bcKhzUAH1q/nZIQSaMdxlETerHXiVqGdiw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(136003)(366004)(396003)(376002)(38100700002)(86362001)(5660300002)(478600001)(8936002)(82960400001)(6486002)(2906002)(316002)(110136005)(4326008)(66946007)(8676002)(6666004)(66556008)(186003)(83380400001)(6506007)(41300700001)(26005)(9686003)(6512007)(54906003)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jxmT3u2HoIdLJ5CVbHBNkcKWdAGqQ+NRhzItEtqJomn2Jez6KO5P2o7Zw5hT?=
+ =?us-ascii?Q?+8BZe4IvT101mOXfMfDC1g7aQBFK650hZpT1Z///vT6biQxLZweSSfpoI3an?=
+ =?us-ascii?Q?NY+jSGWXnn8RN5+ORwivO0WRVQP/kUFScJ6LKQOKU0EIyPzfHvF4dDT0DVNl?=
+ =?us-ascii?Q?0rYC0Rz03VW9Mp3l6VES2xPD0ne4gOR594w5tvxpbn14ul9WnIm6c8btLEM6?=
+ =?us-ascii?Q?XrwPv4iJnvsd/D7xo/cTSYUClyXTy6hYM2K9/asAjCSfJ52ereWmp4hliD1d?=
+ =?us-ascii?Q?AU6RGLZ+bfUDQg8ivZuUoGePvP+E3N7w750bDBnCGSuortTYAFFsJZBa93pd?=
+ =?us-ascii?Q?EB6glhlmjFB2HZKH/5z4DeT2Al80naK4k/95tJi2nBeLv8LlRMKGEJdypbiM?=
+ =?us-ascii?Q?uLiz/i4tSA7e+y1GDElJXuCCdEaTPLhtXhHLYOcaCItz5OTOZbIwiFvhyDth?=
+ =?us-ascii?Q?tdQKwLvsL1SjQbP9mlbGns/L8HCvO/Ubd23GoAWp+q0GtrgXEk9btRMYuiQX?=
+ =?us-ascii?Q?X+jPKdEwLta5wa/klennFhQgrrPAh/ePTo77Y0YlToWesPrmP7Gu9o/W/AZx?=
+ =?us-ascii?Q?vPwTPakh+F7HjMp0V+4WwWVza/AVbi7ujvm0loydwimtdfxnhwerTgZVytlk?=
+ =?us-ascii?Q?Z9Ve+bLy/GarEYZyEp5rHm+jVrsZEDbYfmKkeyPdHvHyXTuArAzbOCBhztt0?=
+ =?us-ascii?Q?2OYUcHcX0hiogHcNfvrBGp9csh9U9NsE3XEIW+wKv145EQ6hBNtK59Xyasmu?=
+ =?us-ascii?Q?xkiaQwQbP4iMmH0wmNk4dD5nc4S6qrcYtke5VbiGuxeNYW1oGJxxOnsnJ7t5?=
+ =?us-ascii?Q?zOJw4pB3bfkFkae1Z+M5B+oBGONJLAx5Z55NG3GeQ4ieCOSbVgXpEnGnUMSO?=
+ =?us-ascii?Q?Pe5BR7nevy1cOL1wLloVVHXtNHN67iq8WIbZkZpjPgOZ7BjZQ9qZ023yLZgS?=
+ =?us-ascii?Q?VQILfVL83hhSdHHo1YsZAn9v985vhdTnQQQ3/u56lhjjYfGY09bNT8rDm3aa?=
+ =?us-ascii?Q?OS7pE1jK0WF0FGegi0nWyobVitbvPJZgY5He0ZNncLOG4q0e0pyD63UCqsNj?=
+ =?us-ascii?Q?FV2cbjyQ5imhfWT1aMkUIUf//6XijEclZjtthpJT1t318+Hi0EtdJ7Wfjssw?=
+ =?us-ascii?Q?4s2d/7KVkip9eozDDcX+031h5IudVUq/99azB0+zf0GxI+rH6glzWK7vO/4C?=
+ =?us-ascii?Q?xj6TgQZVFIC6FrHp+7zT6bnGxO51Y0q8KNWZlaN1E83ars642kXJp8ykrbIE?=
+ =?us-ascii?Q?PMQZKX9QzmYMqG2G9CcSPYYDPAJT63ZVLjPfA6H2+uFtn/LKAAWL+rE+Bx6H?=
+ =?us-ascii?Q?SpzIqyamUIx5TLhHon7nNjMsgxh7tfzBYGlw7CQCaVR6o3wU4IMbkqH2RymW?=
+ =?us-ascii?Q?4PL0K9vWq7TIE4XGKSvvALo8Ys4HlLepEs+VZyUuXOZKrR4TsFDDwkCInv3T?=
+ =?us-ascii?Q?bDpBDBXv1hayWgYNwbNN98wD6xauN0fbL15FIwqytHtbknwssABKqAnGljhb?=
+ =?us-ascii?Q?gt3j52VGF1+Wsz1v7VHJMwl05aid/swNT5Ykfk7+1VrMZKBgXJ05DcMkXzyO?=
+ =?us-ascii?Q?QDlViO4VVCYCPhnmKpGdNhnZZ1J6aSw1cEEbd8KshUiQ8lmssurVjdpVltee?=
+ =?us-ascii?Q?DFDDNaSJNXdVomEL4SBVsIhEhcLXtS2UZyCfwXJGJcd81SN99yRF4YNBa9xX?=
+ =?us-ascii?Q?LfiV1OqBISOgcehVHdEdZF2ElKm00VP0Tiv+LZCMqFQV9VfQEMtCWednVKh6?=
+ =?us-ascii?Q?jCw82NJs+CNaJd3dky7JRTPjJ9MXsS0=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8511487-cdb2-4c97-1cf9-08da53b9a74d
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 19:10:06.9750
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AMub0rDcsM2SzFYbP+eGfY98IOHkHAGN0R2n8ND4hWtyVUARwj9C1AnBikbK2cqVlvVPLkTmb0yi3AX35x+jc0FeXY+SAwiXFEEzamIGHM4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2231
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,198 +161,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 13:53, Vinod Polimera wrote:
-> Enable PSR on eDP interface using drm self-refresh librabry.
-> This patch uses a trigger from self-refresh library to enter/exit
-> into PSR, when there are no updates from framework.
+Dan Williams wrote:
+> ira.weiny@ wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+[..]
+> > diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> > index c4c99ff7b55e..84dc82f7dff0 100644
+> > --- a/drivers/cxl/core/pci.c
+> > +++ b/drivers/cxl/core/pci.c
+> > @@ -4,10 +4,12 @@
+> >  #include <linux/device.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/pci.h>
+> > +#include <linux/pci-doe.h>
+> >  #include <cxlpci.h>
+> >  #include <cxlmem.h>
+> >  #include <cxl.h>
+> >  #include "core.h"
+> > +#include "cdat.h"
+> >  
+> >  /**
+> >   * DOC: cxl core pci
+> > @@ -458,3 +460,173 @@ int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm)
+> >  	return 0;
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(cxl_hdm_decode_init, CXL);
+> > +
+> > +static struct pci_doe_mb *find_cdat_mb(struct device *uport)
+> > +{
+> > +	struct cxl_memdev *cxlmd;
+> > +	struct cxl_dev_state *cxlds;
+> > +	int i;
+> > +
+> > +	if (!is_cxl_memdev(uport))
+> > +		return NULL;
+> > +
+> > +	cxlmd = to_cxl_memdev(uport);
+> > +	cxlds = cxlmd->cxlds;
 > 
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 36 ++++++++++++++++++++++++-----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 20 +++++++++++++++-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
->   3 files changed, 50 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> index b56f777..c6e4f03 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> @@ -18,6 +18,7 @@
->   #include <drm/drm_probe_helper.h>
->   #include <drm/drm_rect.h>
->   #include <drm/drm_vblank.h>
-> +#include <drm/drm_self_refresh_helper.h>
->   
->   #include "dpu_kms.h"
->   #include "dpu_hw_lm.h"
-> @@ -955,24 +956,39 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
->   									      crtc);
->   	struct dpu_crtc *dpu_crtc = to_dpu_crtc(crtc);
->   	struct dpu_crtc_state *cstate = to_dpu_crtc_state(crtc->state);
-> -	struct drm_encoder *encoder;
-> +	struct drm_encoder *encoder = NULL;
->   	unsigned long flags;
->   	bool release_bandwidth = false;
->   
->   	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
->   
-> +	if (old_crtc_state->self_refresh_active) {
-> +		drm_for_each_encoder_mask(encoder, crtc->dev,
-> +					old_crtc_state->encoder_mask) {
-> +			dpu_encoder_assign_crtc(encoder, NULL);
+> This feels stuck between 2 worlds. Either cxl_port_probe() needs to do
+> the enumeration, or the attribute needs to move to be memdev relative.
+> Given that CXL switches are going to also have CDAT data, then the
+> former path needs to happen. Yes, cxl_pci still needs to do the vector
+> allocation, but it does not need to do the PCI DOE probing.
 
-I think we should drop dpu_encoder_assign_crtc completely and use your 
-new helpers instead. Having to manually duplicate existing link sounds 
-like a bad idea.
+It is really the interrupt setup that makes this an awkward fit all
+around. The PCI core knows how to handle capabilities with interrupts,
+but only for PCIe port services. DOE is both a PCIe port service *and*
+and "endpoint service" like VPD (pci_vpd_init()). The more I think about
+this the closer I get to the recommendation from Lukas which is that
+DOE is more like pci_vpd_init() than pci_aer_init(), or a custom
+enabling per driver.
 
-> +		}
-> +		return;
-> +	}
-> +
->   	/* Disable/save vblank irq handling */
->   	drm_crtc_vblank_off(crtc);
->   
->   	drm_for_each_encoder_mask(encoder, crtc->dev,
->   				  old_crtc_state->encoder_mask) {
-> -		/* in video mode, we hold an extra bandwidth reference
-> +		/*
-> +		 * in video mode, we hold an extra bandwidth reference
-
-Unrelated to this patch.
-
->   		 * as we cannot drop bandwidth at frame-done if any
->   		 * crtc is being used in video mode.
->   		 */
->   		if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
->   			release_bandwidth = true;
-> -		dpu_encoder_assign_crtc(encoder, NULL);
-> +		/*
-> +		 * If disable is triggered during psr active(e.g: screen dim in PSR),
-> +		 * we will need encoder->crtc connection to process the device sleep &
-> +		 * preserve it during psr sequence.
-> +		 */
-> +		if (!crtc->state->self_refresh_active)
-> +			dpu_encoder_assign_crtc(encoder, NULL);
->   	}
->   
->   	/* wait for frame_event_done completion */
-> @@ -1020,7 +1036,9 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
->   	struct dpu_crtc *dpu_crtc = to_dpu_crtc(crtc);
->   	struct drm_encoder *encoder;
->   	bool request_bandwidth = false;
-> +	struct drm_crtc_state *old_crtc_state;
->   
-> +	old_crtc_state = drm_atomic_get_old_crtc_state(state, crtc);
->   	pm_runtime_get_sync(crtc->dev->dev);
->   
->   	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
-> @@ -1042,8 +1060,9 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
->   	trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
->   	dpu_crtc->enabled = true;
->   
-> -	drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
-> -		dpu_encoder_assign_crtc(encoder, crtc);
-> +	if (!old_crtc_state->self_refresh_active)
-> +		drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
-> +			dpu_encoder_assign_crtc(encoder, crtc);
->   
->   	/* Enable/restore vblank irq handling */
->   	drm_crtc_vblank_on(crtc);
-> @@ -1525,7 +1544,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->   {
->   	struct drm_crtc *crtc = NULL;
->   	struct dpu_crtc *dpu_crtc = NULL;
-> -	int i;
-> +	int i, ret;
->   
->   	dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
->   	if (!dpu_crtc)
-> @@ -1562,6 +1581,11 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->   	/* initialize event handling */
->   	spin_lock_init(&dpu_crtc->event_lock);
->   
-> +	ret = drm_self_refresh_helper_init(crtc);
-> +	if (ret)
-> +		DPU_ERROR("Failed to initialize %s with self-refresh helpers %d\n",
-> +			crtc->name, ret);
-> +
->   	DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
->   	return crtc;
->   }
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index cc2809b..234e95d 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -225,6 +225,11 @@ bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
->   	return dpu_enc->wide_bus_en;
->   }
->   
-> +static inline bool is_self_refresh_active(const struct drm_crtc_state *state)
-> +{
-> +	return (state && state->self_refresh_active);
-> +}
-> +
->   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
->   {
->   	struct dpu_hw_dither_cfg dither_cfg = { 0 };
-> @@ -592,7 +597,8 @@ static int dpu_encoder_virt_atomic_check(
->   		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
->   			dpu_rm_release(global_state, drm_enc);
->   
-> -			if (!crtc_state->active_changed || crtc_state->active)
-> +			if (!crtc_state->active_changed || crtc_state->active ||
-> +					crtc_state->self_refresh_active)
-
-This condition should be changed to use enabled rather than active. 
-Quoting KMS documentation: 'The driver must not release any shared 
-resources if active is set to false but enable still true...'
-
->   				ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
->   						drm_enc, crtc_state, topology);
->   		}
-> @@ -1171,11 +1177,23 @@ static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
->   					struct drm_atomic_state *state)
->   {
->   	struct dpu_encoder_virt *dpu_enc = NULL;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *old_state;
->   	int i = 0;
->   
->   	dpu_enc = to_dpu_encoder_virt(drm_enc);
->   	DPU_DEBUG_ENC(dpu_enc, "\n");
->   
-> +	crtc = dpu_enc->crtc;
-> +	old_state = drm_atomic_get_old_crtc_state(state, crtc);
-> +
-> +	/*
-> +	 * The encoder disabled already occurred when self refresh mode
-> +	 * was set earlier, in the old_state for the corresponding crtc.
-> +	 */
-> +	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && is_self_refresh_active(old_state))
-> +		return;
-> +
-
-Why do you need to check the encoder_type?
-
->   	mutex_lock(&dpu_enc->enc_lock);
->   	dpu_enc->enabled = false;
->   
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index bce4764..cc0a674 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -507,7 +507,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
->   		return;
->   	}
->   
-> -	if (!crtc->state->active) {
-> +	if (!drm_atomic_crtc_effectively_active(crtc->state)) {
->   		DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
->   		return;
->   	}
-
-
--- 
-With best wishes
-Dmitry
+If the DOE enumeration moves to a sub-function of
+pci_init_capabilities() then the cxl_pci and/or cxl_port drivers just
+look those up and use them. The DOE instances would remain in polled
+mode unless and until a PCI driver added interrupt support late. In
+other words, DOE can follow the VPD init model as long as interrupts are
+not involved, and if interrupts are desired it requires late allocation
+of IRQ vectors.

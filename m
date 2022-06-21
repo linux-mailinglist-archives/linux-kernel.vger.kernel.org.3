@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909155539B0
+	by mail.lfdr.de (Postfix) with ESMTP id E35755539B1
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350296AbiFUSr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 14:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
+        id S1351007AbiFUSsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 14:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiFUSr4 (ORCPT
+        with ESMTP id S229877AbiFUSsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 14:47:56 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54866264;
-        Tue, 21 Jun 2022 11:47:55 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id q4so9637594qvq.8;
-        Tue, 21 Jun 2022 11:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TUwsjMEcTcJGTkqP1tI4ks5+DOl4Jo9qz8wBuhs7k1Q=;
-        b=Q+KB8KiHfVZN/IcFhqa6GwDdZVAb/1h5YJpQ4fznMd3FxHLy83GhnTWQ1iWjVerrRQ
-         oIc+S7GlOeG2zMH3AUxQ69u3ZO08rrQGR787XFx7RR3Kw6Fo4484d5rGtoIv49PFSELW
-         1JJjmO7hszywj4GDpeX//vV2vEkF1mORa19P7KWmna8rzhPDm0vsvm7M1xcuqWOUaRPH
-         9FxUKMbFmncFHYT+GhagELHCylo+sxgXgrjada7iWE++btcWJCRGrLWNNmNst2Bg7PgT
-         wTCRoHT2XZe5KHRdycaNfciWRGTrb9+NQWDCAymUVmMrzmW3sSyuMrAgMjJWtZOxxPj3
-         v9BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TUwsjMEcTcJGTkqP1tI4ks5+DOl4Jo9qz8wBuhs7k1Q=;
-        b=lZu9PVACC6j+QoNvYfcUqgNlPSEDtjuUniLKFwdenQkha5/Tyajsef2y0k2Fk7t2mu
-         v24rD9f0AqtxDWBMura+MoHmdSaAv24wz4rfU4Lvz4VYivZepNmuEu7HXRSaZnJVRfva
-         cBHao7ysae25GlhxnJSWIT9VQmxgdd+RmUsdombqDG/Nw8goqUKF4/1pDfyGbZvBRGZ8
-         dmLmHfNCDmnM8sHQWeoOw+SF3gG/LuLMzBAKVk+et0B5QuaCYjmA5s82BhWM8A92ZmzI
-         AGjsLDmebVRASCT19p1EbWxQzvWGLo1TeAWC1ydVtJq0QAYnDrllizowhN1UMJ6AOqfT
-         rUcg==
-X-Gm-Message-State: AJIora98QxLiL3t2F2Gn7GYXAqOLi5/xWUnOjtbpeMWOEz6hxiopRSOd
-        q4k8+8jRZOA1YLKaNgPdoCKGcpUheUyRzrsxxhU=
-X-Google-Smtp-Source: AGRyM1uJLrWycZyA/aGMIqVI7+AUGaxMZh/S4K2wMif+19wdQg8R7fUB79mtPGkugehrz92tJHI4mkE6SgU4G8Y/ujU=
-X-Received: by 2002:ac8:5d8c:0:b0:306:6efd:7fe1 with SMTP id
- d12-20020ac85d8c000000b003066efd7fe1mr24286817qtx.318.1655837274765; Tue, 21
- Jun 2022 11:47:54 -0700 (PDT)
+        Tue, 21 Jun 2022 14:48:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059E1D134;
+        Tue, 21 Jun 2022 11:47:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93C85616F7;
+        Tue, 21 Jun 2022 18:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60DAEC341C4;
+        Tue, 21 Jun 2022 18:47:56 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ezJM0ZjI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1655837274;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GlYZcKElYGV2iK1XBEvZIDxk1bR0rIwRS2M0K6D36VU=;
+        b=ezJM0ZjIbTQHLkvi2SKGBexDkAX+8Tho6UJYFkD/LP5yOWR8DsK1Dbk/0lKbikmiUNXzt+
+        G73pxPS2hFbiO+xHT3ApWGGZ92oD+DqLcuJINJtYbSgru5ANj20iy+6CuVVwBfq8Of/RjH
+        5A70B1EJYD7o3KbIFH8mqJiuzRSTcQY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 415ea671 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 21 Jun 2022 18:47:54 +0000 (UTC)
+Date:   Tue, 21 Jun 2022 20:47:52 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v5] powerpc/powernv: wire up rng during setup_arch
+Message-ID: <YrISWLwm8m7OPFom@zx2c4.com>
+References: <20220620124531.78075-1-Jason@zx2c4.com>
+ <20220621140849.127227-1-Jason@zx2c4.com>
+ <246d8bf0-2bee-7e1b-e0af-408920ece309@csgroup.eu>
 MIME-Version: 1.0
-References: <20220621135339.1269409-1-robimarko@gmail.com> <a194d4c5-8e31-ecd9-ecd0-0c96af03485b@linaro.org>
-In-Reply-To: <a194d4c5-8e31-ecd9-ecd0-0c96af03485b@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 21 Jun 2022 20:47:44 +0200
-Message-ID: <CAOX2RU6fBo5f6cxAUgLKj3j+_oP7nSm7awCpr_yiO_p3NssWkQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: ath11k: add new DT entry
- for board ID
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kalle Valo <kvalo@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <246d8bf0-2bee-7e1b-e0af-408920ece309@csgroup.eu>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,71 +63,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 17:58, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 21/06/2022 15:53, Robert Marko wrote:
-> > bus + qmi-chip-id + qmi-board-id and optionally the variant are currently
-> > used for identifying the correct board data file.
-> >
-> > This however is sometimes not enough as all of the IPQ8074 boards that I
-> > have access to dont have the qmi-board-id properly fused and simply return
-> > the default value of 0xFF.
-> >
-> > So, to provide the correct qmi-board-id add a new DT property that allows
-> > the qmi-board-id to be overridden from DTS in cases where its not set.
-> > This is what vendors have been doing in the stock firmwares that were
-> > shipped on boards I have.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> > ---
-> >  .../devicetree/bindings/net/wireless/qcom,ath11k.yaml     | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> > index a677b056f112..fe6aafdab9d4 100644
-> > --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> > +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> > @@ -41,6 +41,14 @@ properties:
-> >          * reg
-> >          * reg-names
-> >
-> > +  qcom,ath11k-board-id:
->
-> The "board" a bit confuses me because in the context of entire system it
-> means the entire hardware running Qualcomm SoC. This is sometimes
-> encoded as qcom,board-id property.
+Hi Christophe,
 
-Hi Krzysztof,
-I agree that the name is a bit confusing, it's not the same as
-qcom,board-id AFAIK
-and QCA as well as vendors are using a similar property in the wifi
-node to override
-the default qmi-board-id to the correct one as its rarely properly fused.
+On Tue, Jun 21, 2022 at 06:33:11PM +0000, Christophe Leroy wrote:
+> Le 21/06/2022 à 16:08, Jason A. Donenfeld a écrit :
+> > The platform's RNG must be available before random_init() in order to be
+> > useful for initial seeding, which in turn means that it needs to be
+> > called from setup_arch(), rather than from an init call. Fortunately,
+> > each platform already has a setup_arch function pointer, which means we
+> > can wire it up that way. Complicating things, however, is that POWER8
+> > systems need some per-cpu state and kmalloc, which isn't available at
+> > this stage. So we split things up into an early phase and a later
+> > opportunistic phase. This commit also removes some noisy log messages
+> > that don't add much.
+> 
+> Regarding the kmalloc(), I have not looked at it in details, but usually 
+> you can use memblock_alloc() when kmalloc is not available yet.
 
-I assume it would be better-called qcom,ath11k-qmi-board-id as you
-dont even have
-to be using a Qualcomm SoC as the same is used by PCI ath11k cards as well.
+That seems a bit excessive, especially as those allocations are long
+lived. And we don't even *need* it that early, but just before
+random_init(). Michael is running this v5 on the test rig overnight, so
+we'll learn in the Australian morning whether this finally did the trick
+(I hope).
 
-Regards,
-Robert
->
-> Is your property exactly the same?
->
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      Board ID to override the one returned by the firmware or the default
-> > +      0xff if it was not set by the vendor at all.
-> > +      It is used along the ath11k-calibration-variant to mach the correct
-> > +      calibration data from board-2.bin.
-> > +
-> >    qcom,ath11k-calibration-variant:
-> >      $ref: /schemas/types.yaml#/definitions/string
-> >      description:
->
->
-> Best regards,
-> Krzysztof
+Jason

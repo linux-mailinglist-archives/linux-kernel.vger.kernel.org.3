@@ -2,81 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353AB553DEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318A1553E08
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356329AbiFUVjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S1356274AbiFUVnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355330AbiFUVi3 (ORCPT
+        with ESMTP id S1356492AbiFUVne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:38:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B8311834
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:38:27 -0700 (PDT)
-Received: from localhost (unknown [188.24.177.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 277BB66016B6;
-        Tue, 21 Jun 2022 22:38:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655847506;
-        bh=c0/1Nx2+SJOqTxjeNE/IgDqCaF5b6QxFOepQbDtHEBI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ve1YiwYiqWVd5Wun/9g53AmO4CIFM6hUAHcuaNSCEJjGmXn8o2uYT8K3gZuFXCoE5
-         reNmP4IiKGX9LSZGB/WOM+pTL1Y4586GGczllQ2T8yMoxyGNa4dkE34N8ac/sEPHi5
-         RXcAFd3q3ShQGBrzhXXmM0VXrCWv5t+pxt2fzUsD9Lezofw/OawLN5VVdHkSy7yEvt
-         ZPcurHBcRnmKgZSI/Ue9pFgZ/hGLBnmTQFUcMBWpfzyWYycnmtAhtBTQws2CPwDLD0
-         E1kqMQWmyV6+F8c0qm4ResWDS/u6yquaXaLf0hwhi66qnfSA9inWEpYHUY5LovRjHA
-         GxuB+Pvph1tmg==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: [PATCH] ASoC: cs35l41: Add support for CLSA3541 ACPI device ID
-Date:   Wed, 22 Jun 2022 00:38:19 +0300
-Message-Id: <20220621213819.262537-1-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 21 Jun 2022 17:43:34 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E421917595
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:43:26 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id s14so10281198ljs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RaH322YAfZ65JMqhLFboGn96Qf6ZOePhsZrijH5KbCY=;
+        b=D3/p22SjNtBkp5qEhE4PypZKC+l3FMV1mhcEN+p6jsNQhcEDuTDTjJxGGLOJxbogOF
+         1hFTZ9BOEVKlgp02OsdyaGnv3jsasAPBa/Cnnn2ZVpnyiylHmg6eMVeg4UOWSS0+p6zX
+         sdy+2066vX5/bbMcM3aRdbC1PfISSKXvU7NaQ/kzpQjqwI/qZveOUZN3ugQivMMRJkUd
+         767YoEBbRRZIM8FyEma3DgNG5SB6FMsF8zbh96yzu29kt8zP32y8BNiGjtAdoKvgo2HK
+         SJwOxxywLUJ1z091ovPz98tTKskg+w9ZxRTuR70p3dBhFgE3sxOSL5tGHMYs7Mh864Qz
+         uO2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RaH322YAfZ65JMqhLFboGn96Qf6ZOePhsZrijH5KbCY=;
+        b=tb1GX8YWCBQjYUgyBCuGli6vw40umc2cf23BmrWl6AS2Yfwmmii4LAEx1VNZH4wt4T
+         8X7tMSZO0ahtGn5wyRRH8dBXVzDeKLBDmrwUwVTRndGkT2o1Jimq/X8vzdj2QydkKESU
+         UBLxepVIvCn17J5a64JzRtqdHyStRSz/etIwXItuyo2IXIo00bgsHVqffWwPAn4Qkzyv
+         fo1LpShyWJx9yrBdWe1vhW6cQx2fEub0d2vqsd8B0by1yLvWKkMZQUyA/4tz0jYewgtX
+         djsuPQCROL4PlAuhbGi4v8jBbb4Y7VDPUBqjQGU7r2Le+zcPPdjwtEl0YPtn9avToEn/
+         OXTA==
+X-Gm-Message-State: AJIora/xTdcmlRCcFsUZ3AzV468+N2GNNWGiUqGpZq8gS+Qmx6E7eF7K
+        YVKgUKxfM0e9cq29C1r1Wlo1ivaNoq4o8OA+xKQGDw==
+X-Google-Smtp-Source: AGRyM1t5LrtreIfpkqHvv2yWX9Y68V+SEkl3eaqcL/xXhjiBuz27iIjbUSSQa72Yfnt0/LC6HDLYtul7ha0wfZsOe5Q=
+X-Received: by 2002:a2e:8805:0:b0:255:6e73:9a67 with SMTP id
+ x5-20020a2e8805000000b002556e739a67mr91486ljh.426.1655847804879; Tue, 21 Jun
+ 2022 14:43:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1655761627.git.ashish.kalra@amd.com> <a63de5e687c530849312099ee02007089b67e92f.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <a63de5e687c530849312099ee02007089b67e92f.1655761627.git.ashish.kalra@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 21 Jun 2022 15:43:13 -0600
+Message-ID: <CAMkAt6qL_p8Fp=ED5hER665GHzQn=nwZQhFg4MwHt7QanS4wVw@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 13/49] crypto:ccp: Provide APIs to issue SEV-SNP commands
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the CLSA3541 ACPI device ID used on Valve's Steam Deck.
-The driver is fully compatible with the indicated hardware, hence no
-additional changes are required.
+(
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- sound/soc/codecs/cs35l41-spi.c | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Jun 20, 2022 at 5:05 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
+>
+> From: Brijesh Singh <brijesh.singh@amd.com>
+>
+> Provide the APIs for the hypervisor to manage an SEV-SNP guest. The
+> commands for SEV-SNP is defined in the SEV-SNP firmware specification.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  drivers/crypto/ccp/sev-dev.c | 24 ++++++++++++
+>  include/linux/psp-sev.h      | 73 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 97 insertions(+)
+>
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index f1173221d0b9..35d76333e120 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -1205,6 +1205,30 @@ int sev_guest_df_flush(int *error)
+>  }
+>  EXPORT_SYMBOL_GPL(sev_guest_df_flush);
+>
+> +int snp_guest_decommission(struct sev_data_snp_decommission *data, int *error)
+> +{
+> +       return sev_do_cmd(SEV_CMD_SNP_DECOMMISSION, data, error);
+> +}
+> +EXPORT_SYMBOL_GPL(snp_guest_decommission);
+> +
+> +int snp_guest_df_flush(int *error)
+> +{
+> +       return sev_do_cmd(SEV_CMD_SNP_DF_FLUSH, NULL, error);
+> +}
+> +EXPORT_SYMBOL_GPL(snp_guest_df_flush);
 
-diff --git a/sound/soc/codecs/cs35l41-spi.c b/sound/soc/codecs/cs35l41-spi.c
-index 9e19c946a66b..5c8bb24909eb 100644
---- a/sound/soc/codecs/cs35l41-spi.c
-+++ b/sound/soc/codecs/cs35l41-spi.c
-@@ -74,6 +74,7 @@ MODULE_DEVICE_TABLE(of, cs35l41_of_match);
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id cs35l41_acpi_match[] = {
- 	{ "CSC3541", 0 }, /* Cirrus Logic PnP ID + part ID */
-+	{ "CLSA3541", 0 }, /* Cirrus Logic PnP ID + part ID */
- 	{},
- };
- MODULE_DEVICE_TABLE(acpi, cs35l41_acpi_match);
---
-2.36.1
+Why not instead change sev_guest_df_flush() to be SNP aware? That way
+callers get the right behavior without having to know if SNP is
+enabled or not.
+
+int sev_guest_df_flush(int *error)
+{
+  if (!psp_master || !psp_master->sev_data)
+   return -EINVAL;
+
+  if (psp_master->sev_data->snp_inited)
+    return sev_do_cmd(SEV_CMD_SNP_DF_FLUSH, NULL, error);
+
+  return sev_do_cmd(SEV_CMD_DF_FLUSH, NULL, error);
+}
+
+> +int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error)
+> +{
+> +       return sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, data, error);
+> +}
+> +EXPORT_SYMBOL_GPL(snp_guest_page_reclaim);
+> +
+> +int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error)
+> +{
+> +       return sev_do_cmd(SEV_CMD_SNP_DBG_DECRYPT, data, error);
+> +}
+> +EXPORT_SYMBOL_GPL(snp_guest_dbg_decrypt);
+> +
+>  static void sev_exit(struct kref *ref)
+>  {
+>         misc_deregister(&misc_dev->misc);
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index ef4d42e8c96e..9f921d221b75 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -881,6 +881,64 @@ int sev_guest_df_flush(int *error);
+>   */
+>  int sev_guest_decommission(struct sev_data_decommission *data, int *error);
+>
+> +/**
+> + * snp_guest_df_flush - perform SNP DF_FLUSH command
+> + *
+> + * @sev_ret: sev command return code
+> + *
+> + * Returns:
+> + * 0 if the sev successfully processed the command
+> + * -%ENODEV    if the sev device is not available
+> + * -%ENOTSUPP  if the sev does not support SEV
+> + * -%ETIMEDOUT if the sev command timed out
+> + * -%EIO       if the sev returned a non-zero return code
+> + */
+> +int snp_guest_df_flush(int *error);
+> +
+> +/**
+> + * snp_guest_decommission - perform SNP_DECOMMISSION command
+> + *
+> + * @decommission: sev_data_decommission structure to be processed
+> + * @sev_ret: sev command return code
+> + *
+> + * Returns:
+> + * 0 if the sev successfully processed the command
+> + * -%ENODEV    if the sev device is not available
+> + * -%ENOTSUPP  if the sev does not support SEV
+> + * -%ETIMEDOUT if the sev command timed out
+> + * -%EIO       if the sev returned a non-zero return code
+> + */
+> +int snp_guest_decommission(struct sev_data_snp_decommission *data, int *error);
+> +
+> +/**
+> + * snp_guest_page_reclaim - perform SNP_PAGE_RECLAIM command
+> + *
+> + * @decommission: sev_snp_page_reclaim structure to be processed
+> + * @sev_ret: sev command return code
+> + *
+> + * Returns:
+> + * 0 if the sev successfully processed the command
+> + * -%ENODEV    if the sev device is not available
+> + * -%ENOTSUPP  if the sev does not support SEV
+> + * -%ETIMEDOUT if the sev command timed out
+> + * -%EIO       if the sev returned a non-zero return code
+> + */
+> +int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error);
+> +
+> +/**
+> + * snp_guest_dbg_decrypt - perform SEV SNP_DBG_DECRYPT command
+> + *
+> + * @sev_ret: sev command return code
+> + *
+> + * Returns:
+> + * 0 if the sev successfully processed the command
+> + * -%ENODEV    if the sev device is not available
+> + * -%ENOTSUPP  if the sev does not support SEV
+> + * -%ETIMEDOUT if the sev command timed out
+> + * -%EIO       if the sev returned a non-zero return code
+> + */
+> +int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error);
+> +
+>  void *psp_copy_user_blob(u64 uaddr, u32 len);
+>
+>  #else  /* !CONFIG_CRYPTO_DEV_SP_PSP */
+> @@ -908,6 +966,21 @@ sev_issue_cmd_external_user(struct file *filep, unsigned int id, void *data, int
+>
+>  static inline void *psp_copy_user_blob(u64 __user uaddr, u32 len) { return ERR_PTR(-EINVAL); }
+>
+> +static inline int
+> +snp_guest_decommission(struct sev_data_snp_decommission *data, int *error) { return -ENODEV; }
+> +
+> +static inline int snp_guest_df_flush(int *error) { return -ENODEV; }
+> +
+> +static inline int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error)
+> +{
+> +       return -ENODEV;
+> +}
+> +
+> +static inline int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error)
+> +{
+> +       return -ENODEV;
+> +}
+> +
+>  #endif /* CONFIG_CRYPTO_DEV_SP_PSP */
+>
+>  #endif /* __PSP_SEV_H__ */
+> --
+> 2.25.1
+>

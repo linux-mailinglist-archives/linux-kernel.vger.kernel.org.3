@@ -2,97 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF28E552DB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C78552DC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiFUI5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S1348653AbiFUI66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348632AbiFUI5B (ORCPT
+        with ESMTP id S1348591AbiFUI6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:57:01 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E45A27177;
-        Tue, 21 Jun 2022 01:56:56 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id v1so25954698ejg.13;
-        Tue, 21 Jun 2022 01:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0cx/amxb3Wd/PcYv0eYLLeJxSM7TQT62UUtprSbhbwY=;
-        b=l6LNhCtWPcYK5lVOJB4knQOEE4oFs6J2Jg6Rt0e7BaNut9e46lb5KdVYDnj6ilkGm2
-         mQ7VTnH80+cXckqjznh1du5dtOdVPhs652Du5TxDiQ+58oHjtxhVtjko9YTZsFibM+4t
-         dteat9bhz8IHA88U249+vCWBP8CMzaA8asRdTLzsuGL9ee0hN04GeQteE0Fi4kylaNKj
-         0TFF8lnde6SvXHYI9XMpMF1ignz5BbL2lHAoTlF4Oug9V6Zxoushwt5/wntbiBkIu6+l
-         VjoJciC5kvKSDrAabkgWHTdSnlVHc0xwfw64uWPO7VuWtTj36CeQPvqwS05CcagrCAjw
-         1RAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0cx/amxb3Wd/PcYv0eYLLeJxSM7TQT62UUtprSbhbwY=;
-        b=m8yDpWL7xnjkW6wcHoxsuYxU6LlsCcTBEV72s689WvD+38v5JEDXr78vVMoMPGgyan
-         jRHUv6HlIiS4AnO6TI0RBl701pqSD0TXEg2dUotfR5Pd3e0ur/NXQUIc03sx4iptAnuW
-         OiGRCGiyi2Xx9NxL7+pddkPMn34YLt/G9MEOhCFpK7CurT2+BMa8oYCgTnfp5O+KMDgr
-         DV4HoKqYMQd/TyevHAbQNKsolLJDP00yT1S7ehDDMrph97pZtYq8hXbEgLAvIkzmzgkJ
-         rNcZAWFIYybJCzGFkqFVV9xjjdUKbq3dXpPalinCgC3dG16Hd33zZVdQNMyUI45M9EGh
-         b83g==
-X-Gm-Message-State: AJIora+x8yZDC9bqMjjaFgJ5yMhGdWFHxYUH6xYK99Gh3P+ESpI023rc
-        8FXYd7Y0HWif71+feEYOhwnhh/6Qhvam6gML1X0=
-X-Google-Smtp-Source: AGRyM1sw3R8Crk409rPsvgBxACxYsWIMkIS18fGIYjIZmrNrU7BKdbSLOiW7pxIAdyNT+keBTGz9ZcOQjom49l348P4=
-X-Received: by 2002:a17:906:d550:b0:704:7ba6:9854 with SMTP id
- cr16-20020a170906d55000b007047ba69854mr24696900ejc.579.1655801815068; Tue, 21
- Jun 2022 01:56:55 -0700 (PDT)
+        Tue, 21 Jun 2022 04:58:40 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AFCE1C;
+        Tue, 21 Jun 2022 01:58:38 -0700 (PDT)
+Received: from zn.tnic (p2e55dbad.dip0.t-ipconnect.de [46.85.219.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 56AB81EC0576;
+        Tue, 21 Jun 2022 10:58:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1655801913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=THe01fFq/VVSfqs+JIwBFS+S4rUvRCAH2e4Ug2QOtbU=;
+        b=D+3TDXk5A70FXJH4amYBCqq2eUl/InLmvpky5ywFpHbkfYH1+/Kz38D2aCavRLr5MNpjLH
+        ZN1T8Ki7n5eZa/dUy75+mre+HAkaSlGhiRRig23k/VnuKHepcD61Q+DSn+RLtU4GXIJM+n
+        OKktuV65Kc6g13PHIcdaO7+gvy4nPsk=
+Date:   Tue, 21 Jun 2022 10:58:29 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, michael.roth@amd.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 01/49] x86/cpufeatures: Add SEV-SNP CPU feature
+Message-ID: <YrGINaPc3cojG6/3@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <7abfca61f8595c036e1bd9f1d65ab78af0006627.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-References: <20220621064321.25635-1-jiangjian@cdjrlc.com>
-In-Reply-To: <20220621064321.25635-1-jiangjian@cdjrlc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 21 Jun 2022 10:56:18 +0200
-Message-ID: <CAHp75VeXCaoKQ94x+ehXWMi5zeysJdjrzS1WE2oZCUAeLbCzvQ@mail.gmail.com>
-Subject: Re: [PATCH] iio: aligned '*' each line
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7abfca61f8595c036e1bd9f1d65ab78af0006627.1655761627.git.ashish.kalra@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 8:57 AM Jiang Jian <jiangjian@cdjrlc.com> wrote:
->
-> Consider '*' alignment in comments
+On Mon, Jun 20, 2022 at 10:59:01PM +0000, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> Add CPU feature detection for Secure Encrypted Virtualization with
+> Secure Nested Paging. This feature adds a strong memory integrity
+> protection to help prevent malicious hypervisor-based attacks like
+> data replay, memory re-mapping, and more.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 
-Subject should start with "iio: dac: ad5380: ..."
+verify_tags: Warning: Sender Ashish Kalra <Ashish.Kalra@amd.com> hasn't signed off on the patch!
 
-The commit message should follow English grammar (missed period in
-your case) and explain a little bit more, e.g. "Consider '*' alignment
-in the comments of struct ad5380_chip_info declaration".
+When you send someone else's patch, you need to add your SOB underneath
+it to state that you have handled that patch too, on its way mainline.
 
-...
+While waiting for review, please brush up on the development process by
+perusing the documentation in Documentation/process/ and especially
 
->   * @channel_template:  channel specification template
->   * @num_channels:      number of channels
->   * @int_vref:          internal vref in uV
-> -*/
-> + */
->
+Documentation/process/submitting-patches.rst
 
-While at it, drop the unneeded blank line here.
+> ---
+>  arch/x86/include/asm/cpufeatures.h       | 1 +
+>  arch/x86/kernel/cpu/amd.c                | 3 ++-
+>  tools/arch/x86/include/asm/cpufeatures.h | 1 +
+>  3 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 30da1341f226..1cba0217669f 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -407,6 +407,7 @@
+>  #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
+>  #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
+>  #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
+> +#define X86_FEATURE_SEV_SNP		(19*32+4)  /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
 
->  struct ad5380_chip_info {
+Do you not see how there's a space between the '+' and the single-digit
+number so that the vertical formatting works?
 
+>  #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+>  
+>  /*
+> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> index 0c0b09796ced..2e87015a9d69 100644
+> --- a/arch/x86/kernel/cpu/amd.c
+> +++ b/arch/x86/kernel/cpu/amd.c
+> @@ -559,7 +559,7 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+>  	 *	      If the kernel has not enabled SME via any means then
+>  	 *	      don't advertise the SME feature.
+>  	 *   For SEV: If BIOS has not enabled SEV then don't advertise the
+> -	 *            SEV and SEV_ES feature (set in scattered.c).
+> +	 *            SEV, SEV_ES and SEV_SNP feature.
+
+Let's generalize that so that it doesn't get updated with every feature:
+
+"... then don't advertize SEV and any additional functionality based on it."
+
+>  	 *
+>  	 *   In all cases, since support for SME and SEV requires long mode,
+>  	 *   don't advertise the feature under CONFIG_X86_32.
+> @@ -594,6 +594,7 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+>  clear_sev:
+>  		setup_clear_cpu_cap(X86_FEATURE_SEV);
+>  		setup_clear_cpu_cap(X86_FEATURE_SEV_ES);
+> +		setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
+>  	}
+>  }
+>  
+> diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+> index 73e643ae94b6..a636342ecb26 100644
+> --- a/tools/arch/x86/include/asm/cpufeatures.h
+> +++ b/tools/arch/x86/include/asm/cpufeatures.h
+> @@ -405,6 +405,7 @@
+>  #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
+>  #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
+>  #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
+> +#define X86_FEATURE_SEV_SNP		(19*32+4)  /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
+>  #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+
+Ditto.
+
+Thx.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

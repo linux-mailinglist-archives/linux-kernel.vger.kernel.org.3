@@ -2,180 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF31E553D69
+	by mail.lfdr.de (Postfix) with ESMTP id 72BB1553D68
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355541AbiFUVTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S1355849AbiFUVTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355790AbiFUVTA (ORCPT
+        with ESMTP id S1355816AbiFUVTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:19:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E4173526D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655845462;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6KcRH4/KUHtf5xpIj4aJVy42n1FCoQeasRmMHkO/WZY=;
-        b=Qt5LTOXlYE83qQIlY9uXeg0NSio4kzTD5sD2z1meOpp5+/htVZ9s/FSSUGW1lBQR9jzs7R
-        /869uxLv166UfwxArOUE/onpxRNBRyvNx1wf+CGrm3mtXInCz9kGCI3yrF7WOTzjRSmkuC
-        4Jwp4eQn0saKjdh8im+BFBA/UtTsK4g=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-cEr2j4qbOVa_-EGnshGRsw-1; Tue, 21 Jun 2022 17:04:20 -0400
-X-MC-Unique: cEr2j4qbOVa_-EGnshGRsw-1
-Received: by mail-wm1-f72.google.com with SMTP id l3-20020a05600c1d0300b0039c7efa2526so6741964wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:04:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=6KcRH4/KUHtf5xpIj4aJVy42n1FCoQeasRmMHkO/WZY=;
-        b=UgnIZlSKASWaaOUmjtlwihFogJix0pmbgtSD9OoWwavag6FXewZc0jT5/2E5SlAQ04
-         0cvn+nsezebW1rIf6xtzKQJ8qTmyu3/4LvKGPUBh+Xxplu881AR+6bkChrzTO4/MDFGU
-         pQjliI5+1XcnXpEwQet/xXkxHO/uwyfFw+XUvMcO1nteLK4OqX4HhgHjfm0IFZ5/569G
-         0WzX+Hzn880H2/HxGF8WO49pSByTo0EfGghoyoKvQy/UKjdauyJOizQDOz8erp3N+0Of
-         Nny4AgswIBD18lXIjJYHdgRqofU7G0AWz9GJCM5/fDS15C2eYguqh4lovpiWY/cIYKpb
-         fgDg==
-X-Gm-Message-State: AOAM530AuIUk3w8+16X3Syl5zkvVKt9IYXMvC/8YJMoQIltcEeJ6ROW4
-        Hn3xUwG5vIryLXRJpN/1HwO4FkJluIACIH99YRjzr8rbsRFWjnZXEK+6GqbH2Q6N5EcpjReJdRz
-        YHe1ju+2K6RPa/L/GxvAOnMRn
-X-Received: by 2002:a1c:7411:0:b0:39c:8e4c:9704 with SMTP id p17-20020a1c7411000000b0039c8e4c9704mr42808297wmc.52.1655845459381;
-        Tue, 21 Jun 2022 14:04:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwm+wwv4IGBrN3CJ2eLl14IUYzF8AfIDUJBjL++7SCmt5nepLdvMx+y2Kx/kdCIkOHLNxnIWg==
-X-Received: by 2002:a1c:7411:0:b0:39c:8e4c:9704 with SMTP id p17-20020a1c7411000000b0039c8e4c9704mr42808282wmc.52.1655845459151;
-        Tue, 21 Jun 2022 14:04:19 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:bc00:a63c:7e37:6061:1706? (p200300cbc705bc00a63c7e3760611706.dip0.t-ipconnect.de. [2003:cb:c705:bc00:a63c:7e37:6061:1706])
-        by smtp.gmail.com with ESMTPSA id b3-20020a5d5503000000b0021b881c4c5csm10872237wrv.53.2022.06.21.14.04.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 14:04:18 -0700 (PDT)
-Message-ID: <e25cb58c-464c-8bd4-c7da-9ab80b49f3bb@redhat.com>
-Date:   Tue, 21 Jun 2022 23:04:18 +0200
+        Tue, 21 Jun 2022 17:19:02 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D7A2F3A9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:04:38 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:59736)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o3l2y-008PZ1-37; Tue, 21 Jun 2022 15:04:28 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57252 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o3l2w-00G9Ba-OZ; Tue, 21 Jun 2022 15:04:27 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Derek Bruening <bruening@google.com>,
+        Kevin Malachowski <chowski@google.com>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Paul Turner <pjt@google.com>,
+        Simon Marchi <simon.marchi@efficios.com>,
+        Peter Oskolkov <posk@posk.io>,
+        Chris Kennelly <ckennelly@google.com>,
+        Pedro Alves <palves@redhat.com>,
+        Bui Quang Minh <minhquangbui99@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+References: <20220618182515.95831-1-minhquangbui99@gmail.com>
+        <258546133.12151.1655739550814.JavaMail.zimbra@efficios.com>
+        <CAJqdLroJ6eTD02dAi8Nnb63Sog5x9Pwt9CDwXaUeBQe1Sn2EBg@mail.gmail.com>
+        <648712158.13199.1655748645141.JavaMail.zimbra@efficios.com>
+        <CAJqdLrpKLO8Wh_AytFS9XPMkaq22cOJ+fPi06kyJY55yQUpScg@mail.gmail.com>
+        <CAB=H8NXaMvNU+0Z02VPnLmQde-F8pdw2Ms2SqiOzWtuTcyNjaA@mail.gmail.com>
+        <CAO1ikSbnEbN1-=rY+aOUbjvPS=i9AFJaGBpmbkGR-9UinNKbKw@mail.gmail.com>
+        <87y1xper17.fsf@email.froward.int.ebiederm.org>
+        <871717002.20576.1655841912053.JavaMail.zimbra@efficios.com>
+Date:   Tue, 21 Jun 2022 16:04:18 -0500
+In-Reply-To: <871717002.20576.1655841912053.JavaMail.zimbra@efficios.com>
+        (Mathieu Desnoyers's message of "Tue, 21 Jun 2022 16:05:12 -0400
+        (EDT)")
+Message-ID: <87pmj1enjh.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v10 11/69] mm/mmap: use the maple tree in find_vma()
- instead of the rbtree.
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "damon @ lists . linux . dev" <damon@lists.linux.dev>,
-        SeongJae Park <sj@kernel.org>
-References: <20220621204632.3370049-1-Liam.Howlett@oracle.com>
- <20220621204632.3370049-12-Liam.Howlett@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220621204632.3370049-12-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1o3l2w-00G9Ba-OZ;;;mid=<87pmj1enjh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18zc+rDFOEBT4bWBnCryNsw5KoKma6AAho=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 740 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 9 (1.2%), b_tie_ro: 7 (1.0%), parse: 0.90 (0.1%),
+        extract_message_metadata: 14 (1.9%), get_uri_detail_list: 1.29 (0.2%),
+        tests_pri_-1000: 25 (3.3%), tests_pri_-950: 1.22 (0.2%),
+        tests_pri_-900: 1.09 (0.1%), tests_pri_-90: 340 (46.0%), check_bayes:
+        339 (45.8%), b_tokenize: 11 (1.5%), b_tok_get_all: 165 (22.3%),
+        b_comp_prob: 3.0 (0.4%), b_tok_touch_all: 155 (21.0%), b_finish: 1.00
+        (0.1%), tests_pri_0: 338 (45.6%), check_dkim_signature: 0.56 (0.1%),
+        check_dkim_adsp: 2.4 (0.3%), poll_dns_idle: 0.59 (0.1%), tests_pri_10:
+        2.1 (0.3%), tests_pri_500: 7 (0.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] rseq: x86: Fix rseq_cs get cleared when returning from
+ signal handler
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.06.22 22:46, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Using the maple tree interface mt_find() will handle the RCU locking and
-> will start searching at the address up to the limit, ULONG_MAX in this
-> case.
-> 
-> Add kernel documentation to this API.
-> 
-> Link: https://lkml.kernel.org/r/20220504010716.661115-13-Liam.Howlett@oracle.com
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Cc: SeongJae Park <sj@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Davidlohr Bueso <dave@stgolabs.net>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
->  mm/mmap.c | 28 ++++++++++------------------
->  1 file changed, 10 insertions(+), 18 deletions(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index d7e6baa2f40f..fdb61252448f 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -2486,11 +2486,18 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
->  
->  EXPORT_SYMBOL(get_unmapped_area);
->  
-> -/* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
-> +/**
-> + * find_vma() - Find the VMA for a given address, or the next vma.
-> + * @mm: The mm_struct to check
-> + * @addr: The address
-> + *
-> + * Returns: The VMA associated with addr, or the next vma.
-> + * May return %NULL in the case of no vma at addr or above.
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
 
-Nit: inconsistent use of VMA vs. vma.
+> ----- On Jun 21, 2022, at 3:48 PM, Eric W. Biederman ebiederm@xmission.com wrote:
+>
+>> Derek Bruening <bruening@google.com> writes:
+>> 
+>>> From the viewpoint of dynamic binary translation/instrumentation and
+>>> memtrace (go/memtrace), removing those RSEQ_CS_FLAG_NO_RESTART_ON_* flags
+>>> is a good thing as it reduces complexity and makes it easier to handle rseq
+>>> (which is painful enough to handle already).
+>> 
+>> It sounds like there is consensus.
+>> 
+>> Does someone want to code up a simple patch that detects when
+>> RSEQ_CS_NO_RESTART_ON_SIGNAL and does a WARN_ON_ONCE and fails if
+>> someone uses so it can be set to Linus in the next merge window.
+>> 
+>> After no one screams at that patch it should be safe to remove the
+>> functionality, because you have empirical proof that no one uses
+>> that functionality.
+>
+> Sure, I can whip up something.
+>
+> I'll send it to Peter Zijlstra shortly.
+>
+> I plan to, as you suggest, WARN_ON_ONCE() when this happens, and return
+> an error when the rseq flags or rseq_cs flags contain either of the
+> RSEQ_CS_FLAG_NO_RESTART_ON_* flags. This error is handled by forcing a
+> killing the process with sigsegv:
+>
+> __rseq_handle_notify_resume()
+> [...]
+> error:
+>         sig = ksig ? ksig->sig : 0;
+>         force_sigsegv(sig);
+>
+> Does it look acceptable ?
 
-> + */
->  struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->  {
-> -	struct rb_node *rb_node;
->  	struct vm_area_struct *vma;
-> +	unsigned long index = addr;
->  
->  	mmap_assert_locked(mm);
->  	/* Check the cache first. */
-> @@ -2498,22 +2505,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->  	if (likely(vma))
->  		return vma;
->  
-> -	rb_node = mm->mm_rb.rb_node;
-> -
-> -	while (rb_node) {
-> -		struct vm_area_struct *tmp;
-> -
-> -		tmp = rb_entry(rb_node, struct vm_area_struct, vm_rb);
-> -
-> -		if (tmp->vm_end > addr) {
-> -			vma = tmp;
-> -			if (tmp->vm_start <= addr)
-> -				break;
-> -			rb_node = rb_node->rb_left;
-> -		} else
-> -			rb_node = rb_node->rb_right;
-> -	}
-> -
-> +	vma = mt_find(&mm->mm_mt, &index, ULONG_MAX);
+I think so.  force_sigsegv preps things so that when you go into
+exit_to_user_mode_loop the signal handler kills the process.
 
-I guess it would be handy to have a mt_find() variant that simply
-consumes an address, because for example here, we don't actually care
-about the output semantics? Does anything speak against such a utility
-function or is this here really just a corner case?
+So assuming that happens after force_sigsegv that looks good.
 
-That would make that code *even easier* to read.
-
->  	if (vma)
->  		vmacache_update(addr, vma);
->  	return vma;
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+Eric

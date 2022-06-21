@@ -2,267 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBDF552C4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343B6552C4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347858AbiFUHn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S1347297AbiFUHnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347253AbiFUHnQ (ORCPT
+        with ESMTP id S1346326AbiFUHnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:43:16 -0400
-Received: from forward501j.mail.yandex.net (forward501j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BE52317A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:43:14 -0700 (PDT)
-Received: from vla5-b542255b2eb7.qloud-c.yandex.net (vla5-b542255b2eb7.qloud-c.yandex.net [IPv6:2a02:6b8:c18:3514:0:640:b542:255b])
-        by forward501j.mail.yandex.net (Yandex) with ESMTP id 99DEE624007;
-        Tue, 21 Jun 2022 10:41:43 +0300 (MSK)
-Received: from vla1-aa6bc93a06fb.qloud-c.yandex.net (vla1-aa6bc93a06fb.qloud-c.yandex.net [2a02:6b8:c0d:3a21:0:640:aa6b:c93a])
-        by vla5-b542255b2eb7.qloud-c.yandex.net (mxback/Yandex) with ESMTP id aZSlotdOWI-fgeGPAv5;
-        Tue, 21 Jun 2022 10:41:43 +0300
-X-Yandex-Fwd: 2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1655797303;
-        bh=VcW35AzP/3Dp38gpQny9DaSilKTu5rSPH8SbYdxNKFA=;
-        h=In-Reply-To:Subject:Cc:To:From:References:Date:Message-ID;
-        b=Qnv9rS0ugztTRy7dpivTm47VntUyKvxwAv/TbOhinVjZ/Zaa4T/hvN7ioxlYKNrQu
-         dokRzna1SpHb7ulYg6QfoXtiJZ7tQdAMnjlB0zq06KnUTdFpnmu7WMc8gu25KbGviO
-         O3KXWOlU66+BY+9dOzqQmEU2mGiqtD/8pGzLLgCs=
-Authentication-Results: vla5-b542255b2eb7.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Received: by vla1-aa6bc93a06fb.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id HmnZX5AH9J-feMCXJdd;
-        Tue, 21 Jun 2022 10:41:41 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Date:   Tue, 21 Jun 2022 10:41:39 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Will Deacon <will@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        =?UTF-8?B?Sm/Do28gTcOhcmlv?= Domingos 
-        <joao.mario@tecnico.ulisboa.pt>, linux <linux@yadro.com>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 1/1] RISC-V: Create unique identification for SoC PMU
-Message-ID: <20220621104139.7c77e348@redslave.neermore.group>
-In-Reply-To: <CAOnJCU+7_z1WN_Z6frQcUwzztVL4itbPSfmLUa_7Ob5xCtLo+Q@mail.gmail.com>
-References: <20220619111115.6354-1-nikita.shubin@maquefel.me>
-        <20220619111115.6354-2-nikita.shubin@maquefel.me>
-        <CAK9=C2X4TTCEjZya4wz-W6ndBaxzUpLBtzQAGJ4zphVM8NSgdg@mail.gmail.com>
-        <20220620174006.1c86a456@redslave.neermore.group>
-        <CAOnJCU+7_z1WN_Z6frQcUwzztVL4itbPSfmLUa_7Ob5xCtLo+Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 21 Jun 2022 03:43:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889BCE23
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655797381; x=1687333381;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=8DX6CzI2HQrN8SkpJ6T0Nf+sXlM1pgRiQumruJPH9mA=;
+  b=BkoYmzpfM1Cmn5TK2+IHTntnr67uSB1GFeCKuHvE2wb+sxcYS0JzQWVK
+   jmt8HEsYHqPIN1yF1RuZkSx4ibD/MyVB6rUqMRgnUhmMVxpCcyGXh96/p
+   iqKto2JpAYSn5HY3nMGA36ek8fp4nW2AmVoeI/ZHYg26OdhLbYbNJC7tj
+   Uyi03n7YBmXkA8j3YffHvYHKR202a/b5mlaahl0jEmUkRgC5G7aLJzTtu
+   DP0SqIU8hb+po4UF3qgTvYWBaEg0RpJBK1DB8nYN/rC95jSXFKDpY2JQ3
+   aRVryMUVuPVW555enwaVVmRlsy/I8smc5dfM7suFRjlOdW6MfKvMIPISi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="268772631"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="268772631"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 00:43:00 -0700
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="833455551"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 00:42:59 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
+ work as expected
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+        <20220608144031.829-2-linmiaohe@huawei.com>
+        <87r13jrdst.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <a384f290-dff3-6dad-f1d3-8ec245b9bebd@huawei.com>
+        <87letqpzm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <463fe0cd-504a-f887-0201-691bacd9e69d@huawei.com>
+Date:   Tue, 21 Jun 2022 15:42:27 +0800
+In-Reply-To: <463fe0cd-504a-f887-0201-691bacd9e69d@huawei.com> (Miaohe Lin's
+        message of "Tue, 21 Jun 2022 15:37:25 +0800")
+Message-ID: <87pmj2ea3g.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Anup!
+Miaohe Lin <linmiaohe@huawei.com> writes:
 
-On Mon, 20 Jun 2022 12:40:20 -0700
-Atish Patra <atishp@atishpatra.org> wrote:
+> On 2022/6/21 9:35, Huang, Ying wrote:
+>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>> 
+>>> On 2022/6/20 15:31, Huang, Ying wrote:
+>>>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>>>>
+>>>>> security_vm_enough_memory_mm() checks whether a process has enough memory
+>>>>> to allocate a new virtual mapping. And total_swap_pages is considered as
+>>>>> available memory while swapoff tries to make sure there's enough memory
+>>>>> that can hold the swapped out memory. But total_swap_pages contains the
+>>>>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
+>>>>> success even if there's no memory to hold the swapped out memory because
+>>>>> total_swap_pages always greater than or equal to p->pages.
+>>>>
+>>>> Per my understanding, swapoff will not allocate virtual mapping by
+>>>> itself.  But after swapoff, the overcommit limit could be exceeded.
+>>>> security_vm_enough_memory_mm() is used to check that.  For example, in a
+>>>> system with 4GB memory and 8GB swap, and 10GB is in use,
+>>>>
+>>>> CommitLimit:    4+8 = 12GB
+>>>> Committed_AS:   10GB
+>>>>
+>>>> security_vm_enough_memory_mm() in swapoff() will fail because
+>>>> 10+8 = 18 > 12.  This is expected because after swapoff, the overcommit
+>>>> limit will be exceeded.
+>>>>
+>>>> If 3GB is in use,
+>>>>
+>>>> CommitLimit:    4+8 = 12GB
+>>>> Committed_AS:   3GB
+>>>>
+>>>> security_vm_enough_memory_mm() in swapoff() will succeed because
+>>>> 3+8 = 11 < 12.  This is expected because after swapoff, the overcommit
+>>>> limit will not be exceeded.
+>>>
+>>> In OVERCOMMIT_NEVER scene, I think you're right.
+>>>
+>>>>
+>>>> So, what's the real problem of the original implementation?  Can you
+>>>> show it with an example as above?
+>>>
+>>> In OVERCOMMIT_GUESS scene, in a system with 4GB memory and 8GB swap, and 10GB is in use,
+>>> pages below is 8GB, totalram_pages() + total_swap_pages is 12GB, so swapoff() will succeed
+>>> instead of expected failure because 8 < 12. The overcommit limit is always *ignored* in the
+>>> below case.
+>>>
+>>> 	if (sysctl_overcommit_memory == OVERCOMMIT_GUESS) {
+>>> 		if (pages > totalram_pages() + total_swap_pages)
+>>> 			goto error;
+>>> 		return 0;
+>>> 	}
+>>>
+>>> Or am I miss something?
+>> 
+>> Per my understanding, with OVERCOMMIT_GUESS, the number of in-use pages
+>> isn't checked at all.  The only restriction is that the size of the
+>> virtual mapping created should be less than total RAM + total swap
+>
+> Do you mean the only restriction is that the size of the virtual mapping
+> *created every time* should be less than total RAM + total swap pages but
+> *total virtual mapping* is not limited in OVERCOMMIT_GUESS scene? If so,
+> the current behavior should be sane and I will drop this patch.
 
-> On Mon, Jun 20, 2022 at 7:40 AM Nikita Shubin
-> <nikita.shubin@maquefel.me> wrote:
-> >
-> > On Mon, 20 Jun 2022 17:30:58 +0530
-> > Anup Patel <apatel@ventanamicro.com> wrote:
-> > =20
-> > > On Sun, Jun 19, 2022 at 4:41 PM Nikita Shubin
-> > > <nikita.shubin@maquefel.me> wrote: =20
-> > > >
-> > > > From: Nikita Shubin <n.shubin@yadro.com>
-> > > >
-> > > > Provide RISC-V SBI PMU id to distinguish different cores or
-> > > > SoCs via "devices/platform/riscv-pmu/id" sysfs entry.
-> > > >
-> > > > The identification is generated as string of marchid, mimpid,
-> > > > mvendorid in hex format separated by coma -
-> > > > "0x70032,0x70032,0x0".
-> > > >
-> > > > The CSRs are detailed in the RISC-V privileged spec [1].
-> > > > [1] https://github.com/riscv/riscv-isa-manual
-> > > >
-> > > > Inspired-by: Jo=C3=A3o M=C3=A1rio Domingos <joao.mario@tecnico.ulis=
-boa.pt>
-> > > > Signed-off-by: Nikita Shubin <n.shubin@yadro.com> =20
-> > >
-> > > The mvendorid, marchid, and mimpid can be useful to apps other
-> > > than perf tool.
-> > >
-> > > I have tried to extend /proc/cpuinfo with this information which
-> > > can be parsed by perf tool:
-> > > https://lore.kernel.org/all/20220620115549.1529597-1-apatel@ventanami=
-cro.com/
-> > > =20
-> >
-> > Atish, what do you think about this ?
-> >
-> > RISC-V perf can rely on "/proc/cpuinfo", in some similar manner like
-> > "tools/perf/arch/s390/util/header.c" does.
-> > =20
->=20
-> Yes. We can expose these three values either in sysfs or procfs
-> (/proc/cpuinfo). For perf tool, it shouldn't matter as the header.c
-> will need to generate the unique cpuid
-> string from either.
->=20
-> I am not sure if any other userspace tool prefers to parse sysfs
-> instead of cpuinfo.
+Yes.  This is my understanding.
 
-Okay - let's stick to /proc/cpuinfo.
+Best Regards,
+Huang, Ying
 
->=20
-> > Can it create problems with pmu identification in case of
-> > hetergenous harts ?
-> > =20
->=20
-> Does perf support hetergenous harts at all ? ARM64 code
-> (tool/perf/arch/arm64/util/header.c)
-> just breaks out of the loop after finding the first MIDR.
->=20
-> > >
-> > > Regards,
-> > > Anup
-> > > =20
-> > > > ---
-> > > > v3->v4:
-> > > > - use string for pmuid
-> > > > - rename pmu_sbi_id_show to id_show
-> > > > - fix error print message in id_show
-> > > > - fix DEVICE_ATTR to use octal permissions
-> > > > ---
-> > > >  arch/riscv/kernel/sbi.c        |  3 +++
-> > > >  drivers/perf/riscv_pmu_sbi.c   | 41
-> > > > ++++++++++++++++++++++++++++++++++
-> > > > include/linux/perf/riscv_pmu.h | 1 + 3 files changed, 45
-> > > > insertions(+)
-> > > >
-> > > > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> > > > index 775d3322b422..50dd9b6ecc9e 100644
-> > > > --- a/arch/riscv/kernel/sbi.c
-> > > > +++ b/arch/riscv/kernel/sbi.c
-> > > > @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
-> > > >  {
-> > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
-> > > >  }
-> > > > +EXPORT_SYMBOL(sbi_get_mvendorid);
-> > > >
-> > > >  long sbi_get_marchid(void)
-> > > >  {
-> > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
-> > > >  }
-> > > > +EXPORT_SYMBOL(sbi_get_marchid);
-> > > >
-> > > >  long sbi_get_mimpid(void)
-> > > >  {
-> > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
-> > > >  }
-> > > > +EXPORT_SYMBOL(sbi_get_mimpid);
-> > > >
-> > > >  static void sbi_send_cpumask_ipi(const struct cpumask *target)
-> > > >  {
-> > > > diff --git a/drivers/perf/riscv_pmu_sbi.c
-> > > > b/drivers/perf/riscv_pmu_sbi.c index dca3537a8dcc..be812f855617
-> > > > 100644 --- a/drivers/perf/riscv_pmu_sbi.c
-> > > > +++ b/drivers/perf/riscv_pmu_sbi.c
-> > > > @@ -693,6 +693,28 @@ static int pmu_sbi_setup_irqs(struct
-> > > > riscv_pmu *pmu, struct platform_device *pde return 0;
-> > > >  }
-> > > >
-> > > > +static ssize_t id_show(struct device *dev,
-> > > > +                               struct device_attribute *attr,
-> > > > char *buf) +{
-> > > > +       int len;
-> > > > +       struct riscv_pmu *pmu =3D
-> > > > container_of(dev_get_drvdata(dev), struct riscv_pmu, pmu); +
-> > > > +       len =3D sprintf(buf, "%s\n", pmu->pmuid);
-> > > > +       if (len <=3D 0)
-> > > > +               dev_err(dev, "invalid sprintf len: %d\n", len);
-> > > > +
-> > > > +       return len;
-> > > > +}
-> > > > +
-> > > > +static DEVICE_ATTR(id, 0644, id_show, NULL);
-> > > > +
-> > > > +static struct attribute *pmu_sbi_attrs[] =3D {
-> > > > +       &dev_attr_id.attr,
-> > > > +       NULL
-> > > > +};
-> > > > +
-> > > > +ATTRIBUTE_GROUPS(pmu_sbi);
-> > > > +
-> > > >  static int pmu_sbi_device_probe(struct platform_device *pdev)
-> > > >  {
-> > > >         struct riscv_pmu *pmu =3D NULL;
-> > > > @@ -714,6 +736,14 @@ static int pmu_sbi_device_probe(struct
-> > > > platform_device *pdev) if (pmu_sbi_get_ctrinfo(num_counters))
-> > > >                 goto out_free;
-> > > >
-> > > > +       /* fill pmuid */
-> > > > +       pmu->pmuid =3D kasprintf(GFP_KERNEL, "0x%lx,0x%lx,0x%lx",
-> > > > +                              sbi_get_marchid(),
-> > > > +                              sbi_get_mimpid(),
-> > > > +                              sbi_get_mvendorid());
-> > > > +       if (!pmu->pmuid)
-> > > > +               goto out_free_pmuid;
-> > > > +
-> > > >         ret =3D pmu_sbi_setup_irqs(pmu, pdev);
-> > > >         if (ret < 0) {
-> > > >                 pr_info("Perf sampling/filtering is not
-> > > > supported as sscof extension is not available\n"); @@ -739,8
-> > > > +769,19 @@ static int pmu_sbi_device_probe(struct
-> > > > platform_device *pdev) return ret; }
-> > > >
-> > > > +       ret =3D sysfs_create_group(&pdev->dev.kobj,
-> > > > &pmu_sbi_group);
-> > > > +       if (ret) {
-> > > > +               dev_err(&pdev->dev, "sysfs creation failed\n");
-> > > > +               return ret;
-> > > > +       }
-> > > > +
-> > > > +       pdev->dev.groups =3D pmu_sbi_groups;
-> > > > +       dev_set_drvdata(&pdev->dev, pmu);
-> > > > +
-> > > >         return 0;
-> > > >
-> > > > +out_free_pmuid:
-> > > > +       kfree(pmu->pmuid);
-> > > >  out_free:
-> > > >         kfree(pmu);
-> > > >         return ret;
-> > > > diff --git a/include/linux/perf/riscv_pmu.h
-> > > > b/include/linux/perf/riscv_pmu.h index
-> > > > 46f9b6fe306e..cf3557b77fb8 100644 ---
-> > > > a/include/linux/perf/riscv_pmu.h +++
-> > > > b/include/linux/perf/riscv_pmu.h @@ -42,6 +42,7 @@ struct
-> > > > cpu_hw_events { struct riscv_pmu {
-> > > >         struct pmu      pmu;
-> > > >         char            *name;
-> > > > +       char            *pmuid;
-> > > >
-> > > >         irqreturn_t     (*handle_irq)(int irq_num, void *dev);
-> > > >
-> > > > --
-> > > > 2.35.1
-> > > > =20
-> > =20
->=20
->=20
-
+> Thanks!
+>
+>> pages.  Because swapoff() will not create virtual mapping, so it's
+>> expected that security_vm_enough_memory_mm() in swapoff() always
+>> succeeds.
+>> 
+>> Best Regards,
+>> Huang, Ying
+>> 
+>>>
+>>> Thanks!
+>>>
+>>>>
+>>>>> In order to fix it, p->pages should be retracted from total_swap_pages
+>>>>> first and then check whether there's enough memory for inuse swap pages.
+>>>>>
+>>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>>
+>>>> [snip]
+>>>>
+>>>> .
+>>>>
+>> 
+>> .
+>> 

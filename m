@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12673553EAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90711553EBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354842AbiFUWrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S1346474AbiFUWwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiFUWrV (ORCPT
+        with ESMTP id S1354853AbiFUWv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:47:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98DA31DD7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655851639; x=1687387639;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7q0Ihm9VaccpU9vcxY+QR/y7r1q9Y11CDQYFArZ/uqI=;
-  b=Han6Fn8TunUzjYs4RNdLdmyUGqPBL3zpSpGpeanAvdVgYHAobkmYd6Wl
-   bAVptQJKM44q3aw6iwKrpnRbhnOBOBHNsiRApPVMP3wD5NrWRmTg3tNkk
-   dPx4MpJ65au2aRE3HWBCe6x0yoXmbNpMMSUMtumTzg6Jgu+siXgzFAUca
-   pVoxqFf7dcgf4QMA+RGvDAL29VhIrLSVbyWkSphIkpaDI4vAAGM4sdGwX
-   B2RtTt8pA8YWACCF3eG1c+lGpDOqMPwt4/Cr/dsvEY9KFGxqL1JwmUW1V
-   HnYPJ4eiUc9xeuCZjoMc4HM+Ppzm5nG9G3cfDVd1rrhHHfcy4EkJVk8G8
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="341941281"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="341941281"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:47:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="690170687"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2022 15:47:17 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3meS-0000Vx-UB;
-        Tue, 21 Jun 2022 22:47:16 +0000
-Date:   Wed, 22 Jun 2022 06:47:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kalle Valo <quic_kvalo@quicinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Kalle Valo <kvalo@codeaurora.org>, ath10k@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [kvalo-ath:ath12k-bringup 48/53]
- drivers/net/wireless/ath/ath12k/dbring.c:271:7: warning: variable 'ring' is
- used uninitialized whenever switch case is taken
-Message-ID: <202206220630.i3KlrkEC-lkp@intel.com>
+        Tue, 21 Jun 2022 18:51:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1763E31DDB;
+        Tue, 21 Jun 2022 15:51:53 -0700 (PDT)
+X-UUID: c04db7f580fa40d2b9b608109c8c9ce5-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:d82d7fd8-68cf-49b0-9104-196a679d57cd,OB:10,L
+        OB:0,IP:0,URL:5,TC:0,Content:3,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:59
+X-CID-INFO: VERSION:1.1.6,REQID:d82d7fd8-68cf-49b0-9104-196a679d57cd,OB:10,LOB
+        :0,IP:0,URL:5,TC:0,Content:3,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:59
+X-CID-META: VersionHash:b14ad71,CLOUDID:db4ead2d-1756-4fa3-be7f-474a6e4be921,C
+        OID:f9af49f95651,Recheck:0,SF:28|17|19|48,TC:nil,Content:3,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c04db7f580fa40d2b9b608109c8c9ce5-20220622
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 372402516; Wed, 22 Jun 2022 06:51:47 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 06:51:45 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 22 Jun 2022 06:51:45 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 22 Jun 2022 06:51:45 +0800
+From:   <sean.wang@mediatek.com>
+To:     <pmenzel@molgen.mpg.de>
+CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
+        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
+        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
+        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
+        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
+        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
+        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
+        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
+        <jsiuda@google.com>, <frankgor@google.com>,
+        <abhishekpandit@google.com>, <michaelfsun@google.com>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Bluetooth: btmtksdio: Add in-band wakeup support
+Date:   Wed, 22 Jun 2022 06:51:44 +0800
+Message-ID: <1655851904-15022-1-git-send-email-sean.wang@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1472eccd-429b-0a18-565c-7de2e5ed44f2@molgen.mpg.de--annotate>
+References: <1472eccd-429b-0a18-565c-7de2e5ed44f2@molgen.mpg.de--annotate>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,159 +76,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git ath12k-bringup
-head:   cc108fac9c287f5624daedca923743587adcafd1
-commit: 070381028567d9b8e0d82e6f244909e51902bc49 [48/53] ath12k: remove spectral support
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220622/202206220630.i3KlrkEC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?id=070381028567d9b8e0d82e6f244909e51902bc49
-        git remote add kvalo-ath https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git
-        git fetch --no-tags kvalo-ath ath12k-bringup
-        git checkout 070381028567d9b8e0d82e6f244909e51902bc49
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/ath/ath12k/ drivers/pci/endpoint/functions/
+From: Sean Wang <sean.wang@mediatek.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>Dear Sean,
+>
+>
+>Thank you for the patch.
+>
+>Am 10.06.22 um 02:17 schrieb sean.wang@mediatek.com:
+>> From: Sean Wang <sean.wang@mediatek.com>
+>>
+>> 'ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")'
+>> have added the waken-on-bluetooth via dedicated GPIO.
+>
+>Maybe:
+>
+>Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth") adds the wake on bluethooth via a dedicated GPIO.
 
-All warnings (new ones prefixed by >>):
+Thanks! Look good to me. I will add it in the next version.
 
->> drivers/net/wireless/ath/ath12k/dbring.c:271:7: warning: variable 'ring' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case WMI_DIRECT_BUF_SPECTRAL:
-                ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/dbring.c:280:7: note: uninitialized use occurs here
-           if (!ring) {
-                ^~~~
-   drivers/net/wireless/ath/ath12k/dbring.c:232:28: note: initialize the variable 'ring' to silence this warning
-           struct ath12k_dbring *ring;
-                                     ^
-                                      = NULL
-   1 warning generated.
+>
+>> The patch extends the function to the waken-on-bluetooth via SDIO DAT1
+>> pin (inband wakeup) when the SDIO host driver is able to support.
+>
+>Maybe:
+>
+>Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup), when supported by the SDIO host driver.
+>
 
+Thanks! Look good to me. I will add it in the next version.
 
-vim +/ring +271 drivers/net/wireless/ath/ath12k/dbring.c
+>How did you test this? In what datasheet is it documented?
 
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  228  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  229  int ath12k_dbring_buffer_release_event(struct ath12k_base *ab,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  230  				       struct ath12k_dbring_buf_release_event *ev)
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  231  {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  232  	struct ath12k_dbring *ring;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  233  	struct hal_srng *srng;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  234  	struct ath12k *ar;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  235  	struct ath12k_dbring_element *buff;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  236  	struct ath12k_dbring_data handler_data;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  237  	struct ath12k_buffer_addr desc;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  238  	u8 *vaddr_unalign;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  239  	u32 num_entry, num_buff_reaped;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  240  	u8 pdev_idx, rbm;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  241  	u32 cookie;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  242  	int buf_id;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  243  	int size;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  244  	dma_addr_t paddr;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  245  	int ret = 0;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  246  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  247  	pdev_idx = ev->fixed.pdev_id;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  248  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  249  	if (pdev_idx >= ab->num_radios) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  250  		ath12k_warn(ab, "Invalid pdev id %d\n", pdev_idx);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  251  		return -EINVAL;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  252  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  253  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  254  	if (ev->fixed.num_buf_release_entry !=
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  255  	    ev->fixed.num_meta_data_entry) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  256  		ath12k_warn(ab, "Buffer entry %d mismatch meta entry %d\n",
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  257  			    ev->fixed.num_buf_release_entry,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  258  			    ev->fixed.num_meta_data_entry);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  259  		return -EINVAL;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  260  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  261  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  262  	ar = ab->pdevs[pdev_idx].ar;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  263  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  264  	rcu_read_lock();
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  265  	if (!rcu_dereference(ab->pdevs_active[pdev_idx])) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  266  		ret = -EINVAL;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  267  		goto rcu_unlock;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  268  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  269  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  270  	switch (ev->fixed.module_id) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01 @271  	case WMI_DIRECT_BUF_SPECTRAL:
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  272  		break;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  273  	default:
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  274  		ring = NULL;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  275  		ath12k_warn(ab, "Recv dma buffer release ev on unsupp module %d\n",
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  276  			    ev->fixed.module_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  277  		break;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  278  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  279  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  280  	if (!ring) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  281  		ret = -EINVAL;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  282  		goto rcu_unlock;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  283  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  284  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  285  	srng = &ab->hal.srng_list[ring->refill_srng.ring_id];
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  286  	num_entry = ev->fixed.num_buf_release_entry;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  287  	size = sizeof(*buff) + ring->buf_sz + ring->buf_align - 1;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  288  	num_buff_reaped = 0;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  289  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  290  	spin_lock_bh(&srng->lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  291  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  292  	while (num_buff_reaped < num_entry) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  293  		desc.info0 = ev->buf_entry[num_buff_reaped].paddr_lo;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  294  		desc.info1 = ev->buf_entry[num_buff_reaped].paddr_hi;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  295  		handler_data.meta = ev->meta_data[num_buff_reaped];
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  296  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  297  		num_buff_reaped++;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  298  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  299  		ath12k_hal_rx_buf_addr_info_get(&desc, &paddr, &cookie, &rbm);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  300  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  301  		buf_id = FIELD_GET(DP_RXDMA_BUF_COOKIE_BUF_ID, cookie);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  302  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  303  		spin_lock_bh(&ring->idr_lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  304  		buff = idr_find(&ring->bufs_idr, buf_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  305  		if (!buff) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  306  			spin_unlock_bh(&ring->idr_lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  307  			continue;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  308  		}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  309  		idr_remove(&ring->bufs_idr, buf_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  310  		spin_unlock_bh(&ring->idr_lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  311  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  312  		dma_unmap_single(ab->dev, buff->paddr, ring->buf_sz,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  313  				 DMA_FROM_DEVICE);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  314  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  315  		if (ring->handler) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  316  			vaddr_unalign = buff->payload;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  317  			handler_data.data = PTR_ALIGN(vaddr_unalign,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  318  						      ring->buf_align);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  319  			handler_data.data_sz = ring->buf_sz;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  320  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  321  			ring->handler(ar, &handler_data);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  322  		}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  323  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  324  		memset(buff, 0, size);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  325  		ath12k_dbring_bufs_replenish(ar, ring, buff, GFP_ATOMIC);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  326  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  327  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  328  	spin_unlock_bh(&srng->lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  329  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  330  rcu_unlock:
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  331  	rcu_read_unlock();
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  332  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  333  	return ret;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  334  }
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  335  
+We tested it on the MT8186 platform with wakening up by the keyboard or mouse when the platform is in the suspend state.
 
-:::::: The code at line 271 was first introduced by commit
-:::::: f40abb4788a2a3868606a29d99583421e0874350 ath12k: New driver for Qualcomm 11be hw family
+We can see the details on SDIO DAT1 pin in SDIO specification ver 3.00 section 8.2 Asynchronous Interrupt:
+During the asynchronous interrupt period, the host can stop providing an SD clock to the card and the card
+can generate an interrupt via SDIO DATA1 without SD clock.
 
-:::::: TO: Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
-:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
+or you can check the patch ("mmc: mediatek: add support for SDIO eint wakup IRQ")
+in https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220523074017.12649-4-axe.yang@mediatek.com/
+that is the actual patch btmtksdio was tested against on MT8186 platfrom.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+>> Co-developed-by: Yake Yang <yake.yang@mediatek.com>
+>> Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+>> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+>> ---
+>>   drivers/bluetooth/btmtksdio.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/bluetooth/btmtksdio.c
+>> b/drivers/bluetooth/btmtksdio.c index d6700efcfe8c..9ed3af4ba51a
+>> 100644
+>> --- a/drivers/bluetooth/btmtksdio.c
+>> +++ b/drivers/bluetooth/btmtksdio.c
+>> @@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
+>>   #define BTMTKSDIO_FUNC_ENABLED		3
+>>   #define BTMTKSDIO_PATCH_ENABLED		4
+>>   #define BTMTKSDIO_HW_RESET_ACTIVE	5
+>> +#define BTMTKSDIO_INBAND_WAKEUP		6
+>>
+>>   struct mtkbtsdio_hdr {
+>>	__le16	len;
+>> @@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
+>>		.wakeup_delay = cpu_to_le16(0x20),
+>>	};
+>>
+>> +	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
+>> +		return may_wakeup;
+>> +
+>>	if (may_wakeup && bdev->data->chipid == 0x7921) {
+>>		struct sk_buff *skb;
+>>
+>> @@ -1384,6 +1388,10 @@ static int btmtksdio_probe(struct sdio_func *func,
+>>	 */
+>>	pm_runtime_put_noidle(bdev->dev);
+>>
+>> +	/* Mark if the mmc host can support waken by SDIO */
+>
+>Maybe:
+>
+>Mark if MMC host supports wake on bluetooth by SDIO
+
+Thanks! Look good to me. I will add it in the next version.
+
+>
+>> +	if (device_can_wakeup(func->card->host->parent))
+>> +		set_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state);
+>> +
+>>	err = device_init_wakeup(bdev->dev, true);
+>>	if (err)
+>>		bt_dev_err(hdev, "failed to initialize device wakeup");
+>
+>
+>Kind regards,
+>
+>Paul
+>
+>

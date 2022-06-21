@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C817553D8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D46553D88
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356234AbiFUVXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S1355560AbiFUVXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356034AbiFUVWh (ORCPT
+        with ESMTP id S1355464AbiFUVWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:22:37 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDD662E0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:12:26 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id v81so26710620ybe.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0sx9mCt7ugcCul7YmAFz+wOWvzn0YCkRrYodgyvLA20=;
-        b=jJLcV4chSkoxoph0SxMvMEEtpXLscNJzrhZaEHO3ZPc7SbpH/zvDKOiacYWqha9wxj
-         DO7jw0cqqT3DV5bQSLGtU5a9z6gAx2WcRSGhSMTNItAm+gIhGX/Z0ZytqEyIRY8+z2KA
-         wVxV7TcVmKDv/2YKQiNeaADNAJIuInAo74XsY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0sx9mCt7ugcCul7YmAFz+wOWvzn0YCkRrYodgyvLA20=;
-        b=LTIFb5Wgtx1bOls2G6e6KuDKuIJTvj1OKApyya4QkLWK4LJLgkh4jA578n6AhD6yIm
-         Lo+FEW6jbVQ/3ph5CEVB4CaPVyHrTbXIL6vsWubkaJtkKpeEdJ3F5TE0MF/K46FW8IO8
-         zfYZPZ9aWL9+0sEydiN4wtgHR/fonizEfFa1EoKNrygGIc2xsA3c5CcPkLAGebJcc0kR
-         p2rUBhoetdK9MPGSny2DlAcFmnNz8SIMEQzhiE947hQa5nlEMcaT8zBI8ndy2uIQVh/w
-         IkFbBFqF0BI023r5OPGXkZ1AuLVqsfy8iLWHX9FKs2ttJcBHIIwHuFqXZNrIoeUosjk6
-         W87g==
-X-Gm-Message-State: AJIora/NfX8U1XdCGb5iiiyyfFDfmK6ctE04lSADW9IGkYdQ8kBMwKIF
-        BICU/FBS5a86KoTm8NffWmdgsvfDUIuo/D/SevlkqQXTDm8=
-X-Google-Smtp-Source: AGRyM1t+DFUzS0wvZf5giwOBI/iXtOif2fd5MijWJHsJfzfG0w42jihhLkAOXFsXvEb8fVJDIYNV5qGIHiM0JlDwnXY=
-X-Received: by 2002:a25:9d89:0:b0:669:31d4:7cd9 with SMTP id
- v9-20020a259d89000000b0066931d47cd9mr158778ybp.294.1655845945358; Tue, 21 Jun
- 2022 14:12:25 -0700 (PDT)
+        Tue, 21 Jun 2022 17:22:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F7562F6;
+        Tue, 21 Jun 2022 14:12:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EA076155D;
+        Tue, 21 Jun 2022 21:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDD8C341C4;
+        Tue, 21 Jun 2022 21:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655845949;
+        bh=nUYoRoex6w347HOwhaDxEO5t5c8d600lKv1dhQIfL5c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZbGRF/Y8Bn6KTBDQOCtPqsTiGZyLokKfBISfZJAG4yobQaKFvMV2Jck7Uyz14tUjw
+         W8SqMmRA/nqwnxrLPI1ASP0cBWkpUiVPCCXGoacD3d8Gis5eI4FjMH0jwDHal4aVij
+         gP7XFSac0HWyOg3tfsyz1dhmDLd6A4xiWC2Jwj6b1eOGWI+W5At3H/KYWL/+Mdqm6z
+         joY8UCbXj+v+fA2B0n27l/cB0SFv4tZ6LkJsnWgTTc0sgqKPmbz9QQLOeR5TrWuxkz
+         xrleY2ClSfYSEwyGccRtNLpEijg4US7s9tyzibRACrGJxdjxdpL8hzhL/GNhiNBWLo
+         ERboSqUl81VjQ==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-101d2e81bceso11180349fac.0;
+        Tue, 21 Jun 2022 14:12:28 -0700 (PDT)
+X-Gm-Message-State: AJIora/yKFWUcduipDUo75V7CaCU9oPGBjW6m+y92yubfZ2KZQPSqWBC
+        EgKGkIsdBx2AZghFOu6E1DAtREHgS1uiYlJD5Yg=
+X-Google-Smtp-Source: AGRyM1tatOOl+GEd9ZOd7DehrkpsULz9y5U1aqhVWL3SL9NiTCcfADEG6C6z6SP1xp7bqTcqm4hJ4zAnDzQq+zbY6ow=
+X-Received: by 2002:a05:6870:d587:b0:101:dfd4:4cfa with SMTP id
+ u7-20020a056870d58700b00101dfd44cfamr41237oao.126.1655845948158; Tue, 21 Jun
+ 2022 14:12:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220615172129.1314056-1-pmalani@chromium.org>
- <20220615172129.1314056-5-pmalani@chromium.org> <CAE-0n53ub30HXB325wPoMB4C3n4j_9FWnNu5AmtYgU3PBvs8mQ@mail.gmail.com>
- <CACeCKadSCXZo3E4JZiwxFn_4CH3KDfQkk=xRrxSqCEWAgYhV6Q@mail.gmail.com>
- <20220616193424.GA3844759-robh@kernel.org> <CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com>
-In-Reply-To: <CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 21 Jun 2022 14:12:14 -0700
-Message-ID: <CACeCKad=gm0zU47hmEZwninETycv0pB5fYv0J_c0_fv2cBr3hw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
-To:     Rob Herring <robh@kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
+References: <20220621153623.3786960-1-ardb@kernel.org> <20220621153623.3786960-5-ardb@kernel.org>
+ <202206211357.C66CD742E5@keescook>
+In-Reply-To: <202206211357.C66CD742E5@keescook>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 21 Jun 2022 23:12:17 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGPi+Cy-D8am8tr-rm8gbmUQ-G0bfibD3R3nx=rL7-XVw@mail.gmail.com>
+Message-ID: <CAMj1kXGPi+Cy-D8am8tr-rm8gbmUQ-G0bfibD3R3nx=rL7-XVw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] efi: pstore: Omit efivars caching EFI varstore
+ access layer
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,208 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 12:57 PM Prashant Malani <pmalani@chromium.org> wrote:
+On Tue, 21 Jun 2022 at 23:00, Kees Cook <keescook@chromium.org> wrote:
 >
-> On Thu, Jun 16, 2022 at 12:34 PM Rob Herring <robh@kernel.org> wrote:
+> On Tue, Jun 21, 2022 at 05:36:18PM +0200, Ard Biesheuvel wrote:
+> > Avoid the efivars layer and simply call the newly introduced EFI
+> > varstore helpers instead. This simplifies the code substantially, and
+> > also allows us to remove some hacks in the shared efivars layer that
+> > were added for efi-pstore specifically.
 > >
-> > On Thu, Jun 16, 2022 at 01:54:36AM -0700, Prashant Malani wrote:
-> > > On Thu, Jun 16, 2022 at 12:42 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > Quoting Prashant Malani (2022-06-15 10:20:20)
-> > > > >
-> > > > >  .../display/bridge/analogix,anx7625.yaml      | 64 +++++++++++++++++++
-> > > > >  1 file changed, 64 insertions(+)
-> > > >
-> > > > Can this file get a link to the product brief[1]? It helps to quickly
-> > > > find the block diagram.
-> > >
-> > > Sure, but I don't really think that should be included in this patch
-> > > (or series).
-> > > I'd be happy to submit a separate patch once this series is resolved.
-> > >
-> > > >
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > > index 35a48515836e..bc6f7644db31 100644
-> > > > > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > > @@ -105,6 +105,34 @@ properties:
-> > > > >        - port@0
-> > > > >        - port@1
-> > > > >
-> > > > > +  switches:
-> > > > > +    type: object
-> > > > > +    description: Set of switches controlling DisplayPort traffic on
-> > > > > +      outgoing RX/TX lanes to Type C ports.
-> > > > > +    additionalProperties: false
-> > > > > +
-> > > > > +    properties:
-> > > > > +      '#address-cells':
-> > > > > +        const: 1
-> > > > > +
-> > > > > +      '#size-cells':
-> > > > > +        const: 0
-> > > > > +
-> > > > > +    patternProperties:
-> > > > > +      '^switch@[01]$':
-> > > > > +        $ref: /schemas/usb/typec-switch.yaml#
-> > > > > +        unevaluatedProperties: false
-> > > > > +
-> > > > > +        properties:
-> > > > > +          reg:
-> > > > > +            maxItems: 1
-> > > > > +
-> > > > > +        required:
-> > > > > +          - reg
-> > > > > +
-> > > > > +    required:
-> > > > > +      - switch@0
-> > > > > +
-> > > > >  required:
-> > > > >    - compatible
-> > > > >    - reg
-> > > > > @@ -167,5 +195,41 @@ examples:
-> > > > >                      };
-> > > > >                  };
-> > > > >              };
-> > > > > +            switches {
-> > > >
-> > > > Is "switches" a bus?
-> > >
-> > > No.
-> > >
-> > > >
-> > > > > +                #address-cells = <1>;
-> > > > > +                #size-cells = <0>;
-> > > > > +                switch@0 {
-> > > > > +                    compatible = "typec-switch";
-> > > >
-> > > > Is this compatible matched against a driver that's populated on this
-> > > > "switches" bus?
-> > >
-> > > No. Patch 6/7 has the implementation details on how the anx driver
-> > > performs the enumeration of switches.
-> > >
-> > > >
-> > > > > +                    reg = <0>;
-> > > > > +                    mode-switch;
-> > > > > +
-> > > > > +                    ports {
-> > > > > +                        #address-cells = <1>;
-> > > > > +                        #size-cells = <0>;
-> > > > > +                        port@0 {
-> > > > > +                            reg = <0>;
-> > > > > +                            anx_typec0: endpoint {
-> > > > > +                                remote-endpoint = <&typec_port0>;
-> > > > > +                            };
-> > > > > +                        };
-> > > > > +                    };
-> > > >
-> > > > I was expecting to see these simply be more ports in the existing graph
-> > > > binding of this device, and then have the 'mode-switch' or
-> > > > 'orientation-switch' properties be at the same level as the compatible
-> > > > string "analogix,anx7625". Here's the reasoning, based on looking at the
-> > > > product brief and the existing binding/implementation.
-> > > >
-> > > > Looking at the only existing implementation of this binding upstream in
-> > > > mt8183-kukui-jacuzzi.dtsi it looks like one of these typec ports is
-> > > > actually the same physically as the 'anx7625_out' endpoint (reg address
-> > > > of 1) that is already defined in the binding. It seems that MIPI DSI/DPI
-> > > > comes in and is output through 2 lanes, SSRX2 and SSTX2 according to the
-> > > > product brief[1], and that is connected to some eDP panel
-> > > > ("auo,b116xw03"). Presumably that is the same as anx_typec1 in this
-> > > > patch? I suspect the USB3.1 input is not connected on this board, and
-> > > > thus the crosspoint switch is never used, nor the SSRX1/SSTX1 pins.
-> > > >
-> > > > The existing binding defines the MIPI DSI/DPI input as port0 and two of
-> > > > the four lanes of output that is probably by default connected to the
-> > > > "DisplayPort Transmitter" as port1 because that's how the crosspoint
-> > > > switch comes out of reset. That leaves the USB3.1 input possibly needing
-> > > > a port in the ports binding, and the other two lanes of output needing a
-> > > > port in the ports binding to describe their connection to the downstream
-> > > > device. And finally information about if the crosspoint switch needs to
-> > > > be registered with the typec framework to do typec things, which can be
-> > > > achieved by the presence of the 'mode-switch' property.
-> > > >
-> > > > On a board like kukui-jacuzzi these new properties and ports wouldn't be
-> > > > specified, because what is there is already sufficient. If this chip is
-> > > > connected to a usb-c-connector then I'd expect to see a connection from
-> > > > the output ports in the graph binding to the connector node's ports.
-> > > > There aren't any ports in the usb-c-connector binding though from what I
-> > > > see.
-> > > >
-> > > > I believe there's also one more use case here where USB3.1 or MIPI
-> > > > DSI/DPI is connected on the input side and this device is used to steer
-> > > > USB3.1 or DP through the crosspoint switch to either of the two output
-> > > > pairs. This last scenario means that we have to describe both output
-> > > > pairs, SSRX1/SSTX1 and SSRX2/SSTX2, as different ports in the binding so
-> > > > they can be connected to different usb-c-connectors if the hardware
-> > > > engineer wired the output pins that way.
-> > > >
-> > > > TL;DR: Can we add 'mode-switch' as an optional property and two more
-> > > > ports at address 2 and 3 for the USB3.1 input and the SSRX1/SSTX1 pair
-> > > > respectively to the existing graph part of this binding?
-> > >
-> > > Sorry, but I got lost midway through the preceding explanation.
-> >
-> > Made sense to me.
-> >
-> > > The binding
-> > > can always add additional ports to each "switch" to accomplish the
-> > > graph connections
-> > > you are alluding to (if the driver needs/uses it, which I don't think
-> > > this one does at present).
-> >
-> > Why is the switch special? If I just look at this from a block diagram
-> > perspective, I just see a list of interfaces that need to be described
-> > in the graph.
+> > Since we don't store the name of the associated EFI variable into each
+> > pstore record when enumerating them, we have to guess the variable name
+> > it was constructed from at deletion time, since we no longer keep a
+> > shadow copy of the variable store. To make this a bit more exact, store
+> > the CRC-32 of the ASCII name into the pstore record's ECC region so we
+> > can use it later to make an educated guess regarding the name of the EFI
+> > variable.
 >
-> Because it is specific to Type-C connectors. The anx7625.h does
-> contain a cross-point
-> switch which controls data lines coming from 1 (or more) Type-C
-> connectors, so it seems reasonable
-> to have a dedicated binding for such types of hardware sub-components,
-> which helps define the graph connections
-> in a more uniform manner. That's not to say:
-> - this can only be used by this hardware. The typec-switch binding is
-> generic enough to accommodate other hardware.
-> - there is only 1 way to do this. The interfaces could be described
-> using existing port OF graph bindings, but I don't
-> see that as reason enough to not include a dedicated switch binding if
-> it makes the overall binding more logically organized (IMO) and
-> makes driver registration code mode clean.
+> I wonder if pstore_record should have a "private" field for backends to
+> use? That seems like it solve the need for overloading the ecc field,
+> and allow for arbitrarily more information to be stored (i.e. store full
+> efi var name instead of an easily-colliding crc32?)
 >
-> >
-> > > Adding extra ports to existing ports gets tricky from a mode-switch
-> > > enumeration perspective (which
-> > > ports should have the modes switches, which shouldn't? Do you follow
-> > > the remote end points for each port
-> > > and see which one is a Type C connector?
-> >
-> > The driver knows which port is which because the binding has to define
-> > it. So you have to check 2 of them (SSRX1/SSTX1 and SSRX2/SSTX2) to find
-> > usb C connectors.
->
-> Right, but with the switch binding you no longer need to check. If
-> there is a typec-switch, you know
-> it is coming from a Type-C connector, so you can just register the
-> switches with the Type-C framework.
->
-> >
-> > > What if we add an
-> > > intermediate switch device in the future?)
-> > > Having a dedicated "switch" binding makes this consistent and easy
-> > > (port0 will always have the end-point for the switch).
-> > >
-> > > While there may be more than 1 valid approach here, I believe the
-> > > current one is appropriate.
-> >
-> > To put it simply, if you want to define a generic binding, I want to see
-> > at least 2 users of it.
 
-Pin-Yen and I will work on adding another user for the binding to v5 of
-this patch series.
-
-Best regards,
-
-- Prashant
+We could easily add that - we'd just have to decide how to free the
+memory it points to.

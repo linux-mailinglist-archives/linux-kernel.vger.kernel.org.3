@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C355529E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A78A552A08
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345206AbiFUDmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S1345384AbiFUDm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345090AbiFUDmd (ORCPT
+        with ESMTP id S1345190AbiFUDmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:42:33 -0400
+        Mon, 20 Jun 2022 23:42:43 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306EF1EC79;
-        Mon, 20 Jun 2022 20:42:33 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id B42073200413;
-        Mon, 20 Jun 2022 23:42:31 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979B2205E1;
+        Mon, 20 Jun 2022 20:42:35 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 43C1F32008FC;
+        Mon, 20 Jun 2022 23:42:34 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 20 Jun 2022 23:42:32 -0400
+  by compute1.internal (MEProxy); Mon, 20 Jun 2022 23:42:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1655782951; x=1655869351; bh=Lx
-        uWI7fwqUJxo8RalFUvW8brkX0rNqDAgLS/C3jwWOM=; b=e7K2mVJZDmTrc470vv
-        XbdFJ71hbK8iS+o1Atn7nY+g3n9tpEkn+YiY1D2nJIjUjQOnSgxY+8pANso3ZPfb
-        GwboWO3Opn2k3RfMFd+HHjDDZTobjBFxkMD/h0bM2OW80WqeCmIviZZS3F05z6vb
-        r5zifmydTiNupFLXg5NC4KwvaJrGfLijxvG37iS6Sj3Tzb62EFiEh535vqbkEkPJ
-        8hcOW7JonDOwaSBm4537LxJRKU8jol1JjrTbv7fAFJpenM2jCzKMJ7oJGlH79mcs
-        sYjlnnDaPEr1JNvvIyokeU+LO2X03EJzH8aRGYH/TB6vcgqk2N4u28KPJNW1gikF
-        HwnQ==
+        :subject:subject:to:to; s=fm3; t=1655782953; x=1655869353; bh=E1
+        xy502tT2o6kQP7RzONuNL2uQA+shIpVy7y307P1/M=; b=ejrcg7P9aU9tLfhcw0
+        aBFwTRROuKoxX2lFcWhQqjciNpZv3cjTYCUXfs7UyDA0CxLGT1db5h0DpsMsyl70
+        pwugrcNneV03xT8/ZWjoCnY1b/nW1Y4sMYNhwESMCXwRaybOnSo299yO4ULi482S
+        FvmxuGHtvftHIMDNoNALcGvSzIaizP/j1azMhaB6cWpkg2WSGh93lTPbXDzpoukC
+        Jadph9oSW4KE0Wyh2Qd6xakf23+fZ/LhDvYWnR0A0XY8FYEkC1oab6utDNQzQyF4
+        XwhAYbqT12HLmAwRy2sgwfqjZ9SWH2h8FrfIqdGP7XB+TyumQPydz+VVq/5pq7jq
+        3O0w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1655782951; x=1655869351; bh=LxuWI7fwqUJxo
-        8RalFUvW8brkX0rNqDAgLS/C3jwWOM=; b=eLjLryZYKEw1lLLccdtjDoM1LjY9M
-        o4Mt2Uy5PDhT1evtiv07d1eHcUhjctMItqsHJaku5ZuhG0FU9Q/7zvZgYXuPopUI
-        CkC0jZE0vdgE29QuKxaSO8y9GnU+4ObGdmAKnqvkQY9psgBkDmbujAmt59LixDEG
-        nDOlZbtsDXAsrkygLTqmPC0FP6buTupjwWxdQAYJWzL/zGJB+V2i5oec1nWEtde9
-        u1v4oNqlFFAA/Cjb2jdeQMdskhg7U0vue5HGty34o+z4lKvYSW9hXt5JVb/nf8WD
-        j4UOMm+9Wic1oLsvhykz+x5/dn5p9PfCyUnRQZFnVuwXYN3LsrWqrWCkQ==
-X-ME-Sender: <xms:Jz6xYs_dLOCE8Us1VVMneKKAXP52ZNcVHks0FI61S5FqO5VKJdh9vg>
-    <xme:Jz6xYkuHLAeE_WsJZLdLvL07DT0teqWPllEqhdIlqjX1RzSpcDf-3RITR9e9ER4i9
-    bmWlqIWjL71G1lxqQ>
-X-ME-Received: <xmr:Jz6xYiBVB8psHnGeFMSCSkmVbFexmCyLG7MGOJRKT9_AKgz3olo6BKxfWLQmW9rLgnX9JCCim6rwTzFJiAZdbG_u1qf9duaikiUA5k14FsuSceM6sKLEIvNm2ktZpN-ZHGUlRA>
+        :x-sasl-enc; s=fm2; t=1655782953; x=1655869353; bh=E1xy502tT2o6k
+        QP7RzONuNL2uQA+shIpVy7y307P1/M=; b=ZSIKUCA8opETMy25KJ6SqrKdb7Hh4
+        llyj18qehsm7khzQqYkFBIulQUc4ZetBpAjZURyUPv6L6fMmXrijdCrEC7jJJ6JN
+        V2DpVJe1wIlRNZcgR9qM9aTCkvQrxkQOPakHXgn0zcqtXh1NACZwOu+2RUX7rz7V
+        u0oD3StsXxupoGWQk5uYkBKO1oeWWZDSligbG7/KLjNRxGETblFK8qJt+QVaIyux
+        1duztXOZi+IupN+sMpRshywnZdYd6JpsFswY6GDcQc01YTv1+LmAxPiMnOlZm4Jj
+        b2uwOO9+jJG1b7wNtNBR/9/1s5n0zW5z+GIklZXwTSlfJ9xMq1f1ACg/Q==
+X-ME-Sender: <xms:KT6xYpsECMyCj1RgGMdRCcJySkYVcDWpnvT2YelH8orC8urqVEueGw>
+    <xme:KT6xYidUZwR73MpF3BSBxfsqGdAPFqsWN_Dbuo-jVZlAmy2-R23YHRZ5wQ_3bL0qQ
+    LEk9nUpieG4xZrpYg>
+X-ME-Received: <xmr:KT6xYsw27hLcHNTm1qRa8QBn5qjdPC9QjeHJIojh9Q_Pi1jii4Ua5ZRsFgRH61yE3Ey5ikqRqAROLjBc4sVxh2kCQ-rTstI2KSpe-Lm2h42dqWZMD9If6BV_J1443m2Lg-GwJA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgjedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrh
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:Jz6xYsdq_RlUhntcY14HtbzPKn0mk61Zft73de-aZpv2pABsyU1fQA>
-    <xmx:Jz6xYhMFjfzNw8N066mQFThyypxL3Ep88wlQ_Pa7s7r7JnCSi4YF-g>
-    <xmx:Jz6xYmnXBONjifZzlF22JyYMVYxa0xyhGXm8mYyBJ15wqDsde2vkgw>
-    <xmx:Jz6xYqjFtSQGm2KBjIG_1bRSrm4ETMRMIM5WusI8ZY48kepYF94fhA>
+X-ME-Proxy: <xmx:KT6xYgMJnMWUZwtUM4uj1ImS4k6CiRSbdOdjRQKolOgUX-8hAz38xA>
+    <xmx:KT6xYp9MkHi88g0xyTi8f34gbMJw-2Z1P5nIe0wVKrdWTGxTUi1JcA>
+    <xmx:KT6xYgUWwv9byEQ5386HPmzj4ZqtrGekqkB5N_zWkRCPSL1xdG3A-g>
+    <xmx:KT6xYlRqCDd5ITpRsQtxtw5y2Y2aSh4VLU7DgQEYWSOCvMKTetI4tA>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Jun 2022 23:42:30 -0400 (EDT)
+ 20 Jun 2022 23:42:33 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>, Lee Jones <lee.jones@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -72,9 +72,9 @@ Cc:     devicetree@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] mfd: axp20x: Add AXP221/AXP223/AXP809 GPIO cells
-Date:   Mon, 20 Jun 2022 22:42:22 -0500
-Message-Id: <20220621034224.38995-3-samuel@sholland.org>
+Subject: [PATCH v2 3/4] pinctrl: axp209: Support the AXP221/AXP223/AXP809 variant
+Date:   Mon, 20 Jun 2022 22:42:23 -0500
+Message-Id: <20220621034224.38995-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220621034224.38995-1-samuel@sholland.org>
 References: <20220621034224.38995-1-samuel@sholland.org>
@@ -90,50 +90,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These PMICs all contain a compatible GPIO controller.
+These PMICs each have 2 GPIOs with the same register layout as AXP813,
+but without an ADC function. They all fall back to the AXP221 compatible
+string, so only that one needs to be listed in the driver.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
 (no changes since v1)
 
- drivers/mfd/axp20x.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/pinctrl/pinctrl-axp209.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-index 8161a5dc68e8..88a212a8168c 100644
---- a/drivers/mfd/axp20x.c
-+++ b/drivers/mfd/axp20x.c
-@@ -619,6 +619,9 @@ static const struct mfd_cell axp20x_cells[] = {
+diff --git a/drivers/pinctrl/pinctrl-axp209.c b/drivers/pinctrl/pinctrl-axp209.c
+index 207cbae3a7bf..7ab20ac15391 100644
+--- a/drivers/pinctrl/pinctrl-axp209.c
++++ b/drivers/pinctrl/pinctrl-axp209.c
+@@ -73,7 +73,7 @@ static const struct pinctrl_pin_desc axp209_pins[] = {
+ 	PINCTRL_PIN(2, "GPIO2"),
+ };
  
- static const struct mfd_cell axp221_cells[] = {
- 	{
-+		.name		= "axp20x-gpio",
-+		.of_compatible	= "x-powers,axp221-gpio",
-+	}, {
- 		.name		= "axp221-pek",
- 		.num_resources	= ARRAY_SIZE(axp22x_pek_resources),
- 		.resources	= axp22x_pek_resources,
-@@ -645,6 +648,9 @@ static const struct mfd_cell axp221_cells[] = {
+-static const struct pinctrl_pin_desc axp813_pins[] = {
++static const struct pinctrl_pin_desc axp22x_pins[] = {
+ 	PINCTRL_PIN(0, "GPIO0"),
+ 	PINCTRL_PIN(1, "GPIO1"),
+ };
+@@ -87,9 +87,16 @@ static const struct axp20x_pctrl_desc axp20x_data = {
+ 	.adc_mux = AXP20X_MUX_ADC,
+ };
  
- static const struct mfd_cell axp223_cells[] = {
- 	{
-+		.name		= "axp20x-gpio",
-+		.of_compatible	= "x-powers,axp221-gpio",
-+	}, {
- 		.name		= "axp221-pek",
- 		.num_resources	= ARRAY_SIZE(axp22x_pek_resources),
- 		.resources	= axp22x_pek_resources,
-@@ -785,6 +791,9 @@ static const struct mfd_cell axp806_cells[] = {
++static const struct axp20x_pctrl_desc axp22x_data = {
++	.pins	= axp22x_pins,
++	.npins	= ARRAY_SIZE(axp22x_pins),
++	.ldo_mask = BIT(0) | BIT(1),
++	.gpio_status_offset = 0,
++};
++
+ static const struct axp20x_pctrl_desc axp813_data = {
+-	.pins	= axp813_pins,
+-	.npins	= ARRAY_SIZE(axp813_pins),
++	.pins	= axp22x_pins,
++	.npins	= ARRAY_SIZE(axp22x_pins),
+ 	.ldo_mask = BIT(0) | BIT(1),
+ 	.adc_mask = BIT(0),
+ 	.gpio_status_offset = 0,
+@@ -388,6 +395,7 @@ static int axp20x_build_funcs_groups(struct platform_device *pdev)
  
- static const struct mfd_cell axp809_cells[] = {
- 	{
-+		.name		= "axp20x-gpio",
-+		.of_compatible	= "x-powers,axp221-gpio",
-+	}, {
- 		.name		= "axp221-pek",
- 		.num_resources	= ARRAY_SIZE(axp809_pek_resources),
- 		.resources	= axp809_pek_resources,
+ static const struct of_device_id axp20x_pctl_match[] = {
+ 	{ .compatible = "x-powers,axp209-gpio", .data = &axp20x_data, },
++	{ .compatible = "x-powers,axp221-gpio", .data = &axp22x_data, },
+ 	{ .compatible = "x-powers,axp813-gpio", .data = &axp813_data, },
+ 	{ }
+ };
 -- 
 2.35.1
 

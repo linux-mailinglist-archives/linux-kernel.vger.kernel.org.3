@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBFF5538A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA815538A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351935AbiFURPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 13:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S1352840AbiFURPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 13:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234333AbiFURPZ (ORCPT
+        with ESMTP id S234333AbiFURPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 13:15:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA0D2A73C;
-        Tue, 21 Jun 2022 10:15:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 21 Jun 2022 13:15:39 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E5B2A409;
+        Tue, 21 Jun 2022 10:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1655831739; x=1687367739;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Oa2rFnX3lqAyXLuHHr44CEvOkTd44U44GyCOxUF6RI0=;
+  b=JgfNab0jsVFLcg6DAs9p0mv7ewySupTyrNWB+hYGj/rep0czFeU+wAyK
+   ORJIrjyMTxCeqylZKwmroMTEHl3vd/UWBa2YSqax/HRdZBX4sB/hJhAYJ
+   44mADZVLLyzDRE66yXYpwwA8e3gJNWRNsATADYxL5VPZCaJqWrLWODJpk
+   A=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="127395062"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650924000"; 
+   d="scan'208";a="127395062"
+Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 19:15:36 +0200
+Received: from MUCSE822.infineon.com (MUCSE822.infineon.com [172.23.29.53])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A007DB81A8C;
-        Tue, 21 Jun 2022 17:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E560EC3411C;
-        Tue, 21 Jun 2022 17:15:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655831721;
-        bh=Cv2jhgl2RqU9z4AA4Ivxf+DUW488m0ULCBWrVcbwDiM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=lxmPLgunPScWcwtiTFiaI3zOIlYOWfRJNyNTRdfPyLFg7/qqH9kEva0rDNddbq4Pj
-         KlQ5+vJy4cTXaytSWr/DYHyL7OV7e7QeyuCrzHgpGxhqSIi4eyyN+Hy6hJmpEVN5XJ
-         EO36wT4AR1V4QMUuu5IgIuETQ0/+kkCLnTy2uAhcRkIyAEtH+1HKNUhoTrK7V5vbD5
-         nz/DBnrwdJiTlwluscrrp82feWIRMAVVyEBjRT72yOsoWgOM0rSK7p2Z6HCiieSZBW
-         XYVRYcQ/j5MdrJ5MXc6S1xc6ehy0ME1dAhXGEArsQ417gH4aeroD6tuRCC5UsDGLyT
-         ydcU7/H36xtqA==
-Date:   Tue, 21 Jun 2022 12:15:17 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Ohhoon Kwon <ohoono.kwon@samsung.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lizhi Hou <lizhi.hou@xilinx.com>
-Subject: Re: [PATCH v3 2/5] of: remove __of_node_dup() allocflags parameter
-Message-ID: <20220621171517.GA1315139@bhelgaas>
+        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
+        Tue, 21 Jun 2022 19:15:36 +0200 (CEST)
+Received: from MUCSE807.infineon.com (172.23.29.33) by MUCSE822.infineon.com
+ (172.23.29.53) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 21 Jun
+ 2022 19:15:35 +0200
+Received: from [10.160.196.13] (172.23.8.247) by MUCSE807.infineon.com
+ (172.23.29.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 21 Jun
+ 2022 19:15:34 +0200
+Message-ID: <72cd312f-f843-6a85-b9e7-db8fcb952af8@infineon.com>
+Date:   Tue, 21 Jun 2022 19:15:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 4/4] Bluetooth: hci_bcm: Increase host baudrate for
+ CYW55572 in autobaud mode
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
+        <linux-bluetooth@vger.kernel.org>
+References: <cover.1655723462.git.hakan.jansson@infineon.com>
+ <386b205422099c795272ad8b792091b692def3cd.1655723462.git.hakan.jansson@infineon.com>
+ <1a554d8e-c479-f646-ce9d-25871affbcee@molgen.mpg.de>
+From:   Hakan Jansson <hakan.jansson@infineon.com>
+In-Reply-To: <1a554d8e-c479-f646-ce9d-25871affbcee@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220620104123.341054-3-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE824.infineon.com (172.23.29.55) To
+ MUCSE807.infineon.com (172.23.29.33)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,11 +86,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 12:41:20PM +0200, Cl�ment L�ger wrote:
-> The alloclags are always set to GFP_KERNEL so remove this specific flag.
-> Moreover, this function is going to be based on one that does not
-> provides passing gfp flags, so be prepared for this.
+Hi Paul,
 
-s/alloclags/allocflags/
+On 6/20/2022 2:21 PM, Paul Menzel wrote:
+>> Add device specific data for max baudrate in autobaud mode. This 
+>> allows the
+>> host to use a baudrate higher than "init speed" when loading FW in 
+>> autobaud
+>> mode.
+>
+> Please mention 921600 in the commit message, and maybe also document
+> what the current default is.
 
-s/provides passing/supports passing/
+Sure, I can do that if I submit a new rev. The default is 115200.
+
+> Please also add the measurement data to the commit message, that means,
+> how much is the time to load the firmware decreased.
+
+The actual load time will depend on the specific FW used but I could add 
+an example. It would be in the order of seconds.
+
+>> Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
+>> ---
+>>   drivers/bluetooth/hci_bcm.c | 20 ++++++++++++++++----
+>>   1 file changed, 16 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/bluetooth/hci_bcm.c b/drivers/bluetooth/hci_bcm.c
+>> index 0ae627c293c5..d7e0b75db8a6 100644
+>> --- a/drivers/bluetooth/hci_bcm.c
+>> +++ b/drivers/bluetooth/hci_bcm.c
+>> @@ -53,10 +53,12 @@
+>>    * struct bcm_device_data - device specific data
+>>    * @no_early_set_baudrate: Disallow set baudrate before driver setup()
+>>    * @drive_rts_on_open: drive RTS signal on ->open() when platform 
+>> requires it
+>> + * @max_autobaud_speed: max baudrate supported by device in autobaud 
+>> mode
+>>    */
+>>   struct bcm_device_data {
+>>       bool    no_early_set_baudrate;
+>>       bool    drive_rts_on_open;
+>> +     u32     max_autobaud_speed;
+>
+> Why specify the length, and not just `unsigned int`? Maybe also add the
+> unit to the variable name?
+
+See below.
+
+>>   };
+>>
+>>   /**
+>> @@ -100,6 +102,7 @@ struct bcm_device_data {
+>>    * @drive_rts_on_open: drive RTS signal on ->open() when platform 
+>> requires it
+>>    * @pcm_int_params: keep the initial PCM configuration
+>>    * @use_autobaud_mode: start Bluetooth device in autobaud mode
+>> + * @max_autobaud_speed: max baudrate supported by device in autobaud 
+>> mode
+>>    */
+>>   struct bcm_device {
+>>       /* Must be the first member, hci_serdev.c expects this. */
+>> @@ -139,6 +142,7 @@ struct bcm_device {
+>>       bool                    drive_rts_on_open;
+>>       bool                    use_autobaud_mode;
+>>       u8                      pcm_int_params[5];
+>> +     u32                     max_autobaud_speed;
+>
+> Ditto.
+
+I'm trying to following the style of the existing code which already had 
+struct members "oper_speed" and "init_speed" declared as u32.
+
+
+Regards,
+Håkan

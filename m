@@ -2,75 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D27553720
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851A555370D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352862AbiFUP7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S1353298AbiFUP7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352285AbiFUP6N (ORCPT
+        with ESMTP id S1353446AbiFUP6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:58:13 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DA5D50
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:58:08 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so9560853wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=8bGIi/65SNf1gUCizJJAA/uyPpaT7iiHXEa0Yre3OLs=;
-        b=qc78xzPKYmrdcuYQ1ne6Hu8H1BSHHtXY0kD3g+N7e0SwghvQN3cw/qoAboUgUrs+Ck
-         +iwQJ1AJ10Btc0VTT9f6WHOgo8D1M44NtYEiybmDF8Qw1nuDngA9JskQuGCbrE3tO6nl
-         eOC4eyyo/f5SFvf9KgmRv+CDRnTziQhvDBCEM5t7Y86dYYU5K3O1Rl6sZVi1kpPAVOvC
-         Mm5VwD38GAGomFJPcHYSHlYRYekmhbWFD6Ok/DiaZrz5oqAr5y0B65kbUBRp1g5dzbcn
-         hGDJpk81SwmFxFBSKHm447D3o18Ami9ckEnNWJFVwbBjwjxjpvgRktuW+I3Y1jnfs+DD
-         k+ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8bGIi/65SNf1gUCizJJAA/uyPpaT7iiHXEa0Yre3OLs=;
-        b=EXIsFaEsaN0ZbgUuafevs7DwIhOO/QJrBRkeMhwc0bjERA9n6G1FPnCj/0eXa4/xT+
-         pr9WYbfhqAA1KwQoFYvK6163Xx4vx2Y2j6rrySdq+aRrXeN4k098btlCipTxHxtlSni8
-         A0esnG/67QwpaomX2ecqfkvk7toWTCxN+VA9Rn7mSOE7hCxP5gjaQwntFcMtNXoYiXKh
-         DZsQXlpHFs4E2+osNll//VpZ1+HGkaPJ1BlYg+Es4bDFqfKD1Mlb/xwnTRvVc4OcgBJB
-         silsneergSQJYB0DYLKZkBxc9xPa8DBwDLOjeuT4kTSzlRPDW/EpHZH4/pONLG7mQyZK
-         Ghqw==
-X-Gm-Message-State: AOAM531VX57gHenZGwk3epMvdeN+xOLN3/Y+sKoJIYjyx20lAdnJSKU3
-        Q0xFTS24ds3fGiIleHKEP4IqHNv6o1MSmQ==
-X-Google-Smtp-Source: ABdhPJzfQtcmGS9lGGD/a74+uwozsMtxNFYclUUgKl5wNK5vG+XpP16pmsEjUM4CRShV7wvaWru3eQ==
-X-Received: by 2002:a05:600c:3b88:b0:39c:55b2:3d1 with SMTP id n8-20020a05600c3b8800b0039c55b203d1mr42734848wms.64.1655827086597;
-        Tue, 21 Jun 2022 08:58:06 -0700 (PDT)
-Received: from [192.168.0.221] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i187-20020a1c3bc4000000b0039ee52c1345sm12581252wma.4.2022.06.21.08.58.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 08:58:06 -0700 (PDT)
-Message-ID: <a194d4c5-8e31-ecd9-ecd0-0c96af03485b@linaro.org>
-Date:   Tue, 21 Jun 2022 17:58:04 +0200
+        Tue, 21 Jun 2022 11:58:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED65B38B4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655827118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OnM6LWqbySomFL+MYIQvAUbrzoQzHU8UBGdR/EPQFvc=;
+        b=Z+sF8UTB5STn2iOH13ZNfZx43lC0bdhn+sO1t6uvilubGUJocIA65y4TOAy3ob1sqkV5Si
+        W4svIV5lsaF4HZTPCFO2r6Z9G8R2Fc0ZFZTLjuFFSXlXIX83Jl4hdzjrdOaejHR1L2Gbwk
+        nouwJYn0rk30pvVJker9zE+LrtuI2zo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-347-EI-eceqAOPqCr-ag0dv3CQ-1; Tue, 21 Jun 2022 11:58:34 -0400
+X-MC-Unique: EI-eceqAOPqCr-ag0dv3CQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F17B0811E75;
+        Tue, 21 Jun 2022 15:58:33 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.134])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E80F42026985;
+        Tue, 21 Jun 2022 15:58:31 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] KVM: VMX: Support TscScaling and EnclsExitingBitmap whith eVMCS
+Date:   Tue, 21 Jun 2022 17:58:19 +0200
+Message-Id: <20220621155830.60115-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: ath11k: add new DT entry
- for board ID
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220621135339.1269409-1-robimarko@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220621135339.1269409-1-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,54 +62,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 15:53, Robert Marko wrote:
-> bus + qmi-chip-id + qmi-board-id and optionally the variant are currently
-> used for identifying the correct board data file.
-> 
-> This however is sometimes not enough as all of the IPQ8074 boards that I
-> have access to dont have the qmi-board-id properly fused and simply return
-> the default value of 0xFF.
-> 
-> So, to provide the correct qmi-board-id add a new DT property that allows
-> the qmi-board-id to be overridden from DTS in cases where its not set.
-> This is what vendors have been doing in the stock firmwares that were
-> shipped on boards I have.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+Enlightened VMCS v1 definition was updates to include fields for the
+following features:
+    - PerfGlobalCtrl
+    - EnclsExitingBitmap
+    - TSC scaling
+    - GuestLbrCtl
+    - CET
+    - SSP
 
-Thank you for your patch. There is something to discuss/improve.
+Add support for EnclsExitingBitmap and TSC scaling to KVM. PerfGlobalCtrl 
+doesn't work correctly with Win11, don't enable it yet. SSP, CET and 
+GuestLbrCtl are not currently supported by KVM.
 
-> ---
->  .../devicetree/bindings/net/wireless/qcom,ath11k.yaml     | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> index a677b056f112..fe6aafdab9d4 100644
-> --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> @@ -41,6 +41,14 @@ properties:
->          * reg
->          * reg-names
->  
-> +  qcom,ath11k-board-id:
+Note: adding new field for KVM on Hyper-V case is easy but adding them to
+Hyper-V on KVM requires some work to not break live migration as we never
+expected this to happen without eVMCS version update. The series introduces
+new KVM_CAP_HYPERV_ENLIGHTENED_VMCS2 capability and a notion of KVM 
+internal 'Enlightened VMCS revision'.
 
-The "board" a bit confuses me because in the context of entire system it
-means the entire hardware running Qualcomm SoC. This is sometimes
-encoded as qcom,board-id property.
+Example QEMU enablement patch for the new capability will be sent as a 
+follow-up to the series.
 
-Is your property exactly the same?
+Vitaly Kuznetsov (11):
+  KVM: x86: hyper-v: Expose access to debug MSRs in the partition
+    privilege flags
+  x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
+  x86/hyperv: Update 'struct hv_enlightened_vmcs' definition
+  KVM: VMX: Define VMCS-to-EVMCS conversion for the new fields
+  KVM: nVMX: Support several new fields in eVMCSv1
+  KVM: nVMX: Introduce KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
+  KVM: selftests: Switch to KVM_CAP_HYPERV_ENLIGHTENED_VMCS2
+  KVM: VMX: Support TSC scaling with enlightened VMCS
+  KVM: selftests: Add ENCLS_EXITING_BITMAP{,HIGH} VMCS fields
+  KVM: selftests: Switch to updated eVMCSv1 definition
+  KVM: selftests: Enable TSC scaling in evmcs selftest
 
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Board ID to override the one returned by the firmware or the default
-> +      0xff if it was not set by the vendor at all.
-> +      It is used along the ath11k-calibration-variant to mach the correct
-> +      calibration data from board-2.bin.
-> +
->    qcom,ath11k-calibration-variant:
->      $ref: /schemas/types.yaml#/definitions/string
->      description:
+ Documentation/virt/kvm/api.rst                |  42 ++++++-
+ arch/x86/include/asm/hyperv-tlfs.h            |  19 ++-
+ arch/x86/include/asm/kvm_host.h               |   2 +-
+ arch/x86/kvm/hyperv.c                         |   1 +
+ arch/x86/kvm/vmx/evmcs.c                      | 116 ++++++++++++++----
+ arch/x86/kvm/vmx/evmcs.h                      |  28 +++--
+ arch/x86/kvm/vmx/nested.c                     |  43 ++++++-
+ arch/x86/kvm/vmx/vmx.c                        |   4 +-
+ arch/x86/kvm/vmx/vmx.h                        |  15 +--
+ arch/x86/kvm/x86.c                            |  15 ++-
+ include/asm-generic/hyperv-tlfs.h             |   2 +
+ include/uapi/linux/kvm.h                      |   3 +-
+ .../selftests/kvm/include/kvm_util_base.h     |   8 ++
+ .../selftests/kvm/include/x86_64/evmcs.h      |  46 ++++++-
+ .../selftests/kvm/include/x86_64/vmx.h        |   2 +
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |   5 +-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  33 ++++-
+ .../selftests/kvm/x86_64/hyperv_cpuid.c       |   2 +-
+ .../kvm/x86_64/vmx_set_nested_state_test.c    |   2 +-
+ 19 files changed, 321 insertions(+), 67 deletions(-)
 
+-- 
+2.35.3
 
-Best regards,
-Krzysztof

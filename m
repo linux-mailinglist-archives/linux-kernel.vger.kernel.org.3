@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3941552890
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 02:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81DD552895
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 02:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244646AbiFUAQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 20:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S242593AbiFUAUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 20:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiFUAQA (ORCPT
+        with ESMTP id S230172AbiFUAUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 20:16:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 901B019000
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 17:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655770558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=am4ljrsE7Ufjfmqsop2MzHsqSlEXrA5rSRIM1yT2FYE=;
-        b=P5dRtsSKvV3QKbbOdEXRRj7ZY4MqanQrTt19Kdz7fCwkp/Xfa2FZdSX39CLp3blWQkHW3d
-        7KY+FW18aC6fDGOA32qw5O1iep3JWnx0YZ8wdS3Fj4/vAqkTRsJNnuDPKMPmw7aI/Gq+Gt
-        V2CVktJp25Zw/rUIIP/SJX0H/dqG4lM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-3-rRxPcep1Pda1BUJKX7K4iw-1; Mon, 20 Jun 2022 20:15:57 -0400
-X-MC-Unique: rRxPcep1Pda1BUJKX7K4iw-1
-Received: by mail-wm1-f70.google.com with SMTP id i188-20020a1c3bc5000000b0039db971c6d9so6312227wma.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 17:15:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=am4ljrsE7Ufjfmqsop2MzHsqSlEXrA5rSRIM1yT2FYE=;
-        b=J+TzfkQidPtmJq/UzzqndzVDcZfGYyM0hoq54P/bdyyy35y4SdiwX7uKHhcFQv6P0/
-         qYmddTbjSAGJMTsyiEhkqrjRARO5+bTgpNOyzsIJFwg33WP3OP43FCjvAUc0qPkl5keP
-         HAlChvgmnnl0ua/6IkJw+vxeWkIcqJAcRgQ9wgk3P+aMzEb5qEBPtXvRnuldtrbiDx9X
-         rFH8PtLcy9xmlKDKjNUlLWDEeBIgbNMgppZuyYozl6aTaGkPX9wGwGytrno+0mCcDV+b
-         THmtrUwWO3NHPlTb8PV9WR+JkLwZpCGiOUkTV/WkH1qvT6wHgXHawrEo/+PJMVIv6XWI
-         UgVQ==
-X-Gm-Message-State: AOAM532oe4GHlttJxUI6xl4GTEufAPzJcqSvdxEvq+Df179buRG3SWHt
-        k6jzg2/sigcz1w4kcpTxcx7AFTATkdJyJ+8mf7zrErC8bPZMINtnDgOdLhnGgwbj6JGKKVaBlqY
-        Mn0KhZmdvzHN4voWbBZzkHyhS
-X-Received: by 2002:a05:600c:3b05:b0:397:54ce:896 with SMTP id m5-20020a05600c3b0500b0039754ce0896mr37343025wms.3.1655770556337;
-        Mon, 20 Jun 2022 17:15:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxuF9L1be7ni3J1YmYNIb9c4ZabGtFSUgGjCv0tSabp2R2QRhWX6wNq50I5/oKWe6fZHu9qDw==
-X-Received: by 2002:a05:600c:3b05:b0:397:54ce:896 with SMTP id m5-20020a05600c3b0500b0039754ce0896mr37343003wms.3.1655770556103;
-        Mon, 20 Jun 2022 17:15:56 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfe7cd000000b0021b89181863sm7340790wrn.41.2022.06.20.17.15.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 17:15:55 -0700 (PDT)
-Message-ID: <e6306933-45c4-f38a-bae1-3ad149d67e1b@redhat.com>
-Date:   Tue, 21 Jun 2022 02:15:54 +0200
+        Mon, 20 Jun 2022 20:20:11 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A001B7A2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 17:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=+YmNWCks1/dJwdziGRo9iF81qlkyopZV7A3y12cRD8Q=; b=jmkMy0ad2ZGddc0G6w2baHEa2t
+        Nq8Lj3XdxuW/EOYuKhhfkWYOgVLAo+YSJVC2RQr7CRtMsp+J1ZZnlbgEXcE1ukfIit1L1QzkPvjbg
+        jnc2jmGG9O7Pri8bwjX44ZNU0sJ5zzMCjCNkQm4tptRwlc+HuYko7EYUpU7UbudzT0hTMC7YCD0AP
+        +x/RSXsYIwJWPmE0l+4mxwo5KeXGrbDKLWTl8LQUTZ2CW4GjP38xMtqB52QfRMOTQOVGehVrd18CX
+        taoBu/yjO7E6uVhqee4tUsxZkfPa1kMxr0X1hmEbpLFPqCXM3ME3KlsmU7jUk1Qq4g+5rkj0Qg6mM
+        PcbPuqCA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o3RbE-00A1Mv-VO; Tue, 21 Jun 2022 00:19:08 +0000
+Message-ID: <0225146b-9331-8ed2-3e14-24441f4eb298@infradead.org>
+Date:   Mon, 20 Jun 2022 17:18:28 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 2/2] vfio/pci: Remove console drivers
+Subject: Re: [PATCH v3 4/6] rslib: Fix kernel-doc style for rs_modnn()
 Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>, corbet@lwn.net,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        deller@gmx.de, gregkh@linuxfoundation.org
-Cc:     linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Gerd Hoffmann <kraxel@redhat.com>,
-        Laszlo Ersek <lersek@redhat.com>
-References: <165541020563.1955826.16350888595945658159.stgit@omen>
- <165541193265.1955826.8778757616438743090.stgit@omen>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <165541193265.1955826.8778757616438743090.stgit@omen>
+To:     Zhang Boyang <zhangboyang.id@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Ferdinand Blomqvist <ferdinand.blomqvist@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>
+References: <20220620062015.15612-1-zhangboyang.id@gmail.com>
+ <20220620062015.15612-5-zhangboyang.id@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220620062015.15612-5-zhangboyang.id@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Alex,
 
-On 6/16/22 22:38, Alex Williamson wrote:
-> Console drivers can create conflicts with PCI resources resulting in
-> userspace getting mmap failures to memory BARs.  This is especially
-> evident when trying to re-use the system primary console for userspace
-> drivers.  Use the aperture helpers to remove these conflicts.
+
+On 6/19/22 23:20, Zhang Boyang wrote:
+> This patch fixes the style of kernel-doc of rs_modnn().
 > 
-> Reported-by: Laszlo Ersek <lersek@redhat.com>
-> Suggested-by: Gerd Hoffmann <kraxel@redhat.com>
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+> Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
 > ---
-
-Patch looks good to me. 
-
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+>  include/linux/rslib.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/rslib.h b/include/linux/rslib.h
+> index cd0b5a7a5698..e92923fff3bc 100644
+> --- a/include/linux/rslib.h
+> +++ b/include/linux/rslib.h
+> @@ -107,7 +107,8 @@ struct rs_control *init_rs_non_canonical(int symsize, int (*func)(int),
+>  /* Release a rs control structure */
+>  void free_rs(struct rs_control *rs);
+>  
+> -/** modulo replacement for galois field arithmetics
+> +/**
+> + * rs_modnn() - Modulo replacement for galois field arithmetics
+>   *
+>   *  @rs:	Pointer to the RS codec
+>   *  @x:		the value to reduce
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+~Randy

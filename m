@@ -2,104 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7713C553E51
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A436E553E5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354503AbiFUWIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S231455AbiFUWMc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 18:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbiFUWIJ (ORCPT
+        with ESMTP id S1356625AbiFUWLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:08:09 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210062ED77
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:08:08 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y32so24650628lfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KXWwIJvBgndA3WhK3GL3i3aCpDws4Fk1OlRLme0f82A=;
-        b=mRKePrjtbODAs180aZDsLAEONbuWrZ7iGPXcpUcfSsrbTaJykoYbaixY19NrzKgz7j
-         1/my6u6yhWkZb5L5apnLqQX9tN9kuwSNicpksyprremF6LMxq2Iy334TSqxCxNTO94NL
-         bo9B0OdZSvL3+EoKfiLr4jPe6x/Okg94myvTB7LOBFfxM2w8kpRF8rIsJ2B91aZxzjp2
-         OizmhlznIuMCkJWavRj5GCmTeE4RqozPM5Tx3k0xtMn0R8rQsPIBQPhu2LRW2AwpXJN8
-         Qoens8HmrxcVEMMc2WJpaBQeFUfS9L2PvzbNgnc/KBmZgVP2q8DPl0VpJILYyw6zURnN
-         Nkhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KXWwIJvBgndA3WhK3GL3i3aCpDws4Fk1OlRLme0f82A=;
-        b=6mJrnVWtHHylryLeQTPZ44smDs/h4jSG5eS8JUJaju5AnVzSXzi7ERrSj3U9mfR6/v
-         HFfTYr0ESS+Qru9DlP/dJ3YfZglzSH0G+yToJCYUUqWSNqv13Rztpfd+GnrNvVgMcnjH
-         ljX2OYpzmcurh8mDMRDxxJkf9Gnaq1hyfll4hy/6/kgzswDhCMPpRwv+M+aGFRHhgHBn
-         Sytf9vnAIzPSc/BRiMxlK2cXO3bIAXU3KwFMrUR+NVQ0AqJN+uqjxyK53Mnf5G0JHI4Z
-         5/mkqlAzAAhCxZgJAzrCjx7VKGvHijJOnM0IJYrJ9SnEZZZ5gY0XRzDuN0D9ymrFq6S6
-         2oGQ==
-X-Gm-Message-State: AJIora/Ymx55wGzN0quADGQPUXw0e49oiV1Su0ncZYfS7geRsQu0XLG8
-        +LQKT1fT30wqXHGg/oXUy6bD25Tq0q8ZbtqjHm6CIGxjuM8PmA==
-X-Google-Smtp-Source: AGRyM1tLMp5Ggp2CW7vw70R1i+unH7HMYj8AjZRj1bFWF1Nw2npoZKI4aWcJQ+py3yCG2KULLc91IK4cn22E3FnjVOc=
-X-Received: by 2002:a05:6512:118f:b0:47f:69ef:91b4 with SMTP id
- g15-20020a056512118f00b0047f69ef91b4mr261672lfr.100.1655849286267; Tue, 21
- Jun 2022 15:08:06 -0700 (PDT)
+        Tue, 21 Jun 2022 18:11:43 -0400
+X-Greylist: delayed 710 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 15:11:43 PDT
+Received: from mailgateway.xchanging.com (mail9.xchanging.com [213.219.10.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8AF2ED5B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:11:42 -0700 (PDT)
+Received: from pps.filterd (ACTXTSPRDPFTV05.xchanginghosting.com [127.0.0.1])
+        by ACTXTSPRDPFTV05.xchanginghosting.com (8.16.1.2/8.16.1.2) with SMTP id 25LM4kUF011212;
+        Tue, 21 Jun 2022 23:11:22 +0100
+Received: from [91.103.252.181] ([10.146.3.241])
+        by ACTXTSPRDPFTV05.xchanginghosting.com with ESMTP id 3gufw63aax-48
+        (version=TLSv1 cipher=AES256-SHA bits=256 verify=NOT);
+        Tue, 21 Jun 2022 23:11:22 +0100
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <CAKwvOd=nEddFaTVQ80JrHcpjVv34=EhxJ9bb7rUFrRapuGFj2A@mail.gmail.com>
-In-Reply-To: <CAKwvOd=nEddFaTVQ80JrHcpjVv34=EhxJ9bb7rUFrRapuGFj2A@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 21 Jun 2022 15:07:55 -0700
-Message-ID: <CAKwvOdnG3YWLEJ87a2HptA5y4mDBKWp3ZpEV_g6jN9t9uJZA0Q@mail.gmail.com>
-Subject: Re: Fast Kernel Headers talk @ Plumbers?
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: RE
+To:     Recipients <p.nataraj@xchanging.com>
+From:   "Mr Elisabeth" <p.nataraj@xchanging.com>
+Date:   Tue, 21 Jun 2022 15:11:07 -0700
+Reply-To: mariaelisabethschaeffler505@gmail.com
+Message-ID: <3gufw63aax-48@ACTXTSPRDPFTV05.xchanginghosting.com>
+X-Proofpoint-GUID: Wzq3Fj0wZ3t-PEN4SZtbRxCijehZzouK
+X-Proofpoint-ORIG-GUID: Wzq3Fj0wZ3t-PEN4SZtbRxCijehZzouK
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-21_09:2022-06-21,2022-06-21 signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_80,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
+        NIXSPAM_IXHASH,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_ZBI,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -2.3 RCVD_IN_DNSWL_MED RBL: Sender listed at https://www.dnswl.org/,
+        *       medium trust
+        *      [213.219.10.34 listed in list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8751]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mariaelisabethschaeffler505[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [213.219.10.34 listed in bl.score.senderscore.com]
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        *  0.3 HK_NAME_MR_MRS No description available.
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 RCVD_IN_MSPIKE_ZBI No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:14 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Hi Ingo,
-> Jose and I are currently in the planning process to put together a
-> Kernel+Toolchain microconference track at Linux Plumbers Conference
-> this year (Sept 12-14) in Dublin, Ireland.
->
-> We were very excited to see numbers posted about improvements to
-> kernel build times from your work.  If you're planning on attending
-> plumbers and our MC gets approved, would you be able to present on
-> this work?
->
-> Would others be interested in such a topic?
-
-Hi Ingo,
-Any interest in talking more about your fast kernel headers work at
-plumbers this year?
-If you're still considering attending Linux Plumbers conf, please
-submit a proposal:
-https://lpc.events/event/16/abstracts/
-Please make sure to select "Toolchains Track" as the "Track" after
-clicking on "Submit new abstract."
-
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Schöner Tag! Hast du meine vorherige Nachricht erhalten? Ich habe Ihnen eine E-Mail bezüglich der Spende von  Maria-Elisabeth Schaeffler) gesendet. E-Mail-Antwort an: mariaelisabethschaeffler505@gmail.com

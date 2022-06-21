@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA82C5532CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94335532D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349608AbiFUNB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S1345618AbiFUNB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351222AbiFUNBO (ORCPT
+        with ESMTP id S1345583AbiFUNBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:01:14 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128FA2B25E;
-        Tue, 21 Jun 2022 06:00:42 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z11so13100151edp.9;
-        Tue, 21 Jun 2022 06:00:41 -0700 (PDT)
+        Tue, 21 Jun 2022 09:01:31 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F4110FD0;
+        Tue, 21 Jun 2022 06:01:28 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id o16so18845399wra.4;
+        Tue, 21 Jun 2022 06:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=c2lxo27whQqfjrSMb1N0kIfN8nfAtbXW7B4jSIuP+t4=;
-        b=Gb9VTbQdlr4aP/69yyWuIBp2c7G7jnTP5dpOffH6aerBanwB6a7Z4ViKmSNr7lpjPi
-         8cvXnOqAQ846OIuAX/bYv0uHq46h56XrvfyXfg7maOOFKWuOwPQqXqLOidPK87ORWZxJ
-         SEHMewgROEv4Bco+01+fj2QUvL4Go+hNU8dg/2nDLhcFqOcRivmA9loGUzoW6QZmqqns
-         QKeE/TXSmuIFptGBVlz6F4IHo0Q5Zza9lpfjXa9epzD26Uui/adeTHGRgAzcteWendTs
-         1QKAItKDfYOsMfN39QYNkdsLNqppDY0bikLdc4LwQSz6Tg5eTOvwObd9CiPDmJ+GZH2Q
-         bxtw==
+        bh=6Y0ATUV8Qb4XZ2PUuFjYWiAEtClTIxxHJKputShJ2zA=;
+        b=SxFRCysvo2ayNNvRxbNmb2m3TtNeYut7NtJ6Y+am/HXsSaVoL3J0TuLErblx443GDc
+         EpZrC2rIylJZ/YJ72tFldX6Qpe2AoLBeBD3cBYRihIBWKd6KGbBTyZtqvpIEzzijZzLH
+         a/ne8Gy9d3HjTKAsiy11MQPKGENUFt8lJX9iGe2rNdDaHL22U0fR52zebFJ//a7GeEl8
+         415jHF5PqNOKmPt/mWITyZ6omTLM/onIHt7jILtV4Mor7b+afC4Ji1Xh+K8/A+kHC6k7
+         RrMMAf7oegYrI8/wV5UWZ3jlE2xEQT9zVGz1GWJ+lZgeWhAowO1Nv6WSZBq2xdKJAVBn
+         1NOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=c2lxo27whQqfjrSMb1N0kIfN8nfAtbXW7B4jSIuP+t4=;
-        b=Za0lCijac1Y/RbI+MPu4wvHXPVUqq8InvNRGbFgPTCHJwe6/Fp/DDSu/v/e/kAs3G8
-         bPrtb57W8Ml0iuEtrL8+dnVlcuzL6IgQdipJyH73ja3GYSisrYM9oopbqFx1FncRGDbo
-         pBiYLih8cfNKeI1w+bJcwbthopHdYw0uX9H4HuRGWke1kpX4j6XqYQVWunKsA9ez7GYt
-         6siibUv13cunB2cVv0hb9LWPzDr+uVJZjK409A4xEsm4KUHMSDyMyfhUI9bSzwtJM6Tt
-         L4Tx3LS9WF4vAcsqHwtE8ARar14X0RpNTDckX2RI136zRjNEEAnT4SUewV3BfPrrugOd
-         o2aA==
-X-Gm-Message-State: AJIora9PveQiHfwD5cjcqXbIva9McMuOTDGWNET5dmtK0/5626o4vk8p
-        A0MGq8q4jeq2jyFvpv4zZlSKnfHa2cA=
-X-Google-Smtp-Source: AGRyM1s/gLOIJenRxHO4SWxvQvKXccl0hO78cht0LFAt+dhry6ZvIXDFfAZC7bez1j/oqVrNJOksOA==
-X-Received: by 2002:a05:6402:1d48:b0:42d:d1a2:7c6d with SMTP id dz8-20020a0564021d4800b0042dd1a27c6dmr35675400edb.43.1655816440614;
-        Tue, 21 Jun 2022 06:00:40 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id p6-20020a17090653c600b00722e0b1fa8esm1469868ejo.164.2022.06.21.06.00.34
+        bh=6Y0ATUV8Qb4XZ2PUuFjYWiAEtClTIxxHJKputShJ2zA=;
+        b=OmMJvvUQ/6k+wtF89VIXDQX8c37tOM/ZwBMMjJLNpl9ie4+3JWvODy7PgVlDtt1DmL
+         b8HB8r1+D2rQpuOGDg+ehfayDK1Cls+BvpeNJVYPmwe7fH2eTTjx10qm/yGwlQskV4Qx
+         2AxejtVOZn/XxxA8yudVbaAyB+SCaxuhrgTrqa7kHpDCcPIjsUxLdRFx2+bUsnctfW7e
+         8UWl4FLnx6wnjTiwET5AqQXeRB/ElMAT13v5dQDrp3kNq8ct00oFJEmwehuc0NG/awbB
+         M4c12igixL98GTgVRsIuQ6XdMtkThFeR/+2jKojQfK3ivR3p0TrKP26iaXLym3l4fXP2
+         02uQ==
+X-Gm-Message-State: AJIora/9/j4Wii7/EWxidMIrOnvfcmPmfNOWFiJGzHfqTXYYQpr6MYvv
+        uuDHFNDuUSBrNEFZUsCLE1U=
+X-Google-Smtp-Source: AGRyM1vo+xb8luqoL3byYFbo+WDU6/cNpN4MpBrUrjsxEByYipZtEKB6XXcpChcQlOEJXq1ziaWg6g==
+X-Received: by 2002:a05:6000:1e1b:b0:219:e32d:cbe8 with SMTP id bj27-20020a0560001e1b00b00219e32dcbe8mr28439512wrb.129.1655816486830;
+        Tue, 21 Jun 2022 06:01:26 -0700 (PDT)
+Received: from [192.168.0.160] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d6b81000000b0021b9416fa13sm4608770wrx.90.2022.06.21.06.01.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 06:00:40 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <eab4d1d8-913d-71b8-b48e-01ff83bc128f@redhat.com>
-Date:   Tue, 21 Jun 2022 15:00:29 +0200
+        Tue, 21 Jun 2022 06:01:26 -0700 (PDT)
+Sender: Alejandro Colomar <alx.mailinglists@gmail.com>
+Message-ID: <3d18d50a-b96f-befc-d905-c9f68f7542ab@gmail.com>
+Date:   Tue, 21 Jun 2022 15:01:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v7 00/39] KVM: x86: hyper-v: Fine-grained TLB flush + L2
- TLB flush features
+Subject: Re: [PATCH v3] uapi: Make __{u,s}64 match {u,}int64_t in userspace
 Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220613133922.2875594-1-vkuznets@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220613133922.2875594-1-vkuznets@redhat.com>
+To:     Cyril Hrubis <chrubis@suse.cz>, linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-api@vger.kernel.org, dhowells@redhat.com,
+        David.Laight@aculab.com, zack@owlfolio.org, ltp@lists.linux.it,
+        linux-man <linux-man@vger.kernel.org>
+References: <20220621120355.2903-1-chrubis@suse.cz>
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+In-Reply-To: <20220621120355.2903-1-chrubis@suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 15:38, Vitaly Kuznetsov wrote:
-> Changes since v6:
-> - Rebase to the latest kvm/queue [8baacf67c76c], newly introduced
->    selftests had to be adapted to the overhauled API [blame Sean].
-> - Rename 'entry' to 'flush_all_entry' in hv_tlb_flush_enqueue() [Max].
-> - Add "KVM: selftests: Rename 'evmcs_test' to 'hyperv_evmcs'" patch.
-> - Collect R-b tags.
+On 6/21/22 14:03, Cyril Hrubis wrote:
+> This changes the __u64 and __s64 in userspace on 64bit platforms from
+> long long (unsigned) int to just long (unsigned) int in order to match
+> the uint64_t and int64_t size in userspace for C code.
 > 
-> Original description:
+> We cannot make the change for C++ since that would be non-backwards
+> compatible change and may cause possible regressions and even
+> compilation failures, e.g. overloaded function may no longer find a
+> correct match.
 > 
-> Currently, KVM handles HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} requests
-> by flushing the whole VPID and this is sub-optimal. This series introduces
-> the required mechanism to make handling of these requests more
-> fine-grained by flushing individual GVAs only (when requested). On this
-> foundation, "Direct Virtual Flush" Hyper-V feature is implemented. The
-> feature allows L0 to handle Hyper-V TLB flush hypercalls directly at
-> L0 without the need to reflect the exit to L1. This has at least two
-> benefits: reflecting vmexit and the consequent vmenter are avoided + L0
-> has precise information whether the target vCPU is actually running (and
-> thus requires a kick).
+> This allows us to use the kernel structure definitions in userspace in C
+> code. For example we can use PRIu64 and PRId64 modifiers in printf() to
+> print structure membere. Morever with this there would be no need to
+> redefine these structures in an libc implementations as it is done now.
+> 
+> Consider for example the newly added statx() syscall. If we use the
+> header from uapi we will get warnings when attempting to print it's
+> members as:
+> 
+> 	printf("%" PRIu64 "\n", stx.stx_size);
+> 
+> We get:
+> 
+> 	warning: format '%lu' expects argument of type 'long unsigned int',
+> 	         but argument 5 has type '__u64' {aka 'long long unsigned int'}
+> 
+> Signed-off-by: Cyril Hrubis <chrubis@suse.cz>
 
-I haven't reviewed the selftests part yet, but for the rest I only had 
-two very small comments.
+Acked-by: Alejandro Colomar <alx.manpages@gmail.com>
 
-Paolo
-
+> ---
+>   include/uapi/asm-generic/types.h | 11 +++++++++--
+>   1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> v2: Make sure we do not break C++ applications
+> v3: Update commit message to explain C++ exclusion
+> 
+> diff --git a/include/uapi/asm-generic/types.h b/include/uapi/asm-generic/types.h
+> index dfaa50d99d8f..11e468a39d1e 100644

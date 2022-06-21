@@ -2,86 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757875530AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF6D553089
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349260AbiFULWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
+        id S1348844AbiFULPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349157AbiFULWZ (ORCPT
+        with ESMTP id S231209AbiFULPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:22:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CF92A274;
-        Tue, 21 Jun 2022 04:22:24 -0700 (PDT)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LS3sz4NJLz68778;
-        Tue, 21 Jun 2022 19:18:31 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 21 Jun 2022 13:22:22 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 21 Jun 2022 12:22:17 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
-        <bvanassche@acm.org>, <hch@lst.de>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hare@suse.de>, <satishkh@cisco.com>,
-        <sebaddel@cisco.com>, <kartilak@cisco.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <linux-s390@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <mpi3mr-linuxdrv.pdl@broadcom.com>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <nbd@other.debian.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 4/6] scsi: fnic: Drop reserved request handling
-Date:   Tue, 21 Jun 2022 19:15:41 +0800
-Message-ID: <1655810143-67784-5-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
-References: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
+        Tue, 21 Jun 2022 07:15:52 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016B329C9E;
+        Tue, 21 Jun 2022 04:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655810152; x=1687346152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T9u4NQStwqgT/FP8Ox1SftRm7jpPdpysrGAUgD9ZRjc=;
+  b=jI6VRD9GRDbsv3Akw1drAKKPQ21dMtKU9nfmw53ZDJFHzB8cQXiO5yZX
+   H4An/jembi6KUNHb26jF1Khrg1lcfJ1HCLH/6IjJcji30MTx/NtWhPqNl
+   v3vzQ8v+edg1KwP1eIfFOXIeq5XDu5R0f5OVup6xm4LEwP9Nd7yAprR47
+   HOfc4bWPwoIE3NT5aWne1eVuFD6eGJWTIf00JC3P+b1B/LgxG0lLcDzrX
+   4S5Jz49VaIQ2xgoyjmuovetKYgbP6nl4Uwgfy9B600ddyGd6BJYaHLqkh
+   LnuIvAqeSTYftGQOB52sZUUEICOX3gt/XdrJ1x8aAiS/gAJ6LgXoXXazd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="259914733"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="259914733"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:15:51 -0700
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="614710772"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:15:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3brC-000qy0-7b;
+        Tue, 21 Jun 2022 14:15:42 +0300
+Date:   Tue, 21 Jun 2022 14:15:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        rafael@kernel.org, lenb@kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk, hkallweit1@gmail.com,
+        gjb@semihalf.com, jaz@semihalf.com, tn@semihalf.com,
+        Samer.El-Haj-Mahmoud@arm.com, upstream@semihalf.com
+Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
+ description
+Message-ID: <YrGoXXBgHvyifny3@smile.fi.intel.com>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-10-mw@semihalf.com>
+ <20220621094556.5ev3nencnw7a5xwv@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621094556.5ev3nencnw7a5xwv@bogus>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SCSI core code does not support reserved requests, so drop the
-handling in fnic_pending_aborts_iter().
+On Tue, Jun 21, 2022 at 10:45:56AM +0100, Sudeep Holla wrote:
+> On Mon, Jun 20, 2022 at 05:02:22PM +0200, Marcin Wojtas wrote:
+> > Describe the Distributed Switch Architecture (DSA) - compliant
+> > MDIO devices. In ACPI world they are represented as children
+> > of the MDIO busses, which are responsible for their enumeration
+> > based on the standard _ADR fields and description in _DSD objects
+> > under device properties UUID [1].
+> > 
+> > [1] http://www.uefi.org/sites/default/files/resources/_DSD-device-properties-UUID.pdf
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/fnic/fnic_scsi.c | 2 --
- 1 file changed, 2 deletions(-)
+> Why is this document part of Linux code base ?
 
-diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
-index 3d64877bda8d..e7b7f6d73429 100644
---- a/drivers/scsi/fnic/fnic_scsi.c
-+++ b/drivers/scsi/fnic/fnic_scsi.c
-@@ -2019,8 +2019,6 @@ static bool fnic_pending_aborts_iter(struct scsi_cmnd *sc,
- 
- 	if (sc == iter_data->lr_sc || sc->device != lun_dev)
- 		return true;
--	if (reserved)
--		return true;
- 
- 	io_lock = fnic_io_lock_tag(fnic, abt_tag);
- 	spin_lock_irqsave(io_lock, flags);
+It's fine, but your are right with your latter questions.
+
+> How will the other OSes be aware of this ?
+
+Should be a standard somewhere.
+
+> I assume there was some repository to maintain such DSDs so that it
+> is accessible for other OSes. I am not agreeing or disagreeing on the
+> change itself, but I am concerned about this present in the kernel
+> code.
+
+I dunno we have a such, but the closest I may imagine is MIPI standardization,
+that we have at least for cameras and sound.
+
+I would suggest to go and work with MIPI for network / DSA / etc area, so
+everybody else will be aware of the standard.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 

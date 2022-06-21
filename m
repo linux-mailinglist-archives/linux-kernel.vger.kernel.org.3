@@ -2,139 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFCF553EC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8A1553EDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 01:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiFUW5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S1355128AbiFUXDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 19:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354570AbiFUW5G (ORCPT
+        with ESMTP id S1355041AbiFUXDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:57:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839D5326C5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655852225; x=1687388225;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TY0x4skZSRtNnUTitczz8XAzbhfZ1+UkCJ8XwgnmySQ=;
-  b=HySxZaO7FRPlkm8UeFnMNE5EssEogiNQwOQpw8mtxdN+GU9Lml9XVfMp
-   GwUZviBo/PKGT0EW45CEbx4FQ/3ZXywKz4Cbpf63gB8jf7A+dCq6K13tF
-   eWcaXlAyTvmBtnJUbv9c6NI7mojOGfdc186JOsnhmyfUaTOtNFTKCpVlG
-   rPDvhjc2hyS0L8hRObntVBWGRgCd2MollIwl373q4aqeSWGM+aq4iRZ+J
-   wJa3CnHYjkmpaoza1Jo89NiuzZcoQGJf0S590QPvYIJPbVIeLuIlVQIuY
-   tAY/TSQ6Tr4QkPZ6b3C1/0odHh8S12fQZWh12EIBtjyFBdEHI0yskd7wc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="344250740"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="344250740"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:57:04 -0700
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="914354252"
-Received: from dpasupul-mobl.amr.corp.intel.com (HELO pbossart-mobl3.intel.com) ([10.209.178.35])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:57:03 -0700
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-To:     alsa-devel@alsa-project.org
-Cc:     tiwai@suse.de, broonie@kernel.org, vkoul@kernel.org,
-        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
-        Bard liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] soundwire: intel: use pm_runtime_resume() on component probe
-Date:   Tue, 21 Jun 2022 17:56:40 -0500
-Message-Id: <20220621225641.221170-4-pierre-louis.bossart@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220621225641.221170-1-pierre-louis.bossart@linux.intel.com>
-References: <20220621225641.221170-1-pierre-louis.bossart@linux.intel.com>
+        Tue, 21 Jun 2022 19:03:43 -0400
+Received: from mail-pj1-x1063.google.com (mail-pj1-x1063.google.com [IPv6:2607:f8b0:4864:20::1063])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A4A32EDF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:03:41 -0700 (PDT)
+Received: by mail-pj1-x1063.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so14972151pjz.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:03:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:dkim-signature:mime-version:references
+         :in-reply-to:from:date:message-id:subject:to:cc;
+        bh=48KAdNirHEv4RkT4Y2Kkn02In+bwoIBN5NSUht1OZRU=;
+        b=n8HzLLLWN0Fon9Mi48cnf0jVLsmtmTh1v1VD6MQccJhaA8bCtoVwnnQV/FNTDJm/sF
+         yeT/hZyLtcF6Zk7EhYQOC49hGkGBW4vHxeLbKPngwhXTghQeDcNR4nKD0Qr74IRS2SAo
+         um312w1zAPI0Qaz0uebV6aI4dI6AnAmXzdXGKv0w2UHWMw1CJlQixEmtnwKY1xly/cWr
+         n2lNUIdxlZRE2s5tKbKxLg5DRvqvyYClSjf/OJZktW7ppbdddafA3VdGmAZsm+Pbj0M1
+         1Z9+qXchBZrlM75V4uuV0MpPtu5wDjIGQtO+nl0FDIvscPmvc+SZ8GGGcXicS14Z76zi
+         j6ZA==
+X-Gm-Message-State: AJIora9KG2ifXjdC9tdhMHWxGudthEM2V9O/11tGyijMLmMZ3hGtFviJ
+        KiJmjcjCoqFB4F9IEuISwhmn6LHbalut/bULSWvG2FwAZoD3jw==
+X-Google-Smtp-Source: AGRyM1u+uJJAen59QhdNehxon8vNNuM6PZ1DmgSodUK8ieKeehcwwVTGEUrKor9NKcqmeQDJ6FVBSPLCxbEK
+X-Received: by 2002:a17:902:7088:b0:167:78c0:e05e with SMTP id z8-20020a170902708800b0016778c0e05emr30856864plk.149.1655852621516;
+        Tue, 21 Jun 2022 16:03:41 -0700 (PDT)
+Received: from riotgames.com ([163.116.128.207])
+        by smtp-relay.gmail.com with ESMTPS id n7-20020a170903110700b001639686206fsm881938plh.135.2022.06.21.16.03.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 16:03:41 -0700 (PDT)
+X-Relaying-Domain: riotgames.com
+Received: by mail-qk1-f200.google.com with SMTP id k13-20020a05620a414d00b006a6e4dc1dfcso17971956qko.19
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riotgames.com; s=riotgames;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=48KAdNirHEv4RkT4Y2Kkn02In+bwoIBN5NSUht1OZRU=;
+        b=kBimiMtzGauaXSvCkt7GgQTWwj+GP7yn/VNJb1Vx36GxhxEyrYuFiJXD/S/hr9ftJo
+         QNaL21c7eiLtUwGVK+C+fPQEo6rRdoipqaVitnU5R12StEbE3Itbidm7HEoKUsDvBMR6
+         iCKRgxwgYF3XyjV0z1ry5AHmV6uwicX5pRkN8=
+X-Received: by 2002:a0c:fe48:0:b0:462:6a02:a17d with SMTP id u8-20020a0cfe48000000b004626a02a17dmr25915815qvs.108.1655852619389;
+        Tue, 21 Jun 2022 16:03:39 -0700 (PDT)
+X-Received: by 2002:a0c:fe48:0:b0:462:6a02:a17d with SMTP id
+ u8-20020a0cfe48000000b004626a02a17dmr25915786qvs.108.1655852618955; Tue, 21
+ Jun 2022 16:03:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220603041701.2799595-1-irogers@google.com> <20220619171248.GC3362@bug>
+In-Reply-To: <20220619171248.GC3362@bug>
+From:   Zvi Effron <zeffron@riotgames.com>
+Date:   Tue, 21 Jun 2022 18:03:27 -0500
+Message-ID: <CAC1LvL0rZcEHe_ZHDcB38XD49FmdURg4+yKHP0O=J7=4Xx8M3Q@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: Fix is_pow_of_2
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Ian Rogers <irogers@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuze Chi <chiyuze@google.com>
+Content-Type: text/plain; charset="UTF-8"
+x-netskope-inspected: true
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the card registration, transactions on the SoundWire bus can be
-initiated. If the ALSA card is registered after the bus suspends,
-timeouts can be seen while reading/writing codec registers. This is
-extremely easy to reproduce in driver bind/unbind tests.
+On Sun, Jun 19, 2022 at 12:13 PM Pavel Machek <pavel@ucw.cz> wrote:
+>
+> Hi!
+>
+> > From: Yuze Chi <chiyuze@google.com>
+> >
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -4956,7 +4956,7 @@ static void bpf_map__destroy(struct bpf_map *map);
+> >
+> > static bool is_pow_of_2(size_t x)
+> > {
+> > - return x && (x & (x - 1));
+> > + return x && !(x & (x - 1));
+> > }
+>
+> I'm pretty sure we have this test in macro in includes somewhere... should we use
+> that instead?
 
-In an initial experiment, the ASoC soc-component.c code was modified
-to initiate a pm_runtime resume on a component probe. The results
-showed this was too invasive. Instead this patch suggests resuming the
-SoundWire component only.
+I went looking for a macro that provided this check and could not find one. I
+did find the inlined static function is_power_of_2 in log2.h, though, that we
+could use.
 
-Because of the parent-child hierarchy enforced by the pm_runtime
-framework, it can be argued that the codec component probe should be
-enough to resume all necessary devices, and indeed the same resume
-will be applied to SoundWire codecs used on Intel platforms.
-
-Calling pm_runtime_resume() on both the Intel and codec sides has the
-benefit of resuming the bus without assuming any order during the card
-registration. The first component on a dailink to be probed will
-resume the bus. In addition, if a codec driver did not implement this
-transition, the Intel component would still resume the bus and avoid
-timeouts on card registration.
-
-BugLink: https://github.com/thesofproject/linux/issues/3651
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
----
- drivers/soundwire/intel.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 2e7c27d303b42..c907bab12ee33 100644
---- a/drivers/soundwire/intel.c
-+++ b/drivers/soundwire/intel.c
-@@ -1051,6 +1051,23 @@ static int intel_trigger(struct snd_pcm_substream *substream, int cmd, struct sn
- 	return ret;
- }
- 
-+static int intel_component_probe(struct snd_soc_component *component)
-+{
-+	int ret;
-+
-+	/*
-+	 * make sure the device is pm_runtime_active before initiating
-+	 * bus transactions during the card registration.
-+	 * We use pm_runtime_resume() here, without taking a reference
-+	 * and releasing it immediately.
-+	 */
-+	ret = pm_runtime_resume(component->dev);
-+	if (ret < 0 && ret != -EACCES)
-+		return ret;
-+
-+	return 0;
-+}
-+
- static int intel_component_dais_suspend(struct snd_soc_component *component)
- {
- 	struct snd_soc_dai *dai;
-@@ -1106,6 +1123,7 @@ static const struct snd_soc_dai_ops intel_pcm_dai_ops = {
- 
- static const struct snd_soc_component_driver dai_component = {
- 	.name           = "soundwire",
-+	.probe		= intel_component_probe,
- 	.suspend	= intel_component_dais_suspend
- };
- 
--- 
-2.34.1
-
+> Pavel
+> --
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html

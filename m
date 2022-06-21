@@ -2,179 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735CE552C44
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B02552C4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347617AbiFUHny convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 03:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S1347428AbiFUHrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347249AbiFUHnM (ORCPT
+        with ESMTP id S1347280AbiFUHoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:43:12 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371F3237D1;
-        Tue, 21 Jun 2022 00:43:11 -0700 (PDT)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LRz3G1mFdz67kTG;
-        Tue, 21 Jun 2022 15:41:14 +0800 (CST)
-Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 21 Jun 2022 09:43:08 +0200
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 21 Jun 2022 08:43:08 +0100
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2375.024; Tue, 21 Jun 2022 08:43:08 +0100
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: RE: [PATCH rcu 12/12] srcu: Block less aggressively for expedited
- grace periods
-Thread-Topic: [PATCH rcu 12/12] srcu: Block less aggressively for expedited
- grace periods
-Thread-Index: AQHYhPP8VjWNJPtPxUuR+oHDE6Rcoq1ZeCVw
-Date:   Tue, 21 Jun 2022 07:43:08 +0000
-Message-ID: <fef4fbd55b88481490d52cbd65e1b1f8@huawei.com>
-References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
- <20220620222032.3839547-12-paulmck@kernel.org>
-In-Reply-To: <20220620222032.3839547-12-paulmck@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 21 Jun 2022 03:44:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A2A2317A;
+        Tue, 21 Jun 2022 00:44:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23D31B8169E;
+        Tue, 21 Jun 2022 07:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED6BC3411D;
+        Tue, 21 Jun 2022 07:44:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655797454;
+        bh=TgZQktU/5vsZP3GPNZ/qWZleinBCCk2cgAR6Lox4crc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wht0PXyeuQwQyGpWl60X7KoWQ4g7oJT8n4WSl6EFrGYthyFE7HShKTIyBJGnBxmAb
+         467t3Luka6NxNagPemIBgkgzsXnCDWmc5oXT9YqDSLh8BX8/0LLURrypXa+4Qk8Aq+
+         Ap1psmSnRkJLyskIBIwSkuYFJ8Kf6sideKMUsN6o=
+Date:   Tue, 21 Jun 2022 09:44:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Yang Shen <shenyang39@huawei.com>
+Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
+Message-ID: <YrF2yypHZfiNVRBh@kroah.com>
+References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
+ <Yqn3spLZHpAkQ9Us@myrica>
+ <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
+ <YqrmdKNrYTCiS/MC@myrica>
+ <d90e8ea5-2f18-2eda-b4b2-711083aa7ecd@linaro.org>
+ <YrB1D9rv9G4h/BYU@myrica>
+ <YrB30M9yAbUbPFrG@kroah.com>
+ <b5011dd2-e8ec-a307-1b43-5aff6cbb6891@linaro.org>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b5011dd2-e8ec-a307-1b43-5aff6cbb6891@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Paul E. McKenney [mailto:paulmck@kernel.org]
-> Sent: 20 June 2022 23:21
-> To: rcu@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org; kernel-team@fb.com;
-> rostedt@goodmis.org; Paul E. McKenney <paulmck@kernel.org>; Zhangfei
-> Gao <zhangfei.gao@linaro.org>; Shameerali Kolothum Thodi
-> <shameerali.kolothum.thodi@huawei.com>; Paolo Bonzini
-> <pbonzini@redhat.com>
-> Subject: [PATCH rcu 12/12] srcu: Block less aggressively for expedited grace
-> periods
+On Tue, Jun 21, 2022 at 03:37:31PM +0800, Zhangfei Gao wrote:
 > 
-> Commit 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
-> from consuming CPU") fixed a problem where a long-running expedited
-> SRCU
-> grace period could block kernel live patching.  It did so by giving up
-> on expediting once a given SRCU expedited grace period grew too old.
 > 
-> Unfortunately, this added excessive delays to boots of embedded systems
-> running on qemu that use the ARM IORT RMR feature. 
-
-As pointed out here[0]/[1], this delay has nothing to do with ARM IORT RMR
-feature. The delay is due to the "-bios QEMU_EFI.fd" line which emulates flash
-devices and requires excessive memslot ops during boot.
-
-Thanks,
-Shameer
-
-[0] https://lore.kernel.org/all/110bbec5cee74efba0aad64360069a12@huawei.com/
-[1] https://lore.kernel.org/all/8735g649ew.wl-maz@kernel.org/
-
-
- This commit
-> therefore
-> makes the transition away from expediting less aggressive, increasing
-> the per-grace-period phase number of non-sleeping polls of readers from
-> one to three and increasing the required grace-period age from one jiffy
-> (actually from zero to one jiffies) to two jiffies (actually from one
-> to two jiffies).
+> On 2022/6/20 下午9:36, Greg Kroah-Hartman wrote:
+> > On Mon, Jun 20, 2022 at 02:24:31PM +0100, Jean-Philippe Brucker wrote:
+> > > On Fri, Jun 17, 2022 at 02:05:21PM +0800, Zhangfei Gao wrote:
+> > > > > The refcount only ensures that the uacce_device object is not freed as
+> > > > > long as there are open fds. But uacce_remove() can run while there are
+> > > > > open fds, or fds in the process of being opened. And atfer uacce_remove()
+> > > > > runs, the uacce_device object still exists but is mostly unusable. For
+> > > > > example once the module is freed, uacce->ops is not valid anymore. But
+> > > > > currently uacce_fops_open() may dereference the ops in this case:
+> > > > > 
+> > > > > 	uacce_fops_open()
+> > > > > 	 if (!uacce->parent->driver)
+> > > > > 	 /* Still valid, keep going */		
+> > > > > 	 ...					rmmod
+> > > > > 						 uacce_remove()
+> > > > > 	 ...					 free_module()
+> > > > > 	 uacce->ops->get_queue() /* BUG */
+> > > > uacce_remove should wait for uacce->queues_lock, until fops_open release the
+> > > > lock.
+> > > > If open happen just after the uacce_remove: unlock, uacce_bind_queue in open
+> > > > should fail.
+> > > Ah yes sorry, I lost sight of what this patch was adding. But we could
+> > > have the same issue with the patch, just in a different order, no?
+> > > 
+> > > 	uacce_fops_open()
+> > > 	 uacce = xa_load()
+> > > 	 ...					rmmod
+> > Um, how is rmmod called if the file descriptor is open?
+> > 
+> > That should not be possible if the owner of the file descriptor is
+> > properly set.  Please fix that up.
+> Thanks Greg
 > 
-> Fixes: 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
-> from consuming CPU")
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Reported-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-> Reported-by: chenxiang (M)" <chenxiang66@hisilicon.com>
-> Cc: Shameerali Kolothum Thodi  <shameerali.kolothum.thodi@huawei.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Link:
-> https://lore.kernel.org/all/20615615-0013-5adc-584f-2b1d5c03ebfc@linaro
-> .org/
-> ---
->  kernel/rcu/srcutree.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
+> Set cdev owner or use module_get/put can block rmmod once fops_open.
+> -       uacce->cdev->owner = THIS_MODULE;
+> +       uacce->cdev->owner = uacce->parent->driver->owner;
 > 
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index 50ba70f019dea..0db7873f4e95b 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct
-> *ssp)
+> However, still not find good method to block removing parent pci device.
 > 
->  #define SRCU_INTERVAL		1	// Base delay if no expedited GPs
-> pending.
->  #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from
-> slow readers.
-> -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase
-> consecutive no-delay instances.
-> +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase
-> consecutive no-delay instances.
->  #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay
-> instances.
+> $ echo 1 > /sys/bus/pci/devices/0000:00:02.0/remove &
 > 
->  /*
-> @@ -522,16 +522,22 @@ static bool srcu_readers_active(struct srcu_struct
-> *ssp)
->   */
->  static unsigned long srcu_get_delay(struct srcu_struct *ssp)
->  {
-> +	unsigned long gpstart;
-> +	unsigned long j;
->  	unsigned long jbase = SRCU_INTERVAL;
-> 
->  	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
-> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
->  		jbase = 0;
-> -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
-> -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
-> -	if (!jbase) {
-> -		WRITE_ONCE(ssp->srcu_n_exp_nodelay,
-> READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
-> -		if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
-> SRCU_MAX_NODELAY_PHASE)
-> -			jbase = 1;
-> +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
-> +		j = jiffies - 1;
-> +		gpstart = READ_ONCE(ssp->srcu_gp_start);
-> +		if (time_after(j, gpstart))
-> +			jbase += j - gpstart;
-> +		if (!jbase) {
-> +			WRITE_ONCE(ssp->srcu_n_exp_nodelay,
-> READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
-> +			if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
-> SRCU_MAX_NODELAY_PHASE)
-> +				jbase = 1;
-> +		}
->  	}
->  	return jbase > SRCU_MAX_INTERVAL ? SRCU_MAX_INTERVAL : jbase;
->  }
-> --
-> 2.31.1.189.g2e36527f23
+> [   32.563350]  uacce_remove+0x6c/0x148
+> [   32.563353]  hisi_qm_uninit+0x12c/0x178
+> [   32.563356]  hisi_zip_remove+0xa0/0xd0 [hisi_zip]
+> [   32.563361]  pci_device_remove+0x44/0xd8
+> [   32.563364]  device_remove+0x54/0x88
+> [   32.563367]  device_release_driver_internal+0xec/0x1a0
+> [   32.563370]  device_release_driver+0x20/0x30
+> [   32.563372]  pci_stop_bus_device+0x8c/0xe0
+> [   32.563375]  pci_stop_and_remove_bus_device_locked+0x28/0x60
+> [   32.563378]  remove_store+0x9c/0xb0
+> [   32.563379]  dev_attr_store+0x20/0x38
 
+Removing the parent pci device does not remove the module code, it
+removes the device itself.  Don't confuse code vs. data here.
+
+thanks,
+
+greg k-h

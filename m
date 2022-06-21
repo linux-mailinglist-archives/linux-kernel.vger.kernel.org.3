@@ -2,161 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D257552F71
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1BC552F79
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348491AbiFUKIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S1343867AbiFUKMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345821AbiFUKH7 (ORCPT
+        with ESMTP id S229889AbiFUKMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:07:59 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 552841028
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:07:58 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT957mLFifqhRAA--.24852S4;
-        Tue, 21 Jun 2022 18:07:56 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>, Jun Yi <yijun@loongson.cn>,
-        Rui Wang <wangrui@loongson.cn>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] LoongArch: No need to call RESTORE_ALL_AND_RET for all syscalls
-Date:   Tue, 21 Jun 2022 18:07:54 +0800
-Message-Id: <1655806074-17454-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1655806074-17454-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1655806074-17454-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxT957mLFifqhRAA--.24852S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFyrCryDtFW8Aw1kJrWkWFg_yoW5CF17pF
-        ZFkFnYkr4vgrn7Ary3KFyv9rZxAws7GF43WF40krWruw1kXrn8Xr4vya4qqFnrtw4FgrW0
-        qFWrXwnYgas8XaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPv14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWUAVWUtw
-        CY02Avz4vE14v_Gw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY
-        6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
-        vjfUbhFIUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 21 Jun 2022 06:12:05 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0D4286F0;
+        Tue, 21 Jun 2022 03:12:04 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id j22so8215690ljg.0;
+        Tue, 21 Jun 2022 03:12:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=03Jq4PVZsTZ/X9cKBPWp0lhW/8xvAGxNyHHzAOjpF10=;
+        b=SrLbEFS0VyflCBHWy8qxjLmADDTNnfUoB3nzHcoL08ilgAtm3iTEpGRt9pnRZ2p0Jc
+         NAl0hV9vHjcZh7zBK/WWN+ouwfJSnLl5qihby/8yEcuSj7dcYV2Xcc1RzWy8denk//QY
+         IJ1FXRlRgogyPjEbdLLhwOtR3d6T6xlMz1dkGYr4+0CAMqRIx8xSIZNP+S5k00G6DEa+
+         MBzybVFQqO5m7DZtMAhIAZWhHnknR/4buq7NuzegpZ7iLdDJLDc4B+e8McJxzeefZ6Lt
+         TCRM+RI++A+g93b3QjctW4ykLXyJG21pA544Xmi7bYAHLoTZEq9XvOwe4A/DxKVwdis9
+         Z/Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=03Jq4PVZsTZ/X9cKBPWp0lhW/8xvAGxNyHHzAOjpF10=;
+        b=IcrWZLe4G3BRuFRGzAvtt6fs9AC+RT/Qtr1JI40cN887qEko4b6dB5VuasHn7Rwrd6
+         EaiIHR64kMrNS911kWjeh/p1/g3wHdwvQD4dOFIx3s/sFe7tUwggKgQ0cx4BJEXZ2/HE
+         DPyw9igvbKj4q6GNgt5MLEZxoAinruDuQ+WM4rcH6+L+1DOTXfqKX1WcLV/iybrk8cGl
+         s4p28NS6bUuwdThKAysQIOHf7IjbKd6GKuBuMe5HRx8AMtNr4iXPITEAhhLnYG2VaGHb
+         CArzX+Kv4en+NyurNtRqPf9mkOS/mT9dmi3BlR+2LPqzdmNBaVV1yeD/r9Wc17y3Zr7K
+         hPJw==
+X-Gm-Message-State: AJIora8nKjogYItxQIDawQ15Mut/M+GIAevi/vTFfbWf+qMyL74+9idZ
+        dHu14htSseg9Rdj27JLYXpR52km9ug/mKDaz
+X-Google-Smtp-Source: AGRyM1u7isDdRU5wiug9yDoKlpD2Z75vXUFB9x/5E1nRK+BG/iJsMKUrjIJsxTzMAKvUaZBI1V8dsg==
+X-Received: by 2002:a2e:9246:0:b0:25a:6c6a:10ce with SMTP id v6-20020a2e9246000000b0025a6c6a10cemr5393309ljg.501.1655806322381;
+        Tue, 21 Jun 2022 03:12:02 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id u5-20020ac258c5000000b0047f71e4b0e5sm69225lfo.255.2022.06.21.03.12.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 03:12:01 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 13:11:59 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        blarson@amd.com, brijeshkumar.singh@amd.com,
+        catalin.marinas@arm.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        ulf.hansson@linaro.org, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 04/15] dt-bindings: spi: dw: Add AMD Pensando Elba SoC
+ SPI Controller bindings
+Message-ID: <20220621101159.stvan53rvr6qugna@mobilestation>
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-5-brad@pensando.io>
+ <20220620193044.ihxfn6kddif7j5la@mobilestation>
+ <0a68aa72-df85-cf78-dcca-2d75038234c6@kernel.org>
+ <20220620200445.yew3vo3pnjhos7rs@mobilestation>
+ <4ff85493-665a-ee58-07d3-80178c49223b@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4ff85493-665a-ee58-07d3-80178c49223b@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In handle_syscall, it is unnecessary to call RESTORE_ALL_AND_RET
-for all syscalls.
+On Tue, Jun 21, 2022 at 09:00:36AM +0200, Krzysztof Kozlowski wrote:
+> On 20/06/2022 22:04, Serge Semin wrote:
+> > On Mon, Jun 20, 2022 at 09:46:25PM +0200, Krzysztof Kozlowski wrote:
+> >> On 20/06/2022 21:30, Serge Semin wrote:
+> >>> On Mon, Jun 13, 2022 at 12:56:47PM -0700, Brad Larson wrote:
+> >>>> From: Brad Larson <blarson@amd.com>
+> >>>>
+> >>>> The AMD Pensando Elba SoC has integrated the DW APB SPI Controller
+> >>>>
+> >>>> Signed-off-by: Brad Larson <blarson@amd.com>
+> >>>> ---
+> >>>>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
+> >>>>  1 file changed, 2 insertions(+)
+> >>>>
+> >>>> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> >>>> index e25d44c218f2..2a55b947cffc 100644
+> >>>> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> >>>> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> >>>> @@ -73,6 +73,8 @@ properties:
+> >>>>                - renesas,r9a06g032-spi # RZ/N1D
+> >>>>                - renesas,r9a06g033-spi # RZ/N1S
+> >>>>            - const: renesas,rzn1-spi   # RZ/N1
+> >>>
+> >>>> +      - description: AMD Pensando Elba SoC SPI Controller
+> >>>> +        const: amd,pensando-elba-spi
+> >>>
+> >>> Not enough. The driver requires to have a phandle reference to the
+> >>> Pensando System Controller. So the property like
+> >>> "amd,pensando-elba-syscon" is also needed to be added to the DT schema
+> >>> otherwise should the dt-schema tool correctly handle the
+> >>> "unevaluatedProperties: false" setting (Rob says it isn't fully
+> >>> supported at the moment), the dtbs_check procedure will fail on your
+> >>> dts evaluation.
+> >>
+> > 
+> >> The property was here before, now removed, so I assume it was also
+> >> removed from the driver and DTS. Isn't that the case?
+> > 
+> > Ah, the property has been indeed removed. The driver now searches for
+> > the system controller by the next compatible string:
+> > "amd,pensando-elba-syscon" using the
+> > syscon_regmap_lookup_by_compatible() method. My mistake. Sorry for the
+> > noise.
+> > 
 
-(1) rt_sigreturn call RESTORE_ALL_AND_RET.
-(2) The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
+> > * Though personally I'd prefer to have a property with the phandle
+> > reference in order to signify the connection between the system controller
+> > and the SPI-controller. Otherwise the implicit DT bindings like having
+> > the "amd,pensando-elba-syscon"-compatible syscon gets to be
+> > hidden behind the DT scene. But seeing we have already got the Microsemi
+> > platform with such semantic, I can't insist on fixing this.
+> 
+> I agree entirely, this should be explicit syscon-type property. Looking
+> up for compatibles:
+>  - creates hidden (not expressed via bindings) dependency between nodes,
+>  - is not portable and several people struggled with it later and needed
+> backward-compatible code (many examples, let's just give recent one: [1])
+> 
+> 
+> [1]
+> https://lore.kernel.org/all/20220619151225.209029-10-tmaimon77@gmail.com/
 
-This patch only adds the minimal changes as simple as possible
-to reduce the code complexity, at the same time, it can reduce
-many load instructions.
+Seems even more reasonable now. Thanks for providing a bright example
+justifying the property-based approach.
 
-Here are the test environments:
+@Brad, could you get back the property with a phandle to the syscon
+DT-node? (No need in adding the CS CSR address as the phandle argument,
+just a phandle.)
 
-  Hardware: Loongson-LS3A5000-7A1000-1w-A2101
-  Firmware: UDK2018-LoongArch-A2101-pre-beta8 [1]
-  System: loongarch64-clfs-system-5.0 [2]
+-Sergey
 
-The system passed functional testing used with the following
-test case without and with this patch:
-
-  git clone https://github.com/hevz/sigaction-test.git
-  cd sigaction-test
-  make check
-
-Additionally, use UnixBench syscall to test the performance:
-
-  git clone https://github.com/kdlucas/byte-unixbench.git
-  cd byte-unixbench/UnixBench/
-  make
-  pgms/syscall 600
-
-In order to avoid the performance impact, add init=/bin/bash
-to the boot cmdline.
-
-Here is the test result, the bigger the better, it shows about
-1.2% gain tested with close, getpid and exec [3]:
-
-  duration  without_this_patch  with_this_patch
-  600 s     626558267 lps       634244079 lps
-
-[1] https://github.com/loongson/Firmware/tree/main/5000Series/PC/A2101
-[2] https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/tag/5.0
-[3] https://github.com/kdlucas/byte-unixbench/blob/master/UnixBench/src/syscall.c
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/stackframe.h |  5 +++++
- arch/loongarch/kernel/entry.S           | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-index 4ca9530..551ab8f 100644
---- a/arch/loongarch/include/asm/stackframe.h
-+++ b/arch/loongarch/include/asm/stackframe.h
-@@ -216,4 +216,9 @@
- 	RESTORE_SP_AND_RET \docfi
- 	.endm
- 
-+	.macro	RESTORE_STATIC_SOME_SP_AND_RET docfi=0
-+	RESTORE_STATIC \docfi
-+	RESTORE_SOME \docfi
-+	RESTORE_SP_AND_RET \docfi
-+	.endm
- #endif /* _ASM_STACKFRAME_H */
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-index d5b3dbc..c764c99 100644
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@ -14,6 +14,7 @@
- #include <asm/regdef.h>
- #include <asm/stackframe.h>
- #include <asm/thread_info.h>
-+#include <asm/unistd.h>
- 
- 	.text
- 	.cfi_sections	.debug_frame
-@@ -62,9 +63,23 @@ SYM_FUNC_START(handle_syscall)
- 	li.d	tp, ~_THREAD_MASK
- 	and	tp, tp, sp
- 
-+	/* Syscall number held in a7, we can store it in TI_SYSCALL. */
-+        LONG_S  a7, tp, TI_SYSCALL
-+
- 	move	a0, sp
- 	bl	do_syscall
- 
-+	/*
-+	 * Syscall number held in a7 which is stored in TI_SYSCALL.
-+	 * rt_sigreturn call RESTORE_ALL_AND_RET.
-+	 * The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
-+	 */
-+	LONG_L	t3, tp, TI_SYSCALL
-+	li.w	t4, __NR_rt_sigreturn
-+	beq	t3, t4, 1f
-+
-+	RESTORE_STATIC_SOME_SP_AND_RET
-+1:
- 	RESTORE_ALL_AND_RET
- SYM_FUNC_END(handle_syscall)
- 
--- 
-2.1.0
-
+> 
+> 
+> Best regards,
+> Krzysztof

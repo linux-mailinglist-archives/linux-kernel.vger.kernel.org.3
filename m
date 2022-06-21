@@ -2,169 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7A0552932
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DEE552938
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343600AbiFUCAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 22:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S245318AbiFUCDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245663AbiFUCAQ (ORCPT
+        with ESMTP id S245293AbiFUCD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:00:16 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A31E1F2C1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:00:13 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id f8so11226998plo.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=vXSRs4VvP3x0Znga9Of9H/HEzlYBRuGGU2+TOqlk4gg=;
-        b=g9PmUnxw3mihAqmTXmyIN/UZ1RQhh7a95nNsKWh4vR9sf0qCjDHE/o6ZIeAnOjdEVL
-         agay+Mj93QrNaxiqBOGbhBSAbwu2Gz8zLcZnMzvxcU8PwDYYf4Lyt8gtqqBU+ABaXSq1
-         qTXGbLOKoz+jPOkhjT2IXAEfGs4eO62jiF79WwH+T5BHX2NOSPS2EXGxImu1Igeti9iu
-         scKpEJW5VSa0f9vxqXFCOxf3uMIH8wYy54aCV0KV7L5aHL+ZtZPpl3yIkjgsEprSEg2M
-         4dUaIkyJ9d4SSQIARy2au1uZj+7e7/FZZGEBqSwIszZUp5Kv5sK9JUgKRCgNobso345H
-         8ncQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=vXSRs4VvP3x0Znga9Of9H/HEzlYBRuGGU2+TOqlk4gg=;
-        b=FDM8bdCP/lmFrqLb6Fkgm6xkSvDpHD0nRpGnXZEGRh+PRBLtAasBX3gTDPWY9bLw1Z
-         RrnppIb0O7I+ywR1w4tsBC9KkRdaAG8e0FhrTJxQkc901+DSXMFZ1QqCBT7jPuxcXCQB
-         +TO2WXA2Lc3XbELmbLDrotEy+0jrPjpOHJbcL+/CMsaRFpulePWWd/VONaLv2a0JGslU
-         6etdFf0QoioOjd3B7xPn6VjwlM2zW0HWtAW835ddfb6Zp2AJwfngv8CuwLp/RQ2nkIna
-         2fJ4OPGlDpfrrJ2e3qx5XkJUMNpBJ1ZMDlbxB4I+DECt+p6TQF2lbw8TJ8VHNh4ZjYkF
-         UJYQ==
-X-Gm-Message-State: AJIora+tlSUeYBIDJuBMKhnMgFqJzz3PTW8/t3xKCbgaLtURAc2+WfP1
-        TSaqsMOue/PuRher4X5ogV+Lpw==
-X-Google-Smtp-Source: AGRyM1vEZPAaJ7NbnEz+jr+kqJkEpfJgdGyqHaJ+LUomJ1EoKV0o7a87fK8jVcHC0RMfwZzV/7GZug==
-X-Received: by 2002:a17:90b:1e47:b0:1e6:7d04:2f4 with SMTP id pi7-20020a17090b1e4700b001e67d0402f4mr30015391pjb.93.1655776812748;
-        Mon, 20 Jun 2022 19:00:12 -0700 (PDT)
-Received: from [10.10.0.18] ([199.101.192.101])
-        by smtp.gmail.com with ESMTPSA id mp15-20020a17090b190f00b001ec92c52285sm4246172pjb.21.2022.06.20.19.00.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 19:00:12 -0700 (PDT)
-Subject: Re: [PATCH rcu 12/12] srcu: Block less aggressively for expedited
- grace periods
-To:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
- <20220620222032.3839547-12-paulmck@kernel.org>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Message-ID: <6b89e108-69e1-5fe2-67ba-3dac9ec60f83@linaro.org>
-Date:   Tue, 21 Jun 2022 10:00:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 20 Jun 2022 22:03:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91D2812AD9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655777004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IVPj9SjPI5d2SP8Pi1Lc48AwNlNeq5JfO4Z+hjmJ/t0=;
+        b=FiK0ZiZ9eUQWCoRj5tq+ClNmWZf6F6SZye0fneT5OO8EZ4F2aqFUFD/so52IUMGm0RcoFQ
+        sYV5Gv5XmBz6v7u3XEp2OrAbJJmBL0xrPodaDUfj0lfGbP9IfP7ptsDXp3ixKs9NZPlmfz
+        vBpnDNVNpI1PtBfoKk4UrHUh783311M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-BDApwYCrMjGSFGC81FHmxQ-1; Mon, 20 Jun 2022 22:03:19 -0400
+X-MC-Unique: BDApwYCrMjGSFGC81FHmxQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 51CFD80A0AD;
+        Tue, 21 Jun 2022 02:03:18 +0000 (UTC)
+Received: from [10.22.32.175] (unknown [10.22.32.175])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 876F7492C3B;
+        Tue, 21 Jun 2022 02:03:17 +0000 (UTC)
+Message-ID: <d93b9e08-7976-2901-b363-f9b3b36a884f@redhat.com>
+Date:   Mon, 20 Jun 2022 22:03:17 -0400
 MIME-Version: 1.0
-In-Reply-To: <20220620222032.3839547-12-paulmck@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [rcu] b709abb270:
+ WARNING:at_kernel/rcu/tasks.h:#rcu_tasks_verify_work_fn
 Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        rcu@vger.kernel.org, lkp@lists.01.org,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+References: <20220621010916.GA13677@xsang-OptiPlex-9020>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220621010916.GA13677@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/21 上午6:20, Paul E. McKenney wrote:
-> Commit 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
-> from consuming CPU") fixed a problem where a long-running expedited SRCU
-> grace period could block kernel live patching.  It did so by giving up
-> on expediting once a given SRCU expedited grace period grew too old.
+On 6/20/22 21:09, kernel test robot wrote:
 >
-> Unfortunately, this added excessive delays to boots of embedded systems
-> running on qemu that use the ARM IORT RMR feature.  This commit therefore
-> makes the transition away from expediting less aggressive, increasing
-> the per-grace-period phase number of non-sleeping polls of readers from
-> one to three and increasing the required grace-period age from one jiffy
-> (actually from zero to one jiffies) to two jiffies (actually from one
-> to two jiffies).
+> Greeting,
 >
-> Fixes: 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers from consuming CPU")
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Reported-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-> Reported-by: chenxiang (M)" <chenxiang66@hisilicon.com>
-> Cc: Shameerali Kolothum Thodi  <shameerali.kolothum.thodi@huawei.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Link: https://lore.kernel.org/all/20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org/
-
-Test on 5.19-rc1 with this patch with qemu boot with -bios 
-QEMU_EFI-2022.fd, seems not work, same as rc1.
-
-real    2m42.948s
-user    0m2.843s
-sys     0m1.170s
-
-qemu: stable-6.1
-
-build/aarch64-softmmu/qemu-system-aarch64 -machine 
-virt,gic-version=3,iommu=smmuv3 \
--enable-kvm -cpu host -m 1024 \
--kernel /home/linaro/Image -initrd /home/linaro/tmp/ramdisk-new.img 
--nographic -append \
-"rdinit=init console=ttyAMA0 earlycon=pl011,0x9000000 kpti=off acpi=force" \
--bios QEMU_EFI-2022.fd
-
-Thanks
-> ---
->   kernel/rcu/srcutree.c | 20 +++++++++++++-------
->   1 file changed, 13 insertions(+), 7 deletions(-)
+> FYI, we noticed the following commit (built with gcc-11):
 >
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index 50ba70f019dea..0db7873f4e95b 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
->   
->   #define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
->   #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
-> -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase consecutive no-delay instances.
-> +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
->   #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
->   
->   /*
-> @@ -522,16 +522,22 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
->    */
->   static unsigned long srcu_get_delay(struct srcu_struct *ssp)
->   {
-> +	unsigned long gpstart;
-> +	unsigned long j;
->   	unsigned long jbase = SRCU_INTERVAL;
->   
->   	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
->   		jbase = 0;
-> -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
-> -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
-> -	if (!jbase) {
-> -		WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
-> -		if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
-> -			jbase = 1;
-> +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
-> +		j = jiffies - 1;
-> +		gpstart = READ_ONCE(ssp->srcu_gp_start);
-> +		if (time_after(j, gpstart))
-> +			jbase += j - gpstart;
-> +		if (!jbase) {
-> +			WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
-> +			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
-> +				jbase = 1;
-> +		}
->   	}
->   	return jbase > SRCU_MAX_INTERVAL ? SRCU_MAX_INTERVAL : jbase;
->   }
+> commit: b709abb270544e45bbf3135c03fcfa916899f054 ("[PATCH-rcu] rcu-tasks: Use delayed_work to delay rcu_tasks_verify_self_tests()")
+> url: https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/rcu-tasks-Use-delayed_work-to-delay-rcu_tasks_verify_self_tests/20220614-200840
+> base: https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
+> patch link: https://lore.kernel.org/rcu/20220614120620.1202389-1-longman@redhat.com
+>
+> in testcase: boot
+>
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+>
+> [   64.538953][    T1] ------------[ cut here ]------------
+> [   64.538955][    T1] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1861 rcu_tasks_verify_work_fn+0xa2/0x140
+> [   82.542308][    T1] Modules linked in:
+> [   82.542852][    T1] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.19.0-rc1-00114-gb709abb27054 #1 5174fcc90ab2355d70d76459e249e6beb14aec72
+> [   82.546011][    T1] RIP: 0010:rcu_tasks_verify_work_fn+0xa2/0x140
+
+I believe the WARN_ON(1) in rcu_tasks_verify_self_tests() got triggered 
+30s after the first rcu_tasks_verify_work_fn() is called via 
+late_initcall. The timestamp here transition from the WARNING line to 
+the next one is more than 18s. I think the VM may have preempted heavily 
+by the host causing significant delay or the cpu and memory resource 
+available is being overpowered by the debugging code enabled in a kernel 
+that include this RCU test. Also the WARNING timestamp of 64.538955 is 
+way more than the 30s timeout of the verification test. So I think the 
+warning is expected.
+
+Cheers,
+Longman
+
+> [   82.546872][    T1] Code: fe 01 75 29 48 8b 35 fd fe ea 02 5b b9 fa 00 00 00 48 c7 c2 c0 86 4c 85 5d bf 01 00 00 00 41 5c 41 5d 41 5e e9 1f 88 fa ff 90 <
+> 0f> 0b 90 5b 5d 41 5c 41 5d 41 5e 31 c0 89 c2 89 c1 89 c6 89 c7 c3
+> [   82.550826][    T1] RSP: 0000:ffffc90000017e60 EFLAGS: 00010246
+> [   82.552888][    T1] RAX: 000000000000002c RBX: 0000000000000003 RCX: 0000000000000000
+> [   82.553917][    T1] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+> [   82.554984][    T1] RBP: ffffffff83c38f58 R08: 0000000000000000 R09: 0000000000000000
+> [   82.557733][    T1] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
+> [   82.558808][    T1] R13: 0000000000001d4c R14: 00000000ffffffff R15: ffffffff8491b888
+> [   82.561186][    T1] FS:  0000000000000000(0000) GS:ffffffff8388e000(0000) knlGS:0000000000000000
+> [   82.562420][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   82.564635][    T1] CR2: ffff88843ffff000 CR3: 0000000003876000 CR4: 00000000000406b0
+> [   82.565735][    T1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   82.566827][    T1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   82.569160][    T1] Call Trace:
+> [   82.569637][    T1]  <TASK>
+> [   82.570049][    T1]  ? rcu_tasks_verify_work_fn+0x140/0x140
+> [   82.570816][    T1]  rcu_tasks_verify_schedule_work+0x95/0xc0
+> [   82.572939][    T1]  do_one_initcall+0x6b/0x2c0
+> [   82.573524][    T1]  do_initcalls+0x127/0x148
+> [   82.574155][    T1]  kernel_init_freeable+0xcf/0xff
+> [   82.574846][    T1]  ? rest_init+0xc0/0xc0
+> [   82.576733][    T1]  kernel_init+0x15/0x140
+> [   82.577335][    T1]  ret_from_fork+0x22/0x30
+> [   82.577959][    T1]  </TASK>
+> [   82.578375][    T1] irq event stamp: 1475417
+> [   82.578987][    T1] hardirqs last  enabled at (1475425): [<ffffffff811161cd>] __up_console_sem+0x4d/0x80
+> [   82.581613][    T1] hardirqs last disabled at (1475436): [<ffffffff811161b2>] __up_console_sem+0x32/0x80
+> [   82.582980][    T1] softirqs last  enabled at (1475268): [<ffffffff828002c0>] __do_softirq+0x2c0/0x434
+> [   82.585549][    T1] softirqs last disabled at (1475259): [<ffffffff810b57a0>] irq_exit_rcu+0xa0/0x100
+> [   82.586852][    T1] ---[ end trace 0000000000000000 ]---
+>
+>
+>
+> To reproduce:
+>
+>          # build kernel
+> 	cd linux
+> 	cp config-5.19.0-rc1-00114-gb709abb27054 .config
+> 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+> 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+> 	cd <mod-install-dir>
+> 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+>
+>
+>          git clone https://github.com/intel/lkp-tests.git
+>          cd lkp-tests
+>          bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+>
+>          # if come across any failure that blocks the test,
+>          # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
 

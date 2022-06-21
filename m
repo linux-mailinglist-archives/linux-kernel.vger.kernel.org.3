@@ -2,115 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5585553608
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93DB55360B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352937AbiFUPZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S1351189AbiFUP0H convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 11:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352675AbiFUPZE (ORCPT
+        with ESMTP id S1350387AbiFUP0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:25:04 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1571D2AC4C;
-        Tue, 21 Jun 2022 08:25:00 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LCNK2r006621;
-        Tue, 21 Jun 2022 17:24:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=Y8yGwGuxXDAU0ksP6EFGL3UGPBuTR8ZUSlyw8NNdFDM=;
- b=iqUTgU67XPhZdW9v918PlV4ouqj3lTFOrmN59xl12pm5xTib9yXpYDD90YAwSy7JcaK/
- MqgMj02u+Dh8YitIk+JwOp7sDH9VUMRbDhwA7TziiQEkSeu3JhpwVVCnPA7oVqA/T2OW
- /V0YVD/utHV+zN6FwgnL3V1Cxp9VWcLPF04zenPUqTnH3/cuzZoojqlx7y9rMswPbldf
- ZaPMFnagMzLwg5k1v6229i2ynvIKeLtgewZHW7msU0yun4K63JW/Q7gWrqqhOIoEsvWF
- tdUtHonk4KwpGeLd7jq69zoqenSqU+SOh6ZYufkobuwYeYLvxqyReMtTvQ3kpqEMtN/t uw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gua1n2rb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 17:24:39 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CBCAB10002A;
-        Tue, 21 Jun 2022 17:24:38 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C662922ECD3;
-        Tue, 21 Jun 2022 17:24:38 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 21 Jun
- 2022 17:24:37 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>
-CC:     <stern@rowland.harvard.edu>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2 4/4] usb: dwc2: host: add TPL support
-Date:   Tue, 21 Jun 2022 17:23:50 +0200
-Message-ID: <20220621152350.145745-5-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220621152350.145745-1-fabrice.gasnier@foss.st.com>
-References: <20220621152350.145745-1-fabrice.gasnier@foss.st.com>
+        Tue, 21 Jun 2022 11:26:01 -0400
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8042A951
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:26:00 -0700 (PDT)
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay13.hostedemail.com (Postfix) with ESMTP id DF469602B7;
+        Tue, 21 Jun 2022 15:25:59 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id C136633;
+        Tue, 21 Jun 2022 15:25:58 +0000 (UTC)
+Message-ID: <aa1a96b7141cdf88648de84a0e51896fba23d65c.camel@perches.com>
+Subject: Re: [PATCH] Staging: rtl8192e: make sizeof type-independent
+From:   Joe Perches <joe@perches.com>
+To:     Felix Schlepper <f3sch.git@outlook.com>, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Tue, 21 Jun 2022 08:25:57 -0700
+In-Reply-To: <AM9P190MB1299D518C86D495B168954B2A5B39@AM9P190MB1299.EURP190.PROD.OUTLOOK.COM>
+References: <AM9P190MB1299D518C86D495B168954B2A5B39@AM9P190MB1299.EURP190.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-21_08,2022-06-21_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: C136633
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: 3redqn4duodack9r4tfxoy1kjbsey4r3
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/Gd2h38M+HMuAhZt6MzRncn/Cp1goTE90=
+X-HE-Tag: 1655825158-138843
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+On Tue, 2022-06-21 at 16:58 +0200, Felix Schlepper wrote:
+> Making sizeof operator type-independent.
+> 
+> Reported by checkpatch:
+> 
+> CHECK: Prefer kmalloc(sizeof(*txb)...) over
+>         kmalloc(sizeof(struct rtllib_txb)...)
+> 
+> ---
+> Note: First patch, trying to follow kernelnewbies tutorial.
 
-The Target Peripheral List (TPL) is used to identify targeted devices
-during Embedded Host compliance testing. The user can add "tpl-support"
-in the device tree to enable it.
+Congrats on the first patch, but know that checkpatch is a stupid
+script and it doesn't necessarily offer the best advice.
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+A helper mechanism exists that should be preferred over checkpatch's
+advice...
+
+> diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
+[]
+> @@ -205,8 +205,7 @@ static struct rtllib_txb *rtllib_alloc_txb(int nr_frags, int txb_size,
+>  	struct rtllib_txb *txb;
+>  	int i;
+>  
+> -	txb = kmalloc(sizeof(struct rtllib_txb) + (sizeof(u8 *) * nr_frags),
+> -		      gfp_mask);
+> +	txb = kmalloc(sizeof(*txb) + (sizeof(u8 *) * nr_frags), gfp_mask);
+
+Use struct_size() instead, something like:
+
+	txb = kmalloc(struct_size(txb, fragments, nr_frags), gfp_mask);
+
+>  	if (!txb)
+>  		return NULL;
+>  
+
+though I would also suggest using kzalloc as safer against memory
+initialization defects (and could remove a memset here).
+
+Perhaps something like:
 ---
-Changes in v2:
-- added dt-bindings precursor patch
-- update commit message to clarify TPL and EH meaning
----
- drivers/usb/dwc2/hcd.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/rtl8192e/rtllib_tx.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index f63a27d11fac8..4567f3c24d225 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -52,6 +52,7 @@
+diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
+index 37715afb0210d..bcccde91fa0bd 100644
+--- a/drivers/staging/rtl8192e/rtllib_tx.c
++++ b/drivers/staging/rtl8192e/rtllib_tx.c
+@@ -205,30 +205,28 @@ static struct rtllib_txb *rtllib_alloc_txb(int nr_frags, int txb_size,
+ 	struct rtllib_txb *txb;
+ 	int i;
  
- #include <linux/usb/hcd.h>
- #include <linux/usb/ch11.h>
-+#include <linux/usb/of.h>
+-	txb = kmalloc(sizeof(struct rtllib_txb) + (sizeof(u8 *) * nr_frags),
+-		      gfp_mask);
++	txb = kzalloc(struct_size(txb, fragments, nr_frags), gfp_mask);
+ 	if (!txb)
+ 		return NULL;
  
- #include "core.h"
- #include "hcd.h"
-@@ -5339,6 +5340,8 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
- 	/* Don't support SG list at this point */
- 	hcd->self.sg_tablesize = 0;
+-	memset(txb, 0, sizeof(struct rtllib_txb));
+ 	txb->nr_frags = nr_frags;
+ 	txb->frag_size = cpu_to_le16(txb_size);
  
-+	hcd->tpl_support = of_usb_host_tpl_support(hsotg->dev->of_node);
+ 	for (i = 0; i < nr_frags; i++) {
+ 		txb->fragments[i] = dev_alloc_skb(txb_size);
+-		if (unlikely(!txb->fragments[i])) {
+-			i--;
+-			break;
+-		}
++		if (!txb->fragments[i])
++			goto err_free;
+ 		memset(txb->fragments[i]->cb, 0, sizeof(txb->fragments[i]->cb));
+ 	}
+-	if (unlikely(i != nr_frags)) {
+-		while (i >= 0)
+-			dev_kfree_skb_any(txb->fragments[i--]);
+-		kfree(txb);
+-		return NULL;
+-	}
 +
- 	if (!IS_ERR_OR_NULL(hsotg->uphy))
- 		otg_set_host(hsotg->uphy->otg, &hcd->self);
+ 	return txb;
++
++err_free:
++	while (i > 0)
++		dev_kfree_skb_any(txb->fragments[--i]);
++	kfree(txb);
++
++	return NULL;
+ }
  
--- 
-2.25.1
+ static int rtllib_classify(struct sk_buff *skb, u8 bIsAmsdu)
 

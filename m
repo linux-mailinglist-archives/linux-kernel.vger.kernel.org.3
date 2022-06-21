@@ -2,108 +2,495 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF6D553089
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589055530C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348844AbiFULPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
+        id S1349473AbiFULWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiFULPw (ORCPT
+        with ESMTP id S1349413AbiFULWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:15:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016B329C9E;
-        Tue, 21 Jun 2022 04:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655810152; x=1687346152;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T9u4NQStwqgT/FP8Ox1SftRm7jpPdpysrGAUgD9ZRjc=;
-  b=jI6VRD9GRDbsv3Akw1drAKKPQ21dMtKU9nfmw53ZDJFHzB8cQXiO5yZX
-   H4An/jembi6KUNHb26jF1Khrg1lcfJ1HCLH/6IjJcji30MTx/NtWhPqNl
-   v3vzQ8v+edg1KwP1eIfFOXIeq5XDu5R0f5OVup6xm4LEwP9Nd7yAprR47
-   HOfc4bWPwoIE3NT5aWne1eVuFD6eGJWTIf00JC3P+b1B/LgxG0lLcDzrX
-   4S5Jz49VaIQ2xgoyjmuovetKYgbP6nl4Uwgfy9B600ddyGd6BJYaHLqkh
-   LnuIvAqeSTYftGQOB52sZUUEICOX3gt/XdrJ1x8aAiS/gAJ6LgXoXXazd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="259914733"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="259914733"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:15:51 -0700
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="614710772"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:15:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3brC-000qy0-7b;
-        Tue, 21 Jun 2022 14:15:42 +0300
-Date:   Tue, 21 Jun 2022 14:15:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        rafael@kernel.org, lenb@kernel.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk, hkallweit1@gmail.com,
-        gjb@semihalf.com, jaz@semihalf.com, tn@semihalf.com,
-        Samer.El-Haj-Mahmoud@arm.com, upstream@semihalf.com
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
- description
-Message-ID: <YrGoXXBgHvyifny3@smile.fi.intel.com>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-10-mw@semihalf.com>
- <20220621094556.5ev3nencnw7a5xwv@bogus>
+        Tue, 21 Jun 2022 07:22:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A6E2A27A;
+        Tue, 21 Jun 2022 04:22:30 -0700 (PDT)
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LS3wJ6d21z689rg;
+        Tue, 21 Jun 2022 19:20:32 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 21 Jun 2022 13:22:28 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 21 Jun 2022 12:22:22 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
+        <bvanassche@acm.org>, <hch@lst.de>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hare@suse.de>, <satishkh@cisco.com>,
+        <sebaddel@cisco.com>, <kartilak@cisco.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <linux-s390@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <mpi3mr-linuxdrv.pdl@broadcom.com>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <nbd@other.debian.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v2 5/6] blk-mq: Drop 'reserved' arg of busy_tag_iter_fn
+Date:   Tue, 21 Jun 2022 19:15:42 +0800
+Message-ID: <1655810143-67784-6-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
+References: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621094556.5ev3nencnw7a5xwv@bogus>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 10:45:56AM +0100, Sudeep Holla wrote:
-> On Mon, Jun 20, 2022 at 05:02:22PM +0200, Marcin Wojtas wrote:
-> > Describe the Distributed Switch Architecture (DSA) - compliant
-> > MDIO devices. In ACPI world they are represented as children
-> > of the MDIO busses, which are responsible for their enumeration
-> > based on the standard _ADR fields and description in _DSD objects
-> > under device properties UUID [1].
-> > 
-> > [1] http://www.uefi.org/sites/default/files/resources/_DSD-device-properties-UUID.pdf
+We no longer use the 'reserved' arg in busy_tag_iter_fn for any iter
+function so it may be dropped.
 
-> Why is this document part of Linux code base ?
+Signed-off-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+---
+ block/blk-mq-debugfs.c              |  2 +-
+ block/blk-mq-tag.c                  |  7 +++----
+ block/blk-mq.c                      | 10 ++++------
+ drivers/block/mtip32xx/mtip32xx.c   |  6 +++---
+ drivers/block/nbd.c                 |  2 +-
+ drivers/infiniband/ulp/srp/ib_srp.c |  3 +--
+ drivers/nvme/host/core.c            |  2 +-
+ drivers/nvme/host/fc.c              |  3 +--
+ drivers/nvme/host/nvme.h            |  2 +-
+ drivers/scsi/aacraid/comminit.c     |  2 +-
+ drivers/scsi/aacraid/linit.c        |  2 +-
+ drivers/scsi/fnic/fnic_scsi.c       | 12 ++++--------
+ drivers/scsi/hosts.c                | 14 ++++++--------
+ drivers/scsi/mpi3mr/mpi3mr_os.c     | 16 ++++------------
+ include/linux/blk-mq.h              |  2 +-
+ include/scsi/scsi_host.h            |  2 +-
+ 16 files changed, 34 insertions(+), 53 deletions(-)
 
-It's fine, but your are right with your latter questions.
-
-> How will the other OSes be aware of this ?
-
-Should be a standard somewhere.
-
-> I assume there was some repository to maintain such DSDs so that it
-> is accessible for other OSes. I am not agreeing or disagreeing on the
-> change itself, but I am concerned about this present in the kernel
-> code.
-
-I dunno we have a such, but the closest I may imagine is MIPI standardization,
-that we have at least for cameras and sound.
-
-I would suggest to go and work with MIPI for network / DSA / etc area, so
-everybody else will be aware of the standard.
-
+diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
+index 7e4136a60e1c..d976920d4331 100644
+--- a/block/blk-mq-debugfs.c
++++ b/block/blk-mq-debugfs.c
+@@ -377,7 +377,7 @@ struct show_busy_params {
+  * e.g. due to a concurrent blk_mq_finish_request() call. Returns true to
+  * keep iterating requests.
+  */
+-static bool hctx_show_busy_rq(struct request *rq, void *data, bool reserved)
++static bool hctx_show_busy_rq(struct request *rq, void *data)
+ {
+ 	const struct show_busy_params *params = data;
+ 
+diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+index 2dcd738c6952..509c35f080a9 100644
+--- a/block/blk-mq-tag.c
++++ b/block/blk-mq-tag.c
+@@ -287,7 +287,7 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
+ 		return true;
+ 
+ 	if (rq->q == q && (!hctx || rq->mq_hctx == hctx))
+-		ret = iter_data->fn(rq, iter_data->data, reserved);
++		ret = iter_data->fn(rq, iter_data->data);
+ 	blk_mq_put_rq_ref(rq);
+ 	return ret;
+ }
+@@ -358,7 +358,7 @@ static bool bt_tags_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
+ 
+ 	if (!(iter_data->flags & BT_TAG_ITER_STARTED) ||
+ 	    blk_mq_request_started(rq))
+-		ret = iter_data->fn(rq, iter_data->data, reserved);
++		ret = iter_data->fn(rq, iter_data->data);
+ 	if (!iter_static_rqs)
+ 		blk_mq_put_rq_ref(rq);
+ 	return ret;
+@@ -448,8 +448,7 @@ void blk_mq_tagset_busy_iter(struct blk_mq_tag_set *tagset,
+ }
+ EXPORT_SYMBOL(blk_mq_tagset_busy_iter);
+ 
+-static bool blk_mq_tagset_count_completed_rqs(struct request *rq,
+-		void *data, bool reserved)
++static bool blk_mq_tagset_count_completed_rqs(struct request *rq, void *data)
+ {
+ 	unsigned *count = data;
+ 
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 81bd39e36e49..b805a563aa85 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -128,8 +128,7 @@ struct mq_inflight {
+ 	unsigned int inflight[2];
+ };
+ 
+-static bool blk_mq_check_inflight(struct request *rq, void *priv,
+-				  bool reserved)
++static bool blk_mq_check_inflight(struct request *rq, void *priv)
+ {
+ 	struct mq_inflight *mi = priv;
+ 
+@@ -1399,8 +1398,7 @@ void blk_mq_delay_kick_requeue_list(struct request_queue *q,
+ }
+ EXPORT_SYMBOL(blk_mq_delay_kick_requeue_list);
+ 
+-static bool blk_mq_rq_inflight(struct request *rq, void *priv,
+-			       bool reserved)
++static bool blk_mq_rq_inflight(struct request *rq, void *priv)
+ {
+ 	/*
+ 	 * If we find a request that isn't idle we know the queue is busy
+@@ -1469,7 +1467,7 @@ void blk_mq_put_rq_ref(struct request *rq)
+ 		__blk_mq_free_request(rq);
+ }
+ 
+-static bool blk_mq_check_expired(struct request *rq, void *priv, bool reserved)
++static bool blk_mq_check_expired(struct request *rq, void *priv)
+ {
+ 	unsigned long *next = priv;
+ 
+@@ -3277,7 +3275,7 @@ struct rq_iter_data {
+ 	bool has_rq;
+ };
+ 
+-static bool blk_mq_has_request(struct request *rq, void *data, bool reserved)
++static bool blk_mq_has_request(struct request *rq, void *data)
+ {
+ 	struct rq_iter_data *iter_data = data;
+ 
+diff --git a/drivers/block/mtip32xx/mtip32xx.c b/drivers/block/mtip32xx/mtip32xx.c
+index d5767215840c..5ae0e9bb08be 100644
+--- a/drivers/block/mtip32xx/mtip32xx.c
++++ b/drivers/block/mtip32xx/mtip32xx.c
+@@ -2556,7 +2556,7 @@ static void mtip_softirq_done_fn(struct request *rq)
+ 	blk_mq_end_request(rq, cmd->status);
+ }
+ 
+-static bool mtip_abort_cmd(struct request *req, void *data, bool reserved)
++static bool mtip_abort_cmd(struct request *req, void *data)
+ {
+ 	struct mtip_cmd *cmd = blk_mq_rq_to_pdu(req);
+ 	struct driver_data *dd = data;
+@@ -2569,7 +2569,7 @@ static bool mtip_abort_cmd(struct request *req, void *data, bool reserved)
+ 	return true;
+ }
+ 
+-static bool mtip_queue_cmd(struct request *req, void *data, bool reserved)
++static bool mtip_queue_cmd(struct request *req, void *data)
+ {
+ 	struct driver_data *dd = data;
+ 
+@@ -3672,7 +3672,7 @@ static int mtip_block_initialize(struct driver_data *dd)
+ 	return rv;
+ }
+ 
+-static bool mtip_no_dev_cleanup(struct request *rq, void *data, bool reserv)
++static bool mtip_no_dev_cleanup(struct request *rq, void *data)
+ {
+ 	struct mtip_cmd *cmd = blk_mq_rq_to_pdu(rq);
+ 
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 166303716560..a8f81a1618f8 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -879,7 +879,7 @@ static void recv_work(struct work_struct *work)
+ 	kfree(args);
+ }
+ 
+-static bool nbd_clear_req(struct request *req, void *data, bool reserved)
++static bool nbd_clear_req(struct request *req, void *data)
+ {
+ 	struct nbd_cmd *cmd = blk_mq_rq_to_pdu(req);
+ 
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index 6058abf42ba7..7720ea270ed8 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -1282,8 +1282,7 @@ struct srp_terminate_context {
+ 	int scsi_result;
+ };
+ 
+-static bool srp_terminate_cmd(struct scsi_cmnd *scmnd, void *context_ptr,
+-			      bool reserved)
++static bool srp_terminate_cmd(struct scsi_cmnd *scmnd, void *context_ptr)
+ {
+ 	struct srp_terminate_context *context = context_ptr;
+ 	struct srp_target_port *target = context->srp_target;
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 3ab2cfd254a4..b3d63a57e1b9 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -418,7 +418,7 @@ blk_status_t nvme_host_path_error(struct request *req)
+ }
+ EXPORT_SYMBOL_GPL(nvme_host_path_error);
+ 
+-bool nvme_cancel_request(struct request *req, void *data, bool reserved)
++bool nvme_cancel_request(struct request *req, void *data)
+ {
+ 	dev_dbg_ratelimited(((struct nvme_ctrl *) data)->device,
+ 				"Cancelling I/O %d", req->tag);
+diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
+index a166c0b1cc33..4b74f2267bb3 100644
+--- a/drivers/nvme/host/fc.c
++++ b/drivers/nvme/host/fc.c
+@@ -2456,8 +2456,7 @@ nvme_fc_nvme_ctrl_freed(struct nvme_ctrl *nctrl)
+  * status. The done path will return the io request back to the block
+  * layer with an error status.
+  */
+-static bool
+-nvme_fc_terminate_exchange(struct request *req, void *data, bool reserved)
++static bool nvme_fc_terminate_exchange(struct request *req, void *data)
+ {
+ 	struct nvme_ctrl *nctrl = data;
+ 	struct nvme_fc_ctrl *ctrl = to_fc_ctrl(nctrl);
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 0da94b233fed..e4daa57f8bd5 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -697,7 +697,7 @@ static __always_inline void nvme_complete_batch(struct io_comp_batch *iob,
+ }
+ 
+ blk_status_t nvme_host_path_error(struct request *req);
+-bool nvme_cancel_request(struct request *req, void *data, bool reserved);
++bool nvme_cancel_request(struct request *req, void *data);
+ void nvme_cancel_tagset(struct nvme_ctrl *ctrl);
+ void nvme_cancel_admin_tagset(struct nvme_ctrl *ctrl);
+ bool nvme_change_ctrl_state(struct nvme_ctrl *ctrl,
+diff --git a/drivers/scsi/aacraid/comminit.c b/drivers/scsi/aacraid/comminit.c
+index 940a6deab38f..bd99c5492b7d 100644
+--- a/drivers/scsi/aacraid/comminit.c
++++ b/drivers/scsi/aacraid/comminit.c
+@@ -272,7 +272,7 @@ static void aac_queue_init(struct aac_dev * dev, struct aac_queue * q, u32 *mem,
+ 	q->entries = qsize;
+ }
+ 
+-static bool wait_for_io_iter(struct scsi_cmnd *cmd, void *data, bool rsvd)
++static bool wait_for_io_iter(struct scsi_cmnd *cmd, void *data)
+ {
+ 	int *active = data;
+ 
+diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+index 9c27bc37e5de..5ba5c18b77b4 100644
+--- a/drivers/scsi/aacraid/linit.c
++++ b/drivers/scsi/aacraid/linit.c
+@@ -633,7 +633,7 @@ struct fib_count_data {
+ 	int krlcnt;
+ };
+ 
+-static bool fib_count_iter(struct scsi_cmnd *scmnd, void *data, bool reserved)
++static bool fib_count_iter(struct scsi_cmnd *scmnd, void *data)
+ {
+ 	struct fib_count_data *fib_count = data;
+ 
+diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
+index e7b7f6d73429..77a4d9f8aa83 100644
+--- a/drivers/scsi/fnic/fnic_scsi.c
++++ b/drivers/scsi/fnic/fnic_scsi.c
+@@ -1350,8 +1350,7 @@ int fnic_wq_copy_cmpl_handler(struct fnic *fnic, int copy_work_to_do)
+ 	return wq_work_done;
+ }
+ 
+-static bool fnic_cleanup_io_iter(struct scsi_cmnd *sc, void *data,
+-				 bool reserved)
++static bool fnic_cleanup_io_iter(struct scsi_cmnd *sc, void *data)
+ {
+ 	const int tag = scsi_cmd_to_rq(sc)->tag;
+ 	struct fnic *fnic = data;
+@@ -1548,8 +1547,7 @@ struct fnic_rport_abort_io_iter_data {
+ 	int term_cnt;
+ };
+ 
+-static bool fnic_rport_abort_io_iter(struct scsi_cmnd *sc, void *data,
+-				     bool reserved)
++static bool fnic_rport_abort_io_iter(struct scsi_cmnd *sc, void *data)
+ {
+ 	struct fnic_rport_abort_io_iter_data *iter_data = data;
+ 	struct fnic *fnic = iter_data->fnic;
+@@ -2003,8 +2001,7 @@ struct fnic_pending_aborts_iter_data {
+ 	int ret;
+ };
+ 
+-static bool fnic_pending_aborts_iter(struct scsi_cmnd *sc,
+-				     void *data, bool reserved)
++static bool fnic_pending_aborts_iter(struct scsi_cmnd *sc, void *data)
+ {
+ 	struct fnic_pending_aborts_iter_data *iter_data = data;
+ 	struct fnic *fnic = iter_data->fnic;
+@@ -2668,8 +2665,7 @@ void fnic_exch_mgr_reset(struct fc_lport *lp, u32 sid, u32 did)
+ 
+ }
+ 
+-static bool fnic_abts_pending_iter(struct scsi_cmnd *sc, void *data,
+-				   bool reserved)
++static bool fnic_abts_pending_iter(struct scsi_cmnd *sc, void *data)
+ {
+ 	struct fnic_pending_aborts_iter_data *iter_data = data;
+ 	struct fnic *fnic = iter_data->fnic;
+diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+index 8352f90d997d..315c7ac730e9 100644
+--- a/drivers/scsi/hosts.c
++++ b/drivers/scsi/hosts.c
+@@ -566,8 +566,7 @@ struct Scsi_Host *scsi_host_get(struct Scsi_Host *shost)
+ }
+ EXPORT_SYMBOL(scsi_host_get);
+ 
+-static bool scsi_host_check_in_flight(struct request *rq, void *data,
+-				      bool reserved)
++static bool scsi_host_check_in_flight(struct request *rq, void *data)
+ {
+ 	int *count = data;
+ 	struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(rq);
+@@ -662,7 +661,7 @@ void scsi_flush_work(struct Scsi_Host *shost)
+ }
+ EXPORT_SYMBOL_GPL(scsi_flush_work);
+ 
+-static bool complete_all_cmds_iter(struct request *rq, void *data, bool rsvd)
++static bool complete_all_cmds_iter(struct request *rq, void *data)
+ {
+ 	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(rq);
+ 	enum scsi_host_status status = *(enum scsi_host_status *)data;
+@@ -693,17 +692,16 @@ void scsi_host_complete_all_commands(struct Scsi_Host *shost,
+ EXPORT_SYMBOL_GPL(scsi_host_complete_all_commands);
+ 
+ struct scsi_host_busy_iter_data {
+-	bool (*fn)(struct scsi_cmnd *, void *, bool);
++	bool (*fn)(struct scsi_cmnd *, void *);
+ 	void *priv;
+ };
+ 
+-static bool __scsi_host_busy_iter_fn(struct request *req, void *priv,
+-				   bool reserved)
++static bool __scsi_host_busy_iter_fn(struct request *req, void *priv)
+ {
+ 	struct scsi_host_busy_iter_data *iter_data = priv;
+ 	struct scsi_cmnd *sc = blk_mq_rq_to_pdu(req);
+ 
+-	return iter_data->fn(sc, iter_data->priv, reserved);
++	return iter_data->fn(sc, iter_data->priv);
+ }
+ 
+ /**
+@@ -716,7 +714,7 @@ static bool __scsi_host_busy_iter_fn(struct request *req, void *priv,
+  * ithas to be provided by the caller
+  **/
+ void scsi_host_busy_iter(struct Scsi_Host *shost,
+-			 bool (*fn)(struct scsi_cmnd *, void *, bool),
++			 bool (*fn)(struct scsi_cmnd *, void *),
+ 			 void *priv)
+ {
+ 	struct scsi_host_busy_iter_data iter_data = {
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
+index d8c195b7ca57..59a18769a4fe 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_os.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
+@@ -381,14 +381,12 @@ void mpi3mr_invalidate_devhandles(struct mpi3mr_ioc *mrioc)
+  * mpi3mr_print_scmd - print individual SCSI command
+  * @rq: Block request
+  * @data: Adapter instance reference
+- * @reserved: N/A. Currently not used
+  *
+  * Print the SCSI command details if it is in LLD scope.
+  *
+  * Return: true always.
+  */
+-static bool mpi3mr_print_scmd(struct request *rq,
+-	void *data, bool reserved)
++static bool mpi3mr_print_scmd(struct request *rq, void *data)
+ {
+ 	struct mpi3mr_ioc *mrioc = (struct mpi3mr_ioc *)data;
+ 	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(rq);
+@@ -412,7 +410,6 @@ static bool mpi3mr_print_scmd(struct request *rq,
+  * mpi3mr_flush_scmd - Flush individual SCSI command
+  * @rq: Block request
+  * @data: Adapter instance reference
+- * @reserved: N/A. Currently not used
+  *
+  * Return the SCSI command to the upper layers if it is in LLD
+  * scope.
+@@ -420,8 +417,7 @@ static bool mpi3mr_print_scmd(struct request *rq,
+  * Return: true always.
+  */
+ 
+-static bool mpi3mr_flush_scmd(struct request *rq,
+-	void *data, bool reserved)
++static bool mpi3mr_flush_scmd(struct request *rq, void *data)
+ {
+ 	struct mpi3mr_ioc *mrioc = (struct mpi3mr_ioc *)data;
+ 	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(rq);
+@@ -451,7 +447,6 @@ static bool mpi3mr_flush_scmd(struct request *rq,
+  * mpi3mr_count_dev_pending - Count commands pending for a lun
+  * @rq: Block request
+  * @data: SCSI device reference
+- * @reserved: Unused
+  *
+  * This is an iterator function called for each SCSI command in
+  * a host and if the command is pending in the LLD for the
+@@ -461,8 +456,7 @@ static bool mpi3mr_flush_scmd(struct request *rq,
+  * Return: true always.
+  */
+ 
+-static bool mpi3mr_count_dev_pending(struct request *rq,
+-	void *data, bool reserved)
++static bool mpi3mr_count_dev_pending(struct request *rq, void *data)
+ {
+ 	struct scsi_device *sdev = (struct scsi_device *)data;
+ 	struct mpi3mr_sdev_priv_data *sdev_priv_data = sdev->hostdata;
+@@ -485,7 +479,6 @@ static bool mpi3mr_count_dev_pending(struct request *rq,
+  * mpi3mr_count_tgt_pending - Count commands pending for target
+  * @rq: Block request
+  * @data: SCSI target reference
+- * @reserved: Unused
+  *
+  * This is an iterator function called for each SCSI command in
+  * a host and if the command is pending in the LLD for the
+@@ -495,8 +488,7 @@ static bool mpi3mr_count_dev_pending(struct request *rq,
+  * Return: true always.
+  */
+ 
+-static bool mpi3mr_count_tgt_pending(struct request *rq,
+-	void *data, bool reserved)
++static bool mpi3mr_count_tgt_pending(struct request *rq, void *data)
+ {
+ 	struct scsi_target *starget = (struct scsi_target *)data;
+ 	struct mpi3mr_stgt_priv_data *stgt_priv_data = starget->hostdata;
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index fbb08bdd4618..811f77e32b7f 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -520,7 +520,7 @@ struct blk_mq_queue_data {
+ 	bool last;
+ };
+ 
+-typedef bool (busy_tag_iter_fn)(struct request *, void *, bool);
++typedef bool (busy_tag_iter_fn)(struct request *, void *);
+ 
+ /**
+  * struct blk_mq_ops - Callback functions that implements block driver
+diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+index 667d889b92b5..65082ecdd557 100644
+--- a/include/scsi/scsi_host.h
++++ b/include/scsi/scsi_host.h
+@@ -786,7 +786,7 @@ extern int scsi_host_block(struct Scsi_Host *shost);
+ extern int scsi_host_unblock(struct Scsi_Host *shost, int new_state);
+ 
+ void scsi_host_busy_iter(struct Scsi_Host *,
+-			 bool (*fn)(struct scsi_cmnd *, void *, bool), void *priv);
++			 bool (*fn)(struct scsi_cmnd *, void *), void *priv);
+ 
+ struct class_container;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 

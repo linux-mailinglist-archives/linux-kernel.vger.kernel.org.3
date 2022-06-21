@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA4B552CB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71ED552CDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiFUIVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S1348305AbiFUIYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348763AbiFUIUw (ORCPT
+        with ESMTP id S1348110AbiFUIYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:20:52 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7013D201A9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:20:51 -0700 (PDT)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id ED10D10047FB4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:20:50 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 3Z7yoXWzaNVEz3Z7yo9iB2; Tue, 21 Jun 2022 08:20:50 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=I5+g+Psg c=1 sm=1 tr=0 ts=62b17f62
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=JPEYwPQDsx4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WuRbsktduSQNDRbYs5+HiduR5WXh5fT39TkKjCEX16k=; b=HIgU+gtTkz+QueDwrR+ho+1kQl
-        FqR/7N1pNDjRpSmi8g2wrJtvlGGD5q8KuC3EJZb/fVOuQaTfLtdYi/NMk0735Xl5vD97jPuGFT/uB
-        jkYbvgunmNOlJmpbHnT4o5dg86c+uEoYLjpR13vBBFhYQ+TH6xPVKy7RixsbP55UpapnvVwAS6xpJ
-        JbCCt6LW8qT7TWULsjcJiICxbMWETM3aSBAQgBqvrHEMdhkYdVJY3VWw4IcfgMSTq5FCZwxhATK1Q
-        BLEzNwj1WNi2hrGCd+ZUsjHDnlyCWrb4RBXgeK8wd2lZurQCidtLs/iXH+cyPQ6l8S6ORyIk7tBQ9
-        YmBW909w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45110 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1o3Z7x-0043vn-GR;
-        Tue, 21 Jun 2022 02:20:49 -0600
-Subject: Re: [PATCH 5.15 000/106] 5.15.49-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220620124724.380838401@linuxfoundation.org>
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <abbb7693-f497-62d5-17c3-bdcd3846fab3@w6rz.net>
-Date:   Tue, 21 Jun 2022 01:20:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Jun 2022 04:24:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF856140D4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655799817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XGU7mDtKklVPCqn8Uk3bMEFXs2W9T3w03LpqwdG17/Y=;
+        b=gGO1aDgYqdOwsKkrCMRJ5ZG5N9Br+8SqnRw8z+OrIPfX1XA8cUsrvwWnfgaOCsC7VMxX6D
+        rVnpCcBA73U9bhNRDGnfXD1WN8/Rw5JrqRr0ZNUrNFjRnK+LI9SpXVDCay3ZG4AkDKXRSt
+        k1EaOGUBuaeUCLLBKYlETSuk21+GLEE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-__CdZBpwP7uXeupJBYCqrg-1; Tue, 21 Jun 2022 04:23:35 -0400
+X-MC-Unique: __CdZBpwP7uXeupJBYCqrg-1
+Received: by mail-wm1-f71.google.com with SMTP id k32-20020a05600c1ca000b0039c4cf75023so8100803wms.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:23:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=XGU7mDtKklVPCqn8Uk3bMEFXs2W9T3w03LpqwdG17/Y=;
+        b=Yv/QsMQ5iizaueSiUge82P6ViRq08WFRuKQvYLXAnbEVLQZHspq/lGBAkBU0jJu/Cm
+         WJ/4qqdPfVbrIoSPoB24CHAqt/XcNaSFmcufx+81M/UoaNHuf2HckxhWXurQ680l8kTp
+         hSUGi9cKqmA5t4T0A7FFT6ItEMdy8mnfbdDv/5EtiizNL9UzZjpxBltlXckJJmkAV3B4
+         6ODmNF98moM60Eg52TGJz8/NJY+G3YYIhFNxVB/Mq038xyTuZMRK1UaK2VgaFnCHFeAH
+         jPTf7y9G67YRSmTG7ZPO5GqZNU8xPH2gvY/bHXihxvQV9ePJD/zJQSLnsZannqTmY6p9
+         u9tg==
+X-Gm-Message-State: AJIora/Txa95LJ1YB19AD55vVD+OzdQTLyjBuJJi9DS06AJSPWEV7AQS
+        FSu8dSftg5y5acOxwLX727xZ1rGvXF5EOVdmeihODwC4/SSjuR8nDJIbh7wJcQkc9g8OdiVATMH
+        iHqWKMvjKVRBujpAKVvejtrW7
+X-Received: by 2002:a7b:c758:0:b0:39c:44ce:f00f with SMTP id w24-20020a7bc758000000b0039c44cef00fmr28512313wmk.167.1655799814490;
+        Tue, 21 Jun 2022 01:23:34 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sUotCk+6rcFy05ZeXu+qAjpL3NaHybbZ2BoBeUtiL7/zNAYd2GvpjFdw35xlTwbym9LSrXXg==
+X-Received: by 2002:a7b:c758:0:b0:39c:44ce:f00f with SMTP id w24-20020a7bc758000000b0039c44cef00fmr28512300wmk.167.1655799814242;
+        Tue, 21 Jun 2022 01:23:34 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f04:2500:cdb0:9b78:d423:43f? (p200300d82f042500cdb09b78d423043f.dip0.t-ipconnect.de. [2003:d8:2f04:2500:cdb0:9b78:d423:43f])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b0039c5328ad92sm24367503wmq.41.2022.06.21.01.23.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 01:23:33 -0700 (PDT)
+Message-ID: <212f8b31-e470-d62c-0090-537d0d60add9@redhat.com>
+Date:   Tue, 21 Jun 2022 10:23:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH RFC 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1o3Z7x-0043vn-GR
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:45110
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220617014147.7299-1-peterx@redhat.com>
+ <20220617014147.7299-2-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220617014147.7299-2-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 5:50 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.49 release.
-> There are 106 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.49-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 17.06.22 03:41, Peter Xu wrote:
+> We have had FAULT_FLAG_INTERRUPTIBLE but it was never applied to GUPs.  One
+> issue with it is that not all GUP paths are able to handle signal delivers
+> besides SIGKILL.
+> 
+> That's not ideal for the GUP users who are actually able to handle these
+> cases, like KVM.
+> 
+> KVM uses GUP extensively on faulting guest pages, during which we've got
+> existing infrastructures to retry a page fault at a later time.  Allowing
+> the GUP to be interrupted by generic signals can make KVM related threads
+> to be more responsive.  For examples:
+> 
+>   (1) SIGUSR1: which QEMU/KVM uses to deliver an inter-process IPI,
+>       e.g. when the admin issues a vm_stop QMP command, SIGUSR1 can be
+>       generated to kick the vcpus out of kernel context immediately,
+> 
+>   (2) SIGINT: which can be used with interactive hypervisor users to stop a
+>       virtual machine with Ctrl-C without any delays/hangs,
+> 
+>   (3) SIGTRAP: which grants GDB capability even during page faults that are
+>       stuck for a long time.
+> 
+> Normally hypervisor will be able to receive these signals properly, but not
+> if we're stuck in a GUP for a long time for whatever reason.  It happens
+> easily with a stucked postcopy migration when e.g. a network temp failure
+> happens, then some vcpu threads can hang death waiting for the pages.  With
+> the new FOLL_INTERRUPTIBLE, we can allow GUP users like KVM to selectively
+> enable the ability to trap these signals.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+This makes sense to me. I assume relevant callers will detect "GUP
+failed" but also "well, there is a signal to handle" and cleanly back
+off, correct?
 
-Tested-by: Ron Economos <re@w6rz.net>
+-- 
+Thanks,
+
+David / dhildenb
 

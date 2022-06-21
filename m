@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8570553E9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E3A553E9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354604AbiFUWfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S1354715AbiFUWfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354293AbiFUWfr (ORCPT
+        with ESMTP id S1354582AbiFUWfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:35:47 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A432079;
-        Tue, 21 Jun 2022 15:35:46 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id s17so9482768iob.7;
-        Tue, 21 Jun 2022 15:35:46 -0700 (PDT)
+        Tue, 21 Jun 2022 18:35:48 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955A531DD3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:35:47 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id fd6so18578059edb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:35:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=EuOFBlwUe3i2VoLtrHcHqXQ3t7ZpmfRz4L66vLYl0Zk=;
-        b=ptky5XMl0C3VvHRE/uN2yj0zyO83oB3rrU+1mqb9m+5IQHtMjLDmGRjPecZPnoJ9zP
-         7WWSmBea+PmzduZkvctleKQV6yE33uqc+cUi1WQ2zrUndRDQowQAvoV9TMJ0hyVUDf0Z
-         PJOsmIitgmJcz+vz6pMcrTDux5dXQ2VyCyIClLkx4qhF8jjCXSyU7CV5Y9JFSET8aNbY
-         n8s9WDtRev7csG9bg40o9WpNSf19I3hTwjl903TfAHMFKzNoiIWZYtcjkvnYJgWEA4ZH
-         cVORxtP5I2J5JFrXiGCYCIkH2KWJpkGzMmARvpCHpcBjJqisgG4p6uttLCUS+NRwhG5U
-         mKDg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=qr6sJy5vBRC+dq0sR4qT1WgXSzVq4kiMxqFhXn4CM8Y=;
+        b=S49UqMPn0yi/PCD1TUNgwyC/9NCBw58IbuYy9mCU8ousAQPWKLIEymbuU7A/gkwWsF
+         73ha1IZSvK2v49VjpFQXVGU6ggbizc2/480lkR+b48UsdlNKKs7T7st9OW70gp6c0Yd5
+         N0PKH7VmR9ec+HfYuaWWPm671yeX1BvoRX6MTjGhf7S8ewHVSsUm3Edb4AA7F4Oy60QI
+         cW1EVfLaGhFbvTFPC0VLUn16U1Cc6xoSmQeXIwqO4lXNBoYRf73uiWnzWjwfFZo2shwE
+         HUDelhxlBfbswsVMzJ4tbQtdN//KOvsdAW7ayQy3OOsQWHz2sFW33Z3AA+iSMbMYPCnt
+         vrcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=EuOFBlwUe3i2VoLtrHcHqXQ3t7ZpmfRz4L66vLYl0Zk=;
-        b=BE6kfr8d2nkiwioSIs86K6twcQ2TwYBts2xHqjGdIiFHwlelmtyU9FGuno/NTw7Ql5
-         MtK+A4zu67Hr222uF+ml1Ct1zvfBc9auekkgoTaeMbAr3lUL5i9jffMYgKqfLKf8sPAo
-         oONZR0K95qAA8hz76YT7qHJ6WA2T+CV3KN7fVZsqJ8gmXOelaxUzHq/Hz3uuAbMBRkg1
-         wGZICyWXrmZUD0SnFDtRhVyFzjhprdfJ5qRCs/fug2T5emWR0usFcyQ5YB/YC5Ksrh8k
-         vPC5cGRKQKCH3I40Nj9LvFZ+HzLGnox7AXRX7dXlprZMMlyRBfV6GU38xNo9hu8HwsDX
-         RY+w==
-X-Gm-Message-State: AJIora9goMezfgz84HSbk9i/wdUZhCVKC77qmqCOk07cevIC0FDYaMh8
-        lPA4ImU/oPlGl+at/sDPeio=
-X-Google-Smtp-Source: AGRyM1vSA9nv/dLh6RGsJZZBucx8gPMUZ0qn7+Xw9uYIKkOwaymRH/SE5i5Dj5O3fkGwjkqVJD3CNw==
-X-Received: by 2002:a05:6602:2d06:b0:66a:2cdc:e6f7 with SMTP id c6-20020a0566022d0600b0066a2cdce6f7mr178003iow.113.1655850945946;
-        Tue, 21 Jun 2022 15:35:45 -0700 (PDT)
-Received: from localhost ([172.243.153.43])
-        by smtp.gmail.com with ESMTPSA id o8-20020a02cc28000000b003318783c940sm7681429jap.113.2022.06.21.15.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 15:35:45 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 15:35:37 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
-        john.fastabend@gmail.com, songliubraving@fb.com, kafai@fb.com,
-        yhs@fb.com
-Cc:     dhowells@redhat.com, keyrings@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <62b247b975506_162742082f@john.notmuch>
-In-Reply-To: <20220621163757.760304-5-roberto.sassu@huawei.com>
-References: <20220621163757.760304-1-roberto.sassu@huawei.com>
- <20220621163757.760304-5-roberto.sassu@huawei.com>
-Subject: RE: [PATCH v5 4/5] selftests/bpf: Add test for unreleased key
- references
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=qr6sJy5vBRC+dq0sR4qT1WgXSzVq4kiMxqFhXn4CM8Y=;
+        b=xUT4IZMWk7zUKSo2GF2Efi1iM9O/rhjdpQq+wRnJIAF9mT0KyIwJ2jvyEE4tNbvwRx
+         XEqvit6KmVmLKF3anhmk9qaW59AFOXbU7H7xfm9IQH35eBNHaYr1dsZ6YFkVe2+r4zXa
+         npf7uERaheufwCOmWM3aoFulNf0n9kd0LqOFUdOW1uHXt/HgZNIYZk7ajXUd8PjMNAHs
+         nt3q/f943CIm8YIiI0TeUIBQl0Q05h8euRmpHhWdWDxwHiOFL23cb9svlkpHzIwshRhw
+         pUjbL70F/F8mJdvzicUdKAeH8+Fq8a2FEMnlwvmtRDkv22Ehw2DSMr/OwHuc+OPXxLLJ
+         l8WQ==
+X-Gm-Message-State: AJIora8Oz11HNLZ4eYMHuTy8E5gWbblpl/hdxt0jT7AHN9OUBdNDyFUJ
+        XNMoDscpLeGwgHuAYfTR3CJ2ZYePDrSpM6DCSg==
+X-Google-Smtp-Source: AGRyM1vLlnOfci7BdcswtrPu1enA7i4vWR1V8+sxutHrDxc1NUb/Puc3RtGCGrVkyFrGRTdrO24m2I+bfwsNI66xdbw=
+X-Received: by 2002:a05:6402:2741:b0:434:fe8a:1f96 with SMTP id
+ z1-20020a056402274100b00434fe8a1f96mr406474edd.331.1655850947205; Tue, 21 Jun
+ 2022 15:35:47 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a54:2d0b:0:0:0:0:0 with HTTP; Tue, 21 Jun 2022 15:35:46
+ -0700 (PDT)
+Reply-To: mrskristalinageorgieva74@gmail.com
+From:   post office <anoumou63@gmail.com>
+Date:   Tue, 21 Jun 2022 22:35:46 +0000
+Message-ID: <CANF9qczrR4_Ytp5jh2vhmg2VDA+-UY4iznwv7G-ytB_uveJYRA@mail.gmail.com>
+Subject: =?UTF-8?B?QVRFTsWiSUU=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Roberto Sassu wrote:
-> Ensure that the verifier detects the attempt of acquiring a reference of a
-> key through the helper bpf_lookup_user_key(), without releasing that
-> reference with bpf_key_put(), and refuses to load the program.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
+FOND MONETAR INTERNA=C8=9AIONAL (HQ1)
+700 19th Street, N.W., Washington, D.C. 20431.
 
-Any reason not to add these to ./verifier/ref_tracking.c tests? Seems it
-might be easier to follow there and test both good/bad cases.
+Stimate proprietar de e-mail al beneficiarului, v-am trimis un e-mail
+=C3=AEn urm=C4=83 cu c=C3=A2teva s=C4=83pt=C4=83m=C3=A2ni despre fondul dvs=
+. f=C4=83r=C4=83 niciun r=C4=83spuns din
+partea dvs.
+A=C8=99 dori s=C4=83 =C8=99tiu dac=C4=83 a=C8=9Bi primit e-mailul meu anter=
+ior referitor la
+fondul dvs. nerevendicat, f=C4=83r=C4=83 niciun r=C4=83spuns.
+A=C8=99tept=C4=83m cu ner=C4=83bdare cooperarea dumneavoastr=C4=83 urgent=
+=C4=83 pentru mai multe detalii.
+Felicit=C4=83ri, contact
+Doamna Kristalina Georgieva pentru mai multe detalii
+(mrskristalinageorgieva74@gmail.com)
+(I.M.F) (601) ofi=C8=9Ber 601

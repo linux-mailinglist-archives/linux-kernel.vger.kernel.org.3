@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D88553096
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DC0553099
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349233AbiFULSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S230520AbiFULT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349175AbiFULSq (ORCPT
+        with ESMTP id S1348927AbiFULTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:18:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4CD289AA;
-        Tue, 21 Jun 2022 04:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=7vOo5p0yQrz8WvA9OW0P/gHDo5luj3WAxgSKgWBriNM=; b=6ZJJRVIprvtfY3nIuee+3aB2we
-        QiYsFG3+otBHZgSQ3k9TVyggTrFkrzXw9fLthopF7SW6V2E6YXgAFzYmIy7GKREtifJl4asoYPq5T
-        YXx2sbjr2oKlB2JYnL1eirrvcSGH05kGbYdJk9zbdvxxqeIanZ326qUWLU5srR9l6YBA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o3bu2-007iEV-1l; Tue, 21 Jun 2022 13:18:38 +0200
-Date:   Tue, 21 Jun 2022 13:18:38 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        rafael@kernel.org, lenb@kernel.org, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, gjb@semihalf.com,
-        jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
-        upstream@semihalf.com
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
- description
-Message-ID: <YrGpDgtm4rPkMwnl@lunn.ch>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-10-mw@semihalf.com>
- <YrDO05TMK8SVgnBP@lunn.ch>
- <YrGm2jmR7ijHyQjJ@smile.fi.intel.com>
+        Tue, 21 Jun 2022 07:19:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9072E2A26D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:19:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3759821B6D;
+        Tue, 21 Jun 2022 11:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655810361; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mjLwPmpJnhDmfPFonZ2bEdmvEUUUxw2WLPLCTpbJgCQ=;
+        b=eAcpnsUCpFz5owZAKas2AsZMY7TGKDykmDZTyrLoICMlF+6V/mBKwE+VJzBTM/jrhHtjVc
+        VvE2OgdBh1mPxPTra6rPZt7d1BidVTsTI3G1+dp/rXMQzWneIMcxhb6b50PTsQ00/+ByCB
+        VB7r+BoRHYbC9OZjnig4tUbPHpN2N5o=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DBA812C141;
+        Tue, 21 Jun 2022 11:19:19 +0000 (UTC)
+Date:   Tue, 21 Jun 2022 13:19:19 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] printk/console: Enable console kthreads only when
+ there is no boot console left
+Message-ID: <20220621111919.GD7891@pathway.suse.cz>
+References: <20220621090900.GB7891@pathway.suse.cz>
+ <YrGMYk0LsbKewzPU@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YrGm2jmR7ijHyQjJ@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YrGMYk0LsbKewzPU@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 02:09:14PM +0300, Andy Shevchenko wrote:
-> On Mon, Jun 20, 2022 at 09:47:31PM +0200, Andrew Lunn wrote:
-> 
-> ...
-> 
-> > > +        Name (_CRS, ResourceTemplate ()
-> > > +        {
-> > > +            Memory32Fixed (ReadWrite,
-> > > +                0xf212a200,
-> > > +                0x00000010,
+On Tue 2022-06-21 18:16:18, Sergey Senozhatsky wrote:
+> On (22/06/21 11:09), Petr Mladek wrote:
+> > Threaded console printing does not take into consideration that boot
+> > consoles may be accessing the same hardware as normal consoles and thus
+> > must not be called in parallel.
 > > 
-> > What do these magic numbers mean?
-> 
-> Address + Length, it's all described in the ACPI specification.
-
-The address+plus length of what? This device is on an MDIO bus. As
-such, there is no memory! It probably makes sense to somebody who
-knows ACPI, but to me i have no idea what it means.
-
-> Or if you asked
-> why the values there are the particular numbers? I guess it's fined to have
-> anything sane in the example. OTOH a comment may be added.
-> 
-> > > +                )
-> > > +        })
-> 
-> ...
-> 
-> > > +        Device (SWI0)
-> > > +        {
-> > > +            Name (_HID, "MRVL0120")
-> > > +            Name (_UID, 0x00)
-> > > +            Name (_ADR, 0x4)
-> > > +            <...>
-> > > +        }
+> > Since it is currently not possible to identify which consoles are
+> > accessing the same hardware, delay threaded console printing activation
+> > until it is known that there are no boot consoles registered.
 > > 
-> > I guess it is not normal for ACPI, but could you add some comments
-> > which explain this. In DT we have
-> > 
-> >     properties:
-> >       reg:
-> >         minimum: 0
-> >         maximum: 31
-> >         description:
-> >           The ID number for the device.
-> > 
-> > which i guess what this _ADR property is, but it would be nice if it
-> > actually described what it is supposed to mean. You have a lot of
-> > undocumented properties here.
+> > Link: https://lore.kernel.org/r/20220619204949.50d9154d@thinkpad
+> > Link: https://lore.kernel.org/r/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
+> > Link: https://lore.kernel.org/r/20220619204949.50d9154d@thinkpad
+> > Reported-by: Marek Behún <kabel@kernel.org>
+> > [john.ogness@linutronix.de: Better description of the problem.]
+> > Signed-off-by: Petr Mladek <pmladek@suse.com>
+> > Tested-by: Marek Behún <kabel@kernel.org>
 > 
-> Btw, you are right, _ADR mustn't go together with _HID/_CID.
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-Does ACPI have anything like .yaml to describe the binding and tools
-to validate it?
+Thanks.
 
-   Andrew
+> > -static int __init printk_activate_kthreads(void)
+> > -{
+> > -	struct console *con;
+> >  
+> > -	console_lock();
+> > -	printk_kthreads_available = true;
+> > -	for_each_console(con)
+> > -		printk_start_kthread(con);
+> > -	console_unlock();
+> > +	/*
+> > +	 * Boot consoles may be accessing the same hardware as normal
+> > +	 * consoles and thus must not be called in parallel. Therefore
+> > +	 * only activate threaded console printing if it is known that
+> > +	 * there are no boot consoles registered.
+> > +	 */
+> > +	if (no_bootcon)
+> > +		printk_activate_kthreads();
+> 
+> A quick question. Here we still can have bootcon which can unregistered
+> later, right? Do you think it'll make sense to check if printing kthreads
+> can be safely started and start them if so (if no CON_BOOT found and kthreads
+> are not already created) at the end of unregister_console()?
+
+Yeah, that's my plan how to optimize it in the future. I just
+wanted to do something simple and be on the safe side for 5.19.
+
+Best Regards,
+Petr

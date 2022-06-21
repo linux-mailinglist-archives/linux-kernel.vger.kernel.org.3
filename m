@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1806553E73
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56963553E74
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346787AbiFUW0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
+        id S1349272AbiFUW1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiFUW0A (ORCPT
+        with ESMTP id S231383AbiFUW1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:26:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC23313A5;
-        Tue, 21 Jun 2022 15:25:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1018CB80F63;
-        Tue, 21 Jun 2022 22:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8913C3411C;
-        Tue, 21 Jun 2022 22:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655850356;
-        bh=6O0+TGIwhmpdb4aH1hAuYD76++tmQ0QMm74jwV5F4KQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JiWXTRyFAsQh0irt2QPi+JG32rA4bNgQLIMD4oiX3uiB6IiT79pjmW1+JaT4LeQqj
-         0nE6MgKGTWSW9c4LsEisfEglZLXouRr2GrTxx4B8Mm7v4tQcBTYghCRCZ37yH1Sx7C
-         27In1BK1hiQ1TWqHCS43BRJaZI8nexEQXiPT02mZbsYU00BMbe/JrIeEPHF1eeRvdT
-         V0ayNXjZeTy09sjKbYQWsPn7WoIqMcXymVIM8W5LNy07+IV82qUvgC2Gc/tBkOvBc3
-         5wURTl+fzF5L16sMU5lXsrml/z2rKHHAfnkWJsPkEari0/oAyguf+MT8Bgj/0eZQ0q
-         Ahuj4+5tYw79A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5980C5C0AE0; Tue, 21 Jun 2022 15:25:56 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 15:25:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH rcu 12/12] srcu: Block less aggressively for expedited
- grace periods
-Message-ID: <20220621222556.GU1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
- <20220620222032.3839547-12-paulmck@kernel.org>
- <248317a0-2ef4-c619-15b5-84e2b62aab5e@quicinc.com>
+        Tue, 21 Jun 2022 18:27:19 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA93E313B9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655850438; x=1687386438;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S9M+nxiGTqy+iOORAChUsI1bobjs+TvgVDkGk0n+jYU=;
+  b=nXoEudtReI5UEUBTl9vJGmUtFSLQKDWlOCPSvrvkYpr1O0if8PFsQmL+
+   tNdFlh9Y2ZbAJswixQ9TxNuDNFHEEWqxSo7NAHvqZSOsZUY10xqEpnSFk
+   XXcLGYvgW4hWjLiIyK9zuIGRyB+9eRVb3Tv+D992axrcDY9vF+RQBuF19
+   osEzXtsg9Ix6pDO/TjjTK5Os8yybBd7HKHWzCWDTKhOs7/YAHoWEDnLnv
+   2+VEd2FR2BuRIaoO4QSaSlxGM20kAsbGJtwx4Z17CUSJjm143rw/EC5Gf
+   F6PN24QMSjxxKbJg4O1NpupTqwUZ1gfrzEOVIaO8eKj/Oc8bH60zKiNNq
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="305703132"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="305703132"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:27:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="586365078"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2022 15:27:17 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3mL6-0000V7-JX;
+        Tue, 21 Jun 2022 22:27:16 +0000
+Date:   Wed, 22 Jun 2022 06:26:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jamie Iles <jamie@jamieiles.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld:
+ irq-xilinx-intc.c:undefined reference to `iounmap'
+Message-ID: <202206220648.Ovoh9xpK-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <248317a0-2ef4-c619-15b5-84e2b62aab5e@quicinc.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 03:43:30PM +0530, Neeraj Upadhyay wrote:
-> 
-> 
-> On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
-> > Commit 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
-> > from consuming CPU") fixed a problem where a long-running expedited SRCU
-> > grace period could block kernel live patching.  It did so by giving up
-> > on expediting once a given SRCU expedited grace period grew too old.
-> > 
-> > Unfortunately, this added excessive delays to boots of embedded systems
-> > running on qemu that use the ARM IORT RMR feature.  This commit therefore
-> > makes the transition away from expediting less aggressive, increasing
-> > the per-grace-period phase number of non-sleeping polls of readers from
-> > one to three and increasing the required grace-period age from one jiffy
-> > (actually from zero to one jiffies) to two jiffies (actually from one
-> > to two jiffies).
-> > 
-> > Fixes: 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers from consuming CPU")
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Reported-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-> > Reported-by: chenxiang (M)" <chenxiang66@hisilicon.com>
-> > Cc: Shameerali Kolothum Thodi  <shameerali.kolothum.thodi@huawei.com>
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Link: https://lore.kernel.org/all/20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org/
-> > ---
-> 
-> 
-> Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ca1fdab7fd27eb069df1384b2850dcd0c2bebe8d
+commit: b84dc7f0e3646d480b6972c5f25586215c5f33e2 irqchip/xilinx: Remove microblaze+zynq dependency
+date:   12 days ago
+config: s390-randconfig-r021-20220622 (https://download.01.org/0day-ci/archive/20220622/202206220648.Ovoh9xpK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b84dc7f0e3646d480b6972c5f25586215c5f33e2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b84dc7f0e3646d480b6972c5f25586215c5f33e2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-And I applied your Reviewed-by to the other commits you gave it for,
-and thank you very much!  Much nicer to fix the bugs now than to have
-to do separate patches for them later.  ;-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-							Thanx, Paul
+All errors (new ones prefixed by >>):
 
-> Thanks
-> Neeraj
-> 
-> >   kernel/rcu/srcutree.c | 20 +++++++++++++-------
-> >   1 file changed, 13 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> > index 50ba70f019dea..0db7873f4e95b 100644
-> > --- a/kernel/rcu/srcutree.c
-> > +++ b/kernel/rcu/srcutree.c
-> > @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
-> >   #define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
-> >   #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
-> > -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase consecutive no-delay instances.
-> > +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
-> >   #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
-> >   /*
-> > @@ -522,16 +522,22 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
-> >    */
-> >   static unsigned long srcu_get_delay(struct srcu_struct *ssp)
-> >   {
-> > +	unsigned long gpstart;
-> > +	unsigned long j;
-> >   	unsigned long jbase = SRCU_INTERVAL;
-> >   	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
-> >   		jbase = 0;
-> > -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
-> > -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
-> > -	if (!jbase) {
-> > -		WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
-> > -		if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
-> > -			jbase = 1;
-> > +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
-> > +		j = jiffies - 1;
-> > +		gpstart = READ_ONCE(ssp->srcu_gp_start);
-> > +		if (time_after(j, gpstart))
-> > +			jbase += j - gpstart;
-> > +		if (!jbase) {
-> > +			WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
-> > +			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
-> > +				jbase = 1;
-> > +		}
-> >   	}
-> >   	return jbase > SRCU_MAX_INTERVAL ? SRCU_MAX_INTERVAL : jbase;
-> >   }
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+   coherent.c:(.text+0x13a): undefined reference to `memunmap'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+   coherent.c:(.text+0x1e8): undefined reference to `memremap'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: coherent.c:(.text+0x36c): undefined reference to `memunmap'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
+   irq-al-fic.c:(.init.text+0x3a): undefined reference to `of_iomap'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: irq-al-fic.c:(.init.text+0x4c0): undefined reference to `iounmap'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/irqchip/irq-xilinx-intc.o: in function `xilinx_intc_of_init':
+   irq-xilinx-intc.c:(.init.text+0xa6): undefined reference to `of_iomap'
+>> /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: irq-xilinx-intc.c:(.init.text+0x1fc): undefined reference to `iounmap'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: drivers/misc/open-dice.o: in function `open_dice_write':
+   open-dice.c:(.text+0x170): undefined reference to `devm_memremap'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: open-dice.c:(.text+0x21e): undefined reference to `devm_memunmap'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,218 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B25E552C3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5764E552C40
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347797AbiFUHk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S1347805AbiFUHl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347837AbiFUHki (ORCPT
+        with ESMTP id S1347919AbiFUHlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:40:38 -0400
-Received: from forward500o.mail.yandex.net (forward500o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::610])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D777F23BDC
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:40:35 -0700 (PDT)
-Received: from myt6-93965afc2133.qloud-c.yandex.net (myt6-93965afc2133.qloud-c.yandex.net [IPv6:2a02:6b8:c12:5525:0:640:9396:5afc])
-        by forward500o.mail.yandex.net (Yandex) with ESMTP id CD00D940DAC;
-        Tue, 21 Jun 2022 10:40:33 +0300 (MSK)
-Received: from myt5-01d0fbe499ab.qloud-c.yandex.net (myt5-01d0fbe499ab.qloud-c.yandex.net [2a02:6b8:c12:4619:0:640:1d0:fbe4])
-        by myt6-93965afc2133.qloud-c.yandex.net (mxback/Yandex) with ESMTP id DqjiMbBwxe-eWh05tEC;
-        Tue, 21 Jun 2022 10:40:33 +0300
-X-Yandex-Fwd: 2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1655797233;
-        bh=RdX/+yTKrxFGxvASlWbAzAdqYEzzocthfBSsMMgNr3Y=;
-        h=In-Reply-To:Subject:Cc:To:From:References:Date:Message-ID;
-        b=Qy4sYZrHWLy5aniM2Q8DLanUFI2lgGMlIcLBMZOvtbwlm7YyrxUEHTcfljkQpY0id
-         q89bdZ8psW9qhCz159ety4bcuXPib6E965hdu9hgKWU5MWpeAOg6n/PQa0bz2W7e4A
-         KgXh1+wx9D3ICmQgv+YD//brfOeeNQ0JECFWaJ44=
-Authentication-Results: myt6-93965afc2133.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Received: by myt5-01d0fbe499ab.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id zSjiCSJHOL-eVMWsID8;
-        Tue, 21 Jun 2022 10:40:32 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Date:   Tue, 21 Jun 2022 10:40:30 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RISC-V: Add mvendorid, marchid, and mimpid to
- /proc/cpuinfo output
-Message-ID: <20220621104030.349c570b@redslave.neermore.group>
-In-Reply-To: <20220620115549.1529597-1-apatel@ventanamicro.com>
-References: <20220620115549.1529597-1-apatel@ventanamicro.com>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 21 Jun 2022 03:41:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A852E140AE;
+        Tue, 21 Jun 2022 00:41:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 478676144D;
+        Tue, 21 Jun 2022 07:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A953DC3411D;
+        Tue, 21 Jun 2022 07:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655797302;
+        bh=xHrJEBMzMAaB/yf3L0nRdLkzzYcCFC+/oWPA8LkrBrc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MPg6lskTYBxqWfZR+Rmf32dlWTI6IXzpNKe8pqs0dZeQas50a3nfc+PA2FwPGQNtx
+         zX86Uk3+S29hLX0MwN6gQnM8MgLaDFiQsJefNd7b+LWJFJZw9TK1Ou6hUpKNOqEaH6
+         Tf7gzvq9oNlnWO5wkbTm20qpxtGUcD69IZiyMLhuEdNEi+BKVV3O3aq62QoCxe6zYM
+         g2iOfdvlR/cY9uHNtyjfCNuYB5o7Zm53KLektfBbnY1qrmiXtB466FTXBZ2Dg976K6
+         2uFHEpKn/KeVQZv+3oLegTZlsYSOn5w/2/+iLK1BGgJX+0Uw7f0nO93Mf4nM7fNB0a
+         G0rPTfai6hTTA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3YVz-0005ab-SL; Tue, 21 Jun 2022 09:41:36 +0200
+Date:   Tue, 21 Jun 2022 09:41:35 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Yonglin Tan <yonglin.tan@outlook.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: option: add Quectel EM05-G modem
+Message-ID: <YrF2LxpeUR5Sk1tR@hovoldconsulting.com>
+References: <MEYP282MB237401279FB031848505EFB2FDB39@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MEYP282MB237401279FB031848505EFB2FDB39@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Anup!
-
-On Mon, 20 Jun 2022 17:25:49 +0530
-Anup Patel <apatel@ventanamicro.com> wrote:
-
-> Identifying the underlying RISC-V implementation can be important
-> for some of the user space applications. For example, the perf tool
-> uses arch specific CPU implementation id (i.e. CPUID) to select a
-> JSON file describing custom perf events on a CPU.
+On Tue, Jun 21, 2022 at 10:31:52AM +0800, Yonglin Tan wrote:
+> The EM05-G modem has 2 USB configurations that are configurable via the AT
+> command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
+> the following interfaces, respectively:
 > 
-> Currently, there is no way to identify RISC-V implementation so we
-> add mvendorid, marchid, and mimpid to /proc/cpuinfo output.
-
-Tested on Sifive Unmatched:
-
-localhost / # cat /proc/cpuinfo 
-processor       : 0
-hart            : 4
-isa             : rv64imafdc
-mmu             : sv39
-uarch           : sifive,bullet0
-mvendorid       : 0x489
-marchid         : 0x8000000000000007
-mimpid          : 0x20181004
-
-processor       : 1
-hart            : 1
-isa             : rv64imafdc
-mmu             : sv39
-uarch           : sifive,bullet0
-mvendorid       : 0x489
-marchid         : 0x8000000000000007
-mimpid          : 0x20181004
-
-processor       : 2
-hart            : 2
-isa             : rv64imafdc
-mmu             : sv39
-uarch           : sifive,bullet0
-mvendorid       : 0x489
-marchid         : 0x8000000000000007
-mimpid          : 0x20181004
-
-processor       : 3
-hart            : 3
-isa             : rv64imafdc
-mmu             : sv39
-uarch           : sifive,bullet0
-mvendorid       : 0x489
-marchid         : 0x8000000000000007
-mimpid          : 0x20181004
-
-mvendorid, marchid values match the register description in u74 manual.
-
-mimpid seems to be ok, through i can't find exact in U74/Unmatched docs.
-
-Tested-by: Nikita Shubin <n.shubin@yadro.com>
-
+> "RMNET"	: AT + DIAG + NMEA + Modem + QMI
+> "MBIM"	: MBIM + AT + DIAG + NMEA + Modem
 > 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> The detailed description of the USB configuration for each mode as follows:
+> 
+> RMNET Mode
+> --------------
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 21 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=030a Rev= 3.18
+> S:  Manufacturer=Quectel
+> S:  Product=Quectel EM05-G
+> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> MBIM Mode
+> --------------
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=030a Rev= 3.18
+> S:  Manufacturer=Quectel
+> S:  Product=Quectel EM05-G
+> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+> E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
 > ---
->  arch/riscv/kernel/cpu.c | 51
-> +++++++++++++++++++++++++++++++++++++++++ 1 file changed, 51
-> insertions(+)
-> 
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index fba9e9f46a8c..c037b8691bbb 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -3,10 +3,13 @@
->   * Copyright (C) 2012 Regents of the University of California
->   */
->  
-> +#include <linux/cpu.h>
->  #include <linux/init.h>
->  #include <linux/seq_file.h>
->  #include <linux/of.h>
-> +#include <asm/csr.h>
->  #include <asm/hwcap.h>
-> +#include <asm/sbi.h>
->  #include <asm/smp.h>
->  #include <asm/pgtable.h>
->  
-> @@ -64,6 +67,50 @@ int riscv_of_parent_hartid(struct device_node
-> *node) }
->  
->  #ifdef CONFIG_PROC_FS
-> +
-> +struct riscv_cpuinfo {
-> +	unsigned long mvendorid;
-> +	unsigned long marchid;
-> +	unsigned long mimpid;
-> +};
-> +static DEFINE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
-> +
-> +static int riscv_cpuinfo_starting(unsigned int cpu)
-> +{
-> +	struct riscv_cpuinfo *ci = this_cpu_ptr(&riscv_cpuinfo);
-> +
-> +#if defined(CONFIG_RISCV_SBI)
-> +	ci->mvendorid = sbi_spec_is_0_1() ? 0 : sbi_get_mvendorid();
-> +	ci->marchid = sbi_spec_is_0_1() ? 0 : sbi_get_marchid();
-> +	ci->mimpid = sbi_spec_is_0_1() ? 0 : sbi_get_mimpid();
-> +#elif defined(CONFIG_RISCV_M_MODE)
-> +	ci->mvendorid = csr_read(CSR_MVENDORID);
-> +	ci->marchid = csr_read(CSR_MARCHID);
-> +	ci->mimpid = csr_read(CSR_MIMPID);
-> +#else
-> +	ci->mvendorid = 0;
-> +	ci->marchid = 0;
-> +	ci->mimpid = 0;
-> +#endif
-> +
-> +	return 0;
-> +}
-> +
-> +static int __init riscv_cpuinfo_init(void)
-> +{
-> +	int ret;
-> +
-> +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-> "riscv/cpuinfo:starting",
-> +				riscv_cpuinfo_starting, NULL);
-> +	if (ret < 0) {
-> +		pr_err("cpuinfo: failed to register hotplug
-> callbacks.\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +device_initcall(riscv_cpuinfo_init);
-> +
->  #define __RISCV_ISA_EXT_DATA(UPROP, EXTID) \
->  	{							\
->  		.uprop = #UPROP,				\
-> @@ -178,6 +225,7 @@ static int c_show(struct seq_file *m, void *v)
->  {
->  	unsigned long cpu_id = (unsigned long)v - 1;
->  	struct device_node *node = of_get_cpu_node(cpu_id, NULL);
-> +	struct riscv_cpuinfo *ci = per_cpu_ptr(&riscv_cpuinfo,
-> cpu_id); const char *compat, *isa;
->  
->  	seq_printf(m, "processor\t: %lu\n", cpu_id);
-> @@ -188,6 +236,9 @@ static int c_show(struct seq_file *m, void *v)
->  	if (!of_property_read_string(node, "compatible", &compat)
->  	    && strcmp(compat, "riscv"))
->  		seq_printf(m, "uarch\t\t: %s\n", compat);
-> +	seq_printf(m, "mvendorid\t: 0x%lx\n", ci->mvendorid);
-> +	seq_printf(m, "marchid\t\t: 0x%lx\n", ci->marchid);
-> +	seq_printf(m, "mimpid\t\t: 0x%lx\n", ci->mimpid);
->  	seq_puts(m, "\n");
->  	of_node_put(node);
->  
+> V2:
+>  1. Add the description of the usb interface configurations.
+>  2. Add QMI Interface description.
 
+Thanks for the update.
+
+It looks like you missed my comment about moving the entry to where the
+other Quectel entries with numerical PIDs are (sorted by PID) and moving
+the comment to the first line of the entry.
+
+> 
+>  drivers/usb/serial/option.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>  mode change 100644 => 100755 drivers/usb/serial/option.c
+
+You also should not change the execute permission bits on this file.
+
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> old mode 100644
+> new mode 100755
+> index ed1e50d..05fc322
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -1147,6 +1147,8 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = ZLP },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x030a, 0xff),
+> +	  .driver_info = RSVD(6) | ZLP }, /* EM05-G */
+>  
+>  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+>  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+
+Could you fix that up in a v3?
+
+Johan

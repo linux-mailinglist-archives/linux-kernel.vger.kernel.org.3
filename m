@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FF35535A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67277553598
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352523AbiFUPOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S1352622AbiFUPNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352770AbiFUPNi (ORCPT
+        with ESMTP id S1352625AbiFUPMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:13:38 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527552CDFA;
-        Tue, 21 Jun 2022 08:12:31 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z11so13653656edp.9;
-        Tue, 21 Jun 2022 08:12:31 -0700 (PDT)
+        Tue, 21 Jun 2022 11:12:52 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8982CDCA
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:11:51 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h34-20020a17090a29a500b001eb01527d9eso12851987pjd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LU/OkmDAL+vY/i1/LTdgZ8fR3Suk3NR9q9oRePr0Tbg=;
-        b=K4y0cJ8ttDzz/9xM67cbuUDZf7b81dbH6VmKSWMXgWKDMc5ZtvCa7PJGPxeMeY9Br+
-         eLDLhVgDRoWLqg1+tw2JqOUAPLAxFgb+jKudFlh+KflFmZQWn2UMwriCJUjI7yhmvmq9
-         dPyr4Xga14qlMWcUG6Sspzj7EBscefmbnzUvdIC/wWiJXDaX1aKFgFZSYQrPwNC5f9Nw
-         5PLnxNV+SEsnrOUVWWDNj1cRE/IWgyUJ3Gzjjqbj7mXe2FAup2/Y2lfISzgU88IIpxfT
-         BoKHrt824YPyKPfexhkncfa6LRqhtmvcwsSmPooUh3xqbo0H4Hvvxmva3buAC5CHi3SG
-         BJgw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TiJ5DaDZdRqbzKQOpoFsXYhvDE76Mk9e8wVqdRVoWeo=;
+        b=EoXUiXZJm8qgTinLDSf4GBssv1ro8qAv3QSmdw5OMnK7hnKy/MPFmeUyiLaJk77nGf
+         ppgI4+VNg/Lz9NCp632XtCtbkIyuBDnGgkxSIaJWlQhKLZMQm6anupH/0mZjBJpITAP4
+         mw0t6wBaDsx+MLOB92dLDkQeBXtq9MzRgiHU+FRaTeIuS5lYx4zrzS5+krnmNMeV2cKT
+         c/R9tZ783nX2iMhbsFzPwD8nq4rHyvnT/WFYM2Umuv9Wt5nutaPHUaFZIJ20pD9W8fT/
+         RKFC9sNy4zwGXveU993MUnrHllkl1MGeHaYNRoa7/j4z9l9C2msGaSvloz2GhVGURQW9
+         kJAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=LU/OkmDAL+vY/i1/LTdgZ8fR3Suk3NR9q9oRePr0Tbg=;
-        b=ctt8M6cSeY+vly5WJhw88WU8VlfE3uZH3NcP3FLJ6nzfWouzwMLTMcnMXPRcGeJOMa
-         RbcNJIgu1Ss8YpTSD99Gr5/ZdAi3Gyir+PZBiJI76YLBadwRlmeR2b9LVRh9aNqGBXk3
-         BOulw1XPaz5pGNGlmcwtaVBBUcpqEPLk0mkhGR38hZUb6536pfs5WMidW8JZLkDH8PqW
-         L6Hhg19hcrNyWJH0OQefKri7Bto6D8kb+VeqZ2WHPy1MOqx59Jwvh3GEWJX2uSZLDXqx
-         WQReWzzt93pvC/1Oae5v2TMv1jZTLRexiLffpLf2Og2RpNHCS7HC7OOx12Rj35mrqstU
-         Wh8A==
-X-Gm-Message-State: AJIora/Oc5QFMg3RaO5E40d2z5xRDIc7dDb9hnGXUmnDaTnZi8h1/Bg0
-        Qc98nEt+3h5+Q7Dn6CAf3iU=
-X-Google-Smtp-Source: AGRyM1ujwkeb9wGg4k+jngzeJaKTh4TUZEbqd1al5yboqQIniK7hzUuvDLzXS5hhEJh6BA5VqxF1Hw==
-X-Received: by 2002:aa7:dbd7:0:b0:433:55a6:e3c4 with SMTP id v23-20020aa7dbd7000000b0043355a6e3c4mr36980333edt.74.1655824349229;
-        Tue, 21 Jun 2022 08:12:29 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id ky20-20020a170907779400b006f4cb79d9a8sm7835731ejc.75.2022.06.21.08.12.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 08:12:28 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan McDowell <noodles@earth.li>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH net v2] net: dsa: qca8k: reset cpu port on MTU change
-Date:   Tue, 21 Jun 2022 17:11:22 +0200
-Message-Id: <20220621151122.10220-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        bh=TiJ5DaDZdRqbzKQOpoFsXYhvDE76Mk9e8wVqdRVoWeo=;
+        b=124HmorAUryMQIHlorgWw+g2ryH3ILDL2DHNo4ik1Xdztt2ccp/cc4d/zdf3ckr1He
+         Gbvlt6U9CDr03wFJjbi3mCBuVBXzL+6iqU9pzsJ9IoY/Jlzhsfxecpi7kGojNwA9wtCL
+         52azgiXcPgDemFiNOYO8X47plav0+OaFdZxFskqhsAd/p4kWWg+M2tDINkhzn7krmFiC
+         dcRyvE1ziaxlGtprQwU1rHHF44f6BJrxj/5u/58ogie6302i/IK2VG3q878tv4JIuF6t
+         tm/5+7GR40+doAwT7F5UgUGy/O1DxS2L+QxwIbYp+k8NpnOz5EqbYcDiFXqRJcEnC8iv
+         MQlQ==
+X-Gm-Message-State: AJIora/qcWYYMT+jJ0Zk2XE82oIst2CgH7+RrnnoQmEJCo7niIHW6pf4
+        xkV5Bhge8I7PIOzUlz0h6WE=
+X-Google-Smtp-Source: AGRyM1vsi3VLkwPkdecQZMLXl+3TrUZ58QsgCWlY4+4A65dJh20ybjjO8pAvbxHN1BdfiPWWqQ/xsQ==
+X-Received: by 2002:a17:902:bd81:b0:16a:14f:aab3 with SMTP id q1-20020a170902bd8100b0016a014faab3mr24845978pls.8.1655824301806;
+        Tue, 21 Jun 2022 08:11:41 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:e884:dbae:d158:d600? ([2600:8802:b00:4a48:e884:dbae:d158:d600])
+        by smtp.gmail.com with ESMTPSA id jb20-20020a170903259400b0016a13bd845csm6468162plb.165.2022.06.21.08.11.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 08:11:41 -0700 (PDT)
+Message-ID: <ccadb3d9-97f5-cb0e-8f46-b83ae08a8e8b@gmail.com>
+Date:   Tue, 21 Jun 2022 08:11:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] phy: phy-brcm-usb: drop unexpected word "the" in the
+ comments
+Content-Language: en-US
+To:     Jiang Jian <jiangjian@cdjrlc.com>, alcooperx@gmail.com
+Cc:     bcm-kernel-feedback-list@broadcom.com, kishon@ti.com,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+References: <20220621122401.115500-1-jiangjian@cdjrlc.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220621122401.115500-1-jiangjian@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,70 +76,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was discovered that the Documentation lacks of a fundamental detail
-on how to correctly change the MAX_FRAME_SIZE of the switch.
 
-In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
-switch panics and cease to send any packet. This cause the mgmt ethernet
-system to not receive any packet (the slow fallback still works) and
-makes the device not reachable. To recover from this a switch reset is
-required.
 
-To correctly handle this, turn off the cpu ports before changing the
-MAX_FRAME_SIZE and turn on again after the value is applied.
+On 6/21/2022 5:24 AM, Jiang Jian wrote:
+> there is an unexpected word "the" in the comments that need to be dropped
+> 
+> file: ./drivers/phy/broadcom/phy-brcm-usb-init.c
+> line: 864
+>   * Make sure the the second and third memory controller
+> changed to
+>   * Make sure the second and third memory controller
+> 
+> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 
-Fixes: f58d2598cf70 ("net: dsa: qca8k: implement the port MTU callbacks")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
-v2:
-- Split from original series sent to net-next and rebased
-- Added the stable cc tag
-
- drivers/net/dsa/qca8k.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-index 2727d3169c25..1cbb05b0323f 100644
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -2334,6 +2334,7 @@ static int
- qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
- {
- 	struct qca8k_priv *priv = ds->priv;
-+	int ret;
- 
- 	/* We have only have a general MTU setting.
- 	 * DSA always set the CPU port's MTU to the largest MTU of the slave
-@@ -2344,8 +2345,27 @@ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
- 	if (!dsa_is_cpu_port(ds, port))
- 		return 0;
- 
-+	/* To change the MAX_FRAME_SIZE the cpu ports must be off or
-+	 * the switch panics.
-+	 * Turn off both cpu ports before applying the new value to prevent
-+	 * this.
-+	 */
-+	if (priv->port_enabled_map & BIT(0))
-+		qca8k_port_set_status(priv, 0, 0);
-+
-+	if (priv->port_enabled_map & BIT(6))
-+		qca8k_port_set_status(priv, 6, 0);
-+
- 	/* Include L2 header / FCS length */
--	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, new_mtu + ETH_HLEN + ETH_FCS_LEN);
-+	ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, new_mtu + ETH_HLEN + ETH_FCS_LEN);
-+
-+	if (priv->port_enabled_map & BIT(0))
-+		qca8k_port_set_status(priv, 0, 1);
-+
-+	if (priv->port_enabled_map & BIT(6))
-+		qca8k_port_set_status(priv, 6, 1);
-+
-+	return ret;
- }
- 
- static int
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.36.1
-
+Florian

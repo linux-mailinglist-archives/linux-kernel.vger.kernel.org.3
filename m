@@ -2,119 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C81552D61
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242C5552D64
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348422AbiFUIr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S1348251AbiFUItr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiFUIr1 (ORCPT
+        with ESMTP id S230049AbiFUItq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:47:27 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78B52610D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:47:26 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id k20so8205658ljg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zfcOaEapxaE9S9vGTGo2ekN6KOzKbUmzU3pXqQnWMdE=;
-        b=LqDbSkS9NFzOkFGxfenpQv+DkPMsaj+d7E6D7gghLD52dzHu7LPrKJntN0xJuGtI5x
-         Rc+SgNDXG8zJx+Y4mTYngrQl8PRNAV/DdDQlPxhODumpGxmQINJEVV6Lbg4s2iVP2xZb
-         mZbW9rjb9c0cpNXlBKSxbO+6rlAUifh0y1RFk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zfcOaEapxaE9S9vGTGo2ekN6KOzKbUmzU3pXqQnWMdE=;
-        b=xkhuv/MgYoRRVlyPl9uB6GKOh4sF70ykI67bRdncHlfRxS2ApzVZn++Dou/fpuR6qt
-         CSbDtppfyQQXLvUFzJBW80WPgP5G3NiqJNYP1i3qlPfkkpxX75wKnRNHvYgPyu0gMosp
-         8NkUdvVvS6arwMUvtRGzTzapZhbbSvQ8zy2Kard+4Y3/F0XpUb1cGSlFjZSb+aC3Ebq1
-         w0JcR+THorJYLSOdEXyZP4Dj5n54GAOfmw2BaEHAgG9pE50yyldrfyJa4ekzaQS396pp
-         otO1wCRNze6rAYoExj89RCmC/X00sODHqEz9VdRVGaFsrVt3w8M719DGXRgBOnC9a5x2
-         vJ0Q==
-X-Gm-Message-State: AJIora8N/pI2ntWs3yqFbYyNi6tuwitWuv9s9q4G4LlVXIV3e5C+ZqeW
-        h89gLNih7SZZnQWyaVU1kaEGFQ==
-X-Google-Smtp-Source: AGRyM1tO+LjuM21Aq+uLF72weZdNrgOr4XfGu99LuzUOdAdShSSNsEmOlVEEI5kCXajkUOEiGxXbag==
-X-Received: by 2002:a2e:3516:0:b0:25a:6505:4d12 with SMTP id z22-20020a2e3516000000b0025a65054d12mr7118972ljz.83.1655801245030;
-        Tue, 21 Jun 2022 01:47:25 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id j17-20020a2e8511000000b0025a724f2935sm494272lji.137.2022.06.21.01.47.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 01:47:24 -0700 (PDT)
-Message-ID: <bdedc4fd-e627-a23e-f00a-615dc087c670@rasmusvillemoes.dk>
-Date:   Tue, 21 Jun 2022 10:47:23 +0200
+        Tue, 21 Jun 2022 04:49:46 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF882610D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:49:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VH0a80n_1655801380;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VH0a80n_1655801380)
+          by smtp.aliyun-inc.com;
+          Tue, 21 Jun 2022 16:49:41 +0800
+Subject: Re: [PATCH] mm: fixup validation of buddy pfn
+To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
+        ziy@nvidia.com
+Cc:     guoren@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220621031118.3650529-1-xianting.tian@linux.alibaba.com>
+ <c45a6850-772e-8d2c-9261-7621f242dbae@redhat.com>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <502ccdeb-372c-1d05-4b5e-a962f39cfb55@linux.alibaba.com>
+Date:   Tue, 21 Jun 2022 16:49:40 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 05/34] vsprintf: %pf(%p)
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
-        rostedt@goodmis.org, enozhatsky@chromium.org, willy@infradead.org
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <20220620004233.3805-6-kent.overstreet@gmail.com>
- <f9224687-ce0c-b41b-f158-1b679a70c2d5@rasmusvillemoes.dk>
- <20220621075159.m67qzftqulvphivw@moria.home.lan>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20220621075159.m67qzftqulvphivw@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c45a6850-772e-8d2c-9261-7621f242dbae@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 09.51, Kent Overstreet wrote:
 
->>>  struct printf_spec {
->>> @@ -2520,7 +2521,16 @@ int format_decode(const char *fmt, struct printf_spec *spec)
->>>  		return ++fmt - start;
->>>  
->>>  	case 'p':
->>> -		spec->type = FORMAT_TYPE_PTR;
->>> +		fmt++;
->>> +		if (fmt[0] == 'f' &&
->>> +		    fmt[1] == '(') {
->>> +			fmt += 2;
->>> +			spec->type = FORMAT_TYPE_FN;
->>> +		} else
->>> +			spec->type = FORMAT_TYPE_PTR;
->>> +		return fmt - start;
->>> +	case '(':
->>> +		spec->type = FORMAT_TYPE_FN;
->>>  		return ++fmt - start;
+在 2022/6/21 下午4:01, David Hildenbrand 写道:
+> On 21.06.22 05:11, Xianting Tian wrote:
+>> For RISC-V arch the first 2MB RAM could be reserved for opensbi,
+>> and the arch code may don't create pages for the first 2MB RAM,
+>> so it would have pfn_base=512 and mem_map began with 512th PFN when
+>> CONFIG_FLATMEM=y.
 >>
->> NAK. Don't implement something that will never be tested nor used.
->> There's not a snowball's chance in hell that we'll ever build the kernel
->> without -Wformat.
-> 
-> We're not stopping here. Matthew is taking this to WG14 and I'll be working on
-> adding this functionality to glibc next, and %() is the syntax we intend to take
-> to the working group.
-> 
-> But the working group is naturally going to want to see that a working
-> implementation of it exists.
+>> But __find_buddy_pfn algorithm thinks the start PFN 0, it could get
+>> 0 PFN or less than the pfn_base value, so page_is_buddy() can't
+>> verify the page whose PFN is 0 ~ 511, actually we don't have valid
+>> pages for PFN 0 ~ 511.
+>>
+>> Actually, buddy system should not assume Arch cretaed pages for
+>> reserved memory, Arch may don't know the implied limitation.
+> Ehm, sorry, no. Archs have to stick to the rules of the buddy, not the
+> other way around. Why should we add additional overhead to the buddy
+> just because arch XYZ wants to be special?
 
-OK. But implementation in glibc, musl and/or the kernel is much much
-less interesting than support in gcc and clang for accepting %( in the
-first place, and preferably also for not just treating %( as a synonym
-for %p but actually checking that the argument is a function pointer and
- that its signature matches the arguments between (). Once _that_ has
-landed in gcc 24 and the kernel requirements have been bumped to that
-can we consider adding "%(" format strings (and the necessary support).
+We ever sent a patch to create mapping for the first 2MB RAM for RISC-V, 
+But it is not accetped.
 
-Yes, I appreciate the chicken-and-egg situation. No, I don't think the
-mainline kernel is a suitable place for proof-of-concept and highly
-experimental code.
+But I am just wondering, if we have the RAM whose physical base address 
+is not 0, for example, start with 0x200000(2Mb).
 
-Rasmus
+Then the base PFN is (0x200000 >> 12) = 512, Do we still need to create 
+mapping for the non-existing first 2Mb RAM,
+
+if not, the issue still exist under the case?
+
+>
+> If at all, we should fail hard if an arch doesn't play with the rules
+> and make this a VM_BUG_ON().
+>
+>> With this patch, we can gurantee a valid buddy no matter what we
+>> have pages for reserved memory or not.
+>>
+>> Fixes: 8170ac4700d26f65 ("mm: wrap __find_buddy_pfn() with a necessary buddy page validation")
+>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>> ---
+>>   mm/internal.h | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/internal.h b/mm/internal.h
+>> index c0f8fbe0445b..0ec446caeb2e 100644
+>> --- a/mm/internal.h
+>> +++ b/mm/internal.h
+>> @@ -322,7 +322,8 @@ __find_buddy_pfn(unsigned long page_pfn, unsigned int order)
+>>    * The found buddy can be a non PageBuddy, out of @page's zone, or its order is
+>>    * not the same as @page. The validation is necessary before use it.
+>>    *
+>> - * Return: the found buddy page or NULL if not found.
+>> + * Return: the found buddy page or NULL if not found or NULL if buddy pfn is
+>> + *         not valid.
+>>    */
+>>   static inline struct page *find_buddy_page_pfn(struct page *page,
+>>   			unsigned long pfn, unsigned int order, unsigned long *buddy_pfn)
+>> @@ -330,6 +331,9 @@ static inline struct page *find_buddy_page_pfn(struct page *page,
+>>   	unsigned long __buddy_pfn = __find_buddy_pfn(pfn, order);
+>>   	struct page *buddy;
+>>   
+>> +	if (!pfn_valid(__buddy_pfn))
+>> +		return NULL;
+>> +
+>>   	buddy = page + (__buddy_pfn - pfn);
+>>   	if (buddy_pfn)
+>>   		*buddy_pfn = __buddy_pfn;
+>

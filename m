@@ -2,94 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E654A55290B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC92552913
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244665AbiFUBgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 21:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S244066AbiFUBki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 21:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244545AbiFUBgU (ORCPT
+        with ESMTP id S231894AbiFUBkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 21:36:20 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A6E1CB10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:36:19 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id e63so10232574pgc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waymo.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=vZ6F4wvpDGbWdv9LDQ/ImSRBscJ3ks5pTk2NeSqUUQw=;
-        b=tJG880RA9r3Y4xwm+Il6qBFQ5sGJONzFwHJOvHSjt9EUe58fjyRvokq+3360x4fLNF
-         VPWqi1ZwtRu3zjadlMB+qE7QoXLwbnroS7HqeI1bL5TUWPgZ1PEaMOlifwrDD+HfTplE
-         S6b4Qiur8J8lGfSm6i0KqW2kfeX4n8t9Iy7PYnO6NEoEeg8eG5G0nXxg8SOSRrfU5wPX
-         YaVf1xILZUfWPmsBWrIrmqOTnscBpOndXjZHLbNuyjtNBOa6dIP357EdGwVOQ1Y9TPRC
-         PURHCWcOumCZVvhlmU8j9fKwAQsr4CUxcJGfg7YKAZdEzOOXOKF6pUeYjNtqc+RkB7xI
-         Xlgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=vZ6F4wvpDGbWdv9LDQ/ImSRBscJ3ks5pTk2NeSqUUQw=;
-        b=gP0Mivahtscv8cvA+R59gNhzXEwYcUU9LvQIc4/Jsje/Bv4o8XdoxK91t5OdIVwxd3
-         xkllLSkkQe+y5tgwTs6xcJHfuU1AqWEsIOpIvgkP+1Hs79CTyqlpLnD/7v6Vvorxp297
-         MkaDuBavuuuOqLsJ0a0Bvxp3D8Q688J0V71fBHT+aPFYtx2Nl/4+mVG0MPavpzR45GJA
-         YEkfpcMnAPIOK3cLH5hbRWxg1eTSrv8UgZekZhly3i3jA1nwnL5iTafJc41fTziMTz6e
-         INuDqjitgM+Nd7f1GxcxAPCzm93TIn02fjHxNBnGHmVBakklwBDwteX/J86yCluemRMS
-         Ixcg==
-X-Gm-Message-State: AJIora90utsH9DFNY/vjpg55HhcF58QpnuT0DYdcv2cYLzXgd8zlti8M
-        388Cvzz75+/HGo/lnmtPslb/lX84JTZDgtN+UN9YzA==
-X-Google-Smtp-Source: AGRyM1vo2+viWwqM95mm8E1n776io1sCuKmRDR4PjLs+kEY83xdRYdxsBIAlI4Xv7MYzTijsJFKJrRInYFfmwYhtOUY=
-X-Received: by 2002:a63:a841:0:b0:40c:b1f6:a876 with SMTP id
- i1-20020a63a841000000b0040cb1f6a876mr7774889pgp.578.1655775378560; Mon, 20
- Jun 2022 18:36:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620164953.1503934-1-rsilvera@google.com> <a651ca26-6aae-fe7f-66b1-18fdbad40f41@intel.com>
-In-Reply-To: <a651ca26-6aae-fe7f-66b1-18fdbad40f41@intel.com>
-Reply-To: rsilvera@waymo.com
-From:   Raul Silvera <rsilvera@waymo.com>
-Date:   Mon, 20 Jun 2022 18:35:52 -0700
-Message-ID: <CA+PGoB_H2iKwvTA1xEGmyqccefipdrnS_GxZBixZTAe2bvkDrg@mail.gmail.com>
-Subject: Re: [PATCH] perf: Adjust perf-inject output data offset for backward compatibility
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+        Mon, 20 Jun 2022 21:40:37 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6B51EAEE;
+        Mon, 20 Jun 2022 18:40:29 -0700 (PDT)
+X-UUID: f77b707e3cad4dbc9feeddcebce34a58-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:ef5d236d-a84e-4649-b368-910fbdaa791d,OB:10,L
+        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:50
+X-CID-INFO: VERSION:1.1.6,REQID:ef5d236d-a84e-4649-b368-910fbdaa791d,OB:10,LOB
+        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:50
+X-CID-META: VersionHash:b14ad71,CLOUDID:93d70cea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:325a170b1804,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: f77b707e3cad4dbc9feeddcebce34a58-20220621
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 870076133; Tue, 21 Jun 2022 09:40:25 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 21 Jun 2022 09:40:24 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 09:40:24 +0800
+Message-ID: <15cb231934de2f69db1c64cb2aa8bc8704b7201b.camel@mediatek.com>
+Subject: Re: [PATCH v12 02/14] drm/mediatek: dpi: Add support for
+ quantization range
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 21 Jun 2022 09:40:24 +0800
+In-Reply-To: <20220620121028.29234-3-rex-bc.chen@mediatek.com>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+         <20220620121028.29234-3-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:54 AM Adrian Hunter <adrian.hunter@intel.com> wr=
-ote:
->
-> This looks too late since, although the header comes before the data,
-> it also gets written afterwards (at_exit =3D=3D true).  It would be
-> better if we could rely on header->data_offset at this point.
->
+Hi, Bo-Chen:
 
-Thank you. You're right. We can rely on header->data_offset at this
-point as it is
-adjusted upfront in __cmd_inject. Will send an updated patch.
+On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
+> For RGB colorimetry, CTA-861 support both limited and full range data
+> when receiving video with RGB color space.
+> We use drm_default_rgb_quant_range() to determine the correct
+> setting.
 
-Ra=C3=BAl E. Silvera
-Software Engineer
-waymo.com
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+
+> 
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 34 ++++++++++++++++++--------
+> ----
+>  1 file changed, 21 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index e61cd67b978f..21ad5623b568 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -235,16 +235,30 @@ static void mtk_dpi_config_fb_size(struct
+> mtk_dpi *dpi, u32 width, u32 height)
+>  	mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
+>  }
+>  
+> -static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
+> -					 struct mtk_dpi_yc_limit
+> *limit)
+> +static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
+>  {
+> -	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
+> +	struct mtk_dpi_yc_limit limit;
+> +
+> +	if (drm_default_rgb_quant_range(&dpi->mode) ==
+> +	    HDMI_QUANTIZATION_RANGE_LIMITED) {
+> +		limit.y_bottom = 0x10;
+> +		limit.y_top = 0xfe0;
+> +		limit.c_bottom = 0x10;
+> +		limit.c_top = 0xfe0;
+> +	} else {
+> +		limit.y_bottom = 0;
+> +		limit.y_top = 0xfff;
+> +		limit.c_bottom = 0;
+> +		limit.c_top = 0xfff;
+> +	}
+> +
+> +	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit.y_bottom << Y_LIMINT_BOT,
+>  		     Y_LIMINT_BOT_MASK);
+> -	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
+> +	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit.y_top << Y_LIMINT_TOP,
+>  		     Y_LIMINT_TOP_MASK);
+> -	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit->c_bottom << C_LIMIT_BOT,
+> +	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit.c_bottom << C_LIMIT_BOT,
+>  		     C_LIMIT_BOT_MASK);
+> -	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit->c_top << C_LIMIT_TOP,
+> +	mtk_dpi_mask(dpi, DPI_C_LIMIT, limit.c_top << C_LIMIT_TOP,
+>  		     C_LIMIT_TOP_MASK);
+>  }
+>  
+> @@ -449,7 +463,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>  static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>  				    struct drm_display_mode *mode)
+>  {
+> -	struct mtk_dpi_yc_limit limit;
+>  	struct mtk_dpi_polarities dpi_pol;
+>  	struct mtk_dpi_sync_param hsync;
+>  	struct mtk_dpi_sync_param vsync_lodd = { 0 };
+> @@ -484,11 +497,6 @@ static int mtk_dpi_set_display_mode(struct
+> mtk_dpi *dpi,
+>  	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
+>  		pll_rate, vm.pixelclock);
+>  
+> -	limit.c_bottom = 0x0010;
+> -	limit.c_top = 0x0FE0;
+> -	limit.y_bottom = 0x0010;
+> -	limit.y_top = 0x0FE0;
+> -
+>  	dpi_pol.ck_pol = MTK_DPI_POLARITY_FALLING;
+>  	dpi_pol.de_pol = MTK_DPI_POLARITY_RISING;
+>  	dpi_pol.hsync_pol = vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
+> @@ -536,7 +544,7 @@ static int mtk_dpi_set_display_mode(struct
+> mtk_dpi *dpi,
+>  	else
+>  		mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
+>  
+> -	mtk_dpi_config_channel_limit(dpi, &limit);
+> +	mtk_dpi_config_channel_limit(dpi);
+>  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+>  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+>  	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+

@@ -2,80 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5725D552D56
+	by mail.lfdr.de (Postfix) with ESMTP id A3643552D57
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiFUIpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S230219AbiFUIp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346674AbiFUIpk (ORCPT
+        with ESMTP id S230456AbiFUIpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:45:40 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F59625EAF;
-        Tue, 21 Jun 2022 01:45:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VH0dWR7_1655801131;
-Received: from 30.97.48.73(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VH0dWR7_1655801131)
-          by smtp.aliyun-inc.com;
-          Tue, 21 Jun 2022 16:45:32 +0800
-Message-ID: <f79ad32f-50a3-be1a-0cac-d00f579e7077@linux.alibaba.com>
-Date:   Tue, 21 Jun 2022 16:45:39 +0800
+        Tue, 21 Jun 2022 04:45:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB9D26553;
+        Tue, 21 Jun 2022 01:45:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0974F1F966;
+        Tue, 21 Jun 2022 08:45:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655801153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7pouBC4i764FgZXOuJ6SFkbk2xa1PZt6dSFI3XEoLes=;
+        b=BxLNshCDBQRc4XmBU9sLjI5ynrIOKZzeUOi0zGyby68AWR+NLDKh1gQWWSjQmyLNWRb+W0
+        dy0bLKDuzMCdi110ykiH+iFiyHYjXJJ9LzLM8QxvKgjLk/ggBpz5iUtfZUkwmUxpm4jxDI
+        CIeoXXpEVaSAUBtAywORVhvrAqEkhoM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655801153;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7pouBC4i764FgZXOuJ6SFkbk2xa1PZt6dSFI3XEoLes=;
+        b=k6ybPuTnlEi+J6ckMb+UuqBX0ObNoZVxlTDbFsuZr7WGvkpdlP8i7LXSwEWQ9sn0i6kP5E
+        tdUC8b/eV67CtfCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3B6C13A88;
+        Tue, 21 Jun 2022 08:45:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qHp9M0CFsWJvEAAAMHmgww
+        (envelope-from <hare@suse.de>); Tue, 21 Jun 2022 08:45:52 +0000
+Message-ID: <cc1028ad-bd51-dea7-9f3d-fb954416b9fa@suse.de>
+Date:   Tue, 21 Jun 2022 10:45:52 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] mm/damon: Use set_huge_pte_at() to make huge pte old
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        songmuchun@bytedance.com, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220620172742.48766-1-sj@kernel.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220620172742.48766-1-sj@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 2/3] scsi: BusLogic remove bus_to_virt
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
+References: <20220617125750.728590-1-arnd@kernel.org>
+ <20220617125750.728590-3-arnd@kernel.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20220617125750.728590-3-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi SeongJae,
+On 6/17/22 14:57, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The BusLogic driver is the last remaining driver that relies on the
+> deprecated bus_to_virt() function, which in turn only works on a few
+> architectures, and is incompatible with both swiotlb and iommu support.
+> 
+> Before commit 391e2f25601e ("[SCSI] BusLogic: Port driver to 64-bit."),
+> the driver had a dependency on x86-32, presumably because of this
+> problem. However, the change introduced another bug that made it still
+> impossible to use the driver on any 64-bit machine.
+> 
+> This was in turn fixed in commit 56f396146af2 ("scsi: BusLogic: Fix
+> 64-bit system enumeration error for Buslogic"), 8 years later, which
+> shows that there are not a lot of users.
+> 
+> Maciej is still using the driver on 32-bit hardware, and Khalid mentioned
+> that the driver works with the device emulation used in VirtualBox
+> and VMware. Both of those only emulate it for Windows 2000 and older
+> operating systems that did not ship with the better LSI logic driver.
+> 
+> Do a minimum fix that searches through the list of descriptors to find
+> one that matches the bus address. This is clearly as inefficient as
+> was indicated in the code comment about the lack of a bus_to_virt()
+> replacement. A better fix would likely involve changing out the entire
+> descriptor allocation for a simpler one, but that would be much
+> more invasive.
+> 
+> Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+> Cc: Matt Wang <wwentao@vmware.com>
+> Cc: Khalid Aziz <khalid@gonehiking.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   drivers/scsi/BusLogic.c | 27 ++++++++++++++++-----------
+>   drivers/scsi/Kconfig    |  2 +-
+>   2 files changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+> index a897c8f914cf..d057abfcdd5c 100644
+> --- a/drivers/scsi/BusLogic.c
+> +++ b/drivers/scsi/BusLogic.c
+> @@ -2515,12 +2515,26 @@ static int blogic_resultcode(struct blogic_adapter *adapter,
+>   	return (hoststatus << 16) | tgt_status;
+>   }
+>   
+> +/*
+> + * turn the dma address from an inbox into a ccb pointer
+> + * This is rather inefficient.
+> + */
+> +static struct blogic_ccb *
+> +blogic_inbox_to_ccb(struct blogic_adapter *adapter, struct blogic_inbox *inbox)
+> +{
+> +	struct blogic_ccb *ccb;
+> +
+> +	for (ccb = adapter->all_ccbs; ccb; ccb = ccb->next_all)
+> +		if (inbox->ccb == ccb->dma_handle)
+> +			break;
+> +
+> +	return ccb;
+> +}
+>   
+>   /*
+>     blogic_scan_inbox scans the Incoming Mailboxes saving any
+>     Incoming Mailbox entries for completion processing.
+>   */
+> -
+>   static void blogic_scan_inbox(struct blogic_adapter *adapter)
+>   {
+>   	/*
+> @@ -2540,16 +2554,7 @@ static void blogic_scan_inbox(struct blogic_adapter *adapter)
+>   	enum blogic_cmplt_code comp_code;
+>   
+>   	while ((comp_code = next_inbox->comp_code) != BLOGIC_INBOX_FREE) {
+> -		/*
+> -		   We are only allowed to do this because we limit our
+> -		   architectures we run on to machines where bus_to_virt(
+> -		   actually works.  There *needs* to be a dma_addr_to_virt()
+> -		   in the new PCI DMA mapping interface to replace
+> -		   bus_to_virt() or else this code is going to become very
+> -		   innefficient.
+> -		 */
+> -		struct blogic_ccb *ccb =
+> -			(struct blogic_ccb *) bus_to_virt(next_inbox->ccb);
+> +		struct blogic_ccb *ccb = blogic_inbox_to_ccb(adapter, adapter->next_inbox);
+>   		if (comp_code != BLOGIC_CMD_NOTFOUND) {
+>   			if (ccb->status == BLOGIC_CCB_ACTIVE ||
+>   					ccb->status == BLOGIC_CCB_RESET) {
+> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+> index cf75588a2587..56bdc08d0b77 100644
+> --- a/drivers/scsi/Kconfig
+> +++ b/drivers/scsi/Kconfig
+> @@ -513,7 +513,7 @@ config SCSI_HPTIOP
+>   
+>   config SCSI_BUSLOGIC
+>   	tristate "BusLogic SCSI support"
+> -	depends on PCI && SCSI && VIRT_TO_BUS
+> +	depends on PCI && SCSI
+>   	help
+>   	  This is support for BusLogic MultiMaster and FlashPoint SCSI Host
+>   	  Adapters. Consult the SCSI-HOWTO, available from
 
-On 6/21/2022 1:27 AM, SeongJae Park wrote:
-> Hi Baolin,
-> 
-> On Mon, 20 Jun 2022 10:34:42 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->> The huge_ptep_set_access_flags() can not make the huge pte old according
->> to the discussion [1], that means we will always mornitor the young state
->> of the hugetlb though we stopped accessing the hugetlb, as a result DAMON
->> will get inaccurate accessing statistics.
->>
->> So changing to use set_huge_pte_at() to make the huge pte old to fix this
->> issue.
->>
->> [1] https://lore.kernel.org/all/Yqy97gXI4Nqb7dYo@arm.com/
->>
->> Fixes: 49f4203aae06 ("mm/damon: add access checking for hugetlb pages")
-> 
-> As the commit has merged in from v5.17, I guess it would be better to do below?
-> 
-> Cc: <stable@vger.kernel.org>
+CCB handling in the driver is ugly anyway, so that'll be good enough.
 
-Yes, thanks for reminding. Hope Andrew can help to add the stable tag 
-when picking up this patch.
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-> 
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> 
-> Other than that,
-> 
-> Reviewed-by: SeongJae Park <sj@kernel.org>
+Cheers,
 
-Thanks.
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

@@ -2,205 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9837D5539BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6275539C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245295AbiFUSvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 14:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S1351403AbiFUSxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 14:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiFUSvg (ORCPT
+        with ESMTP id S233766AbiFUSxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 14:51:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C36A18E39;
-        Tue, 21 Jun 2022 11:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655837495; x=1687373495;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BDKF2cjbQfuKSiJaOEoN0ZTDvx4psnCTVw5fZ3Bgitk=;
-  b=P3OqhIf+w7wCKYPCE6lR6ktIc1DdkBS+OmdR7v7ARYyrYXvqVbJtcE0r
-   UhzA1ZfJxgg8nreZjBKLGIH/xHR2ikSc3kpAdYKzxF7Zr/4Ul5Z1nhN9h
-   q8hJ1Nt6lFpHKMErIKMqxXhsrmNP7wYzQsKykL72OJjcJPYQURUI3aRDA
-   9YXgQITQs0k5SEkqIcq3SYTRN3HnU34FgGw202Vk1dtcuX7GxbTPnWftl
-   KNQKqyFzHPrnbhmj1P7hYzyoxOsMEEejwaDB745B14z05OkA3CYC9P4G5
-   ypEqV/dRGOlzaSYf54Uqn4xgk2xO2AOrCWAnQJaijChygVXZ4CNnPMVHX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="305656822"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="305656822"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 11:51:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="585395077"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 21 Jun 2022 11:51:29 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25LIpR4e007012;
-        Tue, 21 Jun 2022 19:51:27 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] bitops: let optimize out non-atomic bitops on compile-time constants
-Date:   Tue, 21 Jun 2022 20:51:26 +0200
-Message-Id: <20220621185126.66881-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <YrICYCW0fCb0Rh8/@yury-laptop>
-References: <20220617144031.2549432-1-alexandr.lobakin@intel.com> <YrCB/rz3RM6TCjij@FVFF77S0Q05N> <20220620150855.2630784-1-alexandr.lobakin@intel.com> <YrICYCW0fCb0Rh8/@yury-laptop>
+        Tue, 21 Jun 2022 14:53:36 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404211180E;
+        Tue, 21 Jun 2022 11:53:35 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id x75so10818916qkb.12;
+        Tue, 21 Jun 2022 11:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jhBWONv0sRk0PO6NOho0MICFxLYjmPHqytEaDgbHoM0=;
+        b=d1P+wZRsxn/ODj3bCIwRGZIvpv1YLgkrDLwtKc4SdcAkb90TBay3UmcRk1vnvOmt1O
+         uQ0z3AhP5gu+zxvJneezJ/x27evsDfWwHq8TEwrGkukKhgM3Did1e4BDFAHwJOtYw1hO
+         W83VTz0RKF+ri1D955w7vGzyEiCBMcpw6n3wkj4mm8vB96vhDkUWWz9JUJKGPl7qltQw
+         bij56P0l/gzY52GEbIIZP3nasnAIoQJU1pQadU8irOxYw6x75DxsnKKryTDpUMlnL8Pn
+         GvGyHyCeX5BozYk6XFJM9bQSaqqZAdwvE/ECbCIQ5CiEUjQmsdcSuyIWoe1o+HRyUkK2
+         7R3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jhBWONv0sRk0PO6NOho0MICFxLYjmPHqytEaDgbHoM0=;
+        b=v+2Lv1RApt67hRSgcujuA/ClaCmZERioZkrVqHOMFWzHAaeyon8CDdi/PA3NHFLeCK
+         n5CtPUu98y1jkThx6kQNNrVYpPkLptiufdRSh7/v4NxNFw8HGGxEOuPwGseVS/Km4KrI
+         rvTsNrmGdVZcOFQrmXfZp5YYWRAcCO5PxZo4M7dRjBb4xxBo2y9X1SLu/V6hSuQ9VxjK
+         G31kbDzjghdmmZtx+V4qLpvac29PgzuJxaXrJhOlEHfFDcmOatCsSM/ThtvLxZvr31W1
+         2QwznYAwdmpKx/bW+IeSoH6Z2bGFVkcTvSExTVR2regB+I3GdhSdc8aO4cJhARMQsFqm
+         CtwQ==
+X-Gm-Message-State: AJIora8uRyxNPVKyWV2954AUd53Kh5S6gk0Nlzejvlc/U/1xPgJOL8S1
+        hPSE2ntX6fED0cwKLxRU2fStq84m+2SHhwb1veKAwRbRyYGbPw==
+X-Google-Smtp-Source: AGRyM1sw7lbXUZfP6EAxcQ//+3RxPj9seN6z//cr+z98y/tqVjbv/xAxi9lBZGkz3w/HuA6qN073RBay+DheVRya+gs=
+X-Received: by 2002:a05:620a:2450:b0:6a6:d264:2b88 with SMTP id
+ h16-20020a05620a245000b006a6d2642b88mr20725040qkn.25.1655837614432; Tue, 21
+ Jun 2022 11:53:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220621112330.448754-1-robimarko@gmail.com> <CAA8EJpoPJKVteUdsxOVH5THH_vqwBrdSn=hkbW4oWmpw+Mjdmg@mail.gmail.com>
+In-Reply-To: <CAA8EJpoPJKVteUdsxOVH5THH_vqwBrdSn=hkbW4oWmpw+Mjdmg@mail.gmail.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Tue, 21 Jun 2022 20:53:23 +0200
+Message-ID: <CAOX2RU4N26weZU4bBTsJ+zuDZnNoW6_UxNKwfSii0LDed9p1_A@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     svarbanov@mm-sol.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
+        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        johan+linaro@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
-Date: Tue, 21 Jun 2022 10:39:44 -0700
+On Tue, 21 Jun 2022 at 19:29, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Tue, 21 Jun 2022 at 14:23, Robert Marko <robimarko@gmail.com> wrote:
+> >
+> > IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
+> > cause the system to hang as its using DBI registers in the .init
+> > and those are only accesible after phy_power_on().
+> >
+> > So solve this by splitting the DBI read/writes to .post_init.
+> >
+> > Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
+>
+> Any elaboration for the Fixes tag? I think the follow one is more
+> logical, isn't it?
+>
+> Fixes: 5d76117f070d ("PCI: qcom: Add support for IPQ8074 PCIe controller")
 
-> On Mon, Jun 20, 2022 at 05:08:55PM +0200, Alexander Lobakin wrote:
-> > From: Mark Rutland <mark.rutland@arm.com>
-> > Date: Mon, 20 Jun 2022 15:19:42 +0100
-> > 
-> > > On Fri, Jun 17, 2022 at 04:40:24PM +0200, Alexander Lobakin wrote:
-> > > > So, in order to let the compiler optimize out such cases, expand the
-> > > > test_bit() and __*_bit() definitions with a compile-time condition
-> > > > check, so that they will pick the generic C non-atomic bitop
-> > > > implementations when all of the arguments passed are compile-time
-> > > > constants, which means that the result will be a compile-time
-> > > > constant as well and the compiler will produce more efficient and
-> > > > simple code in 100% cases (no changes when there's at least one
-> > > > non-compile-time-constant argument).
-> > > 
-> > > > The savings are architecture, compiler and compiler flags dependent,
-> > > > for example, on x86_64 -O2:
-> > > > 
-> > > > GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
-> > > > LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
-> > > > LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
-> > > > 
-> > > > and ARM64 (courtesy of Mark[0]):
-> > > > 
-> > > > GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
-> > > > LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
-> > > 
-> > > Hmm... with *this version* of the series, I'm not getting results nearly as
-> > > good as that when building defconfig atop v5.19-rc3:
-> > > 
-> > >   GCC 8.5.0:   add/remove: 83/49 grow/shrink: 973/1147 up/down: 32020/-47824 (-15804)
-> > >   GCC 9.3.0:   add/remove: 68/51 grow/shrink: 1167/592 up/down: 30720/-31352 (-632)
-> > >   GCC 10.3.0:  add/remove: 84/37 grow/shrink: 1711/1003 up/down: 45392/-41844 (3548)
-> > >   GCC 11.1.0:  add/remove: 88/31 grow/shrink: 1635/963 up/down: 51540/-46096 (5444)
-> > >   GCC 11.3.0:  add/remove: 89/32 grow/shrink: 1629/966 up/down: 51456/-46056 (5400)
-> > >   GCC 12.1.0:  add/remove: 84/31 grow/shrink: 1540/829 up/down: 48772/-43164 (5608)
-> > > 
-> > >   LLVM 12.0.1: add/remove: 118/58 grow/shrink: 437/381 up/down: 45312/-65668 (-20356)
-> > >   LLVM 13.0.1: add/remove: 35/19 grow/shrink: 416/243 up/down: 14408/-22200 (-7792)
-> > >   LLVM 14.0.0: add/remove: 42/16 grow/shrink: 415/234 up/down: 15296/-21008 (-5712)
-> > > 
-> > > ... and that now seems to be regressing codegen with recent versions of GCC as
-> > > much as it improves it LLVM.
-> > > 
-> > > I'm not sure if we've improved some other code and removed the benefit between
-> > > v5.19-rc1 and v5.19-rc3, or whether something else it at play, but this doesn't
-> > > look as compelling as it did.
-> > 
-> > Mostly likely it's due to that in v1 I mistakingly removed
-> > `volatile` from gen[eric]_test_bit(), so there was an impact for
-> > non-constant cases as well.
-> > +5 Kb sounds bad tho. Do you have CONFIG_TEST_BITMAP enabled, does
-> > it work? Probably the same reason as for m68k, more constant
-> > optimization -> more aggressive inlining or inlining rebalance ->
-> > larger code. OTOH I've no idea why sometimes compiler decides to
-> > uninline really tiny functions where due to this patch series some
-> > bitops have been converted to constants, like it goes on m68k.
-> > 
-> > > 
-> > > Overall that's mostly hidden in the Image size, due to 64K alignment and
-> > > padding requirements:
-> > > 
-> > >   Toolchain      Before      After       Difference
-> > > 
-> > >   GCC 8.5.0      36178432    36178432    0
-> > >   GCC 9.3.0      36112896    36112896    0
-> > >   GCC 10.3.0     36442624    36377088    -65536
-> > >   GCC 11.1.0     36311552    36377088    +65536
-> > >   GCC 11.3.0     36311552    36311552    0
-> > >   GCC 12.1.0     36377088    36377088    0
-> > > 
-> > >   LLVM 12.0.1    31418880    31418880    0
-> > >   LLVM 13.0.1    31418880    31418880    0
-> > >   LLVM 14.0.0    31218176    31218176    0
-> > > 
-> > > ... so aside from the blip around GCC 10.3.0 and 11.1.0, there's not a massive
-> > > change overall (due to 64KiB alignment restrictions for portions of the kernel
-> > > Image).
-> 
-> I gave it a try on v5.19-rc3 for arm64 with my default GCC 11.2, and it's:
-> add/remove: 89/33 grow/shrink: 1629/966 up/down: 51456/-46064 (5392)
-> 
-> Which is not great in terms of layout size. But I don't think we should
-> focus too much on those numbers. The goal of the series is not to shrink
-> the image; the true goal is to provide more information to the compiler
-> in a hope that it will make a better decision regarding optimizations.
-> 
-> Looking at results provided by Mark, both GCC and LLVM have a tendency
-> to inline and use other techniques that increase the image more
-> aggressively in newer releases, comparing to old ones. From this
-> perspective, unless we find some terribly wrong behavior, I'm OK with
-> +5K for the Image, because I trust my compiler and believe it spent
-> those 5K wisely.
-> 
-> For the reasons said above, I think we shouldn't disable const
-> bitops for -Os build.
-> 
-> I think this series has total positive impact because it adds a lot
-> of information for compiler with just a few lines of code.
+Hi,
+My logic was that it was working before the commit a0fd361db8e5 as it
+moved PHY init
+later and indirectly broke IPQ8074 gen2.
 
-Right, that was the primary intention. But then I got some text size
-decreases and thought this applies to any setup :)
-
-> 
-> If no objections, I think it's good to try it in -next. Alexander,
-> would you like me to fix gen/generic typo in comment and take it in
-> bitmap-for-next, or you'd prefer to send v4?
-
-I'm sending v4 in a couple minutes, lkp reported that on ARC GCC
-never expands mem*() builtins to plain assignments, which sucks,
-but failed my compile-time tests, so I adjusted code a bit. Hope
-that change will be okay for everyone, so that you could pick it.
-
-> 
-> Thanks,
-> Yury
-
-Thanks,
-Olek
+Regards,
+Robert
+>
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> > Changes in v2:
+> > * Rebase onto next-20220621
+> > ---
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
+> >  1 file changed, 28 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 51fed83484af..da6d79d61397 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+> >         struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
+> >         struct dw_pcie *pci = pcie->pci;
+> >         struct device *dev = pci->dev;
+> > -       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> >         int i, ret;
+> > -       u32 val;
+> >
+> >         for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
+> >                 ret = reset_control_assert(res->rst[i]);
+> > @@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+> >                 goto err_clk_aux;
+> >         }
+> >
+> > +       return 0;
+> > +
+> > +err_clk_aux:
+> > +       clk_disable_unprepare(res->ahb_clk);
+> > +err_clk_ahb:
+> > +       clk_disable_unprepare(res->axi_s_clk);
+> > +err_clk_axi_s:
+> > +       clk_disable_unprepare(res->axi_m_clk);
+> > +err_clk_axi_m:
+> > +       clk_disable_unprepare(res->iface);
+> > +err_clk_iface:
+> > +       /*
+> > +        * Not checking for failure, will anyway return
+> > +        * the original failure in 'ret'.
+> > +        */
+> > +       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> > +               reset_control_assert(res->rst[i]);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
+> > +{
+> > +       struct dw_pcie *pci = pcie->pci;
+> > +       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> > +       u32 val;
+> > +
+> >         writel(SLV_ADDR_SPACE_SZ,
+> >                 pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
+> >
+> > @@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+> >                 PCI_EXP_DEVCTL2);
+> >
+> >         return 0;
+> > -
+> > -err_clk_aux:
+> > -       clk_disable_unprepare(res->ahb_clk);
+> > -err_clk_ahb:
+> > -       clk_disable_unprepare(res->axi_s_clk);
+> > -err_clk_axi_s:
+> > -       clk_disable_unprepare(res->axi_m_clk);
+> > -err_clk_axi_m:
+> > -       clk_disable_unprepare(res->iface);
+> > -err_clk_iface:
+> > -       /*
+> > -        * Not checking for failure, will anyway return
+> > -        * the original failure in 'ret'.
+> > -        */
+> > -       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> > -               reset_control_assert(res->rst[i]);
+> > -
+> > -       return ret;
+> >  }
+> >
+> >  static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+> > @@ -1598,6 +1605,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
+> >  static const struct qcom_pcie_ops ops_2_3_3 = {
+> >         .get_resources = qcom_pcie_get_resources_2_3_3,
+> >         .init = qcom_pcie_init_2_3_3,
+> > +       .post_init = qcom_pcie_post_init_2_3_3,
+> >         .deinit = qcom_pcie_deinit_2_3_3,
+> >         .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+> >  };
+> > --
+> > 2.36.1
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry

@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5D55529BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFD95529C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343774AbiFUDdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S1344399AbiFUDhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbiFUDdV (ORCPT
+        with ESMTP id S1344023AbiFUDhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:33:21 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C5D13E28;
-        Mon, 20 Jun 2022 20:33:20 -0700 (PDT)
-X-UUID: 64d3c4cebbfe4b8396f85f412526225c-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:ffc33452-a15c-49e5-b1b3-744c3e7da423,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:ffc33452-a15c-49e5-b1b3-744c3e7da423,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:5c8b0538-5e4b-44d7-80b2-bb618cb09d29,C
-        OID:824c3d2edc51,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 64d3c4cebbfe4b8396f85f412526225c-20220621
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 574788623; Tue, 21 Jun 2022 11:33:16 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 21 Jun 2022 11:33:16 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 11:33:16 +0800
-Message-ID: <76d86558adba1e043e50ab0e18403038450b8099.camel@mediatek.com>
-Subject: Re: [PATCH v12 14/14] drm/mediatek: dpi: Add matrix_sel helper
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 11:33:15 +0800
-In-Reply-To: <20220620121028.29234-15-rex-bc.chen@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-         <20220620121028.29234-15-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 20 Jun 2022 23:37:11 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B447F13F05
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:37:10 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-101cdfddfacso8693411fac.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0OkAZwfiR/IGc5OiW6l+odjK0O64O9VMbeiiBtsyMJE=;
+        b=QKfx36CREpP4nFKKSmJsir+cI8BvjZ2WDoHlvYAynUsIfS/v52G2SnAXDpnnieexSn
+         mHxg+rKtN3J6FVhwsCM4IAziOKeUhxPBBNU2X1RlLL6DJa4kw0IFpGrv1ymEAUNhxOd5
+         PXCOtABLrY49kCho+3SQf4dsTYkyZzdrh9dSWnl/VrwLmkTuvbDnODn1EYIY8CQDzOMg
+         yeZQsiBj6SIDiRUwXuxgJ8bbuol7a0DihyufYUl1i/FbVQmms3heiElEvwaCFE3HjsEq
+         afUOinuMj2NW6J2BUfQwthP17WYv2+SdzrBSbL/oDqGnV8e3UHOsnKe6ggM2IL8rtHIG
+         L5Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0OkAZwfiR/IGc5OiW6l+odjK0O64O9VMbeiiBtsyMJE=;
+        b=tdGTKZXbAMoi9fT2BzBe0mKl66Yu6/6q3fU+VZth4kDGYdiyq2w2ye5t0/i8/aYuOJ
+         GU/WK5w7UcAkPMTUwpHr4VS/IEXTZ4rJ0NOJIyWYVT1vaJiwRTpGNic1seIL+wVk6Gce
+         7rlEO5eMfxALQSyqrjfVxWtHyNyQ8yG9vJNi3sOTaV0ACguBQloAWrCdV9XqZg71Z748
+         PbRZpy+8ASMEL3HXVnvq2npJWeM++1KGGSb8y6o20+9ob16jJbceq200zjizaw+FTRuN
+         B1flyMU5fe/liI3q7tYgExaUT9fs5NPpby0Mkk+7pKtdI+Iq3jQUGh3hu5oSw/BsXUI1
+         M2Yw==
+X-Gm-Message-State: AJIora/S7pgQWxfI7VnfARYqyQ6kPjeXe5GrY6FmZnKc5bEw67i5L26s
+        xjTTpZLV6IcsxBJ8IcxBI9qz4CVz/JwcJg==
+X-Google-Smtp-Source: AGRyM1vcdaym28Iv5o1yaVIlDuqlMHf9eb+9fp49PcstJIJ4J0VfPhf56qR2V6S2TS3b+hurIf5BMg==
+X-Received: by 2002:a05:6870:15c9:b0:101:e18b:d12d with SMTP id k9-20020a05687015c900b00101e18bd12dmr5070380oad.51.1655782629132;
+        Mon, 20 Jun 2022 20:37:09 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id a16-20020a056870b21000b000f33624baa4sm8362730oam.18.2022.06.20.20.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 20:37:08 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 22:37:06 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] arm64: dts: qcom: add SC8280XP platform
+Message-ID: <YrE84tLOpJtzrNW4@builder.lan>
+References: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
+ <20220607214113.4057684-3-bjorn.andersson@linaro.org>
+ <79443fb4-5c09-a33f-594d-71ac93cc0317@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <79443fb4-5c09-a33f-594d-71ac93cc0317@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,146 +77,306 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+On Wed 08 Jun 03:18 CDT 2022, Krzysztof Kozlowski wrote:
 
-On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
-> From: Guillaume Ranquet <granquet@baylibre.com>
+> On 07/06/2022 23:41, Bjorn Andersson wrote:
+> > Introduce initial support for the Qualcomm SC8280XP platform, aka 8cx
+> > Gen 3. This initial contribution supports SMP, CPUfreq, CPU cluster
+> > idling, GCC, TLMM, SMMU, RPMh regulators, power-domains and clocks,
+> > interconnects, some QUPs, UFS, remoteprocs, USB, watchdog, LLCC and
+> > tsens.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2195 ++++++++++++++++++++++++
+> >  1 file changed, 2195 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > new file mode 100644
+> > index 000000000000..4143813643ad
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > @@ -0,0 +1,2195 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> > + * Copyright (c) 2022, Linaro Limited
+> > + */
+> > +
+> > +#include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
+> > +#include <dt-bindings/clock/qcom,rpmh.h>
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +#include <dt-bindings/interconnect/qcom,sc8280xp.h>
+> > +#include <dt-bindings/mailbox/qcom-ipcc.h>
+> > +#include <dt-bindings/power/qcom-rpmpd.h>
+> > +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> > +#include <dt-bindings/thermal/thermal.h>
+> > +
+> > +/ {
+> > +	interrupt-parent = <&intc>;
+> > +
+> > +	#address-cells = <2>;
+> > +	#size-cells = <2>;
+> > +
+> > +	clocks {
+> > +		xo_board: xo-board {
 > 
-> Matrix selection is a new feature for both dpi and dpintf of MT8195.
-> Add a mtk_dpi_matrix_sel() helper to update the DPI_MATRIX_SET
-> register depending on the color format.
-
-Describe more about what this do.
-
+> xo-board-clk
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c      | 29
-> +++++++++++++++++++++++++
->  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
->  2 files changed, 32 insertions(+)
+> > +			compatible = "fixed-clock";
+> > +			#clock-cells = <0>;
+> > +			clock-frequency = <38400000>;
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 220e9b18e2cd..8a9151cb1622 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -135,6 +135,7 @@ struct mtk_dpi_conf {
->  	u32 channel_swap_shift;
->  	u32 yuv422_en_bit;
->  	u32 csc_enable_bit;
-> +	bool matrx_sel_support;
->  };
->  
->  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
-> u32 mask)
-> @@ -398,6 +399,31 @@ static void mtk_dpi_config_disable_edge(struct
-> mtk_dpi *dpi)
->  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
-> EDGE_SEL_EN);
->  }
->  
-> +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
-> +			       enum mtk_dpi_out_color_format format)
-> +{
-> +	u32 matrix_sel = 0;
-> +
-> +	if (!dpi->conf->matrx_sel_support) {
-> +		dev_info(dpi->dev, "matrix_sel is not supported.\n");
+> The clock is probably on the board, so the frequency should be rather
+> defined in DTS.
+> 
 
-So for this SoC, there would be something wrong? I still does not
-understand what this feature is.
+It's an interesting question, but I don't think it's possible to change
+the rate of this clock from one board to another.
 
-static const struct of_device_id mtk_dpi_of_ids[] = {
-	{ .compatible = "mediatek,mt2701-dpi",
-	  .data = &mt2701_conf,
-	},
-	{ .compatible = "mediatek,mt8173-dpi",
-	  .data = &mt8173_conf,
-	},
-	{ .compatible = "mediatek,mt8183-dpi",
-	  .data = &mt8183_conf,
-	},
-	{ .compatible = "mediatek,mt8192-dpi",
-	  .data = &mt8192_conf,
-	},
-	{ },
-};
+So I think it's best to keep this in the .dtsi, to avoid unnecessary
+duplication.
 
-> +		return;
-> +	}
-> +
-> +	switch (format) {
-> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
-> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
-> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
-> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
-> +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
-> +		if (dpi->mode.hdisplay <= 720)
-> +			matrix_sel = 0x2;
 
-Symbolize 0x2.
-
-> +		break;
-> +	default:
-
-If format is MTK_DPI_COLOR_FORMAT_YCBCR_422 first, then format change
-to MTK_DPI_COLOR_FORMAT_RGB and matrix_sel would still be 0x2. Is this
-correct?
+Thanks for the feedback, will update the remaining things.
 
 Regards,
-CK
+Bjorn
 
-> +		break;
-> +	}
-> +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
-> INT_MATRIX_SEL_MASK);
-> +}
-> +
->  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
->  					enum mtk_dpi_out_color_format
-> format)
->  {
-> @@ -405,6 +431,7 @@ static void mtk_dpi_config_color_format(struct
-> mtk_dpi *dpi,
->  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
->  		mtk_dpi_config_yuv422_enable(dpi, false);
->  		mtk_dpi_config_csc_enable(dpi, true);
-> +		mtk_dpi_matrix_sel(dpi, format);
->  		if (dpi->conf->swap_input_support)
->  			mtk_dpi_config_swap_input(dpi, false);
->  		mtk_dpi_config_channel_swap(dpi,
-> MTK_DPI_OUT_CHANNEL_SWAP_BGR);
-> @@ -412,6 +439,7 @@ static void mtk_dpi_config_color_format(struct
-> mtk_dpi *dpi,
->  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
->  		mtk_dpi_config_yuv422_enable(dpi, true);
->  		mtk_dpi_config_csc_enable(dpi, true);
-> +		mtk_dpi_matrix_sel(dpi, format);
->  		if (dpi->conf->swap_input_support)
->  			mtk_dpi_config_swap_input(dpi, true);
->  		else
-> @@ -951,6 +979,7 @@ static const struct mtk_dpi_conf
-> mt8195_dpintf_conf = {
->  	.channel_swap_shift = DPINTF_CH_SWAP,
->  	.yuv422_en_bit = DPINTF_YUV422_EN,
->  	.csc_enable_bit = DPINTF_CSC_ENABLE,
-> +	.matrx_sel_support = true,
->  };
->  
->  static int mtk_dpi_probe(struct platform_device *pdev)
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> index f7f0272dbd6a..96c117202d0d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> @@ -230,4 +230,7 @@
->  #define EDGE_SEL_EN			BIT(5)
->  #define H_FRE_2N			BIT(25)
->  
-> +#define DPI_MATRIX_SET		0xB4
-> +#define INT_MATRIX_SEL_MASK	(0x1F << 0)
-> +
->  #endif /* __MTK_DPI_REGS_H */
-
+> > +		};
+> > +
+> > +		sleep_clk: sleep-clk {
+> > +			compatible = "fixed-clock";
+> > +			#clock-cells = <0>;
+> > +			clock-frequency = <32764>;
+> > +		};
+> > +	};
+> 
+> (...)
+> 
+> > +
+> > +		qup1: geniqup@ac0000 {
+> > +			compatible = "qcom,geni-se-qup";
+> > +			reg = <0 0x00ac0000 0 0x6000>;
+> > +			clocks = <&gcc GCC_QUPV3_WRAP_1_M_AHB_CLK>,
+> > +				 <&gcc GCC_QUPV3_WRAP_1_S_AHB_CLK>;
+> > +			clock-names = "m-ahb", "s-ahb";
+> > +			iommus = <&apps_smmu 0x83 0>;
+> > +
+> > +			#address-cells = <2>;
+> > +			#size-cells = <2>;
+> > +			ranges;
+> > +
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		ufs_mem_hc: ufshc@1d84000 {
+> 
+> Just "ufs" as node name.
+> 
+> > +			compatible = "qcom,sc8280xp-ufshc", "qcom,ufshc",
+> > +				     "jedec,ufs-2.0";
+> > +			reg = <0 0x01d84000 0 0x3000>;
+> > +			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+> > +			phys = <&ufs_mem_phy_lanes>;
+> > +			phy-names = "ufsphy";
+> > +			lanes-per-direction = <2>;
+> > +			#reset-cells = <1>;
+> > +			resets = <&gcc GCC_UFS_PHY_BCR>;
+> > +			reset-names = "rst";
+> > +
+> > +			power-domains = <&gcc UFS_PHY_GDSC>;
+> > +			required-opps = <&rpmhpd_opp_nom>;
+> > +
+> > +			iommus = <&apps_smmu 0xe0 0x0>;
+> > +
+> > +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>
+> > +				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+> > +				 <&gcc GCC_UFS_PHY_AHB_CLK>,
+> > +				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+> > +				 <&rpmhcc RPMH_CXO_CLK>,
+> > +				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+> > +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+> > +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
+> > +			clock-names = "core_clk",
+> > +				      "bus_aggr_clk",
+> > +				      "iface_clk",
+> > +				      "core_clk_unipro",
+> > +				      "ref_clk",
+> > +				      "tx_lane0_sync_clk",
+> > +				      "rx_lane0_sync_clk",
+> > +				      "rx_lane1_sync_clk";
+> > +			freq-table-hz = <75000000 300000000>,
+> > +					<0 0>,
+> > +					<0 0>,
+> > +					<75000000 300000000>,
+> > +					<0 0>,
+> > +					<0 0>,
+> > +					<0 0>,
+> > +					<0 0>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		ufs_mem_phy: phy@1d87000 {
+> > +			compatible = "qcom,sc8280xp-qmp-ufs-phy";
+> > +			reg = <0 0x01d87000 0 0xe10>;
+> > +			#address-cells = <2>;
+> > +			#size-cells = <2>;
+> > +			ranges;
+> > +			clock-names = "ref",
+> > +				      "ref_aux";
+> > +			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> > +				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+> > +
+> > +			resets = <&ufs_mem_hc 0>;
+> > +			reset-names = "ufsphy";
+> > +			status = "disabled";
+> > +
+> > +			ufs_mem_phy_lanes: phy@1d87400 {
+> > +				reg = <0 0x01d87400 0 0x108>,
+> > +				      <0 0x01d87600 0 0x1e0>,
+> > +				      <0 0x01d87c00 0 0x1dc>,
+> > +				      <0 0x01d87800 0 0x108>,
+> > +				      <0 0x01d87a00 0 0x1e0>;
+> > +				#phy-cells = <0>;
+> > +				#clock-cells = <0>;
+> > +			};
+> > +		};
+> > +
+> > +		ufs_card_hc: ufshc@1da4000 {
+> 
+> node name: ufs
+> 
+> > +			compatible = "qcom,sc8280xp-ufshc", "qcom,ufshc",
+> > +				     "jedec,ufs-2.0";
+> > +			reg = <0 0x01da4000 0 0x3000>;
+> > +			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
+> > +			phys = <&ufs_card_phy_lanes>;
+> > +			phy-names = "ufsphy";
+> > +			lanes-per-direction = <2>;
+> > +			#reset-cells = <1>;
+> > +			resets = <&gcc GCC_UFS_CARD_BCR>;
+> > +			reset-names = "rst";
+> > +
+> > +			power-domains = <&gcc UFS_CARD_GDSC>;
+> > +
+> > +			iommus = <&apps_smmu 0x4a0 0x0>;
+> > +
+> > +			clocks = <&gcc GCC_UFS_CARD_AXI_CLK>,
+> > +				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
+> > +				 <&gcc GCC_UFS_CARD_AHB_CLK>,
+> > +				 <&gcc GCC_UFS_CARD_UNIPRO_CORE_CLK>,
+> > +				 <&rpmhcc RPMH_CXO_CLK>,
+> > +				 <&gcc GCC_UFS_CARD_TX_SYMBOL_0_CLK>,
+> > +				 <&gcc GCC_UFS_CARD_RX_SYMBOL_0_CLK>,
+> > +				 <&gcc GCC_UFS_CARD_RX_SYMBOL_1_CLK>;
+> > +			clock-names = "core_clk",
+> > +				      "bus_aggr_clk",
+> > +				      "iface_clk",
+> > +				      "core_clk_unipro",
+> > +				      "ref_clk",
+> > +				      "tx_lane0_sync_clk",
+> > +				      "rx_lane0_sync_clk",
+> > +				      "rx_lane1_sync_clk";
+> > +			freq-table-hz = <75000000 300000000>,
+> > +					<0 0>,
+> > +					<0 0>,
+> > +					<75000000 300000000>,
+> > +					<0 0>,
+> > +					<0 0>,
+> > +					<0 0>,
+> > +					<0 0>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		ufs_card_phy: phy@1da7000 {
+> > +			compatible = "qcom,sc8280xp-qmp-ufs-phy";
+> > +			reg = <0 0x01da7000 0 0xe10>;
+> > +			#address-cells = <2>;
+> > +			#size-cells = <2>;
+> > +			ranges;
+> > +			clock-names = "ref",
+> > +				      "ref_aux";
+> > +			clocks = <&gcc GCC_UFS_1_CARD_CLKREF_CLK>,
+> > +				 <&gcc GCC_UFS_CARD_PHY_AUX_CLK>;
+> > +
+> > +			resets = <&ufs_card_hc 0>;
+> > +			reset-names = "ufsphy";
+> > +			status = "disabled";
+> > +
+> > +			ufs_card_phy_lanes: phy@1da7400 {
+> > +				reg = <0 0x01da7400 0 0x108>,
+> > +				      <0 0x01da7600 0 0x1e0>,
+> > +				      <0 0x01da7c00 0 0x1dc>,
+> > +				      <0 0x01da7800 0 0x108>,
+> > +				      <0 0x01da7a00 0 0x1e0>;
+> > +				#phy-cells = <0>;
+> > +				#clock-cells = <0>;
+> > +			};
+> > +		};
+> > +
+> > +		tcsr_mutex: hwlock@1f40000 {
+> > +			compatible = "qcom,tcsr-mutex";
+> > +			reg = <0x0 0x01f40000 0x0 0x20000>;
+> > +			#hwlock-cells = <1>;
+> > +		};
+> > +
+> > +		usb_0_hsphy: phy@88e5000 {
+> > +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> > +				     "qcom,usb-snps-hs-5nm-phy";
+> > +			reg = <0 0x088e5000 0 0x400>;
+> > +			status = "disabled";
+> 
+> status goes to the end
+> 
+> > +			#phy-cells = <0>;
+> > +
+> > +			clocks = <&gcc GCC_USB2_HS0_CLKREF_CLK>;
+> > +			clock-names = "ref";
+> > +
+> > +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
+> > +		};
+> > +
+> > +		usb_2_hsphy0: phy@88e7000 {
+> > +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> > +				     "qcom,usb-snps-hs-5nm-phy";
+> > +			reg = <0 0x088e7000 0 0x400>;
+> > +			status = "disabled";
+> 
+> ditto
+> 
+> > +			#phy-cells = <0>;
+> > +
+> > +			clocks = <&gcc GCC_USB2_HS0_CLKREF_CLK>;
+> > +			clock-names = "ref";
+> > +
+> > +			resets = <&gcc GCC_QUSB2PHY_HS0_MP_BCR>;
+> > +		};
+> > +
+> > +		usb_2_hsphy1: phy@88e8000 {
+> > +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> > +				     "qcom,usb-snps-hs-5nm-phy";
+> > +			reg = <0 0x088e8000 0 0x400>;
+> > +			status = "disabled";
+> 
+> ditto
+> 
+> > +			#phy-cells = <0>;
+> > +
+> > +			clocks = <&gcc GCC_USB2_HS1_CLKREF_CLK>;
+> > +			clock-names = "ref";
+> > +
+> > +			resets = <&gcc GCC_QUSB2PHY_HS1_MP_BCR>;
+> > +		};
+> > +
+> > +		usb_2_hsphy2: phy@88e9000 {
+> > +			compatible = "qcom,sc8280xp-usb-hs-phy",
+> > +				     "qcom,usb-snps-hs-5nm-phy";
+> > +			reg = <0 0x088e9000 0 0x400>;
+> > +			status = "disabled";
+> 
+> ditto and so on
+> 
+> Best regards,
+> Krzysztof

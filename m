@@ -2,252 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F037B552E37
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AED552E3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348451AbiFUJZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S1348597AbiFUJZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347053AbiFUJZW (ORCPT
+        with ESMTP id S1347053AbiFUJZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:25:22 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1715423BD9;
-        Tue, 21 Jun 2022 02:25:21 -0700 (PDT)
+        Tue, 21 Jun 2022 05:25:55 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF97240A0;
+        Tue, 21 Jun 2022 02:25:54 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g25so26122750ejh.9;
+        Tue, 21 Jun 2022 02:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655803521; x=1687339521;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1GpJg6NMu+yfELVq4jWXmhjMKuqtOYuN1Sps5jr+o4w=;
-  b=dpBrcJzown84reR7kVcd9TyVemUxrWxfVSpJz6TSfqhMWYiMMuZhFjKe
-   a6iapIJBKMSub9nht3amgbRLhrNgtEIosapvpUiymTQQMGCQAiiC2V1tc
-   Gv+vTzu49u9r6SnheURpTZlv1K1njA2WY7PAzCPO1+nBTwWu3MdB6ZsYj
-   0=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Jun 2022 02:25:20 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 02:25:20 -0700
-Received: from [10.253.79.26] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 21 Jun
- 2022 02:24:47 -0700
-Message-ID: <7f72b026-5808-ee0d-894d-bf50bf162023@quicinc.com>
-Date:   Tue, 21 Jun 2022 17:24:45 +0800
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NOMsJgOH3MiCNjts6Vy2cOyGVGYl5lD+qutJwwCIfsM=;
+        b=U4TmMXAVNZeGSibLS1ghJJrIiOQVgWj4Qhzr2zXpZ+UjaA8vQDXSqrB0mhffAZ6Y9d
+         XaJxAG/q3qhi8lBbjSlIe4BCARpAkrbeLvmp7yJ8wuR7IahJDrPRtLyghlHUZlUs4nWB
+         FZTWmbA6jN6Dl+1dTCiUI5xSy7dHbNcZ9mHyH7xWZpPiLD4CjNeKT3bkajbgNmUNGssT
+         58FkgHEVrYlyPbFS9MvU+nFY1iGFJ3jlS3X3KFvPTYe8GBn4g2yDEArJsar8PRNVwU3S
+         TIAQj0k8aL5a3We6gBozjvqbKtUmm2XGgOixTPoPN+2bY4+KThPsVwTq4sbr78gBo2r6
+         edBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NOMsJgOH3MiCNjts6Vy2cOyGVGYl5lD+qutJwwCIfsM=;
+        b=KN2GuPZKkvOFKroLm3qy8kHCV0JXXd5xe2DrI7Njfq9xMQxJ5yCowZ41SFbAHmMTrh
+         XMNhSYXlVYx9JQDxkxwbPEnrmNGkGdhl52k8/HFktNHoUIzaDE/LO5bTFMvfKELoplSu
+         szrLyvn5XsVkGLLzDBDGZiDXOOvao/CXo9u0LmH3hk9x6pomEiAD222rSOLx3LooFGcT
+         fp6CMZ93pQwegN1h1//0PcBMKqQ95SFoqjPLruZ1U5d6NhjlQpQrOWq7SHcOQmXqhcMh
+         qcyEnEWkJHpYZjw39HOeF9/muhm3ooc8WVXLRQ6KveRDiEPSGCZX0GhMxeqhrdXIT+c3
+         9b4g==
+X-Gm-Message-State: AJIora+boOTEvvYSiXs8Oqw4KcqLERi4qXboNANvkGyKhUJaH4JfhCsS
+        qiH8Nb+WM3ewZTzBR+mjAEzznUsaHFmKnuMdzo4=
+X-Google-Smtp-Source: AGRyM1se8Q5QQtyQhqZ276ze+sQZWIHL5X2Uisw4LahZgr/oEQb+koeaLdBeR+uqRMsLqk/klYDHMQOlZMtTnGjBf6c=
+X-Received: by 2002:a17:907:72c7:b0:722:e5af:f666 with SMTP id
+ du7-20020a17090772c700b00722e5aff666mr1241803ejc.44.1655803552679; Tue, 21
+ Jun 2022 02:25:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
- power down
-Content-Language: en-US
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, <mani@kernel.org>,
-        <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
- <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
- <c93aa921-b327-fdf4-adae-f0dd77e8789e@quicinc.com>
-From:   Qiang Yu <quic_qianyu@quicinc.com>
-In-Reply-To: <c93aa921-b327-fdf4-adae-f0dd77e8789e@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 21 Jun 2022 11:25:16 +0200
+Message-ID: <CAHp75VcQ5xZV2eoC93zu3qA2TcE3LyMgZLMX=r0ibzQ1Fg6U0Q@mail.gmail.com>
+Subject: Re: [PATCH 00/49] regmap-irq cleanups and refactoring
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, tharvey@gateworks.com,
+        rjones@gateworks.com, Matti Vaittinen <mazziesaccount@gmail.com>,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-actions@lists.infradead.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 20, 2022 at 10:07 PM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
+>
+> Hi Mark,
+>
+> Here's a bunch of cleanups for regmap-irq focused on simplifying the API
+> and generalizing it a bit. It's broken up into three refactors, focusing
+> on one area at a time.
+>
+> * Patches 01 and 02 are straightforward bugfixes, independent of the
+>   rest of the series. Neither of the bugs are triggered by in-tree
+>   drivers but they might be worth picking up early anyhow.
+>
+> * Patches 03-13 clean up everything related to configuring IRQ types.
+>
+> * Patches 14-45 deal with mask/unmask registers. First, make unmask
+>   registers behave more intuitively and usefully, and get rid of the
+>   mask_invert flag in favor of describing inverted mask registers as
+>   unmask registers. Second, make the mask_writeonly flag more useful
+>   and enable it for two chips where it makes sense.
+>
+> * Patches 46-49 refactor sub_irq_reg() as a get_irq_reg() callback,
+>   and use that to eliminate the not_fixed_stride flag.
+>
+> The approach I used when refactoring is pretty simple: (1) introduce new
+> functionality in regmap-irq, (2) convert the drivers, and (3) remove any
+> old code. Nothing should break in the middle.
+>
+> The patches can be re-ordered to some extent if that's preferable, but
+> it's best to add get_irq_reg() last to avoid having to think about how
+> it interacts with features that'll be removed anyway.
+>
+> I can't test most of the devices affected by this series so a lot of the
+> code is only build tested. I've tested on real hardware with my AXP192
+> patchset[1], although it only provides limited code coverage.
+>
+> qcom-pm8008 in particular deserves careful testing - it used all of the
+> features touched by the refactors and required the most changes. Other
+> drivers only required trivial changes but there are three of them worth
+> mentioning: wcd943x, wcd9335, and wcd938x. They have suspicious looking
+> IRQ type definitions and I'm pretty sure aren't working properly, but
+> I can't fix them myself. The refactor shouldn't affect their behavior
+> so how / when / if they get fixed shouldn't be much of an issue.
+>
+> Oh, and I added the 'mask_writeonly' flag and volatile ranges to the
+> stpmic1 driver based on its datasheet[2] as a small optimization. It's
+> probably fine but testing would be a good idea.
+>
+> [1]: https://lore.kernel.org/linux-iio/20220618214009.2178567-1-aidanmacdonald.0x0@gmailcom/
+> [2]: https://www.st.com/resource/en/datasheet/stpmic1.pdf
 
-On 6/21/2022 3:57 AM, Jeffrey Hugo wrote:
-> On 6/9/2022 7:54 AM, Jeffrey Hugo wrote:
->> On 6/9/2022 7:43 AM, Qiang Yu wrote:
->>> EP tends to read MSI address/data once and cache them after BME is set.
->>> So host should avoid changing MSI address/data after BME is set.
->>>
->>> In pci reset function, host invokes free_irq(), which also clears MSI
->>> address/data in EP's PCIe config space. If the invalid address/data
->>> are cached and used by EP, MSI triggered by EP wouldn't be received by
->>> host, because an invalid MSI data is sent to an invalid MSI address.
->>>
->>> To fix this issue, after host runs request_irq() successfully during
->>> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
->>> request_irq()/free_irq() when we want to power on and power down MHI.
->>> Meanwhile, Host should invoke free_irq() when mhi host driver is
->>> removed.
->>
->> I don't think this works for hotplug, nor cases where there are 
->> multiple MHI devices on the system.
->>
->> The EP shouldn't be caching this information for multiple reasons. 
->> Masking the MSIs, disabling the MSIs, changing the address when the 
->> affinity changes, etc.
->>
->> It really feels like we are solving the problem in the wrong place.
->>
->> Right now, this gets a NACK from me.
->>
->>>
->>> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
->>> ---
->>>   drivers/bus/mhi/host/init.c        | 31 
->>> +++++++++++++++++++++++++++++++
->>>   drivers/bus/mhi/host/pci_generic.c |  2 ++
->>>   drivers/bus/mhi/host/pm.c          |  4 ++--
->>>   3 files changed, 35 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
->>> index cbb86b2..48cb093 100644
->>> --- a/drivers/bus/mhi/host/init.c
->>> +++ b/drivers/bus/mhi/host/init.c
->>> @@ -18,6 +18,7 @@
->>>   #include <linux/slab.h>
->>>   #include <linux/vmalloc.h>
->>>   #include <linux/wait.h>
->>> +#include <linux/irq.h>
->>
->> Should be in alphabetical order
->>
->>>   #include "internal.h"
->>>   static DEFINE_IDA(mhi_controller_ida);
->>> @@ -168,6 +169,22 @@ int mhi_init_irq_setup(struct mhi_controller 
->>> *mhi_cntrl)
->>>       unsigned long irq_flags = IRQF_SHARED | IRQF_NO_SUSPEND;
->>>       int i, ret;
->>> +    /*
->>> +     * if irq[0] has action, it represents all MSI IRQs have been
->>> +     * requested, so we just need to enable them.
->>> +     */
->>
->> This seems like an assumption about how the interrupts are allocated 
->> and assigned that may not hold true for all devices.
->
-> Ah, I see.  This goes to the assumption that the BHI interrupt is 
-> always line 0, even though as far as I am aware, the spec doesn't 
-> require that.  The comment could be clearer I think.
->
->>
->>> +    if (irq_has_action(mhi_cntrl->irq[0])) {
->>> +        enable_irq(mhi_cntrl->irq[0]);
->>> +
->>> +        for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->>> +            if (mhi_event->offload_ev)
->>> +                continue;
->>> +
->>> +            enable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>> +        }
->>> +        return 0;
->>> +    }
->
-> Please no.  This overloads the function to have two different 
-> behaviors, and it doesn't match the inline disables.
->
-> Since you have inline disables, I would prefer inline enables so that 
-> the code is "balanced".
+Cool series, thanks for cleaning this up!
 
-I remove this in v2, directly invoke enables during power up.  It 
-becomes like this:
-
-mhi power up ->enable_irq,     mhi  power down ->disable irq
-
-pci_probe->mhi_register_controller->request_irq, 
-pci_remove->mhi_unregister_controller->free irq
-
->
->>> +
->>>       /* if controller driver has set irq_flags, use it */
->>>       if (mhi_cntrl->irq_flags)
->>>           irq_flags = mhi_cntrl->irq_flags;
->>> @@ -179,6 +196,11 @@ int mhi_init_irq_setup(struct mhi_controller 
->>> *mhi_cntrl)
->>>                      "bhi", mhi_cntrl);
->>>       if (ret)
->>>           return ret;
->>> +    /*
->>> +     * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
->>> +     * so disable it explicitly.
->>> +     */
->>> +    disable_irq(mhi_cntrl->irq[0]);
->>>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->>>           if (mhi_event->offload_ev)
->>> @@ -200,6 +222,8 @@ int mhi_init_irq_setup(struct mhi_controller 
->>> *mhi_cntrl)
->>>                   mhi_cntrl->irq[mhi_event->irq], i);
->>>               goto error_request;
->>>           }
->>> +
->>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>>       }
->>>       return 0;
->>> @@ -1003,8 +1027,14 @@ int mhi_register_controller(struct 
->>> mhi_controller *mhi_cntrl,
->>>       mhi_create_debugfs(mhi_cntrl);
->>> +    ret = mhi_init_irq_setup(mhi_cntrl);
->>> +    if (ret)
->>> +        goto error_setup_irq;
->>> +
->>>       return 0;
->>> +error_setup_irq:
->>> +    mhi_destroy_debugfs(mhi_cntrl);
->>>   err_release_dev:
->>>       put_device(&mhi_dev->dev);
->>>   err_ida_free:
->>> @@ -1027,6 +1057,7 @@ void mhi_unregister_controller(struct 
->>> mhi_controller *mhi_cntrl)
->>>       struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
->>>       unsigned int i;
->>> +    mhi_deinit_free_irq(mhi_cntrl);
->>>       mhi_destroy_debugfs(mhi_cntrl);
->>>       destroy_workqueue(mhi_cntrl->hiprio_wq);
->>> diff --git a/drivers/bus/mhi/host/pci_generic.c 
->>> b/drivers/bus/mhi/host/pci_generic.c
->>> index 6fbc591..60020d0 100644
->>> --- a/drivers/bus/mhi/host/pci_generic.c
->>> +++ b/drivers/bus/mhi/host/pci_generic.c
->>> @@ -945,6 +945,8 @@ static void mhi_pci_remove(struct pci_dev *pdev)
->>>       mhi_unregister_controller(mhi_cntrl);
->>>       pci_disable_pcie_error_reporting(pdev);
->>> +
->>> +    pci_free_irq_vectors(pdev);
->
-> This seems like a random change that should be in a different patch. 
-> Why is it included here?
-
-During probe, host alloc irq venctor, so I add this change to free 
-vector. I remove it in v2.
-
->
->>>   }
->>>   static void mhi_pci_shutdown(struct pci_dev *pdev)
->>> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
->>> index dc2e8ff..190231c 100644
->>> --- a/drivers/bus/mhi/host/pm.c
->>> +++ b/drivers/bus/mhi/host/pm.c
->>> @@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct 
->>> mhi_controller *mhi_cntrl)
->>>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->>>           if (mhi_event->offload_ev)
->>>               continue;
->>> -        free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
->>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>>           tasklet_kill(&mhi_event->task);
->>>       }
->>> @@ -1182,7 +1182,7 @@ void mhi_power_down(struct mhi_controller 
->>> *mhi_cntrl, bool graceful)
->>>       /* Wait for shutdown to complete */
->>>       flush_work(&mhi_cntrl->st_worker);
->>> -    free_irq(mhi_cntrl->irq[0], mhi_cntrl);
->>> +    disable_irq(mhi_cntrl->irq[0]);
->>>   }
->>>   EXPORT_SYMBOL_GPL(mhi_power_down);
->>
->>
->
+-- 
+With Best Regards,
+Andy Shevchenko

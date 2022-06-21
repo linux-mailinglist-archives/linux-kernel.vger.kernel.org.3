@@ -2,137 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F86D5535A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE785535A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352446AbiFUPO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S1352703AbiFUPPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352963AbiFUPN7 (ORCPT
+        with ESMTP id S1352393AbiFUPOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:13:59 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FC62C675;
-        Tue, 21 Jun 2022 08:12:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5923ACE1AD9;
-        Tue, 21 Jun 2022 15:12:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF077C3411C;
-        Tue, 21 Jun 2022 15:12:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655824365;
-        bh=N33miZAbj1eyWWxBmejWAKLKM/v6H0vsxvVkz0oDr90=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w6nBDsLTQo0L9K20Lm6+yJi/09kP6uhk/T9noNNCe/HlHzKyBovLVjyOCVOxlAe0x
-         vsjL0YS3rLHF2kmeM7Xp8pagK13r/qNvIG3UaqM+NCSzXMM4pUdAQL+5hKfLPqvy+2
-         lWCsL4cMyjr/GBchGs8kgszG5BMzhwV2O11eExyY=
-Date:   Tue, 21 Jun 2022 17:12:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/106] 5.15.49-rc1 review
-Message-ID: <YrHf6j/9ZvBWaNRd@kroah.com>
-References: <20220620124724.380838401@linuxfoundation.org>
- <CA+G9fYsvY-0ub_CXbb5is0vRLQ9+SaPS8Op=9mZzCkeccUN+mg@mail.gmail.com>
- <YrGHheX8D0iIz+db@kroah.com>
- <YrGTT/MLbCuHanhB@zx2c4.com>
- <YrGe64z7Al+V3bvB@kroah.com>
- <CA+G9fYs7+kA6pzCZZNBxrwx-2-OFZfV+5Zk4B8a=uE=VUFykFg@mail.gmail.com>
+        Tue, 21 Jun 2022 11:14:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AF052CDE2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:13:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655824410;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:  content-type:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=g+NJjQlOAcWg6eecPG318LXJkkwF2T/JikgaYlmjCB0=;
+        b=SLadtdZo+8FmCPL9dpKpI/eBt/UXwBCywi/Eyv4dX/i8Dt279B+9FIwmcsJTpIotei2EtB
+        7Oz8PrVFHOaC+SEpRuzmwNLgJqoteNjCx60MQ3md0AwhPulxhJtmYOTfXMvkGQF2cXC+bL
+        oW193DvJRi6sU8G9Xs5n9DnbdOMrdog=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-202-jsuBXvaFMpaGcNfVXLOasQ-1; Tue, 21 Jun 2022 11:13:29 -0400
+X-MC-Unique: jsuBXvaFMpaGcNfVXLOasQ-1
+Received: by mail-qk1-f199.google.com with SMTP id r6-20020a05620a298600b006a98e988ba4so16742995qkp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:13:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g+NJjQlOAcWg6eecPG318LXJkkwF2T/JikgaYlmjCB0=;
+        b=EE8eZ85AU0KLwiZ6DbAzTmZXc+pV+f+8bpHm/R0B9T8Z7rOqgGswoj7gdclFnXaICm
+         51lYQrhu8nZeHA+s5WG0jYapXLb1ANLi1jXQ/X6hNL5y25v/9c41DJGqM+FriXMqfS3R
+         6e//EvG+ync6PwPBy4MnogGe+vz94hKDeJ3EkvnwFVn7Tq0GKcypxiqptt/a53GfS08q
+         QlFN4MpaphSX9qBYzuanRFASiBcyXQrNokpe3+8QOU+goHFuyTINRtIUNQFD0UMR3B+Q
+         ZY5Lwt6CEpnvjUlhON3/p4eyuuipQtg0ilq+1GvMl2ElQbd3uQ2lYzt5xEz5Mu0zJ5GY
+         UtGw==
+X-Gm-Message-State: AJIora8K6a/HJMy92ZXDHJEn5e5WsHt7wGz+Y4BexIIc4AIeKURy64nJ
+        hQEkTMaDC8v/o18LcvLDO3KiMZr6Ir8+9NhHo2dY8WxuClTwDSlUHE8X83Xh7RS3UEpgJ69g1QR
+        MJ+aKPA+fkS97se64f7IbHor/
+X-Received: by 2002:ac8:5b50:0:b0:305:3275:b9bf with SMTP id n16-20020ac85b50000000b003053275b9bfmr24129985qtw.498.1655824408577;
+        Tue, 21 Jun 2022 08:13:28 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sRyiOcUjGsF9W5x9EpD8vRzkOvogV2aC9PWkgpGX0OePdiWEiVSVq+pFjtElx+Cae1c1QL1Q==
+X-Received: by 2002:ac8:5b50:0:b0:305:3275:b9bf with SMTP id n16-20020ac85b50000000b003053275b9bfmr24129957qtw.498.1655824408277;
+        Tue, 21 Jun 2022 08:13:28 -0700 (PDT)
+Received: from step1.redhat.com (host-79-46-200-40.retail.telecomitalia.it. [79.46.200.40])
+        by smtp.gmail.com with ESMTPSA id z13-20020a05622a060d00b00304eb8e880dsm14266895qta.23.2022.06.21.08.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 08:13:27 -0700 (PDT)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH] vdpa_sim_blk: set number of address spaces and virtqueue groups
+Date:   Tue, 21 Jun 2022 17:13:23 +0200
+Message-Id: <20220621151323.190431-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYs7+kA6pzCZZNBxrwx-2-OFZfV+5Zk4B8a=uE=VUFykFg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 05:06:08PM +0530, Naresh Kamboju wrote:
-> On Tue, 21 Jun 2022 at 16:05, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Jun 21, 2022 at 11:45:51AM +0200, Jason A. Donenfeld wrote:
-> > > On Tue, Jun 21, 2022 at 10:55:33AM +0200, Greg Kroah-Hartman wrote:
-> > > > On Tue, Jun 21, 2022 at 02:06:06PM +0530, Naresh Kamboju wrote:
-> > > > > On Mon, 20 Jun 2022 at 18:36, Greg Kroah-Hartman
-> > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > This is the start of the stable review cycle for the 5.15.49 release.
-> > > > > > There are 106 patches in this series, all will be posted as a response
-> > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > let me know.
-> > > > > >
-> > > > > > Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> > > > > > Anything received after that time might be too late.
-> > > > > >
-> > > > > > The whole patch series can be found in one patch at:
-> > > > > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.49-rc1.gz
-> > > > > > or in the git tree and branch at:
-> > > > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > > > > > and the diffstat can be found below.
-> > > > > >
-> > > > > > thanks,
-> > > > > >
-> > > > > > greg k-h
-> > > > >
-> > > > > Following commit causing regression while building allmodconfig for clang-13
-> > > > > on arm64, riscv and x86_64.
-> > > > >
-> > > > > > Linus Torvalds <torvalds@linux-foundation.org>
-> > > > > >     netfs: gcc-12: temporarily disable '-Wattribute-warning' for now
-> > > > >
-> > > > > fs/afs/inode.c:29:32: error: unknown warning group
-> > > > > '-Wattribute-warning', ignored [-Werror,-Wunknown-warning-option]
-> > > > > #pragma GCC diagnostic ignored "-Wattribute-warning"
-> > > > >                                ^
-> > > > > 1 error generated.
-> > > > >
-> > > > > Regressions:
-> > > > >   - arm64/build/clang-13-allmodconfig - Failed
-> > > > >   - riscv/build/clang-13-allmodconfig - Failed
-> > > > >   - x86_64/build/clang-13-allmodconfig - Failed
-> > > >
-> > > > Does Linus's tree also show this issue?
-> > >
-> > > Linus' tree got rid of the pragma with:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/afs/inode.c?id=874c8ca1e60b2c564a48f7e7acc40d328d5c8733
-> >
-> > That isn't going to work on 5.15.y at all without a lot of hand tweaking :(
-> >
-> > > and then a subsequent cleanup:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/afs/inode.c?id=e81fb4198e27925b151aad1450e0fd607d6733f
-> >
-> > That doesn't work on 5.18 either.
-> >
-> > I guess I'll go revert the 5.15 patch here for now and let others sort
-> > it all out when they want to build 5.15 with gcc-12.
-> 
-> Whereas clang-14 builds pass. I am considering this as a waiver.
-> The problem is with clang-13. you may keep the above patch which is
-> adding support for gcc-12.
-> 
-> We will stop building with clang-13 and we will upgrade our toolchains to
-> clang-15 (when released and current clang-nightly builds are in production)
-> and gcc-12 builds are running in staging. We would like to bump versions soon.
+Commit bda324fd037a ("vdpasim: control virtqueue support") added two
+new fields (nas, ngroups) to vdpasim_dev_attr, but we forgot to
+initialize them for vdpa_sim_blk.
 
-No, for now I've dropped this.  If people want to run gcc-12 builds then
-I need backported patches for them.
+When creating a new vdpa_sim_blk device this causes the kernel
+to panic in this way:
+    $ vdpa dev add mgmtdev vdpasim_blk name blk0
+    BUG: kernel NULL pointer dereference, address: 0000000000000030
+    ...
+    RIP: 0010:vhost_iotlb_add_range_ctx+0x41/0x220 [vhost_iotlb]
+    ...
+    Call Trace:
+     <TASK>
+     vhost_iotlb_add_range+0x11/0x800 [vhost_iotlb]
+     vdpasim_map_range+0x91/0xd0 [vdpa_sim]
+     vdpasim_alloc_coherent+0x56/0x90 [vdpa_sim]
+     ...
 
-thanks,
+This happens because vdpasim->iommu[0] is not initialized when
+dev_attr.nas is 0.
 
-greg k-h
+Let's fix this issue by initializing both (nas, ngroups) to 1 for
+vdpa_sim_blk.
+
+Fixes: bda324fd037a ("vdpasim: control virtqueue support")
+Cc: gautam.dawar@xilinx.com
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+---
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+index 42d401d43911..03a28def8eee 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+@@ -34,7 +34,11 @@
+ #define VDPASIM_BLK_CAPACITY	0x40000
+ #define VDPASIM_BLK_SIZE_MAX	0x1000
+ #define VDPASIM_BLK_SEG_MAX	32
++
++/* 1 virtqueue, 1 address space, 1 virtqueue group */
+ #define VDPASIM_BLK_VQ_NUM	1
++#define VDPASIM_BLK_AS_NUM	1
++#define VDPASIM_BLK_GROUP_NUM	1
+ 
+ static char vdpasim_blk_id[VIRTIO_BLK_ID_BYTES] = "vdpa_blk_sim";
+ 
+@@ -260,6 +264,8 @@ static int vdpasim_blk_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+ 	dev_attr.id = VIRTIO_ID_BLOCK;
+ 	dev_attr.supported_features = VDPASIM_BLK_FEATURES;
+ 	dev_attr.nvqs = VDPASIM_BLK_VQ_NUM;
++	dev_attr.ngroups = VDPASIM_BLK_GROUP_NUM;
++	dev_attr.nas = VDPASIM_BLK_AS_NUM;
+ 	dev_attr.config_size = sizeof(struct virtio_blk_config);
+ 	dev_attr.get_config = vdpasim_blk_get_config;
+ 	dev_attr.work_fn = vdpasim_blk_work;
+-- 
+2.36.1
+

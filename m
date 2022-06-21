@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CC1552F5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1256F552F6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346829AbiFUKC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
+        id S231805AbiFUKHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343738AbiFUKC6 (ORCPT
+        with ESMTP id S229535AbiFUKHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:02:58 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C01E54;
-        Tue, 21 Jun 2022 03:02:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Tue, 21 Jun 2022 06:07:11 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395C027FEB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:07:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LS2Bj6zsmz4xYC;
-        Tue, 21 Jun 2022 20:02:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655805775;
-        bh=vctygf8n4bMBEsR+8Tbon08BtTT5coxCQgJQe+wLYnw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HW2aODsXHbc8KTMopkMU77zhdxzUJWxN/ThLWhscOqWSGRUGIRkzVSFoREO/8MRsT
-         nb+ZJl1P/JzaRsDXhEEt32Tv0pVCtq051okP77TT9B566u1pKY1XfJQVE/V4LA47YI
-         6AG39K1+mKj+Mbrfmn0hCQDnn0FmnUqw2Ecnnq8KJKqUP5QczzlkVRTy1+vmVn5Ceb
-         fSMusu30ukKaPJYUCpiiMcSpOljhY+Ew97bPSzMk07vDdcqBurRpBskuRqrLz6Pr29
-         c3VOU+xrDDiVuz6nrR8IHppqDV/uescplByWQhswQDezD7qZDkzRDBfE54rKlgFrc/
-         luHuz4Ca+CJoA==
-Date:   Tue, 21 Jun 2022 20:02:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the wireless-next tree
-Message-ID: <20220621200253.60ecf025@canb.auug.org.au>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DE18A41DF4;
+        Tue, 21 Jun 2022 10:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1655806027; bh=mENta8LrzbYHKgS3y0BpqM4Nb7jfJxw8OCgUAYE0nlk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=p8C3ksm6LXw1QNi98fXAdAcOkNhopVRn2G7HrRekhs3u0CmEbepH5iOgVmRkCFmLd
+         KHtajS5pw6+ebcwMSbU4MNtAOKIpUY+Xmp4XBn45lJyXpF8vpA1qz2qzl/AiO+/BY2
+         nUJhKf/BSZRI4HacI4K6Ojq1S3ZHw/Crw+1kLT3oNzFLgeV47CuYdGfzi1TvtIlWl7
+         XMf1oID/q/NEv/oBjPIjV1ka6ltDMKDFEloEvhzngU/ozuLLIxT4gOnyxMV0hOTvb8
+         0hxcUQLP5ENUdKiJLDbQ1ipi4uGREhdNJhAQNoHOh3gZ2ebl0Xyb6p0x6DkbPSvdSE
+         Qpj04li02/Mrw==
+Message-ID: <9d683b37-abb0-a0d6-417a-b5f7c97673c5@marcan.st>
+Date:   Tue, 21 Jun 2022 19:07:02 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zisjvhq+e3EwuX6MFCMZBsK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] arm64: dts: apple: Re-parent ANS2 power domains
+Content-Language: es-ES
+To:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220602174213.2737-1-sven@svenpeter.dev>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20220602174213.2737-1-sven@svenpeter.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zisjvhq+e3EwuX6MFCMZBsK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 03/06/2022 02.42, Sven Peter wrote:
+> From: Hector Martin <marcan@marcan.st>
+> 
+> Turns out that the APCIE_ST*_SYS domains do hard-depend on ANS2, so
+> without this they refuse to power up.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Reviewed-by: Sven Peter <sven@svenpeter.dev>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+>  arch/arm64/boot/dts/apple/t8103-pmgr.dtsi | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/apple/t8103-pmgr.dtsi b/arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+> index fc51bc872468..a6dbb1f485d8 100644
+> --- a/arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+> @@ -725,11 +725,6 @@ ps_ans2: power-controller@3f0 {
+>  		#power-domain-cells = <0>;
+>  		#reset-cells = <0>;
+>  		label = "ans2";
+> -		/*
+> -		 * The ADT makes ps_apcie_st depend on ps_ans2 instead, but this
+> -		 * doesn't make much sense since ANS2 uses APCIE_ST.
+> -		 */
+> -		power-domains = <&ps_apcie_st>;
+>  	};
+>  
+>  	ps_gfx: power-controller@3f8 {
+> @@ -836,7 +831,7 @@ ps_apcie_st: power-controller@418 {
+>  		#power-domain-cells = <0>;
+>  		#reset-cells = <0>;
+>  		label = "apcie_st";
+> -		power-domains = <&ps_apcie>;
+> +		power-domains = <&ps_apcie>, <&ps_ans2>;
+>  	};
+>  
+>  	ps_ane_sys: power-controller@470 {
 
-Hi all,
+Applied both patches to asahi-soc/dt. Thanks!
 
-After merging the wireless-next tree, today's linux-next build (htmldocs)
-produced this warning:
-
-include/net/cfg80211.h:5741: warning: Function parameter or member 'u' not =
-described in 'wireless_dev'
-include/net/cfg80211.h:5741: warning: Function parameter or member 'links' =
-not described in 'wireless_dev'
-include/net/cfg80211.h:5741: warning: Function parameter or member 'valid_l=
-inks' not described in 'wireless_dev'
-
-Introduced by commit
-
-  7b0a0e3c3a88 ("wifi: cfg80211: do some rework towards MLO link APIs")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zisjvhq+e3EwuX6MFCMZBsK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKxl00ACgkQAVBC80lX
-0Gxibgf/QvCAuVYrPU11+cCIqs42lXGA6HlCOC1YdPUcj1TQk61pnxhPRkcqT4L0
-Z3x88lNn65d1CKnMk2fohj0K1VwDuwDZMa7SwoyXt/PrFHUCjMFGkeYub34hl8cI
-imxZLbl0IX3gnwA4Vcz64V3PBRDOh0XsU6erMtfPKjdyi3thI6sWZLnuDdNFVsK5
-6z+QytOm2ViM3qoM6DZGUuo354xi9bZsuvif3Y3GOasaopAFs5uzV4vRHRphzZ1S
-vxC3K3CJ0kL+pnKHsW+Q7LiTYYp8LiGEZfmaOV2RXPVBJA+RZplhqzlaAJMREqDt
-7JMB3Ny6jZZmBjU3sxNJqTVufkydOw==
-=8B0e
------END PGP SIGNATURE-----
-
---Sig_/zisjvhq+e3EwuX6MFCMZBsK--
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

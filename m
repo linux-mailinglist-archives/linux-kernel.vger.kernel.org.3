@@ -2,378 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E28D55368F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4444E553694
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiFUPql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S1353102AbiFUPrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351597AbiFUPqj (ORCPT
+        with ESMTP id S1351597AbiFUPrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:46:39 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96972CDE8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:46:37 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id o7so28416429eja.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:46:37 -0700 (PDT)
+        Tue, 21 Jun 2022 11:47:17 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE482CDE8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:47:15 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id g4so10698706lfv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HAai0FfdqLrpftN9wmZ6NtWjQkykMlzlgrF66RvPQt8=;
-        b=rls3Nixofbt4S7WQKX2wm858F7z4EjkxC9tIwT2nkM+uOfC1IN0L/RdBe4PhBiD98Q
-         6ijONzSf+OYd5I4+CLPX4eNNsTVnn8yAE+sa2elU4hMg3I00VWBVYlStZIkJx4fuRn4g
-         nBbxnFo2tCT6PCMCrRohT0RIn3il9gLPuyplLTeEJt00Wp9homSsUH9hRvga0pEpS7d+
-         mcx+GI+spL6bpuSP3KYcl/3wBDWssomQPUFnAXeKg+7mEEyxn0MSCvhs4hk49tc63Y+B
-         MMc814Ma9XYM6WmkZIIMXHkb6kteB3ZFiuWMaQHG69xTva8hURV8xAFLjSdUkEPEkrZ6
-         B5RQ==
+        bh=42GgnITWZh+b27jV3AHdl/DcQ5SE6yXvLOohhw0wUcY=;
+        b=SiYYiKh+7WeBHFlQsw/+kDElxLAgY+jlDHm4oP5BJZgjLcb8W7uWr4IN16eQuTbike
+         vr9BX/EKIc3FyjWPFfMLiGvnBWJK2RI4K91w7rQ+dpS5BJ3bYy+uWgZ0Jd7+RdaT4hwc
+         xcov1YB9CpkzL/Z83RLV2pcQ7J1fq4jmVdu8lWDbHuF+3BKHIKPbQ/9qWZ9/oWj3Buv8
+         WaB8Jn70W1Tyn2wmmrcoq1wQGfe/7XS3RqUgo3A4gSBJp1REGYy3B0+47+NKLr3BsP3P
+         SeTnvwH6JqmNdo1MXdvMXFeJ6okrrguXVqPk4nkbBYYEKgm4Q3qCgyMthiiwfrPX42/k
+         hF1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HAai0FfdqLrpftN9wmZ6NtWjQkykMlzlgrF66RvPQt8=;
-        b=XtrwMVCiJd+Wr0LYd5yh3LcUydg53GQakrAJaZQi7b2mF50oQYH0XEMEp5WHa/JSJR
-         LKsoAvPAyapPfvxwR8OihYlAh6EEnAcr4qRpd1WwFgbfrWtuoYMPU8YOqhvcE4GRdY8J
-         tdo/I5l/hKsDSl01zZjk9FiN+HRUrdqo4KqZOHQncCEWlemCZL0Hdv0azyb7Re+L6WZM
-         8h0jArLsPZTHT+5Noq+cryoXRBmE5tmc7O9bF50lKh5IE3U8g82F4NU+0pgsw/ZsztYT
-         yjeK6HHv8VO6sj+RBxONZickJvhAh4XWcie4tmIb0TcO8FUao+JBrY+/MCn0QXdhrD28
-         aAnA==
-X-Gm-Message-State: AJIora/55QBTwrmwALvoXq2Dlirf12rwV7jPzgjrureK+Oz1dYXgL0JC
-        uiu1YtwPmD6OyHdeIRb2jH411Fa5/oFqkko37vENmA==
-X-Google-Smtp-Source: AGRyM1ujnEZrNgrU9zwAv0fnczsHDWeW3XmHL1kotvz733UVwreqxU0J/ViQBFNpouZPT+LlUMMN13XJeicQsoROd1M=
-X-Received: by 2002:a17:906:51d0:b0:722:dbb7:5ac1 with SMTP id
- v16-20020a17090651d000b00722dbb75ac1mr5721598ejk.175.1655826396312; Tue, 21
- Jun 2022 08:46:36 -0700 (PDT)
+        bh=42GgnITWZh+b27jV3AHdl/DcQ5SE6yXvLOohhw0wUcY=;
+        b=kTcPwAWPqNqkj0+VEJRlXHC9BGnMguoFTsvCXiE+HcQCKEgC2T+gM+xbxn54sr/sbx
+         TKzdvgpvYmDQa4ancwLCd6dn9RltGbuCd2278NL3zyDhpHg5JaJTKt1ouP8smEkbdr3S
+         fEfiQkz9XMQcEW5xrBLRexQONKwiH6CldW4X3Jl1Qidkce/D2ITrw+sVsu8rbLhogCBI
+         o5x+BVv/7xrdJFRnSHePHVypJIIqwIGIF+9428h3Vnm4Bej2t1XV6qNbZqGhhzG8O8CS
+         DFopfk6snKsm8Y0QWDdJOzhizAaoSkwrDSlxbZCGoiBJ8uKAdrknAWq9FXzrsysSBUAb
+         Quog==
+X-Gm-Message-State: AJIora9bgwdIXBt7wonfpglXnngppxDQjI1o522cr1AUV+JyY1XnHmyj
+        HIIxAVh63my91nkPscQypMOdPYhOSR24h/hiSABcyw==
+X-Google-Smtp-Source: AGRyM1tXLM5b/7UGEzV3s2TEIi9gqmYUh5eMhvGr1LwrVT1KFBhJKS+pOIuj5hFBOxXlAtlAmlGjZ2EnQMC6+FRweC0=
+X-Received: by 2002:a05:6512:a94:b0:47f:6621:cf2a with SMTP id
+ m20-20020a0565120a9400b0047f6621cf2amr8965752lfu.193.1655826433880; Tue, 21
+ Jun 2022 08:47:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220616123150.5890-1-aford173@gmail.com>
-In-Reply-To: <20220616123150.5890-1-aford173@gmail.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Tue, 21 Jun 2022 16:46:21 +0100
-Message-ID: <CAPY8ntCmov0OY3tBabf7ndSVCNgeYeSy+e4E0sdaW54zZpoauw@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] media: i2c: imx219: Split common registers from
- mode tables
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+References: <cover.1655761627.git.ashish.kalra@amd.com> <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 21 Jun 2022 09:47:02 -0600
+Message-ID: <CAMkAt6qXSMf5zadv+rwHUp5hTHRJQzi66fJYEcU0QpMg1y7aXw@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
+ initialization support
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>
+        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam
-
-Thanks for the patch, and sorry it's taken me a few days to get to it.
-
-On Thu, 16 Jun 2022 at 13:31, Adam Ford <aford173@gmail.com> wrote:
+On Mon, Jun 20, 2022 at 5:02 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
 >
-> There are four modes, and each mode has a table of registers.
-> Some of the registers are common to all modes, so create new
-> tables for these common registers to reduce duplicate code.
+> From: Brijesh Singh <brijesh.singh@amd.com>
 >
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+> The memory integrity guarantees of SEV-SNP are enforced through a new
+> structure called the Reverse Map Table (RMP). The RMP is a single data
+> structure shared across the system that contains one entry for every 4K
+> page of DRAM that may be used by SEV-SNP VMs. The goal of RMP is to
+> track the owner of each page of memory. Pages of memory can be owned by
+> the hypervisor, owned by a specific VM or owned by the AMD-SP. See APM2
+> section 15.36.3 for more detail on RMP.
+>
+> The RMP table is used to enforce access control to memory. The table itself
+> is not directly writable by the software. New CPU instructions (RMPUPDATE,
+> PVALIDATE, RMPADJUST) are used to manipulate the RMP entries.
+>
+> Based on the platform configuration, the BIOS reserves the memory used
+> for the RMP table. The start and end address of the RMP table must be
+> queried by reading the RMP_BASE and RMP_END MSRs. If the RMP_BASE and
+> RMP_END are not set then disable the SEV-SNP feature.
+>
+> The SEV-SNP feature is enabled only after the RMP table is successfully
+> initialized.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 > ---
-> V2:  Merge the PLL table into the common table instead of having
->      two separate, common tables.
+>  arch/x86/include/asm/disabled-features.h |   8 +-
+>  arch/x86/include/asm/msr-index.h         |   6 +
+>  arch/x86/kernel/sev.c                    | 144 +++++++++++++++++++++++
+>  3 files changed, 157 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index e10af3f74b38..a43eed143999 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -145,23 +145,60 @@ struct imx219_mode {
->         struct imx219_reg_list reg_list;
->  };
+> diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+> index 36369e76cc63..c1be3091a383 100644
+> --- a/arch/x86/include/asm/disabled-features.h
+> +++ b/arch/x86/include/asm/disabled-features.h
+> @@ -68,6 +68,12 @@
+>  # define DISABLE_TDX_GUEST     (1 << (X86_FEATURE_TDX_GUEST & 31))
+>  #endif
 >
-> -/*
-> - * Register sets lifted off the i2C interface from the Raspberry Pi firmware
-> - * driver.
-> - * 3280x2464 = mode 2, 1920x1080 = mode 1, 1640x1232 = mode 4, 640x480 = mode 7.
-> - */
-> -static const struct imx219_reg mode_3280x2464_regs[] = {
-> -       {0x0100, 0x00},
-> +/* To Access Addresses 3000-5fff, send the following commands */
-> +static const struct imx219_reg imx219_common_regs[] = {
-> +       {0x0100, 0x00}, /* Mode Select */
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +# define DISABLE_SEV_SNP       0
+> +#else
+> +# define DISABLE_SEV_SNP       (1 << (X86_FEATURE_SEV_SNP & 31))
+> +#endif
 > +
-> +       /* Access Command Sequence */
->         {0x30eb, 0x0c},
->         {0x30eb, 0x05},
->         {0x300a, 0xff},
->         {0x300b, 0xff},
->         {0x30eb, 0x05},
->         {0x30eb, 0x09},
-> -       {0x0114, 0x01},
-> -       {0x0128, 0x00},
-> -       {0x012a, 0x18},
-> +
-> +       /* PLL Clock Table */
-> +       {0x0301, 0x05}, /* VTPXCK_DIV */
-> +       {0x0303, 0x01}, /* VTSYSCK_DIV */
-> +       {0x0304, 0x03}, /* PREPLLCK_VT_DIV 0x03 = AUTO set */
-> +       {0x0305, 0x03}, /* PREPLLCK_OP_DIV 0x03 = AUTO set */
-> +       {0x0306, 0x00}, /* PLL_VT_MPY */
-> +       {0x0307, 0x39},
-> +       {0x030b, 0x01}, /* OP_SYS_CLK_DIV */
-> +       {0x030c, 0x00}, /* PLL_OP_MPY */
-> +       {0x030d, 0x72},
-> +
-> +       /* Undocumented registers */
-> +       {0x455e, 0x00},
-> +       {0x471e, 0x4b},
-> +       {0x4767, 0x0f},
-> +       {0x4750, 0x14},
-> +       {0x4540, 0x00},
-> +       {0x47b4, 0x14},
-> +       {0x4713, 0x30},
-> +       {0x478b, 0x10},
-> +       {0x478f, 0x10},
-> +       {0x4793, 0x10},
-> +       {0x4797, 0x0e},
-> +       {0x479b, 0x0e},
-> +
-> +       /* Frame Bank Register Group "A" */
-> +       {0x0162, 0x0d}, /* Line_Length_A */
-> +       {0x0163, 0x78},
-
-Registers 0x0170 and 0x171 for X_ODD_INC_A and Y_ODD_INC_A are also
-common to all modes as 0x01. You could have modes with skipping, but
-currently there are none.
-
-> +
-> +       /* Output setup registers */
-> +       {0x0114, 0x01}, /* CSI 2-Lane Mode */
-> +       {0x0128, 0x00}, /* DPHY Auto Mode */
-> +       {0x012a, 0x18}, /* EXCK_Freq */
->         {0x012b, 0x00},
-> +};
-> +
+>  /*
+>   * Make sure to add features to the correct mask
+>   */
+> @@ -91,7 +97,7 @@
+>                          DISABLE_ENQCMD)
+>  #define DISABLED_MASK17        0
+>  #define DISABLED_MASK18        0
+> -#define DISABLED_MASK19        0
+> +#define DISABLED_MASK19        (DISABLE_SEV_SNP)
+>  #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
+>
+>  #endif /* _ASM_X86_DISABLED_FEATURES_H */
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index 9e2e7185fc1d..57a8280e283a 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -507,6 +507,8 @@
+>  #define MSR_AMD64_SEV_ENABLED          BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
+>  #define MSR_AMD64_SEV_ES_ENABLED       BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
+>  #define MSR_AMD64_SEV_SNP_ENABLED      BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
+> +#define MSR_AMD64_RMP_BASE             0xc0010132
+> +#define MSR_AMD64_RMP_END              0xc0010133
+>
+>  #define MSR_AMD64_VIRT_SPEC_CTRL       0xc001011f
+>
+> @@ -581,6 +583,10 @@
+>  #define MSR_AMD64_SYSCFG               0xc0010010
+>  #define MSR_AMD64_SYSCFG_MEM_ENCRYPT_BIT       23
+>  #define MSR_AMD64_SYSCFG_MEM_ENCRYPT   BIT_ULL(MSR_AMD64_SYSCFG_MEM_ENCRYPT_BIT)
+> +#define MSR_AMD64_SYSCFG_SNP_EN_BIT            24
+> +#define MSR_AMD64_SYSCFG_SNP_EN                BIT_ULL(MSR_AMD64_SYSCFG_SNP_EN_BIT)
+> +#define MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT       25
+> +#define MSR_AMD64_SYSCFG_SNP_VMPL_EN   BIT_ULL(MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT)
+>  #define MSR_K8_INT_PENDING_MSG         0xc0010055
+>  /* C1E active bits in int pending message */
+>  #define K8_INTP_C1E_ACTIVE_MASK                0x18000000
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index f01f4550e2c6..3a233b5d47c5 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -22,6 +22,8 @@
+>  #include <linux/efi.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/io.h>
+> +#include <linux/cpumask.h>
+> +#include <linux/iommu.h>
+>
+>  #include <asm/cpu_entry_area.h>
+>  #include <asm/stacktrace.h>
+> @@ -38,6 +40,7 @@
+>  #include <asm/apic.h>
+>  #include <asm/cpuid.h>
+>  #include <asm/cmdline.h>
+> +#include <asm/iommu.h>
+>
+>  #define DR7_RESET_VALUE        0x400
+>
+> @@ -57,6 +60,12 @@
+>  #define AP_INIT_CR0_DEFAULT            0x60000010
+>  #define AP_INIT_MXCSR_DEFAULT          0x1f80
+>
 > +/*
-> + * Register sets lifted off the i2C interface from the Raspberry Pi firmware
-> + * driver.
-> + * 3280x2464 = mode 2, 1920x1080 = mode 1, 1640x1232 = mode 4, 640x480 = mode 7.
+> + * The first 16KB from the RMP_BASE is used by the processor for the
+> + * bookkeeping, the range need to be added during the RMP entry lookup.
 > + */
-> +static const struct imx219_reg mode_3280x2464_regs[] = {
->         {0x0164, 0x00},
->         {0x0165, 0x00},
->         {0x0166, 0x0c},
-> @@ -176,51 +213,15 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
->         {0x016f, 0xa0},
->         {0x0170, 0x01},
->         {0x0171, 0x01},
-> -       {0x0174, 0x00},
-> +       {0x0174, 0x00}, /* No-Binning */
->         {0x0175, 0x00},
-> -       {0x0301, 0x05},
-> -       {0x0303, 0x01},
-> -       {0x0304, 0x03},
-> -       {0x0305, 0x03},
-> -       {0x0306, 0x00},
-> -       {0x0307, 0x39},
-> -       {0x030b, 0x01},
-> -       {0x030c, 0x00},
-> -       {0x030d, 0x72},
->         {0x0624, 0x0c},
->         {0x0625, 0xd0},
->         {0x0626, 0x09},
->         {0x0627, 0xa0},
-> -       {0x455e, 0x00},
-> -       {0x471e, 0x4b},
-> -       {0x4767, 0x0f},
-> -       {0x4750, 0x14},
-> -       {0x4540, 0x00},
-> -       {0x47b4, 0x14},
-> -       {0x4713, 0x30},
-> -       {0x478b, 0x10},
-> -       {0x478f, 0x10},
-> -       {0x4793, 0x10},
-> -       {0x4797, 0x0e},
-> -       {0x479b, 0x0e},
-> -       {0x0162, 0x0d},
-> -       {0x0163, 0x78},
->  };
+> +#define RMPTABLE_CPU_BOOKKEEPING_SZ    0x4000
+> +
+>  /* For early boot hypervisor communication in SEV-ES enabled guests */
+>  static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
 >
->  static const struct imx219_reg mode_1920_1080_regs[] = {
-> -       {0x0100, 0x00},
-> -       {0x30eb, 0x05},
-> -       {0x30eb, 0x0c},
-> -       {0x300a, 0xff},
-> -       {0x300b, 0xff},
-> -       {0x30eb, 0x05},
-> -       {0x30eb, 0x09},
-> -       {0x0114, 0x01},
-> -       {0x0128, 0x00},
-> -       {0x012a, 0x18},
-> -       {0x012b, 0x00},
-> -       {0x0162, 0x0d},
-> -       {0x0163, 0x78},
->         {0x0164, 0x02},
->         {0x0165, 0xa8},
->         {0x0166, 0x0a},
-> @@ -235,47 +236,15 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
->         {0x016f, 0x38},
->         {0x0170, 0x01},
->         {0x0171, 0x01},
-> -       {0x0174, 0x00},
-> +       {0x0174, 0x00}, /* No-Binning */
->         {0x0175, 0x00},
-> -       {0x0301, 0x05},
-> -       {0x0303, 0x01},
-> -       {0x0304, 0x03},
-> -       {0x0305, 0x03},
-> -       {0x0306, 0x00},
-> -       {0x0307, 0x39},
-> -       {0x030b, 0x01},
-> -       {0x030c, 0x00},
-> -       {0x030d, 0x72},
->         {0x0624, 0x07},
->         {0x0625, 0x80},
->         {0x0626, 0x04},
->         {0x0627, 0x38},
-> -       {0x455e, 0x00},
-> -       {0x471e, 0x4b},
-> -       {0x4767, 0x0f},
-> -       {0x4750, 0x14},
-> -       {0x4540, 0x00},
-> -       {0x47b4, 0x14},
-> -       {0x4713, 0x30},
-> -       {0x478b, 0x10},
-> -       {0x478f, 0x10},
-> -       {0x4793, 0x10},
-> -       {0x4797, 0x0e},
-> -       {0x479b, 0x0e},
->  };
+> @@ -69,6 +78,10 @@ static struct ghcb *boot_ghcb __section(".data");
+>  /* Bitmap of SEV features supported by the hypervisor */
+>  static u64 sev_hv_features __ro_after_init;
 >
->  static const struct imx219_reg mode_1640_1232_regs[] = {
-> -       {0x0100, 0x00},
-> -       {0x30eb, 0x0c},
-> -       {0x30eb, 0x05},
-> -       {0x300a, 0xff},
-> -       {0x300b, 0xff},
-> -       {0x30eb, 0x05},
-> -       {0x30eb, 0x09},
-> -       {0x0114, 0x01},
-> -       {0x0128, 0x00},
-> -       {0x012a, 0x18},
-> -       {0x012b, 0x00},
->         {0x0164, 0x00},
->         {0x0165, 0x00},
->         {0x0166, 0x0c},
-> @@ -290,51 +259,15 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
->         {0x016f, 0xd0},
->         {0x0170, 0x01},
->         {0x0171, 0x01},
-> -       {0x0174, 0x01},
-> +       {0x0174, 0x01}, /* x2-Binning */
->         {0x0175, 0x01},
-> -       {0x0301, 0x05},
-> -       {0x0303, 0x01},
-> -       {0x0304, 0x03},
-> -       {0x0305, 0x03},
-> -       {0x0306, 0x00},
-> -       {0x0307, 0x39},
-> -       {0x030b, 0x01},
-> -       {0x030c, 0x00},
-> -       {0x030d, 0x72},
->         {0x0624, 0x06},
->         {0x0625, 0x68},
->         {0x0626, 0x04},
->         {0x0627, 0xd0},
-> -       {0x455e, 0x00},
-> -       {0x471e, 0x4b},
-> -       {0x4767, 0x0f},
-> -       {0x4750, 0x14},
-> -       {0x4540, 0x00},
-> -       {0x47b4, 0x14},
-> -       {0x4713, 0x30},
-> -       {0x478b, 0x10},
-> -       {0x478f, 0x10},
-> -       {0x4793, 0x10},
-> -       {0x4797, 0x0e},
-> -       {0x479b, 0x0e},
-> -       {0x0162, 0x0d},
-> -       {0x0163, 0x78},
->  };
->
->  static const struct imx219_reg mode_640_480_regs[] = {
-> -       {0x0100, 0x00},
-> -       {0x30eb, 0x05},
-> -       {0x30eb, 0x0c},
-> -       {0x300a, 0xff},
-> -       {0x300b, 0xff},
-> -       {0x30eb, 0x05},
-> -       {0x30eb, 0x09},
-> -       {0x0114, 0x01},
-> -       {0x0128, 0x00},
-> -       {0x012a, 0x18},
-> -       {0x012b, 0x00},
-> -       {0x0162, 0x0d},
-> -       {0x0163, 0x78},
->         {0x0164, 0x03},
->         {0x0165, 0xe8},
->         {0x0166, 0x08},
-> @@ -349,33 +282,12 @@ static const struct imx219_reg mode_640_480_regs[] = {
->         {0x016f, 0xe0},
->         {0x0170, 0x01},
->         {0x0171, 0x01},
-> -       {0x0174, 0x03},
-> +       {0x0174, 0x03}, /* x2-analog binning */
->         {0x0175, 0x03},
-> -       {0x0301, 0x05},
-> -       {0x0303, 0x01},
-> -       {0x0304, 0x03},
-> -       {0x0305, 0x03},
-> -       {0x0306, 0x00},
-> -       {0x0307, 0x39},
-> -       {0x030b, 0x01},
-> -       {0x030c, 0x00},
-> -       {0x030d, 0x72},
->         {0x0624, 0x06},
->         {0x0625, 0x68},
->         {0x0626, 0x04},
->         {0x0627, 0xd0},
-> -       {0x455e, 0x00},
-> -       {0x471e, 0x4b},
-> -       {0x4767, 0x0f},
-> -       {0x4750, 0x14},
-> -       {0x4540, 0x00},
-> -       {0x47b4, 0x14},
-> -       {0x4713, 0x30},
-> -       {0x478b, 0x10},
-> -       {0x478f, 0x10},
-> -       {0x4793, 0x10},
-> -       {0x4797, 0x0e},
-> -       {0x479b, 0x0e},
->  };
->
->  static const struct imx219_reg raw8_framefmt_regs[] = {
-> @@ -1041,6 +953,13 @@ static int imx219_start_streaming(struct imx219 *imx219)
->         if (ret < 0)
->                 return ret;
->
-> +       /* Send the Manufacturing Header common to all modes */
-
-It's a table of common settings, not a manufacturing header.
-s/Send the Manufacturing Header/Send all registers that are
-
- Dave
-
-> +       ret = imx219_write_regs(imx219, imx219_common_regs, ARRAY_SIZE(imx219_common_regs));
-> +       if (ret) {
-> +               dev_err(&client->dev, "%s failed to send mfg header\n", __func__);
-> +               goto err_rpm_put;
+> +static unsigned long rmptable_start __ro_after_init;
+> +static unsigned long rmptable_end __ro_after_init;
+> +
+> +
+>  /* #VC handler runtime per-CPU data */
+>  struct sev_es_runtime_data {
+>         struct ghcb ghcb_page;
+> @@ -2218,3 +2231,134 @@ static int __init snp_init_platform_device(void)
+>         return 0;
+>  }
+>  device_initcall(snp_init_platform_device);
+> +
+> +#undef pr_fmt
+> +#define pr_fmt(fmt)    "SEV-SNP: " fmt
+> +
+> +static int __snp_enable(unsigned int cpu)
+> +{
+> +       u64 val;
+> +
+> +       if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+> +               return 0;
+> +
+> +       rdmsrl(MSR_AMD64_SYSCFG, val);
+> +
+> +       val |= MSR_AMD64_SYSCFG_SNP_EN;
+> +       val |= MSR_AMD64_SYSCFG_SNP_VMPL_EN;
+> +
+> +       wrmsrl(MSR_AMD64_SYSCFG, val);
+> +
+> +       return 0;
+> +}
+> +
+> +static __init void snp_enable(void *arg)
+> +{
+> +       __snp_enable(smp_processor_id());
+> +}
+> +
+> +static bool get_rmptable_info(u64 *start, u64 *len)
+> +{
+> +       u64 calc_rmp_sz, rmp_sz, rmp_base, rmp_end, nr_pages;
+> +
+> +       rdmsrl(MSR_AMD64_RMP_BASE, rmp_base);
+> +       rdmsrl(MSR_AMD64_RMP_END, rmp_end);
+> +
+> +       if (!rmp_base || !rmp_end) {
+> +               pr_info("Memory for the RMP table has not been reserved by BIOS\n");
+> +               return false;
 > +       }
 > +
->         /* Apply default values of current mode */
->         reg_list = &imx219->mode->reg_list;
->         ret = imx219_write_regs(imx219, reg_list->regs, reg_list->num_of_regs);
+> +       rmp_sz = rmp_end - rmp_base + 1;
+> +
+> +       /*
+> +        * Calculate the amount the memory that must be reserved by the BIOS to
+> +        * address the full system RAM. The reserved memory should also cover the
+> +        * RMP table itself.
+> +        *
+> +        * See PPR Family 19h Model 01h, Revision B1 section 2.1.4.2 for more
+> +        * information on memory requirement.
+> +        */
+> +       nr_pages = totalram_pages();
+> +       calc_rmp_sz = (((rmp_sz >> PAGE_SHIFT) + nr_pages) << 4) + RMPTABLE_CPU_BOOKKEEPING_SZ;
+> +
+> +       if (calc_rmp_sz > rmp_sz) {
+> +               pr_info("Memory reserved for the RMP table does not cover full system RAM (expected 0x%llx got 0x%llx)\n",
+> +                       calc_rmp_sz, rmp_sz);
+> +               return false;
+> +       }
+> +
+> +       *start = rmp_base;
+> +       *len = rmp_sz;
+> +
+> +       pr_info("RMP table physical address 0x%016llx - 0x%016llx\n", rmp_base, rmp_end);
+> +
+> +       return true;
+> +}
+> +
+> +static __init int __snp_rmptable_init(void)
+> +{
+> +       u64 rmp_base, sz;
+> +       void *start;
+> +       u64 val;
+> +
+> +       if (!get_rmptable_info(&rmp_base, &sz))
+> +               return 1;
+> +
+> +       start = memremap(rmp_base, sz, MEMREMAP_WB);
+> +       if (!start) {
+> +               pr_err("Failed to map RMP table 0x%llx+0x%llx\n", rmp_base, sz);
+> +               return 1;
+> +       }
+> +
+> +       /*
+> +        * Check if SEV-SNP is already enabled, this can happen if we are coming from
+> +        * kexec boot.
+> +        */
+> +       rdmsrl(MSR_AMD64_SYSCFG, val);
+> +       if (val & MSR_AMD64_SYSCFG_SNP_EN)
+> +               goto skip_enable;
+> +
+> +       /* Initialize the RMP table to zero */
+> +       memset(start, 0, sz);
+> +
+> +       /* Flush the caches to ensure that data is written before SNP is enabled. */
+> +       wbinvd_on_all_cpus();
+> +
+> +       /* Enable SNP on all CPUs. */
+> +       on_each_cpu(snp_enable, NULL, 1);
+> +
+> +skip_enable:
+> +       rmptable_start = (unsigned long)start;
+> +       rmptable_end = rmptable_start + sz;
+
+Since in get_rmptable_info() `rmp_sz = rmp_end - rmp_base + 1;` should
+this be `rmptable_end = rmptable_start + sz - 1;`?
+
+> +
+> +       return 0;
+> +}
+> +
+> +static int __init snp_rmptable_init(void)
+> +{
+> +       if (!boot_cpu_has(X86_FEATURE_SEV_SNP))
+> +               return 0;
+> +
+> +       if (!iommu_sev_snp_supported())
+> +               goto nosnp;
+> +
+> +       if (__snp_rmptable_init())
+> +               goto nosnp;
+> +
+> +       cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/rmptable_init:online", __snp_enable, NULL);
+> +
+> +       return 0;
+> +
+> +nosnp:
+> +       setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
+> +       return 1;
+> +}
+> +
+> +/*
+> + * This must be called after the PCI subsystem. This is because before enabling
+> + * the SNP feature we need to ensure that IOMMU supports the SEV-SNP feature.
+> + * The iommu_sev_snp_support() is used for checking the feature, and it is
+> + * available after subsys_initcall().
+> + */
+> +fs_initcall(snp_rmptable_init);
 > --
-> 2.34.1
+> 2.25.1
 >

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6BE552BB4
+	by mail.lfdr.de (Postfix) with ESMTP id 692FC552BB5
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346074AbiFUHVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S1345570AbiFUHVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbiFUHVO (ORCPT
+        with ESMTP id S1346482AbiFUHVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:21:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0112250D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:21:14 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id g26so4150413ejb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:21:14 -0700 (PDT)
+        Tue, 21 Jun 2022 03:21:17 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2F622505
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:21:16 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id g25so25492090ejh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I49iaT9479MLDi3TYueSZinlKruIKCVXqSN6hfWZ6x4=;
-        b=gpAE1+YcSfcBdfh7BwfrIoGbRZBggiIKzxdzevy+uY0mwZ38SqW5C24UGUW26VY4UQ
-         WP1S+RpCG/FKyBZUka5u2+CPPXZJ3KWRf8OHVm/eGamVrfkx0pZ8k/r1dCJiI/Y9tWmz
-         1oQm+ijCrgg6t5IQfVcRYcG0EZ0onOIYztGApiM1tQeP5guXwyXfw38Q2H/4ynJnW2mS
-         3D4OkdRnQ+BJI/MKwgR+djuQCWPssy+Hrsm09S+yer0zBBwLofZ5OECr99J3AzlS+crQ
-         9DHd3RGJuWdVl8yX4ILXR2mG3nU1o6BthJk/4T+xZCQa/Ujz8QiKP9A6AoGoZqirNj/t
-         B4/A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0/EcOWoOuIse/hvQ+oqlKU0lIbd1LkUUo/9oXAhtRbA=;
+        b=LbqdqeXvHaDpcKkgE/5jv+iHaxhFG8nHt/LObC0/wQM2dlGqKWQOjxpybNl5ITV3iq
+         x1Q21GlBZTG7ZRClnkl/fwWPfdFoVI6CEVRgLoOZIWpXmF/dC9slhtFk8kouyhUVDAsM
+         afEUozQ9hP7y5yXYOx0YTjKr9uRDE2mvy1J7CGdIqPHY0ohi53Qny8COHRDq3l0ARJdG
+         12/Gs94gSu6Ku1rAh3V7dWRL4xuk+UGyqh2hJqu0lAdXrQHwiWI/UOt+j4KM4w5jUg4Y
+         DIAeoPToqPDmBke/w9hrwvmD3qn6L2zggRtq+yt646Z1mOnLwW3AZUD37Qk113pKiMsk
+         bmIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I49iaT9479MLDi3TYueSZinlKruIKCVXqSN6hfWZ6x4=;
-        b=JW3awyhw+vuuoTzFcIO8it0osVZG9IXPi4ujuPwfRULaT6e8d492RYTqSyC04t3AiN
-         l2Kjr37gnbn7zsW/FHVYJY/L+AzidRnEuu+mcryNd44+ZG3wH4hClWB4PFB8Mqln0wXU
-         zXvlBkDpJQ098cJzY0jCcUnH7H16SeL5CklDToegzEWVo80fJ8Iui5xVnnHNHqRYzfk+
-         zt96Rilc9IrRBSV/jtgXZXipQ3nM+RrS2D6nm3n3janY7swHdzyEc6OXWduUpXursRYd
-         0vrCjYUQgEi2k7UyYZDgvG0LhExehv1srhurbZR/RBOOvfxWFqk8i07Um58Pn8NWUFqG
-         p1VQ==
-X-Gm-Message-State: AJIora+Jt+G5WbGhuwwqsG82Ymvtj8XVaBzrCeA/x5WTxiWAOV8T8voX
-        EuCQ0HcFIagEpjG8v/T7xLWup2jfYa4=
-X-Google-Smtp-Source: AGRyM1vduCB6Dl0uXtQ/uJ/zcFkNMY0AX9tE24LM9PyHr98TUnsUGHKRZg4/lze+IGydS4QD7MJIWw==
-X-Received: by 2002:a17:906:6a28:b0:711:d032:caa4 with SMTP id qw40-20020a1709066a2800b00711d032caa4mr23990285ejc.80.1655796072583;
-        Tue, 21 Jun 2022 00:21:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0/EcOWoOuIse/hvQ+oqlKU0lIbd1LkUUo/9oXAhtRbA=;
+        b=UkWLiGyY97aNpNJpXo9PMNwmnVmRxjDg+tjwg2NXG5fsJL4XuiXJv8jGjg6zz9Py01
+         R3+h67TVoLi01nAsaUCdCM8bBJejhkuUy4Z9O3dvmy/HHIrLHTJ0KhXTFL4habo/LCfv
+         FcuJ3Y3Gty5NTG2DYMPzooe6/tAjZEM2El9dBXF225VX/34rFNAF5QXnuDDNOmLL/tvQ
+         QcHirbbzPqW2fehFqXJeQp5pRzmi5BJb+0g3OQA+DzZ99PLtecQwMTm5giShdvgL+CVF
+         PdvysO5RQxXHbXxsqrtcCNx2jd5ACSrvNt1l2mTAp+4cFLEw2F84HS5wZIuAnstfldGc
+         Q2ng==
+X-Gm-Message-State: AJIora9+JQTIOX0hmaj+JRZQ05hWEmeJuio1ibWwf42iteoNUDBdBjIK
+        WPVdmqmWeTHpv9uCfLgwFAevhfsGvdY=
+X-Google-Smtp-Source: AGRyM1vmykp6H3Y7haeFNYSTgDp2SeGPwB5hGbzrZ2Avqa/HZIDol+cs2KIbjm2MU5/hGGmzXs8DNQ==
+X-Received: by 2002:a17:906:51d6:b0:712:c9:8a1b with SMTP id v22-20020a17090651d600b0071200c98a1bmr25086132ejk.656.1655796074886;
+        Tue, 21 Jun 2022 00:21:14 -0700 (PDT)
 Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
-        by smtp.gmail.com with ESMTPSA id p1-20020a17090653c100b00722e771007fsm50711ejo.37.2022.06.21.00.21.07
+        by smtp.gmail.com with ESMTPSA id p1-20020a17090653c100b00722e771007fsm50711ejo.37.2022.06.21.00.21.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 00:21:11 -0700 (PDT)
+        Tue, 21 Jun 2022 00:21:14 -0700 (PDT)
 From:   Christian Gmeiner <christian.gmeiner@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
@@ -59,10 +59,12 @@ Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
         GPU IP),
         dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
         IP)
-Subject: [PATCH v2 0/4] Add support for GPU load values
-Date:   Tue, 21 Jun 2022 09:20:46 +0200
-Message-Id: <20220621072050.76229-1-christian.gmeiner@gmail.com>
+Subject: [PATCH v2 1/4] drm/etnaviv: add simple moving average (SMA)
+Date:   Tue, 21 Jun 2022 09:20:47 +0200
+Message-Id: <20220621072050.76229-2-christian.gmeiner@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220621072050.76229-1-christian.gmeiner@gmail.com>
+References: <20220621072050.76229-1-christian.gmeiner@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,27 +77,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series add support for loadavg values for GPU
-sub-components. I am adding a SMA algorithm as I was not
-really sure if EWMA would be a good fit for this use case.
+This adds a SMA algorithm inspired by Exponentially weighted moving
+average (EWMA) algorithm found in the kernel.
 
-Changes v2:
- - Addressed feedback from Lucas
-
-Christian Gmeiner (4):
-  drm/etnaviv: add simple moving average (SMA)
-  drm/etnaviv: add loadavg accounting
-  drm/etnaviv: show loadavg in debugfs
-  drm/etnaviv: export loadavg via perfmon
-
- drivers/gpu/drm/etnaviv/etnaviv_drv.c     | 14 ++++
- drivers/gpu/drm/etnaviv/etnaviv_gpu.c     | 76 +++++++++++++++++++++-
- drivers/gpu/drm/etnaviv/etnaviv_gpu.h     | 37 +++++++++++
- drivers/gpu/drm/etnaviv/etnaviv_perfmon.c | 79 +++++++++++++++++++++++
- drivers/gpu/drm/etnaviv/etnaviv_sma.h     | 53 +++++++++++++++
- 5 files changed, 257 insertions(+), 2 deletions(-)
+Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+---
+ drivers/gpu/drm/etnaviv/etnaviv_sma.h | 53 +++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
  create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_sma.h
 
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_sma.h b/drivers/gpu/drm/etnaviv/etnaviv_sma.h
+new file mode 100644
+index 000000000000..81564d5cbdc3
+--- /dev/null
++++ b/drivers/gpu/drm/etnaviv/etnaviv_sma.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020 Etnaviv Project
++ */
++
++#ifndef __ETNAVIV_SMA_H__
++#define __ETNAVIV_SMA_H__
++
++#include <linux/bug.h>
++#include <linux/compiler.h>
++
++/*
++ * Simple moving average (SMA)
++ *
++ * This implements a fixed-size SMA algorithm.
++ *
++ * The first argument to the macro is the name that will be used
++ * for the struct and helper functions.
++ *
++ * The second argument, the samples, expresses how many samples are
++ * used for the SMA algorithm.
++ */
++
++#define DECLARE_SMA(name, _samples) \
++    struct sma_##name { \
++        unsigned long pos; \
++        unsigned long sum; \
++        unsigned long samples[_samples]; \
++    }; \
++    static inline void sma_##name##_init(struct sma_##name *s) \
++    { \
++        BUILD_BUG_ON(!__builtin_constant_p(_samples));	\
++        memset(s, 0, sizeof(struct sma_##name)); \
++    } \
++    static inline unsigned long sma_##name##_read(struct sma_##name *s) \
++    { \
++        BUILD_BUG_ON(!__builtin_constant_p(_samples));	\
++        return s->sum / _samples; \
++    } \
++    static inline void sma_##name##_add(struct sma_##name *s, unsigned long val) \
++    { \
++        unsigned long pos = READ_ONCE(s->pos); \
++        unsigned long sum = READ_ONCE(s->sum); \
++        unsigned long sample = READ_ONCE(s->samples[pos]); \
++      \
++        BUILD_BUG_ON(!__builtin_constant_p(_samples));	\
++      \
++       WRITE_ONCE(s->sum, sum - sample + val); \
++       WRITE_ONCE(s->samples[pos], val); \
++       WRITE_ONCE(s->pos, pos + 1 == _samples ? 0 : pos + 1); \
++    }
++
++#endif /* __ETNAVIV_SMA_H__ */
 -- 
 2.36.1
 

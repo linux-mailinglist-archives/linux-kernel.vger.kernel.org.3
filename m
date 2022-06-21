@@ -2,54 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E507553673
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5778A55366D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353095AbiFUPmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S1353200AbiFUPmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353106AbiFUPlc (ORCPT
+        with ESMTP id S1353223AbiFUPlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:41:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377EC2C109;
-        Tue, 21 Jun 2022 08:41:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D72E3B819FA;
-        Tue, 21 Jun 2022 15:41:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16E9C3411C;
-        Tue, 21 Jun 2022 15:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655826079;
-        bh=8Ke5wnlYDkO5jPYi69LudjpjdoAfCY+krxfC23GY2ms=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fwruP7zsGpMFJhfm8Non/bFVTOXtlqHamCiwlE9yJj/tQKuNZGvv2SLft8rd/961w
-         8ep7HcVCZuZt37AK3G4nJjtt0ftBxBvq3b9lnqr0Akjt4yy5/6vTiMy9vcHSo9z1LR
-         IMtVs4ZaD8T/WmSxEbpcU9rIerz5lEcTTcBAGiyI=
-Date:   Tue, 21 Jun 2022 17:41:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Conor.Dooley@microchip.com
-Cc:     b-liu@ti.com, Daire.McNamara@microchip.com,
-        Valentina.FernandezAlanis@microchip.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org, ben.dooks@codethink.co.uk,
-        heinrich.schuchardt@canonical.com, Nicolas.Ferre@microchip.com,
-        Cristian.Birsan@microchip.com
-Subject: Re: [PATCH v2 0/2] Add support for PolarFire SoC's musb controller
-Message-ID: <YrHmnND30o1Rjmcp@kroah.com>
-References: <20220613114642.1615292-1-conor.dooley@microchip.com>
- <YrHXZYe4e4vlCHh3@kroah.com>
- <6c9001fa-5315-c9f4-b7b9-05248635750d@microchip.com>
+        Tue, 21 Jun 2022 11:41:53 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491DF2C675
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:41:51 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id lw20so6017847ejb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RMRIR+HgYGPk4kqlGjQLW42tNRD3LRift0BoWoXmUl4=;
+        b=PJhWavQQw1jz0WHXyX0ZMJ8eR94uUvT1OrTkOanzF8eCB9cRoiHlLFkzlXwgvLP1n3
+         V+w0eQKQSencR01efMvM+CLx2hpLOKijSklYzMrRkzLvX77UTUutFGU6uJfiZB1pc98e
+         VgYJdmbvnx1PUtVmTp+5NFI05o1TbHCDlbCQjnkikoTILqTKd6MV8Ho+yBGn8ZPN8hEJ
+         sCMUvZdkn9wipxnotVkWIriVN5jdQ2mYy29rx649+igSQ202WUBmFIWDarvr2HGs4tJm
+         xwmC6Jif32cg5AO1lfdsSE8Kh6DFfzyaj9s8iJixRwkpwtevMnkmSpC2/G3dP/aFLb1B
+         NT0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RMRIR+HgYGPk4kqlGjQLW42tNRD3LRift0BoWoXmUl4=;
+        b=cOP5pG/y/vQ/HDo53kG8k+Z6eMDa7x5j+7QU5bIGSsBafsIMx46oL3MhHuVYI27SJ7
+         /dVqk1j0D/8TjLjJ6zrFJXEuOTasvsZayajJr5uBq0AQfNJAcn7JDnBnQAmMRcznmumA
+         UGFWzNI5cX5YiyFCtA8FQ2z56MNEnus1z7znGKTq6i4OZdrDMaclsBuZYzAq/GMyTl4U
+         +vqf60id+gyy0uu+S9bsgjglkq7Wi0rQjxo5lt35dHcLCHDKWBMkAin2LvtAQyB80Zvq
+         8AqaUbLLrIKLJvIc48+u4jCqnngnVEWO1k4hG4JohgQqnY+MVc14LOOy6RMmoNGdmaMA
+         cQjA==
+X-Gm-Message-State: AJIora+asWqU/zsYB9H3UrimisG2U2wMbXrYVzwN/3Ul4XvtYhBkjPh/
+        725zsepn7Wy8vhl/8y2NfjCxww==
+X-Google-Smtp-Source: AGRyM1ukaYxWxV49I7X4K/AxawnLaQ11uVqfavd6zhGXdlYd80VACHz45P5IFtZP8yM2ASJC8c4z9Q==
+X-Received: by 2002:a17:907:3f97:b0:711:d61d:df9 with SMTP id hr23-20020a1709073f9700b00711d61d0df9mr26593417ejc.644.1655826109691;
+        Tue, 21 Jun 2022 08:41:49 -0700 (PDT)
+Received: from [192.168.0.221] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056402124200b004357738e04esm6977188edw.21.2022.06.21.08.41.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 08:41:49 -0700 (PDT)
+Message-ID: <b1472a38-75e5-9711-3e25-7ca9a74109e2@linaro.org>
+Date:   Tue, 21 Jun 2022 17:41:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6c9001fa-5315-c9f4-b7b9-05248635750d@microchip.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 07/18] dt-bindings: reset: npcm: add GCR syscon
+ property
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220621131424.162355-1-tmaimon77@gmail.com>
+ <20220621131424.162355-8-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220621131424.162355-8-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,66 +90,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 03:16:49PM +0000, Conor.Dooley@microchip.com wrote:
+On 21/06/2022 15:14, Tomer Maimon wrote:
+> Describe syscon property that handles general control registers (GCR) in
+> Nuvoton BMC NPCM reset driver.
 > 
-> 
-> On 21/06/2022 15:36, Greg Kroah-Hartman wrote:
-> > On Mon, Jun 13, 2022 at 12:46:41PM +0100, Conor Dooley wrote:
-> >> Hey Bin, Greg,
-> >> Short series here adding support for USB on Microchip PolarFire SoC FPGAs.
-> >> The kconfig dependency for INVENTRA_DMA has become a bit of a mouthful,
-> >> is there a better way of dealing with that?
-> >> Thanks,
-> >> Conor.
-> >>
-> >> Changes since v1:
-> >> - Drop unneeded resource copying as per Rob's changes to the other drivers
-> >> - Drop the dts patch
-> >>
-> >> Conor Dooley (2):
-> >>   usb: musb: Add support for PolarFire SoC's musb controller
-> >>   MAINTAINERS: add musb to PolarFire SoC entry
-> >>
-> >>  MAINTAINERS               |   1 +
-> >>  drivers/usb/musb/Kconfig  |  13 +-
-> >>  drivers/usb/musb/Makefile |   1 +
-> >>  drivers/usb/musb/mpfs.c   | 265 ++++++++++++++++++++++++++++++++++++++
-> >>  4 files changed, 279 insertions(+), 1 deletion(-)
-> >>  create mode 100644 drivers/usb/musb/mpfs.c
-> >>
-> >>
-> >> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
-> >> -- 
-> >> 2.36.1
-> >>
-> > 
-> > Any chance you can get your company to fix up their email settings:
-> > 
-> > Grabbing thread from lore.kernel.org/all/20220613114642.1615292-1-conor.dooley%40microchip.com/t.mbox.gz
-> > Analyzing 4 messages in the thread
-> > Checking attestation on all messages, may take a moment...
-> > ---
-> >   ✗ [PATCH v2 1/2] usb: musb: Add support for PolarFire SoC's musb controller
-> >   ✗ [PATCH v2 2/2] MAINTAINERS: add musb to PolarFire SoC entry
-> >   ---
-> >   ✗ BADSIG: DKIM/microchip.com
-> > ---
-> > Total patches: 2
-> > 
-> > If I didn't know better, I would think you were spoofing the address...
-> 
-> Great, thanks. I was honestly hoping you would make this complaint.
-> I brought it up with our IT before & nothing has happened yet.
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  .../devicetree/bindings/reset/nuvoton,npcm750-reset.yaml    | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-It's amazing that your company emails are even making it to many systems
-these days with that broken.
 
-> At least now I have the direct complaint to forward :)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Please do, and tell them that in the future, some of us will probably
-start requiring this to pass as I doubt they want just anyone to spoof
-patches from your domain :)
 
-thanks,
-
-greg k-h
+Best regards,
+Krzysztof

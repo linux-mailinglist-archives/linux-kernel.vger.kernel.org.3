@@ -2,297 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3EA553C9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8DE553CFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355998AbiFUVG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S1355618AbiFUVFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356938AbiFUVFB (ORCPT
+        with ESMTP id S1355982AbiFUVDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:05:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE502FFED
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 13:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655844847; x=1687380847;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rCK33wHiwXXfEe1g+x7+z+TkND+SGqMzDT8MqJchkn8=;
-  b=aUGhNHVZQbQASZTLo08Pg0hFhTpteiZB0vGNGlOcWtbr1p/Yi4ihOTg9
-   tHTGUZYRRENnICP0TFZl4Hn3t2iDPn/xQECpCUsy/kyNgCoG4j50MNg5p
-   KBOMTPwHSm4PoB+XsYlTEvMM8QIrR+AHYAYCfs10vWzevD3/OccPrNcLJ
-   opRJNgLjjLYSVoIfZNH+645jybfrUw8/Jr6aC+3mF01E324NlH6r7piiB
-   cKgp9xKQD6ZL0qfsy+Vy1wA3CtQQaCznCvWyPrA2u3j9IAxMnbcmNDNCO
-   T/SY7cAa6tGy7i7jlvlOkZT53PfjEhyMMHiuAHYcjpdvKLh7/LIMq1V7F
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="279003791"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="279003791"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 13:52:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="655318118"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Jun 2022 13:52:14 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3kr7-0000Q5-Ua;
-        Tue, 21 Jun 2022 20:52:13 +0000
-Date:   Wed, 22 Jun 2022 04:52:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.06.17a] BUILD SUCCESS
- c09ca10d879bae4a8df842dbe8d6bd8b87830633
-Message-ID: <62b22f7c.dEXaNqXuq3aBWKzX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 21 Jun 2022 17:03:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28FA3527E;
+        Tue, 21 Jun 2022 13:53:18 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1655844748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nb5dLcX7krWQuD6zSqBNNfRwXIDlKoAFhGKnYz0pyus=;
+        b=poyjZf3m9GJDdbHcAdbqc30s9c+rDUxQp7mpaG31RnP3wDDL+wcPVuo+TFKb5FWS6qKdCZ
+        GTC4htJ9T9aYZ69nkdK3uQecEjzyvxl2iyfVlKjQv56zdLGgwz73e2PKvuCG5w9Ehle+D4
+        u6lkclTEH/ZQs8D19VRcyMhHfF9rVynMtAwEgMwZ3CjtOZ0/nwmaO1GjcyWR2T7M+Z5SMx
+        7yaICC2yWZeJeVydVlb5L0wxNgYn2S42rdJPeRzsPiwD8n3h5P2g5qNymuu4oV6rvWfazE
+        Uy+OJt8b0nVlsVDmk3juHlZu1LxIu5tJZABrfCY4lSLXn1sE5m7X7KvNA2KKGw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1655844748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nb5dLcX7krWQuD6zSqBNNfRwXIDlKoAFhGKnYz0pyus=;
+        b=cV8ms7gdEr44A8gH7coFpKz1whmzqybo6L1e7KaFOk/Oltr3Ii5uGgHeVFUvBwYMD+UleV
+        N6AH5qV01G3xYcDw==
+To:     paulmck@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org
+Subject: Re: [PATCH rcu 11/12] torture: Flush printk() buffers before
+ powering off
+In-Reply-To: <20220621181335.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+References: <20220620225814.GA3842995@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225817.3843106-11-paulmck@kernel.org>
+ <8735fyc42v.fsf@jogness.linutronix.de>
+ <20220620232838.GZ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <87v8suphdy.fsf@jogness.linutronix.de>
+ <20220621181335.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+Date:   Tue, 21 Jun 2022 22:58:27 +0206
+Message-ID: <87ilotagdw.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLACK autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.06.17a
-branch HEAD: c09ca10d879bae4a8df842dbe8d6bd8b87830633  rcu/nocb: Choose the right rcuog/rcuop kthreads to output
+On 2022-06-21, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> The patch below will cause rcutorture to implicitly test this
+> functionality, unless told otherwise, for example, by using the
+> --bootargs "torture.printk_shutdown_bug_workaround" kvm.sh
+> argument.
+>
+> Thoughts?
 
-elapsed time: 4630m
+I feel like this is dirtying the torture.* bootarg namespace a
+bit. Also, I am not sure how useful it is as a dynamic option. I assume
+that users would generally avoid using it, so its very existence might
+just be more noise in the documentation and code. It is an unusual
+feature:
 
-configs tested: 213
-configs skipped: 6
+"In case some bug shows up, here is a flag to avoid it."
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I personally would just drop the patch and rely on a correctly
+functional kernel. But I am also not an rcutorture user. If _you_ think
+that such a flag is useful, feel free to include the patch.
 
-gcc tested configs:
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-mips                 randconfig-c004-20220619
-i386                          randconfig-c001
-arm                         axm55xx_defconfig
-powerpc                  storcenter_defconfig
-mips                           xway_defconfig
-openrisc                  or1klitex_defconfig
-sh                               j2_defconfig
-arc                          axs101_defconfig
-powerpc                   motionpro_defconfig
-mips                       bmips_be_defconfig
-m68k                          sun3x_defconfig
-m68k                        mvme16x_defconfig
-parisc                generic-64bit_defconfig
-mips                        vocore2_defconfig
-sparc                       sparc64_defconfig
-m68k                          multi_defconfig
-alpha                            alldefconfig
-arc                              alldefconfig
-m68k                                defconfig
-mips                         rt305x_defconfig
-um                             i386_defconfig
-arm                         assabet_defconfig
-arm                          pxa910_defconfig
-arm                            mps2_defconfig
-arc                        nsimosci_defconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                     taishan_defconfig
-powerpc                mpc7448_hpc2_defconfig
-m68k                          hp300_defconfig
-arc                        vdk_hs38_defconfig
-sh                          landisk_defconfig
-xtensa                       common_defconfig
-powerpc                         wii_defconfig
-sh                              ul2_defconfig
-nios2                            alldefconfig
-arm                       imx_v6_v7_defconfig
-um                                  defconfig
-powerpc                       ppc64_defconfig
-xtensa                  audio_kc705_defconfig
-arm                        multi_v7_defconfig
-sh                           se7705_defconfig
-powerpc                       eiger_defconfig
-arm                            pleb_defconfig
-mips                     loongson1b_defconfig
-m68k                       m5249evb_defconfig
-arm64                            alldefconfig
-parisc                              defconfig
-arm                     eseries_pxa_defconfig
-sh                           se7343_defconfig
-mips                           ci20_defconfig
-xtensa                  nommu_kc705_defconfig
-m68k                       m5275evb_defconfig
-m68k                          amiga_defconfig
-sh                            migor_defconfig
-sh                         apsh4a3a_defconfig
-arm                           h3600_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                         cm_x300_defconfig
-m68k                           virt_defconfig
-powerpc                        warp_defconfig
-m68k                           sun3_defconfig
-powerpc                     asp8347_defconfig
-sh                 kfr2r09-romimage_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                       holly_defconfig
-mips                  decstation_64_defconfig
-sh                        sh7763rdp_defconfig
-m68k                             alldefconfig
-ia64                            zx1_defconfig
-nios2                         10m50_defconfig
-parisc                generic-32bit_defconfig
-powerpc                   currituck_defconfig
-sh                            titan_defconfig
-mips                          rb532_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                           allnoconfig
-powerpc                     redwood_defconfig
-powerpc                 linkstation_defconfig
-mips                            gpr_defconfig
-arm                         lubbock_defconfig
-m68k                        mvme147_defconfig
-sh                          rsk7201_defconfig
-sh                           sh2007_defconfig
-x86_64                           alldefconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220619
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-nios2                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-parisc64                            defconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a004-20220620
-x86_64               randconfig-a006-20220620
-x86_64               randconfig-a001-20220620
-x86_64               randconfig-a005-20220620
-x86_64               randconfig-a002-20220620
-x86_64               randconfig-a003-20220620
-i386                 randconfig-a005-20220620
-i386                 randconfig-a001-20220620
-i386                 randconfig-a006-20220620
-i386                 randconfig-a004-20220620
-i386                 randconfig-a003-20220620
-i386                 randconfig-a002-20220620
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220619
-riscv                randconfig-r042-20220619
-s390                 randconfig-r044-20220619
-arc                  randconfig-r043-20220620
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                               defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                         rhel-8.3-kunit
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
+> commit 204bf1e2a5a2fb68c15b4b64793ad0896db6f705
+> Author: Paul E. McKenney <paulmck@kernel.org>
+> Date:   Tue Jun 21 11:02:25 2022 -0700
+>
+>     torture: Optionally flush printk() buffers before powering off
+>     
+>     The rcutorture test suite produces quite a bit of console output at
+>     the end of a test.  This means that the new-in-2022 printk() kthreads
+>     are likely to be in the process of flushing output at the time of the
+>     torture_shutdown() function's call to kernel_power_off().  Normally,
+>     rcutorture relies on printk() to flush any pending output upon shutdown,
+>     the better to detect bugs in this area, for example, the one introduced
+>     by 8e274732115f ("printk: extend console_lock for per-console locking").
+>     However, once such a bug is detected and reported, it is necessary to
+>     test the rest of the system, without noise from the already-reported bug.
+>     
+>     This commit therefore adds a torture.printk_shutdown_bug_workaround
+>     kernel parameter, which causes torture_shutdown() to invoke pr_flush(),
+>     and print an informative message on the console, immediately before
+>     invoking kernel_power_off().  When this kernel parameter is not specified,
+>     it is up to printk() to flush its own buffers.
+>     
+>     Suggested-by: John Ogness <john.ogness@linutronix.de>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-clang tested configs:
-arm                          pcm027_defconfig
-powerpc                    gamecube_defconfig
-powerpc                     tqm8560_defconfig
-mips                       rbtx49xx_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                            mmp2_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                     ksi8560_defconfig
-riscv                          rv32_defconfig
-powerpc                     mpc512x_defconfig
-arm64                            allyesconfig
-powerpc                       ebony_defconfig
-arm                        vexpress_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                      ppc44x_defconfig
-arm                         shannon_defconfig
-arm                        multi_v5_defconfig
-mips                          malta_defconfig
-arm                        magician_defconfig
-powerpc                 mpc836x_mds_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                 mpc8313_rdb_defconfig
-mips                      malta_kvm_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64               randconfig-a013-20220620
-x86_64               randconfig-a012-20220620
-x86_64               randconfig-a016-20220620
-x86_64               randconfig-a015-20220620
-x86_64               randconfig-a011-20220620
-x86_64               randconfig-a014-20220620
-i386                 randconfig-a014-20220620
-i386                 randconfig-a011-20220620
-i386                 randconfig-a012-20220620
-i386                 randconfig-a015-20220620
-i386                 randconfig-a016-20220620
-i386                 randconfig-a013-20220620
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220619
-hexagon              randconfig-r041-20220619
-hexagon              randconfig-r041-20220622
-s390                 randconfig-r044-20220622
-hexagon              randconfig-r045-20220622
-riscv                randconfig-r042-20220622
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: John Ogness <john.ogness@linutronix.de>

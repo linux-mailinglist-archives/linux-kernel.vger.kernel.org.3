@@ -2,45 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3665533C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06DD5533B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351733AbiFUNgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        id S1351775AbiFUNhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351706AbiFUNgJ (ORCPT
+        with ESMTP id S1351745AbiFUNge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:36:09 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D811A2AE31
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:35:05 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1655818482t4lelr4u
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 21:34:37 +0800 (CST)
-X-QQ-SSF: 0100000000700050B000D00A0000000
-X-QQ-FEAT: xoS364mEyr1O7d4xyo1etuat7DIRMKm12/lCtpnC6qIif68t8nBxJY9ZY0STk
-        aCyrhNuGMgYXDparfZoJuQ8uDc1fRY/EfzT/bF1r+YwjyQ3a2uB8NaB05pVwtNaxYlvfv//
-        7dvJk1QTs0S1HUe/b4a35ZsfECag7K0z5MaNcrgykUjt1BrvA1qpMh0Ah56LlZZSBenHPRC
-        bjKuzCJl1sZpG0o4wDlIK3ryt54M7HbVAZPyYJxtt4UESyhWT+mTnQQQHbTR9+6tWIk9rzE
-        nUsJfM/qnjuFYHX2rDtvcJWkt6GE6IR04hq+FB8b5x3HnegcrA1rXb1obNyp1SIO6E2QvSk
-        /BzCRf1lNt7q/sT7Nbrs2XjoA/7Sw==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     airlied@linux.ie, daniel@ffwll.ch
-Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] drm/i915: i915_irq - drop unexpected word "the" in the comments
-Date:   Tue, 21 Jun 2022 21:34:35 +0800
-Message-Id: <20220621133435.5924-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        Tue, 21 Jun 2022 09:36:34 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15A42C653;
+        Tue, 21 Jun 2022 06:35:23 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id w20so22379473lfa.11;
+        Tue, 21 Jun 2022 06:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pdZHMaX5g8pSHRD00mVKf06kitbS5gJvV25hf8xmhcY=;
+        b=KGdPBiADkqwDO4ovi6DPmn8ovwwpLdf559Qi1yyeLnI9/Y6NK7ikUSHZlcJOjVJ9Y4
+         /PusDag0pBT/sNjF3UP5Qi2Bori9lo5Mp04jAtCg6r4hrdueDc8yL9DxRFszbLrRZOM4
+         fu1tYDFLntWtwkI0n7pjFsTOkrnZmYQx7U/wNFXy5gmM36i8Qr7bjIdz+d67Ngr0FwjX
+         TBu0ev8ryJIY1HWFrI6XBh3Cs2fZ9Qbt2ZGgkIdYZqe18qeLqBNZ48mihxOyoYzMfSRE
+         R9Q+PBLOBDu1vTRwsj4t4/HOpq1Brk5usnVOjZhZhjUZ84jwQH1ETdr30TFkJh0UohMP
+         rP5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pdZHMaX5g8pSHRD00mVKf06kitbS5gJvV25hf8xmhcY=;
+        b=ZLUcw5KRMTULX4DmeMRfjNfwb5ypp9enR2+UoN0LffXVoph2VOsSvQZBxQLGKNTXLA
+         uK3ngVYpHBOPwV6fXiVEuMINoRuYJ+gVvBWzFDjlRxrxrOltzy877mX+8rnXOW5YdmJO
+         kvUtRHLGxMcshVhtfktJdfYdq1q1ezmRIO4xB4txl6nGzoW/htAhkCCrXhuXRM2+sfTJ
+         9EBcvt8iGdvsDAgQy0/qy6qS/ZRfV0zsdgJTq2rWEaxgdyZdZSXfDV2j/a3ehKaHCJVE
+         ACY68wq9EbTl/cHSVcEVCEEZAfN9NY2mC+Ciii1gZu0qubSPLhx7lTi0bh/OxifJvOIv
+         Up/g==
+X-Gm-Message-State: AJIora9C9DDA0NwxJmY95zOwmtUKYx26LT9c34WieubN7QZcwAbOetZ2
+        AsmFK5MyghdvInKD9Ylqx/Ti2FidY11WJ2j7
+X-Google-Smtp-Source: AGRyM1vopnSAwZFPl55nQmKYmC1s2dCSyHZwZPrBjYQvxnkp9vIeFmAFt3gcVBU0zS2nPjXmygRWlA==
+X-Received: by 2002:a19:f207:0:b0:47f:6890:60b0 with SMTP id q7-20020a19f207000000b0047f689060b0mr7500033lfh.327.1655818522123;
+        Tue, 21 Jun 2022 06:35:22 -0700 (PDT)
+Received: from sakura.myxoz.lan (2-248-181-228-no2390.tbcn.telia.com. [2.248.181.228])
+        by smtp.gmail.com with ESMTPSA id a16-20020a19ca10000000b00478a8b7ab1csm347142lfg.150.2022.06.21.06.35.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 06:35:21 -0700 (PDT)
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Miko Larsson <mikoxyzzz@gmail.com>, linux-kbuild@vger.kernel.org,
+        x86@kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Chris Down <chris@chrisdown.name>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Oleksandr Natalenko <oleksandr@redhat.com>
+Subject: [PATCH 0/2] Kconfig: -O3 enablement 
+Date:   Tue, 21 Jun 2022 15:35:24 +0200
+Message-Id: <20220621133526.29662-1-mikoxyzzz@gmail.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,32 +80,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word "the" in the comments that need to be dropped
+Hi,
 
-file: drivers/gpu/drm/i915/i915_irq.c
-line 68
- * interrupt originated from the the GPU so interrupts from a device which
-changed to
- * interrupt originated from the GPU so interrupts from a device which
+This very small series allows -O3 to be used for all architectures. The
+first patch marks -O3 as experimental, with the reasoning being that it
+might expose unwanted regressions to users, and the second patch
+actually allows -O3 by removing the "depend on ARC" string.
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/gpu/drm/i915/i915_irq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The reasoning behind this series is to open up -O3 so that bugs related
+to it (both compiler-related and kernel-related) can be discovered by
+eyeballs wanting to improve the "-O3 experience," as that might be
+beneficial to both compilers and the kernel. This has been attempted
+before [1], but unfortunately nothing ever came of it.
 
-diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
-index 73cebc6aa650..783a6ca41a61 100644
---- a/drivers/gpu/drm/i915/i915_irq.c
-+++ b/drivers/gpu/drm/i915/i915_irq.c
-@@ -65,7 +65,7 @@
- 
- /*
-  * Interrupt statistic for PMU. Increments the counter only if the
-- * interrupt originated from the the GPU so interrupts from a device which
-+ * interrupt originated from the GPU so interrupts from a device which
-  * shares the interrupt line are not accounted.
-  */
- static inline void pmu_irq_stats(struct drm_i915_private *i915,
+[1] https://lore.kernel.org/lkml/20191211104619.114557-1-oleksandr@redhat.com/
+
+Cc: linux-kbuild@vger.kernel.org
+Cc: x86@kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Chris Down <chris@chrisdown.name>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: John Ogness <john.ogness@linutronix.de>
+Cc: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Oleksandr Natalenko <oleksandr@redhat.com>
+
+Miko Larsson (2):
+  Kconfig: Mark -O3 as experimental
+  Kconfig: Allow -O3 for all architectures
+
+ init/Kconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
 -- 
-2.17.1
+2.36.1
 

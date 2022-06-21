@@ -2,128 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B84552E93
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D1C552E98
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349216AbiFUJil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
+        id S1349060AbiFUJix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348826AbiFUJij (ORCPT
+        with ESMTP id S1349041AbiFUJir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:38:39 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2088.outbound.protection.outlook.com [40.107.20.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7582B8;
-        Tue, 21 Jun 2022 02:38:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aZVrWbIkuAwJQYLMZvV2Yc2AFUjJlQ1UsHITOVkb9KfPGcminh8kDWPYo/eHpAheFwFoAahcbv3+16CutbPpoHfDTjG9SxM2lv1HFIqXCE+FwXADLlAy++QS30ZJ17Yos7OY6kKmu8sVnvsTYCgvQsI7ri5JFvwRtYktRiCRIz2mZ8LLR0DcVWsEELgHy0X2PZT/Yakixy2LVsz6ZEwZseJLwFnP0M0+LdcA1lZiBENsIUsozvTbpG3yi88GBU/TY3N9NLY9z5YoKfu1mCyCF/J6mWMBkwtCkZUj9cy5B8tkm+oZvLvavtakqjm2hoBsMq0AaHg4buZByRxCTBW5rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=keg1zAO9UQIM9UKhCwtHA+R918NfqpsdRUcaCbZu/pw=;
- b=XnJRLJlE2H0P9mlVX5xGVslg0WV0vs8mlVkPQRbfiLKiLOskqXAxaRhgxrkQP/aSkTsJgr9B/o0PrdErH5A7N+fGMhWKbSw0y7zJahhnDF1VE9NL0DEuMmFiT39yCSJRvYQw3iW7ofEhgcgSzJdKw0FKSou6m9vtOa6H8Jc+TQT1Yv1TR8JPvyk8ax5xaqn7jBKuSMSEnjqppL9c06LAv6FyNg6X3DxM6nMDc+4PLj4OkcOhLnKZbAtqLgrmpUMWA8dyVMLiaNtaccn41RfGgLBegD+xwvLebg9Loj6vY9uApMdLkJIKlTc5J32F5rRA+bvtEmO3mOBapdWf0N3KUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=keg1zAO9UQIM9UKhCwtHA+R918NfqpsdRUcaCbZu/pw=;
- b=vkl8ueKA8YrAZw2XiueB4k7Afnyk/3SRWegFqnmYPK8o3Ro/8PGR+MpkUMT2yzaG3iTYu+Stniuw4NnsaSKOisSj0TUAyDMfAaoMNdCQ7emPvCe1/JWXp/2+OYHpMVS3CE2k/M374igYqhX/viEqyL1MeqaGOSb+pfq2VbuYVwgh/CsgOrAjhjSbDuvN/h5J2OgIPi6aa3r12KA+Ujwi99j9xqjdcWD3QyDCKdvUxDbQNcQ+vKc7aETJO6THH688EL2BACPGrUHy078j5/8bE8u/uABd/9dVpiLpRNKAJm5XH3dez1/vyOloiVNR7x1KXz1COmOEUURmIBFO1PyCcQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by VE1PR04MB7454.eurprd04.prod.outlook.com
- (2603:10a6:800:1a8::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Tue, 21 Jun
- 2022 09:38:35 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::21d5:a855:6e65:cf5d]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::21d5:a855:6e65:cf5d%12]) with mapi id 15.20.5353.022; Tue, 21 Jun
- 2022 09:38:35 +0000
-Message-ID: <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
-Date:   Tue, 21 Jun 2022 11:38:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: PM runtime_error handling missing in many drivers?
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        rafael.j.wysocki@intel.com, jic23@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-References: <20220620144231.GA23345@axis.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20220620144231.GA23345@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0013.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::18) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
+        Tue, 21 Jun 2022 05:38:47 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D76627175
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:38:46 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso8995779wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:38:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iiYDMb25u9E0kdh4tjgpZhyjltvqJ/xSe7VCUenKLGE=;
+        b=NzfEgVsvUyBOw19ysEIZ2ZijfJ+gor+hiReib2mhC+x0cQc92Zmvb6KI961IGYCpjB
+         oLlQXNVMWSF7ZzyNHa8VJe1wpeXVa018engc/W06pd99K1ag0tuhU5ckSQbsTDZaTycG
+         d3ElhCRJY5qPfuIW7tq6ENi6VKsbLu9yuSHVB/EAQGfrEUrB7YEVofy4ErJ31eyhM/7Y
+         PsGpg9nIE2tRfgmZ/8dUJ+QfviWPyFn1pWuXWOF2fdemQIGbPbYygRpw/pb+ZIftTKsz
+         3QHgWwunrN+3RNSt9f/UvrbOUR7E3APb7SZvABecjBLHwjZgfKSOOipvQVWNa9GQ4wzL
+         /F2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iiYDMb25u9E0kdh4tjgpZhyjltvqJ/xSe7VCUenKLGE=;
+        b=sf2oI/KeoU9ZEST2s1AAe4cyBvZu8Fa6aTVlyLN5xvIxzcsP1inGJXo3ddLt5+G91q
+         DdbYLlCRqSLvvfKagwpSbKIP479noB8ZiqnRmEvtbQeXWt4Vcaiatv8fbBoW+njluXzU
+         C9K5vQ+nfRUKpZmROp52c8CjOz6+I3I2kbjZoi8eYcVrRURMWYW8ILIhxSZtzLvGnZkS
+         Q0a99rSE9Y6vjL8hDqdFBp1QWxArKTX7JrcMtG7Lq5oCUKDQQwPBgXQcnb2CNiT15zhw
+         v3XlnD2NQlxNJ4VD5hfjcUR1XOFde80JoDEuJLbw9OC69pAFVedoq+1y9NBEnLUyYQ6b
+         5Nsw==
+X-Gm-Message-State: AOAM530yh/cbaUQl5bekjUMfQ09US+vyd0TAH+1rEj9DAvUnxyQ2gRyO
+        maHgH+xc1aWhO52eVBFX6hlbYzoRl8DPgaj4c8kcRw==
+X-Google-Smtp-Source: ABdhPJwTHofpmOSIaU6nuTZiYCVo8t0WXtDq/8OyIrHTzJ5w2YzZPp4o8NdJ3c2Enyc+y7QQqDBorPuvt8d4H9ps5Dk=
+X-Received: by 2002:a05:600c:294a:b0:39c:4df5:f825 with SMTP id
+ n10-20020a05600c294a00b0039c4df5f825mr39662307wmd.55.1655804324611; Tue, 21
+ Jun 2022 02:38:44 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9d234e70-9f93-460b-225d-08da5369cff0
-X-MS-TrafficTypeDiagnostic: VE1PR04MB7454:EE_
-X-Microsoft-Antispam-PRVS: <VE1PR04MB745498F0F8E982189C2FE6C0C7B39@VE1PR04MB7454.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o3n1Sc/i13iV6vgKacmIsVaX5TYqjz8DycNoVlkDfWcZOlD38bB2VBZo+UW6g4iwroRtBU01GmI32q0CQB9J5xkV/y1S7e4bZbo5NvUI5SvGZQchGx0sp2rB9QRjHvQqnkrzbTJNdPj6nkwbILniITUaYV95Fw6x0FTtaOhS5nyyKNJyhDL6XCd+isE/fdaxapiZ1AIeKGw+3eMINFhbuqnBiOOIwvyzWfIPxCtMLdEMCCFv8xXrySavtOXv91Nbt9MQyJvp1yzXXw7yGrlWe9Du4e6bC4qd2Q0ls6LyADO2xhXR5pftliMqnfso25nW0EWfRrMzayqINz/BzLoFC6E3Nsrx9E0R8L1rvJ22fhOP1fvoN2e+U12VsIsUH+jvMDkNXh4REoBuQOKLM6M3PoM/ANBLKcslhP+MBlqn3FR32c+oHMDW6vFy/CtVwI4eBTlJ5lDlONApMF6XbqQGgF4T4QEEE6Beer2l2lzXJrLL1ZR9hRCvLCxkdgY6uaASCujftOjwX+qvbE4WDlNT/oEitNVcYctBc89YOeMmGjCmh37rswNxRWGLorRnIHAzyJWi3ANZYy1mu5UeOWdu+Qtjyo6pEwCKCyhzS47MUbDjT2EcSaav1/IeCJoc586TRXaQLtwFU8nDS/tQ2jIVfjD0O8J9/r55b4KDWB1YGLMVJNucv8k+9lntnrq8jdubYZHlsGG6PPoW64oFfV3sjRxw7r3pd4gppsNxN8yK0sg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(366004)(346002)(136003)(39860400002)(8936002)(53546011)(478600001)(86362001)(6512007)(83380400001)(6506007)(66476007)(6486002)(38100700002)(66556008)(2906002)(316002)(36756003)(4326008)(8676002)(66946007)(31696002)(186003)(5660300002)(41300700001)(31686004)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnY5dWFFSHNQT1kvRzJTZ1FMcHFVQ1lSUlFEcU1uQ0xRcTF0ZVFkc095U3JZ?=
- =?utf-8?B?QkZMVTV4a1lUZmQ1ZjlYWTVqbnozZjFjbU1jN2V4ejJVWDBrN0ltOFNsMk40?=
- =?utf-8?B?UlpPUlRHYjl5d0E3Q0xTS3I1a096NU5lLzBzRTQ0S2cyR2t0azdHU0RrWkpX?=
- =?utf-8?B?Uml5VTFEbmdBTThvYnJzcnpSV3JmcXhlY0hGSHNVZ0ZWZVZYeEtETjFVSjZn?=
- =?utf-8?B?UkFLTzNIREFINjMyc2VGY293cWFGWXlFdXg1TDdNOGprbEpYTmJ4UXRwL3Q5?=
- =?utf-8?B?ZXZPSUlpUDVScDZqaUtLR0pJQk5pK0kzRTNCNHJ4M2d0RHB6RURYRmdiT0xy?=
- =?utf-8?B?TEtTd0dRVjRqR2NUcG5yaVRzMS9URHUzSFZEZ0VxYThQR3RUa3VxK050R0pj?=
- =?utf-8?B?VUswdW1uVjJzTmRyWWMvK3NGOWlKZEpvdE5KazVaR0RTcmZhaTJOckRyYit5?=
- =?utf-8?B?aWpESkpuZ1NIN2ExVVMwRklnOElFVi92aTI1TlZNNFh4VXlYVFpNbHZkb2xP?=
- =?utf-8?B?VkVCMVhMaFplWFlENVpldkd1VGlCU28yMHkvSENvRXRRcGt2UnlCV09TblBC?=
- =?utf-8?B?YjQrN1phMHp0cWRNZU9TTjNvSTJBd1N6YkIrZVE1VVp0bnJIeVFoVndTZFRT?=
- =?utf-8?B?WWRSRWVvU0c2T3QyVzNCM0RuNE5paG1oQjRMWFJrcWU1MmdrVEJJd1dWR3Ju?=
- =?utf-8?B?Ykw2RmRBTjRYZUN6bkFMc20zNVQzQWZ4VjFCaFZ4bk1zWWttb1FFS1F4OEhO?=
- =?utf-8?B?ckpLOU5zNUJjbmFRMjA1N3JpT1lFaittWWpWK2RxTTY0akZNTjY5Y05WVDRM?=
- =?utf-8?B?V0wvdEs3eHVSbmZLZVo3b0RQSHhJbW1jTytSblBJclVVQXR0am1oRkxZbCto?=
- =?utf-8?B?Y3B0SDYySVJ3b0NYZktIV292RFhiaWhoSHFla1hRMVFNMVF4cldKS1BlSlVl?=
- =?utf-8?B?QU5QMngwNVV2eVNRRjRPaHF5K1hva3E2SDhFY0J0Q3pFMHhPaitXbnFndFdy?=
- =?utf-8?B?amRKaUtrblhkV2NPVGJ6bnRwZnl4TmIrbSs5b3dMSTFvZEUxcEhOZ2FlUGpG?=
- =?utf-8?B?Vlh6SE96djYrbFNrMklzYi9heERJTEFkdFFIUVZTa1l5WUc1MkxPVzd2RjNn?=
- =?utf-8?B?c2U4ZkJFMWxCaW9NZm5UeE11TVd2U0lGQU9qVHVveGxBK0pNbG5ML0pIb2Rr?=
- =?utf-8?B?ZW9vWUlRcXN3YWF6YUlrWGUwcmk3SXRrNEVvTk02ckFjNEtuMjBNWnF3cStB?=
- =?utf-8?B?YUxEVjRlVmNBWkZNbGxNZFVBamFhL0xHZWROK2ZiVnc0VWNTbGRmQnZ3YWF2?=
- =?utf-8?B?ZHJHcjAwNHp2dmE4amcvNHhCdWhLVTNLbTVvUUNrdFptbW15UGtXdk5ESVM3?=
- =?utf-8?B?NjZRcmNlT1RBVFFiS3VNYmpZUFBBTmxZVnhUbldUaXBYVUt6SXlTSUN1YzJr?=
- =?utf-8?B?d0dkK3NZQkhoVTFJcWN6aURPY0UxVGhCemVYN28rRmdDamhpZlhGMkwxUThh?=
- =?utf-8?B?Nmxpbm9uLzFGWW9DajEzSVhjLzMybi9OZWRBeHVIMldJeUF3K205OWZDV1U0?=
- =?utf-8?B?MlpnZ3VOMFhHUlFtT3A5UnpZMlJaek5zejhmczNZM3hCTkU2UWU0QmUwQ1Bx?=
- =?utf-8?B?UDJ1NWtwTjlud0doVDNON0JWNnpER2tuTEk5dXQxQTZjQ21pZ3UxSnpBSlBy?=
- =?utf-8?B?SEljbHkvbVpCN0Znei85aTRWb21MdFp2OW1TVlFzMWVQc05XZE94dTZGZXJz?=
- =?utf-8?B?NnpkVmhJdjBWdXNEQi96cjBSTDR5Q1NoTnVjRDE0aW9JZ2hmN3RwT25KOUxq?=
- =?utf-8?B?c2x4NGxjQ3JxSWpDTTVrdk5COGVrUXp0MitkMVdBcmp3Qzc0S3U3enRLZXhC?=
- =?utf-8?B?QktxQVppK1FlQ3FxQU41MVFVdnlXMHNSNmdNVlpGck52eEJXSmVCbzMwVGt2?=
- =?utf-8?B?U3A0U1hvT0w1bXE4UDZhUGZMRitYVmU2bEpNdWNZZ1Z6WHh3amQwa1Q3dkFx?=
- =?utf-8?B?NlpXWVdWczdNdFY5cFFYMkg2RFJMa0pvbXR6UmVpTVlTc1BwdVd2R3RGOWlF?=
- =?utf-8?B?bC9nSlJzZjkzWGhwanRlMTVzN1BjeFV6cmxiMEk3UVFKcXQrNEo2OWtXbVlV?=
- =?utf-8?B?QXRBczFrUWc0c1doUSt6K2ZnN00xMTVNc3hSandLaytiOVE4YndidWtsc2lx?=
- =?utf-8?B?WXFoVitnekRTSklnMUxCMVgyUy9rNTd1UndtYkxQUUJOS1l1cGtBSzkySlBG?=
- =?utf-8?B?QnhJSks5ZFlaRFhTTlVxRStER29QYUZ3RnRCbzllTkNVa1JDUy9ybER5bGpG?=
- =?utf-8?B?SjdERTZpRnRrNGhmOGJtVGRFS2dSYTN4R2ZPaUlyRUxoTDlqUWFaVlRJSm9p?=
- =?utf-8?Q?zYLfN7mw6Y7W6MR3MJg9vyfRI1tU4yPTzQWNofWxxQYAJ?=
-X-MS-Exchange-AntiSpam-MessageData-1: 15pw6wToXESthw==
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d234e70-9f93-460b-225d-08da5369cff0
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 09:38:35.3357
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9e2QM2Pj16VhJ4iEbWr1UT8xyUo1xfY7RXvt7mdcuCSQjj2afZt+iG+hbzKfPFVYGY3QoHfMQkm7B/l3TGbHSQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7454
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220620160640.3790-1-jose.exposito89@gmail.com> <20220620160640.3790-3-jose.exposito89@gmail.com>
+In-Reply-To: <20220620160640.3790-3-jose.exposito89@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 21 Jun 2022 17:38:33 +0800
+Message-ID: <CABVgOSmntjTF3fU9NJ_qwxbOYKudjud4Sey_v8F8UFMX5KgYQA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        maarten.lankhorst@linux.intel.com,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000009e25d905e1f1fc5d"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,68 +79,395 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.06.22 16:42, Vincent Whitchurch wrote:
+--0000000000009e25d905e1f1fc5d
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Tue, Jun 21, 2022 at 12:06 AM Jos=C3=A9 Exp=C3=B3sito
+<jose.exposito89@gmail.com> wrote:
+>
+> Test the conversion from XRGB8888 to RGB332.
+>
+> What is tested?
+>
+>  - Different values for the X in XRGB8888 to make sure it is ignored
+>  - Different clip values: Single pixel and full and partial buffer
+>  - Well known colors: White, black, red, green, blue, magenta, yellow
+>    and cyan
+>  - Other colors: Randomly picked
+>  - Destination pitch
+>
+> How to run the tests?
+>
+>  $ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/tes=
+ts \
+>          --kconfig_add CONFIG_VIRTIO_UML=3Dy \
+>          --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy
+>
+> Suggested-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> ---
 
-> Many drivers do something like the following to resume their hardware
-> before performing some hardware access when user space ask for it:
-> 
-> 	ret = pm_runtime_resume_and_get(dev);
-> 	if (ret)
-> 		return ret;
-> 
-> But if the ->runtime_resume() callback fails, then the
-> power.runtime_error is set and any further attempts to use
-> pm_runtime_resume_and_get() will fail, as documented in
-> Documentation/power/runtime_pm.rst.
+These tests all pass properly on my system, and look good to me from a
+KUnit point of view. Thanks very much.
 
-Whether this is properly documented is debatable.
-4. Runtime PM Device Helper Functions (as a chapter)
-does _not_ document it.
+A couple of small notes below, which you can take or leave as you
+wish: they mostly focus on potential future tests.
+
+Regardless,
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  drivers/gpu/drm/Kconfig                       |  16 ++
+>  drivers/gpu/drm/Makefile                      |   1 +
+>  drivers/gpu/drm/tests/.kunitconfig            |   3 +
+>  drivers/gpu/drm/tests/Makefile                |   3 +
+>  .../gpu/drm/tests/drm_format_helper_test.c    | 161 ++++++++++++++++++
+>  5 files changed, 184 insertions(+)
+>  create mode 100644 drivers/gpu/drm/tests/.kunitconfig
+>  create mode 100644 drivers/gpu/drm/tests/Makefile
+>  create mode 100644 drivers/gpu/drm/tests/drm_format_helper_test.c
+>
+> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> index 22e7fa48d693..6c2256e8474b 100644
+> --- a/drivers/gpu/drm/Kconfig
+> +++ b/drivers/gpu/drm/Kconfig
+> @@ -70,6 +70,22 @@ config DRM_DEBUG_SELFTEST
+>
+>           If in doubt, say "N".
+>
+> +config DRM_KUNIT_TEST
+> +       tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
+> +       depends on DRM && KUNIT=3Dy
+> +       select DRM_KMS_HELPER
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         This builds unit tests for DRM. This option is not useful for
+> +         distributions or general kernels, but only for kernel
+> +         developers working on DRM and associated drivers.
+> +
+> +         For more information on KUnit and unit tests in general,
+> +         please refer to the KUnit documentation in
+> +         Documentation/dev-tools/kunit/.
+> +
+> +         If in doubt, say "N".
+> +
+>  config DRM_KMS_HELPER
+>         tristate
+>         depends on DRM
+> diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+> index 13ef240b3d2b..db8ffcf4e048 100644
+> --- a/drivers/gpu/drm/Makefile
+> +++ b/drivers/gpu/drm/Makefile
+> @@ -76,6 +76,7 @@ obj-$(CONFIG_DRM_KMS_HELPER) +=3D drm_kms_helper.o
+>  #
+>
+>  obj-$(CONFIG_DRM_DEBUG_SELFTEST) +=3D selftests/
+> +obj-$(CONFIG_DRM_KUNIT_TEST) +=3D tests/
+>
+>  obj-$(CONFIG_DRM_MIPI_DBI) +=3D drm_mipi_dbi.o
+>  obj-$(CONFIG_DRM_MIPI_DSI) +=3D drm_mipi_dsi.o
+> diff --git a/drivers/gpu/drm/tests/.kunitconfig b/drivers/gpu/drm/tests/.=
+kunitconfig
+> new file mode 100644
+> index 000000000000..6ec04b4c979d
+> --- /dev/null
+> +++ b/drivers/gpu/drm/tests/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=3Dy
+> +CONFIG_DRM=3Dy
+> +CONFIG_DRM_KUNIT_TEST=3Dy
+> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makef=
+ile
+> new file mode 100644
+> index 000000000000..2c8273796d9d
+> --- /dev/null
+> +++ b/drivers/gpu/drm/tests/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_DRM_KUNIT_TEST) +=3D drm_format_helper_test.o
+> diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu=
+/drm/tests/drm_format_helper_test.c
+> new file mode 100644
+> index 000000000000..98583bf56044
+> --- /dev/null
+> +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
+> @@ -0,0 +1,161 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +
+> +#include <kunit/test.h>
+> +
+> +#include <drm/drm_device.h>
+> +#include <drm/drm_file.h>
+> +#include <drm/drm_format_helper.h>
+> +#include <drm/drm_fourcc.h>
+> +#include <drm/drm_framebuffer.h>
+> +#include <drm/drm_gem_framebuffer_helper.h>
+> +#include <drm/drm_mode.h>
+> +#include <drm/drm_print.h>
+> +#include <drm/drm_rect.h>
+> +
+> +#include "../drm_crtc_internal.h"
+> +
+> +#define TEST_BUF_SIZE 50
+> +
+> +struct xrgb8888_to_rgb332_case {
+> +       const char *name;
+> +       unsigned int pitch;
+> +       unsigned int dst_pitch;
+> +       struct drm_rect clip;
+> +       const u32 xrgb8888[TEST_BUF_SIZE];
+> +       const u8 expected[4 * TEST_BUF_SIZE];
+
+Why is this 4*TEST_BUF_SIZE if there are the same number of pixels
+(which in rgb332 are 8-bit, not 32-bit) as in xrgb8888. I see there's
+a pitch test, which does need some extra memory, but not a full 4
+times (less than double, by the looks of things). Having this be 4 *
+implies (to me) that the aim is to have the same total memory
+available between xrgb8888 and expected, which doesn't seem to need to
+be the case. Maybe make this 2 * or similar?
+
+Relatedly, if instead of naming this 'expected', it were named rgb332,
+it'd be possible to extend this struct to add other formats expected
+values, and test several formats with the same list of test inputs.
+(dst_pitch would probably need to become dst_pitch_rgb332 eventually,
+too). This is all something which could wait for a later patch, but is
+food for thought. I'd love to see an xrgb8888_to_rgb565 test at some
+point, too.
 
 
-> [110778.050000][   T27] rpm_resume: 0-0009 flags-4 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
-> [110778.050000][   T27] rpm_return_int: rpm_resume+0x24d/0x11d0:0-0009 ret=-22
-> 
-> The following patch fixes the issue on vcnl4000, but is this the right in the
+> +};
+> +
+> +static struct xrgb8888_to_rgb332_case xrgb8888_to_rgb332_cases[] =3D {
+> +       {
+> +               .name =3D "single_pixel_source_buffer",
+> +               .pitch =3D 1 * 4,
+> +               .dst_pitch =3D 0,
+> +               .clip =3D DRM_RECT_INIT(0, 0, 1, 1),
+> +               .xrgb8888 =3D { 0x01FF0000 },
+> +               .expected =3D { 0xE0 },
+> +       },
+> +       {
+> +               .name =3D "single_pixel_clip_rectangle",
+> +               .pitch =3D 2 * 4,
+> +               .dst_pitch =3D 0,
+> +               .clip =3D DRM_RECT_INIT(1, 1, 1, 1),
+> +               .xrgb8888 =3D {
+> +                       0x00000000, 0x00000000,
+> +                       0x00000000, 0x10FF0000,
+> +               },
+> +               .expected =3D { 0xE0 },
+> +       },
+> +       {
+> +               /* Well known colors: White, black, red, green, blue, mag=
+enta,
+> +                * yellow and cyan. Different values for the X in XRGB888=
+8 to
+> +                * make sure it is ignored. Partial clip area.
+> +                */
+> +               .name =3D "well_known_colors",
+> +               .pitch =3D 4 * 4,
+> +               .dst_pitch =3D 0,
+> +               .clip =3D DRM_RECT_INIT(1, 1, 2, 4),
+> +               .xrgb8888 =3D {
+> +                       0x00000000, 0x00000000, 0x00000000, 0x00000000,
+> +                       0x00000000, 0x11FFFFFF, 0x22000000, 0x00000000,
+> +                       0x00000000, 0x33FF0000, 0x4400FF00, 0x00000000,
+> +                       0x00000000, 0x550000FF, 0x66FF00FF, 0x00000000,
+> +                       0x00000000, 0x77FFFF00, 0x8800FFFF, 0x00000000,
+> +               },
+> +               .expected =3D {
+> +                       0xFF, 0x00,
+> +                       0xE0, 0x1C,
+> +                       0x03, 0xE3,
+> +                       0xFC, 0x1F,
+> +               },
+> +       },
+> +       {
+> +               /* Randomly picked colors. Full buffer within the clip ar=
+ea. */
+> +               .name =3D "destination_pitch",
+> +               .pitch =3D 3 * 4,
+> +               .dst_pitch =3D 5,
+> +               .clip =3D DRM_RECT_INIT(0, 0, 3, 3),
+> +               .xrgb8888 =3D {
+> +                       0xA10E449C, 0xB1114D05, 0xC1A80303,
+> +                       0xD16C7073, 0xA20E449C, 0xB2114D05,
+> +                       0xC2A80303, 0xD26C7073, 0xA30E449C,
+> +               },
+> +               .expected =3D {
+> +                       0x0A, 0x08, 0xA0, 0x00, 0x00,
+> +                       0x6D, 0x0A, 0x08, 0x00, 0x00,
+> +                       0xA0, 0x6D, 0x0A, 0x00, 0x00,
+> +               },
+> +       },
+> +};
+> +
+> +/*
+> + * conversion_buf_size - Return the destination buffer size required to =
+convert
+> + * between formats.
+> + * @dst_format: destination buffer pixel format (DRM_FORMAT_*)
+> + * @dst_pitch: Number of bytes between two consecutive scanlines within =
+dst
+> + * @clip: Clip rectangle area to convert
+> + *
+> + * Returns:
+> + * The size of the destination buffer or negative value on error.
+> + */
+> +static size_t conversion_buf_size(u32 dst_format, unsigned int dst_pitch=
+,
+> +                                 const struct drm_rect *clip)
+> +{
+> +       const struct drm_format_info *dst_fi =3D drm_format_info(dst_form=
+at);
+> +
+> +       if (!dst_fi)
+> +               return -EINVAL;
+> +
+> +       if (!dst_pitch)
+> +               dst_pitch =3D drm_rect_width(clip) * dst_fi->cpp[0];
+> +
+> +       return dst_pitch * drm_rect_height(clip);
+> +}
+> +
+> +static void xrgb8888_to_rgb332_case_desc(struct xrgb8888_to_rgb332_case =
+*t,
+> +                                        char *desc)
+> +{
+> +       strscpy(desc, t->name, KUNIT_PARAM_DESC_SIZE);
+> +}
+> +
+> +KUNIT_ARRAY_PARAM(xrgb8888_to_rgb332, xrgb8888_to_rgb332_cases,
+> +                 xrgb8888_to_rgb332_case_desc);
+> +
+> +static void xrgb8888_to_rgb332_test(struct kunit *test)
+> +{
+> +       const struct xrgb8888_to_rgb332_case *params =3D test->param_valu=
+e;
+> +       size_t dst_size;
+> +       __u8 *dst =3D NULL;
+> +
+> +       struct drm_framebuffer fb =3D {
+> +               .format =3D drm_format_info(DRM_FORMAT_XRGB8888),
+> +               .pitches =3D { params->pitch, 0, 0 },
+> +       };
+> +
+> +       dst_size =3D conversion_buf_size(DRM_FORMAT_RGB332, params->dst_p=
+itch,
+> +                                      &params->clip);
+> +       KUNIT_ASSERT_GT(test, dst_size, 0);
+> +
+> +       dst =3D kunit_kzalloc(test, dst_size, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dst);
+> +
+> +       drm_fb_xrgb8888_to_rgb332(dst, params->dst_pitch, params->xrgb888=
+8,
+> +                                 &fb, &params->clip);
+> +       KUNIT_EXPECT_EQ(test, memcmp(dst, params->expected, dst_size), 0)=
+;
+> +}
+> +
+> +static struct kunit_case drm_format_helper_test_cases[] =3D {
+> +       KUNIT_CASE_PARAM(xrgb8888_to_rgb332_test,
+> +                        xrgb8888_to_rgb332_gen_params),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite drm_format_helper_test_suite =3D {
+> +       .name =3D "drm_format_helper_test",
+> +       .test_cases =3D drm_format_helper_test_cases,
+> +};
+> +
+> +kunit_test_suite(drm_format_helper_test_suite);
+> +
+> +MODULE_DESCRIPTION("KUnit tests for the drm_format_helper APIs");
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>");
+> --
+> 2.25.1
+>
 
+--0000000000009e25d905e1f1fc5d
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> fix?  And, unless I'm missing something, there are dozens of drivers
-> with the same problem.
-
-Yes. The point of pm_runtime_resume_and_get() is to remove the need
-for handling errors when the resume fails. So I fail to see why a
-permanent record of a failure makes sense for this API.
-
-> diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
-> index e02e92bc2928..082b8969fe2f 100644
-> --- a/drivers/iio/light/vcnl4000.c
-> +++ b/drivers/iio/light/vcnl4000.c
-> @@ -414,6 +414,8 @@ static int vcnl4000_set_pm_runtime_state(struct vcnl4000_data *data, bool on)
->  
->  	if (on) {
->  		ret = pm_runtime_resume_and_get(dev);
-> +		if (ret)
-> +			pm_runtime_set_suspended(dev);
->  	} else {
->  		pm_runtime_mark_last_busy(dev);
->  		ret = pm_runtime_put_autosuspend(dev);
-
-If you need to add this to every driver, you can just as well add it to
-pm_runtime_resume_and_get() to avoid the duplication.
-
-But I am afraid we need to ask a deeper question. Is there a point
-in recording failures to resume? The error code is reported back.
-If a driver wishes to act upon it, it can. The core really only
-uses the result to block new PM operations.
-But nobody requests a resume unless it is necessary. Thus I fail
-to see the point of checking this flag in resume as opposed to
-suspend. If we fail, we fail, why not retry? It seems to me that the
-record should be used only during runtime suspend.
-
-And as an immediate band aid, some errors like ENOMEM should
-never be recorded.
-
-	Regards
-		Oliver
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDw
+EBYTPTejkIAyC4X5WuinxcuvLA3p0NVL6s4XyLvWVzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA2MjEwOTM4NDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAG6lEF9IQ0ccg5zoatSdJ
+CaYcQsm3WlU0lN65VMP6mYe2yoDxJV1SGVHjSlVxnM5Xr46Z5rsSCguJcXSy7hgEBG9IIOdtIH60
+CuBj3tNsh9pPgWnPr/onEKyHG1oyqzty1cJzJPlitUA3nRg3YKF5TAzUEZMCiHZ3/HRTuAJyDmQH
+fwc8aYhVxijSU0yWlE5B3LmpeJPQvj036a0OqkkvONKV0FbBFZaBTBWNJkf8+KxvAQSBmEVfQI3m
+U7InQKI6nAe34rduehjqvrWO7f3Ptj7PPi/YHQgZqfNCF8ANtHN5qlM/aQ4yyP71BKdB1NDgzLNA
+IMbkV7hdV7+/MGo9kw==
+--0000000000009e25d905e1f1fc5d--

@@ -2,236 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0DE553567
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A876255353F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351841AbiFUPKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S1352226AbiFUPJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352342AbiFUPJ4 (ORCPT
+        with ESMTP id S1351813AbiFUPJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:09:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41D8F2872D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:09:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655824194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u6RxoWDQZEfB5inmogmfuRCsiEMBnChH++ZuB43pWms=;
-        b=bdt+4BuabVDsnGQrvTk2mzm52WEwMbx/Qupib1TmN9DS60zubuJnLi0qAyK7mX1S83T7y6
-        uRt2uziND6B+sjv1ThgZuat4Bxd6vSO5AjFux89VBpQmwsx2bUvCo6ut2lfyfUVWrw9HD6
-        TCHfx47En3pXWTcY0xnhikW703zDSqU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-mRT5HXJxPvmWCrCKmJg9Og-1; Tue, 21 Jun 2022 11:09:51 -0400
-X-MC-Unique: mRT5HXJxPvmWCrCKmJg9Og-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 21 Jun 2022 11:09:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0521838F;
+        Tue, 21 Jun 2022 08:09:11 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-136-92.dynamic.spd-mgts.ru [109.252.136.92])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 841FB2999B2D;
-        Tue, 21 Jun 2022 15:09:50 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.194.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D56DA10725;
-        Tue, 21 Jun 2022 15:09:46 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH v2 11/11] KVM: x86: emulator/smm: preserve interrupt shadow in SMRAM
-Date:   Tue, 21 Jun 2022 18:09:02 +0300
-Message-Id: <20220621150902.46126-12-mlevitsk@redhat.com>
-In-Reply-To: <20220621150902.46126-1-mlevitsk@redhat.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8638A6601688;
+        Tue, 21 Jun 2022 16:09:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655824150;
+        bh=yKy10fDX54YCxEXJXL79y5iJPRtvTIKAxsv4we0n0gM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jhlSZIQwj7YbqFfDJecLZBGilYxdq01bn1UglhX+ppksvvE2oCGLoyDEV+26Spq8I
+         LA9bzGLWEmIz/sIfdrkH9pRj5uq3H3rQ3gT8hu5eAkFBtUEq525YDwtPu5tr77yQPN
+         dps2l2p7DkF5xz3g6T5Ot+HSskVGcCSmy+gDnqKIZI6oaN3uVNPmq5Mmt/aPFKoypS
+         gy+4TWKA5Rq1Mq/QNYcE6tIxTFT9OLqCWGHiiEvZJ9+J9+HyUW6NvzqRE5oVE/mlSc
+         DIeUxz3n0M4Q2F9J+Uz324cHOBEb0EJsX84dURVAwdJ2W1nVt2D2s5GnK7aGnHl2PR
+         CEgLzJz5I/duw==
+Message-ID: <da2f1552-6896-5ae8-4837-28f31f3031a9@collabora.com>
+Date:   Tue, 21 Jun 2022 18:09:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 02/31] OPP: Add dev_pm_opp_set_config() and friends
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <9c4b2bfe628bf7a583a96cee7cc3539e2e66245e.1653564321.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <9c4b2bfe628bf7a583a96cee7cc3539e2e66245e.1653564321.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When #SMI is asserted, the CPU can be in interrupt shadow
-due to sti or mov ss.
+Hi,
 
-It is not mandatory in  Intel/AMD prm to have the #SMI
-blocked during the shadow, and on top of
-that, since neither SVM nor VMX has true support for SMI
-window, waiting for one instruction would mean single stepping
-the guest.
+On 5/26/22 14:42, Viresh Kumar wrote:
+> +/**
+> + * dev_pm_opp_clear_config() - Releases resources blocked for OPP configuration.
+> + * @opp_table: OPP table returned from dev_pm_opp_set_config().
+> + *
+> + * This allows all device OPP configurations to be cleared at once. This must be
+> + * called once for each call made to dev_pm_opp_set_config(), in order to free
+> + * the OPPs properly.
+> + *
+> + * Currently the first call itself ends up freeing all the OPP configurations,
+> + * while the later ones only drop the OPP table reference. This works well for
+> + * now as we would never want to use an half initialized OPP table and want to
+> + * remove the configurations together.
+> + */
+> +void dev_pm_opp_clear_config(struct opp_table *opp_table)
+> +{
+> +	if (opp_table->genpd_virt_devs)
+> +		dev_pm_opp_detach_genpd(opp_table);
+> +
+> +	if (opp_table->regulators)
+> +		dev_pm_opp_put_regulators(opp_table);
+> +
+> +	if (opp_table->supported_hw)
+> +		dev_pm_opp_put_supported_hw(opp_table);
+> +
+> +	if (opp_table->set_opp)
+> +		dev_pm_opp_unregister_set_opp_helper(opp_table);
+> +
+> +	if (opp_table->prop_name)
+> +		dev_pm_opp_put_prop_name(opp_table);
+> +
+> +	if (opp_table->clk_configured)
+> +		dev_pm_opp_put_clkname(opp_table);
+> +
+> +	dev_pm_opp_put_opp_table(opp_table);
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_opp_clear_config);
 
-Instead, allow #SMI in this case, but both reset the interrupt
-window and stash its value in SMRAM to restore it on exit
-from SMM.
+1. I started to look at the Tegra regressions caused by these OPP
+patches and this one looks wrong to me because dev_pm_opp_set_config()
+could be invoked multiple times by different drivers for the same device
+and then you're putting table not in accordance to the config that was
+used by a particular driver.
 
-This fixes rare failures seen mostly on windows guests on VMX,
-when #SMI falls on the sti instruction which mainfest in
-VM entry failure due to EFLAGS.IF not being set, but STI interrupt
-window still being set in the VMCS.
+For example, if parent tegra-cpufreq driver sets supported_hw for
+cpu_dev and then cpufreq-dt also does dev_pm_opp_set_config(cpu_dev),
+then dev_pm_opp_clear_config(cpu_dev) of cpufreq-dt will put
+supported_hw(cpu_dev) of tegra-cpufreq. Hence this
+dev_pm_opp_set/clear_config() approach isn't viable, unless I'm missing
+something.
+
+2. Patches aren't bisectable, please make sure that all patches compile
+individually and without warnings.
+
+3. There is a new NULL dereference in the recent linux-next on Tegra in
+_set_opp() of the gpu/host1x driver. I'll take a closer look at this
+crash a bit later.
+
+Unable to handle kernel NULL pointer dereference at virtual address 00000000
+[00000000] *pgd=00000000
+Internal error: Oops: 80000005 [#1] SMP ARM
+Modules linked in:
+CPU: 3 PID: 38 Comm: kworker/u8:1 Not tainted
+5.19.0-rc3-next-20220621-00013-g0f8bc1c418c4-dirty #18
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events_unbound deferred_probe_work_func
+PC is at 0x0
+LR is at _set_opp+0x15c/0x414
+pc : [<00000000>]    lr : [<c0afa928>]    psr: 20000013
+sp : df989b60  ip : df989b60  fp : df989ba4
+r10: 00000000  r9 : c21e4b40  r8 : c2861e34
+r7 : c21b3010  r6 : c28a5080  r5 : c2861e00  r4 : 00000000
+r3 : 00000000  r2 : c28a5080  r1 : c2861e00  r0 : c21b3010
+Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 8000404a  DAC: 00000051
+Register r0 information: slab kmalloc-1k start c21b3000 pointer offset
+16 size 1024
+Register r1 information: slab kmalloc-512 start c2861e00 pointer offset
+0 size 512
+Register r2 information: slab kmalloc-128 start c28a5080 pointer offset
+0 size 128
+Register r3 information: NULL pointer
+Register r4 information: NULL pointer
+Register r5 information: slab kmalloc-512 start c2861e00 pointer offset
+0 size 512
+Register r6 information: slab kmalloc-128 start c28a5080 pointer offset
+0 size 128
+Register r7 information: slab kmalloc-1k start c21b3000 pointer offset
+16 size 1024
+Register r8 information: slab kmalloc-512 start c2861e00 pointer offset
+52 size 512
+Register r9 information: slab task_struct start c21e4b40 pointer offset 0
+Register r10 information: NULL pointer
+Register r11 information: 2-page vmalloc region starting at 0xdf988000
+allocated at kernel_clone+0x64/0x43c
+Register r12 information: 2-page vmalloc region starting at 0xdf988000
+allocated at kernel_clone+0x64/0x43c
+Process kworker/u8:1 (pid: 38, stack limit = 0x(ptrval))
+Stack: (0xdf989b60 to 0xdf98a000)
+...
+Backtrace:
+_set_opp from dev_pm_opp_set_opp+0x70/0xd8
+r10:00000001 r9:000f4240 r8:c2848440 r7:c2848440 r6:c28a5080 r5:c21b3010
+r4:c2861e00
+dev_pm_opp_set_opp from tegra_pmc_core_pd_set_performance_state+0x50/0xb8
+r6:c2848440 r5:c1807654 r4:c28a5080
+tegra_pmc_core_pd_set_performance_state from
+_genpd_set_performance_state+0x1fc/0x288
+r6:c2848690 r5:c2848680 r4:000f4240
+_genpd_set_performance_state from _genpd_set_performance_state+0xb8/0x288
+r10:00000001 r9:000f4240 r8:c284a000 r7:c2848440 r6:c284a250 r5:c28a7180
+r4:000f4240
+_genpd_set_performance_state from genpd_set_performance_state+0xb8/0xd4
+r10:c0185b00 r9:c28a7580 r8:00000000 r7:00000000 r6:c284a000 r5:00000000
+r4:c28a7580
+genpd_set_performance_state from genpd_runtime_resume+0x228/0x29c
+r5:c21b3810 r4:c284a1d0
+genpd_runtime_resume from __rpm_callback+0x68/0x1a0
+r10:c0185b00 r9:00000004 r8:00000000 r7:c08dd55c r6:c2173800 r5:c08dd55c
+r4:c21b3810
+__rpm_callback from rpm_callback+0x60/0x64
+r9:00000004 r8:c21b3894 r7:c08dd55c r6:c2173800 r5:c21e4b40 r4:c21b3810
+rpm_callback from rpm_resume+0x608/0x83c
+r7:c08dd55c r6:c2173800 r5:c21e4b40 r4:c21b3810
+rpm_resume from __pm_runtime_resume+0x58/0xb4
+r10:c21e4b40 r9:c21b3810 r8:c21b3800 r7:00000000 r6:c21b3894 r5:60000013
+r4:c21b3810
+__pm_runtime_resume from host1x_probe+0x48c/0x700
+r7:00000000 r6:c2862504 r5:00000000 r4:c2862440
+host1x_probe from platform_probe+0x6c/0xcc
+r10:c202c00d r9:c21e4b40 r8:00000001 r7:00000000 r6:c1812420 r5:c21b3810
+r4:00000000
+platform_probe from really_probe+0xd8/0x300
+r7:00000000 r6:c1812420 r5:00000000 r4:c21b3810
+really_probe from __driver_probe_device+0x94/0xf4
+r7:0000000b r6:c21b3810 r5:c1812420 r4:c21b3810
+__driver_probe_device from driver_probe_device+0x40/0x114
+r5:df989e84 r4:c1901580
+driver_probe_device from __device_attach_driver+0xc4/0x108
+r9:c21e4b40 r8:00000001 r7:c08c0fb4 r6:c21b3810 r5:df989e84 r4:c1812420
+__device_attach_driver from bus_for_each_drv+0x8c/0xd0
+r7:c08c0fb4 r6:c21e4b40 r5:df989e84 r4:00000000
+bus_for_each_drv from __device_attach+0xb8/0x1e8
+r7:c21b3854 r6:c21e4b40 r5:c21b3810 r4:c21b3810
+__device_attach from device_initial_probe+0x1c/0x20
+r8:c1882620 r7:00000000 r6:c1814e90 r5:c21b3810 r4:c21b3810
+device_initial_probe from bus_probe_device+0x94/0x9c
+bus_probe_device from deferred_probe_work_func+0x88/0xb4
+r7:00000000 r6:c1814c00 r5:c1814bec r4:c21b3810
+deferred_probe_work_func from process_one_work+0x21c/0x548
+r7:c202c000 r6:c2006a00 r5:c23e8380 r4:c1814c14
+process_one_work from worker_thread+0x27c/0x5ac
+r10:00000088 r9:c2006a00 r8:c1703d40 r7:c2006a1c r6:c23e8398 r5:c2006a00
+r4:c23e8380
+worker_thread from kthread+0x100/0x120
+r10:00000000 r9:df831e7c r8:c23ed0c0 r7:c23e8380 r6:c014bcfc r5:c23ed000
+r4:c21e4b40
+kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xdf989fb0 to 0xdf989ff8)
+9fa0:                                     00000000 00000000 00000000
+00000000
+9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+00000000
+9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c01539f4 r4:c23ed000
+Code: bad PC value
+---[ end trace 0000000000000000 ]---
 
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/emulate.c     | 17 ++++++++++++++---
- arch/x86/kvm/kvm_emulate.h | 13 ++++++++++---
- arch/x86/kvm/x86.c         | 12 ++++++++++++
- 3 files changed, 36 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 7a3a042d6b862a..d4ede5216491ad 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -2443,7 +2443,7 @@ static int rsm_load_state_32(struct x86_emulate_ctxt *ctxt,
- 			     struct kvm_smram_state_32 *smstate)
- {
- 	struct desc_ptr dt;
--	int i;
-+	int i, r;
- 
- 	ctxt->eflags =  smstate->eflags | X86_EFLAGS_FIXED;
- 	ctxt->_eip =  smstate->eip;
-@@ -2478,8 +2478,16 @@ static int rsm_load_state_32(struct x86_emulate_ctxt *ctxt,
- 
- 	ctxt->ops->set_smbase(ctxt, smstate->smbase);
- 
--	return rsm_enter_protected_mode(ctxt, smstate->cr0,
--					smstate->cr3, smstate->cr4);
-+	r = rsm_enter_protected_mode(ctxt, smstate->cr0,
-+				     smstate->cr3, smstate->cr4);
-+
-+	if (r != X86EMUL_CONTINUE)
-+		return r;
-+
-+	ctxt->ops->set_int_shadow(ctxt, 0);
-+	ctxt->interruptibility = (u8)smstate->int_shadow;
-+
-+	return X86EMUL_CONTINUE;
- }
- 
- #ifdef CONFIG_X86_64
-@@ -2528,6 +2536,9 @@ static int rsm_load_state_64(struct x86_emulate_ctxt *ctxt,
- 	rsm_load_seg_64(ctxt, &smstate->fs, VCPU_SREG_FS);
- 	rsm_load_seg_64(ctxt, &smstate->gs, VCPU_SREG_GS);
- 
-+	ctxt->ops->set_int_shadow(ctxt, 0);
-+	ctxt->interruptibility = (u8)smstate->int_shadow;
-+
- 	return X86EMUL_CONTINUE;
- }
- #endif
-diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-index 7015728da36d5f..11928306439c77 100644
---- a/arch/x86/kvm/kvm_emulate.h
-+++ b/arch/x86/kvm/kvm_emulate.h
-@@ -232,6 +232,7 @@ struct x86_emulate_ops {
- 	bool (*guest_has_rdpid)(struct x86_emulate_ctxt *ctxt);
- 
- 	void (*set_nmi_mask)(struct x86_emulate_ctxt *ctxt, bool masked);
-+	void (*set_int_shadow)(struct x86_emulate_ctxt *ctxt, u8 shadow);
- 
- 	unsigned (*get_hflags)(struct x86_emulate_ctxt *ctxt);
- 	void (*exiting_smm)(struct x86_emulate_ctxt *ctxt);
-@@ -520,7 +521,9 @@ struct kvm_smram_state_32 {
- 	u32 reserved1[62];			/* FE00 - FEF7 */
- 	u32 smbase;				/* FEF8 */
- 	u32 smm_revision;			/* FEFC */
--	u32 reserved2[5];			/* FF00-FF13 */
-+	u32 reserved2[4];			/* FF00-FF0F*/
-+	/* int_shadow is KVM extension*/
-+	u32 int_shadow;				/* FF10 */
- 	/* CR4 is not present in Intel/AMD SMRAM image*/
- 	u32 cr4;				/* FF14 */
- 	u32 reserved3[5];			/* FF18 */
-@@ -592,13 +595,17 @@ struct kvm_smram_state_64 {
- 	struct kvm_smm_seg_state_64 idtr;	/* FE80 (R/O) */
- 	struct kvm_smm_seg_state_64 tr;		/* FE90 (R/O) */
- 
--	/* I/O restart and auto halt restart are not implemented by KVM */
-+	/*
-+	 * I/O restart and auto halt restart are not implemented by KVM
-+	 * int_shadow is KVM's extension
-+	 */
-+
- 	u64 io_restart_rip;			/* FEA0 (R/O) */
- 	u64 io_restart_rcx;			/* FEA8 (R/O) */
- 	u64 io_restart_rsi;			/* FEB0 (R/O) */
- 	u64 io_restart_rdi;			/* FEB8 (R/O) */
- 	u32 io_restart_dword;			/* FEC0 (R/O) */
--	u32 reserved1;				/* FEC4 */
-+	u32 int_shadow;				/* FEC4 (R/O) */
- 	u8 io_instruction_restart;		/* FEC8 (R/W) */
- 	u8 auto_halt_restart;			/* FEC9 (R/W) */
- 	u8 reserved2[6];			/* FECA-FECF */
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a1b138f0815d30..665134b1096b25 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -7887,6 +7887,11 @@ static void emulator_set_nmi_mask(struct x86_emulate_ctxt *ctxt, bool masked)
- 	static_call(kvm_x86_set_nmi_mask)(emul_to_vcpu(ctxt), masked);
- }
- 
-+static void emulator_set_int_shadow(struct x86_emulate_ctxt *ctxt, u8 shadow)
-+{
-+	 static_call(kvm_x86_set_interrupt_shadow)(emul_to_vcpu(ctxt), shadow);
-+}
-+
- static unsigned emulator_get_hflags(struct x86_emulate_ctxt *ctxt)
- {
- 	return emul_to_vcpu(ctxt)->arch.hflags;
-@@ -7967,6 +7972,7 @@ static const struct x86_emulate_ops emulate_ops = {
- 	.guest_has_fxsr      = emulator_guest_has_fxsr,
- 	.guest_has_rdpid     = emulator_guest_has_rdpid,
- 	.set_nmi_mask        = emulator_set_nmi_mask,
-+	.set_int_shadow      = emulator_set_int_shadow,
- 	.get_hflags          = emulator_get_hflags,
- 	.exiting_smm         = emulator_exiting_smm,
- 	.leave_smm           = emulator_leave_smm,
-@@ -9744,6 +9750,8 @@ static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, struct kvm_smram_stat
- 	smram->cr4 = kvm_read_cr4(vcpu);
- 	smram->smm_revision = 0x00020000;
- 	smram->smbase = vcpu->arch.smbase;
-+
-+	smram->int_shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
- }
- 
- #ifdef CONFIG_X86_64
-@@ -9792,6 +9800,8 @@ static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, struct kvm_smram_stat
- 	enter_smm_save_seg_64(vcpu, &smram->ds, VCPU_SREG_DS);
- 	enter_smm_save_seg_64(vcpu, &smram->fs, VCPU_SREG_FS);
- 	enter_smm_save_seg_64(vcpu, &smram->gs, VCPU_SREG_GS);
-+
-+	smram->int_shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
- }
- #endif
- 
-@@ -9828,6 +9838,8 @@ static void enter_smm(struct kvm_vcpu *vcpu)
- 	kvm_set_rflags(vcpu, X86_EFLAGS_FIXED);
- 	kvm_rip_write(vcpu, 0x8000);
- 
-+	static_call(kvm_x86_set_interrupt_shadow)(vcpu, 0);
-+
- 	cr0 = vcpu->arch.cr0 & ~(X86_CR0_PE | X86_CR0_EM | X86_CR0_TS | X86_CR0_PG);
- 	static_call(kvm_x86_set_cr0)(vcpu, cr0);
- 	vcpu->arch.cr0 = cr0;
 -- 
-2.26.3
-
+Best regards,
+Dmitry

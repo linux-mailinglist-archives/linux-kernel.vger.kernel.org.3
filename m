@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCC155390F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747F355390D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbiFURkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 13:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352691AbiFURjw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1352725AbiFURjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 21 Jun 2022 13:39:52 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10olkn2023.outbound.protection.outlook.com [40.92.41.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688C81A07E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:39:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KbrGZPrt5Fb8dAbVZSHn9MFMqDH7c/GeF0S4a+PJgLkKQvBFOiWuoheEkc48myohxAd1U2CDinI2ekBKJ8+qS1VpIRjlVu/dwz05wPz9WL7TeXqpRNmDGo+WCkwIJs+C7oZCAvwaden+wdyqapg7cAdc7zHLqZBD1lUW2w29SrL8nbuCH+O7rms4LvIRky40Mk8lbpWZ4wQ7VV+rt1uSLeevsvwhPMx1WKtEHQZMXgDxQbT8VF2cnq7YLbL0VcBG4oQw1AUQbcQJmY16+aB1miEPtmsfPQ1FZngUj206KGdWVnCga0ytLmXWncvXs6JNuNFHfMMTvbg8N8NJ/R9EIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xLsYb9Vfr9Y7JWEXFo+mKMDXssdPROCQmuiO0zrLqZQ=;
- b=iZWpfJrOyHHs6FWVIKFYk0OV2xtdfpsCqBGIU5hs6O81JPRS9BdksmiCuvLMNiJLULhv8jMPFhjgv8mKVnZ9FwojokotKWyUnclLyYzkgX12G8ngkPwT+TyZ2/FIt8UnS64HCYq83lHaWTEEoB9XRWMXUZxnvHERAWhqEeQYloROUwkWtCyLVY6HbfaYAqfen9SZy7art29Qa/75KNoe5b8j2zmDEDWxK13xSAE/EGy9rrzLPa6geXMNmW5NgAIBQNau7emvTr2r/1uAWtAsrTrEXJaPFEMrnWeYeeVKFJsXw2ifULsyrppQIs33fYbQl2dIpb+XPl0TA1Vc7dvklw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xLsYb9Vfr9Y7JWEXFo+mKMDXssdPROCQmuiO0zrLqZQ=;
- b=oNxM8KjLX2qEybt/zsiA2P5Sd3atMM3/8AlthB6F/DknIOfVS5IQdWgu0hbIQBYvn/nq2NcemxkFX5+TLKexmpn5iBbE4+hYZ9cEhBW8RrHw0EgXzHSpPvY1iELmhCwrmLPcd/IQrKBzVChhrv+wYMJTTUgQL9FQg84LsFFQPooI4GXN51ZQm+XZXXwCZ6Ld/fnWwBfpm1uNc+HpPExzSJTR9harKAVSOoEV2e2HZxKpipVT/2OG2a4fqRmF4KNiMhYwq36a4YBwuVf63Zbkxlbici5p2tvMo/sfRtYVfAXNLq9usWuMTc9K1KnGY6GTQUBrZ8mEX+Lq9tO3ua/d/g==
-Received: from PH7PR14MB5594.namprd14.prod.outlook.com (2603:10b6:510:1f6::17)
- by DM4PR14MB5550.namprd14.prod.outlook.com (2603:10b6:8:8e::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.14; Tue, 21 Jun 2022 17:39:47 +0000
-Received: from PH7PR14MB5594.namprd14.prod.outlook.com
- ([fe80::ad4e:5917:88d1:c56f]) by PH7PR14MB5594.namprd14.prod.outlook.com
- ([fe80::ad4e:5917:88d1:c56f%9]) with mapi id 15.20.5353.018; Tue, 21 Jun 2022
- 17:39:47 +0000
-From:   Celeste Liu <coelacanthus@outlook.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org
-Cc:     Celeste Liu <coelacanthus@outlook.com>,
-        Xiongchuan Tan <xc-tan@outlook.com>,
-        Wang Ruikang <dramforever@live.com>,
-        Ruizhe Pan <c141028@gmail.com>, linux-kernel@vger.kernel.org,
-        Yash Shah <yash.shah@sifive.com>
-Subject: [PATCH v3 RESEND] riscv: don't allow write but not read page mapping 
-Date:   Wed, 22 Jun 2022 01:39:37 +0800
-Message-ID: <PH7PR14MB5594762EF0A4B69A1C31D1B0CEB39@PH7PR14MB5594.namprd14.prod.outlook.com>
-X-Mailer: git-send-email 2.36.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [v7yOssjyVlnnmoYgN/Ax650AhkiIYZZz3q9X2fHY1ycdzua9C9j0xNTS0kE+ndI+Mvq77hDkP9w=]
-X-ClientProxiedBy: TYCPR01CA0123.jpnprd01.prod.outlook.com
- (2603:1096:400:26d::9) To PH7PR14MB5594.namprd14.prod.outlook.com
- (2603:10b6:510:1f6::17)
-X-Microsoft-Original-Message-ID: <20220621173937.92702-1-coelacanthus@outlook.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352406AbiFURjr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Jun 2022 13:39:47 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DCB1C10F;
+        Tue, 21 Jun 2022 10:39:46 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so4983675pjj.5;
+        Tue, 21 Jun 2022 10:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mm0iD6HT9Mx8CXXEjxAdU1TvUV4Ez2s5c81pc2wmXwg=;
+        b=Cpkt5sgP0fqAe+Y1iRtsx8qe+2jJ5InANoetmpK6UNu1KPb9jca4X2hLmzTTN1WqPF
+         AU0N56w++P4mZB3mMlojr8wWM6bXtyDQsj/chEau1PJEWu/RbPlbW8FkMaEMDcuPhG5r
+         NO9U1XfR4Ff0tZM0w5zbEK3DXlzrhHV7B8JwF4bM67grhmMuaBqYmjgCMyeRoaWlti7C
+         oSeeejFFPjPSIRjK9+1Rgrl2zWynXbFQRm7FQYkAlfB/wIgHuMlRiuxIjmRIwu5lXPCE
+         0Z5+P7a9Rw480gqVmvlY0WIZSXBMO/pcQ7u54RbQuXhy+qhX+mUtGNe0SZOZMRjQfaGC
+         hf8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mm0iD6HT9Mx8CXXEjxAdU1TvUV4Ez2s5c81pc2wmXwg=;
+        b=RUgcl7rL7IdSWWFD6qs7/DMLSajLQ+ND+DI93mFzP9GEELexvxELPkYsLRWV5VoscD
+         m2iCPeSdzxxaIRlbJTW4a+UyTqgRHD728fEw0sWpp+5zLPB3Dake2f2Ea1kngNQSgPww
+         ZS44z3Wk73d25ppXRGUF2R8WuhyT46KcAdbY32skeQUHbFKPEVaQ+8HCHifbIY/KOW2E
+         at4w1pMRd/QekuKCoh+xldrTopHr8lhjfbT50bEgHzINzGnKQEN1KOUumy2BlrwJFk6t
+         8T4ZLWJT2JtUyKMIFN4lEk/lPZLdgz9vPqtrhbiyPoQpxUtScczfdZArH4hCqryDbSN4
+         8uwA==
+X-Gm-Message-State: AJIora/Nuv4KcXctTMUE/b3dQKALG8795vuSP86e3LwjKxKnIMvwqjIQ
+        fYg0KsDJDM3u9ZxRPKDui9s=
+X-Google-Smtp-Source: AGRyM1tK7vJkGhs4aAwjMWhpAIqeIo4Bvt11WfobTLLuR1i8TRAIfeLZcBg7z4nUYaKeHpF0qxaBHg==
+X-Received: by 2002:a17:90a:2e02:b0:1ea:c661:7507 with SMTP id q2-20020a17090a2e0200b001eac6617507mr43707102pjd.133.1655833186113;
+        Tue, 21 Jun 2022 10:39:46 -0700 (PDT)
+Received: from localhost ([172.85.181.54])
+        by smtp.gmail.com with ESMTPSA id cp1-20020a170902e78100b00168f329b282sm10960496plb.155.2022.06.21.10.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 10:39:45 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 10:39:44 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Message-ID: <YrICYCW0fCb0Rh8/@yury-laptop>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+ <YrCB/rz3RM6TCjij@FVFF77S0Q05N>
+ <20220620150855.2630784-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 83e88a12-a3c3-442b-ee91-08da53ad08ab
-X-MS-Exchange-SLBlob-MailProps: ajGO1BpsH8pdkbXaTHEBI4QwGIS8rnhWuIskGzFt2gjBuQEVGs7t3BgZYvyoi3eC6kiYgUZYyHqjTkPye5SWEdc7m82/hKKl2p82oMJ91wmYKkFWmqQ61dEshItvsFZ6bHB2CGsoTdMQVFOwk9J6vIpdsDoDMRmvUnMUm4EveQkOGs2y4CJToRSnVxk11UTgw7Bj+N7OfvXYd8GoMmU4MM+P2QddZ2qGnXlV3y5vFAhcHlR+gGl01APOtwwS0ef3XImYqU8h5tVKBVEeg0+M8t7u/Idr1ZRzOXUIf8hyYNEyR1W2iirkhvIyi8WafheyGLlWxrUMPvEKaLP2+DvOTnmDZAz6YwxbRYonpdtWeVeShfJzFNxMUFBW0YRyRhmdmBxIO4rB0qXAFw+hB7r2ylkyknIR91M5RAscEqwcW80lGB3DPKbmp0fPZdwI/+yyIAqjkt4khvF2TGbVTDfcgio0JF7wYKZYzb8HCymF+nNhB5/2r5vLdxX8Qhl8ge/obCrT3cQN/2lzvaciYC9/hLhVIVtX8H8U/NgFaubO9G9+1Lc3fKb/qP2mQMZlDOmqgXSaNNRU8dJLxJlc1NDNEakZOzhxsb5pReiVbRyGubGs+m1UgZ9atcya80NcEixBHV0ml26b0oYHpAGCreVrefdggXvJgVJzgWfgW+rnvM0t0QssmSgPviY4GWoprc2AVdbMD8n6kWBFS345+pCoVB7yB0dmNg1Kmc4LwqRHYLcksh25WyYkHfEDG9DJKmYXu4+tM4i3fmFT9UDg9oOQVHH2Sbn5T6jQAmBRWpnqZOLDbkCHEZ1zhta58Q4K7beeevaABmfd4XLZFMNnjIy4avjK5yj4UVBA/vqwrx5KrL8=
-X-MS-TrafficTypeDiagnostic: DM4PR14MB5550:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a36LLd3jv9E1IYV/TvnBS8bd92PzV6N6QoWiqVttmoaNhfmRnsfulstPGapQNqXbgdSqOUFyUawHLA0zPiUHuYlugogou2+Rmn4+nvIGL31vNqRv1SLj0kHq04QFATzdn6u3qXHw7sQ9s2ALzgcFLWAbOetwEZ/a/v3qeLUU6uc+HA44FJ/ctqCUPelGIfS/veln0LZ+ElMxu+klb5VUR5NmRK4S0sDjpsaaTCIK7UgQ51V9zJp5Tx6nlXJ+roFO5mC2GgzxlANrlb7LmM82I01athRXEVzpLvj70LpioEjiJ8Z+sMqdI4RLGIBmgnZ7QQvDP+7qPLCNVXGtnObAjcpLJtPZsQPDMhcoE6+QZooL5usFacmPzCqrGlMwuTgYqMT/55eLY+/ivFGLc40ZdWJ9ENPWfnbxhNEktjLWei3vnqBIK/mevXRG1Oz5ULfVTjUFXo72SQeqPVL0BsQ/kd1fvDVko2l1puHh370jIs/FWu9asGzOfFZunGqMBjgEACTRFMzm5cwCZ22A14D68iXRNLDiZCtWqfjrMTequCRVUAE81W4HldeYYtNsaYZYp+yNWZDOX4yygybXfBt/oH/4PoNRTvHF1byYJ7vtvNyM20KCKRsBY3qc6U8e2VjiprRLTZ7BPTfefYzisWr07w==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JEYj51smeNyATC2c7D/s30k37ERY7EXPzPWMlHv51QQqwvHJc6/oKeO9kvpO?=
- =?us-ascii?Q?fRbVride89NvQd0zaOLtwgKKPNyehvmm7yAOH1D8BcAzTQqUslTC4TAolprQ?=
- =?us-ascii?Q?WLrmfazhnkJbPjdcBHtggOskgzegOdmof1U1djVC1wEIXwGu8Yxu3s2AElTm?=
- =?us-ascii?Q?pcz/S17q/SWZLkxiAX5+pFI8MmXZeVgq4J1Av58KT6DWJyLaKBouHo49Kr57?=
- =?us-ascii?Q?pgMvvSVTf3Qp8FllHIK/7+kiKS1hHwTJ9XqoQBL5Tzq9mmJkHbeHyYxJ5UO/?=
- =?us-ascii?Q?FdQIq3l1NHd6LePLqISzLGLqpvyrFloBG5KDuwci4QuO/wOaw9WEHKZKfQ6I?=
- =?us-ascii?Q?VatHZE3f8lJuepoXihQ8siI1z9yz9GVt92J2YNmlTYG3rjFP/FsDak/PbsFD?=
- =?us-ascii?Q?pESy0N/TVjCugHtqeLnTpy2WninwNWGqF2mKXzCHCJ93uN7RCr/wJQYHPk9K?=
- =?us-ascii?Q?rICnJGcEROw1oVrH437vhJhGzyIGPXbCVYIphEQEfs+6PGkwJXbCkXTftwhM?=
- =?us-ascii?Q?r535Kf8WWUYdtroRzQtfGnfOmYa/SwSh1rjDBHWMuOTulkT/PJ9IdTQf0tPP?=
- =?us-ascii?Q?Ggf/4i0dh1Fs6HrwPouhVlYI2Pz26Qqn1Tzbu79arGnAL7nAdtUEtzzWIooY?=
- =?us-ascii?Q?4A0w0+8Nxh3+ZsjRdyJKL6dC1ihU1FENLRSWqa4Fdzr3i8HWaDER9rq55yxP?=
- =?us-ascii?Q?XLRU5wq+9RL7cNqUT9GMQ/wGQeQOqUv7tCZHkk+r44W97//ZjgabmyLIWhTs?=
- =?us-ascii?Q?pwR2maq8b2gdVFdB278y1AdLqdj9+gWqgQgVWeqOHe5VrdmcMbgXjv97zyPy?=
- =?us-ascii?Q?wxIyGiwXkFTlIvpCb0Wy9SUwXFeAPw0K3ogTmJgGCozCnUYN2MSb/zVt0psF?=
- =?us-ascii?Q?aG6QV18ex7fvY4Pf5ydgHCSRTg+yAFI/H1sJHe+mCTR+bdS4g322rjqdR64+?=
- =?us-ascii?Q?I8y4spR11VEdpWToTp7IbXcurVHVdFBEGMv28i2eFdUJXQOWzOB4ZCEb9DIW?=
- =?us-ascii?Q?1578H+bYAHi/baaj/YomPfFxYGyHTLP3n7WktVVeJtudOwryUttiYbqZFWgW?=
- =?us-ascii?Q?AiIJ38aNAOtUOlZTDB8D+j3YYFhZqxKc29tni8zgGo3uMATfXsnZASprYYJQ?=
- =?us-ascii?Q?6t9l1KTlaE5lB3c27VkmfKjPFUK0It6bU0i8bI9zt4DT3ZQq0UC1huMCGpuW?=
- =?us-ascii?Q?04Qm/OVI+0x0jqpgPidV67TkXUMqE533aX8r9IYXhxJ6l3sVzFWSKkLHCTEq?=
- =?us-ascii?Q?Wiak3uVyrSBfQV0QR+aozyDhtz2KTFAGeQa/wpDE+jaaXw2LY1ClibrN4/uI?=
- =?us-ascii?Q?oyOwd0oxl2nCXSVCugYGAvkvwt/DnbsOnDmvQ+DTrtnx2/qFlQbpkffyyOHv?=
- =?us-ascii?Q?aJhQNhA8sj62Ke27gq6WIDHnKpcPaZle2xKR4uyxmnGDZNHZYEYgPgnNoLSe?=
- =?us-ascii?Q?n9yRgeVmp0i61XxiUSxiQjyAjG1jhqVtBKEbfCYPCxVFR+2cDBBWfGSkAmTU?=
- =?us-ascii?Q?TEW3FaRZPAQ0lUoPTcTc0aK7xHMxPj5pXRPe?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83e88a12-a3c3-442b-ee91-08da53ad08ab
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR14MB5594.namprd14.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 17:39:47.1278
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR14MB5550
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620150855.2630784-1-alexandr.lobakin@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,62 +90,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When Xiongchuan Tan tries to run one of libaio's tests[1], it encounters a strange
-behavior: for the same PROT_WRITE only mapping, there was a discrepancy
-in whether it could be read before and after writing (readable before
-writing, unreadable after writing). After some investigation,
-I found that mmap allows write only mapping, an undefined behavior, on RISC-V.
+On Mon, Jun 20, 2022 at 05:08:55PM +0200, Alexander Lobakin wrote:
+> From: Mark Rutland <mark.rutland@arm.com>
+> Date: Mon, 20 Jun 2022 15:19:42 +0100
+> 
+> > On Fri, Jun 17, 2022 at 04:40:24PM +0200, Alexander Lobakin wrote:
+> > > So, in order to let the compiler optimize out such cases, expand the
+> > > test_bit() and __*_bit() definitions with a compile-time condition
+> > > check, so that they will pick the generic C non-atomic bitop
+> > > implementations when all of the arguments passed are compile-time
+> > > constants, which means that the result will be a compile-time
+> > > constant as well and the compiler will produce more efficient and
+> > > simple code in 100% cases (no changes when there's at least one
+> > > non-compile-time-constant argument).
+> > 
+> > > The savings are architecture, compiler and compiler flags dependent,
+> > > for example, on x86_64 -O2:
+> > > 
+> > > GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> > > LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> > > LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> > > 
+> > > and ARM64 (courtesy of Mark[0]):
+> > > 
+> > > GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> > > LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
+> > 
+> > Hmm... with *this version* of the series, I'm not getting results nearly as
+> > good as that when building defconfig atop v5.19-rc3:
+> > 
+> >   GCC 8.5.0:   add/remove: 83/49 grow/shrink: 973/1147 up/down: 32020/-47824 (-15804)
+> >   GCC 9.3.0:   add/remove: 68/51 grow/shrink: 1167/592 up/down: 30720/-31352 (-632)
+> >   GCC 10.3.0:  add/remove: 84/37 grow/shrink: 1711/1003 up/down: 45392/-41844 (3548)
+> >   GCC 11.1.0:  add/remove: 88/31 grow/shrink: 1635/963 up/down: 51540/-46096 (5444)
+> >   GCC 11.3.0:  add/remove: 89/32 grow/shrink: 1629/966 up/down: 51456/-46056 (5400)
+> >   GCC 12.1.0:  add/remove: 84/31 grow/shrink: 1540/829 up/down: 48772/-43164 (5608)
+> > 
+> >   LLVM 12.0.1: add/remove: 118/58 grow/shrink: 437/381 up/down: 45312/-65668 (-20356)
+> >   LLVM 13.0.1: add/remove: 35/19 grow/shrink: 416/243 up/down: 14408/-22200 (-7792)
+> >   LLVM 14.0.0: add/remove: 42/16 grow/shrink: 415/234 up/down: 15296/-21008 (-5712)
+> > 
+> > ... and that now seems to be regressing codegen with recent versions of GCC as
+> > much as it improves it LLVM.
+> > 
+> > I'm not sure if we've improved some other code and removed the benefit between
+> > v5.19-rc1 and v5.19-rc3, or whether something else it at play, but this doesn't
+> > look as compelling as it did.
+> 
+> Mostly likely it's due to that in v1 I mistakingly removed
+> `volatile` from gen[eric]_test_bit(), so there was an impact for
+> non-constant cases as well.
+> +5 Kb sounds bad tho. Do you have CONFIG_TEST_BITMAP enabled, does
+> it work? Probably the same reason as for m68k, more constant
+> optimization -> more aggressive inlining or inlining rebalance ->
+> larger code. OTOH I've no idea why sometimes compiler decides to
+> uninline really tiny functions where due to this patch series some
+> bitops have been converted to constants, like it goes on m68k.
+> 
+> > 
+> > Overall that's mostly hidden in the Image size, due to 64K alignment and
+> > padding requirements:
+> > 
+> >   Toolchain      Before      After       Difference
+> > 
+> >   GCC 8.5.0      36178432    36178432    0
+> >   GCC 9.3.0      36112896    36112896    0
+> >   GCC 10.3.0     36442624    36377088    -65536
+> >   GCC 11.1.0     36311552    36377088    +65536
+> >   GCC 11.3.0     36311552    36311552    0
+> >   GCC 12.1.0     36377088    36377088    0
+> > 
+> >   LLVM 12.0.1    31418880    31418880    0
+> >   LLVM 13.0.1    31418880    31418880    0
+> >   LLVM 14.0.0    31218176    31218176    0
+> > 
+> > ... so aside from the blip around GCC 10.3.0 and 11.1.0, there's not a massive
+> > change overall (due to 64KiB alignment restrictions for portions of the kernel
+> > Image).
 
-As mentioned in Table 4.5 in RISC-V spec Volume 2 Section 4.3 version
-"20211203 Privileged Architecture v1.12, Ratified"[2], the PTE permission
-bit combination of "write+!read" is "Reserved for future use.". Hence, don't
-allow such mapping request in mmap call. In the current code[3], write+exec
-only is marked as invalid, but write only is not marked as invalid.
+I gave it a try on v5.19-rc3 for arm64 with my default GCC 11.2, and it's:
+add/remove: 89/33 grow/shrink: 1629/966 up/down: 51456/-46064 (5392)
 
-This patch refines that judgment.
+Which is not great in terms of layout size. But I don't think we should
+focus too much on those numbers. The goal of the series is not to shrink
+the image; the true goal is to provide more information to the compiler
+in a hope that it will make a better decision regarding optimizations.
 
-[1]: https://pagure.io/libaio/blob/1b18bfafc6a2f7b9fa2c6be77a95afed8b7be448/f/harness/cases/5.t
-[2]: https://github.com/riscv/riscv-isa-manual/releases/download/Priv-v1.12/riscv-privileged-20211203.pdf
-[3]: modified in commit e0d17c842c0f824fd4df9f4688709fc6907201e1
-     (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0d17c842c0f824fd4df9f4688709fc6907201e1)
+Looking at results provided by Mark, both GCC and LLVM have a tendency
+to inline and use other techniques that increase the image more
+aggressively in newer releases, comparing to old ones. From this
+perspective, unless we find some terribly wrong behavior, I'm OK with
++5K for the Image, because I trust my compiler and believe it spent
+those 5K wisely.
 
-Reported-by: Xiongchuan Tan <xc-tan@outlook.com>
-Co-developed-by: Wang Ruikang <dramforever@live.com>
-Signed-off-by: Wang Ruikang <dramforever@live.com>
-Co-developed-by: Ruizhe Pan <c141028@gmail.com>
-Signed-off-by: Ruizhe Pan <c141028@gmail.com>
-Signed-off-by: Celeste Liu <coelacanthus@outlook.com>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Cc: linux-riscv@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Yash Shah <yash.shah@sifive.com>
----
- arch/riscv/kernel/sys_riscv.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+For the reasons said above, I think we shouldn't disable const
+bitops for -Os build.
 
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 9c0194f176fc..e55281b497cf 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -18,9 +18,14 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
- 	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
- 		return -EINVAL;
- 
--	if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
--		if (unlikely(!(prot & PROT_READ)))
--			return -EINVAL;
-+	/*
-+	 * As mentioned in Table 4.5 in RISC-V spec Volume 2 Section 4.3 version
-+	 * "20211203 Privileged Architecture v1.12, Ratified", the PTE permission
-+	 * bit combination of "write+!read" is "Reserved for future use.". Hence, don't
-+	 * allow such mapping request in mmap call.
-+	 */
-+	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
-+		return -EINVAL;
- 
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
- 			       offset >> (PAGE_SHIFT - page_shift_offset));
--- 
-2.36.1
+I think this series has total positive impact because it adds a lot
+of information for compiler with just a few lines of code.
 
+If no objections, I think it's good to try it in -next. Alexander,
+would you like me to fix gen/generic typo in comment and take it in
+bitmap-for-next, or you'd prefer to send v4?
+
+Thanks,
+Yury

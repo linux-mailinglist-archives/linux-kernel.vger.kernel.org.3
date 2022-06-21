@@ -2,98 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E2F552A09
+	by mail.lfdr.de (Postfix) with ESMTP id EAFBB552A0A
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiFUEDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 00:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
+        id S230025AbiFUEDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 00:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237022AbiFUEDe (ORCPT
+        with ESMTP id S231804AbiFUEDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 00:03:34 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE33E1C906
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 21:03:33 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id i64so11933425pfc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 21:03:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RZ9pEW9/Xss2opj8NdBtkbickpuy+86/XGNBBbLjj9A=;
-        b=U/KM7/RGGAnmCDAb1dEN26UirE2cOMgyRV+35pgeM0ybt2bdeb0PTBkB2ayjnu10BS
-         yWKkD5HDJXwOgjJHOCw/I7FnkLp4au79qt4thvPFloOgRQPsZ+1ZCGPbUAHlNinJPW2f
-         V/xZK6UpbakbYNN6a3FErpTEqvh2TE6syjx5Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RZ9pEW9/Xss2opj8NdBtkbickpuy+86/XGNBBbLjj9A=;
-        b=Lk4wrehHRmXh0EveF2YDloXk2z7xSv+mMP5Hn3wfn/PK52WMYbdsCwLqArdWl2H+vq
-         LZhbAAE5Z3u4lxlyn6ru8atKernU/HKnvm2xZCsuM0mltWo5HBmRlWFyfenV7cjHo+nZ
-         rS7B+AvW9HTzIjFdjw4i6J87/GbqxG5odlvJZ1rxeFbZVYBoCK3LQ4TY2m8kKryW5aGj
-         4StwNUva8MnrBGSNrV5ddLSvTiHA7HBLlPTfpbh6RS2LCT52sbJ05qev1Fn+6GHowYIF
-         RvkK3IkdyO8W9KgDnr0GjVvlvKfL35loORuKew9gnddsOzh9eIoTmC8RQpfr3xvefZLh
-         roCA==
-X-Gm-Message-State: AJIora/LLz7O4OX0yuJNa6rgCRITtR4xlIWjrj/6Th8/Eh8kFGwkB+Y2
-        nNGirhUqt+wxgFMuVzqerBAcbA==
-X-Google-Smtp-Source: AGRyM1uGzkWyJhK+WU7ooPGx3elf7o3UQYfv7Wrax6G4YMN2oUt6eFQPMZaxlCvlPPvF5Gk/rZnTYw==
-X-Received: by 2002:a63:8f1a:0:b0:409:fc0f:5bee with SMTP id n26-20020a638f1a000000b00409fc0f5beemr22852083pgd.427.1655784213235;
-        Mon, 20 Jun 2022 21:03:33 -0700 (PDT)
-Received: from [192.168.86.125] (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
-        by smtp.gmail.com with ESMTPSA id q22-20020a17090a431600b001eae86cf683sm8970569pjg.42.2022.06.20.21.03.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 21:03:32 -0700 (PDT)
-Message-ID: <b0de876b-3815-8a31-56d0-2052d83dcff2@chromium.org>
-Date:   Mon, 20 Jun 2022 21:03:31 -0700
+        Tue, 21 Jun 2022 00:03:51 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBF021812
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 21:03:47 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 42A293200392;
+        Tue, 21 Jun 2022 00:03:46 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 21 Jun 2022 00:03:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1655784225; x=
+        1655870625; bh=5CIwMNK/gDKbcFBkIn3kz8/WBVGi20o0cyPDTNwTmpY=; b=Y
+        EVvCmRcwiwEkKVOixkHKaw4FnCCGRDL4Lwffa6a9WnWgiE4za54P2O825/xtZ8wf
+        ZOcg4ksqFogHUpa8sVAQbxShi3z6py/FkoKloywVQPYjtJs/9CVWxhh3KPL86Fgd
+        TjsxLnI4d7IBIuaGYUdxXULFzyfHsY1MVXB/QAGpVQfSAibGOqd/ZrcPJRo7bf0+
+        qM8RfTWca/LPFSXmBGIW2VASHA37BXOw5ZMHKhLFySQxDbjQ3x1pw4LULKQTb15T
+        LBtkM0NdFCwdQG8NrSASJ+ofbjn7jYJ1wII6YvA7kQS0AKk0nhFt+gG6pOLYlEUo
+        HX2w3j8bnQFwwOYvn+tAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655784225; x=
+        1655870625; bh=5CIwMNK/gDKbcFBkIn3kz8/WBVGi20o0cyPDTNwTmpY=; b=f
+        VFDS0BVqFGoerCvpcfOjYOPdNj5yJ7BFia7kyzzM1I9xnuR5wuUebDKqgKG/A+sp
+        muEuASPgTV9vsiG39KXQ2kzz/aD+ZA+vsMlxbJb2+muvccyOsHwsMXe2PP5cyUkI
+        kT+pw+AH0l8zcq3oYj0oB6vfqbLBabq3Oc7KPE+v2/xaDNVA8tstIgbuCq0Bz9Jn
+        b/z0Jvc3Igl5R3TmOiYeh/UGWuTsW/iRyx90i/qSZ97pTJCjtwgr1WYkMzZwo1kD
+        NJs51eUVuhzuDWxQJDiY+11mQDFLnnBt4ygqrDE19aj2N8+U+B6W8+Bwxrmt+WXs
+        KiP81uVLcOslkURnRdCnw==
+X-ME-Sender: <xms:IUOxYkCUw2d9XYo2q_V1xW69mLSxEJ_j5egjcaJpI_9yYvL8z1UdVg>
+    <xme:IUOxYmi7bVhWMUZ9-aGQnz6N6KMOaFliVO-g-CiUWz7qlhwGDX3mCduGplGtvqq_1
+    QlIcIVzHx8bkAZvLQ>
+X-ME-Received: <xmr:IUOxYnmTWChUqZNLe4LRizf99FLlRaHec5JskfOF1DtRvtQ6ipngr0FtoUdFzHaQr1PcuBhH2CRhOEC44MKJtfcRy89ytnkRwRMm8-lEw5Hag7nTV09E2eLqrg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:IUOxYqzspOgQl9oeqeM3wRuuVziC9SiuzgDs_cyJVClxMWiZbckUhQ>
+    <xmx:IUOxYpQRr82KIdmBFSG1QdWXuo1NLzVYl0MdSDEFzgCuiC3Hy_jRxQ>
+    <xmx:IUOxYlYQrOpudGAEwXHfPZvb7wAisX505cjNr61Z8FrQJR6WpgC-XQ>
+    <xmx:IUOxYpbkXtO_6aiPN4B4QnYwUPOA1urHWJpN0yFCBGWy5-cTUW43Uw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Jun 2022 00:03:44 -0400 (EDT)
+Subject: Re: [PATCH v2 4/6] genirq: Provide an IRQ affinity mask in non-SMP
+ configs
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Guo Ren <guoren@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20220616064028.57933-1-samuel@sholland.org>
+ <20220616064028.57933-5-samuel@sholland.org> <87h74ipcos.wl-maz@kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <eb0a74ce-f444-de74-d944-87fc42091c46@sholland.org>
+Date:   Mon, 20 Jun 2022 23:03:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v8 1/5] arm64: dts: qcom: sc7180: Add wormdingler dts
- files
+In-Reply-To: <87h74ipcos.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20220617164000.v8.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
- <CAD=FV=XV_FOTT1WKBEUVCXJgGtay1O8qDi7Mj4BG1AUL6nh9TA@mail.gmail.com>
-From:   "Joseph S. Barrera III" <joebar@chromium.org>
-In-Reply-To: <CAD=FV=XV_FOTT1WKBEUVCXJgGtay1O8qDi7Mj4BG1AUL6nh9TA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 5:14 PM, Doug Anderson wrote:
-> Something in this patch series you need to talk about how you relate
-> to Stephen's two patches, AKA
+On 6/18/22 4:01 AM, Marc Zyngier wrote:
+> Hi Samuel,
 > 
-> 1.https://lore.kernel.org/all/20220602190621.1646679-1-swboyd@chromium.org/
-> - arm64: dts: qcom: Remove duplicate sc7180-trogdor include on
-> lazor/homestar
+> On Thu, 16 Jun 2022 07:40:26 +0100,
+> Samuel Holland <samuel@sholland.org> wrote:
+>>
+>> IRQ affinity masks are not allocated in uniprocessor configurations.
+>> This requires special case non-SMP code in drivers for irqchips which
+>> have per-CPU enable or mask registers.
+>>
+>> Since IRQ affinity is always the same in a uniprocessor configuration,
+>> we can still provide the correct affinity mask without allocating one
+>> per IRQ. We can reuse the system-wide cpu_possible_mask.
+>>
+>> By returning a real cpumask from irq_data_get_affinity_mask even when
+>> SMP is disabled, irqchip drivers which iterate over that mask will
+>> automatically do the right thing.
+>>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>> (no changes since v1)
+>>
+>>  include/linux/irq.h | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/include/linux/irq.h b/include/linux/irq.h
+>> index 69ee4e2f36ce..d5e958b026aa 100644
+>> --- a/include/linux/irq.h
+>> +++ b/include/linux/irq.h
+>> @@ -151,7 +151,9 @@ struct irq_common_data {
+>>  #endif
+>>  	void			*handler_data;
+>>  	struct msi_desc		*msi_desc;
+>> +#ifdef CONFIG_SMP
+>>  	cpumask_var_t		affinity;
+>> +#endif
+>>  #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
+>>  	cpumask_var_t		effective_affinity;
+>>  #endif
+>> @@ -881,7 +883,11 @@ static inline int irq_data_get_node(struct irq_data *d)
+>>  
+>>  static inline struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
+>>  {
+>> +#ifdef CONFIG_SMP
+>>  	return d->common->affinity;
+>> +#else
+>> +	return &__cpu_possible_mask;
+>> +#endif
 > 
-> 2.https://lore.kernel.org/all/20220518172525.3319993-1-swboyd@chromium.org/
-> - arm64: dts: qcom: sc7180-trogdor: Split out keyboard node and
-> describe detachables
+> I have a bad feeling about this one. Being in a !SMP configuration
+> doesn't necessarily mean that __cpu_possible_mask only contains a
+> single CPU, specially with things like CONFIG_INIT_ALL_POSSIBLE. I can
+> also imagine an architecture populating this bitmap from firmware
+> tables irrespective of the SMP status of the kernel.
 > 
-> Probably that should be in a cover letter. At the moment, it looks as
-> if you are assuming that patch #1 is there but you're assuming patch
-> #2_isn't_  there. Is that correct?
+> Can't you use something like:
+> 
+> 	return cpumask_of(0);
+> 
+> which is guaranteed to be the right thing on !SMP configuration?
 
-Yes, that's correct, and I'll note that in the cover letter.
+I can if I cast away the const. However I see a lot of:
+
+    cpumask_copy(irq_data_get_affinity_mask(d), foo);
+
+which I suppose is a great reason not to do what I am doing. The right solution
+seems to be adding irq_data_update_affinity() to match
+irq_data_update_effective_affinity(), and making both getters return a const
+cpumask. Then I can use cpumask_of(0).
+
+Regards,
+Samuel

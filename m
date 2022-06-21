@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69455552B94
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A891552B9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346656AbiFUHQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S1346821AbiFUHSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345218AbiFUHQg (ORCPT
+        with ESMTP id S1345379AbiFUHSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:16:36 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168EA167F5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:16:35 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id pk21so2389526ejb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/5gwkSl/og89k1zbn3bGxQzVMXDxSRfDx3JEZvQSNL0=;
-        b=s0q9EHSJfWNT30T82nv9UOc+9lynICqUpHr3RHu563kFNqnRFE60UQSt+RYmVqm9qq
-         YgufxSLZtsEjESJjMunfsYTqY2pA1C7nh4wpSK4u81/0hyJqM8w6A1XLeP/xQVMivlyn
-         h/NTipUKFmIFtxtmvglYq0QnnEd0dqPZFSk+TaAowTvqRAEwO/48Iltfpr3er8sBslU+
-         JkqahJOrIojXg1465sPdxBRvp9Up6YdpSmIaU+C4dibtN3LVEdAC7+O7t1XtrkT2wvoG
-         kQDmqMsEReGH1I6Z3YKo939iqNZB9VYzK0oXGEFypfxVzEguGuSgGLA9W9fx+M8U3rWO
-         V5/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/5gwkSl/og89k1zbn3bGxQzVMXDxSRfDx3JEZvQSNL0=;
-        b=MwLqZKRYTG39wqGMC1mr0mb6aiNeQDeKdxX6TyxStrzLIq/hxx3+GGC9aaJO6e4lPd
-         0RAK/p0Lid8Dx36//AVIjUGKhyAnnlhO+BnGwFsxlxH7bBzSd6WJULfNRu1yadpiF9Md
-         /cgnfJhHukc5RDDvqLqIxGKNv+Fb6X+C0xLQqRZiMFS58wJWw2VUBUfH6VslJoCArhd5
-         AA0ei+Y2L53lv47n+RyjZUlFtfyWHImEopdFLQGqC1OCJs3ePBdXUf7FyRieVwc4Cfdv
-         si7C/g1tqn+EzywDivKO26i9bqNFbljbp11w312GbgWfT6+a+Ze+6XyUR4n+M08+9rVs
-         vl/Q==
-X-Gm-Message-State: AJIora8v6Vmr8dUwjMmwbee33LXv84Pso+GKCHa8Y05P+D9fG1SVmkk8
-        hY+OC1XoztPFZpNgjCYdXkOrIQ==
-X-Google-Smtp-Source: AGRyM1uK1iLvnca6ZP7OFo1HPAJp3rkun2ZWvcPtcEpdFkuqBLzrZg5PJvqT2HBrL0NWklm8KHKPWQ==
-X-Received: by 2002:a17:907:6282:b0:6e0:c64a:60a7 with SMTP id nd2-20020a170907628200b006e0c64a60a7mr24519933ejc.349.1655795793707;
-        Tue, 21 Jun 2022 00:16:33 -0700 (PDT)
-Received: from [192.168.0.216] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g5-20020a50d5c5000000b004356c0d7436sm8260676edj.42.2022.06.21.00.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 00:16:33 -0700 (PDT)
-Message-ID: <2cad0c11-9bde-9926-f190-aa1ee5faa43f@linaro.org>
-Date:   Tue, 21 Jun 2022 09:16:32 +0200
+        Tue, 21 Jun 2022 03:18:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C467631C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:17:58 -0700 (PDT)
+X-UUID: 073fb03cba0f492da81bfb9d16a26fae-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:f4cf376d-e335-4209-9b4a-1699ca9b5cce,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:51
+X-CID-INFO: VERSION:1.1.6,REQID:f4cf376d-e335-4209-9b4a-1699ca9b5cce,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:51
+X-CID-META: VersionHash:b14ad71,CLOUDID:278e16ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:801f2789e3b7,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 073fb03cba0f492da81bfb9d16a26fae-20220621
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <kuan-ying.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 866569992; Tue, 21 Jun 2022 15:17:53 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 21 Jun 2022 15:17:52 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 15:17:52 +0800
+Message-ID: <5949bc710889be1324d5dada995a263fd3c29cb5.camel@mediatek.com>
+Subject: Re: [PATCH 21/32] kasan: simplify invalid-free reporting
+From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+To:     "andrey.konovalov@linux.dev" <andrey.konovalov@linux.dev>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>
+CC:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "Peter Collingbourne" <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 21 Jun 2022 15:17:52 +0800
+In-Reply-To: <f7f5cfc5eb8f1a1f849665641b9dd2cfb4a62c3c.1655150842.git.andreyknvl@google.com>
+References: <cover.1655150842.git.andreyknvl@google.com>
+         <f7f5cfc5eb8f1a1f849665641b9dd2cfb4a62c3c.1655150842.git.andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 1/3] dt-bindings: mfd: atmel,flexcom: Convert to
- json-schema
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        robh+dt@kernel.org, Nicolas.Ferre@microchip.com,
-        Claudiu.Beznea@microchip.com, krzysztof.kozlowski+dt@linaro.org
-Cc:     UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220620144634.25464-1-kavyasree.kotagiri@microchip.com>
- <20220620144634.25464-2-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220620144634.25464-2-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,15 +73,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 16:46, Kavyasree Kotagiri wrote:
-> Convert the Atmel flexcom device tree bindings to json schema.
+On Tue, 2022-06-14 at 04:14 +0800, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
 > 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> Right now, KASAN uses the kasan_report_type enum to describe report
+> types.
+> 
+> As this enum only has two options, replace it with a bool variable.
+> 
+> Also, unify printing report header for invalid-free and other bug
+> types
+> in print_error_description().
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > ---
-> v4 -> v5:
->  - Fixed indentations.
+>  mm/kasan/kasan.h  |  7 +------
+>  mm/kasan/report.c | 16 +++++++---------
+>  2 files changed, 8 insertions(+), 15 deletions(-)
 > 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index e8329935fbfb..f696d50b09fb 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -146,16 +146,11 @@ static inline bool kasan_requires_meta(void)
+>  #define META_MEM_BYTES_PER_ROW (META_BYTES_PER_ROW *
+> KASAN_GRANULE_SIZE)
+>  #define META_ROWS_AROUND_ADDR 2
+> 
+> -enum kasan_report_type {
+> -       KASAN_REPORT_ACCESS,
+> -       KASAN_REPORT_INVALID_FREE,
+> -};
+> -
+>  struct kasan_report_info {
+> -       enum kasan_report_type type;
+>         void *access_addr;
+>         void *first_bad_addr;
+>         size_t access_size;
+> +       bool is_free;
+>         bool is_write;
+>         unsigned long ip;
+>  };
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index f951fd39db74..7269b6249488 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -175,14 +175,12 @@ static void end_report(unsigned long *flags,
+> void *addr)
+> 
 
-Best regards,
-Krzysztof
+Hi Andrey,
+
+Do we need to distinguish "double free" case from "invalid free" or
+we just print "double-free or invalid-free"?
+
+I sent a patch[1] to separate double free case from invalid
+free last week and I saw it has been merged into akpm tree.
+
+[1] 
+https://lore.kernel.org/linux-mm/20220615062219.22618-1-Kuan-Ying.Lee@mediatek.com/
+
+Thanks,
+Kuan-Ying Lee
+
+>  static void print_error_description(struct kasan_report_info *info)
+>  {
+> -       if (info->type == KASAN_REPORT_INVALID_FREE) {
+> -               pr_err("BUG: KASAN: double-free or invalid-free in
+> %pS\n",
+> -                      (void *)info->ip);
+> -               return;
+> -       }
+> +       const char *bug_type = info->is_free ?
+> +               "double-free or invalid-free" :
+> kasan_get_bug_type(info);
+> 
+> -       pr_err("BUG: KASAN: %s in %pS\n",
+> -               kasan_get_bug_type(info), (void *)info->ip);
+> +       pr_err("BUG: KASAN: %s in %pS\n", bug_type, (void *)info-
+> >ip);
+> +       if (info->is_free)
+> +               return;
+>         if (info->access_size)
+>                 pr_err("%s of size %zu at addr %px by task %s/%d\n",
+>                         info->is_write ? "Write" : "Read", info-
+> >access_size,
+> @@ -435,11 +433,11 @@ void kasan_report_invalid_free(void *ptr,
+> unsigned long ip)
+> 
+>         start_report(&flags, true);
+> 
+> -       info.type = KASAN_REPORT_INVALID_FREE;
+>         info.access_addr = ptr;
+>         info.first_bad_addr = kasan_reset_tag(ptr);
+>         info.access_size = 0;
+>         info.is_write = false;
+> +       info.is_free = true;
+>         info.ip = ip;
+> 
+>         print_report(&info);
+> @@ -468,11 +466,11 @@ bool kasan_report(unsigned long addr, size_t
+> size, bool is_write,
+> 
+>         start_report(&irq_flags, true);
+> 
+> -       info.type = KASAN_REPORT_ACCESS;
+>         info.access_addr = ptr;
+>         info.first_bad_addr = kasan_find_first_bad_addr(ptr, size);
+>         info.access_size = size;
+>         info.is_write = is_write;
+> +       info.is_free = false;
+>         info.ip = ip;
+> 
+>         print_report(&info);
+> --
+> 2.25.1
+> 
+> 
+

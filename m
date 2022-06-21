@@ -2,75 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB9B553533
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA924553536
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiFUPGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S1352210AbiFUPGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352197AbiFUPGH (ORCPT
+        with ESMTP id S1351055AbiFUPGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:06:07 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3291227FD5;
-        Tue, 21 Jun 2022 08:06:02 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1655823934t1w17i80
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 23:05:30 +0800 (CST)
-X-QQ-SSF: 0100000000700070B000D00A0000000
-X-QQ-FEAT: rCzLTtzQ0gdSWwagS7lrQndYDD9VIhn4pCNGLyT5Mjd3ZQPnyyxPayz+KTxHR
-        +6UrKBj9U7yOF78n/xoyMnhY/i5cwKM0uykY7R6m7N8IMqvd//Fh1mBpcrfy5gaVwlZKynE
-        CUJ71pUmKdFyXhi+i9GpAsp8XwA4VtQY1Tn+Ts/Iu5dCFU94V8fMEO7RfRSjk2lBTWo7CcS
-        MEaoQg+y05Gms0F22laztKb8Mpf6Us8T9Sc/dmPUkGTY3811uLRqQLUOcwmQx+1hbGlBHAO
-        CWZBrwXdfq+NCTqk07rEOvhoiSjW48w4ejOlptk0Yd7QkrFbLrxKJpXzz5tNiOqspbELZNv
-        kOE9p3XKF1UkFEwSLnx2EDOU212VA==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     mchehab@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, jiangjian@cdjrlc.com,
-        colin.king@intel.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] media: saa7164: Remove duplicate 'on' in two places.
-Date:   Tue, 21 Jun 2022 23:05:28 +0800
-Message-Id: <20220621150528.11270-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 11:06:38 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BC427FFD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:06:36 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id a17so10826275pls.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=UK5eErzZtKg/HvO01KKCBb0udTzOZqxbnH2ci/fBY9s=;
+        b=ZIemzyjsRq9eoP1h9jF5KmQizCSVDGt6xI4plwAWYZQLJz3pQk4VDas5EyrnQ0YdCb
+         Fs45mr5usc2CrPIlhZLD+lj3w62Z8Ne3WxnrMhq/lfYEA6c3lT0WTSEDUW6PK/SRsW7v
+         349tONgsznrE90mTuus6gRE39w7n373/NSybQl2gDyehRhsR7YCbiIUlqJyeOredxrw5
+         WDrejAt13I718g4SUvKBDD3tkbeg2DnakRsVMSTC+qpV0/J6tW0fxT3BgJhoitVr7Lhh
+         T90S57fg2Y0pM3XswrC0DdGuRFepPMQC+V00zshEMy+kb9nfpPhFK+J06QSWSeuh4Glr
+         dYIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=UK5eErzZtKg/HvO01KKCBb0udTzOZqxbnH2ci/fBY9s=;
+        b=6PCUDK8dk+TbG7C/Smfhw8IgDYQLdG6AZ1OVd3BdB3EuPhSS/yOmg941iBSgV3hNSZ
+         1+XFe1aVw7Lg2j4WvoIojRhnSBZqZpc0fMC7Ea+d6hMckArRIrIuGREbA2b8FqZ1L+UY
+         AGHkQKC/xEkUJUyJzgnhN8CicmYaqfwV1MBqyEdrUBg9+ELx+dZm01Or7kgI++lNNEfF
+         G9Jiy62wmhoWA6GCq1Fg6h3njGiBykanrKHui0myYnJ+gHMf3JFOz4QAP5gaJod7KXBr
+         eL/W+aaMIvFitZ1uuRUyoSTYCtSIY1Ksl6jSPsgF/N/+vhMt1ut6W43DFNcO1IaAJhfX
+         tTOA==
+X-Gm-Message-State: AJIora9vj47tnPXPxXdNW5lo2+lntOu2p9tCITWy2VbhLla5R1UqN5Ke
+        jXjcZLFu/nlviWZlEceFp68t
+X-Google-Smtp-Source: AGRyM1uMYG5Bf48KHuNG7PKQdT3esTHv7uuvP4fyRon91ArW38BvcQbSytXAtlAXHvLN9buBK1imjw==
+X-Received: by 2002:a17:90a:5911:b0:1ec:9e24:c671 with SMTP id k17-20020a17090a591100b001ec9e24c671mr14559160pji.173.1655823995841;
+        Tue, 21 Jun 2022 08:06:35 -0700 (PDT)
+Received: from thinkpad ([117.193.212.116])
+        by smtp.gmail.com with ESMTPSA id v11-20020a17090331cb00b00164ade949adsm10788163ple.79.2022.06.21.08.06.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 08:06:35 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 20:36:29 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Lizhi Hou <lizhi.hou@xilinx.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        robh@kernel.org, yilun.xu@intel.com, maxz@xilinx.com,
+        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, trix@redhat.com, mdf@kernel.org,
+        dwmw2@infradead.org, linux-kernel@vger.kernel.org,
+        Max Zhen <max.zhen@xilinx.com>, kishon@ti.com
+Subject: Re: [PATCH V1 RESEND 2/4] Documentation: devicetree: bindings: add
+ binding for PCIe endpoint bus
+Message-ID: <20220621150629.GA28880@thinkpad>
+References: <20220305052304.726050-1-lizhi.hou@xilinx.com>
+ <20220305052304.726050-3-lizhi.hou@xilinx.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220305052304.726050-3-lizhi.hou@xilinx.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-file: drivers/media/pci/saa7164/saa7164-api.c
-line: 804
-/* Assumption: Hauppauge eeprom is at 0xa0 on on bus 0 */
-changed to
-/* Assumption: Hauppauge eeprom is at 0xa0 on bus 0 */
+Hi,
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/media/pci/saa7164/saa7164-api.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
++ Kishon
 
-diff --git a/drivers/media/pci/saa7164/saa7164-api.c b/drivers/media/pci/saa7164/saa7164-api.c
-index 5526bcc7a9bd..965d285a9240 100644
---- a/drivers/media/pci/saa7164/saa7164-api.c
-+++ b/drivers/media/pci/saa7164/saa7164-api.c
-@@ -801,7 +801,7 @@ int saa7164_api_read_eeprom(struct saa7164_dev *dev, u8 *buf, int buflen)
- 	if (buflen < 128)
- 		return -ENOMEM;
- 
--	/* Assumption: Hauppauge eeprom is at 0xa0 on on bus 0 */
-+	/* Assumption: Hauppauge eeprom is at 0xa0 on bus 0 */
- 	/* TODO: Pull the details from the boards struct */
- 	return saa7164_api_i2c_read(&dev->i2c_bus[0], 0xa0 >> 1, sizeof(reg),
- 		&reg[0], 128, buf);
+On Fri, Mar 04, 2022 at 09:23:02PM -0800, Lizhi Hou wrote:
+> Create device tree binding document for PCIe endpoint bus.
+> 
+
+I'm currently working on a PCI endpoint function driver for MHI bus [1] and
+hence interested in this topic.
+
+Comments below.
+
+[1] https://lore.kernel.org/lkml/20220502060611.58987-9-manivannan.sadhasivam@linaro.org/
+
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+> ---
+>  .../devicetree/bindings/bus/pci-ep-bus.yaml   | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+> new file mode 100644
+> index 000000000000..0ca96298db6f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/pci-ep-bus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: PCIe Endpoint Bus binding
+> +
+> +description: |
+> +  PCIe device may use flattened device tree to describe apertures in its
+> +  PCIe BARs. The Bus PCIe endpoint node is created and attached under the
+> +  device tree root node for this kind of device. Then the flatten device
+> +  tree overlay for this device is attached under the endpoint node.
+> +
+> +  The aperture address which is under the endpoint node consists of BAR
+> +  index and offset. It uses the following encoding:
+> +
+
+On top of Rob's reply:
+
+Currently, the BAR memory for the PCI endpoint device is either allocated
+dynamically using pci_epf_alloc_space() or we need to pass the address in
+"phys_addr" field of "struct pci_epf_bar".
+
+In most of the PCI endpoint devices, we need to use a fixed memory region as
+the BAR. Since there is no devicetree integration for PCI endpoint subsystem,
+I've been using the 2nd approach of obtaining the BAR address from PCI endpoint
+controller devicetree node and passing it to "phys_addr" of
+"struct pci_epf_bar".
+
+Ideally, the BAR information should come from the devicetree. But we cannot use
+just "pci-ep-bus" node. I've been thinking about the below structure:
+
+pcie_ep: pcie-ep@40000000 {
+        compatible = "pcie-ep";
+	....
+
+	pci_epf_0: pci-epf@100000 {
+		reg = <0x100000 0x1000>; # BAR0
+	};
+
+	pci_epf_1: pci-epf@200000 {
+		reg = <0x200000 0x1000>; # BAR1
+	};
+};
+
+Where, "pci-epf@" represents each of the PCI endpoint functions implemented by
+this device (note that there can be more than one function per endpoint device)
+and "reg" has the BAR address/size for that function.
+
+Rob, what do you think?
+
+Thanks,
+Mani
+
+> +    0xIooooooo 0xoooooooo
+> +
+> +  Where:
+> +
+> +    I = BAR index
+> +    oooooo oooooooo = BAR offset
+> +
+> +  The endpoint is compatible with 'simple-bus' and contains 'ranges'
+> +  property for translating aperture address to CPU address.
+> +
+> +allOf:
+> +  - $ref: /schemas/simple-bus.yaml#
+> +
+> +maintainers:
+> +  - Lizhi Hou <lizhi.hou@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    contains:
+> +      const: pci-ep-bus
+> +
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+> +
+> +  ranges: true
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]+$":
+> +    description: hardware apertures belong to this device.
+> +    type: object
+> +
+> +required:
+> +  - compatible
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    bus {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        pci-ep-bus@e0000000 {
+> +            compatible = "pci-ep-bus", "simple-bus";
+> +            #address-cells = <2>;
+> +            #size-cells = <2>;
+> +            ranges = <0x0 0x0 0x0 0xe0000000 0x0 0x2000000
+> +                      0x20000000 0x0 0x0 0xe4200000 0x0 0x40000>;
+> +        };
+> +    };
+> -- 
+> 2.27.0
+> 
+
 -- 
-2.17.1
-
+மணிவண்ணன் சதாசிவம்

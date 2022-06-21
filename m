@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC5E5532BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051CA5532BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351311AbiFUM7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
+        id S1351353AbiFUM7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351014AbiFUM6X (ORCPT
+        with ESMTP id S1351028AbiFUM6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:58:23 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609B5BC3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:07 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id l4so13021911pgh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:07 -0700 (PDT)
+        Tue, 21 Jun 2022 08:58:24 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1698A389C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:12 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d5so12431148plo.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JQmNu1Pi61kiVMPJr8aGyJU8VoXoYJEPNAmwcIY/MLE=;
-        b=uRoZYgA2WDdO9ticBdRw4R7/aUXk5r9fqjKxKJCs1SkEG4UdxhjFsO/X/PheSrZDg+
-         Q23F5hcZd9t0a7k63chGSWb3GHjtfCKitwmgpkZIMzFXmeCoTtJZt1WI45hmjAbSNvjU
-         /5wRPFqGLSXBhc/RogtGwjV9RN90CBGRxKIoHDUJysh3Wr6Y4yJWuUtBVejjCQihuCj0
-         CtlKQVvYF4ukD9CjCMcdRjlepscIFcl4DKR7BS4rzRSK7Mf6uRzcc1U6qlPUu8rUerNI
-         JY12moVGemqnvgCfDy9ZpJmjCyPFcuQ5O6SQvqUei19rSVIpmLCFjVox8NrK4WND0BYX
-         Cqsg==
+        bh=nIZConLAu+BQmuX/Tvb9zBVZtwEjqQiDdIX8payO2zo=;
+        b=Zk51NSDrVMZPvZN3TRE8By5zbzxn4KfxBk7mAPZIGImd6sXrZQTiixROziyC4GK7i2
+         tjX3Uc/E0v4rj4SK78xIySUmqwcFv2/QqpusGj+so6BOEcPZY8a1BVGjEQEYoGh7bkkl
+         OE/0bXu3mXp+aWvIm0cGBgL12WKiQodj2ZzTuAk2u3eLaReU+cqH1yGlGUUfgMhXcIsa
+         pMZ2j0weSC5IJyI7Bg2HlgmEVFzD4vXJM29uR5XzcRBOtii439vkQTRNzX2HOBB+Ru/L
+         ngbXnl0WALO2G1k49DSGVvpkOu3AFIwpwC5BwKEXviwXxw5OpAxEnvkkS7Z0wzEZO0oN
+         dG0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JQmNu1Pi61kiVMPJr8aGyJU8VoXoYJEPNAmwcIY/MLE=;
-        b=hXQXhRNPbXPGKxii4LYiSjD7h6371sa6KljonwGGoU5LSOFiFlDpW0SNoiITXEpyaF
-         WgS/qoDWe5oMiAX+jRVeipszKAGvGUF8m/YCVEW6boWjjUiicy/5wYSwKOcWXLVgPjkL
-         DFL8faUmtWZKutPlsnCxP72dPaisoQ4fW7tfPDPuIwpbsgnXyx+IcteWT70ZTGlrdnFD
-         Kbev258jC3lSOkxyCsd48OA9P8oRCii1JpmNsXGLmO8j2ogcRx0XazV6k1NgXNmqOfRN
-         oxQjQ9CTrSbwv/ewIRkhNoxTvPLaM5o8s+xRb23cWe5eaDGa5/SfDJteuiseE/kcKtP3
-         KvzA==
-X-Gm-Message-State: AJIora+7jqFtDLkXpKA5NHPi0GTRnOyKQaIAEsmD+vpbwDyJb1dBn8ai
-        tEoyZ8juHxug+7AtZ3gergMwfg==
-X-Google-Smtp-Source: AGRyM1upaoIcJWVsnc39MXQBtGK/kVVeFupBrAq4ZDu6K/3ZNA+9pZV71aSGLs8BkJ4IPnyCNTw3hA==
-X-Received: by 2002:a63:2b16:0:b0:3fa:faf9:e6d7 with SMTP id r22-20020a632b16000000b003fafaf9e6d7mr25873846pgr.325.1655816286866;
-        Tue, 21 Jun 2022 05:58:06 -0700 (PDT)
+        bh=nIZConLAu+BQmuX/Tvb9zBVZtwEjqQiDdIX8payO2zo=;
+        b=Yrp/rhY6S4pkcCtPaELP+3zaSatdvNTJJk1Oj7gfJm0wn5T1C3M77N32JHoqydkSrv
+         GPyvSFY+opCnHNjOTg9PxIAf1vAZuEoIZHW/2FhGjW5yXNcoPNzMoyXI/VhAmz3uQzdt
+         S7OUbwLZliTmzCb9BKCtJT5oMtTgRd+vx15pmC3r0KXA77pGkjK0h6nlZniaCe+a4E1A
+         4rY4xQvXWXVjWrIuED1dvE1a0d/0lUZzDqPTliWEAuuMCw1OMLKOWHsKBDBqxrZMsdKV
+         KBdqkUoY0T99qAXiSBVv2pBnlRwq9uEzwnuy48E/mNGPfcpItsUEgN410fTgmFa6GXLE
+         DVfg==
+X-Gm-Message-State: AJIora+g0YVPrjfoTlqWGH8w5ic1xL8PJINB/EzWDTbjkYmDBFPA7pzd
+        5fANhm+dA++HvWQfuAKo/YCwIA==
+X-Google-Smtp-Source: AGRyM1sfMqtOuqujc10J2sSlGnIc2sn0IXLs0wAthMZegVzDh1Wtv0OMoc9MoJz2Lr6MQuwf390UoQ==
+X-Received: by 2002:a17:902:c40c:b0:16a:252c:ec82 with SMTP id k12-20020a170902c40c00b0016a252cec82mr10424049plk.5.1655816291697;
+        Tue, 21 Jun 2022 05:58:11 -0700 (PDT)
 Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id e3-20020a170903240300b0015ea3a491a1sm10643134plo.191.2022.06.21.05.58.02
+        by smtp.gmail.com with ESMTPSA id e3-20020a170903240300b0015ea3a491a1sm10643134plo.191.2022.06.21.05.58.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 05:58:06 -0700 (PDT)
+        Tue, 21 Jun 2022 05:58:11 -0700 (PDT)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     akpm@linux-foundation.org, hannes@cmpxchg.org, longman@redhat.com,
         mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com
 Cc:     cgroups@vger.kernel.org, duanxiongchun@bytedance.com,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v6 05/11] mm: vmscan: rework move_pages_to_lru()
-Date:   Tue, 21 Jun 2022 20:56:52 +0800
-Message-Id: <20220621125658.64935-6-songmuchun@bytedance.com>
+Subject: [PATCH v6 06/11] mm: thp: make split queue lock safe when LRU pages are reparented
+Date:   Tue, 21 Jun 2022 20:56:53 +0800
+Message-Id: <20220621125658.64935-7-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 In-Reply-To: <20220621125658.64935-1-songmuchun@bytedance.com>
 References: <20220621125658.64935-1-songmuchun@bytedance.com>
@@ -64,136 +64,247 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the later patch, we will reparent the LRU pages. The pages moved to
-appropriate LRU list can be reparented during the process of the
-move_pages_to_lru(). So holding a lruvec lock by the caller is wrong, we
-should use the more general interface of folio_lruvec_relock_irq() to
-acquire the correct lruvec lock.
+Similar to the lruvec lock, we use the same approach to make the split
+queue lock safe when LRU pages are reparented.
 
 Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- mm/vmscan.c | 39 +++++++++++++++++++--------------------
- 1 file changed, 19 insertions(+), 20 deletions(-)
+ include/linux/memcontrol.h |  10 ++++
+ mm/huge_memory.c           | 116 +++++++++++++++++++++++++++++++++++----------
+ 2 files changed, 100 insertions(+), 26 deletions(-)
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 6a554712ef5d..697656151431 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2312,23 +2312,26 @@ static int too_many_isolated(struct pglist_data *pgdat, int file,
-  * move_pages_to_lru() moves folios from private @list to appropriate LRU list.
-  * On return, @list is reused as a list of folios to be freed by the caller.
-  *
-- * Returns the number of pages moved to the given lruvec.
-+ * Returns the number of pages moved to the appropriate LRU list.
-+ *
-+ * Note: The caller must not hold any lruvec lock.
-  */
--static unsigned int move_pages_to_lru(struct lruvec *lruvec,
--				      struct list_head *list)
-+static unsigned int move_pages_to_lru(struct list_head *list)
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index ff3106eca6f3..026b62b206b1 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1691,6 +1691,11 @@ int alloc_shrinker_info(struct mem_cgroup *memcg);
+ void free_shrinker_info(struct mem_cgroup *memcg);
+ void set_shrinker_bit(struct mem_cgroup *memcg, int nid, int shrinker_id);
+ void reparent_shrinker_deferred(struct mem_cgroup *memcg);
++
++static inline int shrinker_id(struct shrinker *shrinker)
++{
++	return shrinker->id;
++}
+ #else
+ #define mem_cgroup_sockets_enabled 0
+ static inline void mem_cgroup_sk_alloc(struct sock *sk) { };
+@@ -1704,6 +1709,11 @@ static inline void set_shrinker_bit(struct mem_cgroup *memcg,
+ 				    int nid, int shrinker_id)
  {
- 	int nr_pages, nr_moved = 0;
-+	struct lruvec *lruvec = NULL;
- 	LIST_HEAD(folios_to_free);
+ }
++
++static inline int shrinker_id(struct shrinker *shrinker)
++{
++	return -1;
++}
+ #endif
  
- 	while (!list_empty(list)) {
- 		struct folio *folio = lru_to_folio(list);
+ #ifdef CONFIG_MEMCG_KMEM
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 66d9ed8a1289..11ec92783b37 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -558,25 +558,90 @@ pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
+ }
  
-+		lruvec = folio_lruvec_relock_irq(folio, lruvec);
- 		VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
- 		list_del(&folio->lru);
- 		if (unlikely(!folio_evictable(folio))) {
--			spin_unlock_irq(&lruvec->lru_lock);
-+			lruvec_unlock_irq(lruvec);
- 			folio_putback_lru(folio);
--			spin_lock_irq(&lruvec->lru_lock);
-+			lruvec = NULL;
- 			continue;
- 		}
+ #ifdef CONFIG_MEMCG
+-static inline struct deferred_split *get_deferred_split_queue(struct page *page)
++static inline struct mem_cgroup *folio_split_queue_memcg(struct folio *folio,
++		struct deferred_split *queue)
+ {
+-	struct mem_cgroup *memcg = page_memcg(compound_head(page));
+-	struct pglist_data *pgdat = NODE_DATA(page_to_nid(page));
++	if (mem_cgroup_disabled())
++		return NULL;
++	if (&NODE_DATA(folio_nid(folio))->deferred_split_queue == queue)
++		return NULL;
++	return container_of(queue, struct mem_cgroup, deferred_split_queue);
++}
  
-@@ -2349,19 +2352,15 @@ static unsigned int move_pages_to_lru(struct lruvec *lruvec,
- 			__folio_clear_lru_flags(folio);
+-	if (memcg)
+-		return &memcg->deferred_split_queue;
+-	else
+-		return &pgdat->deferred_split_queue;
++static inline struct deferred_split *folio_memcg_split_queue(struct folio *folio)
++{
++	struct mem_cgroup *memcg = folio_memcg(folio);
++
++	return memcg ? &memcg->deferred_split_queue : NULL;
+ }
+ #else
+-static inline struct deferred_split *get_deferred_split_queue(struct page *page)
++static inline struct mem_cgroup *folio_split_queue_memcg(struct folio *folio,
++		struct deferred_split *queue)
+ {
+-	struct pglist_data *pgdat = NODE_DATA(page_to_nid(page));
++	return NULL;
++}
  
- 			if (unlikely(folio_test_large(folio))) {
--				spin_unlock_irq(&lruvec->lru_lock);
-+				lruvec_unlock_irq(lruvec);
- 				destroy_large_folio(folio);
--				spin_lock_irq(&lruvec->lru_lock);
-+				lruvec = NULL;
- 			} else
- 				list_add(&folio->lru, &folios_to_free);
+-	return &pgdat->deferred_split_queue;
++static inline struct deferred_split *folio_memcg_split_queue(struct folio *folio)
++{
++	return NULL;
+ }
+ #endif
  
- 			continue;
- 		}
- 
--		/*
--		 * All pages were isolated from the same lruvec (and isolation
--		 * inhibits memcg migration).
--		 */
- 		VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
- 		lruvec_add_folio(lruvec, folio);
- 		nr_pages = folio_nr_pages(folio);
-@@ -2370,6 +2369,8 @@ static unsigned int move_pages_to_lru(struct lruvec *lruvec,
- 			workingset_age_nonresident(lruvec, nr_pages);
++static struct deferred_split *folio_split_queue(struct folio *folio)
++{
++	struct deferred_split *queue = folio_memcg_split_queue(folio);
++
++	return queue ? : &NODE_DATA(folio_nid(folio))->deferred_split_queue;
++}
++
++static struct deferred_split *folio_split_queue_lock(struct folio *folio)
++{
++	struct deferred_split *queue;
++
++	rcu_read_lock();
++retry:
++	queue = folio_split_queue(folio);
++	spin_lock(&queue->split_queue_lock);
++
++	if (unlikely(folio_split_queue_memcg(folio, queue) != folio_memcg(folio))) {
++		spin_unlock(&queue->split_queue_lock);
++		goto retry;
++	}
++	rcu_read_unlock();
++
++	return queue;
++}
++
++static struct deferred_split *
++folio_split_queue_lock_irqsave(struct folio *folio, unsigned long *flags)
++{
++	struct deferred_split *queue;
++
++	rcu_read_lock();
++retry:
++	queue = folio_split_queue(folio);
++	spin_lock_irqsave(&queue->split_queue_lock, *flags);
++
++	if (unlikely(folio_split_queue_memcg(folio, queue) != folio_memcg(folio))) {
++		spin_unlock_irqrestore(&queue->split_queue_lock, *flags);
++		goto retry;
++	}
++	rcu_read_unlock();
++
++	return queue;
++}
++
++static inline void split_queue_unlock(struct deferred_split *queue)
++{
++	spin_unlock(&queue->split_queue_lock);
++}
++
++static inline void split_queue_unlock_irqrestore(struct deferred_split *queue,
++						 unsigned long flags)
++{
++	spin_unlock_irqrestore(&queue->split_queue_lock, flags);
++}
++
+ void prep_transhuge_page(struct page *page)
+ {
+ 	/*
+@@ -2600,7 +2665,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+ {
+ 	struct folio *folio = page_folio(page);
+ 	struct page *head = &folio->page;
+-	struct deferred_split *ds_queue = get_deferred_split_queue(head);
++	struct deferred_split *ds_queue;
+ 	XA_STATE(xas, &head->mapping->i_pages, head->index);
+ 	struct anon_vma *anon_vma = NULL;
+ 	struct address_space *mapping = NULL;
+@@ -2692,13 +2757,13 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
  	}
  
-+	if (lruvec)
-+		lruvec_unlock_irq(lruvec);
- 	/*
- 	 * To save our caller's stack, now use input list for pages to free.
- 	 */
-@@ -2440,16 +2441,16 @@ shrink_inactive_list(unsigned long nr_to_scan, struct lruvec *lruvec,
+ 	/* Prevent deferred_split_scan() touching ->_refcount */
+-	spin_lock(&ds_queue->split_queue_lock);
++	ds_queue = folio_split_queue_lock(folio);
+ 	if (page_ref_freeze(head, 1 + extra_pins)) {
+ 		if (!list_empty(page_deferred_list(head))) {
+ 			ds_queue->split_queue_len--;
+ 			list_del(page_deferred_list(head));
+ 		}
+-		spin_unlock(&ds_queue->split_queue_lock);
++		split_queue_unlock(ds_queue);
+ 		if (mapping) {
+ 			int nr = thp_nr_pages(head);
  
- 	nr_reclaimed = shrink_page_list(&page_list, pgdat, sc, &stat, false);
+@@ -2716,7 +2781,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+ 		__split_huge_page(page, list, end);
+ 		ret = 0;
+ 	} else {
+-		spin_unlock(&ds_queue->split_queue_lock);
++		split_queue_unlock(ds_queue);
+ fail:
+ 		if (mapping)
+ 			xas_unlock(&xas);
+@@ -2740,25 +2805,23 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
  
--	spin_lock_irq(&lruvec->lru_lock);
--	move_pages_to_lru(lruvec, &page_list);
-+	move_pages_to_lru(&page_list);
+ void free_transhuge_page(struct page *page)
+ {
+-	struct deferred_split *ds_queue = get_deferred_split_queue(page);
++	struct deferred_split *ds_queue;
+ 	unsigned long flags;
  
-+	local_irq_disable();
- 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken);
- 	item = current_is_kswapd() ? PGSTEAL_KSWAPD : PGSTEAL_DIRECT;
- 	if (!cgroup_reclaim(sc))
- 		__count_vm_events(item, nr_reclaimed);
- 	__count_memcg_events(lruvec_memcg(lruvec), item, nr_reclaimed);
- 	__count_vm_events(PGSTEAL_ANON + file, nr_reclaimed);
--	spin_unlock_irq(&lruvec->lru_lock);
-+	local_irq_enable();
+-	spin_lock_irqsave(&ds_queue->split_queue_lock, flags);
++	ds_queue = folio_split_queue_lock_irqsave(page_folio(page), &flags);
+ 	if (!list_empty(page_deferred_list(page))) {
+ 		ds_queue->split_queue_len--;
+ 		list_del(page_deferred_list(page));
+ 	}
+-	spin_unlock_irqrestore(&ds_queue->split_queue_lock, flags);
++	split_queue_unlock_irqrestore(ds_queue, flags);
+ 	free_compound_page(page);
+ }
  
- 	lru_note_cost(lruvec, file, stat.nr_pageout);
- 	mem_cgroup_uncharge_list(&page_list);
-@@ -2578,18 +2579,16 @@ static void shrink_active_list(unsigned long nr_to_scan,
- 	/*
- 	 * Move folios back to the lru list.
- 	 */
--	spin_lock_irq(&lruvec->lru_lock);
--
--	nr_activate = move_pages_to_lru(lruvec, &l_active);
--	nr_deactivate = move_pages_to_lru(lruvec, &l_inactive);
-+	nr_activate = move_pages_to_lru(&l_active);
-+	nr_deactivate = move_pages_to_lru(&l_inactive);
- 	/* Keep all free folios in l_active list */
- 	list_splice(&l_inactive, &l_active);
+ void deferred_split_huge_page(struct page *page)
+ {
+-	struct deferred_split *ds_queue = get_deferred_split_queue(page);
+-#ifdef CONFIG_MEMCG
+-	struct mem_cgroup *memcg = page_memcg(compound_head(page));
+-#endif
++	struct deferred_split *ds_queue;
+ 	unsigned long flags;
++	struct folio *folio = page_folio(page);
  
-+	local_irq_disable();
- 	__count_vm_events(PGDEACTIVATE, nr_deactivate);
- 	__count_memcg_events(lruvec_memcg(lruvec), PGDEACTIVATE, nr_deactivate);
--
- 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken);
--	spin_unlock_irq(&lruvec->lru_lock);
-+	local_irq_enable();
+ 	VM_BUG_ON_PAGE(!PageTransHuge(page), page);
  
- 	mem_cgroup_uncharge_list(&l_active);
- 	free_unref_page_list(&l_active);
+@@ -2775,18 +2838,19 @@ void deferred_split_huge_page(struct page *page)
+ 	if (PageSwapCache(page))
+ 		return;
+ 
+-	spin_lock_irqsave(&ds_queue->split_queue_lock, flags);
++	ds_queue = folio_split_queue_lock_irqsave(folio, &flags);
+ 	if (list_empty(page_deferred_list(page))) {
++		struct mem_cgroup *memcg;
++
++		memcg = folio_split_queue_memcg(folio, ds_queue);
+ 		count_vm_event(THP_DEFERRED_SPLIT_PAGE);
+ 		list_add_tail(page_deferred_list(page), &ds_queue->split_queue);
+ 		ds_queue->split_queue_len++;
+-#ifdef CONFIG_MEMCG
+ 		if (memcg)
+ 			set_shrinker_bit(memcg, page_to_nid(page),
+-					 deferred_split_shrinker.id);
+-#endif
++					 shrinker_id(&deferred_split_shrinker));
+ 	}
+-	spin_unlock_irqrestore(&ds_queue->split_queue_lock, flags);
++	split_queue_unlock_irqrestore(ds_queue, flags);
+ }
+ 
+ static unsigned long deferred_split_count(struct shrinker *shrink,
 -- 
 2.11.0
 

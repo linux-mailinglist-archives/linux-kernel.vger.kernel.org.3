@@ -2,167 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779F555329E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5145532BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350812AbiFUM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S1351043AbiFUM74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240281AbiFUM5K (ORCPT
+        with ESMTP id S1351033AbiFUM6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:57:10 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2119.outbound.protection.outlook.com [40.107.117.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679601409A;
-        Tue, 21 Jun 2022 05:57:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z5bWUrz5+dLf5YHx1YRGHyyiVg9mSX4pnwSHs0yVZm0W6kAOWyJ2+ySDuedY90cwIqBnTPdpmBF1lofczx25knlq501DzQyuXG0h5eUfnJTM/ghOg3Fspm5CbtfMb4UQq64DH71U7aU0OsRiLg5qyTEmaJfLcLHNz7jIv+ZYrMJmKGadf2iTi9HT409O51kvMT3s/eP959n7mrhs6rjRv6YpZpg8D994hx7QF6G1txMd44znwHevXG9+NKClQyjlIJZEFuyUs2DcJ3w1SGIPn8Urn6PqHR6LXk4ow/z5gf/4Qnv4ef1pvHZr0UbGdglnZSI9AF4+2lALpXss5mOaXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q8LIvp/0UKx5Ib1btm+RxZY2UH9uF871iqAz0MknzTI=;
- b=FdiLXo5QQoQFQ/Fu/1Ez4dfhmyCqO8hjJvX1O9y+/EJdX93YQaT6Zfov9ouLV1CAvpl4MSQk4g71nU65x9JzYdROssuwMnv9AWl3beCXhYz2uyroIUb2+bc+TdtoUa1VShxEYjXvDa8br+Q9AZHRVy+dp4k7pU9AiXx2OLdCCSERBKJtD6KQ+5cxyY0qaSHK+2XiIbvAJzZcXO5FmzGrx2r7QdRHU1CHU1p02OiOoJB6UNCO7eVbeKVBvlnkVrv9ysLgwkWu9gz1yeyeVtgJSEKnpbPS68UOEveSSfzAcI3UJaiavJ7vwSJ7mezccEpuT86Zgp/WF6buQazAfKZOkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q8LIvp/0UKx5Ib1btm+RxZY2UH9uF871iqAz0MknzTI=;
- b=HDRIcSpKLn4FZ9AbrYypmKwtT4hJRlIYPy/7bOsRtT4Pv7x3mynii+PrJckqPGbBm6ZOQrw21Vvp5SXiPCKyFp2dX2JQ8P/ABot8al7Na82El7YSQNkJcw45ZuiTe8lHiQjLTvhJY8MZMKI/saQO6f9dffAr0pNpvMQbGjqONtA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
- by SG2PR06MB3872.apcprd06.prod.outlook.com (2603:1096:4:de::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.13; Tue, 21 Jun
- 2022 12:57:04 +0000
-Received: from SL2PR06MB3017.apcprd06.prod.outlook.com
- ([fe80::9c97:b22a:d5d5:d670]) by SL2PR06MB3017.apcprd06.prod.outlook.com
- ([fe80::9c97:b22a:d5d5:d670%5]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
- 12:57:04 +0000
-From:   wubo <11123156@vivo.com>
-To:     miklos@szeredi.hu
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wu Bo <bo.wu@vivo.com>
-Subject: [PATCH] fuse: force sync attr when inode is invalidated
+        Tue, 21 Jun 2022 08:58:24 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E33EB9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:02 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id n12so6098596pfq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SlTUvNn4DYl954HH+rppOxcDjVgo6GqCQhQnv1Q1EhI=;
+        b=fL58wbGMa2SB+egmCsOvHcDN9eGBoafFpvGg3so9U2DmhwQApgE7KCSCjC0WqjJSEn
+         U5vzUEd9XhSPlTzg2SbtZtzSKOqEvUMV1cOHyWmMvvC1jYprYDJl3s9sItS89pDeS9ju
+         RecNr0jOEyi1FNnA5SBkQiHhh6ThScEZzdCM/AQHdtKi4/YLil617oq14JDUMS09tcfU
+         JhfTJo28sCf+ZmeDAmSLtgBqjE0xZ7p6panlmEzDWBJKFE3B7RHOsAdD+pYq2fj0tFhP
+         A3Y94ty0igohGF4sTFirkZWPJzp4qvQtmS9/W3uwgeypNIZuA5gd8Qkxq/Tz6WFjN4ly
+         lPiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SlTUvNn4DYl954HH+rppOxcDjVgo6GqCQhQnv1Q1EhI=;
+        b=07Dhoxku/st9pMI+HvC23cM6vt0+3jJPDNhV5Z+khnd/LhIL7qk/Hi/gjh2Z68El7R
+         2VgHvXKGzZ3oBQLe6mmquZcEoLNGAkz6jgUgxcZSmqrHjA44WBPK7h1fzI4iwJKEqWJr
+         ZsJzL84U9Tl7Dcwfly6JdaA76nXUyhtR/VG4nqpXXMa8CwHRVvxwwBcVYYYLSxymg1dQ
+         Q0Yt+Lag0M4rDRbLryJ0eOikYo9fipKMmwYj36sSUBIP4dTiWHQW0SyYOhqNNheWPgEP
+         Co+n68FulXoswZFaFcNVP6mmbN8rQYyPT0jSfNwNm3ghQZLE4taQmT6DmUf2JNzPsW4G
+         x+sQ==
+X-Gm-Message-State: AJIora+/bDta/fTx2FECTriD84hf3/0v4BKsotUDQGnydoh2bSw+k7pQ
+        ARg3qOTung8HGepSxXQO8StrAA==
+X-Google-Smtp-Source: AGRyM1uuuY5reI7WuH0uENLbGB2vH7kDjDFb906OSYMlWq65zYFJjEPKnW83COUBx7RaIXd8cyjJnw==
+X-Received: by 2002:a05:6a00:c92:b0:51c:1030:5eef with SMTP id a18-20020a056a000c9200b0051c10305eefmr30060253pfv.76.1655816282163;
+        Tue, 21 Jun 2022 05:58:02 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id e3-20020a170903240300b0015ea3a491a1sm10643134plo.191.2022.06.21.05.57.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 05:58:01 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     akpm@linux-foundation.org, hannes@cmpxchg.org, longman@redhat.com,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com
+Cc:     cgroups@vger.kernel.org, duanxiongchun@bytedance.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v6 04/11] mm: memcontrol: make lruvec lock safe when LRU pages are reparented
 Date:   Tue, 21 Jun 2022 20:56:51 +0800
-Message-Id: <20220621125651.14954-1-11123156@vivo.com>
-X-Mailer: git-send-email 2.36.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0202.apcprd06.prod.outlook.com (2603:1096:4:1::34)
- To SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
+Message-Id: <20220621125658.64935-5-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+In-Reply-To: <20220621125658.64935-1-songmuchun@bytedance.com>
+References: <20220621125658.64935-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ba761d1d-98c3-439d-e7be-08da538589f7
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3872:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB387218309BB3AD0C42814EF592B39@SG2PR06MB3872.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: atIGXEN1gWqqQ05iNg9dyGEyBqCZajqF8dwJMrfYyD+xIJwY6nVshdqikibz2H5nP07c71+l2MYpBXvtzD8pbt2GbcmClLklyazZ8H46BB2HEk3gtOYXhfZt1xPAzsiU+/vxJeVtClzlBNnR9C94DRFLRdx7KQmztqJEhxEe1tQlvy9xo3fvXvMkjUVYTF2EjzHb/ObJhb4foI0vZmEZGTL4Z/OQl2kuvz6lgmyBtqJUIHS8GCnW4FxXvC8/TvaN6hYdCsxSfPfmwuIdAxRtduRXyTgBOG/eIC9etvtH85Z9/FHv8Fm8ci9B2RgS8ndspCfBcbk+qnxY8IPKpfWQMQCnZh/hlkx1CcHWcBMXFZUjTQOkVaKHmwCn+QSVcbhRfvNUZOXaitQi8CHrF7zcETJvgmOxs0ltxT4AkX5AkNdIr7dpC+0gwIdW17Cp4lNoRDd3wrKrm8WbwPZUDkyQI3xxM0vWCfW8Pa5pEmoY8tzkqEElAb9zO1cr96ExjZ9CGeZuC3zLa4z6Y2HdNpGpW5SD7vaqZ+mdRtJv8ogmyptUG/Zj5sWBm8pEfuY175WMGckWQfbDIIn8cZ7auZMOVkbv/irLpqNf2YLp2SS7MEbAu0sTkeohEHQrTi8WxRE4r/6uignMZQZe4/lHpMgIE7eInkSpquhGBffw6xk0yR312UmlJ8cXLkwXXEcBrbEGTteIRxblJzYfDqdvpvzFZ9h/3yVOY5Ts/ktC21vXxTIDRSRK4hZSmQJ/8nj1Hzgg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3017.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(346002)(396003)(376002)(52116002)(107886003)(316002)(8936002)(6666004)(2616005)(6506007)(186003)(41300700001)(26005)(1076003)(38350700002)(38100700002)(6512007)(83380400001)(6916009)(36756003)(4326008)(66946007)(66556008)(6486002)(478600001)(5660300002)(66476007)(8676002)(2906002)(43062005)(81742002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4Jxq2C4M93Wh9Hng8C0jWsVeBL1X1tQIzEsh6f2uPm3h/Z/imcvR2UrNqUUj?=
- =?us-ascii?Q?0PZWlF5HkLrCYaDB0Br+tM7439SSl1Y29QhmGKuEoijIFn8LD1ebagArH5Bi?=
- =?us-ascii?Q?y4G+2GYR5TmHp3zhOwIRnTrYv/XGMVZuQrJez4byOtFGMuzh00BaoUffo01n?=
- =?us-ascii?Q?j+kKJfHPf2dA4EFBTrKKd1n4VJgb+k4qvu+AaOuAz0MdlXUnP81z7slYo//m?=
- =?us-ascii?Q?B0xx/sKuJSyYnDDCZpwd/p2Su0Khoa8LcB9vLOf2klLblynoR+hN4BNg3jJJ?=
- =?us-ascii?Q?CClir5YA4AcfvIGNv6jAgPWLhROcvZ8bP/tmAK/B7cKzwtN5cRP3lYh6rApk?=
- =?us-ascii?Q?mbNeI+3ywVYossMG0DK9QGCprdFiWOCP0xNMH97jZ5qwEw5rZS9WNIOINfZ9?=
- =?us-ascii?Q?rnfScXnFlgXhzUtg4U4e8CTmcADhHD7tF2lUs1rsbhKETC5An6RUg7ear/gl?=
- =?us-ascii?Q?VWjazqaI82h7z0gJ5wd7Jik1bl3JHwDyTms4EkzcGMKbgMuD/K3otrG0014e?=
- =?us-ascii?Q?diE+mOHE2wtSIgzspsyLzHISpVpyCg27Ag4vhyamrOjz5M1s7p5rSRGP4erw?=
- =?us-ascii?Q?GmpZBy9k90w4gI0BEvEs0K4prtbOQzIwjSXf+NJQ0aJNdxRoFLZItoo/FEfe?=
- =?us-ascii?Q?B2F2afygK20TXy9NYk60BAlHPEa4nSmr8Hm3bpLquxRGBOOXY4MnN1AfUt5z?=
- =?us-ascii?Q?qAtjxVAauMChXPyHB757qt6NiEQ3sSMk3LEtivusB5XBGaN+JI7Z0IGZN1Gt?=
- =?us-ascii?Q?CCpqgmdkA4S0jHoELlYWETxxwJF3AE8I1X8AM5B4j6Ri/88P86hWapuQd+E+?=
- =?us-ascii?Q?B2rbMDQyXQ5U5BX2alD7SIwjDiJsyEoupsJc6aT0fPUXqRIlnSoKvkD73fUd?=
- =?us-ascii?Q?ArvnXjJPl/6iYps/Yv60++xKV9wNiTwGPtFWj4U1scJ0jnr4DjhQvVWCO0IU?=
- =?us-ascii?Q?Lqpa5bg+ClzI7gx3/p5ymo8hSVqAtLWC+qCu6li9V7/sUpj9PZeQQGgU/BTp?=
- =?us-ascii?Q?E+SZSFn2UzrRaF3/oDCZHkAXlNyI/U+PYGsLlBv0Ru1+oDhtuQdCsdb4NPBK?=
- =?us-ascii?Q?jdgTWNocaVrWqR6Sd+gs0/Fc14MWgu8yuVX+HJ8aRnE8CxEH4PPf70RFnZe4?=
- =?us-ascii?Q?YE5yImvD8x4K48OCjlB+qYRuCsf/HlqnE7WeGy8QCwTC+9KYCbgI4UEJWulO?=
- =?us-ascii?Q?nWQUtf34hEt5w+VDWE2AIqiQDuxLRV/kae7SwWQITsSYF72TLmtIaFi7ohxo?=
- =?us-ascii?Q?AVRBs5yLyYaCWJdL673bCSS9keY9UC5dUA+I2gEiM/p+g1+hcSuLsUpmJ/Ui?=
- =?us-ascii?Q?0xtD/kTvUuOLQ6++1EQ91otGIWHR5NyBt0EUf9dh4l7GbO4RdJ4I25AFTFR7?=
- =?us-ascii?Q?LqTbYHTzRLc6J4ZVGqE2DH3p+tq8FqTvtTogxCfsc/g7LGs/wOpZBCUdeiu7?=
- =?us-ascii?Q?U1D/xUYRRbsJGhrhJVd3vrJNEOREADzj9hqsux2bEoaSqbXbtKDJJpqw3tS8?=
- =?us-ascii?Q?Xt64kRkTPTjeOKh8BON3Mk+9R39mza56S9eAAUbEYxrWctbpFaNf6Z7xHJHU?=
- =?us-ascii?Q?JEBSlaKa4YU+Yy8aiyaMss7efPePxbiEVsL8vW36vSnHbnCu5fFhM+hLUnxn?=
- =?us-ascii?Q?6I9M59urspkaO1mnPCjNUd71zFtfeQKVnqvOZGukDZnqzofSQOE7wPQ31QtD?=
- =?us-ascii?Q?E0TxuXWXimDhl/bpNfzomxvkJd5lEw+LkG8gboBejnJTv6fOKuG2Ji3fflGm?=
- =?us-ascii?Q?BRoc05Qd0g=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba761d1d-98c3-439d-e7be-08da538589f7
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3017.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 12:57:03.8702
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IDCnSjyP4Sd78EFUqWrIJJXaMQHYmIG7rb1HmHoNszctXO1ffzV6j7JbtKmRcsUP2XlZy6u/zbNDEW4vmCbHww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3872
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wu Bo <bo.wu@vivo.com>
+The diagram below shows how to make the folio lruvec lock safe when LRU
+pages are reparented.
 
-Now the fuse driver only trust it's local inode size when
-writeback_cache is enabled. Even the userspace server tell the driver
-the inode cache is invalidated, the size attrabute will not update. And
-will keep it's out-of-date size till the inode cache is dropped. This is
-not reasonable.
+folio_lruvec_lock(folio)
+	rcu_read_lock();
+    retry:
+	lruvec = folio_lruvec(folio);
 
-Signed-off-by: Wu Bo <bo.wu@vivo.com>
+        // The folio is reparented at this time.
+        spin_lock(&lruvec->lru_lock);
+
+        if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio)))
+            // Acquired the wrong lruvec lock and need to retry.
+            // Because this folio is on the parent memcg lruvec list.
+            spin_unlock(&lruvec->lru_lock);
+	    goto retry;
+
+        // If we reach here, it means that folio_memcg(folio) is stable.
+
+memcg_reparent_objcgs(memcg)
+    // lruvec belongs to memcg and lruvec_parent belongs to parent memcg.
+    spin_lock(&lruvec->lru_lock);
+    spin_lock(&lruvec_parent->lru_lock);
+
+    // Move all the pages from the lruvec list to the parent lruvec list.
+
+    spin_unlock(&lruvec_parent->lru_lock);
+    spin_unlock(&lruvec->lru_lock);
+
+After we acquire the lruvec lock, we need to check whether the folio is
+reparented. If so, we need to reacquire the new lruvec lock. On the
+routine of the LRU pages reparenting, we will also acquire the lruvec
+lock (will be implemented in the later patch). So folio_memcg() cannot
+be changed when we hold the lruvec lock.
+
+Since lruvec_memcg(lruvec) is always equal to folio_memcg(folio) after
+we hold the lruvec lock, lruvec_memcg_debug() check is pointless. So
+remove it.
+
+This is a preparation for reparenting the LRU pages.
+
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 ---
- fs/fuse/inode.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ include/linux/memcontrol.h | 18 +++-------------
+ mm/compaction.c            | 27 +++++++++++++++++++----
+ mm/memcontrol.c            | 53 ++++++++++++++++++++++++++--------------------
+ mm/swap.c                  |  5 +++++
+ 4 files changed, 61 insertions(+), 42 deletions(-)
 
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 8c0665c5dff8..a4e62c7f2b83 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -162,6 +162,11 @@ static ino_t fuse_squash_ino(u64 ino64)
- 	return ino;
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 111eda6ff1ce..ff3106eca6f3 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -758,7 +758,9 @@ static inline struct lruvec *mem_cgroup_lruvec(struct mem_cgroup *memcg,
+  * folio_lruvec - return lruvec for isolating/putting an LRU folio
+  * @folio: Pointer to the folio.
+  *
+- * This function relies on folio->mem_cgroup being stable.
++ * The lruvec can be changed to its parent lruvec when the page reparented.
++ * The caller need to recheck if it cares about this changes (just like
++ * folio_lruvec_lock() does).
+  */
+ static inline struct lruvec *folio_lruvec(struct folio *folio)
+ {
+@@ -777,15 +779,6 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio);
+ struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
+ 						unsigned long *flags);
+ 
+-#ifdef CONFIG_DEBUG_VM
+-void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio);
+-#else
+-static inline
+-void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+-{
+-}
+-#endif
+-
+ static inline
+ struct mem_cgroup *mem_cgroup_from_css(struct cgroup_subsys_state *css){
+ 	return css ? container_of(css, struct mem_cgroup, css) : NULL;
+@@ -1260,11 +1253,6 @@ static inline struct lruvec *folio_lruvec(struct folio *folio)
+ 	return &pgdat->__lruvec;
  }
  
-+static bool fuse_force_sync(struct fuse_inode *fi)
+-static inline
+-void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+-{
+-}
+-
+ static inline struct mem_cgroup *parent_mem_cgroup(struct mem_cgroup *memcg)
+ {
+ 	return NULL;
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 46351a14eed2..fe49ac9aedd8 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -508,6 +508,25 @@ static bool compact_lock_irqsave(spinlock_t *lock, unsigned long *flags,
+ 	return true;
+ }
+ 
++static struct lruvec *
++compact_folio_lruvec_lock_irqsave(struct folio *folio, unsigned long *flags,
++				  struct compact_control *cc)
 +{
-+	return fi->i_time == 0;
++	struct lruvec *lruvec;
++
++	rcu_read_lock();
++retry:
++	lruvec = folio_lruvec(folio);
++	compact_lock_irqsave(&lruvec->lru_lock, flags, cc);
++	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
++		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
++		goto retry;
++	}
++	rcu_read_unlock();
++
++	return lruvec;
 +}
 +
- void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
- 				   u64 attr_valid, u32 cache_mask)
+ /*
+  * Compaction requires the taking of some coarse locks that are potentially
+  * very heavily contended. The lock should be periodically unlocked to avoid
+@@ -834,6 +853,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 
+ 	/* Time to isolate some pages for migration */
+ 	for (; low_pfn < end_pfn; low_pfn++) {
++		struct folio *folio;
+ 
+ 		if (skip_on_failure && low_pfn >= next_skip_pfn) {
+ 			/*
+@@ -1055,18 +1075,17 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 		if (!TestClearPageLRU(page))
+ 			goto isolate_fail_put;
+ 
+-		lruvec = folio_lruvec(page_folio(page));
++		folio = page_folio(page);
++		lruvec = folio_lruvec(folio);
+ 
+ 		/* If we already hold the lock, we can skip some rechecking */
+ 		if (lruvec != locked) {
+ 			if (locked)
+ 				lruvec_unlock_irqrestore(locked, flags);
+ 
+-			compact_lock_irqsave(&lruvec->lru_lock, &flags, cc);
++			lruvec = compact_folio_lruvec_lock_irqsave(folio, &flags, cc);
+ 			locked = lruvec;
+ 
+-			lruvec_memcg_debug(lruvec, page_folio(page));
+-
+ 			/* Try get exclusive access under lock */
+ 			if (!skip_updated) {
+ 				skip_updated = true;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 3c489651d312..6f171480b2f2 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1195,23 +1195,6 @@ int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
+ 	return ret;
+ }
+ 
+-#ifdef CONFIG_DEBUG_VM
+-void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+-{
+-	struct mem_cgroup *memcg;
+-
+-	if (mem_cgroup_disabled())
+-		return;
+-
+-	memcg = folio_memcg(folio);
+-
+-	if (!memcg)
+-		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != root_mem_cgroup, folio);
+-	else
+-		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != memcg, folio);
+-}
+-#endif
+-
+ /**
+  * folio_lruvec_lock - Lock the lruvec for a folio.
+  * @folio: Pointer to the folio.
+@@ -1226,10 +1209,18 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+  */
+ struct lruvec *folio_lruvec_lock(struct folio *folio)
  {
-@@ -222,8 +227,10 @@ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
- u32 fuse_get_cache_mask(struct inode *inode)
+-	struct lruvec *lruvec = folio_lruvec(folio);
++	struct lruvec *lruvec;
+ 
++	rcu_read_lock();
++retry:
++	lruvec = folio_lruvec(folio);
+ 	spin_lock(&lruvec->lru_lock);
+-	lruvec_memcg_debug(lruvec, folio);
++
++	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
++		spin_unlock(&lruvec->lru_lock);
++		goto retry;
++	}
++	rcu_read_unlock();
+ 
+ 	return lruvec;
+ }
+@@ -1249,10 +1240,18 @@ struct lruvec *folio_lruvec_lock(struct folio *folio)
+  */
+ struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
  {
- 	struct fuse_conn *fc = get_fuse_conn(inode);
-+	struct fuse_inode *fi = get_fuse_inode(inode);
-+	bool is_force_sync = fuse_force_sync(fi);
+-	struct lruvec *lruvec = folio_lruvec(folio);
++	struct lruvec *lruvec;
  
--	if (!fc->writeback_cache || !S_ISREG(inode->i_mode))
-+	if (!fc->writeback_cache || !S_ISREG(inode->i_mode) || is_force_sync)
- 		return 0;
++	rcu_read_lock();
++retry:
++	lruvec = folio_lruvec(folio);
+ 	spin_lock_irq(&lruvec->lru_lock);
+-	lruvec_memcg_debug(lruvec, folio);
++
++	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
++		spin_unlock_irq(&lruvec->lru_lock);
++		goto retry;
++	}
++	rcu_read_unlock();
  
- 	return STATX_MTIME | STATX_CTIME | STATX_SIZE;
-@@ -437,6 +444,7 @@ int fuse_reverse_inval_inode(struct fuse_conn *fc, u64 nodeid,
- 	fi = get_fuse_inode(inode);
- 	spin_lock(&fi->lock);
- 	fi->attr_version = atomic64_inc_return(&fc->attr_version);
-+	fi->i_time = 0;
- 	spin_unlock(&fi->lock);
+ 	return lruvec;
+ }
+@@ -1274,10 +1273,18 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
+ struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
+ 		unsigned long *flags)
+ {
+-	struct lruvec *lruvec = folio_lruvec(folio);
++	struct lruvec *lruvec;
  
- 	fuse_invalidate_attr(inode);
++	rcu_read_lock();
++retry:
++	lruvec = folio_lruvec(folio);
+ 	spin_lock_irqsave(&lruvec->lru_lock, *flags);
+-	lruvec_memcg_debug(lruvec, folio);
++
++	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
++		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
++		goto retry;
++	}
++	rcu_read_unlock();
+ 
+ 	return lruvec;
+ }
+diff --git a/mm/swap.c b/mm/swap.c
+index 127ef4db394f..987dcbd93ffa 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -337,6 +337,11 @@ void lru_note_cost(struct lruvec *lruvec, bool file, unsigned int nr_pages)
+ 
+ void lru_note_cost_folio(struct folio *folio)
+ {
++	WARN_ON_ONCE(!rcu_read_lock_held());
++	/*
++	 * The rcu read lock is held by the caller, so we do not need to
++	 * care about the lruvec returned by folio_lruvec() being released.
++	 */
+ 	lru_note_cost(folio_lruvec(folio), folio_is_file_lru(folio),
+ 			folio_nr_pages(folio));
+ }
 -- 
-2.35.1
+2.11.0
 

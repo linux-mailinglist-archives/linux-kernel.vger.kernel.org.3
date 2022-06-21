@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665565528EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2D65528F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240638AbiFUBOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 21:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S240211AbiFUBWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 21:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbiFUBO3 (ORCPT
+        with ESMTP id S230330AbiFUBWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 21:14:29 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56822140AB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:14:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655774068; x=1687310068;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=b00p+JPCNLBqBtIBRmsVShSdYPWHF1lrMDDwHIhXKXY=;
-  b=Lfi8V1zTtOGIuPz+Sk19Cmy+glMO9ZFnOkF6Ce42UC8kls8DIJl0Rqtp
-   QlPh39SsPknbvm6XLxIDo/iLrQfAKDd8URqv8cZxsliJDHwFX+TdUAlbI
-   rEwdIIPNbfq8XZCuTPVmlfMEcT0kaEbbznHzBX33JL+6Y0qPOQzJ9IVCx
-   NClcrqh2cAbzhTD5/pMPZzmU+IhABuPb5a+p7CnMh798JuDKgABAIXbY1
-   Vc6w6DBk2ncQxl7E2lmbe4a77ca3CT90dqeHFLNRne/xvxPCTGc/1nP+M
-   YFF11cGnXOVr3FMMrKwF1EIhnZaj+2JF2kfVSg0pXVamSdUTmVVu8JgAf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="366322946"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="366322946"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:14:28 -0700
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="833333958"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:14:26 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Qian Cai <quic_qiancai@quicinc.com>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        <akpm@linux-foundation.org>, <david@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] mm/swapfile: fix possible data races of inuse_pages
-References: <20220608144031.829-1-linmiaohe@huawei.com>
-        <20220608144031.829-3-linmiaohe@huawei.com>
-        <87edzjrcq8.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <13414d6a-9e72-fb6c-f0a8-8b83ba0455de@huawei.com>
-        <YrA8kxavqsDfH5R7@FVFYT0MHHV2J.usts.net>
-        <09ffac27-7fe9-0977-cb33-30433e78e662@huawei.com>
-        <b61771ad-9daa-741e-27e4-fdb50a7c5e38@huawei.com>
-        <YrB6R5uHQaz1adhK@qian> <YrCCFwgoLKhDn7Fo@FVFYT0MHHV2J.usts.net>
-        <YrDob8+9Xgig6mZw@qian>
-Date:   Tue, 21 Jun 2022 09:14:00 +0800
-In-Reply-To: <YrDob8+9Xgig6mZw@qian> (Qian Cai's message of "Mon, 20 Jun 2022
-        17:36:47 -0400")
-Message-ID: <87pmj2q0mf.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 20 Jun 2022 21:22:15 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECA4634B
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:22:14 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id g4so16767504wrh.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iGjjY3HwOIbttDwUviSsDQPsfAs3UUDt07n3f4W7ebQ=;
+        b=hnD5iao8QXyX4Am/IkpwLe36L0lhcFXUS9xABII7VIuDsCodgNb9mLuww/8hvhAQ+U
+         dURvI7VLHfSpnufrdyDrHeMM5PYellEIW7LsmQ+COuxxgo+evSCiCFouKZJfw6l4uL11
+         ASLeErBCwWndAVyF2EuOX+uK632Op8J3u8vq6ZhedSixDg8Tw2pq48sL0imLE9RFfM0Z
+         sbro9vvE7qH6o5Bl5+8zcxPeDCqpNklnbANFwGnOXgN9jghips19+aIUwdslj8p6MVGj
+         Xj329321iOTelgM4m7YEeEuhvqG+j+0XGOP/95Pd3HSuPMgnVLJ1HP3QomhQefqB7hdV
+         WOvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iGjjY3HwOIbttDwUviSsDQPsfAs3UUDt07n3f4W7ebQ=;
+        b=GdcwJgIHeZmhFNQzdV6NoyBNRuZ5TJl9hxSMUtu9A3drx/yIYHplzb+u8yhTgaryhr
+         EZe2PsOwm6c3WQKH4tKvgqJDqiNUQFfkMZ/Z9qCV6wugMnwS1siHMWYlhE5/MTtKTdCH
+         aP/uPkDhEFq1cYwD1IvDn4rakGRcdxEdyrmDfLIapNDdlfJU4POsjL4f1FQqDWEqhr+d
+         286qOzIhbtA/xSF0usRJ7xkg66n99BUjiAz8zxSvQXVi4zlyE1N7AkdqL84ZRKPWkwuM
+         vv3Lu+qVYZo1Uyt2D5bls4QDIJ0s2++O4WKPAh+tZM6JYV1wQmmWypYjIc3SXB0/GFlo
+         MNrw==
+X-Gm-Message-State: AJIora/s5TZ3VMMH0iG/m61G2uwzX1+DxvvDAGLqJJ/ChHPT+iS+vaEn
+        68yLTIXHQ4hLCzut/SwaBki1xcXLTDC/a6Wjf653
+X-Google-Smtp-Source: AGRyM1srvmz0sxYpUL+j7hh3Nxp9SHP3Rpo4co7pFbz2Zx5Ri5/ae/iUzcou5p1/HoxjxoYMy50uLEJPD/myCX07iXE=
+X-Received: by 2002:a5d:4848:0:b0:21b:8cda:5747 with SMTP id
+ n8-20020a5d4848000000b0021b8cda5747mr9405276wrs.483.1655774532923; Mon, 20
+ Jun 2022 18:22:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220617094412.197479-1-xiujianfeng@huawei.com>
+In-Reply-To: <20220617094412.197479-1-xiujianfeng@huawei.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 20 Jun 2022 21:22:02 -0400
+Message-ID: <CAHC9VhTD0Z=9M_7TRBoOUDgNigLyYCW2SgNAtaZdPj8nJNCV2Q@mail.gmail.com>
+Subject: Re: [PATCH RESEND -next] selinux: Let the caller free the momory in
+ *mnt_opts on error
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qian Cai <quic_qiancai@quicinc.com> writes:
-
-> On Mon, Jun 20, 2022 at 10:20:07PM +0800, Muchun Song wrote:
->> The lock does not protect the read sides. So the write side should be
->> fixed by WRITTE_ONCE().
+On Fri, Jun 17, 2022 at 5:46 AM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
 >
-> https://lwn.net/Articles/816854/
+> It may allocate memory for @mnt_opts if NULL in selinux_add_opt(), and
+> now some error paths goto @err label to free memory while others don't,
+> as suggested by Paul, don't free memory in case of error and let the
+> caller to cleanup on error.
 >
-> "Unmarked writes (aligned and up to word size) can be treated as if they had
-> used WRITE_ONCE() by building with
-> CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=y (also selected by default).
-> Experience has shown that compilers are much less likely to destructively
-> optimize in-kernel writes than reads. Some developers might therefore
-> choose to use READ_ONCE() but omit the corresponding WRITE_ONCE(). Other
-> developers might prefer the documentation benefits and long-term peace of
-> mind accruing from explicit use of WRITE_ONCE()..."
+> And also this patch changes the @s NULL check to return -EINVAL instead.
+>
+> Link: https://lore.kernel.org/lkml/20220611090550.135674-1-xiujianfeng@huawei.com/T/
+> Suggested-by: Paul Moore <paul@paul-moore.com>
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  security/selinux/hooks.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
 
-Thanks for pointing me to this great article.  So although not required
-by KCSAN strictly, WRITE_ONCE() is still good for documentation, etc.
-Just like we have done for swap_info_struct->highest_bit, etc.
+Thanks, merged into selinux/next with some rewording of the subject
+line and commit description.
 
-Best Regards,
-Huang, Ying
+-- 
+paul-moore.com

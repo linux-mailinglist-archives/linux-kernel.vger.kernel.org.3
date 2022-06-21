@@ -2,70 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C17E553E7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A15A553E79
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353576AbiFUW2R convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 18:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S1352632AbiFUW2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353370AbiFUW2N (ORCPT
+        with ESMTP id S231383AbiFUW16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:28:13 -0400
-Received: from mailgateway.xchanging.com (mail9.xchanging.com [213.219.10.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F446630F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:28:04 -0700 (PDT)
-Received: from pps.filterd (ACTXTSPRDPFTV05.xchanginghosting.com [127.0.0.1])
-        by ACTXTSPRDPFTV05.xchanginghosting.com (8.16.1.2/8.16.1.2) with SMTP id 25LMP8pY018237;
-        Tue, 21 Jun 2022 23:27:45 +0100
-Received: from [91.103.252.181] ([10.146.3.241])
-        by ACTXTSPRDPFTV05.xchanginghosting.com with ESMTP id 3gufw63drj-31
-        (version=TLSv1 cipher=AES256-SHA bits=256 verify=NOT);
-        Tue, 21 Jun 2022 23:27:45 +0100
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: RE
-To:     Recipients <p.nataraj@xchanging.com>
-From:   "Mr Elisabeth" <p.nataraj@xchanging.com>
-Date:   Tue, 21 Jun 2022 15:27:35 -0700
-Reply-To: mariaelisabethschaeffler505@gmail.com
-Message-ID: <3gufw63drj-31@ACTXTSPRDPFTV05.xchanginghosting.com>
-X-Proofpoint-GUID: 5bzX8fxQGnBtTWIHzCHEF-E6m2-7_WbY
-X-Proofpoint-ORIG-GUID: 5bzX8fxQGnBtTWIHzCHEF-E6m2-7_WbY
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-21_09:2022-06-21,2022-06-21 signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
-        NIXSPAM_IXHASH,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_ZBI,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -2.3 RCVD_IN_DNSWL_MED RBL: Sender listed at https://www.dnswl.org/,
-        *       medium trust
-        *      [213.219.10.34 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [213.219.10.34 listed in bl.score.senderscore.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mariaelisabethschaeffler505[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        *  0.3 HK_NAME_MR_MRS No description available.
-        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 RCVD_IN_MSPIKE_ZBI No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+        Tue, 21 Jun 2022 18:27:58 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4061A2AD1;
+        Tue, 21 Jun 2022 15:27:56 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id d123so15741793iof.10;
+        Tue, 21 Jun 2022 15:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=fNGqJo+i9/6/f3kZZhedEKn3jNfO/JEUEuBNSE2ons8=;
+        b=Bsw5bU9aNfX0F844I1T/2Kq4vl6mJFjBGaNV9ZHdP3lfbUJ/NJmLvDw83lq1sZFFOk
+         jcxk50T2/0kg5pvZqxPXETFm7ri2eYeXWX6DleBI69HpzlTdwJPOtwNWsJItjFz8O79B
+         Z5VES7BJv+nUxwuzojgo6CCgZegw/ZBLHXB9TWjkWI6eWLIzO4nlq4KGdyoaaKMKFCX/
+         M69QnFTju+8iE/bwxLJFtsHzxqpssOEXchocaKHpI4dgQ/XeBdJsSco0UzSfmtL1hX3a
+         Eg52YGE/4lIAK4fPx8BV4Rz+0CiChofrVsBZPjeItE8yTJg1Uf4s4Vq1nIVl9mpNSrA6
+         8WJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=fNGqJo+i9/6/f3kZZhedEKn3jNfO/JEUEuBNSE2ons8=;
+        b=gB5ikzvQynttGT3J50uuSZIxutL/gvPNBnEcSW4E3r60DriRnIbXwH9Jfi9i9XOwHZ
+         fcpkbMenod7TCAq5eX1l7foQwulqm54ctJkKa/SvZkzs0t8+i1Bigb4oh1S7TaIQM5Fo
+         KA+LX9OCtDjkdZ0hd3grgLQjfO+j8tkSYLPg8FC0I9idUTJdeZpYTCmPlY3Er/ffWeD0
+         U46ZTbrrPC+NHNECvbKv/4e1puAhhq2m6/vjDM+u5812GSp7mpP85fIg4Qe0duhNPsFG
+         GS8lkPZLyRl8937IBWiEGFi35VvIvM2s2yGq3VMSvkVats2Pq26SN+Tj3WTv2L52eSpU
+         34RQ==
+X-Gm-Message-State: AJIora/AG7MeT4ijtjApez5AV45mOlypKxbPys7c9jbtCFCkYaO8w4g2
+        Xmg76OnK5OT1tM+fpISYpAs=
+X-Google-Smtp-Source: AGRyM1s7CtUuGPbwQO3uFbWyjsf6za/ECqC0G+2mNEFJEQFJ6RUGx/b3UQVkQauF8xeSlfZOHgzUag==
+X-Received: by 2002:a05:6638:1301:b0:331:f2f0:a17e with SMTP id r1-20020a056638130100b00331f2f0a17emr227630jad.141.1655850475088;
+        Tue, 21 Jun 2022 15:27:55 -0700 (PDT)
+Received: from localhost ([172.243.153.43])
+        by smtp.gmail.com with ESMTPSA id h18-20020a02c732000000b0032e3b0933c6sm7637267jao.162.2022.06.21.15.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 15:27:54 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 15:27:46 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        john.fastabend@gmail.com, songliubraving@fb.com, kafai@fb.com,
+        yhs@fb.com
+Cc:     dhowells@redhat.com, keyrings@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        kernel test robot <lkp@intel.com>
+Message-ID: <62b245e22effa_1627420871@john.notmuch>
+In-Reply-To: <20220621163757.760304-4-roberto.sassu@huawei.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-4-roberto.sassu@huawei.com>
+Subject: RE: [PATCH v5 3/5] bpf: Add bpf_verify_pkcs7_signature() helper
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Schöner Tag! Hast du meine vorherige Nachricht erhalten? Ich habe Ihnen eine E-Mail bezüglich der Spende von  Maria-Elisabeth Schaeffler) gesendet. E-Mail-Antwort an: mariaelisabethschaeffler505@gmail.com
+Roberto Sassu wrote:
+> Add the bpf_verify_pkcs7_signature() helper, to give eBPF security modules
+> the ability to check the validity of a signature against supplied data, by
+> using user-provided or system-provided keys as trust anchor.
+> 
+> The new helper makes it possible to enforce mandatory policies, as eBPF
+> programs might be allowed to make security decisions only based on data
+> sources the system administrator approves.
+> 
+> The caller should provide both the data to be verified and the signature as
+> eBPF dynamic pointers (to minimize the number of parameters).
+> 
+> The caller should also provide a keyring pointer obtained with
+> bpf_lookup_user_key() or, alternatively, a keyring ID with values defined
+> in verification.h. While the first choice gives users more flexibility, the
+> second offers better security guarantees, as the keyring selection will not
+> depend on possibly untrusted user space but on the kernel itself.
+> 
+> Defined keyring IDs are: 0 for the primary keyring (immutable keyring of
+> system keys); 1 for both the primary and secondary keyring (where keys can
+> be added only if they are vouched for by existing keys in those keyrings);
+> 2 for the platform keyring (primarily used by the integrity subsystem to
+> verify a kexec'ed kerned image and, possibly, the initramfs signature).
+> 
+> Note: since the keyring ID assignment is understood only by
+> verify_pkcs7_signature(), it must be passed directly to the corresponding
+> helper, rather than to a separate new helper returning a struct key pointer
+> with the keyring ID as a pointer value. If such pointer is passed to any
+> other helper which does not check its validity, an illegal memory access
+> could occur.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reported-by: kernel test robot <lkp@intel.com> (cast warning)
+> ---
+>  include/uapi/linux/bpf.h       | 17 +++++++++++++++
+>  kernel/bpf/bpf_lsm.c           | 39 ++++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h | 17 +++++++++++++++
+>  3 files changed, 73 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 7bbcf2cd105d..524bed4d7170 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5339,6 +5339,22 @@ union bpf_attr {
+>   *		bpf_lookup_user_key() helper.
+>   *	Return
+>   *		0
+> + *
+> + * long bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr, struct bpf_dynptr *sig_ptr, struct key *trusted_keys, unsigned long keyring_id)
+> + *	Description
+> + *		Verify the PKCS#7 signature *sig* against the supplied *data*
+> + *		with keys in *trusted_keys* or in a keyring with ID
+> + *		*keyring_id*.
+
+Would be nice to give precedence here so that its obvious order between
+trusted_keys and keyring_id. 
+
+> + *
+> + *		*keyring_id* can have the following values defined in
+> + *		verification.h: 0 for the primary keyring (immutable keyring of
+> + *		system keys); 1 for both the primary and secondary keyring
+> + *		(where keys can be added only if they are vouched for by
+> + *		existing keys in those keyrings); 2 for the platform keyring
+> + *		(primarily used by the integrity subsystem to verify a kexec'ed
+> + *		kerned image and, possibly, the initramfs signature).
+> + *	Return
+> + *		0 on success, a negative value on error.
+>   */

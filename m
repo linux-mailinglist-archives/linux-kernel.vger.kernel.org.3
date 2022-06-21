@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C78E5538E7
+	by mail.lfdr.de (Postfix) with ESMTP id 8759D5538E8
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353807AbiFUR30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 13:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S1353886AbiFUR3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 13:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353724AbiFUR3N (ORCPT
+        with ESMTP id S1353756AbiFUR3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 13:29:13 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59BA1707E;
-        Tue, 21 Jun 2022 10:29:12 -0700 (PDT)
+        Tue, 21 Jun 2022 13:29:22 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914FE1A05F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:29:20 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id c83so10655233qke.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655832553; x=1687368553;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=sPVAYqaPJFR/Z0gzjofpTzSyW3DOh5RTZIFv+zTXtgI=;
-  b=fQ7iswdvBUt3NeHNbX4OTRmBJ2PyJSnJO6QPVR2ahAvJQTWjOd6ViPSt
-   TmQsdRanScFq2sA0sNPsNuVNL4H0RMeep2rMBl/e/Yw1F1pIPIMAAGZrT
-   amopytQghE38GtYbKP3iECe3v3c4EItdx3tQSF4ziwngQ2MN5C4nteAwD
-   A=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 21 Jun 2022 10:29:13 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 10:29:12 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 21 Jun 2022 10:29:11 -0700
-Received: from [10.38.247.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 21 Jun
- 2022 10:29:09 -0700
-Message-ID: <a9d3568d-bf0d-ee01-7e8a-b35466c963b4@quicinc.com>
-Date:   Tue, 21 Jun 2022 10:29:07 -0700
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qgqrX/bjYQKajbQBs+HRKEwBVVyLFqaz5TXiJl2OIzs=;
+        b=PwUi7qkhrcxXbogc7WAmbOFJ/f5vZOUqpCl3ZrLLmEAUwbihiTtZ/uJpu2+o1DrZgH
+         4mfOr6Tiuqx9nVTzi4B+cixD/X1ZaRSPYZNGbjzn0Xw+5xBtfwgoK1BEeH1sh5Y2SgVm
+         G1antyVMtrEMJitimUlwMjq/wxVf5iSkNIHWtuph45KSlJ1CBAZBEnS9QCimG9eF6sI5
+         wC5yubAxn2e0UpZtMCQDf+2n/JabyeHcUtb4GBxey0Gh8FqiXBo1eG72Ldfp3qP9YhhN
+         nwPPzAezD6dkxo+Bm+Eo1L5YQ8kZWLQvrZY8ViblkS6HyPhgv6PbTVs1Rs88wZpID0DW
+         vOXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qgqrX/bjYQKajbQBs+HRKEwBVVyLFqaz5TXiJl2OIzs=;
+        b=U5I0shvrIopawPELELBWxoLuuad0oestmGzK+7W81C7EAMZyUnCZRfVUWaNt4RES7F
+         2f6aHUCH2lepcdFg/nvNj8ya2so2mV2GxNQZIQbnNneA2GGsRoCMiIsLMCrDAXr6Ukst
+         kRy7nYaF7aFNuHljUwMAHa5haW791WCugALqrja9HM/vGghCqEfKV5syqsdfP3W6ToXl
+         MYkLSFVCJpvpg+awqgcvDZEtjbDJlAbrBBaA37rW2diyyjGHfi6rqTUfXxAF3JfIwOMi
+         OnQOQDdtDNvPomucxqomj7utR1UlkpD+qIHvPbN61yMo861FDdTsv5sLi5uZHtS95MPG
+         Aq7Q==
+X-Gm-Message-State: AJIora8705ZN66Lf/Tn1u+bleb5Ad3Q+WSjNgP0EL5umw3HeHx0KqtkS
+        lGUHL75VJAalMOhcOQMdnjwdTds2qhRcC4xXWgrbLA==
+X-Google-Smtp-Source: AGRyM1s4vuUr8aV7hp6dmp16vtyPxTAyTQaNFFWSjd/zY0+AdpHQ/h9f2Gv8heM9cpFZcBjx3ufxaF+qZrSxUiGg7Ys=
+X-Received: by 2002:a05:620a:4156:b0:6a6:f8d2:6d9e with SMTP id
+ k22-20020a05620a415600b006a6f8d26d9emr21208822qko.30.1655832559702; Tue, 21
+ Jun 2022 10:29:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm: Use div64_ul instead of do_div
-Content-Language: en-US
-To:     Wan Jiabing <wanjiabing@vivo.com>, Rob Clark <robdclark@gmail.com>,
-        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20220426132126.686447-1-wanjiabing@vivo.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220426132126.686447-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220621112330.448754-1-robimarko@gmail.com>
+In-Reply-To: <20220621112330.448754-1-robimarko@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 21 Jun 2022 20:29:08 +0300
+Message-ID: <CAA8EJpoPJKVteUdsxOVH5THH_vqwBrdSn=hkbW4oWmpw+Mjdmg@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     svarbanov@mm-sol.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, p.zabel@pengutronix.de,
+        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johan+linaro@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,30 +70,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 21 Jun 2022 at 14:23, Robert Marko <robimarko@gmail.com> wrote:
+>
+> IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
+> cause the system to hang as its using DBI registers in the .init
+> and those are only accesible after phy_power_on().
+>
+> So solve this by splitting the DBI read/writes to .post_init.
+>
+> Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
 
+Any elaboration for the Fixes tag? I think the follow one is more
+logical, isn't it?
 
-On 4/26/2022 6:21 AM, Wan Jiabing wrote:
-> Fix following coccicheck warning:
-> drivers/gpu/drm/msm/msm_gpu_devfreq.c:72:1-7: WARNING: do_div() does a 64-by-32 division, please consider using div64_ul instead.
-> 
-> Use div64_ul instead of do_div to avoid a possible truncation.
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Fixes: 5d76117f070d ("PCI: qcom: Add support for IPQ8074 PCIe controller")
+
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
->   drivers/gpu/drm/msm/msm_gpu_devfreq.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> index d2539ca78c29..c2ea978c8921 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> @@ -69,7 +69,7 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
->   	df->time = time;
->   
->   	busy_time *= USEC_PER_SEC;
-> -	do_div(busy_time, sample_rate);
-> +	busy_time = div64_ul(busy_time, sample_rate);
->   	if (WARN_ON(busy_time > ~0LU))
->   		busy_time = ~0LU;
->   
+> Changes in v2:
+> * Rebase onto next-20220621
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
+>  1 file changed, 28 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 51fed83484af..da6d79d61397 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+>         struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
+>         struct dw_pcie *pci = pcie->pci;
+>         struct device *dev = pci->dev;
+> -       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>         int i, ret;
+> -       u32 val;
+>
+>         for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
+>                 ret = reset_control_assert(res->rst[i]);
+> @@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+>                 goto err_clk_aux;
+>         }
+>
+> +       return 0;
+> +
+> +err_clk_aux:
+> +       clk_disable_unprepare(res->ahb_clk);
+> +err_clk_ahb:
+> +       clk_disable_unprepare(res->axi_s_clk);
+> +err_clk_axi_s:
+> +       clk_disable_unprepare(res->axi_m_clk);
+> +err_clk_axi_m:
+> +       clk_disable_unprepare(res->iface);
+> +err_clk_iface:
+> +       /*
+> +        * Not checking for failure, will anyway return
+> +        * the original failure in 'ret'.
+> +        */
+> +       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> +               reset_control_assert(res->rst[i]);
+> +
+> +       return ret;
+> +}
+> +
+> +static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
+> +{
+> +       struct dw_pcie *pci = pcie->pci;
+> +       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> +       u32 val;
+> +
+>         writel(SLV_ADDR_SPACE_SZ,
+>                 pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
+>
+> @@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+>                 PCI_EXP_DEVCTL2);
+>
+>         return 0;
+> -
+> -err_clk_aux:
+> -       clk_disable_unprepare(res->ahb_clk);
+> -err_clk_ahb:
+> -       clk_disable_unprepare(res->axi_s_clk);
+> -err_clk_axi_s:
+> -       clk_disable_unprepare(res->axi_m_clk);
+> -err_clk_axi_m:
+> -       clk_disable_unprepare(res->iface);
+> -err_clk_iface:
+> -       /*
+> -        * Not checking for failure, will anyway return
+> -        * the original failure in 'ret'.
+> -        */
+> -       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> -               reset_control_assert(res->rst[i]);
+> -
+> -       return ret;
+>  }
+>
+>  static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+> @@ -1598,6 +1605,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
+>  static const struct qcom_pcie_ops ops_2_3_3 = {
+>         .get_resources = qcom_pcie_get_resources_2_3_3,
+>         .init = qcom_pcie_init_2_3_3,
+> +       .post_init = qcom_pcie_post_init_2_3_3,
+>         .deinit = qcom_pcie_deinit_2_3_3,
+>         .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>  };
+> --
+> 2.36.1
+>
+
+
+-- 
+With best wishes
+Dmitry

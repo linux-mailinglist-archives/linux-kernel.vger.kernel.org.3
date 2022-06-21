@@ -2,196 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F6D553743
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FB0553764
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbiFUQGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 12:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S1353713AbiFUQHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 12:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353326AbiFUQGg (ORCPT
+        with ESMTP id S1353686AbiFUQHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 12:06:36 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8AA6372;
-        Tue, 21 Jun 2022 09:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655827588; x=1687363588;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=KgHjrlPAUGdlFajed8XBAMx2mJ0fc6m9M6rfrnrsG24=;
-  b=P8njc6nIeLgKH2KjSZCh+aR+JoHGA00+6lwIyvV0YHdKPmnIO0BTyVrN
-   RDH2Nfij32tvBZxBp5jDAxYVAXbf4kL2ljvcpAOYw73p6gmO7eC3blTdZ
-   E28eZzBd/yPLFacWRroc5pBcWpbEx2bvtHzEFid2acaFJWk9GQZc3o9AS
-   bOxLSEAuo1gAZF0Y5ue5CsQ2oSAio7Pbei5MiZvhhPMXFZ+bnqx1xwlko
-   wPEL3kUOu3+5lJ1KJAJfICgx3Iyue3CV9xtPJepwyZENF98JV9pncZpLd
-   w8KQHqUhokzN9XJyLYxQ9f9PEIi94CTHCYMUKNJv+zFjyfmDDZrsl4oLP
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="169313018"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jun 2022 09:06:27 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 21 Jun 2022 09:06:26 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Tue, 21 Jun 2022 09:06:26 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HxSCDo0RH1+aEJ/PYQZk1sdyzjOMpSgNMErGmfxKsyQY6277kfBakAT95fzpwsCiw0jTpQ5c3oqA3xeShu/1MCeRq7myStGcfi3ll+Jhah2SAQmHo22Dhc/Zo+8ibblOZQAcJOJj9tUKBN5QbXRP/40YlPO+H3uALLn3DZW0e3tRw0/cpja+VDda+ZUkQ6aHAVkvzpnlXkfzKEZr8O1YzOoPmqH0qKxAC4+Vd1GsFziWjZKhb9pBhXWOzdH5hEU8sknGZcSXs2GfRVzIhO+MPn2l7COkUYCbbaDHBy/rv99O9eaEZp6p3i2HKKdeW8fXnxjk8r6MLZ84Z0c5h8Imcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KgHjrlPAUGdlFajed8XBAMx2mJ0fc6m9M6rfrnrsG24=;
- b=lQ4MD2EoTRHl4HFFNVdrl7XmfEfYFVydGcG2LGIasjPtRpubOleashkz+fnPUS1dyWNYft7b3GTYlMGU4eHrTtu5qKufRQoAU0rgLn5cgHC8Q8AXPVb3LirmVY3Qt4WVmIJgHNXGTdmRvNOd81vYXBeRqxRR86BIIeraCYeLntdeW5dhyyTprhmHkYxO5j2yY6HMN6TR5J4g1brFJczZIsSzwIfSrQuGKLK/06cooyQ5kwA57vWb1EKaHouqnkCVDxe0+BTwYOp1E1YKKz0rWlWz+ghmywioC49bTX8dMxo0U8fPBV1ZCdJXVSFiGInUYEzmGDkGyOCGoZ4zF1zCxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Tue, 21 Jun 2022 12:07:42 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA66F1E;
+        Tue, 21 Jun 2022 09:07:40 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id cf14so10262881edb.8;
+        Tue, 21 Jun 2022 09:07:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KgHjrlPAUGdlFajed8XBAMx2mJ0fc6m9M6rfrnrsG24=;
- b=PlcQh6Z0WdGQ7HtR0t/Y62j2Ulc7NSz2r/A8L5K6fWIzlgpkjJYmid722EM9h35TyhrhOsh1WQYYk+DlxCRWTlMBYI3J+NPwHwD4KPvcr0AJ/UyT+PgUgqpShE/P7WgU3Ul2JE+mqCoj9/fKSlIMmGNlmpEaYay40GFVRmZIWvQ=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by BY5PR11MB4242.namprd11.prod.outlook.com (2603:10b6:a03:1c1::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Tue, 21 Jun
- 2022 16:06:21 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
- 16:06:21 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <damien.lemoal@opensource.wdc.com>, <mail@conchuod.ie>,
-        <fancer.lancer@gmail.com>
-CC:     <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <thierry.reding@gmail.com>,
-        <sam@ravnborg.org>, <Eugeniy.Paltsev@synopsys.com>,
-        <vkoul@kernel.org>, <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <daniel.lezcano@linaro.org>, <palmer@dabbelt.com>,
-        <palmer@rivosinc.com>, <tglx@linutronix.de>,
-        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
-        <masahiroy@kernel.org>, <geert@linux-m68k.org>,
-        <niklas.cassel@wdc.com>, <dillon.minfei@gmail.com>,
-        <jee.heng.sia@intel.com>, <joabreu@synopsys.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-spi@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
- spi-{r,t}x-bus-width for dwc-ssi
-Thread-Topic: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
- spi-{r,t}x-bus-width for dwc-ssi
-Thread-Index: AQHYgw+Pu1Tn+/2s8EmHi9NhXNIv361YymsAgAACs4CAABvqAIAAALeAgAAH6QCAARnpAA==
-Date:   Tue, 21 Jun 2022 16:06:21 +0000
-Message-ID: <bd2547f8-e069-60a2-a223-9f694457636d@microchip.com>
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-7-mail@conchuod.ie>
- <20220620205654.g7fyipwytbww5757@mobilestation>
- <61b0fb86-078d-0262-b142-df2984ce0f97@microchip.com>
- <9a1fcb40-9267-d8e6-b3b6-3b03fd789822@opensource.wdc.com>
- <a2d85598-76d1-c9dc-d50d-e5aa815997cf@conchuod.ie>
- <c272728f-f610-77df-bd9b-c9fee6b727f8@opensource.wdc.com>
-In-Reply-To: <c272728f-f610-77df-bd9b-c9fee6b727f8@opensource.wdc.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 12fc03b6-a694-4609-57fe-08da539ffb89
-x-ms-traffictypediagnostic: BY5PR11MB4242:EE_
-x-microsoft-antispam-prvs: <BY5PR11MB4242993E3A228AF7E262A0CE98B39@BY5PR11MB4242.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5DHQcHXwT9FeCsHNXwKjMIgpP/0kHhn6+qEryaXVKxiSY/VOwJjcFulciDVvNhJalKdtZkYZnPpakNz9SS/mjWKtpDhVYRc6KWKdld8PS6UFWid31ISDmPu2oWowZixdQxsrk3FFccia52UaFcLjAog4wLl4yzgZ4gu2KmzGzdXNzd4wryTw1y4tvDfNvbOwG2j0d0BmLRShCdTRF4dTamPBWIgCxbYbQXi5IFHA/cqIuMJ4i571AHRUdfae8LeYNOySwbmP02oV+ehOUKLnd1iKpuHMp6w2/knDLDRh742/+iVUXkkTI0s6cLGGCkOBKpmcEmSG+t+vfvWO0Tmv9UEOXXpUkNDexVKsKWz3GqovunRDmRueC3OGDZeE+5JqZJOotmWBqzMscVDrUODdGGrIihmEuNBG6xmTR1sxgAV8acBI1pV9EaZtt3AfAfyEWninQqdo8JwZrSW0pc7oDtsE2SpdaFpt9m5zRal9WoTFhX8jiI/Beeg6WA5xpkAMp/JFYfrryFQt2RUXRM/AZNJGMma1kpmuKNL+aIJ2GZ3W/q3IlI+kTn0OxXq+RsHoRY5vjbe160cwgpNT0UL2q1HoK1rXK5dJqEEMDmV8ThsZzsEZNAkyIsa43BM8rCfV3uI9CLVQn7U95AtQRyPGAkKe7McAo3PWdkLoaoXmWXbotMQFJaDRhgxiROqc0d9vsLPGjJ9CF/7xluJSbTZm/WEQztWPRt1NQaNbhK/bTsAbekk0hlOwBjSGRhuplF8jvtVr3+iAw8fS84OVKNLkKLcKpuTvsGcop1TXwVinwxz2Nv57tG7rnTw7kD7NcXYY/nrumS4VxzTnz+SrXmgnmjhWtv5dVKznrfyCODLzjTA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(366004)(39860400002)(396003)(376002)(4744005)(84970400001)(7416002)(71200400001)(7406005)(8936002)(122000001)(5660300002)(6486002)(186003)(41300700001)(478600001)(2616005)(6512007)(2906002)(38070700005)(316002)(31696002)(26005)(6506007)(86362001)(53546011)(110136005)(91956017)(31686004)(76116006)(54906003)(4326008)(8676002)(66476007)(66446008)(64756008)(66556008)(66946007)(38100700002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K2tNbkZVc21OdFdMOHhsN1Ztb05rdUJWaUY2ZTRZcmVYd1BuVk1zV0N4OTht?=
- =?utf-8?B?WGxTWnNPSUFOaTc1Umc2VFMwOW5uQlR2c3JlTndqY211NytoMWpubE1oTUlD?=
- =?utf-8?B?RytaMXFPR3dqdkliLzZBUmI5SXFjUjJNVnpLRDZBTjY4MDkxMUxMQjV6T2h5?=
- =?utf-8?B?a2xMVjZKc2VXZytlQzhBVW9RbGIzc2NGMngyQmY2dFVkOHg4ZWJsbDU4YlBB?=
- =?utf-8?B?dEk4LzN0S0FrMHlVbEtSQWVrcWEzMk43czF6bGR4MVJuNlNWb2ZaazJxNnlX?=
- =?utf-8?B?N01wRFlTQis4anV5TzlVcktUcG9KZzlpQkR5Skh6Qmh1N3d2SXYwSnBFUG9K?=
- =?utf-8?B?bjZFNWF1cWI4MW04SzVOTXJ0UFVqREE5Y1JDVWRUQ2FueVV6c0hzT2ZhdjlI?=
- =?utf-8?B?dXIzL0diZzJSckdsaVlTQ2sxMnc1TFhIOG5PTTZvSWkzaG01T0IwVk9tV01r?=
- =?utf-8?B?MzJhRC9yeStOY1hmSjYrOENlRmEvamw2aVl2SExSNThBUTlNbU8reVE1YjAr?=
- =?utf-8?B?TnFZODkwcEFjNWFVM2RjRWVpRmY2dWdqQktUNSszYzE4V3lqWVpkOG95Wjg5?=
- =?utf-8?B?cXlYRlU2UmxsNDd6VlUyTk9OcmlYOGoxOU5lUC9OQlY4eElFV25JQkJCWnVv?=
- =?utf-8?B?aUZRSEdsWlVYbW5GdE44aEZGYjBhVnVxazYyTjBZZ3dXY0ZmdDdLQXdzeHhh?=
- =?utf-8?B?ak9EVFdrakFvb3FuYkJtVERVME43U2pJTTViY2lISllvQlpwcGl6aVc2REdS?=
- =?utf-8?B?Y3duT3RkejZOZitKMHRYVnZaOU9MK2RYSUY4UFFtb2RaMHgwUEhrbVV1eEQv?=
- =?utf-8?B?V1R4N2FrVmJJdVpLK0RCUEZrVWNrNWZNYmtwdHpOeG9oZC8zak9SU1l6QXZE?=
- =?utf-8?B?U3dXT0g5d3RPM2trWG1iQ2dlcG56TkR1WkpZQlhvaHUwOGllcEFmUEJhdTF1?=
- =?utf-8?B?UjRMSjNiTkxQdCt4R04rblB2bjl1M1c2SEk1SGJYdERIc0RDbE1icXIyd3Vk?=
- =?utf-8?B?ekdKT1pheXJOZ2g1ekQrTDZrSCtiRjUzVCtmT1hRam5jQUQ5QWxBb1RsMTF4?=
- =?utf-8?B?ZDV0VnQ1ZVNSbW5jK1NoWDhaeTFyTFZUUlZkeStCTWQvQlVDWjZYLzNJWW9X?=
- =?utf-8?B?MDJ6RUNPOU1SSHF2czRaTTFzSkkrWFJOWGRJWVJEWDRjVHJXNmJaZTFpRm9G?=
- =?utf-8?B?WGVFZE9IUW11QjJUWGRSMnpTWklSYVBERzRmV0U0ZC8yMXk0WWlFNG5sM2Mr?=
- =?utf-8?B?bExHRThtaGN5U3puZDgvQVg1S2Nsa2o5QitncG83ZVAvQ3VSdTZtSWlaYnFv?=
- =?utf-8?B?c2Fyc0RaL21VZ1RmbEpRV052ZlR1SjBDSW51R0pHRk9nSk1BK2NVUVcxZThJ?=
- =?utf-8?B?RHRNWmllZEZmajhDaFc2UlNSL0tSV1kzU04yWHlXYUVHdW5BYVBmakc3MzAx?=
- =?utf-8?B?ck9GL2l0VjkrYWhvWjNiNVc4bnFBTlVHRjk1QjZnUlJvQVBaVHVnaDdPTkJU?=
- =?utf-8?B?blA1MTcwSjFhTzlOZTgwRlhVOTdMYmsxeDhEUlZxdUFiU3VoUnlaaStWeDF5?=
- =?utf-8?B?M1lnU2JJMmZ4Qyt2MlFQSnpXZ0dLRnVpSnc1NUQ2Zk1lV2I5VU5Qc00yTmhs?=
- =?utf-8?B?T25MM0lmaUxMcHdYNFJpNHFuVFBzL0xUc29rcmlzbDNjc0MwYnpBTmFSUk5G?=
- =?utf-8?B?RytQQktGMFREUS9aR1JXS1VwTWxmZmJYTW4rU0FvQ09lSnZGajl6a0Vyb0lT?=
- =?utf-8?B?a1dkVWlvWmtaYzhHNTBXbDVHTzFqcUZ3OHBrbGdqdmsydEtXS2VqbDZyMlYx?=
- =?utf-8?B?OThPNGQzRWRZQWtqV2dpOEZteGphSUZ2VkRIRDVKRHAyL0Fmak80YXpNMUhy?=
- =?utf-8?B?NnZieTBNSnE2ZE9UTUFlWlUvTEJIQmdaWEZhaTgwQjUvb0tqYSsvajVWcDVh?=
- =?utf-8?B?Ulp4MkkyTSsvUGsrRlF3dHY0d0VpNjZpLzFORFY1ZzZLSGVsc0JDdVE2NGRV?=
- =?utf-8?B?U0xUT2pMZDFXTVk0MVAyQTJ2cERDL1k3UmVybWVoaUxjVjNjT0Vhekh4QmF1?=
- =?utf-8?B?NVBQVGVVY3hUVHhOS1QrNUJUb2ZxdkdFaHBRU1dNMktmMmVOUmV2ZG1VUy9X?=
- =?utf-8?B?WVppUmNQYm1nbnNpdGt6QlhVQkFqMGRvaXozeG9qTmhqUVk4emFaWWJJaWJC?=
- =?utf-8?B?dTJIbm1BNS9GOVRZdFBSbWtlbExLalFyU21ZUGkwVjJDakI4bzBwdTFhVGh1?=
- =?utf-8?B?ajhEbENBQVdxRktCcEpBVDkzMzFNd3N2MHdaSHRXODBTd0hkRHozdStrcXZJ?=
- =?utf-8?B?aEh3L3Z5TDl1Z0ZyUUd3V1dSOENUcExlNlBPM2k0eGJ3YXNTeHBmcG1xcjFI?=
- =?utf-8?Q?Lyzue7vQRO8MRYwI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <11303A5E58A1CA41800B019DF849D12B@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=n1RNO5f7pssWPG4fLr9gdAw4eJ32N3P99Wlmi11446o=;
+        b=JO89EeNFZ40UdDOlEKa1vkBnKCof/favGwBF1HBd7qmSmaKWqFGdcCgR4Epcgx+/Q2
+         RgIg/21jb/qDXqDt4LfYapKAkxH5N3ndT7tpQF6n/QjqeuMn//MVLofYechx5pdKJz/W
+         S0ph4ZMug+P19CbQ5vvtXePHRDCzLvyB0Y8rh/a8FVxJ6LsV1dIqgPQWdDacegSvx+iV
+         TD0+aFw7LyDXVQhg0iyzcxKWaff3U9SqmqlTYWZqfmIbAij0N8azccoDn54KYIMk7oYe
+         /gtG86/Xb9Rw5kVsQb9jAme5YQAKR+an5xHLqTwq/XSJv4irR+LIWne/lxOeDqiQ2RWs
+         RBig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=n1RNO5f7pssWPG4fLr9gdAw4eJ32N3P99Wlmi11446o=;
+        b=rh2lVC9boZkP3xpdtJrdmy3CFiPegnPRAAkBDOqrOWeNZol3e+D9IrN+yVtjzD4hog
+         Y1YC1YheAjXGVX3T7KTfVJ+/nH5+qeETDOVYwZUSHkiaEU/XQJS6F2XKzMLBr89INor2
+         lAuYvHZVn/Thms9y0JrqZOgILXPBlifXmWP9Bu58yYljQEGkg3nJOE4I4Zbb+tP4x0tm
+         7lWKYCdnuUgFYeTrUXO618FLdHBDHREjxlawqbmABuClv9Wor74TYvW6rHmLRPPAfKOU
+         qBLvhFOfPRle7MsJITgQqI4Ico0XkG/3A+E2iPsjj/3uLGFf+VMlvfO/RaUltScSLaPB
+         u3jA==
+X-Gm-Message-State: AJIora+b+8rwNYReHOxk69K0TCtDJ4H+rCtSbdf6f2f7F0Z5rYLYADOB
+        u+HvunqkwyWr4JDfdnsLfm0=
+X-Google-Smtp-Source: AGRyM1uVyDy8Qc2zsSxZEhbGY0aVHaxjcptrDReKKrpX0HRiXCQZ1C0r/FIdLr0CaHZza7EbcR4J3Q==
+X-Received: by 2002:a05:6402:3708:b0:433:2d3b:ed5 with SMTP id ek8-20020a056402370800b004332d3b0ed5mr36305919edb.246.1655827659371;
+        Tue, 21 Jun 2022 09:07:39 -0700 (PDT)
+Received: from localhost.localdomain ([185.107.57.61])
+        by smtp.gmail.com with ESMTPSA id p6-20020a17090653c600b00722e0b1fa8esm1772943ejo.164.2022.06.21.09.07.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 09:07:39 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 6/6] clk: qcom: msm8996-cpu: Use parent_data for all clocks
+Date:   Tue, 21 Jun 2022 20:06:21 +0400
+Message-Id: <20220621160621.24415-7-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220621160621.24415-1-y.oudjana@protonmail.com>
+References: <20220621160621.24415-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12fc03b6-a694-4609-57fe-08da539ffb89
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2022 16:06:21.1021
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PFfFd4IIEyrIwGs3DmUy3+VU4Y7wp6+mFZTg1yZK5S8A3P/qtg8XfggzrpdEJNonz/qTEcM+0l5s5svLfK/P3wkKmxkBIbegpARnJ9KtB/M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4242
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjEvMDYvMjAyMiAwMDoxNywgRGFtaWVuIExlIE1vYWwgd3JvdGU6DQo+IEVYVEVSTkFMIEVN
-QUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtu
-b3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gT24gNi8yMS8yMiAwNzo0OSwgQ29ub3IgRG9v
-bGV5IHdyb3RlOg0KPj4NCi0tLTg8LS0tDQo+Pj4+DQo+Pj4+IGhtbSwgd2VsbCBJJ2xsIGxlYXZl
-IHRoYXQgdXAgdG8gcGVvcGxlIHRoYXQgaGF2ZSBDYW5hYW4gaGFyZHdhcmUhDQo+Pj4NCj4+PiBJ
-IHdpbGwgdGVzdCB0aGlzIHNlcmllcy4NCj4+Pg0KPj4NCj4+IENvb2wsIHRoYW5rcy4NCj4+IEkn
-bGwgdHJ5IHRvIGdldCBhIHJlc3BpbiBvdXQgdG9tb3Jyb3cgdy8gdGhlIG1lbW9yeSBub2RlICJ1
-bmZpeGVkIi4NCj4gDQo+IE9LLiBJIHdpbGwgdGVzdCB0aGF0IHRoZW4gOikNCg0KU2luY2UgdGhl
-IG1lbW9yeSBub2RlIGhpdCB0aGF0IGR0LXNjaGVtYSBzbmFnLCBJIGhhdmUgbm90IHNlbnQgYSB2
-Mi4NCkdvaW5nIHRvIGJlIEFGSyBmb3IgYSBmZXcgZGF5cywgc28gSSBkcm9wcGVkIHRoZSBtZW1v
-cnkgbm9kZSBjaGFuZ2UsDQpjaGFuZ2VkIHRoZSBzcGkgYmluZGluZyAmIHB1dCB0aGUgc2VyaWVz
-IG9uOg0KZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2Nvbm9yL2xpbnV4
-LmdpdC8gY2FuYWFuDQoNCklmIHlvdSBnZXQgYSBjaGFuY2UgdG8gbG9vayBhdCBpdCBncmVhdCwg
-aWYgbm90IEknbGwgc2VuZCBhIHYyIG9uY2UNCnRoZSBtZW1vcnkgbm9kZSBpcyBmaWd1cmVkIG91
-dC4NCg0KVGhhbmtzLA0KQ29ub3IuDQoNCg==
+From: Yassine Oudjana <y.oudjana@protonmail.com>
+
+Replace parent_names in PLLs, secondary muxes and primary muxes with
+parent_data. For primary muxes there were never any *cl_pll_acd clocks,
+so instead of adding them, put the primary PLLs in both PLL_INDEX and
+ACD_INDEX, then make sure ACD_INDEX is always picked over PLL_INDEX when
+setting parent since we always want ACD when using the primary PLLs.
+
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
+ drivers/clk/qcom/clk-cpu-8996.c | 79 ++++++++++++++++++++-------------
+ 1 file changed, 47 insertions(+), 32 deletions(-)
+
+diff --git a/drivers/clk/qcom/clk-cpu-8996.c b/drivers/clk/qcom/clk-cpu-8996.c
+index b3ad9245874d..cdb7b2ef3367 100644
+--- a/drivers/clk/qcom/clk-cpu-8996.c
++++ b/drivers/clk/qcom/clk-cpu-8996.c
+@@ -112,14 +112,18 @@ static const struct alpha_pll_config hfpll_config = {
+ 	.early_output_mask = BIT(3),
+ };
+ 
++static const struct clk_parent_data pll_parent[] = {
++	{ .fw_name = "xo" },
++};
++
+ static struct clk_alpha_pll pwrcl_pll = {
+ 	.offset = PWRCL_REG_OFFSET,
+ 	.regs = prim_pll_regs,
+ 	.flags = SUPPORTS_DYNAMIC_UPDATE | SUPPORTS_FSM_MODE,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "pwrcl_pll",
+-		.parent_names = (const char *[]){ "xo" },
+-		.num_parents = 1,
++		.parent_data = pll_parent,
++		.num_parents = ARRAY_SIZE(pll_parent),
+ 		.ops = &clk_alpha_pll_huayra_ops,
+ 	},
+ };
+@@ -130,8 +134,8 @@ static struct clk_alpha_pll perfcl_pll = {
+ 	.flags = SUPPORTS_DYNAMIC_UPDATE | SUPPORTS_FSM_MODE,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "perfcl_pll",
+-		.parent_names = (const char *[]){ "xo" },
+-		.num_parents = 1,
++		.parent_data = pll_parent,
++		.num_parents = ARRAY_SIZE(pll_parent),
+ 		.ops = &clk_alpha_pll_huayra_ops,
+ 	},
+ };
+@@ -190,8 +194,8 @@ static struct clk_alpha_pll pwrcl_alt_pll = {
+ 	.flags = SUPPORTS_OFFLINE_REQ | SUPPORTS_FSM_MODE,
+ 	.clkr.hw.init = &(struct clk_init_data) {
+ 		.name = "pwrcl_alt_pll",
+-		.parent_names = (const char *[]){ "xo" },
+-		.num_parents = 1,
++		.parent_data = pll_parent,
++		.num_parents = ARRAY_SIZE(pll_parent),
+ 		.ops = &clk_alpha_pll_hwfsm_ops,
+ 	},
+ };
+@@ -204,8 +208,8 @@ static struct clk_alpha_pll perfcl_alt_pll = {
+ 	.flags = SUPPORTS_OFFLINE_REQ | SUPPORTS_FSM_MODE,
+ 	.clkr.hw.init = &(struct clk_init_data) {
+ 		.name = "perfcl_alt_pll",
+-		.parent_names = (const char *[]){ "xo" },
+-		.num_parents = 1,
++		.parent_data = pll_parent,
++		.num_parents = ARRAY_SIZE(pll_parent),
+ 		.ops = &clk_alpha_pll_hwfsm_ops,
+ 	},
+ };
+@@ -252,6 +256,9 @@ static int clk_cpu_8996_pmux_set_parent(struct clk_hw *hw, u8 index)
+ 	u32 val;
+ 
+ 	val = index;
++	/* We always want ACD when using the primary PLL */
++	if (val == PLL_INDEX)
++		val = ACD_INDEX;
+ 	val <<= cpuclk->shift;
+ 
+ 	return regmap_update_bits(clkr->regmap, cpuclk->reg, mask, val);
+@@ -282,17 +289,24 @@ static const struct clk_ops clk_cpu_8996_pmux_ops = {
+ 	.determine_rate = clk_cpu_8996_pmux_determine_rate,
+ };
+ 
++static const struct clk_parent_data pwrcl_smux_parents[] = {
++	{ .fw_name = "xo" },
++	{ .hw = &pwrcl_pll_postdiv.hw },
++};
++
++static const struct clk_parent_data perfcl_smux_parents[] = {
++	{ .fw_name = "xo" },
++	{ .hw = &perfcl_pll_postdiv.hw },
++};
++
+ static struct clk_regmap_mux pwrcl_smux = {
+ 	.reg = PWRCL_REG_OFFSET + MUX_OFFSET,
+ 	.shift = 2,
+ 	.width = 2,
+ 	.clkr.hw.init = &(struct clk_init_data) {
+ 		.name = "pwrcl_smux",
+-		.parent_names = (const char *[]){
+-			"xo",
+-			"pwrcl_pll_postdiv",
+-		},
+-		.num_parents = 2,
++		.parent_data = pwrcl_smux_parents,
++		.num_parents = ARRAY_SIZE(pwrcl_smux_parents),
+ 		.ops = &clk_regmap_mux_closest_ops,
+ 		.flags = CLK_SET_RATE_PARENT,
+ 	},
+@@ -304,16 +318,27 @@ static struct clk_regmap_mux perfcl_smux = {
+ 	.width = 2,
+ 	.clkr.hw.init = &(struct clk_init_data) {
+ 		.name = "perfcl_smux",
+-		.parent_names = (const char *[]){
+-			"xo",
+-			"perfcl_pll_postdiv",
+-		},
+-		.num_parents = 2,
++		.parent_data = perfcl_smux_parents,
++		.num_parents = ARRAY_SIZE(perfcl_smux_parents),
+ 		.ops = &clk_regmap_mux_closest_ops,
+ 		.flags = CLK_SET_RATE_PARENT,
+ 	},
+ };
+ 
++static const struct clk_parent_data pwrcl_pmux_parents[] = {
++	[SMUX_INDEX] = { .hw = &pwrcl_smux.clkr.hw },
++	[PLL_INDEX] = { .hw = &pwrcl_pll.clkr.hw },
++	[ACD_INDEX] = { .hw = &pwrcl_pll.clkr.hw },
++	[ALT_INDEX] = { .hw = &pwrcl_alt_pll.clkr.hw },
++};
++
++static const struct clk_parent_data perfcl_pmux_parents[] = {
++	[SMUX_INDEX] = { .hw = &perfcl_smux.clkr.hw },
++	[PLL_INDEX] = { .hw = &perfcl_pll.clkr.hw },
++	[ACD_INDEX] = { .hw = &perfcl_pll.clkr.hw },
++	[ALT_INDEX] = { .hw = &perfcl_alt_pll.clkr.hw },
++};
++
+ static struct clk_cpu_8996_pmux pwrcl_pmux = {
+ 	.reg = PWRCL_REG_OFFSET + MUX_OFFSET,
+ 	.shift = 0,
+@@ -323,13 +348,8 @@ static struct clk_cpu_8996_pmux pwrcl_pmux = {
+ 	.nb.notifier_call = cpu_clk_notifier_cb,
+ 	.clkr.hw.init = &(struct clk_init_data) {
+ 		.name = "pwrcl_pmux",
+-		.parent_names = (const char *[]){
+-			"pwrcl_smux",
+-			"pwrcl_pll",
+-			"pwrcl_pll_acd",
+-			"pwrcl_alt_pll",
+-		},
+-		.num_parents = 4,
++		.parent_data = pwrcl_pmux_parents,
++		.num_parents = ARRAY_SIZE(pwrcl_pmux_parents),
+ 		.ops = &clk_cpu_8996_pmux_ops,
+ 		/* CPU clock is critical and should never be gated */
+ 		.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+@@ -345,13 +365,8 @@ static struct clk_cpu_8996_pmux perfcl_pmux = {
+ 	.nb.notifier_call = cpu_clk_notifier_cb,
+ 	.clkr.hw.init = &(struct clk_init_data) {
+ 		.name = "perfcl_pmux",
+-		.parent_names = (const char *[]){
+-			"perfcl_smux",
+-			"perfcl_pll",
+-			"perfcl_pll_acd",
+-			"perfcl_alt_pll",
+-		},
+-		.num_parents = 4,
++		.parent_data = perfcl_pmux_parents,
++		.num_parents = ARRAY_SIZE(perfcl_pmux_parents),
+ 		.ops = &clk_cpu_8996_pmux_ops,
+ 		/* CPU clock is critical and should never be gated */
+ 		.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+-- 
+2.36.1
+

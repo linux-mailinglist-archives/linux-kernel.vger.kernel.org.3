@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED3555327A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AF5553283
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350865AbiFUMug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S1350898AbiFUMun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350812AbiFUMuW (ORCPT
+        with ESMTP id S1350754AbiFUMuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:50:22 -0400
+        Tue, 21 Jun 2022 08:50:25 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955EE2A43D;
-        Tue, 21 Jun 2022 05:50:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640432A43F;
+        Tue, 21 Jun 2022 05:50:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655815821; x=1687351821;
+  t=1655815824; x=1687351824;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MjaLBNVZD6GIe/krItfqqymmS/cXarankYY7kmlJRRQ=;
-  b=ksD0ioJ+KUj+l9YH1eGdw8L4jXMrXRJtucUcrLEuSFbM2lZe+o+8eoUJ
-   F/tUnIi25TSsifJCdyhhGWigZy4xJlSQQs1Fg2iCSxK/kGvXrv7FXjq9a
-   QuEdQDs9BNrDSkGYqBRzeMQBNjrzmSqecEhtGzn0q0XjvcMUnYLy3qJox
-   5cjPlpue5OZu23/Tg+oY7Mq6qG1IEv456Kb0gvD7yliKaa5k330tPH9xk
-   NwWW2vEjoJJl2f/TLIIaUWJakI7Lfc4O/j+lB0dviz+kftIzOrbsf8N3T
-   dYQoGBN2aRQ6B17n6sfB3w+EyYfwHddBKmSIJW/rx3q0bXTunJaX7WwVo
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="341792996"
+  bh=ixMQi5m0yAWtx781C2psFoRemTcSPTJq60wZ+v7XFco=;
+  b=JZwwJmYnk9ohQVDVNeql+Oh/OPLHTMl+HiHKL9lm9JaVpfzqI8l7OddP
+   Y98SuzNNvqtxuAWssWIwfeDLeXuBZdnfM4fVO4b9JVRtZKatRldXtBHMa
+   a867k0fKYpFOjHK62bHUpjRQWxEUwIYiYYTiP1knAlPAG/NFxhae+3+4C
+   KHKFQHh72YF0HyIqSpS9oZdJbK//npVoXIysQBvoEnsZ3QBqW+fiiWWAB
+   6ShdEn+a/tJd/yDMYQ/uSjtvHxf6wTqenWPnm2fjKMcSMNpyZKkRZRPdM
+   WNDzQm+xM65kN6qJPIO2WRBY3RJ2mTdXnGjcm90Z5PyVHLwzb5198iYeR
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="341793002"
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="341792996"
+   d="scan'208";a="341793002"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 05:50:21 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 05:50:24 -0700
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="833561579"
+   d="scan'208";a="833561582"
 Received: from zjeffery-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.211])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 05:50:19 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 05:50:22 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 3/6] serial: Use bits for UART_LSR_BRK_ERROR_BITS/MSR_ANY_DELTA
-Date:   Tue, 21 Jun 2022 15:49:55 +0300
-Message-Id: <20220621124958.3342-4-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 4/6] serial: 8250: Use C99 array initializer & define UART_REG_UNMAPPED
+Date:   Tue, 21 Jun 2022 15:49:56 +0300
+Message-Id: <20220621124958.3342-5-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
 References: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
@@ -60,36 +60,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of listing the bits for UART_LSR_BRK_ERROR_BITS and
-UART_MSR_ANY_DELTA in comment, use them to define instead.
+Use C99 array initializer insteads of comments and make unmapped checks
+more obvious.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- include/uapi/linux/serial_reg.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/8250/8250_port.c | 38 +++++++++++++++--------------
+ 1 file changed, 20 insertions(+), 18 deletions(-)
 
-diff --git a/include/uapi/linux/serial_reg.h b/include/uapi/linux/serial_reg.h
-index f51bc8f36813..bab3b39266cc 100644
---- a/include/uapi/linux/serial_reg.h
-+++ b/include/uapi/linux/serial_reg.h
-@@ -139,7 +139,7 @@
- #define UART_LSR_PE		0x04 /* Parity error indicator */
- #define UART_LSR_OE		0x02 /* Overrun error indicator */
- #define UART_LSR_DR		0x01 /* Receiver data ready */
--#define UART_LSR_BRK_ERROR_BITS	0x1E /* BI, FE, PE, OE bits */
-+#define UART_LSR_BRK_ERROR_BITS	(UART_LSR_BI|UART_LSR_FE|UART_LSR_PE|UART_LSR_OE)
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 953b0fadfd4c..432742a567b6 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -336,27 +336,29 @@ static void default_serial_dl_write(struct uart_8250_port *up, int value)
  
- #define UART_MSR	6	/* In:  Modem Status Register */
- #define UART_MSR_DCD		0x80 /* Data Carrier Detect */
-@@ -150,7 +150,7 @@
- #define UART_MSR_TERI		0x04 /* Trailing edge ring indicator */
- #define UART_MSR_DDSR		0x02 /* Delta DSR */
- #define UART_MSR_DCTS		0x01 /* Delta CTS */
--#define UART_MSR_ANY_DELTA	0x0F /* Any of the delta bits! */
-+#define UART_MSR_ANY_DELTA	(UART_MSR_DDCD|UART_MSR_TERI|UART_MSR_DDSR|UART_MSR_DCTS)
+ #ifdef CONFIG_SERIAL_8250_RT288X
  
- #define UART_SCR	7	/* I/O: Scratch Register */
++#define UART_REG_UNMAPPED	-1
++
+ /* Au1x00/RT288x UART hardware has a weird register layout */
+ static const s8 au_io_in_map[8] = {
+-	 0,	/* UART_RX  */
+-	 2,	/* UART_IER */
+-	 3,	/* UART_IIR */
+-	 5,	/* UART_LCR */
+-	 6,	/* UART_MCR */
+-	 7,	/* UART_LSR */
+-	 8,	/* UART_MSR */
+-	-1,	/* UART_SCR (unmapped) */
++	[UART_RX]	= 0,
++	[UART_IER]	= 2,
++	[UART_IIR]	= 3,
++	[UART_LCR]	= 5,
++	[UART_MCR]	= 6,
++	[UART_LSR]	= 7,
++	[UART_MSR]	= 8,
++	[UART_SCR]	= UART_REG_UNMAPPED,
+ };
  
+ static const s8 au_io_out_map[8] = {
+-	 1,	/* UART_TX  */
+-	 2,	/* UART_IER */
+-	 4,	/* UART_FCR */
+-	 5,	/* UART_LCR */
+-	 6,	/* UART_MCR */
+-	-1,	/* UART_LSR (unmapped) */
+-	-1,	/* UART_MSR (unmapped) */
+-	-1,	/* UART_SCR (unmapped) */
++	[UART_TX]	= 1,
++	[UART_IER]	= 2,
++	[UART_FCR]	= 4,
++	[UART_LCR]	= 5,
++	[UART_MCR]	= 6,
++	[UART_LSR]	= UART_REG_UNMAPPED,
++	[UART_MSR]	= UART_REG_UNMAPPED,
++	[UART_SCR]	= UART_REG_UNMAPPED,
+ };
+ 
+ unsigned int au_serial_in(struct uart_port *p, int offset)
+@@ -364,7 +366,7 @@ unsigned int au_serial_in(struct uart_port *p, int offset)
+ 	if (offset >= ARRAY_SIZE(au_io_in_map))
+ 		return UINT_MAX;
+ 	offset = au_io_in_map[offset];
+-	if (offset < 0)
++	if (offset == UART_REG_UNMAPPED)
+ 		return UINT_MAX;
+ 	return __raw_readl(p->membase + (offset << p->regshift));
+ }
+@@ -374,7 +376,7 @@ void au_serial_out(struct uart_port *p, int offset, int value)
+ 	if (offset >= ARRAY_SIZE(au_io_out_map))
+ 		return;
+ 	offset = au_io_out_map[offset];
+-	if (offset < 0)
++	if (offset == UART_REG_UNMAPPED)
+ 		return;
+ 	__raw_writel(value, p->membase + (offset << p->regshift));
+ }
 -- 
 2.30.2
 

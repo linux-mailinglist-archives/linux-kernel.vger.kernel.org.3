@@ -2,96 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63280553EAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12673553EAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354395AbiFUWqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S1354842AbiFUWrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353562AbiFUWqK (ORCPT
+        with ESMTP id S230194AbiFUWrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:46:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 082FB31DD7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655851567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f/+1/Xy/oMl85EwlznQPMBlg4SJKLxQKry9nxTTQZbw=;
-        b=Xig8AL7bKmoYrVt3KaOD6ZubfTjvJ95Z/iKKaeu4FmsD6e4BRA0kk5O6toWz43616jEavp
-        31pZ6D4Czl9IS0ucpR8VD7XG2jarpF94jm6yftW88mjROVNgZs8jKwdA+dYZhWQRvtMgDz
-        MxgTgFzZdt1QuRURiLBcmwfgs0p1puA=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-20-lIgwHXJeOEiZNBLeLQP6dA-1; Tue, 21 Jun 2022 18:46:06 -0400
-X-MC-Unique: lIgwHXJeOEiZNBLeLQP6dA-1
-Received: by mail-il1-f200.google.com with SMTP id l3-20020a056e021aa300b002d9094fb397so5033171ilv.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:46:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=f/+1/Xy/oMl85EwlznQPMBlg4SJKLxQKry9nxTTQZbw=;
-        b=yZ4pdFf0EMMrxRQ8ZdUGwDDUHuoQOxsRkWOb2dLmJdn+Yp61nOWhiMEazGGr0J5crW
-         ZJNBpC1e/mNaBIhYK0Xnh+e6HR1avnnChwAF40vi7oMZv/G0tZJC20qBp2GKQSqQnmjc
-         6pl14XqsxY/lCFfFBEdwpHXM8RM8ZFVRXTQpMpmoVdTqjdQB5BS9Wlls3jw+Zx/LwM/f
-         UqJff7YJWU/lNnygh247Y63ljwIpeTkLwz4/Xl5F5r1dN7Ot7QO6vzKa4eooxuXpys83
-         sCgqqhK32PgHCnhv1/HJBae2XNDAZTYeO0ya3+AdRCQnv7fm4LVf2VZg88/Ure6IAMea
-         b3lw==
-X-Gm-Message-State: AJIora+AcY3YnrQFA0n1zmTefOalz08CMJCxhUsce8VcSP8LAMWM2ypN
-        /gkjnjYlb/3QBoyqwlqeHy35GAzlwfJz4tKHOD0/rbBwXwSZAvkM+SHU24x2sY2AnMNKJSbbt5N
-        9YAzsJhvU/0kOLLmrIWR/VEUq
-X-Received: by 2002:a6b:ba43:0:b0:669:a9b2:48fb with SMTP id k64-20020a6bba43000000b00669a9b248fbmr192968iof.125.1655851566105;
-        Tue, 21 Jun 2022 15:46:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tCBBV2lQEfTtXWwkhfe9gHC1iihjOMaGFwTYEcz2D9BCipjXjT/6swp6lkrYHefJSlpm5AwA==
-X-Received: by 2002:a6b:ba43:0:b0:669:a9b2:48fb with SMTP id k64-20020a6bba43000000b00669a9b248fbmr192927iof.125.1655851565803;
-        Tue, 21 Jun 2022 15:46:05 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id m3-20020a056638224300b00339c015fd84sm2073679jas.59.2022.06.21.15.46.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 15:46:05 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 16:46:02 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     <joro@8bytes.org>, <will@kernel.org>, <marcan@marcan.st>,
-        <sven@svenpeter.dev>, <robin.murphy@arm.com>,
-        <robdclark@gmail.com>, <baolu.lu@linux.intel.com>,
-        <matthias.bgg@gmail.com>, <orsonzhai@gmail.com>,
-        <baolin.wang7@gmail.com>, <zhang.lyra@gmail.com>,
-        <jean-philippe@linaro.org>, <jgg@nvidia.com>,
-        <kevin.tian@intel.com>, <suravee.suthikulpanit@amd.com>,
-        <alyssa@rosenzweig.io>, <dwmw2@infradead.org>,
-        <yong.wu@mediatek.com>, <mjrosato@linux.ibm.com>,
-        <gerald.schaefer@linux.ibm.com>, <thierry.reding@gmail.com>,
-        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <cohuck@redhat.com>,
-        <thunder.leizhen@huawei.com>, <tglx@linutronix.de>,
-        <christophe.jaillet@wanadoo.fr>, <john.garry@huawei.com>,
-        <chenxiang66@hisilicon.com>, <saiprakash.ranjan@codeaurora.org>,
-        <isaacm@codeaurora.org>, <yangyingliang@huawei.com>,
-        <jordan@cosmicpenguin.net>, <iommu@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
-Subject: Re: [PATCH v2 2/5] vfio/iommu_type1: Prefer to reuse domains vs
- match enforced cache coherency
-Message-ID: <20220621164602.4079bf43.alex.williamson@redhat.com>
-In-Reply-To: <20220616000304.23890-3-nicolinc@nvidia.com>
-References: <20220616000304.23890-1-nicolinc@nvidia.com>
-        <20220616000304.23890-3-nicolinc@nvidia.com>
-Organization: Red Hat
+        Tue, 21 Jun 2022 18:47:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98DA31DD7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655851639; x=1687387639;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7q0Ihm9VaccpU9vcxY+QR/y7r1q9Y11CDQYFArZ/uqI=;
+  b=Han6Fn8TunUzjYs4RNdLdmyUGqPBL3zpSpGpeanAvdVgYHAobkmYd6Wl
+   bAVptQJKM44q3aw6iwKrpnRbhnOBOBHNsiRApPVMP3wD5NrWRmTg3tNkk
+   dPx4MpJ65au2aRE3HWBCe6x0yoXmbNpMMSUMtumTzg6Jgu+siXgzFAUca
+   pVoxqFf7dcgf4QMA+RGvDAL29VhIrLSVbyWkSphIkpaDI4vAAGM4sdGwX
+   B2RtTt8pA8YWACCF3eG1c+lGpDOqMPwt4/Cr/dsvEY9KFGxqL1JwmUW1V
+   HnYPJ4eiUc9xeuCZjoMc4HM+Ppzm5nG9G3cfDVd1rrhHHfcy4EkJVk8G8
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="341941281"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="341941281"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:47:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="690170687"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2022 15:47:17 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3meS-0000Vx-UB;
+        Tue, 21 Jun 2022 22:47:16 +0000
+Date:   Wed, 22 Jun 2022 06:47:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalle Valo <quic_kvalo@quicinc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Kalle Valo <kvalo@codeaurora.org>, ath10k@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [kvalo-ath:ath12k-bringup 48/53]
+ drivers/net/wireless/ath/ath12k/dbring.c:271:7: warning: variable 'ring' is
+ used uninitialized whenever switch case is taken
+Message-ID: <202206220630.i3KlrkEC-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,65 +64,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 17:03:01 -0700
-Nicolin Chen <nicolinc@nvidia.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git ath12k-bringup
+head:   cc108fac9c287f5624daedca923743587adcafd1
+commit: 070381028567d9b8e0d82e6f244909e51902bc49 [48/53] ath12k: remove spectral support
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220622/202206220630.i3KlrkEC-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?id=070381028567d9b8e0d82e6f244909e51902bc49
+        git remote add kvalo-ath https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git
+        git fetch --no-tags kvalo-ath ath12k-bringup
+        git checkout 070381028567d9b8e0d82e6f244909e51902bc49
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/ath/ath12k/ drivers/pci/endpoint/functions/
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> 
-> The KVM mechanism for controlling wbinvd is based on OR of the coherency
-> property of all devices attached to a guest, no matter those devices are
-> attached to a single domain or multiple domains.
-> 
-> So, there is no value in trying to push a device that could do enforced
-> cache coherency to a dedicated domain vs re-using an existing domain
-> which is non-coherent since KVM won't be able to take advantage of it.
-> This just wastes domain memory.
-> 
-> Simplify this code and eliminate the test. This removes the only logic
-> that needed to have a dummy domain attached prior to searching for a
-> matching domain and simplifies the next patches.
-> 
-> It's unclear whether we want to further optimize the Intel driver to
-> update the domain coherency after a device is detached from it, at
-> least not before KVM can be verified to handle such dynamics in related
-> emulation paths (wbinvd, vcpu load, write_cr0, ept, etc.). In reality
-> we don't see an usage requiring such optimization as the only device
-> which imposes such non-coherency is Intel GPU which even doesn't
-> support hotplug/hot remove.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The 2nd paragraph above is quite misleading in this respect.  I think
-it would be more accurate to explain that the benefit to using separate
-domains was that devices attached to domains supporting enforced cache
-coherency always mapped with the attributes necessary to provide that
-feature, therefore if a non-enforced domain was dropped, the associated
-group removal would re-trigger an evaluation by KVM.  We can then go on
-to discuss that in practice the only known cases of such mixed domains
-included an Intel IGD device behind an IOMMU lacking snoop control,
-where such devices do not support hotplug, therefore this scenario lacks
-testing and is not considered sufficiently relevant to support.  Thanks,
+All warnings (new ones prefixed by >>):
 
-Alex
+>> drivers/net/wireless/ath/ath12k/dbring.c:271:7: warning: variable 'ring' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case WMI_DIRECT_BUF_SPECTRAL:
+                ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath12k/dbring.c:280:7: note: uninitialized use occurs here
+           if (!ring) {
+                ^~~~
+   drivers/net/wireless/ath/ath12k/dbring.c:232:28: note: initialize the variable 'ring' to silence this warning
+           struct ath12k_dbring *ring;
+                                     ^
+                                      = NULL
+   1 warning generated.
 
-> 
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/vfio/vfio_iommu_type1.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> index c13b9290e357..f4e3b423a453 100644
-> --- a/drivers/vfio/vfio_iommu_type1.c
-> +++ b/drivers/vfio/vfio_iommu_type1.c
-> @@ -2285,9 +2285,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
->  	 * testing if they're on the same bus_type.
->  	 */
->  	list_for_each_entry(d, &iommu->domain_list, next) {
-> -		if (d->domain->ops == domain->domain->ops &&
-> -		    d->enforce_cache_coherency ==
-> -			    domain->enforce_cache_coherency) {
-> +		if (d->domain->ops == domain->domain->ops) {
->  			iommu_detach_group(domain->domain, group->iommu_group);
->  			if (!iommu_attach_group(d->domain,
->  						group->iommu_group)) {
 
+vim +/ring +271 drivers/net/wireless/ath/ath12k/dbring.c
+
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  228  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  229  int ath12k_dbring_buffer_release_event(struct ath12k_base *ab,
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  230  				       struct ath12k_dbring_buf_release_event *ev)
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  231  {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  232  	struct ath12k_dbring *ring;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  233  	struct hal_srng *srng;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  234  	struct ath12k *ar;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  235  	struct ath12k_dbring_element *buff;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  236  	struct ath12k_dbring_data handler_data;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  237  	struct ath12k_buffer_addr desc;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  238  	u8 *vaddr_unalign;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  239  	u32 num_entry, num_buff_reaped;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  240  	u8 pdev_idx, rbm;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  241  	u32 cookie;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  242  	int buf_id;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  243  	int size;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  244  	dma_addr_t paddr;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  245  	int ret = 0;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  246  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  247  	pdev_idx = ev->fixed.pdev_id;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  248  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  249  	if (pdev_idx >= ab->num_radios) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  250  		ath12k_warn(ab, "Invalid pdev id %d\n", pdev_idx);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  251  		return -EINVAL;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  252  	}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  253  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  254  	if (ev->fixed.num_buf_release_entry !=
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  255  	    ev->fixed.num_meta_data_entry) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  256  		ath12k_warn(ab, "Buffer entry %d mismatch meta entry %d\n",
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  257  			    ev->fixed.num_buf_release_entry,
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  258  			    ev->fixed.num_meta_data_entry);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  259  		return -EINVAL;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  260  	}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  261  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  262  	ar = ab->pdevs[pdev_idx].ar;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  263  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  264  	rcu_read_lock();
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  265  	if (!rcu_dereference(ab->pdevs_active[pdev_idx])) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  266  		ret = -EINVAL;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  267  		goto rcu_unlock;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  268  	}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  269  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  270  	switch (ev->fixed.module_id) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01 @271  	case WMI_DIRECT_BUF_SPECTRAL:
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  272  		break;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  273  	default:
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  274  		ring = NULL;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  275  		ath12k_warn(ab, "Recv dma buffer release ev on unsupp module %d\n",
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  276  			    ev->fixed.module_id);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  277  		break;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  278  	}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  279  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  280  	if (!ring) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  281  		ret = -EINVAL;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  282  		goto rcu_unlock;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  283  	}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  284  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  285  	srng = &ab->hal.srng_list[ring->refill_srng.ring_id];
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  286  	num_entry = ev->fixed.num_buf_release_entry;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  287  	size = sizeof(*buff) + ring->buf_sz + ring->buf_align - 1;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  288  	num_buff_reaped = 0;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  289  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  290  	spin_lock_bh(&srng->lock);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  291  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  292  	while (num_buff_reaped < num_entry) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  293  		desc.info0 = ev->buf_entry[num_buff_reaped].paddr_lo;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  294  		desc.info1 = ev->buf_entry[num_buff_reaped].paddr_hi;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  295  		handler_data.meta = ev->meta_data[num_buff_reaped];
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  296  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  297  		num_buff_reaped++;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  298  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  299  		ath12k_hal_rx_buf_addr_info_get(&desc, &paddr, &cookie, &rbm);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  300  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  301  		buf_id = FIELD_GET(DP_RXDMA_BUF_COOKIE_BUF_ID, cookie);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  302  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  303  		spin_lock_bh(&ring->idr_lock);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  304  		buff = idr_find(&ring->bufs_idr, buf_id);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  305  		if (!buff) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  306  			spin_unlock_bh(&ring->idr_lock);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  307  			continue;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  308  		}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  309  		idr_remove(&ring->bufs_idr, buf_id);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  310  		spin_unlock_bh(&ring->idr_lock);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  311  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  312  		dma_unmap_single(ab->dev, buff->paddr, ring->buf_sz,
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  313  				 DMA_FROM_DEVICE);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  314  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  315  		if (ring->handler) {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  316  			vaddr_unalign = buff->payload;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  317  			handler_data.data = PTR_ALIGN(vaddr_unalign,
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  318  						      ring->buf_align);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  319  			handler_data.data_sz = ring->buf_sz;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  320  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  321  			ring->handler(ar, &handler_data);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  322  		}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  323  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  324  		memset(buff, 0, size);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  325  		ath12k_dbring_bufs_replenish(ar, ring, buff, GFP_ATOMIC);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  326  	}
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  327  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  328  	spin_unlock_bh(&srng->lock);
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  329  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  330  rcu_unlock:
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  331  	rcu_read_unlock();
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  332  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  333  	return ret;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  334  }
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  335  
+
+:::::: The code at line 271 was first introduced by commit
+:::::: f40abb4788a2a3868606a29d99583421e0874350 ath12k: New driver for Qualcomm 11be hw family
+
+:::::: TO: Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
+:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

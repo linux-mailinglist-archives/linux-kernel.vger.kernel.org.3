@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837AF553177
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A9855317A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350252AbiFUL5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
+        id S1350265AbiFUL5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350206AbiFUL5M (ORCPT
+        with ESMTP id S1350237AbiFUL5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:57:12 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816A52AE38
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655812631; x=1687348631;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bs/0j/OtFGIBL6GNtWcTVuEeu+2d9SQNaMwWjvKuGwM=;
-  b=DsO29diPhujQa5/Ce1z2ZA8xi9z1tfd0kTzWBozOM6+xuh3y7sW4LEA0
-   8eXXKvlanIAQf6aFnZP5TbXdJKgAU/h9QLs7TjoB7eI9xoHhJKhfWQCcm
-   jU4A+C0b7aXp/ImElrWz8gDNnvVF/r6n2DAFX1Wr7vebheAbiA5ziQx2f
-   2iPweEs4tzSzjQfEtdvc5F2brPwldcRqAIr1f0ss4qMWCiIL9hXO5lHbW
-   kgUFA6ESBkZeN8JeFS0QIa5qJD+cPHoEjB3+M9na4YL1TbyNZwWGozgLS
-   X/ikeli1biS8HzybHMD4bozWslocTCVsHDhQwNMXnkcS5lJgBydtwpbW2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="366423450"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="366423450"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:57:11 -0700
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="614719605"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:57:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3cVG-000r00-Cp;
-        Tue, 21 Jun 2022 14:57:06 +0300
-Date:   Tue, 21 Jun 2022 14:57:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] nvdimm/namespace: drop nested variable in
- create_namespace_pmem()
-Message-ID: <YrGyEgXM9pvCTEc1@smile.fi.intel.com>
-References: <20220607164937.33967-1-andriy.shevchenko@linux.intel.com>
+        Tue, 21 Jun 2022 07:57:13 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A4E11460;
+        Tue, 21 Jun 2022 04:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=xQFqvX/2U0sysOS7JlcEgkNOgJ7FhhhaD6YU2rG8wGM=; b=jbni4AfMdOAxiigUTxB7wRppR0
+        D5kYFDzS6jHCSYoiNManujTW4YxoyWK0Ndseqf+hKpPEf3vWyUUgmWDAn6K2bL1LZZPWZk9kWNdXV
+        b4C/87HPklnO7EAapuNzPYiNrO+QHfrVmOhzmAAKJbR0f895bfXCzLB8jbo0HxjzMp98=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o3cVH-007iX1-Oa; Tue, 21 Jun 2022 13:57:07 +0200
+Date:   Tue, 21 Jun 2022 13:57:07 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        rafael@kernel.org, lenb@kernel.org, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@armlinux.org.uk, hkallweit1@gmail.com, gjb@semihalf.com,
+        jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
+ description
+Message-ID: <YrGyE2boRg9Fy4A4@lunn.ch>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-10-mw@semihalf.com>
+ <20220621094556.5ev3nencnw7a5xwv@bogus>
+ <YrGoXXBgHvyifny3@smile.fi.intel.com>
+ <YrGqg5fHB4s+Y7wx@lunn.ch>
+ <YrGvfdRF4jNIGzQq@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607164937.33967-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YrGvfdRF4jNIGzQq@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 07:49:37PM +0300, Andy Shevchenko wrote:
-> Kernel build bot reported:
+On Tue, Jun 21, 2022 at 02:46:05PM +0300, Andy Shevchenko wrote:
+> On Tue, Jun 21, 2022 at 01:24:51PM +0200, Andrew Lunn wrote:
+> > On Tue, Jun 21, 2022 at 02:15:41PM +0300, Andy Shevchenko wrote:
+> > > On Tue, Jun 21, 2022 at 10:45:56AM +0100, Sudeep Holla wrote:
 > 
->   namespace_devs.c:1991:10: warning: Local variable 'uuid' shadows outer variable [shadowVariable]
+> ...
 > 
-> Refactor create_namespace_pmem() by dropping a nested version of
-> the same variable.
+> > > I dunno we have a such, but the closest I may imagine is MIPI standardization,
+> > > that we have at least for cameras and sound.
+> > > 
+> > > I would suggest to go and work with MIPI for network / DSA / etc area, so
+> > > everybody else will be aware of the standard.
+> > 
+> > It is the same argument as for DT. Other OSes and bootloaders seem to
+> > manage digging around in Linux for DT binding documentation. I don't
+> > see why bootloaders and other OSes can not also dig around in Linux
+> > for ACPI binding documentations.
+> > 
+> > Ideally, somebody will submit all this for acceptance into ACPI, but
+> > into somebody does, i suspect it will just remain a defacto standard
+> > in Linux.
+> 
+> The "bindings" are orthogonal to ACPI specification. It's a vendor / OS / ...
+> specific from ACPI p.o.v. It has an UUID field and each UUID may or may not
+> be a part of any standard.
 
-Any comments on this and other two patches?
+We want to avoid snowflakes, each driver doing its own thing,
+different to every other driver. So we push as much as possible into
+the core, meaning the driver have no choice. So i expect the MDIO part
+to look the same for every MDIO bus in Linux using ACPI. I expect the
+PHY part to look the same, for every PHY using ACPI in Linux, the DSA
+part to look the same, for every DSA switch using linux, because all
+the ACPI is in the core of each of these subsystems. The driver only
+gets to implement its own properties for anything which is not in one
+of these cores.
 
--- 
-With Best Regards,
-Andy Shevchenko
+So you say these bindings are vendor/OS specific, which is great. We
+are defining how Linux does this. We are fully open, any other OS or
+bootloader can copy it, but it also suggests we don't need to care
+about other OSes and bootloaders? That actually seems opposite to DT,
+were we do try to share it, and avoid being vendor or OS specific!
 
-
+    Andrew

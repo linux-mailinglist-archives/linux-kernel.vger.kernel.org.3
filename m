@@ -2,196 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E6D553EE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 01:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CF7553EFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 01:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355099AbiFUXWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 19:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S1355301AbiFUXed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 19:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354433AbiFUXW2 (ORCPT
+        with ESMTP id S233846AbiFUXeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 19:22:28 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4982F647
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:22:26 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id es26so19761293edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:22:26 -0700 (PDT)
+        Tue, 21 Jun 2022 19:34:21 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF4263C3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:34:19 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id q18so2425322pld.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:34:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6C+HzdvnmDTu8XOljcOnXRbyprFx36b3IfhRieOMMeo=;
-        b=kc7ILBdqRI13JYxlU8Trik1Ro/e/jxvaRdIf/oKr5Ro47P9ktgxa23xtjA/dumVZco
-         UTXNOCr7vOpYx1xWMrfSbBckMTHK+bgfjhFAFPHaAmyvRzYf/rttl/ey2LdLgN2EXZb5
-         mfwTd4kOSHrNb33qbqPyUMAzdguRgwroxRT5SkQh4wSdIojcuws0uB3syNUFkkBMpKBK
-         ojGqa9JdOO4PrLIunx6QB6Ds2Ay+b3Igtjs2U7O89B27FXxO4QjPDw829JROLdU+e7KO
-         2L+bbcVTLkhF0WuQLWY3FpBZCCLAOdKlUMzjDvAyG0+pxUvC7yUzBjunUkNYTh7J0Ank
-         SCNQ==
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j6EHLC1I3sWRh0/mAsfU2ZCVNMk8CE7YRjypzOnx64c=;
+        b=ny3qCYdwkoUpLmuRdVbSsOq6jsHe9rpqDDqLQqrXz6nByKilro0DP4ezMhrbR0SJqB
+         FoEeGs/0KqYKIO0u/AbqJh4tTPMWNOn4JSYvSnoPwDOaKv1ABF+nrB0APB6130vJfsTR
+         M3HfP4uKcxtpwZLnTGnPsFSmRO+kQ/hVnqCzheHZGbv0YUnzklzmqpazOH3E2sRWQ7C8
+         yaUdG690fvYfG8GV8Qr+YU3/4QrtZhxq8j+ugj4qBs8H9HlGveNYGpXzc0YK/9J3vsW/
+         2l9aJ1+luUEHAfiJ7ZU1e5tOJ5rp2oLkiUsHGzPlwQuNmSMbJQk1WJ5kL2XTg6SqCP+k
+         QI8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6C+HzdvnmDTu8XOljcOnXRbyprFx36b3IfhRieOMMeo=;
-        b=iFIrIP63c+Tvoh2JBdnuHYq78fHH7Yd915FvajCXqOReY0yygi//6e2ralO2DLGbTG
-         8jtiXjGYukaXvlhFgmmQOcAsK0mswLFc7nlhfZphma/8+GKIjgYfGgehQxilUuPSpYng
-         aZjqQTNfz7LTyTxkZN9N2tRRydLHLyir6JEQJ+KIumbx15pId8hWapxBKWjEclGNwX9u
-         3CEFKvJCncp/CUiABC/+ag8r03Vl9MWiz4t+K2e5Br5CAhx0v6Rt+ukysp0/0qZLfoq8
-         pDEk63OgVW9ipG8ogP1UEJVbE88fq09DOrhKNPk3wxjMk3c9srgiZJLImxbOQwsDRn1J
-         VScA==
-X-Gm-Message-State: AJIora+EbYBBMSM6nFx3aQjmNINnkedRitDVd8Aw6jAiQl0VfufVnZHt
-        1V8cGcARa6N8KO7z9vCbQCm1QCA76aRCxBBBiIk=
-X-Google-Smtp-Source: AGRyM1tk4dyOxRMQ2zNMeK9u6f7mbpssmmo02VF4dqazq9eyZI6lgzn5DALDBm2WkAUjXW3qMnJXwUHKncWrsmlT5es=
-X-Received: by 2002:a05:6402:1249:b0:435:5e0c:20ac with SMTP id
- l9-20020a056402124900b004355e0c20acmr659770edw.100.1655853745231; Tue, 21 Jun
- 2022 16:22:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j6EHLC1I3sWRh0/mAsfU2ZCVNMk8CE7YRjypzOnx64c=;
+        b=neOCxKnUq9wFrNK9z3OgzgKks/4s+9uxhRwYOjRpw7cTdqaLnmuJupWiZimr1NMh6u
+         Zt3CU2EZdFbTbrC0GUvuXDIGBxaQUx7qP9g0Gu0S8F+WzFbyP+nC77RzU4FD5cJwwrKP
+         qLNE/C8mroSJGgAYCgRfHOphDxlJqHlbzIPNRaXwJEl09bUuw0INVr5mrac0J8tajONF
+         UPn5/LSkXAUHP3lVq2yWUD5mU681eWUXUWzelkRnRzagWM2mH5x/v/JrjCIAU+pXQ/Mi
+         hSaa5Iu944wCO60fhoSAQxJxupj5oKrrwdo38sWDYLVaXxoTTEk7Q7e7F1AbGGSDFiiU
+         o4mw==
+X-Gm-Message-State: AJIora90DpwSp5V3OO76ykLq9Lci6V7s9uVfogZRzQGzp183dIRWXMhe
+        H1PPOD6NkU8yZkj1KTLo06+eQA==
+X-Google-Smtp-Source: AGRyM1sZvtNuqN3d0+/aGvE46mIOMd7ki2UIMNFbuxfZwpXow/kWmkaMMZ4+AE05cbkJOQASbSkebw==
+X-Received: by 2002:a17:902:e746:b0:16a:3b5c:2134 with SMTP id p6-20020a170902e74600b0016a3b5c2134mr4693244plf.36.1655854458772;
+        Tue, 21 Jun 2022 16:34:18 -0700 (PDT)
+Received: from prec5560.. (71-212-119-14.tukw.qwest.net. [71.212.119.14])
+        by smtp.gmail.com with ESMTPSA id s7-20020a17090302c700b00168e83eda56sm11297873plk.3.2022.06.21.16.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 16:34:18 -0700 (PDT)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     bjorn.andersson@linaro.org, agross@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, jonathan@marek.ca, robert.foss@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: [PATCH v6 0/6] SM8350 Display/GPU clock enablement
+Date:   Wed, 22 Jun 2022 01:34:06 +0200
+Message-Id: <20220621233412.506768-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAD-N9QVVKUDFKMSxUc-smcz0B_7PrjN3DPku+cDM3ZKDn0XLBA@mail.gmail.com>
- <20220621145523.GJ16517@kadam>
-In-Reply-To: <20220621145523.GJ16517@kadam>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Wed, 22 Jun 2022 07:21:58 +0800
-Message-ID: <CAD-N9QWi4BxSxCX01zoDVWP1oZwW6vgSyi7TOLbqzR_ZsH-pjg@mail.gmail.com>
-Subject: Re: Unitialized Variable and Null Pointer Dereference bug in gb_bootrom_get_firmware
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     vireshk@kernel.org, Johan Hovold <johan@kernel.org>,
-        elder@kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 10:55 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Tue, Jun 21, 2022 at 10:36:04PM +0800, Dongliang Mu wrote:
-> > Hi maintainers,
-> >
-> > I would like to send one bug report.
-> >
-> > In gb_bootrom_get_firmware, if the first branch is satisfied, it will
-> > go to queue_work, leading to the dereference of uninitialized const
-> > variable "fw". If the second branch is satisfied, it will go to unlock
-> > with fw as NULL pointer, leading to a NULL Pointer Dereference.
-> >
-> > The Fixes commit should be [1], introducing the dereference of "fw" in
-> > the error handling code.
-> >
-> > I am not sure how to fix this bug. Any comment on removing the
-> > dereference of fw?
-> >
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a4293e1d4e6416477976ee3bd248589d3fc4bb19
->
-> No, there is no bug there.  It is a static checker false positive.
->
-> When you are reporting static checker warnings then please at least
-> mention it is from static analsysis so we can know what we are dealing
-> with.
+Changes since v2
+ - Dropped "clk: Introduce CLK_ASSUME_ENABLED_WHEN_UNUSED"
+ - Dropped "clk: qcom: sm8250-dispcc: Flag shared RCGs as assumed enable"
+ - Dropped "clk: qcom: rcg2: Cache rate changes for parked RCGs"
 
-Thanks Dan. I will do it next time.
+Changes since v3:
+ - Dropped RBs & SoBs for bigger changes
+ - Changed author to me for patches with big changes
 
-I am just playing fun with the built-in coccinelle script. Static
-analysis has many false positives. Sorry for my false alarm.
+Changes since v5:
+ - Reverted dispcc-sm8350 split from dispcc-sm8250
+   and related .index changes - Bjorn
+ - Re-added Tags that were thrown out due to the 
+   above revert
 
-Thanks for your valuable feedback.
 
->
-> Here is the code.
->
-> drivers/staging/greybus/bootrom.c
->    241  static int gb_bootrom_get_firmware(struct gb_operation *op)
->    242  {
->    243          struct gb_bootrom *bootrom = gb_connection_get_data(op->connection);
->    244          const struct firmware *fw;
->                                       ^^^
->
->
->    245          struct gb_bootrom_get_firmware_request *firmware_request;
->    246          struct gb_bootrom_get_firmware_response *firmware_response;
->    247          struct device *dev = &op->connection->bundle->dev;
->    248          unsigned int offset, size;
->    249          enum next_request_type next_request;
->    250          int ret = 0;
->    251
->    252          /* Disable timeouts */
->    253          gb_bootrom_cancel_timeout(bootrom);
->    254
->    255          if (op->request->payload_size != sizeof(*firmware_request)) {
->    256                  dev_err(dev, "%s: Illegal size of get firmware request (%zu %zu)\n",
->    257                          __func__, op->request->payload_size,
->    258                          sizeof(*firmware_request));
->    259                  ret = -EINVAL;
->    260                  goto queue_work;
->
-> "ret" is -EINVAL.  "fw" is uninitialized.
->
->    261          }
->    262
->    263          mutex_lock(&bootrom->mutex);
->    264
->    265          fw = bootrom->fw;
->    266          if (!fw) {
->    267                  dev_err(dev, "%s: firmware not available\n", __func__);
->    268                  ret = -EINVAL;
->    269                  goto unlock;
->
-> "ret" is -EINVAL.  "fw" is NULL.
->
->    270          }
->    271
->
-> For the rest "fw" is valid.
->
->    272          firmware_request = op->request->payload;
->    273          offset = le32_to_cpu(firmware_request->offset);
->    274          size = le32_to_cpu(firmware_request->size);
->    275
->    276          if (offset >= fw->size || size > fw->size - offset) {
->    277                  dev_warn(dev, "bad firmware request (offs = %u, size = %u)\n",
->    278                           offset, size);
->    279                  ret = -EINVAL;
->    280                  goto unlock;
->    281          }
->    282
->    283          if (!gb_operation_response_alloc(op, sizeof(*firmware_response) + size,
->    284                                           GFP_KERNEL)) {
->    285                  dev_err(dev, "%s: error allocating response\n", __func__);
->    286                  ret = -ENOMEM;
->    287                  goto unlock;
->    288          }
->    289
->    290          firmware_response = op->response->payload;
->    291          memcpy(firmware_response->data, fw->data + offset, size);
->    292
->    293          dev_dbg(dev, "responding with firmware (offs = %u, size = %u)\n",
->    294                  offset, size);
->    295
->    296  unlock:
->    297          mutex_unlock(&bootrom->mutex);
->    298
->    299  queue_work:
->    300          /* Refresh timeout */
->    301          if (!ret && (offset + size == fw->size))
->                     ^^^^^
-> The "!ret" is only true when "fw" is valid.
->
->
->    302                  next_request = NEXT_REQ_READY_TO_BOOT;
->    303          else
->    304                  next_request = NEXT_REQ_GET_FIRMWARE;
->    305
->    306          gb_bootrom_set_timeout(bootrom, next_request, NEXT_REQ_TIMEOUT_MS);
->    307
->    308          return ret;
->    309  }
->
-> regards,
-> dan carpenter
->
+
+Jonathan Marek (2):
+  clk: qcom: add support for SM8350 DISPCC
+  dt-bindings: clock: Add Qcom SM8350 DISPCC bindings
+
+Robert Foss (4):
+  arm64: dts: qcom: sm8350: Replace integers with rpmpd defines
+  clk: qcom: add support for SM8350 GPUCC
+  dt-bindings: clock: Add Qcom SM8350 GPUCC bindings
+  arm64: dts: qcom: sm8350: Add DISPCC node
+
+ .../bindings/clock/qcom,dispcc-sm8x50.yaml    |   6 +-
+ .../bindings/clock/qcom,gpucc-sm8350.yaml     |  72 ++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          |  42 +-
+ drivers/clk/qcom/Kconfig                      |  12 +-
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/dispcc-sm8250.c              |  60 +-
+ drivers/clk/qcom/gpucc-sm8350.c               | 637 ++++++++++++++++++
+ .../dt-bindings/clock/qcom,dispcc-sm8350.h    |   1 +
+ include/dt-bindings/clock/qcom,gpucc-sm8350.h |  52 ++
+ 9 files changed, 870 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
+ create mode 100644 drivers/clk/qcom/gpucc-sm8350.c
+ create mode 120000 include/dt-bindings/clock/qcom,dispcc-sm8350.h
+ create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8350.h
+
+-- 
+2.34.1
+

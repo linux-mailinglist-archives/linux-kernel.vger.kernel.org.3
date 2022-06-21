@@ -2,295 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11305532B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312215532AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350999AbiFUM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S1351115AbiFUM7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351157AbiFUM6h (ORCPT
+        with ESMTP id S1351153AbiFUM6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:58:37 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701B0B2C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:36 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id z14so13085514pgh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FXYyMqCuMn8N8AtiePCadIk2ihaRxjS8+sCa4dkDZyY=;
-        b=ID4gt1H5XAXZc2WTCkcM4F1wzX1sAe3JOWtacCk0iQKQ+aLMZXAoV2LeDm9V/qhVXx
-         6tpAVEejJhQBmJjVUK+nIaNyniVWz7hJGtPgx1OZl1uOfj2pujAFTcbGChoVU9DBG1kQ
-         iSr/YRd45uGdFIuCRF+nZy0GIGBavXDFzjNLsbIp/9bZz+yRlZan+nvKfKhVHEPvjiD5
-         P/VKwyJbbrvB0eRUS26CEwFTb/hg3CWoix8AAXQYFzZU3v7OZBDBODtMEhL6UOydPlDK
-         QPnx0hfY8bRXub0eY6AxeQXF/rpFM66dPqaBxFcGtr4OkljZGqrs6ATOyrSkIf9U3exr
-         0w8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FXYyMqCuMn8N8AtiePCadIk2ihaRxjS8+sCa4dkDZyY=;
-        b=1Ho6hQdYop/3SMfjykvCh8G6aGxYHbuvzmQt4r/rW0P+7+qJlCmWkEl7cTQj2UePYF
-         5ppcYjmDt+lGPEJOen5b77FqMzgWHQr52Xv8WlRSbSZs9TIT0yQPq3f4NWf4kLBrYEym
-         tosP6LX6Y4WIoh0QzFvYbnr4I2i8MbZMWuWgCIcYK50Bc9u9pVmdLvZn1iw6KnpGVLL+
-         CAf2QPvfbg3I5eMNmbVq+/yxKQi6JJZdiW7C0GP9cWFG/4Vy0MEtf5usHkIyZizsdAOO
-         zMd4M/iME34yuwanpOLXqj82LYcSfmArlT1c0ipeK5ekADAQ35jWmVyqD/e/Mu1g0T88
-         9/fg==
-X-Gm-Message-State: AJIora9jd46xjSYXFEF0V8PmxMbPnD2eGPbtmxVbl9VUawfSPi0qvayk
-        P+S06Lm7BOwPKhtU3EOwuYsxVg==
-X-Google-Smtp-Source: AGRyM1s3jBpILIrDx7KtbyRkegEjXT/bYyiPJT5PmXEB7MsPCFZC/X2wELk53MsJbksfq61xEhFUrw==
-X-Received: by 2002:a63:7c4e:0:b0:380:8ae9:c975 with SMTP id l14-20020a637c4e000000b003808ae9c975mr26959498pgn.25.1655816315865;
-        Tue, 21 Jun 2022 05:58:35 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id e3-20020a170903240300b0015ea3a491a1sm10643134plo.191.2022.06.21.05.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 05:58:35 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     akpm@linux-foundation.org, hannes@cmpxchg.org, longman@redhat.com,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com
-Cc:     cgroups@vger.kernel.org, duanxiongchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v6 11/11] mm: lru: use lruvec lock to serialize memcg changes
-Date:   Tue, 21 Jun 2022 20:56:58 +0800
-Message-Id: <20220621125658.64935-12-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
-In-Reply-To: <20220621125658.64935-1-songmuchun@bytedance.com>
-References: <20220621125658.64935-1-songmuchun@bytedance.com>
+        Tue, 21 Jun 2022 08:58:36 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7312A2;
+        Tue, 21 Jun 2022 05:58:34 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6800B104;
+        Tue, 21 Jun 2022 14:58:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1655816312;
+        bh=QeBzIO+U3oKdldlfZMcuLeVK7EiSrArkPksFp8cBSkM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=OO5/5+9Yhc4qSTux6Py6LT4Iy9hqrC9FAcbdk89g+PfRJ9mfNx/9LXQfiVqPfMl6B
+         l/HtiR7/BVJjXnB3PuCTdJ9rho2pL2COKVqdaXTmuizWOt9m7IN1wjsDio7LVg3ePB
+         sCpnfC6Tove2EPl7XyJUAFnmnCL1okn8xaSvBPgs=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220616170821.1348169-1-steve@sk2.org>
+References: <20220616170821.1348169-1-steve@sk2.org>
+Subject: Re: [PATCH v2] drm: shmobile: Use backlight helper
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Stephen Kitt <steve@sk2.org>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Stephen Kitt <steve@sk2.org>
+Date:   Tue, 21 Jun 2022 13:58:29 +0100
+Message-ID: <165581630958.18145.12909267841116831017@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As described by commit fc574c23558c ("mm/swap.c: serialize memcg
-changes in pagevec_lru_move_fn"), TestClearPageLRU() aims to
-serialize mem_cgroup_move_account() during pagevec_lru_move_fn().
-Now folio_lruvec_lock*() has the ability to detect whether page
-memcg has been changed. So we can use lruvec lock to serialize
-mem_cgroup_move_account() during pagevec_lru_move_fn(). This
-change is a partial revert of the commit fc574c23558c ("mm/swap.c:
-serialize memcg changes in pagevec_lru_move_fn").
+Quoting Stephen Kitt (2022-06-16 18:08:21)
+> This started with work on the removal of backlight_properties'
+> deprecated fb_blank field, much of which can be taken care of by using
+> helper functions provided by backlight.h instead of directly accessing
+> fields in backlight_properties. This patch series doesn't involve
+> fb_blank, but it still seems useful to use helper functions where
+> appropriate.
+>=20
+> Instead of retrieving the backlight brightness in struct
+> backlight_properties manually, and then checking whether the backlight
+> should be on at all, use backlight_get_brightness() which does all
+> this and insulates this from future changes.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-And pagevec_lru_move_fn() is more hot compare with
-mem_cgroup_move_account(), removing an atomic operation would be
-an optimization. Also this change would not dirty cacheline for a
-page which isn't on the LRU.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- mm/memcontrol.c | 34 ++++++++++++++++++++++++++++++++++
- mm/swap.c       | 32 +++++++++++++++-----------------
- mm/vmscan.c     | 16 +++++++---------
- 3 files changed, 56 insertions(+), 26 deletions(-)
+Hi Stephen,
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 803dbdf5f233..85adc43c5a25 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1330,10 +1330,39 @@ struct lruvec *folio_lruvec_lock(struct folio *folio)
- 	lruvec = folio_lruvec(folio);
- 	spin_lock(&lruvec->lru_lock);
- 
-+	/*
-+	 * The memcg of the page can be changed by any the following routines:
-+	 *
-+	 * 1) mem_cgroup_move_account() or
-+	 * 2) memcg_reparent_objcgs()
-+	 *
-+	 * The possible bad scenario would like:
-+	 *
-+	 * CPU0:                CPU1:                CPU2:
-+	 * lruvec = folio_lruvec()
-+	 *
-+	 *                      if (!isolate_lru_page())
-+	 *                              mem_cgroup_move_account()
-+	 *
-+	 *                                           memcg_reparent_objcgs()
-+	 *
-+	 * spin_lock(&lruvec->lru_lock)
-+	 *                ^^^^^^
-+	 *              wrong lock
-+	 *
-+	 * Either CPU1 or CPU2 can change page memcg, so we need to check
-+	 * whether page memcg is changed, if so, we should reacquire the
-+	 * new lruvec lock.
-+	 */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock(&lruvec->lru_lock);
- 		goto retry;
- 	}
-+
-+	/*
-+	 * When we reach here, it means that the folio_memcg(folio) is
-+	 * stable.
-+	 */
- 	rcu_read_unlock();
- 
- 	return lruvec;
-@@ -1361,6 +1390,7 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
- 	lruvec = folio_lruvec(folio);
- 	spin_lock_irq(&lruvec->lru_lock);
- 
-+	/* See the comments in folio_lruvec_lock(). */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock_irq(&lruvec->lru_lock);
- 		goto retry;
-@@ -1394,6 +1424,7 @@ struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
- 	lruvec = folio_lruvec(folio);
- 	spin_lock_irqsave(&lruvec->lru_lock, *flags);
- 
-+	/* See the comments in folio_lruvec_lock(). */
- 	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
- 		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
- 		goto retry;
-@@ -5809,7 +5840,10 @@ static int mem_cgroup_move_account(struct page *page,
- 	obj_cgroup_put(rcu_dereference(from->objcg));
- 	rcu_read_unlock();
- 
-+	/* See the comments in folio_lruvec_lock(). */
-+	spin_lock(&from_vec->lru_lock);
- 	folio->memcg_data = (unsigned long)rcu_access_pointer(to->objcg);
-+	spin_unlock(&from_vec->lru_lock);
- 
- 	__folio_memcg_unlock(from);
- 
-diff --git a/mm/swap.c b/mm/swap.c
-index 987dcbd93ffa..0fc59409e27d 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -196,6 +196,7 @@ static void lru_add_fn(struct lruvec *lruvec, struct folio *folio)
- 
- 	VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
- 
-+	folio_set_lru(folio);
- 	/*
- 	 * Is an smp_mb__after_atomic() still required here, before
- 	 * folio_evictable() tests the mlocked flag, to rule out the possibility
-@@ -238,14 +239,8 @@ static void folio_batch_move_lru(struct folio_batch *fbatch, move_fn_t move_fn)
- 	for (i = 0; i < folio_batch_count(fbatch); i++) {
- 		struct folio *folio = fbatch->folios[i];
- 
--		/* block memcg migration while the folio moves between lru */
--		if (move_fn != lru_add_fn && !folio_test_clear_lru(folio))
--			continue;
--
- 		lruvec = folio_lruvec_relock_irqsave(folio, lruvec, &flags);
- 		move_fn(lruvec, folio);
--
--		folio_set_lru(folio);
- 	}
- 
- 	if (lruvec)
-@@ -265,7 +260,7 @@ static void folio_batch_add_and_move(struct folio_batch *fbatch,
- 
- static void lru_move_tail_fn(struct lruvec *lruvec, struct folio *folio)
- {
--	if (!folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && !folio_test_unevictable(folio)) {
- 		lruvec_del_folio(lruvec, folio);
- 		folio_clear_active(folio);
- 		lruvec_add_folio_tail(lruvec, folio);
-@@ -348,7 +343,8 @@ void lru_note_cost_folio(struct folio *folio)
- 
- static void folio_activate_fn(struct lruvec *lruvec, struct folio *folio)
- {
--	if (!folio_test_active(folio) && !folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && !folio_test_active(folio) &&
-+	    !folio_test_unevictable(folio)) {
- 		long nr_pages = folio_nr_pages(folio);
- 
- 		lruvec_del_folio(lruvec, folio);
-@@ -394,12 +390,9 @@ static void folio_activate(struct folio *folio)
- {
- 	struct lruvec *lruvec;
- 
--	if (folio_test_clear_lru(folio)) {
--		lruvec = folio_lruvec_lock_irq(folio);
--		folio_activate_fn(lruvec, folio);
--		lruvec_unlock_irq(lruvec);
--		folio_set_lru(folio);
--	}
-+	lruvec = folio_lruvec_lock_irq(folio);
-+	folio_activate_fn(lruvec, folio);
-+	lruvec_unlock_irq(lruvec);
- }
- #endif
- 
-@@ -542,6 +535,9 @@ static void lru_deactivate_file_fn(struct lruvec *lruvec, struct folio *folio)
- 	bool active = folio_test_active(folio);
- 	long nr_pages = folio_nr_pages(folio);
- 
-+	if (!folio_test_lru(folio))
-+		return;
-+
- 	if (folio_test_unevictable(folio))
- 		return;
- 
-@@ -580,7 +576,8 @@ static void lru_deactivate_file_fn(struct lruvec *lruvec, struct folio *folio)
- 
- static void lru_deactivate_fn(struct lruvec *lruvec, struct folio *folio)
- {
--	if (folio_test_active(folio) && !folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && folio_test_active(folio) &&
-+	    !folio_test_unevictable(folio)) {
- 		long nr_pages = folio_nr_pages(folio);
- 
- 		lruvec_del_folio(lruvec, folio);
-@@ -596,8 +593,9 @@ static void lru_deactivate_fn(struct lruvec *lruvec, struct folio *folio)
- 
- static void lru_lazyfree_fn(struct lruvec *lruvec, struct folio *folio)
- {
--	if (folio_test_anon(folio) && folio_test_swapbacked(folio) &&
--	    !folio_test_swapcache(folio) && !folio_test_unevictable(folio)) {
-+	if (folio_test_lru(folio) && folio_test_anon(folio) &&
-+	    folio_test_swapbacked(folio) && !folio_test_swapcache(folio) &&
-+	    !folio_test_unevictable(folio)) {
- 		long nr_pages = folio_nr_pages(folio);
- 
- 		lruvec_del_folio(lruvec, folio);
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 51b1607c81e4..11e1f6fc5898 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4864,21 +4864,19 @@ void check_move_unevictable_pages(struct pagevec *pvec)
- 		if (PageTransTail(page))
- 			continue;
- 
--		nr_pages = thp_nr_pages(page);
-+		nr_pages = folio_nr_pages(folio);
- 		pgscanned += nr_pages;
- 
--		/* block memcg migration during page moving between lru */
--		if (!TestClearPageLRU(page))
-+		lruvec = folio_lruvec_relock_irq(folio, lruvec);
-+		if (!folio_test_lru(folio) || !folio_test_unevictable(folio))
- 			continue;
- 
--		lruvec = folio_lruvec_relock_irq(folio, lruvec);
--		if (page_evictable(page) && PageUnevictable(page)) {
--			del_page_from_lru_list(page, lruvec);
--			ClearPageUnevictable(page);
--			add_page_to_lru_list(page, lruvec);
-+		if (folio_evictable(folio)) {
-+			lruvec_del_folio(lruvec, folio);
-+			folio_clear_unevictable(folio);
-+			lruvec_add_folio(lruvec, folio);
- 			pgrescued += nr_pages;
- 		}
--		SetPageLRU(page);
- 	}
- 
- 	if (lruvec) {
--- 
-2.11.0
+This looks reasonable to me too.
 
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> ---
+> Changes since v1: clarified commit message, this doesn't touch fb_blank
+> ---
+>  drivers/gpu/drm/shmobile/shmob_drm_backlight.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c b/drivers/gpu=
+/drm/shmobile/shmob_drm_backlight.c
+> index f6628a5ee95f..794573badfe8 100644
+> --- a/drivers/gpu/drm/shmobile/shmob_drm_backlight.c
+> +++ b/drivers/gpu/drm/shmobile/shmob_drm_backlight.c
+> @@ -18,11 +18,7 @@ static int shmob_drm_backlight_update(struct backlight=
+_device *bdev)
+>         struct shmob_drm_connector *scon =3D bl_get_data(bdev);
+>         struct shmob_drm_device *sdev =3D scon->connector.dev->dev_privat=
+e;
+>         const struct shmob_drm_backlight_data *bdata =3D &sdev->pdata->ba=
+cklight;
+> -       int brightness =3D bdev->props.brightness;
+> -
+> -       if (bdev->props.power !=3D FB_BLANK_UNBLANK ||
+> -           bdev->props.state & BL_CORE_SUSPENDED)
+> -               brightness =3D 0;
+> +       int brightness =3D backlight_get_brightness(bdev);
+> =20
+>         return bdata->set_brightness(brightness);
+>  }
+>=20
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+> --=20
+> 2.30.2
+>

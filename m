@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13706553B3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23687553B40
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354353AbiFUULL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 16:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S1354347AbiFUUL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 16:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354303AbiFUULI (ORCPT
+        with ESMTP id S1353739AbiFUULS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 16:11:08 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754802E091
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 13:11:05 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-101e1a33fe3so9579227fac.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 13:11:05 -0700 (PDT)
+        Tue, 21 Jun 2022 16:11:18 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56582EA02
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 13:11:13 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 93-20020a9d02e6000000b0060c252ee7a4so11443386otl.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 13:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=usp.br; s=usp-google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FIj3vneB7myjB+3bqNJgotk0PgvZy/jfZUlD6e7kiTA=;
-        b=i9E4oMAelSfxr9WNC6NYBjSOnfDcj7CHmZ2kvPnemYf6VMj9YRaZIMh6gnv1gMoYyR
-         shxk+VST3CjHbngQtJzUgE3TEDJUU4jtbRB3cgOvxG1pjjTujWi7wkUyLg/vLgKXEvR+
-         FZOO40pfJbRRsK4nYAew5/iDMJLxS09KGejb8ZyvZl/o/e3iHlV4XIfCIze7egtAIM1x
-         VeLT4rICazHllbdlBeEgBr17PrtGSoeFvdyVMPGatMTJor90ihRTv2KUvle40GYJkYN3
-         tmeWlAIxQavcTDZYnLM6yvH6dmfZQwgCbe4+vUjkTCfm3bT8UV/3JWpjARPy0pbS80wO
-         2TFA==
+        bh=FaElbDldtp91SSwLGIH1v7PEo5QUck2EOfzHV2R9FTE=;
+        b=ICJ5ccrrRUTUHy2WI34UClumYLIML5NOayrU3tBgrMXvhgZ/xHq5MuaCtIGdfryQ1X
+         /UUTWVLDMH5Vid5eIqD3VEnalzx+u8MfmSZGsR1fluKl0vaKlYNIhA8YRORpy2J4scYX
+         9Wy8zAdIsvH3wXQIef8eM+bc6oy2QR7HeNOmYQEe3cMWqdJNcUBInFGrKE4MwTx3X/WM
+         N48ilkwWiGCq7KyNBipQp+mOE00LjnkwSruYWPc8pXSqBTv0+hLyuIRN83D5CrMs7xNM
+         SWewrQhsYANSoWs9Bu3ccwGhDXwdpZKKgGS65xrABIdYnAGsnQltHpTN4/mp0Yf4m7cU
+         35Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FIj3vneB7myjB+3bqNJgotk0PgvZy/jfZUlD6e7kiTA=;
-        b=qDz4RygjJGd1B/DRrtwMe/cbhADyYMiN/ZZ4GDaDPpJeoqKMx/PWO4wM83CBS9hc3n
-         priSSSO8QGeo93LikzkVocNChhvxsGGw/F1s3R6NGdRLes+/XKO3YUS4anjKuK1+xENt
-         pBtLQAkKRuf9Dkc0g42SD1oHYEf+WIo6DlqrL5VgwhkgQbpfbn2MmcrVdvriI/H578R6
-         nAN3v3F2Gbe1eStgUo/IebVdJCKN04lB8IAwVRbP+pAfm+kq19lzy82OJRwamUUvoy89
-         /Z4MwpVfsv1+y+i3yM8NcAlci4OtfFM9aUj7sL60nAw2OeG24QF5ic9ffqOhshZhYwYy
-         nHxg==
-X-Gm-Message-State: AJIora/JUH/qnY9hGfDE1X24MfnJsnh6eTv+W9V0eBguCb19ckndLtV0
-        zKJIKh2vo5evOamL516C7UQtEg==
-X-Google-Smtp-Source: AGRyM1uk5Tb3EusBOFxl9fgiHSZoeNjyZaWyHWunFsL2XD49VslCiS3RpEAUxlJWvvXBjsz/b0yN+Q==
-X-Received: by 2002:a05:6870:b383:b0:e9:2fea:2148 with SMTP id w3-20020a056870b38300b000e92fea2148mr21378134oap.103.1655842264702;
-        Tue, 21 Jun 2022 13:11:04 -0700 (PDT)
+        bh=FaElbDldtp91SSwLGIH1v7PEo5QUck2EOfzHV2R9FTE=;
+        b=ZKioS3wZWJlzPvH3rZEQ10WyWHykYMm+jExaxPSr1FZIts7I0YH7psuGpBWoBSWeMu
+         UuoKHPEROZsik26Z/Qj0CJrz8evGTUruxD7l1vmp1LXmvR5903WTQqZ3+iV5/IhdRgZ8
+         pC4uOoJY7oM1vjUl70fMR2NyAS1Hvg2oTHQpWgMC1FAzmjCmabEq7EAZdVh/YIVcgmjr
+         hZo7bSMcI4YwymsqFMRx4KJA88RtsPZAcwijU5LR/MIQ7iC6ZIz1wIZ1qB5JGlAsTovl
+         +oN0H34lWR7zM8F6MZsknkHrXuC5CHHY17xCDRRmRn8s7yqRHsofGlWEO5kAXifQwLza
+         2fTw==
+X-Gm-Message-State: AJIora8eMRVSXCP2Ek+V6IpiTCGa+KKE+o9te83bFkEpnZMr9Ybg8IrY
+        XcWW4HJongqyK6okVFQkoTVwyg==
+X-Google-Smtp-Source: AGRyM1uJeqWbsd0iiTG3U2QqWwyJWDN+LpmuX07JWQuy7wzLo7maUicyDktTl2rgG975+Id3JC9a4g==
+X-Received: by 2002:a05:6830:1c74:b0:60c:48dd:f534 with SMTP id s20-20020a0568301c7400b0060c48ddf534mr11858045otg.350.1655842272999;
+        Tue, 21 Jun 2022 13:11:12 -0700 (PDT)
 Received: from fedora.. ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
-        by smtp.gmail.com with ESMTPSA id o206-20020acad7d7000000b0032b7a0c5da1sm9759771oig.27.2022.06.21.13.10.58
+        by smtp.gmail.com with ESMTPSA id o206-20020acad7d7000000b0032b7a0c5da1sm9759771oig.27.2022.06.21.13.11.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 13:11:04 -0700 (PDT)
+        Tue, 21 Jun 2022 13:11:12 -0700 (PDT)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
 To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
@@ -65,11 +65,10 @@ To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
 Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
-        Rubens Gomes Neto <rubens.gomes.neto@usp.br>
-Subject: [PATCH v2 6/9] drm: selftest: convert drm_dp_mst_helper selftest to KUnit
-Date:   Tue, 21 Jun 2022 17:09:23 -0300
-Message-Id: <20220621200926.257002-7-maira.canal@usp.br>
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+Subject: [PATCH v2 7/9] drm: selftest: convert drm_framebuffer selftest to KUnit
+Date:   Tue, 21 Jun 2022 17:09:24 -0300
+Message-Id: <20220621200926.257002-8-maira.canal@usp.br>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220621200926.257002-1-maira.canal@usp.br>
 References: <20220621200926.257002-1-maira.canal@usp.br>
@@ -87,247 +86,180 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Considering the current adoption of the KUnit framework, convert the
-DRM DP MST helper selftest to the KUnit API.
+DRM framebuffer selftest to the KUnit API.
 
 Tested-by: David Gow <davidgow@google.com>
-Co-developed-by: Rubens Gomes Neto <rubens.gomes.neto@usp.br>
-Signed-off-by: Rubens Gomes Neto <rubens.gomes.neto@usp.br>
 Signed-off-by: Maíra Canal <maira.canal@usp.br>
 ---
- drivers/gpu/drm/selftests/Makefile            |  3 +-
- .../gpu/drm/selftests/drm_modeset_selftests.h |  2 -
- .../drm/selftests/test-drm_modeset_common.h   |  2 -
- drivers/gpu/drm/tests/Makefile                |  3 +-
- .../drm_dp_mst_helper_test.c}                 | 84 ++++++++++---------
- 5 files changed, 49 insertions(+), 45 deletions(-)
- rename drivers/gpu/drm/{selftests/test-drm_dp_mst_helper.c => tests/drm_dp_mst_helper_test.c} (73%)
+ drivers/gpu/drm/selftests/Makefile            |  5 +--
+ .../gpu/drm/selftests/drm_modeset_selftests.h |  9 ------
+ .../drm/selftests/test-drm_modeset_common.c   | 32 -------------------
+ .../drm/selftests/test-drm_modeset_common.h   | 21 ------------
+ drivers/gpu/drm/tests/Makefile                |  2 +-
+ .../drm_framebuffer_test.c}                   | 25 ++++++++++-----
+ 6 files changed, 19 insertions(+), 75 deletions(-)
+ delete mode 100644 drivers/gpu/drm/selftests/drm_modeset_selftests.h
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.c
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.h
+ rename drivers/gpu/drm/{selftests/test-drm_framebuffer.c => tests/drm_framebuffer_test.c} (96%)
 
 diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/selftests/Makefile
-index 9e0ccb482841..1539f55db9a7 100644
+index 1539f55db9a7..f7db628b60cb 100644
 --- a/drivers/gpu/drm/selftests/Makefile
 +++ b/drivers/gpu/drm/selftests/Makefile
-@@ -1,6 +1,5 @@
+@@ -1,5 +1,2 @@
  # SPDX-License-Identifier: GPL-2.0-only
--test-drm_modeset-y := test-drm_modeset_common.o test-drm_framebuffer.o \
--					test-drm_dp_mst_helper.o
-+test-drm_modeset-y := test-drm_modeset_common.o test-drm_framebuffer.o
- 
- obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o \
- 				    test-drm_buddy.o
+-test-drm_modeset-y := test-drm_modeset_common.o test-drm_framebuffer.o
+-
+-obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o \
+-				    test-drm_buddy.o
++obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_buddy.o
 diff --git a/drivers/gpu/drm/selftests/drm_modeset_selftests.h b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-index 22e467f6465a..40a29b8cf386 100644
+deleted file mode 100644
+index 40a29b8cf386..000000000000
 --- a/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-+++ b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-@@ -7,5 +7,3 @@
-  * Tests are executed in order by igt/drm_selftests_helper
-  */
- selftest(check_drm_framebuffer_create, igt_check_drm_framebuffer_create)
--selftest(dp_mst_calc_pbn_mode, igt_dp_mst_calc_pbn_mode)
--selftest(dp_mst_sideband_msg_req_decode, igt_dp_mst_sideband_msg_req_decode)
++++ /dev/null
+@@ -1,9 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* List each unit test as selftest(name, function)
+- *
+- * The name is used as both an enum and expanded as igt__name to create
+- * a module parameter. It must be unique and legal for a C identifier.
+- *
+- * Tests are executed in order by igt/drm_selftests_helper
+- */
+-selftest(check_drm_framebuffer_create, igt_check_drm_framebuffer_create)
+diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.c b/drivers/gpu/drm/selftests/test-drm_modeset_common.c
+deleted file mode 100644
+index 2a7f93774006..000000000000
+--- a/drivers/gpu/drm/selftests/test-drm_modeset_common.c
++++ /dev/null
+@@ -1,32 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Common file for modeset selftests.
+- */
+-
+-#include <linux/module.h>
+-
+-#include "test-drm_modeset_common.h"
+-
+-#define TESTS "drm_modeset_selftests.h"
+-#include "drm_selftest.h"
+-
+-#include "drm_selftest.c"
+-
+-static int __init test_drm_modeset_init(void)
+-{
+-	int err;
+-
+-	err = run_selftests(selftests, ARRAY_SIZE(selftests), NULL);
+-
+-	return err > 0 ? 0 : err;
+-}
+-
+-static void __exit test_drm_modeset_exit(void)
+-{
+-}
+-
+-module_init(test_drm_modeset_init);
+-module_exit(test_drm_modeset_exit);
+-
+-MODULE_AUTHOR("Intel Corporation");
+-MODULE_LICENSE("GPL");
 diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-index 790f3cf31f0d..3feb2fea1a6b 100644
+deleted file mode 100644
+index 3feb2fea1a6b..000000000000
 --- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-+++ b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-@@ -17,7 +17,5 @@
- #define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
- 
- int igt_check_drm_framebuffer_create(void *ignored);
--int igt_dp_mst_calc_pbn_mode(void *ignored);
--int igt_dp_mst_sideband_msg_req_decode(void *ignored);
- 
- #endif
++++ /dev/null
+@@ -1,21 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifndef __TEST_DRM_MODESET_COMMON_H__
+-#define __TEST_DRM_MODESET_COMMON_H__
+-
+-#include <linux/errno.h>
+-#include <linux/printk.h>
+-
+-#define FAIL(test, msg, ...) \
+-	do { \
+-		if (test) { \
+-			pr_err("%s/%u: " msg, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
+-			return -EINVAL; \
+-		} \
+-	} while (0)
+-
+-#define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
+-
+-int igt_check_drm_framebuffer_create(void *ignored);
+-
+-#endif
 diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
-index 0dfc8b806f85..40c003df2625 100644
+index 40c003df2625..d181da7e3e6b 100644
 --- a/drivers/gpu/drm/tests/Makefile
 +++ b/drivers/gpu/drm/tests/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
+@@ -2,4 +2,4 @@
  
  obj-$(CONFIG_DRM_KUNIT_TEST) += drm_damage_helper_test.o drm_cmdline_parser_test.o \
--	drm_rect_test.o drm_format_test.o drm_plane_helper_test.o
-+	drm_rect_test.o drm_format_test.o drm_plane_helper_test.o \
-+	drm_dp_mst_helper_test.o
-diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-similarity index 73%
-rename from drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-rename to drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-index 967c52150b67..be846be84fe9 100644
---- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-+++ b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-@@ -5,15 +5,15 @@
+ 	drm_rect_test.o drm_format_test.o drm_plane_helper_test.o \
+-	drm_dp_mst_helper_test.o
++	drm_dp_mst_helper_test.o drm_framebuffer_test.o
+diff --git a/drivers/gpu/drm/selftests/test-drm_framebuffer.c b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+similarity index 96%
+rename from drivers/gpu/drm/selftests/test-drm_framebuffer.c
+rename to drivers/gpu/drm/tests/drm_framebuffer_test.c
+index f6d66285c5fc..a1b57703cd5a 100644
+--- a/drivers/gpu/drm/selftests/test-drm_framebuffer.c
++++ b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+@@ -3,8 +3,7 @@
+  * Test cases for the drm_framebuffer functions
+  */
  
- #define PREFIX_STR "[drm_dp_mst_helper]"
- 
+-#include <linux/kernel.h>
+-
 +#include <kunit/test.h>
- #include <linux/random.h>
+ #include <drm/drm_device.h>
+ #include <drm/drm_mode.h>
+ #include <drm/drm_fourcc.h>
+@@ -12,8 +11,6 @@
  
- #include <drm/display/drm_dp_mst_helper.h>
- #include <drm/drm_print.h>
+ #include "../drm_crtc_internal.h"
  
- #include "../display/drm_dp_mst_topology_internal.h"
 -#include "test-drm_modeset_common.h"
+-
+ #define MIN_WIDTH 4
+ #define MAX_WIDTH 4096
+ #define MIN_HEIGHT 4
+@@ -336,15 +333,27 @@ static int execute_drm_mode_fb_cmd2(struct drm_mode_fb_cmd2 *r)
+ 	return buffer_created;
+ }
  
--int igt_dp_mst_calc_pbn_mode(void *ignored)
-+static void igt_dp_mst_calc_pbn_mode(struct kunit *test)
+-int igt_check_drm_framebuffer_create(void *ignored)
++static void igt_check_drm_framebuffer_create(struct kunit *test)
  {
- 	int pbn, i;
- 	const struct {
-@@ -33,13 +33,11 @@ int igt_dp_mst_calc_pbn_mode(void *ignored)
- 		pbn = drm_dp_calc_pbn_mode(test_params[i].rate,
- 					   test_params[i].bpp,
- 					   test_params[i].dsc);
--		FAIL(pbn != test_params[i].expected,
-+		KUNIT_EXPECT_EQ_MSG(test, pbn, test_params[i].expected,
- 		     "Expected PBN %d for clock %d bpp %d, got %d\n",
- 		     test_params[i].expected, test_params[i].rate,
- 		     test_params[i].bpp, pbn);
+ 	int i = 0;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(createbuffer_tests); i++) {
+-		FAIL(createbuffer_tests[i].buffer_created !=
++		KUNIT_EXPECT_EQ_MSG(test, createbuffer_tests[i].buffer_created,
+ 				execute_drm_mode_fb_cmd2(&createbuffer_tests[i].cmd),
+ 		     "Test %d: \"%s\" failed\n", i, createbuffer_tests[i].name);
  	}
 -
 -	return 0;
- }
- 
- static bool
-@@ -176,66 +174,64 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
- 	return result;
- }
- 
--int igt_dp_mst_sideband_msg_req_decode(void *unused)
-+static void igt_dp_mst_sideband_msg_req_decode(struct kunit *test)
- {
- 	struct drm_dp_sideband_msg_req_body in = { 0 };
- 	u8 data[] = { 0xff, 0x0, 0xdd };
- 	int i;
- 
--#define DO_TEST() FAIL_ON(!sideband_msg_req_encode_decode(&in))
--
- 	in.req_type = DP_ENUM_PATH_RESOURCES;
- 	in.u.port_num.port_number = 5;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_POWER_UP_PHY;
- 	in.u.port_num.port_number = 5;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_POWER_DOWN_PHY;
- 	in.u.port_num.port_number = 5;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_ALLOCATE_PAYLOAD;
- 	in.u.allocate_payload.number_sdp_streams = 3;
- 	for (i = 0; i < in.u.allocate_payload.number_sdp_streams; i++)
- 		in.u.allocate_payload.sdp_stream_sink[i] = i + 1;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.allocate_payload.port_number = 0xf;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.allocate_payload.vcpi = 0x7f;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.allocate_payload.pbn = U16_MAX;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_QUERY_PAYLOAD;
- 	in.u.query_payload.port_number = 0xf;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.query_payload.vcpi = 0x7f;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_REMOTE_DPCD_READ;
- 	in.u.dpcd_read.port_number = 0xf;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.dpcd_read.dpcd_address = 0xfedcb;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.dpcd_read.num_bytes = U8_MAX;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_REMOTE_DPCD_WRITE;
- 	in.u.dpcd_write.port_number = 0xf;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.dpcd_write.dpcd_address = 0xfedcb;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.dpcd_write.num_bytes = ARRAY_SIZE(data);
- 	in.u.dpcd_write.bytes = data;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_REMOTE_I2C_READ;
- 	in.u.i2c_read.port_number = 0xf;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.i2c_read.read_i2c_device_id = 0x7f;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.i2c_read.num_transactions = 3;
- 	in.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3;
- 	for (i = 0; i < in.u.i2c_read.num_transactions; i++) {
-@@ -244,32 +240,44 @@ int igt_dp_mst_sideband_msg_req_decode(void *unused)
- 		in.u.i2c_read.transactions[i].i2c_dev_id = 0x7f & ~i;
- 		in.u.i2c_read.transactions[i].i2c_transaction_delay = 0xf & ~i;
- 	}
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_REMOTE_I2C_WRITE;
- 	in.u.i2c_write.port_number = 0xf;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.i2c_write.write_i2c_device_id = 0x7f;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.i2c_write.num_bytes = ARRAY_SIZE(data);
- 	in.u.i2c_write.bytes = data;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 
- 	in.req_type = DP_QUERY_STREAM_ENC_STATUS;
- 	in.u.enc_status.stream_id = 1;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	get_random_bytes(in.u.enc_status.client_id,
- 			 sizeof(in.u.enc_status.client_id));
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.enc_status.stream_event = 3;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.enc_status.valid_stream_event = 0;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.enc_status.stream_behavior = 3;
--	DO_TEST();
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
- 	in.u.enc_status.valid_stream_behavior = 1;
--	DO_TEST();
--
--#undef DO_TEST
--	return 0;
-+	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
  }
 +
-+static struct kunit_case drm_dp_mst_helper_tests[] = {
-+	KUNIT_CASE(igt_dp_mst_calc_pbn_mode),
-+	KUNIT_CASE(igt_dp_mst_sideband_msg_req_decode),
++static struct kunit_case drm_framebuffer_tests[] = {
++	KUNIT_CASE(igt_check_drm_framebuffer_create),
 +	{ }
 +};
 +
-+static struct kunit_suite drm_dp_mst_helper_test_suite = {
-+	.name = "drm_dp_mst_helper",
-+	.test_cases = drm_dp_mst_helper_tests,
++static struct kunit_suite drm_framebuffer_test_suite = {
++	.name = "drm_framebuffer",
++	.test_cases = drm_framebuffer_tests,
 +};
 +
-+kunit_test_suite(drm_dp_mst_helper_test_suite);
++kunit_test_suite(drm_framebuffer_test_suite);
 +
 +MODULE_LICENSE("GPL");
 -- 

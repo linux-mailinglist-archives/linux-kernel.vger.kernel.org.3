@@ -2,141 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C9B553D7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EE7553D92
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353783AbiFUVW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S1355600AbiFUVXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355893AbiFUVW3 (ORCPT
+        with ESMTP id S1355139AbiFUVXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:22:29 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCDC45;
-        Tue, 21 Jun 2022 14:11:59 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id i10so16879012wrc.0;
-        Tue, 21 Jun 2022 14:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=5jGRxWa+Hik2xXu28OZInbUMDSK1LmZ28o9a5C6ustA=;
-        b=dBkR+OXnEaZPr9uoaZB+DI5wT1AXufYbc+9qN44d74R1jy7oOaP5glLLgc/hzh3E8m
-         VEYB0O8O8TiK3K0KU8aR4nbUvWWFGE7uePKS5PELYCU4SnEeJA8EVcTkrM2DoduTme8M
-         T2w+A4Oj1CabUPV/iQcD8tJhe3/0P4UoInCNfQd2pdDiq/qrgQ6JtX7yLUUFdykN73bM
-         NtCtwLELefp/0JcgOX6hIfK1mCyMbjfNrGysmUUfiSDKIuEdhMG6diRPWKvISTwtHa9N
-         kgrC4FpslcP3XTRRhPHg48OrMHfSCIL2fPrOOeRY9LvrBNjg8LF3SLUYHP6wXsVMRurd
-         LPAQ==
+        Tue, 21 Jun 2022 17:23:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A6D05FF7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655846015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p2ZyEjz/X1rrSRyY38O7XcVSbvfO1EBTiv9ehORRiiM=;
+        b=amlFTC61cxaMpJAJOk7D9m9lnlqVWMxEAopTgTXzBpiliSYNg3e53VVgIaN8Pr2Io3QMzU
+        CoJ2dAPtBXM36VqI/3/NblxCQnfnJumBNMx1tvsJvWYuwq0J7fXuZAgaKlGQpnIJtUcvtc
+        ExI1L3NnvSoBHRS0gJIFtpjpd/X6RNA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-74-hrp6LAabP5WbMd84IijUfg-1; Tue, 21 Jun 2022 17:13:34 -0400
+X-MC-Unique: hrp6LAabP5WbMd84IijUfg-1
+Received: by mail-wm1-f71.google.com with SMTP id h205-20020a1c21d6000000b0039c96ec500fso8963349wmh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:13:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=5jGRxWa+Hik2xXu28OZInbUMDSK1LmZ28o9a5C6ustA=;
-        b=GRmD+rEmXrMnUtW7IfBoAGKKPPN+YVnROxzkNjrqTB/oz9pEbFht7AMknO1tjHabtH
-         TyfGnnqPnVsO6X4PwWyabx59vfmnikZO7mq5isr6P+Zj0wiV0y0EE1IVRIcdjKAV/8x+
-         9IZQGI937lernsAAO5yuRjtIADETJF2BYtVShBsoH+k1pugq8/sdslg+3ZFOlqPs43iQ
-         44gKlfi++UfxdSIX5JU/d5d/eVhqdLeuYCGDE/VFeBg39klm7YBpg6GSNmJrphlF53D5
-         izCsU0mkxRSqxFnLWYIhXd9mYl656kdoT/MhptGVBbddFG0H66mT0VHttGBIanHBLbl+
-         2Ffg==
-X-Gm-Message-State: AJIora9I2C5lWwottjfOMj0YGN8+wtusm1f1iLN/FZ6qin5yVDs3/Fk7
-        rfUByHCKM4FIdpQwygRl+3Q=
-X-Google-Smtp-Source: AGRyM1uWGscZnGaavVg/uIQYsRslzM5t54de/BLxZBl+KXB10CZYw57ndf/q8EV3SUZ+AQYy58rh1w==
-X-Received: by 2002:adf:fb10:0:b0:207:af88:1eb9 with SMTP id c16-20020adffb10000000b00207af881eb9mr30853557wrr.238.1655845918233;
-        Tue, 21 Jun 2022 14:11:58 -0700 (PDT)
-Received: from localhost (92.40.168.122.threembb.co.uk. [92.40.168.122])
-        by smtp.gmail.com with ESMTPSA id bv27-20020a0560001f1b00b0021b84ac7a05sm7979960wrb.0.2022.06.21.14.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 14:11:57 -0700 (PDT)
-References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
- <20220620200644.1961936-16-aidanmacdonald.0x0@gmail.com>
- <CAHp75Vd7Sq9RMqin_y-8qUEAJLaGfuqxAbe+qcMB22=bqkyZqg@mail.gmail.com>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, tharvey@gateworks.com,
-        rjones@gateworks.com, Matti Vaittinen <mazziesaccount@gmail.com>,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-actions@lists.infradead.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 15/49] regmap-irq: Change the behavior of mask_writeonly
-In-reply-to: <CAHp75Vd7Sq9RMqin_y-8qUEAJLaGfuqxAbe+qcMB22=bqkyZqg@mail.gmail.com>
-Date:   Tue, 21 Jun 2022 22:13:03 +0100
-Message-ID: <FQHPnJKuXUHf8vLiZoXidpoim5RtEYUC@localhost>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=p2ZyEjz/X1rrSRyY38O7XcVSbvfO1EBTiv9ehORRiiM=;
+        b=2YFa9ag35AUUZk2F79IWPyjDVjZUWO1xT86vRU3bWTgCaIoJEJxsO3BshVdrKdBV0r
+         bjbgVl7MZJWwA0N9BIE1e+QIWmcPTd8VmQRlT39YYbJWVIH1Kfg0gtc6jdGeDbNJlUnx
+         IWLYTV8E5UnqZM2Ir+38LNFVUI6ZLgnVEliICBZhQSIhmetRGBMqIhwyUAUstQrRmKE2
+         B/FNSg0Wzyr2HtV9omMcoR2HNdET+yByqeEM46c2IAdRmOW2BIderoU5lkrXO4uHRmsG
+         vXTYiRdpDMremBSMK5lGk5m2B2q2CfNeV7oXvCY0liMrpdWPCJ+rXkk+SG8I3KUgOUrN
+         cFUw==
+X-Gm-Message-State: AOAM530CuBtDVkzNBk707oFYZG4t61FRTJM3OGH1HjFvUVAWAbuVsIye
+        ZbPQaPKHN/5RgB0qT0ZO3h0qcF+FF3ZNdtp8AFtguULck7VsBYRLS3hfK7IUkpyWN96a4HMIhNb
+        cgPfFqY2B3FvbxURz6DUJ5QzF
+X-Received: by 2002:a05:600c:583:b0:39c:3637:b9f with SMTP id o3-20020a05600c058300b0039c36370b9fmr41890250wmd.79.1655846013138;
+        Tue, 21 Jun 2022 14:13:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwOeKyTVNcHGO8XIrslQyDEH0amifKDQHgWoO8MHT556YVEyS90MtqIiT8yBXXL779Lr60M4g==
+X-Received: by 2002:a05:600c:583:b0:39c:3637:b9f with SMTP id o3-20020a05600c058300b0039c36370b9fmr41890234wmd.79.1655846012925;
+        Tue, 21 Jun 2022 14:13:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:bc00:a63c:7e37:6061:1706? (p200300cbc705bc00a63c7e3760611706.dip0.t-ipconnect.de. [2003:cb:c705:bc00:a63c:7e37:6061:1706])
+        by smtp.gmail.com with ESMTPSA id 64-20020a1c1943000000b0039c6390730bsm22251249wmz.29.2022.06.21.14.13.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 14:13:32 -0700 (PDT)
+Message-ID: <5d3bf51b-3bba-3bd4-db1f-1c0a3930a1e4@redhat.com>
+Date:   Tue, 21 Jun 2022 23:13:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v10 10/69] mmap: use the VMA iterator in
+ count_vma_pages_range()
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "damon @ lists . linux . dev" <damon@lists.linux.dev>,
+        SeongJae Park <sj@kernel.org>
+References: <20220621204632.3370049-1-Liam.Howlett@oracle.com>
+ <20220621204632.3370049-11-Liam.Howlett@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220621204632.3370049-11-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21.06.22 22:46, Liam Howlett wrote:
+> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> 
+> This simplifies the implementation and is faster than using the linked
+> list.
+> 
+> Link: https://lkml.kernel.org/r/20220504010716.661115-12-Liam.Howlett@oracle.com
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: SeongJae Park <sj@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  mm/mmap.c | 24 +++++++-----------------
+>  1 file changed, 7 insertions(+), 17 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 6be7833c781b..d7e6baa2f40f 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -675,29 +675,19 @@ munmap_vma_range(struct mm_struct *mm, unsigned long start, unsigned long len,
+>  
+>  	return 0;
+>  }
+> +
+>  static unsigned long count_vma_pages_range(struct mm_struct *mm,
+>  		unsigned long addr, unsigned long end)
+>  {
+> -	unsigned long nr_pages = 0;
+> +	VMA_ITERATOR(vmi, mm, addr);
+>  	struct vm_area_struct *vma;
+> +	unsigned long nr_pages = 0;
+>  
+> -	/* Find first overlapping mapping */
+> -	vma = find_vma_intersection(mm, addr, end);
+> -	if (!vma)
+> -		return 0;
+> -
+> -	nr_pages = (min(end, vma->vm_end) -
+> -		max(addr, vma->vm_start)) >> PAGE_SHIFT;
+> -
+> -	/* Iterate over the rest of the overlaps */
+> -	for (vma = vma->vm_next; vma; vma = vma->vm_next) {
+> -		unsigned long overlap_len;
+> -
+> -		if (vma->vm_start > end)
+> -			break;
+> +	for_each_vma_range(vmi, vma, end) {
+> +		unsigned long vm_start = max(addr, vma->vm_start);
+> +		unsigned long vm_end = min(end, vma->vm_end);
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+I thought using max_t and min_t was the latest advisory. I might be
+wrong and simply kept doing it that way ;)
 
-> On Mon, Jun 20, 2022 at 10:08 PM Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> wrote:
->>
->> No drivers currently use mask_writeonly, and in its current form
->> it seems a bit misleading. When set, mask registers will be
->> updated with regmap_write_bits() instead of regmap_update_bits(),
->> but regmap_write_bits() still does a read-modify-write under the
->> hood. It's not a write-only operation.
->>
->> Performing a simple regmap_write() is probably more useful, since
->> it can be used for chips that have separate set & clear registers
->> for controlling mask bits. Such registers are normally volatile
->> and read as 0, so avoiding a register read minimizes bus traffic.
->
-> Reading your explanations and the code, I would rather think about
-> fixing the regmap_write_bits() to be writeonly op.
+>  
+> -		overlap_len = min(end, vma->vm_end) - vma->vm_start;
+> -		nr_pages += overlap_len >> PAGE_SHIFT;
+> +		nr_pages += (vm_end - vm_start) / PAGE_SIZE;
 
-That's impossible without special hardware support.
+PHYS_PFN(vm_end - vm_start)
 
-> Otherwise it's unclear what's the difference between
-> regmap_write_bits() vs. regmap_update_bits().
+>  	}
+>  
+>  	return nr_pages;
 
-This was not obvious to me either. They're the same except in how they
-issue the low-level write op -- regmap_update_bits() will only do the
-write if the new value differs from the current one. regmap_write_bits()
-will always do a write, even if the new value is the same.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-I think the problem is lack of documentation. I only figured this out
-by reading the implementation.
+-- 
+Thanks,
 
->>         if (d->chip->mask_writeonly)
->> -               return regmap_write_bits(d->map, reg, mask, val);
->> +               return regmap_write(d->map, reg, val & mask);
->>         else
->>                 return regmap_update_bits(d->map, reg, mask, val);
+David / dhildenb
+

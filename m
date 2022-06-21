@@ -2,112 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BDC55360E
+	by mail.lfdr.de (Postfix) with ESMTP id B15DE55360D
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350330AbiFUP1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S1351811AbiFUP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiFUP1g (ORCPT
+        with ESMTP id S235017AbiFUP1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Jun 2022 11:27:36 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4142A2A971
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:34 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id es26so18167063edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:34 -0700 (PDT)
+Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223662A97B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:35 -0700 (PDT)
+Received: by mail-il1-x14a.google.com with SMTP id w7-20020a056e021c8700b002d3bc8e95cbso9416012ill.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ILeDKuRqs+6KaJKuC3DMca4dsilJZpsBWsm8KWiLros=;
-        b=AbMambO1LB7kdSp+mzCc3liOd7EsJg5F43ijIbQsO676JdbpjQwM6qG9aJstavqgan
-         JDWtRDT3rlmHkaZn2qh4PAzome2qCoQp+jOuXz10+4rg9rNCYMaOPUjqYRtTqNyar7Xr
-         dvKpsKBJ5Z45hzfOiPSeMkMML/++PuAfw9CmA4ZmqfjXpSPizti5IBSH6a1Qg8pnZaFL
-         OTfc4glhUCBbHSpamuedswpCnvaSW1cjg35jkPpTfslqXkTXM9xs5SXJZJ7Bf4zbSs8N
-         VSOkQsAs6uFohQZPg3YIEoZ+p/0JU1I9ePxw7jQZRJhy2qo7SAr2368NOK25rs1qGLYL
-         GFdQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pJAAMlUR9Ydzb8Wli4Gr9USgcKMSCgzvdDTXVExWOBs=;
+        b=qvMB8LoBpaFQ3GQUCSoTnXYGKUdpDLi2qS9fSWosgFZW6a9vh5vMNU1YdL3ai8VSFt
+         BX8jS4oYUYceNUIdKCV4t5VtNX7ciKWxzBUVh7uoogjUG7nvpus5g7xx4STaT7Y1dVT+
+         xYYpueD6bCQPD3QgzWleZSHzHBVbVJpavqmsQiQdHu9PXOH9h0262IVju7GemWKC02N5
+         O+FHafG00jsVpcDQhEdjF4ehUJaXGe9DVYR44q1LKMY088VRjUAABKLdu8NIABYQLb0C
+         Ae0SBv82idmUhns6AGaP+MIdZlQQ2nQQUAlFlh+O+klmpFaCCgAq2CYiZ1ffmeNAXpIA
+         CI2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ILeDKuRqs+6KaJKuC3DMca4dsilJZpsBWsm8KWiLros=;
-        b=fmKI4LawtMjSPdlT1aqtTvx3zCuvFsBnAmm4FSQUrJ9eizkIEBAtcyEZM36KqFzDid
-         IseujgJQKayASX3egUMjEiSWjcet1/v3g3RSWI/FOHeEKQALOOnJFYTtJWVYA9aEVaQO
-         k9ko8ptsQ0sg971uh1J5d/3BZDhFeuH2B0wzZph2xKofWfAMqwv1lORkJPaoOlZadhD6
-         mnyCt6dc59Xd+Wy4guML3T7NHx6ING8JNhsFCGxNU3UyA2toYg6Sd78b5TFEtbucoX6m
-         sDovfc5vVS+TE6wbydfscupKvoK/k41Bg+jb0WITMzWIKlu4ONIynTjWI5H3YOzzL7yQ
-         bSeg==
-X-Gm-Message-State: AJIora/y/nxIPauuOySoFAIB4gBvh7ccSM6U/EWhsCpaFWGabRfwbQUy
-        hHePc615ixPo5Ef9s9TBb2Anq6BJhDCfcS3lP57q3Q==
-X-Google-Smtp-Source: AGRyM1vl1dj3IZNu9lHHH+Fl3VOH/3vv/c4P3JkjJZilD5Y74fS2cnU0d4C05O4nX9JfwTjrn0FjqcAjfOFzgVau2Bs=
-X-Received: by 2002:a05:6402:42d5:b0:433:1727:b31c with SMTP id
- i21-20020a05640242d500b004331727b31cmr36016283edc.9.1655825252741; Tue, 21
- Jun 2022 08:27:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620020727.GA3669@xsang-OptiPlex-9020> <YrBA7ysAif4I9nPv@linutronix.de>
-In-Reply-To: <YrBA7ysAif4I9nPv@linutronix.de>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Tue, 21 Jun 2022 17:27:22 +0200
-Message-ID: <CAMGffEksZGQrdHM9CS0H0Tq4TvfQMAbdcFYZej2KNWY=VxuBQg@mail.gmail.com>
-Subject: Re: [locking/lockdep] 4051a81774: page_allocation_failure:order:#,mode:#(GFP_KERNEL),nodemask=(null)
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        lkp@lists.01.org, lkp@intel.com,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pJAAMlUR9Ydzb8Wli4Gr9USgcKMSCgzvdDTXVExWOBs=;
+        b=CyjjgCHPA/gQueQpdIAOPAfxdsEQlw44FveHxRc178DM9pzXaQ5DbCZlR2plQBwOyH
+         Kb6DRbSHpneOFyhu2OAv4cFaDo9qr23F5RSctLdVScylyCUg8PVhysL6/ev4d9C/vrwL
+         YDbaJmUvP4OqGHE/Gt6AdZNDUqbN/Q+MSAKqmB2QvPfEDmxy/wr8nwxqAOmiWHiypEHi
+         Zhoebi8EP0VpPc2nD9p2U6Vqm+YL8S7o96HbnY4dj+J2x2qrewMX54PQwVa+T46Hc3Rg
+         MJADVYxQiwRzj4Y/WhFOyZRgE1rO9VHZblL8spji26Sk0sO2QdyiHeIe8kZkphg0gMOB
+         ooIA==
+X-Gm-Message-State: AJIora+NkcccB3Jf3fWebFgFz3Xprd3DMqInolnxCz6NKp5+2BJVJMcl
+        3fX5/CYAUq9asMOF9MrtJ1XIBJw+JgTvmA==
+X-Google-Smtp-Source: AGRyM1sxUjFEpBuJrnP39Ob4bVY8ckbZiuOog9KsddFGcK4Q2gPiLHpmQTwxlL016bzslu2xQYcvjIQqcGtHzQ==
+X-Received: from riochico.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:b3e])
+ (user=rsilvera job=sendgmr) by 2002:a02:ac02:0:b0:339:c83a:f6f3 with SMTP id
+ a2-20020a02ac02000000b00339c83af6f3mr2553704jao.174.1655825254515; Tue, 21
+ Jun 2022 08:27:34 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 15:27:25 +0000
+Message-Id: <20220621152725.2668041-1-rsilvera@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+Subject: [PATCH v2] perf: Adjust perf-inject output data offset for backward compatibility
+From:   Raul Silvera <rsilvera@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Raul Silvera <rsilvera@google.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, there
+When perf inject creates a new file, it reuses the data offset from the
+input file. If there has been a change on the size of the header, as
+happened in v5.12 -> v5.13, the new offsets will be wrong, resulting in
+a corrupted output file.
 
-On Mon, Jun 20, 2022 at 11:42 AM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
->
-> + rtrs, infiniband folks.
->
-> On 2022-06-20 10:07:27 [+0800], kernel test robot wrote:
-> > Greeting,
-> >
-> > FYI, we noticed the following commit (built with gcc-11):
-> >
-> > commit: 4051a81774d6d8e28192742c26999d6f29bc0e68 ("locking/lockdep: Use=
- sched_clock() for random numbers")
-> > https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git locking/urgent
-> =E2=80=A6
-> > in testcase: boot
-> >
-> > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2=
- -m 16G
-> >
-> =E2=80=A6
-> > [   17.451787][    T1] rtrs_server L2256: Loading module rtrs_server, p=
-roto 2.0: (max_chunk_size: 131072 (pure IO 126976, headers 4096) , sess_que=
-ue_depth: 512, always_invalidate: 1)
-> > [   17.470894][    T1] swapper: page allocation failure: order:5, mode:=
-0xcc0(GFP_KERNEL), nodemask=3D(null)
->
-> If I read this right, it allocates "512 * 10" chunks of order 5 / 128KiB
-> of memory (contiguous memory). And this appears to fail.
-> This is either a lot of memory or something that shouldn't be used on
-> i386.
-It allocates 512 * 128 KiB of memory, which is probably to big for
-this VM setup.
->
-> Either way, locking/urgent is innocent.
-Agree.
+This change adds the function perf_session__data_offset to compute the
+data offset based on the current header size, and uses that instead of
+the offset from the original input file.
 
-Thanks!
+Signed-off-by: Raul Silvera <rsilvera@google.com>
+---
+Changes since v1:
+ - Use the adjusted header->data_offset in do_write_header instead of
+   recomputing it.
+---
+ tools/perf/builtin-inject.c |  2 +-
+ tools/perf/util/header.c    | 14 ++++++++++++++
+ tools/perf/util/header.h    |  2 ++
+ 3 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index a75bf11585b5..1dfdcef36607 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -916,7 +916,7 @@ static int __cmd_inject(struct perf_inject *inject)
+ 		inject->tool.tracing_data = perf_event__repipe_tracing_data;
+ 	}
+ 
+-	output_data_offset = session->header.data_offset;
++	output_data_offset = perf_session__data_offset(session->evlist);
+ 
+ 	if (inject->build_id_all) {
+ 		inject->tool.mmap	  = perf_event__repipe_buildid_mmap;
+diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+index 53332da100e8..6ad629db63b7 100644
+--- a/tools/perf/util/header.c
++++ b/tools/perf/util/header.c
+@@ -3686,6 +3686,20 @@ int perf_session__write_header(struct perf_session *session,
+ 	return perf_session__do_write_header(session, evlist, fd, at_exit, NULL);
+ }
+ 
++size_t perf_session__data_offset(const struct evlist *evlist)
++{
++	struct evsel *evsel;
++	size_t data_offset;
++
++	data_offset = sizeof(struct perf_file_header);
++	evlist__for_each_entry(evlist, evsel) {
++		data_offset += evsel->core.ids * sizeof(u64);
++	}
++	data_offset += evlist->core.nr_entries * sizeof(struct perf_file_attr);
++
++	return data_offset;
++}
++
+ int perf_session__inject_header(struct perf_session *session,
+ 				struct evlist *evlist,
+ 				int fd,
+diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
+index 08563c1f1bff..56916dabce7b 100644
+--- a/tools/perf/util/header.h
++++ b/tools/perf/util/header.h
+@@ -136,6 +136,8 @@ int perf_session__inject_header(struct perf_session *session,
+ 				int fd,
+ 				struct feat_copier *fc);
+ 
++size_t perf_session__data_offset(const struct evlist *evlist);
++
+ void perf_header__set_feat(struct perf_header *header, int feat);
+ void perf_header__clear_feat(struct perf_header *header, int feat);
+ bool perf_header__has_feat(const struct perf_header *header, int feat);
+-- 
+2.37.0.rc0.104.g0611611a94-goog
+

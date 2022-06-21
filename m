@@ -2,116 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AA2552C18
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E0E552C23
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347500AbiFUHcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S1346266AbiFUHdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344693AbiFUHb1 (ORCPT
+        with ESMTP id S1347576AbiFUHcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:31:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B024E65E3;
-        Tue, 21 Jun 2022 00:30:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5B2541F9C6;
-        Tue, 21 Jun 2022 07:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655796612; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U4DTymAJzJ+35tPlIxji4RhmkYgZWhkrVnEK1homBN0=;
-        b=xDXlEOxSp1VNq0dGCbuV8cBqopmOOBe+A2BB5vgty35t9Pc/P9Zy4i4FWvAzDXkWFKrVsH
-        pB3OKphPeQk5Zzg0nAX5T+R8q37T1TUR75oNH/oCzzYq2pELsarXQyJu0C2STfbnRBlrsk
-        YcOuN/YP1HGwMUimbind212F/PcAhB8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655796612;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U4DTymAJzJ+35tPlIxji4RhmkYgZWhkrVnEK1homBN0=;
-        b=hnBmxj3WK/dvg/U4SLwzrQISzWAXPwW72yyFMPep1j5ut5MiSRm/2ycY7Kw53Tm92v7F1T
-        uO3z7yVLSQtDwOAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26E8613638;
-        Tue, 21 Jun 2022 07:30:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5lt1CIRzsWIJZwAAMHmgww
-        (envelope-from <jslaby@suse.cz>); Tue, 21 Jun 2022 07:30:12 +0000
-Message-ID: <14c9839b-c015-69c1-84f0-a99d03877005@suse.cz>
-Date:   Tue, 21 Jun 2022 09:30:11 +0200
+        Tue, 21 Jun 2022 03:32:55 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC8E6472;
+        Tue, 21 Jun 2022 00:32:54 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id p5so6475069pjt.2;
+        Tue, 21 Jun 2022 00:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b/lnUx0hJ7HqJOINayp9iAYgQI8WL9Iz9w2/x6bwfX4=;
+        b=RnUTro16AXZ0eBQ3b6jODrf2FLbY6MWXm+1M8J3korWvN95fVWDrOvROe4RGaXa6ZV
+         ywmLOOWMirDtDb4x2TSxc2kGKU4h+Fl4dOnwkSWhi05CXKMJjyzP1MuukEDeSXvSUeQq
+         EoeBXRjqLYLI2oMab3Cg5Eqgl/Hu/DQgsFFpTPG6nABHA7LQSAphe7pF3Sm33Qor/Dby
+         MEfCNMfqmwa0Fj0DhglTSDPYZq+dzphCcOPvFCZv69dlyIkuUKdJCWLHc8N/PeSKKgU3
+         R6wxIYP9NiBxI2E1Xg1m1ByTLrfSveOFXuzcQAMM5gLo56lfVGynDan1QC4NWpk8rYae
+         awsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b/lnUx0hJ7HqJOINayp9iAYgQI8WL9Iz9w2/x6bwfX4=;
+        b=5Lh3M/3qRTnJ5P2WOe+GxsxxYO8sjx5sKIivxDqyKJljzYArAgLkUY5boWVNRBF640
+         ighKFhKsCOjXOjauABh69+3D1bb1tia78cRmg/oha/eEw7NGJsuynACNNXzotOYztWl+
+         6uNChbiMRksBIg/ZXGKtSKNZ5TtZBYx6wf+sSugMgeTx3YmdjsOpZE8VhsDtMCGGbhCO
+         imhab/KqH0iSELG9TftVizUbuxBNNyTrI7COppCKRUHBYiEAUxgPbe5B3ZwnKeUnvoJq
+         Gc7QPMXcTlyumFtVsPzu2w6SlwJ3QlNCNcAeGDU56lb5Bq6bQJTFrSLpUAoisV9c+6vw
+         lbIA==
+X-Gm-Message-State: AJIora+8Sj/0GG9lyWAi73Xz4Uzh+sD+unUJMZmo6QAU7D8NRGXbp92A
+        ar4tb/tn2cT7mqPYt5xmXw4=
+X-Google-Smtp-Source: AGRyM1u7kuN98EazRnRgzVwwdQ0H23jAruWbOed9O8/IYVCI1vHt1AHRq1XiCb3ltxIfkRLSlXh74g==
+X-Received: by 2002:a17:902:d50b:b0:16a:2cb3:74f7 with SMTP id b11-20020a170902d50b00b0016a2cb374f7mr6357042plg.6.1655796773424;
+        Tue, 21 Jun 2022 00:32:53 -0700 (PDT)
+Received: from localhost.localdomain ([47.242.114.172])
+        by smtp.gmail.com with ESMTPSA id jj4-20020a170903048400b001678898ad06sm3944394plb.47.2022.06.21.00.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 00:32:52 -0700 (PDT)
+From:   Chuang W <nashuiliang@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Chuang W <nashuiliang@gmail.com>,
+        Jingren Zhou <zhoujingren@didiglobal.com>
+Subject: [PATCH v2] libbpf: Cleanup the kprobe_event on failed add_kprobe_event_legacy()
+Date:   Tue, 21 Jun 2022 15:32:33 +0800
+Message-Id: <20220621073233.53776-1-nashuiliang@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-References: <20220616104541.16289-1-jslaby@suse.cz>
- <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
- <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
- <CA+icZUUSTcrJqZB-gwNYt5objVg1J5+Ous6_hof0_A6eVCM-Kg@mail.gmail.com>
- <CAKwvOdmb5xdF70TzNp=4STCpzkGh16FnuKE1KbdzDhHt=OuRFA@mail.gmail.com>
-From:   Jiri Slaby <jslaby@suse.cz>
-In-Reply-To: <CAKwvOdmb5xdF70TzNp=4STCpzkGh16FnuKE1KbdzDhHt=OuRFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17. 06. 22, 18:32, Nick Desaulniers wrote:
-> On Fri, Jun 17, 2022 at 3:35 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->>
->> On Fri, Jun 17, 2022 at 12:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->>>
->>> On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->>>>
->>>> On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
->>>>>
->>>>> Until the link-vmlinux.sh split (cf. the commit below), the linker was
->>>>> run with jobserver set in MAKEFLAGS. After the split, the command in
->>>>> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
->>>>> is lost.
->>>>>
->>>>> Restore it as linkers working in parallel (esp. the LTO ones) make a use
->>>>> of it.
-> 
-> TBH, I agree with Masahiro. I didn't understand this comment "esp. the
-> LTO ones."  Jiri, can you clarify what you mean here?
+Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
+livepatch"), in a scenario where livepatch and kprobe coexist on the
+same function entry, the creation of kprobe_event using
+add_kprobe_event_legacy() will be successful, at the same time as a
+trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
+perf_event_open() will return an error because both livepatch and kprobe
+use FTRACE_OPS_FL_IPMODIFY.
 
-Sure. clang is not the only compiler/linker that can handle kernel ;). 
-So while rebasing gcc-LTO-kernel-patches to 5.19-rc (to upstream them 
-later), this broke. See:
-https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/lto-wrapper.cc;h=26e06e77be4e0afb2bc3e913062a9c51cab5d205;hb=HEAD#l1336
+With this patch, whenever an error is returned after
+add_kprobe_event_legacy(), this ensures that the created kprobe_event is
+cleaned.
 
-gcc really parses MAKEFLAGS and looks for "--jobserver-auth=" there, if 
-one passes specifies -flto=jobserver.
+Signed-off-by: Chuang W <nashuiliang@gmail.com>
+Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
+---
+ tools/lib/bpf/libbpf.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-thanks,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0781fae58a06..d0a36350e22a 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10809,10 +10809,11 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+ 	}
+ 	type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
+ 	if (type < 0) {
++		err = type;
+ 		pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
+ 			kfunc_name, offset,
+-			libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
+-		return type;
++			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
++		goto clear_kprobe_event;
+ 	}
+ 	attr.size = sizeof(attr);
+ 	attr.config = type;
+@@ -10826,9 +10827,14 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+ 		err = -errno;
+ 		pr_warn("legacy kprobe perf_event_open() failed: %s\n",
+ 			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+-		return err;
++		goto clear_kprobe_event;
+ 	}
+ 	return pfd;
++
++clear_kprobe_event:
++	/* Clear the newly added kprobe_event */
++	remove_kprobe_event_legacy(probe_name, retprobe);
++	return err;
+ }
+ 
+ struct bpf_link *
 -- 
-js
-suse labs
+2.34.1
+

@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F068C5534A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D315534A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351821AbiFUOgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S1351816AbiFUOg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiFUOgs (ORCPT
+        with ESMTP id S1351476AbiFUOgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:36:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9024970
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:36:47 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id v1so27901785ejg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=GJLwzs2N2pKacf0ZdpQ3Wu/SeO3mykpG6QqRYLAhfmk=;
-        b=N6BE6BxVqA8S6MZ6jXtPrW+5fvbwqzTVoAHhh3M6wcy6Cp3FV3fMh6BLMAvKVNnIfu
-         N3CoCOxglGEajhXHoucNcwECSyZ/r+5cwTJu0HYMEaNbYQEZAXIf0ZLUR3VVuqXCKy/M
-         +cPfNworLHTQ6NGyNeJOo4OYiEmoloxSMmG7tq/orOseY2bXZvl0/T7T3dv/VDsT6jP5
-         TF8L4ho8OddkWkPEJ/HtUuM8JU1NqfqYsQpQdrNW+1GuxdhOSAKbdjT6TtYj82lAIH68
-         avk9dDAYHsqPI4Kwg6aZPdtWGSyJDDhDzeVgox8yE0RAvGFjz6ykgpn2s6NlcobiiEBB
-         LnJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=GJLwzs2N2pKacf0ZdpQ3Wu/SeO3mykpG6QqRYLAhfmk=;
-        b=KkfyT3ekNPa9g/ETX9MhgfVu8dhbeI2HAwKa2wvGHTE8kUIBPpjJvaCQPzlBDbn+il
-         Va2Llqp0/11cHwsiEzizXDqy3RUwe/z8AqyjnFBGwQgnegNNLbj9IEdb1ruKgVEMCciL
-         Zyiu4Y5zPCiQVlwETJrllH53N+FR6AjZ6tGT2Ir4kcW185LLssGD6YVDGfGVe/71NL6s
-         dQd0Wu4c5zlAIo9aUdpL06yQeJ4giMY+ftbaKWwj4mqKmtJNbu01aAFuJEe36MwJeiMq
-         6RTaXAju9TseeacjTCK9+pvAYmY0cLrQ2KkPKgmCqUpb4wUPXkjhxr9nMtHHr/ac1sGq
-         VSHA==
-X-Gm-Message-State: AJIora+3jKwA/+Ailm8aC90b3Lkf2ESAXD9b76okuzPS5J9NlYpGtFdJ
-        tOfGl5JT+uJ90JHANMGRliwIHNGvTkWm0Jo4+AICkoNZebbCfsmh1uw=
-X-Google-Smtp-Source: AGRyM1sgOphI4tXDIE/cP6e1t4c0owyLW5pNlViUlFMGQUq41Aw+paKFZiYauH2ZneR1k5TX7rpbx+1VF9WS4NhuzOI=
-X-Received: by 2002:a17:906:9b96:b0:711:d21c:1b0b with SMTP id
- dd22-20020a1709069b9600b00711d21c1b0bmr26352742ejc.365.1655822205405; Tue, 21
- Jun 2022 07:36:45 -0700 (PDT)
+        Tue, 21 Jun 2022 10:36:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E766920BEA;
+        Tue, 21 Jun 2022 07:36:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8319F6168D;
+        Tue, 21 Jun 2022 14:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7A8C3411C;
+        Tue, 21 Jun 2022 14:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655822183;
+        bh=9hzVJBmXejWxqKoWbTYAA5mBykUEAvY+19xhKlfx+aM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h9XH0EAkI74XOBgpK92u1iqaQqlF0Y5PaZFC9rX4RJWOuJSVJ6268ltKh196Uo5Do
+         geb/cdM+8qvDgcfiue/PulRRVnhw2W3dZY5G1/hdVBDtVESzt5DuTuguC5gtAaJ4Z1
+         hfwKwY5OmnlhzASl4GhLJFBvltZK70nVMaEJ/qQU=
+Date:   Tue, 21 Jun 2022 16:36:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Subject: Re: [PATCH v2 0/2] Add support for PolarFire SoC's musb controller
+Message-ID: <YrHXZYe4e4vlCHh3@kroah.com>
+References: <20220613114642.1615292-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Tue, 21 Jun 2022 22:36:04 +0800
-Message-ID: <CAD-N9QVVKUDFKMSxUc-smcz0B_7PrjN3DPku+cDM3ZKDn0XLBA@mail.gmail.com>
-Subject: Unitialized Variable and Null Pointer Dereference bug in gb_bootrom_get_firmware
-To:     vireshk@kernel.org, Johan Hovold <johan@kernel.org>,
-        elder@kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220613114642.1615292-1-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi maintainers,
+On Mon, Jun 13, 2022 at 12:46:41PM +0100, Conor Dooley wrote:
+> Hey Bin, Greg,
+> Short series here adding support for USB on Microchip PolarFire SoC FPGAs.
+> The kconfig dependency for INVENTRA_DMA has become a bit of a mouthful,
+> is there a better way of dealing with that?
+> Thanks,
+> Conor.
+> 
+> Changes since v1:
+> - Drop unneeded resource copying as per Rob's changes to the other drivers
+> - Drop the dts patch
+> 
+> Conor Dooley (2):
+>   usb: musb: Add support for PolarFire SoC's musb controller
+>   MAINTAINERS: add musb to PolarFire SoC entry
+> 
+>  MAINTAINERS               |   1 +
+>  drivers/usb/musb/Kconfig  |  13 +-
+>  drivers/usb/musb/Makefile |   1 +
+>  drivers/usb/musb/mpfs.c   | 265 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 279 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/usb/musb/mpfs.c
+> 
+> 
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+> -- 
+> 2.36.1
+> 
 
-I would like to send one bug report.
+Any chance you can get your company to fix up their email settings:
 
-In gb_bootrom_get_firmware, if the first branch is satisfied, it will
-go to queue_work, leading to the dereference of uninitialized const
-variable "fw". If the second branch is satisfied, it will go to unlock
-with fw as NULL pointer, leading to a NULL Pointer Dereference.
+Grabbing thread from lore.kernel.org/all/20220613114642.1615292-1-conor.dooley%40microchip.com/t.mbox.gz
+Analyzing 4 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+  ✗ [PATCH v2 1/2] usb: musb: Add support for PolarFire SoC's musb controller
+  ✗ [PATCH v2 2/2] MAINTAINERS: add musb to PolarFire SoC entry
+  ---
+  ✗ BADSIG: DKIM/microchip.com
+---
+Total patches: 2
 
-The Fixes commit should be [1], introducing the dereference of "fw" in
-the error handling code.
+If I didn't know better, I would think you were spoofing the address...
 
-I am not sure how to fix this bug. Any comment on removing the
-dereference of fw?
+thanks,
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a4293e1d4e6416477976ee3bd248589d3fc4bb19
-
---
-My best regards to you.
-
-     No System Is Safe!
-     Dongliang Mu
+greg k-h

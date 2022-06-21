@@ -2,175 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17641552A93
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B43552A94
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345158AbiFUFr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 01:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S1345281AbiFUFrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 01:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344023AbiFUFrR (ORCPT
+        with ESMTP id S235691AbiFUFrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 01:47:17 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3284C21E37;
-        Mon, 20 Jun 2022 22:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655790436; x=1687326436;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H6eOoeZPnAT6VYygHS8cwp1zCgFsow4wpSTibez9E74=;
-  b=zXvb1MwNahSoLl7ms4WUg6GUYTFRyJUUgbNBHNbfxs8c7QwFaFy8+QkO
-   IhRDIO32l3QU91kDBA/WcPnQNLSQW3WhgBwUdSEJuDPOhqay1TV5vhv8U
-   abSLTe7WKCsGqWq3QBLACzHr9tWCw6Igyb49GZOL9A845cYpMfqPY2oXi
-   4=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jun 2022 22:47:15 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 22:47:15 -0700
-Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
- 2022 22:47:13 -0700
-Message-ID: <9de7f497-a4cd-ebdb-e912-d4cd73b4a982@quicinc.com>
-Date:   Tue, 21 Jun 2022 11:17:10 +0530
+        Tue, 21 Jun 2022 01:47:23 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5861321E2B
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:47:22 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 64A0D41A42;
+        Tue, 21 Jun 2022 05:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1655790439; bh=ijFdzRKGTtoK1EVyxIS8irIozCEEUXj0UcZnJdewx9o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=q1Y5wLaoxNsvyVxoe1tMqYu3F2C3TZU1t83aZmhfMJKOJpopgE/2q5lzAPty2tvDw
+         6Z7C6s0YGAZnEbPM1BmgwIVF/AvqFrYgebhKpqDmT6FmZuOR6GxwrvWyyi9/9BS81n
+         tOoLJScys6Nu2niNI5TERljSVQldBkk4+PINFEpQ34EZNqhosbAPy/6YrzLrWWGoDI
+         7jw1dux7hSAR2p5lwij4IAkQVa4u/sJVoFoY2CNA181BaXUriBLwi3kFwDE+TErbNG
+         tPr2+6aFxko7u8wixxz9YoYVH4bvtJE4HRIWPb3O620lQ9YYjMKXzxfrS0TjHQKpTW
+         r5pkDpBUyPJqQ==
+Message-ID: <703c04df-9b61-0aca-9b2c-41f5a293e828@marcan.st>
+Date:   Tue, 21 Jun 2022 14:47:15 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH rcu 02/12] rcu: Avoid tracing a few functions executed in
- stop machine
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        <rostedt@goodmis.org>, Patrick Wang <patrick.wang.shcn@gmail.com>
-References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
- <20220620222032.3839547-2-paulmck@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <20220620222032.3839547-2-paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: [PATCH] MAINTAINERS: add ARM/APPLE MACHINE mailing list
+Content-Language: es-ES
+To:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Cc:     linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220602173144.2263-1-sven@svenpeter.dev>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20220602173144.2263-1-sven@svenpeter.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
-> From: Patrick Wang <patrick.wang.shcn@gmail.com>
-> 
-> Stop-machine recently started calling additional functions while waiting:
-> 
-> ----------------------------------------------------------------
-> Former stop machine wait loop:
-> do {
->      cpu_relax(); => macro
->      ...
-> } while (curstate != STOPMACHINE_EXIT);
-> -----------------------------------------------------------------
-> Current stop machine wait loop:
-> do {
->      stop_machine_yield(cpumask); => function (notraced)
->      ...
->      touch_nmi_watchdog(); => function (notraced, inside calls also notraced)
->      ...
->      rcu_momentary_dyntick_idle(); => function (notraced, inside calls traced)
-> } while (curstate != MULTI_STOP_EXIT);
-> ------------------------------------------------------------------
-> 
-> These functions (and the functions that they call) must be marked
-> notrace to prevent them from being updated while they are executing.
-> The consequences of failing to mark these functions can be severe:
-> 
->    rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
->    rcu: 	1-...!: (0 ticks this GP) idle=14f/1/0x4000000000000000 softirq=3397/3397 fqs=0
->    rcu: 	3-...!: (0 ticks this GP) idle=ee9/1/0x4000000000000000 softirq=5168/5168 fqs=0
->    	(detected by 0, t=8137 jiffies, g=5889, q=2 ncpus=4)
->    Task dump for CPU 1:
->    task:migration/1     state:R  running task     stack:    0 pid:   19 ppid:     2 flags:0x00000000
->    Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->    Call Trace:
->    Task dump for CPU 3:
->    task:migration/3     state:R  running task     stack:    0 pid:   29 ppid:     2 flags:0x00000000
->    Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->    Call Trace:
->    rcu: rcu_preempt kthread timer wakeup didn't happen for 8136 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
->    rcu: 	Possible timer handling issue on cpu=2 timer-softirq=594
->    rcu: rcu_preempt kthread starved for 8137 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=2
->    rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
->    rcu: RCU grace-period kthread stack dump:
->    task:rcu_preempt     state:I stack:    0 pid:   14 ppid:     2 flags:0x00000000
->    Call Trace:
->      schedule+0x56/0xc2
->      schedule_timeout+0x82/0x184
->      rcu_gp_fqs_loop+0x19a/0x318
->      rcu_gp_kthread+0x11a/0x140
->      kthread+0xee/0x118
->      ret_from_exception+0x0/0x14
->    rcu: Stack dump where RCU GP kthread last ran:
->    Task dump for CPU 2:
->    task:migration/2     state:R  running task     stack:    0 pid:   24 ppid:     2 flags:0x00000000
->    Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->    Call Trace:
-> 
-> This commit therefore marks these functions notrace:
->   rcu_preempt_deferred_qs()
->   rcu_preempt_need_deferred_qs()
->   rcu_preempt_deferred_qs_irqrestore()
-> 
-
-Only the preemptible RCU definitions are updated; so, this change is not 
-required for non-preemptible RCU case?
-
-
-Thanks
-Neeraj
-
-> Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+On 03/06/2022 02.31, Sven Peter wrote:
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 > ---
->   kernel/rcu/tree_plugin.h | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> index c8ba0fe17267c..440d9e02a26e0 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -460,7 +460,7 @@ static bool rcu_preempt_has_tasks(struct rcu_node *rnp)
->    * be quite short, for example, in the case of the call from
->    * rcu_read_unlock_special().
->    */
-> -static void
-> +static notrace void
->   rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
->   {
->   	bool empty_exp;
-> @@ -581,7 +581,7 @@ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
->    * is disabled.  This function cannot be expected to understand these
->    * nuances, so the caller must handle them.
->    */
-> -static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
-> +static notrace bool rcu_preempt_need_deferred_qs(struct task_struct *t)
->   {
->   	return (__this_cpu_read(rcu_data.cpu_no_qs.b.exp) ||
->   		READ_ONCE(t->rcu_read_unlock_special.s)) &&
-> @@ -595,7 +595,7 @@ static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
->    * evaluate safety in terms of interrupt, softirq, and preemption
->    * disabling.
->    */
-> -static void rcu_preempt_deferred_qs(struct task_struct *t)
-> +static notrace void rcu_preempt_deferred_qs(struct task_struct *t)
->   {
->   	unsigned long flags;
->   
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 55114e73de26..621eeb037a91 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1826,6 +1826,7 @@ ARM/APPLE MACHINE SUPPORT
+>  M:	Hector Martin <marcan@marcan.st>
+>  M:	Sven Peter <sven@svenpeter.dev>
+>  R:	Alyssa Rosenzweig <alyssa@rosenzweig.io>
+> +L:	asahi@lists.linux.dev
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+>  W:	https://asahilinux.org
+
+Applied to asahi-soc/maintainers. Thanks!
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

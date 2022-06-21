@@ -2,105 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F141553AA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9720B553AAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354015AbiFUTec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S1354052AbiFUTgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353394AbiFUTeb (ORCPT
+        with ESMTP id S1348473AbiFUTgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:34:31 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B30B25C76
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:34:29 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 82EDA2800B3C7;
-        Tue, 21 Jun 2022 21:34:27 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 6B9162732F7; Tue, 21 Jun 2022 21:34:27 +0200 (CEST)
-Date:   Tue, 21 Jun 2022 21:34:27 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     ira.weiny@intel.com, Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V11 5/8] cxl/port: Read CDAT table
-Message-ID: <20220621193427.GA25003@wunner.de>
-References: <20220610202259.3544623-1-ira.weiny@intel.com>
- <20220610202259.3544623-6-ira.weiny@intel.com>
- <62ad1fb69d742_8920729490@dwillia2-xfh.notmuch>
- <62b2178bdcf5d_89207294ac@dwillia2-xfh.notmuch>
+        Tue, 21 Jun 2022 15:36:45 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE292D1D0;
+        Tue, 21 Jun 2022 12:36:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E0BE0CE1C1F;
+        Tue, 21 Jun 2022 19:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0076AC341C4;
+        Tue, 21 Jun 2022 19:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655840201;
+        bh=/fhO8DKOPNqPlZBEyqMbHF7H/mKy0R9KV9oyQ1GuVeM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=he2Za5EBD/5TYylCuV5tsn3rzYx4ZTNI9Vw3J556c18n/dhFyh2bGZZ0/rFMNQCQC
+         0oUWBhtdFJAmRsiOz4aInOhQ0t/RybZ/YA1R1+Ap0V5/mkRsxvGTXzzb1EqeoJgmw1
+         eCL2WiVJdMp+YvrnQPHTcOUE2ABoJscI9GeCh53IdT9luyTWu+k+nqKFTmb/uvC/uy
+         mM3MCJ3aumWB1UljHJmgcmlHELtHVm9CtzJ0giiwKnDr5V2pl1Z3wdpDTBfKzr1DDD
+         kW9IQmru1yithHauxeBYf/p7Wb1/TOfGRlSsg3pJAJ+yRkNQ8Ehxwq6qhvVQn1sZ4Q
+         g54LuYWML2jbA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 936E45C0500; Tue, 21 Jun 2022 12:36:40 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 12:36:40 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+Cc:     "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-team@fb.com" <kernel-team@fb.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH rcu 12/12] srcu: Block less aggressively for expedited
+ grace periods
+Message-ID: <20220621193640.GN1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
+ <20220620222032.3839547-12-paulmck@kernel.org>
+ <fef4fbd55b88481490d52cbd65e1b1f8@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <62b2178bdcf5d_89207294ac@dwillia2-xfh.notmuch>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <fef4fbd55b88481490d52cbd65e1b1f8@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 12:10:03PM -0700, Dan Williams wrote:
-> It is really the interrupt setup that makes this an awkward fit all
-> around. The PCI core knows how to handle capabilities with interrupts,
-> but only for PCIe port services. DOE is both a PCIe port service *and*
-> and "endpoint service" like VPD (pci_vpd_init()). The more I think about
-> this the closer I get to the recommendation from Lukas which is that
-> DOE is more like pci_vpd_init() than pci_aer_init(), or a custom
-> enabling per driver.
+On Tue, Jun 21, 2022 at 07:43:08AM +0000, Shameerali Kolothum Thodi wrote:
 > 
-> If the DOE enumeration moves to a sub-function of
-> pci_init_capabilities() then the cxl_pci and/or cxl_port drivers just
-> look those up and use them. The DOE instances would remain in polled
-> mode unless and until a PCI driver added interrupt support late. In
-> other words, DOE can follow the VPD init model as long as interrupts are
-> not involved, and if interrupts are desired it requires late allocation
-> of IRQ vectors.
+> 
+> > -----Original Message-----
+> > From: Paul E. McKenney [mailto:paulmck@kernel.org]
+> > Sent: 20 June 2022 23:21
+> > To: rcu@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org; kernel-team@fb.com;
+> > rostedt@goodmis.org; Paul E. McKenney <paulmck@kernel.org>; Zhangfei
+> > Gao <zhangfei.gao@linaro.org>; Shameerali Kolothum Thodi
+> > <shameerali.kolothum.thodi@huawei.com>; Paolo Bonzini
+> > <pbonzini@redhat.com>
+> > Subject: [PATCH rcu 12/12] srcu: Block less aggressively for expedited grace
+> > periods
+> > 
+> > Commit 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> > from consuming CPU") fixed a problem where a long-running expedited
+> > SRCU
+> > grace period could block kernel live patching.  It did so by giving up
+> > on expediting once a given SRCU expedited grace period grew too old.
+> > 
+> > Unfortunately, this added excessive delays to boots of embedded systems
+> > running on qemu that use the ARM IORT RMR feature. 
+> 
+> As pointed out here[0]/[1], this delay has nothing to do with ARM IORT RMR
+> feature. The delay is due to the "-bios QEMU_EFI.fd" line which emulates flash
+> devices and requires excessive memslot ops during boot.
 
-Thomas Gleixner has been working on dynamic allocation of MSI-X vectors.
-We should probably just build on that and let the PCI core allocate
-vectors for DOE mailboxes independently from drivers.
+Good eyes, and I will update.
 
-To conserve vectors, I'd delay allocation for a DOE mailbox until
-it is first used.  There may be mailboxes that are never used.
+Are we stuck with the excessive memslot ops?  If not, great.
 
-DOE requires MSI-X or MSI.  We could probably leave MSI unsupported
-until a device with broken MSI-X support shows up.  I envision that
-with MSI, the onus is on the driver to allocate vectors for mailboxes
-it intends to use and it would then have to "donate" those vectors
-to the PCI core via a library function.
+If we are stuck with them, there probably needs to be a way of adjusting
+the SRCU delay parameters.  Making "-bios QEMU_EFI.fd" go quickly seems
+to require quite a bit of spinning, more than is likely to be helpful
+in general.
 
-As for portdrv, that's a driver but Bjorn has expressed a desire
-for a long time to move its functionality into the PCI core.
-It shouldn't be allowed to unbind portdrv via sysfs and thus break
-DPC etc, as is currently possible.
+							Thanx, Paul
 
-The question with regards to this series is, do we get *something*
-merged and perfect it over time once it's in the tree, or do we
-keep iterating on the mailing list.  I deliberately only provided
-a single, comprehensive review and then stayed mum because I feel
-bad for Ira having to keep reacting to more and more feedback
-despite being at v11 already (or v12?  I've lost count).
-Particularly because I suspect (I might be mistaken) that Ira's
-natural habitat is actually CXL not PCI, so it might be a burden for him.
-I'd be fine to implement suggestions I've made myself after Ira's
-series lands.  No need for him to keep iterating ad infinitum.
-
-Thanks,
-
-Lukas
+> Thanks,
+> Shameer
+> 
+> [0] https://lore.kernel.org/all/110bbec5cee74efba0aad64360069a12@huawei.com/
+> [1] https://lore.kernel.org/all/8735g649ew.wl-maz@kernel.org/
+> 
+> 
+>  This commit
+> > therefore
+> > makes the transition away from expediting less aggressive, increasing
+> > the per-grace-period phase number of non-sleeping polls of readers from
+> > one to three and increasing the required grace-period age from one jiffy
+> > (actually from zero to one jiffies) to two jiffies (actually from one
+> > to two jiffies).
+> > 
+> > Fixes: 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> > from consuming CPU")
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Reported-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+> > Reported-by: chenxiang (M)" <chenxiang66@hisilicon.com>
+> > Cc: Shameerali Kolothum Thodi  <shameerali.kolothum.thodi@huawei.com>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Link:
+> > https://lore.kernel.org/all/20615615-0013-5adc-584f-2b1d5c03ebfc@linaro
+> > .org/
+> > ---
+> >  kernel/rcu/srcutree.c | 20 +++++++++++++-------
+> >  1 file changed, 13 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > index 50ba70f019dea..0db7873f4e95b 100644
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct
+> > *ssp)
+> > 
+> >  #define SRCU_INTERVAL		1	// Base delay if no expedited GPs
+> > pending.
+> >  #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from
+> > slow readers.
+> > -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase
+> > consecutive no-delay instances.
+> > +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase
+> > consecutive no-delay instances.
+> >  #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay
+> > instances.
+> > 
+> >  /*
+> > @@ -522,16 +522,22 @@ static bool srcu_readers_active(struct srcu_struct
+> > *ssp)
+> >   */
+> >  static unsigned long srcu_get_delay(struct srcu_struct *ssp)
+> >  {
+> > +	unsigned long gpstart;
+> > +	unsigned long j;
+> >  	unsigned long jbase = SRCU_INTERVAL;
+> > 
+> >  	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
+> > READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+> >  		jbase = 0;
+> > -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
+> > -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
+> > -	if (!jbase) {
+> > -		WRITE_ONCE(ssp->srcu_n_exp_nodelay,
+> > READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> > -		if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
+> > SRCU_MAX_NODELAY_PHASE)
+> > -			jbase = 1;
+> > +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
+> > +		j = jiffies - 1;
+> > +		gpstart = READ_ONCE(ssp->srcu_gp_start);
+> > +		if (time_after(j, gpstart))
+> > +			jbase += j - gpstart;
+> > +		if (!jbase) {
+> > +			WRITE_ONCE(ssp->srcu_n_exp_nodelay,
+> > READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> > +			if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
+> > SRCU_MAX_NODELAY_PHASE)
+> > +				jbase = 1;
+> > +		}
+> >  	}
+> >  	return jbase > SRCU_MAX_INTERVAL ? SRCU_MAX_INTERVAL : jbase;
+> >  }
+> > --
+> > 2.31.1.189.g2e36527f23
+> 

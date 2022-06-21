@@ -2,171 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DEE552938
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662A8552939
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245318AbiFUCDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 22:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S245555AbiFUCFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245293AbiFUCD1 (ORCPT
+        with ESMTP id S235637AbiFUCF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:03:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91D2812AD9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:03:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655777004;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IVPj9SjPI5d2SP8Pi1Lc48AwNlNeq5JfO4Z+hjmJ/t0=;
-        b=FiK0ZiZ9eUQWCoRj5tq+ClNmWZf6F6SZye0fneT5OO8EZ4F2aqFUFD/so52IUMGm0RcoFQ
-        sYV5Gv5XmBz6v7u3XEp2OrAbJJmBL0xrPodaDUfj0lfGbP9IfP7ptsDXp3ixKs9NZPlmfz
-        vBpnDNVNpI1PtBfoKk4UrHUh783311M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-116-BDApwYCrMjGSFGC81FHmxQ-1; Mon, 20 Jun 2022 22:03:19 -0400
-X-MC-Unique: BDApwYCrMjGSFGC81FHmxQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 51CFD80A0AD;
-        Tue, 21 Jun 2022 02:03:18 +0000 (UTC)
-Received: from [10.22.32.175] (unknown [10.22.32.175])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 876F7492C3B;
-        Tue, 21 Jun 2022 02:03:17 +0000 (UTC)
-Message-ID: <d93b9e08-7976-2901-b363-f9b3b36a884f@redhat.com>
-Date:   Mon, 20 Jun 2022 22:03:17 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [rcu] b709abb270:
- WARNING:at_kernel/rcu/tasks.h:#rcu_tasks_verify_work_fn
+        Mon, 20 Jun 2022 22:05:27 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DBF15FD5;
+        Mon, 20 Jun 2022 19:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655777126; x=1687313126;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=qOKhlP7BAqQsgm+YBT83Ieabq3gpM2a/MMl+VD+2aQ8=;
+  b=XHTcg0NnNWxHwk1oYeelI3BhbGVpyCaY58cqzEWRIg3sIw8XPRgLa2dh
+   snLWR4qsD1oAWB/8duu8DWb4GC3sP45+SieGxOO0i0tfg+bLnCbERZhEH
+   B+Owf0UOhF4b0cAnVpEimK7jLgD2cnAyNp89mBIZCsHMGWbRNNznVQuC2
+   /TEUOmLa4rjCJBo8QrntFXCBOIejErwufX4ouee4eOtQVB7w61dNgjFsg
+   Jgfy1j6zHDVSQzFBQzRGJKwqYDPsYdgYeJifwAw8mZqvR+vTgrTPNXSy1
+   yq96d5xT8m1ogilVSvVFdCRz4w/MD1UiJJTOEvcPvgzPX7kmeLXjIvMP2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="268724801"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="268724801"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 19:05:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="654926804"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Jun 2022 19:05:25 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 20 Jun 2022 19:05:25 -0700
+Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 20 Jun 2022 19:05:24 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Mon, 20 Jun 2022 19:05:24 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.42) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Mon, 20 Jun 2022 19:05:24 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mrwxESjXJAeVnWSX53EEfxgZNQ5MPLSEhavPltBNFnKSE+LyojGFZ12sEGczqOpR9Nm4fY8lPItu4YSldEs1NRbZTGeDNqUaN5Hd4lz+jtzXCdaFjjDwE0mPAWhnaUmxFp7o8rfkBgJxICB9xgfWoTVbWrUcRrbb13kRqAB/Ws4MSfr0iPEizf/cUmNAaCmGEZiaALd8WskEqlsrkzf7bvXmFL91VVhKXmKpcKlC+0gh+I9MRhtWuX+Hd9bAoCq8ElRSuRRN7Wtkp/axWvPNXxoHVFA4Y67g8ewC+GGtdIM/yLc5fa2zPiV3EZr7rPkIISrezre1diA9giWJcFohRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MgzznvKvLpesU+MPI9CL09m+Mseecx1F0zw6WhQ89Ns=;
+ b=nuQut/PrR6rn9m8xmSCXHHNKalj/mjuCPF5N78c7EFRTMubyd84XiQzSmD2OWqHETd0q64b4oQJ5YjHJIl+RouzCII6ZSRIAtgh1L91JQpoPSEQpuj1H5feK6IRt8B7U02br9CAY0ZCmTUCI6qiRxO27fO3upDQigSLtfaTCF1qHgDtG4lGfSgSSqVwjHQcSRmAGH8klHgWkEmuWFKhu5n2/zlD00U0GqLTHVcepi3wsvmpdFHAB70UHr5tOBihj3cZy9xRYPHVTgyX6AZmaNvN8ooAIj4vGZK62PXL3PcfMsem4e7xLhLeosC6AXPWwkaORKw0X9A2Sv39dq6+TNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
+ by PH0PR11MB5061.namprd11.prod.outlook.com (2603:10b6:510:3c::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Tue, 21 Jun
+ 2022 02:05:22 +0000
+Received: from BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::a113:c892:d94:dd10]) by BN9PR11MB5483.namprd11.prod.outlook.com
+ ([fe80::a113:c892:d94:dd10%7]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
+ 02:05:22 +0000
+From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
+To:     "Xu, Yilun" <yilun.xu@intel.com>
+CC:     "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "Weight, Russell H" <russell.h.weight@intel.com>,
+        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
+Subject: RE: [PATCH v2 4/4] mfd: intel-m10-bmc: support multiple register
+ layouts
+Thread-Topic: [PATCH v2 4/4] mfd: intel-m10-bmc: support multiple register
+ layouts
+Thread-Index: AQHYge8UJIM6KFNt7kqviVQUxyhnm61YXZeAgADDbHA=
+Date:   Tue, 21 Jun 2022 02:05:22 +0000
+Message-ID: <BN9PR11MB54830DB2418CA5321F489C19E3B39@BN9PR11MB5483.namprd11.prod.outlook.com>
+References: <20220617020405.128352-1-tianfei.zhang@intel.com>
+ <20220617020405.128352-5-tianfei.zhang@intel.com>
+ <20220620141919.GA1417169@yilunxu-OptiPlex-7050>
+In-Reply-To: <20220620141919.GA1417169@yilunxu-OptiPlex-7050>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        rcu@vger.kernel.org, lkp@lists.01.org,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-References: <20220621010916.GA13677@xsang-OptiPlex-9020>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220621010916.GA13677@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.500.17
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 12950eb1-51ad-4fc9-2064-08da532a7fe8
+x-ms-traffictypediagnostic: PH0PR11MB5061:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <PH0PR11MB5061A0C3217C81724B51AC3DE3B39@PH0PR11MB5061.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CIunoWc3qrQ0U3NCGSifYZyxddWlEAKw0Vlr2jC9AmeZpYIbm3DltoKPeItNwg7slwTnrPFkmZxcS3BJv2PMfzD3UPkJaGxn11nFMahEN2mlKalj7z/G115zE0/m4l145p2immFmpqiQAxCnfN9KKP79mkuzMDntUW/rIhkag4jeNAmLEN0JXd7paMtf0AA4+WQZgsqg8+IyVMC6XLgT79NsfdvmTe4BrmdFhmuDXcM2FlaXsEJfcZCBe3ciYYCrRce6ApDlXBHwAuLIQdTaSL88DdVZUs9D9NbpFG3EEw6MWfIfKI0AMmuu6evO9Dp2Iv8o42W2wSf2lgB59Q8wQGl6UvT37GolsIUKsOnmd9xYp23zDPWk1s0YANHjRRiLFTcAYTOSOJs5mZd3IO1aNg7lACt8EzWo2eAQqA0cQNXdm8DrF58qpa/i35Spv1A3AUAa0ggInOCzQ0wwIBSY5Z/bxv6l1HNK6UFpdD/dV3C0j/xfTBTJhdC9HhI1Jy48bPsyWU/rLxpqguDfLCoYObUNhOH2nJFx0Rfzc+6XaprIVcZo45XUadZWNkP3PiWhXnVs12ULMls4BUcuAJZqUy9alI+TuPnxxqysn/T7N/jzIDx9p9ULiaxkaVo1UWIZShTDOJk3qxx/ppvHW7i2CUoXq3+Bo5IXMpefHVWy9iNX5WFKE6kqqP10Mp5WpKv/tC/pVQ5q3FOvzLTS773V6A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(376002)(346002)(39860400002)(136003)(71200400001)(186003)(64756008)(478600001)(76116006)(33656002)(66556008)(66446008)(66476007)(5660300002)(6506007)(8676002)(316002)(66946007)(53546011)(52536014)(83380400001)(6862004)(7696005)(122000001)(4326008)(41300700001)(82960400001)(2906002)(38100700002)(8936002)(86362001)(9686003)(55016003)(6636002)(54906003)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jP96JacSJ63RdwsfE7CEv+vudt7L1NYCo/NY8ZP6v62GCLxC7BM/W1H48VDZ?=
+ =?us-ascii?Q?Bas3Sb5MBQLdU0Cs4vDaMOCyiKXlg2+AkV+8TE6BCYsPSklI3m95pASViKXr?=
+ =?us-ascii?Q?pCnIOrJ8qKINQlM8rnbHz6aUKF38+Q9iJIl2cWfX8E9YeBgr9fqOUUFyZklz?=
+ =?us-ascii?Q?ok0ltcA1kCaJrQ6w8/nulCFqADkXJgRjxpUB76vShUMQ2oiuMSTXG2mhIxHg?=
+ =?us-ascii?Q?/gFDukV9sC/Q5Hq8sUrhWt7O23HmO7DGPtiK+WqaltuUaOHQ+ayr2WkB0bk0?=
+ =?us-ascii?Q?eY9y7XKnE4yAgD6gfnP2osGAsJ2ShYs7Sk+sKZWnH7CwIBY4iPw+MhDtLoL6?=
+ =?us-ascii?Q?9ZUZZwJ00atWFmLmvnSGkBrThsvjPEsaZXGFnv7lr9MRvzpv4dV6yWW/X/w6?=
+ =?us-ascii?Q?RKdWL1dTRlvcDrXTL/MxAM1xYyLRX1JKRjOehYXqKX4xILbjKWmZMy3MgXCq?=
+ =?us-ascii?Q?R8r5BqCFpLyf/+JiMahfMerrcXTAZQ53aEWENkuHyps899wKlprOymlyIMh7?=
+ =?us-ascii?Q?XuomCdiZjHKqWYZU3F2LQh+mGUTuqgARBUJiqFNu4Q67hwU8thj89VizCxG3?=
+ =?us-ascii?Q?7YfyRJFU+51NaMeRnBamnw1cDfnSU3Bjd0QTVZinktj5ibkOy2i+x0XkR5oY?=
+ =?us-ascii?Q?0+4Fr3AzbSKNQ7C+eLK3m1jaJLKkPGnRLzgAayIxlEAsMaxc0t55q6D2T7Ho?=
+ =?us-ascii?Q?GK5GSWllDYw9ZSDqTAh9KJIu65+yWglruQfaD/SM9cC67aE4vVc8m14ZjrY7?=
+ =?us-ascii?Q?SfZ1n0RogI7TMlJeUUZcvQo6Dtbpj5OP+K7GRGH6Ok8NjNZms00U9XLbG+sF?=
+ =?us-ascii?Q?bWcLhk5Zrgu+7FnkwlAjYATfpI1bSgzpy0zwIr/0Ts8i/ywBw71ukA5OTmX3?=
+ =?us-ascii?Q?k/hSSsPnpjxG6Fc7BQoimv9KkBfAylZsbEjJiJuxD9Hju7/KPD3CkpTrUHK1?=
+ =?us-ascii?Q?iJ1uAlPT/JjRvEUzu3xJuWceQ84DxwtBervmdytpwLG3BIT0PEnFz3SgX+EA?=
+ =?us-ascii?Q?6Wz6a1tmGxetP6zejil+ZZGhZdQxznaAbUiLJ4q+KE8r4BMR8BqjCEIq8CjG?=
+ =?us-ascii?Q?J6+sNh2BLehEbTAwfd+isTRQygzz6IWO+jDd9RVVJaSkNlZ7EYmYt1IDIXtI?=
+ =?us-ascii?Q?SvBu5AENi7d948DG+2rNyZIdg4CPscxrg2rJ+FJllyf5haCBHCbuzdskG8Q6?=
+ =?us-ascii?Q?ycqyIrlMhs/sLPIf5SvfLVS7GvyQeVP8Pb6qtsVIIyt3eeUWkUOectd8eYdc?=
+ =?us-ascii?Q?IX/HuoSU9/y6eSMip/83AWsj8sMQEbRYct2x8Sobjq46VGDqH2omkVIW61/d?=
+ =?us-ascii?Q?ZDbsbs6zuwBulTiey/P40NCD4YGa44wKoXNM1lX/PIs/mKPoRSQC18SZWArT?=
+ =?us-ascii?Q?HwduezdOv2oRDb5pkfcZpSu4Fw6t03zsvVBOrglkGHx1voU70YqM4TDLOhSk?=
+ =?us-ascii?Q?vDkfhpoYDFeJOy/YkPBrFyUdjn8qpzyRY7+9XH4NxCh7XXpQZGuDkVr2lcpi?=
+ =?us-ascii?Q?IjpL58qAc+2jizyutllW2QFzdnWpoozKr++sUJCObdVMzuyLhGW9eSKGbl4j?=
+ =?us-ascii?Q?9Qe7EUAvI2xMEWuq1u08VKyoxdq2Pe0uUF3ixD320kg4PYduYHkUZ8GbkzbD?=
+ =?us-ascii?Q?FI79Ni5HLU72QITl9oqwIalTtLWgz24e+ZmwUZ0kPRxBggwJ5nmztZffYf5f?=
+ =?us-ascii?Q?xpeFhK9lRAP2AQZ84KquPzb2+VVKtTGJYGOyNwl1Xj/ZIReQ1LIK5MdPXynx?=
+ =?us-ascii?Q?HQm8AtuqjdJzEIGtlSIB6k6aX5CMMlykzDsk6bWdHNZo/zssM+n6m41HCYIJ?=
+x-ms-exchange-antispam-messagedata-1: GTrEcumKrlnyJQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12950eb1-51ad-4fc9-2064-08da532a7fe8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2022 02:05:22.5841
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: r1souK7zB5cEdoyyzVWx4nrwA6dH8iB1OSfAtX1zs4zbgciYgtIizopnQGhyGUmN8EVAmkQA5tM8nwORlezwLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5061
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 21:09, kernel test robot wrote:
->
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-11):
->
-> commit: b709abb270544e45bbf3135c03fcfa916899f054 ("[PATCH-rcu] rcu-tasks: Use delayed_work to delay rcu_tasks_verify_self_tests()")
-> url: https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/rcu-tasks-Use-delayed_work-to-delay-rcu_tasks_verify_self_tests/20220614-200840
-> base: https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
-> patch link: https://lore.kernel.org/rcu/20220614120620.1202389-1-longman@redhat.com
->
-> in testcase: boot
->
-> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->
->
-> [   64.538953][    T1] ------------[ cut here ]------------
-> [   64.538955][    T1] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1861 rcu_tasks_verify_work_fn+0xa2/0x140
-> [   82.542308][    T1] Modules linked in:
-> [   82.542852][    T1] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.19.0-rc1-00114-gb709abb27054 #1 5174fcc90ab2355d70d76459e249e6beb14aec72
-> [   82.546011][    T1] RIP: 0010:rcu_tasks_verify_work_fn+0xa2/0x140
 
-I believe the WARN_ON(1) in rcu_tasks_verify_self_tests() got triggered 
-30s after the first rcu_tasks_verify_work_fn() is called via 
-late_initcall. The timestamp here transition from the WARNING line to 
-the next one is more than 18s. I think the VM may have preempted heavily 
-by the host causing significant delay or the cpu and memory resource 
-available is being overpowered by the debugging code enabled in a kernel 
-that include this RCU test. Also the WARNING timestamp of 64.538955 is 
-way more than the 30s timeout of the verification test. So I think the 
-warning is expected.
 
-Cheers,
-Longman
+> -----Original Message-----
+> From: Xu, Yilun <yilun.xu@intel.com>
+> Sent: Monday, June 20, 2022 10:19 PM
+> To: Zhang, Tianfei <tianfei.zhang@intel.com>
+> Cc: lee.jones@linaro.org; Wu, Hao <hao.wu@intel.com>; trix@redhat.com;
+> linux-kernel@vger.kernel.org; linux-fpga@vger.kernel.org; Weight, Russell=
+ H
+> <russell.h.weight@intel.com>; matthew.gerlach@linux.intel.com
+> Subject: Re: [PATCH v2 4/4] mfd: intel-m10-bmc: support multiple register
+> layouts
+>=20
+> On Thu, Jun 16, 2022 at 10:04:05PM -0400, Tianfei Zhang wrote:
+> > There are different base addresses for the MAX10 CSR register.
+>=20
+> Actually I see differences for each register, not only the register base.=
+..
+>=20
+> > Introducing a new data structure m10bmc_csr for the register
+> > definition of MAX10 CSR. Embedded m10bmc_csr into struct intel_m10bmc
+> > to support multiple register layouts.
+>=20
+> Since the new BMC has different connections to host, different register l=
+ayouts,
+> different sub devices. Actually I can hardly find anything to share betwe=
+en them,
+> so how about we just create a new driver for your new BMC?
 
-> [   82.546872][    T1] Code: fe 01 75 29 48 8b 35 fd fe ea 02 5b b9 fa 00 00 00 48 c7 c2 c0 86 4c 85 5d bf 01 00 00 00 41 5c 41 5d 41 5e e9 1f 88 fa ff 90 <
-> 0f> 0b 90 5b 5d 41 5c 41 5d 41 5e 31 c0 89 c2 89 c1 89 c6 89 c7 c3
-> [   82.550826][    T1] RSP: 0000:ffffc90000017e60 EFLAGS: 00010246
-> [   82.552888][    T1] RAX: 000000000000002c RBX: 0000000000000003 RCX: 0000000000000000
-> [   82.553917][    T1] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> [   82.554984][    T1] RBP: ffffffff83c38f58 R08: 0000000000000000 R09: 0000000000000000
-> [   82.557733][    T1] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
-> [   82.558808][    T1] R13: 0000000000001d4c R14: 00000000ffffffff R15: ffffffff8491b888
-> [   82.561186][    T1] FS:  0000000000000000(0000) GS:ffffffff8388e000(0000) knlGS:0000000000000000
-> [   82.562420][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   82.564635][    T1] CR2: ffff88843ffff000 CR3: 0000000003876000 CR4: 00000000000406b0
-> [   82.565735][    T1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   82.566827][    T1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   82.569160][    T1] Call Trace:
-> [   82.569637][    T1]  <TASK>
-> [   82.570049][    T1]  ? rcu_tasks_verify_work_fn+0x140/0x140
-> [   82.570816][    T1]  rcu_tasks_verify_schedule_work+0x95/0xc0
-> [   82.572939][    T1]  do_one_initcall+0x6b/0x2c0
-> [   82.573524][    T1]  do_initcalls+0x127/0x148
-> [   82.574155][    T1]  kernel_init_freeable+0xcf/0xff
-> [   82.574846][    T1]  ? rest_init+0xc0/0xc0
-> [   82.576733][    T1]  kernel_init+0x15/0x140
-> [   82.577335][    T1]  ret_from_fork+0x22/0x30
-> [   82.577959][    T1]  </TASK>
-> [   82.578375][    T1] irq event stamp: 1475417
-> [   82.578987][    T1] hardirqs last  enabled at (1475425): [<ffffffff811161cd>] __up_console_sem+0x4d/0x80
-> [   82.581613][    T1] hardirqs last disabled at (1475436): [<ffffffff811161b2>] __up_console_sem+0x32/0x80
-> [   82.582980][    T1] softirqs last  enabled at (1475268): [<ffffffff828002c0>] __do_softirq+0x2c0/0x434
-> [   82.585549][    T1] softirqs last disabled at (1475259): [<ffffffff810b57a0>] irq_exit_rcu+0xa0/0x100
-> [   82.586852][    T1] ---[ end trace 0000000000000000 ]---
->
->
->
-> To reproduce:
->
->          # build kernel
-> 	cd linux
-> 	cp config-5.19.0-rc1-00114-gb709abb27054 .config
-> 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
-> 	make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
-> 	cd <mod-install-dir>
-> 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
->
->
->          git clone https://github.com/intel/lkp-tests.git
->          cd lkp-tests
->          bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
->
->          # if come across any failure that blocks the test,
->          # please remove ~/.lkp and /lkp dir to run from a clean state.
->
->
->
+There is two version of BMC for Intel PAC FPGA card, one is SPI bus interfa=
+ce other is PMCI bus interface.
+They are different register layouts. But the working flow of some functiona=
+lity  are very similar, and just slight different, for example,
+access the BMC version/MAC address, the doorbell mechanism of read/write th=
+e flash and so on.
 
+If we create a new driver, there are will be lots of duplicate code between=
+ old driver and new driver.
+
+>=20
+> Thanks,
+> Yilun
+>=20
+> >
+> > Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> > ---
+> >  drivers/mfd/intel-m10-bmc-core.c  | 30 +++++++++++++++++++++++++-----
+> > include/linux/mfd/intel-m10-bmc.h | 20 +++++++++++++++++++-
+> >  2 files changed, 44 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/mfd/intel-m10-bmc-core.c
+> > b/drivers/mfd/intel-m10-bmc-core.c
+> > index c6a1a4c28357..f85f8e2aa9a1 100644
+> > --- a/drivers/mfd/intel-m10-bmc-core.c
+> > +++ b/drivers/mfd/intel-m10-bmc-core.c
+> > @@ -10,6 +10,22 @@
+> >  #include <linux/mfd/intel-m10-bmc.h>
+> >  #include <linux/module.h>
+> >
+> > +static const struct m10bmc_csr m10bmc_pmci_csr =3D {
+> > +	.base =3D M10BMC_PMCI_SYS_BASE,
+> > +	.build_version =3D M10BMC_PMCI_BUILD_VER,
+> > +	.fw_version =3D NIOS2_PMCI_FW_VERSION,
+> > +	.mac_low =3D M10BMC_PMCI_MAC_LOW,
+> > +	.mac_high =3D M10BMC_PMCI_MAC_HIGH,
+> > +};
+> > +
+> > +static const struct m10bmc_csr m10bmc_spi_csr =3D {
+> > +	.base =3D M10BMC_SYS_BASE,
+> > +	.build_version =3D M10BMC_BUILD_VER,
+> > +	.fw_version =3D NIOS2_FW_VERSION,
+> > +	.mac_low =3D M10BMC_MAC_LOW,
+> > +	.mac_high =3D M10BMC_MAC_HIGH,
+> > +};
+> > +
+> >  static struct mfd_cell m10bmc_n6000_bmc_subdevs[] =3D {
+> >  	{ .name =3D "n6000bmc-hwmon" },
+> >  	{ .name =3D "n6000bmc-sec-update" }
+> > @@ -36,7 +52,7 @@ static ssize_t bmc_version_show(struct device *dev,
+> >  	unsigned int val;
+> >  	int ret;
+> >
+> > -	ret =3D m10bmc_sys_read(ddata, M10BMC_BUILD_VER, &val);
+> > +	ret =3D m10bmc_sys_read(ddata, ddata->csr->build_version, &val);
+> >  	if (ret)
+> >  		return ret;
+> >
+> > @@ -51,7 +67,7 @@ static ssize_t bmcfw_version_show(struct device *dev,
+> >  	unsigned int val;
+> >  	int ret;
+> >
+> > -	ret =3D m10bmc_sys_read(ddata, NIOS2_FW_VERSION, &val);
+> > +	ret =3D m10bmc_sys_read(ddata, ddata->csr->fw_version, &val);
+> >  	if (ret)
+> >  		return ret;
+> >
+> > @@ -66,11 +82,11 @@ static ssize_t mac_address_show(struct device *dev,
+> >  	unsigned int macaddr_low, macaddr_high;
+> >  	int ret;
+> >
+> > -	ret =3D m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
+> > +	ret =3D m10bmc_sys_read(ddata, ddata->csr->mac_low, &macaddr_low);
+> >  	if (ret)
+> >  		return ret;
+> >
+> > -	ret =3D m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+> > +	ret =3D m10bmc_sys_read(ddata, ddata->csr->mac_high,
+> &macaddr_high);
+> >  	if (ret)
+> >  		return ret;
+> >
+> > @@ -91,7 +107,7 @@ static ssize_t mac_count_show(struct device *dev,
+> >  	unsigned int macaddr_high;
+> >  	int ret;
+> >
+> > -	ret =3D m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
+> > +	ret =3D m10bmc_sys_read(ddata, ddata->csr->mac_high,
+> &macaddr_high);
+> >  	if (ret)
+> >  		return ret;
+> >
+> > @@ -163,18 +179,22 @@ int m10bmc_dev_init(struct intel_m10bmc
+> *m10bmc)
+> >  	case M10_N3000:
+> >  		cells =3D m10bmc_pacn3000_subdevs;
+> >  		n_cell =3D ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> > +		m10bmc->csr =3D &m10bmc_spi_csr;
+> >  		break;
+> >  	case M10_D5005:
+> >  		cells =3D m10bmc_d5005_subdevs;
+> >  		n_cell =3D ARRAY_SIZE(m10bmc_d5005_subdevs);
+> > +		m10bmc->csr =3D &m10bmc_spi_csr;
+> >  		break;
+> >  	case M10_N5010:
+> >  		cells =3D m10bmc_n5010_subdevs;
+> >  		n_cell =3D ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > +		m10bmc->csr =3D &m10bmc_spi_csr;
+> >  		break;
+> >  	case M10_N6000:
+> >  		cells =3D m10bmc_n6000_bmc_subdevs;
+> >  		n_cell =3D ARRAY_SIZE(m10bmc_n6000_bmc_subdevs);
+> > +		m10bmc->csr =3D &m10bmc_pmci_csr;
+> >  		break;
+> >  	default:
+> >  		return -ENODEV;
+> > diff --git a/include/linux/mfd/intel-m10-bmc.h
+> > b/include/linux/mfd/intel-m10-bmc.h
+> > index 83c4d3993dcb..3a4fdab2acbd 100644
+> > --- a/include/linux/mfd/intel-m10-bmc.h
+> > +++ b/include/linux/mfd/intel-m10-bmc.h
+> > @@ -125,6 +125,11 @@
+> >  #define M10BMC_PMCI_TELEM_START		0x400
+> >  #define M10BMC_PMCI_TELEM_END		0x78c
+> >
+> > +#define M10BMC_PMCI_BUILD_VER   0x0
+> > +#define NIOS2_PMCI_FW_VERSION   0x4
+> > +#define M10BMC_PMCI_MAC_LOW    0x20
+> > +#define M10BMC_PMCI_MAC_HIGH    0x24
+> > +
+> >  /* Supported MAX10 BMC types */
+> >  enum m10bmc_type {
+> >  	M10_N3000,
+> > @@ -133,16 +138,29 @@ enum m10bmc_type {
+> >  	M10_N6000
+> >  };
+> >
+> > +/**
+> > + * struct m10bmc_csr - Intel MAX 10 BMC CSR register  */ struct
+> > +m10bmc_csr {
+> > +	unsigned int base;
+> > +	unsigned int build_version;
+> > +	unsigned int fw_version;
+> > +	unsigned int mac_low;
+> > +	unsigned int mac_high;
+> > +};
+> > +
+> >  /**
+> >   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+> >   * @dev: this device
+> >   * @regmap: the regmap used to access registers by m10bmc itself
+> >   * @type: the type of MAX10 BMC
+> > + * @csr: the register definition of MAX10 BMC
+> >   */
+> >  struct intel_m10bmc {
+> >  	struct device *dev;
+> >  	struct regmap *regmap;
+> >  	enum m10bmc_type type;
+> > +	const struct m10bmc_csr *csr;
+> >  };
+> >
+> >  /*
+> > @@ -174,7 +192,7 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc,
+> unsigned int addr,
+> >   * M10BMC_SYS_BASE accordingly.
+> >   */
+> >  #define m10bmc_sys_read(m10bmc, offset, val) \
+> > -	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
+> > +	m10bmc_raw_read(m10bmc, m10bmc->csr->base + (offset), val)
+> >
+> >  /*
+> >   * MAX10 BMC Core support
+> > --
+> > 2.26.2

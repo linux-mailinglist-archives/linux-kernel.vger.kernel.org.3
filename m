@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67F95529F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EC8552A01
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345287AbiFUDzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S1345359AbiFUDzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345243AbiFUDzD (ORCPT
+        with ESMTP id S1345294AbiFUDzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:55:03 -0400
+        Mon, 20 Jun 2022 23:55:07 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B11D1C918;
-        Mon, 20 Jun 2022 20:55:03 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 72A8132009A3;
-        Mon, 20 Jun 2022 23:55:01 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0E61EC76;
+        Mon, 20 Jun 2022 20:55:06 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B37FF32009AC;
+        Mon, 20 Jun 2022 23:55:04 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 20 Jun 2022 23:55:02 -0400
+  by compute4.internal (MEProxy); Mon, 20 Jun 2022 23:55:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1655783700; x=1655870100; bh=IV
-        XbiXdpdoC7yhelNdR2IcucO5Ao9MT/MrT0BNZ4coY=; b=DD3jZqrlCGUciy45F2
-        3LWHvr7jNU6Jafrt6YnTQMVnVHGZbkq0EsgeAs4u/7Z6byMvZ8RDj5BtJfS9uEjN
-        H9222HyVP9Z6+ptqh0FbAaVGkegjpEqgp1TmBviKg+KA9/aIYFktNud8I7zSpFKB
-        z800FXyNwzcPGFDNRG337ZccouDbbMW398ok8o5KENVvmUSy4IlT3N8JTSQIWiWx
-        A8JkT9cPYj5a7LywTSeDMkW3AVafq6nOkZDsu3gh/oXsupnloKo5KoWyOkdg+uSF
-        cA4UaqVFwAR4R/tWFanMaGkb/RTvtPVLrSPwTWgULGkEYoY72KLYJao+2V73nSEV
-        gDrA==
+        :subject:subject:to:to; s=fm3; t=1655783704; x=1655870104; bh=VR
+        hWQHBguZsw8yrrHV1JpbZv0bAlRhTVvnAV7jTHX4w=; b=ioG//c2UFTlNLdI6/f
+        mw7nqozZ1TMUk2nmIHpEr+9y9Bo6Rfzf0ID3Xu+BdCnTYFWY+c9aJtXBrFUTQY/H
+        S0Jhp9ZMwQ4xW8gROGew+J0wA9KWfcT9oxKv+O3EKKAOUDqxpP07T7VLdf64b+Ab
+        iIxA14zIyFihRKwqSEKj73UalCRUAXABAdcBxfEz6Q7pBFdOUjNe9FkVHqNWwMiW
+        dl970xPjvSTco3SWbu280o8vQSg4NrF7lZzquRECJJnjaXW/DwANGbYQSmK696BR
+        GlcLyYOBm3krFTFWYGdeo7oNtkWlJ6+0jMhqiPHxdGApVRENc5vtg/bNukR9QZFO
+        /QHg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1655783700; x=1655870100; bh=IVXbiXdpdoC7y
-        helNdR2IcucO5Ao9MT/MrT0BNZ4coY=; b=j6cr3/rM/fHch/9aHx6h+vlBZanNb
-        /2/fNyCNM/fdGRkMk3M+6uavJtfqT/4GaL+WnNqfHdAS4QxBmnUjEmXf2uA3K3aI
-        yHWDznXp1OU1s5R92VR2+9rfb1SczsWZ6U7iMNaWttUg/nkbHdTynX5jRwtEmFEz
-        HcFMO1BEY64GnfkOCAjoof+Y1K9NYVocjPphjcMaK4B3zC5Aea3mrr6ORt5d3yy7
-        SpShFSu638iiG5YWX0Lahn3/PZ5ijF0cHXnSgIkfDmbaptN6KTcSCzU5aCKOnqfx
-        BS/5AGf1p3Tjq3dnfolRw3ADMVJDljMoOWxYpcQUwB0TBJLIHMnTNTibw==
-X-ME-Sender: <xms:FEGxYgU-bQblQs3YSwvYJP_uw1qCj8GmkVbUTY7sME3gTJ0KtzlR7A>
-    <xme:FEGxYkkCzqwClXiaicqlYklfQfrTgrusUxdyIWa4hr1oY6X9H_5C-q3BMJRpgDa8P
-    OkEB5oNN0PXEh24bQ>
-X-ME-Received: <xmr:FEGxYkbncAroiaJbw2YFXBdiEAwWIwoLySFGVd8tmlICWYTc2CVBqMa0bjAOMOWu1dwRBKNQAlqVKonwCruz5I57F0iJosKbh-u9UssibtROyXk9IF8LgTRE56lrg0ob35AN7A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgjedvucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm2; t=1655783704; x=1655870104; bh=VRhWQHBguZsw8
+        yrrHV1JpbZv0bAlRhTVvnAV7jTHX4w=; b=R01ZE/sKfHaJ7Q35qldycLrEjPmgt
+        Qu2gjuea1qgnrSVVtuR5k8BUAqdaHBfMS0i4XUdnDL5YenSivR+UB++YCXDazeaO
+        5r1VBtzLLSOLbuCHYu9q+boLgfAkIHplzAMZvMFeX96P28w8qqI37eOA449kfA8g
+        ulowo6ZfTlVtJbJe5tL1g9ENP3ELadZ3WNZfP4xf3z99Vgfi+MLTL++4An/eDxP+
+        78yYx090yJsxxpOFSftb3BdwODjzSJV3B/IZjKou/GyldCZFd6p9tD+N46w5Xm4Y
+        PcqLa+NxFIT89EQ3QRRIya6HxVcE8q5ghNqWMf7T2y3+MEhGIozM+2q4g==
+X-ME-Sender: <xms:GEGxYsiBnbERuAyHXmBtTjSMwysllg0dWLYA4Bk1cgxM53LTezhcBQ>
+    <xme:GEGxYlAOAH9uqScfS04cSV00HkWjDXBCwLoedJyWznPauQ6ih310Fvz8_pbar6VSI
+    hgPd2b2CxtRFDahsw>
+X-ME-Received: <xmr:GEGxYkFQAqnFGK_2GFmGU9VwCyQIPMaMHOepMIilCQSQfN21s3tjqwdIrCi5nRsF4k61njE2aO0xCXf2219a6YvqnORcTtjt-gkrCGTjFeDEjFn2RzxUwTKR8Aaescq0OwrkNw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgjeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgjedvucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:FEGxYvXIRg8IScJBKusOtdXJJzw5GzZDU4rUXPLKKKXre97XTOOsIw>
-    <xmx:FEGxYqlyzw23q6bsq2d2PsZIiqQnWtCQhsOiCuj52CbU-1EEjG44uQ>
-    <xmx:FEGxYkdECgXBx_2-0B6X0i1cqj9P3QT1qN24S3Tkp95_LMOgO9Aijg>
-    <xmx:FEGxYv8gZvOvqm3-ZLhNZ2foBALUqWgTjNm0IZM9eyNGydIB_YM9lg>
+X-ME-Proxy: <xmx:GEGxYtT95agFMh9NGGXxhwWPvTCQFVGb_X8gj6RI-Czhj1z8K6k9wg>
+    <xmx:GEGxYpxPrZ8qixAG9_ue4WURFz4HlpqlQadis23HwkFUTdnHLhSTJg>
+    <xmx:GEGxYr6pB9-HN4w8idgpE5IYSt8RyeqnutLXuGg_I-t8AkPH6Y46jA>
+    <xmx:GEGxYuKI6EVTipbaj696Y4FEoDfqx2YwpteO_KEjEe8DrmbN2q31og>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Jun 2022 23:55:00 -0400 (EDT)
+ 20 Jun 2022 23:55:03 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -76,9 +76,9 @@ Cc:     Arnaud Ferraris <arnaud.ferraris@collabora.com>,
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 2/3] ASoC: sun50i-codec-analog: Add support for internal bias
-Date:   Mon, 20 Jun 2022 22:54:51 -0500
-Message-Id: <20220621035452.60272-3-samuel@sholland.org>
+Subject: [PATCH v2 3/3] arm64: dts: allwinner: pinephone: Enable internal HMIC bias
+Date:   Mon, 20 Jun 2022 22:54:52 -0500
+Message-Id: <20220621035452.60272-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220621035452.60272-1-samuel@sholland.org>
 References: <20220621035452.60272-1-samuel@sholland.org>
@@ -94,60 +94,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Revisions 1.0 and 1.1 of the PinePhone mainboard do not have an external
+resistor connecting HBIAS to MIC2P. Enable the internal resistor to
+provide the necessary headeset microphone bias.
 
-In order to properly bias headset microphones, there should be a pull-up
-resistor between pins HBIAS and MIC2P. This can be an external resistor,
-but the codec also provides an internal 2.2K resistor which is enabled
-by a register.
-
-This patch enables or disables the internal bias resistor based on a
-device tree property.
-
-Signed-off-by: Arnaud Ferraris <arnaud.ferraris@collabora.com>
-[Samuel: split binding and implementation; move to device probe]
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
-Changes in v2:
- - Move register update from component probe to device probe
+(no changes since v1)
 
- sound/soc/sunxi/sun50i-codec-analog.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dts | 4 ++++
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dts | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/sound/soc/sunxi/sun50i-codec-analog.c b/sound/soc/sunxi/sun50i-codec-analog.c
-index a41e25ad0aaf..e1e5e8de0130 100644
---- a/sound/soc/sunxi/sun50i-codec-analog.c
-+++ b/sound/soc/sunxi/sun50i-codec-analog.c
-@@ -117,6 +117,7 @@
- #define SUN50I_ADDA_HS_MBIAS_CTRL_MMICBIASEN	7
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dts
+index fb65319a3bd3..219f720b8b7d 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.0.dts
+@@ -10,6 +10,10 @@ / {
+ 	compatible = "pine64,pinephone-1.0", "pine64,pinephone", "allwinner,sun50i-a64";
+ };
  
- #define SUN50I_ADDA_JACK_MIC_CTRL	0x1d
-+#define SUN50I_ADDA_JACK_MIC_CTRL_INNERRESEN	6
- #define SUN50I_ADDA_JACK_MIC_CTRL_HMICBIASEN	5
- 
- /* mixer controls */
-@@ -507,6 +508,7 @@ static int sun50i_codec_analog_probe(struct platform_device *pdev)
- {
- 	struct regmap *regmap;
- 	void __iomem *base;
-+	bool enable;
- 
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base)) {
-@@ -520,6 +522,12 @@ static int sun50i_codec_analog_probe(struct platform_device *pdev)
- 		return PTR_ERR(regmap);
- 	}
- 
-+	enable = device_property_read_bool(&pdev->dev,
-+					   "allwinner,internal-bias-resistor");
-+	regmap_update_bits(regmap, SUN50I_ADDA_JACK_MIC_CTRL,
-+			   BIT(SUN50I_ADDA_JACK_MIC_CTRL_INNERRESEN),
-+			   enable << SUN50I_ADDA_JACK_MIC_CTRL_INNERRESEN);
++&codec_analog {
++	allwinner,internal-bias-resistor;
++};
 +
- 	return devm_snd_soc_register_component(&pdev->dev,
- 					       &sun50i_codec_analog_cmpnt_drv,
- 					       NULL, 0);
+ &sgm3140 {
+ 	enable-gpios = <&pio 2 3 GPIO_ACTIVE_HIGH>; /* PC3 */
+ 	flash-gpios = <&pio 3 24 GPIO_ACTIVE_HIGH>; /* PD24 */
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dts
+index 5e59d3752178..723af64a9cee 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.1.dts
+@@ -29,6 +29,10 @@ &backlight {
+ 	default-brightness-level = <400>;
+ };
+ 
++&codec_analog {
++	allwinner,internal-bias-resistor;
++};
++
+ &sgm3140 {
+ 	enable-gpios = <&pio 3 24 GPIO_ACTIVE_HIGH>; /* PD24 */
+ 	flash-gpios = <&pio 2 3 GPIO_ACTIVE_HIGH>; /* PC3 */
 -- 
 2.35.1
 

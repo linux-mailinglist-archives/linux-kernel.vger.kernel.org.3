@@ -2,155 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641DB553210
+	by mail.lfdr.de (Postfix) with ESMTP id 189C255320F
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350437AbiFUMaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S1350171AbiFUMat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349343AbiFUMao (ORCPT
+        with ESMTP id S1350439AbiFUMaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:30:44 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBA0140B8;
+        Tue, 21 Jun 2022 08:30:46 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3C618370;
+        Tue, 21 Jun 2022 05:30:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id lw20so4814007ejb.4;
+        Tue, 21 Jun 2022 05:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2ZYvUIcPgesioC1hHyPm1FyQnzg/VK05K3ea5CbvoAI=;
+        b=jNp41uoNzsAu3KCvjI4Nfor3aDBFae+DB8Eqw6W0JhbiGt/c9vk8o9vL5xRzQ9Jvp1
+         rYCapUAOPHft/MoL2MqYagXIqie8dNT/R0gSwNKkLtfRZL8mVCkjEBcIQiGe0yL3Cec9
+         0KPOK2Dq9Xd44xXyW6b00Pv2zTOFR5fPnUFVuphV+XsQRm6LgzVaPuo/fgdKWLv9/9K0
+         pTlA3alMY6x7azXuYNv62i3zG9OQMIyNW5aRcXQ1lP73uVf1W/+Hx2NpMjoyHGZtt5zM
+         mgMAyGh3AGCzmOYfJ3rGJeUuQgec1Kl2UBuDaXuHVgV6z+C28bwxJCutMASzF4OJISsC
+         pSvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2ZYvUIcPgesioC1hHyPm1FyQnzg/VK05K3ea5CbvoAI=;
+        b=IFpVu32VQzj1DAI3HlHc5uzY8jOIYyYMlP934YGC+wZ/LuZnKk+MJ4o9xozNGNgq4d
+         52E042LcZKtNx8JTd2Pxc7WmaR2rW13vXO0/q+ZE1rUjR/chKhCwA1oLEtdrclaE3t4+
+         4CZIkzhL4H0YK2J95wzpySxufb4Q2BNDtE/rDuUqJ8WEJRcN0pakNd/ROFyOwZergACC
+         Ij7NBcJIeFTaLaapSJbALb+Yd/DHeJ9qHgdIQ4Ql7K9ortgPLwTfReDbhD6+2BgAJpCx
+         cIdWxBzdj/otVdOg99ZHvw419V4+yt5k6MVs9/kg58B6t8UDCxV/9TobTjMuQSU9mk7y
+         9tKA==
+X-Gm-Message-State: AJIora9kCZBjT80J3Cw7noH/nfelE6u8x4tkpwRtqaSgozl3aF4OMG8c
+        rI116lgxl+djcm9HGUeKvic=
+X-Google-Smtp-Source: AGRyM1t5NP4Q7+ftb2gJ7eSdql5QKW81iclkgSphg0N6stK85m/Ambr9NA+IC8N/ADX7v2BeuIf42g==
+X-Received: by 2002:a17:906:e2d2:b0:704:81fe:3152 with SMTP id gr18-20020a170906e2d200b0070481fe3152mr25004748ejb.411.1655814643924;
         Tue, 21 Jun 2022 05:30:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a/36bLz0mmfzpsdS3AWdciIpum+jxExd0tk6y4b+MP3fW9IxuHt4unkavix7VFhML1bhL5v7xmxS93V5Az+SkRXSd/rfA5duyMG+iGjPf7WPTkrbNQ1wjpMHqQ9uV7mxRi76F2FEa+mmyR1ut2tJr3zR/+DDtFv7f8HeX9/XjbxZH9k5X5Zl4qPpijpEzEN5GgWOiRoSxtFT35GTdH2svm/sKohlj02/AZyB6Lthu7f0s2hORqJ8i4ZnpRyHP4exygSGjlKrMWcVE5klDB35pz4SH5WxPoL6YW3+Glv+go5NkOk4Y4rAvq7Dcqr7z6dqPngx3nfhsbwJ/yz2P38O6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uW48pd1HORdzaAmxF3NNnGosfoKbHwD0+j0zQqQVbII=;
- b=YIqZjnPx13UqAvDMgBDrmJFvdCY7SEVQFG9anG/RkF0pHe7NfYUW9K0cnJwAFLka1t+FZkTdpWpu6oNWXi0cVFUEz5nRQXsUzDSrwYczLWnflpuSUl3MGq8jSa7xth6gRjkyDj4ynbjU4igsZvtPPT5kzDwM84p9qp1waM8beDkM8wouvn8VsThsXi0cjjgH9fqdyn6OtGOfciwfm9kVUvpHG4GfNWwz+HBCoKNXVfLqPqRST7r9AKnM0jrJMvo3n8y9QXEcEDK5+ROCmtxDfZL8s+SqquBhKsfapBh8q/QY8DgkZ+w1E1+NvMoN/RfhzgelDyMXboEgHGEQCuvs/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uW48pd1HORdzaAmxF3NNnGosfoKbHwD0+j0zQqQVbII=;
- b=aoSMyla8f7yodUxnt7lj8JdctiPpVr8e53mONA5LVm+T7ewT4/9VQnkKBHi2L7pz19weS5RENVngo3J1SwsNhjMccTIJpFZ+LaC/vGTg+EGTUHGj5+k950OturGvpBLLZqA2ED7UdjI2/9YnLZfqmSfyYThKAhVLXOsGkGMp0/idncr5ypVxLJm2JmeMAuzVj3U9pyQnwG1+fi+YGS9tB7aJc+E1awUDtbjZaowG/n2A3a7cfpgVaK3yRLvea9YyRd7q30BWItZ1Nd/J0+WS0b0zBv2S2vNCxuEppqLLN6DSmRQsxxdLHopash7edtXRgvcmOmtuTX8d35qM2ZSeFg==
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
- by BN6PR1201MB2466.namprd12.prod.outlook.com (2603:10b6:404:b0::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Tue, 21 Jun
- 2022 12:30:41 +0000
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::45a7:d9:1cdd:3e9b]) by CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::45a7:d9:1cdd:3e9b%5]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
- 12:30:41 +0000
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sebastian Reichel <sre@kernel.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: RE: linux-next: build failure after merge of the battery tree
-Thread-Topic: linux-next: build failure after merge of the battery tree
-Thread-Index: AQHYhD7/SjaYCOIaYU+H8cFj+TXaJK1ZzNSg
-Date:   Tue, 21 Jun 2022 12:30:41 +0000
-Message-ID: <CH2PR12MB389507C820B4C3E631EDBD7DD7B39@CH2PR12MB3895.namprd12.prod.outlook.com>
-References: <20220620104503.11c0f2e1@canb.auug.org.au>
-In-Reply-To: <20220620104503.11c0f2e1@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 94953ace-d8c3-4525-c835-08da5381dada
-x-ms-traffictypediagnostic: BN6PR1201MB2466:EE_
-x-microsoft-antispam-prvs: <BN6PR1201MB24661B4DEF5C50685FD3A2FFD7B39@BN6PR1201MB2466.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LgYCO7BZ8sNBz4KJfAMIgL0pyXeQG/OujvrVEAAeuOMyn4DexEF5feIrZBF5pyA2DxL6CL2ZWnfrLbtisJImmKIDhEQ5RSnqcI5hvNxGFjSbB7RPQw2FAci1gi0dQmTaIp/PtWNFDaNwUJy1P07vcOE/Dg5WAUpUwCHmMshdKWiXJkHrx319bug/KOCCYgK7i9Voz/7h0tgFNpRBAgce0qxCzT4AQcTCKwV31B9QhAnokg47sWyCl9N9Iv8EEl+3CaY9aQLc8C3QPgj1J1CP3E7uHEUWmTO0HUMYqapWVY3Cn4bpUVcsfLpWTLRtZHb8G3fstXmn9fR+/cAEeP2r8oMiJ9TLeB6c6pOKUVJLsRq42oQC9MD+sofaZcHEGLVQvzbP+UFmFrxI7xQAMXE3cZ3RAm2TtpJNGD5qK3dnKUFEHNmhMEw72kC9NmS8DoPzCexnqMyw3hr6Up6cm2qO10N9voQyxxgjpz0tYe9fPcIr9hRd35F6gdnDDDvKDl+Wv53oWsbYJC/eR2vEDbPIa9vyW7wo+iI+bkLoEDleIHoZNrOippsYAJSJ6Q+lRMRpUJ5B/0nnPodfVkoKsq8E6jOCRY2dV4hgQSQaV/KqdJLxndj7HFZUO2iFfAMP6iLLgwuvT3xQa8Ua/+u+MF0u2zQVe0oQqNwwG/CRrQG02No9I6hJbfYC4B0ipCvNqJKzi1XwMza7se1EXYNrO2mY4Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(66446008)(33656002)(8936002)(52536014)(66556008)(54906003)(64756008)(76116006)(8676002)(4326008)(2906002)(478600001)(66946007)(316002)(55016003)(5660300002)(4744005)(71200400001)(41300700001)(66476007)(83380400001)(122000001)(26005)(7696005)(86362001)(38070700005)(186003)(53546011)(9686003)(110136005)(38100700002)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kBaJMu/eQutzUSdAKUrKhLOp+ieR31ubxypLrT7/YpEYxBws1qLvC2qGFsLx?=
- =?us-ascii?Q?yyLgo4lkjG4xCBWXLRvRYuAjaF20LYMtWC2+mLOZM95YWuCe0OAj2dgLw7FZ?=
- =?us-ascii?Q?Q2YSixEw8gJUW1//K9cvJoReBxAvpH2a+BuSGkXdVrWg0YPQ2ReXgidzyhhr?=
- =?us-ascii?Q?Y5euKZUVBGU8DTD1v1bYhB9wKnQb5snmEkxVxsQETMv4X2T7aMOH6O117BdO?=
- =?us-ascii?Q?pcdfcerEPef4O4muYegVzzBUSXGruUCEk2IkOCnXKkx6qIpO3ARKtQamnzKn?=
- =?us-ascii?Q?+0Ouyq10tGxo9FusW5EoM1fIzzKTraYzw8Ufgj27XjwdUgVqcqq3wP+FWl6/?=
- =?us-ascii?Q?22b3zjUwBX/+2L5xb6if6byaFFiFOkqg2Y+apqYKXOZTcLQejVa6OZohBcEr?=
- =?us-ascii?Q?QSCke6Q6MO9k1XAZzTy1Teix82/2Yzq9eQ+BCPAY918lJ7eG6HGeK/pCOE9o?=
- =?us-ascii?Q?QgCxpNffX/orMut5SPazicVifBWhXmXD0YJHbku19J6mHjzHtrotCdtOWI82?=
- =?us-ascii?Q?EX11ylnsTo5/sYpNlQJ2kG8Zn9Z7R5D5lPe4uKVuPgAqeZRVLAv5omMXySkN?=
- =?us-ascii?Q?ENrWBCxxqWR2sik4UiiyuNA4qd6DsJL88gP5q2OTUW9BOHA+7x+v7dAvKTH8?=
- =?us-ascii?Q?Uwo3zjzJz8PWLyKOX5kPhllr9Az8ewJAIoC/La+xWpIkNfLFddrgMJ5JHGNc?=
- =?us-ascii?Q?1pFKg3/VJC7dx4n2VeSB8erFKhjyJqU88HTY76mbXnLQCSUrNEVYkySf8s2V?=
- =?us-ascii?Q?DUZWTyU7CHoylYUEyJto6Oo0n5ESxBL1Cq2r44eq+pHiSKC2Oed66hvvznyr?=
- =?us-ascii?Q?Ye9y8hJzUZzRTAmTG9f9ogl+YyQSgRQb01kj0D6sO9lelWSEQ6kr/MDNtwKc?=
- =?us-ascii?Q?K03tYsB0Al7Tq9Pr3kJPFK8X/O1gVizO+wZl3N026oqbx3DLRL3ZDeyLSyjo?=
- =?us-ascii?Q?Yx9ujwjpUW9NYJcbW7aZS5geY+PAoKoDLWrEnvI/jhxR9BsVcrAMLEHQpYdu?=
- =?us-ascii?Q?sgUqtzC1DkDLVKsbkCVEqXaQR5jCkRpoZJcdUMlX+hmqzCxCW9TJ7GP0yH0K?=
- =?us-ascii?Q?utIbIpEXZkzIfwRYYo6a3QpCSDGTR6U4KQdf43eG1lBFgbN/NMtUgtrbYxXS?=
- =?us-ascii?Q?wm8OLPF7Xv8Nk1FpXKG821xMF1HKOvhPIxV7rYZhY3gbLpOWbWaRMNZPgJWY?=
- =?us-ascii?Q?zK9qPIbIGRIBqPyemhu8KOtfLmsijBRUB4IvtMZ7NeC9DeufwCdZ+EhV9YQB?=
- =?us-ascii?Q?JXV/PHxUHSVcnIlDWHnEV3CLcoHKqyebOQ4oZXZzSF+to2WdNVxesY5XLwNL?=
- =?us-ascii?Q?+Vr71yvcltqbRVKAXMExJs1DMhpFYWvlBj0IvTuOrRQxyDO2PGpJ8L7iXQpk?=
- =?us-ascii?Q?SL6VGuAB0/ClAnFGvzB80tozELhFo20HsXrJjic9UfmBqrGME76exibuH+kd?=
- =?us-ascii?Q?KCCxLI3kssZOYyGSfv/mfsiib89khrjVFsqfKWTUTZLa7/b/Bid4ZA+qbnyx?=
- =?us-ascii?Q?9tInbw6N8JFMvO/WMtaJcKVnMxtG1ZUlef6D27kTk7hXy7EORrlIgChsSIs3?=
- =?us-ascii?Q?8rDHKI4ozHocdKis9GrbL+EGhm9vo3tGe+rlFXEp6Y6V6YKy7zH4RVZQ9++c?=
- =?us-ascii?Q?dY+1WWhjo1fzaq2PoUqlvRXl44uY9/qyPEwE3UiIb4Rzh1Q45DDyupJWmXAb?=
- =?us-ascii?Q?v8f8GRTPWvj1Nsm+LqVmRzIeXfj7/tgvpgsXxBd9k8PA0JaS?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from skbuf ([188.25.159.210])
+        by smtp.gmail.com with ESMTPSA id f5-20020a50fe05000000b004356afc7009sm8695130edt.59.2022.06.21.05.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 05:30:43 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 15:30:41 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan McDowell <noodles@earth.li>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] net: dsa: qca8k: change only max_frame_size of
+ mac_frame_size_reg
+Message-ID: <20220621123041.6y7rre26iqhhwdoa@skbuf>
+References: <20220618062300.28541-1-ansuelsmth@gmail.com>
+ <20220618062300.28541-2-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94953ace-d8c3-4525-c835-08da5381dada
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2022 12:30:41.3848
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yUOsRIyHkltZx87nFIlR0eP3ixBzJiuXP4FHUJt99qWKflA2oOvZCgQcOoanm9f+R7IIw/2WBYouuq0joFn4cQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB2466
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618062300.28541-2-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I will send a patch right away. Need to include #include <linux/devm-helper=
-s.h>
+On Sat, Jun 18, 2022 at 08:22:59AM +0200, Christian Marangi wrote:
+> Currently we overwrite the entire MAX_FRAME_SIZE reg instead of tweaking
+> just the MAX_FRAME_SIZE value. Change this and update only the relevant
+> bits.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/net/dsa/qca8k.c | 8 ++++++--
+>  drivers/net/dsa/qca8k.h | 3 ++-
+>  2 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+> index 2727d3169c25..eaaf80f96fa9 100644
+> --- a/drivers/net/dsa/qca8k.c
+> +++ b/drivers/net/dsa/qca8k.c
+> @@ -2345,7 +2345,9 @@ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+>  		return 0;
+>  
+>  	/* Include L2 header / FCS length */
+> -	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, new_mtu + ETH_HLEN + ETH_FCS_LEN);
+> +	return regmap_update_bits(priv->regmap, QCA8K_MAX_FRAME_SIZE_REG,
+> +				  QCA8K_MAX_FRAME_SIZE_MASK,
+> +				  new_mtu + ETH_HLEN + ETH_FCS_LEN);
+>  }
+>  
+>  static int
+> @@ -3015,7 +3017,9 @@ qca8k_setup(struct dsa_switch *ds)
+>  	}
+>  
+>  	/* Setup our port MTUs to match power on defaults */
+> -	ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, ETH_FRAME_LEN + ETH_FCS_LEN);
+> +	ret = regmap_update_bits(priv->regmap, QCA8K_MAX_FRAME_SIZE_REG,
+> +				 QCA8K_MAX_FRAME_SIZE_MASK,
+> +				 ETH_FRAME_LEN + ETH_FCS_LEN);
+>  	if (ret)
+>  		dev_warn(priv->dev, "failed setting MTU settings");
+>  
+> diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
+> index ec58d0e80a70..1d0c383a95e7 100644
+> --- a/drivers/net/dsa/qca8k.h
+> +++ b/drivers/net/dsa/qca8k.h
+> @@ -87,7 +87,8 @@
+>  #define   QCA8K_MDIO_MASTER_MAX_REG			32
+>  #define QCA8K_GOL_MAC_ADDR0				0x60
+>  #define QCA8K_GOL_MAC_ADDR1				0x64
+> -#define QCA8K_MAX_FRAME_SIZE				0x78
+> +#define QCA8K_MAX_FRAME_SIZE_REG			0x78
+> +#define   QCA8K_MAX_FRAME_SIZE_MASK			GENMASK(13, 0)
 
------Original Message-----
-From: Stephen Rothwell <sfr@canb.auug.org.au>=20
-Sent: Sunday, June 19, 2022 8:45 PM
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Asmaa Mnebhi <asmaa@nvidia.com>; Linux Kernel Mailing List <linux-kerne=
-l@vger.kernel.org>; Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the battery tree
+What's at bits 14 and beyond? Trying to understand the impact of this change.
 
-Hi all,
-
-After merging the battery tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/power/reset/pwr-mlxbf.c: In function 'pwr_mlxbf_probe':
-drivers/power/reset/pwr-mlxbf.c:67:15: error: implicit declaration of funct=
-ion 'devm_work_autocancel' [-Werror=3Dimplicit-function-declaration]
-   67 |         err =3D devm_work_autocancel(dev, &priv->send_work, pwr_mlx=
-bf_send_work);
-      |               ^~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  a4c0094fcf76 ("power: reset: pwr-mlxbf: add BlueField SoC power control d=
-river")
-
-I have used the battery tree from next-20220617 for today.
-
---=20
-Cheers,
-Stephen Rothwell
+>  #define QCA8K_REG_PORT_STATUS(_i)			(0x07c + (_i) * 4)
+>  #define   QCA8K_PORT_STATUS_SPEED			GENMASK(1, 0)
+>  #define   QCA8K_PORT_STATUS_SPEED_10			0
+> -- 
+> 2.36.1
+> 

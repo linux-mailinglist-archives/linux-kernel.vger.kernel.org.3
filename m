@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105915533C4
+	by mail.lfdr.de (Postfix) with ESMTP id AAB075533C6
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349905AbiFUNhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S1350972AbiFUNhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351251AbiFUNgm (ORCPT
+        with ESMTP id S1351272AbiFUNhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:36:42 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9CB23BED;
-        Tue, 21 Jun 2022 06:35:30 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id c2so22463396lfk.0;
-        Tue, 21 Jun 2022 06:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V/pJJPQHdhr1X6GXakjW2t24XxjC4Wm3mry4MS1kuhQ=;
-        b=A15lnbTyDN1bihZ3NQjR7koVWIn2pcEyi8IoNnhoJJ0ZU9wNrzK6b/HeRmq2pTjkeS
-         j0Pz3mZSsEmiOJ81pm7Fm2QQXQ3HUdbIrn55z1AenbwTXA0C0pTnM70DYMPFgnKbwX1P
-         agWj6P5CVYesSSQfOia7DbM4846Swcrq1mVwVbUQDcdynEn31M0Rw1nxGvl5sBXKwWPc
-         pu96WalvEnGSpe1uTDuhfo+8gcnpY30SUHlJx/xZOOAZeYaaxTRqTCR6HNs5/OUmax/A
-         oog57eN5yqGmp5YJnb3hXYNKkrDBQNKy9yNmutBV9z4cYryIHHnVL4Z/BfyaPgbzk6mB
-         cWuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V/pJJPQHdhr1X6GXakjW2t24XxjC4Wm3mry4MS1kuhQ=;
-        b=p25OGoTOaAy84nFm53dzQosgUK1nmGEUXkV2v0/GVNuemHleepJhM1ceaN12PDMUEv
-         8i+75OJWH5rlPzU/N4KOtEaXUsjcuRW8reVEEfyWIgt7IWFT0s0W7QbQwLyIG7jyEFoP
-         QNS1yzPxc9eAPWnqJuNjmdDICDdS5OgyTxO5K4O26Aj26Dm0QBS7SOYs08txm51MgBTr
-         ow0doXfIYLht8ZkpH2pmEFWNX99+/EknUJvWvyt8Xkwx5VHflKlhOe6vTPNLmKt1FW8p
-         owjuWbx8hXWPlJXbu5f+STDNSD+/XcHeD8E1dGFtEc0Ial5jNzLJ/dT86/K+Cv1m8k1K
-         OLPw==
-X-Gm-Message-State: AJIora+HDjqS0o+6mSCa3SswfbIHC/BkrzV8IobqI1webhESOe+81quP
-        ELznHECm9v3Qt61lgSWGZS5rmyGaaSe8f5C9
-X-Google-Smtp-Source: AGRyM1uOgvRC1Qe3dwS8TCGpEsJjmszOrkvZDUBMkFfrk8xoVEiNxsbB7lk2+ejP577wC8Ag0t5lmA==
-X-Received: by 2002:a05:6512:22cf:b0:47f:7b38:73e7 with SMTP id g15-20020a05651222cf00b0047f7b3873e7mr2651904lfu.523.1655818528591;
-        Tue, 21 Jun 2022 06:35:28 -0700 (PDT)
-Received: from sakura.myxoz.lan (2-248-181-228-no2390.tbcn.telia.com. [2.248.181.228])
-        by smtp.gmail.com with ESMTPSA id a16-20020a19ca10000000b00478a8b7ab1csm347142lfg.150.2022.06.21.06.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 06:35:28 -0700 (PDT)
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Miko Larsson <mikoxyzzz@gmail.com>, linux-kbuild@vger.kernel.org,
-        x86@kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chris Down <chris@chrisdown.name>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Oleksandr Natalenko <oleksandr@redhat.com>
-Subject: [PATCH 2/2] Kconfig: Allow -O3 for all architectures
-Date:   Tue, 21 Jun 2022 15:35:26 +0200
-Message-Id: <20220621133526.29662-3-mikoxyzzz@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220621133526.29662-1-mikoxyzzz@gmail.com>
-References: <20220621133526.29662-1-mikoxyzzz@gmail.com>
+        Tue, 21 Jun 2022 09:37:00 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6257E2CCAC
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=4z8LIqSE2luIYKYQPL4O7016FE7X
+        ACNUC8HzUXy/qdA=; b=01BO+r+v9RlUR+01A7bMVQzBsQhNNmJIvNZlxSGUGfBq
+        Lqm9gGQAQH9l5Ovg8uCXA4Fb0ihlW/7nFgYGuPR6tBcbKeofmdfLu6jgdfaagLMx
+        3xY98ygVqrniGO11M0EC7INENzj53fQR0ID8FOCv7ERwBl2iscYLOR2BWJdM4P8=
+Received: (qmail 166667 invoked from network); 21 Jun 2022 15:35:31 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Jun 2022 15:35:31 +0200
+X-UD-Smtp-Session: l3s3148p1@NDlbS/Xh2kJZD+65
+Date:   Tue, 21 Jun 2022 15:35:30 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-mmc@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 0/2] mmc: renesas: Trivial fixes
+Message-ID: <YrHJIjhDP0/Sur1M@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-mmc@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220404172322.32578-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3uiu3xecSU/IzmT8"
+Content-Disposition: inline
+In-Reply-To: <20220404172322.32578-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit allows all architectures to use the experimental -O3
-optimization option. Previously, only ARC was allowed to use this
-option.
 
-Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
----
- init/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+--3uiu3xecSU/IzmT8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 9c292acb2..b88613cb5 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1403,7 +1403,6 @@ config CC_OPTIMIZE_FOR_PERFORMANCE
- 
- config CC_OPTIMIZE_FOR_PERFORMANCE_O3
- 	bool "Optimize more for performance (-O3) (EXPERIMENTAL)"
--	depends on ARC
- 	help
- 	  Choosing this option will pass "-O3" to your compiler to optimize
- 	  the kernel yet more for performance.
--- 
-2.36.1
+> This patch series adds trivial fixes to renesas mmc driver.
 
+Did I miss if there is anything left to discuss for v2?
+
+
+--3uiu3xecSU/IzmT8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKxyR8ACgkQFA3kzBSg
+KbaE8g//SE/s4VlQCXBI+FKeQFbA8DLx3Kvl+RVRfKQBXRi00zNdF3soWSUCfIGZ
+8UAkK9nthXXx/jCi9aiBo7fT0StSPiuact2ljH8MEjLRtmWV1Qzb//B4plgw0E0M
+m4VfF+FMjfcpUc8zm/e9VXBOKEsm9C2DmCEP1piB7vXDBx0nECt+o8Khf8WNJ+J3
+lpSlIlbxwNgk5c87oBS52m1TyvhZS0eGG0PH/AwIFoIqfKl4w1ZD9SYyB1EzIxem
+qN4H8pbjpXkeYqOb6HqPb2bgzR2VryQ/akHGT9W9DS08wBaA6nKPwvuU469xh7Ck
+3CW1/wyN55lWcceW0JAg+oKnAtScdRqaiHY8UKVIUmxowCNqMETt567T7JuWDeyF
+4pHa+fZl+/X48unxFDpJJjxuTjR2z0iEyF26Amgnyhj+wazeCYrKvJhzURtzYOpF
+1vIxCBSs8e5+sdrlUMQWGYxyC2ESE6v2cZPvd+hpxR3N1vNS7lLyesJ26Qlx3wOZ
+iYDGoA2UKr6hZPlXgxU9W5e9Q4lM68adKZywSmdM9ouabMGWbPVVQiYMT/ETxJMW
+3Lu68Xiuu8zJFxJ3Xcfzr+IID6Zecq9OV3+NF362S/xS70O7742bLYfW4mN9dL3k
+qtyK/xX7DJ7LbCwjyPHH5wJuvPt0mZfWDpIJt9EjrPWVXJQgtlE=
+=6vn6
+-----END PGP SIGNATURE-----
+
+--3uiu3xecSU/IzmT8--

@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5975455361A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006A9553620
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238270AbiFUPbD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 11:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S1352674AbiFUPbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235961AbiFUPbA (ORCPT
+        with ESMTP id S235961AbiFUPbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:31:00 -0400
-Received: from relay4.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C2F28E25
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:30:59 -0700 (PDT)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id CE03780FE9;
-        Tue, 21 Jun 2022 15:30:57 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id F099A20012;
-        Tue, 21 Jun 2022 15:30:55 +0000 (UTC)
-Message-ID: <c65a542d9293667949ba74e7bae54f9dd7caa686.camel@perches.com>
-Subject: Re: Re: [PATCH] net: s390: drop unexpected word "the" in the
- comments
-From:   Joe Perches <joe@perches.com>
-To:     =?UTF-8?Q?=E8=92=8B=E5=81=A5?= <jiangjian@cdjrlc.com>,
-        Alexandra Winter <wintera@linux.ibm.com>
-Cc:     wenjia <wenjia@linux.ibm.com>, hca <hca@linux.ibm.com>,
-        gor <gor@linux.ibm.com>, agordeev <agordeev@linux.ibm.com>,
-        borntraeger <borntraeger@linux.ibm.com>,
-        svens <svens@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 21 Jun 2022 08:30:55 -0700
-In-Reply-To: <tencent_05711A707693017879EC87F7@qq.com>
-References: <20220621113740.103317-1-jiangjian@cdjrlc.com>
-         <09b411b2-0e1f-26d5-c0ea-8ee6504bdcfd@linux.ibm.com>
-         <a502003f9ba31c660ddb9c9d8683b7b2a01d12f7.camel@perches.com>
-         <tencent_05711A707693017879EC87F7@qq.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Tue, 21 Jun 2022 11:31:11 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F123A2AC4F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:31:08 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id x6-20020a1c7c06000000b003972dfca96cso7463234wmc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YT/g1l+EhzOy6M+nS+bPwU5QfP9vQQuvmLes4FWs9nA=;
+        b=zm+1B948VVBoC9zdmS3mRHOhlTzOOstEX1Msg5XVi49sfVCOnSIpk8b2dkPB7fCY+b
+         Goajm2o/+0sxjayYUUrpCaauVigP981n/ef88s3lg6Uqd5IfgNwqM53vWLn6uYW44CJO
+         lkW+eFe9poXybTn/y6UBnLxcT0pP53FHB87n0FydsMHrArcwuEOqj0Ylj1LCz2b+ZhfP
+         Kx7dzCo3ZOFJQwnU+k51JdhWtP75KrzU6M7WiyIbwxRqRT05baeCa9ONMuUMG7eAPqW4
+         f8ljW+lxxbIxsxEiA4J/qXviadQuo9KvaXEr4SF9Om93jcCcnr4DsHENocUxEsi/XAcw
+         VsDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YT/g1l+EhzOy6M+nS+bPwU5QfP9vQQuvmLes4FWs9nA=;
+        b=3hA2ET9wYX2+y6vBD6zs1hFaS7sejUuKOqD+4DoTrcb6MO2k5cuoxp/uL2lomRdsLj
+         uq6nPlGu5H/LFignFy9FYlr1ZcfRUocYfNVqecYdAhs2w+H04phfZK0QWT/aARJsK2Fd
+         bP7c1xxQvLoL7PHo8W6mwh76sO9YXPeCT6fkkf7LyUC4T/oJYEHd3qWwsXCTm3Q0njrp
+         dd5inxVX04f9BYXFWf5GEtYrDWGfNyOM8U6tT4BUmFUoH1HQg+evZT4JlDNbwfl0aQm+
+         B2QhPLW0yWb9E5WuHrRPF1H3DCIefnNie9ZKBEHZOMkb1qKtce4cVSjfvrW9W5oij+kL
+         CwQQ==
+X-Gm-Message-State: AJIora+WwBC55DKgkVO1vs6Hg3U6jJCwQY9jH/Rx30mwyoxsihCaYFbO
+        YosETfQSX5YuC/br2B5FcKqTI/k6P9S/DAS8eklf
+X-Google-Smtp-Source: AGRyM1tFlJzbaN0YRLI5nskwlap9strrp/mdu6n5GbB1zR8mMrlXwMjuJjoJ9Y5PdA6fFEJb3dRbMrNRS3BfacwgBKA=
+X-Received: by 2002:a05:600c:2215:b0:39c:55a0:9531 with SMTP id
+ z21-20020a05600c221500b0039c55a09531mr30734498wml.29.1655825467479; Tue, 21
+ Jun 2022 08:31:07 -0700 (PDT)
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: F099A20012
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 8knhxrmrgmu8k4hk9worbcetgyxdb9dr
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19rgz/bWlKy+zCDv3jFjhLJJqGzyhLHl2I=
-X-HE-Tag: 1655825455-267590
+References: <20220621063824.241527-1-xiujianfeng@huawei.com>
+In-Reply-To: <20220621063824.241527-1-xiujianfeng@huawei.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 21 Jun 2022 11:30:56 -0400
+Message-ID: <CAHC9VhTXf=L97d9zuMOXr0JOm-vVgifJx7cSOJT+wLZZ7uA=gg@mail.gmail.com>
+Subject: Re: [PATCH -next] selinux: Cleanup the enum SEL_COMPAT_NET
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 23:21 +0800, 蒋健 wrote:
-> So,i need to resubmit a new patch ?&nbsp;
+On Tue, Jun 21, 2022 at 2:40 AM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+>
+> The "compat_net" compatibility code has been removed since commit
+> 58bfbb51ff2b ("selinux: Remove the "compat_net" compatibility code"),
+> so SEL_COMPAT_NET need to be removed as well.
+>
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  security/selinux/selinuxfs.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+> index 8fcdd494af27..7115ca91ec05 100644
+> --- a/security/selinux/selinuxfs.c
+> +++ b/security/selinux/selinuxfs.c
+> @@ -58,7 +58,6 @@ enum sel_inos {
+>         SEL_DISABLE,    /* disable SELinux until next reboot */
+>         SEL_MEMBER,     /* compute polyinstantiation membership decision */
+>         SEL_CHECKREQPROT, /* check requested protection, not kernel-applied one */
+> -       SEL_COMPAT_NET, /* whether to use old compat network packet controls */
+>         SEL_REJECT_UNKNOWN, /* export unknown reject handling to userspace */
+>         SEL_DENY_UNKNOWN, /* export unknown deny handling to userspace */
+>         SEL_STATUS,     /* export current status using mmap() */
 
-Not necesarily no.  Up to you.
+Thanks for the patch, but keeping the old enum value is harmless
+considering the size of sel_inos and I would rather see it preserved
+just on the odd chance that some userspace tool is relying on specific
+inode values.
 
-And this is a quite old driver that likely doesn't need much
-change so if there is a patch at all, maybe simpler is better.
-
-(though all the uses like ?&nbsp; in your reply could be a
- reason to either update or perhaps reconfigure your
- X-Mailer: QQMail 2.x email client)
-
-cheers, Joe
+-- 
+paul-moore.com

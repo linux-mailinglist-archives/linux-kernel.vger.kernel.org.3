@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635FC552E47
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D314552E43
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348656AbiFUJ2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S1347480AbiFUJ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347480AbiFUJ2C (ORCPT
+        with ESMTP id S1348944AbiFUJ2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:28:02 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D932CBB4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:27:53 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id b23so6137486ljh.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:27:53 -0700 (PDT)
+        Tue, 21 Jun 2022 05:28:25 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481C3D5E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:28:21 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id f39so5715295lfv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=8e6CPzPX9uApajCNlf3OZqOW+gA8MhL7WPc0wiikTqU=;
-        b=il/sljDYx3y2Rj9aqTxNbHbIQ6aPBlIM7Pdno2uuS3KhdGKi1EZgd2FZY9hkCiRxUf
-         tXXC5pVQluIx7hzrqJkyWQa8PUsf0LJEY1Ckb5XU825NXkHH39idMeeWYYKj8nx3j9ov
-         AVbtVZ20G4hmmd8vqMhW2AI7pWnxAilWfxN8qOYRJ8JpVhXsc4uZLRjZa/oRuq1Ek4Sq
-         +NfhopYiugeI1pVHBPe7y9TDcyBtvwaAB6nO9UYiHGVr7CxQDXuXLfNpVecYHKp31Ryx
-         lOS1h5CPu7upadyDALbWKNDakfbwsuKkASE6Xre2cbymdQ6fljJLXzGYJ8RPK+fnUTP9
-         WVyw==
+        bh=Va65CLlXT66lPiOAfwa9g+ASPcDM2MU+8pT24RRRO7k=;
+        b=fu3PlG9cjiFDFScwOu8ddGWGy5g+HqrHZe10yxTdqH078iLyUE2HKHs8FuC59gH2So
+         WY7XXtfa8HVwjJrAbMJiHsVO4ag6N85TnZqdR2nXa54ZOSeoi/oe7DGi3vRoK4mRkUrI
+         XCWgoPJvlF10a8dqge8Nxc3I81fcwUwjCC05vPyqmKy0Q7umD3STPXA69BtRZTOrlaz5
+         Phftvrz0yrSqsVEdNSl8UxNIptUQYyKKZbHGTNdDbX7MHSIf6b9IczF5CJemmhWsZFCC
+         kttCGIp2asVqs3R6/hefDfA9BUWTDy6LeTczrj2VIE+m5EpdUiRuSWzB8zGODXyEYNhB
+         Xk/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8e6CPzPX9uApajCNlf3OZqOW+gA8MhL7WPc0wiikTqU=;
-        b=3ZgYTG01g1qta3uU02uhBVSnfru9GMMXJ4c5fMjcgdFFYOHKgBPux9CgrSjk9hPj6w
-         2uSXOXSHq3p58AKFwQWh1vm/Uzinf4CxcpSLxYPNLAKVsiGBnyfYyBT7TWmryP1cnLRU
-         zVB/0sXrnsCEPxolZFZC3GuYrcswE8EeUo280Cae9F9QM9PhVZXxU3UltBkufRgi7Jcl
-         MtPZNfkCBpInDdvRLq7BB7h8Q2AeymWPJG2uqzCME0Woaaub3HRbGGO267Ca3x2UbP6F
-         lfxaIoJ0DPmKzA3kAMnAauubMxeKnq6L8rCzvDpUqLo6i4f/Rph4rcWQw1GdX2Gbcd7M
-         Hx5g==
-X-Gm-Message-State: AJIora8TOxWwehqvgWeGMfmvukcZx8V9v72n/2OM22hSfBfA5VJA9qkR
-        MXpdNJhQz7zmPUk0QBR5Cg2zJ1Xfnh8ZpehVI6WN0Q==
-X-Google-Smtp-Source: AGRyM1sBSSnPQfUNpVkNAnJ/02rMsTXl7DvXUFqZ5omPctSopVyLOUzYU7be4FE/ZwsUBD8Qkkc/Jkri0LrTRGe/ZjQ=
-X-Received: by 2002:a2e:a58d:0:b0:25a:6348:9595 with SMTP id
- m13-20020a2ea58d000000b0025a63489595mr7562439ljp.72.1655803672117; Tue, 21
- Jun 2022 02:27:52 -0700 (PDT)
+        bh=Va65CLlXT66lPiOAfwa9g+ASPcDM2MU+8pT24RRRO7k=;
+        b=cN1xFekEKGq0g8jdaWU8eoIDuwlgs40TnJgof6C1HKA4YaVKf6vGwb5MfQheYgYMxW
+         SuF4xk2WOIdS58eXAuthM5evN6uHOnjIEB+OpfBGWouLd+8IN1T3oh0gxLjvggMeJdnA
+         fKzX6GfMlTYLt3WoVYswPwwZ17i560ooRYflM74KzaTlf3j5yE7ZQpkrfeYGy3rrmFCc
+         F3PwyivTFZc31G2NNiyeI7QToDjgiWuoUpZ9Zuyz5dDfOagqSizC2k/aOC46aJJyQOyu
+         2fX5ZtYUR68ii5IIoBcVfuEDZnauFIuMCIamb4C8FfFv5oc1gBkxAAyHtJFAuOkIFv03
+         t76g==
+X-Gm-Message-State: AJIora9GMfBTSKwqy0rWKC6MboXoIW12ZQj3HY+CbJiNRHeJm1t+pVF+
+        MiMRmyMEzx6f8mbpdzU8cDKU9rvZk6p1Leh5SaREog==
+X-Google-Smtp-Source: AGRyM1tnr/7fffHg+1rH3vAPs7eTuYvzjKulUmJ/wgqA54vx/4+Zywf0KM0jO8ZNCCX++WmE4C8hdBJqBRCAAR4w1Yw=
+X-Received: by 2002:a05:6512:118f:b0:47f:6a1a:20d4 with SMTP id
+ g15-20020a056512118f00b0047f6a1a20d4mr7110048lfr.428.1655803699554; Tue, 21
+ Jun 2022 02:28:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-4-mw@semihalf.com>
- <YrCxUfTDmvm9zLXq@smile.fi.intel.com>
-In-Reply-To: <YrCxUfTDmvm9zLXq@smile.fi.intel.com>
+References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-5-mw@semihalf.com>
+ <YrCxqDYg6OIdgmG1@smile.fi.intel.com> <YrCx5SkADWBzRokM@smile.fi.intel.com>
+In-Reply-To: <YrCx5SkADWBzRokM@smile.fi.intel.com>
 From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Tue, 21 Jun 2022 11:27:43 +0200
-Message-ID: <CAPv3WKch9hC3ZjZE0f4JntqFDY04PUpQ1yzsgShThmhkqV01-g@mail.gmail.com>
-Subject: Re: [net-next: PATCH 03/12] net: dsa: switch to device_/fwnode_ APIs
+Date:   Tue, 21 Jun 2022 11:28:10 +0200
+Message-ID: <CAPv3WKfVs9KVboCBgiwR_WA+aPD02Axwvb5uSgjKDsvxYepe7A@mail.gmail.com>
+Subject: Re: [net-next: PATCH 04/12] net: mvpp2: initialize port fwnode pointer
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
@@ -75,7 +75,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,77 +83,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 20 cze 2022 o 19:41 Andy Shevchenko
+pon., 20 cze 2022 o 19:44 Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
 >
-> On Mon, Jun 20, 2022 at 05:02:16PM +0200, Marcin Wojtas wrote:
-> > In order to support both ACPI and DT, modify the generic
-> > DSA code to use device_/fwnode_ equivalent routines.
-> > No functional change is introduced by this patch.
+> On Mon, Jun 20, 2022 at 08:43:05PM +0300, Andy Shevchenko wrote:
+> > On Mon, Jun 20, 2022 at 05:02:17PM +0200, Marcin Wojtas wrote:
+> > > As a preparation to switch the DSA subsystem from using
+> > > of_find_net_device_by_node() to its more generic fwnode_
+> > > equivalent, the port's device structure should be updated
+> > > with its fwnode pointer, similarly to of_node - see analogous
+> > > commit c4053ef32208 ("net: mvpp2: initialize port of_node pointer").
+> > >
+> > > This patch is required to prevent a regression before updating
+> > > the DSA API on boards that connect the mvpp2 port to switch,
+> > > such as Clearfog GT-8K or CN913x CEx7 Evaluation Board.
+> >
+> > ...
+> >
+> > >     dev->dev.of_node =3D port_node;
+> > > +   dev->dev.fwnode =3D port_fwnode;
+> >
+> > device_set_node() ?
 >
-> ...
->
-> >       struct device_node      *dn;
->
-> What prevents us from removing this?
-
-I left it to satisfy possible issues with backward compatibility - I
-migrated mv88e6xxx, other DSA drivers still rely on of_* and may use
-this field.
-
->
-> > +     struct fwnode_handle    *fwnode;
->
-> ...
->
-> > -             dn =3D of_get_child_by_name(ds->dev->of_node, "mdio");
-> > +             fwnode =3D fwnode_get_named_child_node(ds->dev->fwnode, "=
-mdio");
->
-> The rule of thumb is avoid dereferencing fwnode from struct device. So
-> dev_fwnode(), but here it would be achieved by device_get_named_child_nod=
-e().
+> Ah, important remark to all device_set_node() comments. It assumes that y=
+ou
+> replace _both_ assignments with _single_ call.
 >
 
-Ok, thanks - will do for all occurences.
-
-> ...
->
-> > -static int dsa_switch_parse_of(struct dsa_switch *ds, struct device_no=
-de *dn)
-> > +static int dsa_switch_parse_of(struct dsa_switch *ds, struct fwnode_ha=
-ndle *fwnode)
->
-> Shouldn't _of suffix be replaced by, let's say, _fw?
->
-
-I thought about it and can perform such naming update in next iteration.
-
-> ...
->
-> > -     return dsa_switch_parse_ports_of(ds, dn);
-> > +     return dsa_switch_parse_ports_of(ds, fwnode);
->
-> Ditto.
->
-> ...
->
-> > +     fwnode =3D ds->dev->fwnode;
->
-> dev_fwnode() or corresponding device_property_ API.
->
-
-OK.
-
-> ...
->
-> >       slave_dev->dev.of_node =3D port->dn;
-> > +     slave_dev->dev.fwnode =3D port->fwnode;
->
-> device_set_node()
->
-
-OK.
+OK, will do.
 
 Thanks,
 Marcin

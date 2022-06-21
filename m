@@ -2,192 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A891552B9C
+	by mail.lfdr.de (Postfix) with ESMTP id 19CB1552B9B
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346821AbiFUHSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S1346861AbiFUHSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345379AbiFUHSA (ORCPT
+        with ESMTP id S1345379AbiFUHSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:18:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C467631C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:17:58 -0700 (PDT)
-X-UUID: 073fb03cba0f492da81bfb9d16a26fae-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:f4cf376d-e335-4209-9b4a-1699ca9b5cce,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:51
-X-CID-INFO: VERSION:1.1.6,REQID:f4cf376d-e335-4209-9b4a-1699ca9b5cce,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:51
-X-CID-META: VersionHash:b14ad71,CLOUDID:278e16ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:801f2789e3b7,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 073fb03cba0f492da81bfb9d16a26fae-20220621
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <kuan-ying.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 866569992; Tue, 21 Jun 2022 15:17:53 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 21 Jun 2022 15:17:52 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 15:17:52 +0800
-Message-ID: <5949bc710889be1324d5dada995a263fd3c29cb5.camel@mediatek.com>
-Subject: Re: [PATCH 21/32] kasan: simplify invalid-free reporting
-From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-To:     "andrey.konovalov@linux.dev" <andrey.konovalov@linux.dev>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>
-CC:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "Peter Collingbourne" <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 21 Jun 2022 15:17:52 +0800
-In-Reply-To: <f7f5cfc5eb8f1a1f849665641b9dd2cfb4a62c3c.1655150842.git.andreyknvl@google.com>
-References: <cover.1655150842.git.andreyknvl@google.com>
-         <f7f5cfc5eb8f1a1f849665641b9dd2cfb4a62c3c.1655150842.git.andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 03:18:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABA01DA55;
+        Tue, 21 Jun 2022 00:18:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LRyXT6vXDz4xDB;
+        Tue, 21 Jun 2022 17:18:01 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655795883;
+        bh=EGoYRYQjOBwtBkVxbuTSwAYJiJuLfrshpCY8FKmKS5M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VGabhqUSjK/D+ZVivf08qY6OomSshSz0UwEwt3rfHSKXyWD+R3YOtSHShF0B3u3uL
+         h+8KHShyhHAo2pcx/BDtnQ55CpiHNuovljKZjTjuZAEbihOwcmhNIh/c0Lvv9NeJPZ
+         69VRW2VYARVa2lIGYlfjr0/h97Bdvw99/4J9A7e8BtZfiU4pX2IyGLjt0pJRl8N0DS
+         oJ0m6gW5JW4Vys1wGOPdmnx+omXkg58xsVSBYzW6hO9P5I/YCkycxNOtT05VUA3jg9
+         mNvxD06oHhNBoBd97z6wNPsNYKZM7Zn7rYe2nUYxwHcIiNnqcBnNbrrjtIbO07rk9e
+         DqCDwau0FAwGQ==
+Date:   Tue, 21 Jun 2022 17:18:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: linux-next: build failures after merge of the mm tree
+Message-ID: <20220621171800.0397976a@canb.auug.org.au>
+In-Reply-To: <20220620164246.0d3f7784@canb.auug.org.au>
+References: <20220620164246.0d3f7784@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.gKofYcDqE7_tSi1YTSVd61";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 04:14 +0800, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> Right now, KASAN uses the kasan_report_type enum to describe report
-> types.
-> 
-> As this enum only has two options, replace it with a bool variable.
-> 
-> Also, unify printing report header for invalid-free and other bug
-> types
-> in print_error_description().
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  mm/kasan/kasan.h  |  7 +------
->  mm/kasan/report.c | 16 +++++++---------
->  2 files changed, 8 insertions(+), 15 deletions(-)
-> 
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index e8329935fbfb..f696d50b09fb 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -146,16 +146,11 @@ static inline bool kasan_requires_meta(void)
->  #define META_MEM_BYTES_PER_ROW (META_BYTES_PER_ROW *
-> KASAN_GRANULE_SIZE)
->  #define META_ROWS_AROUND_ADDR 2
-> 
-> -enum kasan_report_type {
-> -       KASAN_REPORT_ACCESS,
-> -       KASAN_REPORT_INVALID_FREE,
-> -};
-> -
->  struct kasan_report_info {
-> -       enum kasan_report_type type;
->         void *access_addr;
->         void *first_bad_addr;
->         size_t access_size;
-> +       bool is_free;
->         bool is_write;
->         unsigned long ip;
->  };
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index f951fd39db74..7269b6249488 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -175,14 +175,12 @@ static void end_report(unsigned long *flags,
-> void *addr)
-> 
+--Sig_/.gKofYcDqE7_tSi1YTSVd61
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrey,
+Hi all,
 
-Do we need to distinguish "double free" case from "invalid free" or
-we just print "double-free or invalid-free"?
+On Mon, 20 Jun 2022 16:42:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Hi all,
+>=20
+> After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
+> failed like this:
+>=20
+> In file included from arch/x86/include/asm/page.h:86,
+>                  from arch/x86/include/asm/thread_info.h:12,
+>                  from include/linux/thread_info.h:60,
+>                  from arch/x86/include/asm/preempt.h:7,
+>                  from include/linux/preempt.h:78,
+>                  from include/linux/spinlock.h:55,
+>                  from include/linux/mmzone.h:8,
+>                  from include/linux/gfp.h:6,
+>                  from include/linux/slab.h:15,
+>                  from include/linux/crypto.h:20,
+>                  from arch/x86/kernel/asm-offsets.c:9:
+> include/linux/mm.h: In function 'destroy_large_folio':
+> include/asm-generic/memory_model.h:35:21: error: implicit declaration of =
+function 'page_to_section'; did you mean 'present_section'? [-Werror=3Dimpl=
+icit-function-declaration]
+>    35 |         int __sec =3D page_to_section(__pg);                     =
+ \
+>       |                     ^~~~~~~~~~~~~~~
+> include/asm-generic/memory_model.h:40:32: note: in definition of macro '_=
+_pfn_to_page'
+>    40 | ({      unsigned long __pfn =3D (pfn);                    \
+>       |                                ^~~
+> include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__=
+page_to_pfn'
+>    52 | #define page_to_pfn __page_to_pfn
+>       |                     ^~~~~~~~~~~~~
+> include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
+>   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+>       |                                      ^~~~~~~~~~~
+> include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
+>   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
+>       |                                 ^~~~~~~~
+> include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
+>   928 |         enum compound_dtor_id dtor =3D folio_page(folio, 1)->comp=
+ound_dtor;
+>       |                                      ^~~~~~~~~~
+> In file included from include/linux/memcontrol.h:20,
+>                  from include/linux/swap.h:9,
+>                  from include/linux/suspend.h:5,
+>                  from arch/x86/kernel/asm-offsets.c:13:
+> include/linux/mm.h: At top level:
+> include/linux/mm.h:1556:29: error: conflicting types for 'page_to_section=
+'; have 'long unsigned int(const struct page *)'
+>  1556 | static inline unsigned long page_to_section(const struct page *pa=
+ge)
+>       |                             ^~~~~~~~~~~~~~~
+> In file included from arch/x86/include/asm/page.h:86,
+>                  from arch/x86/include/asm/thread_info.h:12,
+>                  from include/linux/thread_info.h:60,
+>                  from arch/x86/include/asm/preempt.h:7,
+>                  from include/linux/preempt.h:78,
+>                  from include/linux/spinlock.h:55,
+>                  from include/linux/mmzone.h:8,
+>                  from include/linux/gfp.h:6,
+>                  from include/linux/slab.h:15,
+>                  from include/linux/crypto.h:20,
+>                  from arch/x86/kernel/asm-offsets.c:9:
+> include/asm-generic/memory_model.h:35:21: note: previous implicit declara=
+tion of 'page_to_section' with type 'int()'
+>    35 |         int __sec =3D page_to_section(__pg);                     =
+ \
+>       |                     ^~~~~~~~~~~~~~~
+> include/asm-generic/memory_model.h:40:32: note: in definition of macro '_=
+_pfn_to_page'
+>    40 | ({      unsigned long __pfn =3D (pfn);                    \
+>       |                                ^~~
+> include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__=
+page_to_pfn'
+>    52 | #define page_to_pfn __page_to_pfn
+>       |                     ^~~~~~~~~~~~~
+> include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
+>   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+>       |                                      ^~~~~~~~~~~
+> include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
+>   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
+>       |                                 ^~~~~~~~
+> include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
+>   928 |         enum compound_dtor_id dtor =3D folio_page(folio, 1)->comp=
+ound_dtor;
+>       |                                      ^~~~~~~~~~
+> cc1: some warnings being treated as errors
+>=20
+> Caused by commit (I think)
+>=20
+>   d3b90b76e101 ("mm: convert destroy_compound_page() to destroy_large_fol=
+io()")
+>=20
+> I have reverted these commits fot today:
+>=20
+> 56629699b3dd mm/swap: convert __delete_from_swap_cache() to a folio
+> e5085f2cc241 mm/swap: convert delete_from_swap_cache() to take a folio
+> 169f02f4efb1 mm: convert page_swap_flags to folio_swap_flags
+> d3b90b76e101 mm: convert destroy_compound_page() to destroy_large_folio()
+>=20
+> Then I got:
+>=20
+> mm/hugetlb_vmemmap.c: In function 'vmemmap_optimizable_pages':
+> mm/hugetlb_vmemmap.c:110:24: error: implicit declaration of function 'spa=
+rse_decode_mem_map' [-Werror=3Dimplicit-function-declaration]
+>   110 |         vmemmap_page =3D sparse_decode_mem_map(ms->section_mem_ma=
+p,
+>       |                        ^~~~~~~~~~~~~~~~~~~~~
+> mm/hugetlb_vmemmap.c:110:22: warning: assignment to 'struct page *' from =
+'int' makes pointer from integer without a cast [-Wint-conversion]
+>   110 |         vmemmap_page =3D _sparsedecode_mem_map(ms->section_mem_ma=
+p,
+>       |                      ^
+> cc1: some warnings being treated as errors
+>=20
+> from my arm64 defconfig build.
+>=20
+> Caused by commit
+>=20
+>   10a768735470 ("mm: memory_hotplug: make hugetlb_optimize_vmemmap compat=
+ible with memmap_on_memory")
+>=20
+> So I gave up and used the mm tree from next-20220617 for today.
 
-I sent a patch[1] to separate double free case from invalid
-free last week and I saw it has been merged into akpm tree.
+Today, I reverted the following commits instead:
 
-[1] 
-https://lore.kernel.org/linux-mm/20220615062219.22618-1-Kuan-Ying.Lee@mediatek.com/
+10a768735470 mm: memory_hotplug: make hugetlb_optimize_vmemmap compatible w=
+ith memmap_on_memory
+cececf2df493 mm: memory_hotplug: enumerate all supported section flags
+56629699b3dd mm/swap: convert __delete_from_swap_cache() to a folio
+e5085f2cc241 mm/swap: convert delete_from_swap_cache() to take a folio
+169f02f4efb1 mm: convert page_swap_flags to folio_swap_flags
+d3b90b76e101 mm: convert destroy_compound_page() to destroy_large_folio()
+19211dae45bb mm/swap: convert __page_cache_release() to use a folio
 
-Thanks,
-Kuan-Ying Lee
+--=20
+Cheers,
+Stephen Rothwell
 
->  static void print_error_description(struct kasan_report_info *info)
->  {
-> -       if (info->type == KASAN_REPORT_INVALID_FREE) {
-> -               pr_err("BUG: KASAN: double-free or invalid-free in
-> %pS\n",
-> -                      (void *)info->ip);
-> -               return;
-> -       }
-> +       const char *bug_type = info->is_free ?
-> +               "double-free or invalid-free" :
-> kasan_get_bug_type(info);
-> 
-> -       pr_err("BUG: KASAN: %s in %pS\n",
-> -               kasan_get_bug_type(info), (void *)info->ip);
-> +       pr_err("BUG: KASAN: %s in %pS\n", bug_type, (void *)info-
-> >ip);
-> +       if (info->is_free)
-> +               return;
->         if (info->access_size)
->                 pr_err("%s of size %zu at addr %px by task %s/%d\n",
->                         info->is_write ? "Write" : "Read", info-
-> >access_size,
-> @@ -435,11 +433,11 @@ void kasan_report_invalid_free(void *ptr,
-> unsigned long ip)
-> 
->         start_report(&flags, true);
-> 
-> -       info.type = KASAN_REPORT_INVALID_FREE;
->         info.access_addr = ptr;
->         info.first_bad_addr = kasan_reset_tag(ptr);
->         info.access_size = 0;
->         info.is_write = false;
-> +       info.is_free = true;
->         info.ip = ip;
-> 
->         print_report(&info);
-> @@ -468,11 +466,11 @@ bool kasan_report(unsigned long addr, size_t
-> size, bool is_write,
-> 
->         start_report(&irq_flags, true);
-> 
-> -       info.type = KASAN_REPORT_ACCESS;
->         info.access_addr = ptr;
->         info.first_bad_addr = kasan_find_first_bad_addr(ptr, size);
->         info.access_size = size;
->         info.is_write = is_write;
-> +       info.is_free = false;
->         info.ip = ip;
-> 
->         print_report(&info);
-> --
-> 2.25.1
-> 
-> 
+--Sig_/.gKofYcDqE7_tSi1YTSVd61
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKxcKgACgkQAVBC80lX
+0Gw9Ewf9GXmuZy7oI2z6WdE7/cMEJLc+X6UreyfX5QIRJVm4Nu9Un90CIy5JHcqZ
+A/PZJ7EIb0TEvqdWJH7FZOMcrpV84St/5iF4QGuY836cmH3pAHfynxk3oho/876d
+OVXEO/ltSAtmw10nh+ouxtUWwHXWZ/0OGx4T6IvfH2k0lR04fXCm4Ty61mMq/Gpz
+dIIUq/QKXM8DXZkg5XnkpD7ojay38T7w3jX2hxJvK6HMb6YnjKuncTi3gVo/j1hN
+6aJbxykGhghyK6vf0rO8rACPHcXuzJd4+H7uzKPUnRbkV5ZhaUxkCfk/UYE+2dq3
+tSxbNj15KYgPNpIpPCErKKtZTFgwQA==
+=LPu5
+-----END PGP SIGNATURE-----
+
+--Sig_/.gKofYcDqE7_tSi1YTSVd61--

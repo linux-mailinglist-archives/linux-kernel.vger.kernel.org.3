@@ -2,242 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8735F552DE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC5E552DED
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348581AbiFUJGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S1348645AbiFUJHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348440AbiFUJGu (ORCPT
+        with ESMTP id S1348583AbiFUJGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:06:50 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2327F15A34;
-        Tue, 21 Jun 2022 02:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655802409; x=1687338409;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=vJPkzk6EQlamjTWr4zwrEkoumU44Ke4DpZgp6nabWaI=;
-  b=u06d4Rhv+TX8JC7JKs0hFJSWG/w6ke83gTamWqodev/Sqc3vWNyYH+mS
-   GIlshTp+Q4zUodNTY4jDzaN8fj4cilRJdZbbtyeaOVmqDTK3+AbXSSINe
-   iYoZAydvi0giZXtwRdqMPXlvOmDoGpBt+5tj6IzSbXqE84+kYY5cGACWF
-   E=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 21 Jun 2022 02:06:49 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Jun 2022 02:06:47 -0700
-X-QCInternal: smtphost
-Received: from kalyant-linux.qualcomm.com ([10.204.66.210])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 21 Jun 2022 14:36:31 +0530
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id 25A1241C5; Tue, 21 Jun 2022 02:06:31 -0700 (PDT)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     y@qualcomm.com, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com
-Subject: [v1 2/2] drm/msm/disp/dpu1: enable crtc color management based on encoder topology
-Date:   Tue, 21 Jun 2022 02:06:27 -0700
-Message-Id: <1655802387-15275-2-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655802387-15275-1-git-send-email-quic_kalyant@quicinc.com>
-References: <y>
- <1655802387-15275-1-git-send-email-quic_kalyant@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 05:06:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31719F97;
+        Tue, 21 Jun 2022 02:06:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A185061572;
+        Tue, 21 Jun 2022 09:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FECFC341C4;
+        Tue, 21 Jun 2022 09:06:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655802414;
+        bh=N3p+7KlMfefdfn/ZBHvMoWcodfs7abt2FrfWbGO/KsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AUYhA0zhMP1sbp1Fo5+zjviMRMEknLfVukO7ghaNxa82h23l6lmM9/mngfqqtGpFi
+         jTwkXfKIjKb0La+IhkkgQbVwjYMx/xe6oVp/qT4a9lMWlZhc9eus3TA0IVryDCWYCp
+         I6OVCTnH3zkG4HZhah+VSJgLb+6MnWLYEICKxPcg=
+Date:   Tue, 21 Jun 2022 11:06:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        charles-yeh@prolific.com.tw, Charles Yeh <charlesyeh522@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: pl2303: add support for more HXN (G) types
+Message-ID: <YrGKK7Ua20Boz1oZ@kroah.com>
+References: <20220621085855.6252-1-johan@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621085855.6252-1-johan@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Crtc color management needs to be registered only for the crtc which has the
-capability to handle it. Since topology decides which encoder will get the
-dspp hw block, tie up the crtc and the encoder together (encoder->possible_crtcs)
+On Tue, Jun 21, 2022 at 10:58:55AM +0200, Johan Hovold wrote:
+> Add support for further HXN (G) type devices (GT variant, GL variant, GS
+> variant and GR) and document the bcdDevice mapping.
+> 
+> Note that the TA and TB types use the same bcdDevice as some GT and GE
+> variants, respectively, but that the HX status request can be used to
+> determine which is which.
+> 
+> Also note that we currently do not distinguish between the various HXN
+> (G) types in the driver but that this may change eventually (e.g. when
+> adding GPIO support).
+> 
+> Reported-by: Charles Yeh <charlesyeh522@gmail.com>
+> Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
+> Cc: stable@vger.kernel.org	# 5.13
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/usb/serial/pl2303.c | 29 +++++++++++++++++------------
+>  1 file changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+> index 3506c47e1eef..40b1ab3d284d 100644
+> --- a/drivers/usb/serial/pl2303.c
+> +++ b/drivers/usb/serial/pl2303.c
+> @@ -436,22 +436,27 @@ static int pl2303_detect_type(struct usb_serial *serial)
+>  		break;
+>  	case 0x200:
+>  		switch (bcdDevice) {
+> -		case 0x100:
+> +		case 0x100:	/* GC */
+>  		case 0x105:
+> +			return TYPE_HXN;
+> +		case 0x300:	/* GT / TA */
+> +			if (pl2303_supports_hx_status(serial))
+> +				return TYPE_TA;
+> +			fallthrough;
+>  		case 0x305:
+> +		case 0x400:	/* GL */
+>  		case 0x405:
+> +			return TYPE_HXN;
+> +		case 0x500:	/* GE / TB */
+> +			if (pl2303_supports_hx_status(serial))
+> +				return TYPE_TB;
+> +			fallthrough;
+> +		case 0x505:
+> +		case 0x600:	/* GS */
+>  		case 0x605:
+> -			/*
+> -			 * Assume it's an HXN-type if the device doesn't
+> -			 * support the old read request value.
+> -			 */
+> -			if (!pl2303_supports_hx_status(serial))
+> -				return TYPE_HXN;
+> -			break;
+> -		case 0x300:
+> -			return TYPE_TA;
+> -		case 0x500:
+> -			return TYPE_TB;
+> +		case 0x700:	/* GR */
+> +		case 0x705:
+> +			return TYPE_HXN;
+>  		}
+>  		break;
+>  	}
+> -- 
+> 2.35.1
+> 
 
-Change-Id: If5a0f33547b6f527ca4b8fbb78424b141dbbd711
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  8 ++++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 20 ++++++++++++++++----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  5 +++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     | 22 ++++++++++++++++++----
- 5 files changed, 46 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 7763558..2913acb 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -1511,7 +1511,7 @@ static const struct drm_crtc_helper_funcs dpu_crtc_helper_funcs = {
- 
- /* initialize crtc */
- struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
--				struct drm_plane *cursor)
-+				struct drm_plane *cursor, unsigned int enc_mask)
- {
- 	struct drm_crtc *crtc = NULL;
- 	struct dpu_crtc *dpu_crtc = NULL;
-@@ -1544,7 +1544,11 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- 
- 	drm_crtc_helper_add(crtc, &dpu_crtc_helper_funcs);
- 
--	drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
-+	/* Register crtc color management if the encoder has dspp, use the
-+	 * crtc to mark it as possible_crtcs for that encoder.
-+	 */
-+	if(BIT(crtc->index) & enc_mask)
-+		drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
- 
- 	/* save user friendly CRTC name for later */
- 	snprintf(dpu_crtc->name, DPU_CRTC_NAME_SIZE, "crtc%u", crtc->base.id);
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-index b8785c3..0a6458e 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-@@ -269,7 +269,7 @@ void dpu_crtc_complete_commit(struct drm_crtc *crtc);
-  * @Return: new crtc object or error
-  */
- struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
--			       struct drm_plane *cursor);
-+			       struct drm_plane *cursor, unsigned int enc_mask);
- 
- /**
-  * dpu_crtc_register_custom_event - api for enabling/disabling crtc event
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index f2cb497..893ce68 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -13,6 +13,8 @@
- #include <drm/drm_crtc.h>
- #include <drm/drm_file.h>
- #include <drm/drm_probe_helper.h>
-+#include <drm/drm_bridge.h>
-+#include <drm/drm_bridge_connector.h>
- 
- #include "msm_drv.h"
- #include "dpu_kms.h"
-@@ -511,13 +513,18 @@ void dpu_encoder_helper_split_config(
- 	}
- }
- 
--static struct msm_display_topology dpu_encoder_get_topology(
--			struct dpu_encoder_virt *dpu_enc,
-+struct msm_display_topology dpu_encoder_get_topology(
-+			struct drm_encoder *drm_enc,
- 			struct dpu_kms *dpu_kms,
- 			struct drm_display_mode *mode)
- {
- 	struct msm_display_topology topology = {0};
-+	struct dpu_encoder_virt *dpu_enc;
-+	struct drm_bridge *bridge;
- 	int i, intf_count = 0;
-+	bool primary_display = false;
-+
-+	dpu_enc = to_dpu_encoder_virt(drm_enc);
- 
- 	for (i = 0; i < MAX_PHYS_ENCODERS_PER_VIRTUAL; i++)
- 		if (dpu_enc->phys_encs[i])
-@@ -542,7 +549,12 @@ static struct msm_display_topology dpu_encoder_get_topology(
- 	else
- 		topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
- 
--	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
-+	drm_for_each_bridge_in_chain(drm_enc, bridge) {
-+		if (bridge->type != DRM_MODE_CONNECTOR_DisplayPort)
-+			primary_display = true;
-+	}
-+
-+	if (primary_display) {
- 		if (dpu_kms->catalog->dspp &&
- 			(dpu_kms->catalog->dspp_count >= topology.num_lm))
- 			topology.num_dspp = topology.num_lm;
-@@ -601,7 +613,7 @@ static int dpu_encoder_virt_atomic_check(
- 		}
- 	}
- 
--	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode);
-+	topology = dpu_encoder_get_topology(drm_enc, dpu_kms, adj_mode);
- 
- 	/* Reserve dynamic resources now. */
- 	if (!ret) {
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-index 1f39327..c4daf7c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-@@ -172,4 +172,9 @@ int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
- 
- bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc);
- 
-+struct msm_display_topology dpu_encoder_get_topology(
-+			struct drm_encoder *drm_enc,
-+			struct dpu_kms *dpu_kms,
-+			struct drm_display_mode *mode);
-+
- #endif /* __DPU_ENCODER_H__ */
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 3a4da0d..486ff9d 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -687,9 +687,12 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
- 	unsigned cursor_idx = 0;
- 	unsigned primary_idx = 0;
- 	bool pin_overlays;
-+	unsigned int max_dspp_count = 0;
-+	unsigned int enc_mask = 0;
- 
- 	struct msm_drm_private *priv;
- 	struct dpu_mdss_cfg *catalog;
-+	struct msm_display_topology topology = {0};
- 
- 	int primary_planes_idx = 0, cursor_planes_idx = 0, i, ret;
- 	int max_crtc_count;
-@@ -754,10 +757,19 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
- 	}
- 
- 	max_crtc_count = min(max_crtc_count, primary_planes_idx);
-+	max_dspp_count = catalog->dspp_count;
-+
-+	drm_for_each_encoder(encoder, dev) {
-+		topology = dpu_encoder_get_topology(encoder, dpu_kms, NULL);
-+		if (topology.num_dspp > 0 && (topology.num_dspp <= max_dspp_count)) {
-+			enc_mask |= BIT(encoder->index);
-+			max_dspp_count -= topology.num_dspp;
-+		}
-+	}
- 
- 	/* Create one CRTC per encoder */
- 	for (i = 0; i < max_crtc_count; i++) {
--		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
-+		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i], enc_mask);
- 		if (IS_ERR(crtc)) {
- 			ret = PTR_ERR(crtc);
- 			return ret;
-@@ -765,9 +777,11 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
- 		priv->crtcs[priv->num_crtcs++] = crtc;
- 	}
- 
--	/* All CRTCs are compatible with all encoders */
--	drm_for_each_encoder(encoder, dev)
--		encoder->possible_crtcs = (1 << priv->num_crtcs) - 1;
-+	/* Attach CRTC's to compatiable encoders */
-+	drm_for_each_encoder(encoder, dev) {
-+		encoder->possible_crtcs = (enc_mask & BIT(encoder->index)) ?
-+				BIT(encoder->index) : (((1 << priv->num_crtcs) - 1) & ~enc_mask);
-+	}
- 
- 	return 0;
- }
--- 
-2.7.4
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

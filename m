@@ -2,134 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944815538D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A155538E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353185AbiFUR0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 13:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S1353276AbiFUR3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 13:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352406AbiFUR0N (ORCPT
+        with ESMTP id S1353708AbiFUR3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 13:26:13 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841AE2D1F2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:26:12 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id 68so10632799qkk.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:26:12 -0700 (PDT)
+        Tue, 21 Jun 2022 13:29:10 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2278E64DB;
+        Tue, 21 Jun 2022 10:29:09 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z7so20293048edm.13;
+        Tue, 21 Jun 2022 10:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rX/peAHmhyZwy77vQ2JcNhxgJXXBgZnIyQj7eweojrA=;
-        b=fwypcRYdV1D8yWcf3IT9AiP9ODRtAGU+W+qLoiQFpNS34IWuY4vYKa1mjkpHQOFt8J
-         pc7ymvs97JBiS2T5w4KusAoQ0s78r5pshZ0Nao/vhrzmzZRFeZqMn4xld9ZBr/5LbUlH
-         pF62bCdEY1ttEbY5WjbhM2J5HRQ9ncfKyxkFjMdOgDzq9zLkvmqKObnrxNRuVZ11H5tH
-         hJgJPss08/uELByIHex4h2I3QiGIvrrIMAMxFuM6wbaDJDp7CFOWXeXlUTWxO+vRdT49
-         CEZEPYEk7RhOIb2xpkC2wnpwN6SjUe2PzdakfC236eczhf0NuZ3OP0vb/Z1zdByI7HtV
-         x4GA==
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:message-id:in-reply-to:references
+         :mime-version;
+        bh=tQy7cTmu/gQgDJkbt44xMaYq/OxSKXjoHtKVP2MMyy0=;
+        b=WMjEpeEX2LsVXx0mNTwwQBoNqATYbZ1jZSD5BpylETPUBf0IVROfQr/8H5QKghEC6d
+         6feqKilgc7a93eo4BHCUWVleR9pIpLXLYZF8m+GNzpGsOIc4OPblDLTBJrP/b7bWn6hK
+         4fl01DBa9ANlk6AOzKE7Rj2FO+nlvEKrTtZqSCQr9dC49+SF3rOXOgqu4yh9UCmA+CpA
+         eehaR5uAWWTpnawHYHH5fagM91pkSf21n54pqtBsj/nHREIAAbAYUjIDPcsObtLkAsf8
+         q9mX7Pdd5ZyIfYUXBhjj1w2RexD2dFDy9hVrQVkP42vjB08oNo0F6J2djVhpIq1i+Uyi
+         qwbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rX/peAHmhyZwy77vQ2JcNhxgJXXBgZnIyQj7eweojrA=;
-        b=6XUQToHNse4y2T//pBHN+bUcVMfTPpAp+HVPUeIBzcTjUUihDb4Jll8OiKGI4eSnzx
-         /t+A0c+eaNHmaIzpp/HJ2sej7pJ/HuwevmXqI8HnquKftE7TEHsgRBD2pwtd/x0AqWKz
-         +bkbN9kobNl1QBT+n9tW2VJNqSKk4kn9FsHDNMGdETR1rAmKQhdYP0G/wsvkFUFQ9aZ8
-         9HyvP3egD93GLLzR0CHSaeqHBhHafuR/cFGR1gAZD07Y5EMIk3/Se8BMZCPJBMXhjI/h
-         vVXn6nsDtE9VfXFJOy/GmkNIlwbU/ejS8pdk7VIXytvpn3XXOfZ38u19GGw/R5T+s7mG
-         5Tqw==
-X-Gm-Message-State: AJIora8fQqdqm/ts7BXOPpsY8R5sLo3d60fGYgVxWppu1kcdk5RRJh4g
-        kBXxorLzG+exKRQBxZlXhFQCWEc59g0jYEi6nVgIoA==
-X-Google-Smtp-Source: AGRyM1tBlLWy/IzZYwrazH4Rk/tiu8x4mgf+qRApIeKdfuVwyySYOqQDFSnqtGWbl6uTf14jc0HkDInSpl6gsgXe+xQ=
-X-Received: by 2002:a05:620a:4156:b0:6a6:f8d2:6d9e with SMTP id
- k22-20020a05620a415600b006a6f8d26d9emr21197020qko.30.1655832371507; Tue, 21
- Jun 2022 10:26:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:message-id:in-reply-to
+         :references:mime-version;
+        bh=tQy7cTmu/gQgDJkbt44xMaYq/OxSKXjoHtKVP2MMyy0=;
+        b=FXG+OV5pt82gxr9GBWlQAHxBEEEhybjXJhKSaY9GZpc5tzoybPxvicHvYbaGFKmhjw
+         72/RKdBG2tuYIwO4K8oZF3GFza92ER4uE2vmfFArUpVkdstQhTIZvF0yuN3MQq7NrNcq
+         E8l54dR+qpEbXYjC07q7QDpAaP1dXCVTg++HvkizaQ8NlqvWpoRCo44Vd1LJJqpHeQ5J
+         fixwqBLnvMEgdYzGbYO03PxtsSqlPxoIR3vTusuIyME3p986ChKvFZHfeJelyUI4xdfQ
+         9hJVlqDoP8eVrkYl0djAR34U37XKMg0KVIuOB7Q+ekQ/u0MIX+ujKxRzcmeInIUABuD8
+         9Zeg==
+X-Gm-Message-State: AJIora/qTWYYEb/gnIVhRPfRCXjsXqnDiAb4e0vrqGdpnETGq0WU9kLt
+        Y8jed8r3mDysE4jTqE6qzJ8=
+X-Google-Smtp-Source: AGRyM1thdqSzA0MP1eOFglefQAu9FQsKqWvKlZH2bgE+/+4N6AKakfltp6Ehcp4n8/1xAjHPLKB9Fg==
+X-Received: by 2002:a05:6402:201:b0:431:665f:11f1 with SMTP id t1-20020a056402020100b00431665f11f1mr37689389edv.378.1655832547575;
+        Tue, 21 Jun 2022 10:29:07 -0700 (PDT)
+Received: from [192.168.236.247] ([185.107.57.61])
+        by smtp.gmail.com with ESMTPSA id lb10-20020a170907784a00b00722e84c3d44sm643352ejc.118.2022.06.21.10.28.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 10:29:07 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 21:28:45 +0400
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+Subject: Re: [PATCH 5/6] dt-bindings: clock: qcom,msm8996-apcc: Fix clocks
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <XJ8UDR.9Y06T8FUTMOH2@gmail.com>
+In-Reply-To: <CAA8EJprQTiU+=ajKSWbFfbHuVxjEiybTPNez66Ob+4YZ+fXW_A@mail.gmail.com>
+References: <20220621160621.24415-1-y.oudjana@protonmail.com>
+        <20220621160621.24415-6-y.oudjana@protonmail.com>
+        <CAA8EJprQTiU+=ajKSWbFfbHuVxjEiybTPNez66Ob+4YZ+fXW_A@mail.gmail.com>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-References: <20220621111818.447452-1-robimarko@gmail.com> <20220621111818.447452-2-robimarko@gmail.com>
-In-Reply-To: <20220621111818.447452-2-robimarko@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 21 Jun 2022 20:26:00 +0300
-Message-ID: <CAA8EJposq4796b33jkovDDQdzQsrp733kN5tQYAhFow4G8hvow@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] phy: qcom-qmp-pcie: add IPQ8074 PCIe Gen3 QMP PHY support
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, kishon@ti.com,
-        vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 14:18, Robert Marko <robimarko@gmail.com> wrote:
->
-> IPQ8074 has 2 different single lane PCIe PHY-s, one Gen2 and one Gen3.
-> Gen2 one is already supported, so add the support for the Gen3 one.
-> It uses the same register layout as IPQ6018.
->
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-> Changes in v2:
-> * Rebase onto next-20220621 to apply on the refactored driver
-> * Remove non existant has_phy_com_ctrl and has_lane_rst
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 171 ++++++++++++++++++++++-
->  1 file changed, 169 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index b2cd0cf965d8..b4836417b2c0 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
 
-[skipped]
+On Tue, Jun 21 2022 at 20:07:50 +0300, Dmitry Baryshkov 
+<dmitry.baryshkov@linaro.org> wrote:
+> On Tue, 21 Jun 2022 at 19:07, Yassine Oudjana 
+> <yassine.oudjana@gmail.com> wrote:
+>> 
+>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+>> 
+>>  The clocks currently listed in clocks and clock-names are the ones
+>>  supplied by this clock controller, not the ones it consumes. Replace
+>>  them with the only clock it consumes - the on-board oscillator (XO),
+>>  and make the properties required.
+>> 
+>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>  ---
+>>   .../bindings/clock/qcom,msm8996-apcc.yaml         | 15 
+>> +++++++--------
+>>   1 file changed, 7 insertions(+), 8 deletions(-)
+>> 
+>>  diff --git 
+>> a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml 
+>> b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>  index a20cb10636dd..c4971234fef8 100644
+>>  --- a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>  +++ b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>  @@ -26,22 +26,18 @@ properties:
+>> 
+>>     clocks:
+>>       items:
+>>  -      - description: Primary PLL clock for power cluster (little)
+>>  -      - description: Primary PLL clock for perf cluster (big)
+>>  -      - description: Alternate PLL clock for power cluster (little)
+>>  -      - description: Alternate PLL clock for perf cluster (big)
+>>  +      - description: XO source
+>> 
+>>     clock-names:
+>>       items:
+>>  -      - const: pwrcl_pll
+>>  -      - const: perfcl_pll
+>>  -      - const: pwrcl_alt_pll
+>>  -      - const: perfcl_alt_pll
+>>  +      - const: xo
+>> 
+>>   required:
+>>     - compatible
+>>     - reg
+>>     - '#clock-cells'
+>>  +  - clocks
+>>  +  - clock-names
+> 
+> I think we can not list them as required, as then older DT files won't
+> pass schema validation. But I'll leave this into the hands of Rob and
+> Krzyshtof.
 
-> @@ -2121,8 +2277,16 @@ static int phy_pipe_clk_register(struct qcom_qmp *qmp, struct device_node *np)
->
->         init.ops = &clk_fixed_rate_ops;
->
-> -       /* controllers using QMP phys use 125MHz pipe clock interface */
-> -       fixed->fixed_rate = 125000000;
-> +       /*
-> +        * Controllers using QMP PHY-s use 125MHz pipe clock interface
-> +        * unless other frequency is specified in the DTS.
-> +        */
-> +       ret = of_property_read_u32(np, "clock-output-rate", &rate);
+The old DT files that didn't have XO defined had a wrong
+compatible string to begin with (fixed in [1]), so I don't
+think it's a problem.
 
-The clock-output-rate is a new property, which doesn't exist yet. If
-the rate is peculiar to your platform/PHY, I'd suggest adding a field
-to the qmp configuration instead.
-
-> +       if (ret)
-> +               fixed->fixed_rate = 125000000;
-> +       else
-> +               fixed->fixed_rate = rate;
-> +
->         fixed->hw.init = &init;
->
->         ret = devm_clk_hw_register(qmp->dev, &fixed->hw);
-> @@ -2255,6 +2419,9 @@ static const struct of_device_id qcom_qmp_phy_pcie_of_match_table[] = {
->         }, {
->                 .compatible = "qcom,ipq8074-qmp-pcie-phy",
->                 .data = &ipq8074_pciephy_cfg,
-> +       }, {
-> +               .compatible = "qcom,ipq8074-qmp-gen3-pcie-phy",
-> +               .data = &ipq8074_pciephy_gen3_cfg,
->         }, {
->                 .compatible = "qcom,ipq6018-qmp-pcie-phy",
->                 .data = &ipq6018_pciephy_cfg,
+>>   additionalProperties: false
+>> 
+>>  @@ -51,4 +47,7 @@ examples:
+>>           compatible = "qcom,msm8996-apcc";
+>>           reg = <0x6400000 0x90000>;
+>>           #clock-cells = <1>;
+>>  +
+>>  +        clocks = <&xo_board>;
+>>  +        clock-names = "xo";
+>>       };
+>>  --
+>>  2.36.1
+>> 
+> 
+> 
 > --
-> 2.36.1
->
+> With best wishes
+> Dmitry
+
+[1] 
+https://lore.kernel.org/linux-arm-msm/20210527192958.775434-1-konrad.dybcio@somainline.org/
 
 
--- 
-With best wishes
-Dmitry

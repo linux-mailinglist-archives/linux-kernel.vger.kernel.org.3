@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3A1552E6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5EF552E66
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348978AbiFUJeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S1348950AbiFUJdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348964AbiFUJeP (ORCPT
+        with ESMTP id S1347196AbiFUJdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:34:15 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4B825C7F;
-        Tue, 21 Jun 2022 02:34:13 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cf14so8767711edb.8;
-        Tue, 21 Jun 2022 02:34:13 -0700 (PDT)
+        Tue, 21 Jun 2022 05:33:49 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F9F25C73
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:33:47 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id b23so6154452ljh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=semihalf.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c7tGMV7/SSO3JozWEHbkFTrboHXpmm3VDf/oaKBPuDs=;
-        b=BUGmrcAUC+BxJxranrDe0YJYzGvQkDLTBZjdzWtcfzrpUMCnxTVONXV0mU3URS5tLL
-         aEOSB9xjhNccR9NdTm0PXAB31J+uj3WMdOSSAcTNqu5PPt4bWhBbZj33RozwJCD/yiKw
-         aHWzcKV8n5eWavzTVIcGpfPCfSHFkmxIrynAq1xxs+lS4+qvsptHbhl4YwmwptrNB3Nm
-         BqUf9oYH5JyI1RkDsf7QjLD7aLBiXMcbClIMDqdNnscmsnklX7J0ionOlcwtPKbTTD6W
-         MWo/2NK17ioZE0f4OZTLPJxUbR3T9Flg/zpzKS0On4R8An+t7QKX8I7HCC+lq7kqxQUE
-         aL4Q==
+         :cc:content-transfer-encoding;
+        bh=eAn0mkf8cbbSldcOsHVmdulCChq1XWCHxJvyevA7Xy8=;
+        b=p4nsrDQU/HL9kiO/BSBR3lWKcRmz20yfkNdEtRFiNLVnFyObvB+2JDLTEPz7ZfSyAx
+         yb8oXPhQwE7wAUNWhTOZJq9rPKo82YQXQT1v57iBWTtjuIlUiGV3ydbeVvOpNV7FIvKf
+         uwypx613RgvnumfBL4EjeGiXKXumJD7NYUvRTFWCMTZlqmqFOvPQZB25F4VUc/BlUzkI
+         3bNO0DGxMuBeZIB2Pr8Vpxlv1ykqtMJcBaw92L+A25T5Dw2K4bZpnInem7cMn/dTNbx7
+         XJx9UovtyH/lBD5ZMglt4lEvpPjY9t9N2PL3lUOYHjaP+i0BTi9noXI9qYHbg9TRgqLw
+         BH/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c7tGMV7/SSO3JozWEHbkFTrboHXpmm3VDf/oaKBPuDs=;
-        b=TEaSHaAhNVb8CWbwmRh1vvD/nB/ECDkW+UHJmbfMJi30FMpKohP7w30NU9eEW4Sbro
-         5BATQXEcjyCRS1Vlz7XVzSWCeLFDnNo9y/WHEq2gnmS9F46xou9zti4VEi9vqlfClv1P
-         wZ7cudz6eHKQAgTcHb8Tn4OAS0vS0q1Fwy5C3Rf8tDvknhkHCs/Fn6ePfhiTjoSPRF2b
-         Jc/yWkN6iLmSRHbp1rKy6LpIBgaAIoTpmNg4lZgVVKYn9j7GzdX73Hnw1dgIeh70M6fD
-         WvupNsm1hC44aGoGGKoxeDuh7WmppukFtAfybko30VFaavBKXqo0AhtLtSev6b7DT1Uo
-         LHHQ==
-X-Gm-Message-State: AJIora8olAy+G95ki6va6oxq9ZcMU8udERr6eHHjEdzKjtHmjJO4n0Ay
-        oKxpsJJyhDG47FgeHjvoIzocSZPkmka6u8lLgYI=
-X-Google-Smtp-Source: AGRyM1vl6qAENnpkydkK4orwRZWx0Z6A0R1L281fxwrvs+ww8MsmgIRorfjJHWF6QSaoxaSyeHSEr2OQ0e5QEiIHYqg=
-X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
- o16-20020a056402439000b0042e0b7ee9acmr34705675edc.97.1655804052209; Tue, 21
- Jun 2022 02:34:12 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=eAn0mkf8cbbSldcOsHVmdulCChq1XWCHxJvyevA7Xy8=;
+        b=m76mSZofz1+VhHrBKCTv+3AUSSaQmf5dcyhM24KPa7FnjVom/PjfMRvBUQvDa/+SRN
+         RAxJmaH3uCqNAewkc0O95wpXnT5LjogpV3Epc+VcDOA/nex2KrxPKre1SgSqo+sJgYDT
+         uzhVZWQBhQS2Ow6v5Gxkfraj498FwBtsql3ZFVnqLhQpkcLHUBfHMmMxOCkkNyGHO9D1
+         ZtUYcyZ84hDG5YlbAMEZcR/9rEkVBJYa2hvZ4F0FJ4xxhEQKwa0xI3+cqZErhdBARRU1
+         iKDIgt/xmEBF/FayglHSWopTSaks3R0JMRicszylOOvNYeNJbkVNWRMumva68ZHdg4oM
+         D3iA==
+X-Gm-Message-State: AJIora/zjeb9UaY3RPlr91v2dHD1bBhrudRGpIZxy/cakr2xguJSnbal
+        VT1zApf9LEjO+CBQ/ipNjMqcxy8YG5eq8DjkmUE4Tg==
+X-Google-Smtp-Source: AGRyM1vhoowH12J1zPskShLlXyMV98854EH+GXf+cFtJNMVCeZhPcYPK3u6iSPHLdI8a5bE/oc6mJEfEqdg9mfvyvNk=
+X-Received: by 2002:a2e:860e:0:b0:25a:6dbe:abb5 with SMTP id
+ a14-20020a2e860e000000b0025a6dbeabb5mr5361078lji.474.1655804025707; Tue, 21
+ Jun 2022 02:33:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com> <20220620200644.1961936-18-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220620200644.1961936-18-aidanmacdonald.0x0@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 21 Jun 2022 11:33:35 +0200
-Message-ID: <CAHp75VcN0hf5_AVB-aRBhyvwuojuDC=FbBUqWpUWQR=r=zSRPA@mail.gmail.com>
-Subject: Re: [PATCH 17/49] regmap-irq: Add broken_mask_unmask flag
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-7-mw@semihalf.com>
+ <YrCzBzKfSl1u90lB@smile.fi.intel.com>
+In-Reply-To: <YrCzBzKfSl1u90lB@smile.fi.intel.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 21 Jun 2022 11:33:36 +0200
+Message-ID: <CAPv3WKd+e5kYz7L0Fnw6u9wcPU6+r54EeEWvJzw8oCyj=m6JPg@mail.gmail.com>
+Subject: Re: [net-next: PATCH 06/12] net: mdio: introduce fwnode_mdiobus_register_device()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, tharvey@gateworks.com,
-        rjones@gateworks.com, Matti Vaittinen <mazziesaccount@gmail.com>,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-actions@lists.infradead.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+        Len Brown <lenb@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        vivien.didelot@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 10:08 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
+pon., 20 cze 2022 o 19:49 Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
 >
-> This flag is necessary to prepare for fixing the behavior of unmask
-> registers. Existing chips that set mask_base and unmask_base must
-> set broken_mask_unmask=1 to declare that they expect the mask bits
+> On Mon, Jun 20, 2022 at 05:02:19PM +0200, Marcin Wojtas wrote:
+> > As a preparation patch to extend MDIO capabilities in the ACPI world,
+> > introduce fwnode_mdiobus_register_device() to register non-PHY
+> > devices on the mdiobus.
+> >
+> > While at it, also use the newly introduced fwnode operation in
+> > of_mdiobus_phy_device_register().
+>
+> ...
+>
+> >  static int of_mdiobus_register_device(struct mii_bus *mdio,
+> >                                     struct device_node *child, u32 addr=
+)
+> >  {
+>
+> > +     return fwnode_mdiobus_register_device(mdio, of_fwnode_handle(chil=
+d), addr);
+> >  }
+>
+> Since it's static one-liner you probably may ger rid of it completely.
+>
 
-Boolean should take true/false.
+Good point, will do in v2.
 
-> will be inverted in both registers, contrary to the usual behavior
-> of mask registers.
-
-> diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-> index ee2567a0465c..21a70fd99493 100644
-> --- a/include/linux/regmap.h
-> +++ b/include/linux/regmap.h
-> @@ -1523,6 +1523,7 @@ struct regmap_irq_chip {
->         bool clear_on_unmask:1;
->         bool not_fixed_stride:1;
->         bool status_invert:1;
-> +       bool broken_mask_unmask:1;
-
-Looking at the given context, I would group it with clean_on_unmask above.
-
-The above is weird enough on its own. Can you prepare a precursor
-patch that either drops the bit fields of booleans or moves them to
-unsigned int?
-
-Note, bit fields in C are beasts when it goes to concurrent access. It
-would be nice to ensure these are not the cases of a such.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Marcin

@@ -2,179 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05D6553D7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9556F553D83
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355185AbiFUVWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        id S1355605AbiFUVWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355459AbiFUVV5 (ORCPT
+        with ESMTP id S1356160AbiFUVWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:21:57 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFF331DFF;
-        Tue, 21 Jun 2022 14:08:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cZdXE1OJzBaUYlWF6NbMVt0TwWrbxS3mzOOWXZrEyEAXoHax+XVJtUK0AucL4rrbEAfsK/CPUJt+a/ZVtpuqqRs8pZgoNk01BTfQksKYqoz9v3AU1f8N3Nz+2GK0FLSahgyIZy5cPXe3ZxqPM5Zt4mgLV7W/RzKR5D9G9jIK50m+uiJy0Fg5spR/NM+wtsmqaEVE10u4yfrpKE8emdyVz/aNFqYbXOnz6gFkfO0BEzvvyuo8b62KUxnCswMB/WSv1w5glx5X5+uzE0VtCHOIJZfnaPWhj5JF2NDJ7IJWNrgIB8p9Hc+TvUNqJZlz35qyaWU67DeXePo5MSLwWWW5Uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IN2rjHI7mae8Dk8au2O2opi72iO/joSCgRpCxMnXvhI=;
- b=Ko8Wvmuv8sXGmpbDKVIFKUXug38k7W8jjTeCFGPi2DAiGMUX/Pb/BiHMpVsoDo8HQJRrFv/RIkzYTvIzvAJMTf2Me6O437lDYkbxBM1s38KwOP/cNe+J0MrTaMO4Hn5+aXO7G95gVRlRb817z3Qje4xAa009ejVxuRekjMN4kLY55uXQ+5i1Uil9K2kHBuWzXrxUve9p+9O5mWkd3lS+iVag/tv6ZnpFEcbuc9WPpk7NsI1wj+GSZvMnZeSEpiZetmiqirVUJWcl/vsUn1kkHbWxlKOYrGdj/GktS/BM5zQSE7MM26M4CJKM4KLM7zHfFY2yQ/oCwHEGIgCQlgDOxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IN2rjHI7mae8Dk8au2O2opi72iO/joSCgRpCxMnXvhI=;
- b=RdM18ZKL/YFzY2wSIpWBZg3bwhM//xU6WMblFKeRFYlGM+yu9olWMiFF0PdbaLWvhsN4jgUy2knfh9TCxdy7d7K+z2SDCEv2Mk+nxLxtClxFe9KcOTahypm99nEJxI7jZqA9NFM0BFd5cRra7SkVUwCvUSxtqjXfpRoxh/wST3kAYEDvxr9fd0MhX1EA5ylWcAn93u9g6cH2Wd3tgg5FWRhYfwYPXckrEZkRWXeGqRFC7r+/0wn5xKWHPJd0sH7QMpKdA9HQE6G3BvwntlSfllD55DTfrOoDbvxp1849gVO0uEicyRFMMu9u5hG0MPgy8hSYhKF6C6T0RyUErm692w==
-Received: from BN6PR16CA0014.namprd16.prod.outlook.com (2603:10b6:404:f5::24)
- by PH7PR12MB5976.namprd12.prod.outlook.com (2603:10b6:510:1db::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14; Tue, 21 Jun
- 2022 21:08:35 +0000
-Received: from BN8NAM11FT018.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:f5:cafe::bd) by BN6PR16CA0014.outlook.office365.com
- (2603:10b6:404:f5::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15 via Frontend
- Transport; Tue, 21 Jun 2022 21:08:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT018.mail.protection.outlook.com (10.13.176.89) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5373.15 via Frontend Transport; Tue, 21 Jun 2022 21:08:35 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Tue, 21 Jun 2022 21:08:34 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 21 Jun 2022 14:08:34 -0700
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
- Transport; Tue, 21 Jun 2022 14:08:31 -0700
-Date:   Tue, 21 Jun 2022 14:08:29 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "jordan@cosmicpenguin.net" <jordan@cosmicpenguin.net>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "saiprakash.ranjan@codeaurora.org" <saiprakash.ranjan@codeaurora.org>,
-        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
-        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
-        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "isaacm@codeaurora.org" <isaacm@codeaurora.org>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v2 5/5] vfio/iommu_type1: Simplify group attachment
-Message-ID: <YrIzTX2Vg/iJ95hM@Asurada-Nvidia>
-References: <20220616000304.23890-1-nicolinc@nvidia.com>
- <20220616000304.23890-6-nicolinc@nvidia.com>
- <BL1PR11MB52710E360B50DDA99C9A65D18CAC9@BL1PR11MB5271.namprd11.prod.outlook.com>
- <YquxcH2S1fM+llOf@Asurada-Nvidia>
- <BN9PR11MB5276C7BFA77C2C176491B56A8CAF9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <55e352d5-3fea-7e46-0530-b41d323b6fcf@arm.com>
+        Tue, 21 Jun 2022 17:22:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1A4D3152E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:10:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655845826;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SdUI0K3w6UZwdwxK9UpEw+8+48uw2ZOlT+wIg6Q8bOY=;
+        b=GyVraEluMpblzLgAtQ48fi4nq+80XgXevq1mtO+b34ughabKGWLsQNDzgGXgwiquc/QzXV
+        PMQlewO3bKY6ggz8kZ9N8Nc4xL5GLl768otRaw8iEE/Lbt9njMu0nS0PKdZdPBTe6XAq02
+        qqBDImRcKu8GqN/Dvug2RY1PjTWD9h0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-p-ZhjlvFOCOJ4O7Z5tultQ-1; Tue, 21 Jun 2022 17:10:23 -0400
+X-MC-Unique: p-ZhjlvFOCOJ4O7Z5tultQ-1
+Received: by mail-wm1-f69.google.com with SMTP id m23-20020a05600c3b1700b0039c6e3c169aso6750413wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:10:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=SdUI0K3w6UZwdwxK9UpEw+8+48uw2ZOlT+wIg6Q8bOY=;
+        b=Bnr4fjDdfh+N2NATaVcQ86LzeDydc9EWiFmnXRfbIDN7Jhoh8NttUHWdV94Sf7OBrq
+         AMdQHdeE1ks7IKZfYplZ2+ojLuXyED9Lc8rCekL9gEXjfyDw+VN8p1w3bSe+X+oe5Yan
+         4vod7pSnCHgouz4SXTum6jGq5f5CGj/ZBTOp1nSJYMORF/byiIN62fSOT0eon8zcQwfD
+         NVSH77cnv8ronl8d5afc77MgixyaDnKkJdeHBORltdmgFzzfyQkSJFEb1K3ROCfYZ5iL
+         J7Mzfse5pnaobRt9R7hw477Vkeo/4hXe/Lzu3etoYnkbmw74nirgLAQVE157iFQ5q7hD
+         1XAg==
+X-Gm-Message-State: AJIora9JO2UcGAc7kId7iFCwKhDRTIGOTqhKxhqpxVBpsgzGKDRoln//
+        z6QgSoVuYmscFuVqwrUAi1oruz1brAXH5u7mpTAvDixQkXJCT9Z5yu9UCqbcE/Pvnpy9Nks7TKA
+        BK5cyoZOGu9fLBPEL9CORLQA1
+X-Received: by 2002:a05:600c:2215:b0:39c:55a0:9531 with SMTP id z21-20020a05600c221500b0039c55a09531mr108967wml.29.1655845822339;
+        Tue, 21 Jun 2022 14:10:22 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ud+bHPP4KWO8KY35eiF30xNySOOWliDKJe6HtrrpkxxAj+WdmqBBYwA8RLBb2B32014Zn5TA==
+X-Received: by 2002:a05:600c:2215:b0:39c:55a0:9531 with SMTP id z21-20020a05600c221500b0039c55a09531mr108952wml.29.1655845822122;
+        Tue, 21 Jun 2022 14:10:22 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:bc00:a63c:7e37:6061:1706? (p200300cbc705bc00a63c7e3760611706.dip0.t-ipconnect.de. [2003:cb:c705:bc00:a63c:7e37:6061:1706])
+        by smtp.gmail.com with ESMTPSA id p14-20020a5d48ce000000b0021020517639sm17018132wrs.102.2022.06.21.14.10.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 14:10:21 -0700 (PDT)
+Message-ID: <20192b57-30de-1426-6694-238e018104eb@redhat.com>
+Date:   Tue, 21 Jun 2022 23:10:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <55e352d5-3fea-7e46-0530-b41d323b6fcf@arm.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c3ac24fe-ad8d-49f4-dc15-08da53ca3455
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5976:EE_
-X-Microsoft-Antispam-PRVS: <PH7PR12MB59763051D992F16AF8F05BD6ABB39@PH7PR12MB5976.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Fl9OyWh50jzl4t+AuMzoHMYy9C3TFAwRDDPSgk4pLciNlWeqOPXQR6GdNkxh3SxcHy+t++zthderbcYcU+Hwq29AiqGvXQAXmU+HZkbgbp5K3MGf8NLym6BVfeEJtOlSYexF7RVbD8jIUigPBl6+2kXFJT2n6P8V2SBY0iCHOj29DYTFcQkB9XoKqWjaiUfLfdBvItjYKZTZyLxSfiB74P6LDqY1HcOD5Y+ITeGsejfVmKlVl+EXRm0U+aIYnd8Dpsp9lmLTg56kJbmEjLFAdFV5Z2ahl4HTM6uFxLxJEU28RJgzc+k59j2676oCgx8rMlS3cLsHE5EfINhbrNt9UgbsbFuk5ebJMrokYbehcP39/aUmWwP2Ldlbc+1GyXVt36XSRdtKV1PIU/31ErYuAStdT8Hzw4xZc42WkZE1oosYaums+9EUKtOdl9KON3kvy5SOFej0aylW2cxUI035DuKXXKpK0KcCk/Z7af4uhB2aVqS1HPdI7wCPpM6oNxTY+zcbyG5HJoPM4TTMmJOLnBU2BJwaZ8G4kvruD3Afyx0gRX/7IcpV/ED5TOYO/i6F0tJEYqZuXzyBhg1kGGWIG57NXn8DZZJwI4ttQcKJ+Zztk0O7yHk9/JMnB2i7E7zA+Iu3MolPU7YfY/Y6Tc6ynT8FW4q2GA5XSCjNNLlbRoa1mPGtB+5LeDiO+szo7/I7JNO7m/MJ9ogR8wkhW1l8OZOmb2U6GktScpmBy4awXHXH3KqJ3H8HUXBfNPKUNNQG
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(136003)(396003)(36840700001)(46966006)(40470700004)(41300700001)(26005)(82310400005)(47076005)(53546011)(54906003)(6916009)(36860700001)(186003)(83380400001)(5660300002)(356005)(2906002)(81166007)(478600001)(426003)(8676002)(40480700001)(86362001)(70206006)(8936002)(70586007)(9686003)(316002)(336012)(7416002)(40460700003)(33716001)(4326008)(82740400003)(7406005)(55016003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 21:08:35.1169
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3ac24fe-ad8d-49f4-dc15-08da53ca3455
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT018.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5976
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v10 09/69] mm: add VMA iterator
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "damon @ lists . linux . dev" <damon@lists.linux.dev>,
+        SeongJae Park <sj@kernel.org>
+References: <20220621204632.3370049-1-Liam.Howlett@oracle.com>
+ <20220621204632.3370049-10-Liam.Howlett@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220621204632.3370049-10-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:11:01AM +0100, Robin Murphy wrote:
-> External email: Use caution opening links or attachments
+On 21.06.22 22:46, Liam Howlett wrote:
+> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 > 
+> This thin layer of abstraction over the maple tree state is for iterating
+> over VMAs.  You can go forwards, go backwards or ask where the iterator
+> is.  Rename the existing vma_next() to __vma_next() -- it will be removed
+> by the end of this series.
 > 
-> On 2022-06-17 03:53, Tian, Kevin wrote:
-> > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > Sent: Friday, June 17, 2022 6:41 AM
-> > > 
-> > > > ...
-> > > > > -     if (resv_msi) {
-> > > > > +     if (resv_msi && !domain->msi_cookie) {
-> > > > >                ret = iommu_get_msi_cookie(domain->domain,
-> > > > > resv_msi_base);
-> > > > >                if (ret && ret != -ENODEV)
-> > > > >                        goto out_detach;
-> > > > > +             domain->msi_cookie = true;
-> > > > >        }
-> > > > 
-> > > > why not moving to alloc_attach_domain() then no need for the new
-> > > > domain field? It's required only when a new domain is allocated.
-> > > 
-> > > When reusing an existing domain that doesn't have an msi_cookie,
-> > > we can do iommu_get_msi_cookie() if resv_msi is found. So it is
-> > > not limited to a new domain.
-> > 
-> > Looks msi_cookie requirement is per platform (currently only
-> > for smmu. see arm_smmu_get_resv_regions()). If there is
-> > no mixed case then above check is not required.
-> > 
-> > But let's hear whether Robin has a different thought here.
+> Link: https://lkml.kernel.org/r/20220504010716.661115-11-Liam.Howlett@oracle.com
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: SeongJae Park <sj@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  include/linux/mm.h       | 31 +++++++++++++++++++++++++++++++
+>  include/linux/mm_types.h | 21 +++++++++++++++++++++
+>  mm/mmap.c                | 10 +++++-----
+>  3 files changed, 57 insertions(+), 5 deletions(-)
 > 
-> Yes, the cookie should logically be tied to the lifetime of the domain
-> itself. In the relevant context, "an existing domain that doesn't have
-> an msi_cookie" should never exist.
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 810b3dd929e4..f22c6f71a18c 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -658,6 +658,37 @@ static inline bool vma_is_accessible(struct vm_area_struct *vma)
+>  	return vma->vm_flags & VM_ACCESS_FLAGS;
+>  }
+>  
+> +static inline
+> +struct vm_area_struct *vma_find(struct vma_iterator *vmi, unsigned long max)
+> +{
+> +	return mas_find(&vmi->mas, max);
+> +}
+> +
+> +static inline struct vm_area_struct *vma_next(struct vma_iterator *vmi)
+> +{
+> +	/*
+> +	 * Uses vma_find() to get the first VMA when the iterator starts.
+> +	 * Calling mas_next() could skip the first entry.
+> +	 */
+> +	return vma_find(vmi, ULONG_MAX);
+> +}
+> +
+> +static inline struct vm_area_struct *vma_prev(struct vma_iterator *vmi)
+> +{
+> +	return mas_prev(&vmi->mas, 0);
+> +}
+> +
+> +static inline unsigned long vma_iter_addr(struct vma_iterator *vmi)
+> +{
+> +	return vmi->mas.index;
+> +}
+> +
+> +#define for_each_vma(vmi, vma)		while ((vma = vma_next(&(vmi))) != NULL)
+> +
+> +/* The MM code likes to work with exclusive end addresses */
+> +#define for_each_vma_range(vmi, vma, end)				\
+> +	while ((vma = vma_find(&(vmi), (end) - 1)) != NULL)
+> +
+>  #ifdef CONFIG_SHMEM
+>  /*
+>   * The vma_is_shmem is not inline because it is used only by slow
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 254c30def2b2..1485a24796be 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -696,6 +696,27 @@ static inline cpumask_t *mm_cpumask(struct mm_struct *mm)
+>  	return (struct cpumask *)&mm->cpu_bitmap;
+>  }
+>  
+> +struct vma_iterator {
+> +	struct ma_state mas;
+> +};
+> +
+> +#define VMA_ITERATOR(name, mm, addr) 					\
+> +	struct vma_iterator name = {					\
+> +		.mas = {						\
+> +			.tree = &mm->mm_mt,				\
+> +			.index = addr,					\
+> +			.node = MAS_START,				\
+> +		},							\
+> +	}
+> +
 
-Thanks for the explanation. I will move the iommu_get_msi_cookie()
-into alloc_attach_domain(), as Kevin suggested.
+No __* and () macro magic?
+
+I'd have expected at least
+
+tree = &(__mm)->mm_mt,
+.index = (__addr),
+
+;)
+
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+

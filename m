@@ -2,165 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1642553198
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376415531A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350404AbiFUMDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
+        id S1349796AbiFUMGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350390AbiFUMDq (ORCPT
+        with ESMTP id S1348773AbiFUMGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:03:46 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E822B243
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:03:43 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id cf14so9275069edb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:03:43 -0700 (PDT)
+        Tue, 21 Jun 2022 08:06:47 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0C92B24C;
+        Tue, 21 Jun 2022 05:06:46 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id h23so26978178ejj.12;
+        Tue, 21 Jun 2022 05:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=20hOXgHS4fSMKzf2+VEVhuMt/xTY7rwW+BkuR688jQI=;
-        b=G0fDoM6iYkilX2J2us0oDAnu2OXLTFoGwQGcIQ61gW+KroUP3F34RD4BJ1IlsFeOKi
-         8f8+8bvCxI+BjoQhqGDC8Bmih/uM2UMNh0HfP5LHcTP5thFbXw57Wl/JjRk3EIaphPgC
-         /r9iH8r0MZLQ/ZiseG3jh/J+adm1eZ8inUGHNLerNsDK1bRyGyI9t7y5tTAvDDVdeB1B
-         xwLgffZMmNEJhBSsXCtiJaQ53o6MWqYnFwBx1ozBtod/JlyyMz+pR8DZEdtPNbe/8IO5
-         pZskEbg504lpOOtekPsnMcsUaoBfJ2WNfNfE5rDxevNShYsJWXp++OGVY0izxGKuJIRl
-         k4pQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uIvJMdQn/cBqnDvtzgtOjH4SsP+GQUhFYvsFWjOXHDM=;
+        b=H4kXQ+xTTa/Hyrvi3hVFraWBPj3KNV91Iwe4g19INSDVkUZoBtwsfhYckycQaeHeUA
+         rhDkA1kCmys5yWumgOaVBhNG7xoVxhWi1n4tJSxW5SHcnuRwqOj66mR3YqWcE5zJ+Xy9
+         bnnVZZwiwI94wCBYxCxsrEUosmdZOSspJyjFLIfyJB4w+1UloI93LzyrcYFCXx8QV7qd
+         WaNkPb51ohVK3enSaP+7T+yrs+BgoljkXhUGRad5/j738lWnU20PwXVRXBm80M/F0leM
+         5B3CULjnt2390435dTSUKcxenn+IY90G/dJa6D9hUb5O1KOZbreX2oQEX+kiCbbAcy+U
+         GZvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=20hOXgHS4fSMKzf2+VEVhuMt/xTY7rwW+BkuR688jQI=;
-        b=H9bf6yEuco2heIyon0GWEV5s3uLOUNTxdajnICfG7aLVNmblSvgUk1uoeL3SO43j9B
-         Cn0tTqv/K5vfW/tDQSr4+kauU1IWe16WgflO6IAZ8DZm6IqouDfQXoPMsXX9przzBS04
-         3Ot8O2DWAQEJrtDl8dWJV3QnOFnPiFQkva9SMqavffyg6+6KCkj2pv9Mr8PSUiIir5qT
-         JR5CF0Ugok7Mr8uez1X+LktWmtdlswmaown2YO8PEeT0uUU3XL0xU+9seOxzXqoj0NsW
-         MaNPgToDhrt5tPI95MkqSJNWerXwZOc1gnKkYt+pvjN666U+4y/0bYZYnCUFhG9hkPA/
-         08WQ==
-X-Gm-Message-State: AJIora9j9+K8ZlHKkWEIA+00HUlR3UZjAwuLOw90Ddt3khzsxmtea0R6
-        b3FI56hXwjoos5Cwy9hzA2tDtw==
-X-Google-Smtp-Source: AGRyM1vuqpi73lfGfP1AhQV/V6GZDUbkiFuWxRqJMB+M0pVkbVaH3yMP1muhb8X6319Kpo4FNFG3DQ==
-X-Received: by 2002:a05:6402:3689:b0:435:95b0:edf2 with SMTP id ej9-20020a056402368900b0043595b0edf2mr3480378edb.279.1655813021696;
-        Tue, 21 Jun 2022 05:03:41 -0700 (PDT)
-Received: from [192.168.0.220] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n12-20020a170906840c00b00706c50870a0sm7470520ejx.194.2022.06.21.05.03.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 05:03:41 -0700 (PDT)
-Message-ID: <3e02909d-131a-7899-f02b-fa0afcbef1d9@linaro.org>
-Date:   Tue, 21 Jun 2022 14:03:39 +0200
+        bh=uIvJMdQn/cBqnDvtzgtOjH4SsP+GQUhFYvsFWjOXHDM=;
+        b=xD8sB97tJ6yA9e4nbLkNfL0NWsZXXw+Upw4p/r1QImw1oYBrX2AoNS6080P49scIKd
+         8aRlxki9eEp5uGtd9qIVDfJsAUE8jC6aLklMrPHErDCwvuVsLIBN19oic5M1loQRVwm/
+         +TxhSSL2bcxE0opIFgJVeZV9qyang28zyi8mhVbZcrtyRLb96kZraos6sNrxPfbQ/VXV
+         SUXN59dnQlSO3jFaxIPDTR4u8vcUCcI/PZq6pjb67YK9kqJ2HUY7Zr8Xh9jE5rINUMtB
+         h9TjgJz32SyH5r1jJ0uwubm3HpYkZxPpZ3QmXAA/jFKMZ0jaMIU/LMOFXgSOtlO/3znZ
+         kBkg==
+X-Gm-Message-State: AJIora8JWtiZoLW0F/ppH2CxN/vjDqTmHai3I5iB6Jj/6cuss7DvvZEb
+        iVBIFdczVDDM+G1VrrTLI0A=
+X-Google-Smtp-Source: AGRyM1so+nJD+Zkt6+BQ3wIJ/ZbCHw1Klgyeljh6VxhoKuOnqeWAvQtHFPAeC53G98CI38TjB5TqmA==
+X-Received: by 2002:a17:907:1b0d:b0:6ff:22a1:d58a with SMTP id mp13-20020a1709071b0d00b006ff22a1d58amr26604955ejc.293.1655813204987;
+        Tue, 21 Jun 2022 05:06:44 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-99-158.xnet.hr. [88.207.99.158])
+        by smtp.googlemail.com with ESMTPSA id b17-20020a1709063cb100b0070b7875aa6asm4798424ejh.166.2022.06.21.05.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 05:06:44 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH] arm64: dts: ipq8074: fix NAND node name
+Date:   Tue, 21 Jun 2022 14:06:42 +0200
+Message-Id: <20220621120642.518575-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 03/15] dt-bindings: leds: mt6370: Add Mediatek mt6370
- current sink type LED indicator
-Content-Language: en-US
-To:     szuni chen <szunichen@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        ChiYuan Huang <cy_huang@richtek.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-4-peterwu.pub@gmail.com>
- <91e9e3af-8208-7535-1864-08744f934593@linaro.org>
- <CA+hk2fZbh0=8gurGS95XpXrYyF3NbwFbFMcygcrW_q10m0zinA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CA+hk2fZbh0=8gurGS95XpXrYyF3NbwFbFMcygcrW_q10m0zinA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 05:07, szuni chen wrote:
-> Dear Krzysztof,
-> 
-> Thank you for the valuable command.
-> 
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年6月17日 週五 清晨5:09寫道：
->>
->> On 13/06/2022 04:11, ChiaEn Wu wrote:
->>> From: ChiYuan Huang <cy_huang@richtek.com>
->>>
->>> Add Mediatek mt6370 current sink type LED indicator binding documentation.
->>>
->>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
->>> ---
->>>  .../leds/mediatek,mt6370-indicator.yaml       | 48 +++++++++++++++++++
->>>  1 file changed, 48 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
->>> new file mode 100644
->>> index 000000000000..42b96c8047a3
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
->>> @@ -0,0 +1,48 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/leds/mediatek,mt6370-indicator.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: LED driver for MT6370 PMIC from MediaTek Integrated.
->>> +
->>> +maintainers:
->>> +  - Alice Chen <alice_chen@richtek.com>
->>> +
->>> +description: |
->>> +  This module is part of the MT6370 MFD device.
->>> +  Add MT6370 LED driver include 4-channel RGB LED support Register/PWM/Breath Mode
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: mediatek,mt6370-indicator
->>> +
->>> +  "#address-cells":
->>> +    const: 1
->>> +
->>> +  "#size-cells":
->>> +    const: 0
->>> +
->>> +patternProperties:
->>> +  "^(multi-)?led@[0-3]$":
->>
->> If this is multi-led, then you should reference
->> /schemas/leds/leds-pwm-multicolor.yaml
->>
->> See other examples using it.
-> 
-> In my opinion, leds-pwm-multicolor.yaml is used for external pwm
-> signals, and needs to assign an external pwm property.
-> But our pwm leds use an internal clock to generate the pwm signal. Is
-> leds-class-multicolor.yaml more appropriate?
+Per schema it should be nand-controller@79b0000 instead of nand@79b0000.
+Fix it to match nand-controller.yaml requirements.
 
-Yeah, I meant the latter but pasted wrong file.
-/schemas/leds/leds-class-multicolor.yaml#
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+index 34f79860b3c5..7e683aec3ab3 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+@@ -736,7 +736,7 @@ qpic_bam: dma-controller@7984000 {
+ 			status = "disabled";
+ 		};
+ 
+-		qpic_nand: nand@79b0000 {
++		qpic_nand: nand-controller@79b0000 {
+ 			compatible = "qcom,ipq8074-nand";
+ 			reg = <0x079b0000 0x10000>;
+ 			#address-cells = <1>;
+-- 
+2.36.1
+

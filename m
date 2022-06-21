@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166C3552DBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF28E552DB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348031AbiFUI4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
+        id S229718AbiFUI5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346001AbiFUIzj (ORCPT
+        with ESMTP id S1348632AbiFUI5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:55:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7C417AB9;
-        Tue, 21 Jun 2022 01:55:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82F01B80E84;
-        Tue, 21 Jun 2022 08:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8212CC3411C;
-        Tue, 21 Jun 2022 08:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655801736;
-        bh=SIDJRbF9IHp1tjRg9KrOeDM7KjP4HtC/W5MHD5tIwWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jf/eZcnOj+wq18TIO4b+wcUB4FZAdLz/W3pmAFOBAYtDXmvyWx0etUaakMgKFN6Zd
-         /kPXOQFqB6Poobvtwr5yea71PfakyNxr0fBhib69pvBpav4mPh6Q9KT2XyOIhozKjw
-         YYLaZLfB2rlcT9TTBn1bUsLpn9BebMMXVkyGUgKA=
-Date:   Tue, 21 Jun 2022 10:55:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     clang-built-linux <clang-built-linux@googlegroups.com>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/106] 5.15.49-rc1 review
-Message-ID: <YrGHheX8D0iIz+db@kroah.com>
-References: <20220620124724.380838401@linuxfoundation.org>
- <CA+G9fYsvY-0ub_CXbb5is0vRLQ9+SaPS8Op=9mZzCkeccUN+mg@mail.gmail.com>
+        Tue, 21 Jun 2022 04:57:01 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E45A27177;
+        Tue, 21 Jun 2022 01:56:56 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id v1so25954698ejg.13;
+        Tue, 21 Jun 2022 01:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0cx/amxb3Wd/PcYv0eYLLeJxSM7TQT62UUtprSbhbwY=;
+        b=l6LNhCtWPcYK5lVOJB4knQOEE4oFs6J2Jg6Rt0e7BaNut9e46lb5KdVYDnj6ilkGm2
+         mQ7VTnH80+cXckqjznh1du5dtOdVPhs652Du5TxDiQ+58oHjtxhVtjko9YTZsFibM+4t
+         dteat9bhz8IHA88U249+vCWBP8CMzaA8asRdTLzsuGL9ee0hN04GeQteE0Fi4kylaNKj
+         0TFF8lnde6SvXHYI9XMpMF1ignz5BbL2lHAoTlF4Oug9V6Zxoushwt5/wntbiBkIu6+l
+         VjoJciC5kvKSDrAabkgWHTdSnlVHc0xwfw64uWPO7VuWtTj36CeQPvqwS05CcagrCAjw
+         1RAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0cx/amxb3Wd/PcYv0eYLLeJxSM7TQT62UUtprSbhbwY=;
+        b=m8yDpWL7xnjkW6wcHoxsuYxU6LlsCcTBEV72s689WvD+38v5JEDXr78vVMoMPGgyan
+         jRHUv6HlIiS4AnO6TI0RBl701pqSD0TXEg2dUotfR5Pd3e0ur/NXQUIc03sx4iptAnuW
+         OiGRCGiyi2Xx9NxL7+pddkPMn34YLt/G9MEOhCFpK7CurT2+BMa8oYCgTnfp5O+KMDgr
+         DV4HoKqYMQd/TyevHAbQNKsolLJDP00yT1S7ehDDMrph97pZtYq8hXbEgLAvIkzmzgkJ
+         rNcZAWFIYybJCzGFkqFVV9xjjdUKbq3dXpPalinCgC3dG16Hd33zZVdQNMyUI45M9EGh
+         b83g==
+X-Gm-Message-State: AJIora+x8yZDC9bqMjjaFgJ5yMhGdWFHxYUH6xYK99Gh3P+ESpI023rc
+        8FXYd7Y0HWif71+feEYOhwnhh/6Qhvam6gML1X0=
+X-Google-Smtp-Source: AGRyM1sw3R8Crk409rPsvgBxACxYsWIMkIS18fGIYjIZmrNrU7BKdbSLOiW7pxIAdyNT+keBTGz9ZcOQjom49l348P4=
+X-Received: by 2002:a17:906:d550:b0:704:7ba6:9854 with SMTP id
+ cr16-20020a170906d55000b007047ba69854mr24696900ejc.579.1655801815068; Tue, 21
+ Jun 2022 01:56:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsvY-0ub_CXbb5is0vRLQ9+SaPS8Op=9mZzCkeccUN+mg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220621064321.25635-1-jiangjian@cdjrlc.com>
+In-Reply-To: <20220621064321.25635-1-jiangjian@cdjrlc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 21 Jun 2022 10:56:18 +0200
+Message-ID: <CAHp75VeXCaoKQ94x+ehXWMi5zeysJdjrzS1WE2oZCUAeLbCzvQ@mail.gmail.com>
+Subject: Re: [PATCH] iio: aligned '*' each line
+To:     Jiang Jian <jiangjian@cdjrlc.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 02:06:06PM +0530, Naresh Kamboju wrote:
-> On Mon, 20 Jun 2022 at 18:36, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.15.49 release.
-> > There are 106 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.49-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> Following commit causing regression while building allmodconfig for clang-13
-> on arm64, riscv and x86_64.
-> 
-> > Linus Torvalds <torvalds@linux-foundation.org>
-> >     netfs: gcc-12: temporarily disable '-Wattribute-warning' for now
-> 
-> fs/afs/inode.c:29:32: error: unknown warning group
-> '-Wattribute-warning', ignored [-Werror,-Wunknown-warning-option]
-> #pragma GCC diagnostic ignored "-Wattribute-warning"
->                                ^
-> 1 error generated.
-> 
-> Regressions:
->   - arm64/build/clang-13-allmodconfig - Failed
->   - riscv/build/clang-13-allmodconfig - Failed
->   - x86_64/build/clang-13-allmodconfig - Failed
+On Tue, Jun 21, 2022 at 8:57 AM Jiang Jian <jiangjian@cdjrlc.com> wrote:
+>
+> Consider '*' alignment in comments
 
-Does Linus's tree also show this issue?
+Subject should start with "iio: dac: ad5380: ..."
 
-thanks,
+The commit message should follow English grammar (missed period in
+your case) and explain a little bit more, e.g. "Consider '*' alignment
+in the comments of struct ad5380_chip_info declaration".
 
-greg k-h
+...
+
+>   * @channel_template:  channel specification template
+>   * @num_channels:      number of channels
+>   * @int_vref:          internal vref in uV
+> -*/
+> + */
+>
+
+While at it, drop the unneeded blank line here.
+
+>  struct ad5380_chip_info {
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,152 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C78552DC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A564552DC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348653AbiFUI66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S1347762AbiFUJBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348591AbiFUI6k (ORCPT
+        with ESMTP id S1348757AbiFUI72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:58:40 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AFCE1C;
-        Tue, 21 Jun 2022 01:58:38 -0700 (PDT)
-Received: from zn.tnic (p2e55dbad.dip0.t-ipconnect.de [46.85.219.173])
+        Tue, 21 Jun 2022 04:59:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B32E1C;
+        Tue, 21 Jun 2022 01:59:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 56AB81EC0576;
-        Tue, 21 Jun 2022 10:58:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1655801913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=THe01fFq/VVSfqs+JIwBFS+S4rUvRCAH2e4Ug2QOtbU=;
-        b=D+3TDXk5A70FXJH4amYBCqq2eUl/InLmvpky5ywFpHbkfYH1+/Kz38D2aCavRLr5MNpjLH
-        ZN1T8Ki7n5eZa/dUy75+mre+HAkaSlGhiRRig23k/VnuKHepcD61Q+DSn+RLtU4GXIJM+n
-        OKktuV65Kc6g13PHIcdaO7+gvy4nPsk=
-Date:   Tue, 21 Jun 2022 10:58:29 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, michael.roth@amd.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 01/49] x86/cpufeatures: Add SEV-SNP CPU feature
-Message-ID: <YrGINaPc3cojG6/3@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <7abfca61f8595c036e1bd9f1d65ab78af0006627.1655761627.git.ashish.kalra@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E88361548;
+        Tue, 21 Jun 2022 08:59:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4116C3411C;
+        Tue, 21 Jun 2022 08:59:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655801966;
+        bh=AB66Enb7R4KQGpkDyB/YlDU5O1cc0YNqXbOPRX++uow=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lyL3yW2NWKl7RDcU49EKOYTAcavL5+mfzufzfEbko+by7cetSpJ4FQLXycevhzeEs
+         eYgQbrkll+UVn6jqlCel/Uu1Bah7uAzIDcuGmJwSglPyguRbmBcGPhLvaR4Dz1EDSG
+         y+ReuXhPgmpPG0DpCvB2fXsP3sKsygYtjx4IV3K6TOnMpswfjX4UH+omoPqg+7yTL1
+         b1cDr9PcN/PMEMqRBOvRDtLQaHJIllasUvU1UznyvcV1B7pLgO67NuyP+w+ewV+UQO
+         IhBKKHV//Wnp64MpzC9V2yIrpbrx7LJc1nOSRmDde4C9Exju4+jWALxzzJJ+Fu95ue
+         LshYBa9fwiUIw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3ZjE-0001d1-0M; Tue, 21 Jun 2022 10:59:20 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        charles-yeh@prolific.com.tw, Charles Yeh <charlesyeh522@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] USB: serial: pl2303: add support for more HXN (G) types
+Date:   Tue, 21 Jun 2022 10:58:55 +0200
+Message-Id: <20220621085855.6252-1-johan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7abfca61f8595c036e1bd9f1d65ab78af0006627.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 10:59:01PM +0000, Ashish Kalra wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> Add CPU feature detection for Secure Encrypted Virtualization with
-> Secure Nested Paging. This feature adds a strong memory integrity
-> protection to help prevent malicious hypervisor-based attacks like
-> data replay, memory re-mapping, and more.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+Add support for further HXN (G) type devices (GT variant, GL variant, GS
+variant and GR) and document the bcdDevice mapping.
 
-verify_tags: Warning: Sender Ashish Kalra <Ashish.Kalra@amd.com> hasn't signed off on the patch!
+Note that the TA and TB types use the same bcdDevice as some GT and GE
+variants, respectively, but that the HX status request can be used to
+determine which is which.
 
-When you send someone else's patch, you need to add your SOB underneath
-it to state that you have handled that patch too, on its way mainline.
+Also note that we currently do not distinguish between the various HXN
+(G) types in the driver but that this may change eventually (e.g. when
+adding GPIO support).
 
-While waiting for review, please brush up on the development process by
-perusing the documentation in Documentation/process/ and especially
+Reported-by: Charles Yeh <charlesyeh522@gmail.com>
+Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
+Cc: stable@vger.kernel.org	# 5.13
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/pl2303.c | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-Documentation/process/submitting-patches.rst
-
-> ---
->  arch/x86/include/asm/cpufeatures.h       | 1 +
->  arch/x86/kernel/cpu/amd.c                | 3 ++-
->  tools/arch/x86/include/asm/cpufeatures.h | 1 +
->  3 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 30da1341f226..1cba0217669f 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -407,6 +407,7 @@
->  #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
->  #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
->  #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
-> +#define X86_FEATURE_SEV_SNP		(19*32+4)  /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
-
-Do you not see how there's a space between the '+' and the single-digit
-number so that the vertical formatting works?
-
->  #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
->  
->  /*
-> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-> index 0c0b09796ced..2e87015a9d69 100644
-> --- a/arch/x86/kernel/cpu/amd.c
-> +++ b/arch/x86/kernel/cpu/amd.c
-> @@ -559,7 +559,7 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
->  	 *	      If the kernel has not enabled SME via any means then
->  	 *	      don't advertise the SME feature.
->  	 *   For SEV: If BIOS has not enabled SEV then don't advertise the
-> -	 *            SEV and SEV_ES feature (set in scattered.c).
-> +	 *            SEV, SEV_ES and SEV_SNP feature.
-
-Let's generalize that so that it doesn't get updated with every feature:
-
-"... then don't advertize SEV and any additional functionality based on it."
-
->  	 *
->  	 *   In all cases, since support for SME and SEV requires long mode,
->  	 *   don't advertise the feature under CONFIG_X86_32.
-> @@ -594,6 +594,7 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
->  clear_sev:
->  		setup_clear_cpu_cap(X86_FEATURE_SEV);
->  		setup_clear_cpu_cap(X86_FEATURE_SEV_ES);
-> +		setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
->  	}
->  }
->  
-> diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
-> index 73e643ae94b6..a636342ecb26 100644
-> --- a/tools/arch/x86/include/asm/cpufeatures.h
-> +++ b/tools/arch/x86/include/asm/cpufeatures.h
-> @@ -405,6 +405,7 @@
->  #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualization */
->  #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is supported */
->  #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualization - Encrypted State */
-> +#define X86_FEATURE_SEV_SNP		(19*32+4)  /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
->  #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
-
-Ditto.
-
-Thx.
-
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 3506c47e1eef..40b1ab3d284d 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -436,22 +436,27 @@ static int pl2303_detect_type(struct usb_serial *serial)
+ 		break;
+ 	case 0x200:
+ 		switch (bcdDevice) {
+-		case 0x100:
++		case 0x100:	/* GC */
+ 		case 0x105:
++			return TYPE_HXN;
++		case 0x300:	/* GT / TA */
++			if (pl2303_supports_hx_status(serial))
++				return TYPE_TA;
++			fallthrough;
+ 		case 0x305:
++		case 0x400:	/* GL */
+ 		case 0x405:
++			return TYPE_HXN;
++		case 0x500:	/* GE / TB */
++			if (pl2303_supports_hx_status(serial))
++				return TYPE_TB;
++			fallthrough;
++		case 0x505:
++		case 0x600:	/* GS */
+ 		case 0x605:
+-			/*
+-			 * Assume it's an HXN-type if the device doesn't
+-			 * support the old read request value.
+-			 */
+-			if (!pl2303_supports_hx_status(serial))
+-				return TYPE_HXN;
+-			break;
+-		case 0x300:
+-			return TYPE_TA;
+-		case 0x500:
+-			return TYPE_TB;
++		case 0x700:	/* GR */
++		case 0x705:
++			return TYPE_HXN;
+ 		}
+ 		break;
+ 	}
 -- 
-Regards/Gruss,
-    Boris.
+2.35.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

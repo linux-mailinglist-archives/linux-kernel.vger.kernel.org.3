@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83555553DD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A406553DDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356314AbiFUVdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S1354063AbiFUVha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356617AbiFUVdn (ORCPT
+        with ESMTP id S232216AbiFUVh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:33:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F11C6473;
-        Tue, 21 Jun 2022 14:33:42 -0700 (PDT)
+        Tue, 21 Jun 2022 17:37:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9618BE2D;
+        Tue, 21 Jun 2022 14:37:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF18E615DA;
-        Tue, 21 Jun 2022 21:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CE2C3411D;
-        Tue, 21 Jun 2022 21:33:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F97FB81A8C;
+        Tue, 21 Jun 2022 21:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F0DC3411C;
+        Tue, 21 Jun 2022 21:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655847221;
-        bh=hXRncMsrqiLvREP2ZMBHVkrScXAp7TSUS+jzQ5pUVhA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZNWMWL+LmB9fKts8AsUhpwYSXlckyv4TM0q41ac+SLTneE+iBS6A4PVgHjHlntJkd
-         tr0AqWTaFEyjzUnH+g3VdJaH+yY/6HdvjSem+wFyBgYx/3MO5UrVG/QhNRU1ZgMRCd
-         Px6mgW/X2b/eNm8OCfVu7bD8h5kQJnMNKoKmQdeXZ3CpdpHgCJOeYbc/IoWYKfZoXJ
-         P471nRjhxTlwm8Erh5Siis8flYCnKdlA1ZeAVBey3GI4diRa2Mbq8ATGSQNPBqwIN5
-         V+btjki66ZAT6q/0MKuGv+4K0FUvNJyRGHaidUUZM5lY5+YJsYL4kVhb2QEzAMBs1X
-         H/mEVoterbCcw==
-Received: by mail-oo1-f51.google.com with SMTP id w3-20020a4ab6c3000000b0041c1e737283so2945655ooo.12;
-        Tue, 21 Jun 2022 14:33:41 -0700 (PDT)
-X-Gm-Message-State: AJIora/9Xt7SZVZWCbc8o1/4MH1/nmZl+uWQy06+e0Z5OnW3Jaz0T8cP
-        cIdKzmKnrdeK45UsSvx7xor7tPToudIgnuusLUI=
-X-Google-Smtp-Source: AGRyM1tKuOo25ay6VClI3AdUcIFB8V3Jh9agSiNy3WCVFItbUgzdqwxNCUP52L5OkU20g5ZlJq4ejmR44/SVifqEMmI=
-X-Received: by 2002:a4a:c983:0:b0:41b:9e6f:44ab with SMTP id
- u3-20020a4ac983000000b0041b9e6f44abmr24659ooq.98.1655847220275; Tue, 21 Jun
- 2022 14:33:40 -0700 (PDT)
+        s=k20201202; t=1655847446;
+        bh=QEozH589MNtuFtNv/n9JY9HQ9NmxrWcgbRs4SzPhfKU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WM/s8HCS+lS1PQy1SXLPJ1ZrZj68w0itIyktvRfhkoT4qrDGJtmDfacWZOCW5un5b
+         YI2GAxjewAkTG+QnHfya3azPTBq8N5xAc7nC532yX7mYM2vqd2EeUOShANwkly57ue
+         EFAxdD3uASVsEzCFFailgNysofjIIxPRjKuuW9Qv4NMLL80m0rX4K6TaUgJIsqbPLd
+         famv6CuWWxu+nW7KlPeJ3ZQXKEDJdtkEezvG9rRmQoTdpey4WfrojANRSSYtl2//TN
+         BpRsPSoWYdW6DWrxm0vzsviYYhJnjLf+nDeIY6QcAG0cRvyBvjVXKZ/QSIiACrzITw
+         BbCOeyBVLPulg==
+Date:   Tue, 21 Jun 2022 23:37:21 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCHv6 1/2] i2c: designware: introduce a custom scl recovery
+ for SoCFPGA platforms
+Message-ID: <YrI6EeVkkWVMNPFY@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220620230109.986298-1-dinguyen@kernel.org>
 MIME-Version: 1.0
-References: <20220621153623.3786960-1-ardb@kernel.org> <20220621153623.3786960-5-ardb@kernel.org>
- <202206211357.C66CD742E5@keescook> <CAMj1kXGPi+Cy-D8am8tr-rm8gbmUQ-G0bfibD3R3nx=rL7-XVw@mail.gmail.com>
- <202206211419.014C341BE@keescook>
-In-Reply-To: <202206211419.014C341BE@keescook>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 21 Jun 2022 23:33:29 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEWnXd3CyygbQpB8n1srqVA+vTOztevcYTQnDAWZ6-HiA@mail.gmail.com>
-Message-ID: <CAMj1kXEWnXd3CyygbQpB8n1srqVA+vTOztevcYTQnDAWZ6-HiA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] efi: pstore: Omit efivars caching EFI varstore
- access layer
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gOFjVNOAQ1QaTcpi"
+Content-Disposition: inline
+In-Reply-To: <20220620230109.986298-1-dinguyen@kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,36 +63,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 23:21, Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, Jun 21, 2022 at 11:12:17PM +0200, Ard Biesheuvel wrote:
-> > On Tue, 21 Jun 2022 at 23:00, Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Tue, Jun 21, 2022 at 05:36:18PM +0200, Ard Biesheuvel wrote:
-> > > > Avoid the efivars layer and simply call the newly introduced EFI
-> > > > varstore helpers instead. This simplifies the code substantially, and
-> > > > also allows us to remove some hacks in the shared efivars layer that
-> > > > were added for efi-pstore specifically.
-> > > >
-> > > > Since we don't store the name of the associated EFI variable into each
-> > > > pstore record when enumerating them, we have to guess the variable name
-> > > > it was constructed from at deletion time, since we no longer keep a
-> > > > shadow copy of the variable store. To make this a bit more exact, store
-> > > > the CRC-32 of the ASCII name into the pstore record's ECC region so we
-> > > > can use it later to make an educated guess regarding the name of the EFI
-> > > > variable.
-> > >
-> > > I wonder if pstore_record should have a "private" field for backends to
-> > > use? That seems like it solve the need for overloading the ecc field,
-> > > and allow for arbitrarily more information to be stored (i.e. store full
-> > > efi var name instead of an easily-colliding crc32?)
-> > >
-> >
-> > We could easily add that - we'd just have to decide how to free the
-> > memory it points to.
->
-> I assume the pstore core could do that since it manages the record
-> lifetime already?
->
 
-So if priv is non-NULL when it frees the record, it passes it to kfree() ?
+--gOFjVNOAQ1QaTcpi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Jun 20, 2022 at 06:01:08PM -0500, Dinh Nguyen wrote:
+> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+> thus cannot be recovered by the default method of by doing a GPIO access.
+> Only a reset of the I2C IP block can a recovery be successful, so this
+> change effectively resets the I2C controller, NOT any attached clients.
+
+I am afraid here is a serious misunderstanding. The I2C bus recovery
+procedure is a documented mechanism how to get a stalled bus back in the
+case that a client device holds SDA low. This mechanism consists of 9
+SCL pulses. A reset of the IP core is *not a recovery*. If SocFPGA
+cannot togle SCL in some way, it cannot do recovery and
+adap->bus_recovery_info should be NULL. Or did I miss something?
+
+> +static int i2c_socfpga_scl_recovery(struct i2c_adapter *adap)
+> +{
+> +	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
+> +
+> +	bri->prepare_recovery(adap);
+> +	bri->unprepare_recovery(adap);
+> +
+> +	return 0;
+> +}
+
+See, this function is named scl_recovery, but there is no SCL involved.
+This is why I think there is the misunderstanding here.
+
+
+--gOFjVNOAQ1QaTcpi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKyOg0ACgkQFA3kzBSg
+KbaCoA//TYSQgglmhg0+wvtn7CaRSD65yJYC3P+ltv3ow0CjND820EKF0sDYZFw4
+Vts87+sTxp8KfXkKb0jyLoNAc+tte/8jj3GxS/hMjjtB56/aBQ7j6tbeHweTmFC2
+AzaBv04N7a5yWgnyX4h9nR6BQwwZCvRU09OB3A8OOiNhtFHnzcaJShMTgAQ3Oykm
+eYDpvaAIlDQDzoUTydxsQfJhkmlouv8KM52hmNk9FAluCFOY5L1txDv10ocL6+rE
+fZu5c1KaQUpWrhnzBZubOXrSAuMktEHtTGchvKqkC4cE7UT9UPu4pw/YLT0Z1aWr
+qvAZW9rTn6CFUcAZbMUpNPwGMBdaXC5uQjCqO+Mplqke9XgAtnYlgCVThV3FFdQA
+xbanf2o1gXh+qCpBsq+TYcLs9UpUIGouuxT6GK4oWsi9NzBLx0vtGbAGKaEb6vt1
+kiLmkMhQ4T6OvE5TFloL5VRblDsdkw6Wh8KG5VOSOxDi2cSYtWDdQGdDAekIrZFj
+p99ADXhC5h/gmOFxgrM50j1Bbi7CdE9kmcGAtR+iM2BcYdYXilfxsZEfdlc6QDHB
+qegqwLYCqM2ZXc9pI0FYmJYWGmxIeq2p+GeTduFK0oiK7ahpN8MBGXCPSWS6GSF+
+Qdaq2pcNgDPfnJ5+GSoy3DObKB3QeYwarOBAh+BPGzcoYgMHDf8=
+=Gi2f
+-----END PGP SIGNATURE-----
+
+--gOFjVNOAQ1QaTcpi--

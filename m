@@ -2,276 +2,405 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EF5552C7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DA5552C7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347857AbiFUH5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S1347938AbiFUH72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347817AbiFUH5R (ORCPT
+        with ESMTP id S1347916AbiFUH60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:57:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5FB245AB;
-        Tue, 21 Jun 2022 00:57:15 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LRzMG6ybKzcbCw;
-        Tue, 21 Jun 2022 15:55:06 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 21 Jun 2022 15:56:41 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 21 Jun 2022 15:56:40 +0800
-Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
- high memory
-To:     Baoquan He <bhe@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Chen Zhou" <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-References: <20220613080932.663-1-thunder.leizhen@huawei.com>
- <20220613080932.663-6-thunder.leizhen@huawei.com>
- <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <4ad5f8c9-a411-da4e-f626-ead83d107bca@huawei.com>
-Date:   Tue, 21 Jun 2022 15:56:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 21 Jun 2022 03:58:26 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D8C5F6E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:58:23 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id c2so21046267lfk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rAupvnq6gF+hfLMwbK5FyshoSuZewieI0Qe5jG8mpEQ=;
+        b=SHZB3elG8KdiWQghfW62kq8Y+JxtW3U7O18wzOMTwfPmoGL+RUVIV4mssgQfpyX/rP
+         AYyxH5BAB0QHlruVFAoHSzDP3uKW1fHvwoFgiP6f+pR8W7+QfS4k0jmuVeVzhWW8gnxx
+         6Ccwc2mdBKx0lDj0U9XrhF+UuQLBKJIJ4Bc4s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rAupvnq6gF+hfLMwbK5FyshoSuZewieI0Qe5jG8mpEQ=;
+        b=i9ENdQ2fuUDBD2uoxwoBR4mD+MNoBqPoLYrWXPEm/TWlrlrUkaassphM8mEDzo8px5
+         ZYiLf5VDTbLDYEzXsUW1BJwjLti9Wrniwel+5ZmJ3WGJdvmF2YKg0FLKm+vjDjXDh0aa
+         ZI6OGwR1597b9ztHnPl50OW9PkyiOjxTOwv6UvifzLr7VoueR0XSLSIkLRICG6wu3Xyv
+         2zWZJJrBWawOdYf4ubhXIP5rHF2H7Uvi/uIf7w7OUfwBpb+Ihnq10zUxE6Qsjk725hNh
+         nBW/O+JeeAic0TMUqTIAQy+Ii5Qp3Q4O2+R9z07ElP7Eru6DLyRr+3ZUj0RDWxBHrSiB
+         gd7w==
+X-Gm-Message-State: AJIora81UTx9d2XN69achTxV9KptWoTQZhH71iP4uT6KwZweyNX1IxEU
+        w3VcZnssebroWLktuFjpMejHXQ==
+X-Google-Smtp-Source: AGRyM1uvyHwv5Nms9vMGrT+Pj3Myl57qJQnwG96nAmt2D1U+IkwcRVqRNQQZtUK91Tb/HD+gpUxTMw==
+X-Received: by 2002:a05:6512:1523:b0:47f:7940:4a24 with SMTP id bq35-20020a056512152300b0047f79404a24mr2767391lfb.516.1655798301954;
+        Tue, 21 Jun 2022 00:58:21 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id h20-20020a05651c125400b0024f3d1daea2sm1938664ljh.42.2022.06.21.00.58.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 00:58:20 -0700 (PDT)
+Message-ID: <44e37b45-55cf-3705-e5e6-e3921d3646c4@rasmusvillemoes.dk>
+Date:   Tue, 21 Jun 2022 09:58:19 +0200
 MIME-Version: 1.0
-In-Reply-To: <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 07/34] lib/printbuf: Heap allocation
 Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
+Cc:     rostedt@goodmis.org, enozhatsky@chromium.org, willy@infradead.org
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <20220620004233.3805-8-kent.overstreet@gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20220620004233.3805-8-kent.overstreet@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 20/06/2022 02.42, Kent Overstreet wrote:
+> This makes printbufs optionally heap allocated: a printbuf initialized
+> with the PRINTBUF initializer will automatically heap allocate and
+> resize as needed.
+> 
+> Allocations are done with GFP_KERNEL: code should use e.g.
+> memalloc_nofs_save()/restore() as needed. Since we do not currently have
+> memalloc_nowait_save()/restore(), in contexts where it is not safe to
+> block we provide the helpers
+> 
+>   printbuf_atomic_inc()
+>   printbuf_atomic_dec()
+> 
+> When the atomic count is nonzero, memory allocations will be done with
+> GFP_NOWAIT.
+> 
+> On memory allocation failure, output will be truncated. Code that wishes
+> to check for memory allocation failure (in contexts where we should
+> return -ENOMEM) should check if printbuf->allocation_failure is set.
+> Since printbufs are expected to be typically used for log messages and
+> on a best effort basis, we don't return errors directly.
+> 
+> Other helpers provided by this patch:
+> 
+>  - printbuf_make_room(buf, extra)
+>    Reallocates if necessary to make room for @extra bytes (not including
+>    terminating null).
+> 
+>  - printbuf_str(buf)
+>    Returns a null terminated string equivalent to the contents of @buf.
+>    If @buf was never allocated (or allocation failed), returns a
+>    constant empty string.
+> 
+>  - printbuf_exit(buf)
+>    Releases memory allocated by a printbuf.
+> 
+> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+> ---
+>  include/linux/printbuf.h | 120 +++++++++++++++++++++++++++++++++------
+>  lib/Makefile             |   2 +-
+>  lib/printbuf.c           |  71 +++++++++++++++++++++++
+>  3 files changed, 175 insertions(+), 18 deletions(-)
+>  create mode 100644 lib/printbuf.c
+> 
+> diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
+> index 8186c447ca..382863afa7 100644
+> --- a/include/linux/printbuf.h
+> +++ b/include/linux/printbuf.h
+> @@ -4,19 +4,69 @@
+>  #ifndef _LINUX_PRINTBUF_H
+>  #define _LINUX_PRINTBUF_H
+>  
+> -#include <linux/kernel.h>
+> -#include <linux/string.h>
+> -
+>  /*
+> - * Printbufs: String buffer for outputting (printing) to, for vsnprintf
+> + * Printbufs: Simple strings for printing to, with optional heap allocation
+> + *
+> + * This code has provisions for use in userspace, to aid in making other code
+> + * portable between kernelspace and userspace.
+> + *
+> + * Basic example:
+> + *   struct printbuf buf = PRINTBUF;
+> + *
+> + *   prt_printf(&buf, "foo=");
+> + *   foo_to_text(&buf, foo);
+> + *   printk("%s", buf.buf);
+
+So, if prt_printf() and foo_to_text() failed to make room, buf.buf would
+still be NULL, right? Sure, vsnprintf() handles that gracefully, but
+this is probably not what you intended.
+
+>  struct printbuf {
+>  	char			*buf;
+>  	unsigned		size;
+>  	unsigned		pos;
+> +	/*
+> +	 * If nonzero, allocations will be done with GFP_ATOMIC:
+> +	 */
+> +	u8			atomic;
+> +	bool			allocation_failure:1;
+> +	bool			heap_allocated:1;
+>  };
+>  
+> +int printbuf_make_room(struct printbuf *, unsigned);
+> +const char *printbuf_str(const struct printbuf *);
+> +void printbuf_exit(struct printbuf *);
+> +
+> +/* Initializer for a heap allocated printbuf: */
+> +#define PRINTBUF ((struct printbuf) { .heap_allocated = true })
+> +
+> +/* Initializer a printbuf that points to an external buffer: */
+> +#define PRINTBUF_EXTERN(_buf, _size)			\
+> +((struct printbuf) {					\
+> +	.buf	= _buf,					\
+> +	.size	= _size,				\
+> +})
+> +
+>  /*
+>   * Returns size remaining of output buffer:
+>   */
+> @@ -49,26 +99,36 @@ static inline bool printbuf_overflowed(struct printbuf *out)
+>  
+>  static inline void printbuf_nul_terminate(struct printbuf *out)
+>  {
+> +	printbuf_make_room(out, 1);
+> +
+
+Shouldn't this be printbuf_make_room(out, 0)?
+
+Probably this should be split up, so that the functions that also do
+printbuf_make_room() which ensures room for a nul-terminator could then
+call __printbuf_nul_terminate(), which would just contain the below:
+
+>  	if (out->pos < out->size)
+>  		out->buf[out->pos] = 0;
+>  	else if (out->size)
+>  		out->buf[out->size - 1] = 0;
+>  }
 
 
-On 2022/6/21 13:33, Baoquan He wrote:
-> Hi,
-> 
-> On 06/13/22 at 04:09pm, Zhen Lei wrote:
->> If the crashkernel has both high memory above DMA zones and low memory
->> in DMA zones, kexec always loads the content such as Image and dtb to the
->> high memory instead of the low memory. This means that only high memory
->> requires write protection based on page-level mapping. The allocation of
->> high memory does not depend on the DMA boundary. So we can reserve the
->> high memory first even if the crashkernel reservation is deferred.
->>
->> This means that the block mapping can still be performed on other kernel
->> linear address spaces, the TLB miss rate can be reduced and the system
->> performance will be improved.
-> 
-> Ugh, this looks a little ugly, honestly.
-> 
-> If that's for sure arm64 can't split large page mapping of linear
-> region, this patch is one way to optimize linear mapping. Given kdump
-> setting is necessary on arm64 server, the booting speed is truly
-> impacted heavily.
 
-There is also a performance impact when running.
+> -static inline void __prt_char(struct printbuf *out, char c)
+> +/* Doesn't call printbuf_make_room(), doesn't nul terminate: */
+> +static inline void __prt_char_reserved(struct printbuf *out, char c)
+>  {
+>  	if (printbuf_remaining(out))
+>  		out->buf[out->pos] = c;
+>  	out->pos++;
+>  }
+>  
+> +/* Doesn't nul terminate: */
+> +static inline void __prt_char(struct printbuf *out, char c)
+> +{
+> +	printbuf_make_room(out, 1);
+> +	__prt_char_reserved(out, c);
+> +}
+> +
+>  static inline void prt_char(struct printbuf *out, char c)
+>  {
+>  	__prt_char(out, c);
+>  	printbuf_nul_terminate(out);
+>  }
+>  
+> -static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
+> +static inline void __prt_chars_reserved(struct printbuf *out, char c, unsigned n)
+>  {
+>  	unsigned i, can_print = min(n, printbuf_remaining(out));
+>  
+> @@ -79,13 +139,18 @@ static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
+>  
+>  static inline void prt_chars(struct printbuf *out, char c, unsigned n)
+>  {
+> -	__prt_chars(out, c, n);
+> +	printbuf_make_room(out, n);
+> +	__prt_chars_reserved(out, c, n);
+>  	printbuf_nul_terminate(out);
+>  }
+>  
+>  static inline void prt_bytes(struct printbuf *out, const void *b, unsigned n)
+>  {
+> -	unsigned i, can_print = min(n, printbuf_remaining(out));
+> +	unsigned i, can_print;
+> +
+> +	printbuf_make_room(out, n);
+> +
+> +	can_print = min(n, printbuf_remaining(out));
+>  
+>  	for (i = 0; i < can_print; i++)
+>  		out->buf[out->pos++] = ((char *) b)[i];
+> @@ -101,22 +166,43 @@ static inline void prt_str(struct printbuf *out, const char *str)
+>  
+>  static inline void prt_hex_byte(struct printbuf *out, u8 byte)
+>  {
+> -	__prt_char(out, hex_asc_hi(byte));
+> -	__prt_char(out, hex_asc_lo(byte));
+> +	printbuf_make_room(out, 2);
+> +	__prt_char_reserved(out, hex_asc_hi(byte));
+> +	__prt_char_reserved(out, hex_asc_lo(byte));
+>  	printbuf_nul_terminate(out);
+>  }
+>  
+>  static inline void prt_hex_byte_upper(struct printbuf *out, u8 byte)
+>  {
+> -	__prt_char(out, hex_asc_upper_hi(byte));
+> -	__prt_char(out, hex_asc_upper_lo(byte));
+> +	printbuf_make_room(out, 2);
+> +	__prt_char_reserved(out, hex_asc_upper_hi(byte));
+> +	__prt_char_reserved(out, hex_asc_upper_lo(byte));
+>  	printbuf_nul_terminate(out);
+>  }
+>  
+> -#define PRINTBUF_EXTERN(_buf, _size)			\
+> -((struct printbuf) {					\
+> -	.buf	= _buf,					\
+> -	.size	= _size,				\
+> -})
+> +/**
+> + * printbuf_reset - re-use a printbuf without freeing and re-initializing it:
+> + */
+> +static inline void printbuf_reset(struct printbuf *buf)
+> +{
+> +	buf->pos		= 0;
+> +	buf->allocation_failure	= 0;
+> +}
+> +
+> +/**
+> + * printbuf_atomic_inc - mark as entering an atomic section
+> + */
+> +static inline void printbuf_atomic_inc(struct printbuf *buf)
+> +{
+> +	buf->atomic++;
+> +}
+> +
+> +/**
+> + * printbuf_atomic_inc - mark as leaving an atomic section
+> + */
+> +static inline void printbuf_atomic_dec(struct printbuf *buf)
+> +{
+> +	buf->atomic--;
+> +}
 
-> 
-> However, I would suggest letting it as is with below reasons:
-> 
-> 1) The code will complicate the crashkernel reservatoin code which
-> is already difficult to understand. 
+So, if I have a printbuf in scope, and I do irq_disable() or spin_lock()
+or whatnot, I'm supposed to also call printbuf_atomic_inc(), at least if
+the printbuf is used within the locked region.
 
-Yeah, I feel it, too.
+Honest question: An u8 used for this purpose cannot overflow?
 
-> 2) It can only optimize the two cases, first is CONFIG_ZONE_DMA|DMA32
->   disabled, the other is crashkernel=,high is specified. While both
->   two cases are corner case, most of systems have CONFIG_ZONE_DMA|DMA32
->   enabled, and most of systems have crashkernel=xM which is enough.
->   Having them optimized won't bring benefit to most of systems.
+>  #endif /* _LINUX_PRINTBUF_H */
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 6b9ffc1bd1..b4609a4258 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -34,7 +34,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+>  	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+>  	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+>  	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
+> -	 buildid.o
+> +	 buildid.o printbuf.o
+>  
+>  lib-$(CONFIG_PRINTK) += dump_stack.o
+>  lib-$(CONFIG_SMP) += cpumask.o
+> diff --git a/lib/printbuf.c b/lib/printbuf.c
+> new file mode 100644
+> index 0000000000..8c70128e31
+> --- /dev/null
+> +++ b/lib/printbuf.c
+> @@ -0,0 +1,71 @@
+> +// SPDX-License-Identifier: LGPL-2.1+
+> +/* Copyright (C) 2022 Kent Overstreet */
+> +
+> +#ifdef __KERNEL__
+> +#include <linux/export.h>
+> +#include <linux/kernel.h>
+> +#else
+> +#define EXPORT_SYMBOL(x)
+> +#endif
+> +
+> +#include <linux/err.h>
+> +#include <linux/slab.h>
+> +#include <linux/printbuf.h>
+> +
+> +int printbuf_make_room(struct printbuf *out, unsigned extra)
+> +{
+> +	unsigned new_size;
+> +	char *buf;
+> +
+> +	if (!out->heap_allocated)
+> +		return 0;
 
-The case of CONFIG_ZONE_DMA|DMA32 disabled have been resolved by
-commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones").
-Currently the performance problem to be optimized is that DMA is enabled.
+I think that ->allocation_failure should be sticky and make us return an
+early error here; if we're under memory pressure we don't want each and
+every prt_char() of whatever we're trying to print to end up trying to
+do an allocation.
 
+> +	/* Reserved space for terminating nul: */
+> +	extra += 1;
+> +
+> +	if (out->pos + extra < out->size)
+> +		return 0;
 
-> 3) Besides, the crashkernel=,high can be handled earlier because 
->   arm64 alwasys have memblock.bottom_up == false currently, thus we
->   don't need worry arbout the lower limit of crashkernel,high
->   reservation for now. If memblock.bottom_up is set true in the future,
->   this patch doesn't work any more.
-> 
-> 
-> ...
->         crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
->                                                crash_base, crash_max);
-> 
-> So, in my opinion, we can leave the current NON_BLOCK|SECT mapping as
-> is caused by crashkernel reserving, since no regression is brought.
-> And meantime, turning to check if there's any way to make the contiguous
-> linear mapping and later splitting work. The patch 4, 5 in this patchset
-> doesn't make much sense to me, frankly speaking.
+Are you sure you don't want to be careful about the possibility of
+out->pos+extra overflowing? And since extra has been ++'ed, shouldn't
+the comparison be <= ? If pos is 0, size is 2, and I want to add one
+char (so on entry extra is 1), this should not require a reallocation?
 
-OK. As discussed earlier, I can rethink if there is a better way to patch 4-5,
-and this time focus on patch 1-2. In this way, all the functions are complete,
-and only optimization is left.
+> +	new_size = roundup_pow_of_two(out->size + extra);
 
-> 
-> Thanks
-> Baoquan
-> 
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  arch/arm64/mm/init.c | 71 ++++++++++++++++++++++++++++++++++++++++----
->>  1 file changed, 65 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
->> index fb24efbc46f5ef4..ae0bae2cafe6ab0 100644
->> --- a/arch/arm64/mm/init.c
->> +++ b/arch/arm64/mm/init.c
->> @@ -141,15 +141,44 @@ static void __init reserve_crashkernel(int dma_state)
->>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
->>  	char *cmdline = boot_command_line;
->>  	int dma_enabled = IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32);
->> -	int ret;
->> +	int ret, skip_res = 0, skip_low_res = 0;
->>  	bool fixed_base;
->>  
->>  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
->>  		return;
->>  
->> -	if ((!dma_enabled && (dma_state != DMA_PHYS_LIMIT_UNKNOWN)) ||
->> -	     (dma_enabled && (dma_state != DMA_PHYS_LIMIT_KNOWN)))
->> -		return;
->> +	/*
->> +	 * In the following table:
->> +	 * X,high  means crashkernel=X,high
->> +	 * unknown means dma_state = DMA_PHYS_LIMIT_UNKNOWN
->> +	 * known   means dma_state = DMA_PHYS_LIMIT_KNOWN
->> +	 *
->> +	 * The first two columns indicate the status, and the last two
->> +	 * columns indicate the phase in which crash high or low memory
->> +	 * needs to be reserved.
->> +	 *  ---------------------------------------------------
->> +	 * | DMA enabled | X,high used |  unknown  |   known   |
->> +	 *  ---------------------------------------------------
->> +	 * |      N            N       |    low    |    NOP    |
->> +	 * |      Y            N       |    NOP    |    low    |
->> +	 * |      N            Y       |  high/low |    NOP    |
->> +	 * |      Y            Y       |    high   |    low    |
->> +	 *  ---------------------------------------------------
->> +	 *
->> +	 * But in this function, the crash high memory allocation of
->> +	 * crashkernel=Y,high and the crash low memory allocation of
->> +	 * crashkernel=X[@offset] for crashk_res are mixed at one place.
->> +	 * So the table above need to be adjusted as below:
->> +	 *  ---------------------------------------------------
->> +	 * | DMA enabled | X,high used |  unknown  |   known   |
->> +	 *  ---------------------------------------------------
->> +	 * |      N            N       |    res    |    NOP    |
->> +	 * |      Y            N       |    NOP    |    res    |
->> +	 * |      N            Y       |res/low_res|    NOP    |
->> +	 * |      Y            Y       |    res    |  low_res  |
->> +	 *  ---------------------------------------------------
->> +	 *
->> +	 */
->>  
->>  	/* crashkernel=X[@offset] */
->>  	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
->> @@ -169,10 +198,33 @@ static void __init reserve_crashkernel(int dma_state)
->>  		else if (ret)
->>  			return;
->>  
->> +		/* See the third row of the second table above, NOP */
->> +		if (!dma_enabled && (dma_state == DMA_PHYS_LIMIT_KNOWN))
->> +			return;
->> +
->> +		/* See the fourth row of the second table above */
->> +		if (dma_enabled) {
->> +			if (dma_state == DMA_PHYS_LIMIT_UNKNOWN)
->> +				skip_low_res = 1;
->> +			else
->> +				skip_res = 1;
->> +		}
->> +
->>  		crash_max = CRASH_ADDR_HIGH_MAX;
->>  	} else if (ret || !crash_size) {
->>  		/* The specified value is invalid */
->>  		return;
->> +	} else {
->> +		/* See the 1-2 rows of the second table above, NOP */
->> +		if ((!dma_enabled && (dma_state == DMA_PHYS_LIMIT_KNOWN)) ||
->> +		     (dma_enabled && (dma_state == DMA_PHYS_LIMIT_UNKNOWN)))
->> +			return;
->> +	}
->> +
->> +	if (skip_res) {
->> +		crash_base = crashk_res.start;
->> +		crash_size = crashk_res.end - crashk_res.start + 1;
->> +		goto check_low;
->>  	}
->>  
->>  	fixed_base = !!crash_base;
->> @@ -202,9 +254,18 @@ static void __init reserve_crashkernel(int dma_state)
->>  		return;
->>  	}
->>  
->> +	crashk_res.start = crash_base;
->> +	crashk_res.end = crash_base + crash_size - 1;
->> +
->> +check_low:
->> +	if (skip_low_res)
->> +		return;
->> +
->>  	if ((crash_base >= CRASH_ADDR_LOW_MAX) &&
->>  	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
->>  		memblock_phys_free(crash_base, crash_size);
->> +		crashk_res.start = 0;
->> +		crashk_res.end = 0;
->>  		return;
->>  	}
->>  
->> @@ -219,8 +280,6 @@ static void __init reserve_crashkernel(int dma_state)
->>  	if (crashk_low_res.end)
->>  		kmemleak_ignore_phys(crashk_low_res.start);
->>  
->> -	crashk_res.start = crash_base;
->> -	crashk_res.end = crash_base + crash_size - 1;
->>  	insert_resource(&iomem_resource, &crashk_res);
->>  }
->>  
->> -- 
->> 2.25.1
->>
-> 
-> .
-> 
+Are you sure you don't want to be careful about the possibility of
+out->size+extra overflowing, or hitting that with roundup_pow_of_two()
+doing that?
 
--- 
-Regards,
-  Zhen Lei
+> +	buf = krealloc(out->buf, new_size, !out->atomic ? GFP_KERNEL : GFP_NOWAIT);
+> +
+> +	if (!buf) {
+> +		out->allocation_failure = true;
+> +		return -ENOMEM;
+> +	}
+> +
+> +	out->buf	= buf;
+> +	out->size	= new_size;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(printbuf_make_room);
+> +
+> +/**
+> + * printbuf_str - returns printbuf's buf as a C string, guaranteed to be null
+
+Pet peeve: Please use the spelling "nul" consistently.
+
+> + * terminated
+> + */
+> +const char *printbuf_str(const struct printbuf *buf)
+> +{
+> +	/*
+> +	 * If we've written to a printbuf then it's guaranteed to be a null
+> +	 * terminated string - but if we haven't, then we might not have
+> +	 * allocated a buffer at all:
+> +	 */
+> +	return buf->pos
+> +		? buf->buf
+> +		: "";
+> +}
+> +EXPORT_SYMBOL(printbuf_str);
+
+I think the documentation lacks some mention of lifetimes and caller
+obligations or lack thereof. Especially since the return value could
+become dangling not just if the printbuf is destroyed (printbuf_exit),
+but also any other use of the printbuf which could cause a realloc.
+
+Rasmus

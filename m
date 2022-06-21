@@ -2,175 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02212553994
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3925539A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbiFUSgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 14:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S1347202AbiFUSkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 14:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiFUSgF (ORCPT
+        with ESMTP id S232821AbiFUSkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 14:36:05 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07787255B5;
-        Tue, 21 Jun 2022 11:36:04 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id i18so10187732lfu.8;
-        Tue, 21 Jun 2022 11:36:03 -0700 (PDT)
+        Tue, 21 Jun 2022 14:40:08 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36CD10FEE
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:40:06 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id f39so8214327lfv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PS4K/kn6NjTOzcvIzP8OtIS0qJRtLD3yztBTOV02sn0=;
-        b=Nq5uuomhRWpTGO5FdD6ZpSa4orNR0MwFc72q0jeWthe6EygDTAoquDA7zuLlBZGodf
-         IUpoAwirz8aJze/1c24QdNHFglnC/sjYb8zNoktRXoRPf9O6Ez5LlAzte3UqM0zKN+VD
-         YzKuVqeofQ0K7md8ZX4biOGanq1y8kUTBfIbjFbok4QSQ4ow6lFx0zk0o12LBwwopiTE
-         SGJx9APggg3RXKy6mQjlgZvAUaF/GYXCikTZdE3KWfF5vV1qoWgzHSAU6v1kmuV0vQht
-         zllSuQu5xi8vc8l7enQJSjQqAie22nuFJNAdLLvRVtcUqFr3xKNXtx5zGN5HjXZC2cfV
-         sVOA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uDyittP64vQtB3M07CJp4QeN+56SAqdK1J0XQGpRBNo=;
+        b=fpcGPwaFqceX/cmFvUoJ5QF+vl0m5i9zqNt5QSuFTn+JjvEO+6alOPrbo19Jrl2zyV
+         0+guPaVkW6yUcY9p7gw6o23WlqsmcEsVxMDwiU848Mshx01t24FI4QrpSf8ii6F9G1Dd
+         5oJICdaCNpeFqaAXjtnZpwif2QeQm83p3uKl9S8qatOQZHk+LTSa5MR2N9kob6boDHYU
+         YfXybzBaE/x+VTTjnlg4ShuD8hYBI92rGGRySxLtjzFVEw4PuF6wWKph74VOGVwy16wF
+         QqWA75CvOZ0uFIJnefwC+cTQzIkYjDyQqLrLUsd1n83o1wPZYkUe7pDTa7M4XKWTIGba
+         wnVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PS4K/kn6NjTOzcvIzP8OtIS0qJRtLD3yztBTOV02sn0=;
-        b=l+zJaGJSHx3nFVOouOEq2suM6n3/4Ni/OS4w0nMTqKPivKEZ61kZ/FdD0b27qFg5/i
-         jswEK3E5tiSgVXlfAtCxewtE+zf+vxemdrO2XleBXeHbRa08rC3RNMYzTPZx18sDcjXJ
-         7H3GQZMbcgMxrZ62D3Jho6HYbAi0TVhilVaqkDnlQoyGQmFvcYE8/7tk/Mqj3yZJxOmD
-         PrSyak0x+qqgOqbuc0OQsEn2hpUx7/0+jgC3WpHrpwM2oKATvW6l5tG4ZXX61qrC8vHS
-         jvlSRQteVN55PrF99H8zifai++2ZOzQCDjIR0zgeUZYCMaWxzEu7N2erF6L8f170a99U
-         NqYw==
-X-Gm-Message-State: AJIora+NGSdFteohKAcfndqTD91QEN5cg9kXLRsDEQxrbtQ4HSAPXOxb
-        skg8+wFK6Zqvj7ym/Sl67L/48d2L+9EeJbTsiCk=
-X-Google-Smtp-Source: AGRyM1saO3ekyPYvPVEk/8JJxJyEo1kLCKqH6Kzv9ytrVjroEiwKVpa9pdmKB2tTW5G77v/3hY33HkdbULtR+DuvCAw=
-X-Received: by 2002:a05:6512:31d4:b0:479:78d:9c96 with SMTP id
- j20-20020a05651231d400b00479078d9c96mr17716632lfe.121.1655836562193; Tue, 21
- Jun 2022 11:36:02 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uDyittP64vQtB3M07CJp4QeN+56SAqdK1J0XQGpRBNo=;
+        b=byCx6Tqimtv/ns4YjwIfuurOmVYNOdQIAoJQhLjU70SXJMm4RNaajk3Kjut3f7YczP
+         iDJziTq7R5LWaaxKj+kmfKU0CvvYErcGSf7QG7FLx+d0CszWNbFXzCju0J9cOI4XTjJn
+         ybyLFZlnaKUcq4paAWkAOdobJ97tjAVGXrf7sSPzBI3XTB7ZxUNC3vbuhrXoFidW/QuQ
+         j0TS7vAkpyBbhLF75eawueL5bj0Sbhs/o9ydISWVVtWBxtpaxX1ZQIT3nxF+bIV6e20C
+         wRR5bUmYikJ5pBS7iKY1mlibWqyHu6dh4C72mJ+oT9kL4ScCsea12IMB7NLWONh3riyQ
+         GYdg==
+X-Gm-Message-State: AJIora8La2Zr189cnzft96WwmnbEJWizaoYBGy71gRl+nVhcCowXqq8O
+        /pw+PQBRPTWs3IhUEgITZSGwqQ==
+X-Google-Smtp-Source: AGRyM1uhpfmmJNlYBdq65hirTMs/vSoZDLblmci38dLR13tm6bWLAc5IouVaSgnfb/4mTHqgIb03JA==
+X-Received: by 2002:a05:6512:515:b0:479:11a0:8132 with SMTP id o21-20020a056512051500b0047911a08132mr17892802lfb.344.1655836805207;
+        Tue, 21 Jun 2022 11:40:05 -0700 (PDT)
+Received: from [192.168.43.7] ([188.162.64.230])
+        by smtp.gmail.com with ESMTPSA id g2-20020ac24d82000000b0047dc46b466esm2262741lfe.85.2022.06.21.11.40.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 11:40:04 -0700 (PDT)
+Message-ID: <33a9a76a-5f6e-b790-17d4-62869a04529d@linaro.org>
+Date:   Tue, 21 Jun 2022 21:40:02 +0300
 MIME-Version: 1.0
-References: <20220607134709.373344-1-lee.jones@linaro.org> <YrHX9pj/f0tkqJis@google.com>
-In-Reply-To: <YrHX9pj/f0tkqJis@google.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 21 Jun 2022 11:35:50 -0700
-Message-ID: <CABBYNZKniL5Y8r0ztFC0s2PEx3GA5YtKeG7of_vMRvqArjeMpw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Bluetooth: Use chan_list_lock to protect the whole
- put/destroy invokation
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable@kernel.org, Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [v3 0/5] Add PSR support for eDP
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>, y@qualcomm.com,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com
+References: <y> <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+Please fix your mailer. You've got the following headers, which clearly 
+confuse the threading:
 
-On Tue, Jun 21, 2022 at 7:38 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Tue, 07 Jun 2022, Lee Jones wrote:
->
-> > This change prevents a use-after-free caused by one of the worker
-> > threads starting up (see below) *after* the final channel reference
-> > has been put() during sock_close() but *before* the references to the
-> > channel have been destroyed.
-> >
-> >   refcount_t: increment on 0; use-after-free.
-> >   BUG: KASAN: use-after-free in refcount_dec_and_test+0x20/0xd0
-> >   Read of size 4 at addr ffffffc114f5bf18 by task kworker/u17:14/705
-> >
-> >   CPU: 4 PID: 705 Comm: kworker/u17:14 Tainted: G S      W       4.14.2=
-34-00003-g1fb6d0bd49a4-dirty #28
-> >   Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 Google In=
-c. MSM sm8150 Flame DVT (DT)
-> >   Workqueue: hci0 hci_rx_work
-> >   Call trace:
-> >    dump_backtrace+0x0/0x378
-> >    show_stack+0x20/0x2c
-> >    dump_stack+0x124/0x148
-> >    print_address_description+0x80/0x2e8
-> >    __kasan_report+0x168/0x188
-> >    kasan_report+0x10/0x18
-> >    __asan_load4+0x84/0x8c
-> >    refcount_dec_and_test+0x20/0xd0
-> >    l2cap_chan_put+0x48/0x12c
-> >    l2cap_recv_frame+0x4770/0x6550
-> >    l2cap_recv_acldata+0x44c/0x7a4
-> >    hci_acldata_packet+0x100/0x188
-> >    hci_rx_work+0x178/0x23c
-> >    process_one_work+0x35c/0x95c
-> >    worker_thread+0x4cc/0x960
-> >    kthread+0x1a8/0x1c4
-> >    ret_from_fork+0x10/0x18
-> >
-> > Cc: stable@kernel.org
-> > Cc: Marcel Holtmann <marcel@holtmann.org>
-> > Cc: Johan Hedberg <johan.hedberg@gmail.com>
-> > Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: linux-bluetooth@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  net/bluetooth/l2cap_core.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> No reply for 2 weeks.
->
-> Is this patch being considered at all?
->
-> Can I help in any way?
+In-Reply-To: <y>
+References: <y>
 
-Could you please resend to trigger CI, looks like CI missed this one
-for some reason.
-
->
-> > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-> > index ae78490ecd3d4..82279c5919fd8 100644
-> > --- a/net/bluetooth/l2cap_core.c
-> > +++ b/net/bluetooth/l2cap_core.c
-> > @@ -483,9 +483,7 @@ static void l2cap_chan_destroy(struct kref *kref)
-> >
-> >       BT_DBG("chan %p", chan);
-> >
-> > -     write_lock(&chan_list_lock);
-> >       list_del(&chan->global_l);
-> > -     write_unlock(&chan_list_lock);
-> >
-> >       kfree(chan);
-> >  }
-> > @@ -501,7 +499,9 @@ void l2cap_chan_put(struct l2cap_chan *c)
-> >  {
-> >       BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
-> >
-> > +     write_lock(&chan_list_lock);
-> >       kref_put(&c->kref, l2cap_chan_destroy);
-> > +     write_unlock(&chan_list_lock);
-> >  }
-> >  EXPORT_SYMBOL_GPL(l2cap_chan_put);
-> >
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+Also the y@qualcomm.com address (present in To:) rejects incoming mail.
 
 
+On 21/06/2022 13:53, Vinod Polimera wrote:
+> Changes in v2:
+>    - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+>    - Don't modify whitespaces.
+>    - Set self refresh aware from atomic_check.
+>    - Set self refresh aware only if psr is supported.
+>    - Provide a stub for msm_dp_display_set_psr.
+>    - Move dp functions to bridge code.
+> 
+> Changes in v3:
+>    - Change callback names to reflect atomic interfaces.
+>    - Move bridge callback change to separate patch as suggested by Dmitry.
+>    - Remove psr function declaration from msm_drv.h.
+>    - Set self_refresh_aware flag only if psr is supported.
+>    - Modify the variable names to simpler form.
+>    - Define bit fields for PSR settings.
+>    - Add comments explaining the steps to enter/exit psr.
+>    - Change DRM_INFO to drm_dbg_db.
+> 
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> 
+> Vinod Polimera (5):
+>    drm/msm/dp: Add basic PSR support for eDP
+>    drm/bridge: use atomic enable/disable callbacks for panel bridge
+>      functions
+>    drm/bridge: add psr support during panel bridge enable & disable
+>      sequence
+>    drm/msm/disp/dpu1: use atomic enable/disable callbacks for encoder
+>      functions
+>    drm/msm/disp/dpu1: add PSR support for eDP interface in dpu driver
+> 
+>   drivers/gpu/drm/bridge/panel.c              | 110 ++++++++++++++++--
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  36 +++++-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  30 ++++-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |   2 +-
+>   drivers/gpu/drm/msm/dp/dp_catalog.c         |  81 ++++++++++++++
+>   drivers/gpu/drm/msm/dp/dp_catalog.h         |   4 +
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c            |  76 ++++++++++++-
+>   drivers/gpu/drm/msm/dp/dp_ctrl.h            |   3 +
+>   drivers/gpu/drm/msm/dp/dp_display.c         |  14 +++
+>   drivers/gpu/drm/msm/dp/dp_display.h         |   2 +
+>   drivers/gpu/drm/msm/dp/dp_drm.c             | 166 +++++++++++++++++++++++++++-
+>   drivers/gpu/drm/msm/dp/dp_link.c            |  36 ++++++
+>   drivers/gpu/drm/msm/dp/dp_panel.c           |  22 ++++
+>   drivers/gpu/drm/msm/dp/dp_panel.h           |   6 +
+>   drivers/gpu/drm/msm/dp/dp_reg.h             |  27 +++++
+>   15 files changed, 591 insertions(+), 24 deletions(-)
+> 
 
---=20
-Luiz Augusto von Dentz
+
+-- 
+With best wishes
+Dmitry

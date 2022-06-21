@@ -2,119 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46FA552D1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F124B552D2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiFUIgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+        id S1348396AbiFUIiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiFUIgT (ORCPT
+        with ESMTP id S1347950AbiFUIiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:36:19 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F360C25EA1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:36:18 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id p69so11564954ybc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:36:18 -0700 (PDT)
+        Tue, 21 Jun 2022 04:38:51 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0EC2317E;
+        Tue, 21 Jun 2022 01:38:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XK3NOZN6D3jmWfxj6zcoKoNJkVxGQRZizBH81dPFmTw=;
-        b=luiiUMRJeorIuth+JmLI90EZ5LCuCxBcDBbByb9XgBBE/7f4FmfrXWqSVNKADIYCD7
-         uTT9I0U7qE1a1UUf/pZXlWq3A3XuwJwxpdfpuuZBT5OHBZpU92iev8qtXfOF0/koDvUH
-         VF10BAFdOvEZ6goVMZwkUizgPUGUSkigzIfVt4is3/q9uhGyoRLijGRryo/ND26ADBaM
-         f9hGWie8FuBZFj1zFZNlLGiEq7M0r0VPL6nWF3iP9HXcT7GKXNMAI0Ke78jcIEcD1UFh
-         biuyD3Zkm7xKlX1ewXbV/YxP582sdWciF9Cim7qrnmZZztNZ8J6E7bb2A9+7JQylgnSp
-         zFSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XK3NOZN6D3jmWfxj6zcoKoNJkVxGQRZizBH81dPFmTw=;
-        b=PYq6H0NPjkbfcTRGQazLf9/GhUsjDgXx8VoaLZuIcX+N0JY+jO6t/Y1wGGtZnXBszi
-         +g6yX05YtZhEdtJV79Dfvh0Pzxi6Gzu/yOLqeYVPO8heIJbQZL6TbmGsbnNcJ0FmgyTm
-         ksY3jmjT98uV6aXmSNEYbkRCpFVNfYbC5STpk2nCkqa7hMH2muIv3zsZF3fYUgmYCEqE
-         g0vdRTYZa27hE8cprxZlqGZHF+8MnYH/jjjFUDDAWXDnKe4LQUu3Q1gZD54JJLCWmMNc
-         296/O1SAbx8zjWaDRDyN/phPm5hD+qMoy6FTkKua7ypPxbbbGrI/9Qcod7JujadeAWFd
-         0IjA==
-X-Gm-Message-State: AJIora/9n2VNu/7IguqgOHprbg8pArmEweE6Ub3FIe+Sidma+pXUJdA6
-        ahoPZMMLaQ8Oi9XJQuoGZA1kmJyJJk6AaeB36A8Fyw==
-X-Google-Smtp-Source: AGRyM1u0GLsG/mCzq0HCyNwfzW6+MAPhfU7oxo/FlKD+fLxWg+L2HL360XBPmSgozeFNjVnUmLl9Q/2864LVwW1QsIA=
-X-Received: by 2002:a25:cb12:0:b0:668:be92:a574 with SMTP id
- b18-20020a25cb12000000b00668be92a574mr20938131ybg.617.1655800578069; Tue, 21
- Jun 2022 01:36:18 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655800731; x=1687336731;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=EI6M6wg5GXdJ9TlHRlOGin1RyyW6eaTiHorelcQBSrE=;
+  b=hZSzP5dFaG0454iZ8xfdWUd1oRLE1ifwe/YWAQLLKNmpMQjR28STx1mm
+   ZV+NVwd0yhfcMzgv4LOheSF7T9x6Wi/9qqutJCKcabeJLYJLsmC/+zyaI
+   XYayroUHJmHHzBPmh/oUrpKD1SqGe5kPj9VkmjWzyZ8yqj4GaPgh7wP7L
+   M=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Jun 2022 01:38:50 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 01:38:50 -0700
+Received: from cbsp-sh-gv.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 21 Jun 2022 01:38:48 -0700
+From:   Qiang Yu <quic_qianyu@quicinc.com>
+To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>,
+        <loic.poulain@linaro.org>, <quic_jhugo@quicinc.com>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
+        Qiang Yu <quic_qianyu@quicinc.com>
+Subject: [PATCH v2 1/1] bus: mhi: Disable IRQs instead of freeing them during power down
+Date:   Tue, 21 Jun 2022 16:38:09 +0800
+Message-ID: <1655800689-60632-1-git-send-email-quic_qianyu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220620124724.380838401@linuxfoundation.org>
-In-Reply-To: <20220620124724.380838401@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Jun 2022 14:06:06 +0530
-Message-ID: <CA+G9fYsvY-0ub_CXbb5is0vRLQ9+SaPS8Op=9mZzCkeccUN+mg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/106] 5.15.49-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 at 18:36, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.49 release.
-> There are 106 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.49-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+MHI device may go down several times while running. So we just do
+disable/enable IRQs during the mhi_{power_down/power_up} time and
+request/free them when the MHI driver gets installed and removed.
 
-Following commit causing regression while building allmodconfig for clang-13
-on arm64, riscv and x86_64.
+Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+---
+v1->v2: Rewrite commit text. Remove a random change. Use
+        inline enables.
 
-> Linus Torvalds <torvalds@linux-foundation.org>
->     netfs: gcc-12: temporarily disable '-Wattribute-warning' for now
+ drivers/bus/mhi/host/init.c | 14 ++++++++++++++
+ drivers/bus/mhi/host/pm.c   | 22 ++++++++++++++++------
+ 2 files changed, 30 insertions(+), 6 deletions(-)
 
-fs/afs/inode.c:29:32: error: unknown warning group
-'-Wattribute-warning', ignored [-Werror,-Wunknown-warning-option]
-#pragma GCC diagnostic ignored "-Wattribute-warning"
-                               ^
-1 error generated.
+diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+index cbb86b2..daf315a 100644
+--- a/drivers/bus/mhi/host/init.c
++++ b/drivers/bus/mhi/host/init.c
+@@ -179,6 +179,11 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
+ 				   "bhi", mhi_cntrl);
+ 	if (ret)
+ 		return ret;
++	/*
++	 * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
++	 * so disable it explicitly.
++	 */
++	disable_irq(mhi_cntrl->irq[0]);
+ 
+ 	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+ 		if (mhi_event->offload_ev)
+@@ -200,6 +205,8 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
+ 				mhi_cntrl->irq[mhi_event->irq], i);
+ 			goto error_request;
+ 		}
++
++		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+ 	}
+ 
+ 	return 0;
+@@ -1003,8 +1010,14 @@ int mhi_register_controller(struct mhi_controller *mhi_cntrl,
+ 
+ 	mhi_create_debugfs(mhi_cntrl);
+ 
++	ret = mhi_init_irq_setup(mhi_cntrl);
++	if (ret)
++		goto error_setup_irq;
++
+ 	return 0;
+ 
++error_setup_irq:
++	mhi_destroy_debugfs(mhi_cntrl);
+ err_release_dev:
+ 	put_device(&mhi_dev->dev);
+ err_ida_free:
+@@ -1027,6 +1040,7 @@ void mhi_unregister_controller(struct mhi_controller *mhi_cntrl)
+ 	struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
+ 	unsigned int i;
+ 
++	mhi_deinit_free_irq(mhi_cntrl);
+ 	mhi_destroy_debugfs(mhi_cntrl);
+ 
+ 	destroy_workqueue(mhi_cntrl->hiprio_wq);
+diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+index dc2e8ff..eec2d1d 100644
+--- a/drivers/bus/mhi/host/pm.c
++++ b/drivers/bus/mhi/host/pm.c
+@@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
+ 	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+ 		if (mhi_event->offload_ev)
+ 			continue;
+-		free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
++		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+ 		tasklet_kill(&mhi_event->task);
+ 	}
+ 
+@@ -1060,12 +1060,13 @@ static void mhi_deassert_dev_wake(struct mhi_controller *mhi_cntrl,
+ 
+ int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
+ {
++	struct mhi_event *mhi_event = mhi_cntrl->mhi_event;
+ 	enum mhi_state state;
+ 	enum mhi_ee_type current_ee;
+ 	enum dev_st_transition next_state;
+ 	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+ 	u32 interval_us = 25000; /* poll register field every 25 milliseconds */
+-	int ret;
++	int ret, i;
+ 
+ 	dev_info(dev, "Requested to power ON\n");
+ 
+@@ -1117,9 +1118,18 @@ int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
+ 		mhi_write_reg(mhi_cntrl, mhi_cntrl->bhi, BHI_INTVEC, 0);
+ 	}
+ 
+-	ret = mhi_init_irq_setup(mhi_cntrl);
+-	if (ret)
+-		goto error_exit;
++	/*
++	 * IRQs have been reuqested during probe,
++	 * so we just need to enable them.
++	 */
++	enable_irq(mhi_cntrl->irq[0]);
++
++	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
++		if (mhi_event->offload_ev)
++			continue;
++
++		enable_irq(mhi_cntrl->irq[mhi_event->irq]);
++	}
+ 
+ 	/* Transition to next state */
+ 	next_state = MHI_IN_PBL(current_ee) ?
+@@ -1182,7 +1192,7 @@ void mhi_power_down(struct mhi_controller *mhi_cntrl, bool graceful)
+ 	/* Wait for shutdown to complete */
+ 	flush_work(&mhi_cntrl->st_worker);
+ 
+-	free_irq(mhi_cntrl->irq[0], mhi_cntrl);
++	disable_irq(mhi_cntrl->irq[0]);
+ }
+ EXPORT_SYMBOL_GPL(mhi_power_down);
+ 
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-Regressions:
-  - arm64/build/clang-13-allmodconfig - Failed
-  - riscv/build/clang-13-allmodconfig - Failed
-  - x86_64/build/clang-13-allmodconfig - Failed
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build log details:
-https://builds.tuxbuild.com/2AqLnz5M3EvhXrUvjkISFVrUvlo/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org

@@ -2,176 +2,504 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90711553EBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6A6553EC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346474AbiFUWwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S1354672AbiFUW5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354853AbiFUWv7 (ORCPT
+        with ESMTP id S238330AbiFUW5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:51:59 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1763E31DDB;
-        Tue, 21 Jun 2022 15:51:53 -0700 (PDT)
-X-UUID: c04db7f580fa40d2b9b608109c8c9ce5-20220622
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:d82d7fd8-68cf-49b0-9104-196a679d57cd,OB:10,L
-        OB:0,IP:0,URL:5,TC:0,Content:3,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:59
-X-CID-INFO: VERSION:1.1.6,REQID:d82d7fd8-68cf-49b0-9104-196a679d57cd,OB:10,LOB
-        :0,IP:0,URL:5,TC:0,Content:3,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:59
-X-CID-META: VersionHash:b14ad71,CLOUDID:db4ead2d-1756-4fa3-be7f-474a6e4be921,C
-        OID:f9af49f95651,Recheck:0,SF:28|17|19|48,TC:nil,Content:3,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c04db7f580fa40d2b9b608109c8c9ce5-20220622
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 372402516; Wed, 22 Jun 2022 06:51:47 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 22 Jun 2022 06:51:45 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 22 Jun 2022 06:51:45 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Wed, 22 Jun 2022 06:51:45 +0800
-From:   <sean.wang@mediatek.com>
-To:     <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
-        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
-        <jsiuda@google.com>, <frankgor@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Bluetooth: btmtksdio: Add in-band wakeup support
-Date:   Wed, 22 Jun 2022 06:51:44 +0800
-Message-ID: <1655851904-15022-1-git-send-email-sean.wang@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1472eccd-429b-0a18-565c-7de2e5ed44f2@molgen.mpg.de--annotate>
-References: <1472eccd-429b-0a18-565c-7de2e5ed44f2@molgen.mpg.de--annotate>
+        Tue, 21 Jun 2022 18:57:04 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD5D2E6BD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655852223; x=1687388223;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mkqbwtx+IQHPo/ZjAxWJJaigUo/xNaHwjPkv6ssC3+M=;
+  b=k0cYfn9L7yUyPQfBtl7Jwl7+rAO1dd5NV7GVxTRBm+k2tkqd4+rojixv
+   o1BtZwP+8xczHE3fFakmT06wn8H1IuTkw4a07jOGPFtFgTQM/18zdXp0E
+   cbVngF91YaoeVE7hAlNeegNqLsAirs/6gxc5wM0ZIXiibC+6Ods4vEKfb
+   FpW33clurStDaI2Y93HSkHMtABvuaDeofnkcujVdc5jec0GGB+4n3a9e1
+   O859Z5Ev2rrhLRrlPGw4I0Ghn0LjddMuoz8O2rpOQeGaE98dNowxb3Lcc
+   n+suu/Jkkf6TpO29M1PlHMb12KaEcv20MTU5TTKcyn0XsKOZW4tM4h/AN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="344250727"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="344250727"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:57:02 -0700
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="914354231"
+Received: from dpasupul-mobl.amr.corp.intel.com (HELO pbossart-mobl3.intel.com) ([10.209.178.35])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:57:01 -0700
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+To:     alsa-devel@alsa-project.org
+Cc:     tiwai@suse.de, broonie@kernel.org, vkoul@kernel.org,
+        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
+        Bard liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/3] soundwire: revisit driver bind/unbind and callbacks
+Date:   Tue, 21 Jun 2022 17:56:38 -0500
+Message-Id: <20220621225641.221170-2-pierre-louis.bossart@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220621225641.221170-1-pierre-louis.bossart@linux.intel.com>
+References: <20220621225641.221170-1-pierre-louis.bossart@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+In the SoundWire probe, we store a pointer from the driver ops into
+the 'slave' structure. This can lead to kernel oopses when unbinding
+codec drivers, e.g. with the following sequence to remove machine
+driver and codec driver.
 
->Dear Sean,
->
->
->Thank you for the patch.
->
->Am 10.06.22 um 02:17 schrieb sean.wang@mediatek.com:
->> From: Sean Wang <sean.wang@mediatek.com>
->>
->> 'ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")'
->> have added the waken-on-bluetooth via dedicated GPIO.
->
->Maybe:
->
->Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth") adds the wake on bluethooth via a dedicated GPIO.
+/sbin/modprobe -r snd_soc_sof_sdw
+/sbin/modprobe -r snd_soc_rt711
 
-Thanks! Look good to me. I will add it in the next version.
+The full details can be found in the BugLink below, for reference the
+two following examples show different cases of driver ops/callbacks
+being invoked after the driver .remove().
 
->
->> The patch extends the function to the waken-on-bluetooth via SDIO DAT1
->> pin (inband wakeup) when the SDIO host driver is able to support.
->
->Maybe:
->
->Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup), when supported by the SDIO host driver.
->
+kernel: BUG: kernel NULL pointer dereference, address: 0000000000000150
+kernel: Workqueue: events cdns_update_slave_status_work [soundwire_cadence]
+kernel: RIP: 0010:mutex_lock+0x19/0x30
+kernel: Call Trace:
+kernel:  ? sdw_handle_slave_status+0x426/0xe00 [soundwire_bus 94ff184bf398570c3f8ff7efe9e32529f532e4ae]
+kernel:  ? newidle_balance+0x26a/0x400
+kernel:  ? cdns_update_slave_status_work+0x1e9/0x200 [soundwire_cadence 1bcf98eebe5ba9833cd433323769ac923c9c6f82]
 
-Thanks! Look good to me. I will add it in the next version.
+kernel: BUG: unable to handle page fault for address: ffffffffc07654c8
+kernel: Workqueue: pm pm_runtime_work
+kernel: RIP: 0010:sdw_bus_prep_clk_stop+0x6f/0x160 [soundwire_bus]
+kernel: Call Trace:
+kernel:  <TASK>
+kernel:  sdw_cdns_clock_stop+0xb5/0x1b0 [soundwire_cadence 1bcf98eebe5ba9833cd433323769ac923c9c6f82]
+kernel:  intel_suspend_runtime+0x5f/0x120 [soundwire_intel aca858f7c87048d3152a4a41bb68abb9b663a1dd]
+kernel:  ? dpm_sysfs_remove+0x60/0x60
 
->How did you test this? In what datasheet is it documented?
+This was not detected earlier in Intel tests since the tests first
+remove the parent PCI device and shut down the bus. The sequence
+above is a corner case which keeps the bus operational but without a
+driver bound.
 
-We tested it on the MT8186 platform with wakening up by the keyboard or mouse when the platform is in the suspend state.
+While trying to solve this kernel oopses, it became clear that the
+existing SoundWire bus does not deal well with the unbind case.
 
-We can see the details on SDIO DAT1 pin in SDIO specification ver 3.00 section 8.2 Asynchronous Interrupt:
-During the asynchronous interrupt period, the host can stop providing an SD clock to the card and the card
-can generate an interrupt via SDIO DATA1 without SD clock.
+Commit 528be501b7d4a ("soundwire: sdw_slave: add probe_complete structure and new fields")
+added a 'probed' status variable and a 'probe_complete'
+struct completion. This status is however not reset on remove and
+likewise the 'probe complete' is not re-initialized, so the
+bind/unbind/bind test cases would fail. The timeout used before the
+'update_status' callback was also a bad idea in hindsight, there
+should really be no timing assumption as to if and when a driver is
+bound to a device.
 
-or you can check the patch ("mmc: mediatek: add support for SDIO eint wakup IRQ")
-in https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220523074017.12649-4-axe.yang@mediatek.com/
-that is the actual patch btmtksdio was tested against on MT8186 platfrom.
+An initial draft was based on device_lock() and device_unlock() was
+tested. This proved too complicated, with deadlocks created during the
+suspend-resume sequences, which also use the same device_lock/unlock()
+as the bind/unbind sequences. On a CometLake device, a bad DSDT/BIOS
+caused spurious resumes and the use of device_lock() caused hangs
+during suspend. After multiple weeks or testing and painful
+reverse-engineering of deadlocks on different devices, we looked for
+alternatives that did not interfere with the device core.
 
->
->> Co-developed-by: Yake Yang <yake.yang@mediatek.com>
->> Signed-off-by: Yake Yang <yake.yang@mediatek.com>
->> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
->> ---
->>   drivers/bluetooth/btmtksdio.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/bluetooth/btmtksdio.c
->> b/drivers/bluetooth/btmtksdio.c index d6700efcfe8c..9ed3af4ba51a
->> 100644
->> --- a/drivers/bluetooth/btmtksdio.c
->> +++ b/drivers/bluetooth/btmtksdio.c
->> @@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
->>   #define BTMTKSDIO_FUNC_ENABLED		3
->>   #define BTMTKSDIO_PATCH_ENABLED		4
->>   #define BTMTKSDIO_HW_RESET_ACTIVE	5
->> +#define BTMTKSDIO_INBAND_WAKEUP		6
->>
->>   struct mtkbtsdio_hdr {
->>	__le16	len;
->> @@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
->>		.wakeup_delay = cpu_to_le16(0x20),
->>	};
->>
->> +	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
->> +		return may_wakeup;
->> +
->>	if (may_wakeup && bdev->data->chipid == 0x7921) {
->>		struct sk_buff *skb;
->>
->> @@ -1384,6 +1388,10 @@ static int btmtksdio_probe(struct sdio_func *func,
->>	 */
->>	pm_runtime_put_noidle(bdev->dev);
->>
->> +	/* Mark if the mmc host can support waken by SDIO */
->
->Maybe:
->
->Mark if MMC host supports wake on bluetooth by SDIO
+A bus notifier was used successfully to keep track of DRIVER_BOUND and
+DRIVER_UNBIND events. This solved the bind-unbind-bind case in tests,
+but it can still be defeated with a theoretical corner case where the
+memory is freed by a .remove while the callback is in use. The
+notifier only helps make sure the driver callbacks are valid, but not
+that the memory allocated in probe remains valid while the callbacks
+are invoked.
 
-Thanks! Look good to me. I will add it in the next version.
+This patch suggests the introduction of a new 'sdw_dev_lock' mutex
+protecting probe/remove and all driver callbacks. Since this mutex is
+'local' to SoundWire only, it does not interfere with existing locks
+and does not create deadlocks. In addition, this patch removes the
+'probe_complete' completion, instead we directly invoke the
+'update_status' from the probe routine. That removes any sort of
+timing dependency and a much better support for the device/driver
+model, the driver could be bound before the bus started, or eons after
+the bus started and the hardware would be properly initialized in all
+cases.
 
->
->> +	if (device_can_wakeup(func->card->host->parent))
->> +		set_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state);
->> +
->>	err = device_init_wakeup(bdev->dev, true);
->>	if (err)
->>		bt_dev_err(hdev, "failed to initialize device wakeup");
->
->
->Kind regards,
->
->Paul
->
->
+BugLink: https://github.com/thesofproject/linux/issues/3531
+Fixes: 56d4fe31af77 ("soundwire: Add MIPI DisCo property helpers")
+Fixes: 528be501b7d4a ("soundwire: sdw_slave: add probe_complete structure and new fields")
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+---
+ drivers/soundwire/bus.c       | 75 ++++++++++++++++++++---------------
+ drivers/soundwire/bus_type.c  | 30 +++++++++++---
+ drivers/soundwire/slave.c     |  3 +-
+ drivers/soundwire/stream.c    | 53 ++++++++++++++++---------
+ include/linux/soundwire/sdw.h |  6 +--
+ 5 files changed, 106 insertions(+), 61 deletions(-)
+
+diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+index a2bfb0434a675..8d4000664fa34 100644
+--- a/drivers/soundwire/bus.c
++++ b/drivers/soundwire/bus.c
+@@ -7,6 +7,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/soundwire/sdw_registers.h>
+ #include <linux/soundwire/sdw.h>
++#include <linux/soundwire/sdw_type.h>
+ #include "bus.h"
+ #include "sysfs_local.h"
+ 
+@@ -842,15 +843,21 @@ static int sdw_slave_clk_stop_callback(struct sdw_slave *slave,
+ 				       enum sdw_clk_stop_mode mode,
+ 				       enum sdw_clk_stop_type type)
+ {
+-	int ret;
++	int ret = 0;
+ 
+-	if (slave->ops && slave->ops->clk_stop) {
+-		ret = slave->ops->clk_stop(slave, mode, type);
+-		if (ret < 0)
+-			return ret;
++	mutex_lock(&slave->sdw_dev_lock);
++
++	if (slave->probed)  {
++		struct device *dev = &slave->dev;
++		struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
++
++		if (drv->ops && drv->ops->clk_stop)
++			ret = drv->ops->clk_stop(slave, mode, type);
+ 	}
+ 
+-	return 0;
++	mutex_unlock(&slave->sdw_dev_lock);
++
++	return ret;
+ }
+ 
+ static int sdw_slave_clk_stop_prepare(struct sdw_slave *slave,
+@@ -1611,14 +1618,24 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
+ 		}
+ 
+ 		/* Update the Slave driver */
+-		if (slave_notify && slave->ops &&
+-		    slave->ops->interrupt_callback) {
+-			slave_intr.sdca_cascade = sdca_cascade;
+-			slave_intr.control_port = clear;
+-			memcpy(slave_intr.port, &port_status,
+-			       sizeof(slave_intr.port));
+-
+-			slave->ops->interrupt_callback(slave, &slave_intr);
++		if (slave_notify) {
++			mutex_lock(&slave->sdw_dev_lock);
++
++			if (slave->probed) {
++				struct device *dev = &slave->dev;
++				struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
++
++				if (drv->ops && drv->ops->interrupt_callback) {
++					slave_intr.sdca_cascade = sdca_cascade;
++					slave_intr.control_port = clear;
++					memcpy(slave_intr.port, &port_status,
++					       sizeof(slave_intr.port));
++
++					drv->ops->interrupt_callback(slave, &slave_intr);
++				}
++			}
++
++			mutex_unlock(&slave->sdw_dev_lock);
+ 		}
+ 
+ 		/* Ack interrupt */
+@@ -1692,29 +1709,21 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
+ static int sdw_update_slave_status(struct sdw_slave *slave,
+ 				   enum sdw_slave_status status)
+ {
+-	unsigned long time;
++	int ret = 0;
+ 
+-	if (!slave->probed) {
+-		/*
+-		 * the slave status update is typically handled in an
+-		 * interrupt thread, which can race with the driver
+-		 * probe, e.g. when a module needs to be loaded.
+-		 *
+-		 * make sure the probe is complete before updating
+-		 * status.
+-		 */
+-		time = wait_for_completion_timeout(&slave->probe_complete,
+-				msecs_to_jiffies(DEFAULT_PROBE_TIMEOUT));
+-		if (!time) {
+-			dev_err(&slave->dev, "Probe not complete, timed out\n");
+-			return -ETIMEDOUT;
+-		}
++	mutex_lock(&slave->sdw_dev_lock);
++
++	if (slave->probed) {
++		struct device *dev = &slave->dev;
++		struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
++
++		if (drv->ops && drv->ops->update_status)
++			ret = drv->ops->update_status(slave, status);
+ 	}
+ 
+-	if (!slave->ops || !slave->ops->update_status)
+-		return 0;
++	mutex_unlock(&slave->sdw_dev_lock);
+ 
+-	return slave->ops->update_status(slave, status);
++	return ret;
+ }
+ 
+ /**
+diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
+index b81e04dd3a9f7..04b3529f89293 100644
+--- a/drivers/soundwire/bus_type.c
++++ b/drivers/soundwire/bus_type.c
+@@ -98,8 +98,6 @@ static int sdw_drv_probe(struct device *dev)
+ 	if (!id)
+ 		return -ENODEV;
+ 
+-	slave->ops = drv->ops;
+-
+ 	/*
+ 	 * attach to power domain but don't turn on (last arg)
+ 	 */
+@@ -107,19 +105,23 @@ static int sdw_drv_probe(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
++	mutex_lock(&slave->sdw_dev_lock);
++
+ 	ret = drv->probe(slave, id);
+ 	if (ret) {
+ 		name = drv->name;
+ 		if (!name)
+ 			name = drv->driver.name;
++		mutex_unlock(&slave->sdw_dev_lock);
++
+ 		dev_err(dev, "Probe of %s failed: %d\n", name, ret);
+ 		dev_pm_domain_detach(dev, false);
+ 		return ret;
+ 	}
+ 
+ 	/* device is probed so let's read the properties now */
+-	if (slave->ops && slave->ops->read_prop)
+-		slave->ops->read_prop(slave);
++	if (drv->ops && drv->ops->read_prop)
++		drv->ops->read_prop(slave);
+ 
+ 	/* init the sysfs as we have properties now */
+ 	ret = sdw_slave_sysfs_init(slave);
+@@ -139,7 +141,19 @@ static int sdw_drv_probe(struct device *dev)
+ 					     slave->prop.clk_stop_timeout);
+ 
+ 	slave->probed = true;
+-	complete(&slave->probe_complete);
++
++	/*
++	 * if the probe happened after the bus was started, notify the codec driver
++	 * of the current hardware status to e.g. start the initialization.
++	 * Errors are only logged as warnings to avoid failing the probe.
++	 */
++	if (drv->ops && drv->ops->update_status) {
++		ret = drv->ops->update_status(slave, slave->status);
++		if (ret < 0)
++			dev_warn(dev, "%s: update_status failed with status %d\n", __func__, ret);
++	}
++
++	mutex_unlock(&slave->sdw_dev_lock);
+ 
+ 	dev_dbg(dev, "probe complete\n");
+ 
+@@ -152,9 +166,15 @@ static int sdw_drv_remove(struct device *dev)
+ 	struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
+ 	int ret = 0;
+ 
++	mutex_lock(&slave->sdw_dev_lock);
++
++	slave->probed = false;
++
+ 	if (drv->remove)
+ 		ret = drv->remove(slave);
+ 
++	mutex_unlock(&slave->sdw_dev_lock);
++
+ 	dev_pm_domain_detach(dev, false);
+ 
+ 	return ret;
+diff --git a/drivers/soundwire/slave.c b/drivers/soundwire/slave.c
+index 669d7573320b7..25e76b5d4a1a3 100644
+--- a/drivers/soundwire/slave.c
++++ b/drivers/soundwire/slave.c
+@@ -12,6 +12,7 @@ static void sdw_slave_release(struct device *dev)
+ {
+ 	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+ 
++	mutex_destroy(&slave->sdw_dev_lock);
+ 	kfree(slave);
+ }
+ 
+@@ -58,9 +59,9 @@ int sdw_slave_add(struct sdw_bus *bus,
+ 	init_completion(&slave->enumeration_complete);
+ 	init_completion(&slave->initialization_complete);
+ 	slave->dev_num = 0;
+-	init_completion(&slave->probe_complete);
+ 	slave->probed = false;
+ 	slave->first_interrupt_done = false;
++	mutex_init(&slave->sdw_dev_lock);
+ 
+ 	for (i = 0; i < SDW_MAX_PORTS; i++)
+ 		init_completion(&slave->port_ready[i]);
+diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+index d34150559142f..bd502368339e5 100644
+--- a/drivers/soundwire/stream.c
++++ b/drivers/soundwire/stream.c
+@@ -13,6 +13,7 @@
+ #include <linux/slab.h>
+ #include <linux/soundwire/sdw_registers.h>
+ #include <linux/soundwire/sdw.h>
++#include <linux/soundwire/sdw_type.h>
+ #include <sound/soc.h>
+ #include "bus.h"
+ 
+@@ -401,20 +402,26 @@ static int sdw_do_port_prep(struct sdw_slave_runtime *s_rt,
+ 			    struct sdw_prepare_ch prep_ch,
+ 			    enum sdw_port_prep_ops cmd)
+ {
+-	const struct sdw_slave_ops *ops = s_rt->slave->ops;
+-	int ret;
++	int ret = 0;
++	struct sdw_slave *slave = s_rt->slave;
+ 
+-	if (ops->port_prep) {
+-		ret = ops->port_prep(s_rt->slave, &prep_ch, cmd);
+-		if (ret < 0) {
+-			dev_err(&s_rt->slave->dev,
+-				"Slave Port Prep cmd %d failed: %d\n",
+-				cmd, ret);
+-			return ret;
++	mutex_lock(&slave->sdw_dev_lock);
++
++	if (slave->probed) {
++		struct device *dev = &slave->dev;
++		struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
++
++		if (drv->ops && drv->ops->port_prep) {
++			ret = drv->ops->port_prep(slave, &prep_ch, cmd);
++			if (ret < 0)
++				dev_err(dev, "Slave Port Prep cmd %d failed: %d\n",
++					cmd, ret);
+ 		}
+ 	}
+ 
+-	return 0;
++	mutex_unlock(&slave->sdw_dev_lock);
++
++	return ret;
+ }
+ 
+ static int sdw_prep_deprep_slave_ports(struct sdw_bus *bus,
+@@ -578,7 +585,7 @@ static int sdw_notify_config(struct sdw_master_runtime *m_rt)
+ 	struct sdw_slave_runtime *s_rt;
+ 	struct sdw_bus *bus = m_rt->bus;
+ 	struct sdw_slave *slave;
+-	int ret = 0;
++	int ret;
+ 
+ 	if (bus->ops->set_bus_conf) {
+ 		ret = bus->ops->set_bus_conf(bus, &bus->params);
+@@ -589,17 +596,27 @@ static int sdw_notify_config(struct sdw_master_runtime *m_rt)
+ 	list_for_each_entry(s_rt, &m_rt->slave_rt_list, m_rt_node) {
+ 		slave = s_rt->slave;
+ 
+-		if (slave->ops->bus_config) {
+-			ret = slave->ops->bus_config(slave, &bus->params);
+-			if (ret < 0) {
+-				dev_err(bus->dev, "Notify Slave: %d failed\n",
+-					slave->dev_num);
+-				return ret;
++		mutex_lock(&slave->sdw_dev_lock);
++
++		if (slave->probed) {
++			struct device *dev = &slave->dev;
++			struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
++
++			if (drv->ops && drv->ops->bus_config) {
++				ret = drv->ops->bus_config(slave, &bus->params);
++				if (ret < 0) {
++					dev_err(dev, "Notify Slave: %d failed\n",
++						slave->dev_num);
++					mutex_unlock(&slave->sdw_dev_lock);
++					return ret;
++				}
+ 			}
+ 		}
++
++		mutex_unlock(&slave->sdw_dev_lock);
+ 	}
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ /**
+diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+index 76ce3f3ac0f22..bf6f0decb3f6d 100644
+--- a/include/linux/soundwire/sdw.h
++++ b/include/linux/soundwire/sdw.h
+@@ -646,9 +646,6 @@ struct sdw_slave_ops {
+  * @dev_num: Current Device Number, values can be 0 or dev_num_sticky
+  * @dev_num_sticky: one-time static Device Number assigned by Bus
+  * @probed: boolean tracking driver state
+- * @probe_complete: completion utility to control potential races
+- * on startup between driver probe/initialization and SoundWire
+- * Slave state changes/implementation-defined interrupts
+  * @enumeration_complete: completion utility to control potential races
+  * on startup between device enumeration and read/write access to the
+  * Slave device
+@@ -663,6 +660,7 @@ struct sdw_slave_ops {
+  * for a Slave happens for the first time after enumeration
+  * @is_mockup_device: status flag used to squelch errors in the command/control
+  * protocol for SoundWire mockup devices
++ * @sdw_dev_lock: mutex used to protect callbacks/remove races
+  */
+ struct sdw_slave {
+ 	struct sdw_slave_id id;
+@@ -680,12 +678,12 @@ struct sdw_slave {
+ 	u16 dev_num;
+ 	u16 dev_num_sticky;
+ 	bool probed;
+-	struct completion probe_complete;
+ 	struct completion enumeration_complete;
+ 	struct completion initialization_complete;
+ 	u32 unattach_request;
+ 	bool first_interrupt_done;
+ 	bool is_mockup_device;
++	struct mutex sdw_dev_lock; /* protect callbacks/remove races */
+ };
+ 
+ #define dev_to_sdw_dev(_dev) container_of(_dev, struct sdw_slave, dev)
+-- 
+2.34.1
+

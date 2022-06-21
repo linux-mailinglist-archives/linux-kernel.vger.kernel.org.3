@@ -2,139 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2059A553AA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03026553AA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354001AbiFUTeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        id S1354035AbiFUTeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353555AbiFUTeO (ORCPT
+        with ESMTP id S1352672AbiFUTes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:34:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F282B21E38
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655840053; x=1687376053;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YBoCVbeBdJSh8NO5hiSopuZoPLZH9R9aCRx5PpVAHZA=;
-  b=XrewSYjuXbe0cRCDUFWqGnVndtYGyN7To29clgp9Vg5dBB/vwiVjcD5q
-   X3BnstSpqgUGgx9YTk4qf0aBNYTvVhlPvHsOrFxZEnJ2NqomLDCwHXdkl
-   v3dIJqKDiRZX7SR/HZFW15W3fmvqFLFrW4AE6Z25ULxAF2m4iqzSlUhLj
-   InrtwkEciaWk/GV9gozZ/FJ1z8AQ37MctEUoC7I1P/Bg8oe8TMqUH5onU
-   2W47pXrp1JTYQFHDZocV0hY3AaNgtBIIJO2+AlJETdffeL5q7ByGNkpg8
-   6QjmmP+cSR9kPwcTouH0aO/gmvDqtjutAVYpcsOZiBvAHFySUZi8o75wT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281285813"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="281285813"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 12:34:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="833730297"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Jun 2022 12:34:11 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3jda-0000KX-QA;
-        Tue, 21 Jun 2022 19:34:10 +0000
-Date:   Wed, 22 Jun 2022 03:34:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-multiqueue 3/5]
- fs/afs/rxrpc.c:155:6: warning: variable 'o' is used uninitialized whenever
- 'if' condition is false
-Message-ID: <202206220318.jPFg84u7-lkp@intel.com>
+        Tue, 21 Jun 2022 15:34:48 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239752D1ED
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:34:41 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id v81so26281533ybe.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GXndJbSr9Ys4cj6udGMJGPkAdQ+tLqQg3olnN64ieEQ=;
+        b=hs0LBDjDT9OlV72N7fBe49gCxiWYUZOxcBIws2Wgn8BN3WqTsnKUdVz0Q6ampLmXSV
+         5NkiSMbN9ezJtAmWUjyXVIOyvmB3tJWzCQSXBR+AO4tHEKCswdhBhhSG3vkBJZtJUVht
+         3JKyU0RJ2Ra5mCUJKBEJL8bG3wIYavBkn/AC2/Ch3FvXau57I9pfQARkPbGSgaJEoyGe
+         lTYcqa0zN/847nKzFl1WJjYqvmR1XHqpgkTYKwx4e2Qa8R6Ns1pVO3swtmqqCxrKN2V9
+         Bfty4fIeIEEKkVxTaMUi8q3bxkgjiWSJm0iXnvkRaHi2W0O9dPMwDc0y+T+TfR/UJ6Ei
+         2AEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GXndJbSr9Ys4cj6udGMJGPkAdQ+tLqQg3olnN64ieEQ=;
+        b=BdW5TsgX1nuRi9SAgBVl4FNBg98jijHkVfyviwSf8LESMtqsHYpXWD0TXlW0QDDzvh
+         pduJugxWFSZbvVKOGaBb54Ql5bdYRNAf8a4e1z3tCpsHNn9gmuUTfy3m4Tx7OzOtWWZ1
+         nXAzjO+6YawBA8d6bEOsMNFCBN8c+IuoPIIGErnyzN144GGXJeBcpki8dxRiujGFl2Kj
+         MnCdaKlS17p0/g91LXL7RHSOa9nyzll5z23daL5TYKcyGI/r4GJHPQpvc1cOxiiLCSLa
+         ymYiNbcabkGGxIinL4ff+MoK1Fogqwyo0L961d/+RJPzsWtgRa+gpAO+buiBZBZYZXqY
+         7Ffg==
+X-Gm-Message-State: AJIora9xME2Oyd1lQ5TR3McTGB6fBQWYsLVm+ftI0bxBDHfbAUkl4pKh
+        2uBDL5vycyNATK6XU+BlxQWTa3+h6EeMmGhBug4cCg==
+X-Google-Smtp-Source: AGRyM1u+tZKGrSW1cGi362mrQj+GEMsoaxrv0rYK4Hl9mC2GWlTK9NyKv5qqlRv1HupVfSdChNkUORkFSlefFHsLXRY=
+X-Received: by 2002:a25:9947:0:b0:663:ec43:61eb with SMTP id
+ n7-20020a259947000000b00663ec4361ebmr32241009ybo.115.1655840080076; Tue, 21
+ Jun 2022 12:34:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
+In-Reply-To: <YrFzK6EiVvXmzVG6@atomide.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 21 Jun 2022 12:34:03 -0700
+Message-ID: <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-multiqueue
-head:   f37988fef6da3fdc3545e5a65eb9241f82f539f2
-commit: 928631b5285b0aaebed61025256868cd126c9281 [3/5] rxrpc: Allow UDP socket sharing for AF_RXRPC service sockets
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220622/202206220318.jPFg84u7-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/928631b5285b0aaebed61025256868cd126c9281
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-multiqueue
-        git checkout 928631b5285b0aaebed61025256868cd126c9281
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/afs/
+On Tue, Jun 21, 2022 at 12:28 AM Tony Lindgren <tony@atomide.com> wrote:
+>
+> Hi,
+>
+> * Saravana Kannan <saravanak@google.com> [700101 02:00]:
+> > Now that fw_devlink=on by default and fw_devlink supports
+> > "power-domains" property, the execution will never get to the point
+> > where driver_deferred_probe_check_state() is called before the supplier
+> > has probed successfully or before deferred probe timeout has expired.
+> >
+> > So, delete the call and replace it with -ENODEV.
+>
+> Looks like this causes omaps to not boot in Linux next.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Can you please point me to an example DTS I could use for debugging
+this? I'm assuming you are leaving fw_devlink=on and not turning it
+off or putting it in permissive mode.
 
-All warnings (new ones prefixed by >>):
+> With this
+> simple-pm-bus fails to probe initially as the power-domain is not
+> yet available.
 
->> fs/afs/rxrpc.c:155:6: warning: variable 'o' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (!prealloc)
-               ^~~~~~~~~
-   fs/afs/rxrpc.c:157:48: note: uninitialized use occurs here
-           trace_afs_call(call, afs_call_trace_alloc, 1, o,
-                                                         ^
-   fs/afs/rxrpc.c:155:2: note: remove the 'if' if its condition is always true
-           if (!prealloc)
-           ^~~~~~~~~~~~~~
-   fs/afs/rxrpc.c:140:7: note: initialize the variable 'o' to silence this warning
-           int o;
-                ^
-                 = 0
-   1 warning generated.
+Before we get to late_initcall(), I'd expect this series to not have
+any impact because both fw_devlink and
+driver_deferred_probe_check_state() should be causing the device's
+probe to get deferred until the PM domain device comes up.
 
+To double check this, without this series, can you give me the list of
+"supplier:*" symlinks under a simple-pm-bus device's sysfs folder
+that's having problems with this series? And for all those symlinks,
+cat the "status" file under that directory?
 
-vim +155 fs/afs/rxrpc.c
+In the system where this is failing, is the PM domain driver loaded as
+a module at a later point?
 
-   131	
-   132	/*
-   133	 * Allocate a call.
-   134	 */
-   135	static struct afs_call *afs_alloc_call(struct afs_net *net,
-   136					       const struct afs_call_type *type,
-   137					       bool prealloc, gfp_t gfp)
-   138	{
-   139		struct afs_call *call;
-   140		int o;
-   141	
-   142		call = kzalloc(sizeof(*call), gfp);
-   143		if (!call)
-   144			return NULL;
-   145	
-   146		call->type = type;
-   147		call->net = net;
-   148		call->debug_id = atomic_inc_return(&rxrpc_debug_id);
-   149		atomic_set(&call->usage, 1);
-   150		INIT_WORK(&call->async_work, afs_process_async_call);
-   151		init_waitqueue_head(&call->waitq);
-   152		spin_lock_init(&call->state_lock);
-   153		call->iter = &call->def_iter;
-   154	
- > 155		if (!prealloc)
-   156			o = atomic_inc_return(&net->nr_outstanding_calls);
-   157		trace_afs_call(call, afs_call_trace_alloc, 1, o,
-   158			       __builtin_return_address(0));
-   159		return call;
-   160	}
-   161	
+Couple of other things to try (with the patches) to narrow this down:
+* Can you set driver_probe_timeout=0 in the command line and see if that helps?
+* Can you set it to something high like 30 or even larger and see if it helps?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> On platform_probe() genpd_get_from_provider() returns
+> -ENOENT.
+
+This error is with the series I assume?
+
+> Seems like other stuff is potentially broken too, any ideas on
+> how to fix this?
+
+I'll want to understand the issue first. It's not yet clear to me why
+fw_devlink isn't blocking the probe of the simple-pm-bus device until
+the PM domain device shows up. And if it is not blocking, then why and
+at what point in boot it's giving up and letting the probe get to this
+point where there's an error.
+
+-Saravana
+
+>
+>
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> >  drivers/base/power/domain.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 739e52cd4aba..3e86772d5fac 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+> >               mutex_unlock(&gpd_list_lock);
+> >               dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+> >                       __func__, PTR_ERR(pd));
+> > -             return driver_deferred_probe_check_state(base_dev);
+> > +             return -ENODEV;
+> >       }
+> >
+> >       dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

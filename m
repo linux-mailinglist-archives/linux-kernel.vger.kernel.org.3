@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F53E552C3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0157A552BDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347701AbiFUHky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S1346739AbiFUHZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347813AbiFUHka (ORCPT
+        with ESMTP id S1346703AbiFUHZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:40:30 -0400
+        Tue, 21 Jun 2022 03:25:31 -0400
+X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 00:25:29 PDT
 Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8751412AEA;
-        Tue, 21 Jun 2022 00:40:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A9022B05;
+        Tue, 21 Jun 2022 00:25:29 -0700 (PDT)
 Received: from coburn.home.jannau.net (p579ad988.dip0.t-ipconnect.de [87.154.217.136])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id A803826ED15;
-        Tue, 21 Jun 2022 09:18:48 +0200 (CEST)
+        by soltyk.jannau.net (Postfix) with ESMTPSA id 463C626ED16;
+        Tue, 21 Jun 2022 09:18:49 +0200 (CEST)
 From:   Janne Grunau <j@jannau.net>
 To:     iommu@lists.linux-foundation.org
 Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Georgi Djakov <quic_c_gdjako@quicinc.com>,
+        asahi@lists.linux.dev, Sven Peter <sven@svenpeter.dev>,
+        Rob Herring <robh@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Hector Martin <marcan@marcan.st>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
         Joerg Roedel <joro@8bytes.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         Rob Herring <robh+dt@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sven Peter <sven@svenpeter.dev>, Will Deacon <will@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/5] iommu: M1 Pro/Max DART support
-Date:   Tue, 21 Jun 2022 09:18:43 +0200
-Message-Id: <20220621071848.14834-1-j@jannau.net>
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/5] dt-bindings: iommu: dart: add t6000 compatible
+Date:   Tue, 21 Jun 2022 09:18:44 +0200
+Message-Id: <20220621071848.14834-2-j@jannau.net>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220621071848.14834-1-j@jannau.net>
+References: <20220621071848.14834-1-j@jannau.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -48,60 +49,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hej,
+From: Sven Peter <sven@svenpeter.dev>
 
-this is the next attempt adding support for the DART found in Apple's
-M1 Pro/Max/Ultra. This adds a separate io-pgtable implementation for
-DART. As already mentioned in v2 the pte format is not fully compatible
-with io-pgtable-arm. Especially the 2nd least significant bit is used
-and is not available to tag tables/pages.
-io-pgtable-dart.c is copied from io-pgtable-arm.c and support for
-unused features is removed. Support for 4k IO pages is left for A7 to
-A11 SoCs as there's work underway to run Linux on them.
+The M1 Max/Pro SoCs come with a new DART variant that is incompatible with
+the previous one. Add a new compatible for those.
 
-The incompatibilities between both Apple DART pte seems manageable in
-their own io-pgtable implementation. A short list of the known
-differences:
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+Acked-by: Rob Herring <robh@kernel.org>
 
- - the physical addresses are shifted left by 4 bits and and have 2 more
-   bits inside the PTE entries
- - the read/write protection flags are at a different position
- - the subpage protection feature is now mandatory. For Linux we can
-   just configure it to always allow access to the entire page.
- - BIT(1) tags "uncached" mappings (used for the display controller)
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
 
-There is second type of DART (t8110) present on M1 Pro/Max SoCs which
-uses the same PTE format as t6000.
-
-Changes in v3:
-- move APPLE_DART to its own io-pgtable implementation, copied from
-  io-pgtable-arm and simplified
+(no changes since v2)
 
 Changes in v2:
 - added Rob's Acked-by:
-- add APPLE_DART2 io-pgtable format
 
-Janne Grunau (1):
-  iommu/io-pgtable: Move Apple DART support to its own file
+ Documentation/devicetree/bindings/iommu/apple,dart.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Sven Peter (4):
-  dt-bindings: iommu: dart: add t6000 compatible
-  iommu/io-pgtable: Add DART subpage protection support
-  iommu/io-pgtable-dart: Add DART PTE support for t6000
-  iommu: dart: Support t6000 variant
-
- .../devicetree/bindings/iommu/apple,dart.yaml |   4 +-
- MAINTAINERS                                   |   1 +
- drivers/iommu/Kconfig                         |   1 -
- drivers/iommu/Makefile                        |   2 +-
- drivers/iommu/apple-dart.c                    |  24 +-
- drivers/iommu/io-pgtable-arm.c                |  63 --
- drivers/iommu/io-pgtable-dart.c               | 623 ++++++++++++++++++
- drivers/iommu/io-pgtable.c                    |   3 +
- include/linux/io-pgtable.h                    |   1 +
- 9 files changed, 653 insertions(+), 69 deletions(-)
- create mode 100644 drivers/iommu/io-pgtable-dart.c
-
+diff --git a/Documentation/devicetree/bindings/iommu/apple,dart.yaml b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+index 82ad669feef7..06af2bacbe97 100644
+--- a/Documentation/devicetree/bindings/iommu/apple,dart.yaml
++++ b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+@@ -22,7 +22,9 @@ description: |+
+ 
+ properties:
+   compatible:
+-    const: apple,t8103-dart
++    enum:
++      - apple,t8103-dart
++      - apple,t6000-dart
+ 
+   reg:
+     maxItems: 1
 -- 
 2.35.1
 

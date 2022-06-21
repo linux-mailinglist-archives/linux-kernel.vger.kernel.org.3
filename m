@@ -2,108 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFD2552CA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12A2552CAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348036AbiFUIP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S1348077AbiFUIQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiFUIP1 (ORCPT
+        with ESMTP id S229695AbiFUIP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:15:27 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DEBC237F2;
-        Tue, 21 Jun 2022 01:15:26 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 32E821E80D50;
-        Tue, 21 Jun 2022 16:15:25 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aZ1jwiaVgXqG; Tue, 21 Jun 2022 16:15:22 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.64.61.97])
-        (Authenticated sender: jiaming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id A204B1E80D2D;
-        Tue, 21 Jun 2022 16:15:21 +0800 (CST)
-From:   Zhang Jiaming <jiaming@nfschina.com>
-To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, renyu@nfschina.com,
-        Zhang Jiaming <jiaming@nfschina.com>
-Subject: [PATCH] alpha: Add some spaces to ensure format specification
-Date:   Tue, 21 Jun 2022 16:15:06 +0800
-Message-Id: <20220621081506.50096-1-jiaming@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 21 Jun 2022 04:15:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB91237F2;
+        Tue, 21 Jun 2022 01:15:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LRzqD1yqlz4xXj;
+        Tue, 21 Jun 2022 18:15:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655799353;
+        bh=2E5PwMW/yllmF5gZzd1wmtssdamJ4jkSGbKOb/quYE4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=asZT9zsoSemrmQ4dOL6TgHf3lUY6OkIoDhv+OGuVHaziL/+om0P0Vhe91xshCiUi0
+         LrVycbCbF0l0jcjv9C6qCT7/oPB3WZp8c2LiXBBqi0DYPaoWhLwIqTf4/3NuxNDV4f
+         3U16zLHQvJ6Oyeqb1vZNC9faGpwg84m3hmuN3VcmBT5DUziM/aIESMnMnivNRMqpge
+         jv10okWJRp2ZHpLaBzg8AocHhc45AX6fjLnl9aKLKTMmTc2Q5iX3bYw5hy0C20uRWM
+         IBQoilkbh8rnbhOQ1YZzaGDvNn6C5AlBii4m5UcahOkc1ktvOBUkyWQqb5h3/Vdotl
+         WcmDGun/rgZLw==
+Date:   Tue, 21 Jun 2022 18:15:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220621181551.5eb294f5@canb.auug.org.au>
+In-Reply-To: <20220615150013.30c9d7ad@canb.auug.org.au>
+References: <20220603144315.5adcddbf@canb.auug.org.au>
+        <20220615150013.30c9d7ad@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/f6qfnfBBJQs_iRqqx2rm3rV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a space after ','.
-Add spaces around the '=', '>' and '=='.
+--Sig_/f6qfnfBBJQs_iRqqx2rm3rV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
----
- arch/alpha/boot/stdio.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Hi all,
 
-diff --git a/arch/alpha/boot/stdio.c b/arch/alpha/boot/stdio.c
-index 60f73ccd2e89..e6d1ebff4209 100644
---- a/arch/alpha/boot/stdio.c
-+++ b/arch/alpha/boot/stdio.c
-@@ -42,8 +42,8 @@ static int skip_atoi(const char **s)
- 
- static char * number(char * str, unsigned long long num, int base, int size, int precision, int type)
- {
--	char c,sign,tmp[66];
--	const char *digits="0123456789abcdefghijklmnopqrstuvwxyz";
-+	char c, sign, tmp[66];
-+	const char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
- 	int i;
- 
- 	if (type & LARGE)
-@@ -83,14 +83,14 @@ static char * number(char * str, unsigned long long num, int base, int size, int
- 		precision = i;
- 	size -= precision;
- 	if (!(type&(ZEROPAD+LEFT)))
--		while(size-->0)
-+		while (size-- > 0)
- 			*str++ = ' ';
- 	if (sign)
- 		*str++ = sign;
- 	if (type & SPECIAL) {
- 		if (base==8)
- 			*str++ = '0';
--		else if (base==16) {
-+		else if (base == 16) {
- 			*str++ = '0';
- 			*str++ = digits[33];
- 		}
-@@ -125,7 +125,7 @@ int vsprintf(char *buf, const char *fmt, va_list args)
- 				/* 'z' changed to 'Z' --davidm 1/25/99 */
- 
- 
--	for (str=buf ; *fmt ; ++fmt) {
-+	for (str = buf ; *fmt ; ++fmt) {
- 		if (*fmt != '%') {
- 			*str++ = *fmt;
- 			continue;
-@@ -296,7 +296,7 @@ int sprintf(char * buf, const char *fmt, ...)
- 	int i;
- 
- 	va_start(args, fmt);
--	i=vsprintf(buf,fmt,args);
-+	i = vsprintf(buf, fmt, args);
- 	va_end(args);
- 	return i;
- }
--- 
-2.25.1
+On Wed, 15 Jun 2022 15:00:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Fri, 3 Jun 2022 14:43:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
+> >
+> > After merging the amdgpu tree, today's linux-next build (powerpc
+> > allyesconfig) failed like this:
+> >=20
+> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
+c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
+> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
+c:3835:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-W=
+error=3Dframe-larger-than=3D]
+> >  3835 | } // ModeSupportAndSystemConfigurationFull
+> >       | ^
+> > cc1: all warnings being treated as errors =20
+>=20
+> I am still getting the above failure.
 
+I am still getting the above failure ... it has now been 19 days :-(
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/f6qfnfBBJQs_iRqqx2rm3rV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKxfjcACgkQAVBC80lX
+0GxosAf7BLe7e+Qep9x9TBOTlKPRU4VoCcfu4xWob7k9buU7HMEZ2Z85aNEuPcGx
+anaR5Iwjsa57j+afexJjik+/2fyjFNDta9EXMF3W4meWXhNjCpdQZWpQAkrDPGpS
+hmnAODD20wIOgqJs7VPgdnAtMTaCIRmO0pZYO4udYGiO8sI8DCDuO+Ep5xVYxOMx
+byBugvDiL6sJPzyCmrHBSAi2ryY8KiiQ+DVLcT5jvAWgqlrHUNdOgWYuqJ13E+Sa
+tttkfLK2D0noQ5FYhFY9kgVv84g7Ddwecq6/ZocYrgcKtGGIj69sGeY5brCx9cyV
+GfNO+0K2+OxRtgk/N0FLSduTSemLHA==
+=h3cq
+-----END PGP SIGNATURE-----
+
+--Sig_/f6qfnfBBJQs_iRqqx2rm3rV--

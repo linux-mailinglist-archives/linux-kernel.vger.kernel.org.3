@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC17D552C68
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE126552C6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347649AbiFUHyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S1347784AbiFUHzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346664AbiFUHyN (ORCPT
+        with ESMTP id S1345973AbiFUHzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:54:13 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F7D2408C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:54:11 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id g25so25656487ejh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:54:11 -0700 (PDT)
+        Tue, 21 Jun 2022 03:55:40 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3900E240BD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:55:39 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id s1so17669740wra.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TGYC+CLd/1M+90gJK8/fomR0IeIc2wCPl2XftG7b1eQ=;
-        b=GOJ/6dBufOQs/zj+50TNdmUKIpAC87FLuWO1xJhB6j1TTpS+L2sNXMXSSAxNGtGuUm
-         meb69bguCusL1BrbM1+PrgqZf79Ag/Y+EpWCNsurXDkqtg0LKUF3J2ScC3Z6ZRBICknb
-         Mj1RMLBfpDF3ycYFTlvBu1c+1KvGjKajpjjTkbroNgktweP0B86GRdCdfzx9LVGYgbWM
-         KJy2Hdvxd6Hd7gNuTqZX2YcgFYZcoiiRH1LnnBFX6QjFZkbRgVAgF6UB+sHRGrFloDNl
-         1A7aMEbgVFzXlaGs0FZRyec0JR7LgnfrkdJLI3Orh1LrXg5DlRF7uMDn7+2qRJS1/TtG
-         3D5Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=u1L7nd9RWy6bnH2I84AvftyR0eYfq9iIPGW4WLNh4fc=;
+        b=giPyOWITw9taw4PaNQ0JGlbTMOUNhJwyE4M53GOoMqGDpIF+IKrbVQxeckOf1V53Yx
+         LdiUXJgflNcwjcuD4jMqXEuc5hlkzV5w/Qkoo25ZOv2tILXOS93Ru4DFGWOx/dkt/PDc
+         53fo6hW+pNez7BjrVXBNkqXRnEO2BXrGPypOyhQaUmy/rCACBk5DIj/k3JG80MmFw6IE
+         dgXmlEWCFiHkVNiwxRewVvCBuanEzxBInZ8nvPb62dbSIlDgHjbPL3Six75dQsnInvw6
+         m9th3TpLto75NFlInQpJa0MsuByDqaDyi28TZ10ClXPa4S0UCzFY3p0bqFOUBT2kGUWa
+         J5vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TGYC+CLd/1M+90gJK8/fomR0IeIc2wCPl2XftG7b1eQ=;
-        b=GnHT8w1EBKhxeVrdxP6I9pX0yh+RwjQULOicmVXSF00tEA4jaLOqhTXBTtqB/kM5TK
-         xJ8A4rhFSC3/98jiMJLZxe8WxAMgVTWDTpRXV3JM5OtC2FFlbWcneGFC6Auuat0CCPHM
-         XCufF8RVRyeHhzK56cIZ2I7d5NC8E/m0BLBIZnof46z0E1MRkdjE0X00OhqRx7/i6p4c
-         TItrMU1JWiCyjdSu+wN4RY6zyv0VEB7Re+aSH4dGES+fLdIA3K3aEuQD3C94La1gL9hY
-         HHxUYvmISgm+12yeeuDZH+n/5xrGwJIoIkXVnLLdafX4Yz+qNZXQTHz5x3eEVtUEjRTk
-         mOeA==
-X-Gm-Message-State: AJIora8berpa5F2F2iNJafbco+YWAJ82yWbpX0b0FXMSNnY282ZjipSt
-        Zpyqj9CNrOhNRHKuaiMq46K6/g==
-X-Google-Smtp-Source: AGRyM1uqA1FeXdA7Ei4IAR94TJhY69e1fk/nKllBETSu+3zHFfG1fV4TXg6TMSv3VrOLqbYXeneMZg==
-X-Received: by 2002:a17:907:2da6:b0:711:d86d:ccab with SMTP id gt38-20020a1709072da600b00711d86dccabmr24360889ejc.356.1655798050004;
-        Tue, 21 Jun 2022 00:54:10 -0700 (PDT)
-Received: from [192.168.0.216] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056402124200b004357738e04esm6105915edw.21.2022.06.21.00.54.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 00:54:09 -0700 (PDT)
-Message-ID: <626cd8f2-8f54-2877-5b73-c0239a243d99@linaro.org>
-Date:   Tue, 21 Jun 2022 09:54:08 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=u1L7nd9RWy6bnH2I84AvftyR0eYfq9iIPGW4WLNh4fc=;
+        b=47vMGOPlYijd1IJPFBOQuNhCxVXRVyO9h5UUCIFysbjA1FdC7HwsgBPLosWvyvNhFF
+         1AMgc17kehuOy0Va1sQqnbaUdb6A2acY8cVM/BTkOzfm8SddkH0/BIACiAN9xSapOd9Y
+         0tilo+ZDyHuNNEQiKwQJ2YZN9rnHbtFnC7t0yfae5aRDeRft+HPZpQNvrZAUimmgSAG5
+         gnfkBgiom5omHbU2uRABzU1Plr+C3zspp8ysvAbTKQ2bVEbdxlG3rtoGQzNsPfUhixgt
+         tfYoEmN2dPNkLNghX6i6H/iKnHNquAsXDFxV7VgAUvpoXc8N/NI7HIZe3823XYl8SOUf
+         aepQ==
+X-Gm-Message-State: AJIora9xZDnBtiB5Edst543SHNaW8BeoSGP6V0Ukos3HAVewtWfInFB1
+        sIbnYJIGOYx2SU7bZjmDqYmeb0vHtzbgJtP3AqZ1fp804RA=
+X-Google-Smtp-Source: AGRyM1tqRuIcQxhftk2xat7q2KjLeDqf4WLTaKZ42Rx/0qBDAhBIjp4VO/TVO9DuRg2px8UBFx8TKB1DmOWWiqmowuQ=
+X-Received: by 2002:a05:6000:2a4:b0:219:2aad:51ce with SMTP id
+ l4-20020a05600002a400b002192aad51cemr26241317wry.719.1655798137558; Tue, 21
+ Jun 2022 00:55:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: phy: Add Freescale i.MX8qm Mixel LVDS
- PHY binding
-Content-Language: en-US
-To:     Liu Ying <victor.liu@nxp.com>, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     kishon@ti.com, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com
-References: <20220620123854.1138028-1-victor.liu@nxp.com>
- <20220620123854.1138028-3-victor.liu@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220620123854.1138028-3-victor.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CALt099+y4-kJ0OqVeKaAjAbs4inOkR-WE0FmyiJRDc1-Ev9UKw@mail.gmail.com>
+ <20220603124956.GA18365@lst.de> <CALt099JqRXwsGnq_DmHmnwPyB0K9Y+-BZUG_YoGxOg7G7ZZh9w@mail.gmail.com>
+ <20220609042736.GA31823@lst.de> <CALt099+_EoSmigM5LizV8g7KFY=n0dcfPv4Ycw=YrCDvhJELMg@mail.gmail.com>
+In-Reply-To: <CALt099+_EoSmigM5LizV8g7KFY=n0dcfPv4Ycw=YrCDvhJELMg@mail.gmail.com>
+From:   Michael Schaller <misch@google.com>
+Date:   Tue, 21 Jun 2022 09:55:00 +0200
+Message-ID: <CALt099L=D58sMB4176nfmFFN5H_Bh7rvB3Qf5mWJ8MwtuSExmw@mail.gmail.com>
+Subject: Re: New partition on loop device doesn't appear in /dev anymore with
+ kernel 5.17.0 and newer (repro script included)
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 14:38, Liu Ying wrote:
-> Add bindings for Mixel LVDS PHY found on Freescale i.MX8qm SoC.
-> 
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+Done: https://github.com/osandov/blktests/commit/e067296aa2c5ba89d8140113af=
+1e8e50241275b3
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+On Thu, Jun 9, 2022 at 9:10 AM Michael Schaller <misch@google.com> wrote:
+>
+> On Thu, Jun 9, 2022 at 6:27 AM Christoph Hellwig <hch@lst.de> wrote:
+> > Any chance I could trick you into submitting your reproducer to blktest=
+s:
+> >
+> >    https://github.com/osandov/blktests
+> >
+> > ?
+>
+> No need to trick me. ;-)
+> https://github.com/osandov/blktests/pull/93
+>
+>
+> Michael Schaller
+> Site Reliability Engineer - Software Engineer
+> misch@google.com
+>
+> Google Germany GmbH
+> Erika-Mann-Stra=C3=9Fe 33
+> 80636 M=C3=BCnchen
+>
+> Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+> Registergericht und -nummer: Hamburg, HRB 86891
+> Sitz der Gesellschaft: Hamburg

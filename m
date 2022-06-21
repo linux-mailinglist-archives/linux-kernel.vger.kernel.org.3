@@ -2,77 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB165539E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337945539E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348828AbiFUS5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 14:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S233733AbiFUS6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 14:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352291AbiFUS47 (ORCPT
+        with ESMTP id S1352977AbiFUS6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 14:56:59 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B761429C95
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:56:57 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id f39so8281690lfv.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=WnoLWhxeYHm5yTgtcGD1IsezPefmqZIcjwjw5Wg8Y1s=;
-        b=A0iPKWj/b60aY72nWLN+L+5qwzuBwgkTum1Nj3z85tVeILqikpZo97/piph2moEAyI
-         ZAA5BM8ZMmcGV+3zxaWwi0lPt+yVJkZOmJ/qN0sH6z/ioOvf0Kezc0cJLj8f3NQ7m1pc
-         eB1q+sX9/jXxB78m0DhfWhyW40vltUW/UiB3WK4EPIeKXPAj7ecznjMPow0YduS7gwP5
-         f1b54Vs01hf9s3H/yG2oTu5b1GqmF2MH9VPm40JiN5fBJWpR8Uv5ustdhVHU5fRZ1Z5G
-         DBH2agrb2JSwNH4CpO18Vhe702GF/BFl0r0bIJdQJTwrESpYDe9meRlfhODVit0zZ9Vb
-         uyLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=WnoLWhxeYHm5yTgtcGD1IsezPefmqZIcjwjw5Wg8Y1s=;
-        b=b1l2oHXjcaggbZ9fGcl5YhmcbO0dsh952ECcxvs69eH5yU88C7cy/aW5cAq4zk/Yy2
-         esVvAbr1PF0sgJYGRmq/P+H0JP5gViKqQzi3/gURA1mtzTTEOSXQg6mGjpL5NQPfV1Pj
-         n6FpE8wfiFZ8CCaDm2QvAa4SaEk6+aG/sDZhC82Zg44K2y2TCGAOSv+jjQ1tc/XL0GJb
-         AEVimXHPo4Rgez/I5b6BCHJdiujwiexS/1fw8bCYlOGWHti/oqlidYG7lTqAfv1QY51d
-         9Y2CypuvVTRsIwCqRha0B78WimvY+NGn1NphfEJMPpC6fZfw/XvRaG7VPGCdeU5ZKip+
-         ZSFg==
-X-Gm-Message-State: AJIora+DLMvGXgU8pvxlqelRetpANRmC7VizTh2biAXr+E6V1kbJzhLD
-        RylNZL3Uenw+L+DFs3QgxR6FEw==
-X-Google-Smtp-Source: AGRyM1sftYHhG2H1/RbaWHAxQwPnIdXY1mfFVlAOlwLGeBmR2GQ87dQlV7VOlpFL1C5+w62FZN3G5A==
-X-Received: by 2002:a05:6512:1513:b0:47f:6b4b:5e8b with SMTP id bq19-20020a056512151300b0047f6b4b5e8bmr7764466lfb.469.1655837816113;
-        Tue, 21 Jun 2022 11:56:56 -0700 (PDT)
-Received: from [192.168.43.7] ([188.162.64.230])
-        by smtp.gmail.com with ESMTPSA id b3-20020a2e8943000000b00253eee43dd7sm555624ljk.44.2022.06.21.11.56.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 11:56:55 -0700 (PDT)
-Message-ID: <9ed319ee-07bd-253a-c7d8-a35d7d709da0@linaro.org>
-Date:   Tue, 21 Jun 2022 21:56:54 +0300
+        Tue, 21 Jun 2022 14:58:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D036369
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:58:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D5F616F6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 18:57:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6DBCC3411C;
+        Tue, 21 Jun 2022 18:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655837879;
+        bh=2xsWIxZWNcmnA/fSbyReBOaWSpwo1zz6UKyS8jFCJ1c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jHnzKEj5GGG2YK/PcG1gY5A27p4dUbt/IiTwOJaasEvKaNn86EQBy3nSIAVAiGnep
+         lMyJYjHaPsCnhs7XJsaSNDhESynN7qiQt62+GVNfrsRuSdVQgjvyb75PqR+Papyd9q
+         eMga+hXbSgaoN8RV1C+Ij/1CZ1lZme4ECzxW3n8H9Et3qOw8xDdGijdu307QXXXios
+         uqA2yo4W0ymBA8YoRYDujz3RdFQAAaXgi1kz6kUXrCaYdo89mjIxLgtXk9JeVBYZ3a
+         eNWj/ihwpkYKGlZkGPMO/NW6K7QcYqdJIUdKw4FvZGLdYufncLfvp6JVWZtRpdSmHP
+         5yXlNmZXd9DGw==
+Received: by wens.tw (Postfix, from userid 1000)
+        id 83D575F9C4; Wed, 22 Jun 2022 02:57:55 +0800 (CST)
+From:   Chen-Yu Tsai <wens@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Judy Hsiao <judyhsiao@chromium.org>
+Subject: [PATCH] ASoC: rockchip: i2s: Fix crash on missing pinctrl
+Date:   Wed, 22 Jun 2022 02:57:47 +0800
+Message-Id: <20220621185747.2782-1-wens@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [v3 2/5] drm/bridge: use atomic enable/disable callbacks for
- panel bridge functions
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com
-References: <y> <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
- <1655808800-3996-3-git-send-email-quic_vpolimer@quicinc.com>
- <ec989295-faf6-0288-cc5f-54821c654845@linaro.org>
-In-Reply-To: <ec989295-faf6-0288-cc5f-54821c654845@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,79 +59,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 21:54, Dmitry Baryshkov wrote:
-> On 21/06/2022 13:53, Vinod Polimera wrote:
->> Use atomic variants for panel bridge callback functions such that
->> certain states like self-refresh can be accessed as part of
->> enable/disable sequence.
->>
->> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Chen-Yu Tsai <wens@csie.org>
 
-Oh, wait. NACK. This will not compile. Please fix compilation with this 
-patch.
+Commit 44f362c2cc6d ("ASoC: rockchip: i2s: switch BCLK to GPIO") added
+pinctrl lookups, but did not skip the lookup if there was no pinctrl
+device tied to the I2S controller. As a result, the lookup was done
+on an invalid pointer in such cases, causing a kernel panic.
 
-> 
->> ---
->>   drivers/gpu/drm/bridge/panel.c | 16 ++++++++--------
->>   1 file changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/panel.c 
->> b/drivers/gpu/drm/bridge/panel.c
->> index 0ee563e..59a3496 100644
->> --- a/drivers/gpu/drm/bridge/panel.c
->> +++ b/drivers/gpu/drm/bridge/panel.c
->> @@ -108,28 +108,28 @@ static void panel_bridge_detach(struct 
->> drm_bridge *bridge)
->>           drm_connector_cleanup(connector);
->>   }
->> -static void panel_bridge_pre_enable(struct drm_bridge *bridge)
->> +static void panel_bridge_atomic_pre_enable(struct drm_bridge *bridge)
->>   {
->>       struct panel_bridge *panel_bridge = 
->> drm_bridge_to_panel_bridge(bridge);
->>       drm_panel_prepare(panel_bridge->panel);
->>   }
->> -static void panel_bridge_enable(struct drm_bridge *bridge)
->> +static void panel_bridge_atomic_enable(struct drm_bridge *bridge)
->>   {
->>       struct panel_bridge *panel_bridge = 
->> drm_bridge_to_panel_bridge(bridge);
->>       drm_panel_enable(panel_bridge->panel);
->>   }
->> -static void panel_bridge_disable(struct drm_bridge *bridge)
->> +static void panel_bridge_atomic_disable(struct drm_bridge *bridge)
->>   {
->>       struct panel_bridge *panel_bridge = 
->> drm_bridge_to_panel_bridge(bridge);
->>       drm_panel_disable(panel_bridge->panel);
->>   }
->> -static void panel_bridge_post_disable(struct drm_bridge *bridge)
->> +static void panel_bridge_atomic_post_disable(struct drm_bridge *bridge)
->>   {
->>       struct panel_bridge *panel_bridge = 
->> drm_bridge_to_panel_bridge(bridge);
->> @@ -158,10 +158,10 @@ static void panel_bridge_debugfs_init(struct 
->> drm_bridge *bridge,
->>   static const struct drm_bridge_funcs panel_bridge_bridge_funcs = {
->>       .attach = panel_bridge_attach,
->>       .detach = panel_bridge_detach,
->> -    .pre_enable = panel_bridge_pre_enable,
->> -    .enable = panel_bridge_enable,
->> -    .disable = panel_bridge_disable,
->> -    .post_disable = panel_bridge_post_disable,
->> +    .atomic_pre_enable = panel_bridge_atomic_pre_enable,
->> +    .atomic_enable = panel_bridge_atomic_enable,
->> +    .atomic_disable = panel_bridge_atomic_disable,
->> +    .atomic_post_disable = panel_bridge_atomic_post_disable,
->>       .get_modes = panel_bridge_get_modes,
->>       .atomic_reset = drm_atomic_helper_bridge_reset,
->>       .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-> 
-> 
+Only do the subsequent pinctrl state lookups and switch if a pinctrl
+device was found.
 
+i2s_pinctrl_select_bclk_{on,off} already guard against missing pinctrl
+device or pinctrl state, so those two functions aren't touched.
 
+Fixes: 44f362c2cc6d ("ASoC: rockchip: i2s: switch BCLK to GPIO")
+Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+---
+
+This is based on next-20220621, which just saw the inclusion of the
+commit this patch fixes.
+
+This issue was found and tested on ROC-RK3328-CC. Tried to test on
+RK3399, but that has some other DRM driver related crash.
+
+ sound/soc/rockchip/rockchip_i2s.c | 29 ++++++++++++++---------------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/sound/soc/rockchip/rockchip_i2s.c b/sound/soc/rockchip/rockchip_i2s.c
+index be051e48b97b..9fa8ffd712ea 100644
+--- a/sound/soc/rockchip/rockchip_i2s.c
++++ b/sound/soc/rockchip/rockchip_i2s.c
+@@ -808,24 +808,23 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
+ 
+ 	i2s->bclk_ratio = 64;
+ 	i2s->pinctrl = devm_pinctrl_get(&pdev->dev);
+-	if (IS_ERR(i2s->pinctrl))
++	if (IS_ERR(i2s->pinctrl)) {
+ 		dev_err(&pdev->dev, "failed to find i2s pinctrl\n");
++	} else {
++		i2s->bclk_on = pinctrl_lookup_state(i2s->pinctrl, "bclk_on");
++		if (IS_ERR_OR_NULL(i2s->bclk_on))
++			dev_err(&pdev->dev, "failed to find i2s default state\n");
++		else
++			dev_dbg(&pdev->dev, "find i2s bclk state\n");
+ 
+-	i2s->bclk_on = pinctrl_lookup_state(i2s->pinctrl,
+-				   "bclk_on");
+-	if (IS_ERR_OR_NULL(i2s->bclk_on))
+-		dev_err(&pdev->dev, "failed to find i2s default state\n");
+-	else
+-		dev_dbg(&pdev->dev, "find i2s bclk state\n");
+-
+-	i2s->bclk_off = pinctrl_lookup_state(i2s->pinctrl,
+-				  "bclk_off");
+-	if (IS_ERR_OR_NULL(i2s->bclk_off))
+-		dev_err(&pdev->dev, "failed to find i2s gpio state\n");
+-	else
+-		dev_dbg(&pdev->dev, "find i2s bclk_off state\n");
++		i2s->bclk_off = pinctrl_lookup_state(i2s->pinctrl, "bclk_off");
++		if (IS_ERR_OR_NULL(i2s->bclk_off))
++			dev_err(&pdev->dev, "failed to find i2s gpio state\n");
++		else
++			dev_dbg(&pdev->dev, "find i2s bclk_off state\n");
+ 
+-	i2s_pinctrl_select_bclk_off(i2s);
++		i2s_pinctrl_select_bclk_off(i2s);
++	}
+ 
+ 	i2s->playback_dma_data.addr = res->start + I2S_TXDR;
+ 	i2s->playback_dma_data.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
 -- 
-With best wishes
-Dmitry
+2.34.1
+

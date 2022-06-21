@@ -2,164 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4615A55363F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6784D553648
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352908AbiFUPhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S241313AbiFUPiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352953AbiFUPh0 (ORCPT
+        with ESMTP id S1353071AbiFUPiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:37:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0887E2B26D;
-        Tue, 21 Jun 2022 08:37:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD391165C;
-        Tue, 21 Jun 2022 08:37:23 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 007A53F66F;
-        Tue, 21 Jun 2022 08:37:20 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 16:37:18 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Len Brown <lenb@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
- description
-Message-ID: <20220621153718.p7z6v655gpijzedi@bogus>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-10-mw@semihalf.com>
- <20220621094556.5ev3nencnw7a5xwv@bogus>
- <YrGoXXBgHvyifny3@smile.fi.intel.com>
- <YrGqg5fHB4s+Y7wx@lunn.ch>
- <20220621132836.wiyexi4y6vjeumrv@bogus>
- <CAJZ5v0gJPdWnu7u5+zxKbGvGvRrOeh6OxsHTXxvBaP7MOb1coA@mail.gmail.com>
+        Tue, 21 Jun 2022 11:38:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13DBFB7C6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655825924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FnbHuNXX+33sc1khx411pyZstIbascagbQJiHj3LaFU=;
+        b=Q361U+kBqmfO25Eu+hmWja8O9nhGLbwb40T2N+D8TFDemY0Ks+QSPt6KsxjOHWW2KZLAps
+        SwuarveSWT1nHYWbM1Sev2hOyP8broycHGnkg7k2r3Kna3BAVRwbss+M5/JP4zOleDIt4H
+        4XrBPeC17lgxlK2+/DmQ7N6rxEyr8B0=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-502-sLuP8idpMZi0QL3JCARdvQ-1; Tue, 21 Jun 2022 11:38:42 -0400
+X-MC-Unique: sLuP8idpMZi0QL3JCARdvQ-1
+Received: by mail-qv1-f69.google.com with SMTP id b18-20020a0ccd12000000b004703d1b04e8so7433709qvm.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:38:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=FnbHuNXX+33sc1khx411pyZstIbascagbQJiHj3LaFU=;
+        b=UgWpliJgREDZ5dfUqmu9+eVeu7paYiss5E0RPPiHbWkGb3zm3mDnywVmXwrJRG18RZ
+         E4xfWVfgyJ06FMpjuorim6H5lHWepB/CjLSAcCBvUif3M+1bBQ1RsygCl/93n2K8HuEW
+         jQsSiSEAjW1ss/Lvc7J/fOR5HITh5tsYoU4K9KN87TOzN+mjbAFGou1z0rSKiuTt46I5
+         DePsYH/IKLMMXyfh/ai1CPQoo50o0oN8/qjPlKUBeUDEzldqiPF9ZU24K96NPJPpuQoh
+         LZiGIDQfRZavol/2L4DkSS5hmCTGXg98jBzj+7n+EkAJuJfcihNJWdidTwnQ8HBl4tjD
+         KXBQ==
+X-Gm-Message-State: AJIora/Y03lcH0APDmxa8g1rj+yiH+p+ye+W2ZXK4+BBvD9OKITKIMNp
+        SHETTzoc8nVxX0LjgPQjUhTMWIxvKMI30P0Zey+LWX9AheeB5nxFBz0KWMe1yH9tttBclDD2WYU
+        AqurbFw6YHe+7nMTIi0tkwe1V
+X-Received: by 2002:a05:622a:5ca:b0:306:6c7c:efe7 with SMTP id d10-20020a05622a05ca00b003066c7cefe7mr24478225qtb.310.1655825922391;
+        Tue, 21 Jun 2022 08:38:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1snfFXk68dQT4mRBgAFD3F/WUiGoBjFE3pNpAayeNMZAj/1qtmjBnO8Rp9miRu6x2a7GQi+Yw==
+X-Received: by 2002:a05:622a:5ca:b0:306:6c7c:efe7 with SMTP id d10-20020a05622a05ca00b003066c7cefe7mr24478201qtb.310.1655825922126;
+        Tue, 21 Jun 2022 08:38:42 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id bl17-20020a05620a1a9100b006a6c9e17088sm13650258qkb.65.2022.06.21.08.38.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 08:38:41 -0700 (PDT)
+Subject: Re: [PATCH v1] memory: dfl-emif: Update the dfl emif driver support
+ revision 1
+To:     Tianfei Zhang <tianfei.zhang@intel.com>, ssantosh@kernel.org,
+        krzysztof.kozlowski@linaro.org
+Cc:     yilun.xu@intel.com, russell.h.weight@intel.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        matthew.gerlach@linux.intel.com,
+        Debarati Biswas <debaratix.biswas@intel.com>
+References: <20220621123854.8686-1-tianfei.zhang@intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <39675efc-5c35-74e6-c824-d7f09d80fa61@redhat.com>
+Date:   Tue, 21 Jun 2022 08:38:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gJPdWnu7u5+zxKbGvGvRrOeh6OxsHTXxvBaP7MOb1coA@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220621123854.8686-1-tianfei.zhang@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 05:23:30PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Jun 21, 2022 at 3:28 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Tue, Jun 21, 2022 at 01:24:51PM +0200, Andrew Lunn wrote:
-> > > On Tue, Jun 21, 2022 at 02:15:41PM +0300, Andy Shevchenko wrote:
-> > > > On Tue, Jun 21, 2022 at 10:45:56AM +0100, Sudeep Holla wrote:
-> > > > > On Mon, Jun 20, 2022 at 05:02:22PM +0200, Marcin Wojtas wrote:
-> > > > > > Describe the Distributed Switch Architecture (DSA) - compliant
-> > > > > > MDIO devices. In ACPI world they are represented as children
-> > > > > > of the MDIO busses, which are responsible for their enumeration
-> > > > > > based on the standard _ADR fields and description in _DSD objects
-> > > > > > under device properties UUID [1].
-> > > > > >
-> > > > > > [1] http://www.uefi.org/sites/default/files/resources/_DSD-device-properties-UUID.pdf
-> > > >
-> > > > > Why is this document part of Linux code base ?
-> > > >
-> > > > It's fine, but your are right with your latter questions.
-> > > >
-> > > > > How will the other OSes be aware of this ?
-> > > >
-> > > > Should be a standard somewhere.
-> > > >
-> > > > > I assume there was some repository to maintain such DSDs so that it
-> > > > > is accessible for other OSes. I am not agreeing or disagreeing on the
-> > > > > change itself, but I am concerned about this present in the kernel
-> > > > > code.
-> > > >
-> > > > I dunno we have a such, but the closest I may imagine is MIPI standardization,
-> > > > that we have at least for cameras and sound.
-> > > >
-> > > > I would suggest to go and work with MIPI for network / DSA / etc area, so
-> > > > everybody else will be aware of the standard.
-> > >
-> > > It is the same argument as for DT. Other OSes and bootloaders seem to
-> > > manage digging around in Linux for DT binding documentation. I don't
-> > > see why bootloaders and other OSes can not also dig around in Linux
-> > > for ACPI binding documentations.
-> > >
-> >
-> > Theoretically you are right. But in DT case majority of non-standard(by
-> > standard I am referring to the one's in Open Firmware specification) are
-> > in the kernel. But that is not true for ACPI. And that is the reason for
-> > objecting it. One of the main other OS using ACPI may not look here for
-> > any ACPI bindings(we may not care, but still OS neutral place is better
-> > for this).
-> >
-> > > Ideally, somebody will submit all this for acceptance into ACPI, but
-> > > into somebody does, i suspect it will just remain a defacto standard
-> > > in Linux.
-> > >
-> >
-> > DSD is not integral part of ACPI spec, so the process is never clear.
-> > However there is this project[1], IIUC it is just guidance and doesn't
-> > include any bindings IIUC. But we need something similar here for better
-> > visibility and to remain OS agnostic. Even with DT, there is a strong
-> > desire to separate it out, but it has grown so much that it is getting
-> > harder to do that with every release. I was just trying to avoid getting
-> > into that situation.
-> >
-> > [1] https://github.com/UEFI/DSD-Guide
-> 
-> Here's my personal take on this.
-> 
-> This patch series essentially makes the kernel recognize a few generic
-> (that is, not tied on any specific device ID) device properties
-> supplied by the firmware via _DSD.  They are generic, because there is
-> some library code in the kernel that can consume them and that library
-> code is used in multiple places (and it is better to supply data from
-> the firmware directly to it).
-> 
-> If we all agree that it is a good idea for the kernel to allow these
-> properties to be supplied via _DSD this way, there is no reason to
-> avoid admitting that fact in the kernel documentation.
-> 
-> IMV, there's nothing wrong with stating officially that these
-> properties are recognized by the kernel and what they are used for and
-> it has no bearing on whether or not they are also used by someone
-> else.
+It does not seem like version 0 is being handled in all places, please 
+review for backward compatibility.
 
-Good point. I was also suggested to make properties have prefix "linux-"
-similar to "uefi-" in the set of DSD properties list @[1]. In that case
-it makes more sense to maintain in the kernel. If they add "uefi-" prefix,
-I was also told that it can be hosted @[1] as specific in section 3.1.4 @[2]
+On 6/21/22 5:38 AM, Tianfei Zhang wrote:
+> From: Debarati Biswas <debaratix.biswas@intel.com>
+>
+> The next generation (revision 1) of the DFL EMIF feature device requires
+> support for more than 4 memory banks. It does not support the selective
 
-I just sent an update to Documentation with the link to[1]. I can also
-update the same to mention about the process as described in section 3.1.4
-if that helps and we are happy to follow that in the kernel.
+more than 4 or 8 ? below seems like 8.
 
---
-Regards,
-Sudeep
+ver > 0 is not the same as ver == 1, I prefer the later
 
-[1] https://github.com/UEFI/DSD-Guide
-[2] https://github.com/UEFI/DSD-Guide/blob/main/src/dsd-guide.adoc#314-adding-uefi-device-properties
+> clearing of memory banks. A capability register replaces the previous
+> control register, and contains a bitmask to indicate the presence of each
+> memory bank. This bitmask aligns with the previous control register
+> bitmask that served the same purpose. The control and capability
+> registers are treated like a C Union structure in order to support both
+> the new and old revisions of the EMIF device.
+>
+> Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> ---
+>   drivers/memory/dfl-emif.c | 62 +++++++++++++++++++++++++++++++++++----
+>   1 file changed, 57 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/memory/dfl-emif.c b/drivers/memory/dfl-emif.c
+> index 3f719816771d..da06cd30a016 100644
+> --- a/drivers/memory/dfl-emif.c
+> +++ b/drivers/memory/dfl-emif.c
+> @@ -24,11 +24,24 @@
+>   #define EMIF_STAT_CLEAR_BUSY_SFT	16
+>   #define EMIF_CTRL			0x10
+>   #define EMIF_CTRL_CLEAR_EN_SFT		0
+> -#define EMIF_CTRL_CLEAR_EN_MSK		GENMASK_ULL(3, 0)
+> +#define EMIF_CTRL_CLEAR_EN_MSK		GENMASK_ULL(7, 0)
+
+This would seem to be version specific and not a static value.
+
+ver 0 is (3,0) , ver > 0 (7,0)
+
+like what is done below.
+
+This #define is used in emif_clear_attr() but there is not version check 
+in this macro.
+
+>   
+>   #define EMIF_POLL_INVL			10000 /* us */
+>   #define EMIF_POLL_TIMEOUT		5000000 /* us */
+>   
+> +/*
+> + * The Capability Register replaces the Control Register (at the same
+> + * offset) for EMIF feature revisions > 0. The bitmask that indicates
+> + * the presence of memory channels exists in both the Capability Register
+> + * and Control Register definitions. These can be thought of as a C union.
+> + * The Capability Register definitions are used to check for the existence
+> + * of a memory channel, and the Control Register definitions are used for
+> + * managing the memory-clear functionality in revision 0.
+> + */
+> +#define EMIF_CAPABILITY_BASE		0x10
+> +#define EMIF_CAPABILITY_CHN_MSK_V0	GENMASK_ULL(3, 0)
+> +#define EMIF_CAPABILITY_CHN_MSK		GENMASK_ULL(7, 0)
+> +
+>   struct dfl_emif {
+>   	struct device *dev;
+>   	void __iomem *base;
+> @@ -106,16 +119,30 @@ emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 0);
+>   emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 1);
+>   emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 2);
+>   emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 3);
+> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 4);
+> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 5);
+> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 6);
+> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 7);
+>   
+>   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 0);
+>   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 1);
+>   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 2);
+>   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 3);
+> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 4);
+> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 5);
+> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 6);
+> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 7);
+> +
+>   
+>   emif_clear_attr(0);
+>   emif_clear_attr(1);
+>   emif_clear_attr(2);
+>   emif_clear_attr(3);
+> +emif_clear_attr(4);
+> +emif_clear_attr(5);
+> +emif_clear_attr(6);
+> +emif_clear_attr(7);
+> +
+>   
+>   static struct attribute *dfl_emif_attrs[] = {
+>   	&emif_attr_inf0_init_done.attr.attr,
+> @@ -134,6 +161,22 @@ static struct attribute *dfl_emif_attrs[] = {
+>   	&emif_attr_inf3_cal_fail.attr.attr,
+>   	&emif_attr_inf3_clear.attr.attr,
+>   
+> +	&emif_attr_inf4_init_done.attr.attr,
+> +	&emif_attr_inf4_cal_fail.attr.attr,
+> +	&emif_attr_inf4_clear.attr.attr,
+> +
+> +	&emif_attr_inf5_init_done.attr.attr,
+> +	&emif_attr_inf5_cal_fail.attr.attr,
+> +	&emif_attr_inf5_clear.attr.attr,
+> +
+> +	&emif_attr_inf6_init_done.attr.attr,
+> +	&emif_attr_inf6_cal_fail.attr.attr,
+> +	&emif_attr_inf6_clear.attr.attr,
+> +
+> +	&emif_attr_inf7_init_done.attr.attr,
+> +	&emif_attr_inf7_cal_fail.attr.attr,
+> +	&emif_attr_inf7_clear.attr.attr,
+> +
+>   	NULL,
+>   };
+>   
+> @@ -143,15 +186,24 @@ static umode_t dfl_emif_visible(struct kobject *kobj,
+>   	struct dfl_emif *de = dev_get_drvdata(kobj_to_dev(kobj));
+>   	struct emif_attr *eattr = container_of(attr, struct emif_attr,
+>   					       attr.attr);
+> +	struct dfl_device *ddev = to_dfl_dev(de->dev);
+>   	u64 val;
+>   
+>   	/*
+> -	 * This device supports upto 4 memory interfaces, but not all
+> +	 * This device supports up to 8 memory interfaces, but not all
+>   	 * interfaces are used on different platforms. The read out value of
+> -	 * CLEAN_EN field (which is a bitmap) could tell how many interfaces
+> -	 * are available.
+> +	 * CAPABILITY_CHN_MSK field (which is a bitmap) indicates which
+> +	 * interfaces are available.
+>   	 */
+> -	val = FIELD_GET(EMIF_CTRL_CLEAR_EN_MSK, readq(de->base + EMIF_CTRL));
+> +	if (ddev->revision > 0 && strstr(attr->name, "_clear"))
+
+This check does not match to comment, why is this needed ?
+
+Tom
+
+> +		return 0;
+> +
+> +	if (ddev->revision == 0)
+> +		val = FIELD_GET(EMIF_CAPABILITY_CHN_MSK_V0,
+> +				readq(de->base + EMIF_CAPABILITY_BASE));
+> +	else
+> +		val = FIELD_GET(EMIF_CAPABILITY_CHN_MSK,
+> +				readq(de->base + EMIF_CAPABILITY_BASE));
+>   
+>   	return (val & BIT_ULL(eattr->index)) ? attr->mode : 0;
+>   }
+

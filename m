@@ -2,170 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03026553AA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C1E553AAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354035AbiFUTeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S1354019AbiFUTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352672AbiFUTes (ORCPT
+        with ESMTP id S1354012AbiFUTec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:34:48 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239752D1ED
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:34:41 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id v81so26281533ybe.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GXndJbSr9Ys4cj6udGMJGPkAdQ+tLqQg3olnN64ieEQ=;
-        b=hs0LBDjDT9OlV72N7fBe49gCxiWYUZOxcBIws2Wgn8BN3WqTsnKUdVz0Q6ampLmXSV
-         5NkiSMbN9ezJtAmWUjyXVIOyvmB3tJWzCQSXBR+AO4tHEKCswdhBhhSG3vkBJZtJUVht
-         3JKyU0RJ2Ra5mCUJKBEJL8bG3wIYavBkn/AC2/Ch3FvXau57I9pfQARkPbGSgaJEoyGe
-         lTYcqa0zN/847nKzFl1WJjYqvmR1XHqpgkTYKwx4e2Qa8R6Ns1pVO3swtmqqCxrKN2V9
-         Bfty4fIeIEEKkVxTaMUi8q3bxkgjiWSJm0iXnvkRaHi2W0O9dPMwDc0y+T+TfR/UJ6Ei
-         2AEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GXndJbSr9Ys4cj6udGMJGPkAdQ+tLqQg3olnN64ieEQ=;
-        b=BdW5TsgX1nuRi9SAgBVl4FNBg98jijHkVfyviwSf8LESMtqsHYpXWD0TXlW0QDDzvh
-         pduJugxWFSZbvVKOGaBb54Ql5bdYRNAf8a4e1z3tCpsHNn9gmuUTfy3m4Tx7OzOtWWZ1
-         nXAzjO+6YawBA8d6bEOsMNFCBN8c+IuoPIIGErnyzN144GGXJeBcpki8dxRiujGFl2Kj
-         MnCdaKlS17p0/g91LXL7RHSOa9nyzll5z23daL5TYKcyGI/r4GJHPQpvc1cOxiiLCSLa
-         ymYiNbcabkGGxIinL4ff+MoK1Fogqwyo0L961d/+RJPzsWtgRa+gpAO+buiBZBZYZXqY
-         7Ffg==
-X-Gm-Message-State: AJIora9xME2Oyd1lQ5TR3McTGB6fBQWYsLVm+ftI0bxBDHfbAUkl4pKh
-        2uBDL5vycyNATK6XU+BlxQWTa3+h6EeMmGhBug4cCg==
-X-Google-Smtp-Source: AGRyM1u+tZKGrSW1cGi362mrQj+GEMsoaxrv0rYK4Hl9mC2GWlTK9NyKv5qqlRv1HupVfSdChNkUORkFSlefFHsLXRY=
-X-Received: by 2002:a25:9947:0:b0:663:ec43:61eb with SMTP id
- n7-20020a259947000000b00663ec4361ebmr32241009ybo.115.1655840080076; Tue, 21
- Jun 2022 12:34:40 -0700 (PDT)
+        Tue, 21 Jun 2022 15:34:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FA02229F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:34:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29A7561798
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 19:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDDAC3411C;
+        Tue, 21 Jun 2022 19:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655840070;
+        bh=JqOVJ9WxigD2WJ71Jncl66ZjSZFq5vF7VG2S7PJYiW0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ae+P9NdveG66dRlRPUZ4jBeGo8H8r607tNRd8tNebkRdO4pLBXMXDCTN5WQLEBqRY
+         sJzGebHANRM3WfLlk2UByyD2Nq8YCSwbbhMnDeLOlpC4Rp9ro2id6gntNLkcWruZD7
+         zblSfIjwvwSJROG8FI/zp+7LmHCRKGsR9s8hgREU=
+Date:   Tue, 21 Jun 2022 21:34:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "zhangwensheng (E)" <zhangwensheng5@huawei.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org, yukuai3@huawei.com
+Subject: Re: [PATCH -next] driver core: fix deadlock in __driver_attach
+Message-ID: <YrIdQlkfS29fbAHx@kroah.com>
+References: <20220608094355.3298420-1-zhangwensheng5@huawei.com>
+ <YqNL6NPgP+cLOy/I@kroah.com>
+ <4e5e9276-e32d-0903-1f4e-20880cc72d82@huawei.com>
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
-In-Reply-To: <YrFzK6EiVvXmzVG6@atomide.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 21 Jun 2022 12:34:03 -0700
-Message-ID: <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4e5e9276-e32d-0903-1f4e-20880cc72d82@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 12:28 AM Tony Lindgren <tony@atomide.com> wrote:
->
-> Hi,
->
-> * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > Now that fw_devlink=on by default and fw_devlink supports
-> > "power-domains" property, the execution will never get to the point
-> > where driver_deferred_probe_check_state() is called before the supplier
-> > has probed successfully or before deferred probe timeout has expired.
-> >
-> > So, delete the call and replace it with -ENODEV.
->
-> Looks like this causes omaps to not boot in Linux next.
 
-Can you please point me to an example DTS I could use for debugging
-this? I'm assuming you are leaving fw_devlink=on and not turning it
-off or putting it in permissive mode.
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-> With this
-> simple-pm-bus fails to probe initially as the power-domain is not
-> yet available.
+A: No.
+Q: Should I include quotations after my reply?
 
-Before we get to late_initcall(), I'd expect this series to not have
-any impact because both fw_devlink and
-driver_deferred_probe_check_state() should be causing the device's
-probe to get deferred until the PM domain device comes up.
 
-To double check this, without this series, can you give me the list of
-"supplier:*" symlinks under a simple-pm-bus device's sysfs folder
-that's having problems with this series? And for all those symlinks,
-cat the "status" file under that directory?
+http://daringfireball.net/2007/07/on_top
 
-In the system where this is failing, is the PM domain driver loaded as
-a module at a later point?
+On Thu, Jun 16, 2022 at 04:00:58PM +0800, zhangwensheng (E) wrote:
+> sorry that I didn't see your reply.
+> it is real not potential, I have triggered this problem successfully and
+> proven that this change can fix it.
+> 
+> stack like commit b232b02bf3c2 ("driver core: fix deadlock in
+> __device_attach").
+> list below:
+>     In __driver_attach function, The lock holding logic is as follows:
+>     ...
+>     __driver_attach
+>     if (driver_allows_async_probing(drv))
+>       device_lock(dev)      // get lock dev
+>         async_schedule_dev(__driver_attach_async_helper, dev); // func
+>           async_schedule_node
+>             async_schedule_node_domain(func)
+>               entry = kzalloc(sizeof(struct async_entry), GFP_ATOMIC);
+>               /* when fail or work limit, sync to execute func, but
+>                  __driver_attach_async_helper will get lock dev as
+>                  will, which will lead to A-A deadlock.  */
+>               if (!entry || atomic_read(&entry_count) > MAX_WORK) {
+>                 func;
+>               else
+>                 queue_work_node(node, system_unbound_wq, &entry->work)
+>       device_unlock(dev)
+> 
+>     As above show, when it is allowed to do async probes, because of
+>     out of memory or work limit, async work is not be allowed, to do
+>     sync execute instead. it will lead to A-A deadlock because of
+>     __driver_attach_async_helper getting lock dev.
+> 
+>     Because it's logic is same as commit b232b02bf3c2 ("driver core: fix
+> deadlock
+>     in __device_attach"),  I simplify the description.
+> 
+> 
+> Reproduce:
+> and it can be reproduce by make the condition
+> (if (!entry || atomic_read(&entry_count) > MAX_WORK)) untenable, like below:
+> 
+> [  370.785650] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+> this message.
+> [  370.787154] task:swapper/0       state:D stack:    0 pid:    1 ppid:    
+> 0 flags:0x00004000
+> [  370.788865] Call Trace:
+> [  370.789374]  <TASK>
+> [  370.789841]  __schedule+0x482/0x1050
+> [  370.790613]  schedule+0x92/0x1a0
+> [  370.791290]  schedule_preempt_disabled+0x2c/0x50
+> [  370.792256]  __mutex_lock.isra.0+0x757/0xec0
+> [  370.793158]  __mutex_lock_slowpath+0x1f/0x30
+> [  370.794079]  mutex_lock+0x50/0x60
+> [  370.794795]  __device_driver_lock+0x2f/0x70
+> [  370.795677]  ? driver_probe_device+0xd0/0xd0
+> [  370.796576]  __driver_attach_async_helper+0x1d/0xd0
+> [  370.797318]  ? driver_probe_device+0xd0/0xd0
+> [  370.797957]  async_schedule_node_domain+0xa5/0xc0
+> [  370.798652]  async_schedule_node+0x19/0x30
+> [  370.799243]  __driver_attach+0x246/0x290
+> [  370.799828]  ? driver_allows_async_probing+0xa0/0xa0
+> [  370.800548]  bus_for_each_dev+0x9d/0x130
+> [  370.801132]  driver_attach+0x22/0x30
+> [  370.801666]  bus_add_driver+0x290/0x340
+> [  370.802246]  driver_register+0x88/0x140
+> [  370.802817]  ? virtio_scsi_init+0x116/0x116
+> [  370.803425]  scsi_register_driver+0x1a/0x30
+> [  370.804057]  init_sd+0x184/0x226
+> [  370.804533]  do_one_initcall+0x71/0x3a0
+> [  370.805107]  kernel_init_freeable+0x39a/0x43a
+> [  370.805759]  ? rest_init+0x150/0x150
+> [  370.806283]  kernel_init+0x26/0x230
+> [  370.806799]  ret_from_fork+0x1f/0x30
+> 
+> And my change can fix it.
 
-Couple of other things to try (with the patches) to narrow this down:
-* Can you set driver_probe_timeout=0 in the command line and see if that helps?
-* Can you set it to something high like 30 or even larger and see if it helps?
+Ok, please put that type of information in the changelog text.
 
-> On platform_probe() genpd_get_from_provider() returns
-> -ENOENT.
+thanks,
 
-This error is with the series I assume?
-
-> Seems like other stuff is potentially broken too, any ideas on
-> how to fix this?
-
-I'll want to understand the issue first. It's not yet clear to me why
-fw_devlink isn't blocking the probe of the simple-pm-bus device until
-the PM domain device shows up. And if it is not blocking, then why and
-at what point in boot it's giving up and letting the probe get to this
-point where there's an error.
-
--Saravana
-
->
->
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >  drivers/base/power/domain.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 739e52cd4aba..3e86772d5fac 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >               mutex_unlock(&gpd_list_lock);
-> >               dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
-> >                       __func__, PTR_ERR(pd));
-> > -             return driver_deferred_probe_check_state(base_dev);
-> > +             return -ENODEV;
-> >       }
-> >
-> >       dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-> > --
-> > 2.36.1.255.ge46751e96f-goog
-> >
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+greg k-h

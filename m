@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06DD5533B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6605533B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351775AbiFUNhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S1348884AbiFUNhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351745AbiFUNge (ORCPT
+        with ESMTP id S1350729AbiFUNgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:36:34 -0400
+        Tue, 21 Jun 2022 09:36:39 -0400
 Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15A42C653;
-        Tue, 21 Jun 2022 06:35:23 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w20so22379473lfa.11;
-        Tue, 21 Jun 2022 06:35:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BB42CC82;
+        Tue, 21 Jun 2022 06:35:29 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id g4so10047675lfv.9;
+        Tue, 21 Jun 2022 06:35:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pdZHMaX5g8pSHRD00mVKf06kitbS5gJvV25hf8xmhcY=;
-        b=KGdPBiADkqwDO4ovi6DPmn8ovwwpLdf559Qi1yyeLnI9/Y6NK7ikUSHZlcJOjVJ9Y4
-         /PusDag0pBT/sNjF3UP5Qi2Bori9lo5Mp04jAtCg6r4hrdueDc8yL9DxRFszbLrRZOM4
-         fu1tYDFLntWtwkI0n7pjFsTOkrnZmYQx7U/wNFXy5gmM36i8Qr7bjIdz+d67Ngr0FwjX
-         TBu0ev8ryJIY1HWFrI6XBh3Cs2fZ9Qbt2ZGgkIdYZqe18qeLqBNZ48mihxOyoYzMfSRE
-         R9Q+PBLOBDu1vTRwsj4t4/HOpq1Brk5usnVOjZhZhjUZ84jwQH1ETdr30TFkJh0UohMP
-         rP5Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kzAosVTA9b9PugXkA4Upw/+iMo4tmsufzeUut4m9uC0=;
+        b=E5fJoQH/G+nmrT3zZKHouHp23ouJ1Q1Nztd0CggUcBII8aM3q7AbcJ2TrvvvoTHwa8
+         4/W02HElN7Y8ZxttJFL0Kc9dMzeSj/Eg9CuxpJEmAudpg6vOGag1eVdl8yx01Po13qCZ
+         oTu8JSVTJ4H+3p6PWXYLJxIR8y+DmGvS3gRAmYe/B7AhTJH8fdq1DViFNJv1aPYCAZTQ
+         S/4w320UFZ9xNGKmRqwGTPlHscewaIFiNgfq1HNac2NyJ90NL0BIfTk5klk9FzyZvXfI
+         wfu7ZZjC0JDT7zjDRUccLRyCnYWI+NLU14cEKZNW09IjcoxQxnmGu0yVh3uKHFCdoBj4
+         q/ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pdZHMaX5g8pSHRD00mVKf06kitbS5gJvV25hf8xmhcY=;
-        b=ZLUcw5KRMTULX4DmeMRfjNfwb5ypp9enR2+UoN0LffXVoph2VOsSvQZBxQLGKNTXLA
-         uK3ngVYpHBOPwV6fXiVEuMINoRuYJ+gVvBWzFDjlRxrxrOltzy877mX+8rnXOW5YdmJO
-         kvUtRHLGxMcshVhtfktJdfYdq1q1ezmRIO4xB4txl6nGzoW/htAhkCCrXhuXRM2+sfTJ
-         9EBcvt8iGdvsDAgQy0/qy6qS/ZRfV0zsdgJTq2rWEaxgdyZdZSXfDV2j/a3ehKaHCJVE
-         ACY68wq9EbTl/cHSVcEVCEEZAfN9NY2mC+Ciii1gZu0qubSPLhx7lTi0bh/OxifJvOIv
-         Up/g==
-X-Gm-Message-State: AJIora9C9DDA0NwxJmY95zOwmtUKYx26LT9c34WieubN7QZcwAbOetZ2
-        AsmFK5MyghdvInKD9Ylqx/Ti2FidY11WJ2j7
-X-Google-Smtp-Source: AGRyM1vopnSAwZFPl55nQmKYmC1s2dCSyHZwZPrBjYQvxnkp9vIeFmAFt3gcVBU0zS2nPjXmygRWlA==
-X-Received: by 2002:a19:f207:0:b0:47f:6890:60b0 with SMTP id q7-20020a19f207000000b0047f689060b0mr7500033lfh.327.1655818522123;
-        Tue, 21 Jun 2022 06:35:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kzAosVTA9b9PugXkA4Upw/+iMo4tmsufzeUut4m9uC0=;
+        b=ra3aNVtHCCjH3wHRXxDYHbub1mk4t7+K8c9+R5mDiWaBpwZ/j3eHMsqwQb7v4sXD/a
+         wg2uJDb8tq++S3/uGMaycFah97r76gpKsXFJZSAP9hHio8iZzLDwW5cUhe7q+zyfeyMh
+         5nhu0+eFi4vcFitzGCX3odcYkGRRPpRMgOBe42tZFt0n39oHil2WwbiDro5zVur3zmC6
+         HWGLXAlqAx3MshFW0GnTwdddqL3vRD30RohrFgtMuHMWZGct4RyqjxrOqUqydOpSJAGg
+         0BVolAQ3/vZLk4T/UFCDYqw48t3XHjSwLPp4fccSoLGE5gZniu8aHM4XgBbI09FeDjwW
+         SwCQ==
+X-Gm-Message-State: AJIora+3B4lUr/fHOFKGCibkuy8FwMfDs9+uFbfgTexj87HlTNat+icE
+        63TDJESE4MdEXekMYPvPxvAQM9f4/UOQPPUW
+X-Google-Smtp-Source: AGRyM1vEh8l3dmR/pm7rQ2srim+u6z+RnxxX8uX8BXWCQpknShwN6WzuxVUV2RY8vGWNiZDz4y1+Pg==
+X-Received: by 2002:a05:6512:e9d:b0:478:fc65:328c with SMTP id bi29-20020a0565120e9d00b00478fc65328cmr16821362lfb.312.1655818527696;
+        Tue, 21 Jun 2022 06:35:27 -0700 (PDT)
 Received: from sakura.myxoz.lan (2-248-181-228-no2390.tbcn.telia.com. [2.248.181.228])
-        by smtp.gmail.com with ESMTPSA id a16-20020a19ca10000000b00478a8b7ab1csm347142lfg.150.2022.06.21.06.35.21
+        by smtp.gmail.com with ESMTPSA id a16-20020a19ca10000000b00478a8b7ab1csm347142lfg.150.2022.06.21.06.35.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 06:35:21 -0700 (PDT)
+        Tue, 21 Jun 2022 06:35:27 -0700 (PDT)
 From:   Miko Larsson <mikoxyzzz@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Miko Larsson <mikoxyzzz@gmail.com>, linux-kbuild@vger.kernel.org,
@@ -64,10 +64,12 @@ Cc:     Miko Larsson <mikoxyzzz@gmail.com>, linux-kbuild@vger.kernel.org,
         John Ogness <john.ogness@linutronix.de>,
         Elliot Berman <quic_eberman@quicinc.com>,
         Oleksandr Natalenko <oleksandr@redhat.com>
-Subject: [PATCH 0/2] Kconfig: -O3 enablement 
-Date:   Tue, 21 Jun 2022 15:35:24 +0200
-Message-Id: <20220621133526.29662-1-mikoxyzzz@gmail.com>
+Subject: [PATCH 1/2] Kconfig: Mark -O3 as experimental
+Date:   Tue, 21 Jun 2022 15:35:25 +0200
+Message-Id: <20220621133526.29662-2-mikoxyzzz@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220621133526.29662-1-mikoxyzzz@gmail.com>
+References: <20220621133526.29662-1-mikoxyzzz@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,44 +82,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Mark -O3 as experimental, as it might cause unwanted regressions for
+users.
 
-This very small series allows -O3 to be used for all architectures. The
-first patch marks -O3 as experimental, with the reasoning being that it
-might expose unwanted regressions to users, and the second patch
-actually allows -O3 by removing the "depend on ARC" string.
+Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
+---
+ init/Kconfig | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-The reasoning behind this series is to open up -O3 so that bugs related
-to it (both compiler-related and kernel-related) can be discovered by
-eyeballs wanting to improve the "-O3 experience," as that might be
-beneficial to both compilers and the kernel. This has been attempted
-before [1], but unfortunately nothing ever came of it.
-
-[1] https://lore.kernel.org/lkml/20191211104619.114557-1-oleksandr@redhat.com/
-
-Cc: linux-kbuild@vger.kernel.org
-Cc: x86@kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Chris Down <chris@chrisdown.name>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Oleksandr Natalenko <oleksandr@redhat.com>
-
-Miko Larsson (2):
-  Kconfig: Mark -O3 as experimental
-  Kconfig: Allow -O3 for all architectures
-
- init/Kconfig | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
+diff --git a/init/Kconfig b/init/Kconfig
+index c7900e897..9c292acb2 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1402,12 +1402,15 @@ config CC_OPTIMIZE_FOR_PERFORMANCE
+ 	  helpful compile-time warnings.
+ 
+ config CC_OPTIMIZE_FOR_PERFORMANCE_O3
+-	bool "Optimize more for performance (-O3)"
++	bool "Optimize more for performance (-O3) (EXPERIMENTAL)"
+ 	depends on ARC
+ 	help
+ 	  Choosing this option will pass "-O3" to your compiler to optimize
+ 	  the kernel yet more for performance.
+ 
++	  This option is EXPERIMENTAL; you may encounter compiler bugs and/or
++	  kernel bugs with this option enabled.
++
+ config CC_OPTIMIZE_FOR_SIZE
+ 	bool "Optimize for size (-Os)"
+ 	help
 -- 
 2.36.1
 

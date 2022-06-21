@@ -2,56 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B75552E06
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B459552E09
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348586AbiFUJOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S1347721AbiFUJOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiFUJOE (ORCPT
+        with ESMTP id S1346120AbiFUJOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:14:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7D112610
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:14:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0963F6158A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 09:14:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B25C3411C;
-        Tue, 21 Jun 2022 09:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655802842;
-        bh=pL3F/GzW42CiWS3Yg7kxKAhUPHN0SvH5MN8TC9Ak5Ys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MxZR/FXJDErptEmSt8w5bbP3lzcw8Pa0UN3pNctXJj6XoJvXKNRHYLFmLeAHT8Hne
-         Y/vk8BjMpi+WlbfYL86H4bdjt/F9w7JUoAOri+UriPenbf4hAsVTB25nDTGDumShI+
-         2DOqbBwF8z3abaBH9vr9PjQooQ9aP9RMYdHd/D665Ga/nlAcNu9J9eJByO1OMXIhuu
-         QaKhvfvg1Redd8RR4HPWUrNv2A9PrayetJotZPEAAad7nos1kPNyw4xuii2mXg3fYc
-         iO80v43tNR84DXygZxj7AFi7P2p7y6NDh8HLFA/OWa13KKl2rZ1RXWvZH6BAa1x3tp
-         r7C2oCfMU6Arg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3ZxL-0001jL-LK; Tue, 21 Jun 2022 11:13:56 +0200
-Date:   Tue, 21 Jun 2022 11:13:55 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     keliu <liuke94@huawei.com>
-Cc:     vaibhav.sr@gmail.com, mgreer@animalcreek.com, elder@kernel.org,
-        gregkh@linuxfoundation.org, vireshk@kernel.org,
-        pure.logic@nexus-software.ie, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [greybus-dev] [PATCH] staging: greybus: Directly use
- ida_alloc()/free()
-Message-ID: <YrGL0zLpdzGbcWE4@hovoldconsulting.com>
-References: <20220527063528.2356712-1-liuke94@huawei.com>
+        Tue, 21 Jun 2022 05:14:43 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020F212610
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:14:40 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id b7so14687378ljr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9hW3jjf9bp01ZUcaiVpuKXB3YUlqSGpIT2U7YDux9Rg=;
+        b=Gwli9c0qw+zfBDR9Giy7/Y+52KIgrthSDWDZ+6p5zkOfFViD/gVgJOzZ8HVe65ZZZq
+         R7OXFD+kR9WkHTz83UOHgSsfDefZA9DrOOiS5rOvFoZpIxJmxbPaIzHr11KPXLfaWEvz
+         HMzCV8UJKxcvCWtKrE+Q0ie1PD8inJ71VHKvJTcg+3TxVBag9uCAep+FxnvMpwnvnsFE
+         IsUZdlSa2Z6gFvu4kcJy8KaSoEtau1sUsJE/MrIdM159J1mxXO3MkBWehVXeSDBSDeMt
+         eaEf+u405Xt7tv1EP0rXAjV74aH8Eyrwu9uNl3793ctMqtNDHqByELGkklpMDYeim9ZN
+         XLsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9hW3jjf9bp01ZUcaiVpuKXB3YUlqSGpIT2U7YDux9Rg=;
+        b=gLUbx17HQG6MEvIzywI06R45bFaZx/S7dCMzzQVjb1p0Pb/7Pmc3GmXERwZfA6c0Z6
+         LEhDc/9ojq4ldZk7XULnkUqSicIFhFN9KiSWNwhVLNlD8KkT8hUDSVxs8W+FHCmY3sBy
+         50HBI9y+RaEgipsLEOzYFPlFdHDhjMGk3Qdbjl41Ms7uRCPG0QD7SJ9lDH6xSdb7Y2ZL
+         EJNbTBuhXDrijesNhHtpAZj1/py7gzd7mKl3MOwUfRiH6D9UyEL4lvgMiKnNWj7zpAFR
+         nX9H0bTci6I3SPbTzV8lOr0PJVXY016XDPYdnQvCuOVFyC2gJPS4/88TLSM+2eacqwyJ
+         kR4w==
+X-Gm-Message-State: AJIora875KJzDZVhZCU/2DKaLcrzhXpBtM4uAlR4CLTNMGEb0iOm1cy7
+        EQXMCcb2R9J3RrzGFM57US5JFSGqu8LZvi5ApqxUW8BnmZQ=
+X-Google-Smtp-Source: AGRyM1tKvJq8Yv3GhlY6sfPQBp5eChgXt4TwgRHECFq5GkHc3Tha4gNloRxZWtpPHhXNH3BWUnqfTsoUg09Z/UMHmyo=
+X-Received: by 2002:a2e:bf05:0:b0:247:b233:cfba with SMTP id
+ c5-20020a2ebf05000000b00247b233cfbamr13439703ljr.131.1655802879101; Tue, 21
+ Jun 2022 02:14:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527063528.2356712-1-liuke94@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-12-mw@semihalf.com>
+ <YrC1ymfSJ3nxWw4B@smile.fi.intel.com>
+In-Reply-To: <YrC1ymfSJ3nxWw4B@smile.fi.intel.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 21 Jun 2022 11:14:29 +0200
+Message-ID: <CAPv3WKcqpHfN8UnZo19nKPQMbM5hZvptD=mswvuy-8HB6p=BwQ@mail.gmail.com>
+Subject: Re: [net-next: PATCH 11/12] net: dsa: mv88e6xxx: switch to
+ device_/fwnode_ APIs
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        vivien.didelot@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,51 +84,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 06:35:28AM +0000, keliu wrote:
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
-> 
-> Signed-off-by: keliu <liuke94@huawei.com>
+pon., 20 cze 2022 o 20:03 Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
+>
+> On Mon, Jun 20, 2022 at 05:02:24PM +0200, Marcin Wojtas wrote:
+> > In order to support both ACPI and DT, modify the generic
+> > DSA code to use device_/fwnode_ equivalent routines.
+> > No functional change is introduced by this patch.
+>
+> ...
+>
+> >       int err;
+> >
+> > -     if (!np && !pdata)
+> > +     if (!fwnode && !pdata)
+> >               return -EINVAL;
+>
+> Sounds like redundant check
+>
+>         if (pdata)
+>                 ...
+>         else
+>                 compat_info =3D ...
+>         if (!compat_info)
+>                 return -EINVAL
+>
+> ?
+>
+> > -     if (np)
+> > -             compat_info =3D of_device_get_match_data(dev);
+> > +     if (fwnode)
+> > +             compat_info =3D device_get_match_data(dev);
+> >
+> >       if (pdata) {
+>
+> Missed 'else' even in the original code (see above)?
+>
 
-Is "keliu" really your full legal name?
+fwnode/np is mutually exclusive with pdata, but imo nothing wrong with
+adding 'else' here or update the condition as suggested above.
 
-> ---
->  drivers/staging/greybus/audio_manager.c  |  8 ++++----
->  drivers/staging/greybus/authentication.c |  4 ++--
->  drivers/staging/greybus/fw-download.c    |  4 ++--
->  drivers/staging/greybus/fw-management.c  | 12 ++++++------
->  drivers/staging/greybus/gbphy.c          |  4 ++--
->  drivers/staging/greybus/loopback.c       |  6 +++---
->  drivers/staging/greybus/raw.c            |  6 +++---
->  drivers/staging/greybus/vibrator.c       |  6 +++---
->  8 files changed, 25 insertions(+), 25 deletions(-)
- 
-> diff --git a/drivers/staging/greybus/authentication.c b/drivers/staging/greybus/authentication.c
-> index 297e69f011c7..01dd1cd958ea 100644
-> --- a/drivers/staging/greybus/authentication.c
-> +++ b/drivers/staging/greybus/authentication.c
-> @@ -348,7 +348,7 @@ int gb_cap_connection_init(struct gb_connection *connection)
->  err_del_cdev:
->  	cdev_del(&cap->cdev);
->  err_remove_ida:
-> -	ida_simple_remove(&cap_minors_map, minor);
-> +	ida_free(&cap_minors_map, minor);
->  err_connection_disable:
->  	gb_connection_disable(connection);
->  err_list_del:
-> @@ -372,7 +372,7 @@ void gb_cap_connection_exit(struct gb_connection *connection)
->  
->  	device_destroy(cap_class, cap->dev_num);
->  	cdev_del(&cap->cdev);
-> -	ida_simple_remove(&cap_minors_map, MINOR(cap->dev_num));
-> +	ida_free(&cap_minors_map, MINOR(cap->dev_num));
->  
->  	/*
->  	 * Disallow any new ioctl operations on the char device and wait for
+Thanks,
+Marcin
 
-The above looks incomplete since you do not change the ida_simple_get()
-in gb_cap_connection_init().
 
-Please check for any similar mistakes throughout.
-
-Johan
+> >               compat_info =3D pdata_device_get_match_data(dev);
+>
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>

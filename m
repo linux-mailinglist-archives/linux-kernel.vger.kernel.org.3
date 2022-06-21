@@ -2,289 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92385553F1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 01:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FD3553F28
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 01:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355172AbiFUXpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 19:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S1354411AbiFUXra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 19:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiFUXpD (ORCPT
+        with ESMTP id S229982AbiFUXr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 19:45:03 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AF3313B0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:45:02 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id h82-20020a25d055000000b00668b6a4ee32so11162551ybg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=OeZ1TPP4UVsB1asb0DIA2kotVKNpvnWh+JASl2wR8Ns=;
-        b=BFp5nG/nqwJ0SFAw4Eg1f9y9zVw8lXPsLnw0nRJUkaUn7rLJOh5clLOmMBe2A75ptr
-         RH/QjGlgaeg3zPYHs37orlBV5caZNXumOCBQ/tJEupcG3QmtqszTG9iv7PswREGrjzF8
-         uEa7CncQRXDPU9KPfnfPkHz8+Sn+nkPNIdyUtolUy3w+CCeI3Ym7uTuITkMjtUdR7wwe
-         DfxcP3MoyxWQ9bMWcxBJ5DRbHRjrx+OPSnuEZee2dkOOhIxDujBfu2Uv0KXavTYP3slw
-         vNcb05LNdjEK3ZcNlG+weJToAVb5g7n5HFNSoE3Ym/UAy8tC5QcTK98pwnv0DBZM370D
-         phNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=OeZ1TPP4UVsB1asb0DIA2kotVKNpvnWh+JASl2wR8Ns=;
-        b=b1b28wbWYp/udtRptX9iJXvpwcsTzpvtAw8DZ1JB810GxhDGut9IoLCaPJmNlOA7o/
-         JL/z+7kJqSQgphQ0Y/URkXp9X/zzI0dbmgp5dlBOfFTzm0mw2WwApPU6lEofD57EGN8I
-         q7MAPc6eM1DNUjCYQoBBAyDsKDMwJ9PJbsbsZDEfRMwyK156ztiaX4+eH3B9UBYORCdk
-         IFl09vic8RctrDwGQ5gO/41Wr6Z2QbGHVbEDEZY8T7zjkG+cQC9TO18pEMiGMzZNGUtd
-         0QcNfcfNvOZqO7zt+OO4st2izF9xSnNfFundQdhFbcvdJErBaJNxOmdUXr71iJz9AgB/
-         PfkQ==
-X-Gm-Message-State: AJIora/QBRiVPv1qgF6B7ZDeExa5BdwALmLuPN6LO5ifHJ+5Rh90yHC/
-        N7fWoup8JkK+wndxuCo/rGOW0UKkV2Hy
-X-Google-Smtp-Source: AGRyM1uYenwp+AG0ERf5ihu7H0hYKmiAK9w6eU3aEfO8uIbLmENLNzxmcX1EWl1LCHjFe7ZjLfCUVB1QSmGB
-X-Received: from joshdon.svl.corp.google.com ([2620:15c:2cd:202:9725:1fd6:6f9c:fbb8])
- (user=joshdon job=sendgmr) by 2002:a25:8e09:0:b0:664:f501:c66f with SMTP id
- p9-20020a258e09000000b00664f501c66fmr784358ybl.210.1655855101930; Tue, 21 Jun
- 2022 16:45:01 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 16:44:43 -0700
-Message-Id: <20220621234443.3506529-1-joshdon@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH v3] sched/core: add forced idle accounting for cgroups
-From:   Josh Don <joshdon@google.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Cruz Zhao <CruzZhao@linux.alibaba.com>,
-        Josh Don <joshdon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 19:47:28 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2041.outbound.protection.outlook.com [40.107.220.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFBA31500;
+        Tue, 21 Jun 2022 16:47:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kCi8pM01KDslTxSC1v0wpTaefyN5VX3ILYNNAlmIfSFbtAeX+iua2UixPzeaAtOtYzKAeEJwZpCRx0Fm1Giz5rSDggLQCfY/Ez2r23VeQtTLUEmxIvqFg7rFcHkhKoXDPcX4uwI7ShLxeMSUrz+j8HHDih06F1ToIgP8kze58wFBL3DihmKhEjK56u0gKQ8QzGS3LUe5sXqRxIpe7SjrPLAJBoNH7BaNRP1u+O6w1MAl7ZKQ4KmyRH6FwY2g4VQK4ZGj0V+/eYhBJjqToRycLrirJFYSU8QYx7rGSz1BwZohexSzC7BdBA4WAFRuY1ImV0eUvbJ3265xvvtWpcTrOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aqJHOQmxrxlatNO2xMwYxJVq0MrIa0oXWWVFnxwgEkU=;
+ b=kyyEjv8pKRQyS4xhF2jWhFMnPkSN6fQfYmU8rHgRfrAUuAknwC+J9Ct0vlC8Gawbgqr34rAiwTL8n8wCUOdZotajLpMV/HukCNA3aq+UPDoXtVDWxTdvtuZjfNlOlUbj6huTi/9+E3RoJ9Mh076agEQSy8OTdVJA80Imt6SFSLCD9fNoDqBX1gG8vDGcuvTH3iemqXoRaqc53m0j7vDkGbpDCe2GamO+1Cpsip7rBzdJyE1XWRAf4tKYOBfa+qoLIKpHFfMnsnCGAY9xG2bicJarlCSrG4lsclS3nST3Ram8oczITdlKcQzuY8/LhLZKLH9UepGxfRa1QQPssg05PA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aqJHOQmxrxlatNO2xMwYxJVq0MrIa0oXWWVFnxwgEkU=;
+ b=IN9npoapkbB8oXv441aT7uIWUmJRTWO3QfDBLJ3NXVgbNQRgzEawfifkbG/+QCyCIMfbLPRYA/bB2baK8ZQ0SpQDhdc/2QUTxsTMsbVvoJNKEhiw5yW+VkWniwDd9xwWPgxyL5gDmjW1qA5AWop/EiikrCtwVaJmFyhP897Ae5FYRwk0vLTe9sCoCetmO9RRMfSur6oO1htHE8sTl4igEuJ0svwp5K02vk7hjj1tQLaC7RrSbxkjJZC0/mfhpRy20zcjiIdkPQ6RqYzcp7b5ceBhd0ncWuUr7j1KSOLkqhiTVjriw9pZmqMhiZL0YCaMbn/ooiYR0ZjXlM7NHJMBEg==
+Received: from DS7PR03CA0295.namprd03.prod.outlook.com (2603:10b6:5:3ad::30)
+ by BYAPR12MB3479.namprd12.prod.outlook.com (2603:10b6:a03:dc::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.21; Tue, 21 Jun
+ 2022 23:47:25 +0000
+Received: from DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3ad:cafe::13) by DS7PR03CA0295.outlook.office365.com
+ (2603:10b6:5:3ad::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.20 via Frontend
+ Transport; Tue, 21 Jun 2022 23:47:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT025.mail.protection.outlook.com (10.13.172.197) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5373.15 via Frontend Transport; Tue, 21 Jun 2022 23:47:24 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 21 Jun
+ 2022 23:47:24 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 21 Jun
+ 2022 16:47:23 -0700
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
+ Transport; Tue, 21 Jun 2022 16:47:18 -0700
+Date:   Tue, 21 Jun 2022 16:47:16 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+CC:     <joro@8bytes.org>, <will@kernel.org>, <marcan@marcan.st>,
+        <sven@svenpeter.dev>, <robin.murphy@arm.com>,
+        <robdclark@gmail.com>, <baolu.lu@linux.intel.com>,
+        <matthias.bgg@gmail.com>, <orsonzhai@gmail.com>,
+        <baolin.wang7@gmail.com>, <zhang.lyra@gmail.com>,
+        <jean-philippe@linaro.org>, <jgg@nvidia.com>,
+        <kevin.tian@intel.com>, <suravee.suthikulpanit@amd.com>,
+        <alyssa@rosenzweig.io>, <dwmw2@infradead.org>,
+        <yong.wu@mediatek.com>, <mjrosato@linux.ibm.com>,
+        <gerald.schaefer@linux.ibm.com>, <thierry.reding@gmail.com>,
+        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <cohuck@redhat.com>,
+        <thunder.leizhen@huawei.com>, <tglx@linutronix.de>,
+        <christophe.jaillet@wanadoo.fr>, <john.garry@huawei.com>,
+        <chenxiang66@hisilicon.com>, <saiprakash.ranjan@codeaurora.org>,
+        <isaacm@codeaurora.org>, <yangyingliang@huawei.com>,
+        <jordan@cosmicpenguin.net>, <iommu@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
+Subject: Re: [PATCH v2 2/5] vfio/iommu_type1: Prefer to reuse domains vs
+ match enforced cache coherency
+Message-ID: <YrJYhIiivpiJ1t4f@Asurada-Nvidia>
+References: <20220616000304.23890-1-nicolinc@nvidia.com>
+ <20220616000304.23890-3-nicolinc@nvidia.com>
+ <20220621164602.4079bf43.alex.williamson@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220621164602.4079bf43.alex.williamson@redhat.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 83bbd326-a75f-47d9-b6a0-08da53e06440
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3479:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB3479D56EB2C3CE3D32569B32ABB39@BYAPR12MB3479.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8NwIxgGiwtZsX9DG5RYiN32gAOfze5/tHQkp+2/EouFLvJOnuWFOd471Cz5Jl5gYgAUOXfqy5Wr+5NtKJVEZ3Qg+R0CJeF6/IcgIDERf3FtOBJWDpvn9hiQcVDgi2B7o3V8XlxyOC10oADVBAkVSS74F4DgmBYUJMd9ZIY43esDyXNhzvjM6V09g5UD+6hca2/FXncFjBzrplsG7I44g51AEMOepe6dTXA//7yT7sIF6SMzkoQcDqaav8L/RndMvpXmKm4GU+AIFjhCTry0vSif6jeOoeZeB2wIuSfqAEv3VW1BQzOxN7i08+GZKCc1WjnVnnACf45HViXnBFNxg4syidc2AaVEvBtgnkoGl9+BHSx1ckgrGQOCBF6+zXvFAW/5m7JE2gkBKPK/QBoeQ14bBIMMzaz7eSqW1CHUKFJoqFzljM6XYJuZtP6Fj5xxFfTlF94tQ0UcUuUpbhVL5cL34n/9lsR0bs5CyhLZnyo2DbKH3dpwdlgYIKbiYEkhUwExPOrhJMU1cy8uY6FvdXHBuH23fGLzk3Me+8aqbERqrg2yzKpjWfJzpVMFutxwNK8hMTf765uI03HoY3cbDw4s4uJtkQdvIfyLewn84BzCBpbqEw9kJ4o+qQPTS+7PK6MsD+/HGyGP8+EwwwKlH6FzkcX7edz/VyZrbCBOs/KNc+0CV/KhlbnMdjF8UpYRqkxkSlBn3f1+ls7XECv+7fI7ahSW39MDxPyuAmH2YyCZndmi6C684ASePTby+pJkT
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(346002)(376002)(36840700001)(40470700004)(46966006)(70586007)(54906003)(2906002)(7406005)(40460700003)(7416002)(6916009)(8676002)(186003)(81166007)(70206006)(36860700001)(33716001)(4326008)(47076005)(55016003)(8936002)(426003)(82740400003)(9686003)(40480700001)(356005)(26005)(336012)(478600001)(82310400005)(41300700001)(86362001)(316002)(83380400001)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 23:47:24.4682
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83bbd326-a75f-47d9-b6a0-08da53e06440
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3479
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-4feee7d1260 previously added per-task forced idle accounting. This patch
-extends this to also include cgroups.
+On Tue, Jun 21, 2022 at 04:46:02PM -0600, Alex Williamson wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Wed, 15 Jun 2022 17:03:01 -0700
+> Nicolin Chen <nicolinc@nvidia.com> wrote:
+> 
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> >
+> > The KVM mechanism for controlling wbinvd is based on OR of the coherency
+> > property of all devices attached to a guest, no matter those devices are
+> > attached to a single domain or multiple domains.
+> >
+> > So, there is no value in trying to push a device that could do enforced
+> > cache coherency to a dedicated domain vs re-using an existing domain
+> > which is non-coherent since KVM won't be able to take advantage of it.
+> > This just wastes domain memory.
+> >
+> > Simplify this code and eliminate the test. This removes the only logic
+> > that needed to have a dummy domain attached prior to searching for a
+> > matching domain and simplifies the next patches.
+> >
+> > It's unclear whether we want to further optimize the Intel driver to
+> > update the domain coherency after a device is detached from it, at
+> > least not before KVM can be verified to handle such dynamics in related
+> > emulation paths (wbinvd, vcpu load, write_cr0, ept, etc.). In reality
+> > we don't see an usage requiring such optimization as the only device
+> > which imposes such non-coherency is Intel GPU which even doesn't
+> > support hotplug/hot remove.
+> 
+> The 2nd paragraph above is quite misleading in this respect.  I think
+> it would be more accurate to explain that the benefit to using separate
+> domains was that devices attached to domains supporting enforced cache
+> coherency always mapped with the attributes necessary to provide that
+> feature, therefore if a non-enforced domain was dropped, the associated
+> group removal would re-trigger an evaluation by KVM.  We can then go on
+> to discuss that in practice the only known cases of such mixed domains
+> included an Intel IGD device behind an IOMMU lacking snoop control,
+> where such devices do not support hotplug, therefore this scenario lacks
+> testing and is not considered sufficiently relevant to support.  Thanks,
 
-rstat is used for cgroup accounting, except for the root, which uses
-kcpustat in order to bypass the need for doing an rstat flush when
-reading root stats.
+Thanks for the input. I integrated that into the commit log:
 
-Only cgroup v2 is supported. Similar to the task accounting, the cgroup
-accounting requires that schedstats is enabled.
+    vfio/iommu_type1: Prefer to reuse domains vs match enforced cache coherency
 
-Signed-off-by: Josh Don <joshdon@google.com>
----
-v3: Fix build error, and revert back to  __schedstat_*
-v2: Per Tejun's suggestion, move the forceidle stat to cgroup_base_stat
-directly.
+    The KVM mechanism for controlling wbinvd is based on OR of the coherency
+    property of all devices attached to a guest, no matter whether those
+    devices are attached to a single domain or multiple domains.
 
- include/linux/cgroup-defs.h |  4 ++++
- include/linux/kernel_stat.h |  7 ++++++
- kernel/cgroup/rstat.c       | 44 ++++++++++++++++++++++++++++++++-----
- kernel/sched/core_sched.c   |  6 ++++-
- kernel/sched/cputime.c      | 15 +++++++++++++
- 5 files changed, 69 insertions(+), 7 deletions(-)
+    On the other hand, the benefit to using separate domains was that those
+    devices attached to domains supporting enforced cache coherency always
+    mapped with the attributes necessary to provide that feature, therefore
+    if a non-enforced domain was dropped, the associated group removal would
+    re-trigger an evaluation by KVM.
 
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index 1bfcfb1af352..025fd0e84a31 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -287,6 +287,10 @@ struct css_set {
- 
- struct cgroup_base_stat {
- 	struct task_cputime cputime;
-+
-+#ifdef CONFIG_SCHED_CORE
-+	u64 forceidle_sum;
-+#endif
- };
- 
- /*
-diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
-index 69ae6b278464..ddb5a358fd82 100644
---- a/include/linux/kernel_stat.h
-+++ b/include/linux/kernel_stat.h
-@@ -28,6 +28,9 @@ enum cpu_usage_stat {
- 	CPUTIME_STEAL,
- 	CPUTIME_GUEST,
- 	CPUTIME_GUEST_NICE,
-+#ifdef CONFIG_SCHED_CORE
-+	CPUTIME_FORCEIDLE,
-+#endif
- 	NR_STATS,
- };
- 
-@@ -115,4 +118,8 @@ extern void account_process_tick(struct task_struct *, int user);
- 
- extern void account_idle_ticks(unsigned long ticks);
- 
-+#ifdef CONFIG_SCHED_CORE
-+extern void __account_forceidle_time(struct task_struct *tsk, u64 delta);
-+#endif
-+
- #endif /* _LINUX_KERNEL_STAT_H */
-diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index 24b5c2ab5598..504478522df7 100644
---- a/kernel/cgroup/rstat.c
-+++ b/kernel/cgroup/rstat.c
-@@ -310,6 +310,9 @@ static void cgroup_base_stat_add(struct cgroup_base_stat *dst_bstat,
- 	dst_bstat->cputime.utime += src_bstat->cputime.utime;
- 	dst_bstat->cputime.stime += src_bstat->cputime.stime;
- 	dst_bstat->cputime.sum_exec_runtime += src_bstat->cputime.sum_exec_runtime;
-+#ifdef CONFIG_SCHED_CORE
-+	dst_bstat->forceidle_sum += src_bstat->forceidle_sum;
-+#endif
- }
- 
- static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
-@@ -318,6 +321,9 @@ static void cgroup_base_stat_sub(struct cgroup_base_stat *dst_bstat,
- 	dst_bstat->cputime.utime -= src_bstat->cputime.utime;
- 	dst_bstat->cputime.stime -= src_bstat->cputime.stime;
- 	dst_bstat->cputime.sum_exec_runtime -= src_bstat->cputime.sum_exec_runtime;
-+#ifdef CONFIG_SCHED_CORE
-+	dst_bstat->forceidle_sum -= src_bstat->forceidle_sum;
-+#endif
- }
- 
- static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu)
-@@ -398,6 +404,11 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
- 	case CPUTIME_SOFTIRQ:
- 		rstatc->bstat.cputime.stime += delta_exec;
- 		break;
-+#ifdef CONFIG_SCHED_CORE
-+	case CPUTIME_FORCEIDLE:
-+		rstatc->bstat.forceidle_sum += delta_exec;
-+		break;
-+#endif
- 	default:
- 		break;
- 	}
-@@ -411,8 +422,9 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
-  * with how it is done by __cgroup_account_cputime_field for each bit of
-  * cpu time attributed to a cgroup.
-  */
--static void root_cgroup_cputime(struct task_cputime *cputime)
-+static void root_cgroup_cputime(struct cgroup_base_stat *bstat)
- {
-+	struct task_cputime *cputime = &bstat->cputime;
- 	int i;
- 
- 	cputime->stime = 0;
-@@ -438,6 +450,10 @@ static void root_cgroup_cputime(struct task_cputime *cputime)
- 		cputime->sum_exec_runtime += user;
- 		cputime->sum_exec_runtime += sys;
- 		cputime->sum_exec_runtime += cpustat[CPUTIME_STEAL];
-+
-+#ifdef CONFIG_SCHED_CORE
-+		bstat->forceidle_sum += cpustat[CPUTIME_FORCEIDLE];
-+#endif
- 	}
- }
- 
-@@ -445,27 +461,43 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
- {
- 	struct cgroup *cgrp = seq_css(seq)->cgroup;
- 	u64 usage, utime, stime;
--	struct task_cputime cputime;
-+	struct cgroup_base_stat bstat;
-+#ifdef CONFIG_SCHED_CORE
-+	u64 forceidle_time;
-+#endif
- 
- 	if (cgroup_parent(cgrp)) {
- 		cgroup_rstat_flush_hold(cgrp);
- 		usage = cgrp->bstat.cputime.sum_exec_runtime;
- 		cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
- 			       &utime, &stime);
-+#ifdef CONFIG_SCHED_CORE
-+		forceidle_time = cgrp->bstat.forceidle_sum;
-+#endif
- 		cgroup_rstat_flush_release();
- 	} else {
--		root_cgroup_cputime(&cputime);
--		usage = cputime.sum_exec_runtime;
--		utime = cputime.utime;
--		stime = cputime.stime;
-+		root_cgroup_cputime(&bstat);
-+		usage = bstat.cputime.sum_exec_runtime;
-+		utime = bstat.cputime.utime;
-+		stime = bstat.cputime.stime;
-+#ifdef CONFIG_SCHED_CORE
-+		forceidle_time = bstat.forceidle_sum;
-+#endif
- 	}
- 
- 	do_div(usage, NSEC_PER_USEC);
- 	do_div(utime, NSEC_PER_USEC);
- 	do_div(stime, NSEC_PER_USEC);
-+#ifdef CONFIG_SCHED_CORE
-+	do_div(forceidle_time, NSEC_PER_USEC);
-+#endif
- 
- 	seq_printf(seq, "usage_usec %llu\n"
- 		   "user_usec %llu\n"
- 		   "system_usec %llu\n",
- 		   usage, utime, stime);
-+
-+#ifdef CONFIG_SCHED_CORE
-+	seq_printf(seq, "forceidle_usec %llu\n", forceidle_time);
-+#endif
- }
-diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-index 38a2cec21014..5103502da7ba 100644
---- a/kernel/sched/core_sched.c
-+++ b/kernel/sched/core_sched.c
-@@ -277,7 +277,11 @@ void __sched_core_account_forceidle(struct rq *rq)
- 		if (p == rq_i->idle)
- 			continue;
- 
--		__schedstat_add(p->stats.core_forceidle_sum, delta);
-+		/*
-+		 * Note: this will account forceidle to the current cpu, even
-+		 * if it comes from our SMT sibling.
-+		 */
-+		__account_forceidle_time(p, delta);
- 	}
- }
- 
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index 78a233d43757..95fc77853743 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -226,6 +226,21 @@ void account_idle_time(u64 cputime)
- 		cpustat[CPUTIME_IDLE] += cputime;
- }
- 
-+
-+#ifdef CONFIG_SCHED_CORE
-+/*
-+ * Account for forceidle time due to core scheduling.
-+ *
-+ * REQUIRES: schedstat is enabled.
-+ */
-+void __account_forceidle_time(struct task_struct *p, u64 delta)
-+{
-+	__schedstat_add(p->stats.core_forceidle_sum, delta);
-+
-+	task_group_account_field(p, CPUTIME_FORCEIDLE, delta);
-+}
-+#endif
-+
- /*
-  * When a guest is interrupted for a longer amount of time, missed clock
-  * ticks are not redelivered later. Due to that, this function may on
--- 
-2.37.0.rc0.104.g0611611a94-goog
+    In practice however, the only known cases of such mixed domains included
+    an Intel IGD device behind an IOMMU lacking snoop control, where such
+    devices do not support hotplug, therefore this scenario lacks testing and
+    is not considered sufficiently relevant to support.
 
+    After all, KVM won't take advantage of trying to push a device that could
+    do enforced cache coherency to a dedicated domain vs re-using an existing
+    domain, which is non-coherent.
+
+    Simplify this code and eliminate the test. This removes the only logic
+    that needed to have a dummy domain attached prior to searching for a
+    matching domain and simplifies the next patches.
+
+    It's unclear whether we want to further optimize the Intel driver to
+    update the domain coherency after a device is detached from it, at
+    least not before KVM can be verified to handle such dynamics in related
+    emulation paths (wbinvd, vcpu load, write_cr0, ept, etc.). In reality
+    we don't see an usage requiring such optimization as the only device
+    which imposes such non-coherency is Intel GPU which even doesn't
+    support hotplug/hot remove.

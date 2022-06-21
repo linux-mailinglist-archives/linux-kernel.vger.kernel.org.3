@@ -2,295 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7E2552CA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCBC552C88
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347982AbiFUIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S1347926AbiFUIDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345440AbiFUIHb (ORCPT
+        with ESMTP id S1346733AbiFUIDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:07:31 -0400
-X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 01:07:29 PDT
-Received: from forward500p.mail.yandex.net (forward500p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C454224BC3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:07:29 -0700 (PDT)
-Received: from vla1-692e383ae130.qloud-c.yandex.net (vla1-692e383ae130.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:4e82:0:640:692e:383a])
-        by forward500p.mail.yandex.net (Yandex) with ESMTP id 77FACF0172E;
-        Tue, 21 Jun 2022 10:59:27 +0300 (MSK)
-Received: from vla1-ef285479e348.qloud-c.yandex.net (vla1-ef285479e348.qloud-c.yandex.net [2a02:6b8:c0d:35a1:0:640:ef28:5479])
-        by vla1-692e383ae130.qloud-c.yandex.net (mxback/Yandex) with ESMTP id pUgtCkKl7o-xQfuv0vF;
-        Tue, 21 Jun 2022 10:59:27 +0300
-X-Yandex-Fwd: 2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1655798367;
-        bh=lnaqbp1FtSw3PBFIRJvp8ZTIBhxZSVF+tYdiKTeYk14=;
-        h=In-Reply-To:Subject:Cc:To:From:References:Date:Message-ID;
-        b=tB7GwYjx37B3QR+75UYngRf9E9yE5YzZjS4tAcmPAZzL9ZawWSnJgmpnnFb5+Bgyn
-         pMNGF02QqiJdGFPvE91yI1PPLDCVdXHRIwF7Omyf/x5nLYffOpk01SpjBipFObDXOU
-         1KrApVu56MFCYQqykmjj0596oLGLf4VKMgeZRNQw=
-Authentication-Results: vla1-692e383ae130.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Received: by vla1-ef285479e348.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id eWF8YA4OF7-xON4813G;
-        Tue, 21 Jun 2022 10:59:25 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Date:   Tue, 21 Jun 2022 10:59:23 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Atish Patra <atishp@atishpatra.org>, Will Deacon <will@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        =?UTF-8?B?Sm/Do28gTcOhcmlv?= Domingos 
-        <joao.mario@tecnico.ulisboa.pt>, linux <linux@yadro.com>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 1/1] RISC-V: Create unique identification for SoC PMU
-Message-ID: <20220621105923.131fa20f@redslave.neermore.group>
-In-Reply-To: <CAK9=C2UiPdB2+UU6aqh5Muf0cnu87k01f1iga6mUYKZgiceAKQ@mail.gmail.com>
-References: <20220619111115.6354-1-nikita.shubin@maquefel.me>
-        <20220619111115.6354-2-nikita.shubin@maquefel.me>
-        <CAK9=C2X4TTCEjZya4wz-W6ndBaxzUpLBtzQAGJ4zphVM8NSgdg@mail.gmail.com>
-        <20220620174006.1c86a456@redslave.neermore.group>
-        <CAOnJCU+7_z1WN_Z6frQcUwzztVL4itbPSfmLUa_7Ob5xCtLo+Q@mail.gmail.com>
-        <20220621104139.7c77e348@redslave.neermore.group>
-        <CAK9=C2UiPdB2+UU6aqh5Muf0cnu87k01f1iga6mUYKZgiceAKQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 21 Jun 2022 04:03:14 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B2E3615F;
+        Tue, 21 Jun 2022 01:03:12 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 428D71E80D50;
+        Tue, 21 Jun 2022 16:03:11 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id qIN_2rhMcT5i; Tue, 21 Jun 2022 16:03:08 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.64.61.97])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 565A71E80D2D;
+        Tue, 21 Jun 2022 16:03:08 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     pbonzini@redhat.com, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, liqiong@nfschina.com,
+        renyu@nfschina.com, Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] KVM: Fix a typo
+Date:   Tue, 21 Jun 2022 16:01:28 +0800
+Message-Id: <20220621080128.49513-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Anup!
+There is a typo in kvm_vm_elf_load. Change 'begining' to 'beginning'.
 
-On Tue, 21 Jun 2022 13:21:11 +0530
-Anup Patel <apatel@ventanamicro.com> wrote:
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ tools/testing/selftests/kvm/lib/elf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On Tue, Jun 21, 2022 at 1:13 PM Nikita Shubin
-> <nikita.shubin@maquefel.me> wrote:
-> >
-> > Hello Anup!
-> >
-> > On Mon, 20 Jun 2022 12:40:20 -0700
-> > Atish Patra <atishp@atishpatra.org> wrote:
-> > =20
-> > > On Mon, Jun 20, 2022 at 7:40 AM Nikita Shubin
-> > > <nikita.shubin@maquefel.me> wrote: =20
-> > > >
-> > > > On Mon, 20 Jun 2022 17:30:58 +0530
-> > > > Anup Patel <apatel@ventanamicro.com> wrote:
-> > > > =20
-> > > > > On Sun, Jun 19, 2022 at 4:41 PM Nikita Shubin
-> > > > > <nikita.shubin@maquefel.me> wrote: =20
-> > > > > >
-> > > > > > From: Nikita Shubin <n.shubin@yadro.com>
-> > > > > >
-> > > > > > Provide RISC-V SBI PMU id to distinguish different cores or
-> > > > > > SoCs via "devices/platform/riscv-pmu/id" sysfs entry.
-> > > > > >
-> > > > > > The identification is generated as string of marchid,
-> > > > > > mimpid, mvendorid in hex format separated by coma -
-> > > > > > "0x70032,0x70032,0x0".
-> > > > > >
-> > > > > > The CSRs are detailed in the RISC-V privileged spec [1].
-> > > > > > [1] https://github.com/riscv/riscv-isa-manual
-> > > > > >
-> > > > > > Inspired-by: Jo=C3=A3o M=C3=A1rio Domingos
-> > > > > > <joao.mario@tecnico.ulisboa.pt> Signed-off-by: Nikita
-> > > > > > Shubin <n.shubin@yadro.com> =20
-> > > > >
-> > > > > The mvendorid, marchid, and mimpid can be useful to apps other
-> > > > > than perf tool.
-> > > > >
-> > > > > I have tried to extend /proc/cpuinfo with this information
-> > > > > which can be parsed by perf tool:
-> > > > > https://lore.kernel.org/all/20220620115549.1529597-1-apatel@venta=
-namicro.com/
-> > > > > =20
-> > > >
-> > > > Atish, what do you think about this ?
-> > > >
-> > > > RISC-V perf can rely on "/proc/cpuinfo", in some similar manner
-> > > > like "tools/perf/arch/s390/util/header.c" does.
-> > > > =20
-> > >
-> > > Yes. We can expose these three values either in sysfs or procfs
-> > > (/proc/cpuinfo). For perf tool, it shouldn't matter as the
-> > > header.c will need to generate the unique cpuid
-> > > string from either.
-> > >
-> > > I am not sure if any other userspace tool prefers to parse sysfs
-> > > instead of cpuinfo. =20
-> >
-> > Okay - let's stick to /proc/cpuinfo. =20
->=20
-> Sounds good.
->=20
-> You might have to write /proc/cpuinfo parsing code in perf tool
-> header.c. Do you plan to send v4 of perf tool patches ??
-
-Yes, but i might split it into separate series, not to mix perf headers
-and U74 pmu-events bindings, i ll also add some SBI firmware event
-bindings to make things easier.
-
->=20
-> Regards,
-> Anup
->=20
-> > =20
-> > > =20
-> > > > Can it create problems with pmu identification in case of
-> > > > hetergenous harts ?
-> > > > =20
-> > >
-> > > Does perf support hetergenous harts at all ? ARM64 code
-> > > (tool/perf/arch/arm64/util/header.c)
-> > > just breaks out of the loop after finding the first MIDR.
-> > > =20
-> > > > >
-> > > > > Regards,
-> > > > > Anup
-> > > > > =20
-> > > > > > ---
-> > > > > > v3->v4:
-> > > > > > - use string for pmuid
-> > > > > > - rename pmu_sbi_id_show to id_show
-> > > > > > - fix error print message in id_show
-> > > > > > - fix DEVICE_ATTR to use octal permissions
-> > > > > > ---
-> > > > > >  arch/riscv/kernel/sbi.c        |  3 +++
-> > > > > >  drivers/perf/riscv_pmu_sbi.c   | 41
-> > > > > > ++++++++++++++++++++++++++++++++++
-> > > > > > include/linux/perf/riscv_pmu.h | 1 + 3 files changed, 45
-> > > > > > insertions(+)
-> > > > > >
-> > > > > > diff --git a/arch/riscv/kernel/sbi.c
-> > > > > > b/arch/riscv/kernel/sbi.c index 775d3322b422..50dd9b6ecc9e
-> > > > > > 100644 --- a/arch/riscv/kernel/sbi.c
-> > > > > > +++ b/arch/riscv/kernel/sbi.c
-> > > > > > @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
-> > > > > >  {
-> > > > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
-> > > > > >  }
-> > > > > > +EXPORT_SYMBOL(sbi_get_mvendorid);
-> > > > > >
-> > > > > >  long sbi_get_marchid(void)
-> > > > > >  {
-> > > > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
-> > > > > >  }
-> > > > > > +EXPORT_SYMBOL(sbi_get_marchid);
-> > > > > >
-> > > > > >  long sbi_get_mimpid(void)
-> > > > > >  {
-> > > > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
-> > > > > >  }
-> > > > > > +EXPORT_SYMBOL(sbi_get_mimpid);
-> > > > > >
-> > > > > >  static void sbi_send_cpumask_ipi(const struct cpumask
-> > > > > > *target) {
-> > > > > > diff --git a/drivers/perf/riscv_pmu_sbi.c
-> > > > > > b/drivers/perf/riscv_pmu_sbi.c index
-> > > > > > dca3537a8dcc..be812f855617 100644 ---
-> > > > > > a/drivers/perf/riscv_pmu_sbi.c +++
-> > > > > > b/drivers/perf/riscv_pmu_sbi.c @@ -693,6 +693,28 @@ static
-> > > > > > int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct
-> > > > > > platform_device *pde return 0; }
-> > > > > >
-> > > > > > +static ssize_t id_show(struct device *dev,
-> > > > > > +                               struct device_attribute
-> > > > > > *attr, char *buf) +{
-> > > > > > +       int len;
-> > > > > > +       struct riscv_pmu *pmu =3D
-> > > > > > container_of(dev_get_drvdata(dev), struct riscv_pmu, pmu); +
-> > > > > > +       len =3D sprintf(buf, "%s\n", pmu->pmuid);
-> > > > > > +       if (len <=3D 0)
-> > > > > > +               dev_err(dev, "invalid sprintf len: %d\n",
-> > > > > > len); +
-> > > > > > +       return len;
-> > > > > > +}
-> > > > > > +
-> > > > > > +static DEVICE_ATTR(id, 0644, id_show, NULL);
-> > > > > > +
-> > > > > > +static struct attribute *pmu_sbi_attrs[] =3D {
-> > > > > > +       &dev_attr_id.attr,
-> > > > > > +       NULL
-> > > > > > +};
-> > > > > > +
-> > > > > > +ATTRIBUTE_GROUPS(pmu_sbi);
-> > > > > > +
-> > > > > >  static int pmu_sbi_device_probe(struct platform_device
-> > > > > > *pdev) {
-> > > > > >         struct riscv_pmu *pmu =3D NULL;
-> > > > > > @@ -714,6 +736,14 @@ static int pmu_sbi_device_probe(struct
-> > > > > > platform_device *pdev) if
-> > > > > > (pmu_sbi_get_ctrinfo(num_counters)) goto out_free;
-> > > > > >
-> > > > > > +       /* fill pmuid */
-> > > > > > +       pmu->pmuid =3D kasprintf(GFP_KERNEL,
-> > > > > > "0x%lx,0x%lx,0x%lx",
-> > > > > > +                              sbi_get_marchid(),
-> > > > > > +                              sbi_get_mimpid(),
-> > > > > > +                              sbi_get_mvendorid());
-> > > > > > +       if (!pmu->pmuid)
-> > > > > > +               goto out_free_pmuid;
-> > > > > > +
-> > > > > >         ret =3D pmu_sbi_setup_irqs(pmu, pdev);
-> > > > > >         if (ret < 0) {
-> > > > > >                 pr_info("Perf sampling/filtering is not
-> > > > > > supported as sscof extension is not available\n"); @@ -739,8
-> > > > > > +769,19 @@ static int pmu_sbi_device_probe(struct
-> > > > > > platform_device *pdev) return ret; }
-> > > > > >
-> > > > > > +       ret =3D sysfs_create_group(&pdev->dev.kobj,
-> > > > > > &pmu_sbi_group);
-> > > > > > +       if (ret) {
-> > > > > > +               dev_err(&pdev->dev, "sysfs creation
-> > > > > > failed\n");
-> > > > > > +               return ret;
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       pdev->dev.groups =3D pmu_sbi_groups;
-> > > > > > +       dev_set_drvdata(&pdev->dev, pmu);
-> > > > > > +
-> > > > > >         return 0;
-> > > > > >
-> > > > > > +out_free_pmuid:
-> > > > > > +       kfree(pmu->pmuid);
-> > > > > >  out_free:
-> > > > > >         kfree(pmu);
-> > > > > >         return ret;
-> > > > > > diff --git a/include/linux/perf/riscv_pmu.h
-> > > > > > b/include/linux/perf/riscv_pmu.h index
-> > > > > > 46f9b6fe306e..cf3557b77fb8 100644 ---
-> > > > > > a/include/linux/perf/riscv_pmu.h +++
-> > > > > > b/include/linux/perf/riscv_pmu.h @@ -42,6 +42,7 @@ struct
-> > > > > > cpu_hw_events { struct riscv_pmu {
-> > > > > >         struct pmu      pmu;
-> > > > > >         char            *name;
-> > > > > > +       char            *pmuid;
-> > > > > >
-> > > > > >         irqreturn_t     (*handle_irq)(int irq_num, void
-> > > > > > *dev);
-> > > > > >
-> > > > > > --
-> > > > > > 2.35.1
-> > > > > > =20
-> > > > =20
-> > >
-> > > =20
-> > =20
+diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
+index 13e8e3dcf984..272ea7d39fb4 100644
+--- a/tools/testing/selftests/kvm/lib/elf.c
++++ b/tools/testing/selftests/kvm/lib/elf.c
+@@ -139,7 +139,7 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+ 		offset = hdr.e_phoff + (n1 * hdr.e_phentsize);
+ 		offset_rv = lseek(fd, offset, SEEK_SET);
+ 		TEST_ASSERT(offset_rv == offset,
+-			"Failed to seek to begining of program header %u,\n"
++			"Failed to seek to beginning of program header %u,\n"
+ 			"  filename: %s\n"
+ 			"  rv: %jd errno: %i",
+ 			n1, filename, (intmax_t) offset_rv, errno);
+-- 
+2.25.1
 

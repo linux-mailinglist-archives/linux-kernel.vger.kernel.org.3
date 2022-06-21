@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90B455352D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB9B553533
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352179AbiFUPEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S231447AbiFUPGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbiFUPEt (ORCPT
+        with ESMTP id S1352197AbiFUPGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:04:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A49C9275F4;
-        Tue, 21 Jun 2022 08:04:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65478165C;
-        Tue, 21 Jun 2022 08:04:48 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 56E3F3F66F;
-        Tue, 21 Jun 2022 08:04:47 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-acpi@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Samer.El-Haj-Mahmoud@arm.com
-Subject: [PATCH] Documentation: ACPI: Update links and references to DSD related docs
-Date:   Tue, 21 Jun 2022 16:04:36 +0100
-Message-Id: <20220621150436.3303431-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 11:06:07 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3291227FD5;
+        Tue, 21 Jun 2022 08:06:02 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1655823934t1w17i80
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 21 Jun 2022 23:05:30 +0800 (CST)
+X-QQ-SSF: 0100000000700070B000D00A0000000
+X-QQ-FEAT: rCzLTtzQ0gdSWwagS7lrQndYDD9VIhn4pCNGLyT5Mjd3ZQPnyyxPayz+KTxHR
+        +6UrKBj9U7yOF78n/xoyMnhY/i5cwKM0uykY7R6m7N8IMqvd//Fh1mBpcrfy5gaVwlZKynE
+        CUJ71pUmKdFyXhi+i9GpAsp8XwA4VtQY1Tn+Ts/Iu5dCFU94V8fMEO7RfRSjk2lBTWo7CcS
+        MEaoQg+y05Gms0F22laztKb8Mpf6Us8T9Sc/dmPUkGTY3811uLRqQLUOcwmQx+1hbGlBHAO
+        CWZBrwXdfq+NCTqk07rEOvhoiSjW48w4ejOlptk0Yd7QkrFbLrxKJpXzz5tNiOqspbELZNv
+        kOE9p3XKF1UkFEwSLnx2EDOU212VA==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     mchehab@kernel.org
+Cc:     hverkuil-cisco@xs4all.nl, jiangjian@cdjrlc.com,
+        colin.king@intel.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: saa7164: Remove duplicate 'on' in two places.
+Date:   Tue, 21 Jun 2022 23:05:28 +0800
+Message-Id: <20220621150528.11270-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing references to DSD are stale and outdated. The new process
-and guidance is maintained @https://github.com/UEFI/DSD-Guide
+file: drivers/media/pci/saa7164/saa7164-api.c
+line: 804
+/* Assumption: Hauppauge eeprom is at 0xa0 on on bus 0 */
+changed to
+/* Assumption: Hauppauge eeprom is at 0xa0 on bus 0 */
 
-Update the existing documents to reflect the same.
-
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 ---
- .../firmware-guide/acpi/DSD-properties-rules.rst      | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/media/pci/saa7164/saa7164-api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/firmware-guide/acpi/DSD-properties-rules.rst b/Documentation/firmware-guide/acpi/DSD-properties-rules.rst
-index 8b2d8d0864c2..70442bc2521e 100644
---- a/Documentation/firmware-guide/acpi/DSD-properties-rules.rst
-+++ b/Documentation/firmware-guide/acpi/DSD-properties-rules.rst
-@@ -21,7 +21,9 @@ specific type) associated with it.
+diff --git a/drivers/media/pci/saa7164/saa7164-api.c b/drivers/media/pci/saa7164/saa7164-api.c
+index 5526bcc7a9bd..965d285a9240 100644
+--- a/drivers/media/pci/saa7164/saa7164-api.c
++++ b/drivers/media/pci/saa7164/saa7164-api.c
+@@ -801,7 +801,7 @@ int saa7164_api_read_eeprom(struct saa7164_dev *dev, u8 *buf, int buflen)
+ 	if (buflen < 128)
+ 		return -ENOMEM;
  
- In the ACPI _DSD context it is an element of the sub-package following the
- generic Device Properties UUID in the _DSD return package as specified in the
--Device Properties UUID definition document [1]_.
-+section titled "Well-Known _DSD UUIDs and Data Structure Formats" sub-section
-+"Device Properties UUID" in _DSD (Device Specific Data) Implementation Guide
-+document [1]_.
- 
- It also may be regarded as the definition of a key and the associated data type
- that can be returned by _DSD in the Device Properties UUID sub-package for a
-@@ -36,7 +38,9 @@ Property subsets are nested collections of properties.  Each of them is
- associated with an additional key (name) allowing the subset to be referred
- to as a whole (and to be treated as a separate entity).  The canonical
- representation of property subsets is via the mechanism specified in the
--Hierarchical Properties Extension UUID definition document [2]_.
-+section titled "Well-Known _DSD UUIDs and Data Structure Formats" sub-section
-+"Hierarchical Data Extension UUID" in _DSD (Device Specific Data)
-+Implementation Guide document [1]_.
- 
- Property sets may be hierarchical.  That is, a property set may contain
- multiple property subsets that each may contain property subsets of its
-@@ -96,5 +100,4 @@ contents.
- References
- ==========
- 
--.. [1] https://www.uefi.org/sites/default/files/resources/_DSD-device-properties-UUID.pdf
--.. [2] https://www.uefi.org/sites/default/files/resources/_DSD-hierarchical-data-extension-UUID-v1.1.pdf
-+.. [1] https://github.com/UEFI/DSD-Guide
+-	/* Assumption: Hauppauge eeprom is at 0xa0 on on bus 0 */
++	/* Assumption: Hauppauge eeprom is at 0xa0 on bus 0 */
+ 	/* TODO: Pull the details from the boards struct */
+ 	return saa7164_api_i2c_read(&dev->i2c_bus[0], 0xa0 >> 1, sizeof(reg),
+ 		&reg[0], 128, buf);
 -- 
-2.36.1
+2.17.1
 

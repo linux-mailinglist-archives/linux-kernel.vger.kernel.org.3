@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CACF552F39
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4C2552F3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348403AbiFUJ4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S231651AbiFUJ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiFUJ4S (ORCPT
+        with ESMTP id S1347270AbiFUJ50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:56:18 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78A127CE4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:56:17 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id w20so21415117lfa.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:56:17 -0700 (PDT)
+        Tue, 21 Jun 2022 05:57:26 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829B127CF1;
+        Tue, 21 Jun 2022 02:57:25 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id bo5so12622357pfb.4;
+        Tue, 21 Jun 2022 02:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+UauFON3Z5k4erj1lJhxb4xMRY3aeE01J2NPDi4cPiE=;
-        b=FmNU07MSwd8ek+qnq+c1HaZujdUoSsVhCvencgloomp2smg94X2O7E9yd1MfePj7u1
-         s5eggE5sF6BUJKWK7G36SCnzKPgFjxv08NzUItZHIP9TmA0mMp183VisI9k/pD20WQCS
-         nUnAKfO7vdTkq5EvAMGv1ez7HMsiXmAkXdwtsGGlDLS9YdHD98i3/hnYGzA+UbQqoRzZ
-         4t9A5NTPuV35XFoY2Jop+vrvQpXJmJjX+DT0UB01jSp3c7E/eTdqYVsdGpc9zmH34/u4
-         vKbktlJUCjGUQ3vmLvzNCgiat/Yrn2Qw5G/i0JVmXWMuiNICttCpxgPb53FSwW2HSOBl
-         7g1A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zLrX8Nbz/ii0DbaDDTWzWJ9REoXF+EZTeLsLu8+k9QA=;
+        b=nFvBT3js+hZr83wagusc8nIpd8BNUK0vQOV9/eJ9HEWsomrVNHI720LwIHsAL38MzG
+         091FhA/9iclxfjupccvpJsqFYynSJpPKtXnbSdJUMaXyp4ZA5Y8Ip8BoohzMafisDGJg
+         uLL2+tDfR+2qRqo8wSmfJ6BsC7g5KgaR908pH4azPgzGLF6+fZALjp2j7dRwp5znKBty
+         6aAQgHA6ZDZa9bwqz/jab3tLbb8PHJzdVBhkWJsZf2Zi8Q3SFMZlmrLVevGf47rDHbgf
+         ukITsRLOFBOyeW2GXx5BM37AHxHX/8isShswxaeLJd8oMq0HLUcjW+qr2yHPTmb3kM9E
+         +M+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+UauFON3Z5k4erj1lJhxb4xMRY3aeE01J2NPDi4cPiE=;
-        b=UkmY8HATE9J3ZGV/7QSoSPXDFFECJBtfrvxdyG1U/7GnAqVjpeodDBrrA6JYvFTbNg
-         exCOwbbR7OswThSBCQlZ7rXkNQcTEWsNobYQduceOO0ICBDA2hkOOdttwh/YSiwIVX5N
-         97qbnxtXd+zvMN5W4qYE8m6DoIAPjJARGHo/JhbQd9NRvuLVsdZ00DkS7Kz4LmKFOcoc
-         nREe/0qGETGliVL6Vj5EytKw0hopRkdrNi3zijhIBm0BC3CHp4zUZ08LeBX7mYFAeG4I
-         rZZB+Rwo0NPmgiRq2e2NohYgtMN0/dWiWCL+73bcvOvh8c8pKUHDHP6ccV/oM99yibEL
-         RIPw==
-X-Gm-Message-State: AJIora+LQYv2++p/6COo/16CSlmdsSS/3qzi8/K+Kh1kuJG4OeyQtmBt
-        2HRUFqO8NTH+QUayR2ko4aFS9nx0Rp/xZjPPF0v2wQ==
-X-Google-Smtp-Source: AGRyM1vE6WbXLd9KAOeEIAD5vck9Crd9lsdZBLhmd4rzhe3mbEvRfXLywJ8rOiJRSr8/hHK3nCi5rIQ7bY2hjkHVh70=
-X-Received: by 2002:a05:6512:118f:b0:47f:6a1a:20d4 with SMTP id
- g15-20020a056512118f00b0047f6a1a20d4mr7179853lfr.428.1655805376108; Tue, 21
- Jun 2022 02:56:16 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zLrX8Nbz/ii0DbaDDTWzWJ9REoXF+EZTeLsLu8+k9QA=;
+        b=NCygVXJbGk4p0omyo3JuPmmO3vq4gMCjckJfeZco9fAZb/LyQMwIOOE45ZKZYjobUx
+         rMTEu3Fju2ealETZqnmYAY8ATzBiQw9jf4ab/Ozu34TfcW9gybMnIWZ/ERO+fIn7UdJ+
+         xy+A7vYVjPzoqElNAVzOK6F9MgtaP5BkgcwTra346aC5/MpzAllzd5AForwrVZSCe2tg
+         80MU55U9CLy1yjymv2iU63QSdtSuXyOpFQ4AA1YR1ey0rIFkrZoroII64/y+nUQ3Hamn
+         SgCFzWF6LEDS/yyor7qlv2Wv80aOUu/4x8IF7FdlQY6rjTZYxGowjywDzfEBoKFEdmDn
+         kADA==
+X-Gm-Message-State: AJIora/D/yMNwSjR/+qRi+dp3jDe1sl+XDyiTa1d4TXq5qaYlG0RiBII
+        xWVm6yW7inmRFKDCUPYRsfAAbu4YWwg=
+X-Google-Smtp-Source: AGRyM1s5p3tbERT9a4wrIM15o3rTPzXiC7ROJSjzYCyhVxUKTU9NBbiDG+lR+uQmIGc4shm097ZU7w==
+X-Received: by 2002:a63:5412:0:b0:408:84a9:9562 with SMTP id i18-20020a635412000000b0040884a99562mr26177237pgb.600.1655805445016;
+        Tue, 21 Jun 2022 02:57:25 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-83.three.co.id. [180.214.232.83])
+        by smtp.gmail.com with ESMTPSA id gf23-20020a17090ac7d700b001ec9f9fe028sm4221671pjb.46.2022.06.21.02.57.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 02:57:23 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id EE9B710383B; Tue, 21 Jun 2022 16:57:18 +0700 (WIB)
+Date:   Tue, 21 Jun 2022 16:57:17 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/141] 5.18.6-rc1 review
+Message-ID: <YrGV/WnDqi1VaZsV@debian.me>
+References: <20220620124729.509745706@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-2-mw@semihalf.com>
- <YrC1gEf4HpRp5zkh@lunn.ch>
-In-Reply-To: <YrC1gEf4HpRp5zkh@lunn.ch>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Tue, 21 Jun 2022 11:56:06 +0200
-Message-ID: <CAPv3WKe3vBJ9r=6tMEtPj-3c0E3MBpW4Csf8zjS0jG03C35ycg@mail.gmail.com>
-Subject: Re: [net-next: PATCH 01/12] net: phy: fixed_phy: switch to fwnode_ API
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 20 cze 2022 o 19:59 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
->
-> On Mon, Jun 20, 2022 at 05:02:14PM +0200, Marcin Wojtas wrote:
-> > This patch allows to use fixed_phy driver and its helper
-> > functions without Device Tree dependency, by swtiching from
-> > of_ to fwnode_ API.
->
-> Do you actually need this? phylink does not use this code, it has its
-> own fixed link implementation. And that implementation is not limited
-> to 1G.
->
+On Mon, Jun 20, 2022 at 02:48:58PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.6 release.
+> There are 141 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-Yes, phylink has its own fixed-link handling, however the
-net/dsa/port.c relies on fixed_phy helpers these are not 1:1
-equivalents. I assumed this migration (fixed_phy -> phylink) is not
-straightforward and IMO should be handled separately. Do you recall
-justification for not using phylink in this part of net/dsa/*?
+Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
+armv7 with neon FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
 
-Thanks,
-Marcin
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara

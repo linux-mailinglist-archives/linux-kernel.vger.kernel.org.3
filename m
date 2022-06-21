@@ -2,92 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8AD65533C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96D0553391
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiFUNeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S1348739AbiFUNeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351573AbiFUNbC (ORCPT
+        with ESMTP id S1351745AbiFUNbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:31:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70A72AE1E;
-        Tue, 21 Jun 2022 06:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655817939;
-        bh=6NOAMXdCUByyszfLupmrTS363FnVyz0cu7VA/+0ZRpg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=We4utsoGckPb7P63tspOFDUOD+/zLTgLvZg9QhtYw8+7TshQCwQZo2L6w+91ky5eV
-         daVcP4lSCdWcRjfOvC98uMchCvp76tnTwziO81Jy3ll5jp7HCWwQyRtXijWvIWB965
-         d1PuJBwxEIt5633EvI1kAa4wJHR9EHSrFMZGKIAM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([46.223.2.162]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mof5H-1nJ5re2E2L-00p6Z3; Tue, 21
- Jun 2022 15:25:39 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-Subject: [PATCH v6 9/9] tpm, tpm_tis: Enable interrupt test
-Date:   Tue, 21 Jun 2022 15:24:47 +0200
-Message-Id: <20220621132447.16281-10-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
-References: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
+        Tue, 21 Jun 2022 09:31:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB3941AF1F;
+        Tue, 21 Jun 2022 06:28:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B48F6165C;
+        Tue, 21 Jun 2022 06:28:41 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA5FB3F7D7;
+        Tue, 21 Jun 2022 06:28:38 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 14:28:36 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        rafael@kernel.org, lenb@kernel.org, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        Sudeep Holla <sudeep.holla@arm.com>, linux@armlinux.org.uk,
+        hkallweit1@gmail.com, gjb@semihalf.com, jaz@semihalf.com,
+        tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
+ description
+Message-ID: <20220621132836.wiyexi4y6vjeumrv@bogus>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-10-mw@semihalf.com>
+ <20220621094556.5ev3nencnw7a5xwv@bogus>
+ <YrGoXXBgHvyifny3@smile.fi.intel.com>
+ <YrGqg5fHB4s+Y7wx@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:xSB16AR/mNo0Fvb7nCgg54P4T5PTXXJ6u1/cxTo833nbHj1CGwF
- 85DnFGzQJq2atuTTl2iqce6c8e1HOqzMIO+EymhOc6g/r0MKH7EArUfMfOmJfM8o1mFCEMr
- VqNOdl9gVUQienIscPHd1P3lYV3ePa/vcMNOROFa5cSEy4WzXYNfYounXqhnixli/nTi9W+
- ohvFU5CmjZNRWRQ19eI1g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OkfFheutD+Q=:vbgJUfdRzcOzV95IvgvhwB
- CF4BNMQGYWVsXIVn55d38NNBBB0qUsZyHgcwI0xX3rWg2miFY85FLWyASWx3oCJpRt6eHQQNS
- 7FGs+iNFn3/E71ES5tG5PZJU/VglbLq2edlmrpJrCU8mK3Hf4PIx+JwVnnT9eP62OxM99Kvw1
- RbasWoVbSUlJMzUqqaC5Hnitm3WUSj0dyAgqQGQCO9NtdsGv1loHJrKDOf3UN8ZqxQwtCEXZ6
- O48lBFi9ZtmTzGKG7sy4ozLC88y1YuVcIV3FfrkmQFYuzaTSgTYb6+jrei7vzef73h7sVJF/E
- UBavHCh01ORKG4CBreAhvvtGktQPo1Iy67F1ov2ckJAG21RX5EMrZshM8rEwLF9If4+p5VMZA
- TULeP2oXiuo168M3adh1wpcsUf/zrQZqCYFM38/W18Ey9wRTwJYvCgYvz3ZY/nRZhCua6XnGL
- RpgDVZQr4eh1b++OZAKR3DNnx5EjiOXZ0345rUC15V4kvddpnDPMELp110714ZAUAZAhJKOk3
- mOLCugXLGiFpAP4mJv4dNFPhMABxdEgqmemS6XVM6Lw/b+b0L4bEYuVFUd7QDDHTZwMSp1+QJ
- /TNpy06CpQC+syTZCQebOlDiwqQ8jnGiCWXGkCDuoU1T/PnsyqUTPd0EXgSk92D5pID2dNnw5
- 4jVceD2HNX5xvPr8fWL4zIs+3w7+Ra5PAwNtW4pKz+AAca9B3z/64T0I9nLvBJn+CyNiPHHK0
- XVMa9TurgYuWMbhjuqq42lRdjS7ObkOQmhT/0uig+i1dRWc+EvBAD8F6f4zA9YDrf/WQBaWlC
- NdkW7FApsx0WJr6t5HJ6KBKGQsJBSB8kqIsvAfH8kYkCIOFoQ5YVwHOoMViuaIaNmTgK3xr1X
- SowelutJkRpKenaNvA83bmwGy5V7cdmvQV2dtturNeEo+nhDPlhieEVEne/fVPtXsp1Pa7cY+
- JFKwA73133eJzO640cTlKiazx76MX5ZmSt3j0YA5aBCVua1pWntnfjkcAUSDUmWPN8EL1aeyH
- tiMAthMwfRHSxJsANB/xPaAJk8GY50/9lciqCWpwFo1slLTmUsR+92y+6D0ByClXRb1gzR2hS
- Khe0Lqg5apwUdTw3tAkoid/zZwVHqkz+0wUgOR3tNuVs2eU391nqQm3pQ==
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrGqg5fHB4s+Y7wx@lunn.ch>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoZSB0ZXN0
-IGZvciBpbnRlcnJ1cHRzIGluIHRwbV90aXNfc2VuZCgpIGlzIHNraXBwZWQgaWYgdGhlIGZsYWcK
-VFBNX0NISVBfRkxBR19JUlEgaXMgbm90IHNldC4gU2luY2UgdGhlIGN1cnJlbnQgY29kZSBuZXZl
-ciBzZXRzIHRoZSBmbGFnCmluaXRpYWxseSB0aGUgdGVzdCBpcyBuZXZlciBleGVjdXRlZC4KCkZp
-eCB0aGlzIGJ5IHNldHRpbmcgdGhlIGZsYWcgaW4gdHBtX3Rpc19nZW5faW50ZXJydXB0KCkgcmln
-aHQgYWZ0ZXIKaW50ZXJydXB0cyBoYXZlIGJlZW4gZW5hYmxlZCBhbmQgYmVmb3JlIHRoZSB0ZXN0
-IGlzIGV4ZWN1dGVkLgoKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlw
-cG9Aa3VuYnVzLmNvbT4KLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIHwgNSAr
-KysrKwogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29y
-ZS5jCmluZGV4IDFmNzY2M2FjMWZjNC4uNjUwYzIwMmQyZjUwIDEwMDY0NAotLS0gYS9kcml2ZXJz
-L2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19j
-b3JlLmMKQEAgLTc3NSwxMSArNzc1LDE2IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19nZW5faW50ZXJy
-dXB0KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAlpZiAocmV0IDwgMCkKIAkJcmV0dXJuIHJldDsK
-IAorCWNoaXAtPmZsYWdzIHw9IFRQTV9DSElQX0ZMQUdfSVJROworCiAJaWYgKGNoaXAtPmZsYWdz
-ICYgVFBNX0NISVBfRkxBR19UUE0yKQogCQlyZXQgPSB0cG0yX2dldF90cG1fcHQoY2hpcCwgMHgx
-MDAsICZjYXAyLCBkZXNjKTsKIAllbHNlCiAJCXJldCA9IHRwbTFfZ2V0Y2FwKGNoaXAsIFRQTV9D
-QVBfUFJPUF9USVNfVElNRU9VVCwgJmNhcCwgZGVzYywgMCk7CiAKKwlpZiAocmV0KQorCQljaGlw
-LT5mbGFncyAmPSB+VFBNX0NISVBfRkxBR19JUlE7CisKIAl0cG1fdGlzX3JlbGVhc2VfbG9jYWxp
-dHkoY2hpcCwgMCk7CiAKIAlyZXR1cm4gcmV0OwotLSAKMi4zNi4xCgo=
+On Tue, Jun 21, 2022 at 01:24:51PM +0200, Andrew Lunn wrote:
+> On Tue, Jun 21, 2022 at 02:15:41PM +0300, Andy Shevchenko wrote:
+> > On Tue, Jun 21, 2022 at 10:45:56AM +0100, Sudeep Holla wrote:
+> > > On Mon, Jun 20, 2022 at 05:02:22PM +0200, Marcin Wojtas wrote:
+> > > > Describe the Distributed Switch Architecture (DSA) - compliant
+> > > > MDIO devices. In ACPI world they are represented as children
+> > > > of the MDIO busses, which are responsible for their enumeration
+> > > > based on the standard _ADR fields and description in _DSD objects
+> > > > under device properties UUID [1].
+> > > > 
+> > > > [1] http://www.uefi.org/sites/default/files/resources/_DSD-device-properties-UUID.pdf
+> > 
+> > > Why is this document part of Linux code base ?
+> > 
+> > It's fine, but your are right with your latter questions.
+> > 
+> > > How will the other OSes be aware of this ?
+> > 
+> > Should be a standard somewhere.
+> > 
+> > > I assume there was some repository to maintain such DSDs so that it
+> > > is accessible for other OSes. I am not agreeing or disagreeing on the
+> > > change itself, but I am concerned about this present in the kernel
+> > > code.
+> > 
+> > I dunno we have a such, but the closest I may imagine is MIPI standardization,
+> > that we have at least for cameras and sound.
+> > 
+> > I would suggest to go and work with MIPI for network / DSA / etc area, so
+> > everybody else will be aware of the standard.
+>
+> It is the same argument as for DT. Other OSes and bootloaders seem to
+> manage digging around in Linux for DT binding documentation. I don't
+> see why bootloaders and other OSes can not also dig around in Linux
+> for ACPI binding documentations.
+>
+
+Theoretically you are right. But in DT case majority of non-standard(by
+standard I am referring to the one's in Open Firmware specification) are
+in the kernel. But that is not true for ACPI. And that is the reason for
+objecting it. One of the main other OS using ACPI may not look here for
+any ACPI bindings(we may not care, but still OS neutral place is better
+for this).
+
+> Ideally, somebody will submit all this for acceptance into ACPI, but
+> into somebody does, i suspect it will just remain a defacto standard
+> in Linux.
+>
+
+DSD is not integral part of ACPI spec, so the process is never clear.
+However there is this project[1], IIUC it is just guidance and doesn't
+include any bindings IIUC. But we need something similar here for better
+visibility and to remain OS agnostic. Even with DT, there is a strong
+desire to separate it out, but it has grown so much that it is getting
+harder to do that with every release. I was just trying to avoid getting
+into that situation.
+
+-- 
+Regards,
+Sudeep
+
+[1] https://github.com/UEFI/DSD-Guide

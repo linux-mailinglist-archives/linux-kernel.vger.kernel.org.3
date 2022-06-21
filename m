@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04273553E4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A86553E4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355356AbiFUWGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S1354287AbiFUWHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353230AbiFUWGU (ORCPT
+        with ESMTP id S1353230AbiFUWHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:06:20 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C7A2D1D0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:06:19 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id f39so9012264lfv.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:06:19 -0700 (PDT)
+        Tue, 21 Jun 2022 18:07:07 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8CE2D1D0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:07:07 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id y32so24646776lfa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rWSQrXn4FKbri7bJtVQ68GL0P+1bReHIxO5pBLDYc2w=;
-        b=eJQBYtmvEHSqRbZSbiMYBb0Af4lOvLWdbaqfzOi/mavmjcPHXudqxs0/8DcAOEd1E1
-         Q6DTzllxxeZVj00vYojpiTMGw/Rch/Atoq7QS8sGL56difveeOsZW5g2D5iIqhMqJULz
-         VsGEdoHkAacQ8BaeqtkdvNhZ7LuZDwQ2DbCm87RVaQIfJcNxjKz3avfCsJLTvCM4Hbxt
-         c+APLFfOm2uNLCA1lq4UyZ2L0ro12ho5cFSNTQ01fGatdurXr047nYPa/YoHp8qpTWOh
-         1kv8iPu0ZaJDYzyp29ORL8Fb+Cy79IMcpO02nYbkfK+t5Y7bishSTSMN2Ap+TPiY5MUY
-         f8Bw==
+        bh=Y8wwgGAq8d4z4LA30RN/37tv5nej7sfXrWlNWAFCBfU=;
+        b=ecaKjaUXigig96syw1JqIXMgHI+wAHdoIVeO+/ayorUfW8ko0hP+AG3CkHf7kvQC6T
+         W5DKZqDRVimTQc9wLuiji8+ZLNkXjPq10t5ERomU7vT9+9FrVuy6TxaTqbx4q44zZzeR
+         PTsdQiXdJ5jKdT9Vg8L6z8wIT0gK13XEoBqbf+coWNG3WJGxt00pcpCwQYQRYsDfDaL6
+         VqMnYxzUfA6Ml93aAWfRqTKrtsSlyr47sd7OCdBhNAKkt7H/Hi9HgY2JSDtKtm/9fpBC
+         7TOXY9EC4Z5cC6VRmqnuyXphIUerM3uHso4dpmh2pTaj8c27c+VkT55BN9bNF26Trfsp
+         SllQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rWSQrXn4FKbri7bJtVQ68GL0P+1bReHIxO5pBLDYc2w=;
-        b=cNmdrw+FlG1RRZ4PRDwrAdXPG0oAkQnYwmt8BCHojC2CEIFkUO7z2/JkaRZMviLuXn
-         hiVKPrAvmsA8ApOeC6gtU1xls8UIO0b15+VvQpumiPPT3ej0g+lcInfV4bwoRl8qyDCm
-         M+FmOWh9r2Gf2jUiyHaaofyZQiSa0bSPzhvWyoBKTkNxT9XgS5mdO9MHgJEFGJtEjoqH
-         9/axLAEbuTuL7fEDEFP/PmP3Vz7kGZYLEdEFLXNc6QVE001JVTQilOklpdrVmulT3UQG
-         cRVzRvi11zAFeqtRqWCQIn66ivgUlurOC276z605J1FLruMFSC+5/3/jWVWK/7N/Gjgt
-         ZuAQ==
-X-Gm-Message-State: AJIora+6SGvM8YfK8DkM8cJ4TFaQEMq90jzwoXJSkfhvmDE0e3vr4Cnj
-        /IQ4K08IImny+wX2jvJkZRL5KuDiZAflVWZ4sbRaxQ==
-X-Google-Smtp-Source: AGRyM1v8wo7hwa2uixvj6gCTLmESdbXg1gm7BPj/ZZLC1D/uXa0EJN44zvwdPUncmLNKd/yrJlJKQGixM27d4moFLnk=
-X-Received: by 2002:a05:6512:3f9f:b0:47d:c87e:f8f3 with SMTP id
- x31-20020a0565123f9f00b0047dc87ef8f3mr219129lfa.401.1655849177384; Tue, 21
- Jun 2022 15:06:17 -0700 (PDT)
+        bh=Y8wwgGAq8d4z4LA30RN/37tv5nej7sfXrWlNWAFCBfU=;
+        b=YctgGjTPp9SFO9wxbhOZVrApMVrLhNZ6YlZIz2ORve8QaRqBX9aGH6bLKk4F3zn9TH
+         XM/2C7ad/2Fxq3O3Tz2Sg4wReOO4vfOTsa7JdMKUKIGnnM3v/cqcYQyyQA38MwphG7De
+         2/Id49IXz5Vi3SIACxd9uOJ4aJes//aEt9F1nGDXpbHh7sPhQkkRwfKm2Y7TQ3InaioT
+         fFM/WdvP35NQJew5SzPKq2x3OE197uGQWdPV0XfrGgcwBtYzTjE7NGg2aIkRUXRRRnPl
+         RkD23jm63stnP/EVI4JWJJssZwtEP9lIe9+k5aN1iZdigaCYjrW6xczhbvhEeyA7mctM
+         dXTw==
+X-Gm-Message-State: AJIora87Us+dEpZeBdoOacTWCuIGiQTbBJ8ykUDRXi888LUAtd2P+aGB
+        ugeeq0MJC2fwPIXBCI0KK93oBAWkpSM/nGHFXAdg6g==
+X-Google-Smtp-Source: AGRyM1vIZOn+d7juZxc3nYUdcSSYUvzmMe/B2NGIfTleD/o0LVRaB0n0aY/enbAR7IXLInVaMLqpTNtUeBMgDzX7Iz0=
+X-Received: by 2002:a05:6512:b8d:b0:47f:74f0:729b with SMTP id
+ b13-20020a0565120b8d00b0047f74f0729bmr217850lfv.403.1655849224024; Tue, 21
+ Jun 2022 15:07:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
- <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
-In-Reply-To: <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
+References: <CAKwvOdmFzNZ_r1itJJkAh-VPMCjqvCCB1DPXSUwUFeeAjoJviA@mail.gmail.com>
+ <56ed5cf9-f526-79d6-08aa-e1e8dd1852cc@oracle.com>
+In-Reply-To: <56ed5cf9-f526-79d6-08aa-e1e8dd1852cc@oracle.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 21 Jun 2022 15:06:06 -0700
-Message-ID: <CAKwvOdmJgU_MZjwuVXz5QvFdA4+eTHKqxT06HMAq=Hau03ar9Q@mail.gmail.com>
-Subject: Re: Plumbers conf presentation on -fanalyze?
-To:     David Malcolm <dmalcolm@redhat.com>
+Date:   Tue, 21 Jun 2022 15:06:52 -0700
+Message-ID: <CAKwvOd=XVRdnS4+8QZF4iwt1KqKju44n8EVgtN2q=9De_1wmDg@mail.gmail.com>
+Subject: Re: plumbers session on BPF/BTF support in the GNU Toolchain
+To:     David Faust <david.faust@oracle.com>
 Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
         LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -69,24 +68,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com> wrote:
+On Tue, Apr 19, 2022 at 1:01 PM David Faust <david.faust@oracle.com> wrote:
 >
-> On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
+> Hi Nick,
+>
+> On 4/15/22 10:50, Nick Desaulniers wrote:
 > > Hi David,
 > > Jose and I are currently in the planning process to put together a
 > > Kernel+Toolchain microconference track at Linux Plumbers Conference
 > > this year (Sept 12-14) in Dublin, Ireland.
 > >
-> > We had seen
-> > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
-> > particularly the section on The Linux kernel and were wondering if
-> > you'd be interested in presenting more information about -fanalyze to
-> > kernel and toolchain developers there?
+> > Would you and Jose be interested and able to give a presentation on
+> > BPF and BTF in GNU tools?  There will be an audience of kernel
+> > developers there, so discussions with kernel BPF folks could be
+> > facilitated in person.
 >
-> Thanks!  I'm very much interested, but am not yet sure about travel
-> (both in terms of (a) budget and (b) possible new virus strains).  Is
-> this conference going to be purely in-person, or hybrid virtual/in-
-> person?
+> Yes, we'd be happy to. It will be great to have a chance to discuss in
+> person. Looking forward to it.
 
 Hi David,
 If you're still considering attending Linux Plumbers conf, please
@@ -96,8 +94,9 @@ Please make sure to select "Toolchains Track" as the "Track" after
 clicking on "Submit new abstract."
 
 >
-> Dave
->
+> Thanks,
+> David
+
 
 
 -- 

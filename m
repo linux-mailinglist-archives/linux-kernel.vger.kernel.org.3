@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5777F552D60
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5725D552D56
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348353AbiFUIrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S230048AbiFUIpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiFUIrF (ORCPT
+        with ESMTP id S1346674AbiFUIpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:47:05 -0400
-Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEBD2613E;
-        Tue, 21 Jun 2022 01:47:01 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1655801144t635j276
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 16:45:38 +0800 (CST)
-X-QQ-SSF: 0100000000700020B000B00A0000000
-X-QQ-FEAT: g1CXZ3gRPwx3XGBYAGvOolfop4KKqFCtr034AVejk1ghy4k84dmBLJT9/NjIp
-        veOwSHUCMrKVOcjsw+vtIbEWNp3QAgGOAFMskpPENq1uRUzSexrN3S2IA2V56aaMKdN9+ku
-        5lLnjBic37eO0xfLNe8n64Agl5tzgl4ex6rE4uP62XwXxk9vpZppBFD56JskJRUgxXPE4s9
-        uhcoMndqxUsHiZj52H4BNGTf+MQzTNbugPgsDxCplewIRZz+d9JyAMwh1zcOBZ1kVOVCWsJ
-        J18uzH4v8BhP4ZLRq0c2yl9z/rcbucWOIEyUa5LXq55/1X9/NoPHu2i10cdNH+IE/J1aGfD
-        d51z5N4/Imf7U6Pxl8ybjduua9VJw==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     rajur@chelsio.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] cxgb4vf: remove unexpected word "the"
-Date:   Tue, 21 Jun 2022 16:45:37 +0800
-Message-Id: <20220621084537.58402-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 04:45:40 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F59625EAF;
+        Tue, 21 Jun 2022 01:45:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VH0dWR7_1655801131;
+Received: from 30.97.48.73(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VH0dWR7_1655801131)
+          by smtp.aliyun-inc.com;
+          Tue, 21 Jun 2022 16:45:32 +0800
+Message-ID: <f79ad32f-50a3-be1a-0cac-d00f579e7077@linux.alibaba.com>
+Date:   Tue, 21 Jun 2022 16:45:39 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] mm/damon: Use set_huge_pte_at() to make huge pte old
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        songmuchun@bytedance.com, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220620172742.48766-1-sj@kernel.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220620172742.48766-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word "the" in the comments that need to be removed
+Hi SeongJae,
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 6/21/2022 1:27 AM, SeongJae Park wrote:
+> Hi Baolin,
+> 
+> On Mon, 20 Jun 2022 10:34:42 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> 
+>> The huge_ptep_set_access_flags() can not make the huge pte old according
+>> to the discussion [1], that means we will always mornitor the young state
+>> of the hugetlb though we stopped accessing the hugetlb, as a result DAMON
+>> will get inaccurate accessing statistics.
+>>
+>> So changing to use set_huge_pte_at() to make the huge pte old to fix this
+>> issue.
+>>
+>> [1] https://lore.kernel.org/all/Yqy97gXI4Nqb7dYo@arm.com/
+>>
+>> Fixes: 49f4203aae06 ("mm/damon: add access checking for hugetlb pages")
+> 
+> As the commit has merged in from v5.17, I guess it would be better to do below?
+> 
+> Cc: <stable@vger.kernel.org>
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c b/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c
-index 7de3800437c9..c2822e635f89 100644
---- a/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c
-@@ -2859,7 +2859,7 @@ static const struct net_device_ops cxgb4vf_netdev_ops	= {
-  *				address stored on the adapter
-  *	@adapter: The adapter
-  *
-- *	Find the the port mask for the VF based on the index of mac
-+ *	Find the port mask for the VF based on the index of mac
-  *	address stored in the adapter. If no mac address is stored on
-  *	the adapter for the VF, use the port mask received from the
-  *	firmware.
--- 
-2.17.1
+Yes, thanks for reminding. Hope Andrew can help to add the stable tag 
+when picking up this patch.
 
+> 
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> 
+> Other than that,
+> 
+> Reviewed-by: SeongJae Park <sj@kernel.org>
 
+Thanks.

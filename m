@@ -2,94 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A07553E82
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5DA553E88
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243597AbiFUWas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
+        id S1353756AbiFUWbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237933AbiFUWap (ORCPT
+        with ESMTP id S231502AbiFUWbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:30:45 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A0B481
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:30:44 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id c2so24762458lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:30:44 -0700 (PDT)
+        Tue, 21 Jun 2022 18:31:40 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B92B481;
+        Tue, 21 Jun 2022 15:31:40 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id k127so9162524pfd.10;
+        Tue, 21 Jun 2022 15:31:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=be4KTBeZxtpbZf3YZP05Js8VaqFOMrf83r+bDTDFiOM=;
-        b=TbHQbtE0PGZvjMfU0/fdCKW8kn0RfxMLcQkuL7vMebVX3ouG4SBKD8sC2tkjx1p4tL
-         JxLcXHa+y4RxHDPxAebJuKeKGscJoUKjrE8VXTvglAp1x/G4b03ih1fW6yNXCTiMQAPw
-         teAuWEmSVhc73eNHdbcV4Cw5YrPPKwRNTZrJn8Pi8wlXst7by6Z/L8eV9UBD3t3RBMx4
-         6tPWew7RqfGH09r381WEW8Hp903+By355KdF31SA7pdi4YDiewE/7uhPhZfmYqySyvZp
-         6jI1juXcpFpqrIIQaJi/mwPudugxTKnpFg9ho/joL50I2hmuYTg9jX/3uWx6noKgzt2W
-         Yh6A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SZdE7QPkm1R89AKJqDyqxi4uethQzAG0zu7JrCCmLrs=;
+        b=o8ldGyuiz/On72dreNwnBsp7iSyBGM/I7ed6LpTCpfJ1o9ZoG2W5U0roLtkPoyeIjY
+         z7SkF0OCpEUo+YkmM+vxnvsD4byoiu/MYUK171zCvr3x5M8mLxT+HePei6Wm0fayyH/k
+         bk0/vARyaJzMnCqYSMBjKwYnrYL9iHxeCN5ULvZJgbf5vDpLIL7hfAGjegKs7CM/jdAL
+         /vaPsd1gxk6DniB26exqYZYjWvmUMhX9CHrx6jGSErF9tfrcOHxRdv8HBb8tG6h5ICjI
+         zP+nrYCRNPpPqJuE48lxwMxrUlEMBHk8KTg8iNkpQE/pv1TDixl3N9lzj8T8pAC5Mkh9
+         w0wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=be4KTBeZxtpbZf3YZP05Js8VaqFOMrf83r+bDTDFiOM=;
-        b=AZ49ikxtNVTSkfBN7bs42t2lgjZFUfCVp3kjOAXEU1EJiVnfbFXNukW+wQvbEHG0vc
-         AEqMR6gHloeNNeOlTur6YmlS66xZ0gNO0CWVRbIpgLOfuumPFZCJ7zwjr/Z/8ZaQc6CH
-         tSIppN5Hyxjd0G2RMnx7s3VfSUhoEA21WMJ3dG70g9lNcu9gEXJxe9wOs/UY7mNYvDJD
-         JFPOKQgnuud+St2mCvP1c2GWNGAatAG7++1iRiX2HeVuGtK0RIdHJGYyHdru359qc2KU
-         La6Xq7BzlXHMO2VOXwUGut6WvsUPu7Y1DPzeO+cC4k0SPvEi0XcwpNX603L9AT8s5loO
-         kG4A==
-X-Gm-Message-State: AJIora/k0WRPN8vXC3WkBpBRz4+ol7zz0sC3nocvtIzt05iN4eyNTy72
-        c0Qz/P9oYsX4FvVRMrzjfZobRlqvg9g0nvZVvV9iag==
-X-Google-Smtp-Source: AGRyM1tNImbx2kxK7HvpjgFsrzYuq9fWYBmKlPeBU+D7of5gQReoy2FIhun71/isgSXq7ZOimBGSU35RGWxiIk/cWOU=
-X-Received: by 2002:a05:6512:3085:b0:479:3986:1d23 with SMTP id
- z5-20020a056512308500b0047939861d23mr274153lfd.373.1655850642319; Tue, 21 Jun
- 2022 15:30:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SZdE7QPkm1R89AKJqDyqxi4uethQzAG0zu7JrCCmLrs=;
+        b=O5zmTDHUJherhqiaGCmnP9UE4muiCGBM6qHo78VcNbDCfPzW/q74ZTsrha1zRGc/AY
+         yTtnhsXLu0OiznAZ8bcJvCtjoeKuuvVXd0pbIYPRKxBtKiq5u0ukRMQh+cL/MreMnqUV
+         F8i8+iEn8UfeyVJosrVm/uZ7dhzk8evvT3DspMiRPiPiIdrJN/iPajZeOkpuiJKf8vQs
+         CdbKXeKFkfMxwqHjoDg2CkIBErD/z8mP5G7fxmkY+zswUNHkzBb3lLts/yoo58NO1U9Q
+         zyboAAAPE98dLvh699jcY5XgZCn7pbTdqGWAjXH/KgKZmZMI4IoxaCRWaJ/MQXQdBZFA
+         dB8Q==
+X-Gm-Message-State: AJIora8B0Ctu2/+dA7AFvwjcfcAvnjpyll1JsmBADNlgpbocmpRLpTCz
+        kwtCWIWOdHi/CLZIp2+rz0g=
+X-Google-Smtp-Source: AGRyM1u2oBLCQ55uzgZc2QZ4kMby3VwDKlsClbSYcfE5CIM8e26J7xgEw4mcK7ONWCD+oH8bhCiR+w==
+X-Received: by 2002:a63:cd51:0:b0:408:415a:3a18 with SMTP id a17-20020a63cd51000000b00408415a3a18mr192295pgj.524.1655850699528;
+        Tue, 21 Jun 2022 15:31:39 -0700 (PDT)
+Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:29cb])
+        by smtp.gmail.com with ESMTPSA id k16-20020aa78210000000b0051bb79437f7sm11797719pfi.37.2022.06.21.15.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 15:31:38 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 15:31:35 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@kernel.org, john.fastabend@gmail.com,
+        songliubraving@fb.com, kafai@fb.com, yhs@fb.com,
+        dhowells@redhat.com, keyrings@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] selftests/bpf: Add test for
+ bpf_verify_pkcs7_signature() helper
+Message-ID: <20220621223135.puwe3m55yznaevm5@macbook-pro-3.dhcp.thefacebook.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-6-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <afae5980fd4adf52932a9d639a0b0bfe83255c0a.1655761627.git.ashish.kalra@amd.com>
-In-Reply-To: <afae5980fd4adf52932a9d639a0b0bfe83255c0a.1655761627.git.ashish.kalra@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 21 Jun 2022 16:30:30 -0600
-Message-ID: <CAMkAt6pn4FmJchYP9ac3q_Zcrnupgs9Qu-fMe6axXzW_YE283Q@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 18/49] crypto: ccp: Provide APIs to query
- extended attestation report
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621163757.760304-6-roberto.sassu@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,136 +76,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 5:06 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
->
-> From: Brijesh Singh <brijesh.singh@amd.com>
->
-> Version 2 of the GHCB specification defines VMGEXIT that is used to get
-> the extended attestation report. The extended attestation report includes
-> the certificate blobs provided through the SNP_SET_EXT_CONFIG.
->
-> The snp_guest_ext_guest_request() will be used by the hypervisor to get
-> the extended attestation report. See the GHCB specification for more
-> details.
->
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  drivers/crypto/ccp/sev-dev.c | 43 ++++++++++++++++++++++++++++++++++++
->  include/linux/psp-sev.h      | 24 ++++++++++++++++++++
->  2 files changed, 67 insertions(+)
->
-> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> index 97b479d5aa86..f6306b820b86 100644
-> --- a/drivers/crypto/ccp/sev-dev.c
-> +++ b/drivers/crypto/ccp/sev-dev.c
-> @@ -25,6 +25,7 @@
->  #include <linux/fs.h>
->
->  #include <asm/smp.h>
-> +#include <asm/sev.h>
->
->  #include "psp-dev.h"
->  #include "sev-dev.h"
-> @@ -1857,6 +1858,48 @@ int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error)
->  }
->  EXPORT_SYMBOL_GPL(snp_guest_dbg_decrypt);
->
-> +int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
-> +                               unsigned long vaddr, unsigned long *npages, unsigned long *fw_err)
-> +{
-> +       unsigned long expected_npages;
-> +       struct sev_device *sev;
-> +       int rc;
+On Tue, Jun 21, 2022 at 06:37:57PM +0200, Roberto Sassu wrote:
+> +	if (child_pid == 0) {
+> +		snprintf(path, sizeof(path), "%s/signing_key.pem", tmp_dir);
 > +
-> +       if (!psp_master || !psp_master->sev_data)
-> +               return -ENODEV;
-> +
-> +       sev = psp_master->sev_data;
-> +
-> +       if (!sev->snp_inited)
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * Check if there is enough space to copy the certificate chain. Otherwise
-> +        * return ERROR code defined in the GHCB specification.
-> +        */
-> +       expected_npages = sev->snp_certs_len >> PAGE_SHIFT;
-> +       if (*npages < expected_npages) {
-> +               *npages = expected_npages;
-> +               *fw_err = SNP_GUEST_REQ_INVALID_LEN;
-> +               return -EINVAL;
-> +       }
-> +
-> +       rc = sev_do_cmd(SEV_CMD_SNP_GUEST_REQUEST, data, (int *)&fw_err);
+> +		return execlp("./sign-file", "./sign-file", "-d", "sha256",
+> +			      path, path, data_template, NULL);
 
-We can just pass |fw_error| here (with the cast) here right? Not need
-to do &fw_err.
-
-      rc = sev_do_cmd(SEV_CMD_SNP_GUEST_REQUEST, data, (int *)fw_err);
-
-> +       if (rc)
-> +               return rc;
-> +
-> +       /* Copy the certificate blob */
-> +       if (sev->snp_certs_data) {
-> +               *npages = expected_npages;
-> +               memcpy((void *)vaddr, sev->snp_certs_data, *npages << PAGE_SHIFT);
-
-Why don't we just make |vaddr| into a void* instead of an unsigned long?
-
-> +       } else {
-> +               *npages = 0;
-> +       }
-> +
-> +       return rc;
-> +}
-> +EXPORT_SYMBOL_GPL(snp_guest_ext_guest_request);
-> +
->  static void sev_exit(struct kref *ref)
->  {
->         misc_deregister(&misc_dev->misc);
-> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-> index a3bb792bb842..cd37ccd1fa1f 100644
-> --- a/include/linux/psp-sev.h
-> +++ b/include/linux/psp-sev.h
-> @@ -945,6 +945,23 @@ void *psp_copy_user_blob(u64 uaddr, u32 len);
->  void *snp_alloc_firmware_page(gfp_t mask);
->  void snp_free_firmware_page(void *addr);
->
-> +/**
-> + * snp_guest_ext_guest_request - perform the SNP extended guest request command
-> + *  defined in the GHCB specification.
-> + *
-> + * @data: the input guest request structure
-> + * @vaddr: address where the certificate blob need to be copied.
-> + * @npages: number of pages for the certificate blob.
-> + *    If the specified page count is less than the certificate blob size, then the
-> + *    required page count is returned with error code defined in the GHCB spec.
-> + *    If the specified page count is more than the certificate blob size, then
-> + *    page count is updated to reflect the amount of valid data copied in the
-> + *    vaddr.
-> + */
-> +int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
-> +                               unsigned long vaddr, unsigned long *npages,
-> +                               unsigned long *error);
-> +
->  #else  /* !CONFIG_CRYPTO_DEV_SP_PSP */
->
->  static inline int
-> @@ -992,6 +1009,13 @@ static inline void *snp_alloc_firmware_page(gfp_t mask)
->
->  static inline void snp_free_firmware_page(void *addr) { }
->
-> +static inline int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
-> +                                             unsigned long vaddr, unsigned long *n,
-> +                                             unsigned long *error)
-> +{
-> +       return -ENODEV;
-> +}
-> +
->  #endif /* CONFIG_CRYPTO_DEV_SP_PSP */
->
->  #endif /* __PSP_SEV_H__ */
-> --
-> 2.25.1
->
+Did you miss my earlier reply requesting not to do this module_signature append
+and use signature directly?

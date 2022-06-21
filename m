@@ -2,167 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD86552B88
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E9C552BC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346687AbiFUHMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        id S1346957AbiFUHNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346636AbiFUHMn (ORCPT
+        with ESMTP id S1346890AbiFUHNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:12:43 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CD8222BC
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:12:35 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id o9so8831564edt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:12:35 -0700 (PDT)
+        Tue, 21 Jun 2022 03:13:38 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5374011A08;
+        Tue, 21 Jun 2022 00:13:35 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id pk21so2375978ejb.2;
+        Tue, 21 Jun 2022 00:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rZJJbO9tmvN3skIIZSoGEawfNisxmFvqIY3afbWNk0k=;
-        b=x2XlL1khCI/cWLpErGp+GFQadkpgwCUNIt+y1cFMvLTJ8QTD7icTnugWki3Lf7ie0f
-         CzpfEy2ptqM4Or39eOzCVLWFUbbJ2PC9H0+mGo9O0onCHMRUuPsb3WAeSPuJruh0qEHI
-         hqvnIxLIflrU6ZD/ACM33uG6PKa2OeNCvg6GXPKN3zkTWRDrNdF9rOWDhcki1S8gcNaQ
-         Q1z1S5ftZ1jeXv98c1WhlbFXcXrCnDbSkd7cVLYa9sLp7OyywI19eVDbBck+Xtr+lToJ
-         hPC69Xik8O4j6WZJgBESUKybjciq3r2LktSTdr4j8UhSCxkdLptWhSOGA+Po/D8cl8tM
-         umDQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aIA+1YSKl9xwh+U2jOA5P7gKHxbZ6zMzzGEJxc9zUpQ=;
+        b=gw44OF7Rv5WwcyW2uRl5S9mv3PN3asE1qfIL+6ip5FO7uqHz9PcKBZFFX0aoetq713
+         brFkBPLS6h1/RqUUac8/Vk8JJfrJuwO5mfQEEKS3nrf8LExZuGqjOxBU6Iu85Cr0r578
+         u3Ts2oWxO1y/UFm8E1QgPMiYHu6il/JC4htTWmrPvOeKvMUxZMxBkgBJCFa183DNfy4O
+         EwREmPnaIWjOaqSJqMtdzrwNg3BqZqK5VZDvdkIyVLLo8ZtCod+MAi0RDmJB5Hp5BOqW
+         U7GfgZTna8g8jLS8Kak28/9/zp2S04T39Vv2qwIWsc5p/ycxcMlY2AI7cC2o3QkkUnBg
+         rQQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rZJJbO9tmvN3skIIZSoGEawfNisxmFvqIY3afbWNk0k=;
-        b=pRyew+E/xfIsOwROcV2Ja+ubBD6FKoxpJ+wM8BY2Cbu76IPPhGtxiJBMxzEuZNVSoh
-         3DBTeu6dxiSOoPKVrUJu2aThT7B69SxlhEv3vlwsQE3wKzviPOuRxcfD/Lop/i6xuX7W
-         tlQyU3nWcx67XtnxX0UIYH7j7bqaV7N96SW7UjQmA7Whxqa+c+EoJBc6KrVNcaWAxzTD
-         0QWHoiTW18Cysf2MhJj/5LGsh1npEmlvo2bCWFqpEm2m9iTGmP6NwvdPpsd9QPZ1m441
-         jdQm6mMUzVbcWk1aedt53quPnYCPW2LFblLDxuo533nZOaPPYEvnuBarIxYNA79TuVRL
-         Hepg==
-X-Gm-Message-State: AJIora8MFiv1JCeoaUtN1mqn7Xm344bhBMT67ZNpUqywDN7VJTHlgIoW
-        oCinvcxiY77Ojq8hh2RydLnLyg==
-X-Google-Smtp-Source: AGRyM1vrygzsyf1XkfWBidpFgjIUaEYcyGJLiMBB9DaYIq+y5D3cEOQOG47m6jnRBlKuRDUEajM72Q==
-X-Received: by 2002:aa7:c1c7:0:b0:435:5cb2:c202 with SMTP id d7-20020aa7c1c7000000b004355cb2c202mr27028883edp.10.1655795553854;
-        Tue, 21 Jun 2022 00:12:33 -0700 (PDT)
-Received: from [192.168.0.216] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e16-20020a170906315000b0071cef6c53aesm6096627eje.0.2022.06.21.00.12.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 00:12:33 -0700 (PDT)
-Message-ID: <1c2bbc12-0aa5-6d2a-c701-577ce70f7502@linaro.org>
-Date:   Tue, 21 Jun 2022 09:12:32 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aIA+1YSKl9xwh+U2jOA5P7gKHxbZ6zMzzGEJxc9zUpQ=;
+        b=vofpxo/C/MYXJRfW4bZxHZOEedB9/rojNZmxYPWTbtKOXF/m+weuC8s+B8nu0y0lRs
+         /OFBg34cq89UV6aAE6yeo9z+QA5NNiLTVEITDdx+EjURiZuHpxCUXoxiaqS3Ta4Zbb1u
+         QvGJqivBUljD1xBcGZ65T2sv6kUPRUNOkNbNd1H9/3bGeTUR6whzr/AJ1yZVHRagXi6h
+         71wBMwTAmOxLVms4HmOTw4yjnGuDy4+Jg4u0Cy140B8ySSU6s+bGlgH0KSQ3quW0Phto
+         j/u+zjtoy/VOZm30APZCkaLPw9Ct8zahRMle3gsn4q9t7F3AXvbdqeJi2B/btDHjrBny
+         1Lww==
+X-Gm-Message-State: AJIora/BQ/jMFsPyHxhGZ2i/OTKrFnX7NX62NFZqIzI1o7pQCKqWVIS+
+        NdKoZTNc4Q18SQpBIbRRStrJLJN2kmcBaL+T7kVUndeTgOgfiXYB
+X-Google-Smtp-Source: AGRyM1vVwEZRj74D/u4+iIayf3lq1ZmASOLg9o3Kp/fWePh/ZCc4vGcwKsevzboSlgJ+oyGILaPtM2tJUAaeSKpk0bI=
+X-Received: by 2002:a17:907:3f88:b0:711:d5a6:105 with SMTP id
+ hr8-20020a1709073f8800b00711d5a60105mr24734412ejc.727.1655795613765; Tue, 21
+ Jun 2022 00:13:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next 01/28] dt-bindings: phy: Add QorIQ SerDes binding
-Content-Language: en-US
-To:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Ioana Ciornei <ioana.ciornei@nxp.com>
-References: <20220617203312.3799646-1-sean.anderson@seco.com>
- <20220617203312.3799646-2-sean.anderson@seco.com>
- <110c4a4b-8007-1826-ee27-02eaedd22d8f@linaro.org>
- <535a0389-6c97-523d-382f-e54d69d3907e@seco.com>
- <d79239ce-3959-15f8-7121-478fc6d432e4@linaro.org>
- <e6ed314d-290f-ace5-b0ff-01a9a2edca88@seco.com>
- <16684442-35d4-df51-d9f7-4de36d7cf6fd@linaro.org>
- <50fa16ce-ac24-8e4c-5d81-0218535cd05c@seco.com>
- <e922714b-29c7-0f41-9e5c-9a0aef9fb5de@linaro.org>
- <5d724f49-71c4-96ad-b756-06b5683fa112@seco.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5d724f49-71c4-96ad-b756-06b5683fa112@seco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220621070224.1231039-1-zhangshida@kylinos.cn>
+In-Reply-To: <20220621070224.1231039-1-zhangshida@kylinos.cn>
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+Date:   Tue, 21 Jun 2022 15:12:57 +0800
+Message-ID: <CANubcdVceGMyjKbBLyrWZ9jStjWOLgk8AT7_1UDkx8eEb9VgLw@mail.gmail.com>
+Subject: Re: [PATCH v2] xfs: add check before calling xfs_mod_fdblocks
+To:     djwong@kernel.org, dchinner@redhat.com
+Cc:     zhangshida <zhangshida@kylinos.cn>, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 20:51, Sean Anderson wrote:
-> On 6/20/22 2:21 PM, Krzysztof Kozlowski wrote:
->>>>> - samsung_usb2_phy_config in drivers/phy/samsung/
->>>>
->>>> This one is a good example - where do you see there compatibles with
->>>> arbitrary numbers attached?
->>>
->>> samsung_usb2_phy_of_match in drivers/phy/samsung/phy-samsung-usb2.c
->>>
->>> There is a different compatible for each SoC variant. Each compatible selects a struct
->>> containing
->>>
->>> - A list of phys, each with custom power on and off functions
->>> - A function which converts a rate to an arbitrary value to program into a register
->>>
->>> This is further documented in Documentation/driver-api/phy/samsung-usb2.rst
->>
->> Exactly, please follow this approach. Compatible is per different
->> device, e.g. different SoC variant. Of course you could have different
->> devices on same SoC, but "1" and "2" are not different devices.
-> 
-> (in this case they are)
+Shida Zhang <starzhangzsd@gmail.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=8821=E6=
+=97=A5=E5=91=A8=E4=BA=8C 15:02=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Checks are missing when delta equals 0 in __xfs_ag_resv_free() and
+> __xfs_ag_resv_init().
+>
+> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+> ---
+>  Changes from v1:
+>  -Add checks before calling xfs_mod_fdblocks instead.
+>
+>  fs/xfs/libxfs/xfs_ag_resv.c | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/xfs/libxfs/xfs_ag_resv.c b/fs/xfs/libxfs/xfs_ag_resv.c
+> index fe94058d4e9e..c8fa032e4b00 100644
+> --- a/fs/xfs/libxfs/xfs_ag_resv.c
+> +++ b/fs/xfs/libxfs/xfs_ag_resv.c
+> @@ -149,7 +149,12 @@ __xfs_ag_resv_free(
+>                 oldresv =3D resv->ar_orig_reserved;
+>         else
+>                 oldresv =3D resv->ar_reserved;
+> -       error =3D xfs_mod_fdblocks(pag->pag_mount, oldresv, true);
+> +
+> +       if (oldresv)
+> +               error =3D xfs_mod_fdblocks(pag->pag_mount, oldresv, true)=
+;
+> +       else
+> +               error =3D 0;
+> +
+>         resv->ar_reserved =3D 0;
+>         resv->ar_asked =3D 0;
+>         resv->ar_orig_reserved =3D 0;
+> @@ -215,8 +220,13 @@ __xfs_ag_resv_init(
+>
+>         if (XFS_TEST_ERROR(false, mp, XFS_ERRTAG_AG_RESV_FAIL))
+>                 error =3D -ENOSPC;
+> -       else
+> -               error =3D xfs_mod_fdblocks(mp, -(int64_t)hidden_space, tr=
+ue);
+> +       else {
+> +               error =3D 0;
+> +               if (hidden_space)
+> +                       error =3D xfs_mod_fdblocks(mp, -(int64_t)hidden_s=
+pace,
+> +                                               true);
+> +       }
+> +
+>         if (error) {
+>                 trace_xfs_ag_resv_init_error(pag->pag_mount, pag->pag_agn=
+o,
+>                                 error, _RET_IP_);
+> --
+> 2.25.1
+>
 
-In a meaning of descriptive compatible - it's not.
+And the code path that lead delta =3D 0 is shown below:
 
->>>
->>> - For some SerDes on the same SoC, these fields are reserved
->>
->> That all sounds like quite different devices, which indeed usually is
->> described with different compatibles. Still "xxx-1" and "xxx-2" are not
->> valid compatibles. You need to come with some more reasonable name
->> describing them. Maybe the block has revision or different model/vendor.
-> 
-> There is none AFAIK. Maybe someone from NXP can comment (since there are many
-> undocumented registers).
+=3D> xfs_mod_freecounter+0x84/0x2b8
+=3D> __xfs_ag_resv_free+0xc4/0x188
+=3D> xfs_ag_resv_free+0x24/0x50
+=3D> xfs_fs_unreserve_ag_blocks+0x40/0x160
+=3D> xfs_mountfs+0x500/0x900
+=3D> xfs_fs_fill_super+0x3d8/0x810
+=3D> get_tree_bdev+0x164/0x258
+=3D> xfs_fs_get_tree+0x20/0x30
+=3D> vfs_get_tree+0x30/0xf8
+=3D> path_mount+0x3c4/0xa58
+=3D> do_mount+0x74/0x98
 
-Maybe it's also possible to invent some reasonable name based on
-protocols supported? If nothing comes then please add a one-liner
-comment explaining logic behind 1/2 suffix.
-
->>> The compatibles suggested were "fsl,ls1046-serdes-1" and -2. As noted above, these are separate
->>> devices which, while having many similarities, have different register layouts and protocol
->>> support. They are *not* 100% compatible with each other. Would you require that clock drivers
->>> for different SoCs use the same compatibles just because they had the same registers, even though
->>> the clocks themselves had different functions and hierarchy?
->>
->> You miss the point. Clock controllers on same SoC have different names
->> used in compatibles. We do not describe them as "vendor,aa-clk-1" and
->> "vendor,aa-clk-2".
->>
->> Come with proper naming and entire discussion might be not valid
->> (although with not perfect naming Rob might come with questions). I
->> cannot propose the name because I don't know these hardware blocks and I
->> do not have access to datasheet.
->>
->> Other way, if any reasonable naming is not possible, could be also to
->> describe the meaning of "-1" suffix, e.g. that it does not mean some
->> index but a variant from specification.
-> 
-> The documentation refers to these devices as "SerDes1", "SerDes2", etc.
-> 
-> Wold you prefer something like
-> 
-> serdes0: phy@1ea0000 {
-> 	compatible = "fsl,ls1046a-serdes";
-> 	variant = <0>;
-> };
-
-No, it's the same problem, just embeds compatible in different property.
-
-Best regards,
-Krzysztof
+=3D> xfs_mod_freecounter+0x84/0x2b8
+=3D> __xfs_ag_resv_init+0x64/0x1d0
+=3D> xfs_ag_resv_init+0x108/0x1c8
+=3D> xfs_fs_reserve_ag_blocks+0x4c/0x110
+=3D> xfs_mountfs+0x57c/0x900
+=3D> xfs_fs_fill_super+0x3d8/0x810
+=3D> get_tree_bdev+0x164/0x258
+=3D> xfs_fs_get_tree+0x20/0x30
+=3D> vfs_get_tree+0x30/0xf8
+=3D> path_mount+0x3c4/0xa58
+=3D> do_mount+0x74/0x98

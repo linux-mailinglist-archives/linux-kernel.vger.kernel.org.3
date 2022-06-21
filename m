@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CACF55345E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B890655345A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351269AbiFUOTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S230327AbiFUOTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351157AbiFUOTo (ORCPT
+        with ESMTP id S1349027AbiFUOT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:19:44 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF79140CD;
-        Tue, 21 Jun 2022 07:19:42 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u12so27827569eja.8;
-        Tue, 21 Jun 2022 07:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nJcEJHgKYHK2ge32KOPbngb4fap2zLy6k+L71+xMqxs=;
-        b=S3SY5NmCA/58ZV14ZhEQ/wsmZTHR1vM9olmXvgWLfT0N+hSpNza8wPf/Pc5y50FEF4
-         EDXBGt66/jSQ/Uwq/Z5pcPpvA6N9YCO7mUJZs5aRd2SOPCGUWmV96e3FXXXVd5XuNXc+
-         6N+TLGPYXdTL156LjoEgyN/q3914nRfv0Qa8wmc39U92r91M5UZjXm9JeWxhd7iOftB/
-         yzxugvBNbgpL13YRFBYzDr501On8GR8THDL25DagnAx7VecOkKu2HV3EQljswXMzzlEU
-         xjWkv+HQYIuf8KoiRGE3eLvmVSMoaee7kyt/b2FNunwoCTlmKKNMUgyxeMlJL7BW8rDe
-         XnWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nJcEJHgKYHK2ge32KOPbngb4fap2zLy6k+L71+xMqxs=;
-        b=CkVui3zD0L3/gMzAG9A2nPJvgbBbYJRaApyiqtTVCB7djnCdMXRSIKeB5kbQdno/bq
-         wCjihgv3Is+7uMvl2rzzeWoKFGCh/jVdrLiao1YFKlpDCAkrQrK7gxGqJTbWPEEJXztv
-         lXmcKZJxmb9Ojs54Sm7hu0jrwasbsLxwdheWxklqha1mnQrrBYwBIHejyiizA26vAako
-         o5oqOB/eHOvMcTu3dt1MrzZn4xdA1r3e/KA61Yq3iuLndX5Igze3Y2EJCNq643M2P/wc
-         slw36f7A2MK7AgPuHsl4q0HvDaHZ6SFbdxTr720mediYrRH64XO3YZ0NG0MrPrbWgQXb
-         bW+g==
-X-Gm-Message-State: AJIora992DIeGo3HQgpkHKBpVAHi5UUsSPCZi/Fr9203BLvdM14vJH6w
-        KUZDHDPWlq+VFVrHRoc6k7f6QnxvkRK1QYCPhjo=
-X-Google-Smtp-Source: AGRyM1s3MYxLF4VXs6SuFJ5MAGaGHHsLRrY1E8crXVHyz2Zq2/PF5L4GyO7D8f2YZyKvy5clBI40DZnclYMfnONR0pw=
-X-Received: by 2002:a17:906:c7c1:b0:711:d2e9:99d0 with SMTP id
- dc1-20020a170906c7c100b00711d2e999d0mr26117746ejb.639.1655821180915; Tue, 21
- Jun 2022 07:19:40 -0700 (PDT)
+        Tue, 21 Jun 2022 10:19:29 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22214140CD;
+        Tue, 21 Jun 2022 07:19:29 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 4474368AFE; Tue, 21 Jun 2022 16:19:25 +0200 (CEST)
+Date:   Tue, 21 Jun 2022 16:19:24 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mark Hounschell <markh@compro.net>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux-kernel <linux-kernel@vger.kernel.org>,
+        dmaengine@vger.kernel.org
+Subject: Re: [BUG] dma-mapping: remove CONFIG_DMA_REMAP
+Message-ID: <20220621141924.GA8348@lst.de>
+References: <c32d2da1-9122-66bd-12fc-916be79b33fd@compro.net> <20220621134837.GA8025@lst.de> <9de341bc-fe8d-1820-187a-46455e4b9bf2@compro.net>
 MIME-Version: 1.0
-References: <20220621065502.28868-1-jiangjian@cdjrlc.com>
-In-Reply-To: <20220621065502.28868-1-jiangjian@cdjrlc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 21 Jun 2022 16:19:04 +0200
-Message-ID: <CAHp75VfKEu2T+DjCTEGnmME3OCX0Lezy4KxdXezALUH9+sg97g@mail.gmail.com>
-Subject: Re: [PATCH] media: usb: gspca: aligned '*' each line
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9de341bc-fe8d-1820-187a-46455e4b9bf2@compro.net>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 9:01 AM Jiang Jian <jiangjian@cdjrlc.com> wrote:
+On Tue, Jun 21, 2022 at 10:06:59AM -0400, Mark Hounschell wrote:
+> On 6/21/22 09:48, Christoph Hellwig wrote:
+>> On Tue, Jun 21, 2022 at 09:43:18AM -0400, Mark Hounschell wrote:
+>>> Revert that commit and all works like normal. This commit breaks user land.
+>>
+>> No.  We had that discussion before.  It exposeѕ how broken your out of
+>> tree driver is, which you don't bother to fix despite Robin even taking
+>> the pains to explain you how.
 >
-> Consider "*" alignment in comments
+> No, this is not the original issue and we never actually had a discussion. 
+> That original issue was about using Set/ClearPageReserved. You nor Robin 
+> even tried to explain why it was wrong to use it. It was never an issue in 
+> previous kernels. Why now? In any case I have removed that code. This is 
+> what happens now.
+>
+> What is it you think I am doing wrong. Except for using 
+> Set/ClearPageReserved you have not explained anything to me.
 
-In a similar way as I commented on your IIO contribution, do changes
-for all similar patches.
+Which part of "you must not call virt_to_page on the result that is
+very clearly stated in the documentation and has been explained to
+you repeatly" is still not clear to you?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Which part of "if your of tree modules stops working, this does not
+constitute userspace breakage" is not clear to you?
+
+I'm done with this, please stop bothering me.

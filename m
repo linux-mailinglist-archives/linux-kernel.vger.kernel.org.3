@@ -2,405 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DA5552C7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9029552C7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347938AbiFUH72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S1347867AbiFUH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347916AbiFUH60 (ORCPT
+        with ESMTP id S230411AbiFUH7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:58:26 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D8C5F6E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:58:23 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id c2so21046267lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:58:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rAupvnq6gF+hfLMwbK5FyshoSuZewieI0Qe5jG8mpEQ=;
-        b=SHZB3elG8KdiWQghfW62kq8Y+JxtW3U7O18wzOMTwfPmoGL+RUVIV4mssgQfpyX/rP
-         AYyxH5BAB0QHlruVFAoHSzDP3uKW1fHvwoFgiP6f+pR8W7+QfS4k0jmuVeVzhWW8gnxx
-         6Ccwc2mdBKx0lDj0U9XrhF+UuQLBKJIJ4Bc4s=
+        Tue, 21 Jun 2022 03:59:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EAF112A83
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655798351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6sBJMo2yP9mbpru/Lrr+JO5k5YegdQGzkOBh7aOl8JM=;
+        b=QOugknWdgt9b8u5/NjkgV8tSxEuc7nqm8bc2WE4QzWroX0HyxF1NBxzvD19GXpc/ZqZLaC
+        DQOaCOi/UVhgd4yEAiqOzVccR7cpvGJkHbE4Ur1rPoRf0V2SVxTv9RzQAMC1ZQeWgp+Dnm
+        n4nBghMD3Djh4c8RpC+ot6mg5D3YtVE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-153-Gx_GJ4c9PticNR4S0LRq7w-1; Tue, 21 Jun 2022 03:59:10 -0400
+X-MC-Unique: Gx_GJ4c9PticNR4S0LRq7w-1
+Received: by mail-wm1-f71.google.com with SMTP id p24-20020a05600c1d9800b0039c51c2da19so6532002wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:59:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rAupvnq6gF+hfLMwbK5FyshoSuZewieI0Qe5jG8mpEQ=;
-        b=i9ENdQ2fuUDBD2uoxwoBR4mD+MNoBqPoLYrWXPEm/TWlrlrUkaassphM8mEDzo8px5
-         ZYiLf5VDTbLDYEzXsUW1BJwjLti9Wrniwel+5ZmJ3WGJdvmF2YKg0FLKm+vjDjXDh0aa
-         ZI6OGwR1597b9ztHnPl50OW9PkyiOjxTOwv6UvifzLr7VoueR0XSLSIkLRICG6wu3Xyv
-         2zWZJJrBWawOdYf4ubhXIP5rHF2H7Uvi/uIf7w7OUfwBpb+Ihnq10zUxE6Qsjk725hNh
-         nBW/O+JeeAic0TMUqTIAQy+Ii5Qp3Q4O2+R9z07ElP7Eru6DLyRr+3ZUj0RDWxBHrSiB
-         gd7w==
-X-Gm-Message-State: AJIora81UTx9d2XN69achTxV9KptWoTQZhH71iP4uT6KwZweyNX1IxEU
-        w3VcZnssebroWLktuFjpMejHXQ==
-X-Google-Smtp-Source: AGRyM1uvyHwv5Nms9vMGrT+Pj3Myl57qJQnwG96nAmt2D1U+IkwcRVqRNQQZtUK91Tb/HD+gpUxTMw==
-X-Received: by 2002:a05:6512:1523:b0:47f:7940:4a24 with SMTP id bq35-20020a056512152300b0047f79404a24mr2767391lfb.516.1655798301954;
-        Tue, 21 Jun 2022 00:58:21 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05651c125400b0024f3d1daea2sm1938664ljh.42.2022.06.21.00.58.20
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=6sBJMo2yP9mbpru/Lrr+JO5k5YegdQGzkOBh7aOl8JM=;
+        b=0wp/21ym6IYVH1i+hGeqvcmnaAMAVSuiYM2Fj8Bk+V4Dw4kKsjLWeo3Xjkyy9kBUaO
+         jH6nsL9Z2koPWnYcKHi8YUU4fAvkGaMmmlQ/KiRAkSiQgxZLrECTHYW6R1PlfHV1ADQV
+         FBgVd0Whpw1+rtitSQb7LKno/wanKBGFeSlNWE0eil5yhDU1oUJJ1cxg+iYGYUYPnKry
+         Ia/gzMDSjrbrul3PI65UiR5Uq2Z9kIbAEXXyg/CcSQx78D5NGoAUTdX9I6OcnofTmxXH
+         tz6GI0UuDOoLnbryFi4uPZXws1QkCwst5nxHjiBEBLo+3oa/AkW59s7PnvqVzlR5JGNT
+         Jyog==
+X-Gm-Message-State: AOAM530Nd7wwLrSksesH2BCMbaOgHymmQ+B8z/PiDoWULyEQp8MyIoi0
+        c13Os5nrTv55/oMFb0NVxtqCE0p/UJiYZ+8cWPVz/4Xg636I07iLb1WpjLnmbh95vBrENbbj9Rl
+        XaR6GI3pogULczwZSGC8vOX6W
+X-Received: by 2002:a05:600c:25cd:b0:39c:6bc0:a1fb with SMTP id 13-20020a05600c25cd00b0039c6bc0a1fbmr39426080wml.179.1655798348677;
+        Tue, 21 Jun 2022 00:59:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzrL+fSNo0qboO7cLCQ5BtrNAnW4HzEiFBXXy7Ff3nGoezwEquujpy5H+JROgYvTo0OWdSDPQ==
+X-Received: by 2002:a05:600c:25cd:b0:39c:6bc0:a1fb with SMTP id 13-20020a05600c25cd00b0039c6bc0a1fbmr39426055wml.179.1655798348376;
+        Tue, 21 Jun 2022 00:59:08 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f04:2500:cdb0:9b78:d423:43f? (p200300d82f042500cdb09b78d423043f.dip0.t-ipconnect.de. [2003:d8:2f04:2500:cdb0:9b78:d423:43f])
+        by smtp.gmail.com with ESMTPSA id c14-20020a7bc84e000000b0039c4d022a44sm17295191wml.1.2022.06.21.00.59.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 00:58:20 -0700 (PDT)
-Message-ID: <44e37b45-55cf-3705-e5e6-e3921d3646c4@rasmusvillemoes.dk>
-Date:   Tue, 21 Jun 2022 09:58:19 +0200
+        Tue, 21 Jun 2022 00:59:07 -0700 (PDT)
+Message-ID: <139fc140-142f-c467-a5e3-0a0954dca127@redhat.com>
+Date:   Tue, 21 Jun 2022 09:59:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 07/34] lib/printbuf: Heap allocation
+ Thunderbird/91.9.0
 Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
-Cc:     rostedt@goodmis.org, enozhatsky@chromium.org, willy@infradead.org
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <20220620004233.3805-8-kent.overstreet@gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20220620004233.3805-8-kent.overstreet@gmail.com>
+To:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220621041717.6355-1-osalvador@suse.de>
+ <20220621041717.6355-3-osalvador@suse.de>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 2/2] mm/memory_hotplug: Reset node's state when empty
+ during offline
+In-Reply-To: <20220621041717.6355-3-osalvador@suse.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 02.42, Kent Overstreet wrote:
-> This makes printbufs optionally heap allocated: a printbuf initialized
-> with the PRINTBUF initializer will automatically heap allocate and
-> resize as needed.
+On 21.06.22 06:17, Oscar Salvador wrote:
+> All possible nodes are now pre-allocated at boot time by free_area_init()->
+> free_area_init_node(), and those which are to be hot-plugged are initialized
+> later on by hotadd_init_pgdat()->free_area_init_core_hotplug() when they
+> become online.
 > 
-> Allocations are done with GFP_KERNEL: code should use e.g.
-> memalloc_nofs_save()/restore() as needed. Since we do not currently have
-> memalloc_nowait_save()/restore(), in contexts where it is not safe to
-> block we provide the helpers
+> free_area_init_core_hotplug() calls pgdat_init_internals() and
+> zone_init_internals() to initialize some internal data structures
+> and zeroes a few pgdat fields.
 > 
->   printbuf_atomic_inc()
->   printbuf_atomic_dec()
+> But we do already call pgdat_init_internals() and zone_init_internals()
+> for all possible nodes back in free_area_init_core(), and pgdat fields
+> are already zeroed because the pre-allocation memsets with 0s the
+> structure, meaning we do not need to repeat the process when
+> the node becomes online.
 > 
-> When the atomic count is nonzero, memory allocations will be done with
-> GFP_NOWAIT.
+> So initialize it only once when booting, and make sure to reset
+> the fields we care about to 0 when the node goes empty.
+> The only thing we need to check for is to allocate per_cpu_nodestats
+> struct the very first time this node goes online.
 > 
-> On memory allocation failure, output will be truncated. Code that wishes
-> to check for memory allocation failure (in contexts where we should
-> return -ENOMEM) should check if printbuf->allocation_failure is set.
-> Since printbufs are expected to be typically used for log messages and
-> on a best effort basis, we don't return errors directly.
+> node_reset_state() is the function in charge of resetting pgdat's fields,
+> and it is called when offline_pages() detects that the node becomes empty
+> worth of memory.
 > 
-> Other helpers provided by this patch:
-> 
->  - printbuf_make_room(buf, extra)
->    Reallocates if necessary to make room for @extra bytes (not including
->    terminating null).
-> 
->  - printbuf_str(buf)
->    Returns a null terminated string equivalent to the contents of @buf.
->    If @buf was never allocated (or allocation failed), returns a
->    constant empty string.
-> 
->  - printbuf_exit(buf)
->    Releases memory allocated by a printbuf.
-> 
-> Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+> Signed-off-by: Oscar Salvador <osalvador@suse.de>
 > ---
->  include/linux/printbuf.h | 120 +++++++++++++++++++++++++++++++++------
->  lib/Makefile             |   2 +-
->  lib/printbuf.c           |  71 +++++++++++++++++++++++
->  3 files changed, 175 insertions(+), 18 deletions(-)
->  create mode 100644 lib/printbuf.c
+>  include/linux/memory_hotplug.h |  2 +-
+>  mm/memory_hotplug.c            | 54 ++++++++++++++++++++--------------
+>  mm/page_alloc.c                | 49 +++++-------------------------
+>  3 files changed, 41 insertions(+), 64 deletions(-)
 > 
-> diff --git a/include/linux/printbuf.h b/include/linux/printbuf.h
-> index 8186c447ca..382863afa7 100644
-> --- a/include/linux/printbuf.h
-> +++ b/include/linux/printbuf.h
-> @@ -4,19 +4,69 @@
->  #ifndef _LINUX_PRINTBUF_H
->  #define _LINUX_PRINTBUF_H
+> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+> index 20d7edf62a6a..917112661b5c 100644
+> --- a/include/linux/memory_hotplug.h
+> +++ b/include/linux/memory_hotplug.h
+> @@ -319,7 +319,7 @@ extern void set_zone_contiguous(struct zone *zone);
+>  extern void clear_zone_contiguous(struct zone *zone);
 >  
-> -#include <linux/kernel.h>
-> -#include <linux/string.h>
+>  #ifdef CONFIG_MEMORY_HOTPLUG
+> -extern void __ref free_area_init_core_hotplug(struct pglist_data *pgdat);
+> +extern bool pgdat_has_boot_nodestats(pg_data_t *pgdat);
+>  extern int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
+>  extern int add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
+>  extern int add_memory_resource(int nid, struct resource *resource,
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 1213d0c67a53..8a464cdd44ad 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1176,18 +1176,18 @@ static void reset_node_present_pages(pg_data_t *pgdat)
+>  /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
+>  static pg_data_t __ref *hotadd_init_pgdat(int nid)
+>  {
+> -	struct pglist_data *pgdat;
+> +	struct pglist_data *pgdat = NODE_DATA(nid);
+>  
+>  	/*
+> -	 * NODE_DATA is preallocated (free_area_init) but its internal
+> -	 * state is not allocated completely. Add missing pieces.
+> -	 * Completely offline nodes stay around and they just need
+> -	 * reintialization.
+> +	 * NODE_DATA is preallocated (free_area_init), the only thing missing
+> +	 * is to allocate its per_cpu_nodestats struct and to build node's
+> +	 * zonelists. The allocation of per_cpu_nodestats only needs to be done
+> +	 * the very first time this node is brought up, as we reset its state
+> +	 * when all node's memory goes offline.
+>  	 */
+> -	pgdat = NODE_DATA(nid);
 > -
->  /*
-> - * Printbufs: String buffer for outputting (printing) to, for vsnprintf
-> + * Printbufs: Simple strings for printing to, with optional heap allocation
-> + *
-> + * This code has provisions for use in userspace, to aid in making other code
-> + * portable between kernelspace and userspace.
-> + *
-> + * Basic example:
-> + *   struct printbuf buf = PRINTBUF;
-> + *
-> + *   prt_printf(&buf, "foo=");
-> + *   foo_to_text(&buf, foo);
-> + *   printk("%s", buf.buf);
-
-So, if prt_printf() and foo_to_text() failed to make room, buf.buf would
-still be NULL, right? Sure, vsnprintf() handles that gracefully, but
-this is probably not what you intended.
-
->  struct printbuf {
->  	char			*buf;
->  	unsigned		size;
->  	unsigned		pos;
-> +	/*
-> +	 * If nonzero, allocations will be done with GFP_ATOMIC:
-> +	 */
-> +	u8			atomic;
-> +	bool			allocation_failure:1;
-> +	bool			heap_allocated:1;
->  };
+> -	/* init node's zones as empty zones, we don't have any present pages.*/
+> -	free_area_init_core_hotplug(pgdat);
+> +	if (pgdat_has_boot_nodestats(pgdat))
+> +		pgdat->per_cpu_nodestats = alloc_percpu_gfp(struct per_cpu_nodestat,
+> +							    __GFP_ZERO);
 >  
-> +int printbuf_make_room(struct printbuf *, unsigned);
-> +const char *printbuf_str(const struct printbuf *);
-> +void printbuf_exit(struct printbuf *);
-> +
-> +/* Initializer for a heap allocated printbuf: */
-> +#define PRINTBUF ((struct printbuf) { .heap_allocated = true })
-> +
-> +/* Initializer a printbuf that points to an external buffer: */
-> +#define PRINTBUF_EXTERN(_buf, _size)			\
-> +((struct printbuf) {					\
-> +	.buf	= _buf,					\
-> +	.size	= _size,				\
-> +})
-> +
->  /*
->   * Returns size remaining of output buffer:
->   */
-> @@ -49,26 +99,36 @@ static inline bool printbuf_overflowed(struct printbuf *out)
+>  	/*
+>  	 * The node we allocated has no zone fallback lists. For avoiding
+> @@ -1195,15 +1195,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
+>  	 */
+>  	build_all_zonelists(pgdat);
 >  
->  static inline void printbuf_nul_terminate(struct printbuf *out)
->  {
-> +	printbuf_make_room(out, 1);
-> +
-
-Shouldn't this be printbuf_make_room(out, 0)?
-
-Probably this should be split up, so that the functions that also do
-printbuf_make_room() which ensures room for a nul-terminator could then
-call __printbuf_nul_terminate(), which would just contain the below:
-
->  	if (out->pos < out->size)
->  		out->buf[out->pos] = 0;
->  	else if (out->size)
->  		out->buf[out->size - 1] = 0;
->  }
-
-
-
-> -static inline void __prt_char(struct printbuf *out, char c)
-> +/* Doesn't call printbuf_make_room(), doesn't nul terminate: */
-> +static inline void __prt_char_reserved(struct printbuf *out, char c)
->  {
->  	if (printbuf_remaining(out))
->  		out->buf[out->pos] = c;
->  	out->pos++;
+> -	/*
+> -	 * When memory is hot-added, all the memory is in offline state. So
+> -	 * clear all zones' present_pages because they will be updated in
+> -	 * online_pages() and offline_pages().
+> -	 * TODO: should be in free_area_init_core_hotplug?
+> -	 */
+> -	reset_node_managed_pages(pgdat);
+> -	reset_node_present_pages(pgdat);
+> -
+>  	return pgdat;
 >  }
 >  
-> +/* Doesn't nul terminate: */
-> +static inline void __prt_char(struct printbuf *out, char c)
-> +{
-> +	printbuf_make_room(out, 1);
-> +	__prt_char_reserved(out, c);
-> +}
-> +
->  static inline void prt_char(struct printbuf *out, char c)
->  {
->  	__prt_char(out, c);
->  	printbuf_nul_terminate(out);
+> @@ -1780,6 +1771,26 @@ static void node_states_clear_node(int node, struct memory_notify *arg)
+>  		node_clear_state(node, N_MEMORY);
 >  }
 >  
-> -static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
-> +static inline void __prt_chars_reserved(struct printbuf *out, char c, unsigned n)
->  {
->  	unsigned i, can_print = min(n, printbuf_remaining(out));
->  
-> @@ -79,13 +139,18 @@ static inline void __prt_chars(struct printbuf *out, char c, unsigned n)
->  
->  static inline void prt_chars(struct printbuf *out, char c, unsigned n)
->  {
-> -	__prt_chars(out, c, n);
-> +	printbuf_make_room(out, n);
-> +	__prt_chars_reserved(out, c, n);
->  	printbuf_nul_terminate(out);
->  }
->  
->  static inline void prt_bytes(struct printbuf *out, const void *b, unsigned n)
->  {
-> -	unsigned i, can_print = min(n, printbuf_remaining(out));
-> +	unsigned i, can_print;
-> +
-> +	printbuf_make_room(out, n);
-> +
-> +	can_print = min(n, printbuf_remaining(out));
->  
->  	for (i = 0; i < can_print; i++)
->  		out->buf[out->pos++] = ((char *) b)[i];
-> @@ -101,22 +166,43 @@ static inline void prt_str(struct printbuf *out, const char *str)
->  
->  static inline void prt_hex_byte(struct printbuf *out, u8 byte)
->  {
-> -	__prt_char(out, hex_asc_hi(byte));
-> -	__prt_char(out, hex_asc_lo(byte));
-> +	printbuf_make_room(out, 2);
-> +	__prt_char_reserved(out, hex_asc_hi(byte));
-> +	__prt_char_reserved(out, hex_asc_lo(byte));
->  	printbuf_nul_terminate(out);
->  }
->  
->  static inline void prt_hex_byte_upper(struct printbuf *out, u8 byte)
->  {
-> -	__prt_char(out, hex_asc_upper_hi(byte));
-> -	__prt_char(out, hex_asc_upper_lo(byte));
-> +	printbuf_make_room(out, 2);
-> +	__prt_char_reserved(out, hex_asc_upper_hi(byte));
-> +	__prt_char_reserved(out, hex_asc_upper_lo(byte));
->  	printbuf_nul_terminate(out);
->  }
->  
-> -#define PRINTBUF_EXTERN(_buf, _size)			\
-> -((struct printbuf) {					\
-> -	.buf	= _buf,					\
-> -	.size	= _size,				\
-> -})
-> +/**
-> + * printbuf_reset - re-use a printbuf without freeing and re-initializing it:
-> + */
-> +static inline void printbuf_reset(struct printbuf *buf)
+> +static void node_reset_state(int node)
 > +{
-> +	buf->pos		= 0;
-> +	buf->allocation_failure	= 0;
-> +}
+> +	pg_data_t *pgdat = NODE_DATA(node);
+> +	int cpu;
 > +
-> +/**
-> + * printbuf_atomic_inc - mark as entering an atomic section
-> + */
-> +static inline void printbuf_atomic_inc(struct printbuf *buf)
-> +{
-> +	buf->atomic++;
-> +}
+> +	kswapd_stop(node);
+> +	kcompactd_stop(node);
 > +
-> +/**
-> + * printbuf_atomic_inc - mark as leaving an atomic section
-> + */
-> +static inline void printbuf_atomic_dec(struct printbuf *buf)
-> +{
-> +	buf->atomic--;
-> +}
+> +	pgdat->nr_zones = 0;
 
-So, if I have a printbuf in scope, and I do irq_disable() or spin_lock()
-or whatnot, I'm supposed to also call printbuf_atomic_inc(), at least if
-the printbuf is used within the locked region.
+^ what is that? it should be "highest_zone_idx" and I don't see any
+reason that we really need this.
 
-Honest question: An u8 used for this purpose cannot overflow?
+To detect if a node is empty we can use pgdat_is_empty(). To detect if a
+zone is empty we can use zone_is_empty().
 
->  #endif /* _LINUX_PRINTBUF_H */
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 6b9ffc1bd1..b4609a4258 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -34,7 +34,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
->  	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
->  	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
->  	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
-> -	 buildid.o
-> +	 buildid.o printbuf.o
->  
->  lib-$(CONFIG_PRINTK) += dump_stack.o
->  lib-$(CONFIG_SMP) += cpumask.o
-> diff --git a/lib/printbuf.c b/lib/printbuf.c
-> new file mode 100644
-> index 0000000000..8c70128e31
-> --- /dev/null
-> +++ b/lib/printbuf.c
-> @@ -0,0 +1,71 @@
-> +// SPDX-License-Identifier: LGPL-2.1+
-> +/* Copyright (C) 2022 Kent Overstreet */
-> +
-> +#ifdef __KERNEL__
-> +#include <linux/export.h>
-> +#include <linux/kernel.h>
-> +#else
-> +#define EXPORT_SYMBOL(x)
-> +#endif
-> +
-> +#include <linux/err.h>
-> +#include <linux/slab.h>
-> +#include <linux/printbuf.h>
-> +
-> +int printbuf_make_room(struct printbuf *out, unsigned extra)
-> +{
-> +	unsigned new_size;
-> +	char *buf;
-> +
-> +	if (!out->heap_allocated)
-> +		return 0;
+The usage of "pgdat->nr_zones" as an optimization is questionable,
+especially when iterating over our handful of zones where most nodes
+miss the *lower* zones like ZONE_DMA* in practice and have ZONE_NORMAL.
 
-I think that ->allocation_failure should be sticky and make us return an
-early error here; if we're under memory pressure we don't want each and
-every prt_char() of whatever we're trying to print to end up trying to
-do an allocation.
+Can we get rid of that and just check pgdat_is_empty() and
+zone_is_empty() and iterate all applicable zones from 0..X?
 
-> +	/* Reserved space for terminating nul: */
-> +	extra += 1;
-> +
-> +	if (out->pos + extra < out->size)
-> +		return 0;
 
-Are you sure you don't want to be careful about the possibility of
-out->pos+extra overflowing? And since extra has been ++'ed, shouldn't
-the comparison be <= ? If pos is 0, size is 2, and I want to add one
-char (so on entry extra is 1), this should not require a reallocation?
+If it amkes sense what I'm saying, that could be done before this patch.
 
-> +	new_size = roundup_pow_of_two(out->size + extra);
+-- 
+Thanks,
 
-Are you sure you don't want to be careful about the possibility of
-out->size+extra overflowing, or hitting that with roundup_pow_of_two()
-doing that?
+David / dhildenb
 
-> +	buf = krealloc(out->buf, new_size, !out->atomic ? GFP_KERNEL : GFP_NOWAIT);
-> +
-> +	if (!buf) {
-> +		out->allocation_failure = true;
-> +		return -ENOMEM;
-> +	}
-> +
-> +	out->buf	= buf;
-> +	out->size	= new_size;
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(printbuf_make_room);
-> +
-> +/**
-> + * printbuf_str - returns printbuf's buf as a C string, guaranteed to be null
-
-Pet peeve: Please use the spelling "nul" consistently.
-
-> + * terminated
-> + */
-> +const char *printbuf_str(const struct printbuf *buf)
-> +{
-> +	/*
-> +	 * If we've written to a printbuf then it's guaranteed to be a null
-> +	 * terminated string - but if we haven't, then we might not have
-> +	 * allocated a buffer at all:
-> +	 */
-> +	return buf->pos
-> +		? buf->buf
-> +		: "";
-> +}
-> +EXPORT_SYMBOL(printbuf_str);
-
-I think the documentation lacks some mention of lifetimes and caller
-obligations or lack thereof. Especially since the return value could
-become dangling not just if the printbuf is destroyed (printbuf_exit),
-but also any other use of the printbuf which could cause a realloc.
-
-Rasmus

@@ -2,127 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B2C552BAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6BE552BB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346383AbiFUHUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S1346074AbiFUHVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346031AbiFUHUS (ORCPT
+        with ESMTP id S235691AbiFUHVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:20:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D01C1F2E8;
-        Tue, 21 Jun 2022 00:20:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF59C60F56;
-        Tue, 21 Jun 2022 07:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBA2C3411D;
-        Tue, 21 Jun 2022 07:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655796017;
-        bh=6W0c7s4KkH+S/zdUiGrAMs/0jMjBrVdLfs+zroSmWF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g1p6Ippw5y6KSOOg7wb0i774Ka1xszMqIOW9nuXJLpb/8twkTNJEEhhRwnHSKmov0
-         gCj62pnmgvcV17OsttAU6q0/WkuCEASKm2osM1ZbEb0kgIefuicLGBvagTSWSWAdqR
-         9+wzwwTqw0sxr2EN7V3AdI80Za1SJalKHS8U7hn8=
-Date:   Tue, 21 Jun 2022 09:20:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ray Chi <raychi@google.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        albertccwang@google.com
-Subject: Re: [PATCH] USB: hub: add module parameters to usbcore for port init
- retries
-Message-ID: <YrFxLYibDtyuxSO6@kroah.com>
-References: <20220617102256.3253019-1-raychi@google.com>
+        Tue, 21 Jun 2022 03:21:14 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0112250D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:21:14 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id g26so4150413ejb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I49iaT9479MLDi3TYueSZinlKruIKCVXqSN6hfWZ6x4=;
+        b=gpAE1+YcSfcBdfh7BwfrIoGbRZBggiIKzxdzevy+uY0mwZ38SqW5C24UGUW26VY4UQ
+         WP1S+RpCG/FKyBZUka5u2+CPPXZJ3KWRf8OHVm/eGamVrfkx0pZ8k/r1dCJiI/Y9tWmz
+         1oQm+ijCrgg6t5IQfVcRYcG0EZ0onOIYztGApiM1tQeP5guXwyXfw38Q2H/4ynJnW2mS
+         3D4OkdRnQ+BJI/MKwgR+djuQCWPssy+Hrsm09S+yer0zBBwLofZ5OECr99J3AzlS+crQ
+         9DHd3RGJuWdVl8yX4ILXR2mG3nU1o6BthJk/4T+xZCQa/Ujz8QiKP9A6AoGoZqirNj/t
+         B4/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I49iaT9479MLDi3TYueSZinlKruIKCVXqSN6hfWZ6x4=;
+        b=JW3awyhw+vuuoTzFcIO8it0osVZG9IXPi4ujuPwfRULaT6e8d492RYTqSyC04t3AiN
+         l2Kjr37gnbn7zsW/FHVYJY/L+AzidRnEuu+mcryNd44+ZG3wH4hClWB4PFB8Mqln0wXU
+         zXvlBkDpJQ098cJzY0jCcUnH7H16SeL5CklDToegzEWVo80fJ8Iui5xVnnHNHqRYzfk+
+         zt96Rilc9IrRBSV/jtgXZXipQ3nM+RrS2D6nm3n3janY7swHdzyEc6OXWduUpXursRYd
+         0vrCjYUQgEi2k7UyYZDgvG0LhExehv1srhurbZR/RBOOvfxWFqk8i07Um58Pn8NWUFqG
+         p1VQ==
+X-Gm-Message-State: AJIora+Jt+G5WbGhuwwqsG82Ymvtj8XVaBzrCeA/x5WTxiWAOV8T8voX
+        EuCQ0HcFIagEpjG8v/T7xLWup2jfYa4=
+X-Google-Smtp-Source: AGRyM1vduCB6Dl0uXtQ/uJ/zcFkNMY0AX9tE24LM9PyHr98TUnsUGHKRZg4/lze+IGydS4QD7MJIWw==
+X-Received: by 2002:a17:906:6a28:b0:711:d032:caa4 with SMTP id qw40-20020a1709066a2800b00711d032caa4mr23990285ejc.80.1655796072583;
+        Tue, 21 Jun 2022 00:21:12 -0700 (PDT)
+Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
+        by smtp.gmail.com with ESMTPSA id p1-20020a17090653c100b00722e771007fsm50711ejo.37.2022.06.21.00.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 00:21:11 -0700 (PDT)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        etnaviv@lists.freedesktop.org (moderated list:DRM DRIVERS FOR VIVANTE
+        GPU IP),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
+        IP)
+Subject: [PATCH v2 0/4] Add support for GPU load values
+Date:   Tue, 21 Jun 2022 09:20:46 +0200
+Message-Id: <20220621072050.76229-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617102256.3253019-1-raychi@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 06:22:56PM +0800, Ray Chi wrote:
-> Currently, there is a Kconfig (CONFIG_USB_FEW_INIT_RETRIES) to
-> reduce retries when the port initialization is failed. The retry
-> times are fixed and assigned in compile time. To improve the
-> flexibility, this patch add four module parameters:
-> port_reset_tries, set_address_tries, get_descriptor_tries,
-> and get_maxpacket0_tries, to replace the original default values.
-> 
-> The default value of module parameters is the same as before
-> to preserve the existing behavior.
-> 
-> Signed-off-by: Ray Chi <raychi@google.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         | 16 ++++++++++
->  drivers/usb/core/hub.c                        | 31 ++++++++++++++++---
->  2 files changed, 42 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 8090130b544b..c467b2778128 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6277,6 +6277,22 @@
->  			USB_REQ_GET_DESCRIPTOR request in milliseconds
->  			(default 5000 = 5.0 seconds).
->  
-> +	usbcore.port_reset_tries=
-> +			[USB] Set the retry time of port reset for each
-> +			port initialization (default PORT_RESET_TRIES = 5).
-> +
-> +	usbcore.set_address_tries=
-> +			[USB] set the retry time of set address for each
-> +			port initialization (default SET_ADDRESS_TRIES = 2).
-> +
-> +	usbcore.get_descriptor_tries=
-> +			[USB] set the retry time of set address for each
-> +			port initialization (default GET_DESCRIPTOR_TRIES = 2).
-> +
-> +	usbcore.get_maxpacket0_tries=
-> +			[USB] set the retry time of get maxpacket0 for each
-> +			port initialization (default GET_MAXPACKET0_TRIES = 3).
-> +
->  	usbcore.nousb	[USB] Disable the USB subsystem
->  
->  	usbcore.quirks=
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index b7f66dcd1fe0..c5c695886424 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2788,6 +2788,27 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
->  #define HUB_LONG_RESET_TIME	200
->  #define HUB_RESET_TIMEOUT	800
->  
-> +/* define retry time for port reset */
-> +static int port_reset_tries = PORT_RESET_TRIES;
-> +module_param(port_reset_tries, int, S_IRUGO|S_IWUSR);
-> +MODULE_PARM_DESC(port_reset_tries, "retry times of port reset for each port initialization");
+This patch series add support for loadavg values for GPU
+sub-components. I am adding a SMA algorithm as I was not
+really sure if EWMA would be a good fit for this use case.
 
-Please no.  Module parameters are from the 1990's, let us never add new
-ones if at all possible.
+Changes v2:
+ - Addressed feedback from Lucas
 
-These are global options, for all devices in the system.  Instead, use
-per-device settings if you really need to change these values.
+Christian Gmeiner (4):
+  drm/etnaviv: add simple moving average (SMA)
+  drm/etnaviv: add loadavg accounting
+  drm/etnaviv: show loadavg in debugfs
+  drm/etnaviv: export loadavg via perfmon
 
-But I would even push back on that and ask why these values need to be
-changed at all.  What hardware is broken so badly that our timeout
-settings do not work properly?  Can we modify them gracefully to "just
-work" without any need for tweaking or requiring any modification by a
-user at all?  That would be the better solution instead of requiring
-users to do this on their own when confronted by misbehaving hardware.
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c     | 14 ++++
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c     | 76 +++++++++++++++++++++-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.h     | 37 +++++++++++
+ drivers/gpu/drm/etnaviv/etnaviv_perfmon.c | 79 +++++++++++++++++++++++
+ drivers/gpu/drm/etnaviv/etnaviv_sma.h     | 53 +++++++++++++++
+ 5 files changed, 257 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_sma.h
 
-thanks,
+-- 
+2.36.1
 
-greg k-h

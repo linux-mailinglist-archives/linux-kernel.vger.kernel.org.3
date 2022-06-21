@@ -2,70 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B8E552AB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93089552ABE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345302AbiFUGCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 02:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
+        id S1345461AbiFUGEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 02:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344649AbiFUGCg (ORCPT
+        with ESMTP id S233729AbiFUGD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 02:02:36 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEE2222A4;
-        Mon, 20 Jun 2022 23:02:34 -0700 (PDT)
-X-UUID: d13e0d2bb95c46bdb5565224bbad7c1a-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:46f7eb74-bb30-45b8-a74b-01ebac6c9d2d,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:46f7eb74-bb30-45b8-a74b-01ebac6c9d2d,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:8e1014ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:128492dad9fc,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d13e0d2bb95c46bdb5565224bbad7c1a-20220621
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 410090368; Tue, 21 Jun 2022 14:02:31 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 21 Jun 2022 14:02:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 14:02:30 +0800
-Message-ID: <0d35d7b6e0677b6eb1118c5a180229bfbdc77e7b.camel@mediatek.com>
-Subject: Re: [PATCH v12 13/14] drm/mediatek: dpi: Only enable dpi after the
- bridge is enabled
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 14:02:30 +0800
-In-Reply-To: <f8915cb4af91375dc9d7fc9c51f04863dd3e97dd.camel@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-         <20220620121028.29234-14-rex-bc.chen@mediatek.com>
-         <f8915cb4af91375dc9d7fc9c51f04863dd3e97dd.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 02:03:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 718501CB39;
+        Mon, 20 Jun 2022 23:03:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17CAF139F;
+        Mon, 20 Jun 2022 23:03:56 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.69.153])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 399B33F5A1;
+        Mon, 20 Jun 2022 23:03:52 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 07:03:44 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Message-ID: <YrFfQOSrqpX/qjhd@FVFF77S0Q05N>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+ <YrCB/rz3RM6TCjij@FVFF77S0Q05N>
+ <20220620150855.2630784-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620150855.2630784-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,65 +62,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 11:18 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
+On Mon, Jun 20, 2022 at 05:08:55PM +0200, Alexander Lobakin wrote:
+> From: Mark Rutland <mark.rutland@arm.com>
+> Date: Mon, 20 Jun 2022 15:19:42 +0100
 > 
-> On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
-> > From: Guillaume Ranquet <granquet@baylibre.com>
+> > On Fri, Jun 17, 2022 at 04:40:24PM +0200, Alexander Lobakin wrote:
 > > 
-> > Enabling the dpi too early causes glitches on screen.
+> > > The savings are architecture, compiler and compiler flags dependent,
+> > > for example, on x86_64 -O2:
+> > > 
+> > > GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> > > LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> > > LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> > > 
+> > > and ARM64 (courtesy of Mark[0]):
+> > > 
+> > > GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> > > LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
 > > 
-> > Move the call to mtk_dpi_enable() at the end of the bridge_enable
-> > callback to ensure everything is setup properly before enabling
-> > dpi.
+> > Hmm... with *this version* of the series, I'm not getting results nearly as
+> > good as that when building defconfig atop v5.19-rc3:
 > > 
-> > Fixes: f89c696e7f63 ("drm/mediatek: mtk_dpi: Convert to bridge
-> > driver")
-> 
-> I think this problem happen in the first patch [1].
-> 
-> [1] 
-> 
-https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/commit/drivers/gpu/drm/mediatek/mtk_dpi.c?h=mediatek-drm-next&id=9e629c17aa8d7a75b8c1d99ed42892cd8ba7cdc4
-> 
-> Regards,
-> CK
-> 
-
-ok, I will fix this.
-
-BRs,
-Bo-Chen
-
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >   GCC 8.5.0:   add/remove: 83/49 grow/shrink: 973/1147 up/down: 32020/-47824 (-15804)
+> >   GCC 9.3.0:   add/remove: 68/51 grow/shrink: 1167/592 up/down: 30720/-31352 (-632)
+> >   GCC 10.3.0:  add/remove: 84/37 grow/shrink: 1711/1003 up/down: 45392/-41844 (3548)
+> >   GCC 11.1.0:  add/remove: 88/31 grow/shrink: 1635/963 up/down: 51540/-46096 (5444)
+> >   GCC 11.3.0:  add/remove: 89/32 grow/shrink: 1629/966 up/down: 51456/-46056 (5400)
+> >   GCC 12.1.0:  add/remove: 84/31 grow/shrink: 1540/829 up/down: 48772/-43164 (5608)
 > > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > index fc76ccad0a82..220e9b18e2cd 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > @@ -486,7 +486,6 @@ static int mtk_dpi_power_on(struct mtk_dpi
-> > *dpi)
-> >  	if (dpi->pinctrl && dpi->pins_dpi)
-> >  		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
-> >  
-> > -	mtk_dpi_enable(dpi);
-> >  	return 0;
-> >  
-> >  err_pixel:
-> > @@ -731,6 +730,7 @@ static void mtk_dpi_bridge_enable(struct
-> > drm_bridge *bridge)
-> >  
-> >  	mtk_dpi_power_on(dpi);
-> >  	mtk_dpi_set_display_mode(dpi, &dpi->mode);
-> > +	mtk_dpi_enable(dpi);
-> >  }
-> >  
-> >  static enum drm_mode_status
+> >   LLVM 12.0.1: add/remove: 118/58 grow/shrink: 437/381 up/down: 45312/-65668 (-20356)
+> >   LLVM 13.0.1: add/remove: 35/19 grow/shrink: 416/243 up/down: 14408/-22200 (-7792)
+> >   LLVM 14.0.0: add/remove: 42/16 grow/shrink: 415/234 up/down: 15296/-21008 (-5712)
+> > 
+> > ... and that now seems to be regressing codegen with recent versions of GCC as
+> > much as it improves it LLVM.
+> > 
+> > I'm not sure if we've improved some other code and removed the benefit between
+> > v5.19-rc1 and v5.19-rc3, or whether something else it at play, but this doesn't
+> > look as compelling as it did.
 > 
-> 
+> Mostly likely it's due to that in v1 I mistakingly removed
+> `volatile` from gen[eric]_test_bit(), so there was an impact for
+> non-constant cases as well.
+> +5 Kb sounds bad tho. Do you have CONFIG_TEST_BITMAP enabled, does
+> it work? 
 
+I didn't have it enabled, but I tried that just nw with GCC 12.1.0 and it
+builds cleanly, and test_bitmap_const_eval() gets optimized away entirely. If i
+remove the `static` from that, GCC generates:
+
+| <test_bitmap_const_eval>:
+|     paciasp
+|     autiasp
+|     ret
+
+... which is a trivial stub.
+
+> Probably the same reason as for m68k, more constant
+> optimization -> more aggressive inlining or inlining rebalance ->
+> larger code. OTOH I've no idea why sometimes compiler decides to
+> uninline really tiny functions where due to this patch series some
+> bitops have been converted to constants, like it goes on m68k.
+
+Hmm.... it'd be interesting to take a look at a few architectures and see what
+the common case is.
+
+Thanks,
+Mark.

@@ -2,150 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15DE55360D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6159553612
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351811AbiFUP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S1351304AbiFUP3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235017AbiFUP1g (ORCPT
+        with ESMTP id S1352845AbiFUP2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:27:36 -0400
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223662A97B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:35 -0700 (PDT)
-Received: by mail-il1-x14a.google.com with SMTP id w7-20020a056e021c8700b002d3bc8e95cbso9416012ill.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:35 -0700 (PDT)
+        Tue, 21 Jun 2022 11:28:22 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B2F6319
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:28:18 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id d19so15866196lji.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=pJAAMlUR9Ydzb8Wli4Gr9USgcKMSCgzvdDTXVExWOBs=;
-        b=qvMB8LoBpaFQ3GQUCSoTnXYGKUdpDLi2qS9fSWosgFZW6a9vh5vMNU1YdL3ai8VSFt
-         BX8jS4oYUYceNUIdKCV4t5VtNX7ciKWxzBUVh7uoogjUG7nvpus5g7xx4STaT7Y1dVT+
-         xYYpueD6bCQPD3QgzWleZSHzHBVbVJpavqmsQiQdHu9PXOH9h0262IVju7GemWKC02N5
-         O+FHafG00jsVpcDQhEdjF4ehUJaXGe9DVYR44q1LKMY088VRjUAABKLdu8NIABYQLb0C
-         Ae0SBv82idmUhns6AGaP+MIdZlQQ2nQQUAlFlh+O+klmpFaCCgAq2CYiZ1ffmeNAXpIA
-         CI2Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PPDc7qXBrAf8hM+ois/4M7n9y0Ctx2nTK0cCddntA00=;
+        b=Fi5EjLIzvDAJUiiuADLK7DwH7YYV7f0bHceXlX43VOliKsB9BBv4L4DTZlFmLFmkLk
+         POofabhBgj7RE3usD0FttRM8D8eDilGLOLPHqgnO8YDVQiE1OoG9dKOP/Dt3N9HP2E97
+         pFaXlwW+xYC2rWvtNgYANRwcpOUunAVpIJRCpoGyJRPa7VTijqJgFrS7RPtiWetYUA/S
+         nI082qoNoGUD37fI/pZXTw5gtv676RW9g4oemXpkcgvuAWhRvJ3ckQa3MARMB7BRSwwp
+         c9I9EW0jqRTQRaIdnXBNrGAivBi4QpIXdTKVVrEiFHYLvbScsPkiQHkbzokqo2gVc8J3
+         Pkrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=pJAAMlUR9Ydzb8Wli4Gr9USgcKMSCgzvdDTXVExWOBs=;
-        b=CyjjgCHPA/gQueQpdIAOPAfxdsEQlw44FveHxRc178DM9pzXaQ5DbCZlR2plQBwOyH
-         Kb6DRbSHpneOFyhu2OAv4cFaDo9qr23F5RSctLdVScylyCUg8PVhysL6/ev4d9C/vrwL
-         YDbaJmUvP4OqGHE/Gt6AdZNDUqbN/Q+MSAKqmB2QvPfEDmxy/wr8nwxqAOmiWHiypEHi
-         Zhoebi8EP0VpPc2nD9p2U6Vqm+YL8S7o96HbnY4dj+J2x2qrewMX54PQwVa+T46Hc3Rg
-         MJADVYxQiwRzj4Y/WhFOyZRgE1rO9VHZblL8spji26Sk0sO2QdyiHeIe8kZkphg0gMOB
-         ooIA==
-X-Gm-Message-State: AJIora+NkcccB3Jf3fWebFgFz3Xprd3DMqInolnxCz6NKp5+2BJVJMcl
-        3fX5/CYAUq9asMOF9MrtJ1XIBJw+JgTvmA==
-X-Google-Smtp-Source: AGRyM1sxUjFEpBuJrnP39Ob4bVY8ckbZiuOog9KsddFGcK4Q2gPiLHpmQTwxlL016bzslu2xQYcvjIQqcGtHzQ==
-X-Received: from riochico.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:b3e])
- (user=rsilvera job=sendgmr) by 2002:a02:ac02:0:b0:339:c83a:f6f3 with SMTP id
- a2-20020a02ac02000000b00339c83af6f3mr2553704jao.174.1655825254515; Tue, 21
- Jun 2022 08:27:34 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 15:27:25 +0000
-Message-Id: <20220621152725.2668041-1-rsilvera@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH v2] perf: Adjust perf-inject output data offset for backward compatibility
-From:   Raul Silvera <rsilvera@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Raul Silvera <rsilvera@google.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PPDc7qXBrAf8hM+ois/4M7n9y0Ctx2nTK0cCddntA00=;
+        b=EHouvpvmV2wNCe/Vdrr9uKBGKQsJohpQOQddzwAvfWs6Flt15svHGmavjxFko56UTL
+         rWMpWAp6lqdhGBQW7CAneBfdlGgQhHGojEqCk/X/fu+f6OIpHlrqNV6LKh/UO3GDsTXk
+         KTFCaa+8KQgnckllP5M5DjGDbZrts+THwynztrn9Qmto6xC2DTAGZHIqB2DVVOu8hLtA
+         cWQRBT21/x2aAwvVQuugwprEAga/0qLUKbjQjXiqPLgQ5wi0QbaPKoRzv5E/f/dyP2Ql
+         dIA0a5fOHxs+Py47fIHsE32yhKKNDSpg4nFd+ho+9nI5Uxkc1200E+UuSO63ux8ZD174
+         gQ2w==
+X-Gm-Message-State: AJIora9idlTI1f1iyOq9XOo26EyDmriBP6dM1MSVjk5pXm85Kmhznb4Y
+        uqW76qOJBM5tucUTq2BnV/ciLUHtDTmH4+FlIrw9zQ==
+X-Google-Smtp-Source: AGRyM1tCe4/jK6PDAE71M19F4NM9E58kJKDMKB8cBjF0f/1wes7fLBrrgPNVl2oI3WpdVtZrOfMqeKvvJybe5z/2EzA=
+X-Received: by 2002:a2e:8091:0:b0:25a:8496:b255 with SMTP id
+ i17-20020a2e8091000000b0025a8496b255mr75993ljg.369.1655825296513; Tue, 21 Jun
+ 2022 08:28:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1655761627.git.ashish.kalra@amd.com> <12df64394b1788156c8a3c2ee8dfd62b51ab3a81.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <12df64394b1788156c8a3c2ee8dfd62b51ab3a81.1655761627.git.ashish.kalra@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 21 Jun 2022 09:28:04 -0600
+Message-ID: <CAMkAt6r+WSYXLZj-Bs5jpo4CR3+H5cpND0GHjsmgPacBK1GH_Q@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 02/49] iommu/amd: Introduce function to check
+ SEV-SNP support
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When perf inject creates a new file, it reuses the data offset from the
-input file. If there has been a change on the size of the header, as
-happened in v5.12 -> v5.13, the new offsets will be wrong, resulting in
-a corrupted output file.
+On Mon, Jun 20, 2022 at 4:59 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
+>
+> From: Brijesh Singh <brijesh.singh@amd.com>
+>
+> The SEV-SNP support requires that IOMMU must to enabled, see the IOMMU
+> spec section 2.12 for further details. If IOMMU is not enabled or the
+> SNPSup extended feature register is not set then the SNP_INIT command
+> (used for initializing firmware) will fail.
+>
+> The iommu_sev_snp_supported() can be used to check if IOMMU supports the
+> SEV-SNP feature.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  drivers/iommu/amd/init.c | 30 ++++++++++++++++++++++++++++++
+>  include/linux/iommu.h    |  9 +++++++++
+>  2 files changed, 39 insertions(+)
+>
+> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+> index 1a3ad58ba846..82be8067ddf5 100644
+> --- a/drivers/iommu/amd/init.c
+> +++ b/drivers/iommu/amd/init.c
+> @@ -3361,3 +3361,33 @@ int amd_iommu_pc_set_reg(struct amd_iommu *iommu, u8 bank, u8 cntr, u8 fxn, u64
+>
+>         return iommu_pc_get_set_reg(iommu, bank, cntr, fxn, value, true);
+>  }
+> +
+> +bool iommu_sev_snp_supported(void)
+> +{
+> +       struct amd_iommu *iommu;
+> +
+> +       /*
+> +        * The SEV-SNP support requires that IOMMU must be enabled, and is
+> +        * not configured in the passthrough mode.
+> +        */
+> +       if (no_iommu || iommu_default_passthrough()) {
+> +               pr_err("SEV-SNP: IOMMU is either disabled or configured in passthrough mode.\n");
 
-This change adds the function perf_session__data_offset to compute the
-data offset based on the current header size, and uses that instead of
-the offset from the original input file.
+Like below could this say something like snp support is disabled
+because of iommu settings.
 
-Signed-off-by: Raul Silvera <rsilvera@google.com>
----
-Changes since v1:
- - Use the adjusted header->data_offset in do_write_header instead of
-   recomputing it.
----
- tools/perf/builtin-inject.c |  2 +-
- tools/perf/util/header.c    | 14 ++++++++++++++
- tools/perf/util/header.h    |  2 ++
- 3 files changed, 17 insertions(+), 1 deletion(-)
+> +               return false;
+> +       }
+> +
+> +       /*
+> +        * Iterate through all the IOMMUs and verify the SNPSup feature is
+> +        * enabled.
+> +        */
+> +       for_each_iommu(iommu) {
+> +               if (!iommu_feature(iommu, FEATURE_SNP)) {
+> +                       pr_err("SNPSup is disabled (devid: %02x:%02x.%x)\n",
 
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index a75bf11585b5..1dfdcef36607 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -916,7 +916,7 @@ static int __cmd_inject(struct perf_inject *inject)
- 		inject->tool.tracing_data = perf_event__repipe_tracing_data;
- 	}
- 
--	output_data_offset = session->header.data_offset;
-+	output_data_offset = perf_session__data_offset(session->evlist);
- 
- 	if (inject->build_id_all) {
- 		inject->tool.mmap	  = perf_event__repipe_buildid_mmap;
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index 53332da100e8..6ad629db63b7 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -3686,6 +3686,20 @@ int perf_session__write_header(struct perf_session *session,
- 	return perf_session__do_write_header(session, evlist, fd, at_exit, NULL);
- }
- 
-+size_t perf_session__data_offset(const struct evlist *evlist)
-+{
-+	struct evsel *evsel;
-+	size_t data_offset;
-+
-+	data_offset = sizeof(struct perf_file_header);
-+	evlist__for_each_entry(evlist, evsel) {
-+		data_offset += evsel->core.ids * sizeof(u64);
-+	}
-+	data_offset += evlist->core.nr_entries * sizeof(struct perf_file_attr);
-+
-+	return data_offset;
-+}
-+
- int perf_session__inject_header(struct perf_session *session,
- 				struct evlist *evlist,
- 				int fd,
-diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
-index 08563c1f1bff..56916dabce7b 100644
---- a/tools/perf/util/header.h
-+++ b/tools/perf/util/header.h
-@@ -136,6 +136,8 @@ int perf_session__inject_header(struct perf_session *session,
- 				int fd,
- 				struct feat_copier *fc);
- 
-+size_t perf_session__data_offset(const struct evlist *evlist);
-+
- void perf_header__set_feat(struct perf_header *header, int feat);
- void perf_header__clear_feat(struct perf_header *header, int feat);
- bool perf_header__has_feat(const struct perf_header *header, int feat);
--- 
-2.37.0.rc0.104.g0611611a94-goog
+SNPSup might not be obvious to readers, what about " SNP Support is
+disabled ...".
 
+Also should this have the "SEV-SNP:" prefix like the above log?
+
+> +                              PCI_BUS_NUM(iommu->devid), PCI_SLOT(iommu->devid),
+> +                              PCI_FUNC(iommu->devid));
+> +                       return false;
+> +               }
+> +       }
+> +
+> +       return true;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_sev_snp_supported);
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 9208eca4b0d1..fecb72e1b11b 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -675,6 +675,12 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+>  void iommu_sva_unbind_device(struct iommu_sva *handle);
+>  u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+>
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +bool iommu_sev_snp_supported(void);
+> +#else
+> +static inline bool iommu_sev_snp_supported(void) { return false; }
+> +#endif
+> +
+>  #else /* CONFIG_IOMMU_API */
+>
+>  struct iommu_ops {};
+> @@ -1031,6 +1037,9 @@ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
+>  {
+>         return NULL;
+>  }
+> +
+> +static inline bool iommu_sev_snp_supported(void) { return false; }
+> +
+>  #endif /* CONFIG_IOMMU_API */
+>
+>  /**
+> --
+> 2.25.1
+>

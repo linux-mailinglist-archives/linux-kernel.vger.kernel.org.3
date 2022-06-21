@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5F8552A76
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED3C552A80
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344417AbiFUFdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 01:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
+        id S1345141AbiFUFfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 01:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiFUFdd (ORCPT
+        with ESMTP id S232674AbiFUFfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 01:33:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FCB22183E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655789610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h+MrydMOJRPtRlmLWVZnu2Vf2FmC8y0u+vnzj78C7Ng=;
-        b=SVFER4kxi2YZefPiemDFBaglr9G/muqUPfloaQJnukxy2EXLuPkDsfbSmWHaNYXf6MbiUI
-        5GdvCtZKsr2BisUqSYXEep+ZG8alhLlnSUHRH2jLwyWdwRePbTh4hc4abwSubyBAP2NBOA
-        K9CTXOjRimIk0TrA+sh4tPn9SCVyFQ8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-pyhe4RwjNv-T_j2ChAXYbA-1; Tue, 21 Jun 2022 01:33:24 -0400
-X-MC-Unique: pyhe4RwjNv-T_j2ChAXYbA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9735101AA47;
-        Tue, 21 Jun 2022 05:33:23 +0000 (UTC)
-Received: from localhost (ovpn-12-183.pek2.redhat.com [10.72.12.183])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 303CF492C3B;
-        Tue, 21 Jun 2022 05:33:21 +0000 (UTC)
-Date:   Tue, 21 Jun 2022 13:33:17 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
- high memory
-Message-ID: <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
-References: <20220613080932.663-1-thunder.leizhen@huawei.com>
- <20220613080932.663-6-thunder.leizhen@huawei.com>
+        Tue, 21 Jun 2022 01:35:37 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0698321E24
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:35:36 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id m14so11562514plg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uAPSJt+nDjTHM6C/f2cx5+BNHLbog5+o0iqQeYTP3zA=;
+        b=YQC1sqxZ4SX2wJYUbBXA3sg7z9wCkuQA2/i3asOe8m3BFwEeeaFUHonSgS8vWwwWiZ
+         LCHFicXUinbtkH57W4ICnGNc5Vhs74wzUtikYkGxq4MoNvt+JxxZ2heO3nnFMuTLcx90
+         Xh2Q0OynQBx9b4Jk2LLEenO/evR3aRx9SySVQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uAPSJt+nDjTHM6C/f2cx5+BNHLbog5+o0iqQeYTP3zA=;
+        b=kURpUgUyfS10efL8q59ZLGMoDKsfcWpupA1LFkyA51XXHIqX5GoeWVsbnQQREmUahk
+         5HfaeOJeu9Po7PyYBu9Pm1MhQGiZTYbg6PHHz3aV3Ngy8i81yL/w7OYVfkoCpQfkjZZh
+         HtrTkmS0gG1tmfuLrEkNcAR9nGfUwPS3rC8Y8QjRG1WFRoP9ek9Hkq+Hq53kaIo/ese3
+         pYGN2ax9auJq629deZF9RQnB7SmT3F7KMsBv2GDZNCrGN+l9xZ0VoYvVfFOZYusUKmVp
+         GcZcbKGKFsIje622jUtS1O+rlRQPinJGtsr/DnMlFI0x1wHmkB1E7asO8y/wGeyCiI4Q
+         ELbg==
+X-Gm-Message-State: AJIora/1zf3KjwfDY337jVCkWMednMkpRX1V5D+3oO2cGL6OIf4tVQQn
+        3gYYJLSFNDfSmRW09JogxDPRRh1lGYxbhA==
+X-Google-Smtp-Source: AGRyM1tu32aVbPWhF4gId85QXFQlkfBpqw62RfTfleWsXKnPSog13hiass7OZr2jBK2aaj0wWEeSXg==
+X-Received: by 2002:a17:902:7202:b0:167:79d1:f with SMTP id ba2-20020a170902720200b0016779d1000fmr26773774plb.3.1655789734851;
+        Mon, 20 Jun 2022 22:35:34 -0700 (PDT)
+Received: from joebar-glaptop.lan (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
+        by smtp.gmail.com with ESMTPSA id k7-20020a63ab47000000b00408af01cb42sm10061676pgp.81.2022.06.20.22.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 22:35:34 -0700 (PDT)
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v9 0/5] arm64: dts: qcom: sc7180: Add five new trogdor-based boards
+Date:   Mon, 20 Jun 2022 22:33:46 -0700
+Message-Id: <20220621053351.650431-1-joebar@chromium.org>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613080932.663-6-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,178 +72,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series adds five new trogdor-based boards to upstream.
+The patches should be applied *after* applying
+https://lore.kernel.org/all/20220602190621.1646679-1-swboyd@chromium.org/
+(arm64: dts: qcom: Remove duplicate sc7180-trogdor include on lazor/homestar)
 
-On 06/13/22 at 04:09pm, Zhen Lei wrote:
-> If the crashkernel has both high memory above DMA zones and low memory
-> in DMA zones, kexec always loads the content such as Image and dtb to the
-> high memory instead of the low memory. This means that only high memory
-> requires write protection based on page-level mapping. The allocation of
-> high memory does not depend on the DMA boundary. So we can reserve the
-> high memory first even if the crashkernel reservation is deferred.
-> 
-> This means that the block mapping can still be performed on other kernel
-> linear address spaces, the TLB miss rate can be reduced and the system
-> performance will be improved.
+The patches do *not* expect
+https://lore.kernel.org/all/20220518172525.3319993-1-swboyd@chromium.org/
+(sc7180-trogdor: Split out keyboard node and describe detachables)
+to be applied.
 
-Ugh, this looks a little ugly, honestly.
+The compatibles in this series are documented by Doug's series
+https://lore.kernel.org/r/20220520143502.v4.5.Ie8713bc0377672ed8dd71189e66fc0b77226fb85@changeid
 
-If that's for sure arm64 can't split large page mapping of linear
-region, this patch is one way to optimize linear mapping. Given kdump
-setting is necessary on arm64 server, the booting speed is truly
-impacted heavily.
+This version includes corrections to the series change descriptions,
+based on fetching earlier versions of the series and diffing each patch.
 
-However, I would suggest letting it as is with below reasons:
+Changes in v9:
+- Restore two lines accidentally removed from ap_sar_sensor.
+- Simplify trackpad enabling (51d30402be75).
+- Simplify trackpad enabling (51d30402be75).
 
-1) The code will complicate the crashkernel reservatoin code which
-is already difficult to understand. 
-2) It can only optimize the two cases, first is CONFIG_ZONE_DMA|DMA32
-  disabled, the other is crashkernel=,high is specified. While both
-  two cases are corner case, most of systems have CONFIG_ZONE_DMA|DMA32
-  enabled, and most of systems have crashkernel=xM which is enough.
-  Having them optimized won't bring benefit to most of systems.
-3) Besides, the crashkernel=,high can be handled earlier because 
-  arm64 alwasys have memblock.bottom_up == false currently, thus we
-  don't need worry arbout the lower limit of crashkernel,high
-  reservation for now. If memblock.bottom_up is set true in the future,
-  this patch doesn't work any more.
+Changes in v8:
+- Incorporate the deletion of the usb_c1 node from 9f9fb70a7294.
 
+Changes in v7:
+- Restore changes requested by Doug.
+- Restore changes requested by Doug.
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Simplify trackpad enabling (51d30402be75).
+- Restore mrbland patch.
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Simplify trackpad enabling (51d30402be75).
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Remove #include of <arm/cros-ec-keyboard.dtsi>.
+- Accidentally removed two lines from ap_sar_sensor.
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Remove #include of <arm/cros-ec-keyboard.dtsi>.
 
-...
-        crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
-                                               crash_base, crash_max);
+Changes in v6:
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Simplify trackpad enabling (51d30402be75).
+- Accidentally deleted changes requested by Doug.
+- Accidentally deleted changes requested by Doug.
+- Remove mrbland patch.
+- Copy changes to ap_sar_sensor from v5.4.
+- Add #include of <arm/cros-ec-keyboard.dtsi>.
+- Add #include of <arm/cros-ec-keyboard.dtsi> from v5.4.
 
-So, in my opinion, we can leave the current NON_BLOCK|SECT mapping as
-is caused by crashkernel reserving, since no regression is brought.
-And meantime, turning to check if there's any way to make the contiguous
-linear mapping and later splitting work. The patch 4, 5 in this patchset
-doesn't make much sense to me, frankly speaking.
+Changes in v5:
+- Replaced _ in node name with -
+- Ordered nodes by name
+- Remove extra newline
+- Add comment that compatible will be filled in per-board
+- Replace _ in node name with -
+- Order nodes by name.
+- Add comment that compatible will be filled in per-board.
 
-Thanks
-Baoquan
+Changes in v4:
+- Cleaned up rt5682s files
+- Restored camcc definition
+- Added missing version history
+- Add missing version history
+- Add missing version history
+- Fix description (no downstream bits removed).
+- Add missing version history.
+- Fix description (no downstream bits removed).
+- Add missing version history.
 
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  arch/arm64/mm/init.c | 71 ++++++++++++++++++++++++++++++++++++++++----
->  1 file changed, 65 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index fb24efbc46f5ef4..ae0bae2cafe6ab0 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -141,15 +141,44 @@ static void __init reserve_crashkernel(int dma_state)
->  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
->  	char *cmdline = boot_command_line;
->  	int dma_enabled = IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32);
-> -	int ret;
-> +	int ret, skip_res = 0, skip_low_res = 0;
->  	bool fixed_base;
->  
->  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
->  		return;
->  
-> -	if ((!dma_enabled && (dma_state != DMA_PHYS_LIMIT_UNKNOWN)) ||
-> -	     (dma_enabled && (dma_state != DMA_PHYS_LIMIT_KNOWN)))
-> -		return;
-> +	/*
-> +	 * In the following table:
-> +	 * X,high  means crashkernel=X,high
-> +	 * unknown means dma_state = DMA_PHYS_LIMIT_UNKNOWN
-> +	 * known   means dma_state = DMA_PHYS_LIMIT_KNOWN
-> +	 *
-> +	 * The first two columns indicate the status, and the last two
-> +	 * columns indicate the phase in which crash high or low memory
-> +	 * needs to be reserved.
-> +	 *  ---------------------------------------------------
-> +	 * | DMA enabled | X,high used |  unknown  |   known   |
-> +	 *  ---------------------------------------------------
-> +	 * |      N            N       |    low    |    NOP    |
-> +	 * |      Y            N       |    NOP    |    low    |
-> +	 * |      N            Y       |  high/low |    NOP    |
-> +	 * |      Y            Y       |    high   |    low    |
-> +	 *  ---------------------------------------------------
-> +	 *
-> +	 * But in this function, the crash high memory allocation of
-> +	 * crashkernel=Y,high and the crash low memory allocation of
-> +	 * crashkernel=X[@offset] for crashk_res are mixed at one place.
-> +	 * So the table above need to be adjusted as below:
-> +	 *  ---------------------------------------------------
-> +	 * | DMA enabled | X,high used |  unknown  |   known   |
-> +	 *  ---------------------------------------------------
-> +	 * |      N            N       |    res    |    NOP    |
-> +	 * |      Y            N       |    NOP    |    res    |
-> +	 * |      N            Y       |res/low_res|    NOP    |
-> +	 * |      Y            Y       |    res    |  low_res  |
-> +	 *  ---------------------------------------------------
-> +	 *
-> +	 */
->  
->  	/* crashkernel=X[@offset] */
->  	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
-> @@ -169,10 +198,33 @@ static void __init reserve_crashkernel(int dma_state)
->  		else if (ret)
->  			return;
->  
-> +		/* See the third row of the second table above, NOP */
-> +		if (!dma_enabled && (dma_state == DMA_PHYS_LIMIT_KNOWN))
-> +			return;
-> +
-> +		/* See the fourth row of the second table above */
-> +		if (dma_enabled) {
-> +			if (dma_state == DMA_PHYS_LIMIT_UNKNOWN)
-> +				skip_low_res = 1;
-> +			else
-> +				skip_res = 1;
-> +		}
-> +
->  		crash_max = CRASH_ADDR_HIGH_MAX;
->  	} else if (ret || !crash_size) {
->  		/* The specified value is invalid */
->  		return;
-> +	} else {
-> +		/* See the 1-2 rows of the second table above, NOP */
-> +		if ((!dma_enabled && (dma_state == DMA_PHYS_LIMIT_KNOWN)) ||
-> +		     (dma_enabled && (dma_state == DMA_PHYS_LIMIT_UNKNOWN)))
-> +			return;
-> +	}
-> +
-> +	if (skip_res) {
-> +		crash_base = crashk_res.start;
-> +		crash_size = crashk_res.end - crashk_res.start + 1;
-> +		goto check_low;
->  	}
->  
->  	fixed_base = !!crash_base;
-> @@ -202,9 +254,18 @@ static void __init reserve_crashkernel(int dma_state)
->  		return;
->  	}
->  
-> +	crashk_res.start = crash_base;
-> +	crashk_res.end = crash_base + crash_size - 1;
-> +
-> +check_low:
-> +	if (skip_low_res)
-> +		return;
-> +
->  	if ((crash_base >= CRASH_ADDR_LOW_MAX) &&
->  	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
->  		memblock_phys_free(crash_base, crash_size);
-> +		crashk_res.start = 0;
-> +		crashk_res.end = 0;
->  		return;
->  	}
->  
-> @@ -219,8 +280,6 @@ static void __init reserve_crashkernel(int dma_state)
->  	if (crashk_low_res.end)
->  		kmemleak_ignore_phys(crashk_low_res.start);
->  
-> -	crashk_res.start = crash_base;
-> -	crashk_res.end = crash_base + crash_size - 1;
->  	insert_resource(&iomem_resource, &crashk_res);
->  }
->  
-> -- 
-> 2.25.1
-> 
+Changes in v3:
+- Removed camcc definition
+- First inclusion in this series
+- First inclusion in series.
+
+Changes in v2:
+- Word wrapped patch description.
+- Removed "Author" from patch description.
+- Fixed whitespace around "en_pp3300_dx_edp"
+- Add word wrapping to patch description.
+- Remove "Author" from patch description.
+- Fix whitespace around "en_pp3300_dx_edp".
+- First inclusion in series.
+
+Joseph S. Barrera III (5):
+  arm64: dts: qcom: sc7180: Add wormdingler dts files
+  arm64: dts: qcom: sc7180: Add quackingstick dts files
+  arm64: dts: qcom: sc7180: Add mrbland dts files
+  arm64: dts: qcom: sc7180: Add pazquel dts files
+  arm64: dts: qcom: sc7180: Add kingoftown dts files
+
+ arch/arm64/boot/dts/qcom/Makefile             |  18 +
+ .../dts/qcom/sc7180-trogdor-kingoftown-r0.dts |  44 ++
+ .../dts/qcom/sc7180-trogdor-kingoftown-r1.dts |  17 +
+ .../dts/qcom/sc7180-trogdor-kingoftown.dtsi   | 224 ++++++++++
+ .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 +
+ .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 +
+ .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  53 +++
+ .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 +
+ .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 ++
+ .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 344 +++++++++++++++
+ .../sc7180-trogdor-pazquel-lte-parade.dts     |  22 +
+ .../qcom/sc7180-trogdor-pazquel-lte-ti.dts    |  22 +
+ .../qcom/sc7180-trogdor-pazquel-parade.dts    |  17 +
+ .../dts/qcom/sc7180-trogdor-pazquel-ti.dts    |  17 +
+ .../boot/dts/qcom/sc7180-trogdor-pazquel.dtsi | 221 ++++++++++
+ .../sc7180-trogdor-quackingstick-r0-lte.dts   |  38 ++
+ .../qcom/sc7180-trogdor-quackingstick-r0.dts  |  26 ++
+ .../qcom/sc7180-trogdor-quackingstick.dtsi    | 318 ++++++++++++++
+ .../sc7180-trogdor-wormdingler-rev0-boe.dts   |  22 +
+ .../sc7180-trogdor-wormdingler-rev0-inx.dts   |  22 +
+ .../qcom/sc7180-trogdor-wormdingler-rev0.dtsi |  53 +++
+ ...0-trogdor-wormdingler-rev1-boe-rt5682s.dts |  29 ++
+ .../sc7180-trogdor-wormdingler-rev1-boe.dts   |  28 ++
+ ...0-trogdor-wormdingler-rev1-inx-rt5682s.dts |  29 ++
+ .../sc7180-trogdor-wormdingler-rev1-inx.dts   |  22 +
+ .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  | 408 ++++++++++++++++++
+ 26 files changed, 2084 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
+
+-- 
+2.31.0
 

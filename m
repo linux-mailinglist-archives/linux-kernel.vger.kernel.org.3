@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93089552ABE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85979552AC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345461AbiFUGEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 02:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S1345437AbiFUGFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 02:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbiFUGD6 (ORCPT
+        with ESMTP id S229480AbiFUGFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 02:03:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 718501CB39;
-        Mon, 20 Jun 2022 23:03:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17CAF139F;
-        Mon, 20 Jun 2022 23:03:56 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.69.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 399B33F5A1;
-        Mon, 20 Jun 2022 23:03:52 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 07:03:44 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] bitops: let optimize out non-atomic bitops on
- compile-time constants
-Message-ID: <YrFfQOSrqpX/qjhd@FVFF77S0Q05N>
-References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
- <YrCB/rz3RM6TCjij@FVFF77S0Q05N>
- <20220620150855.2630784-1-alexandr.lobakin@intel.com>
+        Tue, 21 Jun 2022 02:05:49 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54F615A1F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:05:47 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25L65SXf121737;
+        Tue, 21 Jun 2022 01:05:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1655791528;
+        bh=Ap0E3scOD56YBw0wixxDNJ51SA2kU8j9amKsGfVLewc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=N2GAXK6+v4JCbCskex3KsAVG3xV023TmieBob3Z1wGAGB6SCbjA+LW+1r5+MSB+TL
+         55vcCGid2z3fsC7E8mzFPd8eBr40n2+lZfu+vl2ZF3ccf3BKmnq2GipGfEFDi67oRh
+         NbNACo5kCAk7U2G3weMPsopwh/IiFYK7StLp86pY=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25L65SkV121374
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Jun 2022 01:05:28 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 21
+ Jun 2022 01:05:28 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 21 Jun 2022 01:05:28 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25L65RZM067872;
+        Tue, 21 Jun 2022 01:05:27 -0500
+Date:   Tue, 21 Jun 2022 11:35:26 +0530
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+CC:     <dri-devel@lists.freedesktop.org>, <andrzej.hajda@intel.com>,
+        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
+        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <p.zabel@pengutronix.de>,
+        <laurent.pinchart@ideasonboard.com>,
+        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
+        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>
+Subject: Re: [PATCH v2] drm/bridge: cdns-dsi: Add support for J721E wrapper
+Message-ID: <20220621060525.kvm5wojt6kmfqhqv@uda0490373>
+References: <20220619140158.30881-1-r-ravikumar@ti.com>
+ <042c77d5-7db1-fa09-4be4-74dbfa85b5e2@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220620150855.2630784-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <042c77d5-7db1-fa09-4be4-74dbfa85b5e2@ideasonboard.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,70 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 05:08:55PM +0200, Alexander Lobakin wrote:
-> From: Mark Rutland <mark.rutland@arm.com>
-> Date: Mon, 20 Jun 2022 15:19:42 +0100
+On 13:02-20220620, Tomi Valkeinen wrote:
+> Hi,
 > 
-> > On Fri, Jun 17, 2022 at 04:40:24PM +0200, Alexander Lobakin wrote:
+> On 19/06/2022 17:01, Rahul T R wrote:
+> > Add support for wrapper settings for DSI bridge on
+> > j721e. Also set the DPI input to DPI0
 > > 
-> > > The savings are architecture, compiler and compiler flags dependent,
-> > > for example, on x86_64 -O2:
-> > > 
-> > > GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
-> > > LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
-> > > LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
-> > > 
-> > > and ARM64 (courtesy of Mark[0]):
-> > > 
-> > > GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
-> > > LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
-> > 
-> > Hmm... with *this version* of the series, I'm not getting results nearly as
-> > good as that when building defconfig atop v5.19-rc3:
-> > 
-> >   GCC 8.5.0:   add/remove: 83/49 grow/shrink: 973/1147 up/down: 32020/-47824 (-15804)
-> >   GCC 9.3.0:   add/remove: 68/51 grow/shrink: 1167/592 up/down: 30720/-31352 (-632)
-> >   GCC 10.3.0:  add/remove: 84/37 grow/shrink: 1711/1003 up/down: 45392/-41844 (3548)
-> >   GCC 11.1.0:  add/remove: 88/31 grow/shrink: 1635/963 up/down: 51540/-46096 (5444)
-> >   GCC 11.3.0:  add/remove: 89/32 grow/shrink: 1629/966 up/down: 51456/-46056 (5400)
-> >   GCC 12.1.0:  add/remove: 84/31 grow/shrink: 1540/829 up/down: 48772/-43164 (5608)
-> > 
-> >   LLVM 12.0.1: add/remove: 118/58 grow/shrink: 437/381 up/down: 45312/-65668 (-20356)
-> >   LLVM 13.0.1: add/remove: 35/19 grow/shrink: 416/243 up/down: 14408/-22200 (-7792)
-> >   LLVM 14.0.0: add/remove: 42/16 grow/shrink: 415/234 up/down: 15296/-21008 (-5712)
-> > 
-> > ... and that now seems to be regressing codegen with recent versions of GCC as
-> > much as it improves it LLVM.
-> > 
-> > I'm not sure if we've improved some other code and removed the benefit between
-> > v5.19-rc1 and v5.19-rc3, or whether something else it at play, but this doesn't
-> > look as compelling as it did.
+> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> > ---
 > 
-> Mostly likely it's due to that in v1 I mistakingly removed
-> `volatile` from gen[eric]_test_bit(), so there was an impact for
-> non-constant cases as well.
-> +5 Kb sounds bad tho. Do you have CONFIG_TEST_BITMAP enabled, does
-> it work? 
+> Nack... This wouldn't work with some other SoC using CDNS DSI.
+> 
+> See cdns-mhdp8546 for an example of a bit more generic wrapper support.
+> 
+>  Tomi
 
-I didn't have it enabled, but I tried that just nw with GCC 12.1.0 and it
-builds cleanly, and test_bitmap_const_eval() gets optimized away entirely. If i
-remove the `static` from that, GCC generates:
+Thanks Tomi,
 
-| <test_bitmap_const_eval>:
-|     paciasp
-|     autiasp
-|     ret
+I have sent a respin with making changes similar to cdns-mhdp8546
+please review
 
-... which is a trivial stub.
-
-> Probably the same reason as for m68k, more constant
-> optimization -> more aggressive inlining or inlining rebalance ->
-> larger code. OTOH I've no idea why sometimes compiler decides to
-> uninline really tiny functions where due to this patch series some
-> bitops have been converted to constants, like it goes on m68k.
-
-Hmm.... it'd be interesting to take a look at a few architectures and see what
-the common case is.
-
-Thanks,
-Mark.
+Regards
+Rahul T R

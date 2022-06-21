@@ -2,139 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93DB55360B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BDC55360E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351189AbiFUP0H convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 11:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S1350330AbiFUP1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350387AbiFUP0B (ORCPT
+        with ESMTP id S232548AbiFUP1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:26:01 -0400
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8042A951
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:26:00 -0700 (PDT)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay13.hostedemail.com (Postfix) with ESMTP id DF469602B7;
-        Tue, 21 Jun 2022 15:25:59 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id C136633;
-        Tue, 21 Jun 2022 15:25:58 +0000 (UTC)
-Message-ID: <aa1a96b7141cdf88648de84a0e51896fba23d65c.camel@perches.com>
-Subject: Re: [PATCH] Staging: rtl8192e: make sizeof type-independent
-From:   Joe Perches <joe@perches.com>
-To:     Felix Schlepper <f3sch.git@outlook.com>, gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Date:   Tue, 21 Jun 2022 08:25:57 -0700
-In-Reply-To: <AM9P190MB1299D518C86D495B168954B2A5B39@AM9P190MB1299.EURP190.PROD.OUTLOOK.COM>
-References: <AM9P190MB1299D518C86D495B168954B2A5B39@AM9P190MB1299.EURP190.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Tue, 21 Jun 2022 11:27:36 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4142A2A971
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:34 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id es26so18167063edb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ILeDKuRqs+6KaJKuC3DMca4dsilJZpsBWsm8KWiLros=;
+        b=AbMambO1LB7kdSp+mzCc3liOd7EsJg5F43ijIbQsO676JdbpjQwM6qG9aJstavqgan
+         JDWtRDT3rlmHkaZn2qh4PAzome2qCoQp+jOuXz10+4rg9rNCYMaOPUjqYRtTqNyar7Xr
+         dvKpsKBJ5Z45hzfOiPSeMkMML/++PuAfw9CmA4ZmqfjXpSPizti5IBSH6a1Qg8pnZaFL
+         OTfc4glhUCBbHSpamuedswpCnvaSW1cjg35jkPpTfslqXkTXM9xs5SXJZJ7Bf4zbSs8N
+         VSOkQsAs6uFohQZPg3YIEoZ+p/0JU1I9ePxw7jQZRJhy2qo7SAr2368NOK25rs1qGLYL
+         GFdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ILeDKuRqs+6KaJKuC3DMca4dsilJZpsBWsm8KWiLros=;
+        b=fmKI4LawtMjSPdlT1aqtTvx3zCuvFsBnAmm4FSQUrJ9eizkIEBAtcyEZM36KqFzDid
+         IseujgJQKayASX3egUMjEiSWjcet1/v3g3RSWI/FOHeEKQALOOnJFYTtJWVYA9aEVaQO
+         k9ko8ptsQ0sg971uh1J5d/3BZDhFeuH2B0wzZph2xKofWfAMqwv1lORkJPaoOlZadhD6
+         mnyCt6dc59Xd+Wy4guML3T7NHx6ING8JNhsFCGxNU3UyA2toYg6Sd78b5TFEtbucoX6m
+         sDovfc5vVS+TE6wbydfscupKvoK/k41Bg+jb0WITMzWIKlu4ONIynTjWI5H3YOzzL7yQ
+         bSeg==
+X-Gm-Message-State: AJIora/y/nxIPauuOySoFAIB4gBvh7ccSM6U/EWhsCpaFWGabRfwbQUy
+        hHePc615ixPo5Ef9s9TBb2Anq6BJhDCfcS3lP57q3Q==
+X-Google-Smtp-Source: AGRyM1vl1dj3IZNu9lHHH+Fl3VOH/3vv/c4P3JkjJZilD5Y74fS2cnU0d4C05O4nX9JfwTjrn0FjqcAjfOFzgVau2Bs=
+X-Received: by 2002:a05:6402:42d5:b0:433:1727:b31c with SMTP id
+ i21-20020a05640242d500b004331727b31cmr36016283edc.9.1655825252741; Tue, 21
+ Jun 2022 08:27:32 -0700 (PDT)
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: C136633
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+References: <20220620020727.GA3669@xsang-OptiPlex-9020> <YrBA7ysAif4I9nPv@linutronix.de>
+In-Reply-To: <YrBA7ysAif4I9nPv@linutronix.de>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Tue, 21 Jun 2022 17:27:22 +0200
+Message-ID: <CAMGffEksZGQrdHM9CS0H0Tq4TvfQMAbdcFYZej2KNWY=VxuBQg@mail.gmail.com>
+Subject: Re: [locking/lockdep] 4051a81774: page_allocation_failure:order:#,mode:#(GFP_KERNEL),nodemask=(null)
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        lkp@lists.01.org, lkp@intel.com,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: 3redqn4duodack9r4tfxoy1kjbsey4r3
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/Gd2h38M+HMuAhZt6MzRncn/Cp1goTE90=
-X-HE-Tag: 1655825158-138843
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 16:58 +0200, Felix Schlepper wrote:
-> Making sizeof operator type-independent.
-> 
-> Reported by checkpatch:
-> 
-> CHECK: Prefer kmalloc(sizeof(*txb)...) over
->         kmalloc(sizeof(struct rtllib_txb)...)
-> 
-> ---
-> Note: First patch, trying to follow kernelnewbies tutorial.
+Hi, there
 
-Congrats on the first patch, but know that checkpatch is a stupid
-script and it doesn't necessarily offer the best advice.
+On Mon, Jun 20, 2022 at 11:42 AM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> + rtrs, infiniband folks.
+>
+> On 2022-06-20 10:07:27 [+0800], kernel test robot wrote:
+> > Greeting,
+> >
+> > FYI, we noticed the following commit (built with gcc-11):
+> >
+> > commit: 4051a81774d6d8e28192742c26999d6f29bc0e68 ("locking/lockdep: Use=
+ sched_clock() for random numbers")
+> > https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git locking/urgent
+> =E2=80=A6
+> > in testcase: boot
+> >
+> > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2=
+ -m 16G
+> >
+> =E2=80=A6
+> > [   17.451787][    T1] rtrs_server L2256: Loading module rtrs_server, p=
+roto 2.0: (max_chunk_size: 131072 (pure IO 126976, headers 4096) , sess_que=
+ue_depth: 512, always_invalidate: 1)
+> > [   17.470894][    T1] swapper: page allocation failure: order:5, mode:=
+0xcc0(GFP_KERNEL), nodemask=3D(null)
+>
+> If I read this right, it allocates "512 * 10" chunks of order 5 / 128KiB
+> of memory (contiguous memory). And this appears to fail.
+> This is either a lot of memory or something that shouldn't be used on
+> i386.
+It allocates 512 * 128 KiB of memory, which is probably to big for
+this VM setup.
+>
+> Either way, locking/urgent is innocent.
+Agree.
 
-A helper mechanism exists that should be preferred over checkpatch's
-advice...
-
-> diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-[]
-> @@ -205,8 +205,7 @@ static struct rtllib_txb *rtllib_alloc_txb(int nr_frags, int txb_size,
->  	struct rtllib_txb *txb;
->  	int i;
->  
-> -	txb = kmalloc(sizeof(struct rtllib_txb) + (sizeof(u8 *) * nr_frags),
-> -		      gfp_mask);
-> +	txb = kmalloc(sizeof(*txb) + (sizeof(u8 *) * nr_frags), gfp_mask);
-
-Use struct_size() instead, something like:
-
-	txb = kmalloc(struct_size(txb, fragments, nr_frags), gfp_mask);
-
->  	if (!txb)
->  		return NULL;
->  
-
-though I would also suggest using kzalloc as safer against memory
-initialization defects (and could remove a memset here).
-
-Perhaps something like:
----
- drivers/staging/rtl8192e/rtllib_tx.c | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-index 37715afb0210d..bcccde91fa0bd 100644
---- a/drivers/staging/rtl8192e/rtllib_tx.c
-+++ b/drivers/staging/rtl8192e/rtllib_tx.c
-@@ -205,30 +205,28 @@ static struct rtllib_txb *rtllib_alloc_txb(int nr_frags, int txb_size,
- 	struct rtllib_txb *txb;
- 	int i;
- 
--	txb = kmalloc(sizeof(struct rtllib_txb) + (sizeof(u8 *) * nr_frags),
--		      gfp_mask);
-+	txb = kzalloc(struct_size(txb, fragments, nr_frags), gfp_mask);
- 	if (!txb)
- 		return NULL;
- 
--	memset(txb, 0, sizeof(struct rtllib_txb));
- 	txb->nr_frags = nr_frags;
- 	txb->frag_size = cpu_to_le16(txb_size);
- 
- 	for (i = 0; i < nr_frags; i++) {
- 		txb->fragments[i] = dev_alloc_skb(txb_size);
--		if (unlikely(!txb->fragments[i])) {
--			i--;
--			break;
--		}
-+		if (!txb->fragments[i])
-+			goto err_free;
- 		memset(txb->fragments[i]->cb, 0, sizeof(txb->fragments[i]->cb));
- 	}
--	if (unlikely(i != nr_frags)) {
--		while (i >= 0)
--			dev_kfree_skb_any(txb->fragments[i--]);
--		kfree(txb);
--		return NULL;
--	}
-+
- 	return txb;
-+
-+err_free:
-+	while (i > 0)
-+		dev_kfree_skb_any(txb->fragments[--i]);
-+	kfree(txb);
-+
-+	return NULL;
- }
- 
- static int rtllib_classify(struct sk_buff *skb, u8 bIsAmsdu)
-
+Thanks!

@@ -2,256 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318A1553E08
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0319553E0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356274AbiFUVnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S1356554AbiFUVnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356492AbiFUVne (ORCPT
+        with ESMTP id S1345358AbiFUVnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:43:34 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E421917595
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:43:26 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s14so10281198ljs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RaH322YAfZ65JMqhLFboGn96Qf6ZOePhsZrijH5KbCY=;
-        b=D3/p22SjNtBkp5qEhE4PypZKC+l3FMV1mhcEN+p6jsNQhcEDuTDTjJxGGLOJxbogOF
-         1hFTZ9BOEVKlgp02OsdyaGnv3jsasAPBa/Cnnn2ZVpnyiylHmg6eMVeg4UOWSS0+p6zX
-         sdy+2066vX5/bbMcM3aRdbC1PfISSKXvU7NaQ/kzpQjqwI/qZveOUZN3ugQivMMRJkUd
-         767YoEBbRRZIM8FyEma3DgNG5SB6FMsF8zbh96yzu29kt8zP32y8BNiGjtAdoKvgo2HK
-         SJwOxxywLUJ1z091ovPz98tTKskg+w9ZxRTuR70p3dBhFgE3sxOSL5tGHMYs7Mh864Qz
-         uO2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RaH322YAfZ65JMqhLFboGn96Qf6ZOePhsZrijH5KbCY=;
-        b=tb1GX8YWCBQjYUgyBCuGli6vw40umc2cf23BmrWl6AS2Yfwmmii4LAEx1VNZH4wt4T
-         8X7tMSZO0ahtGn5wyRRH8dBXVzDeKLBDmrwUwVTRndGkT2o1Jimq/X8vzdj2QydkKESU
-         UBLxepVIvCn17J5a64JzRtqdHyStRSz/etIwXItuyo2IXIo00bgsHVqffWwPAn4Qkzyv
-         fo1LpShyWJx9yrBdWe1vhW6cQx2fEub0d2vqsd8B0by1yLvWKkMZQUyA/4tz0jYewgtX
-         djsuPQCROL4PlAuhbGi4v8jBbb4Y7VDPUBqjQGU7r2Le+zcPPdjwtEl0YPtn9avToEn/
-         OXTA==
-X-Gm-Message-State: AJIora/xTdcmlRCcFsUZ3AzV468+N2GNNWGiUqGpZq8gS+Qmx6E7eF7K
-        YVKgUKxfM0e9cq29C1r1Wlo1ivaNoq4o8OA+xKQGDw==
-X-Google-Smtp-Source: AGRyM1t5LrtreIfpkqHvv2yWX9Y68V+SEkl3eaqcL/xXhjiBuz27iIjbUSSQa72Yfnt0/LC6HDLYtul7ha0wfZsOe5Q=
-X-Received: by 2002:a2e:8805:0:b0:255:6e73:9a67 with SMTP id
- x5-20020a2e8805000000b002556e739a67mr91486ljh.426.1655847804879; Tue, 21 Jun
- 2022 14:43:24 -0700 (PDT)
+        Tue, 21 Jun 2022 17:43:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D7517585;
+        Tue, 21 Jun 2022 14:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 126D36159B;
+        Tue, 21 Jun 2022 21:43:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303B4C3411C;
+        Tue, 21 Jun 2022 21:43:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655847825;
+        bh=vrMa9DlL0Gtn/NRPsxBoWIuls9uIFmuXvxlJ7YOzZ+o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=MZeYhSs++wYDAHtTC1/hhERtHYB+j8OmAKQie3RU7h7LjTQwGTEkyThD8XDvq5kdZ
+         yoPQ9/7lNX+EVkaBPhJukr96nGgedT5z54/m5EEPreqR1Bhh2PSmnZHo4RRJv/DWlj
+         E1y+DOqr+NgB2mNMhohKufFfD3RoLv4GCMMXdj103gbgbmd7Iz/DaGRPEJ6xoX8jyF
+         gkT5Rwvlstm5TKDgO83TtBN0wIYIjM8gEjiRnhYsfsPIYq8sTP85m974o4se5FA5gO
+         BgQdEGq/9DrfqH4SE9udvxaabkzcvFVA4iNFc+RwzFrBUryZDG/iSmgqitnUY6SdOI
+         WRZC80wGzYLeg==
+Date:   Tue, 21 Jun 2022 16:43:43 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
+        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        johan+linaro@kernel.org
+Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
+Message-ID: <20220621214343.GA1335071@bhelgaas>
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <a63de5e687c530849312099ee02007089b67e92f.1655761627.git.ashish.kalra@amd.com>
-In-Reply-To: <a63de5e687c530849312099ee02007089b67e92f.1655761627.git.ashish.kalra@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 21 Jun 2022 15:43:13 -0600
-Message-ID: <CAMkAt6qL_p8Fp=ED5hER665GHzQn=nwZQhFg4MwHt7QanS4wVw@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 13/49] crypto:ccp: Provide APIs to issue SEV-SNP commands
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOX2RU7idTVcW6ivqs3V_Ep33RoHZs1zt0jav-_z2D7xpKJstw@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(
+On Tue, Jun 21, 2022 at 11:05:17PM +0200, Robert Marko wrote:
+> On Tue, 21 Jun 2022 at 22:32, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Tue, Jun 21, 2022 at 01:23:30PM +0200, Robert Marko wrote:
+> > > IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
+> > > cause the system to hang as its using DBI registers in the .init
+> > > and those are only accesible after phy_power_on().
+> >
+> > Is the fact that IPQ8074 has both a Gen2 and a Gen3 port relevant to
+> > this patch?  I don't see the connection.
+> 
+> Not really, I can remove it from the description as this only affects the Gen2
+> port, Gen3 support is dependant on the IPQ6018 support getting merged as
+> it uses the same controller.
 
-On Mon, Jun 20, 2022 at 5:05 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
->
-> From: Brijesh Singh <brijesh.singh@amd.com>
->
-> Provide the APIs for the hypervisor to manage an SEV-SNP guest. The
-> commands for SEV-SNP is defined in the SEV-SNP firmware specification.
->
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  drivers/crypto/ccp/sev-dev.c | 24 ++++++++++++
->  include/linux/psp-sev.h      | 73 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 97 insertions(+)
->
-> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> index f1173221d0b9..35d76333e120 100644
-> --- a/drivers/crypto/ccp/sev-dev.c
-> +++ b/drivers/crypto/ccp/sev-dev.c
-> @@ -1205,6 +1205,30 @@ int sev_guest_df_flush(int *error)
->  }
->  EXPORT_SYMBOL_GPL(sev_guest_df_flush);
->
-> +int snp_guest_decommission(struct sev_data_snp_decommission *data, int *error)
-> +{
-> +       return sev_do_cmd(SEV_CMD_SNP_DECOMMISSION, data, error);
-> +}
-> +EXPORT_SYMBOL_GPL(snp_guest_decommission);
-> +
-> +int snp_guest_df_flush(int *error)
-> +{
-> +       return sev_do_cmd(SEV_CMD_SNP_DF_FLUSH, NULL, error);
-> +}
-> +EXPORT_SYMBOL_GPL(snp_guest_df_flush);
+Great, I think unrelated details confuse things.
 
-Why not instead change sev_guest_df_flush() to be SNP aware? That way
-callers get the right behavior without having to know if SNP is
-enabled or not.
+> > I see that qcom_pcie_host_init() does:
+> >
+> >   qcom_pcie_host_init
+> >     pcie->cfg->ops->init(pcie)
+> >     phy_power_on(pcie->phy)
+> >     pcie->cfg->ops->post_init(pcie)
+> >
+> > and that you're moving DBI register accesses from
+> > qcom_pcie_init_2_3_3() to qcom_pcie_post_init_2_3_3().
+> >
+> > But I also see DBI register accesses in other .init() functions:
+> >
+> >   qcom_pcie_init_2_1_0
+> >   qcom_pcie_init_1_0_0      (oddly out of order)
+> >   qcom_pcie_init_2_3_2
+> >   qcom_pcie_init_2_4_0
+> >
+> > Why do these accesses not need to be moved?  I assume it's because
+> > pcie->phy is an optional PHY and phy_power_on() does nothing on those
+> > controllers?
+> 
+> As far as I could figure out from QCA-s 5.4 kernel, various commits,
+> and QCA-s attempts to solve this already upstream the Gen2
+> controller in IPQ8074 is a bit special and requires the PHY to be
+> powered on before DBI could be accessed or else the board will hang
+> as it does for me.
+> 
+> I can only assume that this is an IPQ8074-specific quirk and other
+> IP-s are not affected like this, so they were not broken.
 
-int sev_guest_df_flush(int *error)
-{
-  if (!psp_master || !psp_master->sev_data)
-   return -EINVAL;
+> > Whatever the reason, I think the DBI accesses should be done
+> > consistently in .post_init().  I see that Dmitry's previous patches
+> > removed all those .post_init() functions, but I think the consistency
+> > is worth having.
+> >
+> > Perhaps we could reorder the patches so this patch comes first, moves
+> > the DBI accesses into .post_init(), then Dmitry's patches could be
+> > rebased on top to drop the clock handling?
+> >
+> > > So solve this by splitting the DBI read/writes to .post_init.
+> 
+> I am open to anything to get this fixed properly, you are gonna need
+> to point me in the right direction as I am really new to PCI.
 
-  if (psp_master->sev_data->snp_inited)
-    return sev_do_cmd(SEV_CMD_SNP_DF_FLUSH, NULL, error);
+Unless there's a reason *not* to move the DBI accesses for other
+variants, I think we should move them all to .post_init().  Otherwise
+it's just magic -- there's no indication in the code about why IPQ8074
+needs to be different from all the rest.
 
-  return sev_do_cmd(SEV_CMD_DF_FLUSH, NULL, error);
-}
+a0fd361db8e5 appeared in v5.11, so presumably IPQ8074 has been broken
+since then?  Are there any problem report URLs or references to the
+attempts you mentioned above that we could include here?
 
-> +int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error)
-> +{
-> +       return sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, data, error);
-> +}
-> +EXPORT_SYMBOL_GPL(snp_guest_page_reclaim);
-> +
-> +int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error)
-> +{
-> +       return sev_do_cmd(SEV_CMD_SNP_DBG_DECRYPT, data, error);
-> +}
-> +EXPORT_SYMBOL_GPL(snp_guest_dbg_decrypt);
-> +
->  static void sev_exit(struct kref *ref)
->  {
->         misc_deregister(&misc_dev->misc);
-> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-> index ef4d42e8c96e..9f921d221b75 100644
-> --- a/include/linux/psp-sev.h
-> +++ b/include/linux/psp-sev.h
-> @@ -881,6 +881,64 @@ int sev_guest_df_flush(int *error);
->   */
->  int sev_guest_decommission(struct sev_data_decommission *data, int *error);
->
-> +/**
-> + * snp_guest_df_flush - perform SNP DF_FLUSH command
-> + *
-> + * @sev_ret: sev command return code
-> + *
-> + * Returns:
-> + * 0 if the sev successfully processed the command
-> + * -%ENODEV    if the sev device is not available
-> + * -%ENOTSUPP  if the sev does not support SEV
-> + * -%ETIMEDOUT if the sev command timed out
-> + * -%EIO       if the sev returned a non-zero return code
-> + */
-> +int snp_guest_df_flush(int *error);
-> +
-> +/**
-> + * snp_guest_decommission - perform SNP_DECOMMISSION command
-> + *
-> + * @decommission: sev_data_decommission structure to be processed
-> + * @sev_ret: sev command return code
-> + *
-> + * Returns:
-> + * 0 if the sev successfully processed the command
-> + * -%ENODEV    if the sev device is not available
-> + * -%ENOTSUPP  if the sev does not support SEV
-> + * -%ETIMEDOUT if the sev command timed out
-> + * -%EIO       if the sev returned a non-zero return code
-> + */
-> +int snp_guest_decommission(struct sev_data_snp_decommission *data, int *error);
-> +
-> +/**
-> + * snp_guest_page_reclaim - perform SNP_PAGE_RECLAIM command
-> + *
-> + * @decommission: sev_snp_page_reclaim structure to be processed
-> + * @sev_ret: sev command return code
-> + *
-> + * Returns:
-> + * 0 if the sev successfully processed the command
-> + * -%ENODEV    if the sev device is not available
-> + * -%ENOTSUPP  if the sev does not support SEV
-> + * -%ETIMEDOUT if the sev command timed out
-> + * -%EIO       if the sev returned a non-zero return code
-> + */
-> +int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error);
-> +
-> +/**
-> + * snp_guest_dbg_decrypt - perform SEV SNP_DBG_DECRYPT command
-> + *
-> + * @sev_ret: sev command return code
-> + *
-> + * Returns:
-> + * 0 if the sev successfully processed the command
-> + * -%ENODEV    if the sev device is not available
-> + * -%ENOTSUPP  if the sev does not support SEV
-> + * -%ETIMEDOUT if the sev command timed out
-> + * -%EIO       if the sev returned a non-zero return code
-> + */
-> +int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error);
-> +
->  void *psp_copy_user_blob(u64 uaddr, u32 len);
->
->  #else  /* !CONFIG_CRYPTO_DEV_SP_PSP */
-> @@ -908,6 +966,21 @@ sev_issue_cmd_external_user(struct file *filep, unsigned int id, void *data, int
->
->  static inline void *psp_copy_user_blob(u64 __user uaddr, u32 len) { return ERR_PTR(-EINVAL); }
->
-> +static inline int
-> +snp_guest_decommission(struct sev_data_snp_decommission *data, int *error) { return -ENODEV; }
-> +
-> +static inline int snp_guest_df_flush(int *error) { return -ENODEV; }
-> +
-> +static inline int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error)
-> +{
-> +       return -ENODEV;
-> +}
-> +
-> +static inline int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error)
-> +{
-> +       return -ENODEV;
-> +}
-> +
->  #endif /* CONFIG_CRYPTO_DEV_SP_PSP */
->
->  #endif /* __PSP_SEV_H__ */
-> --
-> 2.25.1
->
+Since folks may want to backport the fix to v5.11, I'd probably do
+this patch by itself to make the backport easier, then add a second
+patch to move the DBI accesses for all the other variants.
+
+My personal opinion is that you should do this based on v5.19-rc1, and
+then we can rebase Dmitry's patches on top.  That would make all the
+patches simpler and it would make yours easier to backport.  But
+that's the sort of thing Dmitry, Stanimir, Andy, and Bjorn A. could
+weigh in on.
+
+Bjorn H.

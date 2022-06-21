@@ -2,200 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3445C552D8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E312552D94
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348552AbiFUIyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S1347174AbiFUIy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345745AbiFUIyR (ORCPT
+        with ESMTP id S1348465AbiFUIyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:54:17 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8D021E3F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:54:15 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fed274f3fbso113122707b3.17
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=sMhw4RZ/mWWPPEUWkgHgKXiigOXLUScNjtTFmn2v0ww=;
-        b=WYhhSDqtQLk2QwIQ9Mr+OfByWeTNLN8sNc4QhSP14iedILM5LNdrlTY82CM6VPKQCE
-         By6Ua1qc4cn6zsrHKakHGav00eshow0V3SRetAmA0xPNxDAyQihPZF7xBJ0KTM/lOqVD
-         yAhIvn2GX/NfazxHfKC654SnUE7VoOHGZr3pWPPebIBxIOX2UvpIL4VDNO0I6QH/j5Gz
-         YqGIfw9M0roZ/xk2YYqZrsC8UH2LzF0G9fjmQredjggrZW8PNMWTCbL06TbFWUJ7e2/x
-         7HjOI5S5pt2/z0kYY9bCfy6eQ49h/EoCWOj36bKQ3He5JQvrn3N7cPPpRMn1UzZH9WZI
-         RVCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=sMhw4RZ/mWWPPEUWkgHgKXiigOXLUScNjtTFmn2v0ww=;
-        b=RjrNjCHlvxNRACugmvV1R8ln2tsyr5lVYoVkyFu9tZ0RD08mN6gAIgw5Q3cSLJYzev
-         ryqPeSug9Fs8oYfofl+AjNJeJVzxNlBx2oteXK21/1PrKQwsWt+7nszJyeeFliQ/tBqx
-         JUh1S33jxBJ9d26hUbMUJlyvqNpYMf0gCkAWbVbLAfXvILHI62WdqJZOYjPVLcIzaKGM
-         f2GwQcFYv+T89u66U1SbdAKcve8MLv3WyyJ9pMkmFToW7roGONguU5KUISYUB7pr4D9o
-         Mbt4Ue5zKoYF4QQyJaHbXOT147jDP7RY7WnpQZofteHmuY+iBH1X3dXnTpe0wh87O/EM
-         byfg==
-X-Gm-Message-State: AJIora//tqzggRVSjBG10Ypq5reZxQVjuVohqDVLHK7giH5F5/1+WeBW
-        FeTS6Lo0P/5F8bPVEAaJOgD5qEfnjw8SXA==
-X-Google-Smtp-Source: AGRyM1vieUr2pRKhrhNOp1dFpCWfaNn7lwjXBL4J8TaauocML9PYRPmYH8ZaoDHS6H8PaqQG31H3ZdL9MJQ6hg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a0d:f045:0:b0:317:e6b2:2c64 with SMTP id
- z66-20020a0df045000000b00317e6b22c64mr7404945ywe.350.1655801655027; Tue, 21
- Jun 2022 01:54:15 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 16:53:45 +0800
-In-Reply-To: <20220621085345.603820-1-davidgow@google.com>
-Message-Id: <20220621085345.603820-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>
-Cc:     Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 04:54:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5B626ACA;
+        Tue, 21 Jun 2022 01:54:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05E72614E6;
+        Tue, 21 Jun 2022 08:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03ADC3411C;
+        Tue, 21 Jun 2022 08:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655801679;
+        bh=stOJe6Yy2xjGc5GXNNTGn9kaJkwY1JpspK8KOB4uxx0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KCTrCaUXgRpWTvpAB4Hn9pCQ0nVvRQ8SFBS77UtpNg0k0obRA+v3fIPp80pSLnZfn
+         WF5g6hzW+JUhCcFneEfOGuQPktDhG2r0foiv6ouWnUK9oLyV5i74PIcy8AjGls1FDS
+         dN1/ean6Zhb9xoNCMRqdIKIvhMOTY5v0WkUWnTr0=
+Date:   Tue, 21 Jun 2022 10:54:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        will@kernel.org, vdonnefort@google.com,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v7 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <YrGHS48LR759stoL@kroah.com>
+References: <20220621080308.3952915-1-sebastianene@google.com>
+ <20220621080308.3952915-3-sebastianene@google.com>
+ <YrGBBFW2d/scKDeN@kroah.com>
+ <6b5bb5e69888f69fcfdcb8c9c2fd2660@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b5bb5e69888f69fcfdcb8c9c2fd2660@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kunit_test_suite() macro is no-longer incompatible with module_add,
-so its use can be reinstated.
+On Tue, Jun 21, 2022 at 09:44:35AM +0100, Marc Zyngier wrote:
+> On 2022-06-21 09:27, Greg Kroah-Hartman wrote:
+> > On Tue, Jun 21, 2022 at 08:03:09AM +0000, Sebastian Ene wrote:
+> > > This driver creates per-cpu hrtimers which are required to do the
+> > > periodic 'pet' operation. On a conventional watchdog-core driver, the
+> > > userspace is responsible for delivering the 'pet' events by writing to
+> > > the particular /dev/watchdogN node. In this case we require a strong
+> > > thread affinity to be able to account for lost time on a per vCPU.
+> > > 
+> > > This part of the driver is the 'frontend' which is reponsible for
+> > > delivering the periodic 'pet' events, configuring the virtual
+> > > peripheral
+> > > and listening for cpu hotplug events. The other part of the driver
+> > > handles the peripheral emulation and this part accounts for lost
+> > > time by
+> > > looking at the /proc/{}/task/{}/stat entries and is located here:
+> > > https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> > > 
+> > > Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> > > ---
+> > >  drivers/misc/Kconfig               |  12 ++
+> > >  drivers/misc/Makefile              |   1 +
+> > >  drivers/misc/vcpu_stall_detector.c | 222
+> > > +++++++++++++++++++++++++++++
+> > >  3 files changed, 235 insertions(+)
+> > >  create mode 100644 drivers/misc/vcpu_stall_detector.c
+> > > 
+> > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > > index 41d2bb0ae23a..e15c85d74c4b 100644
+> > > --- a/drivers/misc/Kconfig
+> > > +++ b/drivers/misc/Kconfig
+> > > @@ -483,6 +483,18 @@ config OPEN_DICE
+> > > 
+> > >  	  If unsure, say N.
+> > > 
+> > > +config VCPU_STALL_DETECTOR
+> > > +	tristate "VCPU stall detector"
+> > > +	select LOCKUP_DETECTOR
+> > > +	help
+> > > +	  Detect CPU locks on a kvm virtual machine. This driver relies on
+> > > +	  the hrtimers which are CPU-binded to do the 'pet' operation.
+> > > When a
+> > > +	  vCPU has to do a 'pet', it exits the guest through MMIO write and
+> > > +	  the backend driver takes into account the lost ticks for this
+> > > +	  particular CPU.
+> > > +	  To compile this driver as a module, choose M here: the
+> > > +	  module will be called vcpu_stall_detector.
+> > 
+> > Should this depend on KVM_GUEST?
+> 
+> Not all architectures have KVM_GUEST, and arm64 has no use for it.
 
-Since this fixes parsing with builtins and kunit_tool, also enable the
-test by default when KUNIT_ALL_TESTS is enabled.
+Ah, I thought this was a requirement (or created a better guest image)
+for use under KVM.  Nevermind then...
 
-The test can now be run via kunit_tool with:
-	./tools/testing/kunit/kunit.py run --arch=x86_64 \
-	--kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-	--kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-	--kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-	--kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-	'sdhci-of-aspeed'
+thanks,
 
-(It may be worth adding a .kunitconfig at some point, as there are
-enough dependencies to make that command scarily long.)
-
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-No changes since v1:
-https://lore.kernel.org/linux-kselftest/20220618090310.1174932-6-davidgow@google.com/
-
----
- drivers/mmc/host/Kconfig                |  5 +++--
- drivers/mmc/host/sdhci-of-aspeed-test.c |  8 +-------
- drivers/mmc/host/sdhci-of-aspeed.c      | 27 -------------------------
- 3 files changed, 4 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index d6144978e32d..10c563999d3d 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -169,8 +169,9 @@ config MMC_SDHCI_OF_ASPEED
- 	  If unsure, say N.
- 
- config MMC_SDHCI_OF_ASPEED_TEST
--	bool "Tests for the ASPEED SDHCI driver"
--	depends on MMC_SDHCI_OF_ASPEED && KUNIT=y
-+	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
-+	depends on MMC_SDHCI_OF_ASPEED && KUNIT
-+	default KUNIT_ALL_TESTS
- 	help
- 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
- 	  option only if you will boot the kernel for the purpose of running
-diff --git a/drivers/mmc/host/sdhci-of-aspeed-test.c b/drivers/mmc/host/sdhci-of-aspeed-test.c
-index 1ed4f86291f2..ecb502606c53 100644
---- a/drivers/mmc/host/sdhci-of-aspeed-test.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed-test.c
-@@ -96,10 +96,4 @@ static struct kunit_suite aspeed_sdhci_test_suite = {
- 	.test_cases = aspeed_sdhci_test_cases,
- };
- 
--static struct kunit_suite *aspeed_sdc_test_suite_array[] = {
--	&aspeed_sdhci_test_suite,
--	NULL,
--};
--
--static struct kunit_suite **aspeed_sdc_test_suites
--	__used __section(".kunit_test_suites") = aspeed_sdc_test_suite_array;
-+kunit_test_suite(aspeed_sdhci_test_suite);
-diff --git a/drivers/mmc/host/sdhci-of-aspeed.c b/drivers/mmc/host/sdhci-of-aspeed.c
-index 6e4e132903a6..c10367946bc7 100644
---- a/drivers/mmc/host/sdhci-of-aspeed.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed.c
-@@ -606,25 +606,6 @@ static struct platform_driver aspeed_sdc_driver = {
- 
- #if defined(CONFIG_MMC_SDHCI_OF_ASPEED_TEST)
- #include "sdhci-of-aspeed-test.c"
--
--static inline int aspeed_sdc_tests_init(void)
--{
--	return __kunit_test_suites_init(aspeed_sdc_test_suites);
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--	__kunit_test_suites_exit(aspeed_sdc_test_suites);
--}
--#else
--static inline int aspeed_sdc_tests_init(void)
--{
--	return 0;
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--}
- #endif
- 
- static int __init aspeed_sdc_init(void)
-@@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
- 	if (rc < 0)
- 		goto cleanup_sdhci;
- 
--	rc = aspeed_sdc_tests_init();
--	if (rc < 0) {
--		platform_driver_unregister(&aspeed_sdc_driver);
--		goto cleanup_sdhci;
--	}
--
- 	return 0;
- 
- cleanup_sdhci:
-@@ -656,8 +631,6 @@ module_init(aspeed_sdc_init);
- 
- static void __exit aspeed_sdc_exit(void)
- {
--	aspeed_sdc_tests_exit();
--
- 	platform_driver_unregister(&aspeed_sdc_driver);
- 	platform_driver_unregister(&aspeed_sdhci_driver);
- }
--- 
-2.37.0.rc0.104.g0611611a94-goog
-
+greg k-h

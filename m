@@ -2,145 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54887552C2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36787552C32
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346999AbiFUHhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S1347322AbiFUHjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346241AbiFUHh3 (ORCPT
+        with ESMTP id S1346958AbiFUHiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:37:29 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5D5E1C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:37:27 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LRywS1bWyz1KC5C;
-        Tue, 21 Jun 2022 15:35:20 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 21 Jun 2022 15:37:25 +0800
-Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
- work as expected
-To:     "Huang, Ying" <ying.huang@intel.com>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220608144031.829-1-linmiaohe@huawei.com>
- <20220608144031.829-2-linmiaohe@huawei.com>
- <87r13jrdst.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <a384f290-dff3-6dad-f1d3-8ec245b9bebd@huawei.com>
- <87letqpzm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <463fe0cd-504a-f887-0201-691bacd9e69d@huawei.com>
-Date:   Tue, 21 Jun 2022 15:37:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 21 Jun 2022 03:38:17 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D945FAF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:38:15 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id l6so3621077plg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=nk+fdQE93FqPegDOLztKBITezax/oNzcyKzefYaORp8=;
+        b=fg3yA65YsHeVetLshPkg44ZoS0+r4kYz2gK82/9ZhWuhbuhVCG8b1IdASjgMLW9F8P
+         wo5ttxvpAXD/hkkxsxLIM3+CBiBChOIsQ3RNAzLUsbHjSWRRQ1JoPJeddxJmPypYwIDm
+         uLgUOck8sGg5x8fOxEN70TWDH9gWl9Wbnv+6R/mh1fTzZBKh+XeoxxFhRJgG5PZUK9DW
+         nqfEtw30mbezb6SjSdTry30MQ96gE3J2Hddk1ntmpTBAhiKYHRFYBolJEKTxUXGTeuu/
+         YfE/BdyNZZwSOCsxvcz1u38p0OwiwbgnrM79Hvr5UZyx3obezETo8+t91kh276rwrnYH
+         KUvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=nk+fdQE93FqPegDOLztKBITezax/oNzcyKzefYaORp8=;
+        b=YpnD5eqjl1hEf/IYEj9HiW0qBTnH/wwZ7yqR09bxtGCgQXtdHEaw4+8rngrWAgaA0r
+         iYRqwv7k2MML4/3eK4v+m0qavwUFVnRIGkmcadRMVdGXgPEHC1xTfiStWYe2/6o4zgcy
+         KzSUprBhHfspIj89BwF3aZGoYncc85r25ASxC4JJH5sGB8M2FX3F9/FHQaIeYZF4jwLa
+         3muG1KyFEJDG4MluGmeJy66Vgi3Up/L0sxjKShICDI0jWp0Imqg6XT1oy03jJHiS9y8u
+         r5hAuhhJpa8tzDUiBW1b82Cuw26wmk3gHWyzYsxAueUQ7m0RiVt4mUf6MzBEFGYrwtbt
+         KrFQ==
+X-Gm-Message-State: AJIora+v/vzTr5m8ucOnvtDaP1PlgDyJQ/HILEiwmNHxWkrZsiaKnEu9
+        aB2mJXyUqmc8d8PCcKJ0b1GSsQ==
+X-Google-Smtp-Source: AGRyM1tzcOchkt7DypAfKrCwXNSUY5s5v3wBe6Pw1F/TJ4XsfE6hlLD+8GcyGAve96CoC88+Qgh+mw==
+X-Received: by 2002:a17:902:728d:b0:168:d0cf:2246 with SMTP id d13-20020a170902728d00b00168d0cf2246mr27711694pll.74.1655797095238;
+        Tue, 21 Jun 2022 00:38:15 -0700 (PDT)
+Received: from [10.97.0.6] ([199.101.192.33])
+        by smtp.gmail.com with ESMTPSA id z4-20020a17090a66c400b001e345c579d5sm9463008pjl.26.2022.06.21.00.38.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 00:38:14 -0700 (PDT)
+Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Yang Shen <shenyang39@huawei.com>
+References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
+ <Yqn3spLZHpAkQ9Us@myrica> <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
+ <YqrmdKNrYTCiS/MC@myrica> <d90e8ea5-2f18-2eda-b4b2-711083aa7ecd@linaro.org>
+ <YrB1D9rv9G4h/BYU@myrica> <YrB30M9yAbUbPFrG@kroah.com>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Message-ID: <b5011dd2-e8ec-a307-1b43-5aff6cbb6891@linaro.org>
+Date:   Tue, 21 Jun 2022 15:37:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <87letqpzm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <YrB30M9yAbUbPFrG@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/21 9:35, Huang, Ying wrote:
-> Miaohe Lin <linmiaohe@huawei.com> writes:
-> 
->> On 2022/6/20 15:31, Huang, Ying wrote:
->>> Miaohe Lin <linmiaohe@huawei.com> writes:
->>>
->>>> security_vm_enough_memory_mm() checks whether a process has enough memory
->>>> to allocate a new virtual mapping. And total_swap_pages is considered as
->>>> available memory while swapoff tries to make sure there's enough memory
->>>> that can hold the swapped out memory. But total_swap_pages contains the
->>>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
->>>> success even if there's no memory to hold the swapped out memory because
->>>> total_swap_pages always greater than or equal to p->pages.
->>>
->>> Per my understanding, swapoff will not allocate virtual mapping by
->>> itself.  But after swapoff, the overcommit limit could be exceeded.
->>> security_vm_enough_memory_mm() is used to check that.  For example, in a
->>> system with 4GB memory and 8GB swap, and 10GB is in use,
->>>
->>> CommitLimit:    4+8 = 12GB
->>> Committed_AS:   10GB
->>>
->>> security_vm_enough_memory_mm() in swapoff() will fail because
->>> 10+8 = 18 > 12.  This is expected because after swapoff, the overcommit
->>> limit will be exceeded.
->>>
->>> If 3GB is in use,
->>>
->>> CommitLimit:    4+8 = 12GB
->>> Committed_AS:   3GB
->>>
->>> security_vm_enough_memory_mm() in swapoff() will succeed because
->>> 3+8 = 11 < 12.  This is expected because after swapoff, the overcommit
->>> limit will not be exceeded.
->>
->> In OVERCOMMIT_NEVER scene, I think you're right.
->>
->>>
->>> So, what's the real problem of the original implementation?  Can you
->>> show it with an example as above?
->>
->> In OVERCOMMIT_GUESS scene, in a system with 4GB memory and 8GB swap, and 10GB is in use,
->> pages below is 8GB, totalram_pages() + total_swap_pages is 12GB, so swapoff() will succeed
->> instead of expected failure because 8 < 12. The overcommit limit is always *ignored* in the
->> below case.
->>
->> 	if (sysctl_overcommit_memory == OVERCOMMIT_GUESS) {
->> 		if (pages > totalram_pages() + total_swap_pages)
->> 			goto error;
->> 		return 0;
->> 	}
->>
->> Or am I miss something?
-> 
-> Per my understanding, with OVERCOMMIT_GUESS, the number of in-use pages
-> isn't checked at all.  The only restriction is that the size of the
-> virtual mapping created should be less than total RAM + total swap
 
-Do you mean the only restriction is that the size of the virtual mapping
-*created every time* should be less than total RAM + total swap pages but
-*total virtual mapping* is not limited in OVERCOMMIT_GUESS scene? If so,
-the current behavior should be sane and I will drop this patch.
 
-Thanks!
-
-> pages.  Because swapoff() will not create virtual mapping, so it's
-> expected that security_vm_enough_memory_mm() in swapoff() always
-> succeeds.
-> 
-> Best Regards,
-> Huang, Ying
-> 
->>
->> Thanks!
->>
->>>
->>>> In order to fix it, p->pages should be retracted from total_swap_pages
->>>> first and then check whether there's enough memory for inuse swap pages.
+On 2022/6/20 下午9:36, Greg Kroah-Hartman wrote:
+> On Mon, Jun 20, 2022 at 02:24:31PM +0100, Jean-Philippe Brucker wrote:
+>> On Fri, Jun 17, 2022 at 02:05:21PM +0800, Zhangfei Gao wrote:
+>>>> The refcount only ensures that the uacce_device object is not freed as
+>>>> long as there are open fds. But uacce_remove() can run while there are
+>>>> open fds, or fds in the process of being opened. And atfer uacce_remove()
+>>>> runs, the uacce_device object still exists but is mostly unusable. For
+>>>> example once the module is freed, uacce->ops is not valid anymore. But
+>>>> currently uacce_fops_open() may dereference the ops in this case:
 >>>>
->>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>>
->>> [snip]
->>>
->>> .
->>>
-> 
-> .
-> 
+>>>> 	uacce_fops_open()
+>>>> 	 if (!uacce->parent->driver)
+>>>> 	 /* Still valid, keep going */		
+>>>> 	 ...					rmmod
+>>>> 						 uacce_remove()
+>>>> 	 ...					 free_module()
+>>>> 	 uacce->ops->get_queue() /* BUG */
+>>> uacce_remove should wait for uacce->queues_lock, until fops_open release the
+>>> lock.
+>>> If open happen just after the uacce_remove: unlock, uacce_bind_queue in open
+>>> should fail.
+>> Ah yes sorry, I lost sight of what this patch was adding. But we could
+>> have the same issue with the patch, just in a different order, no?
+>>
+>> 	uacce_fops_open()
+>> 	 uacce = xa_load()
+>> 	 ...					rmmod
+> Um, how is rmmod called if the file descriptor is open?
+>
+> That should not be possible if the owner of the file descriptor is
+> properly set.  Please fix that up.
+Thanks Greg
 
+Set cdev owner or use module_get/put can block rmmod once fops_open.
+-       uacce->cdev->owner = THIS_MODULE;
++       uacce->cdev->owner = uacce->parent->driver->owner;
+
+However, still not find good method to block removing parent pci device.
+
+$ echo 1 > /sys/bus/pci/devices/0000:00:02.0/remove &
+
+[   32.563350]  uacce_remove+0x6c/0x148
+[   32.563353]  hisi_qm_uninit+0x12c/0x178
+[   32.563356]  hisi_zip_remove+0xa0/0xd0 [hisi_zip]
+[   32.563361]  pci_device_remove+0x44/0xd8
+[   32.563364]  device_remove+0x54/0x88
+[   32.563367]  device_release_driver_internal+0xec/0x1a0
+[   32.563370]  device_release_driver+0x20/0x30
+[   32.563372]  pci_stop_bus_device+0x8c/0xe0
+[   32.563375]  pci_stop_and_remove_bus_device_locked+0x28/0x60
+[   32.563378]  remove_store+0x9c/0xb0
+[   32.563379]  dev_attr_store+0x20/0x38
+
+mutex_lock(&dev->device_lock) can be used, which used in 
+device_release_driver_internal.
+Or use internal mutex.
+
+Thanks

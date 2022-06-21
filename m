@@ -2,117 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A406553DDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D2F553DF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354063AbiFUVha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S1356103AbiFUViv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbiFUVh3 (ORCPT
+        with ESMTP id S1354116AbiFUViZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:37:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9618BE2D;
-        Tue, 21 Jun 2022 14:37:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F97FB81A8C;
-        Tue, 21 Jun 2022 21:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F0DC3411C;
-        Tue, 21 Jun 2022 21:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655847446;
-        bh=QEozH589MNtuFtNv/n9JY9HQ9NmxrWcgbRs4SzPhfKU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WM/s8HCS+lS1PQy1SXLPJ1ZrZj68w0itIyktvRfhkoT4qrDGJtmDfacWZOCW5un5b
-         YI2GAxjewAkTG+QnHfya3azPTBq8N5xAc7nC532yX7mYM2vqd2EeUOShANwkly57ue
-         EFAxdD3uASVsEzCFFailgNysofjIIxPRjKuuW9Qv4NMLL80m0rX4K6TaUgJIsqbPLd
-         famv6CuWWxu+nW7KlPeJ3ZQXKEDJdtkEezvG9rRmQoTdpey4WfrojANRSSYtl2//TN
-         BpRsPSoWYdW6DWrxm0vzsviYYhJnjLf+nDeIY6QcAG0cRvyBvjVXKZ/QSIiACrzITw
-         BbCOeyBVLPulg==
-Date:   Tue, 21 Jun 2022 23:37:21 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCHv6 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Message-ID: <YrI6EeVkkWVMNPFY@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220620230109.986298-1-dinguyen@kernel.org>
+        Tue, 21 Jun 2022 17:38:25 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6A011A23
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:38:24 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LBDkxR018841;
+        Tue, 21 Jun 2022 16:38:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=hG2O0Ae/l3SL3nlV1NIEggjHFsZlf5b9gTGrlsyn3l4=;
+ b=Bu4ooekZl5jJQknOn9U7PDN8QoGfuFsQt3hRGQv6Uh4YtxW+5sAn7KGuBVYL23/XgENA
+ qEBtaIAA6FPrH7tBJSvx+tnKK50UU64nqnkI3s6uPn9DrzhDtRb6evMdKiFfmLW51Rpz
+ s/tj40mf6hr53+ZboK0GfCm1bzC4wcOVl0F0IdJvVeF+LOgFzQGDiVqu6IaMYKPLiy0J
+ +JGre7pfZ8sOqy9iHMrwB3oKmQxblaoIEqUlyfkRgZhAScgZXgOZ3dj+oIuWISUFdF45
+ sJOj7VHKaaySIcGlGyV+S1xUC/IJk7OsFpkx+jxVYW2rcO0fNs0F4gzrl/I8VfJIt0C2 VQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gsb4p45ae-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 21 Jun 2022 16:38:03 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 21 Jun
+ 2022 22:38:01 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Tue, 21 Jun 2022 22:38:01 +0100
+Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.175])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A4CDE7C;
+        Tue, 21 Jun 2022 21:38:01 +0000 (UTC)
+From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 00/14] ALSA: hda: cirrus: Add initial DSP support and firmware loading
+Date:   Tue, 21 Jun 2022 22:37:47 +0100
+Message-ID: <20220621213801.2021097-1-vitalyr@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gOFjVNOAQ1QaTcpi"
-Content-Disposition: inline
-In-Reply-To: <20220620230109.986298-1-dinguyen@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: gG0iVWVAeW7MjEtaGc-yHvIAM3QJCkHe
+X-Proofpoint-ORIG-GUID: gG0iVWVAeW7MjEtaGc-yHvIAM3QJCkHe
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The CS35L41 Amplifier contains a DSP, capable of running firmware.
+The firmware can run algorithms such as Speaker Protection, to ensure
+that playback at high gains do not harm the speakers.
+Adding support for CS35L41 firmware into the CS35L41 HDA driver also
+allows us to support several extra features, such as hiberation 
+and interrupts.
 
---gOFjVNOAQ1QaTcpi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The chain adds support in stages:
+- General fixes to improve generalization and code re-use inside
+  the CS35L41 HDA driver.
+- Add support for interrupts into the driver, which is required
+  for complete support of the firmware.
+- Refactor ASoC CS35L41 code which deals with firmware to allow
+  for code re-use inside the CS35L41 HDA driver.
+- Add support for loading firmware and tuning files from file system,
+  and creating alsa controls to control it.
+- Support firmware load paths for different hardware systems.
+- Support suspend/resume in the driver when using firmware. The firmware
+  supports hibernation, which allows the CS35L41 to drop into a low
+  power mode during suspend.
+- Support the ability to unload firmware, swap and reload the firmware.
+  This is to allow different firmware to run during calibration.
 
-On Mon, Jun 20, 2022 at 06:01:08PM -0500, Dinh Nguyen wrote:
-> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
-> thus cannot be recovered by the default method of by doing a GPIO access.
-> Only a reset of the I2C IP block can a recovery be successful, so this
-> change effectively resets the I2C controller, NOT any attached clients.
+The intended use-case is to load the firmware once on boot, and the driver
+autmatically tries to load the firmware after it binds to the HDA driver.
+This behaviour can be switched off using a kconfig, if desired.
 
-I am afraid here is a serious misunderstanding. The I2C bus recovery
-procedure is a documented mechanism how to get a stalled bus back in the
-case that a client device holds SDA low. This mechanism consists of 9
-SCL pulses. A reset of the IP core is *not a recovery*. If SocFPGA
-cannot togle SCL in some way, it cannot do recovery and
-adap->bus_recovery_info should be NULL. Or did I miss something?
-
-> +static int i2c_socfpga_scl_recovery(struct i2c_adapter *adap)
-> +{
-> +	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
-> +
-> +	bri->prepare_recovery(adap);
-> +	bri->unprepare_recovery(adap);
-> +
-> +	return 0;
-> +}
-
-See, this function is named scl_recovery, but there is no SCL involved.
-This is why I think there is the misunderstanding here.
+changes since v5:
+ - Fix warning by kernel test robot <lkp@intel.com>
+ 
+changes since v4:
+- Fully remove tlv remnants from control add apis
+- Remove unnecessary debug
+- Rename variable to be more generic
+- Remove redundent length check from read/write control apis
 
 
---gOFjVNOAQ1QaTcpi
-Content-Type: application/pgp-signature; name="signature.asc"
+- Use SNDRV_CTL_ELEM_IFACE_CARD for firmware load controls
+- Make kcontrol add/remove synchronous
+- Load firmware asynchronous when loading via control
+- Used cached controls when reloading firmware; only delete
+controls when removing the driver itself
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKyOg0ACgkQFA3kzBSg
-KbaCoA//TYSQgglmhg0+wvtn7CaRSD65yJYC3P+ltv3ow0CjND820EKF0sDYZFw4
-Vts87+sTxp8KfXkKb0jyLoNAc+tte/8jj3GxS/hMjjtB56/aBQ7j6tbeHweTmFC2
-AzaBv04N7a5yWgnyX4h9nR6BQwwZCvRU09OB3A8OOiNhtFHnzcaJShMTgAQ3Oykm
-eYDpvaAIlDQDzoUTydxsQfJhkmlouv8KM52hmNk9FAluCFOY5L1txDv10ocL6+rE
-fZu5c1KaQUpWrhnzBZubOXrSAuMktEHtTGchvKqkC4cE7UT9UPu4pw/YLT0Z1aWr
-qvAZW9rTn6CFUcAZbMUpNPwGMBdaXC5uQjCqO+Mplqke9XgAtnYlgCVThV3FFdQA
-xbanf2o1gXh+qCpBsq+TYcLs9UpUIGouuxT6GK4oWsi9NzBLx0vtGbAGKaEb6vt1
-kiLmkMhQ4T6OvE5TFloL5VRblDsdkw6Wh8KG5VOSOxDi2cSYtWDdQGdDAekIrZFj
-p99ADXhC5h/gmOFxgrM50j1Bbi7CdE9kmcGAtR+iM2BcYdYXilfxsZEfdlc6QDHB
-qegqwLYCqM2ZXc9pI0FYmJYWGmxIeq2p+GeTduFK0oiK7ahpN8MBGXCPSWS6GSF+
-Qdaq2pcNgDPfnJ5+GSoy3DObKB3QeYwarOBAh+BPGzcoYgMHDf8=
-=Gi2f
------END PGP SIGNATURE-----
+- Improve kcontrol remove
+- Fix control write + notify
+- Cleanup of unnecessary code
+- Fix race condition when loading firmware before playback
+- Ensure errors are properly propogated
+- Fix include for Module parameters
 
---gOFjVNOAQ1QaTcpi--
+Stefan Binding (13):
+  ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
+  ALSA: hda: hda_cs_dsp_ctl: Add apis to write the controls directly
+  ALSA: hda: cs35l41: Save codec object inside component struct
+  ALSA: hda: cs35l41: Save Subsystem ID inside CS35L41 Driver
+  ALSA: hda: cs35l41: Support reading subsystem id from ACPI
+  ALSA: hda: cs35l41: Support multiple load paths for firmware
+  ALSA: hda: cs35l41: Support Speaker ID for laptops
+  ALSA: hda: cs35l41: Support Hibernation during Suspend
+  ALSA: hda: cs35l41: Read Speaker Calibration data from UEFI variables
+  ALSA: hda: hda_cs_dsp_ctl: Add fw id strings
+  ALSA: hda: cs35l41: Add defaulted values into dsp bypass config
+    sequence
+  ALSA: hda: cs35l41: Support Firmware switching and reloading
+  ALSA: hda: cs35l41: Add module parameter to control firmware load
+
+Vitaly Rodionov (1):
+  ALSA: hda: cs35l41: Add initial DSP support and firmware loading
+
+ MAINTAINERS                     |   1 +
+ include/sound/cs35l41.h         |   4 +
+ sound/pci/hda/Kconfig           |   8 +
+ sound/pci/hda/Makefile          |   2 +
+ sound/pci/hda/cs35l41_hda.c     | 902 +++++++++++++++++++++++++++++++-
+ sound/pci/hda/cs35l41_hda.h     |  39 ++
+ sound/pci/hda/cs35l41_hda_i2c.c |   1 +
+ sound/pci/hda/cs35l41_hda_spi.c |   1 +
+ sound/pci/hda/hda_component.h   |   4 +
+ sound/pci/hda/hda_cs_dsp_ctl.c  | 254 +++++++++
+ sound/pci/hda/hda_cs_dsp_ctl.h  |  39 ++
+ sound/pci/hda/patch_realtek.c   |  27 +-
+ 12 files changed, 1277 insertions(+), 5 deletions(-)
+ create mode 100644 sound/pci/hda/hda_cs_dsp_ctl.c
+ create mode 100644 sound/pci/hda/hda_cs_dsp_ctl.h
+
+-- 
+2.34.1
+

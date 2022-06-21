@@ -2,109 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E3D552E2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26560552E31
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348257AbiFUJYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
+        id S1348332AbiFUJYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347838AbiFUJYR (ORCPT
+        with ESMTP id S1348164AbiFUJYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:24:17 -0400
-Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0CDA521E3F;
-        Tue, 21 Jun 2022 02:24:10 -0700 (PDT)
-Received: from fedora33.wangsu.com (unknown [59.61.78.232])
-        by app2 (Coremail) with SMTP id SyJltACXnuIyjrFip5sGAA--.10560S2;
-        Tue, 21 Jun 2022 17:24:06 +0800 (CST)
-From:   Lin Feng <linf@wangsu.com>
-To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linf@wangsu.com
-Subject: [PATCH] cgroup.c: remove redundant check for mixable cgroup in cgroup_migrate_vet_dst
-Date:   Tue, 21 Jun 2022 17:23:58 +0800
-Message-Id: <20220621092358.223594-1-linf@wangsu.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: SyJltACXnuIyjrFip5sGAA--.10560S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFy8KrWfGFWfZrykAr13urg_yoW8JFW7pr
-        4DArW2y3yFkF1Dtw40q3yqgFWFkw40qr1Utas5Ww1UZw17Jw1aqrna9a4UAr15AFZ7Kr1f
-        JFWYyrWjkw4xtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
-        x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-        z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4
-        xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r1j6r4UMcIj6x8ErcxFaVAv
-        8VW8GwAv7VCY1x0262k0Y48FwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2
-        IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF04k20xvY
-        0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r48MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvj
-        fUzc_-DUUUU
-X-CM-SenderInfo: holqwq5zdqw23xof0z/
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 21 Jun 2022 05:24:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C823BF8;
+        Tue, 21 Jun 2022 02:24:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E55615A1;
+        Tue, 21 Jun 2022 09:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05274C3411C;
+        Tue, 21 Jun 2022 09:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655803473;
+        bh=MnADtLc+kcZeQgfJmiyARBu1dzFs4JkhpXcSR8Iu7KE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jAFHMdHAF9BVCckZHuy4rp1sjqvBeH+iq7gafdgw17EDNFmUvsmL/+WzvC+OQd1TK
+         VMVwyyTXxVyCZ72Zjw1jfdjcgFjq2lXmJYeNtOKcifXW7BJeeeJHXJGJxuxtwhhiTa
+         vzkbvMDnpsZE4vtscRWSqJFc1i+Gn7pmPFj9+6xxpwOSh48qa5qjJYSRt80096Qgl2
+         LN3atMC+z7+HleSSnpnAysK6zfjUPLV2JiAMuahd6sZyTcxsiijfUo+1yEdFFaqcGV
+         r8sgeE4K666OW8QZ79QrDE1QAKEgRDjFjOpkotfkDgp3otOJygLgIYlaWxheoc6sJ1
+         3eLnzL+6suvPA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o3a7a-0020Me-TM;
+        Tue, 21 Jun 2022 10:24:31 +0100
+Date:   Tue, 21 Jun 2022 10:24:30 +0100
+Message-ID: <87r13i2wtt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        will@kernel.org, vdonnefort@google.com,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v7 2/2] misc: Add a mechanism to detect stalls on guest vCPUs
+In-Reply-To: <YrGHS48LR759stoL@kroah.com>
+References: <20220621080308.3952915-1-sebastianene@google.com>
+        <20220621080308.3952915-3-sebastianene@google.com>
+        <YrGBBFW2d/scKDeN@kroah.com>
+        <6b5bb5e69888f69fcfdcb8c9c2fd2660@kernel.org>
+        <YrGHS48LR759stoL@kroah.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, sebastianene@google.com, robh+dt@kernel.org, arnd@arndb.de, dragan.cvetic@xilinx.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, will@kernel.org, vdonnefort@google.com, linux@roeck-us.net
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have:
-int cgroup_migrate_vet_dst(struct cgroup *dst_cgrp)
-{
-...
-	/* mixables don't care */
-	if (cgroup_is_mixable(dst_cgrp))
-		return 0;
+On Tue, 21 Jun 2022 09:54:35 +0100,
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> 
+> On Tue, Jun 21, 2022 at 09:44:35AM +0100, Marc Zyngier wrote:
+> > On 2022-06-21 09:27, Greg Kroah-Hartman wrote:
+> > > On Tue, Jun 21, 2022 at 08:03:09AM +0000, Sebastian Ene wrote:
+> > > > This driver creates per-cpu hrtimers which are required to do the
+> > > > periodic 'pet' operation. On a conventional watchdog-core driver, the
+> > > > userspace is responsible for delivering the 'pet' events by writing to
+> > > > the particular /dev/watchdogN node. In this case we require a strong
+> > > > thread affinity to be able to account for lost time on a per vCPU.
+> > > > 
+> > > > This part of the driver is the 'frontend' which is reponsible for
+> > > > delivering the periodic 'pet' events, configuring the virtual
+> > > > peripheral
+> > > > and listening for cpu hotplug events. The other part of the driver
+> > > > handles the peripheral emulation and this part accounts for lost
+> > > > time by
+> > > > looking at the /proc/{}/task/{}/stat entries and is located here:
+> > > > https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> > > > 
+> > > > Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> > > > ---
+> > > >  drivers/misc/Kconfig               |  12 ++
+> > > >  drivers/misc/Makefile              |   1 +
+> > > >  drivers/misc/vcpu_stall_detector.c | 222
+> > > > +++++++++++++++++++++++++++++
+> > > >  3 files changed, 235 insertions(+)
+> > > >  create mode 100644 drivers/misc/vcpu_stall_detector.c
+> > > > 
+> > > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > > > index 41d2bb0ae23a..e15c85d74c4b 100644
+> > > > --- a/drivers/misc/Kconfig
+> > > > +++ b/drivers/misc/Kconfig
+> > > > @@ -483,6 +483,18 @@ config OPEN_DICE
+> > > > 
+> > > >  	  If unsure, say N.
+> > > > 
+> > > > +config VCPU_STALL_DETECTOR
+> > > > +	tristate "VCPU stall detector"
+> > > > +	select LOCKUP_DETECTOR
+> > > > +	help
+> > > > +	  Detect CPU locks on a kvm virtual machine. This driver relies on
+> > > > +	  the hrtimers which are CPU-binded to do the 'pet' operation.
+> > > > When a
+> > > > +	  vCPU has to do a 'pet', it exits the guest through MMIO write and
+> > > > +	  the backend driver takes into account the lost ticks for this
+> > > > +	  particular CPU.
+> > > > +	  To compile this driver as a module, choose M here: the
+> > > > +	  module will be called vcpu_stall_detector.
+> > > 
+> > > Should this depend on KVM_GUEST?
+> > 
+> > Not all architectures have KVM_GUEST, and arm64 has no use for it.
+> 
+> Ah, I thought this was a requirement (or created a better guest image)
+> for use under KVM.  Nevermind then...
 
-	/*
-	 * If @dst_cgrp is already or can become a thread root or is
-	 * threaded, it doesn't matter.
-	 */
-	if (cgroup_can_be_thread_root(dst_cgrp) || cgroup_is_threaded(dst_cgrp))
-		return 0;
-...
-}
+It really depends whether an architecture relies on non-architectural
+extensions to support KVM guests. PPC does most of the time, x86
+certainly works better with the knowledge that this is a KVM guest.
 
-but in fact the entry of cgroup_can_be_thread_root() covers case that
-checking cgroup_is_mixable() as following:
-static bool cgroup_can_be_thread_root(struct cgroup *cgrp)
-{
-        /* mixables don't care */
-        if (cgroup_is_mixable(cgrp))
-                return true;
-...
-}
+KVM on arm64 implements the architecture itself, and hardly anything
+else (if something sucks in virt, it also likely sucks bare metal).
+The couple of KVM-specific options we support are definitely not worth
+a KVM_GUEST, as they only cover pretty esoteric stuff that nobody
+enables, such as PTP_1588_CLOCK_KVM.
 
-so explicitly checking in cgroup_migrate_vet_dst is unnecessary.
+	M.
 
-Signed-off-by: Lin Feng <linf@wangsu.com>
----
- kernel/cgroup/cgroup.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 1779ccddb734..ad4aa08ec988 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2570,10 +2570,6 @@ int cgroup_migrate_vet_dst(struct cgroup *dst_cgrp)
- 	if (!cgroup_is_valid_domain(dst_cgrp->dom_cgrp))
- 		return -EOPNOTSUPP;
- 
--	/* mixables don't care */
--	if (cgroup_is_mixable(dst_cgrp))
--		return 0;
--
- 	/*
- 	 * If @dst_cgrp is already or can become a thread root or is
- 	 * threaded, it doesn't matter.
 -- 
-2.31.1
-
+Without deviation from the norm, progress is not possible.

@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C0E553E40
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE03553E47
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355055AbiFUWDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S1353010AbiFUWFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354420AbiFUWDG (ORCPT
+        with ESMTP id S1354444AbiFUWF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:03:06 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2231DF5A4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:03:02 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id s21so14073143lfs.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:03:02 -0700 (PDT)
+        Tue, 21 Jun 2022 18:05:27 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039902D1D0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:05:26 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id c30so17061983ljr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:05:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A/nAALPTQk2jOf7mwjFbXYskfwmpL/i3xmmIwWAqGBk=;
-        b=X6t1vTBA6W1iUMu8Qz7eID+6FJWgZfWRA7zdkDckW4hNHGuZ2/QO03KT1VsPZyHWee
-         l5itrIal+AwrzrdgdDBYCLYGHKvti9IRVUl0kfq/3ggZQowxaWsXOe9ydphnuFteIlrw
-         azUnNJcBMdBCdXdOF1dC1gVFKaQpW/HSgcYxvKQ0JSfcjVpbircgdMBlH9mSCsLxGvXH
-         +zrl2ydovOhve4QTBNVZpydzIu3e9eBY3AwDYzqjvoM4Hgs3VZLd0mOl/kBL6127eHWw
-         7dq/f6yo0dJ+piy8A+8OgfdCaAO6g8SgJna27hwhay32dLt3T9sDLNKXKIW+D763FHBp
-         OVEw==
+         :cc:content-transfer-encoding;
+        bh=qk9wW2plDRuZUfEbH5Ob9wJ8MzMD7oQ2u+YwN1EZlno=;
+        b=PksK/pvVejHaPuJXQTH64r9lAa+BSxcqKlrp/YdZR0LE3hMPpWsFWMmQlN59uGmqpC
+         NGtOHmEng/i/D9QbisoA6LN/yBGK4iJJU/k3KEURwdY+ntci4FCk3uFB9wCf3zkTyyph
+         ujW4+5Ew683yYv1nlMz+a1NfvCpJtah5v1ZIP9FAYrl/OBRwO35C0h4y6vt/5DidZ0aA
+         VDgDJZB5O2+5JjDtUDq97kAzxKFMzbHUTgi+BlLmCK8Vaoeh9ARNa840AGaHLk8g7jiE
+         HhIIQ5x6G6w07sWsUsLL5/c4nKukLWjXG7Og10dAonWaQ2gTR4W0jlT/QAo+ZavHaGtb
+         stUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A/nAALPTQk2jOf7mwjFbXYskfwmpL/i3xmmIwWAqGBk=;
-        b=28L7uJW7d+vQDppXVbcuk0T9+oSTmduNVXcurfrKbzdqGPJzyivcjQ2/HRXE6RSWCU
-         QiEzhX2v9A22C0TKHtos7nbrKFhvlnqRbqOnoXft+UXgwXFxfVh5lPhJ81pKHMz7c9k4
-         Vv8y7k5EThjMaATU1ByhDKYmjwq/rKsqHq7DMQTOMe0rd0EasqnKPKL6jgcUxKBqvPYi
-         jCk11K9zx6MA24njOJosne8kUMpGyLw0/eyRrASZVKlAB96Q7DYo3a0dtDnYbHNsi+PF
-         30FdD6QlDs0WpuJ1XuLeZDgmWrrw7nIctAqUvXpCH1PtVPf00JL8CxuO0XqTMGjdDPKz
-         t64Q==
-X-Gm-Message-State: AJIora/wUJdoJS0uUWu9BhiSZTOY2xhm7Xh7CKO4qJSuBdmsYuBIYqbM
-        0YeRzIj1DiVcJBLsK9BBzRj7ObKGzVW5WXYv0skzyw==
-X-Google-Smtp-Source: AGRyM1twzM6PZQGBn/eKAhODKzD6PMg5gKTbscJydFS2KHZpqXK16I02j71nfGu5QWAT6I2VTcEoEJ2YRPhl89Ab2oc=
-X-Received: by 2002:a05:6512:10cb:b0:479:682e:7f0c with SMTP id
- k11-20020a05651210cb00b00479682e7f0cmr224941lfg.626.1655848980268; Tue, 21
- Jun 2022 15:03:00 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qk9wW2plDRuZUfEbH5Ob9wJ8MzMD7oQ2u+YwN1EZlno=;
+        b=CHVsN+UJF7KoHLZ675UHPR7iMKdq0aNugg4SSn+vuYNkafk23eeCUk1oX34ZTd+5qU
+         FpyNYJuAZ7uYZ3v2AXWEdgoM5QcJYMRv9RBmnPA94dNdtHYIKQk1dmOd1nutbRp67Lal
+         yc+HCKHpAtz6V9XDowL5xysC5E2JJMC6fRUeOZHg9mf75AHpmYXYM2JdDoBN1Kx9sbTU
+         jZiBWmkiU1pZuk/yMbnxxE1yKUZA3MxdnGUsSy4RuH1eLO3hDwRwn4zARO+8WxSqCWHy
+         GVOuHYTNnbqcqgNxZ0BfmRIGoGvyUGqDUccnPtigg70PG3rO49zGuzoUo1SWYXhYe90g
+         htyg==
+X-Gm-Message-State: AJIora8UqAWuMYgncsvEn9KlM2BtuyA0ga9lFnrE5c2rtk1X+TDUzEVd
+        cjwtjqDv7pn/txZXkd/swUthJBDKZzlrlyKaHNeAuA==
+X-Google-Smtp-Source: AGRyM1s8ItdZNicXgy4vfEI31Rcdko+391VPjrdp8750VHiNV/XVuGohJzT8zmLpof5YTXJPo8fI2yLlcamrBqB4reA=
+X-Received: by 2002:a05:651c:23b:b0:259:fee:cc2a with SMTP id
+ z27-20020a05651c023b00b002590feecc2amr130672ljn.400.1655849123759; Tue, 21
+ Jun 2022 15:05:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
- <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
- <87mtf7z0rt.fsf@gnu.org> <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
-In-Reply-To: <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local> <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
+ <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local> <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
+In-Reply-To: <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 21 Jun 2022 15:02:49 -0700
-Message-ID: <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
-Subject: Re: plumbers session on profiling?
-To:     Ruud van der Pas <ruud.vanderpas@oracle.com>
+Date:   Tue, 21 Jun 2022 15:05:12 -0700
+Message-ID: <CAKwvOdkrZbRTfrK_cFRseoONGi7qQ-_4vB=Zm9KH3Bb2KZ5tww@mail.gmail.com>
+Subject: Re: Dangerous addr to ctrl dependency transformation in fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+To:     =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
 Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-        Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
-        Ingo Molnar <mingo@kernel.org>
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,53 +87,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 4:46 AM Ruud van der Pas
-<ruud.vanderpas@oracle.com> wrote:
+On Tue, May 17, 2022 at 3:29 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> Hi Jose,
+> On Fri, Apr 22, 2022 at 3:39 AM Paul Heidekr=C3=BCger
+> <paul.heidekrueger@in.tum.de> wrote:
+> >
+> > On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
+> > > On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekr=C3=BCger
+> > > <paul.heidekrueger@in.tum.de> wrote:
+> > > >
+> > > > Hi all,
+> > > >
+> > > > work on my dependency checker tool is progressing nicely, and it is
+> > > > flagging, what I believe is, a harmful addr to ctrl dependency
+> > > > transformation. For context, see [1] and [2]. I'm using the Clang
+> > > > compiler.
+> > > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attach=
+ments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-=
+Pro/T/#u
+> > >
+> > > Hi Paul,
+> > > Thanks for the report and your (and your team's) work on this tool.
+> > > Orthogonal to your report, Jose (cc'ed) and I are currently in the
+> > > planning process to put together a Kernel+Toolchain microconference
+> > > track at Linux Plumbers Conference [0] this year (Sept 12-14) in
+> > > Dublin, Ireland.  Would you or someone from your group be able and
+> > > interested in presenting more information about your work to an
+> > > audience of kernel and toolchain developers at such an event?
+> > >
+> > > Would others be interested in such a topic? (What do they say in
+> > > Starship Troopers...?...Would you like to know more?)
+> > >
+> > > [0] https://lpc.events/event/16/
+> > > --
+> > > Thanks,
+> > > ~Nick Desaulniers
+> >
+> > Hi Nick and Jose,
+> >
+> > Many thanks for inviting us! I would love to do a talk at LPC! Hopefull=
+y
+> > in person too.
+> >
+> > Given that there have been several talks around this topic at LPC
+> > already, it seems very fitting, and we'll hopefully have more to share
+> > by then. Actually we have more to share already :-)
+> >
+> > https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/=
+T/#u
+> >
+> > I assume we will have to submit an abstract soon?
 >
-> Thanks. I indeed plan to attend LPC 2022 and am very interested
-> to participate in such a discussion.
+> Yes, if you go to: https://lpc.events/event/16/abstracts/
+>
+> click "Submit new abstract" in the bottom right.
+>
+> Under the "Track" dropdown, please select "Toolchains Track."
 
-Hi Ruud,
+Hi Paul, we'll need all proposals soon.
 If you're still considering attending Linux Plumbers conf, please
 submit a proposal:
 https://lpc.events/event/16/abstracts/
 Please make sure to select "Toolchains Track" as the "Track" after
 clicking on "Submit new abstract."
 
->
-> Kind regards, Ruud
->
-> > On 24 May 2022, at 12:24, Jose E. Marchesi <jemarch@gnu.org> wrote:
-> >
-> >
-> > I am adding Ruud van der Pas in CC.  He works in gprofng and would be
-> > willing to participate in a discussion on kernel profiling.
-> >
-> >> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
-> >>
-> >> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
-> >> <ndesaulniers@google.com> wrote:
-> >>>
-> >>> Hi Sami, Bill, Jose, and Vladamir,
-> >>> Jose and I are currently in the planning process to put together a
-> >>> Kernel+Toolchain microconference track at Linux Plumbers Conference
-> >>> this year (Sept 12-14) in Dublin, Ireland.
-> >>>
-> >>> Would you all be interested in leading a session discussing various
-> >>> profiling related topics such as:
-> >>> * gprofng
-> >>> * PGO
-> >>> * AutoFDO
-> >>>
-> >>> Would others find such a discussion useful?
-> >>> --
-> >>> Thanks,
-> >>> ~Nick Desaulniers
->
+> --
+> Thanks,
+> ~Nick Desaulniers
 
 
--- 
+
+--=20
 Thanks,
 ~Nick Desaulniers

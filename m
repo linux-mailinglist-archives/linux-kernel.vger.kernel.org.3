@@ -2,102 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D99B553779
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8921F553797
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353749AbiFUQK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 12:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S1353788AbiFUQLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 12:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353491AbiFUQKZ (ORCPT
+        with ESMTP id S1353786AbiFUQLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 12:10:25 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA07DE1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 09:10:24 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id r3so25284227ybr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 09:10:24 -0700 (PDT)
+        Tue, 21 Jun 2022 12:11:48 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3F42CE21;
+        Tue, 21 Jun 2022 09:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DaVXixvInX7Tije8Ym//sMBlj70LFPbdDShlLVQqFLs=;
-        b=J/SWUBYSO1uT8oN30UoSsUFLbBMwF1LdwJeSz7ZJajlGm6CfvEEn8+sanhyyFTap73
-         kvsJdepoWsBMC/WVi+BYzpT9h8sAVRRJMi020alPJgZSLJxrcvhGidhEgN8Luek65GpT
-         +s2Qk23ok6Ur0Aojv1+1x4aO6I1GIP6SUzkYYNRu2shwAOkGcd46PJS+7gBNt7liXILV
-         G0MS+nmwnoI4IkghITv48qE1c6vlLowScBNEP+gvIKeit4BDTXdQM1GUQkYfowDHoh3K
-         npPCwAFqfW9DkVyWHl5kaIDZ4M9fZTEYPbXDg6LPG7xARxYheWJTS0b3b9UbsIB0buit
-         brTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DaVXixvInX7Tije8Ym//sMBlj70LFPbdDShlLVQqFLs=;
-        b=bZybxFOzMuZOcKQGWpr1lszdsfRRoxJJB5P6AEtcUPW7qQ66q6SD8NLND4UhUXI8GN
-         Q3ZYvr7v6jfZQKd41hODNornYfpVYTNigfOCrHG1ves/0uX4K1huXy6lXKr7L2PENic2
-         eVUirDaHj1b1D22DkfB+zi91XMtv9JMeoGHxqv4fGHE/AjzYrr0GGW9WeTbxD6+7ZnAr
-         XXtVgsU4K+zGdBg8NXLVH8p+hRMv+yCB8eDjFo6B7ESZJ9K5D4eewds0TaIvkVA16Aor
-         Pgor0CaGzXzbaiAk71InGKiN/OxphMFoeJ19nf+pg7OSkEpfCvCDLomIeo0IuSL5LqgS
-         V6JQ==
-X-Gm-Message-State: AJIora/K2VxLb92vTa/hdnb2skhAZ8SyhbGbuyZT0+x4dnPPzTTPZ/MZ
-        M/wHRTdIEsf5AJTfSPjSE9broR5Q73mWeNtcIUA=
-X-Google-Smtp-Source: AGRyM1vPTY5fnnYz8SMXMdXAFLn+4mX9lO6IqVjSY2QhCKA6LPbKcYS/X/8JwoA4JP55dvzx/XV4QYuV1HoFE7/Y7vk=
-X-Received: by 2002:a25:b218:0:b0:664:6da5:b5c5 with SMTP id
- i24-20020a25b218000000b006646da5b5c5mr32419923ybj.6.1655827823953; Tue, 21
- Jun 2022 09:10:23 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655827907; x=1687363907;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=VPMzRubPpLoq64j1JAqv7n1xLjw6zA0Rho5zPhkempo=;
+  b=Z6vEHoofWF+96pf833YYzIV6hRAF26ptArD7ndCoIDGUo2tgC5VzgGh7
+   mpnKSQZr3UIRLcJrStik99viMPD0b0bHV79bUP1ymp8TW2sGGIuHbJDp4
+   6lbMUUeJNzzlgcO67iUZUEx2nCTd9rrYIdmkHSLZU6J1Mw6nHZcGNnUTY
+   M=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Jun 2022 09:11:46 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 09:11:46 -0700
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 21 Jun 2022 09:11:45 -0700
+Received: from srichara-linux.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 21 Jun 2022 09:11:40 -0700
+From:   Sricharan R <quic_srichara@quicinc.com>
+To:     <quic_srichara@quicinc.com>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <p.zabel@pengutronix.de>,
+        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH V2 0/8] Add minimal boot support for IPQ5018
+Date:   Tue, 21 Jun 2022 21:41:18 +0530
+Message-ID: <20220621161126.15883-1-quic_srichara@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220620173843.1462198-1-daeho43@gmail.com> <20220620173843.1462198-2-daeho43@gmail.com>
- <YrEXmiRH+DcbW2EI@B-P7TQMD6M-0146.local>
-In-Reply-To: <YrEXmiRH+DcbW2EI@B-P7TQMD6M-0146.local>
-From:   Daeho Jeong <daeho43@gmail.com>
-Date:   Tue, 21 Jun 2022 09:10:13 -0700
-Message-ID: <CACOAw_zBi_TnOmqLZwBF9Zdd=0m7EkRP9M210BOrabh3L=7bqQ@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH 2/2] f2fs: handle decompress only post
- processing in softirq
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 5:58 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
->
-> On Mon, Jun 20, 2022 at 10:38:43AM -0700, Daeho Jeong wrote:
-> > From: Daeho Jeong <daehojeong@google.com>
-> >
-> > Now decompression is being handled in workqueue and it makes read I/O
-> > latency non-deterministic, because of the non-deterministic scheduling
-> > nature of workqueues. So, I made it handled in softirq context only if
-> > possible, not in low memory devices, since this modification will
-> > maintain decompresion related memory a little longer.
-> >
->
-> Again, I don't think this method scalable.  Since you already handle
-> all decompression algorithms in this way.  Laterly, I wonder if you'd
-> like to handle all:
->  - decompression algorithms;
->  - verity algorithms;
->  - decrypt algorithms;
->
-> in this way, regardless of slow decompression algorithms, that would be a
-> long latency and CPU overhead of softirq context.  This is my last words
-> on this, I will not talk anymore.
->
-> Thanks,
-> Gao Xiang
+The IPQ5018 is Qualcomm's 802.11ax SoC for Routers,
+Gateways and Access Points.
 
-I understand what you're worried about. However, verity cannot be
-inlined because of its nature triggering I/Os. Except that, other twos
-are almost inducing overhead comparable to memcpy. Still, decrypt part
-is done in a H/W way mostly these days, though.
+This series adds minimal board boot support for ipq5018-mp03.1-c2 board.
 
-Thanks,
+[v2]
+	Fixed all comments and rebased for TOT.
+
+Varadarajan Narayanan (8):
+  clk: qcom: clk-alpha-pll: Add support for Stromer PLLs
+  dt-bindings: arm64: ipq5018: Add binding descriptions for clock and
+    reset
+  clk: qcom: Add Global Clock controller (GCC) driver for IPQ5018
+  dt-bindings: pinctrl: qcom: Add ipq5018 pinctrl bindings
+  pinctrl: qcom: Add IPQ5018 pinctrl driver
+  dt-bindings: qcom: Add ipq5018 bindings
+  arm64: dts: Add ipq5018 SoC and MP03 board support
+  arm64: defconfig: Enable IPQ5018 SoC base configs
+
+ .../devicetree/bindings/arm/qcom.yaml         |    7 +
+ .../bindings/clock/qcom,gcc-other.yaml        |    3 +
+ .../pinctrl/qcom,ipq5018-pinctrl.yaml         |  145 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ .../arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts |   29 +
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         |  221 +
+ arch/arm64/configs/defconfig                  |    3 +
+ drivers/clk/qcom/Kconfig                      |    7 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c              |  100 +-
+ drivers/clk/qcom/clk-alpha-pll.h              |    7 +-
+ drivers/clk/qcom/gcc-ipq5018.c                | 3995 +++++++++++++++++
+ drivers/pinctrl/qcom/Kconfig                  |   10 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-ipq5018.c        |  791 ++++
+ include/dt-bindings/clock/qcom,gcc-ipq5018.h  |  188 +
+ include/dt-bindings/reset/qcom,gcc-ipq5018.h  |  122 +
+ 17 files changed, 5629 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-ipq5018.c
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-ipq5018.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq5018.h
+ create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq5018.h
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+

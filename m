@@ -2,260 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7985530F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7665B55311B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349635AbiFULhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S1349844AbiFULiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349641AbiFULhP (ORCPT
+        with ESMTP id S1349651AbiFULhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:37:15 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2069.outbound.protection.outlook.com [40.107.101.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A25A2A247;
-        Tue, 21 Jun 2022 04:37:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FKl1fvLepH0XEaSAIkkEvwmQTNvlZsNPGyv/Up3bJx7Ne+h87lwgZTRPKf3RYENMC86BFNiDNf9ZK35DKEdVn7I7fktX5ARNFlvKsCuXIqKRJnLghmce4vxmFRNyaVhZGOpKvstR62rdQWK/nQA9+gost6mL7fUYA8ITD2bS/csQb6Is0nPH/2zFgDvH3mf4CMpLhkWDfphpvDGLEvzFvvOwUJfF272XYZ1hitwOnblMqm18QHCRkj0mXPmEuFN6SxGr906+ipijMkqbOhbs7JjV+VS+jSD/OJ1MyScyPtLMh22spfGbjlIy2kzjiek6BYeQ+aeXrS8qvrrU/uyvJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g0gOu+EFdT1Ic9Bu9riCGgWlqaGTGZeGFNgn2cWyO7A=;
- b=WuQ88qrTe8o3ojFtJXG5d1imLgiLHwyC39N+pQMI8fS03R1RnYHACAQsQUMfqvM3gspGLIJOBfz+ymy0UkDNDlZ6XTsNID9Dvn/Et52gT85njiGXY58fmFr1cZIksQCy7eqOxTH0NTYYax/UF3m20FMg5PQN+D0Pbv1l8bWO8yVc5dCo0bQymdv3Yd0MpJPisxAtdETYZ+mAIhbKGLI8kIopdQANfzycIaK1hpoS5u2uY63vjq4px3YSs4JrVENr5uT9emwrBa8Q0NRvpHRX3rtVnPQqUzAivnO6JJJvdNRuYI+AM6PB3AHGyrPSLt8+1XXQ9SrzIFITSNkzHK8bJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g0gOu+EFdT1Ic9Bu9riCGgWlqaGTGZeGFNgn2cWyO7A=;
- b=lB2CDAhqzCy9Kj3TkGzQqZqulRUkMlTp2FgAkU2ZKqanzeWtM7s7OXw0XfEorlCfK7+SNAt4Lt31wxZ0aaw8kCtNj4NhH3UBwnPbwCMu6uI3jmc43ToWZIiIcyzvnuE/2CSzy7jA+Jg04rGqKeyXOhV34szvVhvkYic4V8LAnns=
-Received: from SA9PR13CA0030.namprd13.prod.outlook.com (2603:10b6:806:21::35)
- by BL0PR02MB3666.namprd02.prod.outlook.com (2603:10b6:207:45::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Tue, 21 Jun
- 2022 11:37:07 +0000
-Received: from SN1NAM02FT0015.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:21:cafe::c2) by SA9PR13CA0030.outlook.office365.com
- (2603:10b6:806:21::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.13 via Frontend
- Transport; Tue, 21 Jun 2022 11:37:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0015.mail.protection.outlook.com (10.97.5.180) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5353.14 via Frontend Transport; Tue, 21 Jun 2022 11:37:07 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 21 Jun 2022 04:37:05 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 21 Jun 2022 04:37:05 -0700
-Envelope-to: linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- lorenzo.pieralisi@arm.com,
- bhelgaas@google.com,
- robh@kernel.org
-Received: from [10.140.9.24] (port=39508 helo=xhdarjunv40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <bharat.kumar.gogada@xilinx.com>)
-        id 1o3cBt-000Bco-12; Tue, 21 Jun 2022 04:37:05 -0700
-From:   Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
-        <michals@xilinx.com>, <robh@kernel.org>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Subject: [PATCH v5 2/2] PCI: xilinx-cpm: Add support for Versal CPM5 Root Port
-Date:   Tue, 21 Jun 2022 17:06:53 +0530
-Message-ID: <20220621113653.2354462-3-bharat.kumar.gogada@xilinx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220621113653.2354462-1-bharat.kumar.gogada@xilinx.com>
-References: <20220621113653.2354462-1-bharat.kumar.gogada@xilinx.com>
+        Tue, 21 Jun 2022 07:37:46 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD87D29CB2;
+        Tue, 21 Jun 2022 04:37:41 -0700 (PDT)
+X-UUID: b997b3198feb48b9ba322dda43806d06-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:7e33b2ac-7524-4d98-8399-a42563da50b7,OB:40,L
+        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:90
+X-CID-INFO: VERSION:1.1.6,REQID:7e33b2ac-7524-4d98-8399-a42563da50b7,OB:40,LOB
+        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:90
+X-CID-META: VersionHash:b14ad71,CLOUDID:d8a71dea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:fd768824caf9,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: b997b3198feb48b9ba322dda43806d06-20220621
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 126621589; Tue, 21 Jun 2022 19:37:34 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 21 Jun 2022 19:37:33 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Tue, 21 Jun 2022 19:37:33 +0800
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v13 00/14] drm/mediatek: Add MT8195 dp_intf driver
+Date:   Tue, 21 Jun 2022 19:37:18 +0800
+Message-ID: <20220621113732.11595-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 94299793-79ed-4096-e173-08da537a5f57
-X-MS-TrafficTypeDiagnostic: BL0PR02MB3666:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB366632F6DEE424EFBF005262A5B39@BL0PR02MB3666.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tTiVkREl5u5LGCc03V1w0JTOklj7Z4e3ZhsYVHnqSs1tfUKQ+XJyo1JxgrV+9b4S4e0LUBphTDhcLENGGwV2aqAZCgMvtFIHgdECN5sMJTEGhHhCh3EjhiZgb3YNI7KWgOjq0/rZ2QJpNWK1aFrKGPxVZBBEQBu2benWVNEm2t1RG9ZZa5SjZ4N/6XZrct/oYCx+fEP2q0cAim5GCuKq3rQW+9rJ3KXWUulXVOEEYBpKskMy44NisRRAefpf6q79axuHBojZYD3G6IFtdBdx9uJE++aDwoQnEPxxNwMw7E/RVEnEHgTB91JQmiWTk4Z4pA316il7cyfPbzi3OlZI6hBvxbyK7+XApXQRuXhsIETPeZaSKl1Dvh/KlZYBGaMz7BTSuoxMYCdvvyZyVu+yl9EYDXiS46Pi2m0Xih4K0NZXJKNVhgis6vG9KEjRRgYFbiijXJ+hGpAspL3Pvbe3JcvD6oBenK1qHvbQx9US/nytu8oo61xctis3lTQcxsbAzJgNtoVqSIKHIZrSrxQKwTuVVdLdctkVYu4HDyoyPpu10CX0D0uabBp6W60nY/qkwOIrITn02pkbbttUd6M0AItyr6FBLBjjhVa3H2wa0F772Gg57Hoclfrn9Pu4PwYg/aEtXW+akBJAasFdnmwaZX/fdLVMMGXiTJNYmclWMjleZ6ggyOY3doSF9EbUe4fbkB53XzenoahHB4FL4AVnhsfU/Z3Gati+u4gXXHywn64=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(39860400002)(396003)(136003)(40470700004)(46966006)(36840700001)(8936002)(186003)(316002)(9786002)(478600001)(7636003)(47076005)(5660300002)(83380400001)(336012)(36860700001)(6666004)(40480700001)(426003)(82310400005)(40460700003)(36756003)(103116003)(2616005)(1076003)(107886003)(41300700001)(54906003)(2906002)(110136005)(356005)(82740400003)(70586007)(70206006)(8676002)(4326008)(26005)(7696005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 11:37:07.6119
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94299793-79ed-4096-e173-08da537a5f57
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0015.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB3666
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xilinx Versal Premium series has CPM5 block which supports Root Port
-functioning at Gen5 speed.
+The dpi/dpintf driver and the added helper functions are required for
+the DisplayPort driver to work.
 
-Xilinx Versal CPM5 has few changes with existing CPM block.
-- CPM5 has dedicated register space for control and status registers.
-- CPM5 legacy interrupt handling needs additional register bit
-  to enable and handle legacy interrupts.
+This series is separated from [1] which is original from Guillaume.
+The display port driver is [2].
 
-Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
----
- drivers/pci/controller/pcie-xilinx-cpm.c | 62 ++++++++++++++++++++++--
- 1 file changed, 59 insertions(+), 3 deletions(-)
+Changes for v13:
+1. Change mediatek,mt8195-dp_intf to mediatek,mt8195-dp-intf.
+2. Add kernel doc for mtk_dpi_conf.
+3. Drop patch of tvd_pll enable.
+4. Squash some color format transfer related patches.
+5. Add new patch to support setting of direct connection to pins.
+6. Change fix tag of "drm/mediatek: dpi: Only enable dpi after the bridge is enabled".
 
-diff --git a/drivers/pci/controller/pcie-xilinx-cpm.c b/drivers/pci/controller/pcie-xilinx-cpm.c
-index c7cd44ed4dfc..0bcd11d27eeb 100644
---- a/drivers/pci/controller/pcie-xilinx-cpm.c
-+++ b/drivers/pci/controller/pcie-xilinx-cpm.c
-@@ -35,6 +35,10 @@
- #define XILINX_CPM_PCIE_MISC_IR_ENABLE	0x00000348
- #define XILINX_CPM_PCIE_MISC_IR_LOCAL	BIT(1)
- 
-+#define XILINX_CPM_PCIE_IR_STATUS       0x000002A0
-+#define XILINX_CPM_PCIE_IR_ENABLE       0x000002A8
-+#define XILINX_CPM_PCIE_IR_LOCAL        BIT(0)
-+
- /* Interrupt registers definitions */
- #define XILINX_CPM_PCIE_INTR_LINK_DOWN		0
- #define XILINX_CPM_PCIE_INTR_HOT_RESET		3
-@@ -98,6 +102,16 @@
- /* Phy Status/Control Register definitions */
- #define XILINX_CPM_PCIE_REG_PSCR_LNKUP		BIT(11)
- 
-+/**
-+ * struct xilinx_cpm_variant - CPM variant information
-+ * @cpm_version: CPM5 has few changes compared to CPM block.
-+ *      CPM5 has dedicated register space for control and status registers.
-+ *
-+ */
-+struct xilinx_cpm_variant {
-+	bool cpm_version;
-+};
-+
- /**
-  * struct xilinx_cpm_pcie - PCIe port information
-  * @dev: Device pointer
-@@ -109,6 +123,7 @@
-  * @intx_irq: legacy interrupt number
-  * @irq: Error interrupt number
-  * @lock: lock protecting shared register access
-+ * @is_cpm5: value to check cpm version
-  */
- struct xilinx_cpm_pcie {
- 	struct device			*dev;
-@@ -120,6 +135,7 @@ struct xilinx_cpm_pcie {
- 	int				intx_irq;
- 	int				irq;
- 	raw_spinlock_t			lock;
-+	bool                            is_cpm5;
- };
- 
- static u32 pcie_read(struct xilinx_cpm_pcie *port, u32 reg)
-@@ -285,6 +301,14 @@ static void xilinx_cpm_pcie_event_flow(struct irq_desc *desc)
- 		generic_handle_domain_irq(port->cpm_domain, i);
- 	pcie_write(port, val, XILINX_CPM_PCIE_REG_IDR);
- 
-+	if (port->is_cpm5) {
-+		val = readl_relaxed(port->cpm_base + XILINX_CPM_PCIE_IR_STATUS);
-+		if (val)
-+			writel_relaxed(val,
-+				       port->cpm_base +
-+				       XILINX_CPM_PCIE_IR_STATUS);
-+	}
-+
- 	/*
- 	 * XILINX_CPM_PCIE_MISC_IR_STATUS register is mapped to
- 	 * CPM SLCR block.
-@@ -484,6 +508,12 @@ static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie *port)
- 	 */
- 	writel(XILINX_CPM_PCIE_MISC_IR_LOCAL,
- 	       port->cpm_base + XILINX_CPM_PCIE_MISC_IR_ENABLE);
-+
-+	if (port->is_cpm5) {
-+		writel(XILINX_CPM_PCIE_IR_LOCAL,
-+		       port->cpm_base + XILINX_CPM_PCIE_IR_ENABLE);
-+	}
-+
- 	/* Enable the Bridge enable bit */
- 	pcie_write(port, pcie_read(port, XILINX_CPM_PCIE_REG_RPSC) |
- 		   XILINX_CPM_PCIE_REG_RPSC_BEN,
-@@ -503,6 +533,10 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
- 	struct device *dev = port->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct resource *res;
-+	const struct xilinx_cpm_variant *variant =
-+		of_device_get_match_data(dev);
-+
-+	port->is_cpm5 = variant->cpm_version;
- 
- 	port->cpm_base = devm_platform_ioremap_resource_byname(pdev,
- 							       "cpm_slcr");
-@@ -518,7 +552,14 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
- 	if (IS_ERR(port->cfg))
- 		return PTR_ERR(port->cfg);
- 
--	port->reg_base = port->cfg->win;
-+	if (port->is_cpm5) {
-+		port->reg_base = devm_platform_ioremap_resource_byname(pdev,
-+								       "cpm_csr");
-+		if (IS_ERR(port->reg_base))
-+			return PTR_ERR(port->reg_base);
-+	} else {
-+		port->reg_base = port->cfg->win;
-+	}
- 
- 	return 0;
- }
-@@ -591,9 +632,24 @@ static int xilinx_cpm_pcie_probe(struct platform_device *pdev)
- 	return err;
- }
- 
-+static const struct xilinx_cpm_variant cpm_host = {
-+	.cpm_version = false,
-+};
-+
-+static const struct xilinx_cpm_variant cpm5_host = {
-+	.cpm_version = true,
-+};
-+
- static const struct of_device_id xilinx_cpm_pcie_of_match[] = {
--	{ .compatible = "xlnx,versal-cpm-host-1.00", },
--	{}
-+	{
-+		.compatible = "xlnx,versal-cpm-host-1.00",
-+		.data = &cpm_host,
-+	},
-+	{
-+		.compatible = "xlnx,versal-cpm5-host",
-+		.data = &cpm5_host,
-+	},
-+	{},
- };
- 
- static struct platform_driver xilinx_cpm_pcie_driver = {
+Changes for v12:
+1. Remove pll_gate.
+2. Add more detailed commit message.
+3. Separate tvd_clk patch and yuv422 output support from add dpintf
+   support patch
+4. Remove limit patch and use common driver codes to determine this.
+
+Changes for v11:
+1. Rename ck_cg to pll_gate.
+2. Add some commit message to clarify the modification reason.
+3. Fix some driver order and modify for reviewers' comments.
+
+[1]:https://lore.kernel.org/all/20220523104758.29531-1-granquet@baylibre.com/
+[2]:https://lore.kernel.org/all/20220610105522.13449-1-rex-bc.chen@mediatek.com/
+
+Bo-Chen Chen (4):
+  drm/mediatek: dpi: Add kernel document for struct mtk_dpi_conf
+  drm/mediatek: dpi: Add support for quantization range
+  drm/mediatek: dpi: Add YUV422 output support
+  drm/mediatek: dpi: add config to control setting of direct connection
+    to pins
+
+Guillaume Ranquet (9):
+  drm/mediatek: dpi: implement a CK/DE pol toggle in SoC config
+  drm/mediatek: dpi: implement a swap_input toggle in SoC config
+  drm/mediatek: dpi: move dimension mask to SoC config
+  drm/mediatek: dpi: move hvsize_mask to SoC config
+  drm/mediatek: dpi: move swap_shift to SoC config
+  drm/mediatek: dpi: move the yuv422_en_bit to SoC config
+  drm/mediatek: dpi: move the csc_enable bit to SoC config
+  drm/mediatek: dpi: Add dp_intf support
+  drm/mediatek: dpi: Only enable dpi after the bridge is enabled
+
+Markus Schneider-Pargmann (1):
+  dt-bindings: mediatek,dpi: Add DP_INTF compatible
+
+ .../display/mediatek/mediatek,dpi.yaml        |  11 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c            | 266 +++++++++++++++---
+ drivers/gpu/drm/mediatek/mtk_dpi_regs.h       |  15 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   |   4 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |   1 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   3 +
+ 6 files changed, 253 insertions(+), 47 deletions(-)
+
 -- 
-2.25.1
+2.18.0
 

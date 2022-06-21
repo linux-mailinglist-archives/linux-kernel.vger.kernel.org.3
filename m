@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3B5553295
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F235553292
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350652AbiFUMyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
+        id S1350623AbiFUMxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350637AbiFUMyt (ORCPT
+        with ESMTP id S1344117AbiFUMxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:54:49 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC3E12ADD
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 05:54:44 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1655816007tx16ubgh
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 20:53:22 +0800 (CST)
-X-QQ-SSF: 0100000000700050B000B00A0000000
-X-QQ-FEAT: rCzLTtzQ0geQp+pbd93/gnp9dHiIBybiXO88mAETAH6V50Mq1S6Da4uNbPpKg
-        hutvFwg6dHO7XAmvQgxuOW0+u4ckVI2yIZbf5JH/TsbWo6GkMAhl+x0iofAybpKF8Z4JKxs
-        b/7pGt+Qs17VqDN4zMVjTtZ2UcIMyhIwujdv9NK0wWOh48Xtis1rL7TlXv/ecZAZ0xeclVy
-        zlJUB6Y3a2oQfouHuRFEb5DVsRC1Nku/jzJtAQLIT1ZsJHADUFKx9x4hPQg3VBcsdNMdoTB
-        mJY4CmnHOOn8A2G3EyAx81cBQBBf2x9LzhD9j2Htn8vjw2QToIjTalS64tkiEqJVLD1uUHg
-        Oi6XsErJHDKu7zmxPcVBSC2CI7MCw==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     fbarrat@linux.ibm.com, ajd@linux.ibm.com, arnd@arndb.de
-Cc:     gregkh@linuxfoundation.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] cxl: drop unexpected word "the" in the comments
-Date:   Tue, 21 Jun 2022 20:53:21 +0800
-Message-Id: <20220621125321.122280-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        Tue, 21 Jun 2022 08:53:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C918D12761;
+        Tue, 21 Jun 2022 05:53:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B303D165C;
+        Tue, 21 Jun 2022 05:53:43 -0700 (PDT)
+Received: from [10.57.85.30] (unknown [10.57.85.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 508173F534;
+        Tue, 21 Jun 2022 05:53:42 -0700 (PDT)
+Message-ID: <d732b5d7-1945-f9c5-98a9-4dc891acd744@arm.com>
+Date:   Tue, 21 Jun 2022 13:53:41 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] dmaengine: sun6i: Set the maximum segment size
+Content-Language: en-GB
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20220617034209.57337-1-samuel@sholland.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220617034209.57337-1-samuel@sholland.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,32 +47,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word "the" in the comments that need to be dropped
+On 2022-06-17 04:42, Samuel Holland wrote:
+> The sun6i DMA engine supports segment sizes up to 2^25-1 bytes. This is
+> explicitly stated in newer SoC documentation (H6, D1), and it is implied
+> in older documentation by the 25-bit width of the "bytes left in the
+> current segment" register field.
+> 
+> Exposing the real segment size limit (instead of the 64k default)
+> reduces the number of SG list segments needed for a transaction.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> Tested on A64, verified that the maximum ALSA PCM period increased, and
+> that audio playback still worked.
+> 
+>   drivers/dma/sun6i-dma.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/dma/sun6i-dma.c b/drivers/dma/sun6i-dma.c
+> index b7557f437936..1425f87d97b7 100644
+> --- a/drivers/dma/sun6i-dma.c
+> +++ b/drivers/dma/sun6i-dma.c
+> @@ -9,6 +9,7 @@
+>   
+>   #include <linux/clk.h>
+>   #include <linux/delay.h>
+> +#include <linux/dma-mapping.h>
+>   #include <linux/dmaengine.h>
+>   #include <linux/dmapool.h>
+>   #include <linux/interrupt.h>
+> @@ -1334,6 +1335,8 @@ static int sun6i_dma_probe(struct platform_device *pdev)
+>   	INIT_LIST_HEAD(&sdc->pending);
+>   	spin_lock_init(&sdc->lock);
+>   
+> +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(25));
 
-file: drivers/misc/cxl/cxl.h
-line: 1107
-+/* check if the given pci_dev is on the the cxl vphb bus */
-changed to
-+/* check if the given pci_dev is on the cxl vphb bus */
+Similarly to my comment on the DRM patch, "SZ_32M - 1" might be clearer 
+here.
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/misc/cxl/cxl.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Robin.
 
-diff --git a/drivers/misc/cxl/cxl.h b/drivers/misc/cxl/cxl.h
-index 7a6dd91987fd..0562071cdd4a 100644
---- a/drivers/misc/cxl/cxl.h
-+++ b/drivers/misc/cxl/cxl.h
-@@ -1104,7 +1104,7 @@ extern const struct cxl_backend_ops cxl_native_ops;
- extern const struct cxl_backend_ops cxl_guest_ops;
- extern const struct cxl_backend_ops *cxl_ops;
- 
--/* check if the given pci_dev is on the the cxl vphb bus */
-+/* check if the given pci_dev is on the cxl vphb bus */
- bool cxl_pci_is_vphb_device(struct pci_dev *dev);
- 
- /* decode AFU error bits in the PSL register PSL_SERR_An */
--- 
-2.17.1
-
+> +
+>   	dma_cap_set(DMA_PRIVATE, sdc->slave.cap_mask);
+>   	dma_cap_set(DMA_MEMCPY, sdc->slave.cap_mask);
+>   	dma_cap_set(DMA_SLAVE, sdc->slave.cap_mask);

@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45BC552ACB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B22552ACF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345548AbiFUGL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 02:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S1345004AbiFUGMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 02:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiFUGL4 (ORCPT
+        with ESMTP id S229547AbiFUGM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 02:11:56 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A46015728
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:11:54 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w20so20591822lfa.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/eWGanGXRvTxAEKEXyRihaY2pmewsuWfoiE7kWqZzJ0=;
-        b=WVwPcq7Xs7ZNJvmdOwoL0VOQi8Mil0u7MwlIhaIoQcbaiMQUIm4+G94MZmxriqIY4j
-         sV2HKZzyRbS6wVzIVm7eo1QgVhFOcaQyIx2eK+lNIVFRXHFowBHbJhOh1XLGsQIjRYEv
-         KW2fQu5F2EqkKsoLxCiuG4vmvj3cnNFXD9yps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/eWGanGXRvTxAEKEXyRihaY2pmewsuWfoiE7kWqZzJ0=;
-        b=nu0R4KN49urPjj7yYCrEFFSisQeEWQ0hfMyF28bt+oCIceDhfpXhju9H6v4ZTHtVrZ
-         IXoi/fbv3Pe44B8Y49XF3MAUlnKGFvOiVeHZNoWnb17+yk8xA6/9+YsOba+LtQZxjLiG
-         HWolFFul+JVgwfEvp0f2qQct3e9JOWqC6MmZfuGWu7PvsoTG6EAXFHwwJJ4wm8kmuaCq
-         PJt5lyqSYyIZcb4NVrEZoX5kOgyZ6ojriuqyiUR+PguJC/bnEWJN9yY3NVcSCSnFyC9N
-         TKaO4h9KNHTZoOqrYgGt8pWP2yQoIGTmpA3ynNBD/yq/h8Xh+rLS+E6/MGl3JwFfpulK
-         SWjQ==
-X-Gm-Message-State: AJIora9Nugobw1o/pVM2ABuAhUVC7Pi2OxU1zL6W48DZTZ5GBT07Sz2b
-        vkJIgV6fg3Y346hKPQyscepd+w==
-X-Google-Smtp-Source: AGRyM1tWCSbAFWcWkf2MV6dy2EN4XakvOogG8V/zDwtSKUO4DFfYU461zGuKRDDUF8c74V6lnOxmJw==
-X-Received: by 2002:a05:6512:1307:b0:47f:67ab:4064 with SMTP id x7-20020a056512130700b0047f67ab4064mr6958436lfu.106.1655791912587;
-        Mon, 20 Jun 2022 23:11:52 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id z16-20020a056512371000b0047255d21173sm2042889lfr.162.2022.06.20.23.11.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 23:11:51 -0700 (PDT)
-Message-ID: <46fcdf08-4646-afa0-c112-76d9335adb6c@rasmusvillemoes.dk>
-Date:   Tue, 21 Jun 2022 08:11:49 +0200
+        Tue, 21 Jun 2022 02:12:27 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1761C1580C;
+        Mon, 20 Jun 2022 23:12:25 -0700 (PDT)
+X-UUID: 0b15bc29da43456e9e4f6ebc04174aa8-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:de535e08-fa36-49bb-b16d-50d77a4fc694,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:de535e08-fa36-49bb-b16d-50d77a4fc694,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:196c0938-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:8dec583d3fd7,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0b15bc29da43456e9e4f6ebc04174aa8-20220621
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 827093855; Tue, 21 Jun 2022 14:12:20 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 21 Jun 2022 14:12:19 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 14:12:19 +0800
+Message-ID: <2133b865e57d1576671c2c6e685c7c09b1717fcf.camel@mediatek.com>
+Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 21 Jun 2022 14:12:19 +0800
+In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
+References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
+         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
-Cc:     rostedt@goodmis.org, enozhatsky@chromium.org, willy@infradead.org
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,18 +74,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2022 02.41, Kent Overstreet wrote:
+Hi, Bo-Chen:
 
->   Rasmus pointed out that -fno-strict-aliasing is going to cause gcc to generate
->   nasty code, and indeed it unfortunately does but according to worst case
->   scenario microbenchmarks it's not a problem for actual performance. 
+On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-Well, that's not how I interpreted those numbers, but, except if they
-showed an improvement, how much is acceptable is of course always a
-matter of judgment.
+[snip]
 
-However, what's really annoying and somewhat dishonest is that you're
-not including those numbers, nor the methodology, in either the cover
-letter or commit itself.
+> +
+> +#define MTK_DP_ENC0_P0_3130			(ENC0_OFFSET + 0x130)
 
-Rasmus
+This is useless in this patch, so remove it.
+If this is used in later patch, add this back in that patch.
+
+> +#define MTK_DP_ENC0_P0_3138			(ENC0_OFFSET + 0x138)
+
+Ditto.
+
+Regards,
+CK
+
+> +#define MTK_DP_ENC0_P0_3154			(ENC0_OFFSET + 0x154)
+> +#define PGEN_HTOTAL_DP_ENC0_P0_MASK		GENMASK(13, 0)
+> +#define MTK_DP_ENC0_P0_3158			(ENC0_OFFSET + 0x158)
+> 
+

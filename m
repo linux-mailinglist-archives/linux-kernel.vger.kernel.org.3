@@ -2,123 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72580553076
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00909553077
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348791AbiFULJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S1348838AbiFULLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiFULJY (ORCPT
+        with ESMTP id S230429AbiFULLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:09:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A071C29C80;
-        Tue, 21 Jun 2022 04:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655809763; x=1687345763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LZ7wcisG5occ9JV5pidM/OQD/o/yWikJJHJfKMo/ZqM=;
-  b=bBWxl1tzaO20Aw1wY+ixQz+H0Lh+I1nyqO+uyi/uqd0jzC08Fv/esSTg
-   9yTF/OYymrvfnlA4IE9J8jTeKtA7crcjjNMyIMWDIoupB5efCDm0A+V4I
-   6oOQ70x/MLdP0rDm8K+NCr4s18yKJQtw3ot6g/mJ/VCqDm+nIzzXdLvrc
-   bgNR5LQJGNpfGUUnuucZast6Umitbiz268rPCYcrp/H15WCx8ifPtYxg7
-   er32TQeRYXsEcL8LM9Rg+BOQlXXnFyO+FBnUhXu8Pu7cJgUFiXFb+a4Fg
-   BCIyQsHspvL24b98taJOVv+pJMRltK9hjJYantZypep5UI0PlL8qDmI/p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="263125602"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="263125602"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:09:23 -0700
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="676951239"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 04:09:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3bkw-000qxT-Px;
-        Tue, 21 Jun 2022 14:09:14 +0300
-Date:   Tue, 21 Jun 2022 14:09:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        rafael@kernel.org, lenb@kernel.org, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, gjb@semihalf.com,
-        jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com,
-        upstream@semihalf.com
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
- description
-Message-ID: <YrGm2jmR7ijHyQjJ@smile.fi.intel.com>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-10-mw@semihalf.com>
- <YrDO05TMK8SVgnBP@lunn.ch>
+        Tue, 21 Jun 2022 07:11:16 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8687629C89
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:11:15 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-12-tr4RSfdMOvSW-tkCoCbzDg-1; Tue, 21 Jun 2022 12:11:12 +0100
+X-MC-Unique: tr4RSfdMOvSW-tkCoCbzDg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Tue, 21 Jun 2022 12:11:11 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Tue, 21 Jun 2022 12:11:11 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "pmladek@suse.com" <pmladek@suse.com>
+CC:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
+        "willy@infradead.org" <willy@infradead.org>
+Subject: RE: [PATCH v4 05/34] vsprintf: %pf(%p)
+Thread-Topic: [PATCH v4 05/34] vsprintf: %pf(%p)
+Thread-Index: AQHYhT0x/Lplvj5JSUOd+zyADHSmrK1ZsXPQ
+Date:   Tue, 21 Jun 2022 11:11:11 +0000
+Message-ID: <fd4348c1251e4180b3fc0a7eb5fe2daa@AcuMS.aculab.com>
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <20220620004233.3805-6-kent.overstreet@gmail.com>
+ <f9224687-ce0c-b41b-f158-1b679a70c2d5@rasmusvillemoes.dk>
+In-Reply-To: <f9224687-ce0c-b41b-f158-1b679a70c2d5@rasmusvillemoes.dk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrDO05TMK8SVgnBP@lunn.ch>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 09:47:31PM +0200, Andrew Lunn wrote:
-
-...
-
-> > +        Name (_CRS, ResourceTemplate ()
-> > +        {
-> > +            Memory32Fixed (ReadWrite,
-> > +                0xf212a200,
-> > +                0x00000010,
-> 
-> What do these magic numbers mean?
-
-Address + Length, it's all described in the ACPI specification. Or if you asked
-why the values there are the particular numbers? I guess it's fined to have
-anything sane in the example. OTOH a comment may be added.
-
-> > +                )
-> > +        })
-
-...
-
-> > +        Device (SWI0)
-> > +        {
-> > +            Name (_HID, "MRVL0120")
-> > +            Name (_UID, 0x00)
-> > +            Name (_ADR, 0x4)
-> > +            <...>
-> > +        }
-> 
-> I guess it is not normal for ACPI, but could you add some comments
-> which explain this. In DT we have
-> 
->     properties:
->       reg:
->         minimum: 0
->         maximum: 31
->         description:
->           The ID number for the device.
-> 
-> which i guess what this _ADR property is, but it would be nice if it
-> actually described what it is supposed to mean. You have a lot of
-> undocumented properties here.
-
-Btw, you are right, _ADR mustn't go together with _HID/_CID.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Li4uDQo+ID4gK0NhbGxpbmcgYSBwcmV0dHkgcHJpbnRlciBmdW5jdGlvbg0KPiA+ICstLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gPiArDQo+ID4gKzo6DQo+ID4gKw0KPiA+ICsg
+ICAgICAgICVwZiglcCkgICAgIHByZXR0eSBwcmludGVyIGZ1bmN0aW9uIHRha2luZyBvbmUgYXJn
+dW1lbnQNCj4gPiArICAgICAgICAlcGYoJXAsJXApICBwcmV0dHkgcHJpbnRlciBmdW5jdGlvbiB0
+YWtpbmcgdHdvIGFyZ3VtZW50cw0KPiA+ICsNCj4gPiArRm9yIGNhbGxpbmcgZ2VuZXJpYyBwcmV0
+dHkgcHJpbnRlcnMuIEEgcHJldHR5IHByaW50ZXIgaXMgYSBmdW5jdGlvbiB0aGF0IHRha2VzDQo+
+ID4gK2FzIGl0cyBmaXJzdCBhcmd1bWVudCBhIHBvaW50ZXIgdG8gYSBwcmludGJ1ZiwgYW5kIHRo
+ZW4gemVybyBvciBtb3JlIGFkZGl0aW9uYWwNCj4gPiArcG9pbnRlciBhcmd1bWVudHMuIEZvciBl
+eGFtcGxlOg0KPiA+ICsNCj4gPiArICAgICAgICB2b2lkIGZvb190b190ZXh0KHN0cnVjdCBwcmlu
+dGJ1ZiAqb3V0LCBzdHJ1Y3QgZm9vICpmb28pDQo+ID4gKyAgICAgICAgew0KPiA+ICsgICAgICAg
+ICAgICAgICAgcHJfYnVmKG91dCwgImJhcj0ldSBiYXo9JXUiLCBmb28tPmJhciwgZm9vLT5iYXop
+Ow0KPiA+ICsgICAgICAgIH0NCj4gPiArDQo+ID4gKyAgICAgICAgcHJpbnRmKCIlcGYoJXApIiwg
+Zm9vX3RvX3RleHQsIGZvbyk7DQo+ID4gKw0KPiA+ICtOb3RlIHRoYXQgYSBwcmV0dHktcHJpbnRl
+ciBtYXkgbm90IHNsZWVwLCBpZiBjYWxsZWQgZnJvbSBwcmludGsoKS4gSWYgY2FsbGVkDQo+ID4g
+K2Zyb20gcHJfYnVmKCkgb3Igc3ByaW50ZigpIHRoZXJlIGFyZSBubyBzdWNoIHJlc3RyaWN0aW9u
+cy4NCg0KSSd2ZSBsb3N0IHRoZSBvcmlnaW5hbCBlbWFpbCA6LSkNCg0KSWYgeW91IGFyZSBnb2lu
+ZyB0byBpbXBsZW1lbnQgdGhpcyBmb29fdG9fdGV4dCgpIG5lZWRzIHRvDQpiZSBwYXNzZWQgdGhl
+IGZpZWxkIHdpZHRoLCBwcmVjaXNpb24gYW5kIGZsYWdzLg0KDQpJcyB0aGVyZSBhIHJlYWwgdXNl
+IGZvciBtdWx0aXBsZSBhcmd1bWVudHMgJXBmKCVwLCVwKSB0aGF0IGNhbid0DQpiZSBpbXBsZW1l
+bnRlZCBieSByZXF1aXJpbmcgdGhlIGNhbGxlciB1c2UgYSByZWxheSBzdHJ1Y3R1cmU/DQpUaGF0
+IChzb3J0IG9mKSBzb2x2ZXMgdGhlIHByb2JsZW0gb2YgcGVvcGxlIGV4cGVjdGluZyB0byBiZQ0K
+YWJsZSB0byBwYXNzIGludGVnZXJzIHRob3VnaC4NCg0KQW4gYWx0ZXJuYXRpdmUgd291bGQgYmUg
+dXNpbmcgYW4gYXJyYXkgb2YgYSB1bmlvbiB0eXBlDQp0byBwYXNzIHRocm91Z2ggdGhlIHZhbHVl
+cyBleHRyYWN0ZWQgZnJvbSB0aGUgb3JpZ2luYWwgdmFfbGlzdC4NCg0KT3IgcGFzcyB0aGUgZmly
+c3QgYXMgYSBwb2ludGVyICh0byBnZXQgdGhlIHBvc3NpYmlsaXR5IG9mIGNvbXBpbGUNCnRpbWUg
+Zm9ybWF0IGNoZWNraW5nIGFuZCBhbnkgb3RoZXJzIGFzIGEgdW5pb25bXS4NCg0KCURhdmlkDQoN
+Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
+LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
+YWxlcykNCg==
 

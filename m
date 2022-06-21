@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8E7552D32
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B645B552D34
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346887AbiFUIjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S1347950AbiFUIjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345003AbiFUIjB (ORCPT
+        with ESMTP id S229895AbiFUIjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:39:01 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA9623BD3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:38:58 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3177e60d980so101724537b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iDh+9LhH+7tiFhNIMTxT+tgZMwcqOqSYnB6tz36ZBuM=;
-        b=cZWfvaBa7DUk9Ka+7zdYwrlUnbvZYH/z0ztWmH50eK9pcnb7YWPUMAFeT1BkGZ521N
-         bmO9izfLOA72Mxt/3nXD9iTSoUKehZXNBFQQRe5atnVeCZbMJzj38rL5jkWqbtGIA/yy
-         8xywKLzZOawg3kkg4DfNE5y13tabfeEXyr9oZQH68jp9ztngA4Kq4cSfBpSv2nE4IU3x
-         VnGS3jeejQNzPo/S0qAudmZlHzvUqSt04SYdYvwTFKlxaUTwUpztsdQuuUn5DmArl8jl
-         cdWd/hB8PqYTF0UVyQnr+4T8g235SqOejnyo9iND4FL6XWE7ucSEAdyxgonvK+cr66cE
-         tAZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iDh+9LhH+7tiFhNIMTxT+tgZMwcqOqSYnB6tz36ZBuM=;
-        b=PkRYWKB/u3Usy4vpVFnddwDr6sGJrbqe+Qnyj3f8+cPtaWG5hj10SRjh2U7YJPb/lT
-         1cr+4Cfr9SR1S5OgU4A6Io8Hv4yAu06Dwf0It+2VK1sruv6GjncctWbqn0bYTX3QuDwf
-         9PYuLhyr+xvycM+DjrNnCvL5a5M012KhK9VLjbzqtXjpiAIBQXXrl8AhLVt/dXYdTIaj
-         6y2zHIWwQ8hficB78ip6YAODdaVybLqIdpUvdynPwboGXOVTD1hw7snd+9XBmQxZF4bg
-         NzcxtlPXLENmcba1XsYCV0jPpkrc5Z3+JZ/ELPjpt6Z1JOo5jJFFFw0GtSJt7T+Cq5YS
-         zP1A==
-X-Gm-Message-State: AJIora9tawahc7BQpWCRtjIkNBqa/v+UlQFlMmgFGlUlcsoiSiibjP69
-        3rAu84rLd409+ui4vBNSxOs7Dx00eRWQ35eDH+TdqA==
-X-Google-Smtp-Source: AGRyM1v6TiGSjpc0+2bEY+4ZPExkxwwkypY/E4ibB/ZTz2624OuqSDhfJ143FwEfOhHihVxnOfufu1vCV9jmCBRiw6Y=
-X-Received: by 2002:a0d:f242:0:b0:317:be2a:83df with SMTP id
- b63-20020a0df242000000b00317be2a83dfmr12187371ywf.376.1655800737119; Tue, 21
- Jun 2022 01:38:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620124720.882450983@linuxfoundation.org>
-In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Jun 2022 14:08:46 +0530
-Message-ID: <CA+G9fYst-M64OjAipip3FUZ+JrVJAh24+FT132JEbSDZxti95A@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/84] 5.10.124-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+        Tue, 21 Jun 2022 04:39:18 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102752316D;
+        Tue, 21 Jun 2022 01:39:16 -0700 (PDT)
+X-UUID: bd6ab4af7d2341c9943ad31ff53200b2-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:c0e04849-8556-4565-b4e2-adb89745ac1b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:90210e38-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: bd6ab4af7d2341c9943ad31ff53200b2-20220621
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1741225776; Tue, 21 Jun 2022 16:39:12 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 21 Jun 2022 16:39:11 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 16:39:11 +0800
+Message-ID: <446b9713cf2ad4313c8f3c8b53dd5295ab1aa575.camel@mediatek.com>
+Subject: Re: [PATCH v12 12/14] drm/mediatek: dpi: Add YUV422 output support
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 21 Jun 2022 16:39:11 +0800
+In-Reply-To: <d2a6c5044417e1ac8be9e6387951807e619162e8.camel@mediatek.com>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+         <20220620121028.29234-13-rex-bc.chen@mediatek.com>
+         <d2a6c5044417e1ac8be9e6387951807e619162e8.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,136 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 at 18:31, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.124 release.
-> There are 84 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.124-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On Tue, 2022-06-21 at 11:04 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
+> > Dp_intf supports YUV422 as output format. In MT8195 Chrome project,
+> > YUV422 output format is used for 4K resolution.
+> 
+> Move this patch before [1]. Otherwise, [1] would result in a bug.
+> 
+> [1] [v12,10/14] drm/mediatek: dpi: Add dpintf support
+> 
+ok, I will do this.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> > 
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index f83ecb154457..fc76ccad0a82 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -692,7 +692,10 @@ static int mtk_dpi_bridge_atomic_check(struct
+> > drm_bridge *bridge,
+> >  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
+> >  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
+> >  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
+> > -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> > +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
+> > +		dpi->color_format =
+> > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
+> > +	else
+> > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> 
+> If out_bus_format is MEDIA_BUS_FMT_YUV8_1X24, the color_format is
+> MTK_DPI_COLOR_FORMAT_RGB?
+> 
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I will drop output format of MEDIA_BUS_FMT_YUV8_1X24 for mt8195_dpintf
+because if support MEDIA_BUS_FMT_YUV8_1X24 means support RGB888.
 
-## Build
-* kernel: 5.10.124-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 1432bd558ac04fc517d64312c7d2e7fbb4a76dee
-* git describe: v5.10.123-85-g1432bd558ac0
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.123-85-g1432bd558ac0
+BRs,
+Bo-Chen
 
-## Test Regressions (compared to v5.10.118)
-No test regressions found.
+> Regards,
+> CK
+> 
+> >  
+> >  	return 0;
+> >  }
+> 
+> 
 
-## Metric Regressions (compared to v5.10.118)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.118)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.118)
-No metric fixes found.
-
-## Test result summary
-total: 128188, pass: 115128, fail: 258, skip: 12239, xfail: 563
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 314 total, 314 passed, 0 failed
-* arm64: 58 total, 58 passed, 0 failed
-* i386: 52 total, 49 passed, 3 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-smoke
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

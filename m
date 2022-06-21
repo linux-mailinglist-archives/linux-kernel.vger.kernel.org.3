@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B5A552F61
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B73552F63
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237689AbiFUKCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S1348534AbiFUKDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiFUKCm (ORCPT
+        with ESMTP id S245415AbiFUKC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:02:42 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3CD27FE6;
-        Tue, 21 Jun 2022 03:02:41 -0700 (PDT)
+        Tue, 21 Jun 2022 06:02:59 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC94BD0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:02:57 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id g4so9109929lfv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:02:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655805761; x=1687341761;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QVzdBNyMcQCp/AEcPlHdcIajijCDUBwKc+Y/v0orBkM=;
-  b=eqnyOnIjL/YKQUBORWQy/F+HIltdSWTHTpqzj57zBW+s6AG7Mv5mHdQJ
-   N/VQrsW+WcAOtjmldSSDLC+IIfQCBgABxsEaGcbdSEe+IFwOXLPZkQXgx
-   V5XjpUfqbpnvzB+sAJ/4SUpKj8PuuaaiNm6iQR61TRsOZ/r0+zUOzjbX0
-   w=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Jun 2022 03:02:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:02:41 -0700
-Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 21 Jun
- 2022 03:02:39 -0700
-Message-ID: <e70c457c-0ac6-174d-fa0f-807d8e563f40@quicinc.com>
-Date:   Tue, 21 Jun 2022 15:32:36 +0530
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WgpvJ+ZYQ9wNJ1RH7x/Iyee2F28bg23N2XRimN8MYRQ=;
+        b=ktPF7cOnTQ+f5ss8vA4ne+IqJ1N2aK8YJDV120+3TE5Y/PumvHgTI9YFgKCc/emtfo
+         Rpk77hxnFVp2OoD6JZTZahD5WNhRB58jXTzOyhiGI26jAuV0LO2rsYzX++z/fM1OTXPe
+         RvxfAcSAdUUJr28uLmAby0mBoPAvpNkCR/jGF056uSrC9GxTDf84J4UvIMjPZ/z/OVKr
+         YDXRK3FKeW9eCGLazvBoG9I5pbF0iliNKlnaV6bPxaVInkUTftHN9losZCQKB5WVxwz0
+         CEByZvkr8RrFrC80CCL3NKulB9MQXNa9Lh31KJaecljsfW2TK0XIlIiHubuZfpeb4y2v
+         U5ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WgpvJ+ZYQ9wNJ1RH7x/Iyee2F28bg23N2XRimN8MYRQ=;
+        b=3CM0VhcitrKf0VfqYBniKkrL7O0NkUZKfRpcsIrR3LGtTugVuJu7u5s3wBHVbTwG+D
+         QrQPa1zyTdlJoh1pPZ/m6pwXjsd4lRy+DGjaJZQGBzt2G5v6nZ/y7rsmAIBvInYfVTw3
+         WzQ3SeGozeRwWprMOMqkedUh7acj7fnGhtEh/zqhEv5lK911/A46yV3+AOFDlCMYn5rd
+         063wxn5/n04YhxnZFzeWyFazK2YWk1C9PgMCq5aq3u3Fjg3fzGclDffWNypPgJlpKkiU
+         bSCOmP+Xxv2LUIfmCnyWHF+ULTh5pJdTxWP8iPNDpQOEov/Oj6LzCKQFrb2IK1clYq6L
+         9usA==
+X-Gm-Message-State: AJIora9/abuwIrXyeZUB39S/aI00lbv6yUp8ojCROW6NmR4xzMKU+HaW
+        9Cq9x+sRkII3pe0gShqcJkUdMNvcuUZN0vR5QvVtvA==
+X-Google-Smtp-Source: AGRyM1vJyn4HX+l1jRaEx/IuJ8VvUq21x67APPtICLlcI6h1PNZNhnGzvCIIh/0z7vZgyTr7dsdpoFugsC0f3Mg2usE=
+X-Received: by 2002:a05:6512:118f:b0:47f:6a1a:20d4 with SMTP id
+ g15-20020a056512118f00b0047f6a1a20d4mr7197196lfr.428.1655805776035; Tue, 21
+ Jun 2022 03:02:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH rcu 09/12] rcu/kvfree: Remove useless monitor_todo flag
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        <rostedt@goodmis.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Uladzislau Rezki <urezki@gmail.com>
-References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
- <20220620222032.3839547-9-paulmck@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <20220620222032.3839547-9-paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20220620150225.1307946-1-mw@semihalf.com> <YrCsgIxOmXQcjy+B@smile.fi.intel.com>
+In-Reply-To: <YrCsgIxOmXQcjy+B@smile.fi.intel.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 21 Jun 2022 12:02:46 +0200
+Message-ID: <CAPv3WKdJ_zoraG=gpOOSWHJcoMTKkkH8=N21aXX2RrusjWWD9g@mail.gmail.com>
+Subject: Re: [net-next: PATCH 00/12] ACPI support for DSA
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        vivien.didelot@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,106 +82,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+pon., 20 cze 2022 o 19:21 Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
+>
+> On Mon, Jun 20, 2022 at 05:02:13PM +0200, Marcin Wojtas wrote:
+> > Hi!
+> >
+> > This patchset introduces the support for DSA in ACPI world. A couple of
+> > words about the background and motivation behind those changes:
+> >
+> > The DSA code is strictly dependent on the Device Tree and Open Firmware
+> > (of_*) interface, both in the drivers and the common high-level net/dsa=
+ API.
+> > The only alternative is to pass the information about the topology via
+> > platform data - a legacy approach used by older systems that compiled t=
+he
+> > board description into the kernel.
+> >
+> > The above constraint is problematic for the embedded devices based e.g.=
+ on
+> > x86_64 SoCs, which are described by ACPI tables - to use DSA, some tric=
+ks
+> > and workarounds have to be applied. Addition of switch description to
+> > DSDT/SSDT tables would help to solve many similar cases and use unmodif=
+ied
+> > kernel modules. It also enables this feature for ARM64 ACPI users.
+> >
+> > The key enablements allowing for adding ACPI support for DSA in Linux w=
+ere
+> > NIC drivers, MDIO, PHY, and phylink modifications =E2=80=93 the latter =
+three merged
+> > in 2021. I thought it would be worth to experiment with DSA, which seem=
+ed
+> > to be a natural follow-up challenge.
+> >
+> > It turned out that without much hassle it is possible to describe
+> > DSA-compliant switches as child devices of the MDIO busses, which are
+> > responsible for their enumeration based on the standard _ADR fields and
+> > description in _DSD objects under 'device properties' UUID [1].
+> > The vast majority of required changes were simple of_* to fwnode_*
+> > transition, as the DT and ACPI topolgies are analogous, except for
+> > 'ports' and 'mdio' subnodes naming, as they don't conform ACPI
+> > namespace constraints [2].
+>
+> ...
+>
+> > Note that for now cascade topology remains unsupported in ACPI world
+> > (based on "dsa" label and "link" property values). It seems to be feasi=
+ble,
+> > but would extend this patchset due to necessity of of_phandle_iterator
+> > migration to fwnode_. Leave it as a possible future step.
+>
+> Wondering if this can be done using fwnode graph.
+>
 
+Probably yes. It's a general question whether to follow iterating over
+phandles pointed by properties, like DT with a minimal code change or
+do something completely different.
 
-On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
-> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-> 
-> monitor_todo is not needed as the work struct already tracks
-> if work is pending. Just use that to know if work is pending
-> using schedule_delayed_work() helper.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> ---
-
-Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-
-
-Thanks
-Neeraj
-
->   kernel/rcu/tree.c | 33 ++++++++++++++++-----------------
->   1 file changed, 16 insertions(+), 17 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 5445b19b48408..7919d7b48fa6a 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3216,7 +3216,6 @@ struct kfree_rcu_cpu_work {
->    * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
->    * @lock: Synchronize access to this structure
->    * @monitor_work: Promote @head to @head_free after KFREE_DRAIN_JIFFIES
-> - * @monitor_todo: Tracks whether a @monitor_work delayed work is pending
->    * @initialized: The @rcu_work fields have been initialized
->    * @count: Number of objects for which GP not started
->    * @bkvcache:
-> @@ -3241,7 +3240,6 @@ struct kfree_rcu_cpu {
->   	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
->   	raw_spinlock_t lock;
->   	struct delayed_work monitor_work;
-> -	bool monitor_todo;
->   	bool initialized;
->   	int count;
->   
-> @@ -3421,6 +3419,18 @@ static void kfree_rcu_work(struct work_struct *work)
->   	}
->   }
->   
-> +static bool
-> +need_offload_krc(struct kfree_rcu_cpu *krcp)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < FREE_N_CHANNELS; i++)
-> +		if (krcp->bkvhead[i])
-> +			return true;
-> +
-> +	return !!krcp->head;
-> +}
-> +
->   /*
->    * This function is invoked after the KFREE_DRAIN_JIFFIES timeout.
->    */
-> @@ -3477,9 +3487,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
->   	// of the channels that is still busy we should rearm the
->   	// work to repeat an attempt. Because previous batches are
->   	// still in progress.
-> -	if (!krcp->bkvhead[0] && !krcp->bkvhead[1] && !krcp->head)
-> -		krcp->monitor_todo = false;
-> -	else
-> +	if (need_offload_krc(krcp))
->   		schedule_delayed_work(&krcp->monitor_work, KFREE_DRAIN_JIFFIES);
->   
->   	raw_spin_unlock_irqrestore(&krcp->lock, flags);
-> @@ -3667,11 +3675,8 @@ void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
->   	WRITE_ONCE(krcp->count, krcp->count + 1);
->   
->   	// Set timer to drain after KFREE_DRAIN_JIFFIES.
-> -	if (rcu_scheduler_active == RCU_SCHEDULER_RUNNING &&
-> -	    !krcp->monitor_todo) {
-> -		krcp->monitor_todo = true;
-> +	if (rcu_scheduler_active == RCU_SCHEDULER_RUNNING)
->   		schedule_delayed_work(&krcp->monitor_work, KFREE_DRAIN_JIFFIES);
-> -	}
->   
->   unlock_return:
->   	krc_this_cpu_unlock(krcp, flags);
-> @@ -3746,14 +3751,8 @@ void __init kfree_rcu_scheduler_running(void)
->   		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
->   
->   		raw_spin_lock_irqsave(&krcp->lock, flags);
-> -		if ((!krcp->bkvhead[0] && !krcp->bkvhead[1] && !krcp->head) ||
-> -				krcp->monitor_todo) {
-> -			raw_spin_unlock_irqrestore(&krcp->lock, flags);
-> -			continue;
-> -		}
-> -		krcp->monitor_todo = true;
-> -		schedule_delayed_work_on(cpu, &krcp->monitor_work,
-> -					 KFREE_DRAIN_JIFFIES);
-> +		if (need_offload_krc(krcp))
-> +			schedule_delayed_work_on(cpu, &krcp->monitor_work, KFREE_DRAIN_JIFFIES);
->   		raw_spin_unlock_irqrestore(&krcp->lock, flags);
->   	}
->   }
+Best regards,
+Marcin

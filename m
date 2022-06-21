@@ -2,62 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DBD552AFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819BC552B86
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345277AbiFUGbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 02:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        id S1346569AbiFUHM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiFUGbf (ORCPT
+        with ESMTP id S1344836AbiFUHMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 02:31:35 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D9860E3;
-        Mon, 20 Jun 2022 23:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655793095; x=1687329095;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8B6OBov+Dp//rrdGe97WOSHuT0EA9+jVckLT/ZqJALw=;
-  b=Yti7jI5hBRbceJ9pXq6fzHoFdzwrLgG86FXFEM+pgwt6IWXTHgdBcH11
-   e3gJ2ovgdZz4Y5Z2yRFjhUU62Fycm0BoKZr8RIMVjLq56v1Zos9pXnSj4
-   g8E2VYQmRG01d86PJr15YQX6JFlmNrLYQgRhLm0l/fQ8oc1xI4tgKueGe
-   M=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jun 2022 23:31:34 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 23:31:34 -0700
-Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
- 2022 23:31:32 -0700
-Message-ID: <00f3eb47-2529-a493-ee67-c0c0219937a3@quicinc.com>
-Date:   Tue, 21 Jun 2022 12:01:29 +0530
+        Tue, 21 Jun 2022 03:12:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592BC2229E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:12:25 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o3Y3a-0006RX-Ql; Tue, 21 Jun 2022 09:12:14 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-bd72-15a3-eb10-2206.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:bd72:15a3:eb10:2206])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 353969B386;
+        Tue, 21 Jun 2022 06:35:02 +0000 (UTC)
+Date:   Tue, 21 Jun 2022 08:35:01 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/1] can/esd_usb2: Added support for esd CAN-USB/3
+Message-ID: <20220621063501.wxxpotw6vck42gsn@pengutronix.de>
+References: <20220620202603.2069841-1-frank.jungclaus@esd.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH rcu 07/12] rcu: tiny: Record kvfree_call_rcu() call stack
- for KASAN
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        <rostedt@goodmis.org>, Johannes Berg <johannes.berg@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
- <20220620222032.3839547-7-paulmck@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <20220620222032.3839547-7-paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5bpvqibdgubwlgdb"
+Content-Disposition: inline
+In-Reply-To: <20220620202603.2069841-1-frank.jungclaus@esd.eu>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,98 +56,63 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--5bpvqibdgubwlgdb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
-> From: Johannes Berg <johannes.berg@intel.com>
-> 
-> When running KASAN with Tiny RCU (e.g. under ARCH=um, where
-> a working KASAN patch is now available), we don't get any
-> information on the original kfree_rcu() (or similar) caller
-> when a problem is reported, as Tiny RCU doesn't record this.
-> 
-> Add the recording, which required pulling kvfree_call_rcu()
-> out of line for the KASAN case since the recording function
-> (kasan_record_aux_stack_noalloc) is neither exported, nor
-> can we include kasan.h into rcutiny.h.
-> 
-> without KASAN, the patch has no size impact (ARCH=um kernel):
->      text       data         bss         dec        hex    filename
->   6151515    4423154    33148520    43723189    29b29b5    linux
->   6151515    4423154    33148520    43723189    29b29b5    linux + patch
-> 
-> with KASAN, the impact on my build was minimal:
->      text       data         bss         dec        hex    filename
-> 13915539    7388050    33282304    54585893    340ea25    linux
-> 13911266    7392114    33282304    54585684    340e954    linux + patch
->     -4273      +4064         +-0        -209
-> 
-> Acked-by: Dmitry Vyukov <dvyukov@google.com>
-> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> ---
->   include/linux/rcutiny.h | 11 ++++++++++-
->   kernel/rcu/tiny.c       | 14 ++++++++++++++
->   2 files changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
-> index 5fed476f977f6..d84e13f2c3848 100644
-> --- a/include/linux/rcutiny.h
-> +++ b/include/linux/rcutiny.h
-> @@ -38,7 +38,7 @@ static inline void synchronize_rcu_expedited(void)
->    */
->   extern void kvfree(const void *addr);
->   
-> -static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
-> +static inline void __kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
->   {
->   	if (head) {
->   		call_rcu(head, func);
-> @@ -51,6 +51,15 @@ static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
->   	kvfree((void *) func);
->   }
->   
-> +#ifdef CONFIG_KASAN_GENERIC
-> +void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func);
-> +#else
-> +static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
-> +{
-> +	__kvfree_call_rcu(head, func);
-> +}
-> +#endif
-> +
->   void rcu_qs(void);
->   
->   static inline void rcu_softirq_qs(void)
-> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
-> index 340b3f8b090d4..58ff3721d975c 100644
-> --- a/kernel/rcu/tiny.c
-> +++ b/kernel/rcu/tiny.c
-> @@ -217,6 +217,20 @@ bool poll_state_synchronize_rcu(unsigned long oldstate)
->   }
->   EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu);
->   
-> +#ifdef CONFIG_KASAN_GENERIC
-> +void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
-> +{
-> +	if (head) {
-> +		void *ptr = (void *) head - (unsigned long) func;
-> +
-> +		kasan_record_aux_stack_noalloc(ptr);
-> +	}
+Hello Frank,
 
-For the !head case; similar to Tree RCU's kvfree_call_rcu() 
-implementation, we do not need to record 'ptr' (which will be 'func')?
+thanks for your patch!
 
+On 20.06.2022 22:26:02, Frank Jungclaus wrote:
+> This patch adds support for the newly available esd CAN-USB/3.
+>=20
+> The USB protocol for the CAN-USB/3 is similar to the protocol used
+> for the CAN-USB/2 and the CAN-USB/Micro, so most of the code can be
+> shared for all three platforms.
+> Due to the fact that the CAN-USB/3 additionally supports CAN FD
+> some new functionality / functions are introduced.
+> Each occurrence of the term "usb2" within variables, function names,
+> etc. is changed to "usb" where it is shared for all three platforms.
 
-Thanks
-Neeraj
+Can you split the patch into several ones. Please do the renaming first.
+There's some seemingly unrelated reformatting, this could be a separate
+patch, too. If this is too much work, you might take this into the
+renaming patch. Then add the new device. This makes reviewing a lot
+easier.
 
-> +
-> +	__kvfree_call_rcu(head, func);
-> +}
-> +EXPORT_SYMBOL_GPL(kvfree_call_rcu);
-> +#endif
-> +
->   void __init rcu_init(void)
->   {
->   	open_softirq(RCU_SOFTIRQ, rcu_process_callbacks);
+> The patch has been tested against / should apply to Marc's=20
+> current testing branch:
+> commit 934135149578 ("Merge branch 'document-polarfire-soc-can-controller=
+'")
+
+Note: Better use the linux-can-next/master branch as a base, it will be
+only fast forwarded. The testing branch will be rebased. As you don't
+depend on any new features, it doesn't make any difference for you.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--5bpvqibdgubwlgdb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKxZpIACgkQrX5LkNig
+010Wzgf9EESo1mSFr/dxiOtxvp0BR3UdEVIbciQ4jaSBnN1ANqBSmp0Vb1JsaXdx
+ueC/1P4q9gygB15XcS7ITmOI3pfQwKcEbW/c/X8CJn7gCU1fRRDrqKtlloYY+i8u
+xkwAY3Vgy7hJ1M1gChDJ+7WFTkXEL86agYZmYxGPQBB+GBsLF50d7Jgsn6Piuge3
+3Mw6X2T7PWsYeQ1CA6YHhcplKuMLUZZ10tM1rDnVVcRMjzjS/hCk+wSJ67KKo1mr
+Iy6GeLT0fkDvr/hLpZfJqFSk892lK4jyur4rHTFjXRmUx0fM9mnZc1rwiCObOWsy
+sHIJhathYttsCASc9/vj16torj6Szw==
+=Bhiy
+-----END PGP SIGNATURE-----
+
+--5bpvqibdgubwlgdb--

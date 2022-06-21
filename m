@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68609552998
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6647955299B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344589AbiFUDFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S1344133AbiFUDKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344283AbiFUDFI (ORCPT
+        with ESMTP id S232901AbiFUDKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:05:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 454521E3DE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:05:06 -0700 (PDT)
+        Mon, 20 Jun 2022 23:10:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77E4E1A802
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655780705;
+        s=mimecast20190719; t=1655780999;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=IEDQbrqCDnnzlN2lESJGmEW8kKV42M3tmKohr7BwJIQ=;
-        b=Kh/ri/7h6driFbGjFNGNWK3BOO2PxFe1sOzfW0fQC4oWzV1zUFsxRqVuz78r68THrqjJBm
-        ZOf7+djusE+EjzSTvqmA+4nNntL3jhZm7uaTgZ6AJIl3DqAgcy2YBvnBe/4GLzEZIaeII+
-        0ijhTk5/OCrM7AknODjLEUph/jqYpds=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5I/A1okM/VsKaRtsTRbiZ/e/0xvi8RkHlF5r4h4SXBQ=;
+        b=PUscAvNReY2b2bu/IM4OhImtzky4+BeDf5R/1deiiPzd08H0rSSFbCJofgyNTIlcro9imx
+        J0i0sDNrronqedO9v3/vz79DNhNoILNHi3HP9A5AJ5Bog8YUT6sCW9yPJatWAnC3kUxmyR
+        ptPvorJtfAfaYP1tUZ3SByHMGq9Lreg=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-22AReU_IMVyK0Qly2gDkMw-1; Mon, 20 Jun 2022 23:05:03 -0400
-X-MC-Unique: 22AReU_IMVyK0Qly2gDkMw-1
-Received: by mail-lf1-f69.google.com with SMTP id k17-20020a05651210d100b004794def3bd3so6300381lfg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:05:03 -0700 (PDT)
+ us-mta-527-WZtoqsa8NIyeERaQJo28dQ-1; Mon, 20 Jun 2022 23:09:58 -0400
+X-MC-Unique: WZtoqsa8NIyeERaQJo28dQ-1
+Received: by mail-lf1-f71.google.com with SMTP id bi38-20020a0565120ea600b0047f640eaee0so2976362lfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:09:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IEDQbrqCDnnzlN2lESJGmEW8kKV42M3tmKohr7BwJIQ=;
-        b=zvtac3QfMh1+g9SA72/nBxPjG9skSMyadO2kO/mbwJFY/SCWO/J6YEhgngDq2oufxK
-         v1M2toSY4bVC7h6mqTx87iO+T7K6V4wNapm7nOpwza+lDksDQ97/ilADpSHY/fDDuvzR
-         fWLY8wQNuSrUBN4etjF2/sokh56jLbnlW7JFinXL9EROPBVDcQYpWOakvauiaV11Xq8W
-         j3GqUWyuswsF/KKYUH6Dc7g/XE+J27HkUQwNw4MkJDvZ4fnuAdMI/50tLbYMUFmey+A0
-         RwU4Y6RWHxNSWQ0VFDoXELHLtdOtCPDiy/gdQ8Jgy37EM4N7BBhD5TBzPTUV+Xks0FJe
-         mgDg==
-X-Gm-Message-State: AJIora/ij67kBFYiOwZw1zkjvfffsDlDeuSkwyEJCLzd/Q2xmCLV7ATa
-        ayPmdikZda1mEyFLQ6uJ/v1LMaVuIJ+S/6fPv/wR7TGhUiF4ygH43xhMVmOP3bpgKf93R30M/uq
-        PFasG4D3Ygb90ObuHyJgLuY6nR4PbVUT4E6DqV561
-X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id p37-20020a05651213a500b0047dc1d9dea8mr15453650lfa.442.1655780701968;
-        Mon, 20 Jun 2022 20:05:01 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ve2/AO9/k7M96rrzDPn68BkBow1Mx7UHpUi3NZ41WbMnslBgJ0QvWYbJnGXCZahSfxmqxjVuchsJS0VLaHD/c=
-X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id
- p37-20020a05651213a500b0047dc1d9dea8mr15453640lfa.442.1655780701719; Mon, 20
- Jun 2022 20:05:01 -0700 (PDT)
+        bh=5I/A1okM/VsKaRtsTRbiZ/e/0xvi8RkHlF5r4h4SXBQ=;
+        b=LWh0wtmtiMCd/LU9OP8fT350Bi4it7RSqJKVBudndoDW61NhS5G7WkBYfjJ/1UwkjN
+         wBdLKBCLHijFByHgik2rMH8ILPm2neHD2gD8dg4Osld3KcilCEwRVvXKE17339XDLLAE
+         2ibtzjGzsyppt/8UpB9zjBq4sfHV48jgdKOP2c0bMjrTOfc/QuUTe059uMVM4xn6Lza+
+         Ev47t+i3k49iL+9fZDTxe1pK2vndaGDGV8F1D7OCSp4tWwN/5C2sJmZOnmbXaXrXMNIY
+         bDKlMj03QGF06hqbFrkpysJYfs0n0rQxPRcM7yWZjZc+/5KytSybXZKqutz/E2++evJv
+         5aqg==
+X-Gm-Message-State: AJIora+BEQe/2v4JRAFEwZ4W0Z1etPw6Tbf/hUiSb4AJod4oProuZdum
+        QKmCDB6EWiFj8wc5yrr+rqOgdJRsSGNV47dOUkj3t2xVBHrYekditx6Yk6c7A9BMNpQk3wE3SIq
+        +m89jin0UzxfMFxBOrSC8J78qd9mg1Obrh1fMb9/h
+X-Received: by 2002:a05:6512:3f0f:b0:47f:6f89:326 with SMTP id y15-20020a0565123f0f00b0047f6f890326mr4639287lfa.124.1655780996574;
+        Mon, 20 Jun 2022 20:09:56 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ue+R/3XG0+CAI6OS7Ckr2jK0FXWYnX/c2+y3CX07qDkE24gA6WB9ZJH62m4USzgEMZO/3NXKymWjN8StBbZr4=
+X-Received: by 2002:a05:6512:3f0f:b0:47f:6f89:326 with SMTP id
+ y15-20020a0565123f0f00b0047f6f890326mr4639277lfa.124.1655780996353; Mon, 20
+ Jun 2022 20:09:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220616132725.50599-1-elic@nvidia.com> <20220616132725.50599-2-elic@nvidia.com>
- <CACGkMEue-X8-u0Z=EwUbBSV6vmomwNy52Tot3Zf+0pu4Pztutg@mail.gmail.com> <CAJaqyWfTG_jVW6Vzf64QO=255kfwWKn4gCUMeGog-1shHx3O_g@mail.gmail.com>
-In-Reply-To: <CAJaqyWfTG_jVW6Vzf64QO=255kfwWKn4gCUMeGog-1shHx3O_g@mail.gmail.com>
+References: <20220620051115.3142-1-jasowang@redhat.com> <20220620051115.3142-4-jasowang@redhat.com>
+ <20220620050446-mutt-send-email-mst@kernel.org> <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
+ <20220620061607-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220620061607-mutt-send-email-mst@kernel.org>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 21 Jun 2022 11:04:50 +0800
-Message-ID: <CACGkMEtcs9e1NJ7ArkibQSrDN7j_eyciZo=yDfbd5Jsb4gvzZA@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/3] vdpa/mlx5: Implement susupend virtqueue callback
-To:     Eugenio Perez Martin <eperezma@redhat.com>
-Cc:     Eli Cohen <elic@nvidia.com>, mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
+Date:   Tue, 21 Jun 2022 11:09:45 +0800
+Message-ID: <CACGkMEu7k2X6S0tSsuGOb-Ta+MzzYE5NzHgrhR2H1vgmcLqjCw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] caif_virtio: fix the race between reset and netdev unregister
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Parav Pandit <parav@nvidia.com>
+        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        erwan.yvin@stericsson.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,210 +76,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 5:59 PM Eugenio Perez Martin
-<eperezma@redhat.com> wrote:
+On Mon, Jun 20, 2022 at 6:18 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> On Mon, Jun 20, 2022 at 10:56 AM Jason Wang <jasowang@redhat.com> wrote:
+> On Mon, Jun 20, 2022 at 05:18:29PM +0800, Jason Wang wrote:
+> > On Mon, Jun 20, 2022 at 5:09 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Mon, Jun 20, 2022 at 01:11:15PM +0800, Jason Wang wrote:
+> > > > We use to do the following steps during .remove():
+> > >
+> > > We currently do
+> > >
+> > >
+> > > > static void cfv_remove(struct virtio_device *vdev)
+> > > > {
+> > > >       struct cfv_info *cfv = vdev->priv;
+> > > >
+> > > >       rtnl_lock();
+> > > >       dev_close(cfv->ndev);
+> > > >       rtnl_unlock();
+> > > >
+> > > >       tasklet_kill(&cfv->tx_release_tasklet);
+> > > >       debugfs_remove_recursive(cfv->debugfs);
+> > > >
+> > > >       vringh_kiov_cleanup(&cfv->ctx.riov);
+> > > >       virtio_reset_device(vdev);
+> > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> > > >       cfv->vr_rx = NULL;
+> > > >       vdev->config->del_vqs(cfv->vdev);
+> > > >       unregister_netdev(cfv->ndev);
+> > > > }
+> > > > This is racy since device could be re-opened after dev_close() but
+> > > > before unregister_netdevice():
+> > > >
+> > > > 1) RX vringh is cleaned before resetting the device, rx callbacks that
+> > > >    is called after the vringh_kiov_cleanup() will result a UAF
+> > > > 2) Network stack can still try to use TX virtqueue even if it has been
+> > > >    deleted after dev_vqs()
+> > > >
+> > > > Fixing this by unregistering the network device first to make sure not
+> > > > device access from both TX and RX side.
+> > > >
+> > > > Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
+> > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > ---
+> > > >  drivers/net/caif/caif_virtio.c | 6 ++----
+> > > >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
+> > > > index 66375bea2fcd..a29f9b2df5b1 100644
+> > > > --- a/drivers/net/caif/caif_virtio.c
+> > > > +++ b/drivers/net/caif/caif_virtio.c
+> > > > @@ -752,9 +752,8 @@ static void cfv_remove(struct virtio_device *vdev)
+> > > >  {
+> > > >       struct cfv_info *cfv = vdev->priv;
+> > > >
+> > > > -     rtnl_lock();
+> > > > -     dev_close(cfv->ndev);
+> > > > -     rtnl_unlock();
+> > > > +     /* Make sure NAPI/TX won't try to access the device */
+> > > > +     unregister_netdev(cfv->ndev);
+> > > >
+> > > >       tasklet_kill(&cfv->tx_release_tasklet);
+> > > >       debugfs_remove_recursive(cfv->debugfs);
+> > > > @@ -764,7 +763,6 @@ static void cfv_remove(struct virtio_device *vdev)
+> > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> > > >       cfv->vr_rx = NULL;
+> > > >       vdev->config->del_vqs(cfv->vdev);
+> > > > -     unregister_netdev(cfv->ndev);
+> > > >  }
+> > >
+> > >
+> > > This gives me pause, callbacks can now trigger after device
+> > > has been unregistered. Are we sure this is safe?
 > >
-> > On Thu, Jun 16, 2022 at 9:27 PM Eli Cohen <elic@nvidia.com> wrote:
-> > >
-> > > Implement the suspend callback allowing to suspend the virtqueues so
-> > > they stop processing descriptors. This is required to allow the shadow
-> > > virtqueue to kick in.
-> > >
-> > > Signed-off-by: Eli Cohen <elic@nvidia.com>
-> > > ---
-> > >  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 68 +++++++++++++++++++++++++++++-
-> > >  include/linux/mlx5/mlx5_ifc_vdpa.h |  8 ++++
-> > >  2 files changed, 75 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > > index fb0b23e71383..ea4bc8a0cd25 100644
-> > > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> > > @@ -895,6 +895,7 @@ static int create_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
-> > >         if (err)
-> > >                 goto err_cmd;
-> > >
-> > > +       mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_STATE_INIT;
-> > >         kfree(in);
-> > >         mvq->virtq_id = MLX5_GET(general_obj_out_cmd_hdr, out, obj_id);
-> > >
-> > > @@ -922,6 +923,7 @@ static void destroy_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtq
-> > >                 mlx5_vdpa_warn(&ndev->mvdev, "destroy virtqueue 0x%x\n", mvq->virtq_id);
-> > >                 return;
-> > >         }
-> > > +       mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_NONE;
-> > >         umems_destroy(ndev, mvq);
-> > >  }
-> > >
-> > > @@ -1121,6 +1123,20 @@ static int query_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueu
-> > >         return err;
-> > >  }
-> > >
-> > > +static bool is_valid_state_change(int oldstate, int newstate)
-> > > +{
-> > > +       switch (oldstate) {
-> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_INIT:
-> > > +               return newstate == MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY;
-> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY:
-> > > +               return newstate == MLX5_VIRTIO_NET_Q_OBJECT_STATE_SUSPEND;
-> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_SUSPEND:
-> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_ERR:
-> > > +       default:
-> > > +               return false;
-> > > +       }
-> > > +}
-> > > +
-> > >  static int modify_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq, int state)
-> > >  {
-> > >         int inlen = MLX5_ST_SZ_BYTES(modify_virtio_net_q_in);
-> > > @@ -1130,6 +1146,12 @@ static int modify_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
-> > >         void *in;
-> > >         int err;
-> > >
-> > > +       if (mvq->fw_state == MLX5_VIRTIO_NET_Q_OBJECT_NONE)
-> > > +               return 0;
-> > > +
-> > > +       if (!is_valid_state_change(mvq->fw_state, state))
-> > > +               return -EINVAL;
-> > > +
-> > >         in = kzalloc(inlen, GFP_KERNEL);
-> > >         if (!in)
-> > >                 return -ENOMEM;
-> > > @@ -1991,6 +2013,7 @@ static void mlx5_vdpa_set_vq_ready(struct vdpa_device *vdev, u16 idx, bool ready
-> > >         struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
-> > >         struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
-> > >         struct mlx5_vdpa_virtqueue *mvq;
-> > > +       int err;
-> > >
-> > >         if (!mvdev->actual_features)
-> > >                 return;
-> > > @@ -2004,8 +2027,16 @@ static void mlx5_vdpa_set_vq_ready(struct vdpa_device *vdev, u16 idx, bool ready
-> > >         }
-> > >
-> > >         mvq = &ndev->vqs[idx];
-> > > -       if (!ready)
-> > > +       if (!ready) {
-> > >                 suspend_vq(ndev, mvq);
-> > > +       } else {
-> > > +               err = modify_virtqueue(ndev, mvq, MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY);
-> > > +               if (err) {
-> > > +                       mlx5_vdpa_warn(mvdev, "modify VQ %d to ready failed (%d)\n", idx, err);
-> > > +                       ready = false;
-> > > +               }
-> > > +       }
-> > > +
-> > >
-> > >         mvq->ready = ready;
-> > >  }
-> > > @@ -2732,6 +2763,39 @@ static int mlx5_vdpa_get_vendor_vq_stats(struct vdpa_device *vdev, u16 idx,
-> > >         return err;
-> > >  }
-> > >
-> > > +static void mlx5_vdpa_cvq_suspend(struct mlx5_vdpa_dev *mvdev, bool suspend)
-> > > +{
-> > > +       struct mlx5_control_vq *cvq;
-> > > +
-> > > +       if (!(mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
-> > > +               return;
-> > > +
-> > > +       cvq = &mvdev->cvq;
-> > > +       cvq->ready = !suspend;
-> > > +}
-> >
-> > It looks to me we need to synchronize this with reslock. And this
-> > probably deserve a dedicated fix.
-> >
-> > > +
-> > > +static int mlx5_vdpa_suspend(struct vdpa_device *vdev, bool suspend)
-> > > +{
-> > > +       struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
-> > > +       struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
-> > > +       struct mlx5_vdpa_virtqueue *mvq;
-> > > +       int i;
-> > > +
-> > > +       if (!suspend) {
-> > > +               mlx5_vdpa_warn(mvdev, "Resume of virtqueues is not supported\n");
-> > > +               return -EOPNOTSUPP;
-> > > +       }
-> > > +
-> > > +       down_write(&ndev->reslock);
-> > > +       for (i = 0; i < ndev->cur_num_vqs; i++) {
-> > > +               mvq = &ndev->vqs[i];
-> > > +               suspend_vq(ndev, mvq);
-> > > +       }
-> > > +       mlx5_vdpa_cvq_suspend(mvdev, suspend);
-> >
-> > Do we need to synchronize with the carrier work here? Otherwise we may
-> > get config notification after suspending.
-> >
-> > > +       up_write(&ndev->reslock);
-> > > +       return 0;
-> > > +}
-> > > +
-> > >  static const struct vdpa_config_ops mlx5_vdpa_ops = {
-> > >         .set_vq_address = mlx5_vdpa_set_vq_address,
-> > >         .set_vq_num = mlx5_vdpa_set_vq_num,
-> > > @@ -2762,6 +2826,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
-> > >         .get_generation = mlx5_vdpa_get_generation,
-> > >         .set_map = mlx5_vdpa_set_map,
-> > >         .free = mlx5_vdpa_free,
-> > > +       .suspend = mlx5_vdpa_suspend,
-> >
-> > I don't see the vDPA bus patch to enable this method. Or anything I missed here?
-> >
+> > It looks safe, for RX NAPI is disabled. For TX, tasklet is disabled
+> > after tasklet_kill(). I can add a comment to explain this.
 >
-> Should we add
-> Based-on: <20220526124338.36247-1-eperezma@redhat.com>
->
-> To this series?
+> that waits for outstanding tasklets but does it really prevent
+> future ones?
 
-Probably, but that series seems to support resume while this series doesn't.
-
-Any reason for this?
-
-(I don't see any blocker for this especially considering parents can
-choose to do reset + set_vring_state etc.)
+I think so, it tries to test and set TASKLET_STATE_SCHED which blocks
+the future scheduling of a tasklet.
 
 Thanks
 
 >
+> > > Won't it be safer to just keep the rtnl_lock around
+> > > the whole process?
+> >
+> > It looks to me we rtnl_lock can't help in synchronizing with the
+> > callbacks, anything I miss?
+> >
 > > Thanks
-> >
-> > >  };
+>
+> good point.
+>
+>
 > > >
-> > >  static int query_mtu(struct mlx5_core_dev *mdev, u16 *mtu)
-> > > @@ -2827,6 +2892,7 @@ static void init_mvqs(struct mlx5_vdpa_net *ndev)
-> > >                 mvq->index = i;
-> > >                 mvq->ndev = ndev;
-> > >                 mvq->fwqp.fw = true;
-> > > +               mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_NONE;
-> > >         }
-> > >         for (; i < ndev->mvdev.max_vqs; i++) {
-> > >                 mvq = &ndev->vqs[i];
-> > > diff --git a/include/linux/mlx5/mlx5_ifc_vdpa.h b/include/linux/mlx5/mlx5_ifc_vdpa.h
-> > > index 4414ed5b6ed2..423562f39d3c 100644
-> > > --- a/include/linux/mlx5/mlx5_ifc_vdpa.h
-> > > +++ b/include/linux/mlx5/mlx5_ifc_vdpa.h
-> > > @@ -150,6 +150,14 @@ enum {
-> > >         MLX5_VIRTIO_NET_Q_OBJECT_STATE_ERR      = 0x3,
-> > >  };
+> > > >  static struct virtio_device_id id_table[] = {
+> > > > --
+> > > > 2.25.1
 > > >
-> > > +/* This indicates that the object was not created or has alreadyi
-> > > + * been desroyed. It is very safe to assume that this object will never
-> > > + * have so many states
-> > > + */
-> > > +enum {
-> > > +       MLX5_VIRTIO_NET_Q_OBJECT_NONE = 0xffffffff
-> > > +};
-> > > +
-> > >  enum {
-> > >         MLX5_RQTC_LIST_Q_TYPE_RQ            = 0x0,
-> > >         MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q  = 0x1,
-> > > --
-> > > 2.35.1
-> > >
-> >
 >
 

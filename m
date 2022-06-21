@@ -2,182 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F124B552D2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8E7552D32
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348396AbiFUIiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S1346887AbiFUIjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347950AbiFUIiv (ORCPT
+        with ESMTP id S1345003AbiFUIjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:38:51 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0EC2317E;
-        Tue, 21 Jun 2022 01:38:50 -0700 (PDT)
+        Tue, 21 Jun 2022 04:39:01 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA9623BD3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:38:58 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3177e60d980so101724537b3.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655800731; x=1687336731;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=EI6M6wg5GXdJ9TlHRlOGin1RyyW6eaTiHorelcQBSrE=;
-  b=hZSzP5dFaG0454iZ8xfdWUd1oRLE1ifwe/YWAQLLKNmpMQjR28STx1mm
-   ZV+NVwd0yhfcMzgv4LOheSF7T9x6Wi/9qqutJCKcabeJLYJLsmC/+zyaI
-   XYayroUHJmHHzBPmh/oUrpKD1SqGe5kPj9VkmjWzyZ8yqj4GaPgh7wP7L
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Jun 2022 01:38:50 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 01:38:50 -0700
-Received: from cbsp-sh-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 21 Jun 2022 01:38:48 -0700
-From:   Qiang Yu <quic_qianyu@quicinc.com>
-To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_jhugo@quicinc.com>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
-        Qiang Yu <quic_qianyu@quicinc.com>
-Subject: [PATCH v2 1/1] bus: mhi: Disable IRQs instead of freeing them during power down
-Date:   Tue, 21 Jun 2022 16:38:09 +0800
-Message-ID: <1655800689-60632-1-git-send-email-quic_qianyu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iDh+9LhH+7tiFhNIMTxT+tgZMwcqOqSYnB6tz36ZBuM=;
+        b=cZWfvaBa7DUk9Ka+7zdYwrlUnbvZYH/z0ztWmH50eK9pcnb7YWPUMAFeT1BkGZ521N
+         bmO9izfLOA72Mxt/3nXD9iTSoUKehZXNBFQQRe5atnVeCZbMJzj38rL5jkWqbtGIA/yy
+         8xywKLzZOawg3kkg4DfNE5y13tabfeEXyr9oZQH68jp9ztngA4Kq4cSfBpSv2nE4IU3x
+         VnGS3jeejQNzPo/S0qAudmZlHzvUqSt04SYdYvwTFKlxaUTwUpztsdQuuUn5DmArl8jl
+         cdWd/hB8PqYTF0UVyQnr+4T8g235SqOejnyo9iND4FL6XWE7ucSEAdyxgonvK+cr66cE
+         tAZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iDh+9LhH+7tiFhNIMTxT+tgZMwcqOqSYnB6tz36ZBuM=;
+        b=PkRYWKB/u3Usy4vpVFnddwDr6sGJrbqe+Qnyj3f8+cPtaWG5hj10SRjh2U7YJPb/lT
+         1cr+4Cfr9SR1S5OgU4A6Io8Hv4yAu06Dwf0It+2VK1sruv6GjncctWbqn0bYTX3QuDwf
+         9PYuLhyr+xvycM+DjrNnCvL5a5M012KhK9VLjbzqtXjpiAIBQXXrl8AhLVt/dXYdTIaj
+         6y2zHIWwQ8hficB78ip6YAODdaVybLqIdpUvdynPwboGXOVTD1hw7snd+9XBmQxZF4bg
+         NzcxtlPXLENmcba1XsYCV0jPpkrc5Z3+JZ/ELPjpt6Z1JOo5jJFFFw0GtSJt7T+Cq5YS
+         zP1A==
+X-Gm-Message-State: AJIora9tawahc7BQpWCRtjIkNBqa/v+UlQFlMmgFGlUlcsoiSiibjP69
+        3rAu84rLd409+ui4vBNSxOs7Dx00eRWQ35eDH+TdqA==
+X-Google-Smtp-Source: AGRyM1v6TiGSjpc0+2bEY+4ZPExkxwwkypY/E4ibB/ZTz2624OuqSDhfJ143FwEfOhHihVxnOfufu1vCV9jmCBRiw6Y=
+X-Received: by 2002:a0d:f242:0:b0:317:be2a:83df with SMTP id
+ b63-20020a0df242000000b00317be2a83dfmr12187371ywf.376.1655800737119; Tue, 21
+ Jun 2022 01:38:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220620124720.882450983@linuxfoundation.org>
+In-Reply-To: <20220620124720.882450983@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Jun 2022 14:08:46 +0530
+Message-ID: <CA+G9fYst-M64OjAipip3FUZ+JrVJAh24+FT132JEbSDZxti95A@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/84] 5.10.124-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MHI device may go down several times while running. So we just do
-disable/enable IRQs during the mhi_{power_down/power_up} time and
-request/free them when the MHI driver gets installed and removed.
+On Mon, 20 Jun 2022 at 18:31, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.124 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.124-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
----
-v1->v2: Rewrite commit text. Remove a random change. Use
-        inline enables.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
- drivers/bus/mhi/host/init.c | 14 ++++++++++++++
- drivers/bus/mhi/host/pm.c   | 22 ++++++++++++++++------
- 2 files changed, 30 insertions(+), 6 deletions(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-index cbb86b2..daf315a 100644
---- a/drivers/bus/mhi/host/init.c
-+++ b/drivers/bus/mhi/host/init.c
-@@ -179,6 +179,11 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
- 				   "bhi", mhi_cntrl);
- 	if (ret)
- 		return ret;
-+	/*
-+	 * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
-+	 * so disable it explicitly.
-+	 */
-+	disable_irq(mhi_cntrl->irq[0]);
- 
- 	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
- 		if (mhi_event->offload_ev)
-@@ -200,6 +205,8 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
- 				mhi_cntrl->irq[mhi_event->irq], i);
- 			goto error_request;
- 		}
-+
-+		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
- 	}
- 
- 	return 0;
-@@ -1003,8 +1010,14 @@ int mhi_register_controller(struct mhi_controller *mhi_cntrl,
- 
- 	mhi_create_debugfs(mhi_cntrl);
- 
-+	ret = mhi_init_irq_setup(mhi_cntrl);
-+	if (ret)
-+		goto error_setup_irq;
-+
- 	return 0;
- 
-+error_setup_irq:
-+	mhi_destroy_debugfs(mhi_cntrl);
- err_release_dev:
- 	put_device(&mhi_dev->dev);
- err_ida_free:
-@@ -1027,6 +1040,7 @@ void mhi_unregister_controller(struct mhi_controller *mhi_cntrl)
- 	struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
- 	unsigned int i;
- 
-+	mhi_deinit_free_irq(mhi_cntrl);
- 	mhi_destroy_debugfs(mhi_cntrl);
- 
- 	destroy_workqueue(mhi_cntrl->hiprio_wq);
-diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
-index dc2e8ff..eec2d1d 100644
---- a/drivers/bus/mhi/host/pm.c
-+++ b/drivers/bus/mhi/host/pm.c
-@@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
- 	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
- 		if (mhi_event->offload_ev)
- 			continue;
--		free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
-+		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
- 		tasklet_kill(&mhi_event->task);
- 	}
- 
-@@ -1060,12 +1060,13 @@ static void mhi_deassert_dev_wake(struct mhi_controller *mhi_cntrl,
- 
- int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
- {
-+	struct mhi_event *mhi_event = mhi_cntrl->mhi_event;
- 	enum mhi_state state;
- 	enum mhi_ee_type current_ee;
- 	enum dev_st_transition next_state;
- 	struct device *dev = &mhi_cntrl->mhi_dev->dev;
- 	u32 interval_us = 25000; /* poll register field every 25 milliseconds */
--	int ret;
-+	int ret, i;
- 
- 	dev_info(dev, "Requested to power ON\n");
- 
-@@ -1117,9 +1118,18 @@ int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
- 		mhi_write_reg(mhi_cntrl, mhi_cntrl->bhi, BHI_INTVEC, 0);
- 	}
- 
--	ret = mhi_init_irq_setup(mhi_cntrl);
--	if (ret)
--		goto error_exit;
-+	/*
-+	 * IRQs have been reuqested during probe,
-+	 * so we just need to enable them.
-+	 */
-+	enable_irq(mhi_cntrl->irq[0]);
-+
-+	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
-+		if (mhi_event->offload_ev)
-+			continue;
-+
-+		enable_irq(mhi_cntrl->irq[mhi_event->irq]);
-+	}
- 
- 	/* Transition to next state */
- 	next_state = MHI_IN_PBL(current_ee) ?
-@@ -1182,7 +1192,7 @@ void mhi_power_down(struct mhi_controller *mhi_cntrl, bool graceful)
- 	/* Wait for shutdown to complete */
- 	flush_work(&mhi_cntrl->st_worker);
- 
--	free_irq(mhi_cntrl->irq[0], mhi_cntrl);
-+	disable_irq(mhi_cntrl->irq[0]);
- }
- EXPORT_SYMBOL_GPL(mhi_power_down);
- 
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+## Build
+* kernel: 5.10.124-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 1432bd558ac04fc517d64312c7d2e7fbb4a76dee
+* git describe: v5.10.123-85-g1432bd558ac0
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.123-85-g1432bd558ac0
 
+## Test Regressions (compared to v5.10.118)
+No test regressions found.
+
+## Metric Regressions (compared to v5.10.118)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.118)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.118)
+No metric fixes found.
+
+## Test result summary
+total: 128188, pass: 115128, fail: 258, skip: 12239, xfail: 563
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 314 passed, 0 failed
+* arm64: 58 total, 58 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-smoke
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

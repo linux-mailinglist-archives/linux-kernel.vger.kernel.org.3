@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA57553A4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F8D553A57
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353338AbiFUTR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S1353259AbiFUTTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353296AbiFUTRL (ORCPT
+        with ESMTP id S1353270AbiFUTT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:17:11 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA6519034;
-        Tue, 21 Jun 2022 12:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655838987; x=1687374987;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YBBT3g4AuHURoy+25BrMz0CCKzpPjscESAN6DotPoig=;
-  b=HoSjBoDXhwJZc5j7XlOvqwXLc7aCn7aa17aI57+itYRgj6C2ud2vNx1L
-   AWb8gPzNcZ4ncOrQQj9c+YflhppzK64Eo6vvLwGWki2jqpqr8bvVlnG37
-   WwULNkqZ5Vi5ASZ7r3Iywqyd6xwpvZtPm53yAJQufqZeHWxkB4YVMHEGL
-   Gf3VcM4gxKA9CyvxP4AVX39Yjqv+AOBzBEf52ZwWdvH2Uli0BR1kqaGH/
-   R/Oa5gM3a3VrLzr65tpGQ4ERjZLNSg9L4b0my+2C8DVLYqnMeownK/LSh
-   Lrw9cPV3D6dOHPMa05fxNPSSd2PcbjRNMmkttKZtqS4j+U8bHFag7JJBV
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="260035058"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="260035058"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 12:16:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="677150415"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 12:16:21 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25LJG7oH012650;
-        Tue, 21 Jun 2022 20:16:19 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] lib: test_bitmap: add compile-time optimization/evaluations assertions
-Date:   Tue, 21 Jun 2022 21:15:53 +0200
-Message-Id: <20220621191553.69455-9-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220621191553.69455-1-alexandr.lobakin@intel.com>
-References: <20220621191553.69455-1-alexandr.lobakin@intel.com>
+        Tue, 21 Jun 2022 15:19:29 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8062E6B7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:18:46 -0700 (PDT)
+Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LHcnrn026833;
+        Tue, 21 Jun 2022 19:18:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=qs3PCzipYTgCGNDcxZz3wdl1JoNZIFh36ePeUX5Lz5E=;
+ b=CWNTQT1Q4GVDNzuAgVVmbmD6Xv6Q5qaDIxxHMn4IG/iwFZVB3VhYoO0Xspe2wNQV/f2W
+ pjwjFGHp1tw48/dciOCuq1LM33hJnaJW2NUibv2buxz/y55rY+jO4h5BBbRt2eRChtmY
+ V5LSxivix9X1yNU7pfgdaPswREbq0Q5n2/CXjG0vfOG5EGhVii1apM+3gm2VDELUNARO
+ x2WXmJ4mZMQaop3ORYWmuCrBANmTDMgi2euXkRT5VxX92fALGI3aHoyZ+vCVMWHmRGML
+ e906D81O6Cjk3Hv8KZLsa56TozK1DQfHFQCyBFZHnB5v0ryPzlqHR+bczBBqPjCEZNLt 6A== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3gu4ne0p09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 19:18:38 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id BF1408058CD;
+        Tue, 21 Jun 2022 19:18:36 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id AFD04808A2D;
+        Tue, 21 Jun 2022 19:18:35 +0000 (UTC)
+Date:   Tue, 21 Jun 2022 14:18:33 -0500
+From:   Dimitri Sivanich <sivanich@hpe.com>
+To:     Jiang Jian <jiangjian@cdjrlc.com>
+Cc:     dimitri.sivanich@hpe.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] misc: sgi-gru: grukservices: drop unexpected word "the"
+ in the comments
+Message-ID: <20220621191833.GA31015@hpe.com>
+References: <20220621123203.118488-1-jiangjian@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621123203.118488-1-jiangjian@cdjrlc.com>
+X-Proofpoint-GUID: SIkKl7CGU4fE-yuDlhPezNFNyEII43B6
+X-Proofpoint-ORIG-GUID: SIkKl7CGU4fE-yuDlhPezNFNyEII43B6
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-21_08,2022-06-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999
+ spamscore=0 mlxscore=0 clxscore=1011 suspectscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206210078
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,85 +76,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to the bitmap test suite, which will ensure that
-compilers are able to evaluate operations performed by the
-bitops/bitmap helpers to compile-time constants when all of the
-arguments are compile-time constants as well, or trigger a build
-bug otherwise. This should work on all architectures and all the
-optimization levels supported by Kbuild.
-The function doesn't perform any runtime tests and gets optimized
-out to nothing after passing the build assertions.
+Acked-by: Dimitri Sivanich <sivanich@hpe.com>
 
-Suggested-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- lib/test_bitmap.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index d5923a640457..3a7b09b82794 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -869,6 +869,50 @@ static void __init test_bitmap_print_buf(void)
- 	}
- }
- 
-+static void __init test_bitmap_const_eval(void)
-+{
-+	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-+	unsigned long initvar = BIT(2);
-+	unsigned long bitopvar = 0;
-+	unsigned long var = 0;
-+	int res;
-+
-+	/*
-+	 * Compilers must be able to optimize all of those to compile-time
-+	 * constants on any supported optimization level (-O2, -Os) and any
-+	 * architecture. Otherwise, trigger a build bug.
-+	 * The whole function gets optimized out then, there's nothing to do
-+	 * in runtime.
-+	 */
-+
-+	/* Equals to `unsigned long bitmap[1] = { BIT(5), }` */
-+	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-+	if (!test_bit(7, bitmap))
-+		bitmap_set(bitmap, 5, 1);
-+
-+	/* Equals to `unsigned long bitopvar = BIT(20)` */
-+	__change_bit(31, &bitopvar);
-+	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-+
-+	/* Equals to `unsigned long var = BIT(25)` */
-+	var |= BIT(25);
-+	if (var & BIT(0))
-+		var ^= GENMASK(9, 6);
-+
-+	/* __const_hweight<32|64>(BIT(5)) == 1 */
-+	res = bitmap_weight(bitmap, 20);
-+	BUILD_BUG_ON(!__builtin_constant_p(res));
-+
-+	/* !(BIT(31) & BIT(18)) == 1 */
-+	res = !test_bit(18, &bitopvar);
-+	BUILD_BUG_ON(!__builtin_constant_p(res));
-+
-+	/* BIT(2) & GENMASK(14, 8) == 0 */
-+	BUILD_BUG_ON(!__builtin_constant_p(initvar & GENMASK(14, 8)));
-+	/* ~BIT(25) */
-+	BUILD_BUG_ON(!__builtin_constant_p(~var));
-+}
-+
- static void __init selftest(void)
- {
- 	test_zero_clear();
-@@ -884,6 +928,7 @@ static void __init selftest(void)
- 	test_for_each_set_clump8();
- 	test_bitmap_cut();
- 	test_bitmap_print_buf();
-+	test_bitmap_const_eval();
- }
- 
- KSTM_MODULE_LOADERS(test_bitmap);
--- 
-2.36.1
-
+On Tue, Jun 21, 2022 at 08:32:03PM +0800, Jiang Jian wrote:
+> there is an unexpected word "the" in the comments that need to be dropped
+> file: drivers/misc/sgi-gru/grukservices.c
+> line: 39
+>  * reserved whenever the the kernel context for the blade is loaded. Note
+> changed to
+>  * reserved whenever the kernel context for the blade is loaded. Note
+> 
+> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+> ---
+>  drivers/misc/sgi-gru/grukservices.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/sgi-gru/grukservices.c b/drivers/misc/sgi-gru/grukservices.c
+> index 19dbdad8ad8a..fa1f5a632e7f 100644
+> --- a/drivers/misc/sgi-gru/grukservices.c
+> +++ b/drivers/misc/sgi-gru/grukservices.c
+> @@ -36,7 +36,7 @@
+>   * kernel/user requirements.
+>   *
+>   * Blade percpu resources reserved for kernel use. These resources are
+> - * reserved whenever the the kernel context for the blade is loaded. Note
+> + * reserved whenever the kernel context for the blade is loaded. Note
+>   * that the kernel context is not guaranteed to be always available. It is
+>   * loaded on demand & can be stolen by a user if the user demand exceeds the
+>   * kernel demand. The kernel can always reload the kernel context but
+> -- 
+> 2.17.1

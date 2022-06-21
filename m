@@ -2,99 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4051B552C9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E87552C9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348016AbiFUIGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
+        id S1348022AbiFUIG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347996AbiFUIGC (ORCPT
+        with ESMTP id S1348029AbiFUIGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:06:02 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C1C248FD
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:05:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so2672192wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GsCQyeSS9WqgWVTSCSRei8+jKy0pNjIeX7QnW7mozH8=;
-        b=jibc9DU08V3+hmlKpMeuFBDRViUNOmAqhLv6bBMBvot6Y1y5fIwWhHP50ijPfYjSkP
-         dofNHKktUMXyQWgFL3kXgkNcCMI2EyGV7jpxsE895xWHEcXseYPy3ALYyk3QO/N0mUp0
-         vdtIIlaM3jdF4mNnqhGbeiMjdwIE1RoqzlR0jkpN01OXtm8YiT2z6tDuzLLchasFD2w2
-         Mkh6LtyCFJWejhKMxgykZsEQj/x8fiEINVD1qJbJOxZgN2YH/UWuZMuMZW32iBeGtvQq
-         /lW7BLRvhMJx91EGYj8g/3IgB34BAKrk4wE5Qh21ccOj72gocm1+GPBZgzZ2TTnx2Dna
-         r2Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GsCQyeSS9WqgWVTSCSRei8+jKy0pNjIeX7QnW7mozH8=;
-        b=Cnkt48lQ/PnbkhyCiqhuQSyEFb0xinSkfxvDSUCHGMdSVpPSyMKl3mfgUa3GQ/9M37
-         2HZUU7HQYj+Z6mCvtT8+DvMfaLMS5Cx/EoMK0b3eobKVmylJB0IHEDDI3dMyMJ40k/pm
-         8D70cIG3va/NvH25yBjjCTDuOd4J5KZJVyiM44sU1h0YlFpfrhDM4MKsIeV5VJPhE5uJ
-         Iyx9Vgm70vtU4HrJHSyijDq9c+Ch8BZYzNS6tbEguqL06irZ+jdoR0HEzhh3IY3T+S17
-         CYzwHq9Jqw2nLWToXbTEnfvrU148YJz77Xw6TkW6lbmOMoq29N8fRTVxuZOQut021d1w
-         ZRaA==
-X-Gm-Message-State: AJIora/EzLDGJgS83p7VrYq4nI0rKUHDlsWSHQiCtavR/RwDkjewRcAq
-        m6hoHejG2UvXydcf+Mh3p5Kv5g==
-X-Google-Smtp-Source: AGRyM1uyuBI4yQO8I87mv5kU872kiOSXmbKPq5Tg/yiYqqbU8VShLy0QcRaY062PjM90XL8FvpDVSQ==
-X-Received: by 2002:a05:600c:1c10:b0:39c:4708:648d with SMTP id j16-20020a05600c1c1000b0039c4708648dmr28938957wms.85.1655798758346;
-        Tue, 21 Jun 2022 01:05:58 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id t5-20020a05600001c500b0020d106c0386sm7043231wrx.89.2022.06.21.01.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 01:05:57 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 10:05:54 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     John Keeping <john@metanate.com>
-Cc:     heiko@sntech.de, ardb@kernel.org, herbert@gondor.apana.org.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v7 14/33] crypto: rockchip: handle reset also in PM
-Message-ID: <YrF74tmA9qc+I3JF@Red>
-References: <20220508185957.3629088-1-clabbe@baylibre.com>
- <20220508185957.3629088-15-clabbe@baylibre.com>
- <YrBUODGF51oUsF1f@donbot>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrBUODGF51oUsF1f@donbot>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 21 Jun 2022 04:06:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029112496F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:06:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA776B8169E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:06:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831E4C3411D;
+        Tue, 21 Jun 2022 08:06:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655798779;
+        bh=8qCnewqKJmo59l8Sj5lCGp78mJervPUiBsnnQAaSXP8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Qkya9AELvEs7KfBcoqWIV90YtDor5KNTIHOQolDsiamDPj1nWG9NoZXtYf7Jky0Pk
+         1sTAYweIRfZUetfph6wzdC9h90W31Rss/4k13wb8D17EHfhxd5mF0tKKIfYMezWXTR
+         y6E8omfbdSOqRHsr47icJOllfMcCaeZLa/qQTuVFyGIP5L2v+q09/gzttpo/n8ZeKU
+         IjP7FiEcXL4vUcTwVGRLuiRP8/YwKvUU9AvgPI/h4nnVnNERnhMnvrJ8Zn3Qpg0CyW
+         vlFJJfG0VMm/1Hi9PtWG3B4KEshMYyFlnH/Xga10WYVRH77YvspXYZMnlkD1gbZQ1v
+         TQNoLtozhj5mQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o3Ytt-001zIC-EW;
+        Tue, 21 Jun 2022 09:06:17 +0100
+Date:   Tue, 21 Jun 2022 09:06:17 +0100
+Message-ID: <87sfny30g6.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Guo Ren <guoren@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 4/6] genirq: Provide an IRQ affinity mask in non-SMP configs
+In-Reply-To: <eb0a74ce-f444-de74-d944-87fc42091c46@sholland.org>
+References: <20220616064028.57933-1-samuel@sholland.org>
+        <20220616064028.57933-5-samuel@sholland.org>
+        <87h74ipcos.wl-maz@kernel.org>
+        <eb0a74ce-f444-de74-d944-87fc42091c46@sholland.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: samuel@sholland.org, tglx@linutronix.de, palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu, brgl@bgdev.pl, guoren@kernel.org, mark.rutland@arm.com, linux@armlinux.org.uk, xuwei5@hisilicon.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, Jun 20, 2022 at 12:04:24PM +0100, John Keeping a écrit :
-> On Sun, May 08, 2022 at 06:59:38PM +0000, Corentin Labbe wrote:
-> > reset could be handled by PM functions.
+On Tue, 21 Jun 2022 05:03:43 +0100,
+Samuel Holland <samuel@sholland.org> wrote:
 > 
-> Is there any further rationale for this?
+> On 6/18/22 4:01 AM, Marc Zyngier wrote:
+> > Hi Samuel,
+> > 
+> > On Thu, 16 Jun 2022 07:40:26 +0100,
+> > Samuel Holland <samuel@sholland.org> wrote:
+> >>
+> >> IRQ affinity masks are not allocated in uniprocessor configurations.
+> >> This requires special case non-SMP code in drivers for irqchips which
+> >> have per-CPU enable or mask registers.
+> >>
+> >> Since IRQ affinity is always the same in a uniprocessor configuration,
+> >> we can still provide the correct affinity mask without allocating one
+> >> per IRQ. We can reuse the system-wide cpu_possible_mask.
+> >>
+> >> By returning a real cpumask from irq_data_get_affinity_mask even when
+> >> SMP is disabled, irqchip drivers which iterate over that mask will
+> >> automatically do the right thing.
+> >>
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> >> ---
+> >>
+> >> (no changes since v1)
+> >>
+> >>  include/linux/irq.h | 6 ++++++
+> >>  1 file changed, 6 insertions(+)
+> >>
+> >> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> >> index 69ee4e2f36ce..d5e958b026aa 100644
+> >> --- a/include/linux/irq.h
+> >> +++ b/include/linux/irq.h
+> >> @@ -151,7 +151,9 @@ struct irq_common_data {
+> >>  #endif
+> >>  	void			*handler_data;
+> >>  	struct msi_desc		*msi_desc;
+> >> +#ifdef CONFIG_SMP
+> >>  	cpumask_var_t		affinity;
+> >> +#endif
+> >>  #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> >>  	cpumask_var_t		effective_affinity;
+> >>  #endif
+> >> @@ -881,7 +883,11 @@ static inline int irq_data_get_node(struct irq_data *d)
+> >>  
+> >>  static inline struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
+> >>  {
+> >> +#ifdef CONFIG_SMP
+> >>  	return d->common->affinity;
+> >> +#else
+> >> +	return &__cpu_possible_mask;
+> >> +#endif
+> > 
+> > I have a bad feeling about this one. Being in a !SMP configuration
+> > doesn't necessarily mean that __cpu_possible_mask only contains a
+> > single CPU, specially with things like CONFIG_INIT_ALL_POSSIBLE. I can
+> > also imagine an architecture populating this bitmap from firmware
+> > tables irrespective of the SMP status of the kernel.
+> > 
+> > Can't you use something like:
+> > 
+> > 	return cpumask_of(0);
+> > 
+> > which is guaranteed to be the right thing on !SMP configuration?
 > 
-> After this change there is no longer a guaranteed reset pulse on probe
-> since the reset control may already be de-asserted.  This is normally
-> the most important case for a reset as it's the only time when the state
-> of the hardware is unknown.
+> I can if I cast away the const. However I see a lot of:
 > 
-> The original use of devm_add_action_or_reset() seems a bit weird already
-> since there doesn't seem to be any need to assert reset when the driver
-> is unloaded.
+>     cpumask_copy(irq_data_get_affinity_mask(d), foo);
 > 
+> which I suppose is a great reason not to do what I am doing.
 
-I am not an hw engineer, so my knowledge on reset is low.
-So why not having a reset pulse on probe is a problem ?
+Ah, indeed. Not going to work very well...
 
-Do you mean I must put reset asserted on probe ?
+> The right solution seems to be adding irq_data_update_affinity() to
+> match irq_data_update_effective_affinity(), and making both getters
+> return a const cpumask. Then I can use cpumask_of(0).
 
+Sounds like a plan.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

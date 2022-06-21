@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2835533AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2A85533AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349877AbiFUNfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S233316AbiFUNeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351916AbiFUNdJ (ORCPT
+        with ESMTP id S1351939AbiFUNdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:33:09 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B1028983;
-        Tue, 21 Jun 2022 06:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=G80LNemDmZomH/5dG561zVRY02eIMOerEfE83vdjZHg=; b=OnwqUjGZM/WkATzH2paqr7BPUu
-        zQS/hPvFxad2qilfB71xD1PlP5LEqIgNC6vLSQaXAukL0/Ud5fw4RxkCCnNbCNPysOp6zW6q+bMiL
-        DckLx6qqM0tOaJiw+kMWqZDcavgiHQ8UycMU94twN8oOLqaXgCofaayVC4TXC/uKUpktjgewuWH1Z
-        KRfeovTzP8grfg5Fg5rib3Za2bdULIymDSzYt66z67jEU4sv6qhg3mVssMp13fW7ej0iqrLkrAIgB
-        ORy4jdcg5WBumsobuT5TxkkFeTlT4fhY/JxCRfnIhfTv3ZArwqbhELlAcSdONImzIk9mivs7qq8Hx
-        MMDfNe8g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32964)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o3dx4-0002Qr-Dq; Tue, 21 Jun 2022 14:29:53 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o3dwv-00064M-6m; Tue, 21 Jun 2022 14:29:45 +0100
-Date:   Tue, 21 Jun 2022 14:29:45 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Zheng Bin <zhengbin13@huawei.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        boon.leong.ong@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gaochao49@huawei.com
-Subject: Re: [PATCH -next] net: pcs: pcs-xpcs: Fix build error when
- CONFIG_PCS_XPCS=y && CONFIG_PHYLINK=m
-Message-ID: <YrHHyZNJXVme1JIe@shell.armlinux.org.uk>
-References: <20220621131251.3357104-1-zhengbin13@huawei.com>
+        Tue, 21 Jun 2022 09:33:11 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC162AE26
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:30:30 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by baptiste.telenet-ops.be with bizsmtp
+        id lpWF2700F4C55Sk01pWFgS; Tue, 21 Jun 2022 15:30:28 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1o3dxN-000BYK-Uo; Tue, 21 Jun 2022 15:30:13 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1o3dxN-006KTv-FK; Tue, 21 Jun 2022 15:30:13 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Liu Ying <victor.liu@nxp.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Marek Vasut <marex@denx.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] drm/bridge: imx: i.MX8 bridge drivers should depend on ARCH_MXC
+Date:   Tue, 21 Jun 2022 15:30:11 +0200
+Message-Id: <43645c9b5cd657664c1340d40133f2116c8cef43.1655818025.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621131251.3357104-1-zhengbin13@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,26 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 09:12:51PM +0800, Zheng Bin wrote:
-> If CONFIG_PCS_XPCS=y, CONFIG_PHYLINK=m, bulding fails:
-> 
-> drivers/net/pcs/pcs-xpcs.o: in function `xpcs_do_config':
-> pcs-xpcs.c:(.text+0x64f): undefined reference to `phylink_mii_c22_pcs_encode_advertisement'
-> drivers/net/pcs/pcs-xpcs.o: in function `xpcs_get_state':
-> pcs-xpcs.c:(.text+0x10f8): undefined reference to `phylink_mii_c22_pcs_decode_state
-> 
-> Make PCS_XPCS depends on PHYLINK to fix this.
-> 
-> Fixes: b47aec885bcd ("net: pcs: xpcs: add CL37 1000BASE-X AN support")
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+The various Freescale i.MX8MP display bridges are only present on
+Freescale i.MX8 SoCs.  Hence add a dependency on ARCH_MXC, to prevent
+asking the user about these drivers when configuring a kernel without
+i.MX SoC support.
 
-Paolo Abeni has already sent a patch, which I think is addressing a
-similar issue. Please see:
+Fixes: e60c4354840b2fe8 ("drm/bridge: imx: Add LDB support for i.MX8qm")
+Fixes: 3818715f62b42b5c ("drm/bridge: imx: Add LDB support for i.MX8qxp")
+Fixes: 96988a526c97cfbe ("drm/bridge: imx: Add i.MX8qxp pixel link to DPI support")
+Fixes: 1ec17c26bc06289d ("drm/bridge: imx: Add i.MX8qm/qxp display pixel link support")
+Fixes: 93e163a9e0392aca ("drm/bridge: imx: Add i.MX8qm/qxp pixel combiner support")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Probably the remaining i.MX bridge drivers in
+drivers/gpu/drm/bridge/Kconfig (e.g. DRM_FSL_LDB) should be moved here,
+too?
+---
+ drivers/gpu/drm/bridge/imx/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-https://lore.kernel.org/r/6959a6a51582e8bc2343824d0cee56f1db246e23.1655797997.git.pabeni@redhat.com
-
-Thanks.
-
+diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
+index 212a7b0e64fd8b5a..608f47f41bcd1c81 100644
+--- a/drivers/gpu/drm/bridge/imx/Kconfig
++++ b/drivers/gpu/drm/bridge/imx/Kconfig
+@@ -1,3 +1,5 @@
++if ARCH_MXC || COMPILE_TEST
++
+ config DRM_IMX8QM_LDB
+ 	tristate "Freescale i.MX8QM LVDS display bridge"
+ 	depends on OF
+@@ -41,3 +43,5 @@ config DRM_IMX8QXP_PIXEL_LINK_TO_DPI
+ 	help
+ 	  Choose this to enable pixel link to display pixel interface(PXL2DPI)
+ 	  found in Freescale i.MX8qxp processor.
++
++endif # ARCH_MXC || COMPILE_TEST
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.25.1
+

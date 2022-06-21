@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB2A5535AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C5D5535B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352487AbiFUPPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S1352700AbiFUPPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352711AbiFUPPJ (ORCPT
+        with ESMTP id S1352471AbiFUPPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Jun 2022 11:15:09 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24A0FBC9E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:14:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E1901182E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:14:41 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 121C31691;
-        Tue, 21 Jun 2022 08:14:40 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D01C1692;
+        Tue, 21 Jun 2022 08:14:41 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0554F3F66F;
-        Tue, 21 Jun 2022 08:14:38 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1F9D43F66F;
+        Tue, 21 Jun 2022 08:14:40 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org, will@kernel.org
 Cc:     iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] iommu: Make .release_device optional
-Date:   Tue, 21 Jun 2022 16:14:26 +0100
-Message-Id: <bda9d3eb4527eac8f6544a15067e2529cca54a2e.1655822151.git.robin.murphy@arm.com>
+Subject: [PATCH 3/3] iommu: Clean up release_device checks
+Date:   Tue, 21 Jun 2022 16:14:27 +0100
+Message-Id: <02671dbfad7a3343fc25a44222350efcb455fe3c.1655822151.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.36.1.dirty
 In-Reply-To: <cover.1655822151.git.robin.murphy@arm.com>
 References: <cover.1655822151.git.robin.murphy@arm.com>
@@ -42,152 +42,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many drivers do nothing meaningful for .release_device, and it's neatly
-abstracted to just two callsites in the core code, so let's make it
-optional to implement.
+Since .release_device is now called through per-device ops, any call
+which gets as far as a driver definitely *is* for that driver, for a
+device which has successfully passed .probe_device, so all the checks to
+that effect are now redundant and can be removed. In the same vein we
+can also skip freeing fwspecs which are now managed by core code.
 
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
- drivers/iommu/fsl_pamu_domain.c | 5 -----
- drivers/iommu/iommu.c           | 6 ++++--
- drivers/iommu/msm_iommu.c       | 5 -----
- drivers/iommu/sun50i-iommu.c    | 3 ---
- drivers/iommu/tegra-gart.c      | 5 -----
- drivers/iommu/tegra-smmu.c      | 3 ---
- 6 files changed, 4 insertions(+), 23 deletions(-)
+ drivers/iommu/apple-dart.c                  |  3 ---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  8 +-------
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       | 14 +++-----------
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 11 -----------
+ drivers/iommu/exynos-iommu.c                |  3 ---
+ drivers/iommu/mtk_iommu.c                   |  5 -----
+ drivers/iommu/mtk_iommu_v1.c                |  5 -----
+ drivers/iommu/sprd-iommu.c                  | 11 -----------
+ drivers/iommu/virtio-iommu.c                |  8 +-------
+ 9 files changed, 5 insertions(+), 63 deletions(-)
 
-diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
-index 94b4589dc67c..011f9ab7f743 100644
---- a/drivers/iommu/fsl_pamu_domain.c
-+++ b/drivers/iommu/fsl_pamu_domain.c
-@@ -447,15 +447,10 @@ static struct iommu_device *fsl_pamu_probe_device(struct device *dev)
- 	return &pamu_iommu;
+diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+index 8af0242a90d9..e87d3cf54ed6 100644
+--- a/drivers/iommu/apple-dart.c
++++ b/drivers/iommu/apple-dart.c
+@@ -564,9 +564,6 @@ static void apple_dart_release_device(struct device *dev)
+ {
+ 	struct apple_dart_master_cfg *cfg = dev_iommu_priv_get(dev);
+ 
+-	if (!cfg)
+-		return;
+-
+ 	dev_iommu_priv_set(dev, NULL);
+ 	kfree(cfg);
+ }
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index 88817a3376ef..382f3120e27b 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -2691,20 +2691,14 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
+ 
+ static void arm_smmu_release_device(struct device *dev)
+ {
+-	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-	struct arm_smmu_master *master;
++	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+ 
+-	if (!fwspec || fwspec->ops != &arm_smmu_ops)
+-		return;
+-
+-	master = dev_iommu_priv_get(dev);
+ 	if (WARN_ON(arm_smmu_master_sva_enabled(master)))
+ 		iopf_queue_remove_device(master->smmu->evtq.iopf, dev);
+ 	arm_smmu_detach_dev(master);
+ 	arm_smmu_disable_pasid(master);
+ 	arm_smmu_remove_master(master);
+ 	kfree(master);
+-	iommu_fwspec_free(dev);
  }
  
--static void fsl_pamu_release_device(struct device *dev)
+ static struct iommu_group *arm_smmu_device_group(struct device *dev)
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+index 2ed3594f384e..7c2a99862fd3 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+@@ -1432,27 +1432,19 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
+ static void arm_smmu_release_device(struct device *dev)
+ {
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-	struct arm_smmu_master_cfg *cfg;
+-	struct arm_smmu_device *smmu;
++	struct arm_smmu_master_cfg *cfg = dev_iommu_priv_get(dev);
+ 	int ret;
+ 
+-	if (!fwspec || fwspec->ops != &arm_smmu_ops)
+-		return;
+-
+-	cfg  = dev_iommu_priv_get(dev);
+-	smmu = cfg->smmu;
+-
+-	ret = arm_smmu_rpm_get(smmu);
++	ret = arm_smmu_rpm_get(cfg->smmu);
+ 	if (ret < 0)
+ 		return;
+ 
+ 	arm_smmu_master_free_smes(cfg, fwspec);
+ 
+-	arm_smmu_rpm_put(smmu);
++	arm_smmu_rpm_put(cfg->smmu);
+ 
+ 	dev_iommu_priv_set(dev, NULL);
+ 	kfree(cfg);
+-	iommu_fwspec_free(dev);
+ }
+ 
+ static void arm_smmu_probe_finalize(struct device *dev)
+diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+index 4c077c38fbd6..4a922c7b69ee 100644
+--- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
++++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+@@ -532,16 +532,6 @@ static struct iommu_device *qcom_iommu_probe_device(struct device *dev)
+ 	return &qcom_iommu->iommu;
+ }
+ 
+-static void qcom_iommu_release_device(struct device *dev)
 -{
+-	struct qcom_iommu_dev *qcom_iommu = to_iommu(dev);
+-
+-	if (!qcom_iommu)
+-		return;
+-
+-	iommu_fwspec_free(dev);
 -}
 -
- static const struct iommu_ops fsl_pamu_ops = {
- 	.capable	= fsl_pamu_capable,
- 	.domain_alloc	= fsl_pamu_domain_alloc,
- 	.probe_device	= fsl_pamu_probe_device,
--	.release_device	= fsl_pamu_release_device,
- 	.device_group   = fsl_pamu_device_group,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= fsl_pamu_attach_device,
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 06d6989f07f6..8b4fc7e62b99 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -259,7 +259,8 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
- 	return 0;
- 
- out_release:
--	ops->release_device(dev);
-+	if (ops->release_device)
-+		ops->release_device(dev);
- 
- out_module_put:
- 	module_put(ops->owner);
-@@ -337,7 +338,8 @@ void iommu_release_device(struct device *dev)
- 	iommu_device_unlink(dev->iommu->iommu_dev, dev);
- 
- 	ops = dev_iommu_ops(dev);
--	ops->release_device(dev);
-+	if (ops->release_device)
-+		ops->release_device(dev);
- 
- 	iommu_group_remove_device(dev);
- 	module_put(ops->owner);
-diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index f09aedfdd462..428919a474c1 100644
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -394,10 +394,6 @@ static struct iommu_device *msm_iommu_probe_device(struct device *dev)
- 	return &iommu->iommu;
- }
- 
--static void msm_iommu_release_device(struct device *dev)
--{
--}
--
- static int msm_iommu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ static int qcom_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
  {
- 	int ret = 0;
-@@ -677,7 +673,6 @@ irqreturn_t msm_iommu_fault_handler(int irq, void *dev_id)
- static struct iommu_ops msm_iommu_ops = {
- 	.domain_alloc = msm_iommu_domain_alloc,
- 	.probe_device = msm_iommu_probe_device,
--	.release_device = msm_iommu_release_device,
- 	.device_group = generic_device_group,
- 	.pgsize_bitmap = MSM_IOMMU_PGSIZES,
- 	.of_xlate = qcom_iommu_of_xlate,
-diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-index c54ab477b8fd..a84c63518773 100644
---- a/drivers/iommu/sun50i-iommu.c
-+++ b/drivers/iommu/sun50i-iommu.c
-@@ -738,8 +738,6 @@ static struct iommu_device *sun50i_iommu_probe_device(struct device *dev)
- 	return &iommu->iommu;
- }
- 
--static void sun50i_iommu_release_device(struct device *dev) {}
--
- static struct iommu_group *sun50i_iommu_device_group(struct device *dev)
- {
- 	struct sun50i_iommu *iommu = sun50i_iommu_from_dev(dev);
-@@ -764,7 +762,6 @@ static const struct iommu_ops sun50i_iommu_ops = {
- 	.domain_alloc	= sun50i_iommu_domain_alloc,
- 	.of_xlate	= sun50i_iommu_of_xlate,
- 	.probe_device	= sun50i_iommu_probe_device,
--	.release_device	= sun50i_iommu_release_device,
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev	= sun50i_iommu_attach_device,
- 		.detach_dev	= sun50i_iommu_detach_device,
-diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
-index a6700a40a6f8..e5ca3cf1a949 100644
---- a/drivers/iommu/tegra-gart.c
-+++ b/drivers/iommu/tegra-gart.c
-@@ -246,10 +246,6 @@ static struct iommu_device *gart_iommu_probe_device(struct device *dev)
- 	return &gart_handle->iommu;
- }
- 
--static void gart_iommu_release_device(struct device *dev)
--{
--}
--
- static int gart_iommu_of_xlate(struct device *dev,
- 			       struct of_phandle_args *args)
- {
-@@ -273,7 +269,6 @@ static void gart_iommu_sync(struct iommu_domain *domain,
- static const struct iommu_ops gart_iommu_ops = {
- 	.domain_alloc	= gart_iommu_domain_alloc,
- 	.probe_device	= gart_iommu_probe_device,
--	.release_device	= gart_iommu_release_device,
+ 	struct qcom_iommu_dev *qcom_iommu;
+@@ -591,7 +581,6 @@ static const struct iommu_ops qcom_iommu_ops = {
+ 	.capable	= qcom_iommu_capable,
+ 	.domain_alloc	= qcom_iommu_domain_alloc,
+ 	.probe_device	= qcom_iommu_probe_device,
+-	.release_device	= qcom_iommu_release_device,
  	.device_group	= generic_device_group,
- 	.pgsize_bitmap	= GART_IOMMU_PGSIZES,
- 	.of_xlate	= gart_iommu_of_xlate,
-diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index 1fea68e551f1..2a8de975fe63 100644
---- a/drivers/iommu/tegra-smmu.c
-+++ b/drivers/iommu/tegra-smmu.c
-@@ -864,8 +864,6 @@ static struct iommu_device *tegra_smmu_probe_device(struct device *dev)
- 	return &smmu->iommu;
+ 	.of_xlate	= qcom_iommu_of_xlate,
+ 	.pgsize_bitmap	= SZ_4K | SZ_64K | SZ_1M | SZ_16M,
+diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+index 71f2018e23fe..1d6808d6e190 100644
+--- a/drivers/iommu/exynos-iommu.c
++++ b/drivers/iommu/exynos-iommu.c
+@@ -1251,9 +1251,6 @@ static void exynos_iommu_release_device(struct device *dev)
+ 	struct exynos_iommu_owner *owner = dev_iommu_priv_get(dev);
+ 	struct sysmmu_drvdata *data;
+ 
+-	if (!has_sysmmu(dev))
+-		return;
+-
+ 	if (owner->domain) {
+ 		struct iommu_group *group = iommu_group_get(dev);
+ 
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index bb9dd92c9898..5c3d9366c25c 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -819,17 +819,12 @@ static void mtk_iommu_release_device(struct device *dev)
+ 	struct device *larbdev;
+ 	unsigned int larbid;
+ 
+-	if (!fwspec || fwspec->ops != &mtk_iommu_ops)
+-		return;
+-
+ 	data = dev_iommu_priv_get(dev);
+ 	if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM)) {
+ 		larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+ 		larbdev = data->larb_imu[larbid].dev;
+ 		device_link_remove(dev, larbdev);
+ 	}
+-
+-	iommu_fwspec_free(dev);
  }
  
--static void tegra_smmu_release_device(struct device *dev) {}
+ static int mtk_iommu_get_group_id(struct device *dev, const struct mtk_iommu_plat_data *plat_data)
+diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+index e1cb51b9866c..128c7a3f1778 100644
+--- a/drivers/iommu/mtk_iommu_v1.c
++++ b/drivers/iommu/mtk_iommu_v1.c
+@@ -532,15 +532,10 @@ static void mtk_iommu_v1_release_device(struct device *dev)
+ 	struct device *larbdev;
+ 	unsigned int larbid;
+ 
+-	if (!fwspec || fwspec->ops != &mtk_iommu_v1_ops)
+-		return;
 -
- static const struct tegra_smmu_group_soc *
- tegra_smmu_find_group(struct tegra_smmu *smmu, unsigned int swgroup)
+ 	data = dev_iommu_priv_get(dev);
+ 	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
+ 	larbdev = data->larb_imu[larbid].dev;
+ 	device_link_remove(dev, larbdev);
+-
+-	iommu_fwspec_free(dev);
+ }
+ 
+ static int mtk_iommu_v1_hw_init(const struct mtk_iommu_v1_data *data)
+diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
+index bd409bab6286..511959c8a14d 100644
+--- a/drivers/iommu/sprd-iommu.c
++++ b/drivers/iommu/sprd-iommu.c
+@@ -383,16 +383,6 @@ static struct iommu_device *sprd_iommu_probe_device(struct device *dev)
+ 	return &sdev->iommu;
+ }
+ 
+-static void sprd_iommu_release_device(struct device *dev)
+-{
+-	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-
+-	if (!fwspec || fwspec->ops != &sprd_iommu_ops)
+-		return;
+-
+-	iommu_fwspec_free(dev);
+-}
+-
+ static struct iommu_group *sprd_iommu_device_group(struct device *dev)
  {
-@@ -966,7 +964,6 @@ static int tegra_smmu_of_xlate(struct device *dev,
- static const struct iommu_ops tegra_smmu_ops = {
- 	.domain_alloc = tegra_smmu_domain_alloc,
- 	.probe_device = tegra_smmu_probe_device,
--	.release_device = tegra_smmu_release_device,
- 	.device_group = tegra_smmu_device_group,
- 	.of_xlate = tegra_smmu_of_xlate,
- 	.pgsize_bitmap = SZ_4K,
+ 	struct sprd_iommu_device *sdev = dev_iommu_priv_get(dev);
+@@ -417,7 +407,6 @@ static int sprd_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
+ static const struct iommu_ops sprd_iommu_ops = {
+ 	.domain_alloc	= sprd_iommu_domain_alloc,
+ 	.probe_device	= sprd_iommu_probe_device,
+-	.release_device	= sprd_iommu_release_device,
+ 	.device_group	= sprd_iommu_device_group,
+ 	.of_xlate	= sprd_iommu_of_xlate,
+ 	.pgsize_bitmap	= ~0UL << SPRD_IOMMU_PAGE_SHIFT,
+diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+index 25be4b822aa0..55337796a5f8 100644
+--- a/drivers/iommu/virtio-iommu.c
++++ b/drivers/iommu/virtio-iommu.c
+@@ -981,13 +981,7 @@ static void viommu_probe_finalize(struct device *dev)
+ 
+ static void viommu_release_device(struct device *dev)
+ {
+-	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-	struct viommu_endpoint *vdev;
+-
+-	if (!fwspec || fwspec->ops != &viommu_ops)
+-		return;
+-
+-	vdev = dev_iommu_priv_get(dev);
++	struct viommu_endpoint *vdev = dev_iommu_priv_get(dev);
+ 
+ 	generic_iommu_put_resv_regions(dev, &vdev->resv_regions);
+ 	kfree(vdev);
 -- 
 2.36.1.dirty
 

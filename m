@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F121552E4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635FC552E47
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348787AbiFUJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
+        id S1348656AbiFUJ2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347043AbiFUJ2O (ORCPT
+        with ESMTP id S1347480AbiFUJ2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:28:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E3B7300
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655803670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1/6eJspt/AVzBoz5mItJSgxql1F5f7nb/z62lzZC//s=;
-        b=h92MBdQ60YyfZtTbeTYIsHZWShRLkjKqTjvj2+fhkEzm8r35rgkMIsdzQo3u8IA9caCYqf
-        5pxhNmMkM6OnewRaPK1fLodCkqUaE5yz1EyXfayLo9+RONtmB/JSoZisruRS5D5+BQzVE2
-        ixudyhNSW9jUk8rYMuFumpZtVxYWyig=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-MQve9TMLMYyX3G1gVtvhfA-1; Tue, 21 Jun 2022 05:27:47 -0400
-X-MC-Unique: MQve9TMLMYyX3G1gVtvhfA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 539A280B70F;
-        Tue, 21 Jun 2022 09:27:46 +0000 (UTC)
-Received: from localhost (ovpn-12-183.pek2.redhat.com [10.72.12.183])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A52A540CFD0A;
-        Tue, 21 Jun 2022 09:27:44 +0000 (UTC)
-Date:   Tue, 21 Jun 2022 17:27:40 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        liushixin <liushixin2@huawei.com>
-Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
- high memory
-Message-ID: <YrGPDLea0ALMOqFV@MiWiFi-R3L-srv>
-References: <20220613080932.663-1-thunder.leizhen@huawei.com>
- <20220613080932.663-6-thunder.leizhen@huawei.com>
- <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
- <3f66323d-f371-b931-65fb-edfae0f01c88@huawei.com>
+        Tue, 21 Jun 2022 05:28:02 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D932CBB4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:27:53 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id b23so6137486ljh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8e6CPzPX9uApajCNlf3OZqOW+gA8MhL7WPc0wiikTqU=;
+        b=il/sljDYx3y2Rj9aqTxNbHbIQ6aPBlIM7Pdno2uuS3KhdGKi1EZgd2FZY9hkCiRxUf
+         tXXC5pVQluIx7hzrqJkyWQa8PUsf0LJEY1Ckb5XU825NXkHH39idMeeWYYKj8nx3j9ov
+         AVbtVZ20G4hmmd8vqMhW2AI7pWnxAilWfxN8qOYRJ8JpVhXsc4uZLRjZa/oRuq1Ek4Sq
+         +NfhopYiugeI1pVHBPe7y9TDcyBtvwaAB6nO9UYiHGVr7CxQDXuXLfNpVecYHKp31Ryx
+         lOS1h5CPu7upadyDALbWKNDakfbwsuKkASE6Xre2cbymdQ6fljJLXzGYJ8RPK+fnUTP9
+         WVyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8e6CPzPX9uApajCNlf3OZqOW+gA8MhL7WPc0wiikTqU=;
+        b=3ZgYTG01g1qta3uU02uhBVSnfru9GMMXJ4c5fMjcgdFFYOHKgBPux9CgrSjk9hPj6w
+         2uSXOXSHq3p58AKFwQWh1vm/Uzinf4CxcpSLxYPNLAKVsiGBnyfYyBT7TWmryP1cnLRU
+         zVB/0sXrnsCEPxolZFZC3GuYrcswE8EeUo280Cae9F9QM9PhVZXxU3UltBkufRgi7Jcl
+         MtPZNfkCBpInDdvRLq7BB7h8Q2AeymWPJG2uqzCME0Woaaub3HRbGGO267Ca3x2UbP6F
+         lfxaIoJ0DPmKzA3kAMnAauubMxeKnq6L8rCzvDpUqLo6i4f/Rph4rcWQw1GdX2Gbcd7M
+         Hx5g==
+X-Gm-Message-State: AJIora8TOxWwehqvgWeGMfmvukcZx8V9v72n/2OM22hSfBfA5VJA9qkR
+        MXpdNJhQz7zmPUk0QBR5Cg2zJ1Xfnh8ZpehVI6WN0Q==
+X-Google-Smtp-Source: AGRyM1sBSSnPQfUNpVkNAnJ/02rMsTXl7DvXUFqZ5omPctSopVyLOUzYU7be4FE/ZwsUBD8Qkkc/Jkri0LrTRGe/ZjQ=
+X-Received: by 2002:a2e:a58d:0:b0:25a:6348:9595 with SMTP id
+ m13-20020a2ea58d000000b0025a63489595mr7562439ljp.72.1655803672117; Tue, 21
+ Jun 2022 02:27:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3f66323d-f371-b931-65fb-edfae0f01c88@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-4-mw@semihalf.com>
+ <YrCxUfTDmvm9zLXq@smile.fi.intel.com>
+In-Reply-To: <YrCxUfTDmvm9zLXq@smile.fi.intel.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 21 Jun 2022 11:27:43 +0200
+Message-ID: <CAPv3WKch9hC3ZjZE0f4JntqFDY04PUpQ1yzsgShThmhkqV01-g@mail.gmail.com>
+Subject: Re: [net-next: PATCH 03/12] net: dsa: switch to device_/fwnode_ APIs
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        vivien.didelot@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,87 +83,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/21/22 at 02:24pm, Kefeng Wang wrote:
-> 
-> On 2022/6/21 13:33, Baoquan He wrote:
-> > Hi,
-> > 
-> > On 06/13/22 at 04:09pm, Zhen Lei wrote:
-> > > If the crashkernel has both high memory above DMA zones and low memory
-> > > in DMA zones, kexec always loads the content such as Image and dtb to the
-> > > high memory instead of the low memory. This means that only high memory
-> > > requires write protection based on page-level mapping. The allocation of
-> > > high memory does not depend on the DMA boundary. So we can reserve the
-> > > high memory first even if the crashkernel reservation is deferred.
-> > > 
-> > > This means that the block mapping can still be performed on other kernel
-> > > linear address spaces, the TLB miss rate can be reduced and the system
-> > > performance will be improved.
-> > Ugh, this looks a little ugly, honestly.
-> > 
-> > If that's for sure arm64 can't split large page mapping of linear
-> > region, this patch is one way to optimize linear mapping. Given kdump
-> > setting is necessary on arm64 server, the booting speed is truly
-> > impacted heavily.
-> 
-> Is there some conclusion or discussion that arm64 can't split large page
-> mapping?
+pon., 20 cze 2022 o 19:41 Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
+>
+> On Mon, Jun 20, 2022 at 05:02:16PM +0200, Marcin Wojtas wrote:
+> > In order to support both ACPI and DT, modify the generic
+> > DSA code to use device_/fwnode_ equivalent routines.
+> > No functional change is introduced by this patch.
+>
+> ...
+>
+> >       struct device_node      *dn;
+>
+> What prevents us from removing this?
 
-Yes, please see below commit log. 
-commit d27cfa1fc823 ("arm64: mm: set the contiguous bit for kernel mappings where appropriate")
+I left it to satisfy possible issues with backward compatibility - I
+migrated mv88e6xxx, other DSA drivers still rely on of_* and may use
+this field.
 
-> 
-> Could the crashkernel reservation (and Kfence pool) be splited dynamically?
+>
+> > +     struct fwnode_handle    *fwnode;
+>
+> ...
+>
+> > -             dn =3D of_get_child_by_name(ds->dev->of_node, "mdio");
+> > +             fwnode =3D fwnode_get_named_child_node(ds->dev->fwnode, "=
+mdio");
+>
+> The rule of thumb is avoid dereferencing fwnode from struct device. So
+> dev_fwnode(), but here it would be achieved by device_get_named_child_nod=
+e().
+>
 
-For crashkernel region, we have arch_kexec_protect_crashkres() to secure
-the region, and crash_shrink_memory() could be called to shrink it.
-While crahshkernel region could be crossig part of a block mapping or section
-mapping and the mapping need be splitted, that will cause TLB conflicts.
+Ok, thanks - will do for all occurences.
 
-> 
-> I found Mark replay "arm64: remove page granularity limitation from
-> KFENCE"[1],
-> 
->   "We also avoid live changes from block<->table mappings, since the
->   archtitecture gives us very weak guarantees there and generally requires
->   a Break-Before-Make sequence (though IIRC this was tightened up
->   somewhat, so maybe going one way is supposed to work). Unless it's
->   really necessary, I'd rather not split these block mappings while
->   they're live."
-> 
-> Hi Mark and Catalin,  could you give some comment,  many thanks.
-> 
-> [1] https://lore.kernel.org/lkml/20210920101938.GA13863@C02TD0UTHF1T.local/T/#m1a7f974593f5545cbcfc0d21560df4e7926b1381
-> 
-> 
-> > 
-> > However, I would suggest letting it as is with below reasons:
-> > 
-> > 1) The code will complicate the crashkernel reservatoin code which
-> > is already difficult to understand.
-> > 2) It can only optimize the two cases, first is CONFIG_ZONE_DMA|DMA32
-> >    disabled, the other is crashkernel=,high is specified. While both
-> >    two cases are corner case, most of systems have CONFIG_ZONE_DMA|DMA32
-> >    enabled, and most of systems have crashkernel=xM which is enough.
-> >    Having them optimized won't bring benefit to most of systems.
-> > 3) Besides, the crashkernel=,high can be handled earlier because
-> >    arm64 alwasys have memblock.bottom_up == false currently, thus we
-> >    don't need worry arbout the lower limit of crashkernel,high
-> >    reservation for now. If memblock.bottom_up is set true in the future,
-> >    this patch doesn't work any more.
-> > 
-> > 
-> > ...
-> >          crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
-> >                                                 crash_base, crash_max);
-> > 
-> > So, in my opinion, we can leave the current NON_BLOCK|SECT mapping as
-> > is caused by crashkernel reserving, since no regression is brought.
-> > And meantime, turning to check if there's any way to make the contiguous
-> > linear mapping and later splitting work. The patch 4, 5 in this patchset
-> > doesn't make much sense to me, frankly speaking.
-> > 
-> > Thanks
-> > Baoquan
-> 
+> ...
+>
+> > -static int dsa_switch_parse_of(struct dsa_switch *ds, struct device_no=
+de *dn)
+> > +static int dsa_switch_parse_of(struct dsa_switch *ds, struct fwnode_ha=
+ndle *fwnode)
+>
+> Shouldn't _of suffix be replaced by, let's say, _fw?
+>
 
+I thought about it and can perform such naming update in next iteration.
+
+> ...
+>
+> > -     return dsa_switch_parse_ports_of(ds, dn);
+> > +     return dsa_switch_parse_ports_of(ds, fwnode);
+>
+> Ditto.
+>
+> ...
+>
+> > +     fwnode =3D ds->dev->fwnode;
+>
+> dev_fwnode() or corresponding device_property_ API.
+>
+
+OK.
+
+> ...
+>
+> >       slave_dev->dev.of_node =3D port->dn;
+> > +     slave_dev->dev.fwnode =3D port->fwnode;
+>
+> device_set_node()
+>
+
+OK.
+
+Thanks,
+Marcin

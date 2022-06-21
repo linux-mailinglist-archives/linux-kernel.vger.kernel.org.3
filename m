@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB892552966
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E183552945
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344281AbiFUCa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 22:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S245737AbiFUCRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344166AbiFUCaS (ORCPT
+        with ESMTP id S232192AbiFUCRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:30:18 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE22193D8;
-        Mon, 20 Jun 2022 19:30:18 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1EC811A1262;
-        Tue, 21 Jun 2022 04:30:17 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C70D51A1254;
-        Tue, 21 Jun 2022 04:30:16 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id A3D49180222B;
-        Tue, 21 Jun 2022 10:30:15 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     shengjiu.wang@gmail.com
-Subject: [PATCH v3 3/3] arm64: dts: imx8mn-evk: add bt-sco sound card support
-Date:   Tue, 21 Jun 2022 10:16:03 +0800
-Message-Id: <1655777763-21153-4-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655777763-21153-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1655777763-21153-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 20 Jun 2022 22:17:46 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBFAD1572E;
+        Mon, 20 Jun 2022 19:17:44 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 91E621E80D50;
+        Tue, 21 Jun 2022 10:17:45 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WGOyw6uWBhUX; Tue, 21 Jun 2022 10:17:43 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 6081E1E80D2D;
+        Tue, 21 Jun 2022 10:17:42 +0800 (CST)
+From:   Yu Zhe <yuzhe@nfschina.com>
+To:     ap420073@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, Yu Zhe <yuzhe@nfschina.com>
+Subject: [PATCH] amt: remove unnecessary (void*) conversions.
+Date:   Tue, 21 Jun 2022 10:16:48 +0800
+Message-Id: <20220621021648.2544-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,88 +44,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bt-sco sound card, which supports wb profile as default
+remove unnecessary void* type castings.
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
 ---
- arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ drivers/net/amt.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-index d1f6cccfa00d..89e8ec010f1b 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-@@ -47,6 +47,11 @@
- 		linux,autosuspend-period = <125>;
- 	};
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index be2719a3ba70..732f4c0daa73 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -1373,11 +1373,11 @@ static void amt_add_srcs(struct amt_dev *amt, struct amt_tunnel_list *tunnel,
+ 	int i;
  
-+	audio_codec_bt_sco: audio-codec-bt-sco {
-+		compatible = "linux,bt-sco";
-+		#sound-dai-cells = <1>;
-+	};
-+
- 	wm8524: audio-codec {
- 		#sound-dai-cells = <0>;
- 		compatible = "wlf,wm8524";
-@@ -57,6 +62,25 @@
- 		clock-names = "mclk";
- 	};
+ 	if (!v6) {
+-		igmp_grec = (struct igmpv3_grec *)grec;
++		igmp_grec = grec;
+ 		nsrcs = ntohs(igmp_grec->grec_nsrcs);
+ 	} else {
+ #if IS_ENABLED(CONFIG_IPV6)
+-		mld_grec = (struct mld2_grec *)grec;
++		mld_grec = grec;
+ 		nsrcs = ntohs(mld_grec->grec_nsrcs);
+ #else
+ 	return;
+@@ -1458,11 +1458,11 @@ static void amt_lookup_act_srcs(struct amt_tunnel_list *tunnel,
+ 	int i, j;
  
-+	sound-bt-sco {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "bt-sco-audio";
-+		simple-audio-card,format = "dsp_a";
-+		simple-audio-card,bitclock-inversion;
-+		simple-audio-card,frame-master = <&btcpu>;
-+		simple-audio-card,bitclock-master = <&btcpu>;
-+
-+		btcpu: simple-audio-card,cpu {
-+			sound-dai = <&sai2>;
-+			dai-tdm-slot-num = <2>;
-+			dai-tdm-slot-width = <16>;
-+		};
-+
-+		simple-audio-card,codec {
-+			sound-dai = <&audio_codec_bt_sco 1>;
-+		};
-+	};
-+
- 	sound-wm8524 {
- 		compatible = "fsl,imx-audio-wm8524";
- 		model = "wm8524-audio";
-@@ -183,6 +207,16 @@
- 	};
- };
- 
-+&sai2 {
-+	#sound-dai-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sai2>;
-+	assigned-clocks = <&clk IMX8MN_CLK_SAI2>;
-+	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
-+	assigned-clock-rates = <24576000>;
-+	status = "okay";
-+};
-+
- &sai3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_sai3>;
-@@ -354,6 +388,15 @@
- 		>;
- 	};
- 
-+	pinctrl_sai2: sai2grp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_SAI2_TXC_SAI2_TX_BCLK      0xd6
-+			MX8MN_IOMUXC_SAI2_TXFS_SAI2_TX_SYNC     0xd6
-+			MX8MN_IOMUXC_SAI2_TXD0_SAI2_TX_DATA0    0xd6
-+			MX8MN_IOMUXC_SAI2_RXD0_SAI2_RX_DATA0    0xd6
-+		>;
-+	};
-+
- 	pinctrl_sai3: sai3grp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC     0xd6
+ 	if (!v6) {
+-		igmp_grec = (struct igmpv3_grec *)grec;
++		igmp_grec = grec;
+ 		nsrcs = ntohs(igmp_grec->grec_nsrcs);
+ 	} else {
+ #if IS_ENABLED(CONFIG_IPV6)
+-		mld_grec = (struct mld2_grec *)grec;
++		mld_grec = grec;
+ 		nsrcs = ntohs(mld_grec->grec_nsrcs);
+ #else
+ 	return;
 -- 
-2.17.1
+2.11.0
 

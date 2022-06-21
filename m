@@ -2,83 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB42E553186
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F69553189
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350302AbiFUL7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
+        id S1350233AbiFUMAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbiFUL7i (ORCPT
+        with ESMTP id S231252AbiFUMAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:59:38 -0400
-Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B4E2B1A1;
-        Tue, 21 Jun 2022 04:59:36 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-        by mailout1.rbg.tum.de (Postfix) with ESMTPS id DFFFC24C;
-        Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1655812768;
-        bh=HJy0kdLOn3sZzNx6HdmqXo8gxMramx22W2vHUjsA2e0=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=qBeSiEI2A0dsK/gqxs78bN5dnKH6PeqrMzyddNPIIJAk57CvaI21fnWF84QUl68/k
-         6f7VC4bA76KtLEQOVBlP/YjzveDKWuJ9rWOWT1n8O8aDTk+bLjsTY+AKaveSyYZSwE
-         +l2UXhSnKpBMkMCoMx0NZnu2yZeGJHLBtf9+ot19D5PH80IU/k5Yr7sQ5wpnd9h0TD
-         PVY12UrHz2NIY1s85xs2Fz4oMyfQJ2zWiPzoRPji7OIERKo+hIygKPqGhEREom0IxZ
-         8VEmUe5Nh3SQPpDK/cn+tg3PD9zCxQYucvUDtF3k3WBgzyJ+84f4SlirmXKJ71QQ+t
-         Ds1jYZz1rm/mQ==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id DAC1DDD; Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id A4DE9D6;
-        Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 9F9C0CE;
-        Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 9A1864A02D7; Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 6BF584A0107;
-        Tue, 21 Jun 2022 13:59:27 +0200 (CEST)
-        (Extended-Queue-bit xtech_sz@fff.in.tum.de)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
-Date:   Tue, 21 Jun 2022 13:59:27 +0200
-Cc:     llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 21 Jun 2022 08:00:00 -0400
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2178.outbound.protection.outlook.com [40.92.63.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE292B1A4;
+        Tue, 21 Jun 2022 04:59:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fRfH0X3ZJ3QnOGisA4OVB54t+mlAOWalh41BcA4uXn8wrFO/BhnU5S6MgmUgydqcgHfIIxxooqUFwvdeuEBD4H0WARQ0l93N+2Epzw8+ygMS10/tsEB4FmwYfMqi9O1Xjyfl7xHAKg3PcKXNy5LlpwdTV+pT0RhYZK6MFP4LThDDDf4ovWYqeNwtIYpWWI6ci4923o0fuXCIBuJePrWlJOdMN6hJU5eSAamZ1zPvtcgjlIJlHFjb//gXnCaUdbL7AFGaIMd39f5xipz/rANqTCDlAdYjrRYHpsISzAsC1rGKcaDqtffQio3bB2B1OiWKJTSxea27zxR+87Ysu2rCKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hR8MDB2Mu4g6JaYT+PBwKIDPXjRXo2vncyT6bVpE26E=;
+ b=AzJbLndJ/kHVEuHW+onTfuruGBBlzalekPF6g3UUF0EGVeDs00yV5HkCggAzZx4oyScEsFyzqzA2my1xH/95+oyM3vO6T0jfRexUYl0Okp6lTd8yC1KkSMmCAxAlgpS/TaGXrI4A+B0Id7BDh0Z/Vr8nPK9dWq2T6JEgmhPlmH9iFlr44yQU5TAhiYEvss4gw/Q/zIg67kuPcWBzaFN+PjzkB7bG6dmy9/9TghXIz3e0G/6H/Mrh6i4e8wK86GeCSZ2ZBrijOhLwp99C5r9g5ZLHcIlgkWmF+r1ebgo391zsDT0dWgeKksLJJmtZK5FrOsUk7KZJ2ToyoKaG6B5xrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hR8MDB2Mu4g6JaYT+PBwKIDPXjRXo2vncyT6bVpE26E=;
+ b=KHtW8Mw4xGcseF5ESAfMsoI829GgrIkphPtPrZ5/0yt5uT4BO1Hs3RTEBlVhujxSm83Hj0LtxlMnDyW5DXCrN+DOwY2r2qHHz08YMryWL4hkOGrwmW84c4vxWB2o9VFe64jiUF4JSwK7snfJeJrB5bfmkE4DfbHgUFB+Z9FfkZbIYCiFLj3euv5t+lGJ2mVk4dYwLOsHs7KWWfXiaNxRdHk/frke4A9kLb37Q6we83rhltkeBzeH1qau4tlfmRJheSCcJv37fH+qYjJGHiFzyAtFkEkHVj8rYK8BYNAdmYJ7oijIOJy45iHc9Ag8NOlKxzZl7XxQSN+ooeImowQpNA==
+Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:113::14)
+ by ME2P282MB0641.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:57::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Tue, 21 Jun
+ 2022 11:59:54 +0000
+Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::702a:73df:6a57:6a00]) by MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::702a:73df:6a57:6a00%8]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
+ 11:59:54 +0000
+From:   Yonglin Tan <yonglin.tan@outlook.com>
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yonglin Tan <yonglin.tan@outlook.com>
+Subject: [PATCH v3] USB: serial: option: add Quectel EM05-G modem
+Date:   Tue, 21 Jun 2022 19:59:43 +0800
+Message-ID: <MEYP282MB2374442EF3E1F4E95B8E311CFDB39@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-TMN:  [b0F3b5YjWcc0oJfjtKr+Yf3PhP7wCwzR]
+X-ClientProxiedBy: TYAPR01CA0107.jpnprd01.prod.outlook.com
+ (2603:1096:404:2a::23) To MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:220:113::14)
+X-Microsoft-Original-Message-ID: <1655812783-4851-1-git-send-email-yonglin.tan@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9f65bfe9-e61b-469d-1854-08da537d8dfb
+X-MS-Exchange-SLBlob-MailProps: +LiGfBxqLEuS9uuI2GdeKiPvDPsQm0ajlm8rBrIwAVnaMFJk/dLvnF4VLTuoYT/O8kmXHOojzREJW2/yHEzAEQmC1ME8UnzYrsO3hFK9ipglSZ68FVCUu2m7dEBIO4z/LanqcxRJt2OWLKWSLwR8zP6vS4gB/rE4fPKbvrC506u1tkEzienk7cwiRT2wc6Jyir2sSE3ikvqV46JIYEVXlF0EsXz6EChqcXx5KKf2fSn5pdqwH7IcaX49S1W8aJoYYKhXDOnnOm2rlAmRf9FzEKrr6tBZSht0irrD7drWQPYdlmT7noJc12iOAytWETqxm95xtfFTcHainjxTmvcFSfZlK12vgCccnq9/CjZRvWnOEErseWhZS3ejnRdLVyv6Va8rjMa9vSFQ2V3gxzOa4+/cKvePaUU4AQD/QamVfMbiFYV4Xdsjn7Ck+sxuRBgFMzIwIPin0iyta0A1UI+vzG6dzUEKHJbIzAtdkNXHPa58AhqYYEaRzzHFJb7Rk+pbJakIQlyaaOOaWmSMjYmBSE4vOtIAFlm4ciI8MtWWrw2fiV+8SP6OJUdD6ATMH+ymQxOImhXPSv/qP8d9pMBxiXBCIo/3OpgbcVh2RtKpJYScYV5JJF6P+ysQ6KNYQ8R83A0W+zLg9MPVbb1t53Ff7rKDMaU+7YODDCmFj9JTvAli9McoB9OK3MRoBXke1SpCsS15KyKTFzdxoMtSvdgfUd7EdZ1FK5dthz1hQHso0gOil2F1H9G4wiAh87fSlFoEx7I/ZQ+q4XBOqDYRPnvfwuuowM42oGZO
+X-MS-TrafficTypeDiagnostic: ME2P282MB0641:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NI6a1+09g6J/eH9tmJN6t0Wui14cOAibNCU+tXBwIjH5WeNjh4CboAyicnB/T/qs79MgkaHNM0hN49jhev0zEUD4NOkJVWvZAaCXy5r3jP4lRGeY8QGDuFtlSVt5wVzeKPlKKrYXY9ll0mlv0lcjOlf7bpj/2i79xJUShj8C/JbVEWgrgsBuLUQxImi762j4CWXJ/nSns9F+W1cqFxIkrbHwPxtLIGrs96b4OKej8D++QwKilXY+dSnArsjk7U0RWx0OI7BLO4U2XrPl1hvzwRQ0mWUkbBjI39AoELD9mCbIGnQ8qY5KoJ0zp1VH7xG7lh4FzY6v0prjG3NK6IhsIL8LCh48ybxWDZ15uF5V8GimvI26o223ZGaIBlLJhxIIW6qF6oxfWRPGjUniGbK7a+HwNchdsvAdMH7ucmY8wT7WX92Bg5zRT0NASSPRHwJDFlOdBt4wQVpV3SJ5KEzAIr7Vm6fj41RyWOilwZbjJ9cAhzvDL3pjjQvoDWoF3y/RzQMzFfZ14/dKoDhVSfKej9Vwr6BrqAuKwEe13C2UxivzNMguAGeJhWnxJy/uQkc9g7RGOBW/C9O8SzyVWmo5lA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JoXwXDTyCqY5VbRhlVRfSjnmQvKcVFos0ZsqFmITA3W18nXhnkj9bE8erZIO?=
+ =?us-ascii?Q?5GBQo+6luyTlovg3qu7XX+y655iMj1SJmJ46IS6yZgqafRc/FlmzkrAUeTth?=
+ =?us-ascii?Q?ElZgPIoh/k+8p4dlfLuJqe6u+KzK1uD+JbkgsBXuo/mc5vHg47gSEFmACPmj?=
+ =?us-ascii?Q?qkdJaMoc2Hvhp0jwTvacNzgguK8bp/isJqbj0WzmilIe35vxgrnBYJofZpz6?=
+ =?us-ascii?Q?SKWd9pAW1NaiC74hG3VCvJYcbGGtIzFXXOoK2evqX0P+Yu87WFbsbFPSFN1H?=
+ =?us-ascii?Q?0wq45wav3xLfB1hjmsgczG30hh7a11qs8RDNZDSDaOos6KUnw7Ek3fdIUw5a?=
+ =?us-ascii?Q?FbIPDsZez/P6EnmeQf13tQiB8xyfed/d9aRO1itvbgJDyQfabInnVC3YS9Va?=
+ =?us-ascii?Q?/fVRWDI5jf/h1JL0x7eQHIlL6KZZG/LwwPUESJRRVlGY4vXvtUTaR4sUuQ7f?=
+ =?us-ascii?Q?yG3qVoWvpawsUsZGiCF8+S6lXnyhvQr8Qi6a0iVpXN8cQBVS5ew1VELaMcTE?=
+ =?us-ascii?Q?llhHGseBM8sBz5Uom/FlfCko8ahD36PNnOlAgj8E8Tk7HnUNuko8+q1hlDAJ?=
+ =?us-ascii?Q?RNCQtXEV9BAbTdhzbJ/PEerzDakoC5R3mu356XFvT+iteFY9xzqYfFvkKJdH?=
+ =?us-ascii?Q?bcPm/VmB/8SKsKlqFP8xVZqJr2/WmIlcLYlKYR/2FEAUyEWNV82O2c9keGKu?=
+ =?us-ascii?Q?2v8cRy4Rpw8LlyodHGzBr4eGZ0+4GfvmqiabGNRAAVkZb54ckbB8nwGKgGZx?=
+ =?us-ascii?Q?KTSULRFWBaDW5Ml0CMwITiGIpZugHQviuiKUIZXTGaMLfat45LC2kGRCFtW2?=
+ =?us-ascii?Q?BWKGJJCwy4IUD19U5RpVaEaujGoGxcKvTIClbD/3DExwvbDuIMS5c8avVfBt?=
+ =?us-ascii?Q?6Kw6ysxeCQD4MZNaLyELrr3AwxqQXJ1+KqJ61Cu3CXUYxmZ5TaOWjbMyHOj0?=
+ =?us-ascii?Q?rl17c27ELALK5j26fff75x2xasqLx7IUOIsCVuXaQYi2FYdP/5JmN/tBizSr?=
+ =?us-ascii?Q?kMWbd2BNjmA3WNxDMIrG9WgVp/rvptfhG/fO4F0WsBKR36DsuVZQmbE66GHu?=
+ =?us-ascii?Q?M+fjcBXGD24B4D8HUzO1KSQpFPQm2snLgNQLEMBG5kbPNPH+avA/d/eWqUOR?=
+ =?us-ascii?Q?5dnp26bOeGz65heZUVEhIyd4xuTqosBvFQUxB4SWpOmI8gNboyUBKnKBMUB+?=
+ =?us-ascii?Q?XB0v8Ale/nJ8vP4la8fx0sEJ9SYtWD7m8vOjx6EUasbHKHQ0IkEwwlz5FxBF?=
+ =?us-ascii?Q?hMFLaVbNpQkwJzcBQDLDB6e+1VhuJfgk/bZRQj8DiOClT2j4SZKlQ/bL1Ct/?=
+ =?us-ascii?Q?+ohcxNN2VKiEnCV4uyqFTteTXQO5t8syQMuTIkIaArCXe9uWHu2uU7PpnN4Y?=
+ =?us-ascii?Q?F6JFoLtYIvC0CiNv08EmMtEbgUf/Z23IFmyz2AGisTcBe9+ERLkJpyCE7guk?=
+ =?us-ascii?Q?IVEIirexz7M=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f65bfe9-e61b-469d-1854-08da537d8dfb
+X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 11:59:54.7856
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME2P282MB0641
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,284 +106,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for taking the time to read and provide feedback - much =
-appreciated!
+The EM05-G modem has 2 USB configurations that are configurable via the AT
+command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
+the following interfaces, respectively:
 
-> On 15. Jun 2022, at 16:16, Alan Stern <stern@rowland.harvard.edu> =
-wrote:
->=20
-> On Wed, Jun 15, 2022 at 11:43:29AM +0000, Paul Heidekr=C3=BCger wrote:
->> Hi all,
->>=20
->> I have been confused by explanation.txt's definition of control
->> dependencies:
->>=20
->>> Finally, a read event and another memory access event are linked by =
-a
->>> control dependency if the value obtained by the read affects whether
->>> the second event is executed at all.
->>=20
->> I'll go into the following:
->>=20
->> =3D=3D=3D=3D
->> 1. "At all", to me, is misleading
->> 1.1 The code which confused me
->> 1.2 The traditional definition via post-dominance doesn't work either
->> 2. Solution
->> =3D=3D=3D=3D
->>=20
->> 1. "At all", to me, is misleading:
->>=20
->> "At all" to me suggests a question for which we require a definitive
->> "yes" or "no" answer: given a programme and an input, can a certain
->> piece of code be executed? Can we always answer this this question?
->> Doesn't this sound similar to the halting problem?
->=20
-> No. You're not thinking about this the right way.
->=20
-> The point of view we take in this document and in the LKMM is not like=20=
+"RMNET"	: AT + DIAG + NMEA + Modem + QMI
+"MBIM"	: MBIM + AT + DIAG + NMEA + Modem
 
-> the view in a static analysis of a program. It is a dynamic analysis =
-of=20
-> one particular execution of a program. The halting problem does not=20
-> apply. Note for instance that explanation.txt talks about "events"=20
-> rather than instructions or pieces of code.
->=20
-> (The single-execution-at-a-time point of view has its own limitations,=20=
+The detailed description of the USB configuration for each mode as follows:
 
-> which do have some adverse affects on the LKMM. But we don't want to=20=
+RMNET Mode
+--------------
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 21 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=030a Rev= 3.18
+S:  Manufacturer=Quectel
+S:  Product=Quectel EM05-G
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-> exceed the capabilities of the herd7 tool.)
->=20
->> 1.1 The Example which confused me:
->>=20
->> For the dependency checker project [1], I've been thinking about
->> tracking dependency chains in code, and I stumbled upon the following
->> edge case, which made me question the "at all" part of the current
->> definition. The below C-code is derived from some optimised kernel =
-code
->> in LLVM intermediate representation (IR) I encountered:
->>=20
->>> int *x, *y;
->>>=20
->>> int foo()
->>> {
->>> /* More code */
->>>=20
->>> 	 loop:
->>> 		/* More code */
->>>=20
->>> 	 	if(READ_ONCE(x)) {
->>> 	 		WRITE_ONCE(y, 42);
->>> 	 		return 0;
->>> 	 	}
->>>=20
->>> 		/* More code */
->>>=20
->>> 	 	goto loop;
->>>=20
->>> /* More code */
->>> }
->>=20
->> Assuming that foo() will return, the READ_ONCE() does not determine
->> whether the WRITE_ONCE() will be executed __at all__, as it will be
->> executed exactly when the function returns, instead, it determines
->> __when__ the WRITE_ONCE() will be executed.
->=20
-> But what if your assumption is wrong?
->=20
-> In any case, your question displays an incorrect viewpoint. For=20
-> instance, the READ_ONCE() does not count as a single event. Rather,=20
-> each iteration through the loop executes a separate instance of the=20
-> READ_ONCE(), and each instance counts as its own event. Think of =
-events=20
-> not as static entities in the program source but instead as the items =
-in=20
-> the queue that gets fed into the CPU's execution unit at run time.
->=20
-> Strictly speaking, one could say there is a control dependency from =
-each=20
-> of these READ_ONCE() events to the final WRITE_ONCE(). However the =
-LKMM=20
-> takes a more limited viewpoint, saying that a dependency from a load =
-to=20
-> the controlling expression of an "if" statement only affects the=20
-> execution of the events corresponding to statements lying statically =
-in=20
-> the two arms of the "if". In your example the "if" has a single arm,=20=
+MBIM Mode
+--------------
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=030a Rev= 3.18
+S:  Manufacturer=Quectel
+S:  Product=Quectel EM05-G
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-> and so only the access in that arm is considered to have a control=20
-> dependency from the preceding instance of the READ_ONCE(). And it=20
-> doesn't have a control dependency from any of the earlier iterations =
-of=20
-> the READ_ONCE(), because it doesn't lie in any of the arms of the=20
-> earlier iterations of the "if".
+Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+---
+V2:
+ 1. Add the description of the usb interface configurations.
+ 2. Add QMI Interface description.
 
-OK. So, LKMM limits the scope of control dependencies to its arm(s), =
-hence
-there is a control dependency from the last READ_ONCE() before the loop
-exists to the WRITE_ONCE().
+V3:
+ 1. Move the entry to where the other Quectel entries with numerical PIDs are.
+ 2. Define the macro and remove the comment.
 
-But then what about the following:
+ drivers/usb/serial/option.c | 3 +++
+ 1 file changed, 3 insertions(+)
+ mode change 100644 => 100755 drivers/usb/serial/option.c
 
-> int *x, *y;
->=20
-> int foo()
-> {
-> 	/* More code */
->=20
-> 	if(READ_ONCE(x))
-> 		return 42;
->=20
-> 	/* More code */
->=20
-> 	WRITE_ONCE(y, 42);
->=20
-> 	/* More code */
->=20
-> 	return 0;
-> }
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+old mode 100644
+new mode 100755
+index ed1e50d..7b52865
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -252,6 +252,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EG95			0x0195
+ #define QUECTEL_PRODUCT_BG96			0x0296
+ #define QUECTEL_PRODUCT_EP06			0x0306
++#define QUECTEL_PRODUCT_EM05G			0x030a
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+@@ -1134,6 +1135,8 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
+ 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0, 0) },
++	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G, 0xff),
++	  .driver_info = RSVD(6) | ZLP }, 
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0xff, 0xff),
+ 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0, 0) },
+-- 
+2.7.4
 
-The READ_ONCE() determines whether the WRITE_ONCE() will be executed at =
-all,
-but the WRITE_ONCE() doesn't lie in the if condition's arm. However, by
-"inverting" the if, we get the following equivalent code:
-
-> if(!READ_ONCE(x)) {
-> 	/* More code */
->=20
-> 	WRITE_ONCE(y, 42);
->=20
-> 	/* More code */
->=20
-> 	return 0;
-> }
->=20
-> return 42;
-
-Now, the WRITE_ONCE() is in the if's arm, and there is clearly a control
-dependency.
-
-Similar cases:
-
-> if(READ_ONCE())
-> 	foo(); /* WRITE_ONCE() in foo() */
-> return 42;
-
-or
-
-> if(READ_ONCE())
->     goto foo; /* WRITE_ONCE() after foo */
-> return 42;
-
-In both cases, the WRITE_ONCE() again isn't in the if's arm =
-syntactically
-speaking, but again, with rewriting, you can end up with a control
-dependency; in the first case via inlining, in the second case by simply
-copying the code after the "foo" marker.
-
->> 1.2. The definition via post-dominance doesn't work either:
->>=20
->> I have seen control dependencies being defined in terms of the first
->> basic block that post-dominates the basic block of the if-condition,
->> that is the first basic block control flow must take to reach the
->> function return regardless of what the if condition returned.
->>=20
->> E.g. [2] defines control dependencies as follows:
->>=20
->>> A statement y is said to be control dependent on another statement x
->>> if (1) there exists a nontrivial path from x to y such that every
->>> statement z !=3D x in the path is post-dominated by y, and (2) x is =
-not
->>> post-dominated by y.
->>=20
->> Again, this definition doesn't work for the example above. As the =
-basic
->> block of the if branch trivially post-dominates any other basic =
-block,
->> because it contains the function return.
->=20
-> Again, not applicable as basic blocks, multiple paths, and so on =
-belong=20
-> to static analysis.
->=20
->> 2. Solution:
->>=20
->> The definition I came up with instead is the following:
->>=20
->>> A basic block B is control-dependent on a basic block A if
->>> B is reachable from A, but control flow can take a path through A
->>> which avoids B. The scope of a control dependency ends at the first
->>> basic block where all control flow paths running through A meet.
->>=20
->> Note that this allows control dependencies to remain "unresolved".
-
-The "unresolved" part in my initial definition was inspired by cases =
-such as
-the ones above and the loop example from my previous email, where the
-"paths" could be somewhat thought of as executions. But yes, as you =
-said,
-that's static analysis and not the position LKMM takes.
-
-Many thanks,
-Paul
-
---
-PS replacing "Palmer Dabbelt <palmerdabbelt@google.com>" with "Palmer
-Dabbelt <palmer@dabbelt.com>" in recipients - my maintainers file was
-outdated.
-
->> I'm happy to submit a patch which covers more of what I mentioned =
-above
->> as part of explanation.txt, but figured that in the spirit of keeping
->> things simple, leaving out "at all" might be enough?
->>=20
->> What do you think?
->=20
-> Not so good. A better description would be that there is a control=20
-> dependency from a read event X to a memory access event Y if there is =
-a=20
-> dependency (data or address) from X to the conditional branch event of=20=
-
-> an "if" statement which contains Y in one of its arms. And similarly=20=
-
-> for "switch" statements.
->=20
-> Alan
->=20
->> Many thanks,
->> Paul
->>=20
->> [1]: =
-https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#=
-u
->> [2]: Optimizing Compilers for Modern Architectures: A =
-Dependence-Based
->> Approach, Randy Allen, Ken Kennedy, 2002, p. 350
->>=20
->> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->> Cc: Marco Elver <elver@google.com>
->> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->> Cc: Martin Fink <martin.fink@in.tum.de>
->> ---
->> tools/memory-model/Documentation/explanation.txt | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/tools/memory-model/Documentation/explanation.txt =
-b/tools/memory-model/Documentation/explanation.txt
->> index ee819a402b69..42af7ed91313 100644
->> --- a/tools/memory-model/Documentation/explanation.txt
->> +++ b/tools/memory-model/Documentation/explanation.txt
->> @@ -466,7 +466,7 @@ pointer.
->>=20
->> Finally, a read event and another memory access event are linked by a
->> control dependency if the value obtained by the read affects whether
->> -the second event is executed at all. Simple example:
->> +the second event is executed. Simple example:
->>=20
->> 	int x, y;
->>=20
->> --=20
->> 2.35.1

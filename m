@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C69E55294F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6597552950
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343749AbiFUC1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 22:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        id S1343826AbiFUC1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236683AbiFUC1E (ORCPT
+        with ESMTP id S243817AbiFUC1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:27:04 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E779513F8D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:27:02 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-101d2e81bceso7899704fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y+H1yHRewfJ4TeRG+Yh5+qo4qD6sH1lCnmTiIvv7tW0=;
-        b=YyMolUb7ycdPjzRVy7pn12nfKpgJZLRONkCxbxidaLJd+PRKgP27CLmQVbYuBM+yx2
-         wb4CXQr1x9X2F3ICjltUjg/CBS1Klyu+TqSnHyIqNI/uoiogIdLyiveU9rb2tl5oAlIK
-         PdE4ClbtKV1JLYOxhY+VFQL1gFuuHihE3kmlBEEEjrPVZrA+eNP4x/v7Fiu7BHetlAv2
-         L3uhVWKK3LlZ808xO9sHxzGrpeJbFwpwy3d0c5uNqzXbPBUgn5CIUe9DPvlXtwmCY1t6
-         QzmNI5sYUK+K+J0BWXdpWUdOeIeemze4Vfv9JyB/bxPeZ8PzZWRoaMdbsnUDugtZczIO
-         L5ig==
+        Mon, 20 Jun 2022 22:27:47 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DD11408D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:27:46 -0700 (PDT)
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9BC1F3FC10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1655778464;
+        bh=E2ILNW0gf9tTHNwMSSDXvKI5yArGGaqGE5uePOoWe2M=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=W9FajsxT7yfyXABmQspbiWpj2Tl+V6X6z0PbhDGNE+V0RzG1vKBMUl0kKtdMZnAka
+         zMDSOoTBFh4KAuTDL8ozW1KP1v4EHsX/oyMnn8/3zR6n/vqDzPg3PVgBrWnHxDn3T1
+         47QUCKM45QACPRsRQE5G9wYQN7kN9/BpfzupXinFGK6aqK7fVIhlPFEjyWZ8GoJK1S
+         Io1IV3doh4NXllC2C1ZWpH81o7AfBckPF+GQsJMVU7oBsBna3xOBpfNgsoAgDPcrmL
+         x1oU3qRQYLc/VUZRswEe9d+bThm9JvVcc21dIQ+zLd0YoWlcqkYnJLSwHsvpbF7aPe
+         ZQvD+M//QmKgw==
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-f2bdeb5298so8421265fac.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:27:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=y+H1yHRewfJ4TeRG+Yh5+qo4qD6sH1lCnmTiIvv7tW0=;
-        b=3ZrOwHbAPnDKkvyikIWR8VFpphW73Y1J+32xMGiRSHu03kRmzh4SH1F8mzeoccPUCE
-         RaC59tGgyzFlPjJXsOk5aoUsQlNvsGaYUKZsUe6AwpdJVX3ATUrKREhDYeVUjumVkYqT
-         +baN4ZJFfKMLYPexl+OiMEdYjAhIcBXr0iUHbQoX55fb6GN8uIKyeyUxjvOROceAEwdp
-         hDltY6U/8LmyHlZwMNmKrH1U5GktITxoWGGfz+rM+/yp0WAxvMzLXTGlEETfs+pYAAaM
-         YxXU3FCbCo/cT8NLLR7+IkI3IaTA0xTAOQhKtrmP06Se6y/Pn3zCavNGtwMh2TYY51TM
-         kM4Q==
-X-Gm-Message-State: AJIora9Ye07qJ/O8U3G/8FFS5VHSCXA05nCA0nxrBR1NWHHRyTEdEPUz
-        Jg526IElaxY6cqdKKoYXahZx6DWjvruCOYtTw2I=
-X-Google-Smtp-Source: AGRyM1t9kYo9o6DosEPpQPNwOSkcM6g15Kxfltr5dCVQzIi38dGqVpWj4IuRrNzrmQGdtQ+lJx2gNUynP8rXFjLYsVI=
-X-Received: by 2002:a05:6870:4393:b0:101:aef4:703d with SMTP id
- r19-20020a056870439300b00101aef4703dmr10018636oah.69.1655778421926; Mon, 20
- Jun 2022 19:27:01 -0700 (PDT)
+        bh=E2ILNW0gf9tTHNwMSSDXvKI5yArGGaqGE5uePOoWe2M=;
+        b=uq+P3fjuXth9JcFINHC81I3khjO+YLvAogu1Y23HRgZrE6T6ZZQvsp+ZzCaIeLRquT
+         YBOcLqAPlsRtqfzQxVeIiblz2/qNPY054CzK4NGhpAcvmq5d1NdkvWP5NnaTexaXb8+u
+         pkhOe+ij8Uv5ya7iA0mzbiwsdtC+BpFIJGcmdH0Ozl+/We+cf1C1zSlVIu276OnVS9HO
+         6kuw6JUvU91ygRnWiL+Q95Q5yFoTscNvkzZLyWZWhI6NjVlee29V4XUcnde+znq1PTcH
+         xbSS06lxIxRjKtyP5XH+tsYKdnWh59SDPKBaRp6PaaCtMg2r5u7FzKerpDNpzEThx5fL
+         waEA==
+X-Gm-Message-State: AJIora+uMvUoC12mTcoGsO24gt3hcMLF7nyIuGuln/KV5o/324jUnluE
+        yzc4OKQE135r5J9DYNjT8RGQmSyfYnNi4wIH7fQ7c6wCFbrZg5pVbDX4psJiZ/KUEQ8d7qQxKih
+        u9WHurzKQgs+1H09ItfVLOmUOqIAWHYz2E8uojg0W782PqxPOyJHZVe9fyQ==
+X-Received: by 2002:a05:6870:51ce:b0:101:c7e3:d7a5 with SMTP id b14-20020a05687051ce00b00101c7e3d7a5mr7075690oaj.176.1655778463520;
+        Mon, 20 Jun 2022 19:27:43 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vZLvkYDH4Le6WT3ZT7+7pPrshf6xYt0vj8FsKZf3JR7+H1FAKU3rm40KLEl0Jy+kx4CjUCiuSHq1zWHm5piH0=
+X-Received: by 2002:a05:6870:51ce:b0:101:c7e3:d7a5 with SMTP id
+ b14-20020a05687051ce00b00101c7e3d7a5mr7075675oaj.176.1655778463263; Mon, 20
+ Jun 2022 19:27:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620100216.1791284-1-zys.zljxml@gmail.com> <7a2028c6-8ed6-1fc4-3abf-b13f7254cdee@linux.intel.com>
-In-Reply-To: <7a2028c6-8ed6-1fc4-3abf-b13f7254cdee@linux.intel.com>
-From:   Katrin Jo <zys.zljxml@gmail.com>
-Date:   Tue, 21 Jun 2022 10:26:51 +0800
-Message-ID: <CAOaDN_T_ZVCfhmbqd1AJnt3vhTuxnGhKsxG2fjjF8-u4wXOBcg@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915/gem: remove unused assignments
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, airlied@linux.ie,
-        Daniel Vetter <daniel@ffwll.ch>, bob.beckett@collabora.com,
-        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        katrinzhou <katrinzhou@tencent.com>
+References: <20220408153159.106741-1-kai.heng.feng@canonical.com>
+ <20220408153159.106741-2-kai.heng.feng@canonical.com> <0d4e8764-b1ae-ae59-06ff-d5b705891da4@linux.intel.com>
+In-Reply-To: <0d4e8764-b1ae-ae59-06ff-d5b705891da4@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 21 Jun 2022 10:27:31 +0800
+Message-ID: <CAAd53p61knfUS02Ny9JCn18F8EgiP0EmJjJcPZ6PoKsPC0y5Hg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] PCI/DPC: Disable DPC service when link is in L2/L3
+ ready, L2 and L3 state
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, baolu.lu@linux.intel.com,
+        Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 6:19 PM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
+On Mon, Apr 18, 2022 at 10:41 AM Sathyanarayanan Kuppuswamy
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 >
 >
-> On 20/06/2022 11:02, zys.zljxml@gmail.com wrote:
-> > From: katrinzhou <katrinzhou@tencent.com>
+>
+> On 4/8/22 8:31 AM, Kai-Heng Feng wrote:
+> > On Intel Alder Lake platforms, Thunderbolt entering D3cold can cause
+> > some errors reported by AER:
+> > [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+> > [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> > [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+> > [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+> > [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+> > [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
+> > [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
+> > [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
 > >
-> > The variable ret is reassigned and the value EINVAL is never used.
-> > Thus, remove the unused assignments.
+> > Since AER is disabled in previous patch for a Link in L2/L3 Ready, L2
+> > and L3, also disable DPC here as DPC depends on AER to work.
 > >
-> > Addresses-Coverity: ("Unused value")
-> > Fixes: d4433c7600f7 ("drm/i915/gem: Use the proto-context to handle create parameters (v5)")
-> > Signed-off-by: katrinzhou <katrinzhou@tencent.com>
-> > ---
-> >   drivers/gpu/drm/i915/gem/i915_gem_context.c | 2 --
-> >   1 file changed, 2 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> > index ab4c5ab28e4d..d5ef5243673a 100644
-> > --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> > +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> > @@ -931,8 +931,6 @@ static int set_proto_ctx_param(struct drm_i915_file_private *fpriv,
-> >               break;
-> >
-> >       case I915_CONTEXT_PARAM_PERSISTENCE:
-> > -             if (args->size)
-> > -                     ret = -EINVAL;
-> >               ret = proto_context_set_persistence(fpriv->dev_priv, pc,
-> >                                                   args->value);
+> > Bugzilla:https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> > Reviewed-by: Mika Westerberg<mika.westerberg@linux.intel.com>
+> > Signed-off-by: Kai-Heng Feng<kai.heng.feng@canonical.com>
 >
-> AFAICT fix should end up with code like this:
->
-> if (args->size)
->         ret = -EINVAL;
-> else
->         ret = proto_context_set_persistence(...)
-> break;
->
->
-> Alternatively move args->size checking into
-> proto_context_set_persistence to align with set_persistence().
->
-> Regards,
->
-> Tvrtko
->
-> >               break;
+> Reviewed-by: Kuppuswamy Sathyanarayanan
+> <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-Thanks for reviewing! I sent the V2 patch, modified according to your
-suggestion.
+A gentle ping...
 
-Best Regards,
-Katrin
+> --
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer

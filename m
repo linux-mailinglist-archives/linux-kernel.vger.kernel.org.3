@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D78553522
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B917E553529
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352139AbiFUPCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S1351194AbiFUPEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352134AbiFUPCp (ORCPT
+        with ESMTP id S1352152AbiFUPES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:02:45 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E6827FDA;
-        Tue, 21 Jun 2022 08:02:44 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ay16so8747589ejb.6;
-        Tue, 21 Jun 2022 08:02:44 -0700 (PDT)
+        Tue, 21 Jun 2022 11:04:18 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC32193CC;
+        Tue, 21 Jun 2022 08:04:17 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id q9so19356653wrd.8;
+        Tue, 21 Jun 2022 08:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WoX9840c/J6/KgjfO31tkicZj6v+jhfxjr/FKmSKn8I=;
-        b=L08S3+YgOTeNh4o+dXImz1JlqFOMbO59nYkXYU12iBPMeyv+fNQV2EXgPG+Pbqnd7W
-         VpV5albOuCbIQrG/OF9JD4vfKw4jWZ7IbQva5VlYk94v6MwZiDjZ1SSDsb6HjR+jNsux
-         8yxlridj+PpyCnRQ3bdCKI2NDX64n2cZtVQA9BehzZ8rERK6j4ymFCVpMZJbT+Dgj97r
-         uu4dYeypPAL76ohWzuLNJ3+/YAK9B5hq2+6ryDusDw0Hg+b1c/D1Q4xhjQUmPzIpIBcd
-         Otcn4BJCsHHZ5y3NcB3PSS47tQi+U5wwgCVIthFGl/RqoppEEJaAqbjUK+6NhxFQOv3F
-         uA8Q==
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yi8KGNVnRWVNZALBVc9FWLAz6Ghaa+l0izDAbcV65+U=;
+        b=kj2fdsLo9Bu9eNHHPnC5TWWWpBVAUpYPYdb8e64O1IDyHpdS6BL6qACbcd9BMrGpmH
+         Dz4DJEjgeEQ58KoXVVm7so5iCKxu63DX400hCcvRHzIi6tqG/ifqqGgKtu0DNfw1Peh0
+         kWMSiudAF1tVY8EDtf1ApQmsJkSxwXvapfFe/6gTvHaqsTTcoUgG2whIefxtFRL3G6ff
+         T9i736RsQfZTfchOCu7DRPCX7wRA6LL/Jkqpgt313kNvgYBLFdJFyg901lN6a0qBLVuo
+         mYjC3F7E2gKR+CFfnzgP8JPAhJg85jnhRdk0wea1Kt4+zhSjfJOYtUNTIZlocMxWSYxZ
+         WNrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WoX9840c/J6/KgjfO31tkicZj6v+jhfxjr/FKmSKn8I=;
-        b=BIwu+snnSR+S8Eq99hWzL2NqtPyZ761s1tG4XR+fDX0jYPNr11P5xhe2BOgQckZpHn
-         cSfu8IahlwcXdwlgQ+U+XVPi2XyZ0Qgm9UOtpSkA+Oas5/dDZSIJifBllalM70xaIriP
-         c56fZcC267J2oaUts3jFrvKX2MGJgmMk1mgJ1UEQZSXsF0zP1xKXpHh4mT8dNl9eC59H
-         43jbMErZUObnV4pg2pEXu9Yth3oN2fprbkX7FqWmr2bpR15riSYxzywH5VgQ2ypdQplg
-         RQlcdbU1dqGtuhxkcdHd/gd0tMZmE9wi+UanYkT82GuNPKoXJEG9wz/JlFl02u8PWg5T
-         q8YQ==
-X-Gm-Message-State: AJIora+GU5JzC2rTcqzDSdNIWy33WOZmE66vx+haa+dvGRgZ78X4d7+Q
-        oubqNLZYHgF3Yx093NOIuckYR2JhdIkjS59V+0U=
-X-Google-Smtp-Source: AGRyM1tnpbw7SrZDVUpUILVDpTXh1SUaCjWLTysEACqIxzAcgmzCFEqyrA+yjXPOvw6WCVg4dmKH7T8nHTJtYdPUE28=
-X-Received: by 2002:a17:906:c041:b0:718:c984:d9ee with SMTP id
- bm1-20020a170906c04100b00718c984d9eemr27768100ejb.722.1655823763016; Tue, 21
- Jun 2022 08:02:43 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yi8KGNVnRWVNZALBVc9FWLAz6Ghaa+l0izDAbcV65+U=;
+        b=NZAEjBXNG0a6xXbl+5UsP23s+NtsmNqaMPJaJK9OtAymzSWv8SFGzC1nKlnRKeQbta
+         RzQKKMEDnKAsHnPk1ZZH2smqo9B0lbFCBC7dpaOnczQnZ2T9Evw2vZHoyLwjqtvt0v+g
+         JPAOKQN/HrhIaTp8HrLt/VRsTP8Am23UzXJD+WWy3OdsYR/xF8G0n6FTzrn57X59wGYH
+         hOCNOOJXf+VewM+HEIuWGU2cxkqHbDOLEvX8UuaAIwMT03TmfeDrsCGJoqYrtF/IVVys
+         HMNcaY4owwXRLMubgLwmjvCrRShMsDeYkQj3zTJuos2uttqIp9yjSVFGnRxHlyHV8GLs
+         oaJw==
+X-Gm-Message-State: AJIora++Ppt/KQ2LU8N6fLnIKzohoAG6N62Er3xC1HNtaU3PpX1LktWg
+        0n7vqJRFoKQ7gzdQnAu34o4=
+X-Google-Smtp-Source: AGRyM1sTDNqmK6D2Q/+FbmMDPWeH/f60prdPT3TRnPIIkQ+2IdjMM+IiMlLy+T4/ERQFIHE5AiAMOw==
+X-Received: by 2002:a5d:59ac:0:b0:218:5b7e:1c1c with SMTP id p12-20020a5d59ac000000b002185b7e1c1cmr29080476wrr.621.1655823855502;
+        Tue, 21 Jun 2022 08:04:15 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id u16-20020adfed50000000b0021b89f8662esm8768746wro.13.2022.06.21.08.04.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 08:04:15 -0700 (PDT)
+Message-ID: <62b1ddef.1c69fb81.955cc.19dd@mx.google.com>
+X-Google-Original-Message-ID: <YrHd7fy5ie24gmlv@Ansuel-xps.>
+Date:   Tue, 21 Jun 2022 17:04:13 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan McDowell <noodles@earth.li>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND net-next PATCH 3/3] net: dsa: qca8k: reset cpu port on
+ MTU change
+References: <20220618072650.3502-1-ansuelsmth@gmail.com>
+ <20220618072650.3502-3-ansuelsmth@gmail.com>
+ <20220620215619.2209533a@kernel.org>
+ <62b1db04.1c69fb81.a2134.1b01@mx.google.com>
 MIME-Version: 1.0
-References: <20220603144315.5adcddbf@canb.auug.org.au> <20220615150013.30c9d7ad@canb.auug.org.au>
- <20220621181551.5eb294f5@canb.auug.org.au>
-In-Reply-To: <20220621181551.5eb294f5@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 21 Jun 2022 11:02:30 -0400
-Message-ID: <CADnq5_OxNm9EwLDXishu+pMfT2mgOSTvkmgSm+cm98JiCsiJog@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62b1db04.1c69fb81.a2134.1b01@mx.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,34 +82,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 4:15 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Wed, 15 Jun 2022 15:00:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Tue, Jun 21, 2022 at 04:51:46PM +0200, Christian Marangi wrote:
+> On Mon, Jun 20, 2022 at 09:56:19PM -0700, Jakub Kicinski wrote:
+> > On Sat, 18 Jun 2022 09:26:50 +0200 Christian Marangi wrote:
+> > > It was discovered that the Documentation lacks of a fundamental detail
+> > > on how to correctly change the MAX_FRAME_SIZE of the switch.
+> > > 
+> > > In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
+> > > switch panics and cease to send any packet. This cause the mgmt ethernet
+> > > system to not receive any packet (the slow fallback still works) and
+> > > makes the device not reachable. To recover from this a switch reset is
+> > > required.
+> > > 
+> > > To correctly handle this, turn off the cpu ports before changing the
+> > > MAX_FRAME_SIZE and turn on again after the value is applied.
+> > > 
+> > > Fixes: f58d2598cf70 ("net: dsa: qca8k: implement the port MTU callbacks")
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> >  
+> > It reads like this patch should be backported to 5.10 and 5.15 stable
+> > branches. While patches 1 and 2 are cleanups. In which case you should
+> > reports just patch 3 against net/master first, we'll send it to Linus at
+> > the end of the week and then you can send the cleanups on top for -next.
 > >
-> > On Fri, 3 Jun 2022 14:43:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > After merging the amdgpu tree, today's linux-next build (powerpc
-> > > allyesconfig) failed like this:
-> > >
-> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:3835:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> > >  3835 | } // ModeSupportAndSystemConfigurationFull
-> > >       | ^
-> > > cc1: all warnings being treated as errors
-> >
-> > I am still getting the above failure.
+> 
+> Ok will split this series.
+> 
+> > One extra question below.
+> > 
+> > > diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+> > > index eaaf80f96fa9..0b92b9d5954a 100644
+> > > --- a/drivers/net/dsa/qca8k.c
+> > > +++ b/drivers/net/dsa/qca8k.c
+> > > @@ -2334,6 +2334,7 @@ static int
+> > >  qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+> > >  {
+> > >  	struct qca8k_priv *priv = ds->priv;
+> > > +	int ret;
+> > >  
+> > >  	/* We have only have a general MTU setting.
+> > >  	 * DSA always set the CPU port's MTU to the largest MTU of the slave
+> > > @@ -2344,10 +2345,29 @@ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+> > >  	if (!dsa_is_cpu_port(ds, port))
+> > >  		return 0;
+> > >  
+> > > +	/* To change the MAX_FRAME_SIZE the cpu ports must be off or
+> > > +	 * the switch panics.
+> > > +	 * Turn off both cpu ports before applying the new value to prevent
+> > > +	 * this.
+> > > +	 */
+> > > +	if (priv->port_enabled_map & BIT(0))
+> > > +		qca8k_port_set_status(priv, 0, 0);
+> > > +
+> > > +	if (priv->port_enabled_map & BIT(6))
+> > > +		qca8k_port_set_status(priv, 6, 0);
+> > > +
+> > >  	/* Include L2 header / FCS length */
+> > > -	return regmap_update_bits(priv->regmap, QCA8K_MAX_FRAME_SIZE_REG,
+> > > -				  QCA8K_MAX_FRAME_SIZE_MASK,
+> > > -				  new_mtu + ETH_HLEN + ETH_FCS_LEN);
+> > > +	ret = regmap_update_bits(priv->regmap, QCA8K_MAX_FRAME_SIZE_REG,
+> > 
+> > Why care about the return code of this regmap access but not the ones
+> > inside the *port_set_status() calls?
+> > 
+> 
+> No reason just following old bad behaviour done in other function where
+> qca8k_port_set_status is used. Will send v2 with the error handled.
 >
-> I am still getting the above failure ... it has now been 19 days :-(
 
-Is it still the same error or something else?  I thought this was
-fixed in this patch:
-https://gitlab.freedesktop.org/agd5f/linux/-/commit/d6aa8424bcac64b2608452589c9a09984251c01c
+Actually now that i checked, the qca8k_port_set_status is void... So it
+would require an additional change to that function. Will make it part
+of the net-next series...
 
-Alex
+> > > +				 QCA8K_MAX_FRAME_SIZE_MASK,
+> > > +				 new_mtu + ETH_HLEN + ETH_FCS_LEN);
+> > > +
+> > > +	if (priv->port_enabled_map & BIT(0))
+> > > +		qca8k_port_set_status(priv, 0, 1);
+> > > +
+> > > +	if (priv->port_enabled_map & BIT(6))
+> > > +		qca8k_port_set_status(priv, 6, 1);
+> > > +
+> > > +	return ret;
+> > >  }
+> > >  
+> > >  static int
+> 
+> -- 
+> 	Ansuel
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+-- 
+	Ansuel

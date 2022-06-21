@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308EA553D9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7442A553D9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356426AbiFUVZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S1356194AbiFUVZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356268AbiFUVYp (ORCPT
+        with ESMTP id S1356156AbiFUVY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:24:45 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B923B18E0E;
-        Tue, 21 Jun 2022 14:18:28 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id E5E4C16C007C;
-        Wed, 22 Jun 2022 00:18:26 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zQoGK-iPBWcY; Wed, 22 Jun 2022 00:18:26 +0300 (EEST)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1655846306; bh=SZv4GmVYSWyJ0KWMqNxRyKQ/A9DysKbi7PuZ+/S+Bqg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=inJWNUVE4J5xReNj+7doC1XjK65aw9Z9horZfbUslh+5HPZBByaDldsMkKS+iuaC3
-         3R5Qs2RMEBQQsfody48Raw6eNQP94opuiJ3ZGvSRKg77QXj6tVolLcr1L3e77Q/X4h
-         kuEzzVTdT0Sx7I5bhKWvDQf3hypwDAv4FMKbudHU=
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Marian Postevca <posteuca@mutex.one>,
-        Maximilian Senftleben <kernel@mail.msdigital.de>,
-        stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4.19] usb: gadget: u_ether: fix regression in setting fixed MAC address
-Date:   Wed, 22 Jun 2022 00:18:00 +0300
-Message-Id: <20220621211800.18457-1-posteuca@mutex.one>
+        Tue, 21 Jun 2022 17:24:56 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78362F653
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:19:15 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id c205so7508624pfc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Pw6tOf0NPXvUgCcHpFOHSG/5Ay8ndP0eK1Ju1RYmRfI=;
+        b=U2W7vdfgAxIgUEg7l9O4E/VMMQlsLTmezTIDBqG5h6pjmmvxwDMZmZLarqOeb7Wje1
+         0xWyG8P2Z+hoG8iHH8gqVe3Wgq8s2we20AfndFGBGC3Y+zBgkbFAQesqeIvgKrLM1mO9
+         +iQCUR3ww0HBZXdoYbDfUrrIF7+gQau2zDz3s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Pw6tOf0NPXvUgCcHpFOHSG/5Ay8ndP0eK1Ju1RYmRfI=;
+        b=2b6WFhKhbgl2cGiT0CnZRT72IAOlorhAbVNV2SO2e8E4PCsiuMZloqMX4htXUtfLSd
+         vR1BuEshs7Arvk6QWvZM8CznYLl6ibI0K1KWgzv0NsQGLgf2cSvTED7OOiEKP32F7DXh
+         iJD+PUjQGuekzjFt6PVac7SSJ8tBKFtjN0bnAlC9FMEhiqqOhW0foeGIf4SNr5lBrXuR
+         iTca0kpOsd6f36MVhG/Hu+Zpyiw1shXkcPec2iUJmY1DmB8nbzFR9FPPXb1cSoTbkjbt
+         7sffp2sjVlP5MqhnGWN/tTQuxce8EXIYIzKUTexrBRhL6SJnb264MQQ4z8Gw5VH61jJ9
+         rc5g==
+X-Gm-Message-State: AJIora8Cvsyv2WkgHSZOBB4Inz9aFOkIoPNzRkxgy6UNYiJ61rqKR8To
+        PztfGINhbyJuOkgZeQP7FmT5eg==
+X-Google-Smtp-Source: AGRyM1tso6knQYUy+Fp/H+yAT+CIm2phikJ+bzB99yq1r6ctawOAnKOwSY68yKxnHNb3wtkcWgir0Q==
+X-Received: by 2002:a63:7f0a:0:b0:40c:7993:f177 with SMTP id a10-20020a637f0a000000b0040c7993f177mr16846264pgd.204.1655846355281;
+        Tue, 21 Jun 2022 14:19:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q11-20020a056a00084b00b0051bc3a2355csm11905905pfk.64.2022.06.21.14.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 14:19:15 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 14:19:14 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH v2 1/9] pstore: Don't expose ECC metadata via pstore file
+ system
+Message-ID: <202206211402.1D0B5A4D7@keescook>
+References: <20220621153623.3786960-1-ardb@kernel.org>
+ <20220621153623.3786960-2-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621153623.3786960-2-ardb@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit b337af3a4d6147000b7ca6b3438bf5c820849b37 upstream.
+On Tue, Jun 21, 2022 at 05:36:15PM +0200, Ard Biesheuvel wrote:
+> If a pstore record has its ecc_notice_size field set to >0, it means the
+> record's buffer has that many additional bytes appended to the end that
+> carry backend specific metadata, typically used for error correction.
+> 
+> Given that this is backend specific, and that user space cannot really
+> make sense of this metadata anyway, let's not expose it via the pstore
+> filesystem.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-In systemd systems setting a fixed MAC address through
-the "dev_addr" module argument fails systematically.
-When checking the MAC address after the interface is created
-it always has the same but different MAC address to the one
-supplied as argument.
+"ecc_notice_size" is actually describing the length of the string
+generated and appended by persistent_ram_ecc_string().
 
-This is partially caused by systemd which by default will
-set an internally generated permanent MAC address for interfaces
-that are marked as having a randomly generated address.
+I've been bothered by this string, though, as it confuses what was
+actually stored with additional lines. "Why does every entry end with a
+string about ECC?"
 
-Commit 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in
-setting MAC address in setup phase") didn't take into account
-the fact that the interface must be marked as having a set
-MAC address when it's set as module argument.
+I think it's more sensible to show to userspace the record "as stored". We
+already prepend some chunking details when a panic write may split the
+dump across multiple records, so if anyone needs this IN the userspace
+file contents again, it could move there.
 
-Fixed by marking the interface with NET_ADDR_SET when
-the "dev_addr" module argument is supplied.
+I'd rather ECC status be reported at boot, really. Given that nothing I
+can find[1] parses the ECC notice string, I think it'd be fine to just
+remove it from the string buffer entirely.
 
-Reported-by: Maximilian Senftleben <kernel@mail.msdigital.de>
-Cc: stable@vger.kernel.org
-Fixes: 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in setting MAC address in setup phase")
-Signed-off-by: Marian Postevca <posteuca@mutex.one>
----
- drivers/usb/gadget/function/u_ether.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+-Kees
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 1b3e674e6330d..2fe91f120bb1d 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -772,9 +772,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
- 	dev->qmult = qmult;
- 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
- 
--	if (get_ether_addr(dev_addr, net->dev_addr))
-+	if (get_ether_addr(dev_addr, net->dev_addr)) {
-+		net->addr_assign_type = NET_ADDR_RANDOM;
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "self");
-+	} else {
-+		net->addr_assign_type = NET_ADDR_SET;
-+	}
- 	if (get_ether_addr(host_addr, dev->host_mac))
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "host");
-@@ -831,6 +835,9 @@ struct net_device *gether_setup_name_default(const char *netname)
- 	INIT_LIST_HEAD(&dev->tx_reqs);
- 	INIT_LIST_HEAD(&dev->rx_reqs);
- 
-+	/* by default we always have a random MAC address */
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+
- 	skb_queue_head_init(&dev->rx_frames);
- 
- 	/* network device setup */
-@@ -868,7 +875,6 @@ int gether_register_netdev(struct net_device *net)
- 	g = dev->gadget;
- 
- 	memcpy(net->dev_addr, dev->dev_mac, ETH_ALEN);
--	net->addr_assign_type = NET_ADDR_RANDOM;
- 
- 	status = register_netdev(net);
- 	if (status < 0) {
-@@ -908,6 +914,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
- 	if (get_ether_addr(dev_addr, new_addr))
- 		return -EINVAL;
- 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
-+	net->addr_assign_type = NET_ADDR_SET;
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(gether_set_dev_addr);
+[1] https://codesearch.debian.net/search?q=Corrected+bytes
+
 -- 
-2.35.1
-
+Kees Cook

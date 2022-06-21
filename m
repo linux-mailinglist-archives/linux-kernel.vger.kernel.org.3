@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B1055347A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE95B55347B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351556AbiFUO3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        id S241049AbiFUO3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiFUO3J (ORCPT
+        with ESMTP id S1351562AbiFUO3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:29:09 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8AA262D9;
-        Tue, 21 Jun 2022 07:29:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=dD98V
-        ez2aD21iNFpk0tg6AZ8kngi+2AB0UFxeAgDYzA=; b=EPnbdMYvAKUIAIkqAogV7
-        koFPnM4fK9Ghtb9Wd2rUtZ9UIZDyKCaq3M1bnyZbqe0hyTyXeKEbkXIsLzgxWGNe
-        M8eHqj7vpnwmlZdFWA6MqqS/DFWMNhQtPmEEBtMsYgj0zFB27Kx/rHOCwiGDoAaM
-        yqa5QJ+1wK6WAYqCx9fJR0=
-Received: from [10.20.42.77] (unknown [114.242.206.180])
-        by smtp1 (Coremail) with SMTP id GdxpCgCHjcWo1bFiVHd1KQ--.4781S2;
-        Tue, 21 Jun 2022 22:28:57 +0800 (CST)
-Subject: Re: [PATCH 1/2] ext4: page-io: use 'unsigned int' to bare use of
- 'unsigned'
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220518120137.2544-1-liupeibao@163.com>
- <YqtDEfJd5uUxucaS@mit.edu> <c19b8c8f-7c0f-33e6-3f2c-3425dee7fa8d@163.com>
- <Yq9obvFIv8LjAAvg@mit.edu>
-From:   Liu Peibao <liupeibao@163.com>
-Message-ID: <902000f3-7d9b-3115-0864-3ffa0f87d4d4@163.com>
-Date:   Tue, 21 Jun 2022 22:28:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 21 Jun 2022 10:29:12 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0B562D9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:29:10 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id c4so22659407lfj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yFwOkX5u5xV89mKMUoEbIG06wYYhgJqYwetvw1ZUjd4=;
+        b=owwv9fTp+ThPxppT/bUM8W4zSlE7eydJgrzcdiOBkgF/UzE786XjbBJFh4LNuqzwPV
+         FcdKfRDCJwQtYpbddfkj4EJRnCGWNToze0MtV5AojiF0rwwu97Huq6j6JOC8ujvBii5A
+         5VRpxLArMhwGEr3fjmfnCXfZSr3a/LX7dswiaox80JZOQHE2zEJXA3Si6p/hfdeklbGZ
+         NcCks14qr9KKQuGFmwDUt3jss/F9gqfJ1VdNorGx+lZXQKoR1xigsBvJxQobnYyZE2PS
+         mLqZl1SdKlnttpDOp7mvn1w96B16y91XrBcdiUm1043ST2IjdFCqUnudDHurVGHavjM1
+         NGxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yFwOkX5u5xV89mKMUoEbIG06wYYhgJqYwetvw1ZUjd4=;
+        b=gf2cj717QAkqdZnwqP2zROzftlFmdULhg06uh+sC/7lEHfm6+CMNLa7AnhH6uBq7IP
+         N+P69ZBhzSg/3XYMZjbJi4KZrYWaPco6qruiR9ZhGTRbqdQVGcnpXS8mHV/11w1q7pRd
+         ciPAWqwe+wMjLdx3UB/0j2/W19KE3oj6g5IWiP/Y53eS1UH4o6U95U55eiu7BV2xK2ua
+         KPakyy+jB8nMDg74yV0kJbec7bksKTAkH/NSn70H1NS7w+ltY2JoWBP8YsV7wdRfU9z3
+         sPwtsnZBRgTPK6a/BIQzEp2FS4RD6UTY8RpNYmFlon1CFLfouLz8z1tCKxDtwKHscwub
+         H7+w==
+X-Gm-Message-State: AJIora9mW8bKSTgdWZzvM24O/jMQJLHJYl0IFY9pMJb8R51v6JSxH3th
+        f0z6BhdEJQTfK55pU7Zcobs=
+X-Google-Smtp-Source: AGRyM1u9rwxeINwOLlaQMUTf5uUrbla4nc3wiEJsto1vaZZM6hRcm1M4u2etSfdlQY1qQOSHAUMcUw==
+X-Received: by 2002:a05:6512:b1c:b0:47d:df52:b5a9 with SMTP id w28-20020a0565120b1c00b0047ddf52b5a9mr15981152lfu.293.1655821748868;
+        Tue, 21 Jun 2022 07:29:08 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id n11-20020a2e878b000000b0025a6e47056csm850841lji.124.2022.06.21.07.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 07:29:08 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Tue, 21 Jun 2022 16:29:06 +0200
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] mm: fix racing of vb->va when kasan enabled
+Message-ID: <YrHVsryZlnpO/Vha@pc638.lan>
+References: <1653447164-15017-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <CAB8ipk9cAoP6yV_-Gn8bwbn5ezCZujLeMpioa0TiNU5=akBaug@mail.gmail.com>
+ <Yq+PMWlARgDhv8uL@pc638.lan>
+ <CAGWkznHPdk_yqn2GWPDJaT32+4MnFLnRjdjBkaFv9BLMh4yM=g@mail.gmail.com>
+ <CA+KHdyXpdow7SYsbq_7F0zDd5-nYGi6db7R11R3--g3gUu-59w@mail.gmail.com>
+ <CAGWkznE5cFfdtmQ2j57goWtpfPGYPsd5Oi3pvb9vcfifodR9OQ@mail.gmail.com>
+ <YrGO4cae/03r3PzP@pc638.lan>
+ <CAGWkznFdZ1_jrSWSOPkSDyLY1OSodZBy6MTfdwPKo3VoW67GBg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Yq9obvFIv8LjAAvg@mit.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GdxpCgCHjcWo1bFiVHd1KQ--.4781S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw4Utw4fZF18ZFWxAw18Zrb_yoW8Cr1xpr
-        WfZws8KFs8G3yxAr97XwsxJFWrAw4Fkas8JF18JFy5AF1DXF12grZYkF45uryUCrsIg3Wa
-        ga98Z39a9F1qvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UCzuZUUUUU=
-X-Originating-IP: [114.242.206.180]
-X-CM-SenderInfo: xolx1vpled0qqrwthudrp/1tbiEwknbGE15DBCuAAAsr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGWkznFdZ1_jrSWSOPkSDyLY1OSodZBy6MTfdwPKo3VoW67GBg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,47 +82,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 2:18 AM, Theodore Ts'o wrote:
-> On Sun, Jun 19, 2022 at 11:21:27AM +0800, Liu Peibao wrote:
->>
->> Thanks for your reply. What I want do to is rename some temporary variables
->> in the patch2 and when I make the patch, there are the checkpatch warnings.
->>  From the point of view "one patch do one thing", I split the modification
->> into two patches. Thanks!
-> 
-> I didn't really see the poiont of renaming the temporary variables,
-> either.
-> 
-> In this particular case basically only used to avoid line lengths from
-> exceeding ~72 characters, and requiring a line wrap, and bio_start and
-> bio_end is used only in one place in the code block below.
-> 
-> Is it _really_ all that confusing whether they are named
-> bio_{start,end} instead of bvec_{start,end}?
-> 
-> If I was writing that code from scratch, I might have just used start
-> and end without any prefixes.  And as far as "only have a patch do one
-> thing at a time", this doesn't apply to checkpatch fixes.
-> 
-> The basic motivation behind "no checkpatch-only fixes" is that it
-> tends to introduce code churn which makes interpreting information
-> from "git blame" more difficult; and so therefore the costs exceed the
-> extremely marginal benefits of fixing most checkpatch complaints.  So
-> making a _patch_ be checkpatch clean, whether it's modifying existing
-> code or writing new code, is fine, since you're making a subtantive
-> change to the code, so this is as good a time as any to fix up tiny
-> nits such as checkpatch complaints.
-> 
-> But the idea behind "no unnecessary code churn since it ruins git
-> blame and could potentially induce future patch conflicts" also
-> applies to renaming variables.  The benefits are very minor, and they
-> don't outweigh the costs.
-> 
-> 						- Ted
-> 
+> On Tue, Jun 21, 2022 at 5:27 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+> >
+> > > On Mon, Jun 20, 2022 at 6:44 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > >
+> > > > > > >
+> > > > > > Is it easy to reproduce? If so could you please describe the steps? As i see
+> > > > > > the freeing of the "vb" is RCU safe whereas vb->va is not. But from the first
+> > > > > > glance i do not see how it can accessed twice. Hm..
+> > > > > It was raised from a monkey test on A13_k515 system and got 1/20 pcs
+> > > > > failed. IMO, vb->va which out of vmap_purge_lock protection could race
+> > > > > with a concurrent ra freeing within __purge_vmap_area_lazy.
+> > > > >
+> > > > Do you have exact steps how you run "monkey" test?
+> > > There are about 30+ kos inserted during startup which could be a
+> > > specific criteria for reproduction. Do you have doubts about the test
+> > > result or the solution?
+> > > >
+> > I do not have any doubt about your test results, so if you can trigger it
+> > then there is an issue at least on the 5.4.161-android12 kernel.
+> >
+> > 1. With your fix we get expanded mutex range, thus the worst case of vmalloc
+> > allocation can be increased when it fails and repeat. Because it also invokes
+> > the purge_vmap_area_lazy() that access the same mutex.
+> I am not sure I get your point. _vm_unmap_aliases calls
+> _purge_vmap_area_lazy instead of purge_vmap_area_lazy. Do you have any
+> other solutions? I really don't think my patch is the best way as I
+> don't have a full view of vmalloc mechanism.
+>
+Yep, but it holds the mutex:
 
-Got it! Thanks for your detailed and comprehensive explanation!
+<snip>
+mutex_lock(&vmap_purge_lock);
+purge_fragmented_blocks_allcpus();
+if (!__purge_vmap_area_lazy(start, end) && flush)
+	flush_tlb_kernel_range(start, end);
+mutex_unlock(&vmap_purge_lock);
+<snip>
 
-Best Regards,
-Peibao
+I do not have a solution yet. I am trying still to figure out how you can
+trigger it. 
 
+<snip>
+	rcu_read_lock();
+	list_for_each_entry_rcu(vb, &vbq->free, free_list) {
+		spin_lock(&vb->lock);
+		if (vb->dirty && vb->dirty != VMAP_BBMAP_BITS) {
+			unsigned long va_start = vb->va->va_start;
+<snip>
+
+so you say that "vb->va->va_start" can be accessed twice. I do not see
+how it can happen. The purge_fragmented_blocks() removes "vb" from the 
+free_list and set vb->dirty to the VMAP_BBMAP_BITS to prevent purging
+it again. It is protected by the spin_lock(&vb->lock):
+
+<snip>
+spin_lock(&vb->lock);
+if (vb->free + vb->dirty == VMAP_BBMAP_BITS && vb->dirty != VMAP_BBMAP_BITS) {
+	vb->free = 0; /* prevent further allocs after releasing lock */
+	vb->dirty = VMAP_BBMAP_BITS; /* prevent purging it again */
+	vb->dirty_min = 0;
+	vb->dirty_max = VMAP_BBMAP_BITS;
+<snip>
+
+so the VMAP_BBMAP_BITS is set under spinlock. The _vm_unmap_aliases() checks it:
+
+<snip>
+list_for_each_entry_rcu(vb, &vbq->free, free_list) {
+	spin_lock(&vb->lock);
+	if (vb->dirty && vb->dirty != VMAP_BBMAP_BITS) {
+		unsigned long va_start = vb->va->va_start;
+		unsigned long s, e;
+<snip>
+
+if the "vb->dirty != VMAP_BBMAP_BITS". I am missing your point here?
+
+> >
+> > 2. You run 5.4.161-android12 kernel what is quite old. Could you please
+> > retest with latest kernel? I am asking because on the latest kernel with
+> > CONFIG_KASAN i am not able to reproduce it.
+> >
+> > I do a lot of: vm_map_ram()/vm_unmap_ram()/vmalloc()/vfree() in parallel
+> > by 64 kthreads on my 64 CPUs test system.
+> The failure generates at 20s from starting up, I think it is a rare timing.
+> >
+> > Could you please confirm that you can trigger an issue on the latest kernel?
+> Sorry, I don't have an available latest kernel for now.
+>
+Can you do: "gdb ./vmlinux", execute "l *_vm_unmap_aliases+0x164" and provide
+output?
+
+--
+Uladzislau Rezki

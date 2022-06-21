@@ -2,283 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEC9553CB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F80553D5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355889AbiFUVKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S1356158AbiFUVOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357021AbiFUVJ1 (ORCPT
+        with ESMTP id S1355902AbiFUVN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:09:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51DB3819D;
-        Tue, 21 Jun 2022 13:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655845006; x=1687381006;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=DMLu8GyqYFep9IZls6TVhw57TxeiDFtrj/EX+006c/U=;
-  b=TuPJT2wC5tsen/wlCE7JFZ6mSaoNkqDBzmupD+3RWMBfd0sdy4yC/nFc
-   JIUsNakjVn7UYdftfDfnmUeg4799skAfPphd/Md6lt+EOkKdcSCoUJI+T
-   TdwESxOe3dYHTBvLFueswdrwCHbE0TWNBulIJ/k4NDhWm/kKzvbDuvquj
-   kgmCLvmx/ztYLzdGjHKU0fpuGbSBTTaZHaiNkpaJmiHPGYeDY2Aazd7Pu
-   prCjTuFHM8C49sgRxa9msZbrfMokLjajhdcWPqC7YMgfAPIKxmTEVKpkX
-   2wMmvl5zaaZDWwlEr+ewR2OEfuJvhKC/3WMnx8alTIwBRMF+jL6yy5m5F
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="344227227"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="344227227"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 13:56:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="715126024"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jun 2022 13:56:44 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 21 Jun 2022 13:56:43 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 21 Jun 2022 13:56:43 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 21 Jun 2022 13:56:43 -0700
+        Tue, 21 Jun 2022 17:13:26 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA62533348;
+        Tue, 21 Jun 2022 14:00:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aenk+LltRzE9aoxtdCz+0+/Rb0OaAkI2128ZdiCb6aPwq3j7nyVS02TYrNIBET3Ix96JX5nGmEVkE7Fh+drGhcRlvce8kFdfXSE6kNgyJw/HWZ/pbhayPxiMTU5YuYH/O2P3/kbAB5anEh1e4jt+/aDoKKL6zsuvvoVY3rUSmEtwPAY9d506tS7y6ontQ4+VNbC85wupJbOADMhTYwrUhm2kgfnTwiALeK1CL6bzRe1LT/DSkGNsZJXO0+7Y8yWdl8XMa1HOzXPcZl9w53z/JugmQjaa8XDu8vyt/j1hEU211Dh0P1E+zzzU4NqPnDUl/2nAwatmAZUZNwdSpCB35w==
+ b=ZikeTw0S7ttyzgdzUwFhbCUqhlGkSHs6vGsOB2gVwsQN8WFaC4xFxReXjKQndC2dmmu2VdwXrdnCAB+dIVllZXtJfPAPZWwmWphLJHRSYGwYaIe+LAzpxUjQ8CZJNPJSIYCryJg3qv6vBE0mRte82PEjH4MHvrNPMcO3P5xOLbz+O7RjWD7KKaCMZhWhHsF9D0QcQQzd5uD4te84DCy8Tckxg3Z08EAXXkohzrmLJo7s85+XkQ3Ut77NA+ldNAs81uRjkKaO6/rlaElx4EoMbMcjFZLbhlwFsQXubsXVozHhTsX5gEI5rZsnZv9qM8jrFdy8GFx3CHUSKS8zUyDMig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wc5sBW8uMpMgxsvLrUCy1GQwPNlNF2Ief29KI0eF0eI=;
- b=IBiGlWkpOmcymP/5qxKuVat6nhmrF5HkFCWd0C0gJ8JUO0Ng0vXXqoGPEso4WdPzilrqfrjDVLKiurAeQDmdyJf/oJCDrM2qx4g8qLX8K+jBzy3lbe+CKYz0TylZtSj8EP4pTTUhUubZG+VAO/tBYKV/0Dm+XwvGpTobzr5lJr101OAuOZHYWSUsx5agy/n9iQSVwfo1LGJnQeZDeTEYiMlZKlS5NrDzUJkKG284IKF3xhLoe3PPHWs0kS2oMr32BrW+NNawQBWI6Li2LfHqzWnOBHPK6t0hhLbSmE+j4hPnXdR5mT46RyX1kQSBZUIuqS77ywLU+u9sDSlNUmxV3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by BL1PR11MB5254.namprd11.prod.outlook.com
- (2603:10b6:208:313::16) with Microsoft SMTP Server (version=TLS1_2,
+ bh=L2zPddrz7DMH2w1GwVWYEI6yBRnFoUWwhGSJj5EH538=;
+ b=eceuP3QNjy0tlStTbvYBBLsKtkSx3VzEThxHLSRZGQsPzb8thRMRG422tz7QLikA1ZWxLnQHzQ5c0hNhQDzLT4Ygo48QhfjrgsraT37mjWsKtIrHOfemw0Fq5i7VB24wigDRqjyqPbJoN4xcL980NpaKTgd8u9BKxKteZ429XBuTstGX7T2RukUCxWY2uxWFUVEGyLHKd+h/lGIY735V3bBlDTsrmCb7oCuPbaYmDEnfWBNxS/5YfJlmc/9VZrvPkmn3yG7T9LtMklPX7hBYgGqhAgQdh2bFljAEXTjLqwWr8bIPZZTxGkA0PWNLbSpaq6Xyk2dh5Jbx/+IahSUkAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=svenpeter.dev smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L2zPddrz7DMH2w1GwVWYEI6yBRnFoUWwhGSJj5EH538=;
+ b=BttZqUv4GkeEhYDXThM9SJ5dEvYS3UOV8Wy8kAwXUtt5gfWDaQV8jVt8CI1KRqFp8+6aOf01vY4as7EERb+tjYMRADoJ3BR8vViTBNw1CJdkDAK83+/uq1myr6vYaZBWJLVNeXjknHylytm3oNpQM7c+K5uwirvXZR0Pj4pq9mOFwibkegXoz5SzMGrLi+AzU3aY9WK2FhsgIbVisjfPuLdVqeFKE4imb8DTnlr2ob6wXyy2hQWpgTWMEWdEvC681N4KSrI38teYgl+scbGMXTT3mMz6rHZKP8gy/bCxb3HJ8dyyyY6ODzrybSYWidKWAtchC+myY+BBB+YPfs9ArQ==
+Received: from BN6PR20CA0053.namprd20.prod.outlook.com (2603:10b6:404:151::15)
+ by DM6PR12MB4371.namprd12.prod.outlook.com (2603:10b6:5:2a3::23) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Tue, 21 Jun
- 2022 20:56:41 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::f50c:6e72:c8aa:8dbf%7]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
- 20:56:41 +0000
-Date:   Tue, 21 Jun 2022 13:56:40 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>, <linux-cxl@vger.kernel.org>
-CC:     <dan.j.williams@intel.com>, <alison.schofield@intel.com>,
-        <bwidawsk@kernel.org>, <ira.weiny@intel.com>,
-        <vishal.l.verma@intel.com>, <a.manzanares@samsung.com>,
-        <dave@stgolabs.net>, <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] cxl/acpi: Verify CHBS consistency
-Message-ID: <62b230881a77_8920729456@dwillia2-xfh.notmuch>
-References: <20220621201259.1547474-1-dave@stgolabs.net>
+ 2022 21:00:03 +0000
+Received: from BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:151:cafe::2c) by BN6PR20CA0053.outlook.office365.com
+ (2603:10b6:404:151::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.22 via Frontend
+ Transport; Tue, 21 Jun 2022 21:00:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT008.mail.protection.outlook.com (10.13.177.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5353.14 via Frontend Transport; Tue, 21 Jun 2022 21:00:03 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Tue, 21 Jun 2022 21:00:01 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 21 Jun 2022 14:00:00 -0700
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
+ Transport; Tue, 21 Jun 2022 13:59:57 -0700
+Date:   Tue, 21 Jun 2022 13:59:55 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "sven@svenpeter.dev" <sven@svenpeter.dev>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
+        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
+        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jordan@cosmicpenguin.net" <jordan@cosmicpenguin.net>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "saiprakash.ranjan@codeaurora.org" <saiprakash.ranjan@codeaurora.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "isaacm@codeaurora.org" <isaacm@codeaurora.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>
+Subject: Re: [PATCH v2 5/5] vfio/iommu_type1: Simplify group attachment
+Message-ID: <YrIxG616H5Pi0Qod@Asurada-Nvidia>
+References: <20220616000304.23890-1-nicolinc@nvidia.com>
+ <20220616000304.23890-6-nicolinc@nvidia.com>
+ <BL1PR11MB52710E360B50DDA99C9A65D18CAC9@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <YquxcH2S1fM+llOf@Asurada-Nvidia>
+ <BN9PR11MB5276C7BFA77C2C176491B56A8CAF9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Yq0JKBiQfTkWh4nq@Asurada-Nvidia>
+ <20220620040317.GD5219@nvidia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220621201259.1547474-1-dave@stgolabs.net>
-X-ClientProxiedBy: MWHPR10CA0008.namprd10.prod.outlook.com (2603:10b6:301::18)
- To MWHPR1101MB2126.namprd11.prod.outlook.com (2603:10b6:301:50::20)
-MIME-Version: 1.0
+In-Reply-To: <20220620040317.GD5219@nvidia.com>
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6cfbc711-5061-4d8e-9c76-08da53c88af3
-X-MS-TrafficTypeDiagnostic: BL1PR11MB5254:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BL1PR11MB5254710E9D72A4C174563F75C6B39@BL1PR11MB5254.namprd11.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 411cd746-5d6e-41c0-c242-08da53c90330
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4371:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB43716BA7C7D60392851AF721ABB39@DM6PR12MB4371.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a07HkUCg609ztVNEMwAaF59PVRr1IhJm1a+NSdqJ2wBop/+su13lA4F+mV2izPh1GI3LOmB2vuIXRmTZBxOmAHYpexH6VXw6isv/ddVe8ccxbrzNTBMxiXQpNPcYHOjAXLkRTdmDEYdO4TrQ2kC40bGsRTos/hJi6hMnZbC3EBdamZHl1wN6UDLD6fAAx+pcNlxLuFg2/+tGpWv1gsiwiPt4vD7E1OT6DGbzjLpuDcbkkzVRFNPLIhKbI58OhDT3apmFZ5esfoZrGHqfqHKXbJZu5+U6E3iYR4OyaGBAK1Dmxtz9o70LqfhvrcigZkGhG4lVwFXWlyCnCldqC0aqdvVAEcKiaSXXj024lCFz6mQjVhV1xU6pOeQNMkwZPziVeBJZ1VFLTlezjLX86+utvFzX8Ig5yt/7ldVZTnGEmOm+iSQKAkr15YLEzCq8t2B2TMDFRP68cQqeDd0SbfZmn3ZxCY/sE38txWOkQdgT+XYZPKTEGd+AuOWpy5YpxDxq1YHV5RYWaPZnXLoBfOUzKkEencxm2wrrNWfRc2zAIWB6FxIkLELaHrYV18xIWbwgjW8Rxcj/vTj1nf2a9rV/BiuNg9FGTQWWEGkxRtAZbhuTYPr9IbeJ8cTN8wy/0E0maEv3GRaFzp7eJ68feKhD3w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(376002)(396003)(39860400002)(366004)(26005)(9686003)(8676002)(82960400001)(5660300002)(86362001)(41300700001)(6512007)(15650500001)(38100700002)(83380400001)(2906002)(478600001)(66946007)(186003)(6506007)(316002)(8936002)(4326008)(6486002)(66476007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j6WEm/tFzQiTn6xDbOxTtbwd3aERToqzHCMvHymaJSqX2zYuMUOn0RgNX/9w?=
- =?us-ascii?Q?lWhpzE4OmhiGMZTgOAiOQA9Nsy/200Ijn5AF1ClPYTU9lnMWDAtc7JICRH+A?=
- =?us-ascii?Q?GwNjUmtafDtn7HeK1+v0AEIJbyv3JIpuVo2kaKE690gUjO5lmuYENyAXCN4S?=
- =?us-ascii?Q?UXmZLrAvwzibdJ5h9ntL8fRgWWiSqcY6AEnxwgl692k1uHGnuU54b6dUppRd?=
- =?us-ascii?Q?ba1jBVaL7LgQtQ9Irc3WP9NTOGGiptUy7DUEOwkEvd4jdm5XnfjAQ7Tqj17v?=
- =?us-ascii?Q?rrRBi4ehW59A32pfZcIiEekHczWv2RIiUV1fOHr6hLcZqjljs6fkWgF3QMrW?=
- =?us-ascii?Q?K2X6STcgTnFgfQ6rFzV1iLk4gnK3U6oIXpHGApd5lyxn4sAiQMAI4U/kDupf?=
- =?us-ascii?Q?WYa8Au0ROKwnop4vuyb/RGl7TsEQbjeo0nd5Kg905nozG0Vb1VZ/f0e/Zc69?=
- =?us-ascii?Q?u48V2lQWkFCxPm6WOGy+opZMYU6P6ZeiKj8cg2dK+w/TYMjXiwLTWSzp5/mj?=
- =?us-ascii?Q?9Zsc1BSFxaXHNJCUWR4PUJC+vI2Lj6xB7Qx1hPVds2lw96fHxp3nGEbS56aF?=
- =?us-ascii?Q?yemumaNPIpfmM2dEl91aHhFVYBoQ3k82lO5rtJzsaw0KwcLHfaLfOi35qTxo?=
- =?us-ascii?Q?T+fhcPytDuuJJPkPMWNA0+sfrFZwU0Ax6eDl8DAFhEBs2YsCqlKxF/baeohi?=
- =?us-ascii?Q?8P1DOlZfAwqTWxgNY9Ah4Cqf/mGFPJl3inBlu9LdVeH3/FxT7Lb49NDXVxxB?=
- =?us-ascii?Q?iOoNmcvbYhwvmzG/Z7MBGJSSywbfQVK/rxUyCzLZsOyaCaosDSuFM9mGX4F3?=
- =?us-ascii?Q?p4N3sYDlVrPZU1PTV9RpXt393zBVLAeXxLl22q3wJNv5i6+OPNcUZndNxgkQ?=
- =?us-ascii?Q?f7Idve71X5rABGWAcGQUyWjWeSMI4FKiZHz0iD4skYCWteughVjQfA1CN5vu?=
- =?us-ascii?Q?DtjhNNVSnKzE/SgAoSocpjvR55px98yTo6djFIBu79i4glz9XSzGm43Ma98d?=
- =?us-ascii?Q?8t35Sy7I5nnQrLk9uTN/IaCkq/Gq0Sa0kzn7s/b7X6P2tFh6ex8H2SQjnsu8?=
- =?us-ascii?Q?VeqjcviV+YERus9VFtRblWE5pTJAW6QeFC+Nj61uv2tx22YKIHRiGHwfhpUR?=
- =?us-ascii?Q?B56xXMPFGfdJSC7jcuVD42+6wj9CDR8shMS7MF6hu21O2AK+Zca9n9qi3lM1?=
- =?us-ascii?Q?Fjqh8Xk+PNlkbAlHhpPRn6UOVf9USp4iXwNxW4Af1D6thnVgpCrcO5janyfG?=
- =?us-ascii?Q?aaO7t7vYXT/wpgb/5STm5KOdcWG2iE8XCXwzjZILCsi3fM/fU++HgHgH0Hka?=
- =?us-ascii?Q?sAvDfqwwH/w1J8rgp2lwaV1KI9xGtWNFWs8qb3+uMW5Z932VLRM0SDAkFUVK?=
- =?us-ascii?Q?XETs65u7WhOop3khmYe6uIGTG9Un4j2qxW3nTBtIXwPc2+U810p/yr9Yti8a?=
- =?us-ascii?Q?DsPePwHMZ/1IpNPqt1CkOdqcy8JOlI/CjYxXwNAsBBAYAUNeqfP/yKjnE2Az?=
- =?us-ascii?Q?x6nNch5UrK095kCcQY5I6uWh+la8OF3iMRm8QrIKjl7ZnKHsKa25zbvLknY+?=
- =?us-ascii?Q?paGLtMCC5xucWzRLd0dJVLglgxma5VbRYO203ogmDuDr7WC2AdqHwc4aS8Ba?=
- =?us-ascii?Q?PRTdR3kQvpxQetkBGAfhQHhLCNy4UOzflOYZqxiB7Fe6rZxqCYU/TLSpBTDu?=
- =?us-ascii?Q?4PoOf74qrdPNAF4nCwxPudRAWZbYhOHkDIpw7KRryWcxX3FGptQSufLrHO5J?=
- =?us-ascii?Q?ZcRRwaz33vUjeBKg6lSSQslzRI6gRgw=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6cfbc711-5061-4d8e-9c76-08da53c88af3
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 20:56:41.7538
+X-Microsoft-Antispam-Message-Info: /E1h6WDkvbtStPqf/PKdR7QqRL8imWhkrZ8wFMOmjIL7hJPTwK970ScQSskzv/f7VV283OPC8of4cP+eSeb5GWW3hmpPvDtqjAOsZoHm1nXZCZmlTjijI0BrCTlxlxVHXSdTdIEmwHlVagQGxMs8xVo59T6XouJEKeoWddyNgas7aTyAftf0SDFTY8c6hrmXl+953ojmm44PQ6CFPmgnnX0Pc3RgggDaVw0pK/jo3deu5LbCO9RG7oQ1J4urL0nd+LGoKWhjiOC/62Jk+ntMw3OsiYioa1wuODHrVW2vLx0V9XpzZSkUHxPNwZ2G1Rq3YhkbF/yy80eDrgpYlgoL/z32nKXbmwqQLrI6nDNMUEeA4jR6dCtwHlMcYbAWqr/zCUmzm+lf241+ZMhW98xPys24BJ0RDGucEU8F6NqRDS3LE2KN4V9Ni97R479Xc0mQlElD23abDdZvU9QSTzc0v9I1MT8yupYne/C0nnHZxdVnBSolORgyBqnrTEsj7D8tyVDdQAX9OJPciZCu/2StbH5PW23NKbHKuGFxPWZM+14drseXl88+HENXgcoznYaekcGqm3C3eOCnRYS8IA9+VNYDh0LD21j3JfWr4Feoo8YkHFWBk9YdcsuSD4tn/+zooynylGWLziEAyA/J4VumKzZrq9WHJ92/7QlICBqnRYO0GUEZ7NqR9e1t5DnJm5vO0LVTjaUNBHp1WetTdII+LiaqauXITya9UcCP6K6/s9+IOUQrt/x1Qi25ficuGLih
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(136003)(346002)(40470700004)(36840700001)(46966006)(40460700003)(356005)(5660300002)(55016003)(81166007)(47076005)(41300700001)(336012)(33716001)(4326008)(7416002)(40480700001)(82740400003)(9686003)(426003)(82310400005)(316002)(186003)(54906003)(110136005)(86362001)(70586007)(70206006)(8676002)(2906002)(8936002)(36860700001)(83380400001)(26005)(478600001)(7406005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 21:00:03.1686
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BJTTPDd96l013pPwhNPPhbyKI8BGeDL/L9mFwSsLDXnFmhC6KUuLxr5Ds1uQV4jiGUYXD2k+Gz4I9D6l5nc0P2jKPUX98ROM0p5n1mAzOC0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5254
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 411cd746-5d6e-41c0-c242-08da53c90330
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4371
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Davidlohr Bueso wrote:
-> Similarly to verifying the cfwms, have a cxl_acpi_chbs_verify(),
-> as described by the CXL T3 Memory Device Software Guide
-> for CXL 2.0 platforms.
+On Mon, Jun 20, 2022 at 01:03:17AM -0300, Jason Gunthorpe wrote:
+> On Fri, Jun 17, 2022 at 04:07:20PM -0700, Nicolin Chen wrote:
 > 
-> Also while at it, tuck the rc check for nvdimm bridge into
-> the pmem branch.
+> > > > > > +     vfio_iommu_aper_expand(iommu, &iova_copy);
+> > > > >
+> > > > > but now it's done for every group detach. The aperture is decided
+> > > > > by domain geometry which is not affected by attached groups.
+> > > >
+> > > > Yea, I've noticed this part. Actually Jason did this change for
+> > > > simplicity, and I think it'd be safe to do so?
+> > > 
+> > > Perhaps detach_destroy() can return a Boolean to indicate whether
+> > > a domain is destroyed.
+> > 
+> > It could be a solution but doesn't feel that common for a clean
+> > function to have a return value indicating a special case. Maybe
+> > passing in "&domain" so that we can check if it's NULL after?
 > 
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> ---
-> 
->  drivers/cxl/acpi.c | 64 +++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 61 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-> index 40286f5df812..33b5f362c9f1 100644
-> --- a/drivers/cxl/acpi.c
-> +++ b/drivers/cxl/acpi.c
-> @@ -187,14 +187,65 @@ static int add_host_bridge_uport(struct device *match, void *arg)
->  struct cxl_chbs_context {
->  	struct device *dev;
->  	unsigned long long uid;
-> +	struct cxl_port *root_port;
->  	resource_size_t chbcr;
->  };
->  
-> +static inline bool range_overlaps(struct range *r1, struct range *r2)
-> +{
-> +	return r1->start <= r2->end && r2->start <= r1->end;
-> +}
-> +
-> +static int cxl_acpi_chbs_verify(struct cxl_chbs_context *cxt,
-> +				struct acpi_cedt_chbs *chbs)
-> +{
-> +	struct device *dev = cxt->dev;
-> +	struct cxl_dport *dport;
-> +	struct cxl_port *root_port = cxt->root_port;
-> +	struct range chbs_range = {
-> +		.start = chbs->base,
-> +		.end = chbs->base + chbs->length - 1,
-> +	};
-> +
-> +	if (chbs->cxl_version > 1) {
-> +		dev_err(dev, "CHBS Unsupported CXL Version\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (chbs->cxl_version == ACPI_CEDT_CHBS_VERSION_CXL11)
-> +		return 0;
-> +
-> +	if (chbs->cxl_version == ACPI_CEDT_CHBS_VERSION_CXL20 &&
-> +	    (chbs->length != ACPI_CEDT_CHBS_LENGTH_CXL20)) {
-> +		dev_err(dev, "Platform does not support CXL 2.0\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	device_lock(&root_port->dev);
-> +	list_for_each_entry(dport, &root_port->dports, list) {
-> +		struct range dport_range = {
-> +			.start = dport->component_reg_phys,
-> +			.end = dport->component_reg_phys +
-> +			CXL_COMPONENT_REG_BLOCK_SIZE - 1,
-> +		};
-> +
-> +		if (range_overlaps(&chbs_range, &dport_range)) {
-> +			device_unlock(&root_port->dev);
-> +			dev_err(dev, "CHBS overlapping Base and Length pair\n");
-> +			return -EINVAL;
-> +		}
+> It is harmless to do every time, it just burns a few CPU cycles on a
+> slow path. We don't need complexity to optmize it.
 
-For cxl_port objects this happens "for free" as a side effect of the:
+OK. I will keep it simple then. If Kevin or other has a further
+objection, please let us know.
 
-        crb = devm_cxl_iomap_block(dev, port->component_reg_phys,
-                                   CXL_COMPONENT_REG_BLOCK_SIZE);
-
-...call in devm_cxl_setup_hdm(), where it tries to exclusively claim the
-component register block for that cxl_port driver instance.
-
-I.e. if the CHBS provides overlapping / duplicated ranges the failure is
-localized to the cxl_port_probe() event for that port, and can be
-debugged further by disabling one of the conflicts.
-
-> +	}
-> +	device_unlock(&root_port->dev);
-> +
-> +	return 0;
-> +}
-> +
->  static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
->  			 const unsigned long end)
->  {
->  	struct cxl_chbs_context *ctx = arg;
->  	struct acpi_cedt_chbs *chbs;
-> +	int ret;
->  
->  	if (ctx->chbcr)
->  		return 0;
-> @@ -203,6 +254,11 @@ static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
->  
->  	if (ctx->uid != chbs->uid)
->  		return 0;
-> +
-> +	ret = cxl_acpi_chbs_verify(ctx, chbs);
-> +	if (ret)
-> +		return ret;
-> +
->  	ctx->chbcr = chbs->base;
->  
->  	return 0;
-> @@ -232,6 +288,7 @@ static int add_host_bridge_dport(struct device *match, void *arg)
->  	ctx = (struct cxl_chbs_context) {
->  		.dev = host,
->  		.uid = uid,
-> +		.root_port = root_port,
->  	};
->  	acpi_table_parse_cedt(ACPI_CEDT_TYPE_CHBS, cxl_get_chbcr, &ctx);
->  
-> @@ -321,11 +378,12 @@ static int cxl_acpi_probe(struct platform_device *pdev)
->  	if (rc < 0)
->  		return rc;
->  
-> -	if (IS_ENABLED(CONFIG_CXL_PMEM))
-> +	if (IS_ENABLED(CONFIG_CXL_PMEM)) {
->  		rc = device_for_each_child(&root_port->dev, root_port,
->  					   add_root_nvdimm_bridge);
-> -	if (rc < 0)
-> -		return rc;
-> +		if (rc < 0)
-> +			return rc;
-> +	}
-
-No need to move this inside the "if (IS_ENABLED(CONFIG_CXL_PMEM))" that
-I can see.
+Thanks
+Nic

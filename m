@@ -2,74 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB53A553474
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FD455346F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351529AbiFUOZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S1351375AbiFUOYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349421AbiFUOZI (ORCPT
+        with ESMTP id S1349421AbiFUOYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:25:08 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C56515FCC;
-        Tue, 21 Jun 2022 07:25:03 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1655821432tiv9c18h
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 22:23:48 +0800 (CST)
-X-QQ-SSF: 0100000000700060B000D00A0000000
-X-QQ-FEAT: rCzLTtzQ0gcnji6xLlhDR/w4nX/P79abYLkOaTRlAZW+wnQmI3CnF4k3BiJRn
-        /FybuJcViTGqzAXrxQh6GT/w8faNPbGatL4ajOsZR0bFL2y824RF+sfVSbDPa94jEZxoOfo
-        W/g5/kSspCQDaYsuy/Icf4UNTpHN4/SQylFw8RjnTxGEmLZFqfbGQN+i0B37Wq8w/N8/z5/
-        McUbIzwztGBFmE6gaFiBExFsjR+9jOPfijNQ/RDPjACnRi1Hv51ciXyYlf0gdUfvE+Rh8Wf
-        tAsr2VLekeGarmlD6sYi35h0z9cr3EbOtqjzWCHliMYtuFPIOb7q5c25I9cwcqKOAqU+oHo
-        6Os9Pok+VvaiJ0y8TgnXX9TSG/dIg==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     aacraid@microsemi.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] scsi: aacraid: Remove duplicate 'the' in two places.
-Date:   Tue, 21 Jun 2022 22:23:46 +0800
-Message-Id: <20220621142346.6429-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 10:24:19 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3FB7D186E1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:24:18 -0700 (PDT)
+Received: (qmail 876587 invoked by uid 1000); 21 Jun 2022 10:24:17 -0400
+Date:   Tue, 21 Jun 2022 10:24:17 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
+Cc:     llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
+Message-ID: <YrHUkfDWsexHRUKj@rowland.harvard.edu>
+References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
+ <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
+ <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-file: drivers/scsi/aacraid/aachba.c
-line: 1053
-* The LSB is the the end.
-chaned to
-* The LSB is the end.
+On Tue, Jun 21, 2022 at 01:59:27PM +0200, Paul Heidekrüger wrote:
+> OK. So, LKMM limits the scope of control dependencies to its arm(s), hence
+> there is a control dependency from the last READ_ONCE() before the loop
+> exists to the WRITE_ONCE().
+> 
+> But then what about the following:
+> 
+> > int *x, *y;
+> > 
+> > int foo()
+> > {
+> > 	/* More code */
+> > 
+> > 	if(READ_ONCE(x))
+> > 		return 42;
+> > 
+> > 	/* More code */
+> > 
+> > 	WRITE_ONCE(y, 42);
+> > 
+> > 	/* More code */
+> > 
+> > 	return 0;
+> > }
+> 
+> The READ_ONCE() determines whether the WRITE_ONCE() will be executed at all,
+> but the WRITE_ONCE() doesn't lie in the if condition's arm.
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/scsi/aacraid/aachba.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So in this case the LKMM would not recognize that there's a control 
+dependency, even though it clearly exists.
 
-diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 81462f4ddb90..4d4cb47b3846 100644
---- a/drivers/scsi/aacraid/aachba.c
-+++ b/drivers/scsi/aacraid/aachba.c
-@@ -1050,7 +1050,7 @@ static void get_container_serial_callback(void *context, struct fib * fibptr)
- 				vpdpage83data.type1.productid));
- 
- 			/* Convert to ascii based serial number.
--			 * The LSB is the the end.
-+			 * The LSB is the end.
- 			 */
- 			for (i = 0; i < 8; i++) {
- 				u8 temp =
--- 
-2.17.1
+>   However, by
+> "inverting" the if, we get the following equivalent code:
+> 
+> > if(!READ_ONCE(x)) {
+> > 	/* More code */
+> > 
+> > 	WRITE_ONCE(y, 42);
+> > 
+> > 	/* More code */
+> > 
+> > 	return 0;
+> > }
+> > 
+> > return 42;
+> 
+> Now, the WRITE_ONCE() is in the if's arm, and there is clearly a control
+> dependency.
 
+Correct.
+
+> Similar cases:
+> 
+> > if(READ_ONCE())
+> > 	foo(); /* WRITE_ONCE() in foo() */
+> > return 42;
+> 
+> or
+> 
+> > if(READ_ONCE())
+> >     goto foo; /* WRITE_ONCE() after foo */
+> > return 42;
+> 
+> In both cases, the WRITE_ONCE() again isn't in the if's arm syntactically
+> speaking, but again, with rewriting, you can end up with a control
+> dependency; in the first case via inlining, in the second case by simply
+> copying the code after the "foo" marker.
+
+Again, correct.  The LKMM isn't always consistent, and it behaves this 
+way to try to avoid presuming too much about the optimizations that 
+compilers may apply.
+
+Alan

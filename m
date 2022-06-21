@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E10F552AC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45BC552ACB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344804AbiFUGGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 02:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S1345548AbiFUGL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 02:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiFUGGT (ORCPT
+        with ESMTP id S229547AbiFUGL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 02:06:19 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5AA2018C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:06:18 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z11so11715948edp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:06:18 -0700 (PDT)
+        Tue, 21 Jun 2022 02:11:56 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A46015728
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:11:54 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id w20so20591822lfa.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
-        b=bK83hoj2i7b6z88tns8D/gcTKyp3cynytnB4eQUJ3Ztwy3o+HSa4JMPAo4cHSL0rg6
-         pFjPgT7wKTaGx9OdrlrYoP1Gro9Cn6XXNASkLlZUMpY0D9mwSzsb+5T5Wkggwyfd8gXM
-         bO31Ky6+CZI+a3GHChh61/2ILVDrzSqJRKA4wlUoj1/CxRUig72/aTQE6xKAiBEe2pEt
-         04whtJKVx8TBKSzTRO1Utdi083P76WXDFazkWpMgwMgaebs/Ewe+tRym5gu0G8YhUhHd
-         gI8g9IQAemDmA+esf5SCIeC9nKBMBX7TggkJzc6s2OVSxZQ6wswNjCfySRECYom+UPLm
-         ULlg==
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/eWGanGXRvTxAEKEXyRihaY2pmewsuWfoiE7kWqZzJ0=;
+        b=WVwPcq7Xs7ZNJvmdOwoL0VOQi8Mil0u7MwlIhaIoQcbaiMQUIm4+G94MZmxriqIY4j
+         sV2HKZzyRbS6wVzIVm7eo1QgVhFOcaQyIx2eK+lNIVFRXHFowBHbJhOh1XLGsQIjRYEv
+         KW2fQu5F2EqkKsoLxCiuG4vmvj3cnNFXD9yps=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=8L3u9yLimYhqEYiPckuKAsVAuSvOnpygme4DEwcN/0I=;
-        b=bkqhJZ4YC4tNFpJuQYU+V1SlYpwhrQe0AuuUGuJhWgcEqGNTdj7Vjkm3dOPetV7wMM
-         W6ASnBJYOxlVyQHqnzjN52KTe0CJI9+ZWJXUGwtcqm034sRuVW2LfQ7DfYnvVzVlet10
-         dIez1hwI4+TqoFlQkOjpF3FkJf8CpG7xZL84Jqd42mTAaZ5zxNDsEZB/C0SOlO5vAuFq
-         vtTt3NiAa+FPOXSiQSkd761/d/Lx483bBff8R0c28WXKOTt6vx/uqPn96nS/O/69bXuU
-         CHixy9mE7QgA6sdM0leVUJvh+fYTjSw7NGHLcLV8FYvH+/ASVtMC1tI+WB9hgDOE66fo
-         F/SQ==
-X-Gm-Message-State: AJIora92LYafrsOmFOhJEvfhn6Swdr4vmMi1Ecv4QZgABt7IR0OIGExv
-        UUyjD08G5FnVQJeAAHAD8J7cTVh2+C+pGodsVf4=
-X-Google-Smtp-Source: AGRyM1v8J962cliLseZ9SL3FdsdIqkc0Rz3FNN8MuyD+uZpDGhq66Uo1bYzmcwrrAKlOSBpe49z7QWx2kvtSVOFyJuU=
-X-Received: by 2002:a05:6402:43c5:b0:435:89ee:578f with SMTP id
- p5-20020a05640243c500b0043589ee578fmr7217039edc.225.1655791576871; Mon, 20
- Jun 2022 23:06:16 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/eWGanGXRvTxAEKEXyRihaY2pmewsuWfoiE7kWqZzJ0=;
+        b=nu0R4KN49urPjj7yYCrEFFSisQeEWQ0hfMyF28bt+oCIceDhfpXhju9H6v4ZTHtVrZ
+         IXoi/fbv3Pe44B8Y49XF3MAUlnKGFvOiVeHZNoWnb17+yk8xA6/9+YsOba+LtQZxjLiG
+         HWolFFul+JVgwfEvp0f2qQct3e9JOWqC6MmZfuGWu7PvsoTG6EAXFHwwJJ4wm8kmuaCq
+         PJt5lyqSYyIZcb4NVrEZoX5kOgyZ6ojriuqyiUR+PguJC/bnEWJN9yY3NVcSCSnFyC9N
+         TKaO4h9KNHTZoOqrYgGt8pWP2yQoIGTmpA3ynNBD/yq/h8Xh+rLS+E6/MGl3JwFfpulK
+         SWjQ==
+X-Gm-Message-State: AJIora9Nugobw1o/pVM2ABuAhUVC7Pi2OxU1zL6W48DZTZ5GBT07Sz2b
+        vkJIgV6fg3Y346hKPQyscepd+w==
+X-Google-Smtp-Source: AGRyM1tWCSbAFWcWkf2MV6dy2EN4XakvOogG8V/zDwtSKUO4DFfYU461zGuKRDDUF8c74V6lnOxmJw==
+X-Received: by 2002:a05:6512:1307:b0:47f:67ab:4064 with SMTP id x7-20020a056512130700b0047f67ab4064mr6958436lfu.106.1655791912587;
+        Mon, 20 Jun 2022 23:11:52 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id z16-20020a056512371000b0047255d21173sm2042889lfr.162.2022.06.20.23.11.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 23:11:51 -0700 (PDT)
+Message-ID: <46fcdf08-4646-afa0-c112-76d9335adb6c@rasmusvillemoes.dk>
+Date:   Tue, 21 Jun 2022 08:11:49 +0200
 MIME-Version: 1.0
-Reply-To: mayumisakimoto7@gmail.com
-Sender: christyfilon2016@gmail.com
-Received: by 2002:a17:907:3e0d:0:0:0:0 with HTTP; Mon, 20 Jun 2022 23:06:16
- -0700 (PDT)
-From:   mayumi sakimoto <mayumisakimoto07@gmail.com>
-Date:   Tue, 21 Jun 2022 09:06:16 +0300
-X-Google-Sender-Auth: ymo2Kz8jJesXE4gyxoR0ovIUjLs
-Message-ID: <CAL97wxgc2J9j-bsxc_xxnsfXsV7jywPDutcCYbe7a0iGtX=tNg@mail.gmail.com>
-Subject: Mrs.Mayumi sakimoto
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
+ strings
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com
+Cc:     rostedt@goodmis.org, enozhatsky@chromium.org, willy@infradead.org
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20220620004233.3805-1-kent.overstreet@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On 20/06/2022 02.41, Kent Overstreet wrote:
 
- I hope this email finds you well, Please accept my sincere apologies if
-my email does not meet your business or personal ethics. Please I have something
-very important to discuss with you.I need to entrust you with a
-humanitarian project, Please reply to me as soon as possible.
+>   Rasmus pointed out that -fno-strict-aliasing is going to cause gcc to generate
+>   nasty code, and indeed it unfortunately does but according to worst case
+>   scenario microbenchmarks it's not a problem for actual performance. 
 
+Well, that's not how I interpreted those numbers, but, except if they
+showed an improvement, how much is acceptable is of course always a
+matter of judgment.
 
-Kind Regards,
-mayumi sakimoto
+However, what's really annoying and somewhat dishonest is that you're
+not including those numbers, nor the methodology, in either the cover
+letter or commit itself.
+
+Rasmus

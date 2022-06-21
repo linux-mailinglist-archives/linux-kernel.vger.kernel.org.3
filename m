@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FA8553A0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412BF553A10
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244380AbiFUTKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
+        id S1343787AbiFUTOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352632AbiFUTKu (ORCPT
+        with ESMTP id S229918AbiFUTON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:10:50 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687D62A703
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:10:49 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a13so14099325lfr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=i29BTqmsCMU84u5F3MslriTPhy40bdELmGBDgd2AGXM=;
-        b=ICbNBUW+MOM6OjqyGA60V1mhIwo0IXYbfAP3+J4C70erV48B+86ajHJzii7XyY9Psp
-         NtAUm4Djm65zV3KSlpVoizGewNWVq8m62FnehitL4XWmOSMe4cBQ3VmnELorB3rZonZL
-         dV0fBn5YwoBnaceYHGgX1EC//rV3pIyuKQx4uswPcJ7VLhmEST+lhFvRuMgDCOI+2Rhc
-         STItEQeghGVEympg21etdLX9jpCOU5T1qh4MWrErPwMZxYTY0hWbdonVYYhAVDXyUaFA
-         zTbW/YLZ62nWcGmUKmBM9yCjfThhspAQxj2rcD3VIcN8kI0R1nylAU4uIH6g+AwEJFu4
-         xA4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i29BTqmsCMU84u5F3MslriTPhy40bdELmGBDgd2AGXM=;
-        b=SoSR88BQutZCNYfaYeY+uOqyOqE+f5UQ87VXIoqR2ntfxW6gNBfWmHhsVehZL4Bas5
-         txH8H6qAN0k1OSAxdjpLrDzlZsWUxDIQfw3P0eny+NV8MbCxkup/DVxNDLAMZ+TQ/nBy
-         SlVN+3tFCzrkQjunvJDByIKLhriy6I2rL83pdAHJmWrd9G+531YRWvdNmmV8OA0768TY
-         V09U+6xf1Mz1AnaM31uOafrwAuE8hiDwln3mxIUWQoNnRV1ADUs28yC/6skDjMrTSN+A
-         YRMMeqq7CyBZfXuJBAX5M3zTJw3eRRPhcL76EdwR0i6jOHHROqmm3beu5dpILAFZixTT
-         4dEg==
-X-Gm-Message-State: AJIora9IxrPAD9OPwcFJ72bVLhGRiSG66C0L3Hr0gVN9MbPd49+5hYnB
-        t7eiym3c2RQjrW+TkYhP1Qnm/A==
-X-Google-Smtp-Source: AGRyM1vL0TtajUeOJQp8Cv92b2RohmGgmEB5vAE5GUDt1QgCdEp4vQrPb9fWqQ+25Y7t06djoyVBCw==
-X-Received: by 2002:a05:6512:3b1e:b0:47d:c338:9c07 with SMTP id f30-20020a0565123b1e00b0047dc3389c07mr18282905lfv.186.1655838646118;
-        Tue, 21 Jun 2022 12:10:46 -0700 (PDT)
-Received: from [192.168.43.7] ([188.162.64.230])
-        by smtp.gmail.com with ESMTPSA id x5-20020a056512078500b0047f77729723sm673737lfr.43.2022.06.21.12.10.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 12:10:45 -0700 (PDT)
-Message-ID: <e51f48ce-1561-1593-3442-d09a4c48c70e@linaro.org>
-Date:   Tue, 21 Jun 2022 22:10:43 +0300
+        Tue, 21 Jun 2022 15:14:13 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A198513E09
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655838852; x=1687374852;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=F/YHfUAD5msOHrXLRY/OKVTXQnE8y+kyxfToh44viV4=;
+  b=ncMrRmyYk2333u2p8lTN8KUBD4QBIcGeOw9Chb3I+AFuzaevNlYa1o6c
+   L2AkdvQxFeqJw/PAuCaAPzlbzJRC2NAqm6Pazv5h7/V752HPtA8KxraCY
+   YtikmZi9hT3Tqd9qjm51NGpJUvz4vSMpV6WA4HCC2yzTIokWTONmM4J2F
+   iNJobuN0JhY6LaNQdDN6/G8dKyQRSShnbyQyjR4E+KTpL4REWx3RTxz0Q
+   ZCc2xCanHbtkzAs2B5e7rcGEyma2MTtbEQkIxDvqbPhbZhjQaJLpxNqzC
+   mS44G1acJL2uRQJl3bvnnoFWueX1T4ETqxm8UkBEpaZZqR2wJeVOWYAGX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="277763521"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="277763521"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 12:14:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="677149672"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 12:14:10 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3jKE-0000JW-CE;
+        Tue, 21 Jun 2022 19:14:10 +0000
+Date:   Wed, 22 Jun 2022 03:13:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-multiqueue 3/5]
+ net/rxrpc/recvmsg.c:37:19: warning: variable 'sk' is uninitialized when used
+ here
+Message-ID: <202206220335.rHqLFMRj-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
-Content-Language: en-GB
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     svarbanov@mm-sol.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
-        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        johan+linaro@kernel.org
-References: <20220621112330.448754-1-robimarko@gmail.com>
- <CAA8EJpoPJKVteUdsxOVH5THH_vqwBrdSn=hkbW4oWmpw+Mjdmg@mail.gmail.com>
- <CAOX2RU4N26weZU4bBTsJ+zuDZnNoW6_UxNKwfSii0LDed9p1_A@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAOX2RU4N26weZU4bBTsJ+zuDZnNoW6_UxNKwfSii0LDed9p1_A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,137 +64,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 21:53, Robert Marko wrote:
-> On Tue, 21 Jun 2022 at 19:29, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->> On Tue, 21 Jun 2022 at 14:23, Robert Marko <robimarko@gmail.com> wrote:
->>>
->>> IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
->>> cause the system to hang as its using DBI registers in the .init
->>> and those are only accesible after phy_power_on().
->>>
->>> So solve this by splitting the DBI read/writes to .post_init.
->>>
->>> Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
->>
->> Any elaboration for the Fixes tag? I think the follow one is more
->> logical, isn't it?
->>
->> Fixes: 5d76117f070d ("PCI: qcom: Add support for IPQ8074 PCIe controller")
-> 
-> Hi,
-> My logic was that it was working before the commit a0fd361db8e5 as it
-> moved PHY init
-> later and indirectly broke IPQ8074 gen2.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-multiqueue
+head:   f37988fef6da3fdc3545e5a65eb9241f82f539f2
+commit: 928631b5285b0aaebed61025256868cd126c9281 [3/5] rxrpc: Allow UDP socket sharing for AF_RXRPC service sockets
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220622/202206220335.rHqLFMRj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/928631b5285b0aaebed61025256868cd126c9281
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-multiqueue
+        git checkout 928631b5285b0aaebed61025256868cd126c9281
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/rxrpc/
 
-Ack, thanks for the explanation.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+All warnings (new ones prefixed by >>):
 
-> 
-> Regards,
-> Robert
->>
->>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>> ---
->>> Changes in v2:
->>> * Rebase onto next-20220621
->>> ---
->>>   drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
->>>   1 file changed, 28 insertions(+), 20 deletions(-)
->>>
->>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
->>> index 51fed83484af..da6d79d61397 100644
->>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->>> @@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
->>>          struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
->>>          struct dw_pcie *pci = pcie->pci;
->>>          struct device *dev = pci->dev;
->>> -       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->>>          int i, ret;
->>> -       u32 val;
->>>
->>>          for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
->>>                  ret = reset_control_assert(res->rst[i]);
->>> @@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
->>>                  goto err_clk_aux;
->>>          }
->>>
->>> +       return 0;
->>> +
->>> +err_clk_aux:
->>> +       clk_disable_unprepare(res->ahb_clk);
->>> +err_clk_ahb:
->>> +       clk_disable_unprepare(res->axi_s_clk);
->>> +err_clk_axi_s:
->>> +       clk_disable_unprepare(res->axi_m_clk);
->>> +err_clk_axi_m:
->>> +       clk_disable_unprepare(res->iface);
->>> +err_clk_iface:
->>> +       /*
->>> +        * Not checking for failure, will anyway return
->>> +        * the original failure in 'ret'.
->>> +        */
->>> +       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
->>> +               reset_control_assert(res->rst[i]);
->>> +
->>> +       return ret;
->>> +}
->>> +
->>> +static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
->>> +{
->>> +       struct dw_pcie *pci = pcie->pci;
->>> +       u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->>> +       u32 val;
->>> +
->>>          writel(SLV_ADDR_SPACE_SZ,
->>>                  pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
->>>
->>> @@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
->>>                  PCI_EXP_DEVCTL2);
->>>
->>>          return 0;
->>> -
->>> -err_clk_aux:
->>> -       clk_disable_unprepare(res->ahb_clk);
->>> -err_clk_ahb:
->>> -       clk_disable_unprepare(res->axi_s_clk);
->>> -err_clk_axi_s:
->>> -       clk_disable_unprepare(res->axi_m_clk);
->>> -err_clk_axi_m:
->>> -       clk_disable_unprepare(res->iface);
->>> -err_clk_iface:
->>> -       /*
->>> -        * Not checking for failure, will anyway return
->>> -        * the original failure in 'ret'.
->>> -        */
->>> -       for (i = 0; i < ARRAY_SIZE(res->rst); i++)
->>> -               reset_control_assert(res->rst[i]);
->>> -
->>> -       return ret;
->>>   }
->>>
->>>   static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
->>> @@ -1598,6 +1605,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
->>>   static const struct qcom_pcie_ops ops_2_3_3 = {
->>>          .get_resources = qcom_pcie_get_resources_2_3_3,
->>>          .init = qcom_pcie_init_2_3_3,
->>> +       .post_init = qcom_pcie_post_init_2_3_3,
->>>          .deinit = qcom_pcie_deinit_2_3_3,
->>>          .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
->>>   };
->>> --
->>> 2.36.1
->>>
->>
->>
->> --
->> With best wishes
->> Dmitry
+>> net/rxrpc/recvmsg.c:37:19: warning: variable 'sk' is uninitialized when used here [-Wuninitialized]
+                   call->notify_rx(sk, call, call->user_call_ID);
+                                   ^~
+   net/rxrpc/recvmsg.c:26:17: note: initialize the variable 'sk' to silence this warning
+           struct sock *sk;
+                          ^
+                           = NULL
+   1 warning generated.
 
+
+vim +/sk +37 net/rxrpc/recvmsg.c
+
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  18  
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  19  /*
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  20   * Post a call for attention by the socket or kernel service.  Further
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  21   * notifications are suppressed by putting recvmsg_link on a dummy queue.
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  22   */
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  23  void rxrpc_notify_socket(struct rxrpc_call *call)
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  24  {
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  25  	struct rxrpc_sock *rx;
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  26  	struct sock *sk;
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  27  
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  28  	_enter("%d", call->debug_id);
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  29  
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  30  	if (!list_empty(&call->recvmsg_link))
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  31  		return;
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  32  
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  33  	rcu_read_lock();
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  34  
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  35  	if (call->notify_rx) {
+20acbd9a7aeee0 net/rxrpc/recvmsg.c    David Howells 2017-11-02  36  		spin_lock_bh(&call->notify_lock);
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08 @37  		call->notify_rx(sk, call, call->user_call_ID);
+20acbd9a7aeee0 net/rxrpc/recvmsg.c    David Howells 2017-11-02  38  		spin_unlock_bh(&call->notify_lock);
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  39  		goto out;
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  40  	}
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  41  
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  42  	rx = rcu_dereference(call->socket);
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  43  	if (rx) {
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  44  		sk = &rx->sk;
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  45  		if (sk->sk_state >= RXRPC_CLOSE)
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  46  			goto out;
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  47  
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  48  		write_lock_bh(&rx->recvmsg_lock);
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  49  		if (list_empty(&call->recvmsg_link)) {
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  50  			rxrpc_get_call(call, rxrpc_call_got);
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  51  			list_add_tail(&call->recvmsg_link, &rx->recvmsg_q);
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  52  		}
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  53  		write_unlock_bh(&rx->recvmsg_lock);
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  54  
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  55  		if (!sock_flag(sk, SOCK_DEAD)) {
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  56  			_debug("call %ps", sk->sk_data_ready);
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  57  			sk->sk_data_ready(sk);
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  58  		}
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  59  		goto out;
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  60  	}
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  61  
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  62  	if (call->service) {
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  63  		struct rxrpc_service *b = call->service;
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  64  
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  65  		spin_lock_bh(&b->incoming_lock);
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  66  		if (list_empty(&call->recvmsg_link)) {
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  67  			list_add_tail(&call->recvmsg_link, &b->to_be_accepted);
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  68  			b->nr_tba++;
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  69  		}
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  70  		list_for_each_entry(rx, &b->waiting_sockets, accept_link) {
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  71  			sk = &rx->sk;
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  72  			if (!sock_flag(sk, SOCK_DEAD))
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  73  				sk->sk_data_ready(sk);
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  74  		}
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  75  		spin_unlock_bh(&b->incoming_lock);
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  76  	}
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  77  
+928631b5285b0a net/rxrpc/recvmsg.c    David Howells 2022-06-16  78  out:
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  79  	rcu_read_unlock();
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  80  	_leave("");
+248f219cb8bcbf net/rxrpc/recvmsg.c    David Howells 2016-09-08  81  }
+17926a79320afa net/rxrpc/ar-recvmsg.c David Howells 2007-04-26  82  
+
+:::::: The code at line 37 was first introduced by commit
+:::::: 248f219cb8bcbfbd7f132752d44afa2df7c241d1 rxrpc: Rewrite the data and ack handling code
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp

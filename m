@@ -2,140 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7F9552B70
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695EB552B76
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346490AbiFUHES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
+        id S1346583AbiFUHFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346185AbiFUHEQ (ORCPT
+        with ESMTP id S1346495AbiFUHE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:04:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495F821250
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:04:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9D7D612F5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43429C3411D;
-        Tue, 21 Jun 2022 07:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655795055;
-        bh=kHTXC3AzY4zPOVxPRYVqw1oMnvlKWb2xzZuc6Wb0U6c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fq8WEJQGUDeniIX0uaeTrPRD1rkHGfuRXq0DsjmqsQt8T8F50uy8KRwpK63J9AxVZ
-         GFVkukF+V5bb10FXZ8Q7ipvFsZY/Tg0+rcOjFKNL21KPpGWsRpf7YRU+CUcuEq+cvk
-         hyRkNeCWI3hGxxPe6Bwn+TSggkhiXpxYCpkz9hmoU5Khn82g6Jhj1iU9Yq/XUVA4dr
-         9vuAc91rwecXa96HqTo5TXAxfNnjAGR9LRYwyFOc4oPqXZg7DUT6KoJIIwco4/7AY4
-         NgtFgbXvXVnr1sGsGnI8dHSFnmswCb9DbHkQq4odQ+Ei16FKQK0JrcgTPmLjQ/hWZj
-         hWU8UOXgxrHlA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3Xvl-0002RG-3W; Tue, 21 Jun 2022 09:04:09 +0200
-Date:   Tue, 21 Jun 2022 09:04:09 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     =?utf-8?B?5pm65a6L?= <zhi.song@bytedance.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] node: put_device after failing to device_register
-Message-ID: <YrFtaZedCOwSyOof@hovoldconsulting.com>
-References: <20220615151738.1766206-1-zhi.song@bytedance.com>
- <YrB8bIJj3fvvsCHg@hovoldconsulting.com>
- <1D7A6F9F-9069-4D87-A493-7DB1BDA1EDB4@bytedance.com>
+        Tue, 21 Jun 2022 03:04:58 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2063921812;
+        Tue, 21 Jun 2022 00:04:58 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id es26so16342368edb.4;
+        Tue, 21 Jun 2022 00:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0B3xaLPQDTY5CWdU4uuAJuk+lCuTNpKsZkpyLv+wZNk=;
+        b=FkU5Z/5OwQTqLKI9hQ1umabBxiIBi+vrW8tWIvuS7GOONQH1byKgQ2/KWlgrn76E54
+         Sp7mr57ca9YY6F1RW/r1olrbyiceopLmFgAMW2GZz6ff5nTxJwpYmw1AGjjs6UEeX0tA
+         A3vG5vM/qNWiitU82KORJ/xTaRgtofVmpm+PM10gQcLUn1931APC9OnHMpj9lAnkEgww
+         oLVRMdh1NiStyET0pLeLwz830sKJNcL5stopZdfBeF5OYwrR+rLNBYANY/xs11uJtZoM
+         2GO9bmyZiakyjIxade2/Z1mUoIuwbfIVcq8mpbl1qpCg0WK2vTRx/ACuPC/ZteOlHkYZ
+         4cqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0B3xaLPQDTY5CWdU4uuAJuk+lCuTNpKsZkpyLv+wZNk=;
+        b=AMJVbJfJZz3o4WeJvq1I/uKiO1yWZxInM7mNT+g+tvnClqxZHJzLmHdNix7xgYCGEk
+         qyOTbYi7I/G/sIYe0u2mzfjsDONul3jNBU3zM0p6mf8muZ+GTVrgtsFI961Q4KAwRoEt
+         aK6oUVbdKKX6X/UazKxztV3w6rXLgMiPhaydYegjR0zyELYE67W4H8XCRb2EKEhIP3zd
+         l1fWoFWDF/n2G0IOtucrBt2woYBJ2lQqaEaHCRuTk3NXNoReJA0uIlagnpSFGupabLp6
+         /AwHQ2gVv67lp+QEAayTbWago/Lm/fm9UzbXKS6urAT2cSQPtlj0A7deHtPKTi/ENjIH
+         AFrg==
+X-Gm-Message-State: AJIora/IM/amx4YES1as4i00XvS/pgmoKyq59Y8ThIJ0f84uiVvd54nZ
+        JgFibansYwI73uW1Om/+GMUyJb6nl893/wgxkCo=
+X-Google-Smtp-Source: AGRyM1vk/fsk1xLwAiSdWUdI76LBwT9uqXC401BJldWVyTDbv2mVv+Ljf8Qlj9VQINAmNiUmrcUKC3/DfFSHrVtQ1KU=
+X-Received: by 2002:a05:6402:5212:b0:42e:2fa:41a7 with SMTP id
+ s18-20020a056402521200b0042e02fa41a7mr33591154edd.22.1655795096619; Tue, 21
+ Jun 2022 00:04:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1D7A6F9F-9069-4D87-A493-7DB1BDA1EDB4@bytedance.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220621031113.1222877-1-zhangshida@kylinos.cn> <20220621043550.GP227878@dread.disaster.area>
+In-Reply-To: <20220621043550.GP227878@dread.disaster.area>
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+Date:   Tue, 21 Jun 2022 15:04:20 +0800
+Message-ID: <CANubcdUO55kSFc7USg-EsgE5uvQR08s8wcxrf4=vHk8VOiisjw@mail.gmail.com>
+Subject: Re: [PATCH] xfs: return when delta equals 0 in xfs_mod_freecounter
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     djwong@kernel.org, zhangshida <zhangshida@kylinos.cn>,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 01:28:33AM +0800, 智宋 wrote:
-> > On Jun 20, 2022, at 21:55, Johan Hovold <johan@kernel.org> wrote:
-> > On Wed, Jun 15, 2022 at 11:17:38PM +0800, Zhi Song wrote:
-> >> device_register() is used to register a device with the system.
-> >> We need to call put_device() to give up the reference initialized
-> >> in device_register() when it returns an error and this will clean
-> >> up correctly.
+Dave Chinner <david@fromorbit.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=8821=E6=97=
+=A5=E5=91=A8=E4=BA=8C 12:35=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Tue, Jun 21, 2022 at 11:11:13AM +0800, Shida Zhang wrote:
+> > There are cases that xfs_mod_freecounter() will get called when delta
+> > equals 0 while it's unnecessary.
+>
+> AFAICT all of the call paths are guarded by checks to ensure the
+> delta is, in fact, not zero. i.e. if the delta is zero, we shouldn't
+> be calling xfs_mod_fdblocks() or xfs_mod_frextents() at all.
+>
+> Can you explain in more detail what code path leads to delta =3D 0
+> here?
+>
+> Cheers,
+>
+> Dave.
+> --
+> Dave Chinner
+> david@fromorbit.com
 
-> >> diff --git a/drivers/base/node.c b/drivers/base/node.c
-> >> index 0ac6376ef7a1..88a3337c546e 100644
-> >> --- a/drivers/base/node.c
-> >> +++ b/drivers/base/node.c
-> >> @@ -154,6 +154,7 @@ static struct node_access_nodes *node_init_node_access(struct node *node,
-> >> 	list_add_tail(&access_node->list_node, &node->access_list);
-> >> 	return access_node;
-> >> free_name:
-> >> +	put_device(dev);
-> >> 	kfree_const(dev->kobj.name);
-> > 
-> > That's a pretty obvious use-after-free you just added here. You can't
-> > access dev after you've just freed it.
-> > 
-> > The name is freed along with the rest of the struct device so you need
-> > to remove the second explicit free. And you should rename the label too.
-> > 
-> >> free:
-> >> 	kfree(access_node);
-> > 
-> > But here's another use after free... The put_device() call you added
-> > will have freed access_node by calling node_access_release().
+Yeah. I will give it in another v2 version patch.
 
-> put_device will free kobj.name at kobject_put => kref_put => 
-> kobject_release => kobject_cleanup => kfree_const(name) 
-> and free access_node at kobject_put => kref_put => kobject_release 
-> => kobject_cleanup => t->release(kobj).  (The value of t->release is 
-> device_release, it will invoke dev->release that is node_access_release)
-> 
-> If name is not set, kfree_const (name) won’t be invoked in kobject_cleanup.
+Cheers,
 
-Right.
-
-> If we fail to invoke dev_set_name or device_register, we just need 
-> to invoke put_device(dev) which will process free name, free access_node 
-> and other jobs.
-> 
-> Therefore, the proper code would be this: 
-> --- a/drivers/base/node.c
-> +++ b/drivers/base/node.c
-> @@ -144,20 +144,14 @@ static struct node_access_nodes *node_init_node_access(struct node *node,
->         dev->parent = &node->dev;
->         dev->release = node_access_release;
->         dev->groups = node_access_node_groups;
-> -       if (dev_set_name(dev, "access%u", access))
-> +       if (dev_set_name(dev, "access%u", access) && device_register(dev))
->                 goto free;
->  
-> -       if (device_register(dev))
-> -               goto free_name;
-> -
->         pm_runtime_no_callbacks(dev);
->         list_add_tail(&access_node->list_node, &node->access_list);
->         return access_node;
-> -free_name:
-> -       put_device(dev);
-> -       kfree_const(dev->kobj.name);
->  free:
-> -       kfree(access_node);
-> +       put_device(dev);
->         return NULL;
->  }
-> 
-> The only put_device is enough. Is it correct?
-
-I'm afraid not. You can only call put_device() after the struct device
-has been initialised by device_initialize(), which is done in
-device_register(), so you need to restructure the error handling
-somewhat.
-
-Johan
+Stephen.

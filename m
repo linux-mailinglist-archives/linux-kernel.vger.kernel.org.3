@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E670553057
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBF455305C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348981AbiFUK66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S235429AbiFULBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346528AbiFUK6x (ORCPT
+        with ESMTP id S1347085AbiFULBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:58:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82242981D;
-        Tue, 21 Jun 2022 03:58:51 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LS3ML2BchzSh03;
-        Tue, 21 Jun 2022 18:55:26 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 21 Jun 2022 18:58:49 +0800
-Subject: Re: [PATCH -next] evm: Use IS_ENABLED to initialize .enabled
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>, <zohar@linux.ibm.com>,
-        <dmitry.kasatkin@gmail.com>, <jmorris@namei.org>,
-        <serge@hallyn.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220606101042.89638-1-xiujianfeng@huawei.com>
- <64511312-df94-c40b-689c-5fc3823e91f5@pengutronix.de>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <812c4ee9-56f7-900a-df48-f3ca3e15542f@huawei.com>
-Date:   Tue, 21 Jun 2022 18:58:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Tue, 21 Jun 2022 07:01:00 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B666229823
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:00:58 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id g4so9343659lfv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YuiB2lEEMCk0w/w/b+ALLeZ6vsLYTAjuyX+rwIjOEXk=;
+        b=aqaw3+BMMU0j938NWoZbZ9UP6JuFL0AXN2pvwceLelhH1yoKvwXyL5EgVTxbpxmG/R
+         dJaah/AfgOMSCCDdDay6LYB+g2DIBrAXRsVD6wyNYMz2Qgn9rZSdUsSdmHAsm6f8+yVt
+         xoJLh5X56XJpSwV6KSW120800VS7yh/dEq5Lg5mzR9zek7I4hkavSCrRt16zo5E9tesf
+         CBD2UtOpTGjAU6jpobd4DH0BkziZWqNszjbJX7a+CMhhMig6iZnZboxy9aff3i5hyFey
+         /UDiMuL90ho1PdpiAjB5TEeZP0G+mf0yK/e+R5ukV90gvqYwxrTYAIMOVJ6stF8NfVSr
+         afBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YuiB2lEEMCk0w/w/b+ALLeZ6vsLYTAjuyX+rwIjOEXk=;
+        b=P9hlke3HcUAsl4mNbVB4+KlFF+Hmdk4Z+bfS5T2cOLHitY3hAc1+la8DiAzlBM4XxS
+         q398ePq4E3xLSF5BdK5N3Ct1GsvavSJ0RR1tYg2DGaXyMTTHRUOeQuRE5L+qi1nkhUD4
+         6kflwMVQHKrzXTngb75XqPzTCMDZEALYG/nhtbQshtkaGEqE1hXcqYC/mNR7iucw7IMO
+         T5SdXR1H5Lalvax338mlzWi+e9QU8Ywl8n7C9DXtvLvuvi5yZbtkT6F5K11iD51E84jr
+         3HP1a63VWiJ/t4OByo2+eZSVWb+Wp9Z05FgU05nJVPkUd3utfz5ZnXpygoKfMvi0Co1D
+         fHAA==
+X-Gm-Message-State: AJIora9oc9b4X30AC08Oka3B4UFvY68VN004/I0BxgfitJcb9shdOQYt
+        XIiNIA4tOI92qqfOGN+8R5sR0bPBlzzTecRnL8g=
+X-Google-Smtp-Source: AGRyM1vjPstPhMcfRgUwQXS8N/cl5cvZIXZ3mQrH7rDQ3i/dbq4zsOWG2nTOOO6P5X32unp502ZF7KykuNIxjSSVxyw=
+X-Received: by 2002:ac2:484d:0:b0:47f:7ebf:336 with SMTP id
+ 13-20020ac2484d000000b0047f7ebf0336mr1677240lfy.130.1655809256871; Tue, 21
+ Jun 2022 04:00:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <64511312-df94-c40b-689c-5fc3823e91f5@pengutronix.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <1653447164-15017-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <CAB8ipk9cAoP6yV_-Gn8bwbn5ezCZujLeMpioa0TiNU5=akBaug@mail.gmail.com>
+ <Yq+PMWlARgDhv8uL@pc638.lan> <CAGWkznHPdk_yqn2GWPDJaT32+4MnFLnRjdjBkaFv9BLMh4yM=g@mail.gmail.com>
+ <CA+KHdyXpdow7SYsbq_7F0zDd5-nYGi6db7R11R3--g3gUu-59w@mail.gmail.com>
+ <CAGWkznE5cFfdtmQ2j57goWtpfPGYPsd5Oi3pvb9vcfifodR9OQ@mail.gmail.com> <YrGO4cae/03r3PzP@pc638.lan>
+In-Reply-To: <YrGO4cae/03r3PzP@pc638.lan>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Tue, 21 Jun 2022 19:00:27 +0800
+Message-ID: <CAGWkznFdZ1_jrSWSOPkSDyLY1OSodZBy6MTfdwPKo3VoW67GBg@mail.gmail.com>
+Subject: Re: [PATCH] mm: fix racing of vb->va when kasan enabled
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,89 +73,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ahmad
-
-在 2022/6/7 14:06, Ahmad Fatoum 写道:
-> On 06.06.22 12:10, Xiu Jianfeng wrote:
->> Use IS_ENABLED(CONFIG_XXX) instead of #ifdef/#endif statements to
->> initialize .enabled, minor simplicity improvement.
->>
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-thank you for the review, and I'm not sure if this patch has been 
-picked, so frendly ping here...
->> ---
->>   security/integrity/evm/evm_main.c | 52 ++++++++++++++-----------------
->>   1 file changed, 23 insertions(+), 29 deletions(-)
->>
->> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
->> index cc88f02c7562..397fea5b3fa6 100644
->> --- a/security/integrity/evm/evm_main.c
->> +++ b/security/integrity/evm/evm_main.c
->> @@ -36,42 +36,36 @@ static const char * const integrity_status_msg[] = {
->>   int evm_hmac_attrs;
->>   
->>   static struct xattr_list evm_config_default_xattrnames[] = {
->> -	{.name = XATTR_NAME_SELINUX,
->> -#ifdef CONFIG_SECURITY_SELINUX
->> -	 .enabled = true
->> -#endif
->> +	{
->> +	 .name = XATTR_NAME_SELINUX,
->> +	 .enabled = IS_ENABLED(CONFIG_SECURITY_SELINUX)
->>   	},
->> -	{.name = XATTR_NAME_SMACK,
->> -#ifdef CONFIG_SECURITY_SMACK
->> -	 .enabled = true
->> -#endif
->> +	{
->> +	 .name = XATTR_NAME_SMACK,
->> +	 .enabled = IS_ENABLED(CONFIG_SECURITY_SMACK)
->>   	},
->> -	{.name = XATTR_NAME_SMACKEXEC,
->> -#ifdef CONFIG_EVM_EXTRA_SMACK_XATTRS
->> -	 .enabled = true
->> -#endif
->> +	{
->> +	 .name = XATTR_NAME_SMACKEXEC,
->> +	 .enabled = IS_ENABLED(CONFIG_EVM_EXTRA_SMACK_XATTRS)
->>   	},
->> -	{.name = XATTR_NAME_SMACKTRANSMUTE,
->> -#ifdef CONFIG_EVM_EXTRA_SMACK_XATTRS
->> -	 .enabled = true
->> -#endif
->> +	{
->> +	 .name = XATTR_NAME_SMACKTRANSMUTE,
->> +	 .enabled = IS_ENABLED(CONFIG_EVM_EXTRA_SMACK_XATTRS)
->>   	},
->> -	{.name = XATTR_NAME_SMACKMMAP,
->> -#ifdef CONFIG_EVM_EXTRA_SMACK_XATTRS
->> -	 .enabled = true
->> -#endif
->> +	{
->> +	 .name = XATTR_NAME_SMACKMMAP,
->> +	 .enabled = IS_ENABLED(CONFIG_EVM_EXTRA_SMACK_XATTRS)
->>   	},
->> -	{.name = XATTR_NAME_APPARMOR,
->> -#ifdef CONFIG_SECURITY_APPARMOR
->> -	 .enabled = true
->> -#endif
->> +	{
->> +	 .name = XATTR_NAME_APPARMOR,
->> +	 .enabled = IS_ENABLED(CONFIG_SECURITY_APPARMOR)
->>   	},
->> -	{.name = XATTR_NAME_IMA,
->> -#ifdef CONFIG_IMA_APPRAISE
->> -	 .enabled = true
->> -#endif
->> +	{
->> +	 .name = XATTR_NAME_IMA,
->> +	 .enabled = IS_ENABLED(CONFIG_IMA_APPRAISE)
->>   	},
->> -	{.name = XATTR_NAME_CAPS,
->> +	{
->> +	 .name = XATTR_NAME_CAPS,
->>   	 .enabled = true
->>   	},
->>   };
+On Tue, Jun 21, 2022 at 5:27 PM Uladzislau Rezki <urezki@gmail.com> wrote:
 >
+> > On Mon, Jun 20, 2022 at 6:44 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > >
+> > > > > >
+> > > > > Is it easy to reproduce? If so could you please describe the steps? As i see
+> > > > > the freeing of the "vb" is RCU safe whereas vb->va is not. But from the first
+> > > > > glance i do not see how it can accessed twice. Hm..
+> > > > It was raised from a monkey test on A13_k515 system and got 1/20 pcs
+> > > > failed. IMO, vb->va which out of vmap_purge_lock protection could race
+> > > > with a concurrent ra freeing within __purge_vmap_area_lazy.
+> > > >
+> > > Do you have exact steps how you run "monkey" test?
+> > There are about 30+ kos inserted during startup which could be a
+> > specific criteria for reproduction. Do you have doubts about the test
+> > result or the solution?
+> > >
+> I do not have any doubt about your test results, so if you can trigger it
+> then there is an issue at least on the 5.4.161-android12 kernel.
+>
+> 1. With your fix we get expanded mutex range, thus the worst case of vmalloc
+> allocation can be increased when it fails and repeat. Because it also invokes
+> the purge_vmap_area_lazy() that access the same mutex.
+I am not sure I get your point. _vm_unmap_aliases calls
+_purge_vmap_area_lazy instead of purge_vmap_area_lazy. Do you have any
+other solutions? I really don't think my patch is the best way as I
+don't have a full view of vmalloc mechanism.
+>
+> 2. You run 5.4.161-android12 kernel what is quite old. Could you please
+> retest with latest kernel? I am asking because on the latest kernel with
+> CONFIG_KASAN i am not able to reproduce it.
+>
+> I do a lot of: vm_map_ram()/vm_unmap_ram()/vmalloc()/vfree() in parallel
+> by 64 kthreads on my 64 CPUs test system.
+The failure generates at 20s from starting up, I think it is a rare timing.
+>
+> Could you please confirm that you can trigger an issue on the latest kernel?
+Sorry, I don't have an available latest kernel for now.
+>
+> Thanks!
+>
+> --
+> Uladzislau Rezki

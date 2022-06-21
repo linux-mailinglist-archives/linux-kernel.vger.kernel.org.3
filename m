@@ -2,67 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88252553472
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B1055347A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351500AbiFUOYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
+        id S1351556AbiFUO3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349421AbiFUOYb (ORCPT
+        with ESMTP id S230038AbiFUO3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:24:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932A18E25;
-        Tue, 21 Jun 2022 07:24:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB49EB81821;
-        Tue, 21 Jun 2022 14:24:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22398C341C7;
-        Tue, 21 Jun 2022 14:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655821467;
-        bh=350SJzImgIdaQO22/bjHSMxrvFtKkYmGp2AdM9fujMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xxCobeWV9PFpl1ZnS9rM84etHQCLfr61o3fPRFUyc8MvOdlikTDRjxIEwitXu/AHr
-         T87HxR5UfXRfbZWidBvNqqDt8LFrpzy+PwrGo8QBshRqBVanJ+ykcqKtUkTQCjGRcI
-         EaC8VOHo78caHZARBfV27O9sJNshdS1vPjQ1XMTM=
-Date:   Tue, 21 Jun 2022 16:24:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     hminas@synopsys.com, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 3/3] usb: dwc2: host: add TPL support
-Message-ID: <YrHUmIpydvNYeRou@kroah.com>
-References: <20220621130506.85424-1-fabrice.gasnier@foss.st.com>
- <20220621130506.85424-4-fabrice.gasnier@foss.st.com>
+        Tue, 21 Jun 2022 10:29:09 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8AA262D9;
+        Tue, 21 Jun 2022 07:29:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=dD98V
+        ez2aD21iNFpk0tg6AZ8kngi+2AB0UFxeAgDYzA=; b=EPnbdMYvAKUIAIkqAogV7
+        koFPnM4fK9Ghtb9Wd2rUtZ9UIZDyKCaq3M1bnyZbqe0hyTyXeKEbkXIsLzgxWGNe
+        M8eHqj7vpnwmlZdFWA6MqqS/DFWMNhQtPmEEBtMsYgj0zFB27Kx/rHOCwiGDoAaM
+        yqa5QJ+1wK6WAYqCx9fJR0=
+Received: from [10.20.42.77] (unknown [114.242.206.180])
+        by smtp1 (Coremail) with SMTP id GdxpCgCHjcWo1bFiVHd1KQ--.4781S2;
+        Tue, 21 Jun 2022 22:28:57 +0800 (CST)
+Subject: Re: [PATCH 1/2] ext4: page-io: use 'unsigned int' to bare use of
+ 'unsigned'
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220518120137.2544-1-liupeibao@163.com>
+ <YqtDEfJd5uUxucaS@mit.edu> <c19b8c8f-7c0f-33e6-3f2c-3425dee7fa8d@163.com>
+ <Yq9obvFIv8LjAAvg@mit.edu>
+From:   Liu Peibao <liupeibao@163.com>
+Message-ID: <902000f3-7d9b-3115-0864-3ffa0f87d4d4@163.com>
+Date:   Tue, 21 Jun 2022 22:28:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621130506.85424-4-fabrice.gasnier@foss.st.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yq9obvFIv8LjAAvg@mit.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GdxpCgCHjcWo1bFiVHd1KQ--.4781S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw4Utw4fZF18ZFWxAw18Zrb_yoW8Cr1xpr
+        WfZws8KFs8G3yxAr97XwsxJFWrAw4Fkas8JF18JFy5AF1DXF12grZYkF45uryUCrsIg3Wa
+        ga98Z39a9F1qvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UCzuZUUUUU=
+X-Originating-IP: [114.242.206.180]
+X-CM-SenderInfo: xolx1vpled0qqrwthudrp/1tbiEwknbGE15DBCuAAAsr
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 03:05:06PM +0200, Fabrice Gasnier wrote:
-> From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+On 6/20/22 2:18 AM, Theodore Ts'o wrote:
+> On Sun, Jun 19, 2022 at 11:21:27AM +0800, Liu Peibao wrote:
+>>
+>> Thanks for your reply. What I want do to is rename some temporary variables
+>> in the patch2 and when I make the patch, there are the checkpatch warnings.
+>>  From the point of view "one patch do one thing", I split the modification
+>> into two patches. Thanks!
 > 
-> The TPL support is used to identify targeted devices during EH compliance
-> test. The user can add "tpl-support" in the device tree to enable it.
+> I didn't really see the poiont of renaming the temporary variables,
+> either.
+> 
+> In this particular case basically only used to avoid line lengths from
+> exceeding ~72 characters, and requiring a line wrap, and bio_start and
+> bio_end is used only in one place in the code block below.
+> 
+> Is it _really_ all that confusing whether they are named
+> bio_{start,end} instead of bvec_{start,end}?
+> 
+> If I was writing that code from scratch, I might have just used start
+> and end without any prefixes.  And as far as "only have a patch do one
+> thing at a time", this doesn't apply to checkpatch fixes.
+> 
+> The basic motivation behind "no checkpatch-only fixes" is that it
+> tends to introduce code churn which makes interpreting information
+> from "git blame" more difficult; and so therefore the costs exceed the
+> extremely marginal benefits of fixing most checkpatch complaints.  So
+> making a _patch_ be checkpatch clean, whether it's modifying existing
+> code or writing new code, is fine, since you're making a subtantive
+> change to the code, so this is as good a time as any to fix up tiny
+> nits such as checkpatch complaints.
+> 
+> But the idea behind "no unnecessary code churn since it ruins git
+> blame and could potentially induce future patch conflicts" also
+> applies to renaming variables.  The benefits are very minor, and they
+> don't outweigh the costs.
+> 
+> 						- Ted
+> 
 
-Is that already documented in the proper bindings somewhere?
+Got it! Thanks for your detailed and comprehensive explanation!
 
-thanks,
+Best Regards,
+Peibao
 
-greg k-h

@@ -2,115 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEF9552F5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B3E552F60
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiFUKCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S231348AbiFUKCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiFUKCD (ORCPT
+        with ESMTP id S230145AbiFUKCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:02:03 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78911275D7;
-        Tue, 21 Jun 2022 03:02:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CebAnGs2I4e+XopgqgMPynRsVklLyL9H2XvsgpMCH3A=; b=1XHoW/tBFaJiaNKU4sevkeQHAT
-        wzUfAxdFftsUy5g5L9/JF4dxs7GL+VOQbvh9kbNbOhX+4Z0Dk6MK1XuRFVV1Uc0nCTbXndIkQJc/V
-        fwbyHU2KTxvyHKNGA6gBBeuO/455fTuUXYM0dFbEg37zaZG+VPpP0SeJqJzdnrOQTlpbRRBOoeaYA
-        up/T//k0ritMvyTsQS6847SkS55N2B0Yi/8FucBKE+t4PaP6z2/awQDssBq7Mb7g/DRmvLmZ4y6By
-        WWSgQ9hM3rgxBf1g95BU/wLA2wFBAsd+pJb2t6V6Fh5HJnn9mr0xVhiiVqxFEFhhmMrzguYTPIPpo
-        TNbTmF3Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32960)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o3ahq-0002AF-2D; Tue, 21 Jun 2022 11:01:57 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o3ahl-0005w5-HX; Tue, 21 Jun 2022 11:01:53 +0100
-Date:   Tue, 21 Jun 2022 11:01:53 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Subject: Re: [net-next: PATCH 01/12] net: phy: fixed_phy: switch to fwnode_
- API
-Message-ID: <YrGXEReoc3qweU1S@shell.armlinux.org.uk>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-2-mw@semihalf.com>
- <YrC1gEf4HpRp5zkh@lunn.ch>
- <CAPv3WKe3vBJ9r=6tMEtPj-3c0E3MBpW4Csf8zjS0jG03C35ycg@mail.gmail.com>
+        Tue, 21 Jun 2022 06:02:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C29275D7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:02:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 06D5521E86;
+        Tue, 21 Jun 2022 10:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655805736; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sgRdR+LJUBINnIjh6fDihXSa04mLB4E/ODfp6IXWam0=;
+        b=uEu5XmuakP9bDXcrCcbs6s011cx+cN7J1WamgKwJ0sgwMFNSRA6NfFMuFfqqL4FCWSEuqi
+        9Y6Mlj8P8gwqazlSALZnoruYBRAW2AyqeGKOk9HoXwEDjSp5Zlhv7+0D/3U56nmXrf/TtY
+        oo+afa2gpzqs6RLif4Y8vQ9wOxsOKE8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655805736;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sgRdR+LJUBINnIjh6fDihXSa04mLB4E/ODfp6IXWam0=;
+        b=lIjVYP1qOvlou9tNgSfxjDKIz0jD1rD6mMZKC5VYH2lwH1d5wafRjDqVTErksAymzif5FY
+        elDxGmeN5rysDTCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B80DA13638;
+        Tue, 21 Jun 2022 10:02:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WJ0CLCeXsWIcOwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 21 Jun 2022 10:02:15 +0000
+Message-ID: <045f480b-9f47-6f10-9e5d-4436335b272e@suse.de>
+Date:   Tue, 21 Jun 2022 12:02:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPv3WKe3vBJ9r=6tMEtPj-3c0E3MBpW4Csf8zjS0jG03C35ycg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 1/3] drm/rect: Add DRM_RECT_INIT() macro
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, magalilemes00@gmail.com,
+        David Airlie <airlied@linux.ie>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
+        Daniel Latypov <dlatypov@google.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jani Nikula <jani.nikula@intel.com>, tales.aparecida@gmail.com,
+        Isabella Basso <isabbasso@riseup.net>,
+        KUnit Development <kunit-dev@googlegroups.com>
+References: <20220620160640.3790-1-jose.exposito89@gmail.com>
+ <20220620160640.3790-2-jose.exposito89@gmail.com>
+ <CABVgOSmPfxdcxuU6xtuT2sN75ivs+Atgmt=2PNcdWqnMcrnbEQ@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CABVgOSmPfxdcxuU6xtuT2sN75ivs+Atgmt=2PNcdWqnMcrnbEQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------WykebgcvF10Ma6kvJgv0yieD"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 11:56:06AM +0200, Marcin Wojtas wrote:
-> pon., 20 cze 2022 o 19:59 Andrew Lunn <andrew@lunn.ch> napisał(a):
-> >
-> > On Mon, Jun 20, 2022 at 05:02:14PM +0200, Marcin Wojtas wrote:
-> > > This patch allows to use fixed_phy driver and its helper
-> > > functions without Device Tree dependency, by swtiching from
-> > > of_ to fwnode_ API.
-> >
-> > Do you actually need this? phylink does not use this code, it has its
-> > own fixed link implementation. And that implementation is not limited
-> > to 1G.
-> >
-> 
-> Yes, phylink has its own fixed-link handling, however the
-> net/dsa/port.c relies on fixed_phy helpers these are not 1:1
-> equivalents. I assumed this migration (fixed_phy -> phylink) is not
-> straightforward and IMO should be handled separately. Do you recall
-> justification for not using phylink in this part of net/dsa/*?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------WykebgcvF10Ma6kvJgv0yieD
+Content-Type: multipart/mixed; boundary="------------mV5QSMDza2LYMWzA2yt0rZny";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Gow <davidgow@google.com>, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?=
+ <jose.exposito89@gmail.com>
+Cc: dri-devel@lists.freedesktop.org, magalilemes00@gmail.com,
+ David Airlie <airlied@linux.ie>, =?UTF-8?Q?Ma=c3=adra_Canal?=
+ <maira.canal@usp.br>, Daniel Latypov <dlatypov@google.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Jani Nikula <jani.nikula@intel.com>, tales.aparecida@gmail.com,
+ Isabella Basso <isabbasso@riseup.net>,
+ KUnit Development <kunit-dev@googlegroups.com>
+Message-ID: <045f480b-9f47-6f10-9e5d-4436335b272e@suse.de>
+Subject: Re: [PATCH v4 1/3] drm/rect: Add DRM_RECT_INIT() macro
+References: <20220620160640.3790-1-jose.exposito89@gmail.com>
+ <20220620160640.3790-2-jose.exposito89@gmail.com>
+ <CABVgOSmPfxdcxuU6xtuT2sN75ivs+Atgmt=2PNcdWqnMcrnbEQ@mail.gmail.com>
+In-Reply-To: <CABVgOSmPfxdcxuU6xtuT2sN75ivs+Atgmt=2PNcdWqnMcrnbEQ@mail.gmail.com>
 
-All modern DSA drivers use phylink and not fixed-phy as far as I'm
-aware - there are a number that still implement the .adjust_link
-callback, but note in dsa_port_link_register_of():
+--------------mV5QSMDza2LYMWzA2yt0rZny
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-        if (!ds->ops->adjust_link) {
-	...
-		return 0;
-	}
+SGkNCg0KQW0gMjEuMDYuMjIgdW0gMTE6Mzggc2NocmllYiBEYXZpZCBHb3c6DQo+IE9uIFR1
+ZSwgSnVuIDIxLCAyMDIyIGF0IDEyOjA2IEFNIEpvc8OpIEV4cMOzc2l0bw0KPiA8am9zZS5l
+eHBvc2l0bzg5QGdtYWlsLmNvbT4gd3JvdGU6DQo+Pg0KPj4gQWRkIGEgaGVscGVyIG1hY3Jv
+IHRvIGluaXRpYWxpemUgYSByZWN0YW5nbGUgZnJvbSB4LCB5LCB3aWR0aCBhbmQNCj4+IGhl
+aWdodCBpbmZvcm1hdGlvbi4NCj4+DQo+PiBSZXZpZXdlZC1ieTogSmFuaSBOaWt1bGEgPGph
+bmkubmlrdWxhQGludGVsLmNvbT4NCj4+IEFja2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8
+dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4+IFNpZ25lZC1vZmYtYnk6IEpvc8OpIEV4cMOzc2l0
+byA8am9zZS5leHBvc2l0bzg5QGdtYWlsLmNvbT4NCj4+IC0tLQ0KPiANCj4gVGhpcyBsb29r
+cyBnb29kIHRvIG1lLCB0aG91Z2ggSSBoYXZlIG9uZSBtaW5vciBjb25jZXJuIGFib3V0IHRo
+ZSBtYWNybw0KPiBuYW1lLiAoQnV0IGlmIGl0J3Mgb2theSB3aXRoIHRoZSBEUk0gZm9sa3Ms
+IHdoaWNoIGl0IHNlZW1zIHRvIGJlLCBJDQo+IHdvbid0IG9iamVjdC4pDQo+IA0KPiBFaXRo
+ZXIgd2F5LA0KPiBSZXZpZXdlZC1ieTogRGF2aWQgR293IDxkYXZpZGdvd0Bnb29nbGUuY29t
+Pg0KPiANCj4+ICAgaW5jbHVkZS9kcm0vZHJtX3JlY3QuaCB8IDE2ICsrKysrKysrKysrKysr
+KysNCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKykNCj4+DQo+PiBkaWZm
+IC0tZ2l0IGEvaW5jbHVkZS9kcm0vZHJtX3JlY3QuaCBiL2luY2x1ZGUvZHJtL2RybV9yZWN0
+LmgNCj4+IGluZGV4IDZmNmUxOWJkNGRhYy4uZThkOTRmY2EyNzAzIDEwMDY0NA0KPj4gLS0t
+IGEvaW5jbHVkZS9kcm0vZHJtX3JlY3QuaA0KPj4gKysrIGIvaW5jbHVkZS9kcm0vZHJtX3Jl
+Y3QuaA0KPj4gQEAgLTQ3LDYgKzQ3LDIyIEBAIHN0cnVjdCBkcm1fcmVjdCB7DQo+PiAgICAg
+ICAgICBpbnQgeDEsIHkxLCB4MiwgeTI7DQo+PiAgIH07DQo+Pg0KPj4gKy8qKg0KPj4gKyAq
+IERSTV9SRUNUX0lOSVQgLSBpbml0aWFsaXplIGEgcmVjdGFuZ2xlIGZyb20geC95L3cvaA0K
+Pj4gKyAqIEB4OiB4IGNvb3JkaW5hdGUNCj4+ICsgKiBAeTogeSBjb29yZGluYXRlDQo+PiAr
+ICogQHc6IHdpZHRoDQo+PiArICogQGg6IGhlaWdodA0KPj4gKyAqDQo+PiArICogUkVUVVJO
+UzoNCj4+ICsgKiBBIG5ldyByZWN0YW5nbGUgb2YgdGhlIHNwZWNpZmllZCBzaXplLg0KPj4g
+KyAqLw0KPj4gKyNkZWZpbmUgRFJNX1JFQ1RfSU5JVCh4LCB5LCB3LCBoKSAoKHN0cnVjdCBk
+cm1fcmVjdCl7IFwNCj4+ICsgICAgICAgICAgICAgICAueDEgPSAoeCksIFwNCj4+ICsgICAg
+ICAgICAgICAgICAueTEgPSAoeSksIFwNCj4+ICsgICAgICAgICAgICAgICAueDIgPSAoeCkg
+KyAodyksIFwNCj4+ICsgICAgICAgICAgICAgICAueTIgPSAoeSkgKyAoaCkgfSkNCj4+ICsN
+Cj4gDQo+IE15IG9ubHkgc2xpZ2h0IGNvbmNlcm4gaGVyZSBpcyB0aGF0IGl0IG1pZ2h0IGJl
+IGEgbGl0dGxlIGJpdCBjb25mdXNpbmcNCj4gdGhhdCBhIG1hY3JvIGNhbGxlZCBEUk1fUkVD
+VF9JTklUKCkgYWNjZXB0cyB4L3kvdy9oLCB3aGVyZWFzIHRoZQ0KPiBhY3R1YWwgc3RydWN0
+IGRybV9yZWN0IGlzIHgxL3kxL3gyL3kyLiBJZiB0aGUgbWFjcm8gd2VyZSBjYWxsZWQNCj4g
+c29tZXRoaW5nIGxpa2UgRFJNX1JFQ1RfSU5JVF9GUk9NX1hZV0goKSBvciBzaW1pbGFyLg0K
+DQpUaGUgZXhpc3RpbmcgZHJtX3JlY3RfaW5pdCgpIGZ1bmN0aW9uIHVzZXMgeHl3aCBhcmd1
+bWVudHMuIFNvIHRoZSANCmN1cnJlbnQgbmFtZSBpcyBjb25zaXN0ZW50IHdpdGggZXhpc3Rp
+bmcgcHJhY3RpY2UuIEkgZG9uJ3QgdGhpbmsgd2UgDQpyZWZlciB0byB4Mix5MiBtdWNoLCBp
+ZiBldmVyLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiANCj4+ICAgLyoqDQo+
+PiAgICAqIERSTV9SRUNUX0ZNVCAtIHByaW50ZiBzdHJpbmcgZm9yICZzdHJ1Y3QgZHJtX3Jl
+Y3QNCj4+ICAgICovDQo+PiAtLQ0KPj4gMi4yNS4xDQo+Pg0KDQotLSANClRob21hcyBaaW1t
+ZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0
+aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2Vy
+bWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2
+byBUb3Rldg0K
 
-	dev_warn(ds->dev,
-		 "Using legacy PHYLIB callbacks. Please migrate to PHYLINK!\n");
+--------------mV5QSMDza2LYMWzA2yt0rZny--
 
-It's really just that they haven't been migrated.
+--------------WykebgcvF10Ma6kvJgv0yieD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKxlyYFAwAAAAAACgkQlh/E3EQov+BB
+hA//Z2+5TeqbVms+t8s0pvSMgY+grT9f139Z0ZAZ3c4y9qpp4Czbh7P2PMABA+9TpjsV3zXWS2ni
+FYpjAUJaVo7tKa+d8hwyhCN76Euh0eDQvFZKcUg+5JXEIoLfEoF57guONKZBOqhlJY9g+6ZjuVDw
+7j7kScDewUzt7mwuT6kff8qag9kY9jYujElyO0ZN/qA+Av90+nD0hB48QORNOVd7IO5D1LrxcELv
+Fjq3iHF85qSmJfQfFTLIizFgHdDGknk+ffESHZC4YbgKUjH5mqMLV3PmwZKOJx/FmopD79DmbblU
+iXcfg0KJ3x7nCX4ytWhsN70WpX29H0kqOLLxGM4p6hvV61nfMAr0BgNxyfxw3eqI4Hht4iBV+Cv6
+yy7OpqIoKjP4TAdNeEFBBOeN4rbeodVQpRCOGbAhyJIfUFCDxKtqb0JlyrDUGNBK4y1gxCwZKapr
+VB5P2bQaVU9yOwfjExFOs4Jp9dAPZS2X0B3JLUyvPqrn0QU8JV7SLyKldJWu7Or/bXIiY/s1XE6r
+mMnw06Jk4GHSzVZ32TKV5az2kmypoE0i1NJ50vJxPjhpGPBPAXMoJdJVSIS8SB3NjODajKk+T5KP
+n9x4l0I7JtRSYuu6Y82J5MxSyO5B7Ihjy68jt8EhMIsyOTvK5oABsTNgdgfDXX63l4QG1YLN9Zcg
+bEU=
+=Rs2f
+-----END PGP SIGNATURE-----
+
+--------------WykebgcvF10Ma6kvJgv0yieD--

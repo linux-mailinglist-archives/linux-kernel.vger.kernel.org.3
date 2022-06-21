@@ -2,116 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0424F55357E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FF35535A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352298AbiFUPKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S1352523AbiFUPOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352432AbiFUPK1 (ORCPT
+        with ESMTP id S1352770AbiFUPNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:10:27 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343A62980C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:10:24 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id 199-20020a6b01d0000000b00669bf42cd4cso7767546iob.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:10:24 -0700 (PDT)
+        Tue, 21 Jun 2022 11:13:38 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527552CDFA;
+        Tue, 21 Jun 2022 08:12:31 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id z11so13653656edp.9;
+        Tue, 21 Jun 2022 08:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LU/OkmDAL+vY/i1/LTdgZ8fR3Suk3NR9q9oRePr0Tbg=;
+        b=K4y0cJ8ttDzz/9xM67cbuUDZf7b81dbH6VmKSWMXgWKDMc5ZtvCa7PJGPxeMeY9Br+
+         eLDLhVgDRoWLqg1+tw2JqOUAPLAxFgb+jKudFlh+KflFmZQWn2UMwriCJUjI7yhmvmq9
+         dPyr4Xga14qlMWcUG6Sspzj7EBscefmbnzUvdIC/wWiJXDaX1aKFgFZSYQrPwNC5f9Nw
+         5PLnxNV+SEsnrOUVWWDNj1cRE/IWgyUJ3Gzjjqbj7mXe2FAup2/Y2lfISzgU88IIpxfT
+         BoKHrt824YPyKPfexhkncfa6LRqhtmvcwsSmPooUh3xqbo0H4Hvvxmva3buAC5CHi3SG
+         BJgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=orJv/QF6/hQyCVCkoKcPGnTko1ommFIuCUIXzQv7jwI=;
-        b=o0EjqohNBH2uYuANd+A9t6Uf5p6MsNY+BhadMBz9kSOYEs77jToGhKRGPYzu0qrpmZ
-         wbVn7NVCnAuAqZkTFjQPyBZa/xSOeLAAKHFCj0RGSWzCHGgLNx7h+8WotylCcSvUo/eU
-         09PZy/+5q64OoueOMuYVGD6W0i6Ljup44IiuLy4tEpSph2HUY6Cnhis192xhUYn84wze
-         rEl4nBnkEgdJQMqfxfQiuqJFaGC5DAJE141AQheqDFQ/qn6PncCZaRiD0J2hY1YOqSbG
-         iVHTSVWMPTAQIU06G5s6tLY5Kjkxn2omw8pK35+iZnJeV0koJSxQOrCMJXrD7jQ7SO0y
-         7IOg==
-X-Gm-Message-State: AJIora8ZoB/DCMQRUFKCnR41zyNWZSiLS5UkKq+JuvDOd+UrAqpgJRfF
-        Z0w8SkjCoxedNP+j23fKYQcazXLhymH6KmC0gKx0CGHc2Jom
-X-Google-Smtp-Source: AGRyM1uQePVfTEOaeMTn3UjYHAfWksYYYP9NNjLMDbV9XXmg8SbP7RQv1ctWcAVbgaMBbfkmJYBmZfY0sUmZ9N6xFYOzCpoj0C5G
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LU/OkmDAL+vY/i1/LTdgZ8fR3Suk3NR9q9oRePr0Tbg=;
+        b=ctt8M6cSeY+vly5WJhw88WU8VlfE3uZH3NcP3FLJ6nzfWouzwMLTMcnMXPRcGeJOMa
+         RbcNJIgu1Ss8YpTSD99Gr5/ZdAi3Gyir+PZBiJI76YLBadwRlmeR2b9LVRh9aNqGBXk3
+         BOulw1XPaz5pGNGlmcwtaVBBUcpqEPLk0mkhGR38hZUb6536pfs5WMidW8JZLkDH8PqW
+         L6Hhg19hcrNyWJH0OQefKri7Bto6D8kb+VeqZ2WHPy1MOqx59Jwvh3GEWJX2uSZLDXqx
+         WQReWzzt93pvC/1Oae5v2TMv1jZTLRexiLffpLf2Og2RpNHCS7HC7OOx12Rj35mrqstU
+         Wh8A==
+X-Gm-Message-State: AJIora/Oc5QFMg3RaO5E40d2z5xRDIc7dDb9hnGXUmnDaTnZi8h1/Bg0
+        Qc98nEt+3h5+Q7Dn6CAf3iU=
+X-Google-Smtp-Source: AGRyM1ujwkeb9wGg4k+jngzeJaKTh4TUZEbqd1al5yboqQIniK7hzUuvDLzXS5hhEJh6BA5VqxF1Hw==
+X-Received: by 2002:aa7:dbd7:0:b0:433:55a6:e3c4 with SMTP id v23-20020aa7dbd7000000b0043355a6e3c4mr36980333edt.74.1655824349229;
+        Tue, 21 Jun 2022 08:12:29 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id ky20-20020a170907779400b006f4cb79d9a8sm7835731ejc.75.2022.06.21.08.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 08:12:28 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan McDowell <noodles@earth.li>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH net v2] net: dsa: qca8k: reset cpu port on MTU change
+Date:   Tue, 21 Jun 2022 17:11:22 +0200
+Message-Id: <20220621151122.10220-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c86:b0:2d9:333f:5b9d with SMTP id
- w6-20020a056e021c8600b002d9333f5b9dmr1266033ill.36.1655824223607; Tue, 21 Jun
- 2022 08:10:23 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 08:10:23 -0700
-In-Reply-To: <0000000000003189f305e19f5d3e@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a8a4a905e1f69ec4@google.com>
-Subject: Re: [syzbot] KASAN: null-ptr-deref Read in hugepage_vma_check
-From:   syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, shy828301@gmail.com,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+It was discovered that the Documentation lacks of a fundamental detail
+on how to correctly change the MAX_FRAME_SIZE of the switch.
 
-HEAD commit:    34d1d36073ea Add linux-next specific files for 20220621
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15a34140080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b24b62d1c051cfc8
-dashboard link: https://syzkaller.appspot.com/bug?extid=4d875b4d2e2b60bae9b4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14097a3ff00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1466c63ff00000
+In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
+switch panics and cease to send any packet. This cause the mgmt ethernet
+system to not receive any packet (the slow fallback still works) and
+makes the device not reachable. To recover from this a switch reset is
+required.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com
+To correctly handle this, turn off the cpu ports before changing the
+MAX_FRAME_SIZE and turn on again after the value is applied.
 
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-BUG: KASAN: null-ptr-deref in hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
-Read of size 8 at addr 00000000000005a8 by task syz-executor405/3606
+Fixes: f58d2598cf70 ("net: dsa: qca8k: implement the port MTU callbacks")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+v2:
+- Split from original series sent to net-next and rebased
+- Added the stable cc tag
 
-CPU: 0 PID: 3606 Comm: syz-executor405 Not tainted 5.19.0-rc3-next-20220621-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
- hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
- show_smap+0x1c6/0x470 fs/proc/task_mmu.c:866
- traverse.part.0+0xcf/0x5f0 fs/seq_file.c:111
- traverse fs/seq_file.c:101 [inline]
- seq_read_iter+0x90f/0x1280 fs/seq_file.c:195
- seq_read+0x337/0x4b0 fs/seq_file.c:162
- do_loop_readv_writev fs/read_write.c:763 [inline]
- do_loop_readv_writev fs/read_write.c:750 [inline]
- do_iter_read+0x4f8/0x750 fs/read_write.c:805
- vfs_readv+0xe5/0x150 fs/read_write.c:923
- do_preadv fs/read_write.c:1015 [inline]
- __do_sys_preadv fs/read_write.c:1065 [inline]
- __se_sys_preadv fs/read_write.c:1060 [inline]
- __x64_sys_preadv+0x22b/0x310 fs/read_write.c:1060
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fcb44a75239
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffedce269f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fcb44a75239
-RDX: 0000000000000001 RSI: 00000000200006c0 RDI: 0000000000000003
-RBP: 00007ffedce26a00 R08: 0000000000000000 R09: 65732f636f72702f
-R10: 00000000fffffffe R11: 0000000000000246 R12: 00007fcb44a39120
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-==================================================================
+ drivers/net/dsa/qca8k.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+index 2727d3169c25..1cbb05b0323f 100644
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -2334,6 +2334,7 @@ static int
+ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+ {
+ 	struct qca8k_priv *priv = ds->priv;
++	int ret;
+ 
+ 	/* We have only have a general MTU setting.
+ 	 * DSA always set the CPU port's MTU to the largest MTU of the slave
+@@ -2344,8 +2345,27 @@ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+ 	if (!dsa_is_cpu_port(ds, port))
+ 		return 0;
+ 
++	/* To change the MAX_FRAME_SIZE the cpu ports must be off or
++	 * the switch panics.
++	 * Turn off both cpu ports before applying the new value to prevent
++	 * this.
++	 */
++	if (priv->port_enabled_map & BIT(0))
++		qca8k_port_set_status(priv, 0, 0);
++
++	if (priv->port_enabled_map & BIT(6))
++		qca8k_port_set_status(priv, 6, 0);
++
+ 	/* Include L2 header / FCS length */
+-	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, new_mtu + ETH_HLEN + ETH_FCS_LEN);
++	ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, new_mtu + ETH_HLEN + ETH_FCS_LEN);
++
++	if (priv->port_enabled_map & BIT(0))
++		qca8k_port_set_status(priv, 0, 1);
++
++	if (priv->port_enabled_map & BIT(6))
++		qca8k_port_set_status(priv, 6, 1);
++
++	return ret;
+ }
+ 
+ static int
+-- 
+2.36.1
 

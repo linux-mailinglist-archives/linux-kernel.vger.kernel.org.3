@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA72552DD2
+	by mail.lfdr.de (Postfix) with ESMTP id C6834552DD3
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348465AbiFUJEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
+        id S1348637AbiFUJEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348548AbiFUJEi (ORCPT
+        with ESMTP id S1348491AbiFUJEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:04:38 -0400
+        Tue, 21 Jun 2022 05:04:41 -0400
 Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A856186D0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:04:37 -0700 (PDT)
-Received: by mail-wm1-x349.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so6101599wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:04:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44E61A813
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:04:39 -0700 (PDT)
+Received: by mail-wm1-x349.google.com with SMTP id 206-20020a1c02d7000000b0039c9a08c52bso4053489wmc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=MIz7mf9O+yDJg4rZecZM10jb/99QC/Kv+YtCD3EQfrA=;
-        b=NrUeQOoS9ADwqZ/phm7tK20C/K3dSCmWla0NedrshRR7W2phNCvwjfPAEg78eDqsM1
-         BNvdvg3AZffHgpSQJE++K0VH8Bb6gY1GUIWADtqGLdxqzHGSvlaQFy42xU6tTHByyGNJ
-         Xj0tr3XMhGJM8GgLC6cJlOJn+o+pfttewK9vszflcYE1lInN5I04ptkiea8QtrJ8oZrO
-         Yq4Yg+0QoDKn2q1JGEn59Fp61g+rIRVHplSwSdvvvKcE+3txmnpntFD4TQixOfy3RokS
-         ybvgMeSGtFLyXhCdOsNdnwUBkFVU4ZCR02MbwLyjYl9sM2dSrqZj/TFyMlYbcv1dlfex
-         oQGw==
+        bh=4KZsNDPCzJ207WML9wXC024ukG812EyGktRwhEK7nuM=;
+        b=rxqkeNofePLxPhWW6xKvi8do244IN7uoiswhwgv8j3JwMquRffDY5LsF9pjd7ONtx9
+         caJtDnF9unphAAzyRzm2SM2vnjenu70vjxNtuWqXeQzLUb4oraZS+mwy++0AMx+c7SVg
+         VhXVH+YQ8xmcjigtlHnugsIUv0bzkPrKRzssEO5uLP7rwWmoUe9FRHQgfsHiDBrqlS0h
+         98YvterYZb/P9EnsHSfL5dp3+eC5RsN0NaxlQZeRW4oG1Mmc1iko/rIJNpnmpfjqiIc0
+         AtsZ9ZIoTbHIw84LKQa0zpVlOCoT4qed4YuaFU2l/uc5cGJsysR7EJiHOAiNco32LJ6d
+         ITSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=MIz7mf9O+yDJg4rZecZM10jb/99QC/Kv+YtCD3EQfrA=;
-        b=ZPjazyxOa9qunUs3FLAQ1rNfK5Z54cqdGtwEsDn4EL9l//cx+FqZgeP9DAvyGCImlU
-         ++0j49TxvPg6NubRLbWfac2g5XmE4fykrx6fmu/6bma1u2EkuY9a8FObbdzly5BRF5+2
-         Iov+tEQSaVBjQ3N/Ty3KcJZREbnkOaJBRVO9dPmCskucn3FFx8zq6EA09x+O99RVGr5e
-         lZ16X5ZRURicdEb9ywN0OXBlDcmC2+24ZWMxxR2z+Du0umJQv+OaYPNOlkwKWsh8IVXi
-         wLDyHRcL7m6cYXcYUSDUndWzGpF7lYttHuacidKjdZ3Hmdg28T0hRcTUIny6pi/j3FxM
-         P7yw==
-X-Gm-Message-State: AOAM5321OVw/PUMW9YN/HRLbPEEOOltqSedBBlEZ7d6Mp/L6h8F4MbLU
-        vc8C4PVw9CkATi+vWYh2apeaswt4vQ6xFbJT
-X-Google-Smtp-Source: ABdhPJzwNyHYXBKWXt9ezF/mnWGVK1/cu3Wd9/J14ZWMeBdjcXqZbtEbiXaFvXnAlxC8qfYzAN7mylQrgALHdCCF
+        bh=4KZsNDPCzJ207WML9wXC024ukG812EyGktRwhEK7nuM=;
+        b=W6tI5M/6l/GFWx5PTuR/6WWlo7kv0u6k8YVlbf4SfLWNEmeTzyRZ9vrA2rCg8ieRZ4
+         8x8GuDk0pFfX4BlvTkR0L9piFlqEnXYEOyfuFHw9oxuCZ5DMx9t0bK3mPvMv8A2WqNr8
+         6zhqB8Akoxl5JTfkRJMGRI7M91lUMtqq8qds6hiADH98Dd3fXo/ji3eN1XqwLJ7yT7vZ
+         VGmuhqk6QPQ63+nWDPs7AaqIeuhp1bTbFC1jK+8xOXP9ILxX/+1oEqUFJGliDzf3eLaE
+         dSQIwLhJUGTgHtOAodh+bapoa9bt2CCtSBt8WJRAsUbUaSIh5603GR4Bq1PIUw0lZ/wA
+         BxQw==
+X-Gm-Message-State: AOAM531i2IBfK80OYSC0ve5CzvqZvlMfobfqImbwkUFg4f4RdhFxXqUo
+        S9Hy767q3Ck2kJ53CwlXjGuanZ2oy4kcuCfh
+X-Google-Smtp-Source: ABdhPJxfRe12sbYw0LlETkCtcIUiqVxXk++WdgNbODvvjCW+qqJQadlPUWumCqCiXVn4jT9P9AyYSO6LQ5DEcp9l
 X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a05:600c:3052:b0:39c:6540:c280 with
- SMTP id n18-20020a05600c305200b0039c6540c280mr1747602wmh.1.1655802275960;
- Tue, 21 Jun 2022 02:04:35 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 10:04:12 +0100
+ (user=vdonnefort job=sendgmr) by 2002:a05:600c:1d12:b0:39c:4307:8b10 with
+ SMTP id l18-20020a05600c1d1200b0039c43078b10mr39432649wms.103.1655802278317;
+ Tue, 21 Jun 2022 02:04:38 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 10:04:13 +0100
 In-Reply-To: <20220621090414.433602-1-vdonnefort@google.com>
-Message-Id: <20220621090414.433602-6-vdonnefort@google.com>
+Message-Id: <20220621090414.433602-7-vdonnefort@google.com>
 Mime-Version: 1.0
 References: <20220621090414.433602-1-vdonnefort@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH v11 5/7] sched/fair: Use the same cpumask per-PD throughout find_energy_efficient_cpu()
+Subject: [PATCH v11 6/7] sched/fair: Remove task_util from effective
+ utilization in feec()
 From:   Vincent Donnefort <vdonnefort@google.com>
 To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
         morten.rasmussen@arm.com, chris.redpath@arm.com,
         qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com,
-        vdonnefort@google.com, Lukasz Luba <lukasz.luba@arm.com>
+        vdonnefort@google.com,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,110 +73,337 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+From: Vincent Donnefort <vincent.donnefort@arm.com>
 
-The Perf Domain (PD) cpumask (struct em_perf_domain.cpus) stays
-invariant after Energy Model creation, i.e. it is not updated after
-CPU hotplug operations.
+The energy estimation in find_energy_efficient_cpu() (feec()) relies on
+the computation of the effective utilization for each CPU of a perf domain
+(PD). This effective utilization is then used as an estimation of the busy
+time for this pd. The function effective_cpu_util() which gives this value,
+scales the utilization relative to IRQ pressure on the CPU to take into
+account that the IRQ time is hidden from the task clock. The IRQ scaling is
+as follow:
 
-That's why the PD mask is used in conjunction with the cpu_online_mask
-(or Sched Domain cpumask). Thereby the cpu_online_mask is fetched
-multiple times (in compute_energy()) during a run-queue selection
-for a task.
+   effective_cpu_util = irq + (cpu_cap - irq)/cpu_cap * util
 
-cpu_online_mask may change during this time which can lead to wrong
-energy calculations.
+Where util is the sum of CFS/RT/DL utilization, cpu_cap the capacity of
+the CPU and irq the IRQ avg time.
 
-To be able to avoid this, use the select_rq_mask per-cpu cpumask to
-create a cpumask out of PD cpumask and cpu_online_mask and pass it
-through the function calls of the EAS run-queue selection path.
+If now we take as an example a task placement which doesn't raise the OPP
+on the candidate CPU, we can write the energy delta as:
 
-The PD cpumask for max_spare_cap_cpu/compute_prev_delta selection
-(find_energy_efficient_cpu()) is now ANDed not only with the SD mask
-but also with the cpu_online_mask. This is fine since this cpumask
-has to be in syc with the one used for energy computation
-(compute_energy()).
-An exclusive cpuset setup with at least one asymmetric CPU capacity
-island (hence the additional AND with the SD cpumask) is the obvious
-exception here.
+  delta = OPPcost/cpu_cap * (effective_cpu_util(cpu_util + task_util) -
+                             effective_cpu_util(cpu_util))
+        = OPPcost/cpu_cap * (cpu_cap - irq)/cpu_cap * task_util
 
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+We end-up with an energy delta depending on the IRQ avg time, which is a
+problem: first the time spent on IRQs by a CPU has no effect on the
+additional energy that would be consumed by a task. Second, we don't want
+to favour a CPU with a higher IRQ avg time value.
+
+Nonetheless, we need to take the IRQ avg time into account. If a task
+placement raises the PD's frequency, it will increase the energy cost for
+the entire time where the CPU is busy. A solution is to only use
+effective_cpu_util() with the CPU contribution part. The task contribution
+is added separately and scaled according to prev_cpu's IRQ time.
+
+No change for the FREQUENCY_UTIL component of the energy estimation. We
+still want to get the actual frequency that would be selected after the
+task placement.
+
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Tested-by: Lukasz Luba <lukasz.luba@arm.com>
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index aad1c2248547..112f760ff47e 100644
+index 112f760ff47e..0a28891cb178 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -6701,14 +6701,14 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
-  * task.
+@@ -6694,61 +6694,96 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
+ }
+ 
+ /*
+- * compute_energy(): Estimates the energy that @pd would consume if @p was
+- * migrated to @dst_cpu. compute_energy() predicts what will be the utilization
+- * landscape of @pd's CPUs after the task migration, and uses the Energy Model
+- * to compute what would be the energy if we decided to actually migrate that
+- * task.
++ * energy_env - Utilization landscape for energy estimation.
++ * @task_busy_time: Utilization contribution by the task for which we test the
++ *                  placement. Given by eenv_task_busy_time().
++ * @pd_busy_time:   Utilization of the whole perf domain without the task
++ *                  contribution. Given by eenv_pd_busy_time().
++ * @cpu_cap:        Maximum CPU capacity for the perf domain.
++ * @pd_cap:         Entire perf domain capacity. (pd->nr_cpus * cpu_cap).
++ */
++struct energy_env {
++	unsigned long task_busy_time;
++	unsigned long pd_busy_time;
++	unsigned long cpu_cap;
++	unsigned long pd_cap;
++};
++
++/*
++ * Compute the task busy time for compute_energy(). This time cannot be
++ * injected directly into effective_cpu_util() because of the IRQ scaling.
++ * The latter only makes sense with the most recent CPUs where the task has
++ * run.
   */
- static long
--compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
-+compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
-+	       struct perf_domain *pd)
+-static long
+-compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
+-	       struct perf_domain *pd)
++static inline void eenv_task_busy_time(struct energy_env *eenv,
++				       struct task_struct *p, int prev_cpu)
  {
--	struct cpumask *pd_mask = perf_domain_span(pd);
- 	unsigned long max_util = 0, sum_util = 0, cpu_cap;
+-	unsigned long max_util = 0, sum_util = 0, cpu_cap;
++	unsigned long busy_time, max_cap = arch_scale_cpu_capacity(prev_cpu);
++	unsigned long irq = cpu_util_irq(cpu_rq(prev_cpu));
++
++	if (unlikely(irq >= max_cap))
++		busy_time = max_cap;
++	else
++		busy_time = scale_irq_capacity(task_util_est(p), irq, max_cap);
++
++	eenv->task_busy_time = busy_time;
++}
++
++/*
++ * Compute the perf_domain (PD) busy time for compute_energy(). Based on the
++ * utilization for each @pd_cpus, it however doesn't take into account
++ * clamping since the ratio (utilization / cpu_capacity) is already enough to
++ * scale the EM reported power consumption at the (eventually clamped)
++ * cpu_capacity.
++ *
++ * The contribution of the task @p for which we want to estimate the
++ * energy cost is removed (by cpu_util_next()) and must be calculated
++ * separately (see eenv_task_busy_time). This ensures:
++ *
++ *   - A stable PD utilization, no matter which CPU of that PD we want to place
++ *     the task on.
++ *
++ *   - A fair comparison between CPUs as the task contribution (task_util())
++ *     will always be the same no matter which CPU utilization we rely on
++ *     (util_avg or util_est).
++ *
++ * Set @eenv busy time for the PD that spans @pd_cpus. This busy time can't
++ * exceed @eenv->pd_cap.
++ */
++static inline void eenv_pd_busy_time(struct energy_env *eenv,
++				     struct cpumask *pd_cpus,
++				     struct task_struct *p)
++{
++	unsigned long busy_time = 0;
  	int cpu;
  
--	cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
--	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
-+	cpu_cap = arch_scale_cpu_capacity(cpumask_first(cpus));
-+	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(cpus));
+-	cpu_cap = arch_scale_cpu_capacity(cpumask_first(cpus));
+-	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(cpus));
++	for_each_cpu(cpu, pd_cpus) {
++		unsigned long util = cpu_util_next(cpu, p, -1);
  
- 	/*
- 	 * The capacity state of CPUs of the current rd can be driven by CPUs
-@@ -6719,7 +6719,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 	 * If an entire pd is outside of the current rd, it will not appear in
- 	 * its pd list and will not be accounted by compute_energy().
- 	 */
--	for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
-+	for_each_cpu(cpu, cpus) {
- 		unsigned long util_freq = cpu_util_next(cpu, p, dst_cpu);
- 		unsigned long cpu_util, util_running = util_freq;
- 		struct task_struct *tsk = NULL;
-@@ -6806,6 +6806,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
-  */
- static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+-	/*
+-	 * The capacity state of CPUs of the current rd can be driven by CPUs
+-	 * of another rd if they belong to the same pd. So, account for the
+-	 * utilization of these CPUs too by masking pd with cpu_online_mask
+-	 * instead of the rd span.
+-	 *
+-	 * If an entire pd is outside of the current rd, it will not appear in
+-	 * its pd list and will not be accounted by compute_energy().
+-	 */
+-	for_each_cpu(cpu, cpus) {
+-		unsigned long util_freq = cpu_util_next(cpu, p, dst_cpu);
+-		unsigned long cpu_util, util_running = util_freq;
+-		struct task_struct *tsk = NULL;
++		busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
++	}
+ 
+-		/*
+-		 * When @p is placed on @cpu:
+-		 *
+-		 * util_running = max(cpu_util, cpu_util_est) +
+-		 *		  max(task_util, _task_util_est)
+-		 *
+-		 * while cpu_util_next is: max(cpu_util + task_util,
+-		 *			       cpu_util_est + _task_util_est)
+-		 */
+-		if (cpu == dst_cpu) {
+-			tsk = p;
+-			util_running =
+-				cpu_util_next(cpu, p, -1) + task_util_est(p);
+-		}
++	eenv->pd_busy_time = min(eenv->pd_cap, busy_time);
++}
+ 
+-		/*
+-		 * Busy time computation: utilization clamping is not
+-		 * required since the ratio (sum_util / cpu_capacity)
+-		 * is already enough to scale the EM reported power
+-		 * consumption at the (eventually clamped) cpu_capacity.
+-		 */
+-		cpu_util = effective_cpu_util(cpu, util_running, ENERGY_UTIL,
+-					      NULL);
++/*
++ * Compute the maximum utilization for compute_energy() when the task @p
++ * is placed on the cpu @dst_cpu.
++ *
++ * Returns the maximum utilization among @eenv->cpus. This utilization can't
++ * exceed @eenv->cpu_cap.
++ */
++static inline unsigned long
++eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
++		 struct task_struct *p, int dst_cpu)
++{
++	unsigned long max_util = 0;
++	int cpu;
+ 
+-		sum_util += min(cpu_util, cpu_cap);
++	for_each_cpu(cpu, pd_cpus) {
++		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
++		unsigned long util = cpu_util_next(cpu, p, dst_cpu);
++		unsigned long cpu_util;
+ 
+ 		/*
+ 		 * Performance domain frequency: utilization clamping
+@@ -6757,12 +6792,29 @@ compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
+ 		 * NOTE: in case RT tasks are running, by default the
+ 		 * FREQUENCY_UTIL's utilization can be max OPP.
+ 		 */
+-		cpu_util = effective_cpu_util(cpu, util_freq, FREQUENCY_UTIL,
+-					      tsk);
+-		max_util = max(max_util, min(cpu_util, cpu_cap));
++		cpu_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
++		max_util = max(max_util, cpu_util);
+ 	}
+ 
+-	return em_cpu_energy(pd->em_pd, max_util, sum_util, cpu_cap);
++	return min(max_util, eenv->cpu_cap);
++}
++
++/*
++ * compute_energy(): Use the Energy Model to estimate the energy that @pd would
++ * consume for a given utilization landscape @eenv. When @dst_cpu < 0, the task
++ * contribution is ignored.
++ */
++static inline unsigned long
++compute_energy(struct energy_env *eenv, struct perf_domain *pd,
++	       struct cpumask *pd_cpus, struct task_struct *p, int dst_cpu)
++{
++	unsigned long max_util = eenv_pd_max_util(eenv, pd_cpus, p, dst_cpu);
++	unsigned long busy_time = eenv->pd_busy_time;
++
++	if (dst_cpu >= 0)
++		busy_time = min(eenv->pd_cap, busy_time + eenv->task_busy_time);
++
++	return em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
+ }
+ 
+ /*
+@@ -6808,11 +6860,12 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
  {
-+	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
+ 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
  	unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
- 	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
+-	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
  	int cpu, best_energy_cpu = prev_cpu, target = -1;
-@@ -6840,7 +6841,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+-	unsigned long cpu_cap, util, base_energy = 0;
++	struct root_domain *rd = this_rq()->rd;
++	unsigned long base_energy = 0;
+ 	struct sched_domain *sd;
+ 	struct perf_domain *pd;
++	struct energy_env eenv;
+ 
+ 	rcu_read_lock();
+ 	pd = rcu_dereference(rd->pd);
+@@ -6835,22 +6888,39 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	if (!task_util_est(p))
+ 		goto unlock;
+ 
++	eenv_task_busy_time(&eenv, p, prev_cpu);
++
+ 	for (; pd; pd = pd->next) {
+-		unsigned long cur_delta, spare_cap, max_spare_cap = 0;
++		unsigned long cpu_cap, cpu_thermal_cap, util;
++		unsigned long cur_delta, max_spare_cap = 0;
+ 		bool compute_prev_delta = false;
  		unsigned long base_energy_pd;
  		int max_spare_cap_cpu = -1;
  
--		for_each_cpu_and(cpu, perf_domain_span(pd), sched_domain_span(sd)) {
-+		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+ 		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+ 
+-		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
++		if (cpumask_empty(cpus))
++			continue;
 +
-+		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
++		/* Account thermal pressure for the energy estimation */
++		cpu = cpumask_first(cpus);
++		cpu_thermal_cap = arch_scale_cpu_capacity(cpu);
++		cpu_thermal_cap -= arch_scale_thermal_pressure(cpu);
++
++		eenv.cpu_cap = cpu_thermal_cap;
++		eenv.pd_cap = 0;
++
++		for_each_cpu(cpu, cpus) {
++			eenv.pd_cap += cpu_thermal_cap;
++
++			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
++				continue;
++
  			if (!cpumask_test_cpu(cpu, p->cpus_ptr))
  				continue;
  
-@@ -6877,12 +6880,12 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			util = cpu_util_next(cpu, p, cpu);
+ 			cpu_cap = capacity_of(cpu);
+-			spare_cap = cpu_cap;
+-			lsub_positive(&spare_cap, util);
+ 
+ 			/*
+ 			 * Skip CPUs that cannot satisfy the capacity request.
+@@ -6863,15 +6933,17 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			if (!fits_capacity(util, cpu_cap))
+ 				continue;
+ 
++			lsub_positive(&cpu_cap, util);
++
+ 			if (cpu == prev_cpu) {
+ 				/* Always use prev_cpu as a candidate. */
+ 				compute_prev_delta = true;
+-			} else if (spare_cap > max_spare_cap) {
++			} else if (cpu_cap > max_spare_cap) {
+ 				/*
+ 				 * Find the CPU with the maximum spare capacity
+ 				 * in the performance domain.
+ 				 */
+-				max_spare_cap = spare_cap;
++				max_spare_cap = cpu_cap;
+ 				max_spare_cap_cpu = cpu;
+ 			}
+ 		}
+@@ -6879,13 +6951,16 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		if (max_spare_cap_cpu < 0 && !compute_prev_delta)
  			continue;
  
++		eenv_pd_busy_time(&eenv, cpus, p);
  		/* Compute the 'base' energy of the pd, without @p */
--		base_energy_pd = compute_energy(p, -1, pd);
-+		base_energy_pd = compute_energy(p, -1, cpus, pd);
+-		base_energy_pd = compute_energy(p, -1, cpus, pd);
++		base_energy_pd = compute_energy(&eenv, pd, cpus, p, -1);
  		base_energy += base_energy_pd;
  
  		/* Evaluate the energy impact of using prev_cpu. */
  		if (compute_prev_delta) {
--			prev_delta = compute_energy(p, prev_cpu, pd);
-+			prev_delta = compute_energy(p, prev_cpu, cpus, pd);
+-			prev_delta = compute_energy(p, prev_cpu, cpus, pd);
++			prev_delta = compute_energy(&eenv, pd, cpus, p,
++						    prev_cpu);
++			/* CPU utilization has changed */
  			if (prev_delta < base_energy_pd)
  				goto unlock;
  			prev_delta -= base_energy_pd;
-@@ -6891,7 +6894,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+@@ -6894,8 +6969,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
  
  		/* Evaluate the energy impact of using max_spare_cap_cpu. */
  		if (max_spare_cap_cpu >= 0) {
--			cur_delta = compute_energy(p, max_spare_cap_cpu, pd);
-+			cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
-+						   pd);
+-			cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
+-						   pd);
++			cur_delta = compute_energy(&eenv, pd, cpus, p,
++						   max_spare_cap_cpu);
++			/* CPU utilization has changed */
  			if (cur_delta < base_energy_pd)
  				goto unlock;
  			cur_delta -= base_energy_pd;

@@ -2,70 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B414552E03
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B75552E06
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348199AbiFUJMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S1348586AbiFUJOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347566AbiFUJMk (ORCPT
+        with ESMTP id S231672AbiFUJOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:12:40 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33AE5F52;
-        Tue, 21 Jun 2022 02:12:38 -0700 (PDT)
-X-UUID: 569f04be88c94d0c8d93606e26cfe7c8-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:515177c1-c430-4adf-a027-b7c69ff31e57,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:515177c1-c430-4adf-a027-b7c69ff31e57,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:44f5a22d-1756-4fa3-be7f-474a6e4be921,C
-        OID:c6e029c02700,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 569f04be88c94d0c8d93606e26cfe7c8-20220621
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2044660626; Tue, 21 Jun 2022 17:12:36 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 21 Jun 2022 17:12:34 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 17:12:34 +0800
-Message-ID: <59a4bdf0800afc445f223d07aac8b5335d6e36e8.camel@mediatek.com>
-Subject: Re: [PATCH v12 14/14] drm/mediatek: dpi: Add matrix_sel helper
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 17:12:34 +0800
-In-Reply-To: <5907e3fc6a690bb79c2ad9b20f6e353b2ba8c774.camel@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-         <20220620121028.29234-15-rex-bc.chen@mediatek.com>
-         <76d86558adba1e043e50ab0e18403038450b8099.camel@mediatek.com>
-         <5907e3fc6a690bb79c2ad9b20f6e353b2ba8c774.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 05:14:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7D112610
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:14:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0963F6158A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 09:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B25C3411C;
+        Tue, 21 Jun 2022 09:14:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655802842;
+        bh=pL3F/GzW42CiWS3Yg7kxKAhUPHN0SvH5MN8TC9Ak5Ys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MxZR/FXJDErptEmSt8w5bbP3lzcw8Pa0UN3pNctXJj6XoJvXKNRHYLFmLeAHT8Hne
+         Y/vk8BjMpi+WlbfYL86H4bdjt/F9w7JUoAOri+UriPenbf4hAsVTB25nDTGDumShI+
+         2DOqbBwF8z3abaBH9vr9PjQooQ9aP9RMYdHd/D665Ga/nlAcNu9J9eJByO1OMXIhuu
+         QaKhvfvg1Redd8RR4HPWUrNv2A9PrayetJotZPEAAad7nos1kPNyw4xuii2mXg3fYc
+         iO80v43tNR84DXygZxj7AFi7P2p7y6NDh8HLFA/OWa13KKl2rZ1RXWvZH6BAa1x3tp
+         r7C2oCfMU6Arg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3ZxL-0001jL-LK; Tue, 21 Jun 2022 11:13:56 +0200
+Date:   Tue, 21 Jun 2022 11:13:55 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     keliu <liuke94@huawei.com>
+Cc:     vaibhav.sr@gmail.com, mgreer@animalcreek.com, elder@kernel.org,
+        gregkh@linuxfoundation.org, vireshk@kernel.org,
+        pure.logic@nexus-software.ie, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [greybus-dev] [PATCH] staging: greybus: Directly use
+ ida_alloc()/free()
+Message-ID: <YrGL0zLpdzGbcWE4@hovoldconsulting.com>
+References: <20220527063528.2356712-1-liuke94@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527063528.2356712-1-liuke94@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,175 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
-
-On Tue, 2022-06-21 at 16:41 +0800, Rex-BC Chen wrote:
-> On Tue, 2022-06-21 at 11:33 +0800, CK Hu wrote:
-> > Hi, Bo-Chen:
-> > 
-> > On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
-> > > From: Guillaume Ranquet <granquet@baylibre.com>
-> > > 
-> > > Matrix selection is a new feature for both dpi and dpintf of
-> > > MT8195.
-> > > Add a mtk_dpi_matrix_sel() helper to update the DPI_MATRIX_SET
-> > > register depending on the color format.
-> > 
-> > Describe more about what this do.
-> > 
+On Fri, May 27, 2022 at 06:35:28AM +0000, keliu wrote:
+> Use ida_alloc()/ida_free() instead of deprecated
+> ida_simple_get()/ida_simple_remove() .
 > 
-> this feature is color format transfer.
-> For mt8195, the input format is RGB888 andd output format could be
-> YUV422. do you think I should squash this patch into [v12,12/14]
-> drm/mediatek: dpi: Add YUV422 output support?
+> Signed-off-by: keliu <liuke94@huawei.com>
 
-OK, squash these two patches and add this description into commit
-message. For RGB input and RGB output, I think this function should be
-disabled.
+Is "keliu" really your full legal name?
 
-Regards,
-CK
+> ---
+>  drivers/staging/greybus/audio_manager.c  |  8 ++++----
+>  drivers/staging/greybus/authentication.c |  4 ++--
+>  drivers/staging/greybus/fw-download.c    |  4 ++--
+>  drivers/staging/greybus/fw-management.c  | 12 ++++++------
+>  drivers/staging/greybus/gbphy.c          |  4 ++--
+>  drivers/staging/greybus/loopback.c       |  6 +++---
+>  drivers/staging/greybus/raw.c            |  6 +++---
+>  drivers/staging/greybus/vibrator.c       |  6 +++---
+>  8 files changed, 25 insertions(+), 25 deletions(-)
+ 
+> diff --git a/drivers/staging/greybus/authentication.c b/drivers/staging/greybus/authentication.c
+> index 297e69f011c7..01dd1cd958ea 100644
+> --- a/drivers/staging/greybus/authentication.c
+> +++ b/drivers/staging/greybus/authentication.c
+> @@ -348,7 +348,7 @@ int gb_cap_connection_init(struct gb_connection *connection)
+>  err_del_cdev:
+>  	cdev_del(&cap->cdev);
+>  err_remove_ida:
+> -	ida_simple_remove(&cap_minors_map, minor);
+> +	ida_free(&cap_minors_map, minor);
+>  err_connection_disable:
+>  	gb_connection_disable(connection);
+>  err_list_del:
+> @@ -372,7 +372,7 @@ void gb_cap_connection_exit(struct gb_connection *connection)
+>  
+>  	device_destroy(cap_class, cap->dev_num);
+>  	cdev_del(&cap->cdev);
+> -	ida_simple_remove(&cap_minors_map, MINOR(cap->dev_num));
+> +	ida_free(&cap_minors_map, MINOR(cap->dev_num));
+>  
+>  	/*
+>  	 * Disallow any new ioctl operations on the char device and wait for
 
-> 
-> > > 
-> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > ---
-> > >  drivers/gpu/drm/mediatek/mtk_dpi.c      | 29
-> > > +++++++++++++++++++++++++
-> > >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |  3 +++
-> > >  2 files changed, 32 insertions(+)
-> > > 
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > index 220e9b18e2cd..8a9151cb1622 100644
-> > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > @@ -135,6 +135,7 @@ struct mtk_dpi_conf {
-> > >  	u32 channel_swap_shift;
-> > >  	u32 yuv422_en_bit;
-> > >  	u32 csc_enable_bit;
-> > > +	bool matrx_sel_support;
-> > >  };
-> > >  
-> > >  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32
-> > > val,
-> > > u32 mask)
-> > > @@ -398,6 +399,31 @@ static void
-> > > mtk_dpi_config_disable_edge(struct
-> > > mtk_dpi *dpi)
-> > >  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
-> > > EDGE_SEL_EN);
-> > >  }
-> > >  
-> > > +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi,
-> > > +			       enum mtk_dpi_out_color_format format)
-> > > +{
-> > > +	u32 matrix_sel = 0;
-> > > +
-> > > +	if (!dpi->conf->matrx_sel_support) {
-> > > +		dev_info(dpi->dev, "matrix_sel is not supported.\n");
-> > 
-> > So for this SoC, there would be something wrong? I still does not
-> > understand what this feature is.
-> > 
-> > static const struct of_device_id mtk_dpi_of_ids[] = {
-> > 	{ .compatible = "mediatek,mt2701-dpi",
-> > 	  .data = &mt2701_conf,
-> > 	},
-> > 	{ .compatible = "mediatek,mt8173-dpi",
-> > 	  .data = &mt8173_conf,
-> > 	},
-> > 	{ .compatible = "mediatek,mt8183-dpi",
-> > 	  .data = &mt8183_conf,
-> > 	},
-> > 	{ .compatible = "mediatek,mt8192-dpi",
-> > 	  .data = &mt8192_conf,
-> > 	},
-> > 	{ },
-> > };
-> > 
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	switch (format) {
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
-> > > +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
-> > > +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
-> > > +		if (dpi->mode.hdisplay <= 720)
-> > > +			matrix_sel = 0x2;
-> > 
-> > Symbolize 0x2.
-> > 
-> > > +		break;
-> > > +	default:
-> > 
-> > If format is MTK_DPI_COLOR_FORMAT_YCBCR_422 first, then format
-> > change
-> > to MTK_DPI_COLOR_FORMAT_RGB and matrix_sel would still be 0x2. Is
-> > this
-> > correct?
-> > 
-> > Regards,
-> > CK
-> > 
-> > > +		break;
-> > > +	}
-> > > +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
-> > > INT_MATRIX_SEL_MASK);
-> > > +}
-> > > +
-> > >  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
-> > >  					enum mtk_dpi_out_color_format
-> > > format)
-> > >  {
-> > > @@ -405,6 +431,7 @@ static void
-> > > mtk_dpi_config_color_format(struct
-> > > mtk_dpi *dpi,
-> > >  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
-> > >  		mtk_dpi_config_yuv422_enable(dpi, false);
-> > >  		mtk_dpi_config_csc_enable(dpi, true);
-> > > +		mtk_dpi_matrix_sel(dpi, format);
-> > >  		if (dpi->conf->swap_input_support)
-> > >  			mtk_dpi_config_swap_input(dpi, false);
-> > >  		mtk_dpi_config_channel_swap(dpi,
-> > > MTK_DPI_OUT_CHANNEL_SWAP_BGR);
-> > > @@ -412,6 +439,7 @@ static void
-> > > mtk_dpi_config_color_format(struct
-> > > mtk_dpi *dpi,
-> > >  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
-> > >  		mtk_dpi_config_yuv422_enable(dpi, true);
-> > >  		mtk_dpi_config_csc_enable(dpi, true);
-> > > +		mtk_dpi_matrix_sel(dpi, format);
-> > >  		if (dpi->conf->swap_input_support)
-> > >  			mtk_dpi_config_swap_input(dpi, true);
-> > >  		else
-> > > @@ -951,6 +979,7 @@ static const struct mtk_dpi_conf
-> > > mt8195_dpintf_conf = {
-> > >  	.channel_swap_shift = DPINTF_CH_SWAP,
-> > >  	.yuv422_en_bit = DPINTF_YUV422_EN,
-> > >  	.csc_enable_bit = DPINTF_CSC_ENABLE,
-> > > +	.matrx_sel_support = true,
-> > >  };
-> > >  
-> > >  static int mtk_dpi_probe(struct platform_device *pdev)
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > index f7f0272dbd6a..96c117202d0d 100644
-> > > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> > > @@ -230,4 +230,7 @@
-> > >  #define EDGE_SEL_EN			BIT(5)
-> > >  #define H_FRE_2N			BIT(25)
-> > >  
-> > > +#define DPI_MATRIX_SET		0xB4
-> > > +#define INT_MATRIX_SEL_MASK	(0x1F << 0)
-> > > +
-> > >  #endif /* __MTK_DPI_REGS_H */
-> > 
-> > 
-> 
-> 
+The above looks incomplete since you do not change the ida_simple_get()
+in gb_cap_connection_init().
 
+Please check for any similar mistakes throughout.
+
+Johan

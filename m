@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E4E5536EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695A35536F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351722AbiFUP4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
+        id S1353269AbiFUP6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiFUP4i (ORCPT
+        with ESMTP id S1352432AbiFUP5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:56:38 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E102FE50
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:54:34 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3178ea840easo97370147b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=g7DzGnPqhJYhmGX1M4tOZss3trUT8bJb1NJPEsm7I1c=;
-        b=RVEZbC0Sl753wSBYDrWsS5Of6x5OKyXZHILZ5cD4whXkc5Hue6OwknrLNuMFxr9yjB
-         cS2K5wPf7C5eklorQdt2O+DMCrRoVSWUESng4Ih/mAKlLIo2DTT18y/pd4KvDJePu77o
-         iyEESwuqCh3td5jlRBnFDjrrgSdHbD5JhZFiHnC0WsaskX9tu4JVZbaLqXibiki5KDWX
-         +ZB0RH3/b9HaqxJxhlbrIycxD2v4XuK8xci1uUMDZXEzMT/SeKPyrmaoUl6RfmD0Fl2H
-         rkuYqA0uaGNUtal5r3GeMjSf9yuDftp3vJRTG5W/9jJDDnEed4fI2qlyAKlFVVYHIZ0y
-         /hdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=g7DzGnPqhJYhmGX1M4tOZss3trUT8bJb1NJPEsm7I1c=;
-        b=e2YMUs2vo0sZjpJp7dBPfyF8q0EHvnD+UEGqRtUpM2mivmZztXFoCfgPg1EbBEPrXQ
-         WejIXt03gLD0bRPhb52lFpBQlC8urRMisjiqKST4KMaHnk1jPKO2NQ/dBEQDttaICw+/
-         wjKgnq3LuLPIeqYf11M+GKrlv7XFIt7XF3qsyCh64q8x5q+L8CZAFeFcVxPxVHPYFCJf
-         8eN0HNcASgrCs8nE35Cvx5PgBYQ1dVkHHTxqAvNpXw3sCqCp0nCmwDsH/P6Txpae7EV8
-         ZBv4ClSEK9gTq8MSboWfKloq1rKEEODoDtLSe2RpvRAARiRQ47e2XcPRtIepx5/HgI6d
-         MMhQ==
-X-Gm-Message-State: AJIora8lz/MmfqGUZUvFK3qfZEsYgoqC37v7Sj5Lskqs73lSqI8qbzm1
-        W8c8/FqH6jPi9h5RVjqrc50zSDmMEqSRVpxMTFqOvA==
-X-Google-Smtp-Source: AGRyM1vA9lQAbhS/dLGCcClr8Q4Iou7B67Euo0I/l3wmSat0GaH4PfDeAmvH+hYuiqo9od7R4apuK2bqiVaTyrLAuus=
-X-Received: by 2002:a0d:f242:0:b0:317:be2a:83df with SMTP id
- b63-20020a0df242000000b00317be2a83dfmr14415190ywf.376.1655826873550; Tue, 21
- Jun 2022 08:54:33 -0700 (PDT)
+        Tue, 21 Jun 2022 11:57:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAE32E0A0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:56:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37ECE61345
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9D6C341C0;
+        Tue, 21 Jun 2022 15:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655826974;
+        bh=3V2OC1uVdZn/dHS93ds+EwTItxIT+MQYa/9gN9q8wtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M7Z12EqzPW9drZASeK/1CZVMklTZk7c6U0NFjOpXmeKyYlwDl2LTvagfeFygLTIhw
+         j2pGI1KGShjyzxrrBrC+jHX78X3UFRKdBD6bS72OHzuQDK9IfhaxHCBox0pQpGHVCj
+         Qigtm2DV+Pzl4lcFh+7V9TfCizFqjCSulh1GRQ5kKlpq/QfklMxd5rfLGWzsec/QAS
+         DRoUUWxAhnKlHM1Is1CmmdBXKCu2tvTN6wDzN5LIpkxehzb9uxaHT9572DrU4CO/q/
+         v8/OcUuIJ6H0Obqlf7bB+NniJnMiUUY6ZjTggt3ZdEoGfxqzzLinxVsyUeaNDu+0Xw
+         8vDr9CBmk2rOg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 08B2D4096F; Tue, 21 Jun 2022 12:56:10 -0300 (-03)
+Date:   Tue, 21 Jun 2022 12:56:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf build-id: Fix caching files with a wrong build ID
+Message-ID: <YrHqGS0XB800GF09@kernel.org>
+References: <20220621125144.5623-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
-References: <20220620124729.509745706@linuxfoundation.org>
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Jun 2022 21:24:22 +0530
-Message-ID: <CA+G9fYu3qaDOOShLx3gvWuRi0z4i31UvNNQXYjSnhhZ8RT3-GA@mail.gmail.com>
-Subject: Re: [PATCH 5.18 000/141] 5.18.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621125144.5623-1-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,184 +57,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 at 18:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.18.6 release.
-> There are 141 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.18.6-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Em Tue, Jun 21, 2022 at 03:51:44PM +0300, Adrian Hunter escreveu:
+> Build ID events associate a file name with a build ID.  However, when
+> using perf inject, there is no guarantee that the file on the current
+> machine at the current time has that build ID. Fix by comparing the
+> build IDs and skip adding to the cache if they are different.
+> 
+> Example:
+> 
+>  $ echo "int main() {return 0;}" > prog.c
+>  $ gcc -o prog prog.c
+>  $ perf record --buildid-all ./prog
+>  [ perf record: Woken up 1 times to write data ]
+>  [ perf record: Captured and wrote 0.019 MB perf.data ]
+>  $ file-buildid() { file $1 | awk -F= '{print $2}' | awk -F, '{print $1}' ; }
+>  $ file-buildid prog
+>  444ad9be165d8058a48ce2ffb4e9f55854a3293e
+>  $ file-buildid ~/.debug/$(pwd)/prog/444ad9be165d8058a48ce2ffb4e9f55854a3293e/elf
+>  444ad9be165d8058a48ce2ffb4e9f55854a3293e
+>  $ echo "int main() {return 1;}" > prog.c
+>  $ gcc -o prog prog.c
+>  $ file-buildid prog
+>  885524d5aaa24008a3e2b06caa3ea95d013c0fc5
+> 
+>  Before:
+> 
+>  $ perf buildid-cache --purge $(pwd)/prog
+>  $ perf inject -i perf.data -o junk
+>  $ file-buildid ~/.debug/$(pwd)/prog/444ad9be165d8058a48ce2ffb4e9f55854a3293e/elf
+>  885524d5aaa24008a3e2b06caa3ea95d013c0fc5
+>  $
+> 
+>  After:
+> 
+>  $ perf buildid-cache --purge $(pwd)/prog
+>  $ perf inject -i perf.data -o junk
+>  $ file-buildid ~/.debug/$(pwd)/prog/444ad9be165d8058a48ce2ffb4e9f55854a3293e/elf
+> 
+>  $
+> 
+> Fixes: 454c407ec17a0c ("perf: add perf-inject builtin")
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thanks, applied.
 
-## Build
-* kernel: 5.18.6-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.18.y
-* git commit: 1cf3647a86ad5204a01c7495a62a13d07f02d51c
-* git describe: v5.18.5-142-g1cf3647a86ad
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.18.y/build/v5.18=
-.5-142-g1cf3647a86ad
+- Arnaldo
 
-## Test Regressions (compared to v5.18-48-g10e6e3d47333)
-No test regressions found.
 
-## Metric Regressions (compared to v5.18-48-g10e6e3d47333)
-No metric regressions found.
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/util/build-id.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
+> index 82f3d46bea70..328668f38c69 100644
+> --- a/tools/perf/util/build-id.c
+> +++ b/tools/perf/util/build-id.c
+> @@ -872,6 +872,30 @@ int build_id_cache__remove_s(const char *sbuild_id)
+>  	return err;
+>  }
+>  
+> +static int filename__read_build_id_ns(const char *filename,
+> +				      struct build_id *bid,
+> +				      struct nsinfo *nsi)
+> +{
+> +	struct nscookie nsc;
+> +	int ret;
+> +
+> +	nsinfo__mountns_enter(nsi, &nsc);
+> +	ret = filename__read_build_id(filename, bid);
+> +	nsinfo__mountns_exit(&nsc);
+> +
+> +	return ret;
+> +}
+> +
+> +static bool dso__build_id_mismatch(struct dso *dso, const char *name)
+> +{
+> +	struct build_id bid;
+> +
+> +	if (filename__read_build_id_ns(name, &bid, dso->nsinfo) < 0)
+> +		return false;
+> +
+> +	return !dso__build_id_equal(dso, &bid);
+> +}
+> +
+>  static int dso__cache_build_id(struct dso *dso, struct machine *machine,
+>  			       void *priv __maybe_unused)
+>  {
+> @@ -886,6 +910,10 @@ static int dso__cache_build_id(struct dso *dso, struct machine *machine,
+>  		is_kallsyms = true;
+>  		name = machine->mmap_name;
+>  	}
+> +
+> +	if (!is_kallsyms && dso__build_id_mismatch(dso, name))
+> +		return 0;
+> +
+>  	return build_id_cache__add_b(&dso->bid, name, dso->nsinfo,
+>  				     is_kallsyms, is_vdso);
+>  }
+> -- 
+> 2.25.1
 
-## Test Fixes (compared to v5.18-48-g10e6e3d47333)
-No test fixes found.
+-- 
 
-## Metric Fixes (compared to v5.18-48-g10e6e3d47333)
-No metric fixes found.
-
-## Test result summary
-total: 123299, pass: 111561, fail: 547, skip: 10306, xfail: 885
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 319 total, 316 passed, 3 failed
-* arm64: 64 total, 62 passed, 2 failed
-* i386: 57 total, 50 passed, 7 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 56 passed, 9 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 23 total, 20 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 62 total, 58 passed, 4 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-gpio
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-lib
-* kselftest-membarrier
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-zram
-* kunit
-* kunit/15
-* kunit/261
-* kunit/3
-* kunit/427
-* kunit/90
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-smoke
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+- Arnaldo

@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C350553A9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C74553A99
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353681AbiFUTc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
+        id S1353603AbiFUTc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbiFUTcX (ORCPT
+        with ESMTP id S1353792AbiFUTcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:32:23 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF662CC93
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:32:22 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 89so21974440qvc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:32:22 -0700 (PDT)
+        Tue, 21 Jun 2022 15:32:55 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C0CBBB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:32:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id g25so29575408ejh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3srfLFxYG7qfDVEhrAKtCq0hN10jlAvu2WRTV989x8g=;
-        b=GHkVMrebgfvnerev2S8Dko8BoUQ/WAd1+7MHrFaKplmZGhnuEc5eijtoVZJhD/KLrL
-         QI2WHO1jHuheIxGip/PQ2YvjcuEVsEB2T4qid1z3y4WekPUlqYjFTpoAqLM1ek4jtLCT
-         NkFLiQLJVqDrggRJ2v6CUa0DUUS6Kww4TjX4Y/8/hnLSAjg8gLVqit/86dG6hxQAS8Cx
-         9H3IQaVcGdIZ5z7UKKY7iFjfkGORF9swcrMoTQwttfLYjLsACFkE0j57KSPJVIxLCxRA
-         HqpoRy/t/HsTRSVXC834JSQbiMb50dm4A/8TNFZq8KVWzf/r499HlxHyYmTcW7I7jL0+
-         cSSQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4RZgB2CWdCJhDsL+6cC07YXPGYNGWxRB8UnYBevDamY=;
+        b=qNVKYsJxQ1kIgsRq4i1Tu7kXbRw7FCSTheTNYcxVqCzBIPf2/xb0DlOJxJiimCbHvq
+         A/5jHijVz/08SF8dvZDojQSfLPghkhAdpm3YwbIsq7tcywzHjf7srkFb9OzeD3OzqafJ
+         DDlHKrZapRfHyGPBA4QkIOloVcJW0f25YlxkgFXi2/J58GNfC/I6MHaC77hfS0R1chk+
+         B2nKsZQ/ytmp92ZT04eyy8i1v0+JbQHHI5Ghv1u7lNujV4sf3oHOtMkpn6PiFUs/jyZx
+         WNrU4jsyExB7RDlURvoFplFiJkiY0dPMEFBjdGqjjkRLm11E0JKcyTV3LswNMyZznYlP
+         2ByQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3srfLFxYG7qfDVEhrAKtCq0hN10jlAvu2WRTV989x8g=;
-        b=3vloeLz0vry1+mwa1UA1nkuDrH1tALjVb4sLLE1R58GPuNqvPhmXVLmta/yhxUzZuL
-         Bo90Q1MXJ0f8QMm8YTmMfJoOdegd1qKBCg0XvixaCerrQ+9e+QTiFwx6MclvX0Rj9fjU
-         KwViKwo5rwKcxrzteMYDt0pXiLVqt6djtLPn42oc4U5d8ghKiqGRezf8ZZPKNkWJvJhk
-         2ZoJvjv5qwbEEKVL0v8xiInGAtBQJHUzFnfSdl512Oa1FNcpN+9N7KdU81kYlY12QUy5
-         DkAlp8GuxGUtSD1M7cn8zF/aDofKbaJU6Nhfur/XhQYKXEsw9T0JwhUD35iZ6W+ox7aU
-         gn/A==
-X-Gm-Message-State: AJIora+B2y/Deg9TUG+io0iFtphlhI+DiMH3rnxj+6bHZMiWKcOwX+Bv
-        kfDJsGwBDDK0+LLlJ4ZLgRfjCMuzkVjPmUAuJIzAEA==
-X-Google-Smtp-Source: AGRyM1t4IEveB4UfUxLGaX48vbbsWsqCyvXeGQnnC+lvMBQdKywxsl7HLiRfW0mEXQDTfkTUEY6XBxnMbsN2tWpF6r0=
-X-Received: by 2002:a05:622a:1351:b0:305:2e58:939 with SMTP id
- w17-20020a05622a135100b003052e580939mr25141476qtk.295.1655839941451; Tue, 21
- Jun 2022 12:32:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4RZgB2CWdCJhDsL+6cC07YXPGYNGWxRB8UnYBevDamY=;
+        b=OJ9TXLsL74sySjibpbiFDZp9WP7K3p85euOJa2OKT9RcvhVi1Et+1qFMl9BKn1gzDF
+         vZa2i/VXoztA2/UNSJKLrUmNkkQnArJr4xJdmQlngl0aBnDdABH/2oPeV/eQai8VgK74
+         UplpHv0MC+nrOL2lVIwMUAAsQo+5Twc2g9Xka8MCVytk+LpTwt9niCGL75ckKo6TAWVo
+         pndmoPehNYxYS7Of1LWuFYmU+cL0GYRszwVq7uqg9iw15D3vFuPG8Fpt3SXJYhkLV4MV
+         gaHq36OBFWlamebEXTKdPhiba97vzJ7XgzcOHW73MGnqZrcvoJd701NRw6MZeprT1E1z
+         uOBg==
+X-Gm-Message-State: AJIora+MeNowoiiw/UUnGQwZDXRLE1rpcHnKj3U0lhkDMPlOoSbCecrt
+        aXwlo7WvkuZAzuk8YYL53ANvCg==
+X-Google-Smtp-Source: AGRyM1vnPUkbuWpte2jcBT7DvJQzsFknDR5UZnSlZmLG3WYsVeT+PN8iyTqjwuS6T13nvwQPq9tUGg==
+X-Received: by 2002:a17:907:169e:b0:722:dcb0:ba0 with SMTP id hc30-20020a170907169e00b00722dcb00ba0mr6566226ejc.514.1655839971973;
+        Tue, 21 Jun 2022 12:32:51 -0700 (PDT)
+Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ek6-20020a056402370600b0042bdb6a3602sm12778635edb.69.2022.06.21.12.32.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 12:32:51 -0700 (PDT)
+Message-ID: <7ef854a5-0e56-c71e-447a-f52cdcf51ef0@linaro.org>
+Date:   Tue, 21 Jun 2022 21:32:49 +0200
 MIME-Version: 1.0
-References: <20220621193020.1630180-1-robimarko@gmail.com>
-In-Reply-To: <20220621193020.1630180-1-robimarko@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 21 Jun 2022 22:32:10 +0300
-Message-ID: <CAA8EJppTRitQujoXEXkS0t9p7RF3dOOi9KzaA+or53xQbNWEBw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] phy: qcom-qmp-pcie: make pipe clock rate configurable
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, kishon@ti.com,
-        vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: document qcom,msm-id and
+ qcom,board-id
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Kumar Gala <galak@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <20220621185649.37391-1-krzysztof.kozlowski@linaro.org>
+ <20220621185649.37391-2-krzysztof.kozlowski@linaro.org>
+ <609d1f0f-daca-4fde-3315-5d8e171ca5c4@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <609d1f0f-daca-4fde-3315-5d8e171ca5c4@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,150 +88,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 22:30, Robert Marko <robimarko@gmail.com> wrote:
->
-> IPQ8074 Gen3 PCIe PHY uses 250MHz as the pipe clock rate instead of 125MHz
-> like every other PCIe QMP PHY does, so make it configurable as part of the
-> qmp_phy_cfg.
->
-> Set all of the current configs to use 125MHz as currently done.
->
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 28 ++++++++++++++++++++++--
->  1 file changed, 26 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index b2cd0cf965d8..4dc4d4f8547e 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -1284,6 +1284,9 @@ struct qmp_phy_cfg {
->
->         /* true, if PHY has secondary tx/rx lanes to be configured */
->         bool is_dual_lane_phy;
-> +
-> +       /* QMP PHY pipe clock interface rate */
-> +       unsigned long pipe_clock_rate;
->  };
->
->  /**
-> @@ -1419,6 +1422,8 @@ static const struct qmp_phy_cfg ipq8074_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
+On 21/06/2022 21:26, Dmitry Baryshkov wrote:
+> On 21/06/2022 21:56, Krzysztof Kozlowski wrote:
+>> The top level qcom,msm-id and qcom,board-id properties are utilized by
+>> bootloaders on Qualcomm MSM platforms to determine which device tree
+>> should be used and passed to the kernel.
+>>
+>> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
+>> compatible format") from 2015 was a consensus during discussion about
+>> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
+>> problems with that consensus:
+>> 1. It was reached 7 years ago but it turned out its implementation did
+>>     not reach all possible products.
+>>
+>> 2. Initially additional tool (dtbTool) was needed for parsing these
+>>     fields to create a QCDT image consisting of multiple DTBs, later the
+>>     bootloaders were improved and they use these qcom,msm-id and
+>>     qcom,board-id properties directly.
+> 
+> I might be mistaken here. I think it was expected that dtbTool would use 
+> board compat strings to generate qcom,msm-id and qcom,board-id 
+> properties. It's not that the bootloaders were improved.
 
-Ugh. I'd say, let's make this a default.
+Don't ask me, I am new to this.
 
->  };
->
->  static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
-> @@ -1447,6 +1452,8 @@ static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
-> @@ -1478,6 +1485,8 @@ static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
-> @@ -1507,6 +1516,8 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
-> @@ -1546,6 +1557,8 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
-> @@ -1586,6 +1599,8 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
-> @@ -1611,6 +1626,8 @@ static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
->         .start_ctrl             = SERDES_START | PCS_START,
->         .pwrdn_ctrl             = SW_PWRDN | REFCLK_DRV_DSBL,
->         .phy_status             = PHYSTATUS,
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
-> @@ -1641,6 +1658,8 @@ static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
-> @@ -1673,6 +1692,8 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
-> @@ -1704,6 +1725,8 @@ static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
-> @@ -1736,6 +1759,8 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
->         .has_pwrdn_delay        = true,
->         .pwrdn_delay_min        = 995,          /* us */
->         .pwrdn_delay_max        = 1005,         /* us */
-> +
-> +       .pipe_clock_rate        = 125000000,
->  };
->
->  static void qcom_qmp_phy_pcie_configure_lane(void __iomem *base,
-> @@ -2121,8 +2146,7 @@ static int phy_pipe_clk_register(struct qcom_qmp *qmp, struct device_node *np)
->
->         init.ops = &clk_fixed_rate_ops;
->
-> -       /* controllers using QMP phys use 125MHz pipe clock interface */
-> -       fixed->fixed_rate = 125000000;
-> +       fixed->fixed_rate = qmp->phys[0]->cfg->pipe_clock_rate;
->         fixed->hw.init = &init;
->
->         ret = devm_clk_hw_register(qmp->dev, &fixed->hw);
-> --
-> 2.36.1
->
+https://lore.kernel.org/all/02ab0276-b078-fe66-8596-fcec4378722b@somainline.org/
+
+> 
+>>
+>> 3. Extracting relevant information from the board compatible requires
+>>     this additional tool (dtbTool), which makes the build process more
+>>     complicated and not easily reproducible (DTBs are modified after the
+>>     kernel build).
+>>
+>> 4. Some versions of Qualcomm bootloaders expect these properties even
+>>     when booting with a single DTB.  The community is stuck with these
+>>     bootloaders thus they require properties in the DTBs.
+>>
+>> Since several upstreamed Qualcomm SoC-based boards require these
+>> properties to properly boot and the properties are reportedly used by
+>> bootloaders, document them.
+>>
+>> Link: https://lore.kernel.org/r/a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org/
+>> Co-developed-by: Kumar Gala <galak@codeaurora.org>
+>> Signed-off-by: Kumar Gala <galak@codeaurora.org>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../devicetree/bindings/arm/qcom.yaml         | 123 ++++++++++++++++++
+>>   include/dt-bindings/arm/qcom,ids.h            |  30 +++++
+>>   2 files changed, 153 insertions(+)
+>>   create mode 100644 include/dt-bindings/arm/qcom,ids.h
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> index 6c38c1387afd..05b98cde4653 100644
+>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> @@ -403,6 +403,129 @@ properties:
+>>                 - qcom,sm8450-qrd
+>>             - const: qcom,sm8450
+>>   
+>> +  # Board compatibles go above
+>> +
+>> +  qcom,msm-id:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+>> +    minItems: 1
+>> +    maxItems: 8
+>> +    items:
+>> +      items:
+>> +        - description: |
+>> +            MSM chipset ID - an exact match value consisting of three bitfields::
+> 
+> two bitfields
+
+Right, thanks.
+
+> 
+>> +             - bits 0-15  - The unique MSM chipset ID
+>> +             - bits 16-31 - Reserved; should be 0
+>> +        - description: |
+>> +            Hardware revision ID - a chipset specific 32-bit ID representing
+>> +            the version of the chipset.  It is best a match value - the
+>> +            bootloader will look for the closest possible match.
+>> +    deprecated: true
+>> +    description:
+>> +      The MSM chipset and hardware revision use by Qualcomm bootloaders.  It
+>> +      can optionally be an array of these to indicate multiple hardware that
+>> +      use the same device tree.  It is expected that the bootloader will use
+>> +      this information at boot-up to decide which device tree to use when given
+>> +      multiple device trees, some of which may not be compatible with the
+>> +      actual hardware.  It is the bootloader's responsibility to pass the
+>> +      correct device tree to the kernel.
+>> +      The property is deprecated - it is not expected on newer boards
+>> +      (starting with SM8350).
+> 
+> Could you please elaborate this? 
+
+Second paragraph:
+https://lore.kernel.org/all/20220522195138.35943-1-konrad.dybcio@somainline.org/
+
+Plus consensus with Rob:
+https://lore.kernel.org/all/CAL_JsqKL-mtAQ8Q9H4vLGM8izVVzDPbUAVWSdS8AmGjN6X6kcA@mail.gmail.com/
+
+> If the AOSP team were to add e.g. 
+> SM8350-HDK to their single RB3+RB5 images, they would still need the 
+> qcom,board-id/qcom,msm-id properties to let the bootloader choose proper 
+> DTB.
+
+If you have any email addresses in mind, please Cc them to invite in
+discussions. Otherwise I am afraid it won't be allowed. The feedback I
+got before was that SM8350 and newer do not require this property. Feel
+free to propose other way to solve comments (see "consensus with Rob"
+above).
+
+> 
+>> +
+>> +  qcom,board-id:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+>> +    minItems: 1
+>> +    maxItems: 8
+>> +    items:
+>> +      oneOf:
+>> +        - maxItems: 2
+>> +          items:
+>> +            - description: |
+>> +                Board ID consisting of three bitfields::
+>> +                  - bits 31-24 - Unused
+>> +                  - bits 23-16 - Platform Version Major
+>> +                  - bits 15-8  - Platform Version Minor
+>> +                  - bits 7-0   - Platform Type
+>> +                Platform Type field is an exact match value.  The
+>> +                Platform Major/Minor field is a best match.  The bootloader will
+>> +                look for the closest possible match.
+>> +            - description: |
+>> +                Subtype ID unique to a Platform Type/Chipset ID.  For a given
+>> +                Platform Type, there will typically only be a single board and the
+>> +                subtype_id will be 0.  However in some cases board variants may
+>> +                need to be distinguished by different subtype_id values.
+>> +        # OnePlus uses a variant of board-id with four elements:
+>> +        - minItems: 4
+>> +          items:
+>> +            - const: 8
+>> +            - const: 0
+>> +            - description: OnePlus board ID
+>> +            - description: OnePlus subtype ID
+>> +    deprecated: true
+>> +    description:
+>> +      The board type and revision information.  It can optionally be an array
+>> +      of these to indicate multiple boards that use the same device tree.  It
+>> +      is expected that the bootloader will use this information at boot-up to
+>> +      decide which device tree to use when given multiple device trees, some of
+>> +      which may not be compatible with the actual hardware.  It is the
+>> +      bootloader's responsibility to pass the correct device tree to the
+>> +      kernel
+>> +      The property is deprecated - it is not expected on newer boards
+>> +      (starting with SM8350).
+>> +
+>> +allOf:
+>> +  # Explicit allow-list for older SoCs. The legacy properties are not allowed
+>> +  # on newer SoCs.
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,apq8026
+>> +              - qcom,apq8094
+>> +              - qcom,apq8096
+>> +              - qcom,msm8992
+>> +              - qcom,msm8994
+>> +              - qcom,msm8996
+>> +              - qcom,msm8998
+>> +              - qcom,sdm630
+>> +              - qcom,sdm632
+>> +              - qcom,sdm845
+>> +              - qcom,sdx55
+>> +              - qcom,sdx65
+>> +              - qcom,sm6125
+>> +              - qcom,sm6350
+>> +              - qcom,sm7225
+>> +              - qcom,sm8150
+>> +              - qcom,sm8250
+>> +    then:
+>> +      properties:
+>> +        qcom,board-id: true
+>> +        qcom,msm-id: true
+>> +    else:
+>> +      properties:
+>> +        qcom,board-id: false
+>> +        qcom,msm-id: false
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - oneplus,cheeseburger
+>> +              - oneplus,dumpling
+>> +              - oneplus,enchilada
+>> +              - oneplus,fajita
+>> +    then:
+>> +      properties:
+>> +        qcom,board-id:
+>> +          items:
+>> +            minItems: 4
+>> +    else:
+>> +      properties:
+>> +        qcom,board-id:
+>> +          items:
+>> +            maxItems: 2
+>> +
+>>   additionalProperties: true
+>>   
+>>   ...
+>> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+>> new file mode 100644
+>> index 000000000000..eaf86c18650f
+>> --- /dev/null
+>> +++ b/include/dt-bindings/arm/qcom,ids.h
+>> @@ -0,0 +1,30 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2022 Linaro Ltd
+>> + * Author: Krzysztof Kozlowski <krzk@kernel.org> based on previous work of Kumar Gala.
+>> + */
+>> +#ifndef _DT_BINDINGS_ARM_QCOM_IDS_H
+>> +#define _DT_BINDINGS_ARM_QCOM_IDS_H
+>> +
+>> +/* qcom,msm-id */
+>> +#define QCOM_ID_APQ8026				199
+>> +#define QCOM_ID_MSM8916				206
+>> +#define QCOM_ID_MSM8994				207
+>> +#define QCOM_ID_MSM8996_3_0			246
+> 
+> 2_0 too.
+> And then (according to 3.18):
+> 8996-pro 305
+> 8996-pro-auto 315
+> 8996-auto 310
+
+Sure, I can add these.
+
+> 
+>> +#define QCOM_ID_APQ8016				247
+>> +#define QCOM_ID_MSM8216				248
+>> +#define QCOM_ID_MSM8116				249
+>> +#define QCOM_ID_MSM8616				250
+>> +#define QCOM_ID_MSM8998				292
+>> +#define QCOM_ID_SDM845				321
+> 
+> sdm845-v2.1-rb3.dts:	qcom,msm-id = <341 0x20001>;
+> But this might be a typo
+
+Yeah, that's an interesting one. I did not fill the list to all possible
+options, rather to some subset of more reasonable sources.
+
+> 
+>> +
+>> +/* qcom,board-id */
+>> +#define QCOM_BOARD_ID(a, major, minor) \
+>> +	(((major & 0xff) << 16) | ((minor & 0xff) << 8) | QCOM_BOARD_ID_##a)
+>> +
+>> +#define QCOM_BOARD_ID_MTP			8
+>> +#define QCOM_BOARD_ID_DRAGONBOARD		10
+>> +#define QCOM_BOARD_ID_SBC			24
+>> +
+>> +#endif /* _DT_BINDINGS_ARM_QCOM_IDS_H */
+> 
+> 
 
 
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof

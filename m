@@ -2,334 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE6F5539E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9090E5539EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351510AbiFUS6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 14:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
+        id S1352255AbiFUS7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 14:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbiFUS6k (ORCPT
+        with ESMTP id S232662AbiFUS7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 14:58:40 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45EBEBA
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:58:39 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 128so6912412pfv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:58:39 -0700 (PDT)
+        Tue, 21 Jun 2022 14:59:10 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9873B6310
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:59:08 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a2so23923068lfg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=42vsJg2fPvcjlY+3cTeVot4f6HOKgMA3yaicXV9Nn9g=;
-        b=lRmo2M0V3X+srp+q8k3qHV7v8tnvG2gYUSUyDyTFXlg4pbFtrIbS5376EUqxDEfa5U
-         qTGbKVYBt2cFmsC5AMtMcMTOLr3qGurROGwU6yY3xc0kDOpxHMYhux837IG3codlUihw
-         YregjUU12tV+lYdY287rJmGZRmJPyWAWSGhjh0u4Bvna/3Gl8b4awozZNUcaIVvqvTWw
-         uzacSvuPniXeuyRGXhxM6FBMihrtgtktl7MBsnq50xpihZHBD4gdtwzbkqbfXV75kvZp
-         Upgr5HSfJXhp0+uU+sl2hrlPhIwgiK7SP7RSUqfauw470lHVb03uf5xi1x8ttFx9b9hd
-         KDhQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2n5ZvTZM5Xy4jLPVi8VTwgVRgrWwKM+mMuF3SLS55Uk=;
+        b=ccGuwd2alxEWAXxi99fJ6T3ivm6lM/mkYmg2h51BRJCV7CHOIltxP9fsKs2CgPot3l
+         Bvo8X9z9OVybj/ux43v58MZUPvl6U6zsQmG9tDwGJ8F3e1/nOBF2OhHBY/nsW7pIn5fg
+         0JLOyG0zpv+IoyR2n6HzLqTl9EtkEKYV68r7uZbQAjRWiC04I6oLHHVRRXLDkZALrJDT
+         AqhbNqrhEDvtUUz0xTWHG0N7SvaN9XzHvjUmCfR8GtLkFgnv4rAz/osnRu5mzlqRQkXo
+         cI9z7hClr+U+/j4uXpT+CAU5A2mpDtzR8LmDC6cWxt2tYt/mws75IB/j2HEYqm8A4XFw
+         lesA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=42vsJg2fPvcjlY+3cTeVot4f6HOKgMA3yaicXV9Nn9g=;
-        b=4kJrdfmV4bvlhYdyBiEYG+mj5qOE+RmEF71d7dqWay5wrEEg08S8AQ2fFptKy8EtfU
-         A2xC39i6//sPt7Pc01UzdSCY66M89X4A16AxoWwkDN3XvEw/yWoiCqqFA2ktK95GVcfR
-         aqm7rpi07e64zZtwTQkgC2gagvM/UFrUGlgLCMSx1mcdzS0GsogK033We16eUJFmy8GY
-         HfnQ2m3nQfpX731TtPJty7e/EftNn4GJ7Fm/+g3/Uku0XjetuSZWCBsmvBw9Qp+edYKL
-         WOejkMrI+ZdmeKVy/FOKAdPrtBmUrlkR2OpQo9D6CTEk576spaPMf958lwTbfj+BVPaM
-         phAQ==
-X-Gm-Message-State: AJIora9yVUgg1lRxHdz9SMw9Y0tzPm14l8Jcuy6gC4KHYM+lVPurEqGV
-        dwVWTX9XqcZbb+eFXHLcTiGJzg==
-X-Google-Smtp-Source: AGRyM1tfUIGHG8qYUiIPVrO7RNjl0RDSnZYt3eQ1Z5gR6nlXeI5UqLs3c0i49v7UZF2etkKHkUxZmA==
-X-Received: by 2002:a05:6a00:893:b0:51e:77ab:8874 with SMTP id q19-20020a056a00089300b0051e77ab8874mr31091513pfj.21.1655837918759;
-        Tue, 21 Jun 2022 11:58:38 -0700 (PDT)
-Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
-        by smtp.gmail.com with ESMTPSA id w4-20020a63b744000000b003fd4831e6fesm11324352pgt.70.2022.06.21.11.58.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 11:58:37 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 11:58:34 -0700
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, linmiaohe@huawei.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v5 PATCH 4/7] mm: thp: kill transparent_hugepage_active()
-Message-ID: <YrIU2iP0H5LQbV7R@google.com>
-References: <20220616174840.1202070-1-shy828301@gmail.com>
- <20220616174840.1202070-5-shy828301@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2n5ZvTZM5Xy4jLPVi8VTwgVRgrWwKM+mMuF3SLS55Uk=;
+        b=ZYeAeuu9aT66gLTwSLwBSNHa6xmZ2kn6fg5MbV02Gp32w6h7lrNSUFkBjqX2IKFT3y
+         0P9wecoswY40/yvL14WY4fKiYOIFTKMHsx2uKDjoK0wo85Tx7x2h0UuwlpYJe8dQmKqD
+         3JcdMO+ox2xet/B4Pvu4eyBGJH+sglc5Cj0FmQu3Cg6sjIEFuIc5ZbrPfLSnCbkPERYs
+         4ziorz54FPJjJJ/vv0CMsT8xayi3mIgi/mtmT0tKlt6XG+mCxyLYOQrHY+XmQscVBK/i
+         6dI9qYI02X4PoggJ5LJjV/k1ZcGF7O8BIGWWw20oKWc2fiMvclHFI2+dio56VzlP8nV8
+         DWxA==
+X-Gm-Message-State: AJIora/5Wx5EIJHcvTqzmEZjWhJ3oxwl2R1FhgCqc0o4QGDTDmhSymrX
+        8NdmsGnK5SdmrX3vrxPnV5UNqQ==
+X-Google-Smtp-Source: AGRyM1uIfStI8bKV/5e05aUv9lOS8QCb68T6xzj1TgXejatNoF0hbBGyJXAe5sx5neZu8sbwBKFuOw==
+X-Received: by 2002:a05:6512:1281:b0:47f:7066:6fb2 with SMTP id u1-20020a056512128100b0047f70666fb2mr6672169lfs.247.1655837946901;
+        Tue, 21 Jun 2022 11:59:06 -0700 (PDT)
+Received: from [192.168.43.7] ([188.162.64.230])
+        by smtp.gmail.com with ESMTPSA id n16-20020a2e7210000000b0025a6f7000c0sm846916ljc.11.2022.06.21.11.59.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 11:59:06 -0700 (PDT)
+Message-ID: <47324fb3-c0d1-4839-8db1-c819c7389de7@linaro.org>
+Date:   Tue, 21 Jun 2022 21:59:05 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616174840.1202070-5-shy828301@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [v3 3/5] drm/bridge: add psr support during panel bridge enable &
+ disable sequence
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>, y@qualcomm.com,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com
+References: <y> <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1655808800-3996-4-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1655808800-3996-4-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16 Jun 10:48, Yang Shi wrote:
-> The transparent_hugepage_active() was introduced to show THP eligibility
-> bit in smaps in proc, smaps is the only user.  But it actually does the
-> similar check as hugepage_vma_check() which is used by khugepaged.  We
-> definitely don't have to maintain two similar checks, so kill
-> transparent_hugepage_active().
+On 21/06/2022 13:53, Vinod Polimera wrote:
+> This change avoids panel prepare/unprepare based on self-refresh
+> state.
 > 
-> This patch also fixed the wrong behavior for VM_NO_KHUGEPAGED vmas.
-> 
-> Also move hugepage_vma_check() to huge_memory.c and huge_mm.h since it
-> is not only for khugepaged anymore.
-> 
-> Reviewed-by: Zach O'Keefe <zokeefe@google.com>
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 > ---
->  fs/proc/task_mmu.c         |  2 +-
->  include/linux/huge_mm.h    | 16 +++++++-----
->  include/linux/khugepaged.h |  2 --
->  mm/huge_memory.c           | 50 +++++++++++++++++++++++++++++++-------
->  mm/khugepaged.c            | 48 +++---------------------------------
->  5 files changed, 56 insertions(+), 62 deletions(-)
+>   drivers/gpu/drm/bridge/panel.c | 102 +++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 98 insertions(+), 4 deletions(-)
 > 
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 37ccb5c9f4f8..39a40ec181e7 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -863,7 +863,7 @@ static int show_smap(struct seq_file *m, void *v)
->  	__show_smap(m, &mss, false);
->  
->  	seq_printf(m, "THPeligible:    %d\n",
-> -		   transparent_hugepage_active(vma));
-> +		   hugepage_vma_check(vma, vma->vm_flags, true));
->  
->  	if (arch_pkeys_enabled())
->  		seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index 8a5a8bfce0f5..64487bcd0c7b 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -202,7 +202,9 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
->  	       !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
->  }
->  
-> -bool transparent_hugepage_active(struct vm_area_struct *vma);
-> +bool hugepage_vma_check(struct vm_area_struct *vma,
-> +			unsigned long vm_flags,
-> +			bool smaps);
->  
->  #define transparent_hugepage_use_zero_page()				\
->  	(transparent_hugepage_flags &					\
-> @@ -351,11 +353,6 @@ static inline bool __transparent_hugepage_enabled(struct vm_area_struct *vma)
->  	return false;
->  }
->  
-> -static inline bool transparent_hugepage_active(struct vm_area_struct *vma)
-> -{
-> -	return false;
-> -}
-> -
->  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
->  		unsigned long addr)
->  {
-> @@ -368,6 +365,13 @@ static inline bool transhuge_vma_enabled(struct vm_area_struct *vma,
->  	return false;
->  }
->  
-> +static inline bool hugepage_vma_check(struct vm_area_struct *vma,
-> +				       unsigned long vm_flags,
-> +				       bool smaps)
+> diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
+> index 59a3496..6b09ae0 100644
+> --- a/drivers/gpu/drm/bridge/panel.c
+> +++ b/drivers/gpu/drm/bridge/panel.c
+> @@ -41,6 +41,40 @@ static int panel_bridge_connector_get_modes(struct drm_connector *connector)
+>   	return drm_panel_get_modes(panel_bridge->panel, connector);
+>   }
+>   
+> +static struct drm_crtc *bridge_drm_get_old_connector_crtc(struct drm_encoder *encoder,
+> +							struct drm_atomic_state *state)
 > +{
-> +	return false;
+> +	struct drm_connector *connector;
+> +	struct drm_connector_state *conn_state;
+> +
+> +	connector = drm_atomic_get_old_connector_for_encoder(state, encoder);
+> +	if (!connector)
+> +		return NULL;
+> +
+> +	conn_state = drm_atomic_get_old_connector_state(state, connector);
+> +	if (!conn_state)
+> +		return NULL;
+> +
+> +	return conn_state->crtc;
 > +}
 > +
->  static inline void prep_transhuge_page(struct page *page) {}
->  
->  #define transparent_hugepage_flags 0UL
-> diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
-> index 31ca8a7f78f4..ea5fd4c398f7 100644
-> --- a/include/linux/khugepaged.h
-> +++ b/include/linux/khugepaged.h
-> @@ -10,8 +10,6 @@ extern struct attribute_group khugepaged_attr_group;
->  extern int khugepaged_init(void);
->  extern void khugepaged_destroy(void);
->  extern int start_stop_khugepaged(void);
-> -extern bool hugepage_vma_check(struct vm_area_struct *vma,
-> -			       unsigned long vm_flags);
->  extern void __khugepaged_enter(struct mm_struct *mm);
->  extern void __khugepaged_exit(struct mm_struct *mm);
->  extern void khugepaged_enter_vma(struct vm_area_struct *vma,
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index b530462c4493..a28c6100b491 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -69,21 +69,53 @@ static atomic_t huge_zero_refcount;
->  struct page *huge_zero_page __read_mostly;
->  unsigned long huge_zero_pfn __read_mostly = ~0UL;
->  
-> -bool transparent_hugepage_active(struct vm_area_struct *vma)
-> +bool hugepage_vma_check(struct vm_area_struct *vma,
-> +			unsigned long vm_flags,
-> +			bool smaps)
->  {
-> -	/* The addr is used to check if the vma size fits */
-> -	unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
-> +	if (!transhuge_vma_enabled(vma, vm_flags))
-> +		return false;
+> +static struct drm_crtc *bridge_drm_get_new_connector_crtc(struct drm_encoder *encoder,
+> +							struct drm_atomic_state *state)
+> +{
+> +	struct drm_connector *connector;
+> +	struct drm_connector_state *conn_state;
 > +
+> +	connector = drm_atomic_get_new_connector_for_encoder(state, encoder);
+> +	if (!connector)
+> +		return NULL;
+> +
+> +	conn_state = drm_atomic_get_new_connector_state(state, connector);
+> +	if (!conn_state)
+> +		return NULL;
+> +
+> +	return conn_state->crtc;
+> +}
 
-During testing my work on top this patch, I found a small bug here.
+As I wrote earlier, this should become generic drm helpers.
 
-Namely, transhuge_vma_enabled() will check vma->vm_mm->flags (to see if
-MMF_DISABLE_THP is set); however, for vDSO vmas, vma->vm_mm is NULL.
+> +
+>   static const struct drm_connector_helper_funcs
+>   panel_bridge_connector_helper_funcs = {
+>   	.get_modes = panel_bridge_connector_get_modes,
+> @@ -108,30 +142,90 @@ static void panel_bridge_detach(struct drm_bridge *bridge)
+>   		drm_connector_cleanup(connector);
+>   }
+>   
+> -static void panel_bridge_atomic_pre_enable(struct drm_bridge *bridge)
+> +static void panel_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+> +					struct drm_bridge_state *old_bridge_state)
 
-Previously, transparent_hugepage_active() in smaps path would check
-transhuge_vma_suitable() before checking these flags, which would fail for vDSO
-vma since we'd take the !vma_is_anonymous() branch and find the vma (most
-likely) wasn't suitably aligned (by chance ?).
+This must be a part of the previous patch?
 
-Anyways, I think we need to check vma->vm_mm.
+>   {
+>   	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> +	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +	struct drm_encoder *encoder = bridge->encoder;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *old_crtc_state;
+> +
+> +	crtc = bridge_drm_get_new_connector_crtc(encoder, old_state);
+> +	if (!crtc)
+> +		return;
 
-> +	if (vm_flags & VM_NO_KHUGEPAGED)
-> +		return false;
+Why? And why do you ask for the new crtc from the old state?
+
 > +
-> +	/* Don't run khugepaged against DAX vma */
-> +	if (vma_is_dax(vma))
-> +		return false;
->  
-> -	if (!transhuge_vma_suitable(vma, addr))
-> +	/* Check alignment for file vma and size for both file and anon vma */
-> +	if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
->  		return false;
-> -	if (vma_is_anonymous(vma))
-> -		return __transparent_hugepage_enabled(vma);
-> -	if (vma_is_shmem(vma))
+> +	old_crtc_state = drm_atomic_get_old_crtc_state(old_state, crtc);
 > +
-> +	/* Enabled via shmem mount options or sysfs settings. */
-> +	if (shmem_file(vma->vm_file))
->  		return shmem_huge_enabled(vma);
-> -	if (transhuge_vma_enabled(vma, vma->vm_flags) && file_thp_enabled(vma))
+> +	/* Don't touch the panel if we're coming back from self refresh state */
+> +	if (old_crtc_state && old_crtc_state->self_refresh_active)
+> +		return;
+>   
+>   	drm_panel_prepare(panel_bridge->panel);
+>   }
+>   
+> -static void panel_bridge_atomic_enable(struct drm_bridge *bridge)
+> +static void panel_bridge_atomic_enable(struct drm_bridge *bridge,
+> +					struct drm_bridge_state *old_bridge_state)
+>   {
+>   	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> +	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +	struct drm_encoder *encoder = bridge->encoder;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *old_crtc_state;
 > +
-> +	if (!khugepaged_enabled())
-> +		return false;
+> +	crtc = bridge_drm_get_new_connector_crtc(encoder, old_state);
+> +	if (!crtc)
+> +		return;
 > +
-> +	/* THP settings require madvise. */
-> +	if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
-> +		return false;
+> +	old_crtc_state = drm_atomic_get_old_crtc_state(old_state, crtc);
 > +
-> +	/* Only regular file is valid */
-> +	if (file_thp_enabled(vma))
->  		return true;
->  
-> -	return false;
-> +	if (!vma_is_anonymous(vma))
-> +		return false;
+> +	/* Don't touch the panel if we're coming back from self refresh state */
+> +	if (old_crtc_state && old_crtc_state->self_refresh_active)
+> +		return;
+>   
+>   	drm_panel_enable(panel_bridge->panel);
+>   }
+>   
+> -static void panel_bridge_atomic_disable(struct drm_bridge *bridge)
+> +static void panel_bridge_atomic_disable(struct drm_bridge *bridge,
+> +					struct drm_bridge_state *old_bridge_state)
+>   {
+>   	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> +	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +	struct drm_encoder *encoder = bridge->encoder;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *new_crtc_state;
 > +
-> +	if (vma_is_temporary_stack(vma))
-> +		return false;
+> +	crtc = bridge_drm_get_old_connector_crtc(encoder, old_state);
+> +	if (!crtc)
+> +		return;
 > +
-> +	/*
-> +	 * THPeligible bit of smaps should show 1 for proper VMAs even
-> +	 * though anon_vma is not initialized yet.
-> +	 */
-> +	if (!vma->anon_vma)
-> +		return smaps;
+> +	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, crtc);
+
+This doesn't sound right too.
+
 > +
-> +	return true;
->  }
->  
->  static bool get_huge_zero_page(void)
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 5baa394e34c8..3afd87f8c0b1 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -437,46 +437,6 @@ static inline int khugepaged_test_exit(struct mm_struct *mm)
->  	return atomic_read(&mm->mm_users) == 0;
->  }
->  
-> -bool hugepage_vma_check(struct vm_area_struct *vma,
-> -			unsigned long vm_flags)
-> -{
-> -	if (!transhuge_vma_enabled(vma, vm_flags))
-> -		return false;
-> -
-> -	if (vm_flags & VM_NO_KHUGEPAGED)
-> -		return false;
-> -
-> -	/* Don't run khugepaged against DAX vma */
-> -	if (vma_is_dax(vma))
-> -		return false;
-> -
-> -	/* Check alignment for file vma and size for both file and anon vma */
-> -	if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
-> -		return false;
-> -
-> -	/* Enabled via shmem mount options or sysfs settings. */
-> -	if (shmem_file(vma->vm_file))
-> -		return shmem_huge_enabled(vma);
-> -
-> -	if (!khugepaged_enabled())
-> -		return false;
-> -
-> -	/* THP settings require madvise. */
-> -	if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
-> -		return false;
-> -
-> -	/* Only regular file is valid */
-> -	if (file_thp_enabled(vma))
-> -		return true;
-> -
-> -	if (!vma->anon_vma || !vma_is_anonymous(vma))
-> -		return false;
-> -	if (vma_is_temporary_stack(vma))
-> -		return false;
-> -
-> -	return true;
-> -}
-> -
->  void __khugepaged_enter(struct mm_struct *mm)
->  {
->  	struct mm_slot *mm_slot;
-> @@ -513,7 +473,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
->  {
->  	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
->  	    khugepaged_enabled()) {
-> -		if (hugepage_vma_check(vma, vm_flags))
-> +		if (hugepage_vma_check(vma, vm_flags, false))
->  			__khugepaged_enter(vma->vm_mm);
->  	}
->  }
-> @@ -958,7 +918,7 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
->  
->  	if (!transhuge_vma_suitable(vma, address))
->  		return SCAN_ADDRESS_RANGE;
-> -	if (!hugepage_vma_check(vma, vma->vm_flags))
-> +	if (!hugepage_vma_check(vma, vma->vm_flags, false))
->  		return SCAN_VMA_CHECK;
->  	/*
->  	 * Anon VMA expected, the address may be unmapped then
-> @@ -1448,7 +1408,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
->  	 * the valid THP. Add extra VM_HUGEPAGE so hugepage_vma_check()
->  	 * will not fail the vma for missing VM_HUGEPAGE
->  	 */
-> -	if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE))
-> +	if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE, false))
->  		return;
->  
->  	/* Keep pmd pgtable for uffd-wp; see comment in retract_page_tables() */
-> @@ -2143,7 +2103,7 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
->  			progress++;
->  			break;
->  		}
-> -		if (!hugepage_vma_check(vma, vma->vm_flags)) {
-> +		if (!hugepage_vma_check(vma, vma->vm_flags, false)) {
->  skip:
->  			progress++;
->  			continue;
-> -- 
-> 2.26.3
-> 
+> +	/* Don't do a full disable on PSR transitions if new state is self refresh state */
+> +	if (new_crtc_state && new_crtc_state->self_refresh_active)
+> +		return;
+>   
+>   	drm_panel_disable(panel_bridge->panel);
+>   }
+>   
+> -static void panel_bridge_atomic_post_disable(struct drm_bridge *bridge)
+> +static void panel_bridge_atomic_post_disable(struct drm_bridge *bridge,
+> +					struct drm_bridge_state *old_bridge_state)
+>   {
+>   	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> +	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +	struct drm_encoder *encoder = bridge->encoder;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *new_crtc_state;
+> +
+> +	crtc = bridge_drm_get_old_connector_crtc(encoder, old_state);
+> +	if (!crtc)
+> +		return;
+> +
+> +	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, crtc);
+> +
+> +	/* Don't do unprepare on PSR transitions if new state is self refresh state */
+> +	if (new_crtc_state && new_crtc_state->self_refresh_active)
+> +		return;
+>   
+>   	drm_panel_unprepare(panel_bridge->panel);
+>   }
+
+
+-- 
+With best wishes
+Dmitry

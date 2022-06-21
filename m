@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3292B553ACB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C19553AD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354094AbiFUTvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S1354109AbiFUTzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354091AbiFUTvJ (ORCPT
+        with ESMTP id S1353792AbiFUTzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:51:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5930624F01
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:51:06 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o3jtg-0004jI-BC; Tue, 21 Jun 2022 21:50:48 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-f72d-4f6f-99c1-0b72.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:f72d:4f6f:99c1:b72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E4FDB9BBB0;
-        Tue, 21 Jun 2022 19:50:46 +0000 (UTC)
-Date:   Tue, 21 Jun 2022 21:50:46 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1] arm64: dts: imx8mm-verdin: update CAN clock to 40MHz
-Message-ID: <20220621195046.rnv66d2333wjmtow@pengutronix.de>
-References: <20220512104019.19725-1-andrejs.cainikovs@toradex.com>
- <20220621180749.GA22098@francesco-nb.int.toradex.com>
+        Tue, 21 Jun 2022 15:55:17 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7485C289AC;
+        Tue, 21 Jun 2022 12:55:16 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id lw20so7389887ejb.4;
+        Tue, 21 Jun 2022 12:55:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kmLQpIEr89ZBDY4anFjTosysEvGwUfMAqwQk46EbHQA=;
+        b=R4yNkC8agC+5mzC+cE0N8IJ0dkaJTmlai/IpgVXM1jRHI2S+1soTY4yG40VdPt/x28
+         8+4zkX3RQV+/hiPY5OoJAYN9/NNBXxpHtG6ytMON3XMCSMKK6Qo9oR4uNSkatHit9Ioa
+         toFh48uIUDA9hoT/VaYfValVFZ1G609phmARm468i82i3ttvgJJfpZ1f+hvpXJs9qG+m
+         lWbMXZ27dsEsUxUnQg/7zTE3/DxxxV7Bf2bYalkzgDBiSQVRFm+uNTJOfVE6gX7wNkz+
+         8O9MY8MO8JNjs+2/Iblmors/0hMaXZfzCwv0EDb2y152HtaBBP7HJkYu2Kb0VfGpAldy
+         wNBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kmLQpIEr89ZBDY4anFjTosysEvGwUfMAqwQk46EbHQA=;
+        b=7speNibEnLqxdJQiSXxqFZqO8CXEderIbLVjnp0tsl7s/+XHHvYnL9L4TyDeH/6bg9
+         2awH7zk7AwDaPJBBQVHngspPNq1uuIFSU6Sy/9WiGjxT7kUmc9VMdLIP6bnaeC8Pdrfq
+         EGDxAFlSRS33RBSz2WEke469nq33RtCZydl7nFrT5KcyxF8vwfNT7bDO4M56uwSJs4EX
+         6i1Z+ayfL9GsH+78HTltL01GSxWV0/CjGpzyrZELtcOZBumU6UXXR6uM7UxltKdLtvet
+         94BIuEiiimJvM+co5wGZNwR/Zt3ql8vFfk6/KgaeyuVO5E1Uzs+9v2ngNSCUQzZWfXyk
+         2Mrg==
+X-Gm-Message-State: AJIora8ihEva1uI7/Vd0M73lEszLFjm7l9eUJ8svT8DHHHwKcCwzln1T
+        lhsXqD3CHkpNb2/r9J9vLzI=
+X-Google-Smtp-Source: AGRyM1vNL/LMEd8YBM3Uk3NwflBYV+RGWo+XPiMc1e5evAATMCyqI8/MtpUWsZ1djfnSPY8YMaPQiw==
+X-Received: by 2002:a17:906:7304:b0:6ff:a76:5b09 with SMTP id di4-20020a170906730400b006ff0a765b09mr27664919ejc.193.1655841315013;
+        Tue, 21 Jun 2022 12:55:15 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-99-158.xnet.hr. [88.207.99.158])
+        by smtp.googlemail.com with ESMTPSA id b14-20020a056402084e00b0043565c79879sm10713114edz.43.2022.06.21.12.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 12:55:14 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, kishon@ti.com,
+        vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v4 1/3] phy: qcom-qmp-pcie: make pipe clock rate configurable
+Date:   Tue, 21 Jun 2022 21:55:10 +0200
+Message-Id: <20220621195512.1760362-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cymwswx3km3vprca"
-Content-Disposition: inline
-In-Reply-To: <20220621180749.GA22098@francesco-nb.int.toradex.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+IPQ8074 Gen3 PCIe PHY uses 250MHz as the pipe clock rate instead of 125MHz
+like every other PCIe QMP PHY does, so make it configurable as part of the
+qmp_phy_cfg.
 
---cymwswx3km3vprca
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+Changes in v4:
+* Set 125MHz as the default if not set in qmp_phy_cfg
+---
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-On 21.06.2022 20:07:49, Francesco Dolcini wrote:
-> Hello Shawn, just a ping on this.
->=20
-> Francesco
->=20
-> On Thu, May 12, 2022 at 12:40:19PM +0200, Andrejs Cainikovs wrote:
-> > Update SPI CAN controller clock to match current hardware design.
-> >=20
-> > Signed-off-by: Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
-> > ---
-> >  arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi b/arch/ar=
-m64/boot/dts/freescale/imx8mm-verdin.dtsi
-> > index 0d84d29e70f1..d309bc0ab8f6 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> > @@ -32,10 +32,10 @@ backlight: backlight {
-> >  	};
-> > =20
-> >  	/* Fixed clock dedicated to SPI CAN controller */
-> > -	clk20m: oscillator {
-> > +	clk40m: oscillator {
-> >  		compatible =3D "fixed-clock";
-> >  		#clock-cells =3D <0>;
-> > -		clock-frequency =3D <20000000>;
-> > +		clock-frequency =3D <40000000>;
-> >  	};
-> > =20
-> >  	gpio-keys {
-> > @@ -194,7 +194,7 @@ &ecspi3 {
-> > =20
-> >  	can1: can@0 {
-> >  		compatible =3D "microchip,mcp251xfd";
-> > -		clocks =3D <&clk20m>;
-> > +		clocks =3D <&clk40m>;
-> >  		interrupts-extended =3D <&gpio1 6 IRQ_TYPE_EDGE_FALLING>;
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+index b2cd0cf965d8..66be854fe7f3 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+@@ -1284,6 +1284,9 @@ struct qmp_phy_cfg {
+ 
+ 	/* true, if PHY has secondary tx/rx lanes to be configured */
+ 	bool is_dual_lane_phy;
++
++	/* QMP PHY pipe clock interface rate */
++	unsigned long pipe_clock_rate;
+ };
+ 
+ /**
+@@ -2121,8 +2124,15 @@ static int phy_pipe_clk_register(struct qcom_qmp *qmp, struct device_node *np)
+ 
+ 	init.ops = &clk_fixed_rate_ops;
+ 
+-	/* controllers using QMP phys use 125MHz pipe clock interface */
+-	fixed->fixed_rate = 125000000;
++	/*
++	 * Controllers using QMP PHY-s use 125MHz pipe clock interface
++	 * unless other frequency is specified in the PHY config.
++	 */
++	if (qmp->phys[0]->cfg->pipe_clock_rate)
++		fixed->fixed_rate = qmp->phys[0]->cfg->pipe_clock_rate;
++	else
++		fixed->fixed_rate = 125000000;
++
+ 	fixed->hw.init = &init;
+ 
+ 	ret = devm_clk_hw_register(qmp->dev, &fixed->hw);
+-- 
+2.36.1
 
-You don't want to use an edge triggered interrupt with the mcp251xfd
-chip. You will be losing interrupts, better use IRQ_TYPE_LEVEL_LOW.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---cymwswx3km3vprca
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKyIRMACgkQrX5LkNig
-013PCAf9HxzrgOryxn9dqLo2SGEyP6jPeoxhZTOyjTQ00GRTYV2EaKa9f23ylcxz
-SeiRPsfCf8mj2DcONhgkHTxDGGCL3mp7CJLnGa5hVEVqCMqSq8D7ThFx6RflDNg+
-96Qf8F9LoQOlA+jBmR2KhSNFDzYWTKiwlGur/FrRRpvQephmk/9onhw/fzgZZkCx
-2xwSEcE7hZyMy6KBOxcFEg4yVeN7t6TQuXfmzyuV/KqEEGacTwWXovoagVQFDElo
-poDx/GH++myJCfZgOKNh1Wrm39A6Q+YI3XLscKWgj+dMf5EdOxdl7Vw7lKpAmLI2
-ElEYlv+GQ2vDD8mLXwEMuVArHhzKPA==
-=E6rx
------END PGP SIGNATURE-----
-
---cymwswx3km3vprca--

@@ -2,42 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDAB552A63
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5943F552A66
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344715AbiFUFGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 01:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        id S1344818AbiFUFIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 01:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiFUFGw (ORCPT
+        with ESMTP id S243284AbiFUFI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 01:06:52 -0400
-Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF3B20BFA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 22:06:46 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1655787993tbc01hsc
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 13:06:29 +0800 (CST)
-X-QQ-SSF: 01000000000000009000000A0000000
-X-QQ-FEAT: NTS5Yb/oJHs9wDaGi1JTw5ttwWoqdengp0IZDzk4/c4eUGu+UxEFS1gP7nLSd
-        bydopXRwS7ueVoa8VFhL2dLZYp9fSE+tzIY+E6UZTUFr5Ah8qQdgup0cal1UI7z1Ikzl8yb
-        kpRo6omsNFp0cG7ewmBUnUtoeIbfmCJ9rQhyqOw7m9fV/xoHslMmi8Y175kbfP1lwXNbg8j
-        gcqCrz0orTW4h8F5SDIwxAVdId1mn+S5yNMA+HHvxfR7exBqsCOGlVyz5ZmNd5nKh41unU/
-        E3wsEgrjjPecJRzWXx1kNjjvBA7loarkFamw==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     geert@linux-m68k.org
-Cc:     jiangjian@cdjrlc.com, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] m68k: aligned '*' in comments
-Date:   Tue, 21 Jun 2022 13:06:27 +0800
-Message-Id: <20220621050627.13666-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        Tue, 21 Jun 2022 01:08:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50F220F56;
+        Mon, 20 Jun 2022 22:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655788106; x=1687324106;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=okitOvPYmnWiWxNrowvVr/Wz4wPde4s/6xq0EI+i8N4=;
+  b=DMpfWXT6pDQ6Tcx11jSjRQkL1dKmpoNxvXVLZAKI03rIeO2VlxpQlUlB
+   Pqy4AOhkhTsw1zggTCTf5jovBM++IKotnYGSRXcxYgIOsYRJCboRnCyop
+   xBhyhiCanN6X+NjCL6chBlnpRMJ1ev9gIoqppd3dSQx3f9bgrMKOhvM7n
+   djuK6T71M5gg38gPcwSxNMxWhcxnL8pC4uY4NjXMRfG9qE3vZuyjM+jYm
+   MvbR5eQLVoehZ/HljrJhCt6DW/RqIOqvCq04+01TV7Te13IrEJTXwRIw/
+   CdlvKze0adwvKQRFn5sVJm6fRcHuCGQACUy3AmYMIHvB63jtXbll6v1D+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="280076187"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="280076187"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 22:08:26 -0700
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="833408152"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 22:08:26 -0700
+Date:   Mon, 20 Jun 2022 22:08:25 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>, hpa@zytor.com,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 4/5] x86/mce: Move storm handling to core.
+Message-ID: <YrFSSZqjtWlm9rUr@agluck-desk3.sc.intel.com>
+References: <20220406063542.183946-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220406063542.183946-5-Smita.KoralahalliChannabasappa@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406063542.183946-5-Smita.KoralahalliChannabasappa@amd.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,26 +63,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The '*' in the comment is not aligned
+On Wed, Apr 06, 2022 at 01:35:41AM -0500, Smita Koralahalli wrote:
+> +	/*
+> +	 * When a bank is in storm mode, the history mask covers about
+> +	 * one second of elapsed time. Check how long it has been since
+> +	 * this bank was last polled, and compute a shift value to update
+> +	 * the history bitmask.  When not in storm mode, each consecutive
+> +	 * poll of the bank is logged in the next history bit, so shift
+> +	 * is kept at "1".
+> +	 */
+> +	if (this_cpu_read(bank_storm[bank])) {
+> +		delta = now - this_cpu_read(bank_time_stamp[bank]);
+> +		shift = (delta + HZBITS) / HZBITS;
+> +	}
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+Apologies for the long delay in following up on this.
+
+I tested out your patches on an Intel system, and they "work"
+in that storms are detected, mitigations applied, and then the
+storm end is detected and the system returns to regular mode.
+
+But the storm end happens far more quickly than I expected (in
+just over a second).  So I stared again at the code above, and
+realized it doesn't do what I expected.  Not your fault, you
+just copied from my patches ... which means that my comment
+didn't help explain what I was trying to do ... and so it wasn't
+obvious that:
+1) the test is backwards (need to adjust when the bank is NOT in
+storm mode ... in storm mode we poll every second).
+2) I can't even remember what I was trying to do with HZBITS, but
+it seems wrong too. Just need to use HZ.
+
+Patch below to be merged back into the series. This lets things
+run for just over 30 seconds without finding a logged error while
+polling in storm mode. Which is what I wanted.
+
+[  111.486306] mce: CPU48 BANK7 CMCI storm detected
+[  111.486394] mce: [Hardware Error]: Machine check events logged
+[  111.486401] mce: [Hardware Error]: Machine check events logged
+[  142.861874] mce: CPU48 BANK7 CMCI storm subsided
+
+-Tony
+
 ---
- arch/m68k/q40/q40ints.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/m68k/q40/q40ints.c b/arch/m68k/q40/q40ints.c
-index 6886a5d0007b..d15057d34e56 100644
---- a/arch/m68k/q40/q40ints.c
-+++ b/arch/m68k/q40/q40ints.c
-@@ -32,7 +32,7 @@
-  *            33   : frame int (50/200 Hz periodic timer)
-  *            34   : sample int (10/20 KHz periodic timer)
-  *
--*/
-+ */
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 74254f15f5db..8e6b77349911 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -655,16 +655,16 @@ void track_cmci_storm(int bank, u64 status)
+ 	u64 history;
  
- static void q40_irq_handler(unsigned int, struct pt_regs *fp);
- static void q40_irq_enable(struct irq_data *data);
--- 
-2.17.1
-
+ 	/*
+-	 * When a bank is in storm mode, the history mask covers about
+-	 * one second of elapsed time. Check how long it has been since
+-	 * this bank was last polled, and compute a shift value to update
+-	 * the history bitmask.  When not in storm mode, each consecutive
+-	 * poll of the bank is logged in the next history bit, so shift
+-	 * is kept at "1".
++	 * When a bank is in storm mode it is polled once per second and
++	 * the history mask will record about the last minute of poll results.
++	 * If it is not in storm mode, then the bank is only checked when
++	 * there is a CMCI interrupt. Check how long it has been since
++	 * this bank was last checked, and adjust the amount of "shift"
++	 * to apply to history.
+ 	 */
+-	if (this_cpu_read(bank_storm[bank])) {
++	if (!this_cpu_read(bank_storm[bank])) {
+ 		delta = now - this_cpu_read(bank_time_stamp[bank]);
+-		shift = (delta + HZBITS) / HZBITS;
++		shift = (delta + HZ) / HZ;
+ 	}
+ 
+ 	/* If has been a long time since the last poll, clear history */
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index b9e8c8155c66..b88773a212cf 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -79,13 +79,6 @@ DECLARE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
+  */
+ #define STORM_END_POLL_THRESHOLD	30
+ 
+-/*
+- * When there is no storm each "bit" in the history represents
+- * this many jiffies. When there is a storm every poll() takes
+- * one history bit.
+- */
+-#define HZBITS (HZ / 64)
+-
+ #ifdef CONFIG_ACPI_APEI
+ int apei_write_mce(struct mce *m);
+ ssize_t apei_read_mce(struct mce *m, u64 *record_id);

@@ -2,219 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E57553B5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A15E553B4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354011AbiFUUTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 16:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S1352455AbiFUUPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 16:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353829AbiFUUTQ (ORCPT
+        with ESMTP id S233414AbiFUUPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 16:19:16 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEC11CB00;
-        Tue, 21 Jun 2022 13:19:14 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 17A7F121F84;
-        Tue, 21 Jun 2022 20:13:04 +0000 (UTC)
-Received: from pdx1-sub0-mail-a316.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 4900D121B8E;
-        Tue, 21 Jun 2022 20:13:03 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1655842383; a=rsa-sha256;
-        cv=none;
-        b=Ozh6Dejm/iaa6Ij+swIUcPUBaMm4B49OnIW2oDdHCambEKIa2/l8We1Vk+8T1qy1xJheNk
-        kAJOuIOrBD18jKFPvB1qvkLp7WjQoutFR2IIJ5/+GETBrq+5vvBQUVYTJqwdX9aimvZ2CE
-        lflsk+USygLlQ1/qC3dhNCtE2b7qpf/VdYnBu0lrF/C3l8oVSnF1IUbRgcAE0GgsKaf+6Q
-        quASkrpGzZ+LZyiU+h0J1Vl40mdhyMPVNcDV62kA/lURU4iFuQ10xTH0EqfqtDAZuF4+d3
-        KpFMCChgmrBFJHEvWgrAFxXJ3/ExcDv9WDW9vPm9dnjCfL9TRAruFJw0LVMpWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1655842383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=8KPyrK4qTJmhET6C28NIGcqXGbT/X/diSCKe69qw4NE=;
-        b=V+QYC5r2rUOBVtq8UUrospbNm1NUtUTJheLOnjzbG7/Dj60krRMjZPzZ80O1bfxYHBfCoN
-        w/iHFkan7IGpuJxUA2mXsZMeSHof/dY7bRfQyHwEkQ3cXxUvhUmJ6j1SbFoH8fDa/wR1R9
-        ob9q0KBzEBSsMKp3Pke7tnTU8/kYLW2lWDvoNzUFDsiyEa2v1iXmYMQVtdm3+urNuDq93p
-        TJHK4w+uQTJKeE6Gs5othTdn3Vy/eu9Bv068D5EgfGAslHkLDdALsgPCPcUoPDOZetA5Kc
-        Z7VGmGi9FCoV+ULScP2+3vSWBeBro5RgsDjnh7u40gSmVvksWtVCkqu6EONQDA==
-ARC-Authentication-Results: i=1;
-        rspamd-786f5898df-lv8dd;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Snatch-Spill: 1d4bca9534ee65d1_1655842383906_3821965475
-X-MC-Loop-Signature: 1655842383906:2207848475
-X-MC-Ingress-Time: 1655842383905
-Received: from pdx1-sub0-mail-a316.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.105.211.178 (trex/6.7.1);
-        Tue, 21 Jun 2022 20:13:03 +0000
-Received: from offworld.. (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a316.dreamhost.com (Postfix) with ESMTPSA id 4LSHkk3HV0z2n;
-        Tue, 21 Jun 2022 13:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1655842383;
-        bh=8KPyrK4qTJmhET6C28NIGcqXGbT/X/diSCKe69qw4NE=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=eYymlIO2XmOrppHTU3OEIr/W82/B03X8k/1zpG6CRJ8eQgREq90FGoGsO2NbP6onH
-         DGdG+AerImRAZzbhBDw98PPX88jmXdq/7exRwIE//VvRCj2uH2a8LPJaAUqr7zL6El
-         csozTIiv0i6gzD5BgfLroUi4EPnNUMTFGej6XTI2p9CH9PwHcArzVPpNMMesGqyGZT
-         oJUADS2gUb+J5a0U//q81+7b2HrKCN7xyzEJc5B58F5LMwBpB7iTPcvkeM1g0nx44R
-         8A+EKV6UXiCCGUz41mUX/hI45GZkdC8uvB3prOaYf/YhivnsL8IrPskS+8xRKd8kvb
-         jjnYNzqe2B5pg==
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     linux-cxl@vger.kernel.org
-Cc:     dan.j.williams@intel.com, alison.schofield@intel.com,
-        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-        a.manzanares@samsung.com, dave@stgolabs.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cxl/acpi: Verify CHBS consistency
-Date:   Tue, 21 Jun 2022 13:12:59 -0700
-Message-Id: <20220621201259.1547474-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.36.1
+        Tue, 21 Jun 2022 16:15:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E001CB2D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 13:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655842514; x=1687378514;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bGXRbwjTqUOATWAK5R6YerHSlERTGBCEPEhb+fZuDZA=;
+  b=E0eqvaKXbCJ0E8smVXnxptNPKYncAeSyo7UGR7FI1pju+8XBvbXd7Etk
+   9O6YXTPDA+JYV03J5nm0qL0d1FiDMdpfHPA67cA+8Y+hYi7+AL9+50pYO
+   4uRO5XYndRMKPM3TbeZsNr9QYbfbMaj0sUCSGZQnI6frQ8x4lG+TwGeI1
+   vgCpSFmsS0TxA0VvNjKmfld2R1Osuh8WpqhbEf8up/NPNVe0ffWs1UFWR
+   YEWu/3C2tPHVtFvrC3EPa+Nhcru+BlnFz2R3vLdm3S0RYHaHfcKguRh3n
+   CEOrMzajV/52m4Pzh581fi7qirW0ZbFpRvrwZiKsjXu97MOn6B0hfVjX2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="260657052"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="260657052"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 13:15:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="643801025"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jun 2022 13:15:13 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3kHI-0000NM-FM;
+        Tue, 21 Jun 2022 20:15:12 +0000
+Date:   Wed, 22 Jun 2022 04:14:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: drivers/platform/mips/rs780e-acpi.c:35:6: warning: no previous
+ prototype for 'pm_iowrite'
+Message-ID: <202206220419.A7URFBQr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similarly to verifying the cfwms, have a cxl_acpi_chbs_verify(),
-as described by the CXL T3 Memory Device Software Guide
-for CXL 2.0 platforms.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   78ca55889a549a9a194c6ec666836329b774ab6d
+commit: 0cfd2440aa03ea3d4b04cc2565561cecadcb1257 MIPS: Loongson64: Make RS780E ACPI as a platform driver
+date:   2 years, 2 months ago
+config: mips-randconfig-r011-20220622 (https://download.01.org/0day-ci/archive/20220622/202206220419.A7URFBQr-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0cfd2440aa03ea3d4b04cc2565561cecadcb1257
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0cfd2440aa03ea3d4b04cc2565561cecadcb1257
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/platform/mips/
 
-Also while at it, tuck the rc check for nvdimm bridge into
-the pmem branch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
+All warnings (new ones prefixed by >>):
 
- drivers/cxl/acpi.c | 64 +++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 61 insertions(+), 3 deletions(-)
+>> drivers/platform/mips/rs780e-acpi.c:35:6: warning: no previous prototype for 'pm_iowrite' [-Wmissing-prototypes]
+      35 | void pm_iowrite(u8 reg, u8 value)
+         |      ^~~~~~~~~~
+>> drivers/platform/mips/rs780e-acpi.c:41:4: warning: no previous prototype for 'pm_ioread' [-Wmissing-prototypes]
+      41 | u8 pm_ioread(u8 reg)
+         |    ^~~~~~~~~
+>> drivers/platform/mips/rs780e-acpi.c:47:6: warning: no previous prototype for 'pm2_iowrite' [-Wmissing-prototypes]
+      47 | void pm2_iowrite(u8 reg, u8 value)
+         |      ^~~~~~~~~~~
+>> drivers/platform/mips/rs780e-acpi.c:53:4: warning: no previous prototype for 'pm2_ioread' [-Wmissing-prototypes]
+      53 | u8 pm2_ioread(u8 reg)
+         |    ^~~~~~~~~~
+   drivers/platform/mips/rs780e-acpi.c:72:6: warning: no previous prototype for 'acpi_registers_setup' [-Wmissing-prototypes]
+      72 | void acpi_registers_setup(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
 
-diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-index 40286f5df812..33b5f362c9f1 100644
---- a/drivers/cxl/acpi.c
-+++ b/drivers/cxl/acpi.c
-@@ -187,14 +187,65 @@ static int add_host_bridge_uport(struct device *match, void *arg)
- struct cxl_chbs_context {
- 	struct device *dev;
- 	unsigned long long uid;
-+	struct cxl_port *root_port;
- 	resource_size_t chbcr;
- };
- 
-+static inline bool range_overlaps(struct range *r1, struct range *r2)
-+{
-+	return r1->start <= r2->end && r2->start <= r1->end;
-+}
-+
-+static int cxl_acpi_chbs_verify(struct cxl_chbs_context *cxt,
-+				struct acpi_cedt_chbs *chbs)
-+{
-+	struct device *dev = cxt->dev;
-+	struct cxl_dport *dport;
-+	struct cxl_port *root_port = cxt->root_port;
-+	struct range chbs_range = {
-+		.start = chbs->base,
-+		.end = chbs->base + chbs->length - 1,
-+	};
-+
-+	if (chbs->cxl_version > 1) {
-+		dev_err(dev, "CHBS Unsupported CXL Version\n");
-+		return -EINVAL;
-+	}
-+
-+	if (chbs->cxl_version == ACPI_CEDT_CHBS_VERSION_CXL11)
-+		return 0;
-+
-+	if (chbs->cxl_version == ACPI_CEDT_CHBS_VERSION_CXL20 &&
-+	    (chbs->length != ACPI_CEDT_CHBS_LENGTH_CXL20)) {
-+		dev_err(dev, "Platform does not support CXL 2.0\n");
-+		return -EINVAL;
-+	}
-+
-+	device_lock(&root_port->dev);
-+	list_for_each_entry(dport, &root_port->dports, list) {
-+		struct range dport_range = {
-+			.start = dport->component_reg_phys,
-+			.end = dport->component_reg_phys +
-+			CXL_COMPONENT_REG_BLOCK_SIZE - 1,
-+		};
-+
-+		if (range_overlaps(&chbs_range, &dport_range)) {
-+			device_unlock(&root_port->dev);
-+			dev_err(dev, "CHBS overlapping Base and Length pair\n");
-+			return -EINVAL;
-+		}
-+	}
-+	device_unlock(&root_port->dev);
-+
-+	return 0;
-+}
-+
- static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
- 			 const unsigned long end)
- {
- 	struct cxl_chbs_context *ctx = arg;
- 	struct acpi_cedt_chbs *chbs;
-+	int ret;
- 
- 	if (ctx->chbcr)
- 		return 0;
-@@ -203,6 +254,11 @@ static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
- 
- 	if (ctx->uid != chbs->uid)
- 		return 0;
-+
-+	ret = cxl_acpi_chbs_verify(ctx, chbs);
-+	if (ret)
-+		return ret;
-+
- 	ctx->chbcr = chbs->base;
- 
- 	return 0;
-@@ -232,6 +288,7 @@ static int add_host_bridge_dport(struct device *match, void *arg)
- 	ctx = (struct cxl_chbs_context) {
- 		.dev = host,
- 		.uid = uid,
-+		.root_port = root_port,
- 	};
- 	acpi_table_parse_cedt(ACPI_CEDT_TYPE_CHBS, cxl_get_chbcr, &ctx);
- 
-@@ -321,11 +378,12 @@ static int cxl_acpi_probe(struct platform_device *pdev)
- 	if (rc < 0)
- 		return rc;
- 
--	if (IS_ENABLED(CONFIG_CXL_PMEM))
-+	if (IS_ENABLED(CONFIG_CXL_PMEM)) {
- 		rc = device_for_each_child(&root_port->dev, root_port,
- 					   add_root_nvdimm_bridge);
--	if (rc < 0)
--		return rc;
-+		if (rc < 0)
-+			return rc;
-+	}
- 
- 	/* In case PCI is scanned before ACPI re-trigger memdev attach */
- 	return cxl_bus_rescan();
+
+vim +/pm_iowrite +35 drivers/platform/mips/rs780e-acpi.c
+
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  34  
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29 @35  void pm_iowrite(u8 reg, u8 value)
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  36  {
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  37  	pmio_write_index(PM_INDEX, reg, value);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  38  }
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  39  EXPORT_SYMBOL(pm_iowrite);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  40  
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29 @41  u8 pm_ioread(u8 reg)
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  42  {
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  43  	return pmio_read_index(PM_INDEX, reg);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  44  }
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  45  EXPORT_SYMBOL(pm_ioread);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  46  
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29 @47  void pm2_iowrite(u8 reg, u8 value)
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  48  {
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  49  	pmio_write_index(PM2_INDEX, reg, value);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  50  }
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  51  EXPORT_SYMBOL(pm2_iowrite);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  52  
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29 @53  u8 pm2_ioread(u8 reg)
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  54  {
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  55  	return pmio_read_index(PM2_INDEX, reg);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  56  }
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  57  EXPORT_SYMBOL(pm2_ioread);
+9c057b3e02184b1 drivers/platform/mips/acpi_init.c Huacai Chen 2015-03-29  58  
+
+:::::: The code at line 35 was first introduced by commit
+:::::: 9c057b3e02184b111d3392be75efc7c94f0fdf20 MIPS: Loongson-3: Add chipset ACPI platform driver
+
+:::::: TO: Huacai Chen <chenhc@lemote.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,127 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CEA553191
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED0F5531BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349760AbiFUMCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S1349755AbiFUMMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiFUMCE (ORCPT
+        with ESMTP id S1348842AbiFUMMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:02:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667BD2B1B1;
-        Tue, 21 Jun 2022 05:02:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2140D1F8A3;
-        Tue, 21 Jun 2022 12:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655812922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=uU2jiNk6Ug60ZbuSPO6zGopTbMqjO7aR6mTRO4CzwJg=;
-        b=j60xuo3mlUkeVlZ0C46eHEJwpKdE9M7ag0GKfxhoJoPWEyBl/IshNczI8+QXPnbalYIc48
-        64gC+gHfpUNhd9KaS/SD44DIvReFkLqiBFPURtWLpvOsJGmD5Q+je1k5KwCVkRHUJaG2t1
-        RJMTSTGe4/Qcc/hPG4fSXKvTJCsRnvI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655812922;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=uU2jiNk6Ug60ZbuSPO6zGopTbMqjO7aR6mTRO4CzwJg=;
-        b=l6PIt3b/6fWF1z3LBUP/Ez7zJNMHL1V2ZccxhDw7dVRnN2O8rKAH9kHDoeExpdUPSTHM8m
-        ZcBq+h5bHnXNZuDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 046E913638;
-        Tue, 21 Jun 2022 12:02:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vTmVOjmzsWJ7ewAAMHmgww
-        (envelope-from <chrubis@suse.cz>); Tue, 21 Jun 2022 12:02:01 +0000
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, arnd@arndb.de, ltp@lists.linux.it,
-        David.Laight@aculab.com, zack@owlfolio.org, dhowells@redhat.com,
-        Cyril Hrubis <chrubis@suse.cz>
-Subject: [PATCH v3] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Date:   Tue, 21 Jun 2022 14:03:55 +0200
-Message-Id: <20220621120355.2903-1-chrubis@suse.cz>
-X-Mailer: git-send-email 2.35.1
+        Tue, 21 Jun 2022 08:12:38 -0400
+X-Greylist: delayed 1339 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 05:12:36 PDT
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [159.69.200.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D15E2BB07;
+        Tue, 21 Jun 2022 05:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:Message-Id
+        :Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=njJuoA2Sc/56TeF9U5fuCJ1Q1iYeeVXupfO3Z71rmfU=; b=N20iD1j4QJpCbcdtTtf0vx4SfS
+        v9vaHEUavFbJcnwamVJjVHTPAgSNlSJXTH6poPimDs9+bULGexIuzt+l9cAjUpktSS0RCyKacIuCp
+        7mkrrtulA3TPEdxbQGC4sc5Fem19JxPiWAcf5N2zGRLSh38enkeRCc5KY2ypcoD+ovxYLed2+JLKv
+        qD/IM8Xp/H194fGBE9LyVjxnqVy20zgwo5GUcbzjiUCR/QtX66QNX/o2nRLpjiZGWuqRSCMCEp5sY
+        Qwl4QveMpiaAd3HMniNlZ1tVnv3oVi371F+FhewiOTracn0ddYLjmA3dk5eXCF63MrB9E/zqurcjw
+        LYtHnsDA==;
+Received: from [10.22.3.24] (helo=kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1o3cOK-005hVa-SB; Tue, 21 Jun 2022 13:49:56 +0200
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH net] virtio_net: fix xdp_rxq_info bug after suspend/resume
+Date:   Tue, 21 Jun 2022 13:48:44 +0200
+Message-Id: <20220621114845.3650258-1-stephan.gerhold@kernkonzept.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This changes the __u64 and __s64 in userspace on 64bit platforms from
-long long (unsigned) int to just long (unsigned) int in order to match
-the uint64_t and int64_t size in userspace for C code.
+The following sequence currently causes a driver bug warning
+when using virtio_net:
 
-We cannot make the change for C++ since that would be non-backwards
-compatible change and may cause possible regressions and even
-compilation failures, e.g. overloaded function may no longer find a
-correct match.
+  # ip link set eth0 up
+  # echo mem > /sys/power/state (or e.g. # rtcwake -s 10 -m mem)
+  <resume>
+  # ip link set eth0 down
 
-This allows us to use the kernel structure definitions in userspace in C
-code. For example we can use PRIu64 and PRId64 modifiers in printf() to
-print structure membere. Morever with this there would be no need to
-redefine these structures in an libc implementations as it is done now.
+  Missing register, driver bug
+  WARNING: CPU: 0 PID: 375 at net/core/xdp.c:138 xdp_rxq_info_unreg+0x58/0x60
+  Call trace:
+   xdp_rxq_info_unreg+0x58/0x60
+   virtnet_close+0x58/0xac
+   __dev_close_many+0xac/0x140
+   __dev_change_flags+0xd8/0x210
+   dev_change_flags+0x24/0x64
+   do_setlink+0x230/0xdd0
+   ...
 
-Consider for example the newly added statx() syscall. If we use the
-header from uapi we will get warnings when attempting to print it's
-members as:
+This happens because virtnet_freeze() frees the receive_queue
+completely (including struct xdp_rxq_info) but does not call
+xdp_rxq_info_unreg(). Similarly, virtnet_restore() sets up the
+receive_queue again but does not call xdp_rxq_info_reg().
 
-	printf("%" PRIu64 "\n", stx.stx_size);
+Actually, parts of virtnet_freeze_down() and virtnet_restore_up()
+are almost identical to virtnet_close() and virtnet_open(): only
+the calls to xdp_rxq_info_(un)reg() are missing. This means that
+we can fix this easily and avoid such problems in the future by
+just calling virtnet_close()/open() from the freeze/restore handlers.
 
-We get:
+Aside from adding the missing xdp_rxq_info calls the only difference
+is that the refill work is only cancelled if netif_running(). However,
+this should not make any functional difference since the refill work
+should only be active if the network interface is actually up.
 
-	warning: format '%lu' expects argument of type 'long unsigned int',
-	         but argument 5 has type '__u64' {aka 'long long unsigned int'}
-
-Signed-off-by: Cyril Hrubis <chrubis@suse.cz>
+Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 ---
- include/uapi/asm-generic/types.h | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/virtio_net.c | 25 ++++++-------------------
+ 1 file changed, 6 insertions(+), 19 deletions(-)
 
-v2: Make sure we do not break C++ applications
-v3: Update commit message to explain C++ exclusion
-
-diff --git a/include/uapi/asm-generic/types.h b/include/uapi/asm-generic/types.h
-index dfaa50d99d8f..11e468a39d1e 100644
---- a/include/uapi/asm-generic/types.h
-+++ b/include/uapi/asm-generic/types.h
-@@ -1,9 +1,16 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- #ifndef _ASM_GENERIC_TYPES_H
- #define _ASM_GENERIC_TYPES_H
-+
-+#include <asm/bitsperlong.h>
-+
- /*
-- * int-ll64 is used everywhere now.
-+ * int-ll64 is used everywhere in kernel now.
-  */
--#include <asm-generic/int-ll64.h>
-+#if !defined(__KERNEL__) && !defined(__cplusplus) && __BITSPERLONG == 64
-+# include <asm-generic/int-l64.h>
-+#else
-+# include <asm-generic/int-ll64.h>
-+#endif
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index db05b5e930be..969a67970e71 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2768,7 +2768,6 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
+ static void virtnet_freeze_down(struct virtio_device *vdev)
+ {
+ 	struct virtnet_info *vi = vdev->priv;
+-	int i;
  
- #endif /* _ASM_GENERIC_TYPES_H */
+ 	/* Make sure no work handler is accessing the device */
+ 	flush_work(&vi->config_work);
+@@ -2776,14 +2775,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
+ 	netif_tx_lock_bh(vi->dev);
+ 	netif_device_detach(vi->dev);
+ 	netif_tx_unlock_bh(vi->dev);
+-	cancel_delayed_work_sync(&vi->refill);
+-
+-	if (netif_running(vi->dev)) {
+-		for (i = 0; i < vi->max_queue_pairs; i++) {
+-			napi_disable(&vi->rq[i].napi);
+-			virtnet_napi_tx_disable(&vi->sq[i].napi);
+-		}
+-	}
++	if (netif_running(vi->dev))
++		virtnet_close(vi->dev);
+ }
+ 
+ static int init_vqs(struct virtnet_info *vi);
+@@ -2791,7 +2784,7 @@ static int init_vqs(struct virtnet_info *vi);
+ static int virtnet_restore_up(struct virtio_device *vdev)
+ {
+ 	struct virtnet_info *vi = vdev->priv;
+-	int err, i;
++	int err;
+ 
+ 	err = init_vqs(vi);
+ 	if (err)
+@@ -2800,15 +2793,9 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+ 	virtio_device_ready(vdev);
+ 
+ 	if (netif_running(vi->dev)) {
+-		for (i = 0; i < vi->curr_queue_pairs; i++)
+-			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
+-				schedule_delayed_work(&vi->refill, 0);
+-
+-		for (i = 0; i < vi->max_queue_pairs; i++) {
+-			virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+-			virtnet_napi_tx_enable(vi, vi->sq[i].vq,
+-					       &vi->sq[i].napi);
+-		}
++		err = virtnet_open(vi->dev);
++		if (err)
++			return err;
+ 	}
+ 
+ 	netif_tx_lock_bh(vi->dev);
 -- 
-2.35.1
+2.30.2
 

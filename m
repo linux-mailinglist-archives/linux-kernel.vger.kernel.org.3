@@ -2,128 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E11E5534B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AE85534B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350288AbiFUOjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S1351400AbiFUOkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351344AbiFUOjs (ORCPT
+        with ESMTP id S1349156AbiFUOko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:39:48 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDE224F3C;
-        Tue, 21 Jun 2022 07:39:47 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id w6so6125450pfw.5;
-        Tue, 21 Jun 2022 07:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B3jkGZmyYe5YTvNOcCYwotjMONtKG1bLgc+a9HS4wM4=;
-        b=HGEZK+RsjqtMuR/gMbFIRx8Oi5XKzWx+c5S5C8AsZJgbaE2iqGIodX8r1y2pCa6PLZ
-         6tKO6deQ34s8LrzXhEumFzAkyyNL/thYf1U0jovp2cGEuOENMhFuY9xHQFUMCveF+Tiu
-         T2SzXklrAnU87L+GAzyTMRi/BxowIHw2QTBq/Nvh/CRK2z6iOeF/hk47QG082iwb/KYg
-         K5KnYfucYHCWVmSmjepnuD3Hn8q0dMqZiEzxz7Kqp0irLMlprtGsbIfs3bUSltLcq+uN
-         5RuY30Lt235VNqB5bKc8cR6QUqIhgrQs+BvaSC70vPctZ4Z+6OKPwHbht+Z1gtptmF0y
-         hXVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B3jkGZmyYe5YTvNOcCYwotjMONtKG1bLgc+a9HS4wM4=;
-        b=HtXdamPojpIAX/ELiHJZ1mHn6Majov44DhXVCG1eq7lFpQET/Kvlpt746BJn4j2wxq
-         FiJm7QkXcYoo9mF5nr9rUFzKwKYXGWSHZa2/Iko530zp2oZpUB0V2Ml8JOazDFxFvAhp
-         vc6Lw25Qyn8WbE3b/2A3PHuxPAeAcs/7Kwp7vChD8OP9RLhpRRfjVI+k2W1mHzMfBH0w
-         OHJbaG0BdePbJhxX06nXbmkWuVZWPQQwlzEtya3Xr2NfzCF/6QA38jblnI5oYau88er9
-         hVMyOdIjTq6gUClGq+j7KlLb5o209k2Dc/MajsLUVHCbUi0XL+h/YEddyry8Olypy2yU
-         Yaow==
-X-Gm-Message-State: AJIora/EsJGqrX1np92H0ySMDcNxStEcXFBdApgT78pNIibaO/3BHdhv
-        RWjsenk3W5uvOaTBdzoScEU=
-X-Google-Smtp-Source: AGRyM1v+pmMMh1utCCrDbNZeJJtA0McVOhRstARshwPejkn3gsWR4071Z3vyVnWDb20Gj/Pk9UyrzQ==
-X-Received: by 2002:a05:6a00:2285:b0:525:387b:469c with SMTP id f5-20020a056a00228500b00525387b469cmr2731678pfe.62.1655822387169;
-        Tue, 21 Jun 2022 07:39:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 9-20020aa79149000000b00518424f8922sm11438750pfi.77.2022.06.21.07.39.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 07:39:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e597b6fd-e54e-6689-ffaf-8f7d9c14a1d5@roeck-us.net>
-Date:   Tue, 21 Jun 2022 07:39:42 -0700
+        Tue, 21 Jun 2022 10:40:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC58F237D4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:40:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59EE4616BF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:40:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CE7C341C0;
+        Tue, 21 Jun 2022 14:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655822442;
+        bh=w320+wuqbFHvuGQ3W4guubYrnJKxDF19Xrl56Eu3yHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RutlupmvxTM2WBwYvITX5xNCm/wKJpI1hJPG0OmWn1IjpLSP9S5Iipo8ivtuNZa4N
+         SREWd6vu3fuliQ3quyD4ngv9hfRsSPJwe7og85nudLkf5uosLDZU/FDofT/Ih0DpdQ
+         qO5Nm12xtVGTxffcoEdNz/BVAmwvl5ZbrD9R/2ZgXQtrqO+4IrCESYxy3aPR0922bF
+         LfunBWPeels2/RJolz24Xc2RHqsK8Ep/RJqsuV3XNyah0Imp31NC/FUBAdAml2QYfd
+         JSMEvt3F77KtVcXwjB+pj6MS8gprWfJjbUBfGB6O63rqbtTPYfCctPYcJ3LBB6Z6Nb
+         Xf9pQZO9CTIwg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3f3V-00078B-8q; Tue, 21 Jun 2022 16:40:37 +0200
+Date:   Tue, 21 Jun 2022 16:40:37 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     vireshk@kernel.org, elder@kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: Unitialized Variable and Null Pointer Dereference bug in
+ gb_bootrom_get_firmware
+Message-ID: <YrHYZb2BT8fQMcaR@hovoldconsulting.com>
+References: <CAD-N9QVVKUDFKMSxUc-smcz0B_7PrjN3DPku+cDM3ZKDn0XLBA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 04/18] dt-bindings: watchdog: npcm: Add npcm845
- compatible string
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20220621131424.162355-1-tmaimon77@gmail.com>
- <20220621131424.162355-5-tmaimon77@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220621131424.162355-5-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD-N9QVVKUDFKMSxUc-smcz0B_7PrjN3DPku+cDM3ZKDn0XLBA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/22 06:14, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM845 watchdog.
+On Tue, Jun 21, 2022 at 10:36:04PM +0800, Dongliang Mu wrote:
+> Hi maintainers,
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-Not sure what the plan is here. For the time being, I'll assume
-that all patches will be included in a single pull request and
-not be submitted through maintainer trees.
-
-Guenter
-
-> ---
->   .../devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt          | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> I would like to send one bug report.
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-> index 9059f54dc023..866a958b8a2b 100644
-> --- a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-> @@ -6,7 +6,8 @@ expiry.
->   
->   Required properties:
->   - compatible      : "nuvoton,npcm750-wdt" for NPCM750 (Poleg), or
-> -                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon).
-> +                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon), or
-> +                    "nuvoton,npcm845-wdt" for NPCM845 (Arbel).
->   - reg             : Offset and length of the register set for the device.
->   - interrupts      : Contain the timer interrupt with flags for
->                       falling edge.
+> In gb_bootrom_get_firmware, if the first branch is satisfied, it will
+> go to queue_work, leading to the dereference of uninitialized const
+> variable "fw". If the second branch is satisfied, it will go to unlock
+> with fw as NULL pointer, leading to a NULL Pointer Dereference.
 
+This sounds like the false positive that checkers keep tripping over.
+
+Please double check your analysis and search the archives first.
+
+Johan

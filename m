@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC795533D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8E65533DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351572AbiFUNix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S1345557AbiFUNkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351841AbiFUNig (ORCPT
+        with ESMTP id S233105AbiFUNkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:38:36 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E13AF26;
-        Tue, 21 Jun 2022 06:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-ID:Content-Description;
-        bh=DC4ZEyWBHqB8Ee7U3iV5pXPcACu5mfk1YFIKPVvFHL0=; b=lbBCVFbO79ungOcgVG+jyWLNrM
-        /KOz1ugytuFjXsCl890ONimeyORTPAQUXBUIjHvM+X177APV2JZaL57SPVVwzPSV8sYu/AsVywSKx
-        h36eglYOvSj+A+72OyE4ORJArfNcTeceSS97vUxpu/hOTBsGgoL55w72ktvIfHGZrT4dKQ31b7fQ5
-        eb0emxr7GEA9U44eUsGxzEnodv9kPHcIZ8MhCDVSrbtmt/aIPrOZRX+JhIQft+ft7W8B6DM8VsVHV
-        vDKEyyI75GWBzNoaDTKDO6QXfcmFEoHFXk8mJXlKwmD+q0fSf//m8h5rohnn4eLPq+fGEWexxN66h
-        R+RDMOZg==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1o3e4X-00032a-3U; Tue, 21 Jun 2022 14:37:37 +0100
-Date:   Tue, 21 Jun 2022 14:37:35 +0100
-From:   John Keeping <john@metanate.com>
-To:     LABBE Corentin <clabbe@baylibre.com>
-Cc:     heiko@sntech.de, ardb@kernel.org, herbert@gondor.apana.org.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v7 14/33] crypto: rockchip: handle reset also in PM
-Message-ID: <YrHJn6Pl5B/1pj9L@donbot>
-References: <20220508185957.3629088-1-clabbe@baylibre.com>
- <20220508185957.3629088-15-clabbe@baylibre.com>
- <YrBUODGF51oUsF1f@donbot>
- <YrF74tmA9qc+I3JF@Red>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrF74tmA9qc+I3JF@Red>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 21 Jun 2022 09:40:41 -0400
+Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFB22AD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:40:37 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1655818767tu45ejch
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 21 Jun 2022 21:39:22 +0800 (CST)
+X-QQ-SSF: 0100000000700060B000D00A0000000
+X-QQ-FEAT: FXvDfBZI5O6DgV0I3s0IakLWZaVbIOeZptt8jkiqdC1X/yUp5ELNdn8Vvimqw
+        kdqB7vxeV000srLFqPrzmvpRv3xMNGqY/WTZykt2a5+hrZU2ouG6aJY0FwkNxIcz91BpQfG
+        VqR06qnanaOXzeMMt3XsO3ofR/u0v1o+Xuvjmy/MwCxeN2KgF90IWZySikkpVqMJ8bHPXsH
+        NRdlOMeNA03XnMjqUcn+s0TupNOs31NxK4wghTnvYQSVuCs/aZAMQLbyUfXO3/oIHKhjpYk
+        JiuqbONKtHaOpWVxC5aL0UXAns7l7YBvcX5cguXNa3+mnNVAM1JO3eagNC3l7urNzzhZOa9
+        rm3F+l7prWovBsId6MgNgmymtknZw==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     airlied@linux.ie, daniel@ffwll.ch
+Cc:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
+        jiangjian@cdjrlc.com, Julia.Lawall@inria.fr,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/mmu: drop unexpected word "the" in the comments
+Date:   Tue, 21 Jun 2022 21:39:20 +0800
+Message-Id: <20220621133920.8112-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 10:05:54AM +0200, LABBE Corentin wrote:
-> Le Mon, Jun 20, 2022 at 12:04:24PM +0100, John Keeping a écrit :
-> > On Sun, May 08, 2022 at 06:59:38PM +0000, Corentin Labbe wrote:
-> > > reset could be handled by PM functions.
-> > 
-> > Is there any further rationale for this?
-> > 
-> > After this change there is no longer a guaranteed reset pulse on probe
-> > since the reset control may already be de-asserted.  This is normally
-> > the most important case for a reset as it's the only time when the state
-> > of the hardware is unknown.
-> > 
-> > The original use of devm_add_action_or_reset() seems a bit weird already
-> > since there doesn't seem to be any need to assert reset when the driver
-> > is unloaded.
-> > 
-> 
-> I am not an hw engineer, so my knowledge on reset is low.
-> So why not having a reset pulse on probe is a problem ?
+there is an unexpected word "the" in the comments that need to be dropped
 
-The point of the reset is to bring the hardware back to a known state.
-Since we don't know what state the hardware will be in following the
-bootloader or previous OS, I think the reset in probe is the only place
-that it is important.
+file: drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+line: 1051
+ * have the the deepest nesting of page tables.
+changed to
+ * have the deepest nesting of page tables.
 
-If this patch isn't fixing anything, I suggest just dropping it.
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+index ca74775834dd..ae793f400ba1 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+@@ -1048,7 +1048,7 @@ nvkm_vmm_ctor(const struct nvkm_vmm_func *func, struct nvkm_mmu *mmu,
+ 	__mutex_init(&vmm->mutex, "&vmm->mutex", key ? key : &_key);
+ 
+ 	/* Locate the smallest page size supported by the backend, it will
+-	 * have the the deepest nesting of page tables.
++	 * have the deepest nesting of page tables.
+ 	 */
+ 	while (page[1].shift)
+ 		page++;
+-- 
+2.17.1
+

@@ -2,119 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9065552FFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6A3552FE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiFUKpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S1346805AbiFUKiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiFUKpR (ORCPT
+        with ESMTP id S1348291AbiFUKh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:45:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773C4286D4;
-        Tue, 21 Jun 2022 03:45:16 -0700 (PDT)
+        Tue, 21 Jun 2022 06:37:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B002635;
+        Tue, 21 Jun 2022 03:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655808316; x=1687344316;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=92qWkWzDZRR+3vN9HA1g36iku2zgJgrFBeBrin/KXIc=;
-  b=IErzzsYxL0TpuYIdNFbt8LJ0Vq7bwJBPft31fbYi1e92KCMgOaLS5QLE
-   8SqY9MBWLfJ7mXEmih9/dFCjLiKqqNSkZfpwE53FhoK7IcOGFXkFBQayc
-   +5IN1tgyD7HcsaEFlW2v21B+y4UcxPjtohx74ddqAfHHA0WeNYLTndyKR
-   B9n+YaZMsfkjCqm13e418wVrwcjWx/VP2m3NoT1oPCKZl+jPnXk1tTb0P
-   /uneplq4xWlTntpReehUL1oQ5/hanVANRkPSe2bsp+zYMUrrae2WOmGq8
-   dEYG651qxNxAjUvLj5exm8N7NWS9FpqDKwo/N+0OQAjhutmkmM/x1X6Vn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="280136737"
+  t=1655807875; x=1687343875;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fYz8uuFvylv6Ky43GZqcEtTMOEBoOJOUtkMSELIJ7lU=;
+  b=jJ1VWXUeCuA9IiWKLkpGSJLrFmMfcuC5VB9UXddBMDyh+Z4uqrDJpMSh
+   IyWBQrbQq8lfI2E4LxKRfkR/ld44UQ7bxvcCdqsjLAnTh7PvZCwDIcTuW
+   ZU3CohJrSB1tOMSW91SLUxTmIC5D+ntUKOscZCmzAszxA/+xxafxI6nlI
+   w/YYSAzuVH93asTUNSL76FeUmuy/gF/hhQ+cYTTJyhIvoKaS9kskpKNBR
+   yxiplQihwrgUsKs9XuftewWS3RqWPGE5JIkT2HWZGqHtAqoc6rYusy1kx
+   NfCvfaMJNm0HosyYkdTOcreTsG3smfqb/12WM8UEf2RQF18k3jEcrYcpx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="263120621"
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="280136737"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:45:07 -0700
+   d="scan'208";a="263120621"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:37:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="833523803"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Jun 2022 03:45:04 -0700
-Date:   Tue, 21 Jun 2022 18:36:57 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
-        Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v20 2/4] docs: fpga: mgr: document parse_header() callback
-Message-ID: <20220621103657.GB1530041@yilunxu-OptiPlex-7050>
-References: <20220617134846.19859-1-i.bornyakov@metrotek.ru>
- <20220617134846.19859-3-i.bornyakov@metrotek.ru>
+   d="scan'208";a="689882530"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2022 03:37:52 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5743A13C; Tue, 21 Jun 2022 13:37:57 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: [PATCH v2 1/1] iio: adc: mxs-lradc-adc: Get rid of OF specifics
+Date:   Tue, 21 Jun 2022 13:37:54 +0300
+Message-Id: <20220621103754.12771-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617134846.19859-3-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 04:48:44PM +0300, Ivan Bornyakov wrote:
-> Document newly introduced fpga_manager_ops callback parse_header() and
-> flag skip_header along with header_size and data_size fields of struct
-> fpga_image_info.
-> 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+First of all, the additional conversion from vIRQ, and this is exactly
+what is returned by platform_get_irq_byname(), to vIRQ is not needed.
+Hence, drop no-op call to irq_of_parse_and_map().
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Second, assign the firmware node instead of of_node.
 
-> ---
->  Documentation/driver-api/fpga/fpga-mgr.rst | 27 +++++++++++++++++-----
->  1 file changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/fpga/fpga-mgr.rst b/Documentation/driver-api/fpga/fpga-mgr.rst
-> index 42c01f396dce..49c0a9512653 100644
-> --- a/Documentation/driver-api/fpga/fpga-mgr.rst
-> +++ b/Documentation/driver-api/fpga/fpga-mgr.rst
-> @@ -79,12 +79,27 @@ do the programming sequence for this particular FPGA.  These ops return 0 for
->  success or negative error codes otherwise.
->  
->  The programming sequence is::
-> - 1. .write_init
-> - 2. .write or .write_sg (may be called once or multiple times)
-> - 3. .write_complete
-> -
-> -The .write_init function will prepare the FPGA to receive the image data.  The
-> -buffer passed into .write_init will be at most .initial_header_size bytes long;
-> + 1. .parse_header (optional, may be called once or multiple times)
-> + 2. .write_init
-> + 3. .write or .write_sg (may be called once or multiple times)
-> + 4. .write_complete
-> +
-> +The .parse_header function will set header_size and data_size to
-> +struct fpga_image_info. Before parse_header call, header_size is initialized
-> +with initial_header_size. If flag skip_header of fpga_manager_ops is true,
-> +.write function will get image buffer starting at header_size offset from the
-> +beginning. If data_size is set, .write function will get data_size bytes of
-> +the image buffer, otherwise .write will get data up to the end of image buffer.
-> +This will not affect .write_sg, .write_sg will still get whole image in
-> +sg_table form. If FPGA image is already mapped as a single contiguous buffer,
-> +whole buffer will be passed into .parse_header. If image is in scatter-gather
-> +form, core code will buffer up at least .initial_header_size before the first
-> +call of .parse_header, if it is not enough, .parse_header should set desired
-> +size into info->header_size and return -EAGAIN, then it will be called again
-> +with greater part of image buffer on the input.
-> +
-> +The .write_init function will prepare the FPGA to receive the image data. The
-> +buffer passed into .write_init will be at least info->header_size bytes long;
->  if the whole bitstream is not immediately available then the core code will
->  buffer up at least this much before starting.
->  
-> -- 
-> 2.25.1
-> 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Fabio Estevam <festevam@gmail.com>
+---
+v2: added property.h (Fabio), added tag (Fabio)
+ drivers/iio/adc/mxs-lradc-adc.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/iio/adc/mxs-lradc-adc.c b/drivers/iio/adc/mxs-lradc-adc.c
+index bca79a93cbe4..02d2ffafe34d 100644
+--- a/drivers/iio/adc/mxs-lradc-adc.c
++++ b/drivers/iio/adc/mxs-lradc-adc.c
+@@ -17,8 +17,8 @@
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/mxs-lradc.h>
+ #include <linux/module.h>
+-#include <linux/of_irq.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/sysfs.h>
+ 
+ #include <linux/iio/buffer.h>
+@@ -692,7 +692,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
+ 	struct mxs_lradc_adc *adc;
+ 	struct iio_dev *iio;
+ 	struct resource *iores;
+-	int ret, irq, virq, i, s, n;
++	int ret, irq, i, s, n;
+ 	u64 scale_uv;
+ 	const char **irq_name;
+ 
+@@ -721,7 +721,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, iio);
+ 
+ 	iio->name = pdev->name;
+-	iio->dev.of_node = dev->parent->of_node;
++	device_set_node(&iio->dev, dev_fwnode(dev->parent));
+ 	iio->info = &mxs_lradc_adc_iio_info;
+ 	iio->modes = INDIO_DIRECT_MODE;
+ 	iio->masklength = LRADC_MAX_TOTAL_CHANS;
+@@ -747,9 +747,7 @@ static int mxs_lradc_adc_probe(struct platform_device *pdev)
+ 		if (irq < 0)
+ 			return irq;
+ 
+-		virq = irq_of_parse_and_map(dev->parent->of_node, irq);
+-
+-		ret = devm_request_irq(dev, virq, mxs_lradc_adc_handle_irq,
++		ret = devm_request_irq(dev, irq, mxs_lradc_adc_handle_irq,
+ 				       0, irq_name[i], iio);
+ 		if (ret)
+ 			return ret;
+-- 
+2.35.1
+

@@ -2,53 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF15B55384C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5409C55385E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236768AbiFUQ7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 12:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S1352251AbiFURBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 13:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbiFUQ7d (ORCPT
+        with ESMTP id S1350883AbiFURBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 12:59:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FB21FCDC
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 09:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E4DD61548
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9054DC3411C;
-        Tue, 21 Jun 2022 16:59:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655830771;
-        bh=lmiWAcqBGF009l5Gs571NJGOJ8UGNGQUNmtknNwqWDs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=uLuwfksU+hlYfMlUGekAGUfxxB6eErGQomsklnOQF2lMY9JMDlr9QnhZ5FdSKwRVQ
-         +TVielA9x07BfwCcx+1rHL5v8ifn7eidBhCvimyWoBSXR7qn8DpHW+APIWB5i6t5K7
-         f6Fi2Cd4BphilV6F86Ws8tw4vWWk7jxC3zgu73IXjRjfAcpNXdbLG30jn/fs5A1sE5
-         WDyH7b9dF4/9PiQSvhG84rYFji4hbHTV2CrFEDa31RZbs/TfcSDT8URZpEq8BuJvy4
-         apKjwdnqv/hYIPkn2ebIxPFO4m7GYT7JzyUdaj18UivmCGa1S03bTWY0DHPNT01tXb
-         v2lR/rcJJbxpA==
-From:   Mark Brown <broonie@kernel.org>
-To:     judyhsiao@chromium.org, heiko@sntech.de
-Cc:     perex@perex.cz, linux-kernel@vger.kernel.org, wenst@chromium.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, briannorris@chromium.org,
-        robh+dt@kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220619095324.492678-1-judyhsiao@chromium.org>
-References: <20220619095324.492678-1-judyhsiao@chromium.org>
-Subject: Re: (subset) [PATCH v4 0/3] ASoC: rockchip: i2s: switch BCLK to GPIO
-Message-Id: <165583076931.271995.9857794745310978104.b4-ty@kernel.org>
-Date:   Tue, 21 Jun 2022 17:59:29 +0100
+        Tue, 21 Jun 2022 13:01:41 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF502286E3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:01:39 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id o73so10579986qke.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ndYFg9yJFFsm+MchCSau+vce/mgo6x0ybmLOESsjBAU=;
+        b=FGvOHsGGUGmDXbxdMzvu/CDu6NuiY5QvnTnk1/HR+gu1fNI5L26/9Wo9ifp221Wh3p
+         wfKeopgo8ivR4mjQrM6YDmsy1kMjzCfUFIwYUgKPQjrdrOPWt9bn7KPMvrD2eyl5s8hJ
+         CpVAFnNGoovLlcunn8PvM7fh49U2rQjSWLgpBzQGubxFdDFwUxuXzHM7R3eWIDrFAXte
+         gliH8epLnJYwan5t2e4UUIuk68H9+WuoTE/X2nkFAS37sKR2kismFsaFDQ8rhVkXJpwe
+         SHd0pNYbEBN3++NazBy5etqW1jy9y427VaLEReT1YH4C1QcTwkolxF4z00aJV2EVQfkr
+         au+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ndYFg9yJFFsm+MchCSau+vce/mgo6x0ybmLOESsjBAU=;
+        b=xsQfsxnfXNfCCN9Y8DzQS+S/2JSkPxBi4ZrSn2iQUT0ibJUdjNvxBE7DWmtb0s1p+F
+         D/yOanW39MVvhu7rAS0EV+zx3jW4aXuBoEWX77V9l30T2Q0LMNtIgT5W42M/LDJeJIhY
+         lIMQ7RjGFq1qO4x0ata7U7IAl8FPpk7tdhQGSjbIpMj+NCrV8/m6R0TNQbVxd4GqRcnD
+         vDaZZHeph+2h4G8qmVApSFUhY9BQ6mj9jUTQMVLfh7VJZmgMNCmGucCFnAAEnAnQLbZT
+         5wj+sO9UbRIURUl8c5Hn+LsvLIN73G5fJj2BV9eIzpffkLggdIyPafEZ9XDaSa/a3xQq
+         stwA==
+X-Gm-Message-State: AJIora8jzjWpA5N81UR+EEVwwEw25l+Dw3x2mLCaOMroQHuACMq0cb39
+        +8SQqeVzA6+tzU5tNsPAAD+XzG3iwf14TvEh+2D/Uw==
+X-Google-Smtp-Source: AGRyM1uXAP09+bwhOkQRsesIc4uC3aUOpDDew+bAcVuvJA0BtGFIEUAl8yeVqSD68KuR3Bs6PmzCsdahWfCGU4Cb8tM=
+X-Received: by 2002:a37:a83:0:b0:6a6:7e4d:41dc with SMTP id
+ 125-20020a370a83000000b006a67e4d41dcmr20646327qkk.59.1655830897913; Tue, 21
+ Jun 2022 10:01:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220621160621.24415-1-y.oudjana@protonmail.com> <20220621160621.24415-2-y.oudjana@protonmail.com>
+In-Reply-To: <20220621160621.24415-2-y.oudjana@protonmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 21 Jun 2022 20:01:27 +0300
+Message-ID: <CAA8EJpqHBRHw4+0-P-KAT4JnAHkXUwTdXM9j2d-n66B3Yr+A+w@mail.gmail.com>
+Subject: Re: [PATCH 1/6] clk: qcom: msm8996-cpu: Rename DIV_2_INDEX to SMUX_INDEX
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,54 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 19 Jun 2022 09:53:21 +0000, Judy Hsiao wrote:
-> The patches series is to fix the unexpected large DC output
-> voltage of Max98357a that burns the speakers on the rockchip
-> platform when BCLK and SD_MODE are ON but LRCLK is OFF.
-> 
-> Changes Since V4:
->     -- Fix indentation in the driver. (Align parameters with the parenthesis
->        placement.)
->     -- Fix incorrect return type of rockchip_snd_rxctrl.
-> Changes Since V3:
->     -- Fix indentation in the documentation.
->     -- Put pinctrl-1 right after pinctrl-0 in dtsi.
->     -- Fix indentation in the driver.
->     -- Remove unnecessary dev_dbg() in the driver.
-> Changes Since V2:
->     -- Add documents of i2s pinctrl-names.
->     -- Fix dtsi syntax error.
->     -- Include the dtsi change and the driver change in the same series.
->     -- Ensure that driver gets both bclk_on and bclk_off states before using them.
-> 
-> [...]
+On Tue, 21 Jun 2022 at 19:07, Yassine Oudjana <yassine.oudjana@gmail.com> wrote:
+>
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>
+> The parent at this index is the secondary mux, which can connect
+> not only to primary PLL/2 but also to XO. Rename the index to SMUX_INDEX
+> to better reflect the parent.
+>
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Applied to
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> ---
+>  drivers/clk/qcom/clk-cpu-8996.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
 
-[1/3] ASoC: rockchip: i2s: switch BCLK to GPIO
-      commit: 44f362c2cc6dd0c5e3cb499c4fb4ed45b63a6196
-[3/3] ASoC: dt-bindings: rockchip: Document pinctrl-names for i2s
-      (no commit info)
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+With best wishes
+Dmitry

@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED5F552D4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73ED552D4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348311AbiFUInN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
+        id S1348336AbiFUIom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347709AbiFUInI (ORCPT
+        with ESMTP id S1346674AbiFUIok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:43:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E799248C6;
-        Tue, 21 Jun 2022 01:43:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 21 Jun 2022 04:44:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343E424F21;
+        Tue, 21 Jun 2022 01:44:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3BCAA1F8DE;
-        Tue, 21 Jun 2022 08:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655800985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RrjsV6j2GxgikRLfvlQrNeSRen6nfTOp6oxrH6LHqfA=;
-        b=K0/rxxRxD+aiJWdzNoDa+0SoXPF1IC6BQYG8KRz+uLlaLWZurLtKhY6UYOEfPLCmqSRC/w
-        Y1D5KwymXhBqhBR9crYjVykXd3bn4B3i3+h43/ukFTQ8zjpwPQ13XzqCAo01A3ELViJzf6
-        uSLq81TeqOgtKl81+nNvuE01bTKb9wU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655800985;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RrjsV6j2GxgikRLfvlQrNeSRen6nfTOp6oxrH6LHqfA=;
-        b=4sGC2ZpcdwRXnQXA0/sC53dBVT8LwJN6GZh0t4vK8khlBh7SaMpQztL5XFMRTpAKtvDoDF
-        +22dtf7sd6JD1TDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DB47813A88;
-        Tue, 21 Jun 2022 08:43:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id A00dM5iEsWLADgAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 21 Jun 2022 08:43:04 +0000
-Message-ID: <361336a6-f3be-c7d9-7bdb-20c30c9a72df@suse.de>
-Date:   Tue, 21 Jun 2022 10:43:04 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C55A86150B;
+        Tue, 21 Jun 2022 08:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275A0C341C4;
+        Tue, 21 Jun 2022 08:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655801078;
+        bh=ORuRwRQoPKVhHjkq6Zg8CUnQ9SNrZaZFKq3MGs7Bi8Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UaeT2w7rLrxSkb1TkE5dBgH0eidpobmoYe/PtUAqKalZEibwM/Orqlqd5sM+Q1T8q
+         URibLSIDHPICiKKH06OhzPDrvy281/3qmIa62Sgjzw8uF+6zf4cfL3OpJR+AklLii4
+         K6QoIXNRPYwyiYGX2v0t7twUlGBy1qYUuuLgo2pzWf5srtwhhnqWBOEfFFRu1wgpr/
+         AIqpD+rVImgrPuuaesVhEMYU1v2X3wL5M5YY90xOUggoD6yRNrscesmkCPMTbHNzX4
+         SnISGbOauM2TGqOkEZwwzUTLci156LEKjK3jzWD4wr6cireibb2MGapMsO8FvpK2bh
+         Jt+ME3uwUEwRA==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o3ZUx-001zjn-Vs;
+        Tue, 21 Jun 2022 09:44:36 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
-References: <20220617125750.728590-1-arnd@kernel.org>
- <20220617125750.728590-2-arnd@kernel.org>
-From:   Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v2 1/3] scsi: dpt_i2o: drop stale VIRT_TO_BUS dependency
-In-Reply-To: <20220617125750.728590-2-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Date:   Tue, 21 Jun 2022 09:44:35 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        will@kernel.org, vdonnefort@google.com,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v7 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+In-Reply-To: <YrGBBFW2d/scKDeN@kroah.com>
+References: <20220621080308.3952915-1-sebastianene@google.com>
+ <20220621080308.3952915-3-sebastianene@google.com>
+ <YrGBBFW2d/scKDeN@kroah.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <6b5bb5e69888f69fcfdcb8c9c2fd2660@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, sebastianene@google.com, robh+dt@kernel.org, arnd@arndb.de, dragan.cvetic@xilinx.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, will@kernel.org, vdonnefort@google.com, linux@roeck-us.net
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,85 +75,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/22 14:57, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 2022-06-21 09:27, Greg Kroah-Hartman wrote:
+> On Tue, Jun 21, 2022 at 08:03:09AM +0000, Sebastian Ene wrote:
+>> This driver creates per-cpu hrtimers which are required to do the
+>> periodic 'pet' operation. On a conventional watchdog-core driver, the
+>> userspace is responsible for delivering the 'pet' events by writing to
+>> the particular /dev/watchdogN node. In this case we require a strong
+>> thread affinity to be able to account for lost time on a per vCPU.
+>> 
+>> This part of the driver is the 'frontend' which is reponsible for
+>> delivering the periodic 'pet' events, configuring the virtual 
+>> peripheral
+>> and listening for cpu hotplug events. The other part of the driver
+>> handles the peripheral emulation and this part accounts for lost time 
+>> by
+>> looking at the /proc/{}/task/{}/stat entries and is located here:
+>> https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+>> 
+>> Signed-off-by: Sebastian Ene <sebastianene@google.com>
+>> ---
+>>  drivers/misc/Kconfig               |  12 ++
+>>  drivers/misc/Makefile              |   1 +
+>>  drivers/misc/vcpu_stall_detector.c | 222 
+>> +++++++++++++++++++++++++++++
+>>  3 files changed, 235 insertions(+)
+>>  create mode 100644 drivers/misc/vcpu_stall_detector.c
+>> 
+>> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+>> index 41d2bb0ae23a..e15c85d74c4b 100644
+>> --- a/drivers/misc/Kconfig
+>> +++ b/drivers/misc/Kconfig
+>> @@ -483,6 +483,18 @@ config OPEN_DICE
+>> 
+>>  	  If unsure, say N.
+>> 
+>> +config VCPU_STALL_DETECTOR
+>> +	tristate "VCPU stall detector"
+>> +	select LOCKUP_DETECTOR
+>> +	help
+>> +	  Detect CPU locks on a kvm virtual machine. This driver relies on
+>> +	  the hrtimers which are CPU-binded to do the 'pet' operation. When 
+>> a
+>> +	  vCPU has to do a 'pet', it exits the guest through MMIO write and
+>> +	  the backend driver takes into account the lost ticks for this
+>> +	  particular CPU.
+>> +	  To compile this driver as a module, choose M here: the
+>> +	  module will be called vcpu_stall_detector.
 > 
-> The dpt_i2o driver was fixed to stop using virt_to_bus() in 2008, but
-> it still has a stale reference in an error handling code path that could
-> never work.
-> 
-> Fix it up to build without VIRT_TO_BUS and remove the Kconfig dependency.
-> 
-> The alternative to this would be to just remove the driver, as it is
-> clearly obsolete. The i2o driver layer was removed in 2015 with commit
-> 4a72a7af462d ("staging: remove i2o subsystem"), but the even older
-> dpt_i2o scsi driver stayed around.
-> 
-> The last non-cleanup patches I could find were from Miquel van Smoorenburg
-> and Mark Salyzyn back in 2008, they might know if there is any chance
-> of the hardware still being used anywhere.
-> 
-> Fixes: 67af2b060e02 ("[SCSI] dpt_i2o: move from virt_to_bus/bus_to_virt to dma_alloc_coherent")
-> Cc: Miquel van Smoorenburg <mikevs@xs4all.net>
-> Cc: Mark Salyzyn <salyzyn@android.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   drivers/scsi/Kconfig   | 2 +-
->   drivers/scsi/dpt_i2o.c | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-> index a9fe5152addd..cf75588a2587 100644
-> --- a/drivers/scsi/Kconfig
-> +++ b/drivers/scsi/Kconfig
-> @@ -460,7 +460,7 @@ config SCSI_MVUMI
->   
->   config SCSI_DPT_I2O
->   	tristate "Adaptec I2O RAID support "
-> -	depends on SCSI && PCI && VIRT_TO_BUS
-> +	depends on SCSI && PCI
->   	help
->   	  This driver supports all of Adaptec's I2O based RAID controllers as
->   	  well as the DPT SmartRaid V cards.  This is an Adaptec maintained
-> diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
-> index 2e9155ba7408..55dfe7011912 100644
-> --- a/drivers/scsi/dpt_i2o.c
-> +++ b/drivers/scsi/dpt_i2o.c
-> @@ -52,11 +52,11 @@ MODULE_DESCRIPTION("Adaptec I2O RAID Driver");
->   
->   #include <linux/timer.h>
->   #include <linux/string.h>
-> +#include <linux/io.h>
->   #include <linux/ioport.h>
->   #include <linux/mutex.h>
->   
->   #include <asm/processor.h>	/* for boot_cpu_data */
-> -#include <asm/io.h>		/* for virt_to_bus, etc. */
->   
->   #include <scsi/scsi.h>
->   #include <scsi/scsi_cmnd.h>
-> @@ -2112,7 +2112,7 @@ static irqreturn_t adpt_isr(int irq, void *dev_id)
->   		} else {
->   			/* Ick, we should *never* be here */
->   			printk(KERN_ERR "dpti: reply frame not from pool\n");
-> -			reply = (u8 *)bus_to_virt(m);
-> +			goto out;
->   		}
->   
->   		if (readl(reply) & MSG_FAIL) {
+> Should this depend on KVM_GUEST?
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Not all architectures have KVM_GUEST, and arm64 has no use for it.
 
-Personally I wouldn't mind to see this driver gone, as it's being built 
-upon the (long-defunct) I2O specification. We already deleted the i2o 
-subsystem years ago, so maybe it's time to consign this driver to 
-history, too.
+Thanks,
 
-Cheers,
-
-Hannes
+         M.
 -- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Jazz is not dead. It just smells funny...

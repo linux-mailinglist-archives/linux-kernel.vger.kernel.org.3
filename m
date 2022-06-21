@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA23E553A7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E057D553A83
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353693AbiFUTZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S1353769AbiFUT0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353653AbiFUTZT (ORCPT
+        with ESMTP id S1353545AbiFUT0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:25:19 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FAFA1B1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:25:17 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id g27so13658746wrb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:25:17 -0700 (PDT)
+        Tue, 21 Jun 2022 15:26:43 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9062A1B1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:26:40 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a29so24049889lfk.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:26:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VWOOtwuch2pR8dNc7sCruhWykxDxqzJLTpOmV1VMmXk=;
-        b=ekmRHn/PmRshg6mNF6L9A3ic7KQBPAVwqwB54Tr5uLJuMmxzWDVE2EbX4ysW4EAVfy
-         VEfcWhmR/9AXphxVHk+zQKXBPlsxzo3cqiip2iG/y7w6Fk/iZfKKMfITFhF36lFvHGOI
-         nQfBmH+IeYcLHNlv7sBcWPX7P73VQ6ws8dz4ST1tdDxIXzwSCR4Cc0p7LPKe8gh1ltIF
-         Cw/cDg7F9hRjoCidrjq08QqbIGVvoNLo3glWnBWVQjzJB1rtzHT/OONoUlXlHCZ4OKOl
-         lPNH4oO9I9WPrQ8OOlXQAcFYQe9wWzz+i7EWNlKedBYzlawL00ZnGpE4V1dREWmnApiJ
-         fAIA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rQ6q4wIcrpv5U/9A3k1NVYvqsSOd1yzHoqBOEuafvOo=;
+        b=GvGeZH8AackhWRgV2tAgeFcA8kMb4uIYTWkuiCOpOPvp6LZT/ggbiLpUgapnc151I2
+         3KNBdfywtuto6tNHOs+nafQxycIoOK1xbnZ5VnOeQ6ipDJZ2nhsvi0Kz8rixlQ3nIs10
+         RYfnL2pfvGXQz/4e02n6jlwwuyXzdE4dc4LEFEItn9TV/RzErdUQ/9n0m9P7CIj1VmUY
+         IBYKqglVALdAZqpoToLL7Tc4yvqq/pM1AwIuGaC3TGdXdDlk83Qdw7wJOU0aDB5Iuf1i
+         vE2sjykS3+Ktr3kZ1no/FjRihaXLXsxwS84Ohi1DmYNaSzzdz8Zz2e8clrrOC5uD93PB
+         GSqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VWOOtwuch2pR8dNc7sCruhWykxDxqzJLTpOmV1VMmXk=;
-        b=eIzNhSHIVSgpYgehhpA0sZ93ETG+WEfgK2YxMuv7AJiXHTH1qdRWWZk5al8539iGXI
-         CwYIzsQD/u9Uj0NesKS33WHNbfnNgWf5GaCOqfgZQGxEtnJYIGqiT+ix+XsZ5+aJp8DZ
-         fArtaZMmilzIZxsGtgjsVyInSfO0u6DISy/x65Zxyv7w5x2qjzIbn6T5dYxBF8enA3Pw
-         zkmGP8knC7Bj+ZscdTKt2k4YqWnrdCjyl015RlkB8sL4Q0DGZnnfWR5cputuAMqL2gTi
-         V1etXwLMXIx433aj++KX+wc8QztoNtJCfttXGkKlX/Fv+C0ofzbx1jzlGrh1QVcyCdTE
-         39Hw==
-X-Gm-Message-State: AJIora///3mqRaE9MMq64WqZ2TPDZwhBJ1NUTI3KA1Bk2kEua/0Y0F51
-        C4o4vzqeEPlto9NmHMGwc42c4Yb6mlr5ILNulJCTkg==
-X-Google-Smtp-Source: AGRyM1tywJ8s0GvfVaqfGYApPEuglWdEpM9di3DFQpYPxmbGs6ObvJwXVkIFrGRa9NJAwK3shX3D0qWGAt9xYxqF20c=
-X-Received: by 2002:a05:6000:1546:b0:218:555b:98ff with SMTP id
- 6-20020a056000154600b00218555b98ffmr29059887wry.698.1655839515231; Tue, 21
- Jun 2022 12:25:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rQ6q4wIcrpv5U/9A3k1NVYvqsSOd1yzHoqBOEuafvOo=;
+        b=zC0wSJiZHDDZ/ee13YCT+rsYv8uf/4x1cQbN4kMVOduJhHyxuxm/r33clE8Yt0NkPc
+         y4JY2a0/Y9EY5xWuxZLSzPfFIbQl/OVWsrfHaExJNllpHAz4gfBijZxBAb86x47iVOWj
+         +hKn4Ml5fSee81FsNAH8CiQrGk8kaB3Gpc6xnqbxgpukXuFXiXABHO4OJnxZPhIdLtN9
+         eTLwg+E9O83h5uZnWpSv66uPtcbwZgn9T5LE5WskIWKuCBn1nLcVXRwfA8Ou9tEnmL9a
+         M3smkBRiuGsYjr6QdzYGoGXvvIhy/gQkhG4pkf8Hn3cFXZj05nalADgkDxO0GQjXd0pP
+         40iA==
+X-Gm-Message-State: AJIora9b1WoXoX124Pem/Ze56W7eRZzE9OEGuiXDz6v+HkbpZQwI+ZXx
+        GhnCV03H3v/CU+gzK0RQxu+bzg==
+X-Google-Smtp-Source: AGRyM1sZeKskDOJ6dtUmzK5TJk0bQZr2kK03lyzMRp3hh29VTqDTvHPpW7IrwpEjZiDmR5RkD3jOKQ==
+X-Received: by 2002:a05:6512:230d:b0:47d:de8e:29a with SMTP id o13-20020a056512230d00b0047dde8e029amr17598664lfu.340.1655839599265;
+        Tue, 21 Jun 2022 12:26:39 -0700 (PDT)
+Received: from [192.168.43.7] ([188.162.64.230])
+        by smtp.gmail.com with ESMTPSA id p5-20020ac24ec5000000b0047f666011e4sm1235366lfr.26.2022.06.21.12.26.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 12:26:38 -0700 (PDT)
+Message-ID: <609d1f0f-daca-4fde-3315-5d8e171ca5c4@linaro.org>
+Date:   Tue, 21 Jun 2022 22:26:36 +0300
 MIME-Version: 1.0
-References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
- <20220602203834.3675160-7-tanmay.shah@xilinx.com> <20220607165245.GA890059@p14s>
- <2d905471-34f0-60d9-90f8-17ea34683836@amd.com>
-In-Reply-To: <2d905471-34f0-60d9-90f8-17ea34683836@amd.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Tue, 21 Jun 2022 13:25:03 -0600
-Message-ID: <CANLsYkxQQMyUsLoy7C-hyJpK-McNT7jGepdFifGoePdACncKCQ@mail.gmail.com>
-Subject: Re: [PATCH v8 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc driver
-To:     "Shah, Tanmay" <tanmay.shah@amd.com>
-Cc:     Tanmay Shah <tanmay.shah@xilinx.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "ben.levinsky@xilinx.com" <ben.levinsky@xilinx.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "openamp-system-reference@lists.openampproject.org" 
-        <openamp-system-reference@lists.openampproject.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: document qcom,msm-id and
+ qcom,board-id
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Kumar Gala <galak@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <20220621185649.37391-1-krzysztof.kozlowski@linaro.org>
+ <20220621185649.37391-2-krzysztof.kozlowski@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220621185649.37391-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,434 +87,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+On 21/06/2022 21:56, Krzysztof Kozlowski wrote:
+> The top level qcom,msm-id and qcom,board-id properties are utilized by
+> bootloaders on Qualcomm MSM platforms to determine which device tree
+> should be used and passed to the kernel.
+> 
+> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
+> compatible format") from 2015 was a consensus during discussion about
+> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
+> problems with that consensus:
+> 1. It was reached 7 years ago but it turned out its implementation did
+>     not reach all possible products.
+> 
+> 2. Initially additional tool (dtbTool) was needed for parsing these
+>     fields to create a QCDT image consisting of multiple DTBs, later the
+>     bootloaders were improved and they use these qcom,msm-id and
+>     qcom,board-id properties directly.
 
-> >> + */
-> >> +static int zynqmp_r5_get_tcm_node(struct zynqmp_r5_cluster *cluster)
-> >> +{
-> >> +    int tcm_bank_count, tcm_node;
-> >> +    int i, j;
-> >> +    struct zynqmp_r5_core *r5_core;
-> >> +    struct device *dev = cluster->dev;
-> >
-> >        struct device *dev = cluster->dev;
-> >          struct zynqmp_r5_core *r5_core;
-> >        int tcm_bank_count, tcm_node;
-> >        int i, j;
->
-> Do you want to change this style for all local variables throughout the
-> driver? or just for this function?
+I might be mistaken here. I think it was expected that dtbTool would use 
+board compat strings to generate qcom,msm-id and qcom,board-id 
+properties. It's not that the bootloaders were improved.
 
-I'm not sure what you mean by "local variables"...  What I am
-highlighting here is how variables are declared, i.e in a neat reverse
-Xmass tree rather than in no particular order.  The same heuristic
-should be applied throughout when possible.
+> 
+> 3. Extracting relevant information from the board compatible requires
+>     this additional tool (dtbTool), which makes the build process more
+>     complicated and not easily reproducible (DTBs are modified after the
+>     kernel build).
+> 
+> 4. Some versions of Qualcomm bootloaders expect these properties even
+>     when booting with a single DTB.  The community is stuck with these
+>     bootloaders thus they require properties in the DTBs.
+> 
+> Since several upstreamed Qualcomm SoC-based boards require these
+> properties to properly boot and the properties are reportedly used by
+> bootloaders, document them.
+> 
+> Link: https://lore.kernel.org/r/a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org/
+> Co-developed-by: Kumar Gala <galak@codeaurora.org>
+> Signed-off-by: Kumar Gala <galak@codeaurora.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   .../devicetree/bindings/arm/qcom.yaml         | 123 ++++++++++++++++++
+>   include/dt-bindings/arm/qcom,ids.h            |  30 +++++
+>   2 files changed, 153 insertions(+)
+>   create mode 100644 include/dt-bindings/arm/qcom,ids.h
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 6c38c1387afd..05b98cde4653 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -403,6 +403,129 @@ properties:
+>                 - qcom,sm8450-qrd
+>             - const: qcom,sm8450
+>   
+> +  # Board compatibles go above
+> +
+> +  qcom,msm-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    minItems: 1
+> +    maxItems: 8
+> +    items:
+> +      items:
+> +        - description: |
+> +            MSM chipset ID - an exact match value consisting of three bitfields::
 
->
-> >
-> >> +
-> >> +    /*
-> >> +     * ToDo: Use predefined TCM address space values from driver until
-> >
-> > s/until/while
-> >
-> >> +     * system-dt spec is not final for TCM
-> >> +     */
-> >> +    tcm_bank_count = ARRAY_SIZE(zynqmp_tcm_banks);
-> >> +
-> >> +    /* count per core tcm banks */
-> >> +    tcm_bank_count = tcm_bank_count / cluster->core_count;
-> >> +
-> >> +    /*
-> >> +     * r5 core 0 will use all of TCM banks in lockstep mode.
-> >> +     * In split mode, r5 core0 will use 128k and r5 core1 will use another
-> >> +     * 128k. Assign TCM banks to each core accordingly
-> >> +     */
-> >> +    tcm_node = 0;
-> >> +    for (i = 0; i < cluster->core_count; i++) {
-> >> +            r5_core = cluster->r5_cores[i];
-> >> +            r5_core->tcm_banks = devm_kcalloc(dev, tcm_bank_count,
-> >> +                                              sizeof(struct mem_bank_data *),
-> >> +                                              GFP_KERNEL);
-> >> +            if (!r5_core->tcm_banks)
-> >> +                    return -ENOMEM;
-> >> +
-> >> +            for (j = 0; j < tcm_bank_count; j++) {
-> >> +                    /*
-> >> +                     * Use pre-defined TCM reg values.
-> >> +                     * Eventually this should be replaced by values
-> >> +                     * parsed from dts.
-> >> +                     */
-> >> +                    r5_core->tcm_banks[j] =
-> >> +                            (struct mem_bank_data *)&zynqmp_tcm_banks[tcm_node];
-> >> +                    tcm_node++;
-> >> +            }
-> >> +
-> >> +            r5_core->tcm_bank_count = tcm_bank_count;
-> >> +    }
-> >> +
-> >> +    return 0;
-> >> +}
-> >> +
-> >> +/**
-> >> + * zynqmp_r5_get_mem_region_node()
-> >> + * parse memory-region property from dt node and add
-> >> + * memory region carveouts
-> >> + *
-> >> + * @r5_core: pointer to zynqmp_r5_core type object
-> >> + *
-> >> + * Return: 0 for success and error code for failure.
-> >> + */
-> >> +static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
-> >> +{
-> >> +    int res_mem_count, i;
-> >> +    struct device *dev;
-> >> +    struct device_node *np, *rmem_np;
-> >> +    struct reserved_mem **rmem;
-> >> +
-> >> +    dev = r5_core->dev;
-> >> +
-> >
-> > Extra newline.
-> >
-> >> +    np = r5_core->np;
-> >> +
-> >> +    res_mem_count = of_property_count_elems_of_size(np, "memory-region",
-> >> +                                                    sizeof(phandle));
-> >> +    if (res_mem_count <= 0) {
-> >> +            dev_warn(dev, "failed to get memory-region property %d\n",
-> >> +                     res_mem_count);
-> >> +            return -EINVAL;
-> >> +    }
-> >> +
-> >> +    rmem = devm_kcalloc(dev, res_mem_count,
-> >> +                        sizeof(struct reserved_mem *), GFP_KERNEL);
-> >> +    if (!rmem)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    for (i = 0; i < res_mem_count; i++) {
-> >> +            rmem_np = of_parse_phandle(np, "memory-region", i);
-> >> +            if (!rmem_np)
-> >> +                    goto release_rmem;
-> >> +
-> >> +            rmem[i] = of_reserved_mem_lookup(rmem_np);
-> >> +            if (!rmem[i]) {
-> >> +                    of_node_put(rmem_np);
-> >> +                    goto release_rmem;
-> >> +            }
-> >> +
-> >> +            of_node_put(rmem_np);
-> >> +    }
-> >> +
-> >> +    r5_core->rmem_count = res_mem_count;
-> >> +    r5_core->rmem = rmem;
-> >> +    return 0;
-> >> +
-> >> +release_rmem:
-> >> +    for (i--; i > -1; i--)
-> >
-> > s/"i > -1"/"i >= 0"
-> >
-> >> +            kfree(rmem[i]);
-> >> +    devm_kfree(dev, rmem);
-> >> +    return -ENOMEM;
-> >> +}
-> >> +
-> >> +/*
-> >> + * zynqmp_r5_core_init()
-> >> + * Create and initialize zynqmp_r5_core type object
-> >> + *
-> >> + * @cluster: pointer to zynqmp_r5_cluster type object
-> >> + *
-> >> + * Return: 0 for success and error code for failure.
-> >> + */
-> >> +static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
-> >> +                           enum rpu_oper_mode fw_reg_val, int tcm_mode)
-> >
-> > I would have expected @tcm_mode to be of type "enum rpu_tcm_comp".
-> >
-> >> +{
-> >> +    int ret, i;
-> >> +    struct zynqmp_r5_core *r5_core;
-> >> +    struct device *dev = cluster->dev;
-> >> +
-> >> +    ret = zynqmp_r5_get_tcm_node(cluster);
-> >> +    if (ret < 0) {
-> >> +            dev_err(dev, "can't get tcm node, err %d\n", ret);
-> >> +            return ret;
-> >> +    }
-> >> +
-> >> +    for (i = 0; i < cluster->core_count; i++) {
-> >> +            r5_core = cluster->r5_cores[i];
-> >> +
-> >> +            ret = zynqmp_r5_get_mem_region_node(r5_core);
-> >> +            if (ret)
-> >> +                    dev_warn(dev, "memory-region prop failed %d\n", ret);
-> >> +
-> >> +            /* Initialize r5 cores with power-domains parsed from dts */
-> >> +            ret = of_property_read_u32_index(r5_core->np, "power-domains",
-> >> +                                             1, &r5_core->pm_domain_id);
-> >> +            if (ret) {
-> >> +                    dev_err(dev, "failed to get power-domains property\n");
-> >> +                    return ret;
-> >> +            }
-> >> +
-> >> +            ret = zynqmp_r5_set_mode(r5_core, fw_reg_val, tcm_mode);
-> >> +            if (ret) {
-> >> +                    dev_err(dev, "failed to set r5 cluster mode %d, err %d\n",
-> >> +                            cluster->mode, ret);
-> >> +                    return ret;
-> >> +            }
-> >> +    }
-> >> +
-> >> +    return 0;
-> >> +}
-> >> +
-> >> +/*
-> >> + * zynqmp_r5_cluster_init()
-> >> + * Create and initialize zynqmp_r5_cluster type object
-> >> + *
-> >> + * @cluster: pointer to zynqmp_r5_cluster type object
-> >> + *
-> >> + * Return: 0 for success and error code for failure.
-> >> + */
-> >> +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
-> >> +{
-> >> +    struct device *dev = cluster->dev;
-> >> +    struct device_node *dev_node = dev_of_node(dev);
-> >> +    struct device_node *child;
-> >> +    struct platform_device *child_pdev;
-> >> +    int core_count, ret, i;
-> >> +    enum zynqmp_r5_cluster_mode cluster_mode = LOCKSTEP_MODE;
-> >> +    struct zynqmp_r5_core **r5_cores;
-> >> +    enum rpu_tcm_comb tcm_mode;
-> >> +    enum rpu_oper_mode fw_reg_val;
-> >> +
-> >> +    ret = of_property_read_u32(dev_node, "xlnx,cluster-mode", &cluster_mode);
-> >> +
-> >> +    /*
-> >> +     * on success returns 0, if not defined then returns -EINVAL,
-> >> +     * In that case, default is LOCKSTEP mode
-> >> +     */
-> >> +    if (ret != -EINVAL && ret != 0) {
-> >> +            dev_err(dev, "Invalid xlnx,cluster-mode property\n");
-> >> +            return -EINVAL;
-> >> +    }
-> >> +
-> >> +    /*
-> >> +     * For now driver only supports split mode and lockstep mode.
-> >> +     * fail driver probe if either of that is not set in dts.
-> >> +     */
-> >> +    if (cluster_mode == LOCKSTEP_MODE) {
-> >> +            tcm_mode = PM_RPU_TCM_COMB;
-> >> +            fw_reg_val = PM_RPU_MODE_LOCKSTEP;
-> >> +    } else if (cluster_mode == SPLIT_MODE) {
-> >> +            tcm_mode = PM_RPU_TCM_SPLIT;
-> >> +            fw_reg_val = PM_RPU_MODE_SPLIT;
-> >> +    } else {
-> >> +            dev_err(dev, "driver does not support cluster mode %d\n", cluster_mode);
-> >> +            return -EINVAL;
-> >> +    }
-> >> +
-> >> +    /*
-> >> +     * Number of cores is decided by number of child nodes of
-> >> +     * r5f subsystem node in dts. If Split mode is used in dts
-> >> +     * 2 child nodes are expected.
-> >> +     * In lockstep mode if two child nodes are available,
-> >> +     * only use first child node and consider it as core0
-> >> +     * and ignore core1 dt node.
-> >> +     */
-> >> +    core_count = of_get_available_child_count(dev_node);
-> >> +    if (core_count <= 0) {
-> >> +            dev_err(dev, "Invalid number of r5 cores %d", core_count);
-> >> +            return -EINVAL;
-> >> +    } else if (cluster_mode == SPLIT_MODE && core_count != 2) {
-> >> +            dev_err(dev, "Invalid number of r5 cores for split mode\n");
-> >> +            return -EINVAL;
-> >> +    } else if (cluster_mode == LOCKSTEP_MODE && core_count == 2) {
-> >> +            dev_warn(dev, "Only r5 core0 will be used\n");
-> >> +            core_count = 1;
-> >> +    }
-> >> +
-> >> +    r5_cores = kcalloc(core_count,
-> >> +                       sizeof(struct zynqmp_r5_core *), GFP_KERNEL);
-> >> +    if (!r5_cores)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    i = 0;
-> >> +    for_each_available_child_of_node(dev_node, child) {
-> >> +            child_pdev = of_find_device_by_node(child);
-> >
-> > Here a reference to child_pdev->dev is taken...
-> >
-> >> +            if (!child_pdev) {
-> >> +                    of_node_put(child);
-> >> +                    ret = -ENODEV;
-> >> +                    goto release_r5_cores;
-> >> +            }
-> >> +
-> >> +            /* create and add remoteproc instance of type struct rproc */
-> >> +            r5_cores[i] = zynqmp_r5_add_rproc_core(&child_pdev->dev);
-> >> +            if (IS_ERR(r5_cores[i])) {
-> >> +                    of_node_put(child);
-> >
-> > If devm_rproc_alloc() fails in zynqmp_r5_add_rproc_core() the reference to
-> > child_pdev-dev taken above is not released.
-> >
-> >
-> >> +                    ret = PTR_ERR(r5_cores[i]);
-> >> +                    goto release_r5_cores;
-> >> +            }
-> >> +
-> >> +            i++;
-> >> +
-> >> +            /*
-> >> +             * If two child nodes are available in dts in lockstep mode,
-> >> +             * then ignore second child node.
-> >> +             */
-> >> +            if (i == core_count) {
-> >> +                    of_node_put(child);
-> >> +                    break;
-> >> +            }
-> >> +    }
-> >> +
-> >> +    cluster->mode = cluster_mode;
-> >> +    cluster->core_count = core_count;
-> >> +    cluster->r5_cores = r5_cores;
-> >> +
-> >> +    ret = zynqmp_r5_core_init(cluster, fw_reg_val, tcm_mode);
-> >> +    if (ret < 0) {
-> >> +            dev_err(dev, "failed to init r5 core err %d\n", ret);
-> >> +            cluster->core_count = 0;
-> >> +            cluster->r5_cores = NULL;
-> >> +            goto release_r5_cores;
-> >> +    }
-> >> +
-> >> +    return 0;
-> >> +
-> >> +release_r5_cores:
-> >> +    for (i--; i > -1; i--) {
-> >
-> > s/"i > -1"/"i >= 0"
-> >
-> >> +            put_device(r5_cores[i]->dev);
-> >> +            rproc_del(r5_cores[i]->rproc);
-> >> +    }
-> >> +    kfree(r5_cores);
-> >> +    return ret;
-> >> +}
-> >> +
-> >> +static void zynqmp_r5_core_exit(struct zynqmp_r5_core *r5_core)
-> >> +{
-> >> +    /* release r5_core device */
-> >> +    put_device(r5_core->dev);
-> >> +
-> >> +    rproc_del(r5_core->rproc);
-> >> +}
-> >> +
-> >> +static void zynqmp_r5_cluster_exit(void *data)
-> >> +{
-> >> +    struct platform_device *pdev = (struct platform_device *)data;
-> >> +    struct zynqmp_r5_cluster *cluster;
-> >> +    int i;
-> >> +
-> >> +    cluster = (struct zynqmp_r5_cluster *)platform_get_drvdata(pdev);
-> >> +    if (!cluster)
-> >> +            return;
-> >> +
-> >> +    for (i = 0; i < cluster->core_count; i++) {
-> >> +            zynqmp_r5_core_exit(cluster->r5_cores[i]);
-> >
-> > I don't see a need for this extra function.  Just call put_device() and
-> > rproc_del() here.
-> >
-> >> +            cluster->r5_cores[i] = NULL;
-> >
-> > Not sure this is useful since both cluster->r5_cores and cluster are freed
-> > below.
-> >
-> > I will review zynqmp_r5_rproc_ops and up tomorrow and Thursday.
-> >
-> > Thanks,
-> > Mathieu
-> >
-> >> +    }
-> >> +
-> >> +    kfree(cluster->r5_cores);
-> >> +    kfree(cluster);
-> >> +    platform_set_drvdata(pdev, NULL);
-> >> +}
-> >> +
-> >> +/*
-> >> + * zynqmp_r5_remoteproc_probe()
-> >> + *
-> >> + * @pdev: domain platform device for R5 cluster
-> >> + *
-> >> + * called when driver is probed, for each R5 core specified in DT,
-> >> + * setup as needed to do remoteproc-related operations
-> >> + *
-> >> + * Return: 0 for success, negative value for failure.
-> >> + */
-> >> +static int zynqmp_r5_remoteproc_probe(struct platform_device *pdev)
-> >> +{
-> >> +    int ret;
-> >> +    struct zynqmp_r5_cluster *cluster;
-> >> +    struct device *dev = &pdev->dev;
-> >> +
-> >> +    cluster = kzalloc(sizeof(*cluster), GFP_KERNEL);
-> >> +    if (!cluster)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    cluster->dev = dev;
-> >> +
-> >> +    ret = devm_of_platform_populate(dev);
-> >> +    if (ret) {
-> >> +            dev_err_probe(dev, ret, "failed to populate platform dev\n");
-> >> +            kfree(cluster);
-> >> +            return ret;
-> >> +    }
-> >> +
-> >> +    /* wire in so each core can be cleaned up at driver remove */
-> >> +    platform_set_drvdata(pdev, cluster);
-> >> +
-> >> +    ret = zynqmp_r5_cluster_init(cluster);
-> >> +    if (ret) {
-> >> +            zynqmp_r5_cluster_exit(pdev);
-> >> +            dev_err_probe(dev, ret, "Invalid r5f subsystem device tree\n");
-> >> +            return ret;
-> >> +    }
-> >> +
-> >> +    ret = devm_add_action_or_reset(dev, zynqmp_r5_cluster_exit, pdev);
-> >> +    if (ret)
-> >> +            return ret;
-> >> +
-> >> +    return 0;
-> >> +}
-> >> +
-> >> +/* Match table for OF platform binding */
-> >> +static const struct of_device_id zynqmp_r5_remoteproc_match[] = {
-> >> +    { .compatible = "xlnx,zynqmp-r5fss", },
-> >> +    { /* end of list */ },
-> >> +};
-> >> +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
-> >> +
-> >> +static struct platform_driver zynqmp_r5_remoteproc_driver = {
-> >> +    .probe = zynqmp_r5_remoteproc_probe,
-> >> +    .driver = {
-> >> +            .name = "zynqmp_r5_remoteproc",
-> >> +            .of_match_table = zynqmp_r5_remoteproc_match,
-> >> +    },
-> >> +};
-> >> +module_platform_driver(zynqmp_r5_remoteproc_driver);
-> >> +
-> >> +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
-> >> +MODULE_AUTHOR("Xilinx Inc.");
-> >> +MODULE_LICENSE("GPL");
-> >> --
-> >> 2.25.1
-> >>
->
-> --
-> Thanks,
-> Tanmay
-> tanmay.shah@amd.com
+two bitfields
+
+> +             - bits 0-15  - The unique MSM chipset ID
+> +             - bits 16-31 - Reserved; should be 0
+> +        - description: |
+> +            Hardware revision ID - a chipset specific 32-bit ID representing
+> +            the version of the chipset.  It is best a match value - the
+> +            bootloader will look for the closest possible match.
+> +    deprecated: true
+> +    description:
+> +      The MSM chipset and hardware revision use by Qualcomm bootloaders.  It
+> +      can optionally be an array of these to indicate multiple hardware that
+> +      use the same device tree.  It is expected that the bootloader will use
+> +      this information at boot-up to decide which device tree to use when given
+> +      multiple device trees, some of which may not be compatible with the
+> +      actual hardware.  It is the bootloader's responsibility to pass the
+> +      correct device tree to the kernel.
+> +      The property is deprecated - it is not expected on newer boards
+> +      (starting with SM8350).
+
+Could you please elaborate this? If the AOSP team were to add e.g. 
+SM8350-HDK to their single RB3+RB5 images, they would still need the 
+qcom,board-id/qcom,msm-id properties to let the bootloader choose proper 
+DTB.
+
+> +
+> +  qcom,board-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    minItems: 1
+> +    maxItems: 8
+> +    items:
+> +      oneOf:
+> +        - maxItems: 2
+> +          items:
+> +            - description: |
+> +                Board ID consisting of three bitfields::
+> +                  - bits 31-24 - Unused
+> +                  - bits 23-16 - Platform Version Major
+> +                  - bits 15-8  - Platform Version Minor
+> +                  - bits 7-0   - Platform Type
+> +                Platform Type field is an exact match value.  The
+> +                Platform Major/Minor field is a best match.  The bootloader will
+> +                look for the closest possible match.
+> +            - description: |
+> +                Subtype ID unique to a Platform Type/Chipset ID.  For a given
+> +                Platform Type, there will typically only be a single board and the
+> +                subtype_id will be 0.  However in some cases board variants may
+> +                need to be distinguished by different subtype_id values.
+> +        # OnePlus uses a variant of board-id with four elements:
+> +        - minItems: 4
+> +          items:
+> +            - const: 8
+> +            - const: 0
+> +            - description: OnePlus board ID
+> +            - description: OnePlus subtype ID
+> +    deprecated: true
+> +    description:
+> +      The board type and revision information.  It can optionally be an array
+> +      of these to indicate multiple boards that use the same device tree.  It
+> +      is expected that the bootloader will use this information at boot-up to
+> +      decide which device tree to use when given multiple device trees, some of
+> +      which may not be compatible with the actual hardware.  It is the
+> +      bootloader's responsibility to pass the correct device tree to the
+> +      kernel
+> +      The property is deprecated - it is not expected on newer boards
+> +      (starting with SM8350).
+> +
+> +allOf:
+> +  # Explicit allow-list for older SoCs. The legacy properties are not allowed
+> +  # on newer SoCs.
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,apq8026
+> +              - qcom,apq8094
+> +              - qcom,apq8096
+> +              - qcom,msm8992
+> +              - qcom,msm8994
+> +              - qcom,msm8996
+> +              - qcom,msm8998
+> +              - qcom,sdm630
+> +              - qcom,sdm632
+> +              - qcom,sdm845
+> +              - qcom,sdx55
+> +              - qcom,sdx65
+> +              - qcom,sm6125
+> +              - qcom,sm6350
+> +              - qcom,sm7225
+> +              - qcom,sm8150
+> +              - qcom,sm8250
+> +    then:
+> +      properties:
+> +        qcom,board-id: true
+> +        qcom,msm-id: true
+> +    else:
+> +      properties:
+> +        qcom,board-id: false
+> +        qcom,msm-id: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - oneplus,cheeseburger
+> +              - oneplus,dumpling
+> +              - oneplus,enchilada
+> +              - oneplus,fajita
+> +    then:
+> +      properties:
+> +        qcom,board-id:
+> +          items:
+> +            minItems: 4
+> +    else:
+> +      properties:
+> +        qcom,board-id:
+> +          items:
+> +            maxItems: 2
+> +
+>   additionalProperties: true
+>   
+>   ...
+> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+> new file mode 100644
+> index 000000000000..eaf86c18650f
+> --- /dev/null
+> +++ b/include/dt-bindings/arm/qcom,ids.h
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022 Linaro Ltd
+> + * Author: Krzysztof Kozlowski <krzk@kernel.org> based on previous work of Kumar Gala.
+> + */
+> +#ifndef _DT_BINDINGS_ARM_QCOM_IDS_H
+> +#define _DT_BINDINGS_ARM_QCOM_IDS_H
+> +
+> +/* qcom,msm-id */
+> +#define QCOM_ID_APQ8026				199
+> +#define QCOM_ID_MSM8916				206
+> +#define QCOM_ID_MSM8994				207
+> +#define QCOM_ID_MSM8996_3_0			246
+
+2_0 too.
+And then (according to 3.18):
+8996-pro 305
+8996-pro-auto 315
+8996-auto 310
+
+> +#define QCOM_ID_APQ8016				247
+> +#define QCOM_ID_MSM8216				248
+> +#define QCOM_ID_MSM8116				249
+> +#define QCOM_ID_MSM8616				250
+> +#define QCOM_ID_MSM8998				292
+> +#define QCOM_ID_SDM845				321
+
+sdm845-v2.1-rb3.dts:	qcom,msm-id = <341 0x20001>;
+But this might be a typo
+
+> +
+> +/* qcom,board-id */
+> +#define QCOM_BOARD_ID(a, major, minor) \
+> +	(((major & 0xff) << 16) | ((minor & 0xff) << 8) | QCOM_BOARD_ID_##a)
+> +
+> +#define QCOM_BOARD_ID_MTP			8
+> +#define QCOM_BOARD_ID_DRAGONBOARD		10
+> +#define QCOM_BOARD_ID_SBC			24
+> +
+> +#endif /* _DT_BINDINGS_ARM_QCOM_IDS_H */
+
+
+-- 
+With best wishes
+Dmitry

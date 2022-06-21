@@ -2,51 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39AF552F9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF5D552FA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346092AbiFUKWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S230449AbiFUKW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiFUKWJ (ORCPT
+        with ESMTP id S229497AbiFUKWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:22:09 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670F42872D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:22:08 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 2E632419C2;
-        Tue, 21 Jun 2022 10:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1655806926; bh=pafEXRxpxS9FRvzCx01u+dGd5pnrVKa0D5+ebH8kZzo=;
-        h=From:To:Cc:Subject:Date;
-        b=JrFJGsd3j2Nf1OJEpB8OHGAWfJUUxhFV7TMD8md4C97koAS9rDShp9YO9dPj1IicB
-         dmiL5adAhcHxqtE8txC1E8Pbt3XZW+/mF0F52oD2XMelDPnvdQENCibQldiY/khRfi
-         z1gEFXteqAoGlOzPG22wlyLh+HkcZmCQFdbdXcnMfBP5+i1Mi270nsD1iZ1TqzG7dt
-         XXtMRoyoRPhWy235cuFcC/IilLQ5b/axImPiVxNJ5VJs5RhWYFenYG0wxLBU08FSHl
-         wiqNxkpY6Jzu1PTLZLn4sNXuPoY1ToU4JtaMZYnIiN1PVgzJ2BleZ9nBl7N9SQRN8a
-         +8aJYzMa0hbOA==
-From:   Hector Martin <marcan@marcan.st>
-To:     Jacky Chou <jackychou@asix.com.tw>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [PATCH v3] net: usb: ax88179_178a: Bind only to vendor-specific interface
-Date:   Tue, 21 Jun 2022 19:21:50 +0900
-Message-Id: <20220621102150.202475-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        Tue, 21 Jun 2022 06:22:25 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38242899F;
+        Tue, 21 Jun 2022 03:22:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id g4so18206620wrh.11;
+        Tue, 21 Jun 2022 03:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nFKOWnxfMAvpfuR5nZvfo/PJZQyBNJd8pSCg3peeMzU=;
+        b=PS1CvUmfj+YgU/b5s3RHKMSGeq25FnBJ908QsNFw9En7udzmO5KWpI87Fxrz7cBCP2
+         M2b9eOiapgceBX3JBUOGXwsuO368zVhC/SL8YP/Op3i6NFfG1zDNg/KwAHfdkbJmI2lb
+         O+ogXD9IU1W5rytIxgWHMlX/2SofhA841OyaEHNBnT2edKBa9lD5y45EXkzgmoOu7YYQ
+         PvBlHX+7wd63wZAmEW021ZnD8kGY2023HmEU9Yr4wF58bJsOGCCw+v7sV8JCZWq1y6WD
+         5VT3LCPDRZ1Np+Dy8RyNwiTdDogQ+c7VvDkGUrqtUuJEwv1zdV3FmofzDfOUD9BUnNNX
+         7K7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nFKOWnxfMAvpfuR5nZvfo/PJZQyBNJd8pSCg3peeMzU=;
+        b=NFuh6s89PwucEuKCVjuhWx06tW8JJ+On9dQxo0l433T1jQsZgC4uWWKYwITxf1ZXzl
+         ETX85mualIgunL6Udk+DOE4I279YbpiCeI8H6AeefWo48WNmwgacFZbY4erp1gy1XkzK
+         t81XfoHzTQ5+qJPwuXhMrr8y5uytXJmH1J3kj6GTAZlS/9LpdXhk/Y8rMur+yQJVj5Fh
+         P3c7e816JBRC9JgGa3AcCq3I08fyytOl5rJVfs0jIoUfr5UQfHTSEmKqWycryqRSvFIm
+         YPLbe2CkFjoV7L3F9LveS6vsIPY7BYZpqLPNC5si7+acaqj8VELwApkTt9D6oh7OWgqF
+         CTJA==
+X-Gm-Message-State: AJIora8cVlaD80yc6Dmgf7vtLeHqMe8hVbT4k7NoKK4tXnjbR4TG4tel
+        Q07Mm2ueGAo7Frifqgho1DDa2SOZnNX9phZJSZFasHaLgig=
+X-Google-Smtp-Source: AGRyM1uvf4LHU1HU49uZEE55Xvve6Ulm83LVZnbey7RZpGVfRK8TyarjNw9QuE1f9s0fM3kEJoVkyDixZGpKfisVAJQ=
+X-Received: by 2002:adf:e0c3:0:b0:21a:39f3:e6f6 with SMTP id
+ m3-20020adfe0c3000000b0021a39f3e6f6mr23433295wri.98.1655806941204; Tue, 21
+ Jun 2022 03:22:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+References: <CAMZm_C=o-rc4a+u_8-pFJtmL_2drwczASMRTqszamrks5Zm_OA@mail.gmail.com>
+ <CAG48ez2PVMs-CeLoZtvPq2EeQqOg05mm3AuvEE_pr9Sog0O5og@mail.gmail.com>
+ <CAMZm_CmW7pHwfEfCQfXRJPiHOjeGviQunfwxY_1ejrihKab5rA@mail.gmail.com> <CAG48ez2OcfTQ4SRbY89uHDJG6QujSfChaO4B3=zgGpj=9J8bdA@mail.gmail.com>
+In-Reply-To: <CAG48ez2OcfTQ4SRbY89uHDJG6QujSfChaO4B3=zgGpj=9J8bdA@mail.gmail.com>
+From:   Federico Di Pierro <nierro92@gmail.com>
+Date:   Tue, 21 Jun 2022 12:22:10 +0200
+Message-ID: <CAMZm_C=5sNVxB6vE83zcrhv+b0JhYT9hL8i4o_6rwRuwm_ggVg@mail.gmail.com>
+Subject: Re: pgprot_encrypted macro is broken
+To:     Jann Horn <jannh@google.com>
+Cc:     Linux API <linux-api@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,103 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
-chipset, but exposes CDC Ethernet configurations as well as the
-vendor specific one. This driver ends up binding first to both CDC
-interfaces, tries to instantiate two Ethernet interfaces talking to
-the same device, and the result is a nice fireworks show.
+Hi!
 
-Change all the ID matches to specifically match the vendor-specific
-interface. By default the device comes up in CDC mode and is bound by
-that driver (which works fine); users may switch it to the vendor
-interface using sysfs to set bConfigurationValue, at which point the
-device actually goes through a reconnect cycle and comes back as a
-vendor specific only device, and then this driver binds and works too.
+Thank you very much for your hints and for your time!
+I solved the issue and I agree that we should not have used that macro
+in the first place.
 
-The affected device uses VID/PID 0b95:1790, but we might as well change
-all of them for good measure, since there is no good reason for this
-driver to bind to standard CDC Ethernet interfaces.
+Again, thank you very much for your help,
+Regards
+Federico
 
-v3: Added VID/PID info to commit message
-
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index e2fa56b92685..7c7c2f31d9f1 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1914,55 +1914,55 @@ static const struct driver_info at_umc2000sp_info = {
- static const struct usb_device_id products[] = {
- {
- 	/* ASIX AX88179 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x1790),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88179_info,
- }, {
- 	/* ASIX AX88178A 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x178a),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x178a, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88178a_info,
- }, {
- 	/* Cypress GX3 SuperSpeed to Gigabit Ethernet Bridge Controller */
--	USB_DEVICE(0x04b4, 0x3610),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04b4, 0x3610, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&cypress_GX3_info,
- }, {
- 	/* D-Link DUB-1312 USB 3.0 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x2001, 0x4a00),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x2001, 0x4a00, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&dlink_dub1312_info,
- }, {
- 	/* Sitecom USB 3.0 to Gigabit Adapter */
--	USB_DEVICE(0x0df6, 0x0072),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0df6, 0x0072, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&sitecom_info,
- }, {
- 	/* Samsung USB Ethernet Adapter */
--	USB_DEVICE(0x04e8, 0xa100),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04e8, 0xa100, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&samsung_info,
- }, {
- 	/* Lenovo OneLinkDock Gigabit LAN */
--	USB_DEVICE(0x17ef, 0x304b),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x17ef, 0x304b, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&lenovo_info,
- }, {
- 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
--	USB_DEVICE(0x050d, 0x0128),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x050d, 0x0128, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&belkin_info,
- }, {
- 	/* Toshiba USB 3.0 GBit Ethernet Adapter */
--	USB_DEVICE(0x0930, 0x0a13),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0930, 0x0a13, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&toshiba_info,
- }, {
- 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
--	USB_DEVICE(0x0711, 0x0179),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0711, 0x0179, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&mct_info,
- }, {
- 	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000e),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000e, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000_info,
- }, {
- 	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000f),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000f, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc200_info,
- }, {
- 	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x0010),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x0010, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000sp_info,
- },
- 	{ },
--- 
-2.35.1
-
+Il giorno lun 20 giu 2022 alle ore 13:32 Jann Horn <jannh@google.com>
+ha scritto:
+>
+> On Mon, Jun 20, 2022 at 9:39 AM Federico Di Pierro <nierro92@gmail.com> wrote:
+> > > Why does your driver need to use that macro? pgprot_encrypted() is
+> > > mostly only directly used by core kernel code, not by drivers... and
+> > > if memory encryption is enabled, almost all memory mappings created by
+> > > the kernel should be marked as encrypted automatically.
+> >
+> > This is interesting; i don't really know the history behind our piece
+> > of code; as far as i understand,
+> > we have a shared ring buffer with userspace, onto which we push tracing events,
+> > and we must mark it as encrypted when
+> > the kmod runs on an AMD SME enabled kernel to allow userspace to grab sane data.
+> >
+> > This is the commit that introduced the change (if you wish to give it a look):
+> > https://github.com/falcosecurity/libs/commit/0333501cf429c045c61aaf5909812156f090786e
+> >
+> > Do you see any workaround not involving `pgprot_encrypted` ?
+>
+> If you do have to use remap_pfn_range() to map normal kernel memory,
+> then you might want to use vma->vm_page_prot instead, like a few other
+> places in the kernel do.
+>
+> (Alternatively you might want to use remap_vmalloc_range() to map
+> vmalloc pages into userspace, but note that that has very different
+> semantics - I believe that installs a normal page reference rather
+> than a raw PFN reference, so that would permit get_user_pages() calls
+> on the range.)

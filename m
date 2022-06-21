@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C16E553457
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951BC553466
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350456AbiFUOT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S1351303AbiFUOUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349027AbiFUOT1 (ORCPT
+        with ESMTP id S1350589AbiFUOUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:19:27 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4525B13EAA
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:19:26 -0700 (PDT)
-Received: (qmail 876385 invoked by uid 1000); 21 Jun 2022 10:19:25 -0400
-Date:   Tue, 21 Jun 2022 10:19:25 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     hminas@synopsys.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 1/3] usb: host: ohci-platform: add TPL support
-Message-ID: <YrHTba9s2NhBfQT2@rowland.harvard.edu>
-References: <20220621130506.85424-1-fabrice.gasnier@foss.st.com>
- <20220621130506.85424-2-fabrice.gasnier@foss.st.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621130506.85424-2-fabrice.gasnier@foss.st.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 10:20:30 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCD3140CD;
+        Tue, 21 Jun 2022 07:20:24 -0700 (PDT)
+X-QQ-mid: bizesmtp87t1655821217tp8rfu89
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 21 Jun 2022 22:20:14 +0800 (CST)
+X-QQ-SSF: 0100000000700060B000D00A0000000
+X-QQ-FEAT: RKCwGdK8Yfg7VxFNpIqXTE0grhkMICdJ+CsRucJlPWC1m9niPrQ9sW1JDn21B
+        6RVWkPULMyA/QOh2SXDdLb5c5nsd57IznTuJp+KlQQSK1mMN2Q7CH4qBzNESwVJBhjZzszS
+        ohr8bxrhRIpGGB7C/dzy+qZxuZez1M3lsbWqFr6kslf8id1tlcR4HmieH/7m8UJ9GZiJxJr
+        grdKtzMY044sVBLe32+AgVqH4/XVbADzGod32P/xhv9yM8EL56RWml8LwjTVXWGlPRjLi+9
+        aI/XUUueipg2mveaL7x5iayAAXH7GvMkNHmp7AqhM0jSF9k0c0F6SoQxr+YtmHRL3CENm0c
+        AMjcxG7iCyEBL3m1l2BwXNDMfqD7a2dWWR/eeI0
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] scsi: target: Remove duplicate 'the' in two places.
+Date:   Tue, 21 Jun 2022 22:20:12 +0800
+Message-Id: <20220621142012.4622-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 03:05:04PM +0200, Fabrice Gasnier wrote:
-> From: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> 
-> The TPL support is used to identify targeted devices during EH compliance
-> test. The user can add "tpl-support" in the device tree to enable it.
-> 
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> ---
+file: drivers/target/target_core_alua.c
+line: 388
+ * the Target Port in question for the the incoming
+changed to
+ * the Target Port in question for the incoming
 
-For this patch and the 2/3 ehci-platform patch:
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/target/target_core_alua.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+diff --git a/drivers/target/target_core_alua.c b/drivers/target/target_core_alua.c
+index b56ef8af66e7..58df0145e8d0 100644
+--- a/drivers/target/target_core_alua.c
++++ b/drivers/target/target_core_alua.c
+@@ -385,7 +385,7 @@ target_emulate_set_target_port_groups(struct se_cmd *cmd)
+ 
+ 			/*
+ 			 * Extract the RELATIVE TARGET PORT IDENTIFIER to identify
+-			 * the Target Port in question for the the incoming
++			 * the Target Port in question for the incoming
+ 			 * SET_TARGET_PORT_GROUPS op.
+ 			 */
+ 			rtpi = get_unaligned_be16(ptr + 2);
+-- 
+2.17.1
 
->  drivers/usb/host/ohci-platform.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-> index 47dfbfe9e5190..0adae62651276 100644
-> --- a/drivers/usb/host/ohci-platform.c
-> +++ b/drivers/usb/host/ohci-platform.c
-> @@ -28,6 +28,7 @@
->  #include <linux/usb/ohci_pdriver.h>
->  #include <linux/usb.h>
->  #include <linux/usb/hcd.h>
-> +#include <linux/usb/of.h>
->  
->  #include "ohci.h"
->  
-> @@ -210,6 +211,8 @@ static int ohci_platform_probe(struct platform_device *dev)
->  	hcd->rsrc_start = res_mem->start;
->  	hcd->rsrc_len = resource_size(res_mem);
->  
-> +	hcd->tpl_support = of_usb_host_tpl_support(dev->dev.of_node);
-> +
->  	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
->  	if (err)
->  		goto err_power;
-> -- 
-> 2.25.1
-> 

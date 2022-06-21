@@ -2,88 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520B855393C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06AC553941
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351436AbiFURyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 13:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
+        id S1351793AbiFUR5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 13:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbiFURyu (ORCPT
+        with ESMTP id S233529AbiFUR5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 13:54:50 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630FE1C93E;
-        Tue, 21 Jun 2022 10:54:49 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id mf9so8781607ejb.0;
-        Tue, 21 Jun 2022 10:54:49 -0700 (PDT)
+        Tue, 21 Jun 2022 13:57:42 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2301D0D9;
+        Tue, 21 Jun 2022 10:57:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=1eMvpQGmuzfMVoYRI7eriOn5I/gqQSujwrf47DAtefA=;
-        b=UGWyICoF0B6YAXeThrkyJcBSimG+HS00n7Gx8AhzRX4CghUiSLthzUaKBi/411M2yl
-         2iSc4Jec/rFJ/DvO2P2hrKrVepnspC08bx0xUdrtxpLUXVU8nNyoC9oIoXAQbBErQyNj
-         HDc7iskJUBOFini7+bDfUM5+WhXz0JNoGfBA8YDEt+Bhud67l4ZSab9XqMw0bvOHV6Hc
-         vZPaNYmDX/ZcMQx0Mbjg4Ix8plra/vOMzvwLg5st5eKRZ2y9BXqbPrJS8q2uhlE3Tftf
-         kn3f/Ma5AI36xdit1zmuOfqBx723UhVhCDigRUoFF2A3t6T45HuSVHim3Pg459fq/0EI
-         5oiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=1eMvpQGmuzfMVoYRI7eriOn5I/gqQSujwrf47DAtefA=;
-        b=sRccOTL4fECdLQ9cyJT1apsHjGnyfpltvuy2I4pY3F9BqsgJv2XqVEtWZ9ivgLecVu
-         T3Bj7TOk/34Lrym4QEKV5ol/27x0CGi2T3MVChRgDYNVFUwLLFwtUv2wVLzvCZ4TdMoe
-         u8PThQTa6x2b9gr/JSZ9EAYIoFb4yvbHqwddkvxjkgL6o77vH3H7baqslZNmisIkc6ze
-         IK8BiYRh0Sz8MBwtU4oEZi5/Y3h/HHtXAB8i6Bg7CCpcKhImRJ+0YUyzaYrJAX4txFm0
-         A2Wq1ueG1Ztr94eZxUHTvD3/McE5MIsYpGPfByC+iR6bNogO1RjOv/uakFakuK9EKTYP
-         C7Mg==
-X-Gm-Message-State: AJIora9CavdKffyhvKEvyR/h+peI8c5AWJBWZOZem2qMa0jm3D5WML/Z
-        7FTWV2M3vq4CX35MUTMDxf0=
-X-Google-Smtp-Source: AGRyM1tqDwkFqvkz9vkf9hEiAlt4g87Egh+XWoOYQty1n7xTXN7pTEIHixXgs7oOfA3enuHtIXgGAw==
-X-Received: by 2002:a17:906:7c0c:b0:6f9:1fc:ebf3 with SMTP id t12-20020a1709067c0c00b006f901fcebf3mr27654186ejo.403.1655834087798;
-        Tue, 21 Jun 2022 10:54:47 -0700 (PDT)
-Received: from [192.168.43.195] (p57bfe813.dip0.t-ipconnect.de. [87.191.232.19])
-        by smtp.gmail.com with ESMTPSA id lb25-20020a170907785900b006febc1e9fc8sm8047977ejc.47.2022.06.21.10.54.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 10:54:47 -0700 (PDT)
-Message-ID: <d885a607-4db8-4c76-3931-627951a26ccd@message-id.googlemail.com>
-Date:   Tue, 21 Jun 2022 19:54:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] platform/x86: panasonic-laptop: allow to use all
- hotkeys
-Content-Language: en-US
-From:   Stefan Seyfried <stefan.seyfried@googlemail.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Kenneth Chan <kenneth.t.chan@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stefan Seyfried <seife+kernel@b1-systems.com>
-References: <20200821181433.17653-8-kenneth.t.chan@gmail.com>
- <20220612090507.20648-1-stefan.seyfried@googlemail.com>
- <20220612090507.20648-3-stefan.seyfried@googlemail.com>
- <CAHp75Ve+vrfSu6pD+AKe-eCVA2pC5o520y4gVwLNg9Dtk0U5bw@mail.gmail.com>
- <CAHp75VdFPUHTeDBY5ukFgVqJJn7BbTHxrxKUGOLB6P1UX-utAg@mail.gmail.com>
- <d80789bc-a8fc-de5f-164a-75adf7097311@message-id.googlemail.com>
- <6969ca0e-4a4c-c995-02a2-6645f875338c@redhat.com>
- <CAPqSeKu9csK_u0S6MiRay_mvfYejUhKbb=wvJO7F_Z-JL6F7DA@mail.gmail.com>
- <5f03f5b9-87bb-e27d-ce51-9c1572221f21@redhat.com>
- <89398c05-92c6-120d-ed51-ab62f1f404eb@message-id.googlemail.com>
- <19e590f1-e865-ad19-e9e4-df1f9274663c@redhat.com>
- <ad0e83af-b704-53b8-3963-b4dd53853f2b@message-id.googlemail.com>
- <3f3dfbad-9437-2c04-cf56-861649c117fd@redhat.com>
- <0bfb0325-0362-2d51-7f25-f389af4bfb68@message-id.googlemail.com>
-In-Reply-To: <0bfb0325-0362-2d51-7f25-f389af4bfb68@message-id.googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655834261; x=1687370261;
+  h=from:to:cc:subject:date:message-id;
+  bh=IhpY0nvaFsgCuREHN0wAidroPYiiZ/Yc0RCBikSIN8s=;
+  b=etvoddiJDCTrhIgWEkaNs69M+e61z8BxA4yNlEYGTGp1tdhTk4l7azNy
+   OTGtZwsxR0xjJ49yqOn+l9foW2+rm/It25w4wlEneTeInRlQUEJWnemnJ
+   dP/RQF70ip8yt/4ILOG2swgaZW0/YX/ah9gFr0GP9YdJIilMw9vG3Q61z
+   Y=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 21 Jun 2022 10:57:41 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Jun 2022 10:57:39 -0700
+X-QCInternal: smtphost
+Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 21 Jun 2022 23:27:24 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 641833FF1; Tue, 21 Jun 2022 23:27:23 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which otherwise could return a sub-optimal clock rate.
+Date:   Tue, 21 Jun 2022 23:27:19 +0530
+Message-Id: <1655834239-20812-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,71 +56,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+In the logic around call to clk_round_rate, for some corner conditions,
+get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
+exact clock rate was not found lowest clock was being returned.
 
-the patched ACPI video module DOES WORK.
+Search for suitable clock rate in 2 steps
+a) exact match or within 2% tolerance
+b) within 5% tolerance
+This also takes care of corner conditions.
 
-I just managed to actually compile the unmodified source code m(
-After patching acpi_video.c, compiling and installing it so that it 
-actually gets used, everything works fine now.
+Fixes: c2194bc999d4 ("tty: serial: qcom-geni-serial: Remove uart frequency table. Instead, find suitable frequency with call to clk_round_rate")
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+ drivers/tty/serial/qcom_geni_serial.c | 134 ++++++++++++++++++++++++++--------
+ 1 file changed, 102 insertions(+), 32 deletions(-)
 
-On 21.06.22 12:23, Stefan Seyfried wrote:
-> Hi Hans,
-> 
-> On 21.06.22 11:26, Hans de Goede wrote:
->> Hi,
->>
->> On 6/20/22 20:10, Stefan Seyfried wrote:
->>> Well, the non-working backlight is coming from the i915 driver, but 
->>> as this is a very old Chipset (i855 GM) I'd rather be happy it works 
->>> at all instead of complaining ;-)
->>> (I have another machine of similar age, hp nc6000 with ati graphics, 
->>> and there is no way getting it to work somewhat reliably at all)
->>
->> Ah right, you've got a panasonic + a native intel backlight device.
->>
->> We are going to need a quirk to (eventually also depending on other 
->> changes)
->> disable the broken intel backlight device.
->>
->> But that won't fix the keys issue, at least not without an extra
->> quirk just for that.
->>
->> I wonder if your machine supports the backlight control part of
->> the ACPI video bus at all. If not that would explain why it is
->> not reporting brightness keys and that would also give us a way
->> to solve this without an extra quirk.
->>
->> And that would actually also avoid the need for a backlight
->> quirk too.
->>
->> Can you pass "acpi_backlight=video" on the kernel commandline
->> and see if a /sys/class/backlight/acpi_video0 device then
->> shows up. If it does _not_ show up then indeed there is no
->> ACPI backlight control at all.
-> 
-> Nothing new shows up, just panasonic and intel_backlight as before.
-> 
->> In that case please give the attached patches a try on top
->> of my last series.
-> 
-> they do not fix the brightness keys for me.
-
-YES they do fix it. I just need to actually use the patched module :-)
-
-> I did not have time to put in some debugging and will be traveling for 
-> the rest of the week, but I'll take the toughbook with me and will try 
-> to debug this later ;-)
-> 
->> The acpi_video patch should fix your brightness keys then and
-> 
-> apparently it does not :-(
-It does.
-
-Thanks
-	Stefan
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 2e23b65..8d247c1 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -943,52 +943,123 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
+ 	return 0;
+ }
+ 
+-static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+-			unsigned int sampling_rate, unsigned int *clk_div)
++static unsigned long find_clk_rate_in_tol(struct clk *clk, unsigned int desired_clk,
++			unsigned int *clk_div, unsigned int percent_tol, bool *exact_match)
+ {
++	unsigned long freq;
++	unsigned long div, maxdiv, new_div;
++	unsigned long long mult;
+ 	unsigned long ser_clk;
+-	unsigned long desired_clk;
+-	unsigned long freq, prev;
+-	unsigned long div, maxdiv;
+-	int64_t mult;
+-
+-	desired_clk = baud * sampling_rate;
+-	if (!desired_clk) {
+-		pr_err("%s: Invalid frequency\n", __func__);
+-		return 0;
+-	}
++	unsigned long test_freq, offset, new_freq;
+ 
++	ser_clk = 0;
+ 	maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
+-	prev = 0;
++	div = 1;
+ 
+-	for (div = 1; div <= maxdiv; div++) {
+-		mult = div * desired_clk;
+-		if (mult > ULONG_MAX)
++	while (div <= maxdiv) {
++		mult = (unsigned long long)div * desired_clk;
++		if (mult != (unsigned long)mult)
+ 			break;
+ 
+-		freq = clk_round_rate(clk, (unsigned long)mult);
+-		if (!(freq % desired_clk)) {
+-			ser_clk = freq;
+-			break;
++		/*
++		 * Loop requesting a freq within tolerance and possibly exact freq.
++		 *
++		 * We'll keep track of the lowest freq inexact match we found
++		 * but always try to find a perfect match. NOTE: this algorithm
++		 * could miss a slightly better freq if there's more than one
++		 * freq between (freq - offset) and (freq) but (freq) can't be made
++		 * exactly, but that's OK.
++		 *
++		 * This absolutely relies on the fact that the Qualcomm clock
++		 * driver always rounds up.
++		 * We make use of exact_match as an I/O param.
++		 */
++
++		/* look only for exact match if within tolerance is already found */
++		if (ser_clk)
++			offset = 0;
++		else
++			offset = (mult * percent_tol) / 100;
++
++		test_freq = mult - offset;
++		freq = clk_round_rate(clk, test_freq);
++
++		/*
++		 * A dead-on freq is an insta-win, look for it only in 1st run
++		 */
++		if (*exact_match) {
++			if (!(freq % desired_clk)) {
++				ser_clk = freq;
++				*clk_div = freq / desired_clk;
++				return ser_clk;
++			}
++		}
++
++		if (!ser_clk) {
++			new_div = DIV_ROUND_CLOSEST(freq, desired_clk);
++			new_freq = new_div * desired_clk;
++			offset = (new_freq * percent_tol) / 100;
++
++			if (new_freq - offset <= freq && freq <= new_freq + offset) {
++				/* Save the first (lowest freq) within tolerance */
++				ser_clk = freq;
++				*clk_div = new_div;
++				/* no more search for exact match required in 2nd run */
++				if (!(*exact_match))
++					break;
++			}
+ 		}
+ 
+-		if (!prev)
+-			ser_clk = freq;
+-		else if (prev == freq)
++		div = freq / desired_clk + 1;
++
++		/*
++		 * Only time clock framework doesn't round up is if
++		 * we're past the max clock rate. We're done searching
++		 * if that's the case.
++		 */
++		if (freq < test_freq)
+ 			break;
++	}
++
++	*exact_match = false;
++	return ser_clk;
++}
++
++static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
++			unsigned int sampling_rate, unsigned int *clk_div)
++{
++	unsigned long ser_clk;
++	unsigned long desired_clk;
++	unsigned long desired_tol;
++	bool exact_match;
+ 
+-		prev = freq;
++	desired_clk = baud * sampling_rate;
++	if (!desired_clk) {
++		pr_err("%s: Invalid frequency\n", __func__);
++		return 0;
+ 	}
+ 
+-	if (!ser_clk) {
+-		pr_err("%s: Can't find matching DFS entry for baud %d\n",
+-								__func__, baud);
++	/* try to find exact clock rate or within 2% tolerance */
++	ser_clk = 0;
++	exact_match = true;
++	desired_tol = 2;
++
++	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, desired_tol, &exact_match);
++	if (ser_clk) {
++		if (!exact_match)
++			pr_warn("Cannot find exact match clk_rate, using one within 2 percent tolerance\n");
+ 		return ser_clk;
+ 	}
+ 
+-	*clk_div = ser_clk / desired_clk;
+-	if (!(*clk_div))
+-		*clk_div = 1;
++	/* try within 5% tolerance now, no need to look for exact match */
++	exact_match = false;
++	desired_tol = 5;
++
++	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, desired_tol, &exact_match);
++	if (ser_clk)
++		pr_warn("Cannot find exact match clk_rate, using one within 5 percent tolerance\n");
++	else
++		pr_err("Cannot find suitable clk_rate, giving up\n");
+ 
+ 	return ser_clk;
+ }
+@@ -1021,8 +1092,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+ 	if (ver >= QUP_SE_VERSION_2_5)
+ 		sampling_rate /= 2;
+ 
+-	clk_rate = get_clk_div_rate(port->se.clk, baud,
+-		sampling_rate, &clk_div);
++	clk_rate = get_clk_div_rate(port->se.clk, baud, sampling_rate, &clk_div);
+ 	if (!clk_rate)
+ 		goto out_restart_rx;
+ 
 -- 
-Stefan Seyfried
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
-"For a successful technology, reality must take precedence over
-  public relations, for nature cannot be fooled." -- Richard Feynman

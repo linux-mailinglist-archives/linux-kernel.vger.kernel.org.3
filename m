@@ -2,86 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39A65532DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142EC5532EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350259AbiFUNEQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 09:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S1351174AbiFUNF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349803AbiFUNEL (ORCPT
+        with ESMTP id S1350821AbiFUNFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:04:11 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6DED237F2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:04:08 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-12-D7su6iPqNO-F5Tx2uXwdog-1; Tue, 21 Jun 2022 14:04:05 +0100
-X-MC-Unique: D7su6iPqNO-F5Tx2uXwdog-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Tue, 21 Jun 2022 14:04:04 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Tue, 21 Jun 2022 14:04:04 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Cyril Hrubis' <chrubis@suse.cz>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>,
-        "zack@owlfolio.org" <zack@owlfolio.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>
-Subject: RE: [PATCH v3] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Thread-Topic: [PATCH v3] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Thread-Index: AQHYhWa4Wwgq8v8s30aZYtCosiJuGq1Z063Q
-Date:   Tue, 21 Jun 2022 13:04:04 +0000
-Message-ID: <a26ab9bfc27a430bb8a7b6aa2f39d724@AcuMS.aculab.com>
-References: <20220621120355.2903-1-chrubis@suse.cz>
-In-Reply-To: <20220621120355.2903-1-chrubis@suse.cz>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 21 Jun 2022 09:05:53 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7350418B14;
+        Tue, 21 Jun 2022 06:05:52 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25L8oUWh018369;
+        Tue, 21 Jun 2022 15:05:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=Fp2la6PbcDqoHzVfECKWbHyqaieoleTk0b1rFBS6Uck=;
+ b=YdTf9NwnQkWUjN1W1n6lzrKhbRHqoEDozYOvAlXhTep8lmYYS6C/lkIe3UhC/sdbJRc5
+ 2oJwlOsMKlExIUU1otOawjw01lL2Zp/973nXSq+fsqlVTDuVTENTVJF8fzEbjv4L0U79
+ RZhSNBdTOMNDiGwx2+wrj7aFA0Pk6vhyMVEJ4SuGW9gTJRcyU2A91gzufrexP7S94Ppq
+ J2ziXthv1oEPaSF8GVNyPon/2sxvW6NbcwSsi8h1vsWh3v9E6We/1Te++wONSo4mOQsp
+ sGeMkmjVLgw0FcpEFHhEUNLMJUSRWGSdeu6+2bhx1uk3Avdk6liQfwmev40TJOPl7vMY uQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3guau51ny1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 15:05:32 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0EA3210002A;
+        Tue, 21 Jun 2022 15:05:29 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EB7D22248AA;
+        Tue, 21 Jun 2022 15:05:29 +0200 (CEST)
+Received: from localhost (10.75.127.116) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 21 Jun
+ 2022 15:05:29 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
+        <stern@rowland.harvard.edu>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <fabrice.gasnier@foss.st.com>
+Subject: [PATCH 0/3] usb: host: add TPL support to ehci ohci and dwc2
+Date:   Tue, 21 Jun 2022 15:05:03 +0200
+Message-ID: <20220621130506.85424-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.116]
+X-ClientProxiedBy: GPXDAG2NODE5.st.com (10.75.127.69) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-21_05,2022-06-21_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cyril Hrubis 
-> Sent: 21 June 2022 13:04
-> 
-> This changes the __u64 and __s64 in userspace on 64bit platforms from
-> long long (unsigned) int to just long (unsigned) int in order to match
-> the uint64_t and int64_t size in userspace for C code.
-> 
-> We cannot make the change for C++ since that would be non-backwards
-> compatible change and may cause possible regressions and even
-> compilation failures, e.g. overloaded function may no longer find a
-> correct match.
+The TPL support is used to identify targeted devices during EH compliance
+testing. Add TPL support setting from device tree on ehci-platform,
+ohci-platform and dwc2 drivers.
 
-Isn't is enough just to mention C++ name mangling?
+Amelie Delaunay (3):
+  usb: host: ohci-platform: add TPL support
+  usb: host: ehci-platform: add TPL support
+  usb: dwc2: host: add TPL support
 
-	David
+ drivers/usb/dwc2/hcd.c           | 3 +++
+ drivers/usb/host/ehci-platform.c | 2 ++
+ drivers/usb/host/ohci-platform.c | 3 +++
+ 3 files changed, 8 insertions(+)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+2.25.1
 

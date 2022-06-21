@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF980553894
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27866553896
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 19:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352983AbiFURJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 13:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S1352478AbiFURJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 13:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352201AbiFURJW (ORCPT
+        with ESMTP id S235406AbiFURJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 13:09:22 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F380F29C95
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:09:20 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id c144so10578593qkg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j7blovD8yZIVSMDnF6wpQvtTZGOIDSOmS5ueDQXNEg4=;
-        b=NeG3Kaj7vE75G3AkBh2+Yw84vXZI5c+6emC1Wwt5NzbaCSOEMo0R+IgeRsgZ2aoHy/
-         xt/JdsNWanaZL5XtJgQ7G7FPbsZmAzZzQhYSHV7fDUsXOviWLHhqow5EGSRA5ZVhIC8W
-         lHXyZX8fXR2Ax489AidUmQYUIVTaYY38D2KOQEn9IOc0RbiXHayDXC3F2lVah4XrN4G1
-         umL9z9YB8em2O6K8hnlCaXLjdOCDtGG6HX5fe6fKNNySnPOkAtYtXSFUzC8jukqqMmMs
-         nqiIoibpyBkamgXTMQRhCDi/mktwUfjkLHR/4NWr9NFeyLerDsRYG8aOyIKF7Wtz/Yqb
-         Knng==
+        Tue, 21 Jun 2022 13:09:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59F36286D7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655831378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5kAhXV5ceZVd9SW+rj4Nij9cH0l8kTqdMQa24MeO028=;
+        b=a6tE37yWZvfapKGwM2BaMX2wmLDc/0oRNaiFLfpkIPBaE28KIL3qkVBsKp12PsdhlGq3lU
+        90rGrxpHNMpJtKmJGx01KxV673oZSZxnGc1x/jUY1y21hLwzhkAS/W4B72R4F6JP5UkGOd
+        XduCukErzoY0VrzFq7HyPIoPGjxx9Fo=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-351-st76avpAPr-7faYZCff1aQ-1; Tue, 21 Jun 2022 13:09:37 -0400
+X-MC-Unique: st76avpAPr-7faYZCff1aQ-1
+Received: by mail-il1-f200.google.com with SMTP id l3-20020a056e021aa300b002d9094fb397so4554998ilv.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 10:09:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j7blovD8yZIVSMDnF6wpQvtTZGOIDSOmS5ueDQXNEg4=;
-        b=SzpsyYCkTrbqDTgxhoDyxEbCUHUFqBmt3mjwU7pFJqPv5ThMf9B1PRRVE3kqsNpPkk
-         LUAiMcApUFKvvpi3Knrd/NYsf1BuhFAEwrWP1kvKghDyIRgY86BWJc3eJNkPSDMbrMOZ
-         3YWzcUCFsTx0YoTtmkFYHIP8ggbIsrAnHg5Xp2qTPpoIDdc/YJ97l78C2Vq3EXIt9kGO
-         kIp2CzN4zNBpmXcN6gUvzESG5mHYgb96OQoZDmCET5SB25aLj3XlN3tldSy1n+nAcat8
-         ptzLFOLpxzVnZyHIfM+tPuqKtCP5HNxzrYbT3eUi/a2e9mPqBZ53Y+2Zw92+2tkVs5Vu
-         bnzw==
-X-Gm-Message-State: AJIora+nkk01FxMlPO1Fx9iFNYw7WoHzWXA05/eMywQoYoZ5SAROq2e4
-        IqdnbZkdYq3f74k+F1hv3HEJ48Kt3+4rwzBogPOO3A==
-X-Google-Smtp-Source: AGRyM1vzX9rdE/oum8gEQi8Myh0QDcna7eZrIKYriBs6e5jUFmi+GI0nMJFeYRWdeZlQ0Ly7vp+EGPfSyGI7dzPvJ2U=
-X-Received: by 2002:a05:620a:4156:b0:6a6:f8d2:6d9e with SMTP id
- k22-20020a05620a415600b006a6f8d26d9emr21129486qko.30.1655831359859; Tue, 21
- Jun 2022 10:09:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5kAhXV5ceZVd9SW+rj4Nij9cH0l8kTqdMQa24MeO028=;
+        b=sO6Q22f7fge7tpErctyx/U1BurIlr8SsjL0m2uwpGGWswjcM6v52dcSOmUVUT1Rco6
+         VBl6JGV/91HO1lkAkSALDjIzOefDCZeOtNG4ef9JZPS/ioQFXx//IVSOaXKt0bZ+VPOK
+         COXKtB6zO3ZFYJeochzmZYG9s/DH3XjtdFMRlCTKNvGIhMRgQa1UCNJI9sZ0TCqVDeGn
+         47XS++9oIRiMoYeY/Qj9rgEGgsyPvaS04qk+lBIzTfTcqfRckywUkWB1jtfykhDHIfhs
+         1Kb8iPHksglAeGWQ+N/3M18qyiTMox82Hj9I1TjMQfLXeVT9ebRjbm/Jev3N1SS2re5/
+         Yo9w==
+X-Gm-Message-State: AJIora+Orbg2YJJQJ4sfW2IM6Ugjb0jtObW95hPOouUPhF5g4QkLM7U9
+        kDAoTZidm4WvYMl/+lcMkFqfTj487Zt+3rPi9qTkR5rm3pXYgTjz8btwd6SPRjDoRBlnd7Xy8KN
+        n6ZsJJpl63bX41xWgYLxX+2ef
+X-Received: by 2002:a05:6638:240a:b0:332:783:156b with SMTP id z10-20020a056638240a00b003320783156bmr16359096jat.306.1655831376643;
+        Tue, 21 Jun 2022 10:09:36 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sEoM/q2ZzHHdyf2r5gcqetk1jTonW7PHJFLpLSAjDLzc2r35SkR603oJ4EMetLtOp4Z+ydng==
+X-Received: by 2002:a05:6638:240a:b0:332:783:156b with SMTP id z10-20020a056638240a00b003320783156bmr16359088jat.306.1655831376427;
+        Tue, 21 Jun 2022 10:09:36 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id o33-20020a027421000000b00331a211407fsm7406362jac.93.2022.06.21.10.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 10:09:35 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 13:09:34 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH RFC 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
+Message-ID: <YrH7ToN8fDB0PbW3@xz-m1.local>
+References: <20220617014147.7299-1-peterx@redhat.com>
+ <20220617014147.7299-2-peterx@redhat.com>
+ <212f8b31-e470-d62c-0090-537d0d60add9@redhat.com>
 MIME-Version: 1.0
-References: <20220621160621.24415-1-y.oudjana@protonmail.com> <20220621160621.24415-7-y.oudjana@protonmail.com>
-In-Reply-To: <20220621160621.24415-7-y.oudjana@protonmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 21 Jun 2022 20:09:08 +0300
-Message-ID: <CAA8EJpo8E68_nw+H54CqVm7w_5WDYLQYt=UXdyzy=bZobEAs=Q@mail.gmail.com>
-Subject: Re: [PATCH 6/6] clk: qcom: msm8996-cpu: Use parent_data for all clocks
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <212f8b31-e470-d62c-0090-537d0d60add9@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,192 +83,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 19:07, Yassine Oudjana <yassine.oudjana@gmail.com> wrote:
->
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
->
-> Replace parent_names in PLLs, secondary muxes and primary muxes with
-> parent_data. For primary muxes there were never any *cl_pll_acd clocks,
-> so instead of adding them, put the primary PLLs in both PLL_INDEX and
-> ACD_INDEX, then make sure ACD_INDEX is always picked over PLL_INDEX when
-> setting parent since we always want ACD when using the primary PLLs.
->
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> ---
->  drivers/clk/qcom/clk-cpu-8996.c | 79 ++++++++++++++++++++-------------
->  1 file changed, 47 insertions(+), 32 deletions(-)
->
-> diff --git a/drivers/clk/qcom/clk-cpu-8996.c b/drivers/clk/qcom/clk-cpu-8996.c
-> index b3ad9245874d..cdb7b2ef3367 100644
-> --- a/drivers/clk/qcom/clk-cpu-8996.c
-> +++ b/drivers/clk/qcom/clk-cpu-8996.c
-> @@ -112,14 +112,18 @@ static const struct alpha_pll_config hfpll_config = {
->         .early_output_mask = BIT(3),
->  };
->
-> +static const struct clk_parent_data pll_parent[] = {
-> +       { .fw_name = "xo" },
-> +};
-> +
->  static struct clk_alpha_pll pwrcl_pll = {
->         .offset = PWRCL_REG_OFFSET,
->         .regs = prim_pll_regs,
->         .flags = SUPPORTS_DYNAMIC_UPDATE | SUPPORTS_FSM_MODE,
->         .clkr.hw.init = &(struct clk_init_data){
->                 .name = "pwrcl_pll",
-> -               .parent_names = (const char *[]){ "xo" },
-> -               .num_parents = 1,
-> +               .parent_data = pll_parent,
-> +               .num_parents = ARRAY_SIZE(pll_parent),
->                 .ops = &clk_alpha_pll_huayra_ops,
->         },
->  };
-> @@ -130,8 +134,8 @@ static struct clk_alpha_pll perfcl_pll = {
->         .flags = SUPPORTS_DYNAMIC_UPDATE | SUPPORTS_FSM_MODE,
->         .clkr.hw.init = &(struct clk_init_data){
->                 .name = "perfcl_pll",
-> -               .parent_names = (const char *[]){ "xo" },
-> -               .num_parents = 1,
-> +               .parent_data = pll_parent,
-> +               .num_parents = ARRAY_SIZE(pll_parent),
->                 .ops = &clk_alpha_pll_huayra_ops,
->         },
->  };
-> @@ -190,8 +194,8 @@ static struct clk_alpha_pll pwrcl_alt_pll = {
->         .flags = SUPPORTS_OFFLINE_REQ | SUPPORTS_FSM_MODE,
->         .clkr.hw.init = &(struct clk_init_data) {
->                 .name = "pwrcl_alt_pll",
-> -               .parent_names = (const char *[]){ "xo" },
-> -               .num_parents = 1,
-> +               .parent_data = pll_parent,
-> +               .num_parents = ARRAY_SIZE(pll_parent),
->                 .ops = &clk_alpha_pll_hwfsm_ops,
->         },
->  };
-> @@ -204,8 +208,8 @@ static struct clk_alpha_pll perfcl_alt_pll = {
->         .flags = SUPPORTS_OFFLINE_REQ | SUPPORTS_FSM_MODE,
->         .clkr.hw.init = &(struct clk_init_data) {
->                 .name = "perfcl_alt_pll",
-> -               .parent_names = (const char *[]){ "xo" },
-> -               .num_parents = 1,
-> +               .parent_data = pll_parent,
-> +               .num_parents = ARRAY_SIZE(pll_parent),
->                 .ops = &clk_alpha_pll_hwfsm_ops,
->         },
->  };
-> @@ -252,6 +256,9 @@ static int clk_cpu_8996_pmux_set_parent(struct clk_hw *hw, u8 index)
->         u32 val;
->
->         val = index;
-> +       /* We always want ACD when using the primary PLL */
-> +       if (val == PLL_INDEX)
-> +               val = ACD_INDEX;
->         val <<= cpuclk->shift;
->
->         return regmap_update_bits(clkr->regmap, cpuclk->reg, mask, val);
-> @@ -282,17 +289,24 @@ static const struct clk_ops clk_cpu_8996_pmux_ops = {
->         .determine_rate = clk_cpu_8996_pmux_determine_rate,
->  };
->
-> +static const struct clk_parent_data pwrcl_smux_parents[] = {
-> +       { .fw_name = "xo" },
-> +       { .hw = &pwrcl_pll_postdiv.hw },
-> +};
-> +
-> +static const struct clk_parent_data perfcl_smux_parents[] = {
-> +       { .fw_name = "xo" },
-> +       { .hw = &perfcl_pll_postdiv.hw },
-> +};
-> +
->  static struct clk_regmap_mux pwrcl_smux = {
->         .reg = PWRCL_REG_OFFSET + MUX_OFFSET,
->         .shift = 2,
->         .width = 2,
->         .clkr.hw.init = &(struct clk_init_data) {
->                 .name = "pwrcl_smux",
-> -               .parent_names = (const char *[]){
-> -                       "xo",
-> -                       "pwrcl_pll_postdiv",
-> -               },
-> -               .num_parents = 2,
-> +               .parent_data = pwrcl_smux_parents,
-> +               .num_parents = ARRAY_SIZE(pwrcl_smux_parents),
->                 .ops = &clk_regmap_mux_closest_ops,
->                 .flags = CLK_SET_RATE_PARENT,
->         },
-> @@ -304,16 +318,27 @@ static struct clk_regmap_mux perfcl_smux = {
->         .width = 2,
->         .clkr.hw.init = &(struct clk_init_data) {
->                 .name = "perfcl_smux",
-> -               .parent_names = (const char *[]){
-> -                       "xo",
-> -                       "perfcl_pll_postdiv",
-> -               },
-> -               .num_parents = 2,
-> +               .parent_data = perfcl_smux_parents,
-> +               .num_parents = ARRAY_SIZE(perfcl_smux_parents),
->                 .ops = &clk_regmap_mux_closest_ops,
->                 .flags = CLK_SET_RATE_PARENT,
->         },
->  };
->
-> +static const struct clk_parent_data pwrcl_pmux_parents[] = {
-> +       [SMUX_INDEX] = { .hw = &pwrcl_smux.clkr.hw },
-> +       [PLL_INDEX] = { .hw = &pwrcl_pll.clkr.hw },
-> +       [ACD_INDEX] = { .hw = &pwrcl_pll.clkr.hw },
-> +       [ALT_INDEX] = { .hw = &pwrcl_alt_pll.clkr.hw },
-> +};
-> +
-> +static const struct clk_parent_data perfcl_pmux_parents[] = {
-> +       [SMUX_INDEX] = { .hw = &perfcl_smux.clkr.hw },
-> +       [PLL_INDEX] = { .hw = &perfcl_pll.clkr.hw },
-> +       [ACD_INDEX] = { .hw = &perfcl_pll.clkr.hw },
-> +       [ALT_INDEX] = { .hw = &perfcl_alt_pll.clkr.hw },
-> +};
-> +
->  static struct clk_cpu_8996_pmux pwrcl_pmux = {
->         .reg = PWRCL_REG_OFFSET + MUX_OFFSET,
->         .shift = 0,
-> @@ -323,13 +348,8 @@ static struct clk_cpu_8996_pmux pwrcl_pmux = {
->         .nb.notifier_call = cpu_clk_notifier_cb,
->         .clkr.hw.init = &(struct clk_init_data) {
->                 .name = "pwrcl_pmux",
-> -               .parent_names = (const char *[]){
-> -                       "pwrcl_smux",
-> -                       "pwrcl_pll",
-> -                       "pwrcl_pll_acd",
-> -                       "pwrcl_alt_pll",
-> -               },
-> -               .num_parents = 4,
-> +               .parent_data = pwrcl_pmux_parents,
+On Tue, Jun 21, 2022 at 10:23:32AM +0200, David Hildenbrand wrote:
+> On 17.06.22 03:41, Peter Xu wrote:
+> > We have had FAULT_FLAG_INTERRUPTIBLE but it was never applied to GUPs.  One
+> > issue with it is that not all GUP paths are able to handle signal delivers
+> > besides SIGKILL.
+> > 
+> > That's not ideal for the GUP users who are actually able to handle these
+> > cases, like KVM.
+> > 
+> > KVM uses GUP extensively on faulting guest pages, during which we've got
+> > existing infrastructures to retry a page fault at a later time.  Allowing
+> > the GUP to be interrupted by generic signals can make KVM related threads
+> > to be more responsive.  For examples:
+> > 
+> >   (1) SIGUSR1: which QEMU/KVM uses to deliver an inter-process IPI,
+> >       e.g. when the admin issues a vm_stop QMP command, SIGUSR1 can be
+> >       generated to kick the vcpus out of kernel context immediately,
+> > 
+> >   (2) SIGINT: which can be used with interactive hypervisor users to stop a
+> >       virtual machine with Ctrl-C without any delays/hangs,
+> > 
+> >   (3) SIGTRAP: which grants GDB capability even during page faults that are
+> >       stuck for a long time.
+> > 
+> > Normally hypervisor will be able to receive these signals properly, but not
+> > if we're stuck in a GUP for a long time for whatever reason.  It happens
+> > easily with a stucked postcopy migration when e.g. a network temp failure
+> > happens, then some vcpu threads can hang death waiting for the pages.  With
+> > the new FOLL_INTERRUPTIBLE, we can allow GUP users like KVM to selectively
+> > enable the ability to trap these signals.
+> 
+> This makes sense to me. I assume relevant callers will detect "GUP
+> failed" but also "well, there is a signal to handle" and cleanly back
+> off, correct?
 
-Please use parent_hws here and below.
+Correct, via an -EINTR.
 
-> +               .num_parents = ARRAY_SIZE(pwrcl_pmux_parents),
->                 .ops = &clk_cpu_8996_pmux_ops,
->                 /* CPU clock is critical and should never be gated */
->                 .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
-> @@ -345,13 +365,8 @@ static struct clk_cpu_8996_pmux perfcl_pmux = {
->         .nb.notifier_call = cpu_clk_notifier_cb,
->         .clkr.hw.init = &(struct clk_init_data) {
->                 .name = "perfcl_pmux",
-> -               .parent_names = (const char *[]){
-> -                       "perfcl_smux",
-> -                       "perfcl_pll",
-> -                       "perfcl_pll_acd",
-> -                       "perfcl_alt_pll",
-> -               },
-> -               .num_parents = 4,
-> +               .parent_data = perfcl_pmux_parents,
-> +               .num_parents = ARRAY_SIZE(perfcl_pmux_parents),
->                 .ops = &clk_cpu_8996_pmux_ops,
->                 /* CPU clock is critical and should never be gated */
->                 .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
-> --
-> 2.36.1
->
+One thing to mention is that the gup user behavior will be the same as
+before if the caller didn't explicilty pass in FOLL_INTERRUPTIBLE with the
+gup call.  So after the whole series applied only kvm (and only some path
+of kvm, not all GUP; I only touched up the x86 slow page fault path) to
+handle this, but that'll be far enough to cover 99.99% use cases that I
+wanted to take care of.
 
+E.g., some kvm request to gup on some guest apic page may not still be able
+to respond to a SIGUSR1 but that's very very rare, and we can always add
+more users of FOLL_INTERRUPTIBLE when the code is ready to benefit from the
+fast respondings.
+
+Thanks,
 
 -- 
-With best wishes
-Dmitry
+Peter Xu
+

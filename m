@@ -2,87 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F7455299D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F162A5529A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344982AbiFUDLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S1344993AbiFUDMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344839AbiFUDL2 (ORCPT
+        with ESMTP id S1344989AbiFUDL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:11:28 -0400
-Received: from out199-9.us.a.mail.aliyun.com (out199-9.us.a.mail.aliyun.com [47.90.199.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7488F1F2FC
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:11:25 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VH.Hjy._1655781080;
-Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VH.Hjy._1655781080)
-          by smtp.aliyun-inc.com;
-          Tue, 21 Jun 2022 11:11:20 +0800
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     akpm@linux-foundation.org, david@redhat.com, ziy@nvidia.com
-Cc:     guoren@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [PATCH] mm: fixup validation of buddy pfn
-Date:   Tue, 21 Jun 2022 11:11:18 +0800
-Message-Id: <20220621031118.3650529-1-xianting.tian@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 20 Jun 2022 23:11:59 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070511FA4B;
+        Mon, 20 Jun 2022 20:11:57 -0700 (PDT)
+X-UUID: f42fc7d779dd466d86a6b54c2315ef00-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:05b7a6f9-0bf1-4f2f-b9bb-873c83cb3b13,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:47
+X-CID-INFO: VERSION:1.1.6,REQID:05b7a6f9-0bf1-4f2f-b9bb-873c83cb3b13,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:47
+X-CID-META: VersionHash:b14ad71,CLOUDID:06db0fea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:03753ab33708,Recheck:0,SF:28|17|19|48,TC:nil,Content:4,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: f42fc7d779dd466d86a6b54c2315ef00-20220621
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1915420034; Tue, 21 Jun 2022 11:11:55 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 21 Jun 2022 11:11:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 11:11:55 +0800
+Message-ID: <7bffe5226a80474f150ef67e36d2b75ea8e8a9d8.camel@mediatek.com>
+Subject: Re: [PATCH v12 11/14] drm/mediatek: dpi: Add tvd_clk enable/disable
+ flow
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 21 Jun 2022 11:11:55 +0800
+In-Reply-To: <218de671054a2c02d47a0bb4a31a0b07d24d7eee.camel@mediatek.com>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+         <20220620121028.29234-12-rex-bc.chen@mediatek.com>
+         <218de671054a2c02d47a0bb4a31a0b07d24d7eee.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For RISC-V arch the first 2MB RAM could be reserved for opensbi,
-and the arch code may don't create pages for the first 2MB RAM,
-so it would have pfn_base=512 and mem_map began with 512th PFN when
-CONFIG_FLATMEM=y.
+On Tue, 2022-06-21 at 10:55 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
+> > We should enable/disable tvd_clk when power_on/power_off, so add
+> > this
+> > patch to do this.
+> 
+> Without this patch, what would happen?
+> It seems this patch is redundant for these SoCs:
+> 
+> static const struct of_device_id mtk_dpi_of_ids[] = {
+> 	{ .compatible = "mediatek,mt2701-dpi",
+> 	  .data = &mt2701_conf,
+> 	},
+> 	{ .compatible = "mediatek,mt8173-dpi",
+> 	  .data = &mt8173_conf,
+> 	},
+> 	{ .compatible = "mediatek,mt8183-dpi",
+> 	  .data = &mt8183_conf,
+> 	},
+> 	{ .compatible = "mediatek,mt8192-dpi",
+> 	  .data = &mt8192_conf,
+> 	},
+> 	{ },
+> };
+> 
+> Regards,
+> CK
+> 
 
-But __find_buddy_pfn algorithm thinks the start PFN 0, it could get
-0 PFN or less than the pfn_base value, so page_is_buddy() can't
-verify the page whose PFN is 0 ~ 511, actually we don't have valid
-pages for PFN 0 ~ 511.
+Hello CK,
 
-Actually, buddy system should not assume Arch cretaed pages for
-reserved memory, Arch may don't know the implied limitation.
-With this patch, we can gurantee a valid buddy no matter what we
-have pages for reserved memory or not.
+IMO, this is a bug fix patch. From the usage of clock, if we want to
+use it, we should enable it . Therefore, I think we should add this and
+I will add a fix tag for this patch.
 
-Fixes: 8170ac4700d26f65 ("mm: wrap __find_buddy_pfn() with a necessary buddy page validation")
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
----
- mm/internal.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/mm/internal.h b/mm/internal.h
-index c0f8fbe0445b..0ec446caeb2e 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -322,7 +322,8 @@ __find_buddy_pfn(unsigned long page_pfn, unsigned int order)
-  * The found buddy can be a non PageBuddy, out of @page's zone, or its order is
-  * not the same as @page. The validation is necessary before use it.
-  *
-- * Return: the found buddy page or NULL if not found.
-+ * Return: the found buddy page or NULL if not found or NULL if buddy pfn is
-+ *         not valid.
-  */
- static inline struct page *find_buddy_page_pfn(struct page *page,
- 			unsigned long pfn, unsigned int order, unsigned long *buddy_pfn)
-@@ -330,6 +331,9 @@ static inline struct page *find_buddy_page_pfn(struct page *page,
- 	unsigned long __buddy_pfn = __find_buddy_pfn(pfn, order);
- 	struct page *buddy;
- 
-+	if (!pfn_valid(__buddy_pfn))
-+		return NULL;
-+
- 	buddy = page + (__buddy_pfn - pfn);
- 	if (buddy_pfn)
- 		*buddy_pfn = __buddy_pfn;
--- 
-2.17.1
+BRs,
+Bo-Chen
+> 
+> > 
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > index 2717b1741b7a..f83ecb154457 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > @@ -455,6 +455,7 @@ static void mtk_dpi_power_off(struct mtk_dpi
+> > *dpi)
+> >  	mtk_dpi_disable(dpi);
+> >  	clk_disable_unprepare(dpi->pixel_clk);
+> >  	clk_disable_unprepare(dpi->engine_clk);
+> > +	clk_disable_unprepare(dpi->tvd_clk);
+> >  }
+> >  
+> >  static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+> > @@ -464,10 +465,16 @@ static int mtk_dpi_power_on(struct mtk_dpi
+> > *dpi)
+> >  	if (++dpi->refcount != 1)
+> >  		return 0;
+> >  
+> > +	ret = clk_prepare_enable(dpi->tvd_clk);
+> > +	if (ret) {
+> > +		dev_err(dpi->dev, "Failed to enable tvd pll: %d\n",
+> > ret);
+> > +		goto err_refcount;
+> > +	}
+> > +
+> >  	ret = clk_prepare_enable(dpi->engine_clk);
+> >  	if (ret) {
+> >  		dev_err(dpi->dev, "Failed to enable engine clock:
+> > %d\n", ret);
+> > -		goto err_refcount;
+> > +		goto err_engine;
+> >  	}
+> >  
+> >  	ret = clk_prepare_enable(dpi->pixel_clk);
+> > @@ -484,6 +491,8 @@ static int mtk_dpi_power_on(struct mtk_dpi
+> > *dpi)
+> >  
+> >  err_pixel:
+> >  	clk_disable_unprepare(dpi->engine_clk);
+> > +err_engine:
+> > +	clk_disable_unprepare(dpi->tvd_clk);
+> >  err_refcount:
+> >  	dpi->refcount--;
+> >  	return ret;
+> 
+> 
 

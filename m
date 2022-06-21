@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E3A553E9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86D7553E9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354715AbiFUWfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S1354735AbiFUWgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354582AbiFUWfs (ORCPT
+        with ESMTP id S1354582AbiFUWgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:35:48 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955A531DD3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:35:47 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id fd6so18578059edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=qr6sJy5vBRC+dq0sR4qT1WgXSzVq4kiMxqFhXn4CM8Y=;
-        b=S49UqMPn0yi/PCD1TUNgwyC/9NCBw58IbuYy9mCU8ousAQPWKLIEymbuU7A/gkwWsF
-         73ha1IZSvK2v49VjpFQXVGU6ggbizc2/480lkR+b48UsdlNKKs7T7st9OW70gp6c0Yd5
-         N0PKH7VmR9ec+HfYuaWWPm671yeX1BvoRX6MTjGhf7S8ewHVSsUm3Edb4AA7F4Oy60QI
-         cW1EVfLaGhFbvTFPC0VLUn16U1Cc6xoSmQeXIwqO4lXNBoYRf73uiWnzWjwfFZo2shwE
-         HUDelhxlBfbswsVMzJ4tbQtdN//KOvsdAW7ayQy3OOsQWHz2sFW33Z3AA+iSMbMYPCnt
-         vrcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=qr6sJy5vBRC+dq0sR4qT1WgXSzVq4kiMxqFhXn4CM8Y=;
-        b=xUT4IZMWk7zUKSo2GF2Efi1iM9O/rhjdpQq+wRnJIAF9mT0KyIwJ2jvyEE4tNbvwRx
-         XEqvit6KmVmLKF3anhmk9qaW59AFOXbU7H7xfm9IQH35eBNHaYr1dsZ6YFkVe2+r4zXa
-         npf7uERaheufwCOmWM3aoFulNf0n9kd0LqOFUdOW1uHXt/HgZNIYZk7ajXUd8PjMNAHs
-         nt3q/f943CIm8YIiI0TeUIBQl0Q05h8euRmpHhWdWDxwHiOFL23cb9svlkpHzIwshRhw
-         pUjbL70F/F8mJdvzicUdKAeH8+Fq8a2FEMnlwvmtRDkv22Ehw2DSMr/OwHuc+OPXxLLJ
-         l8WQ==
-X-Gm-Message-State: AJIora8Oz11HNLZ4eYMHuTy8E5gWbblpl/hdxt0jT7AHN9OUBdNDyFUJ
-        XNMoDscpLeGwgHuAYfTR3CJ2ZYePDrSpM6DCSg==
-X-Google-Smtp-Source: AGRyM1vLlnOfci7BdcswtrPu1enA7i4vWR1V8+sxutHrDxc1NUb/Puc3RtGCGrVkyFrGRTdrO24m2I+bfwsNI66xdbw=
-X-Received: by 2002:a05:6402:2741:b0:434:fe8a:1f96 with SMTP id
- z1-20020a056402274100b00434fe8a1f96mr406474edd.331.1655850947205; Tue, 21 Jun
- 2022 15:35:47 -0700 (PDT)
+        Tue, 21 Jun 2022 18:36:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C616731DD9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:36:49 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o3mUH-00072Y-BQ; Wed, 22 Jun 2022 00:36:45 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-ad3c-d4a3-b7b8-663d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:ad3c:d4a3:b7b8:663d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D10FB9BC62;
+        Tue, 21 Jun 2022 22:36:42 +0000 (UTC)
+Date:   Wed, 22 Jun 2022 00:36:42 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Liang He <windhl@126.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: Remove extra of_node_get in grcan
+Message-ID: <20220621223642.zovfknmkl46d3lrs@pengutronix.de>
+References: <20220619070257.4067022-1-windhl@126.com>
 MIME-Version: 1.0
-Received: by 2002:a54:2d0b:0:0:0:0:0 with HTTP; Tue, 21 Jun 2022 15:35:46
- -0700 (PDT)
-Reply-To: mrskristalinageorgieva74@gmail.com
-From:   post office <anoumou63@gmail.com>
-Date:   Tue, 21 Jun 2022 22:35:46 +0000
-Message-ID: <CANF9qczrR4_Ytp5jh2vhmg2VDA+-UY4iznwv7G-ytB_uveJYRA@mail.gmail.com>
-Subject: =?UTF-8?B?QVRFTsWiSUU=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7hp4pruqbs2u4bdq"
+Content-Disposition: inline
+In-Reply-To: <20220619070257.4067022-1-windhl@126.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FOND MONETAR INTERNA=C8=9AIONAL (HQ1)
-700 19th Street, N.W., Washington, D.C. 20431.
 
-Stimate proprietar de e-mail al beneficiarului, v-am trimis un e-mail
-=C3=AEn urm=C4=83 cu c=C3=A2teva s=C4=83pt=C4=83m=C3=A2ni despre fondul dvs=
-. f=C4=83r=C4=83 niciun r=C4=83spuns din
-partea dvs.
-A=C8=99 dori s=C4=83 =C8=99tiu dac=C4=83 a=C8=9Bi primit e-mailul meu anter=
-ior referitor la
-fondul dvs. nerevendicat, f=C4=83r=C4=83 niciun r=C4=83spuns.
-A=C8=99tept=C4=83m cu ner=C4=83bdare cooperarea dumneavoastr=C4=83 urgent=
-=C4=83 pentru mai multe detalii.
-Felicit=C4=83ri, contact
-Doamna Kristalina Georgieva pentru mai multe detalii
-(mrskristalinageorgieva74@gmail.com)
-(I.M.F) (601) ofi=C8=9Ber 601
+--7hp4pruqbs2u4bdq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 19.06.2022 15:02:57, Liang He wrote:
+> In grcan_probe(), of_find_node_by_path() has increased the refcount.
+> There is no need to call of_node_get() again.
+>=20
+> Fixes: 1e93ed26acf0 (can: grcan: grcan_probe(): fix broken system id chec=
+k for errata workaround needs)
+>=20
+> Signed-off-by: Liang He <windhl@126.com>
+
+Applied to linux-can/testing.
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--7hp4pruqbs2u4bdq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKyR/cACgkQrX5LkNig
+012j4QgAil42H+AKdjYOmRnYwjdDdSVagPnwXJ8o1Xy8K5dBH9r/qNWyLdcOKHhH
+0M0D/R/uNtFDGhXFkWz5pH9K/04BPpwZN9s3Je6vHsWvj6vULUDcOyW4I+SzdZaE
+EMszknbppkNEJBg9C6OmapupzYMOq553CxYEIZPv7pXUAxe/ONDPZi7u8zstXFNp
+n1f7MV+PdKYZ+v35EJtWIAqYr5TezaEzzcrwJE8ZtbGXT7l7Yg44JN30y6052mbj
+fr33Lblwi/GT3y0SIdgmXoZnvNLYAq4CJVdpifUzA5tL+BeJRrRGkmtKYuNdAMZM
+4HlThHfSdTNgSqjlUaXw42GTzOjPhQ==
+=u3Xx
+-----END PGP SIGNATURE-----
+
+--7hp4pruqbs2u4bdq--

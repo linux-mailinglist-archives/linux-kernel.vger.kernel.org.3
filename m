@@ -2,141 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDA755290C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E654A55290B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244398AbiFUBf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 21:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
+        id S244665AbiFUBgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 21:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiFUBfz (ORCPT
+        with ESMTP id S244545AbiFUBgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 21:35:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324591C134
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655775355; x=1687311355;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=1sAEize2JPA180/ucIEiMx0IRlM6GKGbk0JEfZIi4tM=;
-  b=XAzDm7ASzWaBK6XY+86PJamrmnm7QpiFLkwrxqUAwXd5RIv1uGX4wlzJ
-   Zje3hugZBn++S+3etcjjj37yd5HjNr2fPrjF6BTr463oUwaA9gEF/L+ZK
-   Qbcy98rb33Yp8I72gYsC6THfr1ZKCvTZwSVO2TbwxQv1R/eMddjxF+FZx
-   m8sFeXl4dIEuOSJsXJf4z6Wf059c+YOLat54INmaBv+EJgKQvb0KXroB9
-   XwXGltExpOKGL0fSx58Zxcaw4Hkxi6IHJMwco5puRZDPb2y2bYyVLicWz
-   kozn/8mmYHYWScdm8lJMpmCqOZeGtqpiSP0u36VfufEAvK5wNr2iQJ1jn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="259822437"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="259822437"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:35:55 -0700
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="654918761"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:35:53 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
- work as expected
-References: <20220608144031.829-1-linmiaohe@huawei.com>
-        <20220608144031.829-2-linmiaohe@huawei.com>
-        <87r13jrdst.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <a384f290-dff3-6dad-f1d3-8ec245b9bebd@huawei.com>
-Date:   Tue, 21 Jun 2022 09:35:50 +0800
-In-Reply-To: <a384f290-dff3-6dad-f1d3-8ec245b9bebd@huawei.com> (Miaohe Lin's
-        message of "Mon, 20 Jun 2022 20:12:27 +0800")
-Message-ID: <87letqpzm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 20 Jun 2022 21:36:20 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A6E1CB10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:36:19 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id e63so10232574pgc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waymo.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=vZ6F4wvpDGbWdv9LDQ/ImSRBscJ3ks5pTk2NeSqUUQw=;
+        b=tJG880RA9r3Y4xwm+Il6qBFQ5sGJONzFwHJOvHSjt9EUe58fjyRvokq+3360x4fLNF
+         VPWqi1ZwtRu3zjadlMB+qE7QoXLwbnroS7HqeI1bL5TUWPgZ1PEaMOlifwrDD+HfTplE
+         S6b4Qiur8J8lGfSm6i0KqW2kfeX4n8t9Iy7PYnO6NEoEeg8eG5G0nXxg8SOSRrfU5wPX
+         YaVf1xILZUfWPmsBWrIrmqOTnscBpOndXjZHLbNuyjtNBOa6dIP357EdGwVOQ1Y9TPRC
+         PURHCWcOumCZVvhlmU8j9fKwAQsr4CUxcJGfg7YKAZdEzOOXOKF6pUeYjNtqc+RkB7xI
+         Xlgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=vZ6F4wvpDGbWdv9LDQ/ImSRBscJ3ks5pTk2NeSqUUQw=;
+        b=gP0Mivahtscv8cvA+R59gNhzXEwYcUU9LvQIc4/Jsje/Bv4o8XdoxK91t5OdIVwxd3
+         xkllLSkkQe+y5tgwTs6xcJHfuU1AqWEsIOpIvgkP+1Hs79CTyqlpLnD/7v6Vvorxp297
+         MkaDuBavuuuOqLsJ0a0Bvxp3D8Q688J0V71fBHT+aPFYtx2Nl/4+mVG0MPavpzR45GJA
+         YEkfpcMnAPIOK3cLH5hbRWxg1eTSrv8UgZekZhly3i3jA1nwnL5iTafJc41fTziMTz6e
+         INuDqjitgM+Nd7f1GxcxAPCzm93TIn02fjHxNBnGHmVBakklwBDwteX/J86yCluemRMS
+         Ixcg==
+X-Gm-Message-State: AJIora90utsH9DFNY/vjpg55HhcF58QpnuT0DYdcv2cYLzXgd8zlti8M
+        388Cvzz75+/HGo/lnmtPslb/lX84JTZDgtN+UN9YzA==
+X-Google-Smtp-Source: AGRyM1vo2+viWwqM95mm8E1n776io1sCuKmRDR4PjLs+kEY83xdRYdxsBIAlI4Xv7MYzTijsJFKJrRInYFfmwYhtOUY=
+X-Received: by 2002:a63:a841:0:b0:40c:b1f6:a876 with SMTP id
+ i1-20020a63a841000000b0040cb1f6a876mr7774889pgp.578.1655775378560; Mon, 20
+ Jun 2022 18:36:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220620164953.1503934-1-rsilvera@google.com> <a651ca26-6aae-fe7f-66b1-18fdbad40f41@intel.com>
+In-Reply-To: <a651ca26-6aae-fe7f-66b1-18fdbad40f41@intel.com>
+Reply-To: rsilvera@waymo.com
+From:   Raul Silvera <rsilvera@waymo.com>
+Date:   Mon, 20 Jun 2022 18:35:52 -0700
+Message-ID: <CA+PGoB_H2iKwvTA1xEGmyqccefipdrnS_GxZBixZTAe2bvkDrg@mail.gmail.com>
+Subject: Re: [PATCH] perf: Adjust perf-inject output data offset for backward compatibility
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaohe Lin <linmiaohe@huawei.com> writes:
+On Mon, Jun 20, 2022 at 11:54 AM Adrian Hunter <adrian.hunter@intel.com> wr=
+ote:
+>
+> This looks too late since, although the header comes before the data,
+> it also gets written afterwards (at_exit =3D=3D true).  It would be
+> better if we could rely on header->data_offset at this point.
+>
 
-> On 2022/6/20 15:31, Huang, Ying wrote:
->> Miaohe Lin <linmiaohe@huawei.com> writes:
->> 
->>> security_vm_enough_memory_mm() checks whether a process has enough memory
->>> to allocate a new virtual mapping. And total_swap_pages is considered as
->>> available memory while swapoff tries to make sure there's enough memory
->>> that can hold the swapped out memory. But total_swap_pages contains the
->>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
->>> success even if there's no memory to hold the swapped out memory because
->>> total_swap_pages always greater than or equal to p->pages.
->> 
->> Per my understanding, swapoff will not allocate virtual mapping by
->> itself.  But after swapoff, the overcommit limit could be exceeded.
->> security_vm_enough_memory_mm() is used to check that.  For example, in a
->> system with 4GB memory and 8GB swap, and 10GB is in use,
->> 
->> CommitLimit:    4+8 = 12GB
->> Committed_AS:   10GB
->> 
->> security_vm_enough_memory_mm() in swapoff() will fail because
->> 10+8 = 18 > 12.  This is expected because after swapoff, the overcommit
->> limit will be exceeded.
->> 
->> If 3GB is in use,
->> 
->> CommitLimit:    4+8 = 12GB
->> Committed_AS:   3GB
->> 
->> security_vm_enough_memory_mm() in swapoff() will succeed because
->> 3+8 = 11 < 12.  This is expected because after swapoff, the overcommit
->> limit will not be exceeded.
->
-> In OVERCOMMIT_NEVER scene, I think you're right.
->
->> 
->> So, what's the real problem of the original implementation?  Can you
->> show it with an example as above?
->
-> In OVERCOMMIT_GUESS scene, in a system with 4GB memory and 8GB swap, and 10GB is in use,
-> pages below is 8GB, totalram_pages() + total_swap_pages is 12GB, so swapoff() will succeed
-> instead of expected failure because 8 < 12. The overcommit limit is always *ignored* in the
-> below case.
->
-> 	if (sysctl_overcommit_memory == OVERCOMMIT_GUESS) {
-> 		if (pages > totalram_pages() + total_swap_pages)
-> 			goto error;
-> 		return 0;
-> 	}
->
-> Or am I miss something?
+Thank you. You're right. We can rely on header->data_offset at this
+point as it is
+adjusted upfront in __cmd_inject. Will send an updated patch.
 
-Per my understanding, with OVERCOMMIT_GUESS, the number of in-use pages
-isn't checked at all.  The only restriction is that the size of the
-virtual mapping created should be less than total RAM + total swap
-pages.  Because swapoff() will not create virtual mapping, so it's
-expected that security_vm_enough_memory_mm() in swapoff() always
-succeeds.
-
-Best Regards,
-Huang, Ying
-
->
-> Thanks!
->
->> 
->>> In order to fix it, p->pages should be retracted from total_swap_pages
->>> first and then check whether there's enough memory for inuse swap pages.
->>>
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> 
->> [snip]
->> 
->> .
->> 
+Ra=C3=BAl E. Silvera
+Software Engineer
+waymo.com

@@ -2,43 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59350552BDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BCA552BEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346546AbiFUHYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S1346972AbiFUH03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345320AbiFUHYj (ORCPT
+        with ESMTP id S1347129AbiFUH0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:24:39 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2A419FB3;
-        Tue, 21 Jun 2022 00:24:33 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1655796261th7gvsn9
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 15:24:07 +0800 (CST)
-X-QQ-SSF: 01000000007000109000B00A0000000
-X-QQ-FEAT: FCUjxTjsuSIbhoALcgPlqmFKLwSQeShLqrw7une5wOgn2fiyfbUrMxl4ompzA
-        O7EE75Dq/2p1CTybtiDJo+a4wSjxGlKWRdZJy42dA7adtWzB4J3zhAKOxEkwlsSYTpoOUvS
-        yDGpn/sAWUblz67j8qoPx5TvqZIemvfZJ3mZzN7Z82gnebP5UzifbjbFSzPM6ZBVXZ/Ow30
-        yohVW8rzt/7Z0ysf5B7lGmbpaopqQeS3MGxs9N1fErje3b0+WG0fqKJt4zJLV5z98R0leNi
-        XkLAUtPAggCEleJwij2W6ZxK3Jf37ZZxq1WiLt0/kknEFafgKfozEXT9FQtVuBYGGm0wCvI
-        jmyhw26QyUum/dNK4A=
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     john.garry@huawei.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jiangjian@cdjrlc.com
-Subject: [PATCH] scsi: hisi_sas: aligned "*" each line
-Date:   Tue, 21 Jun 2022 15:24:05 +0800
-Message-Id: <20220621072405.34394-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        Tue, 21 Jun 2022 03:26:11 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D3722B0A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:26:07 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id cs6so14643634qvb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d2goD1P8UZdoMASbRq27dQ+7VURQY6z/sy9q6Pv8gJ0=;
+        b=Nxf6B2MS9DZB/qkHAQOWw5j6Bxtg9kXmQExGgUeWaC3kJp0lzK6x8BHGxiyuf1PBbq
+         uePpIuL+U7i0MRI/BGAYmGPWtW3pprxDU7KhDqDB55rrl2psNymEaK1oB9Bk2tuIs0DO
+         vCe/RlXfewePsPZV77Rrn5giVYffEX1nAG2gak+cWKoIlPw8DsgjcHyzW6vHnei8W4yi
+         bldDvXWFxnpNK7oFaUEuYWDrqSGqvzjcEkefGn6o6BMvxx9I4fD/jCRn9exwoZxlLOq9
+         pgUC+UKExjEp8eFrG6lsYClq/9xrrmInHpBjHS9tBiUEBgX64G+DrX1Itm0fIudn52v3
+         lk7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d2goD1P8UZdoMASbRq27dQ+7VURQY6z/sy9q6Pv8gJ0=;
+        b=fDvE4AMOOfOWlAQ4zgOrBkJZUHws8wbKrgOYwwhmmqO75Pe5gK8nLcCF2HkYN1f/R5
+         UZg9/egXWZ1Fh7tCR08PCveDzXBHrrkBFtz15nlc4Io9a7RJ28T3mCzf3hhrM+OiLeDG
+         ugS7L6m8b1X/EM1JJjIZH6F8g4RIPJgnFmDpDekTMmtTtSuYtIHNdEHpCSVG/dN5cG2C
+         QDWNq20plds5mCHtbSXhZBJlRnsNigC0Q8qJDM+iJDnxzh7TSa23ntd/twvhUyEge+M1
+         020V3MJId8SlcxmWB8nlBVPbIzWiLTndTaXLubYNPix8rdUQgThNrQeXoalqHBKrJd8w
+         jB6A==
+X-Gm-Message-State: AJIora/dCMOl+yhmvt50fWXKgYTaFF5mQbD4V2AmCNe7qRTUhDgIfQHo
+        x2fNScoAZwrxB0sVumwlkn6Iv6GC0C5hRysf4HRHBg==
+X-Google-Smtp-Source: AGRyM1s872tNwJc0ZLYopGWEjQHkRWEwSjnPvn0vD1OExkgUdoy/kck4+JRqdMmtHyzx3sNtCNhvpRW6dj44v3O+djY=
+X-Received: by 2002:a05:622a:550:b0:305:2905:a230 with SMTP id
+ m16-20020a05622a055000b003052905a230mr22593229qtx.478.1655796366422; Tue, 21
+ Jun 2022 00:26:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220610194435.2268290-1-yosryahmed@google.com>
+ <20220610194435.2268290-4-yosryahmed@google.com> <ee47c4af-aa4f-3ede-74b9-5d952df2fb1e@fb.com>
+In-Reply-To: <ee47c4af-aa4f-3ede-74b9-5d952df2fb1e@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 21 Jun 2022 00:25:55 -0700
+Message-ID: <CA+khW7jU=Fqt49jxG8y5n2YtRu4_C1gFUW-PqZGY_Rt8PGrGEg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/8] bpf, iter: Fix the condition on p when
+ calling stop.
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,28 +86,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consider * alignment in comments
+On Mon, Jun 20, 2022 at 11:48 AM Yonghong Song <yhs@fb.com> wrote:
+>
+> On 6/10/22 12:44 PM, Yosry Ahmed wrote:
+> > From: Hao Luo <haoluo@google.com>
+> >
+> > In bpf_seq_read, seq->op->next() could return an ERR and jump to
+> > the label stop. However, the existing code in stop does not handle
+> > the case when p (returned from next()) is an ERR. Adds the handling
+> > of ERR of p by converting p into an error and jumping to done.
+> >
+> > Because all the current implementations do not have a case that
+> > returns ERR from next(), so this patch doesn't have behavior changes
+> > right now.
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index 455d49299ddf..18297ab5a32b 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -805,8 +805,8 @@ slot_index_alloc_quirk_v2_hw(struct hisi_hba *hisi_hba,
- 			return -SAS_QUEUE_FULL;
- 		}
- 		/*
--		  * SAS IPTT bit0 should be 1, and SATA IPTT bit0 should be 0.
--		  */
-+		 * SAS IPTT bit0 should be 1, and SATA IPTT bit0 should be 0.
-+		 */
- 		if (sata_dev ^ (start & 1))
- 			break;
- 		start++;
--- 
-2.17.1
-
+Yonghong, do you want to get this change in now, or you want to wait
+for the whole patchset? This fix is straightforward and independent of
+other parts. Yosry and I can rebase.

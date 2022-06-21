@@ -2,220 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C125553141
+	by mail.lfdr.de (Postfix) with ESMTP id B90BF553142
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348897AbiFULoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S1350104AbiFULob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349554AbiFULoU (ORCPT
+        with ESMTP id S1349554AbiFULoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:44:20 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D92019C1F;
-        Tue, 21 Jun 2022 04:44:19 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id o9so9734015edt.12;
-        Tue, 21 Jun 2022 04:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=b4SZYE3Hi8RUeUlm3jAB1Med63tggD/V2wg3L6fvsJs=;
-        b=q3nkNg4eBftqV+Ct404C78m0pZ/KIZTV+GVwzh4+wzFIgABa3x4U6OX+xfz7KY9eOt
-         AjvaXCNNGXU1jZERKZQoBoTRNh/5HPWFNFzv57fjcnx0C9Wcykz0lTzVlSOL4fNpvKwf
-         uzC8XKkYZXnLj0PzoSJpDF11DLxwXAqJ9m7dIZzrBdotXfjjOUC2XmjJTjTLXvyXWT+F
-         2VgH6ziiIfuVJZS3pSzxr9nm+kEnkxpxTwL26bHeARJrjiJM7Gx03wtpLBh44yIK1X1m
-         0NbBnLJmxrDfisnlfpWat0ktoxD014DptDQo8g5DF0nTfpE1sZOwNzvbJyiVFBLIdqDK
-         7LAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=b4SZYE3Hi8RUeUlm3jAB1Med63tggD/V2wg3L6fvsJs=;
-        b=N9TjO+ozjbQALlUdMykW4s2jtjwgb986yZrSUPRwZ5FWdbM5xrPBd6vOt+ARIEdn8c
-         VJhVqOBZUzrepkbThiWkQtUO+waqpiavMUogmDzVLX8HNbYC8kmFp+5vZBy4p2e9xpW9
-         Cshr2m/nmWU4HnVwkUh3pFGlNE16utCelgeirfECCE8kYSf3Uz9yNb8RLOV5Mp2KYa7X
-         DptKN+ia6GdcXmYH9tpfvFRrMRRC8bx91lTC3AquwW4xTh+GAiVz0Bp6MPfWmG00SrvU
-         adv5cL7+j1/BHZIz9ONhWWmYjSupb98LGlWaXhrcwdk7uCrWlXjIB2iSk+OcpBv8Vuo+
-         R1Gw==
-X-Gm-Message-State: AJIora8HGKalG95S65CHjJIiDhthKAvaV+byzXjX8ZGy6nVKXX3RfF+E
-        hTj8a+sjMDH/1rAQUHkZE3I=
-X-Google-Smtp-Source: AGRyM1sUX/XLpqVZR6VUFxp0XfHBRL/XL/+Di1HzIvqErmiguGsaJpAlJT243DZzxOiA3FsSBCpufg==
-X-Received: by 2002:aa7:d94a:0:b0:435:75bf:48a0 with SMTP id l10-20020aa7d94a000000b0043575bf48a0mr16764056eds.187.1655811857674;
-        Tue, 21 Jun 2022 04:44:17 -0700 (PDT)
-Received: from skbuf ([188.25.159.210])
-        by smtp.gmail.com with ESMTPSA id sz23-20020a1709078b1700b00722e660f16fsm608262ejc.23.2022.06.21.04.44.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 04:44:17 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 14:44:15 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v8 05/16] net: pcs: add Renesas MII converter
- driver
-Message-ID: <20220621114415.zj37zmgkwkon6u7e@skbuf>
-References: <20220620110846.374787-1-clement.leger@bootlin.com>
- <20220620110846.374787-6-clement.leger@bootlin.com>
+        Tue, 21 Jun 2022 07:44:30 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C9A71CB3F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:44:29 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP0war7Fivd9RAA--.25191S3;
+        Tue, 21 Jun 2022 19:44:26 +0800 (CST)
+To:     yangtiezhu@loongson.cn
+References: <1654651402-21552-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v2] samples: Use KSYM_NAME_LEN for kprobes
+Cc:     linux-kernel@vger.kernel.org, lixuefeng@loongson.cn,
+        mhiramat@kernel.org, rostedt@goodmis.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <80873eed-2989-c836-3c24-d0f055000f87@loongson.cn>
+Date:   Tue, 21 Jun 2022 19:44:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220620110846.374787-6-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1654651402-21552-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxP0war7Fivd9RAA--.25191S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY-7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2
+        V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_Gw4l42xK82IYc2Ij64vIr41l4I8I3I0E4I
+        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+        WwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWr
+        Zr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UYxBIdaVFxhVjvjDU0xZFpf9x0JUsZ2-UUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 01:08:35PM +0200, Clément Léger wrote:
-> Add a PCS driver for the MII converter that is present on the Renesas
-> RZ/N1 SoC. This MII converter is reponsible for converting MII to
-> RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
-> reuse it in both the switch driver and the stmmac driver. Currently,
-> this driver only allows the PCS to be used by the dual Cortex-A7
-> subsystem since the register locking system is not used.
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
+Hi Masami,
 
-Pretty cool driver. I understand this to be more or less the same thing
-as drivers/net/phy/xilinx_gmii2rgmii.c in principle, but this appears
-nicer done and I'm glad you didn't follow the same model (the
-phylink_pcs seems to be a much better fit than a chained PHY).
-If PHY library maintainers don't have any objections you can add my:
+Are you OK with this version?
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+[PATCH v2] samples: Use KSYM_NAME_LEN for kprobes
+https://lore.kernel.org/lkml/1654651402-21552-1-git-send-email-yangtiezhu@loongson.cn/
 
-> +static void miic_reg_rmw(struct miic *miic, int offset, u32 mask, u32 val)
-> +{
-> +	u32 reg;
-> +
-> +	spin_lock(&miic->lock);
-> +
-> +	reg = miic_reg_readl(miic, offset);
-> +	reg &= ~mask;
-> +	reg |= val;
-> +	miic_reg_writel(miic, offset, reg);
-> +
-> +	spin_unlock(&miic->lock);
-> +}
+Thanks,
+Tiezhu
 
-Just a small comment: I don't think pcs_config and pcs_link_up need
-serialization with respect to each other, so this read-modify-write
-spinlock doesn't do much. But it doesn't really hurt either.
-
-> +
-> +static void miic_converter_enable(struct miic *miic, int port, int enable)
-> +{
-> +	u32 val = 0;
-> +
-> +	if (enable)
-> +		val = MIIC_CONVRST_PHYIF_RST(port);
-> +
-> +	miic_reg_rmw(miic, MIIC_CONVRST, MIIC_CONVRST_PHYIF_RST(port), val);
-> +}
-> +
-> +static int miic_config(struct phylink_pcs *pcs, unsigned int mode,
-> +		       phy_interface_t interface,
-> +		       const unsigned long *advertising, bool permit)
-> +{
-> +	struct miic_port *miic_port = phylink_pcs_to_miic_port(pcs);
-> +	struct miic *miic = miic_port->miic;
-> +	int port = miic_port->port;
-> +	u32 speed, conv_mode, val;
-> +
-> +	switch (interface) {
-> +	case PHY_INTERFACE_MODE_RMII:
-> +		conv_mode = CONV_MODE_RMII;
-> +		speed = CONV_MODE_100MBPS;
-> +		break;
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +		conv_mode = CONV_MODE_RGMII;
-> +		speed = CONV_MODE_1000MBPS;
-> +		break;
-> +	case PHY_INTERFACE_MODE_MII:
-> +		conv_mode = CONV_MODE_MII;
-> +		/* When in MII mode, speed should be set to 0 (which is actually
-> +		 * CONV_MODE_10MBPS)
-> +		 */
-> +		speed = CONV_MODE_10MBPS;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	val = FIELD_PREP(MIIC_CONVCTRL_CONV_MODE, conv_mode) |
-> +	      FIELD_PREP(MIIC_CONVCTRL_CONV_SPEED, speed);
-> +
-> +	miic_reg_rmw(miic, MIIC_CONVCTRL(port),
-> +		     MIIC_CONVCTRL_CONV_MODE | MIIC_CONVCTRL_CONV_SPEED, val);
-> +	miic_converter_enable(miic_port->miic, miic_port->port, 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static void miic_link_up(struct phylink_pcs *pcs, unsigned int mode,
-> +			 phy_interface_t interface, int speed, int duplex)
-> +{
-> +	struct miic_port *miic_port = phylink_pcs_to_miic_port(pcs);
-> +	struct miic *miic = miic_port->miic;
-> +	u32 conv_speed = 0, val = 0;
-> +	int port = miic_port->port;
-> +
-> +	if (duplex == DUPLEX_FULL)
-> +		val |= MIIC_CONVCTRL_FULLD;
-> +
-> +	/* No speed in MII through-mode */
-> +	if (interface != PHY_INTERFACE_MODE_MII) {
-> +		switch (speed) {
-> +		case SPEED_1000:
-> +			conv_speed = CONV_MODE_1000MBPS;
-> +			break;
-> +		case SPEED_100:
-> +			conv_speed = CONV_MODE_100MBPS;
-> +			break;
-> +		case SPEED_10:
-> +			conv_speed = CONV_MODE_10MBPS;
-> +			break;
-> +		default:
-> +			return;
-> +		}
-> +	}
-> +
-> +	val |= FIELD_PREP(MIIC_CONVCTRL_CONV_SPEED, conv_speed);
-> +
-> +	miic_reg_rmw(miic, MIIC_CONVCTRL(port),
-> +		     (MIIC_CONVCTRL_CONV_SPEED | MIIC_CONVCTRL_FULLD), val);
-> +}

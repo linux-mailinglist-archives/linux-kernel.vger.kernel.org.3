@@ -2,90 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F50055351C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5476055351F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352109AbiFUPB3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 11:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S1352106AbiFUPCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236418AbiFUPB1 (ORCPT
+        with ESMTP id S241568AbiFUPCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:01:27 -0400
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3172526553
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:01:24 -0700 (PDT)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 1D50E351D9;
-        Tue, 21 Jun 2022 15:01:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id B87FD2000F;
-        Tue, 21 Jun 2022 15:01:18 +0000 (UTC)
-Message-ID: <a502003f9ba31c660ddb9c9d8683b7b2a01d12f7.camel@perches.com>
-Subject: Re: [PATCH] net: s390: drop unexpected word "the" in the comments
-From:   Joe Perches <joe@perches.com>
-To:     Alexandra Winter <wintera@linux.ibm.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     wenjia@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 21 Jun 2022 08:01:17 -0700
-In-Reply-To: <09b411b2-0e1f-26d5-c0ea-8ee6504bdcfd@linux.ibm.com>
-References: <20220621113740.103317-1-jiangjian@cdjrlc.com>
-         <09b411b2-0e1f-26d5-c0ea-8ee6504bdcfd@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        Tue, 21 Jun 2022 11:02:08 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16A226AEC;
+        Tue, 21 Jun 2022 08:02:01 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1655823701tb93jqah
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 21 Jun 2022 23:01:37 +0800 (CST)
+X-QQ-SSF: 0100000000700070B000D00A0000000
+X-QQ-FEAT: 7zplUpjHcnoyzKgwGO4YsHy8RATQXXCS9QWuYZDM5utjDzLWZet91XhDLB56y
+        4JkeNIUNaMKhmFP2tCCUXPln4c8dMKwHjkiNvTBQK6nfGLU5rdgIPaPM58kUMiOAIXqK8iy
+        M1cgWiHjwaZa4FYTkZO3ZTJHj92E7hb1waCKiJ901j3MijOlAIoiElbJeUN/WYVNo84p041
+        RPJkS8wYd05OLN5IQTJHoonjMBFA0Po8PPhNWQyYr6t1G1zl9PlrkeL+ZszfOqAotiuOcf9
+        MJQmqDnCgTKDqYGirhf5YYosL14M55TCbuZF5lguNKyj5KpllBv4A/X8M2q2F+YxXoiNA4u
+        TOBNnZrYZbHimy0sjyzBxFcRe+F4w==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     kartilak@cisco.com, sebaddel@cisco.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] snic: Remove duplicate 'on' in two places.
+Date:   Tue, 21 Jun 2022 23:01:36 +0800
+Message-Id: <20220621150136.9264-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: nbwwtqkrsbqnzwh9ramyn7pzw1fuzn1n
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: B87FD2000F
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+sUyxK4FFvpDjZtlXFNMosIz2P+MhhHMw=
-X-HE-Tag: 1655823678-383585
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 13:58 +0200, Alexandra Winter wrote:
-> On 21.06.22 13:37, Jiang Jian wrote:
-> > there is an unexpected word "the" in the comments that need to be dropped
-[]
-> > * have to request a PCI to be sure the the PCI
-> > * have to request a PCI to be sure the PCI
-[]
-> > diff --git a/drivers/s390/net/qeth_core_main.c b/drivers/s390/net/qeth_core_main.c
-[]
-> > @@ -3565,7 +3565,7 @@ static void qeth_flush_buffers(struct qeth_qdio_out_q *queue, int index,
-> >  			if (!atomic_read(&queue->set_pci_flags_count)) {
-> >  				/*
-> >  				 * there's no outstanding PCI any more, so we
-> > -				 * have to request a PCI to be sure the the PCI
+file: ./drivers/scsi/snic/snic_fwint.h
+line: 148
+ * Bit 3: Async event notifications on on tgt online/offline events.
+changed to
+ * Bit 3: Async event notifications on tgt online/offline events.
 
-Might have intended "that the" and not "the the"
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/scsi/snic/snic_fwint.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > +				 * have to request a PCI to be sure the PCI
-> >  				 * will wake at some time in the future then we
-> >  				 * can flush packed buffers that might still be
-> >  				 * hanging around, which can happen if no
-
-And this is a relatively long sentence.
-
-Perhaps something like:
-
-			if (!atomic_read(&queue->set_pci_flags_count)) {
-				/*
-				 * there's no outstanding PCI any more so:
-				 * o request a PCI to be sure that the PCI
-				 *   will wake at some time in the future
-				 * o flush packed buffers that might still be
-				 *   hanging around (which can happen if no
-				 *   further send was requested by the stack)
-				 */
+diff --git a/drivers/scsi/snic/snic_fwint.h b/drivers/scsi/snic/snic_fwint.h
+index e6b3e8b431c0..2550ba964b03 100644
+--- a/drivers/scsi/snic/snic_fwint.h
++++ b/drivers/scsi/snic/snic_fwint.h
+@@ -145,7 +145,7 @@ struct snic_exch_ver_req {
+  * HBA Capabilities
+  * Bit 1: Reserved.
+  * Bit 2: Dynamic Discovery of LUNs.
+- * Bit 3: Async event notifications on on tgt online/offline events.
++ * Bit 3: Async event notifications on tgt online/offline events.
+  * Bit 4: IO timeout support in FW.
+  * Bit 5-31: Reserved.
+  */
+-- 
+2.17.1
 

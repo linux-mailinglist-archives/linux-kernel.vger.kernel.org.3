@@ -2,143 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B73552F63
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CC1552F5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348534AbiFUKDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245415AbiFUKC7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1346829AbiFUKC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 21 Jun 2022 06:02:59 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC94BD0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:02:57 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id g4so9109929lfv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WgpvJ+ZYQ9wNJ1RH7x/Iyee2F28bg23N2XRimN8MYRQ=;
-        b=ktPF7cOnTQ+f5ss8vA4ne+IqJ1N2aK8YJDV120+3TE5Y/PumvHgTI9YFgKCc/emtfo
-         Rpk77hxnFVp2OoD6JZTZahD5WNhRB58jXTzOyhiGI26jAuV0LO2rsYzX++z/fM1OTXPe
-         RvxfAcSAdUUJr28uLmAby0mBoPAvpNkCR/jGF056uSrC9GxTDf84J4UvIMjPZ/z/OVKr
-         YDXRK3FKeW9eCGLazvBoG9I5pbF0iliNKlnaV6bPxaVInkUTftHN9losZCQKB5WVxwz0
-         CEByZvkr8RrFrC80CCL3NKulB9MQXNa9Lh31KJaecljsfW2TK0XIlIiHubuZfpeb4y2v
-         U5ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WgpvJ+ZYQ9wNJ1RH7x/Iyee2F28bg23N2XRimN8MYRQ=;
-        b=3CM0VhcitrKf0VfqYBniKkrL7O0NkUZKfRpcsIrR3LGtTugVuJu7u5s3wBHVbTwG+D
-         QrQPa1zyTdlJoh1pPZ/m6pwXjsd4lRy+DGjaJZQGBzt2G5v6nZ/y7rsmAIBvInYfVTw3
-         WzQ3SeGozeRwWprMOMqkedUh7acj7fnGhtEh/zqhEv5lK911/A46yV3+AOFDlCMYn5rd
-         063wxn5/n04YhxnZFzeWyFazK2YWk1C9PgMCq5aq3u3Fjg3fzGclDffWNypPgJlpKkiU
-         bSCOmP+Xxv2LUIfmCnyWHF+ULTh5pJdTxWP8iPNDpQOEov/Oj6LzCKQFrb2IK1clYq6L
-         9usA==
-X-Gm-Message-State: AJIora9/abuwIrXyeZUB39S/aI00lbv6yUp8ojCROW6NmR4xzMKU+HaW
-        9Cq9x+sRkII3pe0gShqcJkUdMNvcuUZN0vR5QvVtvA==
-X-Google-Smtp-Source: AGRyM1vJyn4HX+l1jRaEx/IuJ8VvUq21x67APPtICLlcI6h1PNZNhnGzvCIIh/0z7vZgyTr7dsdpoFugsC0f3Mg2usE=
-X-Received: by 2002:a05:6512:118f:b0:47f:6a1a:20d4 with SMTP id
- g15-20020a056512118f00b0047f6a1a20d4mr7197196lfr.428.1655805776035; Tue, 21
- Jun 2022 03:02:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <YrCsgIxOmXQcjy+B@smile.fi.intel.com>
-In-Reply-To: <YrCsgIxOmXQcjy+B@smile.fi.intel.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Tue, 21 Jun 2022 12:02:46 +0200
-Message-ID: <CAPv3WKdJ_zoraG=gpOOSWHJcoMTKkkH8=N21aXX2RrusjWWD9g@mail.gmail.com>
-Subject: Re: [net-next: PATCH 00/12] ACPI support for DSA
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343738AbiFUKC6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Jun 2022 06:02:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C01E54;
+        Tue, 21 Jun 2022 03:02:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LS2Bj6zsmz4xYC;
+        Tue, 21 Jun 2022 20:02:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655805775;
+        bh=vctygf8n4bMBEsR+8Tbon08BtTT5coxCQgJQe+wLYnw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HW2aODsXHbc8KTMopkMU77zhdxzUJWxN/ThLWhscOqWSGRUGIRkzVSFoREO/8MRsT
+         nb+ZJl1P/JzaRsDXhEEt32Tv0pVCtq051okP77TT9B566u1pKY1XfJQVE/V4LA47YI
+         6AG39K1+mKj+Mbrfmn0hCQDnn0FmnUqw2Ecnnq8KJKqUP5QczzlkVRTy1+vmVn5Ceb
+         fSMusu30ukKaPJYUCpiiMcSpOljhY+Ew97bPSzMk07vDdcqBurRpBskuRqrLz6Pr29
+         c3VOU+xrDDiVuz6nrR8IHppqDV/uescplByWQhswQDezD7qZDkzRDBfE54rKlgFrc/
+         luHuz4Ca+CJoA==
+Date:   Tue, 21 Jun 2022 20:02:53 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        vivien.didelot@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the wireless-next tree
+Message-ID: <20220621200253.60ecf025@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/zisjvhq+e3EwuX6MFCMZBsK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 20 cze 2022 o 19:21 Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
->
-> On Mon, Jun 20, 2022 at 05:02:13PM +0200, Marcin Wojtas wrote:
-> > Hi!
-> >
-> > This patchset introduces the support for DSA in ACPI world. A couple of
-> > words about the background and motivation behind those changes:
-> >
-> > The DSA code is strictly dependent on the Device Tree and Open Firmware
-> > (of_*) interface, both in the drivers and the common high-level net/dsa=
- API.
-> > The only alternative is to pass the information about the topology via
-> > platform data - a legacy approach used by older systems that compiled t=
-he
-> > board description into the kernel.
-> >
-> > The above constraint is problematic for the embedded devices based e.g.=
- on
-> > x86_64 SoCs, which are described by ACPI tables - to use DSA, some tric=
-ks
-> > and workarounds have to be applied. Addition of switch description to
-> > DSDT/SSDT tables would help to solve many similar cases and use unmodif=
-ied
-> > kernel modules. It also enables this feature for ARM64 ACPI users.
-> >
-> > The key enablements allowing for adding ACPI support for DSA in Linux w=
-ere
-> > NIC drivers, MDIO, PHY, and phylink modifications =E2=80=93 the latter =
-three merged
-> > in 2021. I thought it would be worth to experiment with DSA, which seem=
-ed
-> > to be a natural follow-up challenge.
-> >
-> > It turned out that without much hassle it is possible to describe
-> > DSA-compliant switches as child devices of the MDIO busses, which are
-> > responsible for their enumeration based on the standard _ADR fields and
-> > description in _DSD objects under 'device properties' UUID [1].
-> > The vast majority of required changes were simple of_* to fwnode_*
-> > transition, as the DT and ACPI topolgies are analogous, except for
-> > 'ports' and 'mdio' subnodes naming, as they don't conform ACPI
-> > namespace constraints [2].
->
-> ...
->
-> > Note that for now cascade topology remains unsupported in ACPI world
-> > (based on "dsa" label and "link" property values). It seems to be feasi=
-ble,
-> > but would extend this patchset due to necessity of of_phandle_iterator
-> > migration to fwnode_. Leave it as a possible future step.
->
-> Wondering if this can be done using fwnode graph.
->
+--Sig_/zisjvhq+e3EwuX6MFCMZBsK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Probably yes. It's a general question whether to follow iterating over
-phandles pointed by properties, like DT with a minimal code change or
-do something completely different.
+Hi all,
 
-Best regards,
-Marcin
+After merging the wireless-next tree, today's linux-next build (htmldocs)
+produced this warning:
+
+include/net/cfg80211.h:5741: warning: Function parameter or member 'u' not =
+described in 'wireless_dev'
+include/net/cfg80211.h:5741: warning: Function parameter or member 'links' =
+not described in 'wireless_dev'
+include/net/cfg80211.h:5741: warning: Function parameter or member 'valid_l=
+inks' not described in 'wireless_dev'
+
+Introduced by commit
+
+  7b0a0e3c3a88 ("wifi: cfg80211: do some rework towards MLO link APIs")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/zisjvhq+e3EwuX6MFCMZBsK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKxl00ACgkQAVBC80lX
+0Gxibgf/QvCAuVYrPU11+cCIqs42lXGA6HlCOC1YdPUcj1TQk61pnxhPRkcqT4L0
+Z3x88lNn65d1CKnMk2fohj0K1VwDuwDZMa7SwoyXt/PrFHUCjMFGkeYub34hl8cI
+imxZLbl0IX3gnwA4Vcz64V3PBRDOh0XsU6erMtfPKjdyi3thI6sWZLnuDdNFVsK5
+6z+QytOm2ViM3qoM6DZGUuo354xi9bZsuvif3Y3GOasaopAFs5uzV4vRHRphzZ1S
+vxC3K3CJ0kL+pnKHsW+Q7LiTYYp8LiGEZfmaOV2RXPVBJA+RZplhqzlaAJMREqDt
+7JMB3Ny6jZZmBjU3sxNJqTVufkydOw==
+=8B0e
+-----END PGP SIGNATURE-----
+
+--Sig_/zisjvhq+e3EwuX6MFCMZBsK--

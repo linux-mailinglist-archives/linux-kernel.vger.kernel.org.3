@@ -2,96 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFBB552A0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DE8552A13
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiFUEDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 00:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S1345799AbiFUEJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 00:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiFUEDv (ORCPT
+        with ESMTP id S231804AbiFUEIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 00:03:51 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBF021812
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 21:03:47 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 42A293200392;
-        Tue, 21 Jun 2022 00:03:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 21 Jun 2022 00:03:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1655784225; x=
-        1655870625; bh=5CIwMNK/gDKbcFBkIn3kz8/WBVGi20o0cyPDTNwTmpY=; b=Y
-        EVvCmRcwiwEkKVOixkHKaw4FnCCGRDL4Lwffa6a9WnWgiE4za54P2O825/xtZ8wf
-        ZOcg4ksqFogHUpa8sVAQbxShi3z6py/FkoKloywVQPYjtJs/9CVWxhh3KPL86Fgd
-        TjsxLnI4d7IBIuaGYUdxXULFzyfHsY1MVXB/QAGpVQfSAibGOqd/ZrcPJRo7bf0+
-        qM8RfTWca/LPFSXmBGIW2VASHA37BXOw5ZMHKhLFySQxDbjQ3x1pw4LULKQTb15T
-        LBtkM0NdFCwdQG8NrSASJ+ofbjn7jYJ1wII6YvA7kQS0AKk0nhFt+gG6pOLYlEUo
-        HX2w3j8bnQFwwOYvn+tAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655784225; x=
-        1655870625; bh=5CIwMNK/gDKbcFBkIn3kz8/WBVGi20o0cyPDTNwTmpY=; b=f
-        VFDS0BVqFGoerCvpcfOjYOPdNj5yJ7BFia7kyzzM1I9xnuR5wuUebDKqgKG/A+sp
-        muEuASPgTV9vsiG39KXQ2kzz/aD+ZA+vsMlxbJb2+muvccyOsHwsMXe2PP5cyUkI
-        kT+pw+AH0l8zcq3oYj0oB6vfqbLBabq3Oc7KPE+v2/xaDNVA8tstIgbuCq0Bz9Jn
-        b/z0Jvc3Igl5R3TmOiYeh/UGWuTsW/iRyx90i/qSZ97pTJCjtwgr1WYkMzZwo1kD
-        NJs51eUVuhzuDWxQJDiY+11mQDFLnnBt4ygqrDE19aj2N8+U+B6W8+Bwxrmt+WXs
-        KiP81uVLcOslkURnRdCnw==
-X-ME-Sender: <xms:IUOxYkCUw2d9XYo2q_V1xW69mLSxEJ_j5egjcaJpI_9yYvL8z1UdVg>
-    <xme:IUOxYmi7bVhWMUZ9-aGQnz6N6KMOaFliVO-g-CiUWz7qlhwGDX3mCduGplGtvqq_1
-    QlIcIVzHx8bkAZvLQ>
-X-ME-Received: <xmr:IUOxYnmTWChUqZNLe4LRizf99FLlRaHec5JskfOF1DtRvtQ6ipngr0FtoUdFzHaQr1PcuBhH2CRhOEC44MKJtfcRy89ytnkRwRMm8-lEw5Hag7nTV09E2eLqrg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:IUOxYqzspOgQl9oeqeM3wRuuVziC9SiuzgDs_cyJVClxMWiZbckUhQ>
-    <xmx:IUOxYpQRr82KIdmBFSG1QdWXuo1NLzVYl0MdSDEFzgCuiC3Hy_jRxQ>
-    <xmx:IUOxYlYQrOpudGAEwXHfPZvb7wAisX505cjNr61Z8FrQJR6WpgC-XQ>
-    <xmx:IUOxYpbkXtO_6aiPN4B4QnYwUPOA1urHWJpN0yFCBGWy5-cTUW43Uw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Jun 2022 00:03:44 -0400 (EDT)
-Subject: Re: [PATCH v2 4/6] genirq: Provide an IRQ affinity mask in non-SMP
- configs
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Guo Ren <guoren@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20220616064028.57933-1-samuel@sholland.org>
- <20220616064028.57933-5-samuel@sholland.org> <87h74ipcos.wl-maz@kernel.org>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <eb0a74ce-f444-de74-d944-87fc42091c46@sholland.org>
-Date:   Mon, 20 Jun 2022 23:03:43 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 21 Jun 2022 00:08:22 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9889519019;
+        Mon, 20 Jun 2022 21:08:19 -0700 (PDT)
+X-UUID: 0220861514dc4317b4c3844f9614faf5-20220621
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:57d9eafa-a58b-4749-a2fb-b984fb888fe2,OB:10,L
+        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:57d9eafa-a58b-4749-a2fb-b984fb888fe2,OB:10,LOB
+        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:3df3992d-1756-4fa3-be7f-474a6e4be921,C
+        OID:de8a5d5f857e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0220861514dc4317b4c3844f9614faf5-20220621
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1381626784; Tue, 21 Jun 2022 12:08:13 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 21 Jun 2022 12:08:11 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 21 Jun 2022 12:08:11 +0800
+Message-ID: <e8ec7c5f8a750a1748b482b040c6efafc1149401.camel@mediatek.com>
+Subject: Re: [PATCH v12 11/14] drm/mediatek: dpi: Add tvd_clk enable/disable
+ flow
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 21 Jun 2022 12:08:11 +0800
+In-Reply-To: <4a873de158868368818c00fbfee1a03f620ad8c9.camel@mediatek.com>
+References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
+         <20220620121028.29234-12-rex-bc.chen@mediatek.com>
+         <218de671054a2c02d47a0bb4a31a0b07d24d7eee.camel@mediatek.com>
+         <7bffe5226a80474f150ef67e36d2b75ea8e8a9d8.camel@mediatek.com>
+         <6af179e2995ce2f4f2e7c72f10516afb0c1604a3.camel@mediatek.com>
+         <4a873de158868368818c00fbfee1a03f620ad8c9.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <87h74ipcos.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,76 +76,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/22 4:01 AM, Marc Zyngier wrote:
-> Hi Samuel,
-> 
-> On Thu, 16 Jun 2022 07:40:26 +0100,
-> Samuel Holland <samuel@sholland.org> wrote:
->>
->> IRQ affinity masks are not allocated in uniprocessor configurations.
->> This requires special case non-SMP code in drivers for irqchips which
->> have per-CPU enable or mask registers.
->>
->> Since IRQ affinity is always the same in a uniprocessor configuration,
->> we can still provide the correct affinity mask without allocating one
->> per IRQ. We can reuse the system-wide cpu_possible_mask.
->>
->> By returning a real cpumask from irq_data_get_affinity_mask even when
->> SMP is disabled, irqchip drivers which iterate over that mask will
->> automatically do the right thing.
->>
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
->> ---
->>
->> (no changes since v1)
->>
->>  include/linux/irq.h | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/include/linux/irq.h b/include/linux/irq.h
->> index 69ee4e2f36ce..d5e958b026aa 100644
->> --- a/include/linux/irq.h
->> +++ b/include/linux/irq.h
->> @@ -151,7 +151,9 @@ struct irq_common_data {
->>  #endif
->>  	void			*handler_data;
->>  	struct msi_desc		*msi_desc;
->> +#ifdef CONFIG_SMP
->>  	cpumask_var_t		affinity;
->> +#endif
->>  #ifdef CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK
->>  	cpumask_var_t		effective_affinity;
->>  #endif
->> @@ -881,7 +883,11 @@ static inline int irq_data_get_node(struct irq_data *d)
->>  
->>  static inline struct cpumask *irq_data_get_affinity_mask(struct irq_data *d)
->>  {
->> +#ifdef CONFIG_SMP
->>  	return d->common->affinity;
->> +#else
->> +	return &__cpu_possible_mask;
->> +#endif
-> 
-> I have a bad feeling about this one. Being in a !SMP configuration
-> doesn't necessarily mean that __cpu_possible_mask only contains a
-> single CPU, specially with things like CONFIG_INIT_ALL_POSSIBLE. I can
-> also imagine an architecture populating this bitmap from firmware
-> tables irrespective of the SMP status of the kernel.
-> 
-> Can't you use something like:
-> 
-> 	return cpumask_of(0);
-> 
-> which is guaranteed to be the right thing on !SMP configuration?
+Hi, Rex:
 
-I can if I cast away the const. However I see a lot of:
+On Tue, 2022-06-21 at 11:50 +0800, Rex-BC Chen wrote:
+> On Tue, 2022-06-21 at 11:45 +0800, CK Hu wrote:
+> > On Tue, 2022-06-21 at 11:11 +0800, Rex-BC Chen wrote:
+> > > On Tue, 2022-06-21 at 10:55 +0800, CK Hu wrote:
+> > > > Hi, Bo-Chen:
+> > > > 
+> > > > On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
+> > > > > We should enable/disable tvd_clk when power_on/power_off, so
+> > > > > add
+> > > > > this
+> > > > > patch to do this.
+> > > > 
+> > > > Without this patch, what would happen?
+> > > > It seems this patch is redundant for these SoCs:
+> > > > 
+> > > > static const struct of_device_id mtk_dpi_of_ids[] = {
+> > > > 	{ .compatible = "mediatek,mt2701-dpi",
+> > > > 	  .data = &mt2701_conf,
+> > > > 	},
+> > > > 	{ .compatible = "mediatek,mt8173-dpi",
+> > > > 	  .data = &mt8173_conf,
+> > > > 	},
+> > > > 	{ .compatible = "mediatek,mt8183-dpi",
+> > > > 	  .data = &mt8183_conf,
+> > > > 	},
+> > > > 	{ .compatible = "mediatek,mt8192-dpi",
+> > > > 	  .data = &mt8192_conf,
+> > > > 	},
+> > > > 	{ },
+> > > > };
+> > > > 
+> > > > Regards,
+> > > > CK
+> > > > 
+> > > 
+> > > Hello CK,
+> > > 
+> > > IMO, this is a bug fix patch. From the usage of clock, if we want
+> > > to
+> > > use it, we should enable it . Therefore, I think we should add
+> > > this
+> > > and
+> > > I will add a fix tag for this patch.
+> > 
+> > I think mt8173 chromebook use this driver for HDMI output. So
+> > mt8173
+> > chromebook HDMI could not work normally?
+> > 
+> > Regards,
+> > CK
+> > 
+> 
+> Hmm..
+> I am not sure about this. But without this patch, dpi is also working
+> in mt8183/mt8192. It may be related to the ccf driver. But anyway, I
+> think we should do this whether ccf driver helps us to enable this
+> clock.
 
-    cpumask_copy(irq_data_get_affinity_mask(d), foo);
-
-which I suppose is a great reason not to do what I am doing. The right solution
-seems to be adding irq_data_update_affinity() to match
-irq_data_update_effective_affinity(), and making both getters return a const
-cpumask. Then I can use cpumask_of(0).
+OK. So, could you help to fix the bug in ccf? If HDMI is disabled but
+ccf still turn on this clock, the power would be wasted.
 
 Regards,
-Samuel
+CK
+
+> 
+> BRs,
+> Bo-Chen
+> 
+> > > 
+> > > BRs,
+> > > Bo-Chen
+> > > > 
+> > > > > 
+> > > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > > > ---
+> > > > >  drivers/gpu/drm/mediatek/mtk_dpi.c | 11 ++++++++++-
+> > > > >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > index 2717b1741b7a..f83ecb154457 100644
+> > > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > > > @@ -455,6 +455,7 @@ static void mtk_dpi_power_off(struct
+> > > > > mtk_dpi
+> > > > > *dpi)
+> > > > >  	mtk_dpi_disable(dpi);
+> > > > >  	clk_disable_unprepare(dpi->pixel_clk);
+> > > > >  	clk_disable_unprepare(dpi->engine_clk);
+> > > > > +	clk_disable_unprepare(dpi->tvd_clk);
+> > > > >  }
+> > > > >  
+> > > > >  static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+> > > > > @@ -464,10 +465,16 @@ static int mtk_dpi_power_on(struct
+> > > > > mtk_dpi
+> > > > > *dpi)
+> > > > >  	if (++dpi->refcount != 1)
+> > > > >  		return 0;
+> > > > >  
+> > > > > +	ret = clk_prepare_enable(dpi->tvd_clk);
+> > > > > +	if (ret) {
+> > > > > +		dev_err(dpi->dev, "Failed to enable tvd pll:
+> > > > > %d\n",
+> > > > > ret);
+> > > > > +		goto err_refcount;
+> > > > > +	}
+> > > > > +
+> > > > >  	ret = clk_prepare_enable(dpi->engine_clk);
+> > > > >  	if (ret) {
+> > > > >  		dev_err(dpi->dev, "Failed to enable engine
+> > > > > clock:
+> > > > > %d\n", ret);
+> > > > > -		goto err_refcount;
+> > > > > +		goto err_engine;
+> > > > >  	}
+> > > > >  
+> > > > >  	ret = clk_prepare_enable(dpi->pixel_clk);
+> > > > > @@ -484,6 +491,8 @@ static int mtk_dpi_power_on(struct
+> > > > > mtk_dpi
+> > > > > *dpi)
+> > > > >  
+> > > > >  err_pixel:
+> > > > >  	clk_disable_unprepare(dpi->engine_clk);
+> > > > > +err_engine:
+> > > > > +	clk_disable_unprepare(dpi->tvd_clk);
+> > > > >  err_refcount:
+> > > > >  	dpi->refcount--;
+> > > > >  	return ret;
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> 
+> 
+

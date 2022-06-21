@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DB4552AAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 07:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A11552AAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345484AbiFUF7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 01:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S1345513AbiFUGAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 02:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344804AbiFUF7V (ORCPT
+        with ESMTP id S1345490AbiFUGAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 01:59:21 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D736186EF;
-        Mon, 20 Jun 2022 22:59:19 -0700 (PDT)
-X-UUID: 148d9402c6144a4d963e7a5dd563a9ef-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:ac0bca8d-75a9-4786-a815-bed43bd9116b,OB:0,LO
-        B:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:ac0bca8d-75a9-4786-a815-bed43bd9116b,OB:0,LOB:
-        20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:36739c2d-1756-4fa3-be7f-474a6e4be921,C
-        OID:7265b6e7ca27,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 148d9402c6144a4d963e7a5dd563a9ef-20220621
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 871620538; Tue, 21 Jun 2022 13:59:15 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 21 Jun 2022 13:59:13 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 13:59:13 +0800
-Message-ID: <133322e6f3dcad0971ce89211493d28b32000282.camel@mediatek.com>
-Subject: Re: [PATCH v12 11/14] drm/mediatek: dpi: Add tvd_clk enable/disable
- flow
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 13:59:13 +0800
-In-Reply-To: <cb1ea849cd2fc5a0364944610e4719cb3c8c82f8.camel@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-         <20220620121028.29234-12-rex-bc.chen@mediatek.com>
-         <218de671054a2c02d47a0bb4a31a0b07d24d7eee.camel@mediatek.com>
-         <7bffe5226a80474f150ef67e36d2b75ea8e8a9d8.camel@mediatek.com>
-         <6af179e2995ce2f4f2e7c72f10516afb0c1604a3.camel@mediatek.com>
-         <4a873de158868368818c00fbfee1a03f620ad8c9.camel@mediatek.com>
-         <e8ec7c5f8a750a1748b482b040c6efafc1149401.camel@mediatek.com>
-         <9b7e78729878115768f61929feac8fc9ed6b4f29.camel@mediatek.com>
-         <cb1ea849cd2fc5a0364944610e4719cb3c8c82f8.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 02:00:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7352220E5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655791237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HpI8G7xwI35B9Nl13pX8pLeBi7qUikVCYP4oyWd8eYk=;
+        b=CtGDBCOhL1IuW4imQ44ctR/6f3ha1ct1wv/k6vzPZD2aKJTDLzIFUrY4d+zqOQ9Y5qt2ln
+        /7sCOFe5mAw7hYuQKPDXXwDjry0iIXd0YKFRbYJY3WsO97jSqjOqsHjR/NCmIlaki+eMBl
+        jY3458KqkyezOFsEfBT4x6Qiczlp+gw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-hJR6aoIONWS6Q7O7zJxrAw-1; Tue, 21 Jun 2022 02:00:34 -0400
+X-MC-Unique: hJR6aoIONWS6Q7O7zJxrAw-1
+Received: by mail-wm1-f72.google.com with SMTP id m22-20020a7bcb96000000b0039c4f6ade4dso3908410wmi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:00:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HpI8G7xwI35B9Nl13pX8pLeBi7qUikVCYP4oyWd8eYk=;
+        b=69YX00m6L/sU1PjDlIDrGN6d22U40RdT9AwLwvlg/qRuTqP+j14u994ddy08itcoyW
+         aS2ING2GrRygzjNDw32wDn37Io08snUR6Zjh4QphVvUwUwRf9cOghbayvfvSO9A2RfHe
+         KxJ4ShtPZ5ZwrpVksAsn8s2x9XVL26HngqDervs83MdN2FI53ZmsBn8cvfQV6brcNs6b
+         WzbLe6U+fhoUMP7m/f5o/bTYsLwLFX81hMgwoZv9pw8fcWSQgjVrwr+gCceGomHDB4GV
+         ZxVAJNwngm2lK9gAKTrMCUd7SXHbRuyUHBYXvdLY6AxFtNvFmaQiUnt0mLTauyumexGI
+         lTAw==
+X-Gm-Message-State: AJIora+bxqqhy8Zoxb02zNBAzl3ttMdADF7hHRuEzlQnSFOvOPSf8R+Y
+        5BWKtqaOc8bqP6+tMNEuN8T+VudDzAewsZpMR63PYdqJw284aa/lgY/tlJ6VvKdtylZBOsyMSWH
+        3CRtr2ekPR6COuvEcDM4hujsf
+X-Received: by 2002:adf:db48:0:b0:21b:9733:e134 with SMTP id f8-20020adfdb48000000b0021b9733e134mr1868392wrj.396.1655791233058;
+        Mon, 20 Jun 2022 23:00:33 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ueVVv0nYzdNBCnl0LzuMmMaJJwbfPo6vYbVgN8zyrf0qI4HmI616IJk704Hm+OV6yGEEGYsQ==
+X-Received: by 2002:adf:db48:0:b0:21b:9733:e134 with SMTP id f8-20020adfdb48000000b0021b9733e134mr1868373wrj.396.1655791232802;
+        Mon, 20 Jun 2022 23:00:32 -0700 (PDT)
+Received: from redhat.com ([2.53.15.87])
+        by smtp.gmail.com with ESMTPSA id i27-20020a1c541b000000b0039c5ab7167dsm21126194wmb.48.2022.06.20.23.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 23:00:32 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 02:00:28 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        erwan.yvin@stericsson.com
+Subject: Re: [PATCH 3/3] caif_virtio: fix the race between reset and netdev
+ unregister
+Message-ID: <20220621020013-mutt-send-email-mst@kernel.org>
+References: <20220620051115.3142-1-jasowang@redhat.com>
+ <20220620051115.3142-4-jasowang@redhat.com>
+ <20220620050446-mutt-send-email-mst@kernel.org>
+ <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
+ <20220620061607-mutt-send-email-mst@kernel.org>
+ <CACGkMEu7k2X6S0tSsuGOb-Ta+MzzYE5NzHgrhR2H1vgmcLqjCw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEu7k2X6S0tSsuGOb-Ta+MzzYE5NzHgrhR2H1vgmcLqjCw@mail.gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,198 +84,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 13:54 +0800, CK Hu wrote:
-> Hi, Rex:
+On Tue, Jun 21, 2022 at 11:09:45AM +0800, Jason Wang wrote:
+> On Mon, Jun 20, 2022 at 6:18 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Mon, Jun 20, 2022 at 05:18:29PM +0800, Jason Wang wrote:
+> > > On Mon, Jun 20, 2022 at 5:09 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Mon, Jun 20, 2022 at 01:11:15PM +0800, Jason Wang wrote:
+> > > > > We use to do the following steps during .remove():
+> > > >
+> > > > We currently do
+> > > >
+> > > >
+> > > > > static void cfv_remove(struct virtio_device *vdev)
+> > > > > {
+> > > > >       struct cfv_info *cfv = vdev->priv;
+> > > > >
+> > > > >       rtnl_lock();
+> > > > >       dev_close(cfv->ndev);
+> > > > >       rtnl_unlock();
+> > > > >
+> > > > >       tasklet_kill(&cfv->tx_release_tasklet);
+> > > > >       debugfs_remove_recursive(cfv->debugfs);
+> > > > >
+> > > > >       vringh_kiov_cleanup(&cfv->ctx.riov);
+> > > > >       virtio_reset_device(vdev);
+> > > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> > > > >       cfv->vr_rx = NULL;
+> > > > >       vdev->config->del_vqs(cfv->vdev);
+> > > > >       unregister_netdev(cfv->ndev);
+> > > > > }
+> > > > > This is racy since device could be re-opened after dev_close() but
+> > > > > before unregister_netdevice():
+> > > > >
+> > > > > 1) RX vringh is cleaned before resetting the device, rx callbacks that
+> > > > >    is called after the vringh_kiov_cleanup() will result a UAF
+> > > > > 2) Network stack can still try to use TX virtqueue even if it has been
+> > > > >    deleted after dev_vqs()
+> > > > >
+> > > > > Fixing this by unregistering the network device first to make sure not
+> > > > > device access from both TX and RX side.
+> > > > >
+> > > > > Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
+> > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > ---
+> > > > >  drivers/net/caif/caif_virtio.c | 6 ++----
+> > > > >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
+> > > > > index 66375bea2fcd..a29f9b2df5b1 100644
+> > > > > --- a/drivers/net/caif/caif_virtio.c
+> > > > > +++ b/drivers/net/caif/caif_virtio.c
+> > > > > @@ -752,9 +752,8 @@ static void cfv_remove(struct virtio_device *vdev)
+> > > > >  {
+> > > > >       struct cfv_info *cfv = vdev->priv;
+> > > > >
+> > > > > -     rtnl_lock();
+> > > > > -     dev_close(cfv->ndev);
+> > > > > -     rtnl_unlock();
+> > > > > +     /* Make sure NAPI/TX won't try to access the device */
+> > > > > +     unregister_netdev(cfv->ndev);
+> > > > >
+> > > > >       tasklet_kill(&cfv->tx_release_tasklet);
+> > > > >       debugfs_remove_recursive(cfv->debugfs);
+> > > > > @@ -764,7 +763,6 @@ static void cfv_remove(struct virtio_device *vdev)
+> > > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
+> > > > >       cfv->vr_rx = NULL;
+> > > > >       vdev->config->del_vqs(cfv->vdev);
+> > > > > -     unregister_netdev(cfv->ndev);
+> > > > >  }
+> > > >
+> > > >
+> > > > This gives me pause, callbacks can now trigger after device
+> > > > has been unregistered. Are we sure this is safe?
+> > >
+> > > It looks safe, for RX NAPI is disabled. For TX, tasklet is disabled
+> > > after tasklet_kill(). I can add a comment to explain this.
+> >
+> > that waits for outstanding tasklets but does it really prevent
+> > future ones?
 > 
-> On Tue, 2022-06-21 at 13:47 +0800, Rex-BC Chen wrote:
-> > On Tue, 2022-06-21 at 12:08 +0800, CK Hu wrote:
-> > > Hi, Rex:
-> > > 
-> > > On Tue, 2022-06-21 at 11:50 +0800, Rex-BC Chen wrote:
-> > > > On Tue, 2022-06-21 at 11:45 +0800, CK Hu wrote:
-> > > > > On Tue, 2022-06-21 at 11:11 +0800, Rex-BC Chen wrote:
-> > > > > > On Tue, 2022-06-21 at 10:55 +0800, CK Hu wrote:
-> > > > > > > Hi, Bo-Chen:
-> > > > > > > 
-> > > > > > > On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
-> > > > > > > > We should enable/disable tvd_clk when
-> > > > > > > > power_on/power_off,
-> > > > > > > > so
-> > > > > > > > add
-> > > > > > > > this
-> > > > > > > > patch to do this.
-> > > > > > > 
-> > > > > > > Without this patch, what would happen?
-> > > > > > > It seems this patch is redundant for these SoCs:
-> > > > > > > 
-> > > > > > > static const struct of_device_id mtk_dpi_of_ids[] = {
-> > > > > > > 	{ .compatible = "mediatek,mt2701-dpi",
-> > > > > > > 	  .data = &mt2701_conf,
-> > > > > > > 	},
-> > > > > > > 	{ .compatible = "mediatek,mt8173-dpi",
-> > > > > > > 	  .data = &mt8173_conf,
-> > > > > > > 	},
-> > > > > > > 	{ .compatible = "mediatek,mt8183-dpi",
-> > > > > > > 	  .data = &mt8183_conf,
-> > > > > > > 	},
-> > > > > > > 	{ .compatible = "mediatek,mt8192-dpi",
-> > > > > > > 	  .data = &mt8192_conf,
-> > > > > > > 	},
-> > > > > > > 	{ },
-> > > > > > > };
-> > > > > > > 
-> > > > > > > Regards,
-> > > > > > > CK
-> > > > > > > 
-> > > > > > 
-> > > > > > Hello CK,
-> > > > > > 
-> > > > > > IMO, this is a bug fix patch. From the usage of clock, if
-> > > > > > we
-> > > > > > want
-> > > > > > to
-> > > > > > use it, we should enable it . Therefore, I think we should
-> > > > > > add
-> > > > > > this
-> > > > > > and
-> > > > > > I will add a fix tag for this patch.
-> > > > > 
-> > > > > I think mt8173 chromebook use this driver for HDMI output. So
-> > > > > mt8173
-> > > > > chromebook HDMI could not work normally?
-> > > > > 
-> > > > > Regards,
-> > > > > CK
-> > > > > 
-> > > > 
-> > > > Hmm..
-> > > > I am not sure about this. But without this patch, dpi is also
-> > > > working
-> > > > in mt8183/mt8192. It may be related to the ccf driver. But
-> > > > anyway,
-> > > > I
-> > > > think we should do this whether ccf driver helps us to enable
-> > > > this
-> > > > clock.
-> > > 
-> > > OK. So, could you help to fix the bug in ccf? If HDMI is disabled
-> > > but
-> > > ccf still turn on this clock, the power would be wasted.
-> > > 
-> > > Regards,
-> > > CK
-> > > 
-> > 
-> > I am also testing if we don't have this patch and it also "works"
-> > (dpintf is working fine).
-> > do you think we need this patch or just drop this?
-> > 
-> > For the ccf driver, I am not familiar to ccf and also not a expert
-> > of
-> > ccf.
-> > It just a guest for this. I am not sure whether it's a "bug" or
-> > just
-> > a.
-> > And I think it's not the purpose of this series. If there is any
-> > issue,
-> > I think we will fix it in the future.
+> I think so, it tries to test and set TASKLET_STATE_SCHED which blocks
+> the future scheduling of a tasklet.
 > 
-> Because we have no idea how this works, I think it's better to drop
-> this patch.
-> 
-> Regards,
-> CK
-> 
+> Thanks
 
-ok, I will drop this patch in next version.
+But then in the end it clears it, does it not?
 
-BRs,
-Bo-Chen
-
-> > 
-> > BRs,
-> > Bo-Chen
-> > 
-> > > > 
-> > > > BRs,
-> > > > Bo-Chen
-> > > > 
-> > > > > > 
-> > > > > > BRs,
-> > > > > > Bo-Chen
-> > > > > > > 
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > > > > > > ---
-> > > > > > > >  drivers/gpu/drm/mediatek/mtk_dpi.c | 11 ++++++++++-
-> > > > > > > >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > > > > > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > > > > > index 2717b1741b7a..f83ecb154457 100644
-> > > > > > > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > > > > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > > > > > > > @@ -455,6 +455,7 @@ static void
-> > > > > > > > mtk_dpi_power_off(struct
-> > > > > > > > mtk_dpi
-> > > > > > > > *dpi)
-> > > > > > > >  	mtk_dpi_disable(dpi);
-> > > > > > > >  	clk_disable_unprepare(dpi->pixel_clk);
-> > > > > > > >  	clk_disable_unprepare(dpi->engine_clk);
-> > > > > > > > +	clk_disable_unprepare(dpi->tvd_clk);
-> > > > > > > >  }
-> > > > > > > >  
-> > > > > > > >  static int mtk_dpi_power_on(struct mtk_dpi *dpi)
-> > > > > > > > @@ -464,10 +465,16 @@ static int
-> > > > > > > > mtk_dpi_power_on(struct
-> > > > > > > > mtk_dpi
-> > > > > > > > *dpi)
-> > > > > > > >  	if (++dpi->refcount != 1)
-> > > > > > > >  		return 0;
-> > > > > > > >  
-> > > > > > > > +	ret = clk_prepare_enable(dpi->tvd_clk);
-> > > > > > > > +	if (ret) {
-> > > > > > > > +		dev_err(dpi->dev, "Failed to enable tvd
-> > > > > > > > pll:
-> > > > > > > > %d\n",
-> > > > > > > > ret);
-> > > > > > > > +		goto err_refcount;
-> > > > > > > > +	}
-> > > > > > > > +
-> > > > > > > >  	ret = clk_prepare_enable(dpi->engine_clk);
-> > > > > > > >  	if (ret) {
-> > > > > > > >  		dev_err(dpi->dev, "Failed to enable
-> > > > > > > > engine
-> > > > > > > > clock:
-> > > > > > > > %d\n", ret);
-> > > > > > > > -		goto err_refcount;
-> > > > > > > > +		goto err_engine;
-> > > > > > > >  	}
-> > > > > > > >  
-> > > > > > > >  	ret = clk_prepare_enable(dpi->pixel_clk);
-> > > > > > > > @@ -484,6 +491,8 @@ static int mtk_dpi_power_on(struct
-> > > > > > > > mtk_dpi
-> > > > > > > > *dpi)
-> > > > > > > >  
-> > > > > > > >  err_pixel:
-> > > > > > > >  	clk_disable_unprepare(dpi->engine_clk);
-> > > > > > > > +err_engine:
-> > > > > > > > +	clk_disable_unprepare(dpi->tvd_clk);
-> > > > > > > >  err_refcount:
-> > > > > > > >  	dpi->refcount--;
-> > > > > > > >  	return ret;
-> > > > > > > 
-> > > > > > > 
-> > > > > > 
-> > > > > > 
-> > > > > 
-> > > > > 
-> > > > 
-> > > > 
-> > > 
-> > > 
-> > 
-> > 
-> 
-> 
+> >
+> > > > Won't it be safer to just keep the rtnl_lock around
+> > > > the whole process?
+> > >
+> > > It looks to me we rtnl_lock can't help in synchronizing with the
+> > > callbacks, anything I miss?
+> > >
+> > > Thanks
+> >
+> > good point.
+> >
+> >
+> > > >
+> > > > >  static struct virtio_device_id id_table[] = {
+> > > > > --
+> > > > > 2.25.1
+> > > >
+> >
 

@@ -2,160 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEDA552F50
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEF9552F5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349238AbiFUKAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S229656AbiFUKCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349359AbiFUKAI (ORCPT
+        with ESMTP id S229462AbiFUKCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:00:08 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CB0427FCF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 03:00:05 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX06hlrFi26RRAA--.25344S4;
-        Tue, 21 Jun 2022 18:00:04 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>, Jun Yi <yijun@loongson.cn>,
-        Rui Wang <wangrui@loongson.cn>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] LoongArch: No need to call RESTORE_ALL_AND_RET for all syscalls
-Date:   Tue, 21 Jun 2022 18:00:01 +0800
-Message-Id: <1655805601-16677-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1655805601-16677-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1655805601-16677-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxX06hlrFi26RRAA--.25344S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFyrCryDtFW8Aw1kJrWkWFg_yoW5CF17pF
-        ZFyFnYkr4vgrn7Ary3KFyv9rZxAws7GF43WF40krWruw1kXrn8Xr4vya4qqFnrtw4FgrW0
-        qFWrXwnYgas8XaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBS14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUjVysUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 21 Jun 2022 06:02:03 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78911275D7;
+        Tue, 21 Jun 2022 03:02:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=CebAnGs2I4e+XopgqgMPynRsVklLyL9H2XvsgpMCH3A=; b=1XHoW/tBFaJiaNKU4sevkeQHAT
+        wzUfAxdFftsUy5g5L9/JF4dxs7GL+VOQbvh9kbNbOhX+4Z0Dk6MK1XuRFVV1Uc0nCTbXndIkQJc/V
+        fwbyHU2KTxvyHKNGA6gBBeuO/455fTuUXYM0dFbEg37zaZG+VPpP0SeJqJzdnrOQTlpbRRBOoeaYA
+        up/T//k0ritMvyTsQS6847SkS55N2B0Yi/8FucBKE+t4PaP6z2/awQDssBq7Mb7g/DRmvLmZ4y6By
+        WWSgQ9hM3rgxBf1g95BU/wLA2wFBAsd+pJb2t6V6Fh5HJnn9mr0xVhiiVqxFEFhhmMrzguYTPIPpo
+        TNbTmF3Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32960)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1o3ahq-0002AF-2D; Tue, 21 Jun 2022 11:01:57 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1o3ahl-0005w5-HX; Tue, 21 Jun 2022 11:01:53 +0100
+Date:   Tue, 21 Jun 2022 11:01:53 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 01/12] net: phy: fixed_phy: switch to fwnode_
+ API
+Message-ID: <YrGXEReoc3qweU1S@shell.armlinux.org.uk>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-2-mw@semihalf.com>
+ <YrC1gEf4HpRp5zkh@lunn.ch>
+ <CAPv3WKe3vBJ9r=6tMEtPj-3c0E3MBpW4Csf8zjS0jG03C35ycg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPv3WKe3vBJ9r=6tMEtPj-3c0E3MBpW4Csf8zjS0jG03C35ycg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In handle_syscall, it is unnecessary to call RESTORE_ALL_AND_RET
-for all syscalls.
+On Tue, Jun 21, 2022 at 11:56:06AM +0200, Marcin Wojtas wrote:
+> pon., 20 cze 2022 o 19:59 Andrew Lunn <andrew@lunn.ch> napisał(a):
+> >
+> > On Mon, Jun 20, 2022 at 05:02:14PM +0200, Marcin Wojtas wrote:
+> > > This patch allows to use fixed_phy driver and its helper
+> > > functions without Device Tree dependency, by swtiching from
+> > > of_ to fwnode_ API.
+> >
+> > Do you actually need this? phylink does not use this code, it has its
+> > own fixed link implementation. And that implementation is not limited
+> > to 1G.
+> >
+> 
+> Yes, phylink has its own fixed-link handling, however the
+> net/dsa/port.c relies on fixed_phy helpers these are not 1:1
+> equivalents. I assumed this migration (fixed_phy -> phylink) is not
+> straightforward and IMO should be handled separately. Do you recall
+> justification for not using phylink in this part of net/dsa/*?
 
-(1) rt_sigreturn call RESTORE_ALL_AND_RET.
-(2) The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
+All modern DSA drivers use phylink and not fixed-phy as far as I'm
+aware - there are a number that still implement the .adjust_link
+callback, but note in dsa_port_link_register_of():
 
-This patch only adds the minimal changes as simple as possible
-to reduce the code complexity, at the same time, it can reduce
-many load instructions.
+        if (!ds->ops->adjust_link) {
+	...
+		return 0;
+	}
 
-Here are the test environments:
+	dev_warn(ds->dev,
+		 "Using legacy PHYLIB callbacks. Please migrate to PHYLINK!\n");
 
-  Hardware: Loongson-LS3A5000-7A1000-1w-A2101
-  Firmware: UDK2018-LoongArch-A2101-pre-beta8 [1]
-  System: loongarch64-clfs-system-5.0 [2]
+It's really just that they haven't been migrated.
 
-The system passed functional testing used with the following
-test case without and with this patch:
-
-  git clone https://github.com/hevz/sigaction-test.git
-  cd sigaction-test
-  make check
-
-Additionally, use UnixBench syscall to test the performance:
-
-  git clone https://github.com/kdlucas/byte-unixbench.git
-  cd byte-unixbench/UnixBench/
-  make
-  pgms/syscall 600
-
-In order to avoid the performance impact, add init=/bin/bash
-to the boot cmdline.
-
-Here is the test result, the bigger the better, it shows about
-1.2% gain tested with close, getpid and exec [1]:
-
-  duration  without_this_patch  with_this_patch
-  600 s     626558267 lps       634244079 lps
-
-[1] https://github.com/loongson/Firmware/tree/main/5000Series/PC/A2101
-[2] https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/tag/5.0
-[3] https://github.com/kdlucas/byte-unixbench/blob/master/UnixBench/src/syscall.c
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/stackframe.h |  5 +++++
- arch/loongarch/kernel/entry.S           | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-index 4ca9530..551ab8f 100644
---- a/arch/loongarch/include/asm/stackframe.h
-+++ b/arch/loongarch/include/asm/stackframe.h
-@@ -216,4 +216,9 @@
- 	RESTORE_SP_AND_RET \docfi
- 	.endm
- 
-+	.macro	RESTORE_STATIC_SOME_SP_AND_RET docfi=0
-+	RESTORE_STATIC \docfi
-+	RESTORE_SOME \docfi
-+	RESTORE_SP_AND_RET \docfi
-+	.endm
- #endif /* _ASM_STACKFRAME_H */
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-index d5b3dbc..c764c99 100644
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@ -14,6 +14,7 @@
- #include <asm/regdef.h>
- #include <asm/stackframe.h>
- #include <asm/thread_info.h>
-+#include <asm/unistd.h>
- 
- 	.text
- 	.cfi_sections	.debug_frame
-@@ -62,9 +63,23 @@ SYM_FUNC_START(handle_syscall)
- 	li.d	tp, ~_THREAD_MASK
- 	and	tp, tp, sp
- 
-+	/* Syscall number held in a7, we can store it in TI_SYSCALL. */
-+        LONG_S  a7, tp, TI_SYSCALL
-+
- 	move	a0, sp
- 	bl	do_syscall
- 
-+	/*
-+	 * Syscall number held in a7 which is stored in TI_SYSCALL.
-+	 * rt_sigreturn call RESTORE_ALL_AND_RET.
-+	 * The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
-+	 */
-+	LONG_L	t3, tp, TI_SYSCALL
-+	li.w	t4, __NR_rt_sigreturn
-+	beq	t3, t4, 1f
-+
-+	RESTORE_STATIC_SOME_SP_AND_RET
-+1:
- 	RESTORE_ALL_AND_RET
- SYM_FUNC_END(handle_syscall)
- 
 -- 
-2.1.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

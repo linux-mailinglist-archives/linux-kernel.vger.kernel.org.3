@@ -2,325 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DF4553B8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF72553B90
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiFUUXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 16:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S1354044AbiFUUZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 16:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354338AbiFUUXY (ORCPT
+        with ESMTP id S232397AbiFUUZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 16:23:24 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7F513F6A;
-        Tue, 21 Jun 2022 13:23:22 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id o8so20509070wro.3;
-        Tue, 21 Jun 2022 13:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QAT6SWc55tzdZAkJWCvpHRcd5t3vnhoiATlEpv06WdA=;
-        b=Fx3fUCjmST6q3UsD0a6cB7LrH7NSm1kUG0cnyecEsUrqPdadOw3/oYHEjdadu0YUKs
-         3nT+O0wQQB5+FK1BRs3XGoM9/8WrTv5kdcDDWthFSE3W898gBuOK4LcVY2DRLlvigQfc
-         qAlwj4pBm3EJvq81vytiY6WJd95WcisHPLVbrSZeMiBfWUg7bgnVTc4/rqS+DFkdLCyn
-         yrB3s12S0jWQT2z9px2HZxnIqwvnHExBjFYqE1MawzP1TTl+FhnXe8PcPLUayBUWDZ4S
-         qnZ6X1GWpiW8BFwJxOQ1kh+thH2h3ufuGkp4WqynYMdQlv0ul4tMna2iNPWLKBAMq0fr
-         Nhsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QAT6SWc55tzdZAkJWCvpHRcd5t3vnhoiATlEpv06WdA=;
-        b=NZ6CSJjWMsYPFkHEMe+ddK+SjWXdM0Aai/mWMpUJUpuOE71/+378BmiVnua8YhcRj1
-         Btu2g7+slsacMyUqXlNo6GyXeRyqFWz3Zq4GXOJk0YORJk+mnPfjeGGqucY5FOuKF/JD
-         EDEPcb1DgkWdoVetYAXq3/b062Revl3E8/xNjLoi1CP2hCVODYOHVuJLQng7nDiNaiZU
-         baE2RiD/laB+Pb9XlVALkoFTe7QJg9ZlN0ka3WdrBHUVvZDsgU85vDLpuCWkzkDJKIJX
-         wgrFAW6vqVLGcAtPbeWoKtLjGKaTkreogiJ3Yci/bGHBnsR1K0fSrQ/cxwwI4wzCsUZE
-         7h1A==
-X-Gm-Message-State: AJIora/Pk/I1zIf+4l4rWSXn8BzzBcq3PnVqWLYa9taFOIvP+z/rTtCA
-        pFQVGn1APgQ5WLGlX/1o5oiNeY//jSA=
-X-Google-Smtp-Source: AGRyM1tStv1F8UqO7JT3i+lddtDNeOpgoLnm2TJtlhH8ZZcPgaDob/cD1bkB4oSHo5fHqXL1VyPumw==
-X-Received: by 2002:a05:6000:1a89:b0:21b:83aa:ebd5 with SMTP id f9-20020a0560001a8900b0021b83aaebd5mr19799624wry.476.1655843000929;
-        Tue, 21 Jun 2022 13:23:20 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfe7cd000000b0021b89181863sm9762729wrn.41.2022.06.21.13.23.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 13:23:18 -0700 (PDT)
-Message-ID: <62b228b6.1c69fb81.e4673.34a2@mx.google.com>
-X-Google-Original-Message-ID: <YrIotGGd60xzdBf1@Ansuel-xps.>
-Date:   Tue, 21 Jun 2022 22:23:16 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] clk: qcom: lcc-ipq806x: convert to parent data
-References: <20220621163326.16858-1-ansuelsmth@gmail.com>
- <20220621163326.16858-3-ansuelsmth@gmail.com>
- <CAA8EJpqQTTevQa4pQg3E+x4_AOjYo8ajOqUrfwGsVtC8N=bpOw@mail.gmail.com>
+        Tue, 21 Jun 2022 16:25:16 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF5724F12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 13:25:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655843115; x=1687379115;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7e+ir0VyaDL/t9/cJ3Sqhdxf9f68AWW8rKGLisVcpJ8=;
+  b=Hzik7xqGvRZEfgpKnQAWFpPvs02/gWLjMENuRtYsi9H8/fjXz+uwRiQP
+   5OXOWNPq8G5c+ov14g2mZwxDo0R3017d6FE2nuMWZQSpRr62iuaL0IhJ1
+   ZvLBp09LfSd+bEk7Zkm41QxU3/hZZPlJuFULUQIrL7rQK8usjXZVqBtaI
+   ouswc/D6B18E+pIDbKLPOq28wW0WR4wVMXSzXzRvYj/wnEPN2B88oUopT
+   B0vSwlpm7oGz2sb0e/8ZyMPBRUvf4kgLf3Pg81zv7b6XSKG8SU/gI/k3Q
+   ldYHvrQceTpID6IV8Qj/uWUqCnPgdQU8Ja1KRmN+/sIOB/At503UAt8PV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="341912449"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="341912449"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 13:25:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="591818035"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Jun 2022 13:25:13 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3kQy-0000O9-WC;
+        Tue, 21 Jun 2022 20:25:12 +0000
+Date:   Wed, 22 Jun 2022 04:25:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [drm-misc:drm-misc-next 3/4]
+ drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: error: call to undeclared
+ function 'drm_plane_create_zpos_immutable_property'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202206220449.j02XFvCg-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpqQTTevQa4pQg3E+x4_AOjYo8ajOqUrfwGsVtC8N=bpOw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 08:15:57PM +0300, Dmitry Baryshkov wrote:
-> On Tue, 21 Jun 2022 at 19:33, Christian Marangi <ansuelsmth@gmail.com> wrote:
-> >
-> > Convert lcc-ipq806x driver to parent_data API.
-> >
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> > v2:
-> > - Fix Sob tag
-> >
-> >  drivers/clk/qcom/lcc-ipq806x.c | 79 +++++++++++++++++++---------------
-> >  1 file changed, 44 insertions(+), 35 deletions(-)
-> >
-> > diff --git a/drivers/clk/qcom/lcc-ipq806x.c b/drivers/clk/qcom/lcc-ipq806x.c
-> > index ba90bebba597..c07ca8dc6e3a 100644
-> > --- a/drivers/clk/qcom/lcc-ipq806x.c
-> > +++ b/drivers/clk/qcom/lcc-ipq806x.c
-> > @@ -24,6 +24,10 @@
-> >  #include "clk-regmap-mux.h"
-> >  #include "reset.h"
-> >
-> > +static const struct clk_parent_data gcc_pxo[] = {
-> > +       { .fw_name = "pxo", .name = "pxo" },
-> 
-> I think you'd use .name = "pxo_board" here. You don't need to use the
-> interim clock.
->
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   87a3451e346be3f9a5d8943ae094888044314631
+commit: 90bb087f66745ca48f6f5e43df99a1212d89e712 [3/4] drm: Drop drm_blend.h from drm_crtc.h
+config: powerpc-buildonly-randconfig-r002-20220622 (https://download.01.org/0day-ci/archive/20220622/202206220449.j02XFvCg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc drm-misc-next
+        git checkout 90bb087f66745ca48f6f5e43df99a1212d89e712
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/xlnx/
 
-In gcc and in the rest of this driver we use pxo. Wonder what is right?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > +};
-> > +
-> >  static struct clk_pll pll4 = {
-> >         .l_reg = 0x4,
-> >         .m_reg = 0x8,
-> > @@ -34,7 +38,7 @@ static struct clk_pll pll4 = {
-> >         .status_bit = 16,
-> >         .clkr.hw.init = &(struct clk_init_data){
-> >                 .name = "pll4",
-> > -               .parent_names = (const char *[]){ "pxo" },
-> > +               .parent_data = gcc_pxo,
-> >                 .num_parents = 1,
-> 
-> Could you please either inline the gcc_pxo here (yes, it's ugly, but
-> it works for small arrays) or use ARRAY_SIZE here.
-> 
+Note: the drm-misc/drm-misc-next HEAD 87a3451e346be3f9a5d8943ae094888044314631 builds fine.
+      It only hurts bisectability.
 
-Yes will inline gcc_pxo.
+All errors (new ones prefixed by >>):
 
-> >                 .ops = &clk_pll_ops,
-> >         },
-> > @@ -64,9 +68,9 @@ static const struct parent_map lcc_pxo_pll4_map[] = {
-> >         { P_PLL4, 2 }
-> >  };
-> >
-> > -static const char * const lcc_pxo_pll4[] = {
-> > -       "pxo",
-> > -       "pll4_vote",
-> > +static const struct clk_parent_data lcc_pxo_pll4[] = {
-> > +       { .fw_name = "pxo", .name = "pxo" },
-> > +       { .fw_name = "pll4_vote", .name = "pll4_vote" },
-> >  };
-> >
-> >  static struct freq_tbl clk_tbl_aif_mi2s[] = {
-> > @@ -131,18 +135,14 @@ static struct clk_rcg mi2s_osr_src = {
-> >                 .enable_mask = BIT(9),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "mi2s_osr_src",
-> > -                       .parent_names = lcc_pxo_pll4,
-> > -                       .num_parents = 2,
-> > +                       .parent_data = lcc_pxo_pll4,
-> > +                       .num_parents = ARRAY_SIZE(lcc_pxo_pll4),
-> >                         .ops = &clk_rcg_ops,
-> >                         .flags = CLK_SET_RATE_GATE,
-> >                 },
-> >         },
-> >  };
-> >
-> > -static const char * const lcc_mi2s_parents[] = {
-> > -       "mi2s_osr_src",
-> > -};
-> > -
-> >  static struct clk_branch mi2s_osr_clk = {
-> >         .halt_reg = 0x50,
-> >         .halt_bit = 1,
-> > @@ -152,7 +152,9 @@ static struct clk_branch mi2s_osr_clk = {
-> >                 .enable_mask = BIT(17),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "mi2s_osr_clk",
-> > -                       .parent_names = lcc_mi2s_parents,
-> > +                       .parent_hws = (const struct clk_hw*[]){
-> > +                               &mi2s_osr_src.clkr.hw,
-> > +                       },
-> >                         .num_parents = 1,
-> >                         .ops = &clk_branch_ops,
-> >                         .flags = CLK_SET_RATE_PARENT,
-> > @@ -167,7 +169,9 @@ static struct clk_regmap_div mi2s_div_clk = {
-> >         .clkr = {
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "mi2s_div_clk",
-> > -                       .parent_names = lcc_mi2s_parents,
-> > +                       .parent_hws = (const struct clk_hw*[]){
-> > +                               &mi2s_osr_src.clkr.hw,
-> > +                       },
-> >                         .num_parents = 1,
-> >                         .ops = &clk_regmap_div_ops,
-> >                 },
-> > @@ -183,7 +187,9 @@ static struct clk_branch mi2s_bit_div_clk = {
-> >                 .enable_mask = BIT(15),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "mi2s_bit_div_clk",
-> > -                       .parent_names = (const char *[]){ "mi2s_div_clk" },
-> > +                       .parent_hws = (const struct clk_hw*[]){
-> > +                               &mi2s_div_clk.clkr.hw,
-> > +                       },
-> >                         .num_parents = 1,
-> >                         .ops = &clk_branch_ops,
-> >                         .flags = CLK_SET_RATE_PARENT,
-> > @@ -191,6 +197,10 @@ static struct clk_branch mi2s_bit_div_clk = {
-> >         },
-> >  };
-> >
-> > +static const struct clk_parent_data lcc_mi2s_bit_div_codec_clk[] = {
-> > +       { .hw = &mi2s_bit_div_clk.clkr.hw, },
-> > +       { .fw_name = "mi2s_codec_clk", .name = "mi2s_codec_clk" },
-> > +};
-> >
-> >  static struct clk_regmap_mux mi2s_bit_clk = {
-> >         .reg = 0x48,
-> > @@ -199,11 +209,8 @@ static struct clk_regmap_mux mi2s_bit_clk = {
-> >         .clkr = {
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "mi2s_bit_clk",
-> > -                       .parent_names = (const char *[]){
-> > -                               "mi2s_bit_div_clk",
-> > -                               "mi2s_codec_clk",
-> > -                       },
-> > -                       .num_parents = 2,
-> > +                       .parent_data = lcc_mi2s_bit_div_codec_clk,
-> > +                       .num_parents = ARRAY_SIZE(lcc_mi2s_bit_div_codec_clk),
-> >                         .ops = &clk_regmap_mux_closest_ops,
-> >                         .flags = CLK_SET_RATE_PARENT,
-> >                 },
-> > @@ -245,8 +252,8 @@ static struct clk_rcg pcm_src = {
-> >                 .enable_mask = BIT(9),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "pcm_src",
-> > -                       .parent_names = lcc_pxo_pll4,
-> > -                       .num_parents = 2,
-> > +                       .parent_data = lcc_pxo_pll4,
-> > +                       .num_parents = ARRAY_SIZE(lcc_pxo_pll4),
-> >                         .ops = &clk_rcg_ops,
-> >                         .flags = CLK_SET_RATE_GATE,
-> >                 },
-> > @@ -262,7 +269,9 @@ static struct clk_branch pcm_clk_out = {
-> >                 .enable_mask = BIT(11),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "pcm_clk_out",
-> > -                       .parent_names = (const char *[]){ "pcm_src" },
-> > +                       .parent_hws = (const struct clk_hw*[]){
-> > +                               &pcm_src.clkr.hw,
-> > +                       },
-> >                         .num_parents = 1,
-> >                         .ops = &clk_branch_ops,
-> >                         .flags = CLK_SET_RATE_PARENT,
-> > @@ -270,6 +279,11 @@ static struct clk_branch pcm_clk_out = {
-> >         },
-> >  };
-> >
-> > +static const struct clk_parent_data lcc_pcm_clk_out_codec_clk[] = {
-> > +       { .hw = &pcm_clk_out.clkr.hw, },
-> > +       { .fw_name = "pcm_codec_clk", .name = "pcm_codec_clk" },
-> > +};
-> > +
-> >  static struct clk_regmap_mux pcm_clk = {
-> >         .reg = 0x54,
-> >         .shift = 10,
-> > @@ -277,11 +291,8 @@ static struct clk_regmap_mux pcm_clk = {
-> >         .clkr = {
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "pcm_clk",
-> > -                       .parent_names = (const char *[]){
-> > -                               "pcm_clk_out",
-> > -                               "pcm_codec_clk",
-> > -                       },
-> > -                       .num_parents = 2,
-> > +                       .parent_data = lcc_pcm_clk_out_codec_clk,
-> > +                       .num_parents = ARRAY_SIZE(lcc_pcm_clk_out_codec_clk),
-> >                         .ops = &clk_regmap_mux_closest_ops,
-> >                         .flags = CLK_SET_RATE_PARENT,
-> >                 },
-> > @@ -325,18 +336,14 @@ static struct clk_rcg spdif_src = {
-> >                 .enable_mask = BIT(9),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "spdif_src",
-> > -                       .parent_names = lcc_pxo_pll4,
-> > -                       .num_parents = 2,
-> > +                       .parent_data = lcc_pxo_pll4,
-> > +                       .num_parents = ARRAY_SIZE(lcc_pxo_pll4),
-> >                         .ops = &clk_rcg_ops,
-> >                         .flags = CLK_SET_RATE_GATE,
-> >                 },
-> >         },
-> >  };
-> >
-> > -static const char * const lcc_spdif_parents[] = {
-> > -       "spdif_src",
-> > -};
-> > -
-> >  static struct clk_branch spdif_clk = {
-> >         .halt_reg = 0xd4,
-> >         .halt_bit = 1,
-> > @@ -346,7 +353,9 @@ static struct clk_branch spdif_clk = {
-> >                 .enable_mask = BIT(12),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "spdif_clk",
-> > -                       .parent_names = lcc_spdif_parents,
-> > +                       .parent_hws = (const struct clk_hw*[]){
-> > +                               &spdif_src.clkr.hw,
-> > +                       },
-> >                         .num_parents = 1,
-> >                         .ops = &clk_branch_ops,
-> >                         .flags = CLK_SET_RATE_PARENT,
-> > @@ -384,8 +393,8 @@ static struct clk_rcg ahbix_clk = {
-> >                 .enable_mask = BIT(11),
-> >                 .hw.init = &(struct clk_init_data){
-> >                         .name = "ahbix",
-> > -                       .parent_names = lcc_pxo_pll4,
-> > -                       .num_parents = 2,
-> > +                       .parent_data = lcc_pxo_pll4,
-> > +                       .num_parents = ARRAY_SIZE(lcc_pxo_pll4),
-> >                         .ops = &clk_rcg_lcc_ops,
-> >                 },
-> >         },
-> > --
-> > 2.36.1
-> >
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
+>> drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: error: call to undeclared function 'drm_plane_create_zpos_immutable_property'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   drm_plane_create_zpos_immutable_property(&layer->plane, i);
+                   ^
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: note: did you mean 'drm_plane_create_scaling_filter_property'?
+   include/drm/drm_plane.h:908:5: note: 'drm_plane_create_scaling_filter_property' declared here
+   int drm_plane_create_scaling_filter_property(struct drm_plane *plane,
+       ^
+>> drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:4: error: call to undeclared function 'drm_plane_create_alpha_property'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           drm_plane_create_alpha_property(&layer->plane);
+                           ^
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:4: note: did you mean 'drm_plane_create_color_properties'?
+   include/drm/drm_color_mgmt.h:90:5: note: 'drm_plane_create_color_properties' declared here
+   int drm_plane_create_color_properties(struct drm_plane *plane,
+       ^
+   2 errors generated.
+
+
+vim +/drm_plane_create_zpos_immutable_property +1260 drivers/gpu/drm/xlnx/zynqmp_disp.c
+
+d76271d22694e8 Hyun Kwon        2018-07-07  1226  
+d76271d22694e8 Hyun Kwon        2018-07-07  1227  static int zynqmp_disp_create_planes(struct zynqmp_disp *disp)
+d76271d22694e8 Hyun Kwon        2018-07-07  1228  {
+d76271d22694e8 Hyun Kwon        2018-07-07  1229  	unsigned int i, j;
+d76271d22694e8 Hyun Kwon        2018-07-07  1230  	int ret;
+d76271d22694e8 Hyun Kwon        2018-07-07  1231  
+d76271d22694e8 Hyun Kwon        2018-07-07  1232  	for (i = 0; i < ZYNQMP_DISP_NUM_LAYERS; i++) {
+d76271d22694e8 Hyun Kwon        2018-07-07  1233  		struct zynqmp_disp_layer *layer = &disp->layers[i];
+d76271d22694e8 Hyun Kwon        2018-07-07  1234  		enum drm_plane_type type;
+d76271d22694e8 Hyun Kwon        2018-07-07  1235  		u32 *drm_formats;
+d76271d22694e8 Hyun Kwon        2018-07-07  1236  
+d76271d22694e8 Hyun Kwon        2018-07-07  1237  		drm_formats = drmm_kcalloc(disp->drm, sizeof(*drm_formats),
+d76271d22694e8 Hyun Kwon        2018-07-07  1238  					   layer->info->num_formats,
+d76271d22694e8 Hyun Kwon        2018-07-07  1239  					   GFP_KERNEL);
+d76271d22694e8 Hyun Kwon        2018-07-07  1240  		if (!drm_formats)
+d76271d22694e8 Hyun Kwon        2018-07-07  1241  			return -ENOMEM;
+d76271d22694e8 Hyun Kwon        2018-07-07  1242  
+d76271d22694e8 Hyun Kwon        2018-07-07  1243  		for (j = 0; j < layer->info->num_formats; ++j)
+d76271d22694e8 Hyun Kwon        2018-07-07  1244  			drm_formats[j] = layer->info->formats[j].drm_fmt;
+d76271d22694e8 Hyun Kwon        2018-07-07  1245  
+d76271d22694e8 Hyun Kwon        2018-07-07  1246  		/* Graphics layer is primary, and video layer is overlay. */
+1e42874b0df79a Quanyang Wang    2021-05-18  1247  		type = zynqmp_disp_layer_is_video(layer)
+1e42874b0df79a Quanyang Wang    2021-05-18  1248  		     ? DRM_PLANE_TYPE_OVERLAY : DRM_PLANE_TYPE_PRIMARY;
+d76271d22694e8 Hyun Kwon        2018-07-07  1249  		ret = drm_universal_plane_init(disp->drm, &layer->plane, 0,
+d76271d22694e8 Hyun Kwon        2018-07-07  1250  					       &zynqmp_disp_plane_funcs,
+d76271d22694e8 Hyun Kwon        2018-07-07  1251  					       drm_formats,
+d76271d22694e8 Hyun Kwon        2018-07-07  1252  					       layer->info->num_formats,
+d76271d22694e8 Hyun Kwon        2018-07-07  1253  					       NULL, type, NULL);
+d76271d22694e8 Hyun Kwon        2018-07-07  1254  		if (ret)
+d76271d22694e8 Hyun Kwon        2018-07-07  1255  			return ret;
+d76271d22694e8 Hyun Kwon        2018-07-07  1256  
+d76271d22694e8 Hyun Kwon        2018-07-07  1257  		drm_plane_helper_add(&layer->plane,
+d76271d22694e8 Hyun Kwon        2018-07-07  1258  				     &zynqmp_disp_plane_helper_funcs);
+650f12042b8532 Laurent Pinchart 2021-03-07  1259  
+8c772f0b2b8e94 Laurent Pinchart 2021-03-07 @1260  		drm_plane_create_zpos_immutable_property(&layer->plane, i);
+650f12042b8532 Laurent Pinchart 2021-03-07  1261  		if (zynqmp_disp_layer_is_gfx(layer))
+650f12042b8532 Laurent Pinchart 2021-03-07 @1262  			drm_plane_create_alpha_property(&layer->plane);
+d76271d22694e8 Hyun Kwon        2018-07-07  1263  	}
+d76271d22694e8 Hyun Kwon        2018-07-07  1264  
+d76271d22694e8 Hyun Kwon        2018-07-07  1265  	return 0;
+d76271d22694e8 Hyun Kwon        2018-07-07  1266  }
+d76271d22694e8 Hyun Kwon        2018-07-07  1267  
+
+:::::: The code at line 1260 was first introduced by commit
+:::::: 8c772f0b2b8e94bfd68f9bf19d7aba293332e4bf drm: xlnx: zynqmp_dpsub: Expose plane ordering to userspace
+
+:::::: TO: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+:::::: CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 -- 
-	Ansuel
+0-DAY CI Kernel Test Service
+https://01.org/lkp

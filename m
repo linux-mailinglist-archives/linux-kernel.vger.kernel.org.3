@@ -2,75 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C2A552E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14873552E89
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349108AbiFUJgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
+        id S1349112AbiFUJhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349088AbiFUJgj (ORCPT
+        with ESMTP id S1348833AbiFUJhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:36:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC2832715F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655804197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NcXrei2y1YJ8W4iMhBTE/8lC+VPJchskiCKRKCR2d9s=;
-        b=i4KS9I/2XQCQTAPK5aPHsCn79CcE0vQYaDZSk40VxSdne0XByS80xZ+v0Z0EtQnqFkr3bm
-        iPzeBE3CF3bygg25ueG/zQFKSriJsrUf00uPzCZG/Wtvf7/zX9AnF2sdvHWjrOZNXHQQca
-        vsnla0Rc2ugbC/wNEO2/y9MDyZSbGJo=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-570-8MF_foIyMxydEE8DZvB-3Q-1; Tue, 21 Jun 2022 05:36:36 -0400
-X-MC-Unique: 8MF_foIyMxydEE8DZvB-3Q-1
-Received: by mail-lf1-f69.google.com with SMTP id j3-20020a05651231c300b0047dbea7b031so6680886lfe.19
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:36:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NcXrei2y1YJ8W4iMhBTE/8lC+VPJchskiCKRKCR2d9s=;
-        b=hXyly7YuWzGPE5mQh9+QN1VlDUuhM6tsGE4eTNuGuWpbO91wLRaVl72YtEnFLq6l+m
-         LBKLXPK/bJUBPoJJ9qnTYoYos2GfdX0FItLFSKvmpCoZok1nvMCa+J1VBzr+saN+Tz/N
-         P4vLJxyMV1TZqmTGkFFRZKxtoNRdCPFeMNRw8Xsh91hhDZj9OJEFnG+wrkDP5jF0FHmM
-         scWcZOJiVofdHmw8eNoprhzlwqggth0OFX6172TQz/7NoTliG3jEwUiBsc4J9GFUnoLs
-         rXAqYr7pyxkGQ2v92pbyxt2Tfn7ne6B7XEJEwP49qwnSxRwxQ/Mau5JEybepkCqKxJIb
-         o6kw==
-X-Gm-Message-State: AJIora/370UFiRsQDx19O9DH98YVvWn9hC/mLK2kDWifmYjDHMm3uXeK
-        8mUFbdrA73ilx4UN5KM6CvkZIWRYcsPW3lxo0AR1Qcf60mDOSn4ozkIFJcvFfTVGnU9ycHAxthP
-        G1UmVG0fc2C/iNCx9971cO43t3iXWWXvbnSpym5du
-X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id p37-20020a05651213a500b0047dc1d9dea8mr16179015lfa.442.1655804194871;
-        Tue, 21 Jun 2022 02:36:34 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vYHin7RcteM0oZeoqpcOaahexAusmGmc0X7KmU5H3LSzGjszNsAIJFXEvBb7MZram6VDes8GvKxQzQWHh+L8w=
-X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id
- p37-20020a05651213a500b0047dc1d9dea8mr16178998lfa.442.1655804194646; Tue, 21
- Jun 2022 02:36:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620024158.2505-1-jasowang@redhat.com> <87y1xq8jgw.fsf@redhat.com>
-In-Reply-To: <87y1xq8jgw.fsf@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 21 Jun 2022 17:36:23 +0800
-Message-ID: <CACGkMEun6C9RgQVGq1B8BJMd9DyRQkSXj8shXVVhDymQYQLxgA@mail.gmail.com>
-Subject: Re: [PATCH V2] virtio: disable notification hardening by default
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     Halil Pasic <pasic@linux.ibm.com>, mst <mst@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 21 Jun 2022 05:37:15 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDCA275C6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:37:07 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1655804223tju3ecfs
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 21 Jun 2022 17:36:58 +0800 (CST)
+X-QQ-SSF: 0100000000700030B000B00A0000000
+X-QQ-FEAT: B0D4DPF8NcR5GZuJ2U5q3wJIJFnHVmNBA3+lnkqt0BNqvCom4ybXtKDqOCQ6v
+        HQF96ApE8ce8LKYJnvG67ckRGM2RPxVVBquJRlcXjIiz9kFhEQjb3zzGLy1uPVr9R2Jv8qA
+        ITejeTggLFSq44emH0LBWZJh7d4L+8RBvc4FCfXtyXLqG9Ol9dwKAu27J4h1TQ9g2Tsjp1Z
+        B/e+k2o+hep+HvOWMup6UtjiMSfiKIuHU6mlH6CURjxCOnFZPz9qD7oPrEXSMWPSgvOEZ0u
+        zCdb6Q1DQisuLWA5ZcA8lTLh/nHSZsEZ4RmNN6lVEdTfXqW0H+B+PAz27Sc/kHQ/HAfma7A
+        9xSvEiE4fDik6e3wcY=
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     miquel.raynal@bootlin.com, vigneshr@ti.com
+Cc:     richard@nod.at, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, jiangjian@cdjrlc.com
+Subject: [PATCH] ubi: remove unexpected word "the"
+Date:   Tue, 21 Jun 2022 17:36:56 +0800
+Message-Id: <20220621093656.73074-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,116 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 5:16 PM Cornelia Huck <cohuck@redhat.com> wrote:
->
-> On Mon, Jun 20 2022, Jason Wang <jasowang@redhat.com> wrote:
->
-> > We try to harden virtio device notifications in 8b4ec69d7e09 ("virtio:
-> > harden vring IRQ"). It works with the assumption that the driver or
-> > core can properly call virtio_device_ready() at the right
-> > place. Unfortunately, this seems to be not true and uncover various
-> > bugs of the existing drivers, mainly the issue of using
-> > virtio_device_ready() incorrectly.
-> >
-> > So let's having a Kconfig option and disable it by default. It gives
-> > us a breath to fix the drivers and then we can consider to enable it
-> > by default.
-> >
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > ---
-> > Changes since V1:
-> > - tweak the Kconfig prompt
-> > - don't hold spinlock for IRQ path in s390
-> > ---
-> >  drivers/s390/virtio/virtio_ccw.c |  4 ++++
-> >  drivers/virtio/Kconfig           | 11 +++++++++++
-> >  drivers/virtio/virtio.c          |  2 ++
-> >  drivers/virtio/virtio_ring.c     | 12 ++++++++++++
-> >  include/linux/virtio_config.h    |  2 ++
-> >  5 files changed, 31 insertions(+)
-> >
-> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
-> > index 97e51c34e6cf..89bbf7ccfdd1 100644
-> > --- a/drivers/s390/virtio/virtio_ccw.c
-> > +++ b/drivers/s390/virtio/virtio_ccw.c
-> > @@ -1136,8 +1136,10 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
-> >                       vcdev->err = -EIO;
-> >       }
-> >       virtio_ccw_check_activity(vcdev, activity);
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >       /* Interrupts are disabled here */
-> >       read_lock(&vcdev->irq_lock);
->
-> Should we add a comment that this pairs with
-> virtio_ccw_synchronize_cbs()? Just to avoid future headscratching as to
-> why this lock is only needed when notification hardening is enabled.
+there is an unexpected word "the" in the comments that need to be removed
 
-Fine.
+* @dev: device object to make use of the the Linux device model
+* @dev: UBI device object to use the the Linux device model
 
->
-> > +#endif
-> >       for_each_set_bit(i, indicators(vcdev),
-> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
-> >               /* The bit clear must happen before the vring kick. */
-> > @@ -1146,7 +1148,9 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
-> >               vq = virtio_ccw_vq_by_ind(vcdev, i);
-> >               vring_interrupt(0, vq);
-> >       }
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >       read_unlock(&vcdev->irq_lock);
-> > +#endif
-> >       if (test_bit(0, indicators2(vcdev))) {
-> >               virtio_config_changed(&vcdev->vdev);
-> >               clear_bit(0, indicators2(vcdev));
-> > diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-> > index b5adf6abd241..96ec56d44b91 100644
-> > --- a/drivers/virtio/Kconfig
-> > +++ b/drivers/virtio/Kconfig
-> > @@ -35,6 +35,17 @@ menuconfig VIRTIO_MENU
-> >
-> >  if VIRTIO_MENU
-> >
-> > +config VIRTIO_HARDEN_NOTIFICATION
-> > +        bool "Harden virtio notification"
-> > +        help
-> > +          Enable this to harden the device notifications and supress
-> > +          the ones that are illegal.
->
-> "...and suppress those that happen at a time where notifications are
-> illegal." ?
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/mtd/ubi/ubi.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Ok.
-
->
-> > +
-> > +          Experimental: not all drivers handle this correctly at this
-> > +          point.
->
-> "Note that several drivers still have bugs that may cause crashes or
-> hangs when correct handling of notifications is enforced; depending on
-> the subset of drivers and devices you use, this may or may not work."
->
-> Or is that too verbose?
-
-Looks fine.
-
->
-> > +
-> > +          If unsure, say N.
-> > +
-> >  config VIRTIO_PCI
-> >       tristate "PCI driver for virtio devices"
-> >       depends on PCI
->
-> The ifdeffery looks a big ugly, but I don't have a better idea.
-
-I guess you meant the ccw part, I leave the spinlock here in V1, but
-Michael prefers to have that.
-
-In the future, we may consider removing that, one possible way is to
-have a per driver boolean for the hardening.
-
-Tanks
-
->
+diff --git a/drivers/mtd/ubi/ubi.h b/drivers/mtd/ubi/ubi.h
+index 078112e23dfd..d9039e7f6703 100644
+--- a/drivers/mtd/ubi/ubi.h
++++ b/drivers/mtd/ubi/ubi.h
+@@ -281,7 +281,7 @@ struct ubi_eba_leb_desc {
+ 
+ /**
+  * struct ubi_volume - UBI volume description data structure.
+- * @dev: device object to make use of the the Linux device model
++ * @dev: device object to make use of the Linux device model
+  * @cdev: character device object to create character device
+  * @ubi: reference to the UBI device description object
+  * @vol_id: volume ID
+@@ -439,7 +439,7 @@ struct ubi_debug_info {
+ 
+ /**
+  * struct ubi_device - UBI device description structure
+- * @dev: UBI device object to use the the Linux device model
++ * @dev: UBI device object to use the Linux device model
+  * @cdev: character device object to create character device
+  * @ubi_num: UBI device number
+  * @ubi_name: UBI device name
+-- 
+2.17.1
 

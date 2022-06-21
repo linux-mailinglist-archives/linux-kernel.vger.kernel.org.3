@@ -2,39 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB8F552A03
+	by mail.lfdr.de (Postfix) with ESMTP id B8F05552A04
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344839AbiFUDu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
+        id S1344983AbiFUDkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237675AbiFUDuV (ORCPT
+        with ESMTP id S1344601AbiFUDkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:50:21 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7704118E19;
-        Mon, 20 Jun 2022 20:50:20 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E808A1A1322;
-        Tue, 21 Jun 2022 05:50:18 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5C4261A131E;
-        Tue, 21 Jun 2022 05:50:18 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 288631802204;
-        Tue, 21 Jun 2022 11:50:17 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     vkoul@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, shengjiu.wang@gmail.com,
-        joy.zou@nxp.com, linux-imx@nxp.com, dmaengine@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dmaengine: imx-sdma: Add FIFO stride support for multi FIFO script
-Date:   Tue, 21 Jun 2022 11:36:06 +0800
-Message-Id: <1655782566-21386-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Mon, 20 Jun 2022 23:40:00 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612BB62D6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:39:59 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id h187so15668149oif.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 20:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hWxtngEThL/1CXndF6OBNy94w7fuARzauxhQ7hxLhOE=;
+        b=SXW893XzMEBxwo+LkZJq5IBDKGRH9yjB51xSiP5mHpUwPu4P2GMPq1gjaIxldpUuQE
+         Kl7msxEtaIDRUXxcojnPL73Lu+KBakHKxmL7nB2SAuLcMpr6GdlvQAFOFX3onPexAuwX
+         kr6gG8tncr4XBlsAjwP0sDiOfk/jCt3P/pzpCcMWekAAEdxeTmWc9UVPT5xcGcbhjKSr
+         zX8JkDxpwPlwQRtpXYO9s1NKKZt3TpGjSX8rrp/qV/khkXUxmL7fRo8ajkN+YUP85guQ
+         6tftfEJZHMc1Aeor5FRMAsGHUk8FmvWxemOVv0jG2hm+98Kxjf1V5ta7e0CSWZi/biUG
+         uoaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hWxtngEThL/1CXndF6OBNy94w7fuARzauxhQ7hxLhOE=;
+        b=cwiMm75/ksdK47vKCV0OGAF8j6aP2XfDQtCByOQTOwJZvB6akNu9YqwdSBSkkWEP8D
+         O+vwxRBTUXjpUep9AtmTxZ7ZNSh1MmJeXYkNqSUPzVANrc+vRMEU82xpamsxkrbWP31n
+         /4Ir3WvrCNIAXkj/pXRpWZjk+FXTwXt7o86OcnWioycP/QmTu7qrWDyc6vq+zmr3preG
+         aU4WIIRlvl10O9NUcXEGdsxbAI2OnA1ubpZalQjmdTHtFun/IlpXin+rhreiLlZb6v/4
+         uzh4RE6mrTkhPvzJqbsmPEP69boZcZlHFcZIR8GknnHddYEpCSJBQnbREkO6WLPQcjC5
+         utoQ==
+X-Gm-Message-State: AOAM532OKEiBhmnp+QW1WzZkT9Tx5yV2yE8da3jg5/Jsrx31Fizr+ykL
+        Gr3AZHj36e0XU24Xk1aLpu8Ehw==
+X-Google-Smtp-Source: ABdhPJzasNTQSQFYwStVLiv+HTVfwGDinnn0CJxvWRSXoooldyj+Em+8GYm7NFgp9nFMOcgsHd5ihA==
+X-Received: by 2002:a05:6808:3027:b0:2f9:6618:ea55 with SMTP id ay39-20020a056808302700b002f96618ea55mr18305800oib.247.1655782798638;
+        Mon, 20 Jun 2022 20:39:58 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t23-20020a05683022f700b006060322125esm8877594otc.46.2022.06.20.20.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 20:39:58 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 22:39:56 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sc8280x: Add reference device
+Message-ID: <YrE9jGuLNeFHFGr7@builder.lan>
+References: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
+ <20220607214113.4057684-4-bjorn.andersson@linaro.org>
+ <YqDLmsrAkI1OnHqd@hovoldconsulting.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqDLmsrAkI1OnHqd@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -43,141 +77,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The peripheral may have several FIFOs, but some case just select
-some FIFOs from them for data transfer, which means FIFO0 and FIFO2
-may be selected. So add FIFO address stride support, 0 means all FIFOs
-are continuous, 1 means 1 word stride between FIFOs. All stride between
-FIFOs should be same.
+On Wed 08 Jun 11:17 CDT 2022, Johan Hovold wrote:
 
-Another option words_per_fifo means how many audio channel data copied
-to one FIFO one time, 1 means one channel per FIFO, 2 means 2 channels
-per FIFO.
+> On Tue, Jun 07, 2022 at 02:41:12PM -0700, Bjorn Andersson wrote:
+> > Add basic support for the SC8280XP reference device, which allows it to
+> > boot to a shell (using EFIFB) with functional storage (UFS), USB,
+> > keyboard, touchpad, touchscreen, backlight and remoteprocs.
+> > 
+> > The PMICs are, per socinfo, reused from other platforms. But given that
+> > the address of the PMICs doesn't match other cases and that it's
+> > desirable to label things according to the schematics a new dtsi file is
+> > created to represent the reference combination of PMICs.
+> 
+> nit: missing p in "sc8280xp" in Subject.
+> 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/Makefile            |   1 +
+> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts    | 423 +++++++++++++++++++
+> >  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 108 +++++
+> >  3 files changed, 532 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+>  
+> > +	vreg_misc_3p3: misc-3p3-regulator {
+> > +		compatible = "regulator-fixed";
+> > +		regulator-name = "VREG_MISC_3P3";
+> > +
+> > +		regulator-min-microvolt = <3300000>;
+> > +		regulator-max-microvolt = <3300000>;
+> > +
+> > +		gpio = <&pmc8280_1_gpios 0 GPIO_ACTIVE_HIGH>;
+> 
+> The PMIC gpios are 1-based, so this should be
+> 
+> 		gpio = <&pmc8280_1_gpios 1 GPIO_ACTIVE_HIGH>;
+> 
+> or the regulator fails to probe.
+> 
+> > +		enable-active-high;
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&misc_3p3_reg_en>;
+> > +
+> > +		regulator-boot-on;
+> > +		regulator-always-on;
+> > +	};
+> > +
+> > +	reserved-memory {
+> > +	};
+> > +};
+> 
+> > +&qup0_i2c4 {
+> > +       status = "okay";
+> 
+> Please move the status property last throughout here too.
+> 
+> > +       clock-frequency = <400000>;
+> > +
+> > +       pinctrl-names = "default";
+> > +       pinctrl-0 = <&qup0_i2c4_default>, <&ts0_default>;
+> > +
+> > +       hid@10 {
+> 
+> I've changed this to use the more descriptive name "touchscreen".
+> 
+> > +               compatible = "hid-over-i2c";
+> > +               reg = <0x10>;
+> > +               hid-descr-addr = <0x1>;
+> > +                       
+> > +               interrupts-extended = <&tlmm 175 IRQ_TYPE_LEVEL_LOW>;
+> > +       };
+> > +};
+> 
+> > +&qup2_i2c5 {
+> > +       status = "okay";
+> > +       clock-frequency = <400000>;
+> > +
+> > +       pinctrl-names = "default";
+> > +       pinctrl-0 = <&qup2_i2c5_default>, <&kybd_default>, <&tpad_default>;
+> > +
+> > +       hid@15 {
+> 
+> And this to "touchpad@15"
+> 
+> > +               compatible = "hid-over-i2c";
+> > +               reg = <0x15>;
+> > +               hid-descr-addr = <0x1>;
+> > +
+> > +               interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
+> > +       };
+> > +
+> > +       hid@68 {
+> 
+> And keyboard@68
+> 
+> Sure these are multifunction devices, but this is the primary function.
+> 
+> > +               compatible = "hid-over-i2c";
+> > +               reg = <0x68>;
+> > +               hid-descr-addr = <0x1>;
+> > +
+> > +               interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
+> > +       };
+> > +};
+> 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+> > new file mode 100644
+> > index 000000000000..36ed7d808ab8
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+> 
+> > +	pmc8280c: pmic@2 {
+> > +		compatible = "qcom,pm8350c", "qcom,spmi-pmic";
+> > +		reg = <0x2 SPMI_USID>;
+> > +		#address-cells = <1>;
+> > +		#size-cells = <0>;
+> > +
+> > +		pmc8280c_gpios: gpio@8800 {
+> > +			compatible = "qcom,pm8350c-gpio", "qcom,spmi-gpio";
+> > +			reg = <0x8800>;
+> > +			gpio-controller;
+> > +			gpio-ranges = <&pmc8280c_gpios 0 0 9>;
+> > +			#gpio-cells = <2>;
+> > +			interrupt-controller;
+> > +			#interrupt-cells = <2>;
+> > +		};
+> > +
+> > +		pmc8280c_lpg: lpg@e800 {
+> 
+> I renamed the node (and label suffix) "pwm" when I noticed that the
+> binding had changed in mainline.
+> 
+> Since this device is used as a PWM provider I guess that's a better
+> name?
+> 
 
-If 'n_fifos_src =  4' and 'words_per_fifo = 2', it means the first two
-words(channels) fetch from FIFO0 and then jump to FIFO1 for next two words,
-and so on after the last FIFO3 fetched, roll back to FIFO0.
+The pm8350c seems to include a number of PWM channels, the RGB current
+sink (triled) and the LUT block - together making up the "Light Pulse
+Generator".
 
-Signed-off-by: Joy Zou <joy.zou@nxp.com>
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
-changes in v3
-- fix issue with words_per_fifo = 0 case;
+So with that in mind, the compatible seems to have come from the fact
+that the author only intended to use one of the PWM sub-blocks...
 
-changes in v2
-- change offset to stride for naming and description
-- fix description for words_per_fifo
-- update subsystem tag to be dmaengine
 
- drivers/dma/imx-sdma.c      | 27 +++++++++++++++++++++++++--
- include/linux/dma/imx-dma.h | 13 +++++++++++++
- 2 files changed, 38 insertions(+), 2 deletions(-)
+Thanks for the feedback on the series, will updated and resubmit
+accordingly.
 
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index 39d70ef1caf0..17adad9cb6d9 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -183,6 +183,8 @@
- 				 BIT(DMA_DEV_TO_DEV))
- 
- #define SDMA_WATERMARK_LEVEL_N_FIFOS	GENMASK(15, 12)
-+#define SDMA_WATERMARK_LEVEL_OFF_FIFOS  GENMASK(19, 16)
-+#define SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO   GENMASK(31, 28)
- #define SDMA_WATERMARK_LEVEL_SW_DONE	BIT(23)
- 
- #define SDMA_DONE0_CONFIG_DONE_SEL	BIT(7)
-@@ -429,6 +431,9 @@ struct sdma_desc {
-  * @n_fifos_src:	number of source device fifos
-  * @n_fifos_dst:	number of destination device fifos
-  * @sw_done:		software done flag
-+ * @stride_fifos_src:	stride for source device FIFOs
-+ * @stride_fifos_dst:	stride for destination device FIFOs
-+ * @words_per_fifo:	copy number of words one time for one FIFO
-  */
- struct sdma_channel {
- 	struct virt_dma_chan		vc;
-@@ -456,6 +461,9 @@ struct sdma_channel {
- 	bool				is_ram_script;
- 	unsigned int			n_fifos_src;
- 	unsigned int			n_fifos_dst;
-+	unsigned int			stride_fifos_src;
-+	unsigned int			stride_fifos_dst;
-+	unsigned int			words_per_fifo;
- 	bool				sw_done;
- };
- 
-@@ -1245,17 +1253,29 @@ static void sdma_set_watermarklevel_for_p2p(struct sdma_channel *sdmac)
- static void sdma_set_watermarklevel_for_sais(struct sdma_channel *sdmac)
- {
- 	unsigned int n_fifos;
-+	unsigned int stride_fifos;
-+	unsigned int words_per_fifo;
- 
- 	if (sdmac->sw_done)
- 		sdmac->watermark_level |= SDMA_WATERMARK_LEVEL_SW_DONE;
- 
--	if (sdmac->direction == DMA_DEV_TO_MEM)
-+	if (sdmac->direction == DMA_DEV_TO_MEM) {
- 		n_fifos = sdmac->n_fifos_src;
--	else
-+		stride_fifos = sdmac->stride_fifos_src;
-+	} else {
- 		n_fifos = sdmac->n_fifos_dst;
-+		stride_fifos = sdmac->stride_fifos_dst;
-+	}
-+
-+	words_per_fifo = sdmac->words_per_fifo;
- 
- 	sdmac->watermark_level |=
- 			FIELD_PREP(SDMA_WATERMARK_LEVEL_N_FIFOS, n_fifos);
-+	sdmac->watermark_level |=
-+			FIELD_PREP(SDMA_WATERMARK_LEVEL_OFF_FIFOS, stride_fifos);
-+	if (words_per_fifo)
-+		sdmac->watermark_level |=
-+			FIELD_PREP(SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO, (words_per_fifo - 1));
- }
- 
- static int sdma_config_channel(struct dma_chan *chan)
-@@ -1769,6 +1789,9 @@ static int sdma_config(struct dma_chan *chan,
- 		}
- 		sdmac->n_fifos_src = sdmacfg->n_fifos_src;
- 		sdmac->n_fifos_dst = sdmacfg->n_fifos_dst;
-+		sdmac->stride_fifos_src = sdmacfg->stride_fifos_src;
-+		sdmac->stride_fifos_dst = sdmacfg->stride_fifos_dst;
-+		sdmac->words_per_fifo = sdmacfg->words_per_fifo;
- 		sdmac->sw_done = sdmacfg->sw_done;
- 	}
- 
-diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
-index 8887762360d4..f487a4fa103a 100644
---- a/include/linux/dma/imx-dma.h
-+++ b/include/linux/dma/imx-dma.h
-@@ -70,6 +70,16 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
-  * struct sdma_peripheral_config - SDMA config for audio
-  * @n_fifos_src: Number of FIFOs for recording
-  * @n_fifos_dst: Number of FIFOs for playback
-+ * @stride_fifos_src: FIFO address stride for recording, 0 means all FIFOs are
-+ *                    continuous, 1 means 1 word stride between FIFOs. All stride
-+ *                    between FIFOs should be same.
-+ * @stride_fifos_dst: FIFO address stride for playback
-+ * @words_per_fifo: numbers of words per FIFO fetch/fill, 1 means
-+ *                  one channel per FIFO, 2 means 2 channels per FIFO..
-+ *                  If 'n_fifos_src =  4' and 'words_per_fifo = 2', it
-+ *                  means the first two words(channels) fetch from FIFO0
-+ *                  and then jump to FIFO1 for next two words, and so on
-+ *                  after the last FIFO3 fetched, roll back to FIFO0.
-  * @sw_done: Use software done. Needed for PDM (micfil)
-  *
-  * Some i.MX Audio devices (SAI, micfil) have multiple successive FIFO
-@@ -82,6 +92,9 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
- struct sdma_peripheral_config {
- 	int n_fifos_src;
- 	int n_fifos_dst;
-+	int stride_fifos_src;
-+	int stride_fifos_dst;
-+	int words_per_fifo;
- 	bool sw_done;
- };
- 
--- 
-2.17.1
+Regards,
+Bjorn
 
+> > +			compatible = "qcom,pm8350c-pwm";
+> > +			reg = <0xe800>;
+> > +
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +
+> > +			#pwm-cells = <2>;
+> > +
+> > +			status = "disabled";
+> > +		};
+> > +	};
+> 
+> Johan

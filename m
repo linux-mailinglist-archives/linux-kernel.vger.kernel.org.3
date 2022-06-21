@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAE0552AF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DBD552AFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345081AbiFUGZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 02:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
+        id S1345277AbiFUGbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 02:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244186AbiFUGZa (ORCPT
+        with ESMTP id S232935AbiFUGbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 02:25:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CCE518B2B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655792727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9vkl6K79nfxbxKEX0DIwGmMpY5XA3ZSnIwpY7DQqp7w=;
-        b=eSzslpyTJHofoflz89ieUbk8od3e8tGgLbovuZvYX47DfWgfTwfLWHFqZbYPiqtur+rvae
-        /rSlYofP7XGC/y8SbhvFEfoSyOJqpRD7kFF8RRPUnmb+brWs8+YPAeIh5bNVR8+QGQHyTc
-        BP+AWUWRqpHtzdI8BB7sba/W9kT0ySg=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-ZIadSF9uOC-ej99-CQlpNw-1; Tue, 21 Jun 2022 02:25:25 -0400
-X-MC-Unique: ZIadSF9uOC-ej99-CQlpNw-1
-Received: by mail-lj1-f197.google.com with SMTP id i23-20020a2e9417000000b0025a739223d1so495038ljh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:25:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9vkl6K79nfxbxKEX0DIwGmMpY5XA3ZSnIwpY7DQqp7w=;
-        b=d5HgqTin6f/e0kyBbdfcV54+uzTncY1hfaA1wLC4SmjCnjSW5WOQqBt24DGX5zY3oT
-         A/81G+sK9k9xCX4oW9hrwR/saAkioDEXNvyZxsuj87dciIkWn9sROdPoyDLuRFXLf2nS
-         OvkJ9xgKYV9WXe7pmOTf2CVvDoDcWpdgPlM6YXMYaH7Srn6mQTVXYVe3d8THScvwdo+g
-         qcl6QqgafSd0d2XIHfUCs0P3yuC2l+jUjKQloXB29KVtNmTGr6PYj5o6q3L6PLqXZO9E
-         mUQCQoR403LpznuF1jlqHij3HXw1jhWU5v/ixXaUIu4O7fbo97Tacgmlbp5MvUT+IfZb
-         2btw==
-X-Gm-Message-State: AJIora8KxbNbaI8CBRof/76Jf89BvSoVkLmG6ueElbiGQMX/UCgNwicm
-        VIrO973Lqe6ejCkkuPTKHNM13GVkvApa8DthEouIknMDK9a9TL5z91wX1nNUVXqs7lcF1pC3LRl
-        O0I7AEmFcd9O6DYL3mfbYx8V3h2kBJfrO7EZJoOjN
-X-Received: by 2002:a05:6512:158d:b0:47f:718c:28b5 with SMTP id bp13-20020a056512158d00b0047f718c28b5mr4440723lfb.397.1655792724197;
-        Mon, 20 Jun 2022 23:25:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1snQmZAFq0OU2yReyGppSCc3x0Hn6RAHMizDeVt63/wmQvk3IeHI+fzf6PkF3AfRAf8B/1aJkCfPGcPZar/K3M=
-X-Received: by 2002:a05:6512:158d:b0:47f:718c:28b5 with SMTP id
- bp13-20020a056512158d00b0047f718c28b5mr4440713lfb.397.1655792723972; Mon, 20
- Jun 2022 23:25:23 -0700 (PDT)
+        Tue, 21 Jun 2022 02:31:35 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D9860E3;
+        Mon, 20 Jun 2022 23:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655793095; x=1687329095;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8B6OBov+Dp//rrdGe97WOSHuT0EA9+jVckLT/ZqJALw=;
+  b=Yti7jI5hBRbceJ9pXq6fzHoFdzwrLgG86FXFEM+pgwt6IWXTHgdBcH11
+   e3gJ2ovgdZz4Y5Z2yRFjhUU62Fycm0BoKZr8RIMVjLq56v1Zos9pXnSj4
+   g8E2VYQmRG01d86PJr15YQX6JFlmNrLYQgRhLm0l/fQ8oc1xI4tgKueGe
+   M=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jun 2022 23:31:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 23:31:34 -0700
+Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
+ 2022 23:31:32 -0700
+Message-ID: <00f3eb47-2529-a493-ee67-c0c0219937a3@quicinc.com>
+Date:   Tue, 21 Jun 2022 12:01:29 +0530
 MIME-Version: 1.0
-References: <20220620051115.3142-1-jasowang@redhat.com> <20220620051115.3142-4-jasowang@redhat.com>
- <20220620050446-mutt-send-email-mst@kernel.org> <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
- <20220620061607-mutt-send-email-mst@kernel.org> <CACGkMEu7k2X6S0tSsuGOb-Ta+MzzYE5NzHgrhR2H1vgmcLqjCw@mail.gmail.com>
- <20220621020013-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220621020013-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 21 Jun 2022 14:25:13 +0800
-Message-ID: <CACGkMEtQPWmV297_4oak2KxGhXYgef-eevB3KsC7RDy8mSMbNA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] caif_virtio: fix the race between reset and netdev unregister
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        erwan.yvin@stericsson.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH rcu 07/12] rcu: tiny: Record kvfree_call_rcu() call stack
+ for KASAN
+Content-Language: en-US
+To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        <rostedt@goodmis.org>, Johannes Berg <johannes.berg@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
+ <20220620222032.3839547-7-paulmck@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20220620222032.3839547-7-paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,117 +65,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 2:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Jun 21, 2022 at 11:09:45AM +0800, Jason Wang wrote:
-> > On Mon, Jun 20, 2022 at 6:18 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > >
-> > > On Mon, Jun 20, 2022 at 05:18:29PM +0800, Jason Wang wrote:
-> > > > On Mon, Jun 20, 2022 at 5:09 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > >
-> > > > > On Mon, Jun 20, 2022 at 01:11:15PM +0800, Jason Wang wrote:
-> > > > > > We use to do the following steps during .remove():
-> > > > >
-> > > > > We currently do
-> > > > >
-> > > > >
-> > > > > > static void cfv_remove(struct virtio_device *vdev)
-> > > > > > {
-> > > > > >       struct cfv_info *cfv = vdev->priv;
-> > > > > >
-> > > > > >       rtnl_lock();
-> > > > > >       dev_close(cfv->ndev);
-> > > > > >       rtnl_unlock();
-> > > > > >
-> > > > > >       tasklet_kill(&cfv->tx_release_tasklet);
-> > > > > >       debugfs_remove_recursive(cfv->debugfs);
-> > > > > >
-> > > > > >       vringh_kiov_cleanup(&cfv->ctx.riov);
-> > > > > >       virtio_reset_device(vdev);
-> > > > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
-> > > > > >       cfv->vr_rx = NULL;
-> > > > > >       vdev->config->del_vqs(cfv->vdev);
-> > > > > >       unregister_netdev(cfv->ndev);
-> > > > > > }
-> > > > > > This is racy since device could be re-opened after dev_close() but
-> > > > > > before unregister_netdevice():
-> > > > > >
-> > > > > > 1) RX vringh is cleaned before resetting the device, rx callbacks that
-> > > > > >    is called after the vringh_kiov_cleanup() will result a UAF
-> > > > > > 2) Network stack can still try to use TX virtqueue even if it has been
-> > > > > >    deleted after dev_vqs()
-> > > > > >
-> > > > > > Fixing this by unregistering the network device first to make sure not
-> > > > > > device access from both TX and RX side.
-> > > > > >
-> > > > > > Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
-> > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > ---
-> > > > > >  drivers/net/caif/caif_virtio.c | 6 ++----
-> > > > > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
-> > > > > > index 66375bea2fcd..a29f9b2df5b1 100644
-> > > > > > --- a/drivers/net/caif/caif_virtio.c
-> > > > > > +++ b/drivers/net/caif/caif_virtio.c
-> > > > > > @@ -752,9 +752,8 @@ static void cfv_remove(struct virtio_device *vdev)
-> > > > > >  {
-> > > > > >       struct cfv_info *cfv = vdev->priv;
-> > > > > >
-> > > > > > -     rtnl_lock();
-> > > > > > -     dev_close(cfv->ndev);
-> > > > > > -     rtnl_unlock();
-> > > > > > +     /* Make sure NAPI/TX won't try to access the device */
-> > > > > > +     unregister_netdev(cfv->ndev);
-> > > > > >
-> > > > > >       tasklet_kill(&cfv->tx_release_tasklet);
-> > > > > >       debugfs_remove_recursive(cfv->debugfs);
-> > > > > > @@ -764,7 +763,6 @@ static void cfv_remove(struct virtio_device *vdev)
-> > > > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
-> > > > > >       cfv->vr_rx = NULL;
-> > > > > >       vdev->config->del_vqs(cfv->vdev);
-> > > > > > -     unregister_netdev(cfv->ndev);
-> > > > > >  }
-> > > > >
-> > > > >
-> > > > > This gives me pause, callbacks can now trigger after device
-> > > > > has been unregistered. Are we sure this is safe?
-> > > >
-> > > > It looks safe, for RX NAPI is disabled. For TX, tasklet is disabled
-> > > > after tasklet_kill(). I can add a comment to explain this.
-> > >
-> > > that waits for outstanding tasklets but does it really prevent
-> > > future ones?
-> >
-> > I think so, it tries to test and set TASKLET_STATE_SCHED which blocks
-> > the future scheduling of a tasklet.
-> >
-> > Thanks
->
-> But then in the end it clears it, does it not?
 
-Right, so we need to reset before taskset_kill().
+
+On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
+> From: Johannes Berg <johannes.berg@intel.com>
+> 
+> When running KASAN with Tiny RCU (e.g. under ARCH=um, where
+> a working KASAN patch is now available), we don't get any
+> information on the original kfree_rcu() (or similar) caller
+> when a problem is reported, as Tiny RCU doesn't record this.
+> 
+> Add the recording, which required pulling kvfree_call_rcu()
+> out of line for the KASAN case since the recording function
+> (kasan_record_aux_stack_noalloc) is neither exported, nor
+> can we include kasan.h into rcutiny.h.
+> 
+> without KASAN, the patch has no size impact (ARCH=um kernel):
+>      text       data         bss         dec        hex    filename
+>   6151515    4423154    33148520    43723189    29b29b5    linux
+>   6151515    4423154    33148520    43723189    29b29b5    linux + patch
+> 
+> with KASAN, the impact on my build was minimal:
+>      text       data         bss         dec        hex    filename
+> 13915539    7388050    33282304    54585893    340ea25    linux
+> 13911266    7392114    33282304    54585684    340e954    linux + patch
+>     -4273      +4064         +-0        -209
+> 
+> Acked-by: Dmitry Vyukov <dvyukov@google.com>
+> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>   include/linux/rcutiny.h | 11 ++++++++++-
+>   kernel/rcu/tiny.c       | 14 ++++++++++++++
+>   2 files changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+> index 5fed476f977f6..d84e13f2c3848 100644
+> --- a/include/linux/rcutiny.h
+> +++ b/include/linux/rcutiny.h
+> @@ -38,7 +38,7 @@ static inline void synchronize_rcu_expedited(void)
+>    */
+>   extern void kvfree(const void *addr);
+>   
+> -static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
+> +static inline void __kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
+>   {
+>   	if (head) {
+>   		call_rcu(head, func);
+> @@ -51,6 +51,15 @@ static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
+>   	kvfree((void *) func);
+>   }
+>   
+> +#ifdef CONFIG_KASAN_GENERIC
+> +void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func);
+> +#else
+> +static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
+> +{
+> +	__kvfree_call_rcu(head, func);
+> +}
+> +#endif
+> +
+>   void rcu_qs(void);
+>   
+>   static inline void rcu_softirq_qs(void)
+> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+> index 340b3f8b090d4..58ff3721d975c 100644
+> --- a/kernel/rcu/tiny.c
+> +++ b/kernel/rcu/tiny.c
+> @@ -217,6 +217,20 @@ bool poll_state_synchronize_rcu(unsigned long oldstate)
+>   }
+>   EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu);
+>   
+> +#ifdef CONFIG_KASAN_GENERIC
+> +void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
+> +{
+> +	if (head) {
+> +		void *ptr = (void *) head - (unsigned long) func;
+> +
+> +		kasan_record_aux_stack_noalloc(ptr);
+> +	}
+
+For the !head case; similar to Tree RCU's kvfree_call_rcu() 
+implementation, we do not need to record 'ptr' (which will be 'func')?
+
 
 Thanks
+Neeraj
 
->
-> > >
-> > > > > Won't it be safer to just keep the rtnl_lock around
-> > > > > the whole process?
-> > > >
-> > > > It looks to me we rtnl_lock can't help in synchronizing with the
-> > > > callbacks, anything I miss?
-> > > >
-> > > > Thanks
-> > >
-> > > good point.
-> > >
-> > >
-> > > > >
-> > > > > >  static struct virtio_device_id id_table[] = {
-> > > > > > --
-> > > > > > 2.25.1
-> > > > >
-> > >
->
-
+> +
+> +	__kvfree_call_rcu(head, func);
+> +}
+> +EXPORT_SYMBOL_GPL(kvfree_call_rcu);
+> +#endif
+> +
+>   void __init rcu_init(void)
+>   {
+>   	open_softirq(RCU_SOFTIRQ, rcu_process_callbacks);

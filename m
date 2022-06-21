@@ -2,108 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36555534B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606BC5534BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 16:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351706AbiFUOlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 10:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S235670AbiFUOmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 10:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349156AbiFUOlI (ORCPT
+        with ESMTP id S229681AbiFUOmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:41:08 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1524F24F00
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:41:07 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso13593179pjh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 07:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JOicc8moSgPUHZwRa0UCLUvVifYA0qTN8DaBzCizOgw=;
-        b=cKCuyyDnkfNQBL6avZcuKqgcaAnrDgGaMrPVXHKS56JghxcscK9NoNnj3Fq7/NVRC+
-         oRVzrbe4sEZRyZOqRivaOWFZO8Gd7vthX9YgbDCc1RkeiGegxd0pyZQqGZ/UzgMt5ruJ
-         MaD7F/sfEkQoWFzd4qxP745PX7p+Gml77tWHRrjRjkZiJB4Si0+QNOhldE61LLtgrKtz
-         z7nAckxCBVmBlyIGhrdH+2BUYxEDwzsjv/pBBt1WZ1hcXBLEmjxXq9UXzk0BiNzqacIe
-         VkYCNWJt/9iPC5J8GLSnvPOdHVjKAoDqjVqKQeMuB+EOm3tQprFc1Ew0wMXup3tiDdCK
-         rfwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JOicc8moSgPUHZwRa0UCLUvVifYA0qTN8DaBzCizOgw=;
-        b=8GvV+D5UK30liz3V5u0XeN3RKl34hJKAJgnpR/pq4Ol/hQZU0T0fAcWvQdf4On3CWK
-         mRZrlbknZR56NvoUGJMd2mtzQhn2MiIpwfMPQ0Gpx8a3zlJW20TAHQrppHSg6jHRX6GP
-         uwcSDbJ1aVdJuBeFu29NhO4ulGXlq1PinQtj7PY2z7mW/A5jp6yVX82cYs2AOayyTloZ
-         DrHX5tF0WvJ6fTIWZC4O93LwJEUDv/RUglbY2lMgV0VVpvEbm9Un32Bb394e6Ko+ySIg
-         00bAeIev9PMBs90d9VMoUnupjaChWDmnj4Cn/QzThKXXIOPE3sxMpNewSEpsKD/vUd/z
-         zCew==
-X-Gm-Message-State: AJIora+DBknNLOpsA+/9i0MiTCZEpbODLXHUVXC19UJkM16Tkj3oOS3N
-        koRBKoNRA3U9aUWOSTgCzG7GJw==
-X-Google-Smtp-Source: AGRyM1vJrRABFv+Um9W+VY7dY1s+g55BsfMNsbio+5fYQj4/zIQK6olfXAORs7KW0GbN7wK+7Xjx+Q==
-X-Received: by 2002:a17:902:ab87:b0:162:26cf:bf7a with SMTP id f7-20020a170902ab8700b0016226cfbf7amr28637304plr.168.1655822466277;
-        Tue, 21 Jun 2022 07:41:06 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902c65100b0016a091e993dsm8269986pls.42.2022.06.21.07.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 07:41:05 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 14:41:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Shaoqin" <shaoqin.huang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Colton Lewis <coltonlewis@google.com>,
-        Andrew Jones <drjones@redhat.com>
-Subject: Re: [PATCH 2/3] KVM: selftests: Consolidate boilerplate code in
- get_ucall()
-Message-ID: <YrHYfiI+54hAp0vv@google.com>
-References: <20220618001618.1840806-1-seanjc@google.com>
- <20220618001618.1840806-3-seanjc@google.com>
- <de35d629-e076-e02d-7482-c93de628dd82@intel.com>
+        Tue, 21 Jun 2022 10:42:43 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A903324F06;
+        Tue, 21 Jun 2022 07:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655822562; x=1687358562;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=J3cg98MSDxZXcoUuPDHI2nmcKFNOBrxiekk6k9TpI1Y=;
+  b=HxFtPX8895GcGFkS5xzrNPivc3Uvq6ZUz8SA60ggAkqr1nFxvIf1akLb
+   paSSLoxqXHdKyu2vfadE9NTepT/tlBX3QD+Omf9TNWSOwqXJotDkh+91h
+   WbFRLgGHvrBHbzjf8Rzla4EEGUYuOM2YJJ7Jwxcp1z3QhwBVrUH9qjjM0
+   uIpb59/jqQYtprn1JNYQsjyrmPSyX/XG23nq6rgaA3SnchPLUxRBJpyhj
+   uaiz1YeZqRUrvj4hYh6ZbOmqij7uupRoZj5+Ba57S7jB+rZUglZG/Bv+I
+   A4B0F28/FPX7glsOaeZuOSD91CHo8NOIQachPXWKUhyHqlFIbngjiN788
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="341817714"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="341817714"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 07:42:25 -0700
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="585773611"
+Received: from johnkeat-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.188.142])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 07:42:25 -0700
+Message-ID: <22649214925c2940bb524fd33d1f6ffc23223990.camel@linux.intel.com>
+Subject: Re: [PATCH] ID: intel-ish-hid: hid-client: drop unexpected word
+ "the" in the comments
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Jiang Jian <jiangjian@cdjrlc.com>, jikos@kernel.org,
+        benjamin.tissoires@redhat.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 21 Jun 2022 07:42:21 -0700
+In-Reply-To: <20220621122751.117143-1-jiangjian@cdjrlc.com>
+References: <20220621122751.117143-1-jiangjian@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de35d629-e076-e02d-7482-c93de628dd82@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022, Huang, Shaoqin wrote:
+On Tue, 2022-06-21 at 20:27 +0800, Jiang Jian wrote:
+> there is an unexpected word "the" in the comments that need to be
+> dropped
 > 
+> file: drivers/hid/intel-ish-hid/ishtp-hid-client.c
+> line: 331
+>  * @device: Pointer to the the ishtp client device for which this
+> message
+> changed to
+>  * @device: Pointer to the ishtp client device for which this message
 > 
-> On 6/18/2022 8:16 AM, Sean Christopherson wrote:
-> > Consolidate the actual copying of a ucall struct from guest=>host into
-> > the common get_ucall().  Return a host virtual address instead of a guest
-> > virtual address even though the addr_gva2hva() part could be moved to
-> > get_ucall() too.  Conceptually, get_ucall() is invoked from the host and
-> > should return a host virtual address (and returning NULL for "nothing to
-> > see here" is far superior to returning 0).
-> 
-> It seems the get_ucall() returns the uc->cmd, the ucall_arch_get_ucall()
-> returns a host virtual address.
+> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Yep, get_ucall() then does the memcpy() from guest memory via that host virtual
-addres and returns the resulting ucall command.  The intent is that the arch
-hooks are not to be called by common code.
+> ---
+>  drivers/hid/intel-ish-hid/ishtp-hid-client.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/intel-ish-hid/ishtp-hid-client.c
+> b/drivers/hid/intel-ish-hid/ishtp-hid-client.c
+> index 4338c9b68a43..e3d70c5460e9 100644
+> --- a/drivers/hid/intel-ish-hid/ishtp-hid-client.c
+> +++ b/drivers/hid/intel-ish-hid/ishtp-hid-client.c
+> @@ -328,7 +328,7 @@ static void process_recv(struct ishtp_cl
+> *hid_ishtp_cl, void *recv_buf,
+>  
+>  /**
+>   * ish_cl_event_cb() - bus driver callback for incoming
+> message/packet
+> - * @device:    Pointer to the the ishtp client device for which this
+> message
+> + * @device:    Pointer to the ishtp client device for which this
+> message
+>   *             is targeted
+>   *
+>   * Remove the packet from the list and process the message by
+> calling
+

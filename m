@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3475535AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB2A5535AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352233AbiFUPPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S1352487AbiFUPPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352393AbiFUPPI (ORCPT
+        with ESMTP id S1352711AbiFUPPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:15:08 -0400
+        Tue, 21 Jun 2022 11:15:09 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39E66656B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:14:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24A0FBC9E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:14:40 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF2301688;
-        Tue, 21 Jun 2022 08:14:38 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 121C31691;
+        Tue, 21 Jun 2022 08:14:40 -0700 (PDT)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BE5213F66F;
-        Tue, 21 Jun 2022 08:14:37 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0554F3F66F;
+        Tue, 21 Jun 2022 08:14:38 -0700 (PDT)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org, will@kernel.org
 Cc:     iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 1/3] iommu: Use dev_iommu_ops() for probe_finalize
-Date:   Tue, 21 Jun 2022 16:14:25 +0100
-Message-Id: <5fe4b0ce22f676f435d332f2b2828dc7ef848a19.1655822151.git.robin.murphy@arm.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] iommu: Make .release_device optional
+Date:   Tue, 21 Jun 2022 16:14:26 +0100
+Message-Id: <bda9d3eb4527eac8f6544a15067e2529cca54a2e.1655822151.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.36.1.dirty
 In-Reply-To: <cover.1655822151.git.robin.murphy@arm.com>
 References: <cover.1655822151.git.robin.murphy@arm.com>
@@ -43,36 +42,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ->probe_finalize hook only runs after ->probe_device succeeds,
-so we can move that over to the new dev_iommu_ops() as well.
+Many drivers do nothing meaningful for .release_device, and it's neatly
+abstracted to just two callsites in the core code, so let's make it
+optional to implement.
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
- drivers/iommu/iommu.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/iommu/fsl_pamu_domain.c | 5 -----
+ drivers/iommu/iommu.c           | 6 ++++--
+ drivers/iommu/msm_iommu.c       | 5 -----
+ drivers/iommu/sun50i-iommu.c    | 3 ---
+ drivers/iommu/tegra-gart.c      | 5 -----
+ drivers/iommu/tegra-smmu.c      | 3 ---
+ 6 files changed, 4 insertions(+), 23 deletions(-)
 
+diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
+index 94b4589dc67c..011f9ab7f743 100644
+--- a/drivers/iommu/fsl_pamu_domain.c
++++ b/drivers/iommu/fsl_pamu_domain.c
+@@ -447,15 +447,10 @@ static struct iommu_device *fsl_pamu_probe_device(struct device *dev)
+ 	return &pamu_iommu;
+ }
+ 
+-static void fsl_pamu_release_device(struct device *dev)
+-{
+-}
+-
+ static const struct iommu_ops fsl_pamu_ops = {
+ 	.capable	= fsl_pamu_capable,
+ 	.domain_alloc	= fsl_pamu_domain_alloc,
+ 	.probe_device	= fsl_pamu_probe_device,
+-	.release_device	= fsl_pamu_release_device,
+ 	.device_group   = fsl_pamu_device_group,
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+ 		.attach_dev	= fsl_pamu_attach_device,
 diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 847ad47a2dfd..06d6989f07f6 100644
+index 06d6989f07f6..8b4fc7e62b99 100644
 --- a/drivers/iommu/iommu.c
 +++ b/drivers/iommu/iommu.c
-@@ -272,7 +272,7 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
+@@ -259,7 +259,8 @@ static int __iommu_probe_device(struct device *dev, struct list_head *group_list
+ 	return 0;
  
- int iommu_probe_device(struct device *dev)
+ out_release:
+-	ops->release_device(dev);
++	if (ops->release_device)
++		ops->release_device(dev);
+ 
+ out_module_put:
+ 	module_put(ops->owner);
+@@ -337,7 +338,8 @@ void iommu_release_device(struct device *dev)
+ 	iommu_device_unlink(dev->iommu->iommu_dev, dev);
+ 
+ 	ops = dev_iommu_ops(dev);
+-	ops->release_device(dev);
++	if (ops->release_device)
++		ops->release_device(dev);
+ 
+ 	iommu_group_remove_device(dev);
+ 	module_put(ops->owner);
+diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
+index f09aedfdd462..428919a474c1 100644
+--- a/drivers/iommu/msm_iommu.c
++++ b/drivers/iommu/msm_iommu.c
+@@ -394,10 +394,6 @@ static struct iommu_device *msm_iommu_probe_device(struct device *dev)
+ 	return &iommu->iommu;
+ }
+ 
+-static void msm_iommu_release_device(struct device *dev)
+-{
+-}
+-
+ static int msm_iommu_attach_dev(struct iommu_domain *domain, struct device *dev)
  {
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops;
- 	struct iommu_group *group;
- 	int ret;
+ 	int ret = 0;
+@@ -677,7 +673,6 @@ irqreturn_t msm_iommu_fault_handler(int irq, void *dev_id)
+ static struct iommu_ops msm_iommu_ops = {
+ 	.domain_alloc = msm_iommu_domain_alloc,
+ 	.probe_device = msm_iommu_probe_device,
+-	.release_device = msm_iommu_release_device,
+ 	.device_group = generic_device_group,
+ 	.pgsize_bitmap = MSM_IOMMU_PGSIZES,
+ 	.of_xlate = qcom_iommu_of_xlate,
+diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
+index c54ab477b8fd..a84c63518773 100644
+--- a/drivers/iommu/sun50i-iommu.c
++++ b/drivers/iommu/sun50i-iommu.c
+@@ -738,8 +738,6 @@ static struct iommu_device *sun50i_iommu_probe_device(struct device *dev)
+ 	return &iommu->iommu;
+ }
  
-@@ -313,6 +313,7 @@ int iommu_probe_device(struct device *dev)
- 	mutex_unlock(&group->mutex);
- 	iommu_group_put(group);
+-static void sun50i_iommu_release_device(struct device *dev) {}
+-
+ static struct iommu_group *sun50i_iommu_device_group(struct device *dev)
+ {
+ 	struct sun50i_iommu *iommu = sun50i_iommu_from_dev(dev);
+@@ -764,7 +762,6 @@ static const struct iommu_ops sun50i_iommu_ops = {
+ 	.domain_alloc	= sun50i_iommu_domain_alloc,
+ 	.of_xlate	= sun50i_iommu_of_xlate,
+ 	.probe_device	= sun50i_iommu_probe_device,
+-	.release_device	= sun50i_iommu_release_device,
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+ 		.attach_dev	= sun50i_iommu_attach_device,
+ 		.detach_dev	= sun50i_iommu_detach_device,
+diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
+index a6700a40a6f8..e5ca3cf1a949 100644
+--- a/drivers/iommu/tegra-gart.c
++++ b/drivers/iommu/tegra-gart.c
+@@ -246,10 +246,6 @@ static struct iommu_device *gart_iommu_probe_device(struct device *dev)
+ 	return &gart_handle->iommu;
+ }
  
-+	ops = dev_iommu_ops(dev);
- 	if (ops->probe_finalize)
- 		ops->probe_finalize(dev);
+-static void gart_iommu_release_device(struct device *dev)
+-{
+-}
+-
+ static int gart_iommu_of_xlate(struct device *dev,
+ 			       struct of_phandle_args *args)
+ {
+@@ -273,7 +269,6 @@ static void gart_iommu_sync(struct iommu_domain *domain,
+ static const struct iommu_ops gart_iommu_ops = {
+ 	.domain_alloc	= gart_iommu_domain_alloc,
+ 	.probe_device	= gart_iommu_probe_device,
+-	.release_device	= gart_iommu_release_device,
+ 	.device_group	= generic_device_group,
+ 	.pgsize_bitmap	= GART_IOMMU_PGSIZES,
+ 	.of_xlate	= gart_iommu_of_xlate,
+diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
+index 1fea68e551f1..2a8de975fe63 100644
+--- a/drivers/iommu/tegra-smmu.c
++++ b/drivers/iommu/tegra-smmu.c
+@@ -864,8 +864,6 @@ static struct iommu_device *tegra_smmu_probe_device(struct device *dev)
+ 	return &smmu->iommu;
+ }
  
+-static void tegra_smmu_release_device(struct device *dev) {}
+-
+ static const struct tegra_smmu_group_soc *
+ tegra_smmu_find_group(struct tegra_smmu *smmu, unsigned int swgroup)
+ {
+@@ -966,7 +964,6 @@ static int tegra_smmu_of_xlate(struct device *dev,
+ static const struct iommu_ops tegra_smmu_ops = {
+ 	.domain_alloc = tegra_smmu_domain_alloc,
+ 	.probe_device = tegra_smmu_probe_device,
+-	.release_device = tegra_smmu_release_device,
+ 	.device_group = tegra_smmu_device_group,
+ 	.of_xlate = tegra_smmu_of_xlate,
+ 	.pgsize_bitmap = SZ_4K,
 -- 
 2.36.1.dirty
 

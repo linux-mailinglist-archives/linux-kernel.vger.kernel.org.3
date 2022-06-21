@@ -2,153 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4CD55298C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA9355298F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344717AbiFUCz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 22:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S244441AbiFUC7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234350AbiFUCzX (ORCPT
+        with ESMTP id S234350AbiFUC7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:55:23 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0337B1C12C;
-        Mon, 20 Jun 2022 19:55:16 -0700 (PDT)
-X-UUID: f1ea7741739e4e09be4a31db22552025-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:ba2e26d5-d786-49fc-8cfa-cf5aa9e53d1a,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:40
-X-CID-INFO: VERSION:1.1.6,REQID:ba2e26d5-d786-49fc-8cfa-cf5aa9e53d1a,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:40
-X-CID-META: VersionHash:b14ad71,CLOUDID:34ca972d-1756-4fa3-be7f-474a6e4be921,C
-        OID:ff90d4188138,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f1ea7741739e4e09be4a31db22552025-20220621
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1105904644; Tue, 21 Jun 2022 10:55:08 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 21 Jun 2022 10:55:06 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 10:55:06 +0800
-Message-ID: <218de671054a2c02d47a0bb4a31a0b07d24d7eee.camel@mediatek.com>
-Subject: Re: [PATCH v12 11/14] drm/mediatek: dpi: Add tvd_clk enable/disable
- flow
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 10:55:05 +0800
-In-Reply-To: <20220620121028.29234-12-rex-bc.chen@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-         <20220620121028.29234-12-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 20 Jun 2022 22:59:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D480515A38
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655780345;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dhNf5VQ2CZlb1zUdYetihyiK9C1Amm6yrig07SxOLrA=;
+        b=XVjDyTmpMNVSouaW12zb3WMTNxS7i9oRC94wJ6JWeJOG19GMpnbx8SZBv2VZgxOquJwJNA
+        dS3vuJ6PQG9OjSajFRelIzT3DrlZGNNOjfmPY9uvF+WnVzgv7GdtSt37VhG1MJ/5pI3ok1
+        N47V477PpdAD/Hwe1t3Nyliu/N4Ljz0=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-348-OgiApl-4MFK8xQIvyjQWlA-1; Mon, 20 Jun 2022 22:59:04 -0400
+X-MC-Unique: OgiApl-4MFK8xQIvyjQWlA-1
+Received: by mail-lf1-f71.google.com with SMTP id c21-20020a056512105500b00479762353a4so6312177lfb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:59:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dhNf5VQ2CZlb1zUdYetihyiK9C1Amm6yrig07SxOLrA=;
+        b=LkyfHDpT6Uyec/YNr9lA8zuJSG8IyVqK8SRHNvQmTaUHLSbs4iOAVOLuBIn3h8n50O
+         qSXZNNiq0UnrlBHDzvxtGS351RYKJZ4Lmn9eHstps6nK7RzwwqasZnwubve97K7k9ctX
+         k65tjhyxUvurxRzZmmfzI8nVbsq/caZ9BlozfJm4SuirDBh7Lcg5eOgWkEOo1jUPAwbv
+         MEy/zPKpBe9SYiqdAyzwgEvDvKAKqyWuQqO9fzQPWMZFMjwjwLPkxtLh0ZiG31hz2BAt
+         Z2p5TfQIW59ArETkBfqXqjTPWwU/fNVgL3jtMLP/fpV1Vv2siS1XIX7Ofogcsl9eO1cZ
+         hjLw==
+X-Gm-Message-State: AJIora9XDn0fg2nEuUu3zlUR+FcK43+0zphjCvFN2ooYvd7Vko+BnnDa
+        f5gPhj89orWwpRcV5aq8l3K0GFdmQaJcU/ZqCWbVOUyoz4eexTjRN9oFcPf8utF+A+lGVdRnxw9
+        G1SwpcMpTwkHL/QnmcBtEQt1mLgPtMlj5K/I0Qpn2
+X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id d21-20020a05651c089500b00250c5ecbc89mr13499806ljq.251.1655780342872;
+        Mon, 20 Jun 2022 19:59:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s5BLy+ZqwEf9mB09ZKSQV92I6GPkiZ5JusIUOOeAvPSFUNj/tkmDvxSH81jDgGB5d0TqIUiNTGN8kE+P9NQhQ=
+X-Received: by 2002:a05:651c:895:b0:250:c5ec:bc89 with SMTP id
+ d21-20020a05651c089500b00250c5ecbc89mr13499797ljq.251.1655780342664; Mon, 20
+ Jun 2022 19:59:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220616132725.50599-1-elic@nvidia.com> <20220616132725.50599-2-elic@nvidia.com>
+ <CACGkMEue-X8-u0Z=EwUbBSV6vmomwNy52Tot3Zf+0pu4Pztutg@mail.gmail.com> <DM8PR12MB54004277F21D682A3EE6D1C1ABB09@DM8PR12MB5400.namprd12.prod.outlook.com>
+In-Reply-To: <DM8PR12MB54004277F21D682A3EE6D1C1ABB09@DM8PR12MB5400.namprd12.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 21 Jun 2022 10:58:51 +0800
+Message-ID: <CACGkMEth7Nw4pwsa9zwmhacZ22Oue44gSa+YaCKF8qP_R+3gJw@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/3] vdpa/mlx5: Implement susupend virtqueue callback
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     eperezma <eperezma@redhat.com>, mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Parav Pandit <parav@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+On Mon, Jun 20, 2022 at 9:09 PM Eli Cohen <elic@nvidia.com> wrote:
+>
+> > -----Original Message-----
+> > From: Jason Wang <jasowang@redhat.com>
+> > Sent: Monday, June 20, 2022 11:56 AM
+> > To: Eli Cohen <elic@nvidia.com>
+> > Cc: eperezma <eperezma@redhat.com>; mst <mst@redhat.com>; virtualization <virtualization@lists.linux-foundation.org>; linux-
+> > kernel <linux-kernel@vger.kernel.org>; Si-Wei Liu <si-wei.liu@oracle.com>; Parav Pandit <parav@nvidia.com>
+> > Subject: Re: [PATCH RFC 1/3] vdpa/mlx5: Implement susupend virtqueue callback
+> >
+> > On Thu, Jun 16, 2022 at 9:27 PM Eli Cohen <elic@nvidia.com> wrote:
+> > >
+> > > Implement the suspend callback allowing to suspend the virtqueues so
+> > > they stop processing descriptors. This is required to allow the shadow
+> > > virtqueue to kick in.
+> > >
+> > > Signed-off-by: Eli Cohen <elic@nvidia.com>
+> > > ---
+> > >  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 68 +++++++++++++++++++++++++++++-
+> > >  include/linux/mlx5/mlx5_ifc_vdpa.h |  8 ++++
+> > >  2 files changed, 75 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > index fb0b23e71383..ea4bc8a0cd25 100644
+> > > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > @@ -895,6 +895,7 @@ static int create_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
+> > >         if (err)
+> > >                 goto err_cmd;
+> > >
+> > > +       mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_STATE_INIT;
+> > >         kfree(in);
+> > >         mvq->virtq_id = MLX5_GET(general_obj_out_cmd_hdr, out, obj_id);
+> > >
+> > > @@ -922,6 +923,7 @@ static void destroy_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtq
+> > >                 mlx5_vdpa_warn(&ndev->mvdev, "destroy virtqueue 0x%x\n", mvq->virtq_id);
+> > >                 return;
+> > >         }
+> > > +       mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_NONE;
+> > >         umems_destroy(ndev, mvq);
+> > >  }
+> > >
+> > > @@ -1121,6 +1123,20 @@ static int query_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueu
+> > >         return err;
+> > >  }
+> > >
+> > > +static bool is_valid_state_change(int oldstate, int newstate)
+> > > +{
+> > > +       switch (oldstate) {
+> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_INIT:
+> > > +               return newstate == MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY;
+> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY:
+> > > +               return newstate == MLX5_VIRTIO_NET_Q_OBJECT_STATE_SUSPEND;
+> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_SUSPEND:
+> > > +       case MLX5_VIRTIO_NET_Q_OBJECT_STATE_ERR:
+> > > +       default:
+> > > +               return false;
+> > > +       }
+> > > +}
+> > > +
+> > >  static int modify_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq, int state)
+> > >  {
+> > >         int inlen = MLX5_ST_SZ_BYTES(modify_virtio_net_q_in);
+> > > @@ -1130,6 +1146,12 @@ static int modify_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
+> > >         void *in;
+> > >         int err;
+> > >
+> > > +       if (mvq->fw_state == MLX5_VIRTIO_NET_Q_OBJECT_NONE)
+> > > +               return 0;
+> > > +
+> > > +       if (!is_valid_state_change(mvq->fw_state, state))
+> > > +               return -EINVAL;
+> > > +
+> > >         in = kzalloc(inlen, GFP_KERNEL);
+> > >         if (!in)
+> > >                 return -ENOMEM;
+> > > @@ -1991,6 +2013,7 @@ static void mlx5_vdpa_set_vq_ready(struct vdpa_device *vdev, u16 idx, bool ready
+> > >         struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+> > >         struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+> > >         struct mlx5_vdpa_virtqueue *mvq;
+> > > +       int err;
+> > >
+> > >         if (!mvdev->actual_features)
+> > >                 return;
+> > > @@ -2004,8 +2027,16 @@ static void mlx5_vdpa_set_vq_ready(struct vdpa_device *vdev, u16 idx, bool ready
+> > >         }
+> > >
+> > >         mvq = &ndev->vqs[idx];
+> > > -       if (!ready)
+> > > +       if (!ready) {
+> > >                 suspend_vq(ndev, mvq);
+> > > +       } else {
+> > > +               err = modify_virtqueue(ndev, mvq, MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY);
+> > > +               if (err) {
+> > > +                       mlx5_vdpa_warn(mvdev, "modify VQ %d to ready failed (%d)\n", idx, err);
+> > > +                       ready = false;
+> > > +               }
+> > > +       }
+> > > +
+> > >
+> > >         mvq->ready = ready;
+> > >  }
+> > > @@ -2732,6 +2763,39 @@ static int mlx5_vdpa_get_vendor_vq_stats(struct vdpa_device *vdev, u16 idx,
+> > >         return err;
+> > >  }
+> > >
+> > > +static void mlx5_vdpa_cvq_suspend(struct mlx5_vdpa_dev *mvdev, bool suspend)
+> > > +{
+> > > +       struct mlx5_control_vq *cvq;
+> > > +
+> > > +       if (!(mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
+> > > +               return;
+> > > +
+> > > +       cvq = &mvdev->cvq;
+> > > +       cvq->ready = !suspend;
+> > > +}
+> >
+> > It looks to me we need to synchronize this with reslock. And this
+> > probably deserve a dedicated fix.
+> >
+>
+> It's already being held by mlx5_vdpa_suspend
 
-On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
-> We should enable/disable tvd_clk when power_on/power_off, so add this
-> patch to do this.
+Right, but I meant this seems kind of duplicated with set_cvq_ready(),
+can we unify them? (We don't hold reslock there).
 
-Without this patch, what would happen?
-It seems this patch is redundant for these SoCs:
+>
+> > > +
+> > > +static int mlx5_vdpa_suspend(struct vdpa_device *vdev, bool suspend)
+> > > +{
+> > > +       struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+> > > +       struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+> > > +       struct mlx5_vdpa_virtqueue *mvq;
+> > > +       int i;
+> > > +
+> > > +       if (!suspend) {
+> > > +               mlx5_vdpa_warn(mvdev, "Resume of virtqueues is not supported\n");
+> > > +               return -EOPNOTSUPP;
+> > > +       }
+> > > +
+> > > +       down_write(&ndev->reslock);
+> > > +       for (i = 0; i < ndev->cur_num_vqs; i++) {
+> > > +               mvq = &ndev->vqs[i];
+> > > +               suspend_vq(ndev, mvq);
+> > > +       }
+> > > +       mlx5_vdpa_cvq_suspend(mvdev, suspend);
+> >
+> > Do we need to synchronize with the carrier work here? Otherwise we may
+> > get config notification after suspending.
+> >
+>
+> Are you saying we should not allow carrier updates after the VQs have been suspended?
+> Link state should not be related to suspension of VQs.
 
-static const struct of_device_id mtk_dpi_of_ids[] = {
-	{ .compatible = "mediatek,mt2701-dpi",
-	  .data = &mt2701_conf,
-	},
-	{ .compatible = "mediatek,mt8173-dpi",
-	  .data = &mt8173_conf,
-	},
-	{ .compatible = "mediatek,mt8183-dpi",
-	  .data = &mt8183_conf,
-	},
-	{ .compatible = "mediatek,mt8192-dpi",
-	  .data = &mt8192_conf,
-	},
-	{ },
-};
+Yes, it's not related to the VQ but we suspend the device here. So we
+probably need to flush the carrier work.
 
-Regards,
-CK
+Thanks
 
-
-> 
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 2717b1741b7a..f83ecb154457 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -455,6 +455,7 @@ static void mtk_dpi_power_off(struct mtk_dpi
-> *dpi)
->  	mtk_dpi_disable(dpi);
->  	clk_disable_unprepare(dpi->pixel_clk);
->  	clk_disable_unprepare(dpi->engine_clk);
-> +	clk_disable_unprepare(dpi->tvd_clk);
->  }
->  
->  static int mtk_dpi_power_on(struct mtk_dpi *dpi)
-> @@ -464,10 +465,16 @@ static int mtk_dpi_power_on(struct mtk_dpi
-> *dpi)
->  	if (++dpi->refcount != 1)
->  		return 0;
->  
-> +	ret = clk_prepare_enable(dpi->tvd_clk);
-> +	if (ret) {
-> +		dev_err(dpi->dev, "Failed to enable tvd pll: %d\n",
-> ret);
-> +		goto err_refcount;
-> +	}
-> +
->  	ret = clk_prepare_enable(dpi->engine_clk);
->  	if (ret) {
->  		dev_err(dpi->dev, "Failed to enable engine clock:
-> %d\n", ret);
-> -		goto err_refcount;
-> +		goto err_engine;
->  	}
->  
->  	ret = clk_prepare_enable(dpi->pixel_clk);
-> @@ -484,6 +491,8 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
->  
->  err_pixel:
->  	clk_disable_unprepare(dpi->engine_clk);
-> +err_engine:
-> +	clk_disable_unprepare(dpi->tvd_clk);
->  err_refcount:
->  	dpi->refcount--;
->  	return ret;
+>
+> > > +       up_write(&ndev->reslock);
+> > > +       return 0;
+> > > +}
+> > > +
+> > >  static const struct vdpa_config_ops mlx5_vdpa_ops = {
+> > >         .set_vq_address = mlx5_vdpa_set_vq_address,
+> > >         .set_vq_num = mlx5_vdpa_set_vq_num,
+> > > @@ -2762,6 +2826,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
+> > >         .get_generation = mlx5_vdpa_get_generation,
+> > >         .set_map = mlx5_vdpa_set_map,
+> > >         .free = mlx5_vdpa_free,
+> > > +       .suspend = mlx5_vdpa_suspend,
+> >
+> > I don't see the vDPA bus patch to enable this method. Or anything I missed here?
+> >
+> > Thanks
+> >
+> > >  };
+> > >
+> > >  static int query_mtu(struct mlx5_core_dev *mdev, u16 *mtu)
+> > > @@ -2827,6 +2892,7 @@ static void init_mvqs(struct mlx5_vdpa_net *ndev)
+> > >                 mvq->index = i;
+> > >                 mvq->ndev = ndev;
+> > >                 mvq->fwqp.fw = true;
+> > > +               mvq->fw_state = MLX5_VIRTIO_NET_Q_OBJECT_NONE;
+> > >         }
+> > >         for (; i < ndev->mvdev.max_vqs; i++) {
+> > >                 mvq = &ndev->vqs[i];
+> > > diff --git a/include/linux/mlx5/mlx5_ifc_vdpa.h b/include/linux/mlx5/mlx5_ifc_vdpa.h
+> > > index 4414ed5b6ed2..423562f39d3c 100644
+> > > --- a/include/linux/mlx5/mlx5_ifc_vdpa.h
+> > > +++ b/include/linux/mlx5/mlx5_ifc_vdpa.h
+> > > @@ -150,6 +150,14 @@ enum {
+> > >         MLX5_VIRTIO_NET_Q_OBJECT_STATE_ERR      = 0x3,
+> > >  };
+> > >
+> > > +/* This indicates that the object was not created or has alreadyi
+> > > + * been desroyed. It is very safe to assume that this object will never
+> > > + * have so many states
+> > > + */
+> > > +enum {
+> > > +       MLX5_VIRTIO_NET_Q_OBJECT_NONE = 0xffffffff
+> > > +};
+> > > +
+> > >  enum {
+> > >         MLX5_RQTC_LIST_Q_TYPE_RQ            = 0x0,
+> > >         MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q  = 0x1,
+> > > --
+> > > 2.35.1
+> > >
+>
 

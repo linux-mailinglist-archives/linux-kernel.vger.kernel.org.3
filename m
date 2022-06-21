@@ -2,74 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C223553681
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84CB55367F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353009AbiFUPmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S1352967AbiFUPml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352981AbiFUPmk (ORCPT
+        with ESMTP id S243753AbiFUPmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:42:40 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B642F2B27A;
-        Tue, 21 Jun 2022 08:42:35 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1655826148tzkp4njf
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 21 Jun 2022 23:42:24 +0800 (CST)
-X-QQ-SSF: 0100000000700080B000E00A0000000
-X-QQ-FEAT: HoyAXBWgsknanSWZcWN00IISLxs+jEQAg/Ts8xjC0YrVNWLL5zWmCO+pKLt/g
-        HLqNsVNOLfPhRiOusn8F0tDBxlm3rR2YSKe/8WQ89s6Ob7ymF2SvdC6pbFQYrkAkzS2pcW7
-        sZVSJ1rknkYrsjRpKerdjcBZ1f5zyLSQMaJer2MLRZAk/UPbS6S4qJH4ZcUM7W1qpe6DpwM
-        EWc6yvZ8XN9bx/wM8icJVkeQEj3J/xG+VRS/8LrPnJLcKIQnSZhYxWcBYIUu6+oVyhulNBb
-        9jkm03vwQ6lTXal8MuowaA0u1sQHU377NrPcJY1ryEHyi4+IK3UlYw5+4IUMj8qqqyIzmPH
-        Vk+FPdB
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     robh+dt@kernel.org, frowand.list@gmail.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] of: device - Remove duplicate 'of' in two places.
-Date:   Tue, 21 Jun 2022 23:42:22 +0800
-Message-Id: <20220621154222.13714-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 11:42:39 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92DF2C643
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:42:37 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id p63so10382665qkd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=j+TmZokpENwEZtYw+9zpADRR+ouuJfl5CqudgyGGVMI=;
+        b=rYLR4rn00kFhjq3jMMRY7EV3DBXR7qIPak/L8qbBz7KbspyXsDYwanSNawW1tKwOFH
+         ewJrprj9XAeaMHMnCVlg1mhbGk8X6etye45/t42emj4n96CBFUyK5gOLOtftDOcdpZMh
+         908EbU0jMLl63DlEFVUzOjzrIiEDup69vNvC3BVREh9cTbfasxeL2JzuFMVynhfUHn98
+         SGF8a9JKO8Pf8V6BWlSMg2+9tMhrZdQC/G3V+w+lJ0Ok91h8ogWI0K7twjgTqZVkmTxE
+         6XVNDuCjL70HX8cR/4q2TUO+k8WZac1WO63xDQo9PTA6W60gd87FacoEKmclkA3dwS9D
+         TH+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=j+TmZokpENwEZtYw+9zpADRR+ouuJfl5CqudgyGGVMI=;
+        b=61XLGlpFJAnOlW7z6S5gHtHZecPUONFc9SwHx3C1cv93drIoewTvQ0q1IWG1XJZtiI
+         2JxWUWtxkiRnpg2K6z//ygQvLfSHxA7JEwfWSSDkrdnaCA4Iz84ibPmasRrOas6pnjCT
+         z5Z5taVZhA03xiPrnx4X0YezIya3H2QoS94J+fAryy9DrEUDyNt97Th8biMkOhhiO9oM
+         9hA2d3HD6ARg/ueiD3BzEvo9iNZM/FP5qZv9XrSNktjBcDFalpThtVnT/pezj0eLHuqH
+         YZEGWEMi6TRnEjh/9JZQZkfOPdtZ6W0PnNdNhOXZ9pRWnzX05b1RJJZkamCbUtsNme0m
+         LlmQ==
+X-Gm-Message-State: AJIora81msEgB03sYMSw6pu29zoqAqTgkXQwCjKpHV+UTkOwhebwQl6b
+        x0PyCkTAy1qZ/hWZOz6nd3di0EwqNSRDOzGv
+X-Google-Smtp-Source: AGRyM1vE+SSLFEkr3ihfgV0r8gtNBCmLkJBjCPAUN5aHdi7vF4C6XWO85PiLvuKGcwPkdcTuFdcspg==
+X-Received: by 2002:a05:620a:280d:b0:67d:2480:fdea with SMTP id f13-20020a05620a280d00b0067d2480fdeamr20435321qkp.157.1655826156800;
+        Tue, 21 Jun 2022 08:42:36 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05620a424a00b006a79d8c8198sm14389324qko.135.2022.06.21.08.42.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 08:42:36 -0700 (PDT)
+Message-ID: <2aabc41c8432d09b7ceeb8e67144a639d3d86c72.camel@ndufresne.ca>
+Subject: Re: DMA-buf and uncached system memory
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Andy.Hsieh" <andy.hsieh@mediatek.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org, lkml <linux-kernel@vger.kernel.org>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Sharma, Shashank" <Shashank.Sharma@amd.com>
+Date:   Tue, 21 Jun 2022 11:42:35 -0400
+In-Reply-To: <39f7f41a-af8d-4700-37da-9401455afb98@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <cdb508e49eb1439f4e4c327d2a6738f219e04bf8.camel@ndufresne.ca>
+         <5822b325-766e-ce3c-50eb-d7f54f14fd0b@mediatek.com>
+         <39f7f41a-af8d-4700-37da-9401455afb98@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-file: ./drivers/of/device.c
-line: 22
- * @matches: array of of device match structures to search in
-changed to
- * @matches: array of device match structures to search in
+Hi Christian and Andy,
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/of/device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Le mardi 21 juin 2022 =C3=A0 12:34 +0200, Christian K=C3=B6nig a =C3=A9crit=
+=C2=A0:
+> =C2=A0Hi Andy,
+> =C2=A0
+> =C2=A0Am 21.06.22 um 12:17 schrieb Andy.Hsieh:
+> =C2=A0
+> > On 2/16/21 4:39 AM, Nicolas Dufresne wrote:
+> > > Le lundi 15 f=C3=A9vrier 2021 =C3=A0 09:58 +0100, Christian K=C3=B6ni=
+g a =C3=A9crit=C2=A0:
+> > > > Hi guys,
+> > > >=20
+> > > > we are currently working an Freesync and direct scan out from syste=
+m=20
+> > > > memory on AMD APUs in A+A laptops.
+> > > >=20
+> > > > On problem we stumbled over is that our display hardware needs to s=
+can=20
+> > > > out from uncached system memory and we currently don't have a way t=
+o=20
+> > > > communicate that through DMA-buf.
+> > > >=20
+> > > > For our specific use case at hand we are going to implement somethi=
+ng=20
+> > > > driver specific, but the question is should we have something more=
+=20
+> > > > generic for this?
+> > >=20
+> > > Hopefully I'm getting this right, but this makes me think of a long
+> > > standing
+> > > issue I've met with Intel DRM and UVC driver. If I let the UVC driver
+> > > allocate
+> > > the buffer, and import the resulting DMABuf (cacheable memory written=
+ with
+> > > a cpu
+> > > copy in the kernel) into DRM, we can see cache artifact being display=
+ed.
+> > > While
+> > > if I use the DRM driver memory (dumb buffer in that case) it's clean
+> > > because
+> > > there is a driver specific solution to that.
+> > >=20
+> > > There is no obvious way for userspace application to know what's is
+> > > right/wrong
+> > > way and in fact it feels like the kernel could solve this somehow wit=
+hout
+> > > having
+> > > to inform userspace (perhaps).
+> > >=20
+> > > >=20
+> > > > After all the system memory access pattern is a PCIe extension and =
+as=20
+> > > > such something generic.
+> > > >=20
+> > > > Regards,
+> > > > Christian.
+> > >=20
+> > >=20
+> >=20
+> > Hi All,
+> >=20
+> > We also encountered the UVC cache issue on ARMv8 CPU in Mediatek SoC wh=
+en
+> > using UVC dmabuf-export and feeding the dmabuf to the DRM display by th=
+e
+> > following GStreamer command:
+> >=20
+> > # gst-launch-1.0 v4l2src device=3D/dev/video0 io-mode=3Ddmabuf ! kmssin=
+k
+> >=20
+> > UVC driver uses videobuf2-vmalloc to allocate buffers and is able to ex=
+port
+> > them as dmabuf. But UVC uses memcpy() to fill the frame buffer by CPU
+> > without
+> > flushing the cache. So if the display hardware directly uses the buffer=
+, the
+> > image shown on the screen will be dirty.
+> >=20
+> > Here are some experiments:
+> >=20
+> > 1. By doing some memory operations (e.g. devmem) when streaming the UVC=
+,
+> > =C2=A0=C2=A0=C2=A0the issue is mitigated. I guess the cache is swapped =
+rapidly.
+> > 2. By replacing the memcpy() with memcpy_flushcache() in the UVC driver=
+,
+> > =C2=A0=C2=A0=C2=A0the issue disappears.
+> > 3. By adding .finish callback in videobuf2-vmalloc.c to flush the cache
+> > =C2=A0=C2=A0=C2=A0before returning the buffer, the issue disappears.
+> >=20
+> > It seems to lack a cache flush stage in either UVC or Display. We may a=
+lso
+> > need communication between the producer and consumer. Then, they can de=
+cide
+> > who is responsible for the flushing to avoid flushing cache uncondition=
+ally
+> > leading to the performance impact.
+> =C2=A0
+> =C2=A0Well, that's not what this mail thread was all about.
+> =C2=A0
+> =C2=A0The issue you are facing is that somebody is forgetting to flush ca=
+ches, but
+> the issue discussed in this thread here is that we have hardware which
+> bypasses caches altogether.
+> =C2=A0
+> =C2=A0As far as I can see in your case UVC just allocates normal cached s=
+ystem
+> memory through videobuf2-vmalloc() and it is perfectly valid to fill that
+> using memcpy().
+> =C2=A0
+> =C2=A0If some hardware then accesses those buffers bypassing CPU caches t=
+hen it is
+> the responsibility of the importing driver and/or DMA subsystem to flush =
+the
+> caches accordingly.
 
-diff --git a/drivers/of/device.c b/drivers/of/device.c
-index 874f031442dc..1582388156a9 100644
---- a/drivers/of/device.c
-+++ b/drivers/of/device.c
-@@ -19,7 +19,7 @@
- 
- /**
-  * of_match_device - Tell if a struct device matches an of_device_id list
-- * @matches: array of of device match structures to search in
-+ * @matches: array of device match structures to search in
-  * @dev: the of device structure to match against
-  *
-  * Used by a driver to check whether an platform_device present in the
--- 
-2.17.1
+I've tracked this down to videobuf2-vmalloc.c failing to look for coherency
+during "attach()". It is also missing begin_/end access implementation for =
+the
+case it get attached to a non-coherent device. Seems fixable though, but "I=
+'m
+far from an expert", but more some random person reading code and comments.
+
+regards,
+Nicolas
+
+> =C2=A0
+> =C2=A0Regards,
+> =C2=A0Christian.
+> =C2=A0
+> =C2=A0
+> >=20
+> > Regards,
+> > Andy Hsieh
+> >=20
+> > ************* MEDIATEK Confidentiality Notice ********************
+> > The information contained in this e-mail message (including any=20
+> > attachments) may be confidential, proprietary, privileged, or otherwise
+> > exempt from disclosure under applicable laws. It is intended to be=20
+> > conveyed only to the designated recipient(s). Any use, dissemination,=
+=20
+> > distribution, printing, retaining or copying of this e-mail (including =
+its=20
+> > attachments) by unintended recipient(s) is strictly prohibited and may=
+=20
+> > be unlawful. If you are not an intended recipient of this e-mail, or be=
+lieve
+> > that you have received this e-mail in error, please notify the sender=
+=20
+> > immediately (by replying to this e-mail), delete any and all copies of=
+=20
+> > this e-mail (including any attachments) from your system, and do not
+> > disclose the content of this e-mail to any other person. Thank you!
+> =C2=A0
+> =C2=A0
 

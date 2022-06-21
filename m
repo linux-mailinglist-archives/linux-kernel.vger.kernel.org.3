@@ -2,230 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D8C553D6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC983553D72
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355292AbiFUVUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S1356069AbiFUVVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355902AbiFUVTp (ORCPT
+        with ESMTP id S1355933AbiFUVUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:19:45 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D2135A9E;
-        Tue, 21 Jun 2022 14:05:30 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id c83so11127973qke.3;
-        Tue, 21 Jun 2022 14:05:30 -0700 (PDT)
+        Tue, 21 Jun 2022 17:20:46 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AB1427E2;
+        Tue, 21 Jun 2022 14:06:20 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id w17so20598954wrg.7;
+        Tue, 21 Jun 2022 14:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HeP7RDe/WRpFOY2lnHR3tmueb25njNH1IUveff2RKuw=;
-        b=RNn2c0pBugaiXV6bz9gavvC/w8yIBIIHbIyYCrjfQW0kPPaZGrUfvMCZM+vlZtSq46
-         xbkJiHnOQ8U9AZ5bJALjEDIgvghARiuR1y+r7tHE5q0RemuV/DIOvO3ylhMj0QI3n8ol
-         wrlFvdzyyBm8O6LU7LWWcjYJ+sf5wU/qQ5EkVmFuZd8XPB/J3xb6xjnOGJxtMD/jB6pf
-         tZRzvd37kq2B+tHdDdh/bBlVOjXWa9p+XKqEiJw5I5aysYUZnpD5UuoDZFU5x1QDAK1P
-         muMB3ab7gsVimZJEjSe6ctpLJg/NewPf4IIzqX7dGL3Q2Q0DJc0+btEokJVeItBnotPl
-         WmQQ==
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=B+AifBFHSjsojzLa/Un/BRuE3LfBPqi3dOTl8DfRwag=;
+        b=jUd5EpK/oDVgY0PrmyIj4MbqMNgKMDJSXTdrkx7aDI+kKFIwzflLFxbl8tnmBcS4Tp
+         gB4gaM7Xma3+XSg+VGLSGTTgAuKWgIh6oZEa3B1gj7CGcxjYDaT+mvOLqiK71CJ9lCAf
+         VLJs+n52lPXvDYIMyuayGTeKnVXRXd+7SYpLLXlfBBqdyIzNsIzgV1Pov6IBTxeWpOLA
+         y2WofGIr0wPjngMAcYFM5cXxiNo4M8n8MEvUAduAxgAsmqhRyoZLMLWAdXvCTVIIBRWG
+         Zr/aISNe4jZxXrKY34Xe5QxN9wI5wZzSkhMqFa50UXd8ZPYof9DpGUqyIGw0r9T09fDC
+         iUAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HeP7RDe/WRpFOY2lnHR3tmueb25njNH1IUveff2RKuw=;
-        b=KrpWcJEd/q2Tsjlb/3x8aQonpeBI2OdyZlDdv2UbxpieCV9ekKR6nFGuUSPhGwAZJQ
-         jo8xK7WPA7J9UGg1EZYu4NuCBOS4yy721hZ3EKMcbsgLeRYlpYPggRFlgcQZ9huWQUTh
-         QVUxb6W5MxgMrrAdA43HaWgPhJSC0jeVz/ifFBZ1pGF9nle2OnsgX148bwfymw79BncF
-         Il8R1uLFWhJNE+NISwO3DttAvtQd1VfN7iCo3fd+Lmf5aFl9CzuDohaAv3XLWQ3GYZCf
-         F06RQGVRxeTHp5adiQFEHuk45UMaXflOPtXMWg0CuNSAkv73tNKHy8zhwwYibpcLEqlw
-         O7uw==
-X-Gm-Message-State: AJIora8FKQo2wnmTXIyaDnskUkBpdtYHNF4mnY227fouEfXXn4Gfwg4N
-        gKGSjJvjRejvSkF+5ycpkEGPMsIpqdT7m8s5JnR/uFTRnoo=
-X-Google-Smtp-Source: AGRyM1sSz3lGLVvNvrBZVOZaQYqXP7lJyPtshZ2BVHVzuAw+yQapRXKEcg7t/xS1RXtwoheTfAdGz+DbTHKsHhr6cWY=
-X-Received: by 2002:a05:620a:2450:b0:6a6:d264:2b88 with SMTP id
- h16-20020a05620a245000b006a6d2642b88mr21180101qkn.25.1655845528278; Tue, 21
- Jun 2022 14:05:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621112330.448754-1-robimarko@gmail.com> <20220621203211.GA1330530@bhelgaas>
-In-Reply-To: <20220621203211.GA1330530@bhelgaas>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 21 Jun 2022 23:05:17 +0200
-Message-ID: <CAOX2RU7idTVcW6ivqs3V_Ep33RoHZs1zt0jav-_z2D7xpKJstw@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     svarbanov@mm-sol.com, Andy Gross <agross@kernel.org>,
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=B+AifBFHSjsojzLa/Un/BRuE3LfBPqi3dOTl8DfRwag=;
+        b=FA7hlEJhmVDaLCVRP6TwLLfR13LrYkKswmyxLeYOraK895gcr0C7mnMeZBpjTDkbcY
+         dSa7rc52SOw7pLnln5eaq8ZeVJFPUXILL5TpuhlwSYlxWp/SVh5VHacJLg02eu4Mgp5z
+         w1uFtWJ13oSrP5Lm6vpqTPvgXKDSjXFQRJA9FvoQWc7byK9DNADESI+dg6B8dBWHgK/W
+         jNCplxjz8ZHQ033FW8oXYl3NUCT7OlEl8EXFjaXBhzt3V/Tylqp4KlEOlprZLD0Rp6Vh
+         z4l0FOkBZ2wc0JpCH3Z4pH1Sze18HcsXzywaeHC1Ca8q6k1bvW0QGQUZJorqkUHXNwRX
+         AygA==
+X-Gm-Message-State: AJIora8XbEDEpnX5oSa3dMSwKy6p0mkEhuEazFsp3DnUOocG3pVktwFD
+        qd/Z4lSC1Caw+QjcOnEsrMU=
+X-Google-Smtp-Source: AGRyM1ts9ak9btzFswFUFoMElfPqueKySjcD1ty3sVAYSJ8wBUDzoTa0DLvFqOB9/wbjCt3Z3zA1LA==
+X-Received: by 2002:a5d:47a5:0:b0:210:2b96:a952 with SMTP id 5-20020a5d47a5000000b002102b96a952mr31343094wrb.248.1655845578965;
+        Tue, 21 Jun 2022 14:06:18 -0700 (PDT)
+Received: from localhost (92.40.168.124.threembb.co.uk. [92.40.168.124])
+        by smtp.gmail.com with ESMTPSA id j1-20020adfff81000000b00210bac248c8sm16976883wrr.11.2022.06.21.14.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 14:06:18 -0700 (PDT)
+References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+ <20220620200644.1961936-18-aidanmacdonald.0x0@gmail.com>
+ <CAHp75VcN0hf5_AVB-aRBhyvwuojuDC=FbBUqWpUWQR=r=zSRPA@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
-        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, tharvey@gateworks.com,
+        rjones@gateworks.com, Matti Vaittinen <mazziesaccount@gmail.com>,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-actions@lists.infradead.org,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        johan+linaro@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 17/49] regmap-irq: Add broken_mask_unmask flag
+In-reply-to: <CAHp75VcN0hf5_AVB-aRBhyvwuojuDC=FbBUqWpUWQR=r=zSRPA@mail.gmail.com>
+Date:   Tue, 21 Jun 2022 22:07:24 +0100
+Message-ID: <6DVb6JaRd4bhUPBIyfXXiqm668jAPyls@localhost>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 22:32, Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Tue, Jun 21, 2022 at 01:23:30PM +0200, Robert Marko wrote:
-> > IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
-> > cause the system to hang as its using DBI registers in the .init
-> > and those are only accesible after phy_power_on().
->
-> Is the fact that IPQ8074 has both a Gen2 and a Gen3 port relevant to
-> this patch?  I don't see the connection.
 
-Hi Bjorn,
-Not really, I can remove it from the description as this only affects the Gen2
-port, Gen3 support is dependant on the IPQ6018 support getting merged as
-it uses the same controller.
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
+> On Mon, Jun 20, 2022 at 10:08 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+>>
+>> This flag is necessary to prepare for fixing the behavior of unmask
+>> registers. Existing chips that set mask_base and unmask_base must
+>> set broken_mask_unmask=1 to declare that they expect the mask bits
 >
-> I see that qcom_pcie_host_init() does:
+> Boolean should take true/false.
 >
->   qcom_pcie_host_init
->     pcie->cfg->ops->init(pcie)
->     phy_power_on(pcie->phy)
->     pcie->cfg->ops->post_init(pcie)
+>> will be inverted in both registers, contrary to the usual behavior
+>> of mask registers.
 >
-> and that you're moving DBI register accesses from
-> qcom_pcie_init_2_3_3() to qcom_pcie_post_init_2_3_3().
+>> diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+>> index ee2567a0465c..21a70fd99493 100644
+>> --- a/include/linux/regmap.h
+>> +++ b/include/linux/regmap.h
+>> @@ -1523,6 +1523,7 @@ struct regmap_irq_chip {
+>>         bool clear_on_unmask:1;
+>>         bool not_fixed_stride:1;
+>>         bool status_invert:1;
+>> +       bool broken_mask_unmask:1;
 >
-> But I also see DBI register accesses in other .init() functions:
+> Looking at the given context, I would group it with clean_on_unmask above.
 >
->   qcom_pcie_init_2_1_0
->   qcom_pcie_init_1_0_0      (oddly out of order)
->   qcom_pcie_init_2_3_2
->   qcom_pcie_init_2_4_0
->
-> Why do these accesses not need to be moved?  I assume it's because
-> pcie->phy is an optional PHY and phy_power_on() does nothing on those
-> controllers?
+> The above is weird enough on its own. Can you prepare a precursor
+> patch that either drops the bit fields of booleans or moves them to
+> unsigned int?
 
-As far as I could figure out from QCA-s 5.4 kernel, various commits, and QCA-s
-attempts to solve this already upstream the Gen2 controller in IPQ8074 is a bit
-special and requires the PHY to be powered on before DBI could be accessed or
-else the board will hang as it does for me.
+Sure.
 
-I can only assume that this is an IPQ8074-specific quirk and other IP-s are not
-affected like this, so they were not broken.
+> Note, bit fields in C are beasts when it goes to concurrent access. It
+> would be nice to ensure these are not the cases of a such.
 
->
-> Whatever the reason, I think the DBI accesses should be done
-> consistently in .post_init().  I see that Dmitry's previous patches
-> removed all those .post_init() functions, but I think the consistency
-> is worth having.
->
-> Perhaps we could reorder the patches so this patch comes first, moves
-> the DBI accesses into .post_init(), then Dmitry's patches could be
-> rebased on top to drop the clock handling?
->
-> > So solve this by splitting the DBI read/writes to .post_init.
-
-I am open to anything to get this fixed properly, you are gonna need
-to point me in the right direction
-as I am really new to PCI.
-
-Regards,
-Robert
-> >
-> > Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> > Changes in v2:
-> > * Rebase onto next-20220621
-> > ---
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
-> >  1 file changed, 28 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 51fed83484af..da6d79d61397 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
-> >       struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
-> >       struct dw_pcie *pci = pcie->pci;
-> >       struct device *dev = pci->dev;
-> > -     u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> >       int i, ret;
-> > -     u32 val;
-> >
-> >       for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
-> >               ret = reset_control_assert(res->rst[i]);
-> > @@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
-> >               goto err_clk_aux;
-> >       }
-> >
-> > +     return 0;
-> > +
-> > +err_clk_aux:
-> > +     clk_disable_unprepare(res->ahb_clk);
-> > +err_clk_ahb:
-> > +     clk_disable_unprepare(res->axi_s_clk);
-> > +err_clk_axi_s:
-> > +     clk_disable_unprepare(res->axi_m_clk);
-> > +err_clk_axi_m:
-> > +     clk_disable_unprepare(res->iface);
-> > +err_clk_iface:
-> > +     /*
-> > +      * Not checking for failure, will anyway return
-> > +      * the original failure in 'ret'.
-> > +      */
-> > +     for (i = 0; i < ARRAY_SIZE(res->rst); i++)
-> > +             reset_control_assert(res->rst[i]);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
-> > +{
-> > +     struct dw_pcie *pci = pcie->pci;
-> > +     u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> > +     u32 val;
-> > +
-> >       writel(SLV_ADDR_SPACE_SZ,
-> >               pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
-> >
-> > @@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
-> >               PCI_EXP_DEVCTL2);
-> >
-> >       return 0;
-> > -
-> > -err_clk_aux:
-> > -     clk_disable_unprepare(res->ahb_clk);
-> > -err_clk_ahb:
-> > -     clk_disable_unprepare(res->axi_s_clk);
-> > -err_clk_axi_s:
-> > -     clk_disable_unprepare(res->axi_m_clk);
-> > -err_clk_axi_m:
-> > -     clk_disable_unprepare(res->iface);
-> > -err_clk_iface:
-> > -     /*
-> > -      * Not checking for failure, will anyway return
-> > -      * the original failure in 'ret'.
-> > -      */
-> > -     for (i = 0; i < ARRAY_SIZE(res->rst); i++)
-> > -             reset_control_assert(res->rst[i]);
-> > -
-> > -     return ret;
-> >  }
-> >
-> >  static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
-> > @@ -1598,6 +1605,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
-> >  static const struct qcom_pcie_ops ops_2_3_3 = {
-> >       .get_resources = qcom_pcie_get_resources_2_3_3,
-> >       .init = qcom_pcie_init_2_3_3,
-> > +     .post_init = qcom_pcie_post_init_2_3_3,
-> >       .deinit = qcom_pcie_deinit_2_3_3,
-> >       .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> >  };
-> > --
-> > 2.36.1
-> >
+These are read-only so there's no danger here.

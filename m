@@ -2,218 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7055553CF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD99C553D56
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355801AbiFUVFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S1355776AbiFUVMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356805AbiFUVEw (ORCPT
+        with ESMTP id S1355354AbiFUVMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:04:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671926400;
-        Tue, 21 Jun 2022 13:53:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF0F4B81A9A;
-        Tue, 21 Jun 2022 20:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E70BC3411C;
-        Tue, 21 Jun 2022 20:53:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1655844811;
-        bh=20N4ZigNt3ywDZXkpxWcD1TBryesu5HI23JwFB7LT6Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ki9Ly2I17JqvfHtT9RHEyv92O0rFsOjs8eDP3o2/BGTxMObJIPpQZgeqVnU/Vn8VT
-         +qrGnD6sUvLGN1MjXJtGByEvIB0XWyBMMCbt0IuJN1hocwlnH54YS62IhyT+LYf+is
-         01mlP/9fWSPpl+j6bDoLXjDXLRZzJ8Df5WNTKDDE=
-Date:   Tue, 21 Jun 2022 13:53:13 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     corbet@lwn.net, david@redhat.com, mike.kravetz@oracle.com,
-        osalvador@suse.de, paulmck@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v5 0/2] make hugetlb_optimize_vmemmap compatible with
- memmap_on_memory
-Message-Id: <20220621135313.ae6fbc28338f1220328694f7@linux-foundation.org>
-In-Reply-To: <20220620110616.12056-1-songmuchun@bytedance.com>
-References: <20220620110616.12056-1-songmuchun@bytedance.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 17:12:39 -0400
+Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524FE3AA4D;
+        Tue, 21 Jun 2022 13:58:35 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.mutex.one (Postfix) with ESMTP id 4E46C16C00A0;
+        Tue, 21 Jun 2022 23:58:18 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
+Received: from mail.mutex.one ([127.0.0.1])
+        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Jk9ZoUcCUrVN; Tue, 21 Jun 2022 23:58:17 +0300 (EEST)
+From:   Marian Postevca <posteuca@mutex.one>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
+        t=1655845097; bh=vpNthc+lldxuvJbZ7zxIciUxabh3k038ETcMBiLjAOs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RxSc0hQi5h2gzEr2CUj6KMIEzlaUYhp21qBaf+RtgAXfqkJ9cjyOgSzNyiOl7hfz1
+         jrWPr20+WF+PD7DyfR2y8p+7OOx1hgBKGzOJgShlDIA2Lx8n+c/zeKVHs64XV9PXt2
+         1sNpTadLLnTVdvwo2yT7Kq5RM2z5Syq1dTKePbVs=
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Marian Postevca <posteuca@mutex.one>,
+        Maximilian Senftleben <kernel@mail.msdigital.de>,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 4.14] usb: gadget: u_ether: fix regression in setting fixed MAC address
+Date:   Tue, 21 Jun 2022 23:54:07 +0300
+Message-Id: <20220621205406.22599-1-posteuca@mutex.one>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 19:06:14 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+commit b337af3a4d6147000b7ca6b3438bf5c820849b37 upstream.
 
-> This series makes hugetlb_optimize_vmemmap compatible with memmap_on_memory
-> and is based on mm-stable.  The reason refers to the patch 2's commit log.
-> 
-> v5:
->  - Replace enum to defines per David.
->  - Walk vmemmap page tables to avoid false-positive.
+In systemd systems setting a fixed MAC address through
+the "dev_addr" module argument fails systematically.
+When checking the MAC address after the interface is created
+it always has the same but different MAC address to the one
+supplied as argument.
 
-I can't see this second change in the v3->v5 deltas?
+This is partially caused by systemd which by default will
+set an internally generated permanent MAC address for interfaces
+that are marked as having a randomly generated address.
 
+Commit 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in
+setting MAC address in setup phase") didn't take into account
+the fact that the interface must be marked as having a set
+MAC address when it's set as module argument.
 
+Fixed by marking the interface with NET_ADDR_SET when
+the "dev_addr" module argument is supplied.
 
-From: Muchun Song <songmuchun@bytedance.com>
-Subject: mm-memory_hotplug-enumerate-all-supported-section-flags-v5
-Date: Mon, 20 Jun 2022 19:06:15 +0800
-
-replace enum with defines per David
- 
-Link: https://lkml.kernel.org/r/20220620110616.12056-2-songmuchun@bytedance.com
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Reported-by: Maximilian Senftleben <kernel@mail.msdigital.de>
+Cc: stable@vger.kernel.org
+Fixes: 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in setting MAC address in setup phase")
+Signed-off-by: Marian Postevca <posteuca@mutex.one>
 ---
+ drivers/usb/gadget/function/u_ether.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
- include/linux/mmzone.h |   13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
-
---- a/include/linux/mmzone.h~mm-memory_hotplug-enumerate-all-supported-section-flags-v5
-+++ a/include/linux/mmzone.h
-@@ -1439,16 +1439,13 @@ enum {
- 	SECTION_MAP_LAST_BIT,
- };
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index f59c20457e658..2d45233ba027e 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -776,9 +776,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
+ 	dev->qmult = qmult;
+ 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
  
--enum {
--	SECTION_MARKED_PRESENT		= BIT(SECTION_MARKED_PRESENT_BIT),
--	SECTION_HAS_MEM_MAP		= BIT(SECTION_HAS_MEM_MAP_BIT),
--	SECTION_IS_ONLINE		= BIT(SECTION_IS_ONLINE_BIT),
--	SECTION_IS_EARLY		= BIT(SECTION_IS_EARLY_BIT),
-+#define SECTION_MARKED_PRESENT		BIT(SECTION_MARKED_PRESENT_BIT)
-+#define SECTION_HAS_MEM_MAP		BIT(SECTION_HAS_MEM_MAP_BIT)
-+#define SECTION_IS_ONLINE		BIT(SECTION_IS_ONLINE_BIT)
-+#define SECTION_IS_EARLY		BIT(SECTION_IS_EARLY_BIT)
- #ifdef CONFIG_ZONE_DEVICE
--	SECTION_TAINT_ZONE_DEVICE	= BIT(SECTION_TAINT_ZONE_DEVICE_BIT),
-+#define SECTION_TAINT_ZONE_DEVICE	BIT(SECTION_TAINT_ZONE_DEVICE_BIT)
- #endif
--};
--
- #define SECTION_MAP_MASK		(~(BIT(SECTION_MAP_LAST_BIT) - 1))
- #define SECTION_NID_SHIFT		SECTION_MAP_LAST_BIT
- 
-_
-
-
-
-
-From: Muchun Song <songmuchun@bytedance.com>
-Subject: mm-memory_hotplug-make-hugetlb_optimize_vmemmap-compatible-with-memmap_on_memory-v5
-Date: Mon, 20 Jun 2022 19:06:16 +0800
-
-walk vmemmap page tables to avoid false-positive
-
-Link: https://lkml.kernel.org/r/20220620110616.12056-3-songmuchun@bytedance.com
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Co-developed-by: Oscar Salvador <osalvador@suse.de>
-Signed-off-by: Oscar Salvador <osalvador@suse.de>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- mm/hugetlb_vmemmap.c |   69 ++++++++++++++++++++++++++---------------
- 1 file changed, 44 insertions(+), 25 deletions(-)
-
---- a/mm/hugetlb_vmemmap.c~mm-memory_hotplug-make-hugetlb_optimize_vmemmap-compatible-with-memmap_on_memory-v5
-+++ a/mm/hugetlb_vmemmap.c
-@@ -10,6 +10,7 @@
-  */
- #define pr_fmt(fmt)	"HugeTLB: " fmt
- 
-+#include <linux/memory.h>
- #include "hugetlb_vmemmap.h"
- 
- /*
-@@ -99,34 +100,52 @@ int hugetlb_vmemmap_alloc(struct hstate
- static unsigned int vmemmap_optimizable_pages(struct hstate *h,
- 					      struct page *head)
- {
--	struct mem_section *ms;
--	struct page *vmemmap_page;
--	unsigned long pfn = page_to_pfn(head);
--
- 	if (READ_ONCE(vmemmap_optimize_mode) == VMEMMAP_OPTIMIZE_OFF)
- 		return 0;
- 
--	ms = __pfn_to_section(pfn);
--	vmemmap_page = sparse_decode_mem_map(ms->section_mem_map,
--					     pfn_to_section_nr(pfn));
--	/*
--	 * Only the vmemmap pages' vmemmap may be marked as VmemmapSelfHosted.
--	 *
--	 * Due to HugeTLB alignment requirements, and the vmemmap pages being
--	 * at the start of the hotplugged memory region. Checking any vmemmap
--	 * page's vmemmap is fine.
--	 *
--	 * [      hotplugged memory     ]
--	 * [ vmemmap ][  usable memory  ]
--	 *   ^   |      |            |
--	 *   +---+      |            |
--	 *     ^        |            |
--	 *     +--------+            |
--	 *         ^                 |
--	 *         +-----------------+
--	 */
--	if (PageVmemmapSelfHosted(vmemmap_page))
--		return 0;
-+	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG)) {
-+		pmd_t *pmdp, pmd;
-+		struct page *vmemmap_page;
-+		unsigned long vaddr = (unsigned long)head;
-+
-+		/*
-+		 * Only the vmemmap page's vmemmap page can be self-hosted.
-+		 * Walking the page tables to find the backing page of the
-+		 * vmemmap page.
-+		 */
-+		pmdp = pmd_off_k(vaddr);
-+		/*
-+		 * The READ_ONCE() is used to stabilize *pmdp in a register or
-+		 * on the stack so that it will stop changing under the code.
-+		 * The only concurrent operation where it can be changed is
-+		 * split_vmemmap_huge_pmd() (*pmdp will be stable after this
-+		 * operation).
-+		 */
-+		pmd = READ_ONCE(*pmdp);
-+		if (pmd_leaf(pmd))
-+			vmemmap_page = pmd_page(pmd) + pte_index(vaddr);
-+		else
-+			vmemmap_page = pte_page(*pte_offset_kernel(pmdp, vaddr));
-+		/*
-+		 * Due to HugeTLB alignment requirements and the vmemmap pages
-+		 * being at the start of the hotplugged memory region in
-+		 * memory_hotplug.memmap_on_memory case. Checking any vmemmap
-+		 * page's vmemmap page if it is marked as VmemmapSelfHosted is
-+		 * sufficient.
-+		 *
-+		 * [                  hotplugged memory                  ]
-+		 * [        section        ][...][        section        ]
-+		 * [ vmemmap ][              usable memory               ]
-+		 *   ^   |     |                                        |
-+		 *   +---+     |                                        |
-+		 *     ^       |                                        |
-+		 *     +-------+                                        |
-+		 *          ^                                           |
-+		 *          +-------------------------------------------+
-+		 */
-+		if (PageVmemmapSelfHosted(vmemmap_page))
-+			return 0;
+-	if (get_ether_addr(dev_addr, net->dev_addr))
++	if (get_ether_addr(dev_addr, net->dev_addr)) {
++		net->addr_assign_type = NET_ADDR_RANDOM;
+ 		dev_warn(&g->dev,
+ 			"using random %s ethernet address\n", "self");
++	} else {
++		net->addr_assign_type = NET_ADDR_SET;
 +	}
+ 	if (get_ether_addr(host_addr, dev->host_mac))
+ 		dev_warn(&g->dev,
+ 			"using random %s ethernet address\n", "host");
+@@ -835,6 +839,9 @@ struct net_device *gether_setup_name_default(const char *netname)
+ 	INIT_LIST_HEAD(&dev->tx_reqs);
+ 	INIT_LIST_HEAD(&dev->rx_reqs);
  
- 	return hugetlb_optimize_vmemmap_pages(h);
++	/* by default we always have a random MAC address */
++	net->addr_assign_type = NET_ADDR_RANDOM;
++
+ 	skb_queue_head_init(&dev->rx_frames);
+ 
+ 	/* network device setup */
+@@ -872,7 +879,6 @@ int gether_register_netdev(struct net_device *net)
+ 	g = dev->gadget;
+ 
+ 	memcpy(net->dev_addr, dev->dev_mac, ETH_ALEN);
+-	net->addr_assign_type = NET_ADDR_RANDOM;
+ 
+ 	status = register_netdev(net);
+ 	if (status < 0) {
+@@ -912,6 +918,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
+ 	if (get_ether_addr(dev_addr, new_addr))
+ 		return -EINVAL;
+ 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
++	net->addr_assign_type = NET_ADDR_SET;
+ 	return 0;
  }
-_
+ EXPORT_SYMBOL_GPL(gether_set_dev_addr);
+-- 
+2.35.1
 

@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEB8552D5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C81552D61
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347633AbiFUIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S1348422AbiFUIr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiFUIrB (ORCPT
+        with ESMTP id S230049AbiFUIr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:47:01 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA792610D;
-        Tue, 21 Jun 2022 01:46:59 -0700 (PDT)
-X-UUID: ec8775581713496298f9786b6bb3f920-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:49656c31-03b5-4dac-916c-58014802bba8,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:2
-X-CID-META: VersionHash:b14ad71,CLOUDID:dfd9a12d-1756-4fa3-be7f-474a6e4be921,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:4,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: ec8775581713496298f9786b6bb3f920-20220621
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1524695954; Tue, 21 Jun 2022 16:46:55 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 21 Jun 2022 16:46:53 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 16:46:53 +0800
-Message-ID: <7a581fd59a68a292a0acc0c17173cc3ae62612f0.camel@mediatek.com>
-Subject: Re: [PATCH v12 10/14] drm/mediatek: dpi: Add dpintf support
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 16:46:53 +0800
-In-Reply-To: <0862532b568f7e13b89b6537928efd518a2971a3.camel@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-         <20220620121028.29234-11-rex-bc.chen@mediatek.com>
-         <0862532b568f7e13b89b6537928efd518a2971a3.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 04:47:27 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78B52610D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:47:26 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id k20so8205658ljg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 01:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zfcOaEapxaE9S9vGTGo2ekN6KOzKbUmzU3pXqQnWMdE=;
+        b=LqDbSkS9NFzOkFGxfenpQv+DkPMsaj+d7E6D7gghLD52dzHu7LPrKJntN0xJuGtI5x
+         Rc+SgNDXG8zJx+Y4mTYngrQl8PRNAV/DdDQlPxhODumpGxmQINJEVV6Lbg4s2iVP2xZb
+         mZbW9rjb9c0cpNXlBKSxbO+6rlAUifh0y1RFk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zfcOaEapxaE9S9vGTGo2ekN6KOzKbUmzU3pXqQnWMdE=;
+        b=xkhuv/MgYoRRVlyPl9uB6GKOh4sF70ykI67bRdncHlfRxS2ApzVZn++Dou/fpuR6qt
+         CSbDtppfyQQXLvUFzJBW80WPgP5G3NiqJNYP1i3qlPfkkpxX75wKnRNHvYgPyu0gMosp
+         8NkUdvVvS6arwMUvtRGzTzapZhbbSvQ8zy2Kard+4Y3/F0XpUb1cGSlFjZSb+aC3Ebq1
+         w0JcR+THorJYLSOdEXyZP4Dj5n54GAOfmw2BaEHAgG9pE50yyldrfyJa4ekzaQS396pp
+         otO1wCRNze6rAYoExj89RCmC/X00sODHqEz9VdRVGaFsrVt3w8M719DGXRgBOnC9a5x2
+         vJ0Q==
+X-Gm-Message-State: AJIora8N/pI2ntWs3yqFbYyNi6tuwitWuv9s9q4G4LlVXIV3e5C+ZqeW
+        h89gLNih7SZZnQWyaVU1kaEGFQ==
+X-Google-Smtp-Source: AGRyM1tO+LjuM21Aq+uLF72weZdNrgOr4XfGu99LuzUOdAdShSSNsEmOlVEEI5kCXajkUOEiGxXbag==
+X-Received: by 2002:a2e:3516:0:b0:25a:6505:4d12 with SMTP id z22-20020a2e3516000000b0025a65054d12mr7118972ljz.83.1655801245030;
+        Tue, 21 Jun 2022 01:47:25 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id j17-20020a2e8511000000b0025a724f2935sm494272lji.137.2022.06.21.01.47.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 01:47:24 -0700 (PDT)
+Message-ID: <bdedc4fd-e627-a23e-f00a-615dc087c670@rasmusvillemoes.dk>
+Date:   Tue, 21 Jun 2022 10:47:23 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 05/34] vsprintf: %pf(%p)
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
+        rostedt@goodmis.org, enozhatsky@chromium.org, willy@infradead.org
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <20220620004233.3805-6-kent.overstreet@gmail.com>
+ <f9224687-ce0c-b41b-f158-1b679a70c2d5@rasmusvillemoes.dk>
+ <20220621075159.m67qzftqulvphivw@moria.home.lan>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20220621075159.m67qzftqulvphivw@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,178 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 10:32 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
-> 
-> On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
-> > From: Guillaume Ranquet <granquet@baylibre.com>
-> > 
-> > dpintf is the displayport interface hardware unit. This unit is
-> > similar
-> > to dpi and can reuse most of the code.
-> > 
-> > This patch adds support for mt8195-dpintf to this dpi driver. Main
-> > differences are:
-> >  - 4 pixels for one round for dp_intf while dpi is 1 pixel for one
-> > round.
-> >    Therefore, pixel clock and timing parameter should be divided by
-> > 4
-> > for
-> >    dp_intf.
-> >  - Some features/functional components are not available for dpintf
-> >    which are now excluded from code execution once is_dpintf is
-> > set.
-> >    The main difference is some parts of hardware design between
-> > dp_intf
-> >    and dpi.
-> >  - Some register contents differ slightly between the two
-> > components.
-> > To
-> >    work around this I added register bits/masks with a DPINTF_
-> > prefix
-> >    and use them where different.
-> > 
-> > Based on a separate driver for dpintf created by
-> > Jitao shi <jitao.shi@mediatek.com>.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > [Bo-Chen: Modify reviewers' comments.]
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/gpu/drm/mediatek/mtk_dpi.c          | 65
-> > +++++++++++++++++++--
-> >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h     | 13 +++++
-> >  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  4 ++
-> >  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  1 +
-> >  drivers/gpu/drm/mediatek/mtk_drm_drv.c      |  3 +
-> >  5 files changed, 82 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > index e186870ba3bc..2717b1741b7a 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > @@ -126,6 +126,7 @@ struct mtk_dpi_conf {
-> >  	const u32 *output_fmts;
-> >  	u32 num_output_fmts;
-> >  	bool is_ck_de_pol;
-> > +	bool is_dpintf;
-> >  	bool swap_input_support;
-> >  	/* Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and VSYNC_PORCH
-> > (no shift) */
-> >  	u32 dimension_mask;
-> > @@ -513,6 +514,14 @@ static int mtk_dpi_set_display_mode(struct
-> > mtk_dpi *dpi,
-> >  	pll_rate = clk_get_rate(dpi->tvd_clk);
-> >  
-> >  	vm.pixelclock = pll_rate / factor;
-> > +
-> > +	/*
-> > +	 * For dp_intf, we need to divide clock by 4 because it's
-> > +	 * 4 pixels for one round while dpi is 1 pixel for one round.
-> > +	 */
-> > +	if (dpi->conf->is_dpintf)
-> > +		vm.pixelclock /= 4;
-> 
-> I this this should define dpi->conf->round_pixels rather than dpi-
-> > conf->is_dpintf.
+On 21/06/2022 09.51, Kent Overstreet wrote:
 
-ok, I will use this config and drop is_dpintf.
+>>>  struct printf_spec {
+>>> @@ -2520,7 +2521,16 @@ int format_decode(const char *fmt, struct printf_spec *spec)
+>>>  		return ++fmt - start;
+>>>  
+>>>  	case 'p':
+>>> -		spec->type = FORMAT_TYPE_PTR;
+>>> +		fmt++;
+>>> +		if (fmt[0] == 'f' &&
+>>> +		    fmt[1] == '(') {
+>>> +			fmt += 2;
+>>> +			spec->type = FORMAT_TYPE_FN;
+>>> +		} else
+>>> +			spec->type = FORMAT_TYPE_PTR;
+>>> +		return fmt - start;
+>>> +	case '(':
+>>> +		spec->type = FORMAT_TYPE_FN;
+>>>  		return ++fmt - start;
+>>
+>> NAK. Don't implement something that will never be tested nor used.
+>> There's not a snowball's chance in hell that we'll ever build the kernel
+>> without -Wformat.
+> 
+> We're not stopping here. Matthew is taking this to WG14 and I'll be working on
+> adding this functionality to glibc next, and %() is the syntax we intend to take
+> to the working group.
+> 
+> But the working group is naturally going to want to see that a working
+> implementation of it exists.
 
-> > +
-> >  	if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
-> >  	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE))
-> >  		clk_set_rate(dpi->pixel_clk, vm.pixelclock * 2);
-> > @@ -534,6 +543,17 @@ static int mtk_dpi_set_display_mode(struct
-> > mtk_dpi *dpi,
-> >  	hsync.sync_width = vm.hsync_len;
-> >  	hsync.back_porch = vm.hback_porch;
-> >  	hsync.front_porch = vm.hfront_porch;
-> > +
-> > +	/*
-> > +	 * For dp_intf, we need to divide everything by 4 because it's
-> > +	 * 4 pixels for one round while dpi is 1 pixel for one round.
-> > +	 */
-> > +	if (dpi->conf->is_dpintf) {
-> > +		hsync.sync_width = vm.hsync_len / 4;
-> > +		hsync.back_porch = vm.hback_porch / 4;
-> > +		hsync.front_porch = vm.hfront_porch / 4;
-> > +	}
-> 
-> Ditto.
-> 
-> > +
-> >  	hsync.shift_half_line = false;
-> >  	vsync_lodd.sync_width = vm.vsync_len;
-> >  	vsync_lodd.back_porch = vm.vback_porch;
-> > @@ -575,11 +595,16 @@ static int mtk_dpi_set_display_mode(struct
-> > mtk_dpi *dpi,
-> >  	mtk_dpi_config_channel_limit(dpi);
-> >  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
-> >  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
-> > -	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-> >  	mtk_dpi_config_color_format(dpi, dpi->color_format);
-> > -	mtk_dpi_config_2n_h_fre(dpi);
-> > -	mtk_dpi_dual_edge(dpi);
-> > -	mtk_dpi_config_disable_edge(dpi);
-> > +	if (dpi->conf->is_dpintf) {
-> 
-> Separate this to an independent patch and give a better config name
-> rather than dpi->conf->is_dpintf.
-> 
+OK. But implementation in glibc, musl and/or the kernel is much much
+less interesting than support in gcc and clang for accepting %( in the
+first place, and preferably also for not just treating %( as a synonym
+for %p but actually checking that the argument is a function pointer and
+ that its signature matches the arguments between (). Once _that_ has
+landed in gcc 24 and the kernel requirements have been bumped to that
+can we consider adding "%(" format strings (and the necessary support).
 
-this is separate config.
-I will modify like this:
-add new config "input_2pixel" for input two pixels in this patch:
-mtk_dpi_mask(dpi, DPI_CON, DPINTF_INPUT_2P_EN,
-			     DPINTF_INPUT_2P_EN);
+Yes, I appreciate the chicken-and-egg situation. No, I don't think the
+mainline kernel is a suitable place for proof-of-concept and highly
+experimental code.
 
-and create another patch to add config "support_direct_pin"
-this config is only used for dpi which could be directly connect to
-pins while dp_intf is not.
-
-+       if (dpi->conf->support_direct_pin) {
-+               mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-+               mtk_dpi_config_2n_h_fre(dpi);
-+               mtk_dpi_dual_edge(dpi);
-+               mtk_dpi_config_disable_edge(dpi);
-+       }
-
-BRs,
-Bo-Chen
-> > +		mtk_dpi_mask(dpi, DPI_CON, DPINTF_INPUT_2P_EN,
-> > +			     DPINTF_INPUT_2P_EN);
-> > +	} else {
-> > +		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-> > +		mtk_dpi_config_2n_h_fre(dpi);
-> > +		mtk_dpi_dual_edge(dpi);
-> > +		mtk_dpi_config_disable_edge(dpi);
-> > +	}
-> >  	mtk_dpi_sw_reset(dpi, false);
-> >  
-> >  	return 0;
-> > @@ -817,6 +842,16 @@ static unsigned int
-> > mt8183_calculate_factor(int
-> > clock)
-> >  		return 2;
-> >  }
-> >  
-> 
-> [snip]
-> 
-> >  
-> >  #define EDGE_SEL_EN			BIT(5)
-> >  #define H_FRE_2N			BIT(25)
-> > +
-> 
-> This seems not related to dpintf support.
-> 
-> Regards,
-> CK
-> 
-> >  #endif /* __MTK_DPI_REGS_H */
-> > 
-> 
-> 
-
+Rasmus

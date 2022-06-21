@@ -2,100 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1B9552976
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69E8552979
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 04:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344484AbiFUCjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 22:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S1344920AbiFUCkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 22:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244545AbiFUCje (ORCPT
+        with ESMTP id S244545AbiFUCkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 22:39:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EE8CE35
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655779174; x=1687315174;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xCEmjp76i6Brb9eB2mFQBJ51i6/s+EEMAFzhf6ZmxSo=;
-  b=Y0TYyZIYg0bAG44tCvFJI0aDk1p+EHrU7R9sQpX9un6kUnjKy4O1djb7
-   JNWgt5mvb0xBqdIwvMkCTf+KHlqz7R6F2/Z7d0gV98vUmjCjb8bgaZldf
-   8jjD08B6FJMVj7e1awGD8P+I7RXEhGVWc//MS+XswvdquEev+AI+vcC9P
-   45HREGxxNmCjsNmYjHeIjNxJLFSKbPaxSp4X32fraNjNaIkg/ByStiQ+2
-   t1GVKSBCrLtfKh+6QBVBQUz1rqDwXhfVEKZHvq2RxjJSuVzHyMXbuAFdL
-   D/x+TXkf2Ucm55VEZBD/sd+H6kqwpvTnDHiW4nVWmI0hwqDEcM5vqFB+F
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="344003550"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="344003550"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 19:39:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="764296831"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jun 2022 19:39:32 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3Tna-000Xuv-CG;
-        Tue, 21 Jun 2022 02:39:26 +0000
-Date:   Tue, 21 Jun 2022 10:38:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Edward Wu <edwardwu@realtek.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        surenb@google.com, minchan@google.com, edwardwu@realtek.com
-Subject: Re: [PATCH] mm: cma: sync everything after EBUSY
-Message-ID: <202206211055.X7Tcbmrt-lkp@intel.com>
-References: <20220615021504.23358-1-edwardwu@realtek.com>
+        Mon, 20 Jun 2022 22:40:37 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B02C1F624
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:40:36 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id p14so6135407pfh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 19:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=MAxGrYPRrn3PDrCT6+3wEqy3eFiNsK2NRcJPeVZeG8Y=;
+        b=VW7TBZ7AhbUaLY1bMT0AIMf1zF4z/GCdtWfYA5qth8EnqLEmZCPvDNjAFBrikMfKNO
+         6BLseU+zvq4Gtk0mx4TfSV3FgigKHWuAI9dUL7uVcA7IPGtI2rJKqSlGoky6xQliKmj+
+         LDpZSNzZFCvOMHa0Zi77QcpVCuBa47cONxkzCyu+fSFuid2Uloj9uD1XKZP4s+n43DdQ
+         Pj6ZRsWHTd2tFmTTltXpp3BkuIaY+J2AsMVxUHjRNkTcf8aWi7AfrglV3LqIM6PdTshA
+         u9MEj1l3jpRgMhxIEGnAoHigsclOwZEv+PsEQE5pEP4TbNvIz/nUrMm4HQM1w/bHXQeC
+         0EnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MAxGrYPRrn3PDrCT6+3wEqy3eFiNsK2NRcJPeVZeG8Y=;
+        b=jtzs8VPbaZ54MCzaIe0WTPb+qp36uanm8Bk0qWDJeJtRvyUW+joCdRFmHj5D1nZi+B
+         OnPNiQcVKqzA+RwaMqJW3+SggPz1DdqBvQBqlCGCDMcP/0Bfrov7jpaW07gcUiD9v8Jd
+         mgu2OVLNHVUiJbutsoZ5E8KOgBoQxC7k8ycEXXWkp7PQv+UFzMLodUH9r3Qr0ZWTfUY1
+         7N++GM1kC0uhxvnv+c8zqv3s4fl5iD+Jjm/B1iUmM4VnvnfERa/mqe/CPeW7OgbngbyR
+         VDk06Gsyy7TgLjXVF+l97Ucw/6K5NC9nTsJ2I31FATRaKl9kXkRNusZge5N3aIZlGKSN
+         qsiA==
+X-Gm-Message-State: AJIora9flwHwY5w6xHJ58NGINELE8pmHTBeJQPMzsn8cyWqfLof66PMD
+        /4T2j3Usn92hdx1xDjWVLYamCpjTFVB4eg==
+X-Google-Smtp-Source: AGRyM1sRVqR4TPQ7hzPO5xLtJI0dp5o82s+eN+/tAD+iVCtZICpWioOkfJVo3hOKTVfpBf5zMVnxRw==
+X-Received: by 2002:a62:6411:0:b0:50a:81df:bfa6 with SMTP id y17-20020a626411000000b0050a81dfbfa6mr28143915pfb.26.1655779235852;
+        Mon, 20 Jun 2022 19:40:35 -0700 (PDT)
+Received: from [10.76.33.147] ([61.120.150.69])
+        by smtp.gmail.com with ESMTPSA id j11-20020aa7928b000000b005251ce498cfsm3787737pfa.191.2022.06.20.19.40.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 19:40:35 -0700 (PDT)
+Message-ID: <2a95ca55-4088-583b-9a28-cf9f4c0f32fc@bytedance.com>
+Date:   Tue, 21 Jun 2022 10:40:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615021504.23358-1-edwardwu@realtek.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH] ext4: reuse order and buddy in mb_mark_used when buddy
+ split
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lei.rao@intel.com
+References: <20220606155305.74146-1-hanjinke.666@bytedance.com>
+From:   hanjinke <hanjinke.666@bytedance.com>
+In-Reply-To: <20220606155305.74146-1-hanjinke.666@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Edward,
+hi, friendly pinging...
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Wu/mm-cma-sync-everything-after-EBUSY/20220615-101716
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220621/202206211055.X7Tcbmrt-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/ef04552ed13eb371365fcc55c7ae1e5c3c211168
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Edward-Wu/mm-cma-sync-everything-after-EBUSY/20220615-101716
-        git checkout ef04552ed13eb371365fcc55c7ae1e5c3c211168
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> mm/cma.c:415:6: sparse: sparse: symbol 'cma_sync_work' was not declared. Should it be static?
->> mm/cma.c:422:6: sparse: sparse: symbol 'cma_ebusy_sync_pinned_pages' was not declared. Should it be static?
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+在 2022/6/6 下午11:53, Jinke Han 写道:
+> From: hanjinke <hanjinke.666@bytedance.com>
+> 
+> After each buddy split, mb_mark_used will search the proper order
+> for the block which may consume some loop in mb_find_order_for_block.
+> In fact, we can reuse the oder and buddy generated by the buddy split.
+> 
+> Reviewed by: lei.rao@intel.com
+> Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+> ---
+>   fs/ext4/mballoc.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 9f12f29bc346..c7ac6b269dd8 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -1933,6 +1933,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+>   	unsigned ret = 0;
+>   	int len0 = len;
+>   	void *buddy;
+> +	bool split = false;
+>   
+>   	BUG_ON(start + len > (e4b->bd_sb->s_blocksize << 3));
+>   	BUG_ON(e4b->bd_group != ex->fe_group);
+> @@ -1957,12 +1958,16 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+>   
+>   	/* let's maintain buddy itself */
+>   	while (len) {
+> -		ord = mb_find_order_for_block(e4b, start);
+> +		if (!split)
+> +			ord = mb_find_order_for_block(e4b, start);
+>   
+>   		if (((start >> ord) << ord) == start && len >= (1 << ord)) {
+>   			/* the whole chunk may be allocated at once! */
+>   			mlen = 1 << ord;
+> -			buddy = mb_find_buddy(e4b, ord, &max);
+> +			if (!split)
+> +				buddy = mb_find_buddy(e4b, ord, &max);
+> +			else
+> +				split = false;
+>   			BUG_ON((start >> ord) >= max);
+>   			mb_set_bit(start >> ord, buddy);
+>   			e4b->bd_info->bb_counters[ord]--;
+> @@ -1989,6 +1994,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+>   		mb_clear_bit(cur + 1, buddy);
+>   		e4b->bd_info->bb_counters[ord]++;
+>   		e4b->bd_info->bb_counters[ord]++;
+> +		split = true;
+>   	}
+>   	mb_set_largest_free_order(e4b->bd_sb, e4b->bd_info);
+>   

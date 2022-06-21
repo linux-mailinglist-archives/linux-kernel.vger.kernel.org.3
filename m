@@ -2,66 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F86F5529C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB8F552A03
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 06:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344450AbiFUDjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S1344839AbiFUDu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiFUDj1 (ORCPT
+        with ESMTP id S237675AbiFUDuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:39:27 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5F46259;
-        Mon, 20 Jun 2022 20:39:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655782766; x=1687318766;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qVX3BzEHCS59pOvp34Vx2zJmoCdlA/L6qhq0aL8cy4M=;
-  b=D/rn7iGiG02CfCxNBnOZqS79idGwoDc3qSGwCeWM3crDeMYekDPKglqj
-   SQrIIpI/tLt5xOL7acVy2YskDR1eQLiUd8M4HIJE1pF/x0ZMrs9X/7D6l
-   eMv37ITXRcaRm6DoBP/upogUpFX7I024agHHoct1qrMeTZP2Yr5C0ER3q
-   9kMCiLcb5S/kDF19hNKNyNic4wgzfkUHpJ73C2nrMQiSVWv34ZX1lV5Ds
-   FVdzn/U6SvwbMXEn4ya5AZBu5yoFzfssqc6r+f623QSCxdzopqrBQU6z6
-   krg2PoJDEevhJCqdeN4M6hv2FFWpaOLpI46SZBURPGDOkf0qgewSW8ghm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="260451251"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="260451251"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 20:39:26 -0700
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="833381018"
-Received: from zequnyu-mobl1.ccr.corp.intel.com (HELO [10.255.31.162]) ([10.255.31.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 20:39:23 -0700
-Message-ID: <5d13cab5-1f0a-51c7-78a3-fb5d3d793ab1@linux.intel.com>
-Date:   Tue, 21 Jun 2022 11:39:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, "Qiang, Chenyi" <chenyi.qiang@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/1] iommu/vt-d: Fix RID2PASID setup failure
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>
-References: <20220620081729.4610-1-baolu.lu@linux.intel.com>
- <BN9PR11MB52764F60972DF52EEF945D408CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB52764F60972DF52EEF945D408CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 20 Jun 2022 23:50:21 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7704118E19;
+        Mon, 20 Jun 2022 20:50:20 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E808A1A1322;
+        Tue, 21 Jun 2022 05:50:18 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5C4261A131E;
+        Tue, 21 Jun 2022 05:50:18 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 288631802204;
+        Tue, 21 Jun 2022 11:50:17 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     vkoul@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, shengjiu.wang@gmail.com,
+        joy.zou@nxp.com, linux-imx@nxp.com, dmaengine@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dmaengine: imx-sdma: Add FIFO stride support for multi FIFO script
+Date:   Tue, 21 Jun 2022 11:36:06 +0800
+Message-Id: <1655782566-21386-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +43,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/21 10:54, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Monday, June 20, 2022 4:17 PM
->> @@ -2564,7 +2564,7 @@ static int domain_add_dev_info(struct
->> dmar_domain *domain, struct device *dev)
->>   			ret = intel_pasid_setup_second_level(iommu,
->> domain,
->>   					dev, PASID_RID2PASID);
->>   		spin_unlock_irqrestore(&iommu->lock, flags);
->> -		if (ret) {
->> +		if (ret && ret != -EBUSY) {
->>   			dev_err(dev, "Setup RID2PASID failed\n");
->>   			dmar_remove_one_dev_info(dev);
->>   			return ret;
->> --
->> 2.25.1
-> 
-> It's cleaner to avoid this error at the first place, i.e. only do the
-> setup when the first device is attached to the pasid table.
+The peripheral may have several FIFOs, but some case just select
+some FIFOs from them for data transfer, which means FIFO0 and FIFO2
+may be selected. So add FIFO address stride support, 0 means all FIFOs
+are continuous, 1 means 1 word stride between FIFOs. All stride between
+FIFOs should be same.
 
-The logic that identifies the first device might introduce additional
-unnecessary complexity. Devices that share a pasid table are rare. I
-even prefer to give up sharing tables so that the code can be
-simpler.:-)
+Another option words_per_fifo means how many audio channel data copied
+to one FIFO one time, 1 means one channel per FIFO, 2 means 2 channels
+per FIFO.
 
---
-Best regards,
-baolu
+If 'n_fifos_src =  4' and 'words_per_fifo = 2', it means the first two
+words(channels) fetch from FIFO0 and then jump to FIFO1 for next two words,
+and so on after the last FIFO3 fetched, roll back to FIFO0.
+
+Signed-off-by: Joy Zou <joy.zou@nxp.com>
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+changes in v3
+- fix issue with words_per_fifo = 0 case;
+
+changes in v2
+- change offset to stride for naming and description
+- fix description for words_per_fifo
+- update subsystem tag to be dmaengine
+
+ drivers/dma/imx-sdma.c      | 27 +++++++++++++++++++++++++--
+ include/linux/dma/imx-dma.h | 13 +++++++++++++
+ 2 files changed, 38 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+index 39d70ef1caf0..17adad9cb6d9 100644
+--- a/drivers/dma/imx-sdma.c
++++ b/drivers/dma/imx-sdma.c
+@@ -183,6 +183,8 @@
+ 				 BIT(DMA_DEV_TO_DEV))
+ 
+ #define SDMA_WATERMARK_LEVEL_N_FIFOS	GENMASK(15, 12)
++#define SDMA_WATERMARK_LEVEL_OFF_FIFOS  GENMASK(19, 16)
++#define SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO   GENMASK(31, 28)
+ #define SDMA_WATERMARK_LEVEL_SW_DONE	BIT(23)
+ 
+ #define SDMA_DONE0_CONFIG_DONE_SEL	BIT(7)
+@@ -429,6 +431,9 @@ struct sdma_desc {
+  * @n_fifos_src:	number of source device fifos
+  * @n_fifos_dst:	number of destination device fifos
+  * @sw_done:		software done flag
++ * @stride_fifos_src:	stride for source device FIFOs
++ * @stride_fifos_dst:	stride for destination device FIFOs
++ * @words_per_fifo:	copy number of words one time for one FIFO
+  */
+ struct sdma_channel {
+ 	struct virt_dma_chan		vc;
+@@ -456,6 +461,9 @@ struct sdma_channel {
+ 	bool				is_ram_script;
+ 	unsigned int			n_fifos_src;
+ 	unsigned int			n_fifos_dst;
++	unsigned int			stride_fifos_src;
++	unsigned int			stride_fifos_dst;
++	unsigned int			words_per_fifo;
+ 	bool				sw_done;
+ };
+ 
+@@ -1245,17 +1253,29 @@ static void sdma_set_watermarklevel_for_p2p(struct sdma_channel *sdmac)
+ static void sdma_set_watermarklevel_for_sais(struct sdma_channel *sdmac)
+ {
+ 	unsigned int n_fifos;
++	unsigned int stride_fifos;
++	unsigned int words_per_fifo;
+ 
+ 	if (sdmac->sw_done)
+ 		sdmac->watermark_level |= SDMA_WATERMARK_LEVEL_SW_DONE;
+ 
+-	if (sdmac->direction == DMA_DEV_TO_MEM)
++	if (sdmac->direction == DMA_DEV_TO_MEM) {
+ 		n_fifos = sdmac->n_fifos_src;
+-	else
++		stride_fifos = sdmac->stride_fifos_src;
++	} else {
+ 		n_fifos = sdmac->n_fifos_dst;
++		stride_fifos = sdmac->stride_fifos_dst;
++	}
++
++	words_per_fifo = sdmac->words_per_fifo;
+ 
+ 	sdmac->watermark_level |=
+ 			FIELD_PREP(SDMA_WATERMARK_LEVEL_N_FIFOS, n_fifos);
++	sdmac->watermark_level |=
++			FIELD_PREP(SDMA_WATERMARK_LEVEL_OFF_FIFOS, stride_fifos);
++	if (words_per_fifo)
++		sdmac->watermark_level |=
++			FIELD_PREP(SDMA_WATERMARK_LEVEL_WORDS_PER_FIFO, (words_per_fifo - 1));
+ }
+ 
+ static int sdma_config_channel(struct dma_chan *chan)
+@@ -1769,6 +1789,9 @@ static int sdma_config(struct dma_chan *chan,
+ 		}
+ 		sdmac->n_fifos_src = sdmacfg->n_fifos_src;
+ 		sdmac->n_fifos_dst = sdmacfg->n_fifos_dst;
++		sdmac->stride_fifos_src = sdmacfg->stride_fifos_src;
++		sdmac->stride_fifos_dst = sdmacfg->stride_fifos_dst;
++		sdmac->words_per_fifo = sdmacfg->words_per_fifo;
+ 		sdmac->sw_done = sdmacfg->sw_done;
+ 	}
+ 
+diff --git a/include/linux/dma/imx-dma.h b/include/linux/dma/imx-dma.h
+index 8887762360d4..f487a4fa103a 100644
+--- a/include/linux/dma/imx-dma.h
++++ b/include/linux/dma/imx-dma.h
+@@ -70,6 +70,16 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
+  * struct sdma_peripheral_config - SDMA config for audio
+  * @n_fifos_src: Number of FIFOs for recording
+  * @n_fifos_dst: Number of FIFOs for playback
++ * @stride_fifos_src: FIFO address stride for recording, 0 means all FIFOs are
++ *                    continuous, 1 means 1 word stride between FIFOs. All stride
++ *                    between FIFOs should be same.
++ * @stride_fifos_dst: FIFO address stride for playback
++ * @words_per_fifo: numbers of words per FIFO fetch/fill, 1 means
++ *                  one channel per FIFO, 2 means 2 channels per FIFO..
++ *                  If 'n_fifos_src =  4' and 'words_per_fifo = 2', it
++ *                  means the first two words(channels) fetch from FIFO0
++ *                  and then jump to FIFO1 for next two words, and so on
++ *                  after the last FIFO3 fetched, roll back to FIFO0.
+  * @sw_done: Use software done. Needed for PDM (micfil)
+  *
+  * Some i.MX Audio devices (SAI, micfil) have multiple successive FIFO
+@@ -82,6 +92,9 @@ static inline int imx_dma_is_general_purpose(struct dma_chan *chan)
+ struct sdma_peripheral_config {
+ 	int n_fifos_src;
+ 	int n_fifos_dst;
++	int stride_fifos_src;
++	int stride_fifos_dst;
++	int words_per_fifo;
+ 	bool sw_done;
+ };
+ 
+-- 
+2.17.1
+

@@ -2,288 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA497552C5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D48D552C60
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 09:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347517AbiFUHvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 03:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S1347552AbiFUHwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 03:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiFUHvn (ORCPT
+        with ESMTP id S229605AbiFUHwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 03:51:43 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A02458B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:51:42 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t25so20963597lfg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:51:42 -0700 (PDT)
+        Tue, 21 Jun 2022 03:52:03 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD57245AB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:52:02 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id y14so13896824qvs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 00:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=C43G7OP5T13FTpq18dv8vek6Xm2VVX3iEQqYB+pBnxQ=;
-        b=caTdju9eo2lIZz5cmdYtRpSaBf3lqPh+AZOlRsDlj2vIrqJLKOuk0aUohUKl/6l0HC
-         C7ONtVUasQadYAxv+N9ef90NLTdgw4IBlAdq4ZhwprBiXzSkI/1oJZQF2XzaV9PbClRG
-         Y2M2DShadLkoS+dQkHB2xLkNi+22EaX15TGWJ+xWrekHFfWvnl86018YL0xhewS3UQSc
-         zA3m1b/p9hdmShlkvg5/BvK47KYJzLHRhigSLaCuq2Z+kWrRPGaazgkS6Vk1zoLbM2ua
-         sy3nyYolFFGwYCKTI/6gd7aOpso1+C7xNZhXYQ+uD66vh9LioLZCV0Mq6edsWfuFZqzl
-         wihA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oBi1GtdcKMWmT1bDHc11If7BFUljocWb98H7N/H6xs0=;
+        b=SGPJ5m4tvIHRyjwwdQIIal8VjxuNUxpv23Qai8KBUFCze0qz9KMZRvu8ZUqU3eN3Ku
+         fl4o56SOitD/EI4WXS5RhK3oGUbWPgnOyKgfDrGciUttk7igTulNAjflhz1fpUnQN4lX
+         aRimKlcstTq4qTa0Gf9IOTzFsnalN0nboEJh3CcPDXUjN0h8kDOh8EpqDRKAC+ZOB7cn
+         FHXXrWylD4MypmamELDdF1j65iVrsu5e9H3g2wQ6mOaVmFOdv6gw/bEleMWXTm7wQea1
+         2u+2YtFlgloF51zN4dc7ehszwNHr+Vw4YfOlPRw55uWxOJjFdXbhGorhz6P8E1OuNeTd
+         91sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=C43G7OP5T13FTpq18dv8vek6Xm2VVX3iEQqYB+pBnxQ=;
-        b=GkHCMFF2mAjtKln0B7movDbFFRGgviyqbc40DbAHknUrBbY7I4T8zVo90hB/BTVqtn
-         Ujy/tYX5QsDkZLpJ43lnkoyv4/hDb9Pnjd9I91w758/2wJAyV32DATOSW38i15W6EREU
-         feRk9H85cfe/6tO6W8lSlcV10OJPwM47YXUWHxDI6+FEWsR+qYhWenK1Yhp2YUsy5Yji
-         kW63oPyLYmBl+62OPTYcx6C5ahmICHfUMCYMRwI1hKXbIppr4e3ULzfgfS1Kbr/r7e9p
-         ONp6fzbp2oXqbh34rmyfyj5OBWaTXcEBQnHwz0wD5gwog83K/qGNK1HOHVJ1CFuQTjhO
-         lnAw==
-X-Gm-Message-State: AJIora91RZ7/GS4WndARtU5cHN/gxmJRklt+IN1EwZD01agNHdWOvtc3
-        i9FKnssP6VQ8cS7wdoUkYBgBbSGcIagrQit2SQwoQw==
-X-Google-Smtp-Source: AGRyM1txURs3R58y/o69nTNlDWo9qFx554cdLekLz8IA3BceaY4qBwfW1KSZOthWW8ybIACOruUQRGTQvga+tuY580E=
-X-Received: by 2002:ac2:484d:0:b0:47f:7ebf:336 with SMTP id
- 13-20020ac2484d000000b0047f7ebf0336mr1232541lfy.130.1655797900889; Tue, 21
- Jun 2022 00:51:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oBi1GtdcKMWmT1bDHc11If7BFUljocWb98H7N/H6xs0=;
+        b=KNykt835viq/pVUKTOJcML70Mxjdn/QiSZJeBLNWqyxc07qu5woWpD9B9JWsFSGxMA
+         C9qYFE3UX+d8649aVofQGjYHDXOOvL8PQHcS9Kpvk1y7y9LN47qSDPLYD66xOex3TAyp
+         7Ztx0jLhGy7iwZjYYhO0kAMJxIk8X/QFYG0cbRAotQh4h4hCViqszJ5TyzHoz7nCIusF
+         q2yt0wvmIUsmlYUwyzeiHBlKv0+lflkMyzyBy+YlnOpFqClIbK1DnQ28AcvFOFPzLNV+
+         V59g8rSGvCVI3bbpCm/i8eqjArKpD1Ex/ct9CmVD82PoQa1rv7K0gm4oWMfukGgWJSB3
+         LHwg==
+X-Gm-Message-State: AJIora8Txjr4i0wkAMllf8hQYmCS/9RUJoFID8QfnoD+OP1aScAbXOiy
+        KQfjJdLlAq1p4sIQ2HJb3Q==
+X-Google-Smtp-Source: AGRyM1uldbQ+FF0ReOT1dCERxSwSqnUWwf/gHG/zCBzt2IGMN+ewK96Jq0luXf2dgWYAW+ncZVhwDw==
+X-Received: by 2002:a05:6214:5199:b0:464:58c0:3926 with SMTP id kl25-20020a056214519900b0046458c03926mr21833952qvb.48.1655797921656;
+        Tue, 21 Jun 2022 00:52:01 -0700 (PDT)
+Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id l16-20020a05620a28d000b006a6cadd89efsm14678198qkp.82.2022.06.21.00.52.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 00:52:00 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 03:51:59 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
+        rostedt@goodmis.org, enozhatsky@chromium.org, willy@infradead.org
+Subject: Re: [PATCH v4 05/34] vsprintf: %pf(%p)
+Message-ID: <20220621075159.m67qzftqulvphivw@moria.home.lan>
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <20220620004233.3805-6-kent.overstreet@gmail.com>
+ <f9224687-ce0c-b41b-f158-1b679a70c2d5@rasmusvillemoes.dk>
 MIME-Version: 1.0
-References: <20220619111115.6354-1-nikita.shubin@maquefel.me>
- <20220619111115.6354-2-nikita.shubin@maquefel.me> <CAK9=C2X4TTCEjZya4wz-W6ndBaxzUpLBtzQAGJ4zphVM8NSgdg@mail.gmail.com>
- <20220620174006.1c86a456@redslave.neermore.group> <CAOnJCU+7_z1WN_Z6frQcUwzztVL4itbPSfmLUa_7Ob5xCtLo+Q@mail.gmail.com>
- <20220621104139.7c77e348@redslave.neermore.group>
-In-Reply-To: <20220621104139.7c77e348@redslave.neermore.group>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Tue, 21 Jun 2022 13:21:11 +0530
-Message-ID: <CAK9=C2UiPdB2+UU6aqh5Muf0cnu87k01f1iga6mUYKZgiceAKQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] RISC-V: Create unique identification for SoC PMU
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Atish Patra <atishp@atishpatra.org>, Will Deacon <will@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        =?UTF-8?B?Sm/Do28gTcOhcmlvIERvbWluZ29z?= 
-        <joao.mario@tecnico.ulisboa.pt>, linux <linux@yadro.com>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f9224687-ce0c-b41b-f158-1b679a70c2d5@rasmusvillemoes.dk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 1:13 PM Nikita Shubin <nikita.shubin@maquefel.me> w=
-rote:
->
-> Hello Anup!
->
-> On Mon, 20 Jun 2022 12:40:20 -0700
-> Atish Patra <atishp@atishpatra.org> wrote:
->
-> > On Mon, Jun 20, 2022 at 7:40 AM Nikita Shubin
-> > <nikita.shubin@maquefel.me> wrote:
-> > >
-> > > On Mon, 20 Jun 2022 17:30:58 +0530
-> > > Anup Patel <apatel@ventanamicro.com> wrote:
-> > >
-> > > > On Sun, Jun 19, 2022 at 4:41 PM Nikita Shubin
-> > > > <nikita.shubin@maquefel.me> wrote:
-> > > > >
-> > > > > From: Nikita Shubin <n.shubin@yadro.com>
-> > > > >
-> > > > > Provide RISC-V SBI PMU id to distinguish different cores or
-> > > > > SoCs via "devices/platform/riscv-pmu/id" sysfs entry.
-> > > > >
-> > > > > The identification is generated as string of marchid, mimpid,
-> > > > > mvendorid in hex format separated by coma -
-> > > > > "0x70032,0x70032,0x0".
-> > > > >
-> > > > > The CSRs are detailed in the RISC-V privileged spec [1].
-> > > > > [1] https://github.com/riscv/riscv-isa-manual
-> > > > >
-> > > > > Inspired-by: Jo=C3=A3o M=C3=A1rio Domingos <joao.mario@tecnico.ul=
-isboa.pt>
-> > > > > Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
-> > > >
-> > > > The mvendorid, marchid, and mimpid can be useful to apps other
-> > > > than perf tool.
-> > > >
-> > > > I have tried to extend /proc/cpuinfo with this information which
-> > > > can be parsed by perf tool:
-> > > > https://lore.kernel.org/all/20220620115549.1529597-1-apatel@ventana=
-micro.com/
-> > > >
-> > >
-> > > Atish, what do you think about this ?
-> > >
-> > > RISC-V perf can rely on "/proc/cpuinfo", in some similar manner like
-> > > "tools/perf/arch/s390/util/header.c" does.
-> > >
-> >
-> > Yes. We can expose these three values either in sysfs or procfs
-> > (/proc/cpuinfo). For perf tool, it shouldn't matter as the header.c
-> > will need to generate the unique cpuid
-> > string from either.
-> >
-> > I am not sure if any other userspace tool prefers to parse sysfs
-> > instead of cpuinfo.
->
-> Okay - let's stick to /proc/cpuinfo.
+On Tue, Jun 21, 2022 at 09:04:38AM +0200, Rasmus Villemoes wrote:
+> On 20/06/2022 02.42, Kent Overstreet wrote:
+> > +Note that a pretty-printer may not sleep, if called from printk(). If called
+> > +from pr_buf() or sprintf() there are no such restrictions.
+> 
+> I know what you're trying to say, but if the sprintf() call itself is
+> from a non-sleepable context this is obviously not true. So please just
+> make the rule "A pretty-printer must not sleep.". That's much simpler
+> and less error-prone. Otherwise I guarantee you that somebody is going
+> to add a sleeping pretty-printer for their own need, use it in a couple
+> of safe places, and then somebody wants to add a printk() in that driver
+> and sees "hey, I can get all this state dumped very easily with this
+> pretty-printer".
 
-Sounds good.
+Kernel programmers are used to having to consider the context they're in and
+what the functions they're calling might do, a pretty-printer being called
+indirectly via sprintf() is absolutely no different. 
 
-You might have to write /proc/cpuinfo parsing code in perf tool
-header.c. Do you plan to send v4 of perf tool patches ??
+> >  struct printf_spec {
+> > @@ -2520,7 +2521,16 @@ int format_decode(const char *fmt, struct printf_spec *spec)
+> >  		return ++fmt - start;
+> >  
+> >  	case 'p':
+> > -		spec->type = FORMAT_TYPE_PTR;
+> > +		fmt++;
+> > +		if (fmt[0] == 'f' &&
+> > +		    fmt[1] == '(') {
+> > +			fmt += 2;
+> > +			spec->type = FORMAT_TYPE_FN;
+> > +		} else
+> > +			spec->type = FORMAT_TYPE_PTR;
+> > +		return fmt - start;
+> > +	case '(':
+> > +		spec->type = FORMAT_TYPE_FN;
+> >  		return ++fmt - start;
+> 
+> NAK. Don't implement something that will never be tested nor used.
+> There's not a snowball's chance in hell that we'll ever build the kernel
+> without -Wformat.
 
-Regards,
-Anup
+We're not stopping here. Matthew is taking this to WG14 and I'll be working on
+adding this functionality to glibc next, and %() is the syntax we intend to take
+to the working group.
 
->
-> >
-> > > Can it create problems with pmu identification in case of
-> > > hetergenous harts ?
-> > >
-> >
-> > Does perf support hetergenous harts at all ? ARM64 code
-> > (tool/perf/arch/arm64/util/header.c)
-> > just breaks out of the loop after finding the first MIDR.
-> >
-> > > >
-> > > > Regards,
-> > > > Anup
-> > > >
-> > > > > ---
-> > > > > v3->v4:
-> > > > > - use string for pmuid
-> > > > > - rename pmu_sbi_id_show to id_show
-> > > > > - fix error print message in id_show
-> > > > > - fix DEVICE_ATTR to use octal permissions
-> > > > > ---
-> > > > >  arch/riscv/kernel/sbi.c        |  3 +++
-> > > > >  drivers/perf/riscv_pmu_sbi.c   | 41
-> > > > > ++++++++++++++++++++++++++++++++++
-> > > > > include/linux/perf/riscv_pmu.h | 1 + 3 files changed, 45
-> > > > > insertions(+)
-> > > > >
-> > > > > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> > > > > index 775d3322b422..50dd9b6ecc9e 100644
-> > > > > --- a/arch/riscv/kernel/sbi.c
-> > > > > +++ b/arch/riscv/kernel/sbi.c
-> > > > > @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
-> > > > >  {
-> > > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
-> > > > >  }
-> > > > > +EXPORT_SYMBOL(sbi_get_mvendorid);
-> > > > >
-> > > > >  long sbi_get_marchid(void)
-> > > > >  {
-> > > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
-> > > > >  }
-> > > > > +EXPORT_SYMBOL(sbi_get_marchid);
-> > > > >
-> > > > >  long sbi_get_mimpid(void)
-> > > > >  {
-> > > > >         return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
-> > > > >  }
-> > > > > +EXPORT_SYMBOL(sbi_get_mimpid);
-> > > > >
-> > > > >  static void sbi_send_cpumask_ipi(const struct cpumask *target)
-> > > > >  {
-> > > > > diff --git a/drivers/perf/riscv_pmu_sbi.c
-> > > > > b/drivers/perf/riscv_pmu_sbi.c index dca3537a8dcc..be812f855617
-> > > > > 100644 --- a/drivers/perf/riscv_pmu_sbi.c
-> > > > > +++ b/drivers/perf/riscv_pmu_sbi.c
-> > > > > @@ -693,6 +693,28 @@ static int pmu_sbi_setup_irqs(struct
-> > > > > riscv_pmu *pmu, struct platform_device *pde return 0;
-> > > > >  }
-> > > > >
-> > > > > +static ssize_t id_show(struct device *dev,
-> > > > > +                               struct device_attribute *attr,
-> > > > > char *buf) +{
-> > > > > +       int len;
-> > > > > +       struct riscv_pmu *pmu =3D
-> > > > > container_of(dev_get_drvdata(dev), struct riscv_pmu, pmu); +
-> > > > > +       len =3D sprintf(buf, "%s\n", pmu->pmuid);
-> > > > > +       if (len <=3D 0)
-> > > > > +               dev_err(dev, "invalid sprintf len: %d\n", len);
-> > > > > +
-> > > > > +       return len;
-> > > > > +}
-> > > > > +
-> > > > > +static DEVICE_ATTR(id, 0644, id_show, NULL);
-> > > > > +
-> > > > > +static struct attribute *pmu_sbi_attrs[] =3D {
-> > > > > +       &dev_attr_id.attr,
-> > > > > +       NULL
-> > > > > +};
-> > > > > +
-> > > > > +ATTRIBUTE_GROUPS(pmu_sbi);
-> > > > > +
-> > > > >  static int pmu_sbi_device_probe(struct platform_device *pdev)
-> > > > >  {
-> > > > >         struct riscv_pmu *pmu =3D NULL;
-> > > > > @@ -714,6 +736,14 @@ static int pmu_sbi_device_probe(struct
-> > > > > platform_device *pdev) if (pmu_sbi_get_ctrinfo(num_counters))
-> > > > >                 goto out_free;
-> > > > >
-> > > > > +       /* fill pmuid */
-> > > > > +       pmu->pmuid =3D kasprintf(GFP_KERNEL, "0x%lx,0x%lx,0x%lx",
-> > > > > +                              sbi_get_marchid(),
-> > > > > +                              sbi_get_mimpid(),
-> > > > > +                              sbi_get_mvendorid());
-> > > > > +       if (!pmu->pmuid)
-> > > > > +               goto out_free_pmuid;
-> > > > > +
-> > > > >         ret =3D pmu_sbi_setup_irqs(pmu, pdev);
-> > > > >         if (ret < 0) {
-> > > > >                 pr_info("Perf sampling/filtering is not
-> > > > > supported as sscof extension is not available\n"); @@ -739,8
-> > > > > +769,19 @@ static int pmu_sbi_device_probe(struct
-> > > > > platform_device *pdev) return ret; }
-> > > > >
-> > > > > +       ret =3D sysfs_create_group(&pdev->dev.kobj,
-> > > > > &pmu_sbi_group);
-> > > > > +       if (ret) {
-> > > > > +               dev_err(&pdev->dev, "sysfs creation failed\n");
-> > > > > +               return ret;
-> > > > > +       }
-> > > > > +
-> > > > > +       pdev->dev.groups =3D pmu_sbi_groups;
-> > > > > +       dev_set_drvdata(&pdev->dev, pmu);
-> > > > > +
-> > > > >         return 0;
-> > > > >
-> > > > > +out_free_pmuid:
-> > > > > +       kfree(pmu->pmuid);
-> > > > >  out_free:
-> > > > >         kfree(pmu);
-> > > > >         return ret;
-> > > > > diff --git a/include/linux/perf/riscv_pmu.h
-> > > > > b/include/linux/perf/riscv_pmu.h index
-> > > > > 46f9b6fe306e..cf3557b77fb8 100644 ---
-> > > > > a/include/linux/perf/riscv_pmu.h +++
-> > > > > b/include/linux/perf/riscv_pmu.h @@ -42,6 +42,7 @@ struct
-> > > > > cpu_hw_events { struct riscv_pmu {
-> > > > >         struct pmu      pmu;
-> > > > >         char            *name;
-> > > > > +       char            *pmuid;
-> > > > >
-> > > > >         irqreturn_t     (*handle_irq)(int irq_num, void *dev);
-> > > > >
-> > > > > --
-> > > > > 2.35.1
-> > > > >
-> > >
-> >
-> >
->
+But the working group is naturally going to want to see that a working
+implementation of it exists.
+
+> Sorry, but this is way too ugly, and the prospect of at some point in
+> the future invoking libffi to do something even naster... eww. We do not
+> need more functions with completely generic prototypes with no
+> typechecking and making it extremely hard to teach one of our static
+> analyzers (smatch has some %pX checking) to do that typechecking.
+> 
+> There are at least two ways you can achieve this passing of a variable
+> number of arguments with proper types.
+> 
+> (1) Each pretty-printer comes with a struct wrapping up its real
+> arguments and a macro for creating a compound literal passing those
+> arguments.
+> 
+> struct foo_pp {
+>   void (*func)(struct printbuf *pb, void *ctx); /* always first */
+>   int x;
+>   long y;
+> };
+> void foo_pp(struct printbuf *pb, void *ctx)
+> {
+>   struct foo_pp *f = ctx;
+>   pr_printf(pb, "%d %ld", f->x, f->y);
+> }
+> 
+> #define FOO_PP(_x, _y) (struct foo_pp){.func = foo_pp, .x = (_x), .y = (_y)}
+> 
+> printk("bla bla %pf\n", &FOO_PP(aa, bb));
+
+Hellllllllll no.
+
+All that's missing right now is gcc checking that the function signature matches
+the args specified within the (). That will come. No way in hell am I going to
+implement some half baked hacked up macro crap - I intend to do this right.
+
+> (2) Let the pretty-printer itself extract the varargs it expects. To
+> portably pass around a va_list by reference it needs to be wrapped, so
+> this would be
+> 
+> struct wva { va_list ap; };
+> 
+> void foo_pp(struct printbuf *pb, struct wva *w)
+> {
+>   int x = va_arg(w->ap, int);
+>   long y = va_arg(w->ap, long);
+>   pr_printf(pb, "%d %ld", x, y);
+> }
+> 
+> printk("bla bla %pf(%d, %ld)\n", foo_pp, aa, bb)
+> 
+> with the core printf implementation internally using such a wrapped
+> va_list, and after a %pf( relying on the pretty-printer having consumed
+> the arguments up until the closing ). It would probably be a good idea
+> to give the pretty-printer a pointer to that opening '(' or one-past-it
+> as well so it could do a sanity check.
+
+Also no. Varargs is terrible in most situations, and should only be used for
+functions that actually want to take variable numbers of arguments - that
+doesn't apply to pretty printers.

@@ -2,290 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894CC55307E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE142553086
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348954AbiFULNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S1348992AbiFULOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348275AbiFULMv (ORCPT
+        with ESMTP id S1348360AbiFULOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:12:51 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145C429C9C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:12:49 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id c144so9716425qkg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:12:49 -0700 (PDT)
+        Tue, 21 Jun 2022 07:14:52 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8576429CA6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:14:51 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id r3so23876050ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9qa1MQsdjtp0OEX63gPYIUdKxF/75S2mxsehPpdr6gY=;
-        b=l6NGbdp4FKgTJV9bvxCF+EY/e18GEajW6uYOe172nIpRGpI9MAJlvER6aKZcAPH1vx
-         tqYuoMRyhxog/HbuYMoRJkVNHrpmDj/flJseuG7qmds/cwGcZdnYTgiejUbpLBb+2bfk
-         9qGIZfD0/x74wCAluBB1HQz6FT/yP4xsV/qzUex1Vn4Gz2HbEYt+ML44shsG+rWdQioW
-         jI5UlxcEkTA6LJqclPrkxDpljoFxKJbpk7dJ/k1DKhbfvnrn04Tb20cJuxhUH56g/CF1
-         cVM4WmoIMf9b9dd8UXBry8HuoVsSj0nMEI8nt6qy+P6DE7mrj0hu1Y93s40qZ6S0eb4X
-         LQ0g==
+        bh=yTjJ0DM8UhfLUxnJgLF1yIGlrKBlqdpXoPMj/z5vlI8=;
+        b=5b6BBFCna+oCdlTQAsmmddI1nNzy/HGy2Wj8rNb4up3wBw/q1UFl4HhcBq8VFlbkox
+         dmbkQHzAqLeQytnQ9CE0xMBFOVPXJlc40Fj80hAmNJNRvZbfIflzxHiBJjXI3A3qAjdh
+         gxyL0X3gjaGkKfelem7RxJmmiE2NVbcQi4X++/0ni5kdyhF7fwyGJZHakYaPgiiJ8Q5T
+         5rksYIOs68P0XXPah4TaPOYqHh5XSWU0m6VzWyXZYEn9h1o7VZrY+pDo+jl3CAo34vGW
+         PzZbtIxmSmqXSc0xP7dbc4gTqiegp0C1cJqIMbyXmRBtdJ66OtdOa7gutoESRqHHprvT
+         8Ffw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9qa1MQsdjtp0OEX63gPYIUdKxF/75S2mxsehPpdr6gY=;
-        b=JpSsJt7Di9ygZveSaPHkePaoIsji/QwkxJR7s+/RS6GTk7o9/xYHmDrwOzhJegC8ZJ
-         KJBOiloFFd66+jkhQ4uGWmtm1Eckdi4koDErE2OLhe4r+3z4Er3lDWDHgDaVcrZiHVYH
-         uQh+4I/2aZB6VxDx+6L2UUROIP47o4vvuOSTzDzRFk3z6Lk60mZBDDgQjD8n0ZVMmNme
-         5ntZONyztzr6NjkQYm8bo55E9p73RTui/LYVZ4cBZjgQoSZO40JQKXT1TH6fX2cfG3N4
-         6TgYLNsODHOL672NGeKqN3KeojaJSxhBytpYWNae6XgFbmQgEp7Y17g6XN2SUZdz1uYf
-         w6Qw==
-X-Gm-Message-State: AJIora92vgwwFWTMjjOyDuIKiz+6pZGcfP3Sml+pvuFxRzq2Q7rrgpq2
-        TSvHxlDpOGdlI1AQYgce6ZjP6Kb4YvcJLUFR6QbniQ==
-X-Google-Smtp-Source: AGRyM1uafhTUa4eavyRah2JJoXvD8uHWLL2uFvFdCTn2zghYYgQYSuB04Dr+yY9pjQbiW54ZNO0GarGgEj06mOHKfo4=
-X-Received: by 2002:a05:620a:4305:b0:6a9:3829:c03 with SMTP id
- u5-20020a05620a430500b006a938290c03mr19272968qko.363.1655809968124; Tue, 21
- Jun 2022 04:12:48 -0700 (PDT)
+        bh=yTjJ0DM8UhfLUxnJgLF1yIGlrKBlqdpXoPMj/z5vlI8=;
+        b=5BZ+tkDGOuF2+uovARIqY851Pddva3vB0hg7bso1Ix3Y2vu11mvltnf7UhMAF5/NUz
+         p1TtMPZLZ7ETGQq8RjE9UthcIMWtOoVrcOyNcTHnfnccw3h53yjwqEWUVUee01f12H4q
+         mDWWmHjRgeIWvo3Z8aHHB5TblmHjyrClEwyt+/xB9xLgyMOFEC6MUCCTmql3cT9FjKIQ
+         AkNxcH2VrAZxnGzyHZMUUS8cdELiFfq8wsA4Hrhb1s5nLKKsi++RxImHJhSdFcLKQ04a
+         O8G35iMEAWSQiZMUQJYV814WJSO5fo9YL/ufCWr3PP3qgFzZWWcazp+fEO7vqb3WyKw6
+         qpfw==
+X-Gm-Message-State: AJIora8omFhG3pbELf1zQ1iSXh3std/kJFkxuDAJ1e82KJimpnWRyggk
+        3flTMNxkJEdmJeZdra6ZsK6/63xS4SmO7iC+PDTkBA==
+X-Google-Smtp-Source: AGRyM1uueA1T7Oig/PE3Ow5Ua3OljfQyd9wJyYgZG3tA3cfWlxrzAD4imH7uKaj12EBuo2dqrUPyHy+BsiBoHgnkoEk=
+X-Received: by 2002:a25:b218:0:b0:664:6da5:b5c5 with SMTP id
+ i24-20020a25b218000000b006646da5b5c5mr30977101ybj.6.1655810090707; Tue, 21
+ Jun 2022 04:14:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <1655802387-15275-1-git-send-email-quic_kalyant@quicinc.com> <1655802387-15275-2-git-send-email-quic_kalyant@quicinc.com>
-In-Reply-To: <1655802387-15275-2-git-send-email-quic_kalyant@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 21 Jun 2022 14:12:36 +0300
-Message-ID: <CAA8EJponMDAXDAZ9zpkYEZvONDAztuXhjwZ6y7rgo1HtQOMtfQ@mail.gmail.com>
-Subject: Re: [v1 2/2] drm/msm/disp/dpu1: enable crtc color management based on
- encoder topology
-To:     Kalyan Thota <quic_kalyant@quicinc.com>
-Cc:     y@qualcomm.com, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robdclark@gmail.com, dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
+References: <20220620164246.0d3f7784@canb.auug.org.au> <20220621171800.0397976a@canb.auug.org.au>
+In-Reply-To: <20220621171800.0397976a@canb.auug.org.au>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 21 Jun 2022 19:14:13 +0800
+Message-ID: <CAMZfGtWkzpLPBQHM5WQ7yFTFiTY8o7NU-z+01O-KbEYdc9AFdw@mail.gmail.com>
+Subject: Re: [External] Re: linux-next: build failures after merge of the mm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oscar Salvador <osalvador@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generic comment: y@qualcomm.com address bounces. Please remove it from
-the cc list. If you need to send a patch for the internal reasons,
-please use Bcc.
+On Tue, Jun 21, 2022 at 3:18 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Mon, 20 Jun 2022 16:42:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
+> > failed like this:
+> >
+> > In file included from arch/x86/include/asm/page.h:86,
+> >                  from arch/x86/include/asm/thread_info.h:12,
+> >                  from include/linux/thread_info.h:60,
+> >                  from arch/x86/include/asm/preempt.h:7,
+> >                  from include/linux/preempt.h:78,
+> >                  from include/linux/spinlock.h:55,
+> >                  from include/linux/mmzone.h:8,
+> >                  from include/linux/gfp.h:6,
+> >                  from include/linux/slab.h:15,
+> >                  from include/linux/crypto.h:20,
+> >                  from arch/x86/kernel/asm-offsets.c:9:
+> > include/linux/mm.h: In function 'destroy_large_folio':
+> > include/asm-generic/memory_model.h:35:21: error: implicit declaration of function 'page_to_section'; did you mean 'present_section'? [-Werror=implicit-function-declaration]
+> >    35 |         int __sec = page_to_section(__pg);                      \
+> >       |                     ^~~~~~~~~~~~~~~
+> > include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
+> >    40 | ({      unsigned long __pfn = (pfn);                    \
+> >       |                                ^~~
+> > include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
+> >    52 | #define page_to_pfn __page_to_pfn
+> >       |                     ^~~~~~~~~~~~~
+> > include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
+> >   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+> >       |                                      ^~~~~~~~~~~
+> > include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
+> >   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
+> >       |                                 ^~~~~~~~
+> > include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
+> >   928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
+> >       |                                      ^~~~~~~~~~
+> > In file included from include/linux/memcontrol.h:20,
+> >                  from include/linux/swap.h:9,
+> >                  from include/linux/suspend.h:5,
+> >                  from arch/x86/kernel/asm-offsets.c:13:
+> > include/linux/mm.h: At top level:
+> > include/linux/mm.h:1556:29: error: conflicting types for 'page_to_section'; have 'long unsigned int(const struct page *)'
+> >  1556 | static inline unsigned long page_to_section(const struct page *page)
+> >       |                             ^~~~~~~~~~~~~~~
+> > In file included from arch/x86/include/asm/page.h:86,
+> >                  from arch/x86/include/asm/thread_info.h:12,
+> >                  from include/linux/thread_info.h:60,
+> >                  from arch/x86/include/asm/preempt.h:7,
+> >                  from include/linux/preempt.h:78,
+> >                  from include/linux/spinlock.h:55,
+> >                  from include/linux/mmzone.h:8,
+> >                  from include/linux/gfp.h:6,
+> >                  from include/linux/slab.h:15,
+> >                  from include/linux/crypto.h:20,
+> >                  from arch/x86/kernel/asm-offsets.c:9:
+> > include/asm-generic/memory_model.h:35:21: note: previous implicit declaration of 'page_to_section' with type 'int()'
+> >    35 |         int __sec = page_to_section(__pg);                      \
+> >       |                     ^~~~~~~~~~~~~~~
+> > include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
+> >    40 | ({      unsigned long __pfn = (pfn);                    \
+> >       |                                ^~~
+> > include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
+> >    52 | #define page_to_pfn __page_to_pfn
+> >       |                     ^~~~~~~~~~~~~
+> > include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
+> >   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+> >       |                                      ^~~~~~~~~~~
+> > include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
+> >   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
+> >       |                                 ^~~~~~~~
+> > include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
+> >   928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
+> >       |                                      ^~~~~~~~~~
+> > cc1: some warnings being treated as errors
+> >
+> > Caused by commit (I think)
+> >
+> >   d3b90b76e101 ("mm: convert destroy_compound_page() to destroy_large_folio()")
+> >
+> > I have reverted these commits fot today:
+> >
+> > 56629699b3dd mm/swap: convert __delete_from_swap_cache() to a folio
+> > e5085f2cc241 mm/swap: convert delete_from_swap_cache() to take a folio
+> > 169f02f4efb1 mm: convert page_swap_flags to folio_swap_flags
+> > d3b90b76e101 mm: convert destroy_compound_page() to destroy_large_folio()
+> >
+> > Then I got:
+> >
+> > mm/hugetlb_vmemmap.c: In function 'vmemmap_optimizable_pages':
+> > mm/hugetlb_vmemmap.c:110:24: error: implicit declaration of function 'sparse_decode_mem_map' [-Werror=implicit-function-declaration]
+> >   110 |         vmemmap_page = sparse_decode_mem_map(ms->section_mem_map,
+> >       |                        ^~~~~~~~~~~~~~~~~~~~~
+> > mm/hugetlb_vmemmap.c:110:22: warning: assignment to 'struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+> >   110 |         vmemmap_page = _sparsedecode_mem_map(ms->section_mem_map,
+> >       |                      ^
+> > cc1: some warnings being treated as errors
+> >
+> > from my arm64 defconfig build.
+> >
+> > Caused by commit
+> >
+> >   10a768735470 ("mm: memory_hotplug: make hugetlb_optimize_vmemmap compatible with memmap_on_memory")
+> >
+> > So I gave up and used the mm tree from next-20220617 for today.
+>
+> Today, I reverted the following commits instead:
+>
+> 10a768735470 mm: memory_hotplug: make hugetlb_optimize_vmemmap compatible with memmap_on_memory
 
-On Tue, 21 Jun 2022 at 12:06, Kalyan Thota <quic_kalyant@quicinc.com> wrote:
->
-> Crtc color management needs to be registered only for the crtc which has the
-> capability to handle it. Since topology decides which encoder will get the
-> dspp hw block, tie up the crtc and the encoder together (encoder->possible_crtcs)
->
-> Change-Id: If5a0f33547b6f527ca4b8fbb78424b141dbbd711
+For this one, I have fixed it in thread [1]. Hopefully, Andrew can
+pick it into "mm" or "next" branch.
 
-No change-id's please. This is not the gerrit.
+[1] https://lore.kernel.org/all/20220620110616.12056-1-songmuchun@bytedance.com/
 
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  8 ++++++--
->  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  2 +-
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 20 ++++++++++++++++----
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  5 +++++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     | 22 ++++++++++++++++++----
->  5 files changed, 46 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> index 7763558..2913acb 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> @@ -1511,7 +1511,7 @@ static const struct drm_crtc_helper_funcs dpu_crtc_helper_funcs = {
->
->  /* initialize crtc */
->  struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
-> -                               struct drm_plane *cursor)
-> +                               struct drm_plane *cursor, unsigned int enc_mask)
->  {
->         struct drm_crtc *crtc = NULL;
->         struct dpu_crtc *dpu_crtc = NULL;
-> @@ -1544,7 +1544,11 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->
->         drm_crtc_helper_add(crtc, &dpu_crtc_helper_funcs);
->
-> -       drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
-> +       /* Register crtc color management if the encoder has dspp, use the
-> +        * crtc to mark it as possible_crtcs for that encoder.
-> +        */
-> +       if(BIT(crtc->index) & enc_mask)
+Thanks.
 
-So, we are checking CRTC's index against the encoder's mask? This is
-counterintuitive.
-
-> +               drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
+> cececf2df493 mm: memory_hotplug: enumerate all supported section flags
+> 56629699b3dd mm/swap: convert __delete_from_swap_cache() to a folio
+> e5085f2cc241 mm/swap: convert delete_from_swap_cache() to take a folio
+> 169f02f4efb1 mm: convert page_swap_flags to folio_swap_flags
+> d3b90b76e101 mm: convert destroy_compound_page() to destroy_large_folio()
+> 19211dae45bb mm/swap: convert __page_cache_release() to use a folio
 >
->         /* save user friendly CRTC name for later */
->         snprintf(dpu_crtc->name, DPU_CRTC_NAME_SIZE, "crtc%u", crtc->base.id);
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-> index b8785c3..0a6458e 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-> @@ -269,7 +269,7 @@ void dpu_crtc_complete_commit(struct drm_crtc *crtc);
->   * @Return: new crtc object or error
->   */
->  struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
-> -                              struct drm_plane *cursor);
-> +                              struct drm_plane *cursor, unsigned int enc_mask);
->
->  /**
->   * dpu_crtc_register_custom_event - api for enabling/disabling crtc event
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index f2cb497..893ce68 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -13,6 +13,8 @@
->  #include <drm/drm_crtc.h>
->  #include <drm/drm_file.h>
->  #include <drm/drm_probe_helper.h>
-> +#include <drm/drm_bridge.h>
-> +#include <drm/drm_bridge_connector.h>
->
->  #include "msm_drv.h"
->  #include "dpu_kms.h"
-> @@ -511,13 +513,18 @@ void dpu_encoder_helper_split_config(
->         }
->  }
->
-> -static struct msm_display_topology dpu_encoder_get_topology(
-> -                       struct dpu_encoder_virt *dpu_enc,
-> +struct msm_display_topology dpu_encoder_get_topology(
-> +                       struct drm_encoder *drm_enc,
->                         struct dpu_kms *dpu_kms,
->                         struct drm_display_mode *mode)
->  {
->         struct msm_display_topology topology = {0};
-> +       struct dpu_encoder_virt *dpu_enc;
-> +       struct drm_bridge *bridge;
->         int i, intf_count = 0;
-> +       bool primary_display = false;
-> +
-> +       dpu_enc = to_dpu_encoder_virt(drm_enc);
->
->         for (i = 0; i < MAX_PHYS_ENCODERS_PER_VIRTUAL; i++)
->                 if (dpu_enc->phys_encs[i])
-> @@ -542,7 +549,12 @@ static struct msm_display_topology dpu_encoder_get_topology(
->         else
->                 topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
->
-> -       if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
-> +       drm_for_each_bridge_in_chain(drm_enc, bridge) {
-> +               if (bridge->type != DRM_MODE_CONNECTOR_DisplayPort)
-> +                       primary_display = true;
-> +       }
-
-I must admit, I never actually liked the original (intf_type == DSI)
-check. However the new one is even worse. We are checking the whole
-bridge chain in an attempt to rule out the DP ports for whatever
-reason. What about the HDMI ports? Should they be also frowned upon?
-The ugly part is that we are making the decision for the user, which
-displays are "primary" for him. Can we let the user make this setting?
-
-> +
-> +       if (primary_display) {
->                 if (dpu_kms->catalog->dspp &&
->                         (dpu_kms->catalog->dspp_count >= topology.num_lm))
->                         topology.num_dspp = topology.num_lm;
-> @@ -601,7 +613,7 @@ static int dpu_encoder_virt_atomic_check(
->                 }
->         }
->
-> -       topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode);
-> +       topology = dpu_encoder_get_topology(drm_enc, dpu_kms, adj_mode);
-
-extra whitespace change. Please drop.
-
->
->         /* Reserve dynamic resources now. */
->         if (!ret) {
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> index 1f39327..c4daf7c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> @@ -172,4 +172,9 @@ int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
->
->  bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc);
->
-> +struct msm_display_topology dpu_encoder_get_topology(
-> +                       struct drm_encoder *drm_enc,
-> +                       struct dpu_kms *dpu_kms,
-> +                       struct drm_display_mode *mode);
-> +
->  #endif /* __DPU_ENCODER_H__ */
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 3a4da0d..486ff9d 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -687,9 +687,12 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
->         unsigned cursor_idx = 0;
->         unsigned primary_idx = 0;
->         bool pin_overlays;
-> +       unsigned int max_dspp_count = 0;
-> +       unsigned int enc_mask = 0;
->
->         struct msm_drm_private *priv;
->         struct dpu_mdss_cfg *catalog;
-> +       struct msm_display_topology topology = {0};
->
->         int primary_planes_idx = 0, cursor_planes_idx = 0, i, ret;
->         int max_crtc_count;
-> @@ -754,10 +757,19 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
->         }
->
->         max_crtc_count = min(max_crtc_count, primary_planes_idx);
-> +       max_dspp_count = catalog->dspp_count;
-> +
-> +       drm_for_each_encoder(encoder, dev) {
-> +               topology = dpu_encoder_get_topology(encoder, dpu_kms, NULL);
-
-This can crash dpu_encoder_get_topology() because it checks mode->hdisplay.
-And the check anyway is futile here. We do not know if the encoder is
-going to use 1 or 2 LMs (since we do not know the resolution), so we
-do not know whether it will use 1 or 2 DSPP blocks.
-
-> +               if (topology.num_dspp > 0 && (topology.num_dspp <= max_dspp_count)) {
-> +                       enc_mask |= BIT(encoder->index);
-> +                       max_dspp_count -= topology.num_dspp;
-> +               }
-> +       }
->
->         /* Create one CRTC per encoder */
->         for (i = 0; i < max_crtc_count; i++) {
-> -               crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
-> +               crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i], enc_mask);
->                 if (IS_ERR(crtc)) {
->                         ret = PTR_ERR(crtc);
->                         return ret;
-> @@ -765,9 +777,11 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
->                 priv->crtcs[priv->num_crtcs++] = crtc;
->         }
->
-> -       /* All CRTCs are compatible with all encoders */
-> -       drm_for_each_encoder(encoder, dev)
-> -               encoder->possible_crtcs = (1 << priv->num_crtcs) - 1;
-> +       /* Attach CRTC's to compatiable encoders */
-
-compatible
-
-
-> +       drm_for_each_encoder(encoder, dev) {
-> +               encoder->possible_crtcs = (enc_mask & BIT(encoder->index)) ?
-> +                               BIT(encoder->index) : (((1 << priv->num_crtcs) - 1) & ~enc_mask);
-> +       }
->
->         return 0;
->  }
 > --
-> 2.7.4
->
-
-
---
-With best wishes
-Dmitry
+> Cheers,
+> Stephen Rothwell

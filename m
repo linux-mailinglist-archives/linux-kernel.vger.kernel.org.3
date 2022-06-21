@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0A4553B9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADE4553B9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 22:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354099AbiFUU0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 16:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
+        id S1354046AbiFUU2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 16:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235086AbiFUU0r (ORCPT
+        with ESMTP id S235086AbiFUU1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 16:26:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED03C2A73B;
-        Tue, 21 Jun 2022 13:26:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Jun 2022 16:27:49 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F079D2EA03;
+        Tue, 21 Jun 2022 13:27:47 -0700 (PDT)
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87A0B6177B;
-        Tue, 21 Jun 2022 20:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494B9C3411C;
-        Tue, 21 Jun 2022 20:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655843206;
-        bh=Iv7WrPExU3s0MnkfQxFXTcvrqffkxEjLNITUpV9WDZ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QjAH+6v+BLZOFXyeSbf34WfglSewe50UzYMMuRcB/g8L0KNuhl/q7DA/TTgb/+w2v
-         2VS9z2dCQYWQZUm6Mm+cQlYqQsYKgd8PzSGqMakjTQhPGdiDlkIGm84MWNpElAlLBy
-         muSZF/Gcl4hVPDFEDSjjJXs5WcGOI0owEcZLc92A=
-Date:   Tue, 21 Jun 2022 22:26:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Paul Rosswurm <paulros@microsoft.com>,
-        Shachar Raindel <shacharr@microsoft.com>,
-        "olaf@aepfle.de" <olaf@aepfle.de>, vkuznets <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next, 1/2] net: mana: Add handling of CQE_RX_TRUNCATED
-Message-ID: <YrIpgssFaIYu1EN3@kroah.com>
-References: <1644014745-22261-1-git-send-email-haiyangz@microsoft.com>
- <1644014745-22261-2-git-send-email-haiyangz@microsoft.com>
- <MN2PR21MB12957F8F10E4B152E26421BBCA2A9@MN2PR21MB1295.namprd21.prod.outlook.com>
- <20220207091212.0ccccde7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <DM5PR21MB17494B8D4472F74198C88FE7CAB39@DM5PR21MB1749.namprd21.prod.outlook.com>
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 942D241625;
+        Tue, 21 Jun 2022 20:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1655843265;
+        bh=FHOjmjAGhb/jKh/X38HObStif09xq2VOvZEQFXt3zqo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=REhG/YvE5Y5HZv8PaXPYcPM44vP8IEJ8IMzZFA32j0rDjJBvP54vgsg5TljnEVb2C
+         6l9Gw8xSjfI1zJUVeqU706hHjnfTfXBQg2mjFR6AwzXgBae9AkqRIO3MW8Nnl/QIYx
+         a1aXnHf31tgETQ71gAcLHrFbepqdBlwyN+w4B9rXjnOL0oVRtEXzi0mdktd1n9nhlu
+         c44GHwZtTKZGR9nZxxQNYa84k7b7lT8U8Rrb1bb1ojiaT2SzJ9CuwKDkd0rVfWt/0m
+         kvplSORt2LLsRq1jQmvt49GetCZG97LSsyDGbhwWhE+cCGxDZom8/JBlMrQKyYTzOo
+         3XS9YZXjztRIg==
+Message-ID: <cd2a4ea4-52d2-cf95-7769-859b0a35b564@canonical.com>
+Date:   Tue, 21 Jun 2022 13:27:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM5PR21MB17494B8D4472F74198C88FE7CAB39@DM5PR21MB1749.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Linux 5.18-rc4
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        James Morris <jmorris@namei.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        gwml@vger.gnuweeb.org
+References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
+ <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
+ <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
+ <87r1414y5v.fsf@email.froward.int.ebiederm.org>
+ <CAHk-=wijAnOcC2qQEAvFtRD_xpPbG+aSUXkfM-nFTHuMmPbZGA@mail.gmail.com>
+ <266e648a-c537-66bc-455b-37105567c942@canonical.com>
+ <Yp5iOlrgELc9SkSI@casper.infradead.org>
+ <dd654ee2-ae10-e247-f98b-f5057dbb380b@canonical.com>
+ <Yqe+zE4f7uo8YdBE@casper.infradead.org>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <Yqe+zE4f7uo8YdBE@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 07:55:26PM +0000, Haiyang Zhang wrote:
+On 6/13/22 15:48, Matthew Wilcox wrote:
+> On Mon, Jun 06, 2022 at 02:00:33PM -0700, John Johansen wrote:
+>> On 6/6/22 13:23, Matthew Wilcox wrote:
+>>> On Mon, Jun 06, 2022 at 12:19:36PM -0700, John Johansen wrote:
+>>>>> I suspect that part is that both Apparmor and IPC use the idr local lock.
+>>>>>
+>>>> bingo,
+>>>>
+>>>> apparmor moved its secids allocation from a custom radix tree to idr in
+>>>>
+>>>>   99cc45e48678 apparmor: Use an IDR to allocate apparmor secids
+>>>>
+>>>> and ipc is using the idr for its id allocation as well
+>>>>
+>>>> I can easily lift the secid() allocation out of the ctx->lock but that
+>>>> would still leave it happening under the file_lock and not fix the problem.
+>>>> I think the quick solution would be for apparmor to stop using idr, reverting
+>>>> back at least temporarily to the custom radix tree.
+>>>
+>>> How about moving forward to the XArray that doesn't use that horrid
+>>> prealloc gunk?  Compile tested only.
+>>>
+>>
+>> I'm not very familiar with XArray but it does seem like a good fit. We do try
+>> to keep the secid allocation dense, ideally no holes. Wrt the current locking
+>> issue I want to hear what Thomas has to say. Regardless I am looking into
+>> whether we should just switch to XArrays going forward.
 > 
-> 
-> > -----Original Message-----
-> > From: Jakub Kicinski <kuba@kernel.org>
-> > Sent: Monday, February 7, 2022 12:12 PM
-> > To: Haiyang Zhang <haiyangz@microsoft.com>
-> > Cc: linux-hyperv@vger.kernel.org; netdev@vger.kernel.org; Dexuan Cui
-> > <decui@microsoft.com>; KY Srinivasan <kys@microsoft.com>; Stephen
-> > Hemminger <sthemmin@microsoft.com>; Paul Rosswurm
-> > <paulros@microsoft.com>; Shachar Raindel <shacharr@microsoft.com>;
-> > olaf@aepfle.de; vkuznets <vkuznets@redhat.com>; davem@davemloft.net;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH net-next, 1/2] net: mana: Add handling of
-> > CQE_RX_TRUNCATED
-> > 
-> > On Sat, 5 Feb 2022 22:32:41 +0000 Haiyang Zhang wrote:
-> > > Since the proper handling of CQE_RX_TRUNCATED type is important, could
-> > any
-> > > of you backport this patch to the stable branches: 5.16 & 5.15?
-> > 
-> > Only patches which are in Linus's tree can be backported to stable.
-> > You sent this change for -next so no, it can't be backported now.
-> > You need to wait until 5.17 final is released and then ask Greg KH
-> > to backport it.
-> 
-> @Greg KH <gregkh@linuxfoundation.org>
-> 
-> Hi Greg,
-> 
-> This patch is on 5.18 now:
-> 	net: mana: Add handling of CQE_RX_TRUNCATED
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v5.18.5&id=e4b7621982d29f26ff4d39af389e5e675a4ffed4
-> 
-> Could you backport it to 5.15?
+> Nothing from Thomas ... shall we just go with this?  Do you want a
+> commit message, etc for the patch?
 
+Hey Matthew,
 
-<formletter>
+I have done testing with this and the patch looks good. We will certainly
+go this route going forward so a commit message, would be good. As for
+fixing the issue in current kernels. I am not opposed to pulling this
+back as fixes for
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+  99cc45e48678 apparmor: Use an IDR to allocate apparmor secids
 
-</formletter>
+but I would like some other peoples opinions on doing that, because we
+don't understand why we are getting the current lock splat, and without
+understanding it is a fix by avoiding the issue rather than being sure
+the actual issue is fixed.
+

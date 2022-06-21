@@ -2,150 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72BB1553D68
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C3A553D6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355849AbiFUVTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S1355931AbiFUVTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355816AbiFUVTC (ORCPT
+        with ESMTP id S1355661AbiFUVTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Jun 2022 17:19:02 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D7A2F3A9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:04:38 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:59736)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o3l2y-008PZ1-37; Tue, 21 Jun 2022 15:04:28 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57252 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o3l2w-00G9Ba-OZ; Tue, 21 Jun 2022 15:04:27 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Derek Bruening <bruening@google.com>,
-        Kevin Malachowski <chowski@google.com>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Paul Turner <pjt@google.com>,
-        Simon Marchi <simon.marchi@efficios.com>,
-        Peter Oskolkov <posk@posk.io>,
-        Chris Kennelly <ckennelly@google.com>,
-        Pedro Alves <palves@redhat.com>,
-        Bui Quang Minh <minhquangbui99@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-References: <20220618182515.95831-1-minhquangbui99@gmail.com>
-        <258546133.12151.1655739550814.JavaMail.zimbra@efficios.com>
-        <CAJqdLroJ6eTD02dAi8Nnb63Sog5x9Pwt9CDwXaUeBQe1Sn2EBg@mail.gmail.com>
-        <648712158.13199.1655748645141.JavaMail.zimbra@efficios.com>
-        <CAJqdLrpKLO8Wh_AytFS9XPMkaq22cOJ+fPi06kyJY55yQUpScg@mail.gmail.com>
-        <CAB=H8NXaMvNU+0Z02VPnLmQde-F8pdw2Ms2SqiOzWtuTcyNjaA@mail.gmail.com>
-        <CAO1ikSbnEbN1-=rY+aOUbjvPS=i9AFJaGBpmbkGR-9UinNKbKw@mail.gmail.com>
-        <87y1xper17.fsf@email.froward.int.ebiederm.org>
-        <871717002.20576.1655841912053.JavaMail.zimbra@efficios.com>
-Date:   Tue, 21 Jun 2022 16:04:18 -0500
-In-Reply-To: <871717002.20576.1655841912053.JavaMail.zimbra@efficios.com>
-        (Mathieu Desnoyers's message of "Tue, 21 Jun 2022 16:05:12 -0400
-        (EDT)")
-Message-ID: <87pmj1enjh.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DAC2F644
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:04:35 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id q197-20020a6b8ece000000b00670f1479a02so4166537iod.14
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 14:04:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=C+3Mp5eGJJIAr0nNvTRNoEHotNhZy1SzSYyrJ1qhGOM=;
+        b=LM3U9K1hTbPazIHOvoGRaeSjNHSV/GZzPUfpLGDXgyPiyoCn2lMGi796sakz+QnwwB
+         lQqNzb6vbSqYUUkKVOQ5JPqjQ09SITGxZ1qDR1WkxPgq544TNGs8gRHUwO8y4rcEd9nC
+         Vi2DmzPmYJxnJjMuXaJ0iwH/5lJ+5quEd20aNwfnxIyPOm89OUdIsNnZtWTU2afAefmK
+         Mo5dvRvHga/YesuUGmXlPUMhB8+PRiHZvZxKUlUHpXUPJR6H5B8zv68SKrGaJTxvQg6Q
+         /6R5X8KvTAD6VI09nhC+Bh5qwoqz1a4rnX1OD83t9Wbs1vsC3pma3xbtf200VJCOsgIX
+         Tgiw==
+X-Gm-Message-State: AJIora8AK4SejXMBkUbtM3VtPle9ly2Tia67yQkO4fB4Q/YRDbWirEaB
+        pe0Z7i+ypu5sIHiE1BfkPABaJuob7u0VmAk4PzLajNKxJgVv
+X-Google-Smtp-Source: AGRyM1sSwSuEpD8CazXxC+Sjb+PX5IKY/ITJdC4XGJ7MaOqbylO8rX/M02XfpKscvH+Ko7Rjsw61gFt0SfI94zSwPOQcVzbrjudm
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1o3l2w-00G9Ba-OZ;;;mid=<87pmj1enjh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18zc+rDFOEBT4bWBnCryNsw5KoKma6AAho=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Received: by 2002:a05:6e02:78a:b0:2d3:af3f:a9e2 with SMTP id
+ q10-20020a056e02078a00b002d3af3fa9e2mr115686ils.96.1655845474431; Tue, 21 Jun
+ 2022 14:04:34 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 14:04:34 -0700
+In-Reply-To: <00000000000073aa8605e1df6ab9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004e7a7505e1fb919f@google.com>
+Subject: Re: [syzbot] general protection fault in do_mpage_readpage
+From:   syzbot <syzbot+dbbd022e608bb122cf4e@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 740 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 9 (1.2%), b_tie_ro: 7 (1.0%), parse: 0.90 (0.1%),
-        extract_message_metadata: 14 (1.9%), get_uri_detail_list: 1.29 (0.2%),
-        tests_pri_-1000: 25 (3.3%), tests_pri_-950: 1.22 (0.2%),
-        tests_pri_-900: 1.09 (0.1%), tests_pri_-90: 340 (46.0%), check_bayes:
-        339 (45.8%), b_tokenize: 11 (1.5%), b_tok_get_all: 165 (22.3%),
-        b_comp_prob: 3.0 (0.4%), b_tok_touch_all: 155 (21.0%), b_finish: 1.00
-        (0.1%), tests_pri_0: 338 (45.6%), check_dkim_signature: 0.56 (0.1%),
-        check_dkim_adsp: 2.4 (0.3%), poll_dns_idle: 0.59 (0.1%), tests_pri_10:
-        2.1 (0.3%), tests_pri_500: 7 (0.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] rseq: x86: Fix rseq_cs get cleared when returning from
- signal handler
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
+syzbot has found a reproducer for the following issue on:
 
-> ----- On Jun 21, 2022, at 3:48 PM, Eric W. Biederman ebiederm@xmission.com wrote:
->
->> Derek Bruening <bruening@google.com> writes:
->> 
->>> From the viewpoint of dynamic binary translation/instrumentation and
->>> memtrace (go/memtrace), removing those RSEQ_CS_FLAG_NO_RESTART_ON_* flags
->>> is a good thing as it reduces complexity and makes it easier to handle rseq
->>> (which is painful enough to handle already).
->> 
->> It sounds like there is consensus.
->> 
->> Does someone want to code up a simple patch that detects when
->> RSEQ_CS_NO_RESTART_ON_SIGNAL and does a WARN_ON_ONCE and fails if
->> someone uses so it can be set to Linus in the next merge window.
->> 
->> After no one screams at that patch it should be safe to remove the
->> functionality, because you have empirical proof that no one uses
->> that functionality.
->
-> Sure, I can whip up something.
->
-> I'll send it to Peter Zijlstra shortly.
->
-> I plan to, as you suggest, WARN_ON_ONCE() when this happens, and return
-> an error when the rseq flags or rseq_cs flags contain either of the
-> RSEQ_CS_FLAG_NO_RESTART_ON_* flags. This error is handled by forcing a
-> killing the process with sigsegv:
->
-> __rseq_handle_notify_resume()
-> [...]
-> error:
->         sig = ksig ? ksig->sig : 0;
->         force_sigsegv(sig);
->
-> Does it look acceptable ?
+HEAD commit:    34d1d36073ea Add linux-next specific files for 20220621
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11eeec3ff00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b24b62d1c051cfc8
+dashboard link: https://syzkaller.appspot.com/bug?extid=dbbd022e608bb122cf4e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1216c174080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14362fd8080000
 
-I think so.  force_sigsegv preps things so that when you go into
-exit_to_user_mode_loop the signal handler kills the process.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dbbd022e608bb122cf4e@syzkaller.appspotmail.com
 
-So assuming that happens after force_sigsegv that looks good.
+loop0: detected capacity change from 0 to 8191
+ntfs3: loop0: Mark volume as dirty due to NTFS errors
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 3604 Comm: syz-executor200 Not tainted 5.19.0-rc3-next-20220621-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:map_buffer_to_folio fs/mpage.c:107 [inline]
+RIP: 0010:do_mpage_readpage+0xfe8/0x19f0 fs/mpage.c:228
+Code: 85 ed 0f 84 98 01 00 00 49 be 00 00 00 00 00 fc ff df 4c 89 ed 45 31 e4 eb 2c e8 73 8f 93 ff 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 30 00 0f 85 53 08 00 00 48 8b 6d 08 41 83 c4 01 49 39 ed
+RSP: 0018:ffffc90002f9f7c0 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff8880206957c0 RSI: ffffffff81e72ddd RDI: 0000000000000008
+RBP: 0000000000000000 R08: 0000000000000004 R09: 0000000000000002
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffffc90002f9f960
+FS:  000055555626d300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005d84c8 CR3: 000000007e93c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mpage_read_folio+0xa5/0x140 fs/mpage.c:378
+ ntfs_read_folio+0x148/0x1e0 fs/ntfs3/inode.c:706
+ filemap_read_folio+0x3c/0x1d0 mm/filemap.c:2396
+ do_read_cache_folio+0x251/0x5b0 mm/filemap.c:3521
+ do_read_cache_page mm/filemap.c:3563 [inline]
+ read_cache_page+0x59/0x2a0 mm/filemap.c:3572
+ read_mapping_page include/linux/pagemap.h:756 [inline]
+ ntfs_map_page fs/ntfs3/ntfs_fs.h:897 [inline]
+ ntfs_fill_super+0x27e9/0x3730 fs/ntfs3/super.c:1145
+ get_tree_bdev+0x4a2/0x7e0 fs/super.c:1294
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1501
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f240cf2feaa
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffefafe8648 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffefafe86a0 RCX: 00007f240cf2feaa
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffefafe8660
+RBP: 00007ffefafe8660 R08: 00007ffefafe86a0 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 00000000200034e8
+R13: 0000000000000003 R14: 0000000000000004 R15: 000000000000021f
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:map_buffer_to_folio fs/mpage.c:107 [inline]
+RIP: 0010:do_mpage_readpage+0xfe8/0x19f0 fs/mpage.c:228
+Code: 85 ed 0f 84 98 01 00 00 49 be 00 00 00 00 00 fc ff df 4c 89 ed 45 31 e4 eb 2c e8 73 8f 93 ff 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 30 00 0f 85 53 08 00 00 48 8b 6d 08 41 83 c4 01 49 39 ed
+RSP: 0018:ffffc90002f9f7c0 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff8880206957c0 RSI: ffffffff81e72ddd RDI: 0000000000000008
+RBP: 0000000000000000 R08: 0000000000000004 R09: 0000000000000002
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffffc90002f9f960
+FS:  000055555626d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f240cf1fd20 CR3: 000000007e93c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	85 ed                	test   %ebp,%ebp
+   2:	0f 84 98 01 00 00    	je     0x1a0
+   8:	49 be 00 00 00 00 00 	movabs $0xdffffc0000000000,%r14
+   f:	fc ff df
+  12:	4c 89 ed             	mov    %r13,%rbp
+  15:	45 31 e4             	xor    %r12d,%r12d
+  18:	eb 2c                	jmp    0x46
+  1a:	e8 73 8f 93 ff       	callq  0xff938f92
+  1f:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
+  2f:	0f 85 53 08 00 00    	jne    0x888
+  35:	48 8b 6d 08          	mov    0x8(%rbp),%rbp
+  39:	41 83 c4 01          	add    $0x1,%r12d
+  3d:	49 39 ed             	cmp    %rbp,%r13
 
-Eric

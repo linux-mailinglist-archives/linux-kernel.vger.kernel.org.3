@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B645B552D34
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66748552D37
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 10:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347950AbiFUIjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 04:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S1347700AbiFUIjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 04:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiFUIjS (ORCPT
+        with ESMTP id S229895AbiFUIjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:39:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102752316D;
-        Tue, 21 Jun 2022 01:39:16 -0700 (PDT)
-X-UUID: bd6ab4af7d2341c9943ad31ff53200b2-20220621
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:c0e04849-8556-4565-b4e2-adb89745ac1b,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:90210e38-5e4b-44d7-80b2-bb618cb09d29,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: bd6ab4af7d2341c9943ad31ff53200b2-20220621
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1741225776; Tue, 21 Jun 2022 16:39:12 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 21 Jun 2022 16:39:11 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 21 Jun 2022 16:39:11 +0800
-Message-ID: <446b9713cf2ad4313c8f3c8b53dd5295ab1aa575.camel@mediatek.com>
-Subject: Re: [PATCH v12 12/14] drm/mediatek: dpi: Add YUV422 output support
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 21 Jun 2022 16:39:11 +0800
-In-Reply-To: <d2a6c5044417e1ac8be9e6387951807e619162e8.camel@mediatek.com>
-References: <20220620121028.29234-1-rex-bc.chen@mediatek.com>
-         <20220620121028.29234-13-rex-bc.chen@mediatek.com>
-         <d2a6c5044417e1ac8be9e6387951807e619162e8.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 04:39:53 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E7925EA1;
+        Tue, 21 Jun 2022 01:39:53 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z19so1515080edb.11;
+        Tue, 21 Jun 2022 01:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=u7YnhhQYtJ0M3xC7HRSVT7bml8DDqb3tmwKspbCUexU=;
+        b=eUtaQ659iBtSbi6vx63Og3HtODbQYAQNj9VhsS1EgSNPlkbhr3W2Smwq8h15cEzVSG
+         AU5o3Zziy2/7i+ADUyCHgY9NACZI/PP/iRX77JwlroSG52F7gaEofiDYzobfPorXQZds
+         GnpxTc6zz3co2reobFDW2tKMoR0uMm8n8/kgHPmZ9PvR/+dsSAuVx8IonB4s34v8G0sr
+         qJSpx6voJhP1DXSV50ZhODltR4I1Txx38t5S010s+9bhgs1xxG5x//GZqlf8Tg8YtAp1
+         ljaBdGWGL5GZHBxo2lOjZVaUgtiLF9+hbbExtMPb+ATTNKwVPFUBQKLgFd05vMGwr0LX
+         OoqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=u7YnhhQYtJ0M3xC7HRSVT7bml8DDqb3tmwKspbCUexU=;
+        b=dl0/C8nLz4BsiETwpFyTUmHMyVKa51fXt5Wi/WDfvkC+MmyrmiyQiZBOPV0iS6SPhs
+         Iem02dS3/5RLR7UR6Hpw3oyux0xAQko4UV9afU1WU0vE+SysEcT68xFjlOJ2jfRnaYYI
+         kVgaAZf4nKsOQjGZG9QWNq5wBVVCW+APgN6TmFppnX6Buy+z1cwr2fxYnTBH0Vv8mt5+
+         bNYCi3a/7cq+9XTzPX0j/aOSsZvRADduOfhGrklhT4+S0ioMSu59dT7whzQ3Ph40jnIb
+         U/m0YKvOh7VBOfWfPJ26+IH5jt5vxIWbKPh4ErqVD5f07MTkjmc0+OXede/Lp+648yLz
+         aHvw==
+X-Gm-Message-State: AJIora+qb2xSPkPD390CfHk8b6pCF3wzAGtz4EUjg0iaadj7aFnVDavb
+        qlRJwHjvvno18q7Z0DuvW8JOoHzTUcVwEMptqBNTyp2hCnRdTg==
+X-Google-Smtp-Source: AGRyM1u036K32l8dIMmb+DtsESrvBm19v/53EQEeKlkfk4W9ujWKMBWfDMHU0NzTObCZaXkVciq+YiTxlEluNjfpGbc=
+X-Received: by 2002:a05:6402:2790:b0:431:4bb6:a6dc with SMTP id
+ b16-20020a056402279000b004314bb6a6dcmr34533918ede.48.1655800791735; Tue, 21
+ Jun 2022 01:39:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220621070224.1231039-1-zhangshida@kylinos.cn> <20220621073943.GQ227878@dread.disaster.area>
+In-Reply-To: <20220621073943.GQ227878@dread.disaster.area>
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+Date:   Tue, 21 Jun 2022 16:39:15 +0800
+Message-ID: <CANubcdVW8cje_3MEAZsWN8TFKMO8kTe8VuNFAxsBxTh7haV8vg@mail.gmail.com>
+Subject: Re: [PATCH v2] xfs: add check before calling xfs_mod_fdblocks
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     djwong@kernel.org, dchinner@redhat.com,
+        zhangshida <zhangshida@kylinos.cn>, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 11:04 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
-> 
-> On Mon, 2022-06-20 at 20:10 +0800, Bo-Chen Chen wrote:
-> > Dp_intf supports YUV422 as output format. In MT8195 Chrome project,
-> > YUV422 output format is used for 4K resolution.
-> 
-> Move this patch before [1]. Otherwise, [1] would result in a bug.
-> 
-> [1] [v12,10/14] drm/mediatek: dpi: Add dpintf support
-> 
-ok, I will do this.
+Dave Chinner <david@fromorbit.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=8821=E6=97=
+=A5=E5=91=A8=E4=BA=8C 15:39=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Tue, Jun 21, 2022 at 03:02:24PM +0800, Shida Zhang wrote:
+> > Checks are missing when delta equals 0 in __xfs_ag_resv_free() and
+> > __xfs_ag_resv_init().
+>
+> This describes what the patch does, not the problem being solved is.
+>
+> i.e. This doesn't tell the reader why the delta can be zero in these
+> places, nor does it tell them what the impact of it being zero is.
+> We can't use this information to identify a system that is having
+> problems due to this issue because they havent' been described.
+>
+> Hence when I ask for more detail about how something occurs, what I'm
+> asking for is a description of the how the problem was found, what
+> the impact of the problem has on systems, how the problem is
+> reproduced, etc.
+>
+> Something led you to finding this problem - tell us the story so we
+> also know what you know and so can understand why the change needs
+> to be made. A good commit description tells the reader everything
+> you know about the problem that needs to be fixed, the code change
+> itself will then describe how the problem was fixed...
+>
+> Cheers,
+>
+> Dave.
+> --
+> Dave Chinner
+> david@fromorbit.com
 
-> > 
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/gpu/drm/mediatek/mtk_dpi.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > index f83ecb154457..fc76ccad0a82 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> > @@ -692,7 +692,10 @@ static int mtk_dpi_bridge_atomic_check(struct
-> > drm_bridge *bridge,
-> >  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
-> >  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
-> >  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
-> > -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> > +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
-> > +		dpi->color_format =
-> > MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
-> > +	else
-> > +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> 
-> If out_bus_format is MEDIA_BUS_FMT_YUV8_1X24, the color_format is
-> MTK_DPI_COLOR_FORMAT_RGB?
-> 
+Thanks for your suggestion. I will try to rephrase the description.
 
-I will drop output format of MEDIA_BUS_FMT_YUV8_1X24 for mt8195_dpintf
-because if support MEDIA_BUS_FMT_YUV8_1X24 means support RGB888.
+Cheers,
 
-BRs,
-Bo-Chen
-
-> Regards,
-> CK
-> 
-> >  
-> >  	return 0;
-> >  }
-> 
-> 
-
+Stephen.

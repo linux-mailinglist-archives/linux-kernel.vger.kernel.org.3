@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4343555313A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54800553072
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 13:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349993AbiFULmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 07:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S1348640AbiFULGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 07:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349833AbiFULmu (ORCPT
+        with ESMTP id S229613AbiFULGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 07:42:50 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF37E48
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:References
-        :In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=LcqlgrS7zj13sDDduNZ2hZFqVURpCBy3Ki4wyCilt+Q=; b=kMBGSmVw3QnKKa6d3FhfEYQw75
-        2TAOzLxlIbjHi+qMYl0ePadqRiBOW4EcqIx5L2SrHR1B8lj/fPJEVvekkzbYSukNRj1j25DrNvF0q
-        eC5LFrhAHq5CWgg1WNhPFmFFbPCQRrmrx9HEF5B1qbiFYNKgSt1RhtdxbmV7GNKQT/G16S1WhG57U
-        GkxwmduqFmF9D+XpnWQuemMZlZavWU5fitl4ODVsDtF7uyAKMtEc0INWvLcgyGTJunsoHTqwUUykO
-        5tdz2Xxm+Yvl9Am12r3J5g223E7lMCjMmnmqPLXTyN2Zcpn2dWyLZmWtJx9q6B/3MVZqUFyE9jmHP
-        VyVJT99A==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1o3blp-005hKr-CO; Tue, 21 Jun 2022 13:10:09 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Subject: [PATCH 2/2] virtio_mmio: Restore guest page size on resume
-Date:   Tue, 21 Jun 2022 13:06:21 +0200
-Message-Id: <20220621110621.3638025-3-stephan.gerhold@kernkonzept.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220621110621.3638025-1-stephan.gerhold@kernkonzept.com>
-References: <20220621110621.3638025-1-stephan.gerhold@kernkonzept.com>
+        Tue, 21 Jun 2022 07:06:44 -0400
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487FA29C87
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:06:43 -0700 (PDT)
+Received: by mail-pl1-f194.google.com with SMTP id k7so12202595plg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 04:06:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=womC/be6OksJ07JVvS178BAU4AIaext+3ynvpTRikio=;
+        b=bgeazasa10h17+JOaEjiEoYzW6baZaurdTaSQ0GJICkhrTUiyjxJmMB0/ZiGNXzgLn
+         vS98Y0o6NZFuDRG1GsD7zQvpqwP4W4cgAUG4JTswK1wcchwYcEO7Mv/qazkfUv9wuo8n
+         zqsJcZE6VDCysfAb1NUPKWd2XsBWArM90zLBQ9NAYzZ/ZtkjV0rc1Dmrz7t6/sOkuYIj
+         cHv0PdSJ/QXVn025lbLim3lL3S1JB/Zmo/mVG19XntHyCfA1kjpQbhZe11nwsgbfJ2am
+         ChkIoKBaRRlnv4uuFekI87CYvLEwvYrM0rtwR/2wypv4BF5VZqNOY5VgNTJ/hKV0/Dpq
+         +lww==
+X-Gm-Message-State: AJIora8jQWCMcMeeL3vMNOBjB9V/PjMXFTZZb1Tg2Erbn4Ka9y0sa3mk
+        ftOy8ZBEk7mvu0HyxyJdtg==
+X-Google-Smtp-Source: AGRyM1tr7WvZy6G8nzBUNCoo/gq6WqTSZhIDTWhkfc/VyfwOGjEGv6Kk+PF36juah20dM3DdQTvT8w==
+X-Received: by 2002:a17:90a:e503:b0:1ec:84b2:6404 with SMTP id t3-20020a17090ae50300b001ec84b26404mr21133920pjy.169.1655809602698;
+        Tue, 21 Jun 2022 04:06:42 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id j1-20020aa783c1000000b0051be585ab1dsm10833535pfn.200.2022.06.21.04.06.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 04:06:42 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     quic_abhinavk@quicinc.com, robdclark@gmail.com,
+        dmitry.baryshkov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, sunliming@kylinos.cn,
+        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/msm/dpu: Fix variable dereferenced before check
+Date:   Tue, 21 Jun 2022 19:06:34 +0800
+Message-Id: <20220621110634.368913-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtio devices might lose their state when the VMM is restarted
-after a suspend to disk (hibernation) cycle. This means that the
-guest page size register must be restored for the virtio_mmio legacy
-interface, since otherwise the virtio queues are not functional.
+Fixes the following smatch warning:
 
-This is particularly problematic for QEMU that currently still defaults
-to using the legacy interface for virtio_mmio. Write the guest page
-size register again in virtio_mmio_restore() to make legacy virtio_mmio
-devices work correctly after hibernation.
+drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:261
+dpu_encoder_phys_wb_atomic_check() warn: variable dereferenced before check 'conn_state'
 
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
 ---
- drivers/virtio/virtio_mmio.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-index 980dffd69586..083ff1eb743d 100644
---- a/drivers/virtio/virtio_mmio.c
-+++ b/drivers/virtio/virtio_mmio.c
-@@ -569,6 +569,9 @@ static int virtio_mmio_restore(struct device *dev)
- {
- 	struct virtio_mmio_device *vm_dev = dev_get_drvdata(dev);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+index 59da348ff339..0ec809ab06e7 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+@@ -252,11 +252,6 @@ static int dpu_encoder_phys_wb_atomic_check(
+ 	DPU_DEBUG("[atomic_check:%d, \"%s\",%d,%d]\n",
+ 			phys_enc->wb_idx, mode->name, mode->hdisplay, mode->vdisplay);
  
-+	if (vm_dev->version == 1)
-+		writel(PAGE_SIZE, vm_dev->base + VIRTIO_MMIO_GUEST_PAGE_SIZE);
+-	if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
+-		return 0;
+-
+-	fb = conn_state->writeback_job->fb;
+-
+ 	if (!conn_state || !conn_state->connector) {
+ 		DPU_ERROR("invalid connector state\n");
+ 		return -EINVAL;
+@@ -267,6 +262,11 @@ static int dpu_encoder_phys_wb_atomic_check(
+ 		return -EINVAL;
+ 	}
+ 
++	if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
++		return 0;
 +
- 	return virtio_device_restore(&vm_dev->vdev);
- }
++	fb = conn_state->writeback_job->fb;
++
+ 	DPU_DEBUG("[fb_id:%u][fb:%u,%u]\n", fb->base.id,
+ 			fb->width, fb->height);
  
 -- 
-2.30.2
+2.25.1
 

@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E6F553E95
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8570553E9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354499AbiFUWfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S1354604AbiFUWfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354293AbiFUWff (ORCPT
+        with ESMTP id S1354293AbiFUWfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:35:35 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D3531DD3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:35:34 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id lw20so8087592ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:35:33 -0700 (PDT)
+        Tue, 21 Jun 2022 18:35:47 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A432079;
+        Tue, 21 Jun 2022 15:35:46 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id s17so9482768iob.7;
+        Tue, 21 Jun 2022 15:35:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=fE13mG9CKvIUbMO9JtlL0pZ2ijxEEYtHb1Jlhe49Vto=;
-        b=S417DFgbvM0La9BdQyrCMy6u0GYqMwbvSHr0l1IeeFlxbPH0BaPdx+AWt147nNHgAP
-         Qa+faBHIurOrbOtlHXkqhkExIbuKJow2Yig4wYFedKol+We9E6K79umct/wnO66ihbrC
-         R8TjjsEsw8pLiDUtPEHfa7wcj7dRpiti876pfi1mn1HiEg/9MY1oFJErZNefsa0/pbcR
-         7xZk+OgdG9/YvBtT5J2HhHdURQ21JeZ1wK4zyKX+zfgEf1/gUrlH9Mi80CfuEy8J2RyA
-         RSaH1PN3CMc/ZmyPHDUjlygyIIHfGMJoljH+k/eChcPDU//tLkNAVtt3Gbkk56vMZgcw
-         /+UQ==
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=EuOFBlwUe3i2VoLtrHcHqXQ3t7ZpmfRz4L66vLYl0Zk=;
+        b=ptky5XMl0C3VvHRE/uN2yj0zyO83oB3rrU+1mqb9m+5IQHtMjLDmGRjPecZPnoJ9zP
+         7WWSmBea+PmzduZkvctleKQV6yE33uqc+cUi1WQ2zrUndRDQowQAvoV9TMJ0hyVUDf0Z
+         PJOsmIitgmJcz+vz6pMcrTDux5dXQ2VyCyIClLkx4qhF8jjCXSyU7CV5Y9JFSET8aNbY
+         n8s9WDtRev7csG9bg40o9WpNSf19I3hTwjl903TfAHMFKzNoiIWZYtcjkvnYJgWEA4ZH
+         cVORxtP5I2J5JFrXiGCYCIkH2KWJpkGzMmARvpCHpcBjJqisgG4p6uttLCUS+NRwhG5U
+         mKDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=fE13mG9CKvIUbMO9JtlL0pZ2ijxEEYtHb1Jlhe49Vto=;
-        b=4ZcM6xZyo5W/Wk/cpfPH0eXkItCUwqWlIsQuCF2B/segkAwxpIcDpKIUMg+JijhgzZ
-         NShw3oLRzmaOdjfjPqUONp8U0qxepe4/Htc0AkGUv5Tp0crG9+u1xMTtVXlgKjnLMQkR
-         GfRnYOOWn4Io+lTSC6zrOAp66837ex5H9vGI6JPpHE9kAndln1oYykS0nam5l8YK7Tu6
-         CXI775CLnmBfYcuDyNuk9U5R08RLglkgqIgidKLesYGM8Y2zl68jrTtTgFz7j+EbAMxJ
-         yFA8/tSMcCkMi+n+/IhFjjIdh58MJ+eTxwNyuUjrRkZHidpYAQWrwYsQvm2XwojKg0AD
-         ooCA==
-X-Gm-Message-State: AJIora+YuE79buXjR/iEqn7edbfpgb5/em7S1Oc4v/bCqF/jjM3TrVB0
-        FcLWI5jTVGcEvDuvh4FaaqxaDMxO7LaRABcaSSc=
-X-Google-Smtp-Source: AGRyM1vjKPgpQn6C0iWl/ATZAPlIpQte8Z8n/NdpgdzTB5HDwnW55fUYw+vUV3DTIZ8l6/3wBXL5RKz3HjW0nJ4UeXE=
-X-Received: by 2002:a17:906:7791:b0:712:1c42:777a with SMTP id
- s17-20020a170906779100b007121c42777amr329384ejm.68.1655850932513; Tue, 21 Jun
- 2022 15:35:32 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a50:624a:0:0:0:0:0 with HTTP; Tue, 21 Jun 2022 15:35:32
- -0700 (PDT)
-From:   Schlumberger Recruitment Team 
-        <schlumbergerrecruitmentteam@gmail.com>
-Date:   Tue, 21 Jun 2022 10:35:32 -1200
-Message-ID: <CANv9ONDNVSMfiGEEuyXZB+aZCGgSU++FNEEnA-3Df6gvsVs9FQ@mail.gmail.com>
-Subject: VACANCY FOR EMPLOYMENT IN UK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=EuOFBlwUe3i2VoLtrHcHqXQ3t7ZpmfRz4L66vLYl0Zk=;
+        b=BE6kfr8d2nkiwioSIs86K6twcQ2TwYBts2xHqjGdIiFHwlelmtyU9FGuno/NTw7Ql5
+         MtK+A4zu67Hr222uF+ml1Ct1zvfBc9auekkgoTaeMbAr3lUL5i9jffMYgKqfLKf8sPAo
+         oONZR0K95qAA8hz76YT7qHJ6WA2T+CV3KN7fVZsqJ8gmXOelaxUzHq/Hz3uuAbMBRkg1
+         wGZICyWXrmZUD0SnFDtRhVyFzjhprdfJ5qRCs/fug2T5emWR0usFcyQ5YB/YC5Ksrh8k
+         vPC5cGRKQKCH3I40Nj9LvFZ+HzLGnox7AXRX7dXlprZMMlyRBfV6GU38xNo9hu8HwsDX
+         RY+w==
+X-Gm-Message-State: AJIora9goMezfgz84HSbk9i/wdUZhCVKC77qmqCOk07cevIC0FDYaMh8
+        lPA4ImU/oPlGl+at/sDPeio=
+X-Google-Smtp-Source: AGRyM1vSA9nv/dLh6RGsJZZBucx8gPMUZ0qn7+Xw9uYIKkOwaymRH/SE5i5Dj5O3fkGwjkqVJD3CNw==
+X-Received: by 2002:a05:6602:2d06:b0:66a:2cdc:e6f7 with SMTP id c6-20020a0566022d0600b0066a2cdce6f7mr178003iow.113.1655850945946;
+        Tue, 21 Jun 2022 15:35:45 -0700 (PDT)
+Received: from localhost ([172.243.153.43])
+        by smtp.gmail.com with ESMTPSA id o8-20020a02cc28000000b003318783c940sm7681429jap.113.2022.06.21.15.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 15:35:45 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 15:35:37 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        john.fastabend@gmail.com, songliubraving@fb.com, kafai@fb.com,
+        yhs@fb.com
+Cc:     dhowells@redhat.com, keyrings@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Message-ID: <62b247b975506_162742082f@john.notmuch>
+In-Reply-To: <20220621163757.760304-5-roberto.sassu@huawei.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-5-roberto.sassu@huawei.com>
+Subject: RE: [PATCH v5 4/5] selftests/bpf: Add test for unreleased key
+ references
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-The Schlumberger United Kingdom, We are recruiting all professionals for
-our ongoing project . Salary Rate from =C2=A3 2,000 British pounds to =C2=
-=A3
-65,000 British pounds depending on working experience and
-qualification, you are hereby advised to send us your recently updated
-CV/Resume with the below information if you are ready to relocate to
-the United Kingdom.
+Roberto Sassu wrote:
+> Ensure that the verifier detects the attempt of acquiring a reference of a
+> key through the helper bpf_lookup_user_key(), without releasing that
+> reference with bpf_key_put(), and refuses to load the program.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
 
-1) Your present monthly salary in the US .....?
-2) Expected monthly Salary....?
-3) Are you willing to relocate now.....?
-4) Your present Position....?
-5)  WhatsApp Number for interview
-
-Thanks,
-
-HR MANAGER
-The Schlumberger Recruitment team
+Any reason not to add these to ./verifier/ref_tracking.c tests? Seems it
+might be easier to follow there and test both good/bad cases.

@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BF4552F16
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026F7552F1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348834AbiFUJrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S1347303AbiFUJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349266AbiFUJrk (ORCPT
+        with ESMTP id S230328AbiFUJts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:47:40 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3E827B37;
-        Tue, 21 Jun 2022 02:47:39 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so9012134wma.4;
-        Tue, 21 Jun 2022 02:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K3ZCR9iVeq6ZAfU5TRz3a90s4e4BlA0vDBwbjjM5RfY=;
-        b=dkpM687CjGEtZhDZ8rCYb6sL/az4iSWToMOUg+fg5uLqGa7P6ahCru2Owl3HEpvPwX
-         Oi2/89PQEieIpg84jOUXJ6Y5Cpwan5pt5ljmadId3m5MbuBe8aDrPUBRkLJ1DwUs5vWH
-         Hb+UNstb7VY6U0dpCsXJ8mzrWHs2oKbbg8uQq2dSWJgaYjKUILISHN5l90u7VVYrZw7C
-         a2mbYQ1UCK2dxrxyamx/HQWb7akAs/5Zn1dBqO/ju2XEVFLnj1ttNHBVNzIpyuQmuUrS
-         xXmDCobmZKLeuP1mQInRZKtYBvlasJyz9NP6QUtJxDPiAIjJHGxG1fITu5HgBGY7Aj+h
-         2EiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K3ZCR9iVeq6ZAfU5TRz3a90s4e4BlA0vDBwbjjM5RfY=;
-        b=J3PisXJDyU3cpslpTuV/iLVzz79t1L/2OSOkwPLl5WhYlbKBm18JFGGd78OE8adv6J
-         aGjWz6Lqdl0jUz/YAshZaeA+L27WAqGyXMYyPqU8DDPRQ5ozDv9I7xtYlNgizWVsy7mx
-         MmN9Nn8wIqZbFi1QZ2oCs0fzPaS2yHdcfFuqGguSiX/9WuxC4e8vUbwW8VTSLwMJl4T2
-         I0IjF0GVh4aJJIf6ep8AH8JNZcZcGUOeM0KCP4ezhUvSb8osZYB+O/z2agOOvyPUkDBd
-         K1KV2be+cWR419SiHPdrbj02UsvhfrYmGOl1URKJWacWW8EFetjBHv746ST7c6YBZ8+a
-         OTZQ==
-X-Gm-Message-State: AJIora/h9uSw+iDYUK1zvI3KxYuFmWcpWYBZJ5ayh8wsmVjK6ZBV7zYU
-        FGn1zWuctY6PxFar26L9YLw=
-X-Google-Smtp-Source: AGRyM1sjQlqfYgzhZtmD5KyrTu1rLV5cg8wZwFoDW7+iQXmmb5YxwYnxnBrasq/IQhB/AjTjOu85qQ==
-X-Received: by 2002:a05:600c:3505:b0:39c:93d4:5eec with SMTP id h5-20020a05600c350500b0039c93d45eecmr28551855wmq.179.1655804857770;
-        Tue, 21 Jun 2022 02:47:37 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r15-20020adff70f000000b002185d79dc7fsm15323739wrp.75.2022.06.21.02.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 02:47:37 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] iio: adc: qcom-spmi-rradc: Fix spelling mistake "coherrency" -> "coherency"
-Date:   Tue, 21 Jun 2022 10:47:36 +0100
-Message-Id: <20220621094736.90436-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 05:49:48 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EAF27B22;
+        Tue, 21 Jun 2022 02:49:42 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1655804969tsjh4bcg
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 21 Jun 2022 17:49:25 +0800 (CST)
+X-QQ-SSF: 0100000000700030B000B00A0000000
+X-QQ-FEAT: FXvDfBZI5O4XzwHJcwonh32Ii7bk32q2ji7yURaEycrIRNPucCS1KFehgDMuS
+        2VcTDoMN/PcwsPpa4H9835AWoeG37jbP6YExaarvi3XPI00wFqxYlMcU6f/KcKFlqeSVJcg
+        JopVkrb1mb+uv61/FiN4cGZPphUuuWwZPp+wHaPuh0aWyxpNawhNp+oyjFb+AsVkYkRJF2w
+        ZCdU1Reup/RREOL8bY9TblpgfvQUR6ZBEvYOQ50IBzgh6GeiXvQHizy88zUu/6rA2tz445j
+        U+J/liCt866/SSJxOLFY7GY2SYGdZeJi1v4Fm7O9CfHdTPwYxwKl6mts7lmx53Zbe56Bf15
+        TBgatPX46/PJaxCPr4GKG/viQQW/w==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jiangjian@cdjrlc.com
+Subject: [PATCH] firmware: qcom_scm: drop unexpected word "the"
+Date:   Tue, 21 Jun 2022 17:49:24 +0800
+Message-Id: <20220621094924.83135-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_err message. Fix it.
+there is an unexpected word "the" in the comments that need to be dropped
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> * will cause the the boot stages to enter download mode, unless
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 ---
- drivers/iio/adc/qcom-spmi-rradc.c | 2 +-
+ drivers/firmware/qcom_scm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/qcom-spmi-rradc.c b/drivers/iio/adc/qcom-spmi-rradc.c
-index 87f349782108..56a713766954 100644
---- a/drivers/iio/adc/qcom-spmi-rradc.c
-+++ b/drivers/iio/adc/qcom-spmi-rradc.c
-@@ -295,7 +295,7 @@ static int rradc_read(struct rradc_chip *chip, u16 addr, __le16 *buf, int len)
- 	}
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index 3163660fa8e2..4623d2919ed0 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -1337,7 +1337,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
  
- 	if (retry_cnt == RR_ADC_COHERENT_CHECK_RETRY)
--		dev_err(chip->dev, "Retry exceeded for coherrency check\n");
-+		dev_err(chip->dev, "Retry exceeded for coherency check\n");
- 
- 	return ret;
- }
+ 	/*
+ 	 * If requested enable "download mode", from this point on warmboot
+-	 * will cause the the boot stages to enter download mode, unless
++	 * will cause the boot stages to enter download mode, unless
+ 	 * disabled below by a clean shutdown/reboot.
+ 	 */
+ 	if (download_mode)
 -- 
-2.35.3
+2.17.1
 

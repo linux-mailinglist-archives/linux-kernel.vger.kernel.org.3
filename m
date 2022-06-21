@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4012552E7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C2A552E80
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349056AbiFUJgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S1349108AbiFUJgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349035AbiFUJgG (ORCPT
+        with ESMTP id S1349088AbiFUJgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:36:06 -0400
+        Tue, 21 Jun 2022 05:36:39 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACA7A25C79
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:36:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC2832715F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:36:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655804163;
+        s=mimecast20190719; t=1655804197;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4GxMxN9cunj7j/s8YfY5rtdI8+FBR/4TfOiBLvKgbPo=;
-        b=KyWQgsRXa/9uPjqDK8KekF+MkytrL9JIuApDy0G1uwuOMBfT7h7H2+O5YIkz7e6bevH+np
-        0WXWiexQp/z6g91xAk47YBbLs7wMMckd1JgG1+YfVCwtc/Hm0j5jQZY6O46HiuN5PWToJm
-        KmiVSDUmM3D6Fu24O0sBxuGOX3N1zKw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=NcXrei2y1YJ8W4iMhBTE/8lC+VPJchskiCKRKCR2d9s=;
+        b=i4KS9I/2XQCQTAPK5aPHsCn79CcE0vQYaDZSk40VxSdne0XByS80xZ+v0Z0EtQnqFkr3bm
+        iPzeBE3CF3bygg25ueG/zQFKSriJsrUf00uPzCZG/Wtvf7/zX9AnF2sdvHWjrOZNXHQQca
+        vsnla0Rc2ugbC/wNEO2/y9MDyZSbGJo=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-486-0kqwBBi6O-aiHPJp5CQaRQ-1; Tue, 21 Jun 2022 05:36:00 -0400
-X-MC-Unique: 0kqwBBi6O-aiHPJp5CQaRQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 975E229AB3F0;
-        Tue, 21 Jun 2022 09:35:59 +0000 (UTC)
-Received: from localhost (ovpn-12-183.pek2.redhat.com [10.72.12.183])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 134E81121314;
-        Tue, 21 Jun 2022 09:35:57 +0000 (UTC)
-Date:   Tue, 21 Jun 2022 17:35:54 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
- high memory
-Message-ID: <YrGQ+l8bwAsMXaX1@MiWiFi-R3L-srv>
-References: <20220613080932.663-1-thunder.leizhen@huawei.com>
- <20220613080932.663-6-thunder.leizhen@huawei.com>
- <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
- <4ad5f8c9-a411-da4e-f626-ead83d107bca@huawei.com>
+ us-mta-570-8MF_foIyMxydEE8DZvB-3Q-1; Tue, 21 Jun 2022 05:36:36 -0400
+X-MC-Unique: 8MF_foIyMxydEE8DZvB-3Q-1
+Received: by mail-lf1-f69.google.com with SMTP id j3-20020a05651231c300b0047dbea7b031so6680886lfe.19
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:36:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NcXrei2y1YJ8W4iMhBTE/8lC+VPJchskiCKRKCR2d9s=;
+        b=hXyly7YuWzGPE5mQh9+QN1VlDUuhM6tsGE4eTNuGuWpbO91wLRaVl72YtEnFLq6l+m
+         LBKLXPK/bJUBPoJJ9qnTYoYos2GfdX0FItLFSKvmpCoZok1nvMCa+J1VBzr+saN+Tz/N
+         P4vLJxyMV1TZqmTGkFFRZKxtoNRdCPFeMNRw8Xsh91hhDZj9OJEFnG+wrkDP5jF0FHmM
+         scWcZOJiVofdHmw8eNoprhzlwqggth0OFX6172TQz/7NoTliG3jEwUiBsc4J9GFUnoLs
+         rXAqYr7pyxkGQ2v92pbyxt2Tfn7ne6B7XEJEwP49qwnSxRwxQ/Mau5JEybepkCqKxJIb
+         o6kw==
+X-Gm-Message-State: AJIora/370UFiRsQDx19O9DH98YVvWn9hC/mLK2kDWifmYjDHMm3uXeK
+        8mUFbdrA73ilx4UN5KM6CvkZIWRYcsPW3lxo0AR1Qcf60mDOSn4ozkIFJcvFfTVGnU9ycHAxthP
+        G1UmVG0fc2C/iNCx9971cO43t3iXWWXvbnSpym5du
+X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id p37-20020a05651213a500b0047dc1d9dea8mr16179015lfa.442.1655804194871;
+        Tue, 21 Jun 2022 02:36:34 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vYHin7RcteM0oZeoqpcOaahexAusmGmc0X7KmU5H3LSzGjszNsAIJFXEvBb7MZram6VDes8GvKxQzQWHh+L8w=
+X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id
+ p37-20020a05651213a500b0047dc1d9dea8mr16178998lfa.442.1655804194646; Tue, 21
+ Jun 2022 02:36:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4ad5f8c9-a411-da4e-f626-ead83d107bca@huawei.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+References: <20220620024158.2505-1-jasowang@redhat.com> <87y1xq8jgw.fsf@redhat.com>
+In-Reply-To: <87y1xq8jgw.fsf@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 21 Jun 2022 17:36:23 +0800
+Message-ID: <CACGkMEun6C9RgQVGq1B8BJMd9DyRQkSXj8shXVVhDymQYQLxgA@mail.gmail.com>
+Subject: Re: [PATCH V2] virtio: disable notification hardening by default
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     Halil Pasic <pasic@linux.ibm.com>, mst <mst@redhat.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -81,216 +78,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/21/22 at 03:56pm, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/6/21 13:33, Baoquan He wrote:
-> > Hi,
-> > 
-> > On 06/13/22 at 04:09pm, Zhen Lei wrote:
-> >> If the crashkernel has both high memory above DMA zones and low memory
-> >> in DMA zones, kexec always loads the content such as Image and dtb to the
-> >> high memory instead of the low memory. This means that only high memory
-> >> requires write protection based on page-level mapping. The allocation of
-> >> high memory does not depend on the DMA boundary. So we can reserve the
-> >> high memory first even if the crashkernel reservation is deferred.
-> >>
-> >> This means that the block mapping can still be performed on other kernel
-> >> linear address spaces, the TLB miss rate can be reduced and the system
-> >> performance will be improved.
-> > 
-> > Ugh, this looks a little ugly, honestly.
-> > 
-> > If that's for sure arm64 can't split large page mapping of linear
-> > region, this patch is one way to optimize linear mapping. Given kdump
-> > setting is necessary on arm64 server, the booting speed is truly
-> > impacted heavily.
-> 
-> There is also a performance impact when running.
+On Tue, Jun 21, 2022 at 5:16 PM Cornelia Huck <cohuck@redhat.com> wrote:
+>
+> On Mon, Jun 20 2022, Jason Wang <jasowang@redhat.com> wrote:
+>
+> > We try to harden virtio device notifications in 8b4ec69d7e09 ("virtio:
+> > harden vring IRQ"). It works with the assumption that the driver or
+> > core can properly call virtio_device_ready() at the right
+> > place. Unfortunately, this seems to be not true and uncover various
+> > bugs of the existing drivers, mainly the issue of using
+> > virtio_device_ready() incorrectly.
+> >
+> > So let's having a Kconfig option and disable it by default. It gives
+> > us a breath to fix the drivers and then we can consider to enable it
+> > by default.
+> >
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> > Changes since V1:
+> > - tweak the Kconfig prompt
+> > - don't hold spinlock for IRQ path in s390
+> > ---
+> >  drivers/s390/virtio/virtio_ccw.c |  4 ++++
+> >  drivers/virtio/Kconfig           | 11 +++++++++++
+> >  drivers/virtio/virtio.c          |  2 ++
+> >  drivers/virtio/virtio_ring.c     | 12 ++++++++++++
+> >  include/linux/virtio_config.h    |  2 ++
+> >  5 files changed, 31 insertions(+)
+> >
+> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> > index 97e51c34e6cf..89bbf7ccfdd1 100644
+> > --- a/drivers/s390/virtio/virtio_ccw.c
+> > +++ b/drivers/s390/virtio/virtio_ccw.c
+> > @@ -1136,8 +1136,10 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> >                       vcdev->err = -EIO;
+> >       }
+> >       virtio_ccw_check_activity(vcdev, activity);
+> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> >       /* Interrupts are disabled here */
+> >       read_lock(&vcdev->irq_lock);
+>
+> Should we add a comment that this pairs with
+> virtio_ccw_synchronize_cbs()? Just to avoid future headscratching as to
+> why this lock is only needed when notification hardening is enabled.
 
-Yes, indeed, the TLB flush will happen more often.
+Fine.
 
-> 
-> > 
-> > However, I would suggest letting it as is with below reasons:
-> > 
-> > 1) The code will complicate the crashkernel reservatoin code which
-> > is already difficult to understand. 
-> 
-> Yeah, I feel it, too.
-> 
-> > 2) It can only optimize the two cases, first is CONFIG_ZONE_DMA|DMA32
-> >   disabled, the other is crashkernel=,high is specified. While both
-> >   two cases are corner case, most of systems have CONFIG_ZONE_DMA|DMA32
-> >   enabled, and most of systems have crashkernel=xM which is enough.
-> >   Having them optimized won't bring benefit to most of systems.
-> 
-> The case of CONFIG_ZONE_DMA|DMA32 disabled have been resolved by
-> commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones").
-> Currently the performance problem to be optimized is that DMA is enabled.
+>
+> > +#endif
+> >       for_each_set_bit(i, indicators(vcdev),
+> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
+> >               /* The bit clear must happen before the vring kick. */
+> > @@ -1146,7 +1148,9 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> >               vq = virtio_ccw_vq_by_ind(vcdev, i);
+> >               vring_interrupt(0, vq);
+> >       }
+> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> >       read_unlock(&vcdev->irq_lock);
+> > +#endif
+> >       if (test_bit(0, indicators2(vcdev))) {
+> >               virtio_config_changed(&vcdev->vdev);
+> >               clear_bit(0, indicators2(vcdev));
+> > diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+> > index b5adf6abd241..96ec56d44b91 100644
+> > --- a/drivers/virtio/Kconfig
+> > +++ b/drivers/virtio/Kconfig
+> > @@ -35,6 +35,17 @@ menuconfig VIRTIO_MENU
+> >
+> >  if VIRTIO_MENU
+> >
+> > +config VIRTIO_HARDEN_NOTIFICATION
+> > +        bool "Harden virtio notification"
+> > +        help
+> > +          Enable this to harden the device notifications and supress
+> > +          the ones that are illegal.
+>
+> "...and suppress those that happen at a time where notifications are
+> illegal." ?
 
-Yes, the disabled CONFIG_ZONE_DMA|DMA32 case has avoided the problem since
-its boundary is decided already at that time. Crashkenrel=,high can slso
-avoid this benefitting from the top done memblock allocating. However,
-the crashkerne=xM which now gets the fallback support is the main syntax
-we will use, that still has the problem.
+Ok.
 
-> 
-> 
-> > 3) Besides, the crashkernel=,high can be handled earlier because 
-> >   arm64 alwasys have memblock.bottom_up == false currently, thus we
-> >   don't need worry arbout the lower limit of crashkernel,high
-> >   reservation for now. If memblock.bottom_up is set true in the future,
-> >   this patch doesn't work any more.
-> > 
-> > 
-> > ...
-> >         crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
-> >                                                crash_base, crash_max);
-> > 
-> > So, in my opinion, we can leave the current NON_BLOCK|SECT mapping as
-> > is caused by crashkernel reserving, since no regression is brought.
-> > And meantime, turning to check if there's any way to make the contiguous
-> > linear mapping and later splitting work. The patch 4, 5 in this patchset
-> > doesn't make much sense to me, frankly speaking.
-> 
-> OK. As discussed earlier, I can rethink if there is a better way to patch 4-5,
-> and this time focus on patch 1-2. In this way, all the functions are complete,
-> and only optimization is left.
+>
+> > +
+> > +          Experimental: not all drivers handle this correctly at this
+> > +          point.
+>
+> "Note that several drivers still have bugs that may cause crashes or
+> hangs when correct handling of notifications is enforced; depending on
+> the subset of drivers and devices you use, this may or may not work."
+>
+> Or is that too verbose?
 
-Sounds nice, thx.
+Looks fine.
 
-> > 
-> >>
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >> ---
-> >>  arch/arm64/mm/init.c | 71 ++++++++++++++++++++++++++++++++++++++++----
-> >>  1 file changed, 65 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> >> index fb24efbc46f5ef4..ae0bae2cafe6ab0 100644
-> >> --- a/arch/arm64/mm/init.c
-> >> +++ b/arch/arm64/mm/init.c
-> >> @@ -141,15 +141,44 @@ static void __init reserve_crashkernel(int dma_state)
-> >>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
-> >>  	char *cmdline = boot_command_line;
-> >>  	int dma_enabled = IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32);
-> >> -	int ret;
-> >> +	int ret, skip_res = 0, skip_low_res = 0;
-> >>  	bool fixed_base;
-> >>  
-> >>  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
-> >>  		return;
-> >>  
-> >> -	if ((!dma_enabled && (dma_state != DMA_PHYS_LIMIT_UNKNOWN)) ||
-> >> -	     (dma_enabled && (dma_state != DMA_PHYS_LIMIT_KNOWN)))
-> >> -		return;
-> >> +	/*
-> >> +	 * In the following table:
-> >> +	 * X,high  means crashkernel=X,high
-> >> +	 * unknown means dma_state = DMA_PHYS_LIMIT_UNKNOWN
-> >> +	 * known   means dma_state = DMA_PHYS_LIMIT_KNOWN
-> >> +	 *
-> >> +	 * The first two columns indicate the status, and the last two
-> >> +	 * columns indicate the phase in which crash high or low memory
-> >> +	 * needs to be reserved.
-> >> +	 *  ---------------------------------------------------
-> >> +	 * | DMA enabled | X,high used |  unknown  |   known   |
-> >> +	 *  ---------------------------------------------------
-> >> +	 * |      N            N       |    low    |    NOP    |
-> >> +	 * |      Y            N       |    NOP    |    low    |
-> >> +	 * |      N            Y       |  high/low |    NOP    |
-> >> +	 * |      Y            Y       |    high   |    low    |
-> >> +	 *  ---------------------------------------------------
-> >> +	 *
-> >> +	 * But in this function, the crash high memory allocation of
-> >> +	 * crashkernel=Y,high and the crash low memory allocation of
-> >> +	 * crashkernel=X[@offset] for crashk_res are mixed at one place.
-> >> +	 * So the table above need to be adjusted as below:
-> >> +	 *  ---------------------------------------------------
-> >> +	 * | DMA enabled | X,high used |  unknown  |   known   |
-> >> +	 *  ---------------------------------------------------
-> >> +	 * |      N            N       |    res    |    NOP    |
-> >> +	 * |      Y            N       |    NOP    |    res    |
-> >> +	 * |      N            Y       |res/low_res|    NOP    |
-> >> +	 * |      Y            Y       |    res    |  low_res  |
-> >> +	 *  ---------------------------------------------------
-> >> +	 *
-> >> +	 */
-> >>  
-> >>  	/* crashkernel=X[@offset] */
-> >>  	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
-> >> @@ -169,10 +198,33 @@ static void __init reserve_crashkernel(int dma_state)
-> >>  		else if (ret)
-> >>  			return;
-> >>  
-> >> +		/* See the third row of the second table above, NOP */
-> >> +		if (!dma_enabled && (dma_state == DMA_PHYS_LIMIT_KNOWN))
-> >> +			return;
-> >> +
-> >> +		/* See the fourth row of the second table above */
-> >> +		if (dma_enabled) {
-> >> +			if (dma_state == DMA_PHYS_LIMIT_UNKNOWN)
-> >> +				skip_low_res = 1;
-> >> +			else
-> >> +				skip_res = 1;
-> >> +		}
-> >> +
-> >>  		crash_max = CRASH_ADDR_HIGH_MAX;
-> >>  	} else if (ret || !crash_size) {
-> >>  		/* The specified value is invalid */
-> >>  		return;
-> >> +	} else {
-> >> +		/* See the 1-2 rows of the second table above, NOP */
-> >> +		if ((!dma_enabled && (dma_state == DMA_PHYS_LIMIT_KNOWN)) ||
-> >> +		     (dma_enabled && (dma_state == DMA_PHYS_LIMIT_UNKNOWN)))
-> >> +			return;
-> >> +	}
-> >> +
-> >> +	if (skip_res) {
-> >> +		crash_base = crashk_res.start;
-> >> +		crash_size = crashk_res.end - crashk_res.start + 1;
-> >> +		goto check_low;
-> >>  	}
-> >>  
-> >>  	fixed_base = !!crash_base;
-> >> @@ -202,9 +254,18 @@ static void __init reserve_crashkernel(int dma_state)
-> >>  		return;
-> >>  	}
-> >>  
-> >> +	crashk_res.start = crash_base;
-> >> +	crashk_res.end = crash_base + crash_size - 1;
-> >> +
-> >> +check_low:
-> >> +	if (skip_low_res)
-> >> +		return;
-> >> +
-> >>  	if ((crash_base >= CRASH_ADDR_LOW_MAX) &&
-> >>  	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
-> >>  		memblock_phys_free(crash_base, crash_size);
-> >> +		crashk_res.start = 0;
-> >> +		crashk_res.end = 0;
-> >>  		return;
-> >>  	}
-> >>  
-> >> @@ -219,8 +280,6 @@ static void __init reserve_crashkernel(int dma_state)
-> >>  	if (crashk_low_res.end)
-> >>  		kmemleak_ignore_phys(crashk_low_res.start);
-> >>  
-> >> -	crashk_res.start = crash_base;
-> >> -	crashk_res.end = crash_base + crash_size - 1;
-> >>  	insert_resource(&iomem_resource, &crashk_res);
-> >>  }
-> >>  
-> >> -- 
-> >> 2.25.1
-> >>
-> > 
-> > .
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
-> 
+>
+> > +
+> > +          If unsure, say N.
+> > +
+> >  config VIRTIO_PCI
+> >       tristate "PCI driver for virtio devices"
+> >       depends on PCI
+>
+> The ifdeffery looks a big ugly, but I don't have a better idea.
+
+I guess you meant the ccw part, I leave the spinlock here in V1, but
+Michael prefers to have that.
+
+In the future, we may consider removing that, one possible way is to
+have a per driver boolean for the hardening.
+
+Tanks
+
+>
 

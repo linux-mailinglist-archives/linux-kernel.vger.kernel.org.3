@@ -2,190 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85643552DCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0279A552DD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348546AbiFUJDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
+        id S1348772AbiFUJE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348746AbiFUJDn (ORCPT
+        with ESMTP id S1348055AbiFUJE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:03:43 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D5D2ADA;
-        Tue, 21 Jun 2022 02:03:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655802223; x=1687338223;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4JZweCQSf+b6fCtkASZHm4F6TWH/UJu0XxFQAnCoS+g=;
-  b=Vl3Q23eRLHGE1UQH+jSooMnzB5k89ZXygm13HrXoMuVvkexHiIUWYNzh
-   uqt9Zjlm3BNqVtnFx80M4c3/At3o3IXobVlOai4pPSj0Vv1XJqBVqZn1n
-   tQXT9WzBxcwNfCBvEmToib7ygTy0zx+JA/WovVYVtXTwQggF/zFNI/C0M
-   N2Gn1Tzqe31EJdNq2inT8if9kAguALItl4U0l0YFB8pocqam2W8jYRN3C
-   YUR774iCzYbXXdYmrO0CoPsItm0ziQORsYGu7bGDgnx7CeWYNWDcPToI2
-   o5hwNhIIqHtZ/6jhFYaS4Yy2t1K3FbRkIYWQ4ao0wQHTE23/N066vQrNp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="281127585"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="281127585"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 02:03:42 -0700
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="833485569"
-Received: from zequnyu-mobl1.ccr.corp.intel.com (HELO [10.255.31.162]) ([10.255.31.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 02:03:40 -0700
-Message-ID: <ff4d8dab-e409-1e5d-74c5-ddbb65c2ba03@linux.intel.com>
-Date:   Tue, 21 Jun 2022 17:03:38 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, "Qiang, Chenyi" <chenyi.qiang@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/1] iommu/vt-d: Fix RID2PASID setup failure
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>
-References: <20220620081729.4610-1-baolu.lu@linux.intel.com>
- <BN9PR11MB52764F60972DF52EEF945D408CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <5d13cab5-1f0a-51c7-78a3-fb5d3d793ab1@linux.intel.com>
- <BN9PR11MB527671B3B4C1F786E40D67408CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <80457871-a760-69ba-70be-5e95344182ea@linux.intel.com>
- <BN9PR11MB5276A8B4E2466BE080CA9E9B8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276A8B4E2466BE080CA9E9B8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 05:04:26 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE2615A34
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:04:24 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-317b370cec1so51106247b3.19
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:04:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=heCYgcqbDfeISBdjgcDETH6bE95n34xRpmw6W+zKBiE=;
+        b=N+4xFQcsEWy6UuXVeuHBwaQvG6vSML+CQHvjprqSMVKQChAH1bXn34XCnvhFBOvgBt
+         5F5ejXBKW0xLOgAHEaW8V9zQwfzqXNt0vxDtUYxIstpPb7TeufWO0ZVD1a7tw9zK3oxO
+         IBr/2KPCWBe6uMhv+Nc9fQ3o+1H28N8mCh4E7AW4Qg5bmYxTfQHUuTqtlmm83dqznecG
+         mHIFgZF85TD/lmtfhemLPPm/ijHNysIjxDzFep8UpTXGyQBK3JJVD4pc+8mty06S3kss
+         kta2giDU59H26ilC/88pTmvuvUKw+IN3D30/sQCyVqnZUWpY0ylcb9UoeICb9A1RtDhA
+         E0kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=heCYgcqbDfeISBdjgcDETH6bE95n34xRpmw6W+zKBiE=;
+        b=V1hxPgolL00x9OGpX9Io5JjHSrgJpNzHmhnJ1hZV1/kVhAlPxUrVSIOUylhJ2I7lVD
+         h4XZOHNcnVX0xrXj3K9GeBKEA84D47KIg6I7zyGmClfte7CuCAaM0nrZx4wA84ZRjCw1
+         iIxn8OX9ondfH+ypPTvyBXeiPvCDMHARx2A6mHeIBZ1GBmh/l9dLbkN/S6Mk/Wr7KBWT
+         O+mmDLju8v8+89gUcQ+YPkz2mDpWnqgJj5fTInztX2UqTNX1arMmZaYiSflntiXmK4q6
+         AB4RnutS5t91rUV5Mig/3GwIsODH/bG7abOxptMD/D3QvBicC4jcYGT2dko4WQ0LjzWz
+         /PZA==
+X-Gm-Message-State: AJIora+Yg9ICksOi8PXUKDgslSyypZwZ68BjDwoh1K2EwfKUb++tvKI5
+        0XD/08Koxq7ie4FqurKsv7DfE8KBSrqm10ia
+X-Google-Smtp-Source: AGRyM1sm7SxRpZF52W36/0KuvpTAXkBo43VgGBIiDLFAnqoNieq6MlesRPpH58l9JvGge1zzffTaHCrecNNMB2ZM
+X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
+ (user=vdonnefort job=sendgmr) by 2002:a81:112:0:b0:317:8cc9:ccde with SMTP id
+ 18-20020a810112000000b003178cc9ccdemr21506435ywb.273.1655802264083; Tue, 21
+ Jun 2022 02:04:24 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 10:04:07 +0100
+Message-Id: <20220621090414.433602-1-vdonnefort@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+Subject: [PATCH v11 0/7] feec() energy margin removal
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com,
+        vdonnefort@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/21 13:48, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Tuesday, June 21, 2022 12:28 PM
->>
->> On 2022/6/21 11:46, Tian, Kevin wrote:
->>>> From: Baolu Lu <baolu.lu@linux.intel.com>
->>>> Sent: Tuesday, June 21, 2022 11:39 AM
->>>>
->>>> On 2022/6/21 10:54, Tian, Kevin wrote:
->>>>>> From: Lu Baolu <baolu.lu@linux.intel.com>
->>>>>> Sent: Monday, June 20, 2022 4:17 PM
->>>>>> @@ -2564,7 +2564,7 @@ static int domain_add_dev_info(struct
->>>>>> dmar_domain *domain, struct device *dev)
->>>>>>     			ret = intel_pasid_setup_second_level(iommu,
->>>>>> domain,
->>>>>>     					dev, PASID_RID2PASID);
->>>>>>     		spin_unlock_irqrestore(&iommu->lock, flags);
->>>>>> -		if (ret) {
->>>>>> +		if (ret && ret != -EBUSY) {
->>>>>>     			dev_err(dev, "Setup RID2PASID failed\n");
->>>>>>     			dmar_remove_one_dev_info(dev);
->>>>>>     			return ret;
->>>>>> --
->>>>>> 2.25.1
->>>>>
->>>>> It's cleaner to avoid this error at the first place, i.e. only do the
->>>>> setup when the first device is attached to the pasid table.
->>>>
->>>> The logic that identifies the first device might introduce additional
->>>> unnecessary complexity. Devices that share a pasid table are rare. I
->>>> even prefer to give up sharing tables so that the code can be
->>>> simpler.:-)
->>>>
->>>
->>> It's not that complex if you simply move device_attach_pasid_table()
->>> out of intel_pasid_alloc_table(). Then do the setup if
->>> list_empty(&pasid_table->dev) and then attach device to the
->>> pasid table in domain_add_dev_info().
->>
->> The pasid table is part of the device, hence a better place to
->> allocate/free the pasid table is in the device probe/release paths.
->> Things will become more complicated if we change relationship between
->> device and it's pasid table when attaching/detaching a domain. That's
->> the reason why I thought it was additional complexity.
->>
-> 
-> If you do want to follow current route it’s still cleaner to check
-> whether the pasid entry has pointed to the domain in the individual
-> setup function instead of blindly returning -EBUSY and then ignoring
-> it even if a real busy condition occurs. The setup functions can
-> just return zero for this benign alias case.
+Hi,
 
-Kevin, how do you like this one?
+Here's a new version of the patch-set to get rid of the energy margin in
+find_energy_efficient_cpu() (feec()). Many thanks to all for the insightful
+comments I got.
 
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index cb4c1d0cf25c..ecffd0129b2b 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -575,6 +575,16 @@ static inline int pasid_enable_wpe(struct 
-pasid_entry *pte)
-  	return 0;
-  };
+feec() will migrate a task to save energy only if it saves at least 6% of
+the total energy consumed by the system. This conservative approach is a
+problem on a system where a lot of small tasks create a huge load on the
+overall: very few of them will be allowed to migrate to a smaller CPU,
+wasting a lot of energy. Instead of trying to determine yet another margin,
+let's try to remove it.
 
-+/*
-+ * Return true if @pasid is RID2PASID and the domain @did has already
-+ * been setup to the @pte. Otherwise, return false.
-+ */
-+static inline bool
-+rid2pasid_domain_valid(struct pasid_entry *pte, u32 pasid, u16 did)
-+{
-+	return pasid == PASID_RID2PASID && pasid_get_domain_id(pte) == did;
-+}
-+
-  /*
-   * Set up the scalable mode pasid table entry for first only
-   * translation type.
-@@ -595,9 +605,8 @@ int intel_pasid_setup_first_level(struct intel_iommu 
-*iommu,
-  	if (WARN_ON(!pte))
-  		return -EINVAL;
+The first elements of this patch-set are various fixes and improvements
+which stabilize task_util and ensures energy comparison fairness across all
+CPUs.  Only once those fixed, we can completely remove the margin and let
+feec() place tasks more aggressively and save energy.
 
--	/* Caller must ensure PASID entry is not in use. */
-  	if (pasid_pte_is_present(pte))
--		return -EBUSY;
-+		return rid2pasid_domain_valid(pte, pasid, did) ? 0: -EBUSY;
+This has been validated in two different ways:
 
-  	pasid_clear_entry(pte);
+First using LISA's eas_behaviour test suite. This is composed of a set of
+scenarios and verifies if the task placement is optimum. No failure has bee=
+n
+observed and it also improved some tests such as Ramp-Down (as the
+placement is now more energy oriented) and *ThreeSmall (as no bouncing
+between clusters happen anymore).
 
-@@ -698,9 +707,8 @@ int intel_pasid_setup_second_level(struct 
-intel_iommu *iommu,
-  		return -ENODEV;
-  	}
+  * Hikey960: 100% PASSED
+  * DB-845C:  100% PASSED
+  * RB5:      100% PASSED
 
--	/* Caller must ensure PASID entry is not in use. */
-  	if (pasid_pte_is_present(pte))
--		return -EBUSY;
-+		return rid2pasid_domain_valid(pte, pasid, did) ? 0: -EBUSY;
+Second, using an Android benchmark: PCMark2 on a Pixel4, with a lot of
+backports to have a scheduler as close as we can from mainline.
 
-  	pasid_clear_entry(pte);
-  	pasid_set_domain_id(pte, did);
-@@ -738,9 +746,8 @@ int intel_pasid_setup_pass_through(struct 
-intel_iommu *iommu,
-  		return -ENODEV;
-  	}
+  +------------+-----------------+-----------------+
+  |    Test    |      Perf       |    Energy [1]   |
+  +------------+-----------------+-----------------+
+  | Web2       | -0.3% pval 0.03 | -1.8% pval 0.00 |
+  | Video2     | -0.3% pval 0.13 | -5.6% pval 0.00 |
+  | Photo2 [2] | -3.8% pval 0.00 | -1%   pval 0.00 |
+  | Writing2   |  0%   pval 0.13 | -1%   pval 0.00 |
+  | Data2      |  0%   pval 0.8  | -0.43 pval 0.00 |
+  +------------+-----------------+-----------------+
 
--	/* Caller must ensure PASID entry is not in use. */
-  	if (pasid_pte_is_present(pte))
--		return -EBUSY;
-+		return rid2pasid_domain_valid(pte, pasid, did) ? 0: -EBUSY;
+The margin removal let the kernel make the best use of the Energy Model,
+tasks are more likely to be placed where they fit and this saves a
+substantial amount of energy, while having a limited impact on
+performances.
 
-  	pasid_clear_entry(pte);
-  	pasid_set_domain_id(pte, did);
+[1]=C2=A0This is an energy estimation based on the CPU activity and the Ene=
+rgy
+Model for this device. "All models are wrong but some are useful"; yes,
+this is an imperfect estimation that doesn't take into account some idle
+states and shared power rails. Nonetheless this is based on the information
+the kernel has during runtime and it proves the scheduler can take better
+decisions based solely on those data.
 
---
-Best regards,
-baolu
+[2] This is the only performance impact observed. The debugging of this
+test showed no issue with task placement. The better score was solely due
+to some critical threads held on better performing CPUs. If a thread needs
+a higher capacity CPU, the placement must result from a user input (with
+e.g. uclamp min) instead of being artificially held on less efficient CPUs
+by feec(). Notice also, the experiment didn't use the Android-only
+latency_sensitive feature which would hide this problem on a real-life
+device.
+
+v10 -> v11:
+  - Cosmetic changes for comments and commit messages.
+  - Tested-by tag from Lukasz.
+
+v9 -> v10:
+  - Cosmetic changes for comments and commit messages.
+  - Renaming timestamp variables =3D> *_idle. (Dietmar)
+  - Fix for empty mask in feec() (Dietmar)
+  - Collect Reviewed-by tags.
+
+v8 -> v9:
+  - PELT migration decay: Fix barriers to prevent overestimation. (Vincent
+    G.)
+  - PELT migration decay: Fix CONFIG_GROUP_SCHED=3Dn build.
+  - Various readbility improvements. (Dietmar)
+  - Collect Reviewed-by tags.
+
+v7 -> v8:
+  - PELT migration decay: Refine estimation computation. (vincent G.)
+  - PELT migration decay: Do not apply estimation if load_avg is decayed
+    (Tao)
+  - PELT migration decay: throttled_pelt_idle update ordering for the
+    update_blocked_load case. (vincent G.)
+
+v6 -> v7:
+  - PELT migration decay: Add missing clock_pelt_idle updates.
+  - PELT migration decay: Fix PELT scaling delta for CONFIG_CFS_BANDWIDTH.
+
+v4 -> v5:
+  - PELT migration decay: timestamp only at idle time (Vincent G.)
+  - PELT migration decay: split timestamp values (enter_idle /
+    clock_pelt_idle) (Vincent G.)
+
+v3 -> v4:
+  - Minor cosmetic changes (Dietmar)
+
+v2 -> v3:
+  - feec(): introduce energy_env struct (Dietmar)
+  - PELT migration decay: Only apply when src CPU is idle (Vincent G.)
+  - PELT migration decay: Do not apply when cfs_rq is throttled
+  - PELT migration decay: Snapshot the lag at cfs_rq's level
+
+v1 -> v2:
+  - Fix PELT migration last_update_time (previously root cfs_rq's).
+  - Add Dietmar's patches to refactor feec()'s CPU loop.
+  - feec(): renaming busy time functions get_{pd,tsk}_busy_time()
+  - feec(): pd_cap computation in the first for_each_cpu loop.
+  - feec(): create get_pd_max_util() function (previously within
+    compute_energy())
+  - feec(): rename base_energy_pd to base_energy.
+
+Dietmar Eggemann (3):
+  sched, drivers: Remove max param from
+    effective_cpu_util()/sched_cpu_util()
+  sched/fair: Rename select_idle_mask to select_rq_mask
+  sched/fair: Use the same cpumask per-PD throughout
+    find_energy_efficient_cpu()
+
+Vincent Donnefort (4):
+  sched/fair: Provide u64 read for 32-bits arch helper
+  sched/fair: Decay task PELT values during wakeup migration
+  sched/fair: Remove task_util from effective utilization in feec()
+  sched/fair: Remove the energy margin in feec()
+
+ drivers/powercap/dtpm_cpu.c       |  33 +--
+ drivers/thermal/cpufreq_cooling.c |   6 +-
+ include/linux/sched.h             |   2 +-
+ kernel/sched/core.c               |  15 +-
+ kernel/sched/cpufreq_schedutil.c  |   5 +-
+ kernel/sched/fair.c               | 470 +++++++++++++++++++-----------
+ kernel/sched/pelt.h               |  40 ++-
+ kernel/sched/sched.h              |  53 +++-
+ 8 files changed, 400 insertions(+), 224 deletions(-)
+
+--=20
+2.37.0.rc0.104.g0611611a94-goog
+

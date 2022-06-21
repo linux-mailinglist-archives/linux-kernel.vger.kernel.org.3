@@ -2,184 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA7B552909
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDA755290C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244224AbiFUBfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 21:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S244398AbiFUBf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 21:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiFUBfg (ORCPT
+        with ESMTP id S232935AbiFUBfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 21:35:36 -0400
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2174.outbound.protection.outlook.com [40.92.62.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219D41C134;
-        Mon, 20 Jun 2022 18:35:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bxpoK3zAiFarQN/c7vC7tRw30eyP02EDMl/GM+8Hl3mWrAIJlRza853EEHCEIViszfdtHsVxjBYe7v+euFAFH2KuP7DXPPtRWUSojqUGhlVti448u08agRqg6tg6UQENEiQZsJqlU00v7r2N4x+9ZQrzyvvw5EGxhLIwNZ3tpk0oH8BdgO52h+Eu4yjxFy9qSTjs7+bYOHgqY4R+43eErAqj+BAt0vrhb3KjMtVNOPVdRFtzmbH6btFiT486aM98j+0VFQmj5meHrjQJPsf1IT+nD+3ffXh7RaSFaHu3otXUkH5P9QtvJMd5Y4IBRXAS55TKPNYvudNxLjRmECB/sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kk2U/RSzw5bv/Y6wSy6n1ZuU3F+CSmZSLSkx0eEZotY=;
- b=GSiogTEr+kQ3rRlHxVGMdR9ZAYMBl/sckBaeuA9HOR3RKzu7jvw8V4h8VD5Wq3m5W2qCuvgOM3pcw8fu2ZdgAMk4Yto95pjal4TWDzVI1bq5T7ighuKv/3d+6GGpAXjAGqkAqC6awVdTVGHv+y5s8rdcOVtdDePfx5LU3UeTAM4454Gh7K7l2J3zeltJxbclr//UEm6PlbDzAoAVSqnCjGzXG4v6tsvPGKQTa9fo8eoRBmPKx+ldeEkgM4OYlSU6gYgI3xDYuSf+3iudTz0VEfEGQGReyIdTVJaaYmEO4Mp2VrbaZXROHKXJ01vKYk+NUzgaXjUtVCUcyF7Dl5J/iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kk2U/RSzw5bv/Y6wSy6n1ZuU3F+CSmZSLSkx0eEZotY=;
- b=Nwd4uSzfl7uPn0P5jCm8++lKi6hT3BAmvrTvzEJU31avvxuhfxtvot71L7wXp2txITViN3i1fC3wM3UqhippGaQP6Joh07YTSCQOHEFqVTKyfIEC95B6BiNb3tff0uzZhwW0XFNDDGSZYNsQk3yBo6FMSRh3Kkec1YWx2v3dxGKxIyZXn8gsdqjWhaW0ExoRa0gd8q4n/qUQHPWVEBfm1GvwjmNYj0V4S9T6fTitl6lRVRXzpzhgF1mCNv6uUodRJ3Sh0qFNlwoVWSv4EP+gdYvcVjzlmsVBOruLLOPH1yG18ag9870Qs7NMotRyY7emzIU8iU4qFw5sa2xhct3Zsw==
-Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:113::14)
- by SYCP282MB0573.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:92::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Tue, 21 Jun
- 2022 01:35:31 +0000
-Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- ([fe80::702a:73df:6a57:6a00]) by MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
- ([fe80::702a:73df:6a57:6a00%8]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
- 01:35:30 +0000
-From:   =?gb2312?B?zLcg08DB1g==?= <yonglin.tan@outlook.com>
-To:     Johan Hovold <johan@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?u9i4tDogW1BBVENIXSBVU0I6IHNlcmlhbDogb3B0aW9uOiBhZGQgUXVlY3Rl?=
- =?gb2312?Q?l_EM05-G_modem?=
-Thread-Topic: [PATCH] USB: serial: option: add Quectel EM05-G modem
-Thread-Index: AQHYhJ+woLm9L0GMh0muX9ti4Bgunq1YQUWAgADNy0A=
-Date:   Tue, 21 Jun 2022 01:35:30 +0000
-Message-ID: <MEYP282MB2374E3E5905D037891E1DDADFDB39@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
-References: <MEYP282MB23740858061FFA19E97E5C0FFDB09@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
- <YrBuqTQObu7/vAf0@hovoldconsulting.com>
-In-Reply-To: <YrBuqTQObu7/vAf0@hovoldconsulting.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-tmn:  [/caF7nPpOjZ7c45Mxqu6AGkOnmA4ZEwa]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0c8d8fd9-fe28-4993-a4a9-08da532653c4
-x-ms-traffictypediagnostic: SYCP282MB0573:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6rhG1RkhgeNouDIEkXqdx6r72sTDrqlZqR5WeNM5jzyV8zM5pQwnRpqwYTHtpjDX3SIzGRVPumAzLCODt39L85j+arxLQbgE7EqJ35Q5Zvm+g7jwz9wQx4Rm3QyhoM/znvZ6y9CxTTDZuz8Fq5LyKyHMhwiarcuTAJcBqwhbBJhtg/83E2dmHxjGpeP7yWU5/0jpNnohOFAiJlyfBxKUFF2sDNE1HEcsjeAn6MutVNQgpeyti3SQhG0vNGCAkUCtsBYxcM3HLYTTEJCj5GpVPXYHReb2rjAYH1vrOGgzVsAveItar2CvzCjGRyvjp5lHa3U30rBQcU8GZt6LD288KWCNxvEryJD1bMso4fWHHmzWkkkCqpIxLLr/l44nyLuLTvOpQ/iMBme6BNLgHnmsAJ1GL/J6vMsjtyzG4ZwjIeRM+7b83RZ6t8Su1/zwHjtIb03iErrmUT9/1E1F6hn7gmS6ufAFA8MGB2uPxl1Znuavsl8fS3RD3N8Hv2vAFdfS4vfogEYMxufkUjojt1S7Ha9uWHxiBTISbmoRKVS4p41VhDOj67ae6cI4vSox+7D9bVqWXpKbpVJLtxS6eViDAwXzxjPWz6MrQNLNW6gge7UD+KI0mDbYRhJbUTqcDryc
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?ZFdvY21kcVdWV2duNVZzUDNKdExhRDcvUzYwV2dsUDdENFRMczZBcWdGOTBB?=
- =?gb2312?B?aWF6MXJ6cm53SG94cmlJYllvbVpBK0s5TzlTSEZ2bEl3TzhoczJ1M0ZpaDRt?=
- =?gb2312?B?QXZGaWVpVnl6c3I2RUhvZXpPT0kyd0Yzd2lJWnNYd0tXSUVqVVhyVk1rd3Qy?=
- =?gb2312?B?M1Q1ZzF4MWJQYktkaGVmZ25PNHMwNWJhcnhjR3ZHVTlRMXFsYjQzR0ZFR0Vo?=
- =?gb2312?B?V3NFK2lPc2VVTG14TGQvM013VHd0OEJpRUVTaVVMZkZKalM0M2pTWjFNS0V3?=
- =?gb2312?B?S1NjUEttU2V5K25rOEpidzhyUjJzOXNJR1d4dDQyc3VJaG8rOTIvTmtydDE2?=
- =?gb2312?B?NStBMFZSM3hvM3RrTnBxRWtlRTVwVjRFN1lRZFgraWFyQkNRTHViUlo3OWpY?=
- =?gb2312?B?SE80M2NrbE9EbXJWSlJpbTZ4VnJBRzE5REd5b2xpVlJhTDMzYkxqbWRFY0xB?=
- =?gb2312?B?ZVRwaCtCRVl0c0FFOWk2bjh0bkphL1c2bGFXZHhZZjBJOGp6ek1ERnZweFRx?=
- =?gb2312?B?VkRZaSs2eVhCMFFqa2poZ2lnMktKUEEvZ2QyVHdwSUVaZnUrM3oyMHVkb1Z0?=
- =?gb2312?B?RGlaa3g5RlMwcG8xWkZXRzBKNmR6Vjdhai9zcldsWnBuNGpmUmVnbHJZWEpW?=
- =?gb2312?B?K0tBQzd0Tk8rRUYwNnpZazcyTnJLL0crV3ltamVxQnlYTlVtZmlWUS9BTjZM?=
- =?gb2312?B?M2ltNnl3dXN1VXZ0N3pCRk5pQ005Y3ROaTlROVdQM3pGbU1leU42eUZJREhy?=
- =?gb2312?B?bk9nQ2tlMkpPMlF6V1oyZVQveDVWaGdra0xGU2s3enl0WDNzeWl0ZFJ6Mmg0?=
- =?gb2312?B?aTdxdTBiTHhBZW1hNGl0dUV0SlZxNm1QbG5tQXZ6NFNYZFROYVJFNWViMWVv?=
- =?gb2312?B?WXpwYU93Qy81YVVnRmFST0ZPcXl6ZWpsMllveGdoNUVhc2lHTGJDWkhRK1NR?=
- =?gb2312?B?ZnJOdWxHMmJRNnlNT1k0MVVWTTU4SkFnQjhyKy9UeDlIczRxdytNZzk3UnlX?=
- =?gb2312?B?aWxZc3kwbncvSkEyeFFlRTRHWi9nWk9vc0tNbmNNZFNJVTYrS2gzRGE3YnZG?=
- =?gb2312?B?dkNQRks5cElzdnhOTCttcVdYeThQV1RCSFpTNCtNYmJsOXlwQlArd2RYQXBK?=
- =?gb2312?B?VmQ0ZWtCMmtNamFCMlk4U1FnUmc2R1lsK2NYS3pYWitXY2k1YnBRNFFYSEl4?=
- =?gb2312?B?R0tjRjcvZHl4UnQ0Qm1DS29qendmWlNNbElRTkY3aUpXb1FyUWRoazZseFQ4?=
- =?gb2312?B?a1pBOFhFcHFXUGFuRk5ONk4zWUJnblZBWFZ6bXVWNFVMQzNuU0RhTkwwSUpj?=
- =?gb2312?B?amN3djl0bUJmMVVLdWxNQWp4ZTF5WE5iYXhud0FKdDJ2ZWo3UGFXQ3B3b3NV?=
- =?gb2312?B?d0Y4VnJEeEZLVzB2azBHbG9kUnUzY3ltTUhMaXY0aFBnTE4xTDFxaXlPTVdX?=
- =?gb2312?B?MG5ZNzBDQmZRNjEwalg5TEhKczZyU3kzVmVsMDdydXVuamtVQXRwTWVMOGRx?=
- =?gb2312?B?UjdmOEJ1dnZnZlM4R3dROHB6RkVwWFJrYjVVaitqWG13RFFiRkNudFBMdTJD?=
- =?gb2312?B?TE5hVHJ3Uys5OUpZZ2l0MEtzZWZ6eExNNmhqM0o3NTl6ZnZJYnpKaUFjRkVu?=
- =?gb2312?B?MVN0c0dIdUl6cVB6OVpSb1RRRStjRXNPRWR6UDcwM3lHc0xkRHFzR2o0bmhu?=
- =?gb2312?B?dEtTZUhmTWtvOGYrMFVJZDJDWkt0dzU2Z1ZjMGttM1FXK2Q0K3FpK2pxQzVo?=
- =?gb2312?B?b0tFVHJnYlFVY2hacWUvT1dpN05xSHNiaU01R2ROekI1SlVLT0lqcU1GUHJD?=
- =?gb2312?B?bllMZE5rWWZMRGZCN0lENVZJVGtnS3NNblBieTBSODJEMmhNU3VKK015VzBH?=
- =?gb2312?B?bE5EbFdsclNlT0RyRVF5Y2psbE1TbWJDTUo4b051Q2ZGSTNXRFhuY2FNRnA2?=
- =?gb2312?Q?1cryby0aSnc=3D?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Mon, 20 Jun 2022 21:35:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324591C134
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655775355; x=1687311355;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=1sAEize2JPA180/ucIEiMx0IRlM6GKGbk0JEfZIi4tM=;
+  b=XAzDm7ASzWaBK6XY+86PJamrmnm7QpiFLkwrxqUAwXd5RIv1uGX4wlzJ
+   Zje3hugZBn++S+3etcjjj37yd5HjNr2fPrjF6BTr463oUwaA9gEF/L+ZK
+   Qbcy98rb33Yp8I72gYsC6THfr1ZKCvTZwSVO2TbwxQv1R/eMddjxF+FZx
+   m8sFeXl4dIEuOSJsXJf4z6Wf059c+YOLat54INmaBv+EJgKQvb0KXroB9
+   XwXGltExpOKGL0fSx58Zxcaw4Hkxi6IHJMwco5puRZDPb2y2bYyVLicWz
+   kozn/8mmYHYWScdm8lJMpmCqOZeGtqpiSP0u36VfufEAvK5wNr2iQJ1jn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="259822437"
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="259822437"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:35:55 -0700
+X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
+   d="scan'208";a="654918761"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:35:53 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] mm/swapfile: make security_vm_enough_memory_mm()
+ work as expected
+References: <20220608144031.829-1-linmiaohe@huawei.com>
+        <20220608144031.829-2-linmiaohe@huawei.com>
+        <87r13jrdst.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <a384f290-dff3-6dad-f1d3-8ec245b9bebd@huawei.com>
+Date:   Tue, 21 Jun 2022 09:35:50 +0800
+In-Reply-To: <a384f290-dff3-6dad-f1d3-8ec245b9bebd@huawei.com> (Miaohe Lin's
+        message of "Mon, 20 Jun 2022 20:12:27 +0800")
+Message-ID: <87letqpzm1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c8d8fd9-fe28-4993-a4a9-08da532653c4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2022 01:35:30.4980
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SYCP282MB0573
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBKb2hhbiwNCg0KVGhlIGludGVyZmFjZSA2IGlzIGZpeGVkIHRvIFFNSSBXV0FOIGluIEVN
-MDUtRyBtb2RlbS4gSWYgSSBkb24ndCByZXNlcnZlIGl0LCBpdCB3aWxsIG1hdGNoZXMgdGhlIG9w
-dGlvbiBkcml2ZXIsIGl0J3Mgbm90IGNvcnJlY3QuDQoNCkknbGwgY2hhbmdlIHRoZSBjb21tZW50
-cy4NCg0KLS0tLS3Tyrz+1K28/i0tLS0tDQq3orz+yMs6IEpvaGFuIEhvdm9sZCA8am9oYW5Aa2Vy
-bmVsLm9yZz4gDQq3osvNyrG85DogMjAyMsTqNtTCMjDI1SAyMDo1Nw0KytW8/sjLOiBZb25nbGlu
-IFRhbiA8eW9uZ2xpbi50YW5Ab3V0bG9vay5jb20+DQqzrcvNOiBsaW51eC11c2JAdmdlci5rZXJu
-ZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQrW98ziOiBSZTogW1BBVENIXSBV
-U0I6IHNlcmlhbDogb3B0aW9uOiBhZGQgUXVlY3RlbCBFTTA1LUcgbW9kZW0NCg0KT24gTW9uLCBK
-dW4gMjAsIDIwMjIgYXQgMDg6MTY6NTNQTSArMDgwMCwgWW9uZ2xpbiBUYW4gd3JvdGU6DQo+IEFk
-ZCBhIGRldmljZS1pZCBlbnRyeSBmb3IgdGhlIFF1ZWN0ZWwgRU0wNS1HIG1vZHVsZS4NCj4gDQo+
-IFQ6ICBCdXM9MDEgTGV2PTAxIFBybnQ9MDEgUG9ydD0wMCBDbnQ9MDEgRGV2Iz0gMTYgU3BkPTQ4
-MCAgTXhDaD0gMA0KPiBEOiAgVmVyPSAyLjAwIENscz1lZihtaXNjICkgU3ViPTAyIFByb3Q9MDEg
-TXhQUz02NCAjQ2Zncz0gIDENCj4gUDogIFZlbmRvcj0yYzdjIFByb2RJRD0wMzBhIFJldj0gMy4x
-OA0KPiBTOiAgTWFudWZhY3R1cmVyPVF1ZWN0ZWwNCj4gUzogIFByb2R1Y3Q9UXVlY3RlbCBFTTA1
-LUcNCj4gQzoqICNJZnM9IDYgQ2ZnIz0gMSBBdHI9YTAgTXhQd3I9NTAwbUENCj4gQTogIEZpcnN0
-SWYjPSAwIElmQ291bnQ9IDIgQ2xzPTAyKGNvbW0uKSBTdWI9MGUgUHJvdD0wMA0KPiBJOiogSWYj
-PSAzIEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPW9w
-dGlvbg0KPiBFOiAgQWQ9ODEoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+IEU6
-ICBBZD0wMShPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gSToqIElmIz0gNCBB
-bHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0wMCBQcm90PTAwIERyaXZlcj1vcHRpb24N
-Cj4gRTogIEFkPTgzKEkpIEF0cj0wMyhJbnQuKSBNeFBTPSAgMTAgSXZsPTMybXMNCj4gRTogIEFk
-PTgyKEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiBFOiAgQWQ9MDIoTykgQXRy
-PTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+IEk6KiBJZiM9IDIgQWx0PSAwICNFUHM9IDMg
-Q2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uDQo+IEU6ICBBZD04NShJ
-KSBBdHI9MDMoSW50LikgTXhQUz0gIDEwIEl2bD0zMm1zDQo+IEU6ICBBZD04NChJKSBBdHI9MDIo
-QnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gRTogIEFkPTAzKE8pIEF0cj0wMihCdWxrKSBNeFBT
-PSA1MTIgSXZsPTBtcw0KPiBJOiogSWYjPSA1IEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikg
-U3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbg0KPiBFOiAgQWQ9ODcoSSkgQXRyPTAzKEludC4p
-IE14UFM9ICAxMCBJdmw9MzJtcw0KPiBFOiAgQWQ9ODYoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUx
-MiBJdmw9MG1zDQo+IEU6ICBBZD0wNChPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMN
-Cj4gSToqIElmIz0gMCBBbHQ9IDAgI0VQcz0gMSBDbHM9MDIoY29tbS4pIFN1Yj0wZSBQcm90PTAw
-IERyaXZlcj1jZGNfbWJpbQ0KPiBFOiAgQWQ9ODkoSSkgQXRyPTAzKEludC4pIE14UFM9ICA2NCBJ
-dmw9MzJtcw0KPiBJOiAgSWYjPSAxIEFsdD0gMCAjRVBzPSAwIENscz0wYShkYXRhICkgU3ViPTAw
-IFByb3Q9MDIgRHJpdmVyPWNkY19tYmltDQo+IEk6KiBJZiM9IDEgQWx0PSAxICNFUHM9IDIgQ2xz
-PTBhKGRhdGEgKSBTdWI9MDAgUHJvdD0wMiBEcml2ZXI9Y2RjX21iaW0NCj4gRTogIEFkPTg4KEkp
-IEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiBFOiAgQWQ9MDUoTykgQXRyPTAyKEJ1
-bGspIE14UFM9IDUxMiBJdmw9MG1zDQoNCkFyZSB0aGVyZSBhbnkgZnVydGhlciBjb25maWd1cmF0
-aW9ucyBmb3IgdGhpcyBkZXZpY2UgdGhhdCB5b3UgbmVlZCB0byBjb25zaWRlcj8NCg0KWW91IHJl
-c2VydmUgaW50ZXJmYWNlIDYgYmVsb3cgd2hpY2ggZG9lc24ndCBldmVuIGV4aXN0IGluIHRoZSBh
-Ym92ZSBjb25maWd1cmF0aW9uLg0KDQpDYW4geW91IHNheSBzb21ldGhpbmcgbW9yZSBhYm91dCB3
-aGF0IHRoZSBpbmRpdmlkdWFsIGludGVyZmFjZXMgYXJlIHVzZWQgZm9yLCBmb3IgZXhhbXBsZSwg
-YXMgd2FzIGRvbmUgaGVyZToNCg0KCWh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC9UWVpQUjA2
-TUI0MjcwRDMzOTRCOEUzRTAzMDE3MzhGNkI4NkQwOUBUWVpQUjA2TUI0MjcwLmFwY3ByZDA2LnBy
-b2Qub3V0bG9vay5jb20vDQoNCj4gU2lnbmVkLW9mZi1ieTogWW9uZ2xpbiBUYW4gPHlvbmdsaW4u
-dGFuQG91dGxvb2suY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYyB8
-IDIgKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gIG1vZGUgY2hhbmdl
-IDEwMDY0NCA9PiAxMDA3NTUgZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5jDQo+IA0KPiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5jIGIvZHJpdmVycy91c2Ivc2VyaWFs
-L29wdGlvbi5jIA0KPiBvbGQgbW9kZSAxMDA2NDQgbmV3IG1vZGUgMTAwNzU1IGluZGV4IGVkMWU1
-MGQuLjA1ZmMzMjINCj4gLS0tIGEvZHJpdmVycy91c2Ivc2VyaWFsL29wdGlvbi5jDQo+ICsrKyBi
-L2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYw0KPiBAQCAtMTE0Nyw2ICsxMTQ3LDggQEAgc3Rh
-dGljIGNvbnN0IHN0cnVjdCB1c2JfZGV2aWNlX2lkIG9wdGlvbl9pZHNbXSA9IHsNCj4gIAkgIC5k
-cml2ZXJfaW5mbyA9IFpMUCB9LA0KPiAgCXsgVVNCX0RFVklDRV9BTkRfSU5URVJGQUNFX0lORk8o
-UVVFQ1RFTF9WRU5ET1JfSUQsIFFVRUNURUxfUFJPRFVDVF9FQzIwMFNfQ04sIDB4ZmYsIDAsIDAp
-IH0sDQo+ICAJeyBVU0JfREVWSUNFX0FORF9JTlRFUkZBQ0VfSU5GTyhRVUVDVEVMX1ZFTkRPUl9J
-RCwgDQo+IFFVRUNURUxfUFJPRFVDVF9FQzIwMFQsIDB4ZmYsIDAsIDApIH0sDQo+ICsJeyBVU0Jf
-REVWSUNFX0lOVEVSRkFDRV9DTEFTUyhRVUVDVEVMX1ZFTkRPUl9JRCwgMHgwMzBhLCAweGZmKSwN
-Cj4gKwkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoNikgfCBaTFAgfSwgLyogRU0wNS1HICovDQoNCkFz
-IG1lbnRpb25lZCBhYm92ZSBSU1ZEKDYpIGxvb2tzIHdyb25nIGhlcmUuDQoNClBsZWFzZSBtb3Zl
-IHRoZSBjb21tZW50IHRvIHRoZSBmaXJzdCBsaW5lIG9mIHRoZSBlbnRyeSwgYW5kIG1vdmUgdGhl
-IGVudHJ5IHRvIHRoZSBvdGhlciBRdWVjdGVsIGVudHJpZXMgdXNpbmcgbnVtZXJpY2FsIFBJRHMg
-KGkuZS4gYmVmb3JlIEVNMTYwUi1HTCkuDQogIA0KPiAgCXsgVVNCX0RFVklDRShDTU9URUNIX1ZF
-TkRPUl9JRCwgQ01PVEVDSF9QUk9EVUNUXzYwMDEpIH0sDQo+ICAJeyBVU0JfREVWSUNFKENNT1RF
-Q0hfVkVORE9SX0lELCBDTU9URUNIX1BST0RVQ1RfQ01VXzMwMCkgfSwNCg0KSm9oYW4NCg==
+Miaohe Lin <linmiaohe@huawei.com> writes:
+
+> On 2022/6/20 15:31, Huang, Ying wrote:
+>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>> 
+>>> security_vm_enough_memory_mm() checks whether a process has enough memory
+>>> to allocate a new virtual mapping. And total_swap_pages is considered as
+>>> available memory while swapoff tries to make sure there's enough memory
+>>> that can hold the swapped out memory. But total_swap_pages contains the
+>>> swap space that is being swapoff. So security_vm_enough_memory_mm() will
+>>> success even if there's no memory to hold the swapped out memory because
+>>> total_swap_pages always greater than or equal to p->pages.
+>> 
+>> Per my understanding, swapoff will not allocate virtual mapping by
+>> itself.  But after swapoff, the overcommit limit could be exceeded.
+>> security_vm_enough_memory_mm() is used to check that.  For example, in a
+>> system with 4GB memory and 8GB swap, and 10GB is in use,
+>> 
+>> CommitLimit:    4+8 = 12GB
+>> Committed_AS:   10GB
+>> 
+>> security_vm_enough_memory_mm() in swapoff() will fail because
+>> 10+8 = 18 > 12.  This is expected because after swapoff, the overcommit
+>> limit will be exceeded.
+>> 
+>> If 3GB is in use,
+>> 
+>> CommitLimit:    4+8 = 12GB
+>> Committed_AS:   3GB
+>> 
+>> security_vm_enough_memory_mm() in swapoff() will succeed because
+>> 3+8 = 11 < 12.  This is expected because after swapoff, the overcommit
+>> limit will not be exceeded.
+>
+> In OVERCOMMIT_NEVER scene, I think you're right.
+>
+>> 
+>> So, what's the real problem of the original implementation?  Can you
+>> show it with an example as above?
+>
+> In OVERCOMMIT_GUESS scene, in a system with 4GB memory and 8GB swap, and 10GB is in use,
+> pages below is 8GB, totalram_pages() + total_swap_pages is 12GB, so swapoff() will succeed
+> instead of expected failure because 8 < 12. The overcommit limit is always *ignored* in the
+> below case.
+>
+> 	if (sysctl_overcommit_memory == OVERCOMMIT_GUESS) {
+> 		if (pages > totalram_pages() + total_swap_pages)
+> 			goto error;
+> 		return 0;
+> 	}
+>
+> Or am I miss something?
+
+Per my understanding, with OVERCOMMIT_GUESS, the number of in-use pages
+isn't checked at all.  The only restriction is that the size of the
+virtual mapping created should be less than total RAM + total swap
+pages.  Because swapoff() will not create virtual mapping, so it's
+expected that security_vm_enough_memory_mm() in swapoff() always
+succeeds.
+
+Best Regards,
+Huang, Ying
+
+>
+> Thanks!
+>
+>> 
+>>> In order to fix it, p->pages should be retracted from total_swap_pages
+>>> first and then check whether there's enough memory for inuse swap pages.
+>>>
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> 
+>> [snip]
+>> 
+>> .
+>> 

@@ -2,81 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A11552AAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02149552AB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 08:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345513AbiFUGAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 02:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S1345518AbiFUGAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 02:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345490AbiFUGAk (ORCPT
+        with ESMTP id S1345509AbiFUGAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 02:00:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7352220E5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655791237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HpI8G7xwI35B9Nl13pX8pLeBi7qUikVCYP4oyWd8eYk=;
-        b=CtGDBCOhL1IuW4imQ44ctR/6f3ha1ct1wv/k6vzPZD2aKJTDLzIFUrY4d+zqOQ9Y5qt2ln
-        /7sCOFe5mAw7hYuQKPDXXwDjry0iIXd0YKFRbYJY3WsO97jSqjOqsHjR/NCmIlaki+eMBl
-        jY3458KqkyezOFsEfBT4x6Qiczlp+gw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-hJR6aoIONWS6Q7O7zJxrAw-1; Tue, 21 Jun 2022 02:00:34 -0400
-X-MC-Unique: hJR6aoIONWS6Q7O7zJxrAw-1
-Received: by mail-wm1-f72.google.com with SMTP id m22-20020a7bcb96000000b0039c4f6ade4dso3908410wmi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 23:00:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HpI8G7xwI35B9Nl13pX8pLeBi7qUikVCYP4oyWd8eYk=;
-        b=69YX00m6L/sU1PjDlIDrGN6d22U40RdT9AwLwvlg/qRuTqP+j14u994ddy08itcoyW
-         aS2ING2GrRygzjNDw32wDn37Io08snUR6Zjh4QphVvUwUwRf9cOghbayvfvSO9A2RfHe
-         KxJ4ShtPZ5ZwrpVksAsn8s2x9XVL26HngqDervs83MdN2FI53ZmsBn8cvfQV6brcNs6b
-         WzbLe6U+fhoUMP7m/f5o/bTYsLwLFX81hMgwoZv9pw8fcWSQgjVrwr+gCceGomHDB4GV
-         ZxVAJNwngm2lK9gAKTrMCUd7SXHbRuyUHBYXvdLY6AxFtNvFmaQiUnt0mLTauyumexGI
-         lTAw==
-X-Gm-Message-State: AJIora+bxqqhy8Zoxb02zNBAzl3ttMdADF7hHRuEzlQnSFOvOPSf8R+Y
-        5BWKtqaOc8bqP6+tMNEuN8T+VudDzAewsZpMR63PYdqJw284aa/lgY/tlJ6VvKdtylZBOsyMSWH
-        3CRtr2ekPR6COuvEcDM4hujsf
-X-Received: by 2002:adf:db48:0:b0:21b:9733:e134 with SMTP id f8-20020adfdb48000000b0021b9733e134mr1868392wrj.396.1655791233058;
-        Mon, 20 Jun 2022 23:00:33 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ueVVv0nYzdNBCnl0LzuMmMaJJwbfPo6vYbVgN8zyrf0qI4HmI616IJk704Hm+OV6yGEEGYsQ==
-X-Received: by 2002:adf:db48:0:b0:21b:9733:e134 with SMTP id f8-20020adfdb48000000b0021b9733e134mr1868373wrj.396.1655791232802;
-        Mon, 20 Jun 2022 23:00:32 -0700 (PDT)
-Received: from redhat.com ([2.53.15.87])
-        by smtp.gmail.com with ESMTPSA id i27-20020a1c541b000000b0039c5ab7167dsm21126194wmb.48.2022.06.20.23.00.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 23:00:32 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 02:00:28 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        erwan.yvin@stericsson.com
-Subject: Re: [PATCH 3/3] caif_virtio: fix the race between reset and netdev
- unregister
-Message-ID: <20220621020013-mutt-send-email-mst@kernel.org>
-References: <20220620051115.3142-1-jasowang@redhat.com>
- <20220620051115.3142-4-jasowang@redhat.com>
- <20220620050446-mutt-send-email-mst@kernel.org>
- <CACGkMEsEq3mu6unXx1VZuEFgDCotOc9v7fcwJG-kXEqs6hXYYg@mail.gmail.com>
- <20220620061607-mutt-send-email-mst@kernel.org>
- <CACGkMEu7k2X6S0tSsuGOb-Ta+MzzYE5NzHgrhR2H1vgmcLqjCw@mail.gmail.com>
+        Tue, 21 Jun 2022 02:00:45 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB4F22290;
+        Mon, 20 Jun 2022 23:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655791245; x=1687327245;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aZpK0M6SHXLLGZP0lunOQ+0S8bc7+yt9mRIFzLutF/U=;
+  b=oie9d63vhD0kEWXAajFg+Xoxd7/C43WtR9mUm8Ww6gsb42iW/5tAEAVI
+   JZOOM2EnqIRt4KMcbO6eZW0nFGl35uOy7Mm38cjTQ2L09a3TJCeQmTNkS
+   WG42OBozwDUmK8AlkKYDs+IPQVxnaovtj/DGyi1/k0F2/geyZMzQUoXQT
+   k=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jun 2022 23:00:44 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 23:00:45 -0700
+Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 20 Jun
+ 2022 23:00:42 -0700
+Message-ID: <789b9966-f899-3882-768d-e996e43ec6da@quicinc.com>
+Date:   Tue, 21 Jun 2022 11:30:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEu7k2X6S0tSsuGOb-Ta+MzzYE5NzHgrhR2H1vgmcLqjCw@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH rcu 04/12] rcu: Immediately boost preempted readers for
+ strict grace periods
+Content-Language: en-US
+To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        <rostedt@goodmis.org>, Zqiang <qiang1.zhang@intel.com>
+References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
+ <20220620222032.3839547-4-paulmck@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20220620222032.3839547-4-paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,109 +64,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 11:09:45AM +0800, Jason Wang wrote:
-> On Mon, Jun 20, 2022 at 6:18 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Mon, Jun 20, 2022 at 05:18:29PM +0800, Jason Wang wrote:
-> > > On Mon, Jun 20, 2022 at 5:09 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Mon, Jun 20, 2022 at 01:11:15PM +0800, Jason Wang wrote:
-> > > > > We use to do the following steps during .remove():
-> > > >
-> > > > We currently do
-> > > >
-> > > >
-> > > > > static void cfv_remove(struct virtio_device *vdev)
-> > > > > {
-> > > > >       struct cfv_info *cfv = vdev->priv;
-> > > > >
-> > > > >       rtnl_lock();
-> > > > >       dev_close(cfv->ndev);
-> > > > >       rtnl_unlock();
-> > > > >
-> > > > >       tasklet_kill(&cfv->tx_release_tasklet);
-> > > > >       debugfs_remove_recursive(cfv->debugfs);
-> > > > >
-> > > > >       vringh_kiov_cleanup(&cfv->ctx.riov);
-> > > > >       virtio_reset_device(vdev);
-> > > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
-> > > > >       cfv->vr_rx = NULL;
-> > > > >       vdev->config->del_vqs(cfv->vdev);
-> > > > >       unregister_netdev(cfv->ndev);
-> > > > > }
-> > > > > This is racy since device could be re-opened after dev_close() but
-> > > > > before unregister_netdevice():
-> > > > >
-> > > > > 1) RX vringh is cleaned before resetting the device, rx callbacks that
-> > > > >    is called after the vringh_kiov_cleanup() will result a UAF
-> > > > > 2) Network stack can still try to use TX virtqueue even if it has been
-> > > > >    deleted after dev_vqs()
-> > > > >
-> > > > > Fixing this by unregistering the network device first to make sure not
-> > > > > device access from both TX and RX side.
-> > > > >
-> > > > > Fixes: 0d2e1a2926b18 ("caif_virtio: Introduce caif over virtio")
-> > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > ---
-> > > > >  drivers/net/caif/caif_virtio.c | 6 ++----
-> > > > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/net/caif/caif_virtio.c b/drivers/net/caif/caif_virtio.c
-> > > > > index 66375bea2fcd..a29f9b2df5b1 100644
-> > > > > --- a/drivers/net/caif/caif_virtio.c
-> > > > > +++ b/drivers/net/caif/caif_virtio.c
-> > > > > @@ -752,9 +752,8 @@ static void cfv_remove(struct virtio_device *vdev)
-> > > > >  {
-> > > > >       struct cfv_info *cfv = vdev->priv;
-> > > > >
-> > > > > -     rtnl_lock();
-> > > > > -     dev_close(cfv->ndev);
-> > > > > -     rtnl_unlock();
-> > > > > +     /* Make sure NAPI/TX won't try to access the device */
-> > > > > +     unregister_netdev(cfv->ndev);
-> > > > >
-> > > > >       tasklet_kill(&cfv->tx_release_tasklet);
-> > > > >       debugfs_remove_recursive(cfv->debugfs);
-> > > > > @@ -764,7 +763,6 @@ static void cfv_remove(struct virtio_device *vdev)
-> > > > >       vdev->vringh_config->del_vrhs(cfv->vdev);
-> > > > >       cfv->vr_rx = NULL;
-> > > > >       vdev->config->del_vqs(cfv->vdev);
-> > > > > -     unregister_netdev(cfv->ndev);
-> > > > >  }
-> > > >
-> > > >
-> > > > This gives me pause, callbacks can now trigger after device
-> > > > has been unregistered. Are we sure this is safe?
-> > >
-> > > It looks safe, for RX NAPI is disabled. For TX, tasklet is disabled
-> > > after tasklet_kill(). I can add a comment to explain this.
-> >
-> > that waits for outstanding tasklets but does it really prevent
-> > future ones?
+
+
+On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
+> From: Zqiang <qiang1.zhang@intel.com>
 > 
-> I think so, it tries to test and set TASKLET_STATE_SCHED which blocks
-> the future scheduling of a tasklet.
+> The intent of the CONFIG_RCU_STRICT_GRACE_PERIOD Konfig option is to
+> cause normal grace periods to complete quickly in order to better catch
+> errors resulting from improperly leaking pointers from RCU read-side
+> critical sections.  However, kernels built with this option enabled still
+> wait for some hundreds of milliseconds before boosting RCU readers that
+> have been preempted within their current critical section.  The value
+> of this delay is set by the CONFIG_RCU_BOOST_DELAY Kconfig option,
+> which defaults to 500 milliseconds.
 > 
-> Thanks
+> This commit therefore causes kernels build with strict grace periods
+> to ignore CONFIG_RCU_BOOST_DELAY.  This causes rcu_initiate_boost()
+> to start boosting immediately after all CPUs on a given leaf rcu_node
+> structure have passed through their quiescent states.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
 
-But then in the end it clears it, does it not?
+Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 
-> >
-> > > > Won't it be safer to just keep the rtnl_lock around
-> > > > the whole process?
-> > >
-> > > It looks to me we rtnl_lock can't help in synchronizing with the
-> > > callbacks, anything I miss?
-> > >
-> > > Thanks
-> >
-> > good point.
-> >
-> >
-> > > >
-> > > > >  static struct virtio_device_id id_table[] = {
-> > > > > --
-> > > > > 2.25.1
-> > > >
-> >
 
+Thanks
+Neeraj
+
+>   kernel/rcu/tree_plugin.h | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index 440d9e02a26e0..53d05eb804121 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -1140,7 +1140,8 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
+>   	    (rnp->gp_tasks != NULL &&
+>   	     rnp->boost_tasks == NULL &&
+>   	     rnp->qsmask == 0 &&
+> -	     (!time_after(rnp->boost_time, jiffies) || rcu_state.cbovld))) {
+> +	     (!time_after(rnp->boost_time, jiffies) || rcu_state.cbovld ||
+> +	      IS_ENABLED(CONFIG_RCU_STRICT_GRACE_PERIOD)))) {
+>   		if (rnp->exp_tasks == NULL)
+>   			WRITE_ONCE(rnp->boost_tasks, rnp->gp_tasks);
+>   		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);

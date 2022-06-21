@@ -2,242 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6784D553648
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9D3553658
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241313AbiFUPiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S1353031AbiFUPkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353071AbiFUPiq (ORCPT
+        with ESMTP id S1352867AbiFUPkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:38:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13DBFB7C6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655825924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FnbHuNXX+33sc1khx411pyZstIbascagbQJiHj3LaFU=;
-        b=Q361U+kBqmfO25Eu+hmWja8O9nhGLbwb40T2N+D8TFDemY0Ks+QSPt6KsxjOHWW2KZLAps
-        SwuarveSWT1nHYWbM1Sev2hOyP8broycHGnkg7k2r3Kna3BAVRwbss+M5/JP4zOleDIt4H
-        4XrBPeC17lgxlK2+/DmQ7N6rxEyr8B0=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-502-sLuP8idpMZi0QL3JCARdvQ-1; Tue, 21 Jun 2022 11:38:42 -0400
-X-MC-Unique: sLuP8idpMZi0QL3JCARdvQ-1
-Received: by mail-qv1-f69.google.com with SMTP id b18-20020a0ccd12000000b004703d1b04e8so7433709qvm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:38:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=FnbHuNXX+33sc1khx411pyZstIbascagbQJiHj3LaFU=;
-        b=UgWpliJgREDZ5dfUqmu9+eVeu7paYiss5E0RPPiHbWkGb3zm3mDnywVmXwrJRG18RZ
-         E4xfWVfgyJ06FMpjuorim6H5lHWepB/CjLSAcCBvUif3M+1bBQ1RsygCl/93n2K8HuEW
-         jQsSiSEAjW1ss/Lvc7J/fOR5HITh5tsYoU4K9KN87TOzN+mjbAFGou1z0rSKiuTt46I5
-         DePsYH/IKLMMXyfh/ai1CPQoo50o0oN8/qjPlKUBeUDEzldqiPF9ZU24K96NPJPpuQoh
-         LZiGIDQfRZavol/2L4DkSS5hmCTGXg98jBzj+7n+EkAJuJfcihNJWdidTwnQ8HBl4tjD
-         KXBQ==
-X-Gm-Message-State: AJIora/Y03lcH0APDmxa8g1rj+yiH+p+ye+W2ZXK4+BBvD9OKITKIMNp
-        SHETTzoc8nVxX0LjgPQjUhTMWIxvKMI30P0Zey+LWX9AheeB5nxFBz0KWMe1yH9tttBclDD2WYU
-        AqurbFw6YHe+7nMTIi0tkwe1V
-X-Received: by 2002:a05:622a:5ca:b0:306:6c7c:efe7 with SMTP id d10-20020a05622a05ca00b003066c7cefe7mr24478225qtb.310.1655825922391;
-        Tue, 21 Jun 2022 08:38:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1snfFXk68dQT4mRBgAFD3F/WUiGoBjFE3pNpAayeNMZAj/1qtmjBnO8Rp9miRu6x2a7GQi+Yw==
-X-Received: by 2002:a05:622a:5ca:b0:306:6c7c:efe7 with SMTP id d10-20020a05622a05ca00b003066c7cefe7mr24478201qtb.310.1655825922126;
-        Tue, 21 Jun 2022 08:38:42 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bl17-20020a05620a1a9100b006a6c9e17088sm13650258qkb.65.2022.06.21.08.38.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 08:38:41 -0700 (PDT)
-Subject: Re: [PATCH v1] memory: dfl-emif: Update the dfl emif driver support
- revision 1
-To:     Tianfei Zhang <tianfei.zhang@intel.com>, ssantosh@kernel.org,
-        krzysztof.kozlowski@linaro.org
-Cc:     yilun.xu@intel.com, russell.h.weight@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        matthew.gerlach@linux.intel.com,
-        Debarati Biswas <debaratix.biswas@intel.com>
-References: <20220621123854.8686-1-tianfei.zhang@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <39675efc-5c35-74e6-c824-d7f09d80fa61@redhat.com>
-Date:   Tue, 21 Jun 2022 08:38:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 21 Jun 2022 11:40:08 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDD82BB28;
+        Tue, 21 Jun 2022 08:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=Jmq5B6v8SQVbhm55DgcO6ZMY68OIQiWikBqR9L2Q1V0=;
+        b=gTQ9uSCg0HG+EmsZa03wxGw+gJZ6V3DnJwAQCidiOTin7NRy9mzZsuNhrKAMIwKuD8i6ApVKhkRfv
+         KuK8n3+5fpMYfbt6gr1aCUS/z2BPf+6JxdV6yozMhNOCKxIZepoDG/aDVKjvSJspdc3LfGbmjckdwD
+         nO/Ct3MBff2aJOOEfZRcG8Ze0I88toI1Is5YPWnT8YGhCF40dIOX/YWl9FzI6SLJkuyk58GqBbKD9J
+         3yjbxdT1H0SNAOXxvumHt9RUTIuFKbkTIeZkmFjdYTBDlbHB/OYM7ahJVZ6b2n8g8IKOnt+kVOu6Fl
+         8VXVEB0/ckb1L4W1MURTnXy3kSbVwmg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.024835)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.075826), Hit: No, Details: v2.40.0; Id: 15.52k32d.1g63empna.1mr5a; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Tue, 21 Jun 2022 18:39:42 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, corbet@lwn.net
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        conor.dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: [PATCH v21 0/5] Microchip Polarfire FPGA manager
+Date:   Tue, 21 Jun 2022 18:38:42 +0300
+Message-Id: <20220621153847.103052-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220621123854.8686-1-tianfei.zhang@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It does not seem like version 0 is being handled in all places, please 
-review for backward compatibility.
+Add support to the FPGA manager for programming Microchip Polarfire
+FPGAs over slave SPI interface with .dat formatted bitsream image.
 
-On 6/21/22 5:38 AM, Tianfei Zhang wrote:
-> From: Debarati Biswas <debaratix.biswas@intel.com>
->
-> The next generation (revision 1) of the DFL EMIF feature device requires
-> support for more than 4 memory banks. It does not support the selective
+Changelog:
+  v1 -> v2: fix printk formating
+  v2 -> v3:
+   * replace "microsemi" with "microchip"
+   * replace prefix "microsemi_fpga_" with "mpf_"
+   * more sensible .compatible and .name strings
+   * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+  v3 -> v4: fix unused variable warning
+    Put 'mpf_of_ids' definition under conditional compilation, so it
+    would not hang unused if CONFIG_OF is not enabled.
+  v4 -> v5:
+   * prefix defines with MPF_
+   * mdelay() -> usleep_range()
+   * formatting fixes
+   * add DT bindings doc
+   * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+     We can't parse image header in write_init() because image header
+     size is not known beforehand. Thus parsing need to be done in
+     fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+     also need to be reenterable. On the other hand,
+     fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+     write() callback to write_sg().
+  v5 -> v6: fix patch applying
+     I forgot to clean up unrelated local changes which lead to error on
+     patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+     applying on vanilla kernel.
+  v6 -> v7: fix binding doc to pass dt_binding_check
+  v7 -> v8: another fix for dt_binding_check warning
+  v8 -> v9:
+   * add another patch to support bitstream offset in FPGA image buffer
+   * rework fpga_manager_ops.write_sg() back to fpga_manager_ops.write()
+   * move image header parsing from write() to write_init()
+  v9 -> v10:
+   * add parse_header() callback to fpga_manager_ops
+   * adjust fpga_mgr_write_init[_buf|_sg]() for parse_header() usage
+   * implement parse_header() in microchip-spi driver
+  v10 -> v11: include missing unaligned.h to microchip-spi
+     fix error: implicit declaration of function 'get_unaligned_le[16|32]'
+  v11 -> v12:
+   * microchip-spi: double read hw status, ignore first read, because it
+     can be unreliable.
+   * microchip-spi: remove sleep between status readings in
+     poll_status_not_busy() to save a few seconds. Status is polled on
+     every 16 byte writes - that is quite often, therefore
+     usleep_range() accumulate to a considerable number of seconds.
+  v12 -> v13:
+   * fpga-mgr: separate fpga_mgr_parse_header_buf() from
+     fpga_mgr_write_init_buf()
+   * fpga-mgr: introduce FPGA_MGR_STATE_PARSE_HEADER and
+     FPGA_MGR_STATE_PARSE_HEADER_ERR fpga_mgr_states
+   * fpga-mgr: rename fpga_mgr_write_init_sg() to fpga_mgr_prepare_sg()
+     and rework with respect to a new fpga_mgr_parse_header_buf()
+   * fpga-mgr: rework write accounting in fpga_mgr_buf_load_sg() for
+     better clarity
+   * microchip-spi: rename MPF_STATUS_POLL_TIMEOUT to
+     MPF_STATUS_POLL_RETRIES
+   * microchip-spi: add comment about status reading quirk to
+     mpf_read_status()
+   * microchip-spi: rename poll_status_not_busy() to mpf_poll_status()
+     and add comment.
+   * microchip-spi: make if statement in mpf_poll_status() easier to
+     read.
+  v13 -> v14:
+   * fpga-mgr: improvements from Xu Yilun in
+      - fpga_mgr_parse_header_buf()
+      - fpga_mgr_write_init_buf()
+      - fpga_mgr_prepare_sg()
+      - fpga_mgr_buf_load_sg()
+   * fpga-mgr: add check for -EAGAIN from fpga_mgr_parse_header_buf()
+     when called from fpga_mgr_buf_load_mapped()
+   * microchip-spi: remove excessive cs_change from second spi_transfer
+     in mpf_read_status()
+   * microchip-spi: change type of components_size_start,
+     bitstream_start, i from size_t to u32 in mpf_ops_parse_header()
+  v14 -> v15: eliminate memcpy() in mpf_ops_write()
+    Eliminate excessive memcpy() in mpf_ops_write() by using
+    spi_sync_transfer() instead of spi_write().
+  v15 -> v16:
+   * microchip-spi: change back components_size_start and
+     bitstream_start variables types to size_t, i - to u16 in
+     mpf_ops_parse_header()
+   * fpga-mgr: rename fpga_parse_header_buf() to
+     fpga_parse_header_mapped(). It serves only mapped FPGA image now,
+     adjust it accordingly.
+   * fpga-mgr: separate fpga_mgr_parse_header_sg_first() and
+     fpga_mgr_parse_header_sg() from fpga_mgr_prepare_sg()
+  v16 -> v17:
+   * fpga-mgr: return size of allocated header from
+     fpga_mgr_parse_header_sg(), add `char **ret_buf` to function args
+     to save pointer to allocated header. This allow us to call
+     fpga_mgr_write_init_buf() with exact size of allocated header.
+   * document parse_header() callback in fpga-mgr.rst
+  v17 -> v18:
+   * fpga-mgr: change back fpga_mgr_parse_header_sg() to return
+     allocated buffer but set buffer size into output parameter
+   * fpga-mgr: check returned pointer from krealloc for ZERO_OR_NULL_PTR
+     in fpga_mgr_paese_header_sg() as krealloc may return ZERO_SIZE_PTR.
+   * fpga-mgr: in fpga_mgr_prepare_sg() return fpga_mgr_write_init() on
+     fast path only when both initial_header_size and parse_header() are
+     not defined.
+   * docs: fpga-mgr: a few rewords from Xu Yilun
+  v18 -> v19:
+   * microchip-spi: split multiple assignments on a single line in
+     functions mpf_read_status() and mpf_ops_parse_header()
+   * fpga-mgr: add braces {} around "else if" arm in
+     fpga_mgr_prepare_sg()
+   * fpga-mgr: don't reuse krealloc() arg in fpga_mgr_parse_header_sg().
+     If krealloc() returns NULL, it doesn't free the original.
+  v19 -> v20:
+   * fpga-mgr: initialize info->header_size with
+     mops->initial_header_size at fpga_mgr_load().
+   * fpga-mgr: add mops->skip_header boolean flag. Adjust skipping
+     header before write to check against skip_header flag instead of
+     mere presence of info->header_size.
+   * fpga-mgr: split check for ZERO_OR_NULL_PTR() after realloc() in
+     fpga_mgr_parse_header_sg() function to check against zero header +
+     check against NULL returned from realloc().
+   * docs: fpga-mgr: adjust for skip_header flag.
+   * microchip-spi: add skip_header to mpf_ops.
+  v21 -> v21:
+   * fpga-mgr: in function fpga_mgr_parse_header_sg(), after
+     reallocation of a buffer for a new header, copy only exceeding
+     part, since realloc preserve old buffer content.
+   * fpga-mgr: in function fpga_mgr_buf_load_sg() instead of manually
+     counting fragments with header that should be skipped, use
+     sg_miter_skip().
+   * fpga-mgr: add tag "Suggested-by: Xu Yilun <yilun.xu@intel.com>"
+     since all changes in fpga-mgr was his ideas.
+   * MAINTAINERS: add entry for Microchip PolarFire FPGA drivers as
+     Conor Dooley suggested.
 
-more than 4 or 8 ? below seems like 8.
+Ivan Bornyakov (5):
+  fpga: fpga-mgr: support bitstream offset in image buffer
+  docs: fpga: mgr: document parse_header() callback
+  fpga: microchip-spi: add Microchip MPF FPGA manager
+  dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+  MAINTAINERS: add Microchip PolarFire FPGA drivers entry
 
-ver > 0 is not the same as ver == 1, I prefer the later
+ .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
+ Documentation/driver-api/fpga/fpga-mgr.rst    |  27 +-
+ MAINTAINERS                                   |   8 +
+ drivers/fpga/Kconfig                          |   8 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/fpga-mgr.c                       | 225 ++++++++--
+ drivers/fpga/microchip-spi.c                  | 398 ++++++++++++++++++
+ include/linux/fpga/fpga-mgr.h                 |  24 +-
+ 8 files changed, 702 insertions(+), 33 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/microchip-spi.c
 
-> clearing of memory banks. A capability register replaces the previous
-> control register, and contains a bitmask to indicate the presence of each
-> memory bank. This bitmask aligns with the previous control register
-> bitmask that served the same purpose. The control and capability
-> registers are treated like a C Union structure in order to support both
-> the new and old revisions of the EMIF device.
->
-> Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
->   drivers/memory/dfl-emif.c | 62 +++++++++++++++++++++++++++++++++++----
->   1 file changed, 57 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/memory/dfl-emif.c b/drivers/memory/dfl-emif.c
-> index 3f719816771d..da06cd30a016 100644
-> --- a/drivers/memory/dfl-emif.c
-> +++ b/drivers/memory/dfl-emif.c
-> @@ -24,11 +24,24 @@
->   #define EMIF_STAT_CLEAR_BUSY_SFT	16
->   #define EMIF_CTRL			0x10
->   #define EMIF_CTRL_CLEAR_EN_SFT		0
-> -#define EMIF_CTRL_CLEAR_EN_MSK		GENMASK_ULL(3, 0)
-> +#define EMIF_CTRL_CLEAR_EN_MSK		GENMASK_ULL(7, 0)
+-- 
+2.25.1
 
-This would seem to be version specific and not a static value.
-
-ver 0 is (3,0) , ver > 0 (7,0)
-
-like what is done below.
-
-This #define is used in emif_clear_attr() but there is not version check 
-in this macro.
-
->   
->   #define EMIF_POLL_INVL			10000 /* us */
->   #define EMIF_POLL_TIMEOUT		5000000 /* us */
->   
-> +/*
-> + * The Capability Register replaces the Control Register (at the same
-> + * offset) for EMIF feature revisions > 0. The bitmask that indicates
-> + * the presence of memory channels exists in both the Capability Register
-> + * and Control Register definitions. These can be thought of as a C union.
-> + * The Capability Register definitions are used to check for the existence
-> + * of a memory channel, and the Control Register definitions are used for
-> + * managing the memory-clear functionality in revision 0.
-> + */
-> +#define EMIF_CAPABILITY_BASE		0x10
-> +#define EMIF_CAPABILITY_CHN_MSK_V0	GENMASK_ULL(3, 0)
-> +#define EMIF_CAPABILITY_CHN_MSK		GENMASK_ULL(7, 0)
-> +
->   struct dfl_emif {
->   	struct device *dev;
->   	void __iomem *base;
-> @@ -106,16 +119,30 @@ emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 0);
->   emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 1);
->   emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 2);
->   emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 3);
-> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 4);
-> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 5);
-> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 6);
-> +emif_state_attr(init_done, EMIF_STAT_INIT_DONE_SFT, 7);
->   
->   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 0);
->   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 1);
->   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 2);
->   emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 3);
-> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 4);
-> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 5);
-> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 6);
-> +emif_state_attr(cal_fail, EMIF_STAT_CALC_FAIL_SFT, 7);
-> +
->   
->   emif_clear_attr(0);
->   emif_clear_attr(1);
->   emif_clear_attr(2);
->   emif_clear_attr(3);
-> +emif_clear_attr(4);
-> +emif_clear_attr(5);
-> +emif_clear_attr(6);
-> +emif_clear_attr(7);
-> +
->   
->   static struct attribute *dfl_emif_attrs[] = {
->   	&emif_attr_inf0_init_done.attr.attr,
-> @@ -134,6 +161,22 @@ static struct attribute *dfl_emif_attrs[] = {
->   	&emif_attr_inf3_cal_fail.attr.attr,
->   	&emif_attr_inf3_clear.attr.attr,
->   
-> +	&emif_attr_inf4_init_done.attr.attr,
-> +	&emif_attr_inf4_cal_fail.attr.attr,
-> +	&emif_attr_inf4_clear.attr.attr,
-> +
-> +	&emif_attr_inf5_init_done.attr.attr,
-> +	&emif_attr_inf5_cal_fail.attr.attr,
-> +	&emif_attr_inf5_clear.attr.attr,
-> +
-> +	&emif_attr_inf6_init_done.attr.attr,
-> +	&emif_attr_inf6_cal_fail.attr.attr,
-> +	&emif_attr_inf6_clear.attr.attr,
-> +
-> +	&emif_attr_inf7_init_done.attr.attr,
-> +	&emif_attr_inf7_cal_fail.attr.attr,
-> +	&emif_attr_inf7_clear.attr.attr,
-> +
->   	NULL,
->   };
->   
-> @@ -143,15 +186,24 @@ static umode_t dfl_emif_visible(struct kobject *kobj,
->   	struct dfl_emif *de = dev_get_drvdata(kobj_to_dev(kobj));
->   	struct emif_attr *eattr = container_of(attr, struct emif_attr,
->   					       attr.attr);
-> +	struct dfl_device *ddev = to_dfl_dev(de->dev);
->   	u64 val;
->   
->   	/*
-> -	 * This device supports upto 4 memory interfaces, but not all
-> +	 * This device supports up to 8 memory interfaces, but not all
->   	 * interfaces are used on different platforms. The read out value of
-> -	 * CLEAN_EN field (which is a bitmap) could tell how many interfaces
-> -	 * are available.
-> +	 * CAPABILITY_CHN_MSK field (which is a bitmap) indicates which
-> +	 * interfaces are available.
->   	 */
-> -	val = FIELD_GET(EMIF_CTRL_CLEAR_EN_MSK, readq(de->base + EMIF_CTRL));
-> +	if (ddev->revision > 0 && strstr(attr->name, "_clear"))
-
-This check does not match to comment, why is this needed ?
-
-Tom
-
-> +		return 0;
-> +
-> +	if (ddev->revision == 0)
-> +		val = FIELD_GET(EMIF_CAPABILITY_CHN_MSK_V0,
-> +				readq(de->base + EMIF_CAPABILITY_BASE));
-> +	else
-> +		val = FIELD_GET(EMIF_CAPABILITY_CHN_MSK,
-> +				readq(de->base + EMIF_CAPABILITY_BASE));
->   
->   	return (val & BIT_ULL(eattr->index)) ? attr->mode : 0;
->   }
 

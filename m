@@ -2,135 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B265539F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34CF5539F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352291AbiFUTAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S1352591AbiFUTBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbiFUTAG (ORCPT
+        with ESMTP id S230386AbiFUTBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:00:06 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6184C2A41D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:00:04 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id c4so23890037lfj.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6fjMjr211YE9YcIQWwQaRZfIoF2o601X8To7eThZCiA=;
-        b=JC/7niSPsJ0iKH+blG56YnE5G8oObtz7l5leDaLqSh1cPQixTKplCxrdd6G5g0aCag
-         ixPCy7kMe/0pzU2aQ0dSVUnlBbp1lnHQrzXmbQfwZnxVwPyY4r3Elt3DOTISgMjM5l4D
-         c773jMp0cVHVMoQWtthfGuCQX7clEaIhibW59mF2OazXxSZ7IhW8GNCEw3J4IRvE3jJy
-         f3O8GvAkQBucJFFCDfXE4dsUauvHpp4s+Z1Ue5YbYAw7cf5p1pg0uEO1CoiQKxoqR9os
-         ho0sxgdf13ftuAcYlpBffww6hUkLPUTj/zckqHgBQFhZClC94l07Q5bnPIJW62C9Fw90
-         yHTA==
+        Tue, 21 Jun 2022 15:01:01 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C216310;
+        Tue, 21 Jun 2022 12:01:00 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id x38so26080393ybd.9;
+        Tue, 21 Jun 2022 12:01:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6fjMjr211YE9YcIQWwQaRZfIoF2o601X8To7eThZCiA=;
-        b=N5+iEnNsdx+wAMKX1OVF3FGLyKa/fWuH2fgmBgN4zgxtA6aiBN2RjAfUrefg+NWziC
-         PRpjdQ4qx0y83xFb1+9tVIETfMwWsSQ8N8lKAHu2PfF1NfBAmCh+zCxYCXUhJy5zzRF6
-         s884B9BaVV/Hsg/4JdqQ1oyfiyct5mXJLGp4gss12XSRDyH95VaFfEq+pG3fpczDEma6
-         gkUPTa53d+4ht+Vu2yUG9HLV9E1M6+wfnRJtEttcsYIGn+UVHlMVlNpjz3EjYFZKq3CM
-         +afIaSvBJYuieOHERG7id9TJvEw1H38sPOJ6z2x7WBPnXsJBHXPmQil68emIF4ppJb+L
-         LNOg==
-X-Gm-Message-State: AJIora/ZAz8zJB+F/gOMsg70B+l6hdPQzGfs5TVI+NuSDLsdl+4hs7LS
-        Yawj5tBTUateqAiJTt5uxw+yyQ==
-X-Google-Smtp-Source: AGRyM1tTwTGocDhWlMkEi3nkgXGoxnkT2ptk3Q/PpeJxeI6Wy1TAEbaq/L9tcVznRBBHUDnp7PiDpQ==
-X-Received: by 2002:a19:5214:0:b0:47f:8f4e:9829 with SMTP id m20-20020a195214000000b0047f8f4e9829mr1025330lfb.161.1655838002612;
-        Tue, 21 Jun 2022 12:00:02 -0700 (PDT)
-Received: from [192.168.43.7] ([188.162.64.230])
-        by smtp.gmail.com with ESMTPSA id s25-20020a2e2c19000000b0024f3d1daed6sm2104748ljs.94.2022.06.21.12.00.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 12:00:02 -0700 (PDT)
-Message-ID: <043d02d3-e03e-f19d-4692-237c43236744@linaro.org>
-Date:   Tue, 21 Jun 2022 22:00:00 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U+zEfTPl62ZsQ+t9lMlcWTCl0qIebIY9l0QPCPq49r0=;
+        b=JdXHa2jrfBN45+6Iub7qTRXjgdaDRMw7DU7OuBbNSoIOQBqrgakOp/G8g5IdyheFO0
+         ASF09DTG6P7wByBzF9s8JOKrI7gi+jOjWgTkVhluwX2WoFPQbPfuUJn5Yhl2oLCaCXXL
+         xtI14GzNjRgZ998zcGUFUhHKCp2+lmBCHHUPsnffg76qIWLzN+/3QU2mNEFK66g+1IQD
+         hYVr5y82N6QusAl2mIJzqKRlusiLXXOR3TkH/52+zb7umd0/Yxr8Q2EY0UUIY5rCmua/
+         AeDYZa/gkhDP7JfCBhL+Op8Pp3xg/37KGTLpgmEiSwTujrTms2YmCwUxc23cRV2WaSIJ
+         5Sig==
+X-Gm-Message-State: AJIora/sm5ngf7u7PgJEfEJknbwCDWNcwUS2Stge8Q8uQEIfwPjNqmmF
+        IpUppAmGKDr9c0eWsJbeLjwd2vg5wRvqH1ncuRqy18Vd
+X-Google-Smtp-Source: AGRyM1vHY55MahEyWeg4N+yr0dbBZvb66hCxrIii1Y0e4pT8SAg3KKAFkEl6bUit0p6mohG2X8nrYo3pN/RnCIwnq+4=
+X-Received: by 2002:a25:cad5:0:b0:668:b012:88c0 with SMTP id
+ a204-20020a25cad5000000b00668b01288c0mr25821880ybg.633.1655838059428; Tue, 21
+ Jun 2022 12:00:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [v3 4/5] drm/msm/disp/dpu1: use atomic enable/disable callbacks
- for encoder functions
-Content-Language: en-GB
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>, y@qualcomm.com,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com
-References: <y> <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
- <1655808800-3996-5-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1655808800-3996-5-git-send-email-quic_vpolimer@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220617122402.151782-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220617122402.151782-1-dmitry.osipenko@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 21 Jun 2022 21:00:48 +0200
+Message-ID: <CAJZ5v0h9-BRp2k5Vc+9qyf6RV5dq98LBUKm+xTcNJYDnMxJ98g@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: hibernate: Use kernel_can_power_off()
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ken Moffat <zarniwhoop@ntlworld.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 13:53, Vinod Polimera wrote:
-> Use atomic variants for encoder callback functions such that
-> certain states like self-refresh can be accessed as part of
-> enable/disable sequence.
-> 
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-
+On Fri, Jun 17, 2022 at 2:24 PM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> Use new kernel_can_power_off() API instead of legacy pm_power_off global
+> variable to fix regressed hibernation to disk where machine no longer
+> powers off when it should because ACPI power driver transitioned to the
+> new sys-off based API and it doesn't use pm_power_off anymore.
+>
+> Fixes: 98f30d0ecf79 ("ACPI: power: Switch to sys-off handler API")
+> Tested-by: Ken Moffat <zarniwhoop@ntlworld.com>
+> Reported-by: Ken Moffat <zarniwhhop@ntlworld.com>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index 52516eb..cc2809b 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -1130,7 +1130,8 @@ void dpu_encoder_virt_runtime_resume(struct drm_encoder *drm_enc)
->   	mutex_unlock(&dpu_enc->enc_lock);
->   }
->   
-> -static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
-> +static void dpu_encoder_virt_atomic_enable(struct drm_encoder *drm_enc,
-> +					struct drm_atomic_state *state)
->   {
->   	struct dpu_encoder_virt *dpu_enc = NULL;
->   	int ret = 0;
-> @@ -1166,7 +1167,8 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
->   	mutex_unlock(&dpu_enc->enc_lock);
->   }
->   
-> -static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
-> +static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
-> +					struct drm_atomic_state *state)
->   {
->   	struct dpu_encoder_virt *dpu_enc = NULL;
->   	int i = 0;
-> @@ -2332,8 +2334,8 @@ static void dpu_encoder_frame_done_timeout(struct timer_list *t)
->   
->   static const struct drm_encoder_helper_funcs dpu_encoder_helper_funcs = {
->   	.atomic_mode_set = dpu_encoder_virt_atomic_mode_set,
-> -	.disable = dpu_encoder_virt_disable,
-> -	.enable = dpu_encoder_virt_enable,
-> +	.atomic_disable = dpu_encoder_virt_atomic_disable,
-> +	.atomic_enable = dpu_encoder_virt_atomic_enable,
->   	.atomic_check = dpu_encoder_virt_atomic_check,
->   };
->   
+>  kernel/power/hibernate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 20a66bf9f465..89c71fce225d 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -665,7 +665,7 @@ static void power_down(void)
+>                 hibernation_platform_enter();
+>                 fallthrough;
+>         case HIBERNATION_SHUTDOWN:
+> -               if (pm_power_off)
+> +               if (kernel_can_power_off())
+>                         kernel_power_off();
+>                 break;
+>         }
+> --
 
-
--- 
-With best wishes
-Dmitry
+Applied as 5.19-rc material, thanks!

@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5F5553AAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D11A553AB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354055AbiFUThN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S1354060AbiFUThp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348473AbiFUThJ (ORCPT
+        with ESMTP id S1348473AbiFUThn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:37:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B8FD2D1D0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:37:08 -0700 (PDT)
+        Tue, 21 Jun 2022 15:37:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA1742D1FA
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:37:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655840227;
+        s=mimecast20190719; t=1655840261;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=exBeYI4UlIWCSp5FGAcvkiWJcZFIGwb+G+M3ptZksLc=;
-        b=J6heWhsa8AR1w6dz/47oJV6idgNxKYtCaIpBE5MR9bChcwmSMebzszexp7tMixTIgwphp+
-        TmLs4rMT8zW3TatzXsVRyIWYyFhWjTQyTge7cVBFhnLogifytuLQ5THvsQSJMZuu9R52dR
-        6mjt0kiHuEEyTQPVQK0qPYZwqiAfgBY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qu+hqkp0ZSoYmNwiO1knCkx+ca27suxkvWUEOC/mfPk=;
+        b=C1iWYcPC9cw9LlzpE/3a0VAj2Jzb4QFBo9p+mbp6Is3I96svecLNwrhMRgwjgXgAYHXzOP
+        8xNmw3nzAYTeqrcb+LSoCEnB8Twoi5fI9emKTnzYuDv0Z/OKfnqYCAMZvI/eG/y3bJj8Dw
+        Pco7Vi6yuj+hld8Or7qJ+oaHGlFAlMk=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-Ra8wHpUVOw-ZAXqimd0DnA-1; Tue, 21 Jun 2022 15:37:03 -0400
-X-MC-Unique: Ra8wHpUVOw-ZAXqimd0DnA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8901185A7B2;
-        Tue, 21 Jun 2022 19:37:02 +0000 (UTC)
-Received: from llong.com (unknown [10.22.17.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D2F640C5BF;
-        Tue, 21 Jun 2022 19:37:01 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mike Stowell <mstowell@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v2] locking/rtmutex: Limit # of lock stealing for non-RT waiters
-Date:   Tue, 21 Jun 2022 15:36:41 -0400
-Message-Id: <20220621193641.609712-1-longman@redhat.com>
+ us-mta-55-L2IiRJVbP5uiM9GT-r3qOA-1; Tue, 21 Jun 2022 15:37:40 -0400
+X-MC-Unique: L2IiRJVbP5uiM9GT-r3qOA-1
+Received: by mail-qk1-f199.google.com with SMTP id y8-20020a05620a44c800b006a6f8cd53cbso17529157qkp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:37:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=qu+hqkp0ZSoYmNwiO1knCkx+ca27suxkvWUEOC/mfPk=;
+        b=iRVrWgmpidHJoPGPggfW4T7+XsEOHspMgv2576GHxVDydQMh5H3mycetZqsn7in9LH
+         K/2a0jixMJtCNV3vXHyVk9uBtNIFQPg490X9RTgaXWiPX/XI6qqxql54vaWYwr0JsfyE
+         sR8NjJMeWfjUWGyPBtwgxwA1xuiVhbWEfXbDsqwjMhk6O9TlIdauK5uPS8+quRmngmM1
+         jWXgR+yTlWJXddGlV1Tm3aSTOnxpCWdFOsFUI8OP1uSFIDD8Fn4Un/y1lwSz/EGzeko3
+         BSf6d1tdFuEL1NcbWAoLnlO6jinQJrXmRY+MebozMk+nvcmkU6rZyGVRkbk+obJTknpW
+         Q0Aw==
+X-Gm-Message-State: AJIora8D1snmXaRigb3DXWw56R2PbDLJjzMuCab9ut7xXOf/uUHiXWsv
+        ToNsP0uj7scaL1wzSXXFlP3RaFxf5331yQ4eS8IaymfHXabqOr5eAJ2GL+B0f6m65/ueXq1sRoV
+        YQl4j6Gqn84TkznIVQO+trT4m
+X-Received: by 2002:a05:620a:28d3:b0:6a7:4622:6da8 with SMTP id l19-20020a05620a28d300b006a746226da8mr21552942qkp.541.1655840260210;
+        Tue, 21 Jun 2022 12:37:40 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tDZnCDXrNfnnhHJs9Wcc9ITw4Hnhpqjh0ps0HnfSLrIwbq7dpnHJ5fkHKap+vHwesdk2nAQw==
+X-Received: by 2002:a05:620a:28d3:b0:6a7:4622:6da8 with SMTP id l19-20020a05620a28d300b006a746226da8mr21552932qkp.541.1655840259973;
+        Tue, 21 Jun 2022 12:37:39 -0700 (PDT)
+Received: from [192.168.8.138] ([141.154.49.182])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05620a408900b006a740bb8578sm15626152qko.83.2022.06.21.12.37.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 12:37:39 -0700 (PDT)
+Message-ID: <758b642ece93bd025d24080bf1d33703ba6f6ee1.camel@redhat.com>
+Subject: Re: [PATCH 3/3] drm/dp_mst: Get rid of old comment in
+ drm_atomic_get_mst_topology_state docs
+From:   Lyude Paul <lyude@redhat.com>
+To:     "Lin, Wayne" <Wayne.Lin@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@intel.com>,
+        "Lakha, Bhawanpreet" <Bhawanpreet.Lakha@amd.com>,
+        Rajkumar Subbiah <rsubbia@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 21 Jun 2022 15:37:38 -0400
+In-Reply-To: <CO6PR12MB5489D6138C8CC26344618172FCAB9@CO6PR12MB5489.namprd12.prod.outlook.com>
+References: <20220602201757.30431-1-lyude@redhat.com>
+         <20220602201757.30431-4-lyude@redhat.com>
+         <CO6PR12MB5489D6138C8CC26344618172FCAB9@CO6PR12MB5489.namprd12.prod.outlook.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,90 +88,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
-stealing") allows unlimited number of lock stealing's for non-RT
-tasks. That can lead to lock starvation of non-RT top waiter tasks if
-there is a constant incoming stream of non-RT lockers. This can cause
-task lockup in PREEMPT_RT kernel. For example,
+Thanks! Will push these two patches upstream
 
-[ 1249.921363] INFO: task systemd:2178 blocked for more than 622 seconds.
-[ 1872.984225] INFO: task kworker/6:4:63401 blocked for more than 622 seconds.
+On Mon, 2022-06-13 at 09:59 +0000, Lin, Wayne wrote:
+> [Public]
+> 
+> Hi Lyude,
+> 
+> Feel free to add
+> Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
+> 
+> > -----Original Message-----
+> > From: Lyude Paul <lyude@redhat.com>
+> > Sent: Friday, June 3, 2022 4:18 AM
+> > To: dri-devel@lists.freedesktop.org
+> > Cc: David Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>;
+> > Thomas
+> > Zimmermann <tzimmermann@suse.de>; Lin, Wayne
+> > <Wayne.Lin@amd.com>; Jani Nikula <jani.nikula@intel.com>; Lakha,
+> > Bhawanpreet <Bhawanpreet.Lakha@amd.com>; Rajkumar Subbiah
+> > <rsubbia@codeaurora.org>; open list <linux-kernel@vger.kernel.org>
+> > Subject: [PATCH 3/3] drm/dp_mst: Get rid of old comment in
+> > drm_atomic_get_mst_topology_state docs
+> > 
+> > We don't actually care about connection_mutex here anymore, so let's get
+> > rid of the comment mentioning it in this function's kdocs.
+> > 
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+> > ---
+> >  drivers/gpu/drm/display/drm_dp_mst_topology.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > index d6e595b95f07..9f96132a5d74 100644
+> > --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > @@ -5458,8 +5458,7 @@
+> > EXPORT_SYMBOL(drm_dp_mst_topology_state_funcs);
+> >   *
+> >   * This function wraps drm_atomic_get_priv_obj_state() passing in the MST
+> > atomic
+> >   * state vtable so that the private object state returned is that of a
+> > MST
+> > - * topology object. Also, drm_atomic_get_private_obj_state() expects the
+> > caller
+> > - * to care of the locking, so warn if don't hold the connection_mutex.
+> > + * topology object.
+> >   *
+> >   * RETURNS:
+> >   *
+> > --
+> > 2.35.3
+> 
+> --
+> Regards,
+> Wayne Lin
+> 
 
-Avoiding this problem and ensuring forward progress by limiting the
-number of times that a lock can be stolen from each waiter. This patch
-sets a threshold of 10. That number is arbitrary and can be changed
-if needed.
-
-With that change, the task lockups previously observed when running
-stressful workloads on PREEMPT_RT kernel disappeared.
-
-Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock stealing")
-Reported-by: Mike Stowell <mstowell@redhat.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/locking/rtmutex.c        | 9 ++++++---
- kernel/locking/rtmutex_common.h | 8 ++++++++
- 2 files changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 7779ee8abc2a..bdddb3dc36c2 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -359,10 +359,13 @@ static inline bool rt_mutex_steal(struct rt_mutex_waiter *waiter,
- 	if (rt_prio(waiter->prio) || dl_prio(waiter->prio))
- 		return false;
- 
--	return rt_mutex_waiter_equal(waiter, top_waiter);
--#else
--	return false;
-+	if (rt_mutex_waiter_equal(waiter, top_waiter) &&
-+	   (top_waiter->nr_steals < RT_MUTEX_LOCK_STEAL_MAX)) {
-+		top_waiter->nr_steals++;
-+		return true;
-+	}
- #endif
-+	return false;
- }
- 
- #define __node_2_waiter(node) \
-diff --git a/kernel/locking/rtmutex_common.h b/kernel/locking/rtmutex_common.h
-index c47e8361bfb5..5858efe5cb0e 100644
---- a/kernel/locking/rtmutex_common.h
-+++ b/kernel/locking/rtmutex_common.h
-@@ -26,6 +26,7 @@
-  * @task:		task reference to the blocked task
-  * @lock:		Pointer to the rt_mutex on which the waiter blocks
-  * @wake_state:		Wakeup state to use (TASK_NORMAL or TASK_RTLOCK_WAIT)
-+ * @nr_steals:		Number of times the lock is stolen
-  * @prio:		Priority of the waiter
-  * @deadline:		Deadline of the waiter if applicable
-  * @ww_ctx:		WW context pointer
-@@ -36,11 +37,17 @@ struct rt_mutex_waiter {
- 	struct task_struct	*task;
- 	struct rt_mutex_base	*lock;
- 	unsigned int		wake_state;
-+	unsigned int		nr_steals;
- 	int			prio;
- 	u64			deadline;
- 	struct ww_acquire_ctx	*ww_ctx;
- };
- 
-+/*
-+ * The maximum number of times where lock can be stolen per waiter.
-+ */
-+#define	RT_MUTEX_LOCK_STEAL_MAX	10
-+
- /**
-  * rt_wake_q_head - Wrapper around regular wake_q_head to support
-  *		    "sleeping" spinlocks on RT
-@@ -194,6 +201,7 @@ static inline void rt_mutex_init_waiter(struct rt_mutex_waiter *waiter)
- 	RB_CLEAR_NODE(&waiter->tree_entry);
- 	waiter->wake_state = TASK_NORMAL;
- 	waiter->task = NULL;
-+	waiter->nr_steals = 0;
- }
- 
- static inline void rt_mutex_init_rtlock_waiter(struct rt_mutex_waiter *waiter)
 -- 
-2.31.1
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

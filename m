@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1892A55372B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C626553736
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 18:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353660AbiFUQCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 12:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S1353675AbiFUQDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 12:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353491AbiFUQCe (ORCPT
+        with ESMTP id S1353555AbiFUQC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 12:02:34 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E1D25C53;
-        Tue, 21 Jun 2022 09:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6f6mchpkGAoQTBVb95PMvTYApL6hiX50UGJlEV/6gZo=; b=mYghn/1swk/lIPK0weN4r6vRdI
-        kQsTxWBXBos7RDrvIzyJRb+rxRPcVj5BzaoCnRnxx98SAQlbDI3d2jLe1lse5FrBK+t5qvbXGUsdo
-        ICVDaXTZk2O97NpRmtldppVMokDgO6NatHXPvgE3MoKJNbWaF2CEzYsqS3LvQh2lOAgIXNGWzxXbk
-        424XVpss3oBBWGvCLSGB7hPft2KcU9uziA8gWUBlNRp54GnXZzAX6MxyxTJN8h+od5OnvIJvusoGb
-        81IkwQ4/VgA2A9s9Z0Ap4uIaVx429cn0QGU+JDSG051w/Ci93JAloMNcdNYGUX2OHQ+1U1qLOeJE1
-        N865ywOg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32966)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o3gJy-0002bT-RO; Tue, 21 Jun 2022 17:01:42 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o3gJw-0006FV-KO; Tue, 21 Jun 2022 17:01:40 +0100
-Date:   Tue, 21 Jun 2022 17:01:40 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        jvetter@kalray.eu, jmaselbas@kalray.eu
-Subject: Re: [PATCH] net: phylink: check for pcs_ops being NULL
-Message-ID: <YrHrZJLSDEky9b7w@shell.armlinux.org.uk>
-References: <20220621134917.24184-1-ysionneau@kalray.eu>
+        Tue, 21 Jun 2022 12:02:58 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED752DAA7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 09:02:13 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id fu3so28474776ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 09:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ajIufaZS31L5JGgBZ3aj5H5ZSklCRI8PNMvHL2oafFw=;
+        b=TbjJf5zpVMUIhuON7L5caOsWN1RSMkNH4eTucjnQ+TOGgUGSs/J9dl7n8G9Z3uOLsS
+         go4x+wTu3yJfXNZGli7paJzK232anQdm/Vgn99gPxnrBXve8mMhkbq79K0OgMxmAVz3R
+         MHiXrUBpOS82MmyxyTzEqrcy+yhbH4RBMk6nlbwaJw3RnverxVBR8BLnfoYeFYhLo75/
+         jcnBZOLdzu+ZhL6IGsw7BG8uXxBU0JVyi4YsanybY5+GXzqihbZhZ7CzlyWdH9ZKBU3Z
+         50f2wP4+jn2U4ey4kK3rqtzKsh/8Igz38hUURZVF2Dzph0sojs1K/lmbQDpLVQzEyXyl
+         B3OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ajIufaZS31L5JGgBZ3aj5H5ZSklCRI8PNMvHL2oafFw=;
+        b=1gl/T15FoOSmu1BPs3eeFoW2D9q5hSdj8rT9linVX7t/TobPyZfVLha6+BohGZZmp9
+         eEVkCKGWSGpdrW1gnwVCN+XsNPBDQCBkfUV0UiEFsRFtss9V/ExDpPDQPINhBBOJMcuW
+         pCwwC+cM0shiYKj2MHwKTrDWztCVl/HOPPZeOOHDX71wmqAw1kuCREAN+HVJiD9x2U9r
+         LTIh4xSFiZwWNzQXVB3RkyVZosKflfC3J/1pZI5YxJGsp8oihPSOa1TrqeQ/PDFY6Lb4
+         7ZZHcrCablSaUvrLjvyNdcScXLseWrXPNh1N6J879Lm1d8GEIdemKzhDlH0FowhQjxE5
+         IAqw==
+X-Gm-Message-State: AJIora/GRtjlTJrDdSvWKSyRDw67q8eeMK1larLydw7gpT5Qe0Dt0dpI
+        76/FtOYRXz3N2q8ah58P9t8gaw==
+X-Google-Smtp-Source: AGRyM1tJ7negbS1AH/+t/TmQDM/W7Td5eE5Db99BDGFKcNAC3cPdeq3N/XH0C1NPOygluBZ3K/vcSQ==
+X-Received: by 2002:a17:906:9c82:b0:6df:c5f0:d456 with SMTP id fj2-20020a1709069c8200b006dfc5f0d456mr26930081ejc.287.1655827332290;
+        Tue, 21 Jun 2022 09:02:12 -0700 (PDT)
+Received: from [192.168.0.221] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z15-20020a1709060f0f00b006ff19354f9fsm7821657eji.215.2022.06.21.09.02.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 09:02:11 -0700 (PDT)
+Message-ID: <94152e7d-184a-6b7a-6468-2678de410883@linaro.org>
+Date:   Tue, 21 Jun 2022 18:02:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621134917.24184-1-ysionneau@kalray.eu>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/9] dt-bindings: arm: qcom: fix Alcatel OneTouch Idol 3
+ compatibles
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-kernel@vger.kernel.org
+References: <20220520123252.365762-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220520123252.365762-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 03:49:17PM +0200, Yann Sionneau wrote:
-> Out of tree drivers that have not been updated
-> after 001f4261fe4d ("net: phylink: use legacy_pre_march2020") would not set the
-> legacy_pre_march2020 boolean which if not initialized will default to false.
-> Such drivers will most likely still be using the legacy interface and will
-> not have pcs_ops.
+On 20/05/2022 14:32, Krzysztof Kozlowski wrote:
+> The MSM8916 Alcatel OneTouch Idol 3 does not use MTP fallbacks in
+> compatibles:
+> 
+>   msm8916-alcatel-idol347.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
+>     ['alcatel,idol347', 'qcom,msm8916'] is too short
+> 
+> Reported-by: Rob Herring <robh@kernel.org>
+> Fixes: e9dd2f7204ed ("dt-bindings: arm: qcom: Document alcatel,idol347 board")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
 
-... which means they're broken. The answer is not to patch phylink like
-this, because even with this, it's likely that they are still broken.
+I pinged about the patchset two weeks ago. There were no responses, but
+this one here is actually a fix.  Others document missing stuff, which
+although is not a fix, but still necessary to reduce amount of dtbs
+check warnings.
 
-They need to set legacy_pre_march2020.
+Shall I treat the silence as this won't be picked up? I can take it
+instead, but it will create some conflicts because several people are
+doing similar as here...
 
-Note that the legacy stuff will be going away - some of it, such as the
-mac_pcs_an_restart() method will be going away, maybe in the next merge
-window.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Best regards,
+Krzysztof

@@ -2,86 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5778A55366D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350CE55367B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353200AbiFUPmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S1353128AbiFUPmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353223AbiFUPlx (ORCPT
+        with ESMTP id S1353256AbiFUPl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:41:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491DF2C675
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:41:51 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id lw20so6017847ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RMRIR+HgYGPk4kqlGjQLW42tNRD3LRift0BoWoXmUl4=;
-        b=PJhWavQQw1jz0WHXyX0ZMJ8eR94uUvT1OrTkOanzF8eCB9cRoiHlLFkzlXwgvLP1n3
-         V+w0eQKQSencR01efMvM+CLx2hpLOKijSklYzMrRkzLvX77UTUutFGU6uJfiZB1pc98e
-         VgYJdmbvnx1PUtVmTp+5NFI05o1TbHCDlbCQjnkikoTILqTKd6MV8Ho+yBGn8ZPN8hEJ
-         sCMUvZdkn9wipxnotVkWIriVN5jdQ2mYy29rx649+igSQ202WUBmFIWDarvr2HGs4tJm
-         xwmC6Jif32cg5AO1lfdsSE8Kh6DFfzyaj9s8iJixRwkpwtevMnkmSpC2/G3dP/aFLb1B
-         NT0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RMRIR+HgYGPk4kqlGjQLW42tNRD3LRift0BoWoXmUl4=;
-        b=cOP5pG/y/vQ/HDo53kG8k+Z6eMDa7x5j+7QU5bIGSsBafsIMx46oL3MhHuVYI27SJ7
-         /dVqk1j0D/8TjLjJ6zrFJXEuOTasvsZayajJr5uBq0AQfNJAcn7JDnBnQAmMRcznmumA
-         UGFWzNI5cX5YiyFCtA8FQ2z56MNEnus1z7znGKTq6i4OZdrDMaclsBuZYzAq/GMyTl4U
-         +vqf60id+gyy0uu+S9bsgjglkq7Wi0rQjxo5lt35dHcLCHDKWBMkAin2LvtAQyB80Zvq
-         8AqaUbLLrIKLJvIc48+u4jCqnngnVEWO1k4hG4JohgQqnY+MVc14LOOy6RMmoNGdmaMA
-         cQjA==
-X-Gm-Message-State: AJIora+asWqU/zsYB9H3UrimisG2U2wMbXrYVzwN/3Ul4XvtYhBkjPh/
-        725zsepn7Wy8vhl/8y2NfjCxww==
-X-Google-Smtp-Source: AGRyM1ukaYxWxV49I7X4K/AxawnLaQ11uVqfavd6zhGXdlYd80VACHz45P5IFtZP8yM2ASJC8c4z9Q==
-X-Received: by 2002:a17:907:3f97:b0:711:d61d:df9 with SMTP id hr23-20020a1709073f9700b00711d61d0df9mr26593417ejc.644.1655826109691;
-        Tue, 21 Jun 2022 08:41:49 -0700 (PDT)
-Received: from [192.168.0.221] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056402124200b004357738e04esm6977188edw.21.2022.06.21.08.41.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 08:41:49 -0700 (PDT)
-Message-ID: <b1472a38-75e5-9711-3e25-7ca9a74109e2@linaro.org>
-Date:   Tue, 21 Jun 2022 17:41:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 07/18] dt-bindings: reset: npcm: add GCR syscon
- property
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220621131424.162355-1-tmaimon77@gmail.com>
- <20220621131424.162355-8-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220621131424.162355-8-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Tue, 21 Jun 2022 11:41:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701182CDD0;
+        Tue, 21 Jun 2022 08:41:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1532617E3;
+        Tue, 21 Jun 2022 15:41:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D0DC341D0;
+        Tue, 21 Jun 2022 15:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655826115;
+        bh=VZ1aOhko6KQdmGVGgjGkXcxKKwEIKN4Fo0Q8ZpAvlkk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pvsA9YUJI0dpz1d+/HAGdq8ElXW6GJGaWcu0x3xMKvHk7AL82RjfVVXMEhEJso7/L
+         nFiZA/3HeHxeN+9U1CnYW48JCShdZ+QcVlBjx22F/YAYThiJG+XD0bn6S0vgGTpycq
+         1Am6eZiWDRrwtzA/w5ddCzI/W1B2S5beindDKfqeU06Rlj3M0ALzPZnpeHMjQZ0ReZ
+         /VGJQSey2EDEFq9j/12H9XdeuIzg6wcpB9lY8k2ZSFtv6qpoiek52UkiQ/mLs6cKgs
+         g8G+a4kzfKmqqDCcrtSBp9Kq3KtWmDe7NapUm/ZeMO/53YR7dsSVZAX/jOEYRC7Iqk
+         DqxhY2CzZTYew==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o3g0m-0025Go-Hj;
+        Tue, 21 Jun 2022 16:41:52 +0100
+Date:   Tue, 21 Jun 2022 16:41:52 +0100
+Message-ID: <87o7ym2fcv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Ksenija Stanojevic <ksenija.stanojevic@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: mxs_lradc_ts: Warning due to "0 is an invalid IRQ number"
+In-Reply-To: <YrHPA+TBKZU/RuSz@smile.fi.intel.com>
+References: <CAOMZO5D7z=Eg=WYgzrpqn9VoU8HxMeBbEZiv9KLjMVD1_kRo+w@mail.gmail.com>
+        <20200701224145.GA3616172@bjorn-Precision-5520>
+        <YrHPA+TBKZU/RuSz@smile.fi.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: andriy.shevchenko@intel.com, helgaas@kernel.org, festevam@gmail.com, marex@denx.de, ksenija.stanojevic@gmail.com, dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, robh+dt@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,18 +73,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 15:14, Tomer Maimon wrote:
-> Describe syscon property that handles general control registers (GCR) in
-> Nuvoton BMC NPCM reset driver.
+On Tue, 21 Jun 2022 15:00:35 +0100,
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  .../devicetree/bindings/reset/nuvoton,npcm750-reset.yaml    | 6 ++++++
->  1 file changed, 6 insertions(+)
+> +Cc: Marc in case I'm utterly wrong in my conclusion below.
+>
+> On Wed, Jul 01, 2020 at 05:41:45PM -0500, Bjorn Helgaas wrote:
+
+Two year old thread, not bad! ;-)
+
+> > On Wed, Jul 01, 2020 at 12:32:48PM -0300, Fabio Estevam wrote:
+> > > On Tue, Jun 16, 2020 at 8:52 PM Fabio Estevam <festevam@gmail.com> wrote:
+> > > > I am seeing the following warning on a imx28-evk running linux-next:
+> > > >
+> > > > [    7.625012] ------------[ cut here ]------------
+> > > > [    7.630111] WARNING: CPU: 0 PID: 1 at drivers/base/platform.c:317
+> > > > __platform_get_irq_byname+0x74/0x90
+> > > > [    7.639692] 0 is an invalid IRQ number
+> > > > [    7.643540] Modules linked in:
+> > > > [    7.646961] CPU: 0 PID: 1 Comm: swapper Not tainted
+> > > > 5.8.0-rc1-next-20200616-dirty #92
+> > > > [    7.654896] Hardware name: Freescale MXS (Device Tree)
+> > > > [    7.660434] [<c00105ec>] (unwind_backtrace) from [<c000e070>]
+> > > > (show_stack+0x10/0x14)
+> > > > [    7.668591] [<c000e070>] (show_stack) from [<c001aa90>] (__warn+0xe4/0x108)
+> > > > [    7.675941] [<c001aa90>] (__warn) from [<c001ab20>]
+> > > > (warn_slowpath_fmt+0x6c/0xb8)
+> > > > [    7.683575] [<c001ab20>] (warn_slowpath_fmt) from [<c0491b44>]
+> > > > (__platform_get_irq_byname+0x74/0x90)
+> > > > [    7.693101] [<c0491b44>] (__platform_get_irq_byname) from
+> > > > [<c0491b70>] (platform_get_irq_byname+0x10/0x48)
+> > > > [    7.703154] [<c0491b70>] (platform_get_irq_byname) from
+> > > > [<c056e234>] (mxs_lradc_ts_probe+0x190/0x384)
+> > > > [    7.712771] [<c056e234>] (mxs_lradc_ts_probe) from [<c0491850>]
+> > > > (platform_drv_probe+0x48/0x98)
+> > > > [    7.722806] [<c0491850>] (platform_drv_probe) from [<c048f7f0>]
+> > > > (really_probe+0x218/0x348)
+> > > > [    7.731530] [<c048f7f0>] (really_probe) from [<c048fa28>]
+> > > > (driver_probe_device+0x58/0xb4)
+> > > > [    7.740189] [<c048fa28>] (driver_probe_device) from [<c048fc2c>]
+> > > > (device_driver_attach+0x58/0x60)
+> > > > [    7.749471] [<c048fc2c>] (device_driver_attach) from [<c048fcb8>]
+> > > > (__driver_attach+0x84/0xc0)
+> > > > [    7.758394] [<c048fcb8>] (__driver_attach) from [<c048db28>]
+> > > > (bus_for_each_dev+0x70/0xb4)
+> > > > [    7.766977] [<c048db28>] (bus_for_each_dev) from [<c048eb24>]
+> > > > (bus_add_driver+0x154/0x1e0)
+> > > > [    7.775385] [<c048eb24>] (bus_add_driver) from [<c0490774>]
+> > > > (driver_register+0x74/0x108)
+> > > > [    7.783872] [<c0490774>] (driver_register) from [<c000a2fc>]
+> > > > (do_one_initcall+0x68/0x268)
+> > > > [    7.792467] [<c000a2fc>] (do_one_initcall) from [<c0a00fa0>]
+> > > > (kernel_init_freeable+0x160/0x1f4)
+> > > > [    7.801661] [<c0a00fa0>] (kernel_init_freeable) from [<c0720c58>]
+> > > > (kernel_init+0x8/0xf4)
+> > > > [    7.810165] [<c0720c58>] (kernel_init) from [<c0008510>]
+> > > > (ret_from_fork+0x14/0x24)
+> > > > [    7.818101] Exception stack(0xc748dfb0 to 0xc748dff8)
+> > > > [    7.823273] dfa0:                                     00000000
+> > > > 00000000 00000000 00000000
+> > > > [    7.831815] dfc0: 00000000 00000000 00000000 00000000 00000000
+> > > > 00000000 00000000 00000000
+> > > > [    7.840351] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> > > > [    7.847322] irq event stamp: 273303
+> > > > [    7.850940] hardirqs last  enabled at (273311): [<c0066ed8>]
+> > > > console_unlock+0x390/0x534
+> > > > [    7.859314] hardirqs last disabled at (273328): [<c0066b8c>]
+> > > > console_unlock+0x44/0x534
+> > > > [    7.867605] softirqs last  enabled at (273344): [<c00097fc>]
+> > > > __do_softirq+0x2d4/0x450
+> > > > [    7.875817] softirqs last disabled at (273355): [<c001fe48>]
+> > > > irq_exit+0x150/0x174
+> > > > [    7.883472] ---[ end trace ddb222ada5cbf5cd ]---
+> > > > [    7.900004] input: mxs-lradc-ts as
+> > > > /devices/soc0/80000000.apb/80040000.apbx/80050000.lradc/mxs-lradc-ts/input/input0
+> > > >
+> > > > The touchscreen irq is defined as:
+> > > >
+> > > > enum mx28_lradc_irqs {
+> > > > MX28_LRADC_TS_IRQ = 0,
+> > > >
+> > > > Shouldn't we retrieve the IRQ number from the device tree instead?
+> > 
+> >   mxs_lradc_ts_probe()
+> >   {
+> >     ...
+> >     irq = platform_get_irq_byname(pdev, mxs_lradc_ts_irq_names[i]);
+> >     if (irq < 0)
+> > 	    return irq;
+> > 
+> >     virq = irq_of_parse_and_map(node, irq);
+> >     ...
+> >   }
+> > 
+> > That's not right, is it?  irq_of_parse_and_map() takes an *index*, but
+> > we're passing an IRQ.
+> > 
+> > mxs_lradc_adc_probe() also has the same pattern.
+> 
+> Yeah, you are right. This code is broken by design. But the issue is that MFD
+> driver supplies _index_ and not vIRQ from proper IRQ domain. I dunno how it's
+> supposed to work without dirty tricks in the GIC (or whatever interrupt
+> controller is there).
+
+Not even close. This is totally broken, irrespective of the interrupt
+controller. platform_get_irq_byname() does the mapping already,
+mapping things *twice* is unlikely to lead to something useful.
+
+The core of the issue is that there seem to be a bunch of MFD using
+hardcoded resources (board-file style), and they randomly feed this
+into the DT code.
+
+> Since there is no response to this thread by the authors of the code, I would
+> mark it as BROKEN and perhaps remove from the kernel if no-one steps in to fix
+> this mess.
+
+Something like the hack below could potentially make things less
+broken, but I'm not holding my breath. If nobody cares, let's remove
+the code altogether.
+
+	M.
+
+diff --git a/drivers/input/touchscreen/mxs-lradc-ts.c b/drivers/input/touchscreen/mxs-lradc-ts.c
+index 9e36fee38d61..93f21f00388f 100644
+--- a/drivers/input/touchscreen/mxs-lradc-ts.c
++++ b/drivers/input/touchscreen/mxs-lradc-ts.c
+@@ -606,7 +606,7 @@ static int mxs_lradc_ts_probe(struct platform_device *pdev)
+ 	struct device_node *node = dev->parent->of_node;
+ 	struct mxs_lradc *lradc = dev_get_drvdata(dev->parent);
+ 	struct mxs_lradc_ts *ts;
+-	int ret, irq, virq, i;
++	int ret, virq, i;
+ 	u32 ts_wires = 0, adapt;
+ 
+ 	ts = devm_kzalloc(dev, sizeof(*ts), GFP_KERNEL);
+@@ -671,11 +671,16 @@ static int mxs_lradc_ts_probe(struct platform_device *pdev)
+ 	mxs_lradc_ts_hw_init(ts);
+ 
+ 	for (i = 0; i < 3; i++) {
+-		irq = platform_get_irq_byname(pdev, mxs_lradc_ts_irq_names[i]);
+-		if (irq < 0)
+-			return irq;
++		struct resource *r;
+ 
+-		virq = irq_of_parse_and_map(node, irq);
++		r = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
++						 mxs_lradc_ts_irq_names[i]);
++		if (!r)
++			return -ENXIO;
++
++		virq = irq_of_parse_and_map(node, r->start);
++		if (!virq)
++			return -ENXIO;
+ 
+ 		mxs_lradc_ts_stop(ts);
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,110 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC7E5539FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 314B3553A04
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 21:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352824AbiFUTJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 15:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S1352946AbiFUTJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 15:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243248AbiFUTJ1 (ORCPT
+        with ESMTP id S234757AbiFUTJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 15:09:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 572A122B1F;
-        Tue, 21 Jun 2022 12:09:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 423E9165C;
-        Tue, 21 Jun 2022 12:09:26 -0700 (PDT)
-Received: from [10.57.85.30] (unknown [10.57.85.30])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B8893F792;
-        Tue, 21 Jun 2022 12:09:24 -0700 (PDT)
-Message-ID: <4bc34090-249a-c505-3d90-f75a7fe7c17d@arm.com>
-Date:   Tue, 21 Jun 2022 20:09:20 +0100
+        Tue, 21 Jun 2022 15:09:32 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CAC20F43
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:09:31 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id b7so16591659ljr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 12:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=N+CKs/MdDNeIXKqg/peSNpt0QR5CtVV30OB0kmctgDo=;
+        b=iVhfwHhIa9Vk3yrDkSkHcZx/O3qpbd2ezkl8qQ4XdCT/Xs3kIzsJcHm3DqCuTVsih8
+         wfVBF8ZzUPz0+jaAyqo7q7yO1PZY6xQN3CIWGoIJy0IkKTmKw2j3wo2Noh4v5vlgbpyz
+         CBeSxZM6LZ8dPVUor1RYuYAUJMXKW6Wp3d1Lnmu9VFbKRlSZ6cW2Q1BSQJRtA/xjW1NT
+         vTB2SWE0cO1f3i/6uO1FWfN4aQzZI/I1dh65neWwtpzv9Ln15OaCOYBVvmJW1AmqCriY
+         vF1aC1WMJywpkKwuOIaQcOVAYtsl8nB7JZ+DCifAN/Vj8wniUshXwCX36hDZQ8nHbPvS
+         j9YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=N+CKs/MdDNeIXKqg/peSNpt0QR5CtVV30OB0kmctgDo=;
+        b=awbxO/FSsFnPMzaKTOFQM9AnxDTkdaI5T5QTUXj+Sv9pxKvgRedXCZ4VvGdcad+1eB
+         MmLYJK8bmUdpqLaikqo36DOgMIZ/zxpb2XBIakuhWDVtRp3khFB+cXVWrkJcU33z68vJ
+         W6s8Yr2OrlFBW1tY0icWyp4maszC31CL9urBCCTYMmbbcVSDfkmO4HQEJhMHk0AOdPjU
+         0RSTNDEbnW3Qha7e0HyFXpdQyWSyJK/xJZeVTsQB+Cb8uKdcT3lwIQcrYoqY6zlqXR7v
+         rL535KAG7sVsaGZO/QnKhCigiNCAoU0qJRuke9N0THrS63BvYcebObq4ES5ZktKRfdd6
+         YY/g==
+X-Gm-Message-State: AJIora81mjv/oxzYbNrccR+kYngyBbfOImAc+EYWIGbMca5Bk1DHk+1x
+        1DAtJ0H8mzcNAKqf6TuIujEEyg==
+X-Google-Smtp-Source: AGRyM1t+UYNo3yqTQePlymhYwIBugeRmXDicBMI65qLJgLc+UfeGqSNklac9iZwD27zQld3rOaXzZQ==
+X-Received: by 2002:a2e:2c0e:0:b0:25a:6b43:eff8 with SMTP id s14-20020a2e2c0e000000b0025a6b43eff8mr6782427ljs.299.1655838569854;
+        Tue, 21 Jun 2022 12:09:29 -0700 (PDT)
+Received: from [192.168.43.7] ([188.162.64.230])
+        by smtp.gmail.com with ESMTPSA id l30-20020a19495e000000b00479019e1b66sm2269713lfj.39.2022.06.21.12.09.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 12:09:29 -0700 (PDT)
+Message-ID: <fbf04495-7831-f1a8-5832-8927cde7cda6@linaro.org>
+Date:   Tue, 21 Jun 2022 22:09:27 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] vfio/type1: Simplify bus_type determination
+Subject: Re: [v3 5/5] drm/msm/disp/dpu1: add PSR support for eDP interface in
+ dpu driver
 Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kvm@vger.kernel.org, cohuck@redhat.com,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        alex.williamson@redhat.com
-References: <07c69a27fa5bf9724ea8c9fcfe3ff2e8b68f6bf0.1654697988.git.robin.murphy@arm.com>
- <20220610000343.GD1343366@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220610000343.GD1343366@nvidia.com>
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>, y@qualcomm.com,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com
+References: <y> <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1655808800-3996-6-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1655808800-3996-6-git-send-email-quic_vpolimer@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-10 01:03, Jason Gunthorpe via iommu wrote:
-> On Wed, Jun 08, 2022 at 03:25:49PM +0100, Robin Murphy wrote:
->> Since IOMMU groups are mandatory for drivers to support, it stands to
->> reason that any device which has been successfully be added to a group
->> must be on a bus supported by that IOMMU driver, and therefore a domain
->> viable for any device in the group must be viable for all devices in
->> the group. This already has to be the case for the IOMMU API's internal
->> default domain, for instance. Thus even if the group contains devices
->> on different buses, that can only mean that the IOMMU driver actually
->> supports such an odd topology, and so without loss of generality we can
->> expect the bus type of any arbitrary device in a group to be suitable
->> for IOMMU API calls.
->>
->> Replace vfio_bus_type() with a trivial callback that simply returns any
->> device from which to then derive a usable bus type. This is also a step
->> towards removing the vague bus-based interfaces from the IOMMU API.
->>
->> Furthermore, scrutiny reveals a lack of protection for the bus and/or
->> device being removed while .attach_group is inspecting them; the
->> reference we hold on the iommu_group ensures that data remains valid,
->> but does not prevent the group's membership changing underfoot. Holding
->> the vfio_goup's device_lock should be sufficient to block any relevant
->> device's VFIO driver from unregistering, and thus block unbinding and
->> any further stages of removal for the duration of the attach operation.
+On 21/06/2022 13:53, Vinod Polimera wrote:
+> Enable PSR on eDP interface using drm self-refresh librabry.
+> This patch uses a trigger from self-refresh library to enter/exit
+> into PSR, when there are no updates from framework.
 > 
-> The device_lock only protects devices that are on the device_list from
-> concurrent unregistration, the device returned by
-> iommu_group_for_each_dev() is not guarented to be the on the device
-> list.
-
-Sigh, you're quite right, and now I have a vague feeling that you called 
-that out in the previous discussion too, so apologies for forgetting.
-
->> @@ -760,8 +760,11 @@ static int __vfio_container_attach_groups(struct vfio_container *container,
->>   	int ret = -ENODEV;
->>   
->>   	list_for_each_entry(group, &container->group_list, container_next) {
->> +		/* Prevent devices unregistering during attach */
->> +		mutex_lock(&group->device_lock);
->>   		ret = driver->ops->attach_group(data, group->iommu_group,
->>   						group->type);
->> +		mutex_unlock(&group->device_lock);
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 36 ++++++++++++++++++++++++-----
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 20 +++++++++++++++-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
+>   3 files changed, 50 insertions(+), 8 deletions(-)
 > 
-> I still prefer the version where we pass in an arbitrary vfio_device
-> from the list the group maintains:
-> 
->     list_first_entry(group->device_list)
-> 
-> And don't call iommu_group_for_each_dev(), it is much simpler to
-> reason about how it works.
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index b56f777..c6e4f03 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -18,6 +18,7 @@
+>   #include <drm/drm_probe_helper.h>
+>   #include <drm/drm_rect.h>
+>   #include <drm/drm_vblank.h>
+> +#include <drm/drm_self_refresh_helper.h>
+>   
+>   #include "dpu_kms.h"
+>   #include "dpu_hw_lm.h"
+> @@ -955,24 +956,39 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+>   									      crtc);
+>   	struct dpu_crtc *dpu_crtc = to_dpu_crtc(crtc);
+>   	struct dpu_crtc_state *cstate = to_dpu_crtc_state(crtc->state);
+> -	struct drm_encoder *encoder;
+> +	struct drm_encoder *encoder = NULL;
+>   	unsigned long flags;
+>   	bool release_bandwidth = false;
+>   
+>   	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
+>   
+> +	if (old_crtc_state->self_refresh_active) {
+> +		drm_for_each_encoder_mask(encoder, crtc->dev,
+> +					old_crtc_state->encoder_mask) {
+> +			dpu_encoder_assign_crtc(encoder, NULL);
 
-Agreed, trying to figure out which are the VFIO devices from within the 
-iommu_group iterator seems beyond the threshold of practicality.
+I think we should drop dpu_encoder_assign_crtc completely and use your 
+new helpers instead. Having to manually duplicate existing link sounds 
+like a bad idea.
 
-Quick consensus then: does anyone have a particular preference between 
-changing the .attach_group signature vs. adding a helper based on 
-vfio_group_get_from_iommu() for type1 to call from within its callback? 
-They seem about equal (but opposite) in terms of the simplicity vs. 
-impact tradeoff to me, so I can't quite decide conclusively...
+> +		}
+> +		return;
+> +	}
+> +
+>   	/* Disable/save vblank irq handling */
+>   	drm_crtc_vblank_off(crtc);
+>   
+>   	drm_for_each_encoder_mask(encoder, crtc->dev,
+>   				  old_crtc_state->encoder_mask) {
+> -		/* in video mode, we hold an extra bandwidth reference
+> +		/*
+> +		 * in video mode, we hold an extra bandwidth reference
 
-Thanks,
-Robin.
+Unrelated to this patch.
+
+>   		 * as we cannot drop bandwidth at frame-done if any
+>   		 * crtc is being used in video mode.
+>   		 */
+>   		if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
+>   			release_bandwidth = true;
+> -		dpu_encoder_assign_crtc(encoder, NULL);
+> +		/*
+> +		 * If disable is triggered during psr active(e.g: screen dim in PSR),
+> +		 * we will need encoder->crtc connection to process the device sleep &
+> +		 * preserve it during psr sequence.
+> +		 */
+> +		if (!crtc->state->self_refresh_active)
+> +			dpu_encoder_assign_crtc(encoder, NULL);
+>   	}
+>   
+>   	/* wait for frame_event_done completion */
+> @@ -1020,7 +1036,9 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+>   	struct dpu_crtc *dpu_crtc = to_dpu_crtc(crtc);
+>   	struct drm_encoder *encoder;
+>   	bool request_bandwidth = false;
+> +	struct drm_crtc_state *old_crtc_state;
+>   
+> +	old_crtc_state = drm_atomic_get_old_crtc_state(state, crtc);
+>   	pm_runtime_get_sync(crtc->dev->dev);
+>   
+>   	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
+> @@ -1042,8 +1060,9 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+>   	trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
+>   	dpu_crtc->enabled = true;
+>   
+> -	drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+> -		dpu_encoder_assign_crtc(encoder, crtc);
+> +	if (!old_crtc_state->self_refresh_active)
+> +		drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+> +			dpu_encoder_assign_crtc(encoder, crtc);
+>   
+>   	/* Enable/restore vblank irq handling */
+>   	drm_crtc_vblank_on(crtc);
+> @@ -1525,7 +1544,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
+>   {
+>   	struct drm_crtc *crtc = NULL;
+>   	struct dpu_crtc *dpu_crtc = NULL;
+> -	int i;
+> +	int i, ret;
+>   
+>   	dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
+>   	if (!dpu_crtc)
+> @@ -1562,6 +1581,11 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
+>   	/* initialize event handling */
+>   	spin_lock_init(&dpu_crtc->event_lock);
+>   
+> +	ret = drm_self_refresh_helper_init(crtc);
+> +	if (ret)
+> +		DPU_ERROR("Failed to initialize %s with self-refresh helpers %d\n",
+> +			crtc->name, ret);
+> +
+>   	DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
+>   	return crtc;
+>   }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index cc2809b..234e95d 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -225,6 +225,11 @@ bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
+>   	return dpu_enc->wide_bus_en;
+>   }
+>   
+> +static inline bool is_self_refresh_active(const struct drm_crtc_state *state)
+> +{
+> +	return (state && state->self_refresh_active);
+> +}
+> +
+>   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
+>   {
+>   	struct dpu_hw_dither_cfg dither_cfg = { 0 };
+> @@ -592,7 +597,8 @@ static int dpu_encoder_virt_atomic_check(
+>   		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
+>   			dpu_rm_release(global_state, drm_enc);
+>   
+> -			if (!crtc_state->active_changed || crtc_state->active)
+> +			if (!crtc_state->active_changed || crtc_state->active ||
+> +					crtc_state->self_refresh_active)
+
+This condition should be changed to use enabled rather than active. 
+Quoting KMS documentation: 'The driver must not release any shared 
+resources if active is set to false but enable still true...'
+
+>   				ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
+>   						drm_enc, crtc_state, topology);
+>   		}
+> @@ -1171,11 +1177,23 @@ static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
+>   					struct drm_atomic_state *state)
+>   {
+>   	struct dpu_encoder_virt *dpu_enc = NULL;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *old_state;
+>   	int i = 0;
+>   
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+>   	DPU_DEBUG_ENC(dpu_enc, "\n");
+>   
+> +	crtc = dpu_enc->crtc;
+> +	old_state = drm_atomic_get_old_crtc_state(state, crtc);
+> +
+> +	/*
+> +	 * The encoder disabled already occurred when self refresh mode
+> +	 * was set earlier, in the old_state for the corresponding crtc.
+> +	 */
+> +	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && is_self_refresh_active(old_state))
+> +		return;
+> +
+
+Why do you need to check the encoder_type?
+
+>   	mutex_lock(&dpu_enc->enc_lock);
+>   	dpu_enc->enabled = false;
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index bce4764..cc0a674 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -507,7 +507,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
+>   		return;
+>   	}
+>   
+> -	if (!crtc->state->active) {
+> +	if (!drm_atomic_crtc_effectively_active(crtc->state)) {
+>   		DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
+>   		return;
+>   	}
+
+
+-- 
+With best wishes
+Dmitry

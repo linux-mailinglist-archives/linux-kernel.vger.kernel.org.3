@@ -2,259 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45BA55358C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0424F55357E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 17:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352587AbiFUPLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 11:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S1352298AbiFUPKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 11:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352417AbiFUPK4 (ORCPT
+        with ESMTP id S1352432AbiFUPK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:10:56 -0400
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A01286D1;
-        Tue, 21 Jun 2022 08:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=KUWhy8rPFuwEh8PDKMugA0pP7hmxBbSzVXLcTuhwxhc=; b=odCs6Tn1vgmi+IOJewB37rq/DN
-        L763XaFgoFCElHuu0N1hRSghStmYGddeyLSLamuTNVm1hJD2zL0M7HZdfwo47yuPssI4VninX0XDJ
-        xkJJSxhvKdmL0w1SHt/YCmP454myS/sPG7djATUSXiimMZ+807XbLSrFMm71KFPBP/V/+jDXMkTtZ
-        gNtgbg7KHvmayDosPyfGUhKqlkkhmV2h2C3N3WRclEj/mfxTe0TuUyF47T6SerSo4W7Dl4jJ5oI2b
-        st3RT70lPLR0ZL65l5nbByYOxMosCecdsqoboMnppaI+mBYcW45hMjbYy4F9cMcltoj3OKbzC9e7P
-        axwQpWzQ==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1o3fWU-00Ea3F-Mr; Tue, 21 Jun 2022 18:10:34 +0300
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-To:     thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com
-Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Subject: [PATCH v6 10/10] drm/tegra: Implement stream ID related callbacks on engines
-Date:   Tue, 21 Jun 2022 18:10:22 +0300
-Message-Id: <20220621151022.1416300-11-cyndis@kapsi.fi>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220621151022.1416300-1-cyndis@kapsi.fi>
-References: <20220621151022.1416300-1-cyndis@kapsi.fi>
+        Tue, 21 Jun 2022 11:10:27 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343A62980C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:10:24 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id 199-20020a6b01d0000000b00669bf42cd4cso7767546iob.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 08:10:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=orJv/QF6/hQyCVCkoKcPGnTko1ommFIuCUIXzQv7jwI=;
+        b=o0EjqohNBH2uYuANd+A9t6Uf5p6MsNY+BhadMBz9kSOYEs77jToGhKRGPYzu0qrpmZ
+         wbVn7NVCnAuAqZkTFjQPyBZa/xSOeLAAKHFCj0RGSWzCHGgLNx7h+8WotylCcSvUo/eU
+         09PZy/+5q64OoueOMuYVGD6W0i6Ljup44IiuLy4tEpSph2HUY6Cnhis192xhUYn84wze
+         rEl4nBnkEgdJQMqfxfQiuqJFaGC5DAJE141AQheqDFQ/qn6PncCZaRiD0J2hY1YOqSbG
+         iVHTSVWMPTAQIU06G5s6tLY5Kjkxn2omw8pK35+iZnJeV0koJSxQOrCMJXrD7jQ7SO0y
+         7IOg==
+X-Gm-Message-State: AJIora8ZoB/DCMQRUFKCnR41zyNWZSiLS5UkKq+JuvDOd+UrAqpgJRfF
+        Z0w8SkjCoxedNP+j23fKYQcazXLhymH6KmC0gKx0CGHc2Jom
+X-Google-Smtp-Source: AGRyM1uQePVfTEOaeMTn3UjYHAfWksYYYP9NNjLMDbV9XXmg8SbP7RQv1ctWcAVbgaMBbfkmJYBmZfY0sUmZ9N6xFYOzCpoj0C5G
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1c86:b0:2d9:333f:5b9d with SMTP id
+ w6-20020a056e021c8600b002d9333f5b9dmr1266033ill.36.1655824223607; Tue, 21 Jun
+ 2022 08:10:23 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 08:10:23 -0700
+In-Reply-To: <0000000000003189f305e19f5d3e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a8a4a905e1f69ec4@google.com>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in hugepage_vma_check
+From:   syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, shy828301@gmail.com,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikko Perttunen <mperttunen@nvidia.com>
+syzbot has found a reproducer for the following issue on:
 
-Implement the get_streamid_offset and can_use_memory_ctx callbacks
-required for supporting context isolation. Since old firmware on VIC
-cannot support context isolation without hacks that we don't want to
-implement, check the firmware binary to see if context isolation
-should be enabled.
+HEAD commit:    34d1d36073ea Add linux-next specific files for 20220621
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15a34140080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b24b62d1c051cfc8
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d875b4d2e2b60bae9b4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14097a3ff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1466c63ff00000
 
-Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
----
-v5:
-* Split into two callbacks
-* Add NVDEC support
-v4:
-* Add locking in vic_load_firmware
-* Return -EOPNOTSUPP if context isolation is not available
-* Update for changed get_streamid_offset declaration
-* Add comment noting that vic_load_firmware is safe to call
-  without the hardware being powered on
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com
 
-Implement context isolation related callbacks in VIC, NVDEC
----
- drivers/gpu/drm/tegra/drm.h   |  8 +++++
- drivers/gpu/drm/tegra/nvdec.c |  9 +++++
- drivers/gpu/drm/tegra/vic.c   | 67 ++++++++++++++++++++++++++++++-----
- 3 files changed, 76 insertions(+), 8 deletions(-)
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+BUG: KASAN: null-ptr-deref in hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+Read of size 8 at addr 00000000000005a8 by task syz-executor405/3606
 
-diff --git a/drivers/gpu/drm/tegra/drm.h b/drivers/gpu/drm/tegra/drm.h
-index 2acc8f2948ad..845e60f144c7 100644
---- a/drivers/gpu/drm/tegra/drm.h
-+++ b/drivers/gpu/drm/tegra/drm.h
-@@ -100,6 +100,14 @@ int tegra_drm_submit(struct tegra_drm_context *context,
- 		     struct drm_tegra_submit *args, struct drm_device *drm,
- 		     struct drm_file *file);
- 
-+static inline int
-+tegra_drm_get_streamid_offset_thi(struct tegra_drm_client *client, u32 *offset)
-+{
-+	*offset = 0x30;
-+
-+	return 0;
-+}
-+
- struct tegra_drm_client {
- 	struct host1x_client base;
- 	struct list_head list;
-diff --git a/drivers/gpu/drm/tegra/nvdec.c b/drivers/gpu/drm/tegra/nvdec.c
-index 386f9b2e78c4..a84f61709679 100644
---- a/drivers/gpu/drm/tegra/nvdec.c
-+++ b/drivers/gpu/drm/tegra/nvdec.c
-@@ -306,10 +306,19 @@ static void nvdec_close_channel(struct tegra_drm_context *context)
- 	host1x_channel_put(context->channel);
- }
- 
-+static int nvdec_can_use_memory_ctx(struct tegra_drm_client *client, bool *supported)
-+{
-+	*supported = true;
-+
-+	return 0;
-+}
-+
- static const struct tegra_drm_client_ops nvdec_ops = {
- 	.open_channel = nvdec_open_channel,
- 	.close_channel = nvdec_close_channel,
- 	.submit = tegra_drm_submit,
-+	.get_streamid_offset = tegra_drm_get_streamid_offset_thi,
-+	.can_use_memory_ctx = nvdec_can_use_memory_ctx,
- };
- 
- #define NVIDIA_TEGRA_210_NVDEC_FIRMWARE "nvidia/tegra210/nvdec.bin"
-diff --git a/drivers/gpu/drm/tegra/vic.c b/drivers/gpu/drm/tegra/vic.c
-index f56f5921a8c2..c5526bda88d6 100644
---- a/drivers/gpu/drm/tegra/vic.c
-+++ b/drivers/gpu/drm/tegra/vic.c
-@@ -38,6 +38,8 @@ struct vic {
- 	struct clk *clk;
- 	struct reset_control *rst;
- 
-+	bool can_use_context;
-+
- 	/* Platform configuration */
- 	const struct vic_config *config;
- };
-@@ -229,28 +231,38 @@ static int vic_load_firmware(struct vic *vic)
- {
- 	struct host1x_client *client = &vic->client.base;
- 	struct tegra_drm *tegra = vic->client.drm;
-+	static DEFINE_MUTEX(lock);
-+	u32 fce_bin_data_offset;
- 	dma_addr_t iova;
- 	size_t size;
- 	void *virt;
- 	int err;
- 
--	if (vic->falcon.firmware.virt)
--		return 0;
-+	mutex_lock(&lock);
-+
-+	if (vic->falcon.firmware.virt) {
-+		err = 0;
-+		goto unlock;
-+	}
- 
- 	err = falcon_read_firmware(&vic->falcon, vic->config->firmware);
- 	if (err < 0)
--		return err;
-+		goto unlock;
- 
- 	size = vic->falcon.firmware.size;
- 
- 	if (!client->group) {
- 		virt = dma_alloc_coherent(vic->dev, size, &iova, GFP_KERNEL);
--		if (!virt)
--			return -ENOMEM;
-+		if (!virt) {
-+			err = -ENOMEM;
-+			goto unlock;
-+		}
- 	} else {
- 		virt = tegra_drm_alloc(tegra, size, &iova);
--		if (IS_ERR(virt))
--			return PTR_ERR(virt);
-+		if (IS_ERR(virt)) {
-+			err = PTR_ERR(virt);
-+			goto unlock;
-+		}
- 	}
- 
- 	vic->falcon.firmware.virt = virt;
-@@ -277,7 +289,28 @@ static int vic_load_firmware(struct vic *vic)
- 		vic->falcon.firmware.phys = phys;
- 	}
- 
--	return 0;
-+	/*
-+	 * Check if firmware is new enough to not require mapping firmware
-+	 * to data buffer domains.
-+	 */
-+	fce_bin_data_offset = *(u32 *)(virt + VIC_UCODE_FCE_DATA_OFFSET);
-+
-+	if (!vic->config->supports_sid) {
-+		vic->can_use_context = false;
-+	} else if (fce_bin_data_offset != 0x0 && fce_bin_data_offset != 0xa5a5a5a5) {
-+		/*
-+		 * Firmware will access FCE through STREAMID0, so context
-+		 * isolation cannot be used.
-+		 */
-+		vic->can_use_context = false;
-+		dev_warn_once(vic->dev, "context isolation disabled due to old firmware\n");
-+	} else {
-+		vic->can_use_context = true;
-+	}
-+
-+unlock:
-+	mutex_unlock(&lock);
-+	return err;
- 
- cleanup:
- 	if (!client->group)
-@@ -285,6 +318,7 @@ static int vic_load_firmware(struct vic *vic)
- 	else
- 		tegra_drm_free(tegra, size, virt, iova);
- 
-+	mutex_unlock(&lock);
- 	return err;
- }
- 
-@@ -358,10 +392,27 @@ static void vic_close_channel(struct tegra_drm_context *context)
- 	host1x_channel_put(context->channel);
- }
- 
-+static int vic_can_use_memory_ctx(struct tegra_drm_client *client, bool *supported)
-+{
-+	struct vic *vic = to_vic(client);
-+	int err;
-+
-+	/* This doesn't access HW so it's safe to call without powering up. */
-+	err = vic_load_firmware(vic);
-+	if (err < 0)
-+		return err;
-+
-+	*supported = vic->can_use_context;
-+
-+	return 0;
-+}
-+
- static const struct tegra_drm_client_ops vic_ops = {
- 	.open_channel = vic_open_channel,
- 	.close_channel = vic_close_channel,
- 	.submit = tegra_drm_submit,
-+	.get_streamid_offset = tegra_drm_get_streamid_offset_thi,
-+	.can_use_memory_ctx = vic_can_use_memory_ctx,
- };
- 
- #define NVIDIA_TEGRA_124_VIC_FIRMWARE "nvidia/tegra124/vic03_ucode.bin"
--- 
-2.36.1
+CPU: 0 PID: 3606 Comm: syz-executor405 Not tainted 5.19.0-rc3-next-20220621-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+ hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+ show_smap+0x1c6/0x470 fs/proc/task_mmu.c:866
+ traverse.part.0+0xcf/0x5f0 fs/seq_file.c:111
+ traverse fs/seq_file.c:101 [inline]
+ seq_read_iter+0x90f/0x1280 fs/seq_file.c:195
+ seq_read+0x337/0x4b0 fs/seq_file.c:162
+ do_loop_readv_writev fs/read_write.c:763 [inline]
+ do_loop_readv_writev fs/read_write.c:750 [inline]
+ do_iter_read+0x4f8/0x750 fs/read_write.c:805
+ vfs_readv+0xe5/0x150 fs/read_write.c:923
+ do_preadv fs/read_write.c:1015 [inline]
+ __do_sys_preadv fs/read_write.c:1065 [inline]
+ __se_sys_preadv fs/read_write.c:1060 [inline]
+ __x64_sys_preadv+0x22b/0x310 fs/read_write.c:1060
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fcb44a75239
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffedce269f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fcb44a75239
+RDX: 0000000000000001 RSI: 00000000200006c0 RDI: 0000000000000003
+RBP: 00007ffedce26a00 R08: 0000000000000000 R09: 65732f636f72702f
+R10: 00000000fffffffe R11: 0000000000000246 R12: 00007fcb44a39120
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+==================================================================
 

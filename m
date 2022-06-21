@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402E65531BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7DF5531C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 14:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349925AbiFUMME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 08:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S1349316AbiFUMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 08:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350389AbiFUML6 (ORCPT
+        with ESMTP id S229921AbiFUMOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:11:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946D12B26B;
-        Tue, 21 Jun 2022 05:11:57 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 68146660174F;
-        Tue, 21 Jun 2022 13:11:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655813516;
-        bh=eoqC+ap4P2hb2zlxPni+x1COpwjVm+TE+Yg1s60B24o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UuLs3CyL4DP3wA3w/BLytMrh3d+ohdDT7bB541UNpQ/xTyw0GngZf1uy4FRYbx6fT
-         ZJmlaEREL65aQTK0IVMVzCojsQQuihyF2LvjhUNWXpX1t/W6Uuo1PMODXKuhKk9op+
-         nZCKlbJWHMc/z4nUgk7yke1eCMl2t/ODiUuyh+HoB5oi8sxcoFxbhQj2yn2B8Ojh5H
-         YJ4h0OUfHHrMH0xWLpeNoKhMYc+vt4Tn0s3cGw2w8VLZxKKY+nSrHDgy03vDbWCT/Z
-         GjcwZw6T8r/pSwKzNPQHo1w/pgEpmkKoGys2G3lhGWGndd3QitxDUFDKr6nnNveQou
-         B1MraZh3CPq0A==
-Message-ID: <7e4ce7cc-365c-82ad-3517-f54e18589a74@collabora.com>
-Date:   Tue, 21 Jun 2022 14:11:52 +0200
+        Tue, 21 Jun 2022 08:14:02 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297311003;
+        Tue, 21 Jun 2022 05:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=WnC8/sVEqcV82ARt6NQG9FTjINSGhbQW6PZRwnbLprs=; b=AAKg5CtcGYAQc9VOmfGncdP/qy
+        6KjzYJBG9pPPuAL1pfNLPIvsq9t4K9dmbW045BGri0Pg98M4q4YD5Urjbxi00ARrcQQ+pMtoPGsr1
+        V79EVcO1N6WvMsaAPEScCpL/a6qpOlcoBkhNuLZq11+sFCxHeZgB/emEqoCSGO9qnCkHgnHF4jO/g
+        nWuBHSN91RpR76Ls6IjuajnytXDjwgOstNIFA+ZKxzpzwNotfWbYQk3VqBRuogPVPHyry3B51Lh4v
+        CkNkjP+h6j/diRO+MYb6LHBMHIl/NvrufiWNDIx++xVJivhGSh64QsRA3qHpH0Klykj5d9Pk/wPHV
+        xaPQ01H+09Z1834SWCS1go4rXN8Yb68Mk5B9ilJg6Lwu65bgrhCNFJDJl2eKoFDVTaz8/tPhCJzfD
+        1OQXLchwjmRWMaBzFwMQR815ufEt282WjYZHJBz94QU/kTz4jgdcVUwAuLUIpYywATXqaC/6pLsXC
+        dwgDAfVDgwYtTbViLcxMs2xZICitDOVDePPyqrwroF1VqiZScUZ1DJl3T/uLaix42zD65DfGiyR+L
+        WIpfKcvqehqVpkzSM8r6AnmyTq7pilgFlioy12g4EImGmUrnTOHaFhZwjN1zcpWOto+4H+hFL4VjG
+        lBMbs8eqfdeTKUOe7/qFLiqvRyDGKuW8NYEAHejrA=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        David Howells <dhowells@redhat.com>, stable@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] 9p: fix EBADF errors in cached mode
+Date:   Tue, 21 Jun 2022 14:13:51 +0200
+Message-ID: <25475559.V594D4LmdM@silver>
+In-Reply-To: <YrDZ3nlTFwJ4ytl8@codewreck.org>
+References: <15767273.MGizftpLG7@silver> <1902408.H94Nh90b8Q@silver>
+ <YrDZ3nlTFwJ4ytl8@codewreck.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v13 01/14] dt-bindings: mediatek,dpi: Add DP_INTF
- compatible
-Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        airlied@linux.ie
-Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
-        wenst@chromium.org, ck.hu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220621113732.11595-1-rex-bc.chen@mediatek.com>
- <20220621113732.11595-2-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220621113732.11595-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/06/22 13:37, Bo-Chen Chen ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Montag, 20. Juni 2022 22:34:38 CEST Dominique Martinet wrote:
+> Christian Schoenebeck wrote on Mon, Jun 20, 2022 at 02:47:24PM +0200:
+> > Some more tests this weekend; all looks fine. It appears that this also
+> > fixed the performance degradation that I reported early in this thread.
 > 
-> DP_INTF is similar to DPI but does not have the exact same feature set
-> or register layouts.
-> 
-> DP_INTF is the sink of the display pipeline that is connected to the
-> DisplayPort controller and encoder unit. It takes the same clocks as
-> DPI.
-> 
-> In this patch, we also do these string replacement:
-> - s/mediatek/MediaTek/ in title.
-> - s/Mediatek/MediaTek/ in description.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Modify reviewers' comments.]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> wow, I wouldn't have expected the EBADF fix patch to have any impact on
+> performance. Maybe the build just behaved differently enough to take
+> more time with the errors?
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Maybe. It could also be less overhead using writeback_fid vs. dedicated fid, 
+i.e. no walking and fid cloning required when just using the writeback_fid 
+which is already there (reduced latency).
+
+Probably also overall reduced total amount of fids might have some (smaller) 
+impact, as on QEMU 9p server side we still have a simple linked list for fids 
+which is iterated on each fid lookup. A proc-like interface for statistics 
+(e.g. max. amount of fids) would be useful.
+
+But honestly, all these things still don't really explain to me such a 
+difference from performance PoV in regards to this patch, as the particular 
+case handled by this patch does not appear to happen often.
+
+Anyway, my plan is to identify performance bottlenecks in general more 
+analytically this year. Now that we have macOS support for 9p in QEMU, I'll 
+probably use Xcode's "Instruments" tool which really has a great way to 
+graphically investigate complex performance aspects in a very intuitive and 
+customizable way, which goes beyond standard profiling. Then I can hunt down 
+performance issues by weight.
+
+Best regards,
+Christian Schoenebeck
+
 

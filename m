@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CF7553EFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 01:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531E6553F03
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 01:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355301AbiFUXed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 19:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S1355348AbiFUXeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 19:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbiFUXeV (ORCPT
+        with ESMTP id S1350019AbiFUXeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 19:34:21 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF4263C3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:34:19 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id q18so2425322pld.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:34:19 -0700 (PDT)
+        Tue, 21 Jun 2022 19:34:22 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5504D30563
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:34:20 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id i64so14481617pfc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 16:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=j6EHLC1I3sWRh0/mAsfU2ZCVNMk8CE7YRjypzOnx64c=;
-        b=ny3qCYdwkoUpLmuRdVbSsOq6jsHe9rpqDDqLQqrXz6nByKilro0DP4ezMhrbR0SJqB
-         FoEeGs/0KqYKIO0u/AbqJh4tTPMWNOn4JSYvSnoPwDOaKv1ABF+nrB0APB6130vJfsTR
-         M3HfP4uKcxtpwZLnTGnPsFSmRO+kQ/hVnqCzheHZGbv0YUnzklzmqpazOH3E2sRWQ7C8
-         yaUdG690fvYfG8GV8Qr+YU3/4QrtZhxq8j+ugj4qBs8H9HlGveNYGpXzc0YK/9J3vsW/
-         2l9aJ1+luUEHAfiJ7ZU1e5tOJ5rp2oLkiUsHGzPlwQuNmSMbJQk1WJ5kL2XTg6SqCP+k
-         QI8A==
+        bh=fJgKFMAN9XJcQFXSIBW4zb7s2vD8f3jyjsxvG6sAqRM=;
+        b=Z/aOhdB8XUfEaX6j3ZNfWzrLU8KayJ5c0OPQZEAXfEJowv3AwV3zrG7mrwvN0nWAWV
+         CUn4WPnoToYv/Lxu57bR6whg484OXyqomiPAZhX3mPCt617VmjYCnAzR7NMvpq26gd+d
+         GipV0733h/usUyYvSwuLEVVvgMHQhQq+gfJif410klwaaoUgSf4wq0IX1OvZF7k896DY
+         Lv9IzoMeHExsa5iz3vfVL0THo/CRD538fxMfbYL9TprYPtbRincPVLittQnywjDm2cIL
+         52MbdQSNyFpI2tF3sKICGYcKiPBlQ/BmbKVzbswSeoAQ8zqTOMqIysFYiXB4EIqYrLNl
+         FKMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j6EHLC1I3sWRh0/mAsfU2ZCVNMk8CE7YRjypzOnx64c=;
-        b=neOCxKnUq9wFrNK9z3OgzgKks/4s+9uxhRwYOjRpw7cTdqaLnmuJupWiZimr1NMh6u
-         Zt3CU2EZdFbTbrC0GUvuXDIGBxaQUx7qP9g0Gu0S8F+WzFbyP+nC77RzU4FD5cJwwrKP
-         qLNE/C8mroSJGgAYCgRfHOphDxlJqHlbzIPNRaXwJEl09bUuw0INVr5mrac0J8tajONF
-         UPn5/LSkXAUHP3lVq2yWUD5mU681eWUXUWzelkRnRzagWM2mH5x/v/JrjCIAU+pXQ/Mi
-         hSaa5Iu944wCO60fhoSAQxJxupj5oKrrwdo38sWDYLVaXxoTTEk7Q7e7F1AbGGSDFiiU
-         o4mw==
-X-Gm-Message-State: AJIora90DpwSp5V3OO76ykLq9Lci6V7s9uVfogZRzQGzp183dIRWXMhe
-        H1PPOD6NkU8yZkj1KTLo06+eQA==
-X-Google-Smtp-Source: AGRyM1sZvtNuqN3d0+/aGvE46mIOMd7ki2UIMNFbuxfZwpXow/kWmkaMMZ4+AE05cbkJOQASbSkebw==
-X-Received: by 2002:a17:902:e746:b0:16a:3b5c:2134 with SMTP id p6-20020a170902e74600b0016a3b5c2134mr4693244plf.36.1655854458772;
-        Tue, 21 Jun 2022 16:34:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fJgKFMAN9XJcQFXSIBW4zb7s2vD8f3jyjsxvG6sAqRM=;
+        b=rJgOUvP6VzPOSxSAcho/51waQdVcLOeCfhE257B1rIZkmSsI52WzJkq4FPYvdq5MIx
+         zotRG2pe/JBWU4c7ix4EAKcunsuIh7Ymy3SNsGjtAnWNJjq+pqixO4/6NzfVwswnpL1D
+         do+xkGJsVbeFAlJkySybToPH4vZWqlDJ91y7nbvX51eefFA0Wjhp6YPu8Occt+5p3JI3
+         tUTP4RVLKal3UeHrM3dGaxhiTZwCevJCNdwaeOnASF0tgCBEOvT+CFrD+PYDPC6dBBmM
+         PjIN/2rP6/O4vt823rwXFgjavpd5RFkCQlfnxxMTH+h6/9JVrACXGvmeoyLUgqt7SvX8
+         yuug==
+X-Gm-Message-State: AJIora/hNNN/EhEUscQHm9ChP2oLrahVZnrGMlDSYGmKLWI+Bo3P2V/r
+        SD4JwGvqXcLp5NarY2q45D8Tyg==
+X-Google-Smtp-Source: AGRyM1vur6Kvm3tsOQjtHwjlG48ZcycgnHC9uDokuSDAPpAacs8/ihbnm3Kn225KKBUKyNxVUGtiVw==
+X-Received: by 2002:a05:6a00:b8d:b0:525:4637:de98 with SMTP id g13-20020a056a000b8d00b005254637de98mr67960pfj.31.1655854459880;
+        Tue, 21 Jun 2022 16:34:19 -0700 (PDT)
 Received: from prec5560.. (71-212-119-14.tukw.qwest.net. [71.212.119.14])
         by smtp.gmail.com with ESMTPSA id s7-20020a17090302c700b00168e83eda56sm11297873plk.3.2022.06.21.16.34.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 16:34:18 -0700 (PDT)
+        Tue, 21 Jun 2022 16:34:19 -0700 (PDT)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     bjorn.andersson@linaro.org, agross@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -56,10 +56,12 @@ To:     bjorn.andersson@linaro.org, agross@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: [PATCH v6 0/6] SM8350 Display/GPU clock enablement
-Date:   Wed, 22 Jun 2022 01:34:06 +0200
-Message-Id: <20220621233412.506768-1-robert.foss@linaro.org>
+Subject: [PATCH v6 1/6] arm64: dts: qcom: sm8350: Replace integers with rpmpd defines
+Date:   Wed, 22 Jun 2022 01:34:07 +0200
+Message-Id: <20220621233412.506768-2-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220621233412.506768-1-robert.foss@linaro.org>
+References: <20220621233412.506768-1-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,48 +74,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v2
- - Dropped "clk: Introduce CLK_ASSUME_ENABLED_WHEN_UNUSED"
- - Dropped "clk: qcom: sm8250-dispcc: Flag shared RCGs as assumed enable"
- - Dropped "clk: qcom: rcg2: Cache rate changes for parked RCGs"
+Replace &rpmhpd power domain integers with their respective defines
+in order to improve legibility.
 
-Changes since v3:
- - Dropped RBs & SoBs for bigger changes
- - Changed author to me for patches with big changes
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Changes since v5:
- - Reverted dispcc-sm8350 split from dispcc-sm8250
-   and related .index changes - Bjorn
- - Re-added Tags that were thrown out due to the 
-   above revert
-
-
-
-Jonathan Marek (2):
-  clk: qcom: add support for SM8350 DISPCC
-  dt-bindings: clock: Add Qcom SM8350 DISPCC bindings
-
-Robert Foss (4):
-  arm64: dts: qcom: sm8350: Replace integers with rpmpd defines
-  clk: qcom: add support for SM8350 GPUCC
-  dt-bindings: clock: Add Qcom SM8350 GPUCC bindings
-  arm64: dts: qcom: sm8350: Add DISPCC node
-
- .../bindings/clock/qcom,dispcc-sm8x50.yaml    |   6 +-
- .../bindings/clock/qcom,gpucc-sm8350.yaml     |  72 ++
- arch/arm64/boot/dts/qcom/sm8350.dtsi          |  42 +-
- drivers/clk/qcom/Kconfig                      |  12 +-
- drivers/clk/qcom/Makefile                     |   1 +
- drivers/clk/qcom/dispcc-sm8250.c              |  60 +-
- drivers/clk/qcom/gpucc-sm8350.c               | 637 ++++++++++++++++++
- .../dt-bindings/clock/qcom,dispcc-sm8350.h    |   1 +
- include/dt-bindings/clock/qcom,gpucc-sm8350.h |  52 ++
- 9 files changed, 870 insertions(+), 13 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
- create mode 100644 drivers/clk/qcom/gpucc-sm8350.c
- create mode 120000 include/dt-bindings/clock/qcom,dispcc-sm8350.h
- create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8350.h
-
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index c0137bdcf94b..52428b6df64e 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1656,8 +1656,8 @@ mpss: remoteproc@4080000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 0>,
+-					<&rpmhpd 12>;
++			power-domains = <&rpmhpd SM8350_CX>,
++					<&rpmhpd SM8350_MSS>;
+ 			power-domain-names = "cx", "mss";
+ 
+ 			interconnects = <&mc_virt MASTER_LLCC &mc_virt SLAVE_EBI1>;
+@@ -2167,8 +2167,8 @@ slpi: remoteproc@5c00000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 4>,
+-					<&rpmhpd 5>;
++			power-domains = <&rpmhpd SM8350_LCX>,
++					<&rpmhpd SM8350_LMX>;
+ 			power-domain-names = "lcx", "lmx";
+ 
+ 			memory-region = <&pil_slpi_mem>;
+@@ -2235,8 +2235,8 @@ cdsp: remoteproc@98900000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 0>,
+-					<&rpmhpd 10>;
++			power-domains = <&rpmhpd SM8350_CX>,
++					<&rpmhpd SM8350_MXC>;
+ 			power-domain-names = "cx", "mxc";
+ 
+ 			interconnects = <&compute_noc MASTER_CDSP_PROC &mc_virt SLAVE_EBI1>;
+@@ -2540,8 +2540,8 @@ adsp: remoteproc@17300000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 4>,
+-					<&rpmhpd 5>;
++			power-domains = <&rpmhpd SM8350_LCX>,
++					<&rpmhpd SM8350_LMX>;
+ 			power-domain-names = "lcx", "lmx";
+ 
+ 			memory-region = <&pil_adsp_mem>;
 -- 
 2.34.1
 

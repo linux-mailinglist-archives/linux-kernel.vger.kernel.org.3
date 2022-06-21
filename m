@@ -2,106 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3819955338C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B67D5533BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351707AbiFUN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
+        id S233550AbiFUNe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351724AbiFUN27 (ORCPT
+        with ESMTP id S1351579AbiFUNbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:28:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8884E25C69
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655817861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u736UGku/JrRJ1DksO+V4OLlrYIRIw9y+gv92kWBcJM=;
-        b=IuMxgONpExw7RBnnK/cC9wGbnTcWbCFvoOKnND2sIqdZA2OaE+IySx+dDz3cqpHPdIP3xV
-        kUfe8r9OC82VULiTWCAx9++xN3DV42NJZJA18+8huu3yxn3O8B+9dQ779/ekzd7bkezDHJ
-        45+ydW9qLt4I+IvoT0SebLyhUKUaolw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-RRkKvLFoPD2Uur9kxuC0Fw-1; Tue, 21 Jun 2022 09:24:19 -0400
-X-MC-Unique: RRkKvLFoPD2Uur9kxuC0Fw-1
-Received: by mail-wm1-f72.google.com with SMTP id c185-20020a1c35c2000000b0039db3e56c39so8438347wma.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:24:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=u736UGku/JrRJ1DksO+V4OLlrYIRIw9y+gv92kWBcJM=;
-        b=YrXVrtFLuBmabf7sLlyZTA7UmAbDegiiHMrqaRhopReKDSIrgpyRjYRB5eRgRdat3g
-         h4IaoQcWTaYnAqSOrHnJ/18oUrPpMrHx5+DNft7cTwjvARLW/Bsv5LxwzhW5nDMO0KCu
-         R2Z6hdXE5Q6LR0Bn8AK9ZGNs2h/P2gOUyAsd9lbghHXQHP5vz2jlYmtqjd4XEesu1lU4
-         Lb0Gs3ZxN6EEJbiuKwopPzQ9Fm12RPkuQvWY/yIq27oRB+b+bZWqs+uri0dClpRPpkk2
-         AQy5K2l6HP4oMdjO2gfnHw1IzUdkgbLHJ1woxBmDAkbCRcFFEAzcTtSPHu5AUR9xwBOQ
-         xrRQ==
-X-Gm-Message-State: AOAM533pnuWoHIj7Jr2DGxZeYwKCN7RajT6JDwCnB9sSvgBpE2CUp52L
-        eF2q6qe0Akh4MJu8JG28xRQz+hB+eH6hR3gVZF3gEZT9dRldEcJAacSQ4QdsSUlrAZPS3d54MlM
-        VM0+80BkjcgavGoSCGbmA69e3ry8bJDknE7m29tmGIHxxDYs9bo6ffET0QEVM+Dt4cHo1m3NBer
-        NT
-X-Received: by 2002:a05:600c:1f05:b0:39c:51c6:7c85 with SMTP id bd5-20020a05600c1f0500b0039c51c67c85mr41896749wmb.33.1655817858831;
-        Tue, 21 Jun 2022 06:24:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx2vHsz7ni0WNOKWRzoORK2MuOU/fyqYFPbMjIK0vgwy2HJOf9+5BNaiEvUfNHK0WjXot0RhQ==
-X-Received: by 2002:a05:600c:1f05:b0:39c:51c6:7c85 with SMTP id bd5-20020a05600c1f0500b0039c51c67c85mr41896715wmb.33.1655817858571;
-        Tue, 21 Jun 2022 06:24:18 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id e7-20020a5d5947000000b0021b95bcaf7fsm2737151wri.59.2022.06.21.06.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 06:24:18 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 17/39] KVM: x86: hyper-v: L2 TLB flush
-In-Reply-To: <e22c7352-bafa-3ebf-c842-ed706579a619@redhat.com>
-References: <20220613133922.2875594-1-vkuznets@redhat.com>
- <20220613133922.2875594-18-vkuznets@redhat.com>
- <e22c7352-bafa-3ebf-c842-ed706579a619@redhat.com>
-Date:   Tue, 21 Jun 2022 15:24:17 +0200
-Message-ID: <87wnda40am.fsf@redhat.com>
+        Tue, 21 Jun 2022 09:31:02 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E652AE17;
+        Tue, 21 Jun 2022 06:25:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655817936;
+        bh=vLz9Wf2+6MlMxzDvcnR6bF4tQIwwWW2OtZip072WcPg=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=lPW9Vx5rvFOZK++BIZ6HSKC9cxArBrrcNYMX/Bpa6tTw3fIOSCboWc3DUyzcmDqpF
+         gtCTIgUg8+rmG+Dep3M0+WF2E0sKek758UOSktLt2dXbThwo5Fw3hR1vxl3ywVVmAP
+         zv2sk22TtelEeuR+CVqwPA0qzLOWFX/ZVyL7nSww=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([46.223.2.162]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSKyI-1oEcEi0PfM-00Sbd6; Tue, 21
+ Jun 2022 15:25:36 +0200
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+Subject: [PATCH v6 0/9] TPM IRQ fixes
+Date:   Tue, 21 Jun 2022 15:24:38 +0200
+Message-Id: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:VrMkKDj7QnWhNze5ttV1evfMRvtx/UFBImuDqIINsdLXnwGMawH
+ InkQDtd/RZ3Zdw8UmzD9d7MmGKLkKwIsHdIbEenkbHsPgz2AXzl2SnBD1jP41lo+AMu/AF6
+ 1k42hv78yH2jJ+JFqN51G0utD2XPtWUZ/LlyB5spmWagOrskxgh20SapeN+yIURud/+H9Qq
+ NKIXk+etLnKQedAjOBSgA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FjBVVmvSacQ=:nra10x3JWv3Kh4MaYpjtWW
+ cKiJTlTQv1MySAB8vu15WJaR5xjYM9FEykEEmX7rmxM9fmjbavk4s/EHiONfrtZOIzSC9PVHf
+ Bd867ctVlMuZwJGsTfCHbSZjCbQG4GzKNzLgZew6ErMzbwF9/PNuGaGPshoiD1xHhe+cRFLkd
+ rO6WacdXkEsZi7iJpuZnco1IqI4fpQcdlXCqX87smq4xFjUggIXc4IxKPpBDI5nnBBFBXA5Rn
+ nga5AEpGVpEincWLY9V5UKW7kG2+xjkvyFR284FeuqHqIwXtfYQe2eI9ZdsRJs5MeToDHacDg
+ PVJ4aCxsLVCtMZbdmTi8MRCfR9+kKwbWe/Jj8gpFybGq+VHLM2DEWSyC1m7adHYFWfxPTXnLC
+ e8ZFiSUELp+/f/Bp0Pc/AsVolsk+uugYwRaJdcs1Z8fxLiuUU5k6MZvLjD6O+sa8kXh/4rDdg
+ 13wBDaGMr0jtutzR8m+wZY0OhwF2hSZ1HyotFNgTSwv8NE7YSDy2drA6GguK0r5jvihSO4PqS
+ l73kETGhWN/gb/m5nyANbqL/9EValwrpYaXd+otea4+PLGWC+f+H3EjfZstNBcHwp12toh8Up
+ QlhwkuXidTFoRfSOJOd87kX/p2vVJ95UKKNZAm6YqflKEFaV+gPeSo1gxg34iKyEUnZG/Pxxc
+ vh+4MmPWlqeNrUK1PN0QJG18Os+Olaa7U8VCSdYwJ9Ux+60wtw57wEH+yGxZope6l38TMr1So
+ EeipkQL4x77c7lVeLD2RcRG31xkO0WcdRTq35kmILd43FwzgYO8jI09Dyl/fGvIXEFc2g9i03
+ Xj9Z7XunWEyGkc2bxa8EABhWRqpuOBGGN7/vsKt+tL47iZZnEydj3plflpXcbdXNUEwmStmrp
+ StaF8/81daM5/9xvd3e85KofaM0DVzIxVLi/QX/GajIwXyN1Va+TQPySntqCJzWPnM1JEEkFV
+ jiHCtKtondWmhKDNMrKp+SDzGsLsj3ODPRHLCf06sJvzpWa+2qPM1UrBKYjFxC1Z3taI5muhf
+ 41UfV/kApnzfgze3/bnslEfifUNRH2tJfzFfWTMOJCDObXCjbtY2biZkhd8ItohwKFvzm2O2x
+ /iac687bkAYAOBhYUYAj7O5JTM4oI3DmwlykWJP1SxuYWp7qYAm92xi0Q==
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
-
-> On 6/13/22 15:39, Vitaly Kuznetsov wrote:
->> -	tlb_flush_fifo = kvm_hv_get_tlb_flush_fifo(vcpu);
->> +	tlb_flush_fifo = kvm_hv_get_tlb_flush_fifo(vcpu, is_guest_mode(vcpu));
->>   
->
-> Any reason to add this parameter?  
-
-Yes) Other users (all from kvm_hv_flush_tlb()) set this parameter based
-on whether the calling vCPU (*not* the destination vCPU, which is the
-first parameter) is in guest mode or not.
-
-> It is always set to is_guest_mode(vcpu) and, even if it wasn't, I
-> would add the parameter directly in patch 11.
-
-I can move to Patch11 if necessary.
-
--- 
-Vitaly
-
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoaXMgc2Vy
+aWVzIGVuYWJsZXMgSVJRIHN1cHBvcnQgZm9yIHRoZSBUUE0gVElTIGNvcmUuIEZvciB0aGlzIHJl
+YXNvbiBhCm51bWJlciBvZiBidWdmaXhlcyBhcm91bmQgdGhlIGludGVycnVwdCBoYW5kbGluZyBh
+cmUgcmVxdWlyZWQgKHBhdGNoZXMgMSB0bwo0KS4KClBhdGNoIDUgdGFrZXMgaW50byBhY2NvdW50
+IHRoYXQgYWNjb3JkaW5nIHRvIHRoZSBUUE0gSW50ZXJmYWNlClNwZWNpZmljYXRpb24gc3RzVmFs
+aWQgYW5kIGNvbW1hbmRSZWFkIGludGVycnVwdHMgbWlnaHQgbm90IGJlIHN1cHBvcnRlZApieSB0
+aGUgaGFyZHdhcmUuIEZvciB0aGlzIHJlYXNvbiB0aGUgc3VwcG9ydGVkIGludGVycnVwdHMgYXJl
+IGZpcnN0IHF1ZXJpZWQKYW5kIHN0b3JlZC4gVGhlbiB3YWl0X2Zvcl90cG1fc3RhdCgpIGlzIGFk
+anVzdGVkIHRvIG5vdCB3YWl0IGZvciBzdGF0dXMKY2hhbmdlcyB0aGF0IGFyZSBub3QgcmVwb3J0
+ZWQgYnkgaW50ZXJydXB0cy4KClBhdGNoIDYgYWRkcmVzc2VzIHRoZSBpc3N1ZSB3aXRoIGNvbmN1
+cnJlbnQgbG9jYWxpdHkgaGFuZGxpbmc6ClNpbmNlIHRoZSBpbnRlcnJ1cHQgaGFuZGxlciB3cml0
+ZXMgdGhlIGludGVycnVwdCBzdGF0dXMgcmVnaXN0ZXJzIGl0IG5lZWRzCnRvIGhvbGQgdGhlIGxv
+Y2FsaXR5LiBIb3dldmVyIGl0IHJ1bnMgY29uY3VycmVudGx5IHRvIHRoZSB0aHJlYWQgd2hpY2gK
+dHJpZ2dlcmVkIHRoZSBpbnRlcnJ1cHQgKGUuZy4gYnkgcmVhZGluZyBvciB3cml0aW5nIGRhdGEg
+dG8gdGhlIFRQTSkuIFNvCml0IG11c3QgdGFrZSBjYXJlIHdoZW4gY2xhaW1pbmcgYW5kIHJlbGVh
+c2luZyB0aGUgbG9jYWxpdHkgaXRzZWxmLApiZWNhdXNlIGl0IG1heSByYWNlIHdpdGggdGhlIGNv
+bmN1cnJlbnQgcnVubmluZyB0aHJlYWQgd2hpY2ggYWxzbyBjbGFpbXMKYW5kIHJlbGVhc2VzIHRo
+ZSBsb2NhbGl0eS4KVG8gYXZvaWQgdGhhdCBib3RoIGludGVycnVwdCBhbmQgY29uY3VycmVudCBy
+dW5uaW5nIHRocmVhZCBpbnRlcmZlcmUgd2l0aAplYWNoIG90aGVyIGEgbG9jYWxpdHkgY291bnRl
+ciBpcyB1c2VkIHdoaWNoIGd1YXJhbnRlZXMgdGhhdCBhdCBhbnkgdGltZQp0aGUgbG9jYWxpdHkg
+aXMgaGVsZCBhcyBsb25nIGFzIGl0IGlzIHJlcXVpcmVkIGJ5IG9uZSBvZiBib3RoIGV4ZWN1dGlv
+bgpwYXRocy4KClBhdGNoIDcgaW1wbGVtZW50cyB0aGUgcmVxdWVzdCBvZiBhIHRocmVhZGVkIGlu
+dGVycnVwdCBoYW5kbGVyLiBUaGlzIGlzCm5lZWRlZCBzaW5jZSBTUEkgdXNlcyBhIG11dGV4IGZv
+ciBkYXRhIHRyYW5zbWlzc2lvbiBhbmQgc2luY2Ugd2UgYWNjZXNzIHRoZQppbnRlcnJ1cHQgc3Rh
+dHVzIHJlZ2lzdGVyIHZpYSBTUEkgaW4gdGhlIGlycSBoYW5kbGVyIHdlIG5lZWQgYSBzbGVlcGFi
+bGUKY29udGV4dC4KClBhdGNoIDggbWFrZXMgc3VyZSB0aGF0IHdyaXRlcyB0byB0aGUgaW50ZXJy
+dXB0IHJlZ2lzdGVyIGFyZSBlZmZlY3RpdmUgaWYKZG9uZSBpbiB0aGUgaW50ZXJydXB0IGhhbmRs
+ZXIuCgpQYXRjaCA5IGVuYWJsZXMgdGhlIHRlc3QgZm9yIGludGVycnVwdHMgYnkgc2V0dGluZyB0
+aGUgcmVxdWlyZWQgZmxhZyBiZWZvcmUKdGhlIHRlc3QgaXMgZXhlY3V0ZWQuCgpDaGFuZ2VzIGlu
+IHY2OgotIHNldCBUUE1fVElTX0lSUV9URVNURUQgaW4gZmxhZyBtZW1iZXIgb2YgdGhlIHRwbV90
+aXNfZGF0YSBzdHJ1Y3QgaW5zdGVhZAppbiBhbiBvd24gYml0ZmllbGQgCi0gaW1wcm92ZSBjb21t
+aXQgbWVzc2FnZXMKLSB1c2UgaW50X21hc2sgaW5zdGVhZCBvZiBpcnFzX2luX3VzZSBhcyB2YXJp
+YWJsZSBuYW1lCi0gdXNlIHN0c19tYXNrIGluc3RlYWQgb2YgYWN0aXZlX2lycXMgYXMgdmFyaWFi
+bGUgbmFtZQotIHNxdWFzaCBwYXRjaCA1IGFuZCA2Ci0gcHJlZml4IGZ1bmN0aW9ucyB3aXRoIHRw
+bV90aXNfCi0gcmVtb3ZlICJmaXhlcyIgdGFnCgpDaGFuZ2VzIGluIHY1OgotIGltcHJvdmUgY29t
+bWl0IG1lc3NhZ2Ugb2YgcGF0Y2ggMSBhcyByZXF1ZXN0ZWQgYnkgSmFya28KLSBkcm9wIHBhdGNo
+IHRoYXQgbWFrZXMgbG9jYWxpdHkgaGFuZGxpbmcgc2ltcGxlciBieSBvbmx5IGNsYWltaW5nIGl0
+IGF0CiAgZHJpdmVyIHN0YXJ0dXAgYW5kIHJlbGVhc2luZyBpdCBhdCBkcml2ZXIgc2h1dGRvd24g
+KHJlcXVlc3RlZCBieSBKYXJrbykKLSBkcm9wIHBhdGNoIHRoYXQgbW92ZXMgdGhlIGludGVycnVw
+dCB0ZXN0IGZyb20gdHBtX3Rpc19zZW5kKCkKICB0byB0bXBfdGlzX3Byb2JlX2lycV9zaW5nbGUo
+KSBhcyByZXF1ZXN0ZWQgYnkgSmFya28KLSBhZGQgcGF0Y2ggdG8gbWFrZSBsb2NhbGl0eSBoYW5k
+bGluZyB0aHJlYWRzYWZlIHNvIHRoYXQgaXQgY2FuIGFsc28gYmUKICBkb25lIGJ5IHRoZSBpcnEg
+aGFuZGxlcgotIHNlcGFyYXRlIGxvZ2ljYWwgY2hhbmdlcyBpbnRvIG93biBwYXRjaGVzCi0gYWx3
+YXlzIHJlcXVlc3QgdGhyZWFkZWQgaW50ZXJydXB0IGhhbmRsZXIKCkNoYW5nZXMgaW4gdjQ6Ci0g
+b25seSByZXF1ZXN0IHRocmVhZGVkIGlycSBpbiBjYXNlIG9mIFNQSSBhcyByZXF1ZXN0ZWQgYnkg
+SmFya28uCi0gcmVpbXBsZW1lbnQgcGF0Y2ggMiB0byBsaW1pdCBsb2NhbGl0eSBoYW5kbGluZyBj
+aGFuZ2VzIHRvIHRoZSBUSVMgY29yZS4KLSBzZXBhcmF0ZSBmaXhlcyBmcm9tIGNsZWFudXBzIGFz
+IHJlcXVlc3RlZCBieSBKYXJrby4KLSByZXBocmFzZSBjb21taXQgbWVzc2FnZXMgCgpDaGFuZ2Vz
+IGluIHYzOgotIGZpeGVkIGNvbXBpbGVyIGVycm9yIHJlcG9ydGVkIGJ5IGtlcm5lbCB0ZXN0IHJv
+Ym90Ci0gcmVwaHJhc2VkIGNvbW1pdCBtZXNzYWdlIGFzIHN1Z2dlc3RlZCBieSBKYXJrbyBTYWtr
+aW5lbgotIGFkZGVkIFJldmlld2VkLWJ5IHRhZwoKQ2hhbmdlcyBpbiB2MjoKLSByZWJhc2UgYWdh
+aW5zdCA1LjEyCi0gZnJlZSBpcnEgb24gZXJyb3IgcGF0aAoKTGlubyBTYW5maWxpcHBvICg5KToK
+ICB0cG0sIHRwbV90aXM6IEF2b2lkIGNhY2hlIGluY29oZXJlbmN5IGluIHRlc3QgZm9yIGludGVy
+cnVwdHMKICB0cG0sIHRwbV90aXM6IENsYWltIGxvY2FsaXR5IGJlZm9yZSB3cml0aW5nIFRQTV9J
+TlRfRU5BQkxFIHJlZ2lzdGVyCiAgdHBtLCB0cG1fdGlzOiBEaXNhYmxlIGludGVycnVwdHMgaWYg
+dHBtX3Rpc19wcm9iZV9pcnEoKSBmYWlsZWQKICB0cG0sIHRtcF90aXM6IENsYWltIGxvY2FsaXR5
+IGJlZm9yZSB3cml0aW5nIGludGVycnVwdCByZWdpc3RlcnMKICB0cG0sIHRwbV90aXM6IE9ubHkg
+aGFuZGxlIHN1cHBvcnRlZCBpbnRlcnJ1cHRzCiAgdG1wLCB0bXBfdGlzOiBJbXBsZW1lbnQgdXNh
+Z2UgY291bnRlciBmb3IgbG9jYWxpdHkKICB0cG0sIHRwbV90aXM6IFJlcXVlc3QgdGhyZWFkZWQg
+aW50ZXJydXB0IGhhbmRsZXIKICB0cG0sIHRwbV90aXM6IENsYWltIGxvY2FsaXR5IGluIGludGVy
+cnVwdCBoYW5kbGVyCiAgdHBtLCB0cG1fdGlzOiBFbmFibGUgaW50ZXJydXB0IHRlc3QKCiBkcml2
+ZXJzL2NoYXIvdHBtL3RwbV90aXMuYyAgICAgIHwgICAyICstCiBkcml2ZXJzL2NoYXIvdHBtL3Rw
+bV90aXNfY29yZS5jIHwgMjUyICsrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tCiBkcml2
+ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oIHwgICA1ICstCiAzIGZpbGVzIGNoYW5nZWQsIDE3
+MSBpbnNlcnRpb25zKCspLCA4OCBkZWxldGlvbnMoLSkKCgpiYXNlLWNvbW1pdDogNzhjYTU1ODg5
+YTU0OWE5YTE5NGM2ZWM2NjY4MzYzMjliNzc0YWI2ZAotLSAKMi4zNi4xCgo=

@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254A25528F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D969D5528F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 03:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242634AbiFUBYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 21:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S238710AbiFUB1F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Jun 2022 21:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240589AbiFUBYe (ORCPT
+        with ESMTP id S230330AbiFUB1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 21:24:34 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE0818393;
-        Mon, 20 Jun 2022 18:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655774674; x=1687310674;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=P1rVaIhS5r5JKXcqA4qDq5VHV9+1YzZmetl5LjjbGvk=;
-  b=fetST3UJnTH8ePIrxc1bdi49jvP1zt68/xPc97r78r5ZCnUEttgKYRst
-   EheJOpNLLQIydQWwkMjQk3wIu4enhDPHdswz2CztZbRNpySO1W5uC2meZ
-   o6r8AsgF/kdrqrFQL1rbcOK2CO78mEKRE3I02nnjtGv3Lm5As2F0Tq7T2
-   jIVNCq32C7HJd1glbaigo1wLdjBkbeoxIuK9RM5XqPY8fZZzCKEvp3h0c
-   U50K7obj1Kch8etS0eCN7PR5MWc7YAa3XOGdquU87HOhs8hBTUK+s8oj2
-   buse6pxVKLP5ll+0NXNIyznLwSn2Ngp16T+/NRt6LIRoohmxYwnXl9U8e
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="278771181"
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="278771181"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:24:33 -0700
-X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="643366799"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 18:24:32 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Add a warnings in sync_sched_exp_online_cleanup()
-Date:   Tue, 21 Jun 2022 09:24:12 +0800
-Message-Id: <20220621012412.2724457-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Jun 2022 21:27:03 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782D71900A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Jun 2022 18:27:02 -0700 (PDT)
+Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id 1CDB432FB4;
+        Tue, 21 Jun 2022 01:27:01 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 8A60120012;
+        Tue, 21 Jun 2022 01:26:59 +0000 (UTC)
+Message-ID: <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
+Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
+ strings
+From:   Joe Perches <joe@perches.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     David Laight <David.Laight@ACULAB.COM>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "enozhatsky@chromium.org" <enozhatsky@chromium.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "willy@infradead.org" <willy@infradead.org>
+Date:   Mon, 20 Jun 2022 18:26:58 -0700
+In-Reply-To: <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+         <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
+         <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
+         <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
+         <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Stat-Signature: 6i9xmf7fozugzaj85ucgm93s6c5syqtf
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 8A60120012
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+6laJhvDVSxjllgACLhEHrhgVyrTNCaWA=
+X-HE-Tag: 1655774819-286916
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the sync_sched_exp_online_cleanup() is invoked in
-cpuhp per-cpu kthreads when CPU is going online, so the CPU id
-obtained by get_cpu() should always be equal to the CPU id of
-the passed parameter, that is to say, the smp_call_function_single()
-never be invoked, if be invoked, there may be problem with cpu-hotplug,
-this commit add WARN_ON_ONCE() to remind everyone.
+On Mon, 2022-06-20 at 20:57 -0400, Kent Overstreet wrote:
+> On Mon, Jun 20, 2022 at 05:38:51PM -0700, Joe Perches wrote:
+> > On Mon, 2022-06-20 at 11:07 -0400, Kent Overstreet wrote:
+> > > On Mon, Jun 20, 2022 at 04:19:31AM +0000, David Laight wrote:
+> > > > I really think that is a bad idea.
+> > > > printk() already uses a lot of stack, anything doing a recursive
+> > > > call is just making that worse.
+> > > > Especially since these calls can often be in error paths
+> > > > which are not often tested and can already be on deep stacks.
+> > > 
+> > > We went over this before - this patch series drastically reduces stack usage of
+> > > sprintf by eliminating a bunch of stack allocated buffers. Do try to keep up...
+> > 
+> > I generally agree with David.
+> > 
+> > I think Kent has not provided data that this actually _reduces_
+> > stack usage.
+> 
+> I think the people who are comfortable with reading C can discern that when
+> large stack allocated character arrays are deleted, frame size and stack usage
+> go down.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_exp.h | 2 ++
- 1 file changed, 2 insertions(+)
+I am very comfortable reading C.
 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index be667583a554..ae8dcfd4486c 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -865,6 +865,8 @@ static void sync_sched_exp_online_cleanup(int cpu)
- 		put_cpu();
- 		return;
- 	}
-+
-+	WARN_ON_ONCE(my_cpu != cpu);
- 	/* Quiescent state needed on some other CPU, send IPI. */
- 	ret = smp_call_function_single(cpu, rcu_exp_handler, NULL, 0);
- 	put_cpu();
--- 
-2.25.1
+You have not provided any data.
 

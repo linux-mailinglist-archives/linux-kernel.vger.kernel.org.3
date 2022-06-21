@@ -2,63 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D5E5533D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80BC5532C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 15:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351253AbiFUNjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 09:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S1351056AbiFUNAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 09:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351716AbiFUNil (ORCPT
+        with ESMTP id S1351022AbiFUNA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:38:41 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA8B28987
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 06:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655818711; x=1687354711;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4g1OBCKHsQO3IKCZZ/oEJywrdg/bmeF4o4W6XXd/1Fc=;
-  b=gAVUgnhEYvGV+8Ep9J4w0+hr6bJloYhdV0zlU7NmgXTM+hHiKXg7i106
-   Qxy29iUoH8ZxszelCF5H1hv7vjqTqjpNZ6AtXI+zqEof5jQlQj3UxAbTg
-   gg7YKMLZVpLD7c7J0vKoNSZOvUX0+CFBmG6DXfT/njaSaUsIlbOK3Y+IR
-   EpSqjfJwgG/7xO0Hhme9K0amEzxVrpsFcWN/besbJmPaM7q+C6XdgtwDy
-   43UdKrW319XhBRlOTium0RwHMgA8bfPyj+GCGJps/aTc2ArNBZI8xhBal
-   Ds+08ZxFipo3qImGmGaKzH1+K0ysxCEyz8WUsVeic5zJBqlG7BMrmWNkf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="341802758"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="341802758"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 06:38:31 -0700
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="591653651"
-Received: from dpasupul-mobl.amr.corp.intel.com (HELO [10.209.178.35]) ([10.209.178.35])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 06:38:30 -0700
-Message-ID: <f80c7bf2-1d9e-40d7-d3bd-c8bbe548934b@linux.intel.com>
-Date:   Tue, 21 Jun 2022 08:11:48 -0500
+        Tue, 21 Jun 2022 09:00:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9702C119;
+        Tue, 21 Jun 2022 05:59:57 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LS6334vNNzSgwV;
+        Tue, 21 Jun 2022 20:56:31 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 21 Jun
+ 2022 20:59:54 +0800
+From:   Zheng Bin <zhengbin13@huawei.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <boon.leong.ong@intel.com>,
+        <rmk+kernel@armlinux.org.uk>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <zhengbin13@huawei.com>, <gaochao49@huawei.com>
+Subject: [PATCH -next] net: pcs: pcs-xpcs: Fix build error when CONFIG_PCS_XPCS=y && CONFIG_PHYLINK=m
+Date:   Tue, 21 Jun 2022 21:12:51 +0800
+Message-ID: <20220621131251.3357104-1-zhengbin13@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [Sound-open-firmware] ASoC: SOF: Race condition in ipc.c
-Content-Language: en-US
-To:     noman pouigt <variksla@gmail.com>, Mark Brown <broonie@kernel.org>,
-        liam.r.girdwood@linux.intel.com
-Cc:     alsa-devel@alsa-project.org, peter.ujfalusi@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, linux-kernel@vger.kernel.org,
-        yangyingliang@huawei.com, rander.wang@intel.com,
-        yung-chuan.liao@linux.intel.com,
-        sound-open-firmware@alsa-project.org
-References: <CAES_P+_aC4cHMB3Tn0pz13_gKCpXs=efeae2JBvEPOK5zidYnA@mail.gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <CAES_P+_aC4cHMB3Tn0pz13_gKCpXs=efeae2JBvEPOK5zidYnA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,95 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If CONFIG_PCS_XPCS=y, CONFIG_PHYLINK=m, bulding fails:
 
+drivers/net/pcs/pcs-xpcs.o: in function `xpcs_do_config':
+pcs-xpcs.c:(.text+0x64f): undefined reference to `phylink_mii_c22_pcs_encode_advertisement'
+drivers/net/pcs/pcs-xpcs.o: in function `xpcs_get_state':
+pcs-xpcs.c:(.text+0x10f8): undefined reference to `phylink_mii_c22_pcs_decode_state
 
-On 6/20/22 21:46, noman pouigt wrote:
-> Folks,
-> 
-> I have borrowed part of SOF architecture for my own DSP
-> framework development as the memory on the DSP is
-> extremely small and wouldn't be able to support SOF.
+Make PCS_XPCS depends on PHYLINK to fix this.
 
-You're providing very little context here. Of course it's open-source
-and you can do whatever you want with the code, but it's not clear if
-the 'borrowed' code can deal with your specific case.
+Fixes: b47aec885bcd ("net: pcs: xpcs: add CL37 1000BASE-X AN support")
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+---
+ drivers/net/pcs/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Currently I am running into a race condition as below:
-> 
-> CPU                                            DSP
-> PCM_TRIGGER_START
-> sof_ipc_send_msg ---->
-> 
->                                       <------Immediate ACK
-> ipc3_wait_tx_done
-> (wait_event_timeout)
->                                       <------ POSITION update
-> 
-> snd_pcm_period_elapsed
-> 
-> 
-> As you can see TRIGGER_START didn't even finish
-> and waiting for it to complete in ipc3_wait_tx_done
-> function. However, before it could complete the position
-> interrupt was issued which results in calling period_elapsed
-> function.
-> 
-> In order to fix this I assume below is called in SOF framework:
-> schedule_work(&spcm->stream[substream->stream].period_elapsed_work);
-> 
-> How is this design working? If the interrupt is coming too fast
-> from the DSP than the associated function with this schedule_work
-> will not get called as the scheduler will not get time to schedule the
-> workqueue and elapsed function will not be called thereby not increasing
-> the hw_ptr. How is the flow control for data transfer achieved?
+diff --git a/drivers/net/pcs/Kconfig b/drivers/net/pcs/Kconfig
+index 22ba7b0b476d..faec931b1e65 100644
+--- a/drivers/net/pcs/Kconfig
++++ b/drivers/net/pcs/Kconfig
+@@ -8,6 +8,7 @@ menu "PCS device drivers"
+ config PCS_XPCS
+ 	tristate "Synopsys DesignWare XPCS controller"
+ 	depends on MDIO_DEVICE && MDIO_BUS
++	depends on PHYLINK
+ 	help
+ 	  This module provides helper functions for Synopsys DesignWare XPCS
+ 	  controllers.
+--
+2.31.1
 
-The schedule_work was added by this commit, and the explanations are
-rather straightforward:
-
-commit e2803e610aecb36ea4fec5a04861547664580d0c
-
-Author: Keyon Jie <yang.jie@linux.intel.com>
-
-Date:   Tue Apr 30 18:09:25 2019 -0500
-
-
-
-
-ASoC: SOF: PCM: add period_elapsed work to fix race condition in
-interrupt context
-
-"
-The IPC implementation in SOF requires sending IPCs serially: we should
-not send a new IPC command to the firmware before we get an ACK (or time
-out) from firmware, and the IRQ processing is complete.
-
-snd_pcm_period_elapsed() can be called in interrupt context before
-IRQ_HANDLED is returned. When the PCM is done draining, a STOP
-IPC will then be sent, which breaks the expectation that IPCs are
-handled serially and leads to IPC timeouts.
-
-This patch adds a workqueue to defer the call to snd_pcm_elapsed() after
-the IRQ is handled.
-"
-
-I am not sure what the problem you have really is.
-
-It's not really surprising that the first period is consumed
-immediately, the flow will become more steady-state afterwards.
-
-The DMAs should be primed to deal with more than one period, and the
-schedule_work() will only signal that the application can refill the
-ring buffer. There's all kinds of delays that will happen depending on
-load and scheduling, and if the POSITION_UPDATE was received immediately
-then there's should be still plenty of time to provide a new buffer.
-
-> 
-> I am facing the above problem in my design.
-> 
-> I am wondering if I can simply add one more IPC command(don't call
-> wait_event_interruptible for this) after TRIGGER_START to start the
-> streaming.This way schedule_work for updating period_elapsed function
-> can be avoided and it can be called in an interrupt context.
-
-See commit above, this won't work because you'll be sending an IPC while
-dealing with an IPC.

@@ -2,95 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D46553D88
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C9B553D7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 23:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355560AbiFUVXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 17:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S1353783AbiFUVW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 17:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355464AbiFUVWi (ORCPT
+        with ESMTP id S1355893AbiFUVW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:22:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F7562F6;
-        Tue, 21 Jun 2022 14:12:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EA076155D;
-        Tue, 21 Jun 2022 21:12:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDD8C341C4;
-        Tue, 21 Jun 2022 21:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655845949;
-        bh=nUYoRoex6w347HOwhaDxEO5t5c8d600lKv1dhQIfL5c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZbGRF/Y8Bn6KTBDQOCtPqsTiGZyLokKfBISfZJAG4yobQaKFvMV2Jck7Uyz14tUjw
-         W8SqMmRA/nqwnxrLPI1ASP0cBWkpUiVPCCXGoacD3d8Gis5eI4FjMH0jwDHal4aVij
-         gP7XFSac0HWyOg3tfsyz1dhmDLd6A4xiWC2Jwj6b1eOGWI+W5At3H/KYWL/+Mdqm6z
-         joY8UCbXj+v+fA2B0n27l/cB0SFv4tZ6LkJsnWgTTc0sgqKPmbz9QQLOeR5TrWuxkz
-         xrleY2ClSfYSEwyGccRtNLpEijg4US7s9tyzibRACrGJxdjxdpL8hzhL/GNhiNBWLo
-         ERboSqUl81VjQ==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-101d2e81bceso11180349fac.0;
-        Tue, 21 Jun 2022 14:12:28 -0700 (PDT)
-X-Gm-Message-State: AJIora/yKFWUcduipDUo75V7CaCU9oPGBjW6m+y92yubfZ2KZQPSqWBC
-        EgKGkIsdBx2AZghFOu6E1DAtREHgS1uiYlJD5Yg=
-X-Google-Smtp-Source: AGRyM1tatOOl+GEd9ZOd7DehrkpsULz9y5U1aqhVWL3SL9NiTCcfADEG6C6z6SP1xp7bqTcqm4hJ4zAnDzQq+zbY6ow=
-X-Received: by 2002:a05:6870:d587:b0:101:dfd4:4cfa with SMTP id
- u7-20020a056870d58700b00101dfd44cfamr41237oao.126.1655845948158; Tue, 21 Jun
- 2022 14:12:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621153623.3786960-1-ardb@kernel.org> <20220621153623.3786960-5-ardb@kernel.org>
- <202206211357.C66CD742E5@keescook>
-In-Reply-To: <202206211357.C66CD742E5@keescook>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 21 Jun 2022 23:12:17 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGPi+Cy-D8am8tr-rm8gbmUQ-G0bfibD3R3nx=rL7-XVw@mail.gmail.com>
-Message-ID: <CAMj1kXGPi+Cy-D8am8tr-rm8gbmUQ-G0bfibD3R3nx=rL7-XVw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] efi: pstore: Omit efivars caching EFI varstore
- access layer
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
+        Tue, 21 Jun 2022 17:22:29 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCDC45;
+        Tue, 21 Jun 2022 14:11:59 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id i10so16879012wrc.0;
+        Tue, 21 Jun 2022 14:11:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=5jGRxWa+Hik2xXu28OZInbUMDSK1LmZ28o9a5C6ustA=;
+        b=dBkR+OXnEaZPr9uoaZB+DI5wT1AXufYbc+9qN44d74R1jy7oOaP5glLLgc/hzh3E8m
+         VEYB0O8O8TiK3K0KU8aR4nbUvWWFGE7uePKS5PELYCU4SnEeJA8EVcTkrM2DoduTme8M
+         T2w+A4Oj1CabUPV/iQcD8tJhe3/0P4UoInCNfQd2pdDiq/qrgQ6JtX7yLUUFdykN73bM
+         NtCtwLELefp/0JcgOX6hIfK1mCyMbjfNrGysmUUfiSDKIuEdhMG6diRPWKvISTwtHa9N
+         kgrC4FpslcP3XTRRhPHg48OrMHfSCIL2fPrOOeRY9LvrBNjg8LF3SLUYHP6wXsVMRurd
+         LPAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=5jGRxWa+Hik2xXu28OZInbUMDSK1LmZ28o9a5C6ustA=;
+        b=GRmD+rEmXrMnUtW7IfBoAGKKPPN+YVnROxzkNjrqTB/oz9pEbFht7AMknO1tjHabtH
+         TyfGnnqPnVsO6X4PwWyabx59vfmnikZO7mq5isr6P+Zj0wiV0y0EE1IVRIcdjKAV/8x+
+         9IZQGI937lernsAAO5yuRjtIADETJF2BYtVShBsoH+k1pugq8/sdslg+3ZFOlqPs43iQ
+         44gKlfi++UfxdSIX5JU/d5d/eVhqdLeuYCGDE/VFeBg39klm7YBpg6GSNmJrphlF53D5
+         izCsU0mkxRSqxFnLWYIhXd9mYl656kdoT/MhptGVBbddFG0H66mT0VHttGBIanHBLbl+
+         2Ffg==
+X-Gm-Message-State: AJIora9I2C5lWwottjfOMj0YGN8+wtusm1f1iLN/FZ6qin5yVDs3/Fk7
+        rfUByHCKM4FIdpQwygRl+3Q=
+X-Google-Smtp-Source: AGRyM1uWGscZnGaavVg/uIQYsRslzM5t54de/BLxZBl+KXB10CZYw57ndf/q8EV3SUZ+AQYy58rh1w==
+X-Received: by 2002:adf:fb10:0:b0:207:af88:1eb9 with SMTP id c16-20020adffb10000000b00207af881eb9mr30853557wrr.238.1655845918233;
+        Tue, 21 Jun 2022 14:11:58 -0700 (PDT)
+Received: from localhost (92.40.168.122.threembb.co.uk. [92.40.168.122])
+        by smtp.gmail.com with ESMTPSA id bv27-20020a0560001f1b00b0021b84ac7a05sm7979960wrb.0.2022.06.21.14.11.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 14:11:57 -0700 (PDT)
+References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+ <20220620200644.1961936-16-aidanmacdonald.0x0@gmail.com>
+ <CAHp75Vd7Sq9RMqin_y-8qUEAJLaGfuqxAbe+qcMB22=bqkyZqg@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Marc Zyngier <maz@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, tharvey@gateworks.com,
+        rjones@gateworks.com, Matti Vaittinen <mazziesaccount@gmail.com>,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-actions@lists.infradead.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 15/49] regmap-irq: Change the behavior of mask_writeonly
+In-reply-to: <CAHp75Vd7Sq9RMqin_y-8qUEAJLaGfuqxAbe+qcMB22=bqkyZqg@mail.gmail.com>
+Date:   Tue, 21 Jun 2022 22:13:03 +0100
+Message-ID: <FQHPnJKuXUHf8vLiZoXidpoim5RtEYUC@localhost>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 at 23:00, Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, Jun 21, 2022 at 05:36:18PM +0200, Ard Biesheuvel wrote:
-> > Avoid the efivars layer and simply call the newly introduced EFI
-> > varstore helpers instead. This simplifies the code substantially, and
-> > also allows us to remove some hacks in the shared efivars layer that
-> > were added for efi-pstore specifically.
-> >
-> > Since we don't store the name of the associated EFI variable into each
-> > pstore record when enumerating them, we have to guess the variable name
-> > it was constructed from at deletion time, since we no longer keep a
-> > shadow copy of the variable store. To make this a bit more exact, store
-> > the CRC-32 of the ASCII name into the pstore record's ECC region so we
-> > can use it later to make an educated guess regarding the name of the EFI
-> > variable.
->
-> I wonder if pstore_record should have a "private" field for backends to
-> use? That seems like it solve the need for overloading the ecc field,
-> and allow for arbitrarily more information to be stored (i.e. store full
-> efi var name instead of an easily-colliding crc32?)
->
 
-We could easily add that - we'd just have to decide how to free the
-memory it points to.
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+
+> On Mon, Jun 20, 2022 at 10:08 PM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+>>
+>> No drivers currently use mask_writeonly, and in its current form
+>> it seems a bit misleading. When set, mask registers will be
+>> updated with regmap_write_bits() instead of regmap_update_bits(),
+>> but regmap_write_bits() still does a read-modify-write under the
+>> hood. It's not a write-only operation.
+>>
+>> Performing a simple regmap_write() is probably more useful, since
+>> it can be used for chips that have separate set & clear registers
+>> for controlling mask bits. Such registers are normally volatile
+>> and read as 0, so avoiding a register read minimizes bus traffic.
+>
+> Reading your explanations and the code, I would rather think about
+> fixing the regmap_write_bits() to be writeonly op.
+
+That's impossible without special hardware support.
+
+> Otherwise it's unclear what's the difference between
+> regmap_write_bits() vs. regmap_update_bits().
+
+This was not obvious to me either. They're the same except in how they
+issue the low-level write op -- regmap_update_bits() will only do the
+write if the new value differs from the current one. regmap_write_bits()
+will always do a write, even if the new value is the same.
+
+I think the problem is lack of documentation. I only figured this out
+by reading the implementation.
+
+>>         if (d->chip->mask_writeonly)
+>> -               return regmap_write_bits(d->map, reg, mask, val);
+>> +               return regmap_write(d->map, reg, val & mask);
+>>         else
+>>                 return regmap_update_bits(d->map, reg, mask, val);

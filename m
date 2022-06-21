@@ -2,192 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F635529AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39E95529B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 05:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345132AbiFUDOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Jun 2022 23:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S244449AbiFUDPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Jun 2022 23:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343662AbiFUDN6 (ORCPT
+        with ESMTP id S242106AbiFUDPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Jun 2022 23:13:58 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE54120A4;
-        Mon, 20 Jun 2022 20:13:56 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 964C13200645;
-        Mon, 20 Jun 2022 23:13:53 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 20 Jun 2022 23:13:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1655781233; x=1655867633; bh=JIQVua/KN0tcwAdf3iHUyfV4R
-        R4Q0CrA2bv56SJC9R8=; b=B9PRh5Rd8oa01y2eEFjqHFLOJpm0h6pNVrDISZLfN
-        u4q4T5eMwkFl9Fmxh1Slx53T+fqgEA7aXEmbnlvsWkq6bJZ8xkpRTNvhPsdEO+Ef
-        D5ugfb6HLepwJBiaxWdcC51HplPrmwZlJrDWVW+au9jVutw9/EUrvp+mXP9jtiyu
-        JZHDSteD9UxuThTDqX7cAyM0C8CzP7UMRk0SQfv19bg4g9wysm2rVgUU3IUjvVdM
-        6KrqwwAmwnrsHV81onzVz1eHZoqGAoPOJe6kBvFcXRV2RBB8Pc8Z9LQt97Bls1oH
-        v93Dy+jwZ3b8oO2DDDffYLlr+XhORmwkh7DpxZX3IH2cg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1655781233; x=1655867633; bh=JIQVua/KN0tcwAdf3iHUyfV4RR4Q0CrA2bv
-        56SJC9R8=; b=d/1pFOzkbXgDSKc4QUKgR1VKKr/JOtCqdC2W3A/f/x/XG8GYqca
-        C0bnkyqBVnRwsK6GO1hOya50WMYhe3sWQDtVA2zyPAWomtgPITXJfnRFDiB/wVp+
-        MO1HqHF4xEECW6gc5a5eNFZGN8GrKBHbWhTAYBr8ZHUe/w7PS8mokLYwWZYEHt8A
-        ihWiPCvb0UP16cFcqLWDDqTG+VV4192eSE2SAkHRXXLsRxyrA3ZtTouf/JbavgEN
-        07FBphtM8wWS/ntSQ8n21Eko/KHxgTdrK3uFWsd8+yIQb42TFpE8tLsZvIbRTCPM
-        LpHADavYrj77n90DtzN/f41qnRFnuHWTRRQ==
-X-ME-Sender: <xms:cDexYmtpYzGwWMcldm3imIgDH4Y5UjePUlBB1aIz-bWiHjyiuC5rjA>
-    <xme:cDexYrcgpJgQGTtvPML0q-MbgmH98ch2Qi0Fzaz3he1N35Xhc32HMenC--4-s0rAs
-    0QEZWqz6SXYWN2uOQ>
-X-ME-Received: <xmr:cDexYhywWkUVEqD1Zc1gTHtxnp1CDXZbtoimh8rkSGB4iy_8JXQF2KX0kCiokPBidnRpgVOq3oclzZK309ZQF78VSvaE9rW1mdkwAKMMhWoA8WA7ZmEosOyS5O2r8xbSTH3EGg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefvddgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:cDexYhOQiehcAPyETfjU7K7iiCf27dSuD-wEFrtVvkPnzcsLQ3XgoA>
-    <xmx:cDexYm8uyyFpqjq4SQxClVqT-9-prc4vt5_4z1ckSF8RlpnYorpCsA>
-    <xmx:cDexYpUbdYAswhbeKT0tLb92_e52ds4GKFuXwjtCv7Qyp8hyOXIzsQ>
-    <xmx:cTexYrNGQ28OJHiL8kYhWYZ5oCdkCr0W7fjPLw2ykmq0GBbIy9OUFA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Jun 2022 23:13:51 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Samuel Holland <samuel@sholland.org>,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH] dmaengine: sun4i: Set the maximum segment size
-Date:   Mon, 20 Jun 2022 22:13:50 -0500
-Message-Id: <20220621031350.36187-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 20 Jun 2022 23:15:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5751FCC9;
+        Mon, 20 Jun 2022 20:15:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 707146102F;
+        Tue, 21 Jun 2022 03:15:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA802C3411B;
+        Tue, 21 Jun 2022 03:15:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655781349;
+        bh=DWJ7U3bJ5onh5qejtXviF2uTYPEnnM4yUBhRX9yiw0k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=m6Gn6VMkawK3Qd/gva8YurTcNnh44llHBPWLPqR7XY90KhXnLuJTVnJZcTOM1dkMf
+         dcQvWtLUtFsW0JTxAF9nzgDIq9Fk5YJ92oKnScJ8InGo9QkPw61QJHPqnf+s8Z5+nY
+         SuZywUIx5Eysr1K+7gpsR7O48SR62JUwyFOXPx4BzZvw3hGOKnHiM9uiCv9vCxFZHt
+         3A6O492NTIIOyeA2VzpHl8hnpUtE1Ee86KrzdVmuDTrwJmEPVNc39tODYgKcjx6GcD
+         4X8HEps/Oe1aYAqzHwGyYuVvWNhjqWc/hmqWRfd7Tq16rYdIpR7Pl2fMfAe7FSjZGl
+         nY6LMFJs6/guQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 63DA75C0531; Mon, 20 Jun 2022 20:15:49 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 20:15:49 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH rcu 12/12] srcu: Block less aggressively for expedited
+ grace periods
+Message-ID: <20220621031549.GC1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
+ <20220620222032.3839547-12-paulmck@kernel.org>
+ <6b89e108-69e1-5fe2-67ba-3dac9ec60f83@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <6b89e108-69e1-5fe2-67ba-3dac9ec60f83@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sun4i DMA engine supports transfer sizes up to 128k for normal DMA
-and 16M for dedicated DMA, as documented in the A10 and A20 manuals.
+On Tue, Jun 21, 2022 at 10:00:07AM +0800, Zhangfei Gao wrote:
+> 
+> 
+> On 2022/6/21 上午6:20, Paul E. McKenney wrote:
+> > Commit 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers
+> > from consuming CPU") fixed a problem where a long-running expedited SRCU
+> > grace period could block kernel live patching.  It did so by giving up
+> > on expediting once a given SRCU expedited grace period grew too old.
+> > 
+> > Unfortunately, this added excessive delays to boots of embedded systems
+> > running on qemu that use the ARM IORT RMR feature.  This commit therefore
+> > makes the transition away from expediting less aggressive, increasing
+> > the per-grace-period phase number of non-sleeping polls of readers from
+> > one to three and increasing the required grace-period age from one jiffy
+> > (actually from zero to one jiffies) to two jiffies (actually from one
+> > to two jiffies).
+> > 
+> > Fixes: 282d8998e997 ("srcu: Prevent expedited GPs and blocking readers from consuming CPU")
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Reported-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+> > Reported-by: chenxiang (M)" <chenxiang66@hisilicon.com>
+> > Cc: Shameerali Kolothum Thodi  <shameerali.kolothum.thodi@huawei.com>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Link: https://lore.kernel.org/all/20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org/
+> 
+> Test on 5.19-rc1 with this patch with qemu boot with -bios QEMU_EFI-2022.fd,
+> seems not work, same as rc1.
+> 
+> real    2m42.948s
+> user    0m2.843s
+> sys     0m1.170s
+> 
+> qemu: stable-6.1
+> 
+> build/aarch64-softmmu/qemu-system-aarch64 -machine
+> virt,gic-version=3,iommu=smmuv3 \
+> -enable-kvm -cpu host -m 1024 \
+> -kernel /home/linaro/Image -initrd /home/linaro/tmp/ramdisk-new.img
+> -nographic -append \
+> "rdinit=init console=ttyAMA0 earlycon=pl011,0x9000000 kpti=off acpi=force" \
+> -bios QEMU_EFI-2022.fd
 
-Since this is larger than the default segment size limit (64k), exposing
-the real limit reduces the number of transfers needed for a transaction.
-However, because the device can only report one segment size limit, we
-have to expose the smaller limit from normal DMA.
+Understood.  This patch fixes some cases, but not your case.  Which is
+why you guys are experimenting with additional changes.  In the meantime,
+this patch helps at least some people.  I look forward to you guys have
+an appropriate solution that I can pull in on top of this one.
 
-One complication is that the driver combines pairs of periodic transfers
-to reduce programming overhead. This only works when the period size is
-at most half of the maximum transfer size. With the default 64k segment
-size limit, this was always the case, but for normal DMA it is no longer
-guaranteed. Skip the optimization if the period is too long; even
-without it, the overhead is less than before.
+Or, if the solution shows up quickly enough, I can replace this patch
+with your guys' solution.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
-I don't have any A10 or A20 boards I can test this on.
+							Thanx, Paul
 
- drivers/dma/sun4i-dma.c | 32 +++++++++++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/dma/sun4i-dma.c b/drivers/dma/sun4i-dma.c
-index 93f1645ae928..f291b1b4db32 100644
---- a/drivers/dma/sun4i-dma.c
-+++ b/drivers/dma/sun4i-dma.c
-@@ -7,6 +7,7 @@
- #include <linux/bitmap.h>
- #include <linux/bitops.h>
- #include <linux/clk.h>
-+#include <linux/dma-mapping.h>
- #include <linux/dmaengine.h>
- #include <linux/dmapool.h>
- #include <linux/interrupt.h>
-@@ -122,6 +123,15 @@
- 	 SUN4I_DDMA_PARA_DST_WAIT_CYCLES(2) |				\
- 	 SUN4I_DDMA_PARA_SRC_WAIT_CYCLES(2))
- 
-+/*
-+ * Normal DMA supports individual transfers (segments) up to 128k.
-+ * Dedicated DMA supports transfers up to 16M. We can only report
-+ * one size limit, so we have to use the smaller value.
-+ */
-+#define SUN4I_NDMA_MAX_SEG_SIZE		SZ_128K
-+#define SUN4I_DDMA_MAX_SEG_SIZE		SZ_16M
-+#define SUN4I_DMA_MAX_SEG_SIZE		SUN4I_NDMA_MAX_SEG_SIZE
-+
- struct sun4i_dma_pchan {
- 	/* Register base of channel */
- 	void __iomem			*base;
-@@ -155,7 +165,8 @@ struct sun4i_dma_contract {
- 	struct virt_dma_desc		vd;
- 	struct list_head		demands;
- 	struct list_head		completed_demands;
--	int				is_cyclic;
-+	bool				is_cyclic : 1;
-+	bool				use_half_int : 1;
- };
- 
- struct sun4i_dma_dev {
-@@ -372,7 +383,7 @@ static int __execute_vchan_pending(struct sun4i_dma_dev *priv,
- 	if (promise) {
- 		vchan->contract = contract;
- 		vchan->pchan = pchan;
--		set_pchan_interrupt(priv, pchan, contract->is_cyclic, 1);
-+		set_pchan_interrupt(priv, pchan, contract->use_half_int, 1);
- 		configure_pchan(pchan, promise);
- 	}
- 
-@@ -735,12 +746,21 @@ sun4i_dma_prep_dma_cyclic(struct dma_chan *chan, dma_addr_t buf, size_t len,
- 	 *
- 	 * Which requires half the engine programming for the same
- 	 * functionality.
-+	 *
-+	 * This only works if two periods fit in a single promise. That will
-+	 * always be the case for dedicated DMA, where the hardware has a much
-+	 * larger maximum transfer size than advertised to clients.
- 	 */
--	nr_periods = DIV_ROUND_UP(len / period_len, 2);
-+	if (vchan->is_dedicated || period_len <= SUN4I_NDMA_MAX_SEG_SIZE / 2) {
-+		period_len *= 2;
-+		contract->use_half_int = 1;
-+	}
-+
-+	nr_periods = DIV_ROUND_UP(len, period_len);
- 	for (i = 0; i < nr_periods; i++) {
- 		/* Calculate the offset in the buffer and the length needed */
--		offset = i * period_len * 2;
--		plength = min((len - offset), (period_len * 2));
-+		offset = i * period_len;
-+		plength = min((len - offset), period_len);
- 		if (dir == DMA_MEM_TO_DEV)
- 			src = buf + offset;
- 		else
-@@ -1149,6 +1169,8 @@ static int sun4i_dma_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, priv);
- 	spin_lock_init(&priv->lock);
- 
-+	dma_set_max_seg_size(&pdev->dev, SUN4I_DMA_MAX_SEG_SIZE);
-+
- 	dma_cap_zero(priv->slave.cap_mask);
- 	dma_cap_set(DMA_PRIVATE, priv->slave.cap_mask);
- 	dma_cap_set(DMA_MEMCPY, priv->slave.cap_mask);
--- 
-2.35.1
-
+> Thanks
+> > ---
+> >   kernel/rcu/srcutree.c | 20 +++++++++++++-------
+> >   1 file changed, 13 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > index 50ba70f019dea..0db7873f4e95b 100644
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+> >   #define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
+> >   #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
+> > -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase consecutive no-delay instances.
+> > +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
+> >   #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
+> >   /*
+> > @@ -522,16 +522,22 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+> >    */
+> >   static unsigned long srcu_get_delay(struct srcu_struct *ssp)
+> >   {
+> > +	unsigned long gpstart;
+> > +	unsigned long j;
+> >   	unsigned long jbase = SRCU_INTERVAL;
+> >   	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+> >   		jbase = 0;
+> > -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
+> > -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
+> > -	if (!jbase) {
+> > -		WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> > -		if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
+> > -			jbase = 1;
+> > +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
+> > +		j = jiffies - 1;
+> > +		gpstart = READ_ONCE(ssp->srcu_gp_start);
+> > +		if (time_after(j, gpstart))
+> > +			jbase += j - gpstart;
+> > +		if (!jbase) {
+> > +			WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> > +			if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
+> > +				jbase = 1;
+> > +		}
+> >   	}
+> >   	return jbase > SRCU_MAX_INTERVAL ? SRCU_MAX_INTERVAL : jbase;
+> >   }
+> 

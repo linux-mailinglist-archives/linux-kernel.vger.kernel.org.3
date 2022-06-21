@@ -2,167 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D16F552E27
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7AA552E2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 11:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347873AbiFUJWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 05:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S1347954AbiFUJWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 05:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347951AbiFUJWn (ORCPT
+        with ESMTP id S1347951AbiFUJWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:22:43 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC6A1FCCE;
-        Tue, 21 Jun 2022 02:22:41 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id h23so26109904ejj.12;
-        Tue, 21 Jun 2022 02:22:41 -0700 (PDT)
+        Tue, 21 Jun 2022 05:22:36 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455DB1FA4C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:22:34 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id j22so8077921ljg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 02:22:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=semihalf.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nwSBD3PTloVRfceK56G2aCfoof4Hwc6nnq2tpaiVX1E=;
-        b=SZC4AJowoOWLiXUnJNCXlRo+Fy21+43HuGqupG34NYAHev8FNX9LB4nFwui2g2ERc/
-         2nAJjFE7gSxwK3AKqYoV1+xDYo3j7xKpCHwaEkBrfpjwItcvjJqbKZBmsBC6S6wk0LeP
-         jECzrOFPrp+pM5SPwC+6kLb36nf+Eql2JHp+xmKVEp9KBopfkHCProz5vj1URUzLxuOc
-         2gtMsViSY39FbLby9xOKwyFIHQnssNg0xndDzN3H/27fb1evpypF3YvV3oswAKpp+Rdc
-         8SQN3kqU5KrBqva1r+R8tUi0Xkhp826IwLzXg6j6O1xwnr3vjRymNISR9wMWgtdGEpu5
-         ffSQ==
+         :cc:content-transfer-encoding;
+        bh=YQJ0P5pmj7pWHKO2M8CX9J9qrG0ooOx/mkHybDQ4GBg=;
+        b=aMxG6S8DAeIn+DjepGp31VtLdFcuEUyiZ9F9DfVF60ir3YzF6gtG7xVME6GsL7DU6y
+         25Mxbp/KyhTvl2n5DzwI60KipI1j9jA7Hy1qQly0uQFnFl+jm18RLliZW+2uQdIPTkGn
+         hEBHkPys8aojNmjXMPwz2LlCkpCRc+3COR44NMol6MMuhQywPr4ryDLVS6IkRkw3wOR9
+         fMYXQtVWmR2Wp+VHDUold0P11mMo46vFOeIEPyVdKqnMZUTjYiq3CcOrQlQGqOFSQSkK
+         3uFmGEoF7lZpUNGRhU47heDrTdht3rOwbNuEQezoPRO4yavQowjzxPHFxDJ4+5+d9+Mt
+         W++w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nwSBD3PTloVRfceK56G2aCfoof4Hwc6nnq2tpaiVX1E=;
-        b=cBgAbuZo65rfgvivd9KbCbX7qu+EESGr1UGiiZk3ZnMl+R9dP4aOT3+gt3e6+ijiHS
-         1MJB4SwoI4cjGTxh/iPsamTQmele4Ww2JgOS+YLpdL1/a3wFgkS8v7AP+CL2vxSIsLjr
-         ITKolee/Z67GROdOPdnNV34NtnhAL+13UbHVyNvbLpZ3w2+UJZbWx9XhHWG0ABQNP4ve
-         SVjk+IPj84C+TWF56A4WxdfUYgzShjBi0SIoHPiRBLcUnYC6o47IC0DFZpdSQjNEMpoE
-         mWPfKm9h2cX3OMLiFG7LO7MizQ8OqTDEi8P/rz5VJAjl1B4bK83zCuaNauKrUYshIa0h
-         hYnA==
-X-Gm-Message-State: AJIora99Yf/xDgksfJnGnPDpQcxiyEo6xvVwUcstPyQ2H+Dj6XlaMyg/
-        Nxo2yABJ2hmL+25WcWz+18KtjuB5rQbwXu0Prqo=
-X-Google-Smtp-Source: AGRyM1st5l8YH2ggqJetd23NizO1SBXRfCSKIN2Ag6+snWa4U1k/4MnJ2Of8mZI6rssF1UlaIrePIaWD6CbQW7kd1/8=
-X-Received: by 2002:a17:906:149:b0:711:fca6:bc2f with SMTP id
- 9-20020a170906014900b00711fca6bc2fmr25088970ejh.497.1655803360410; Tue, 21
- Jun 2022 02:22:40 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YQJ0P5pmj7pWHKO2M8CX9J9qrG0ooOx/mkHybDQ4GBg=;
+        b=Jrf5nnMXBcak7atrcyYSSqxcZ8Cp8jIgMKLcsTl7s7YAiGVN1Qr9CIkF7sdU7B/IFP
+         HSDHBwmL4j7f9j6C0CM6qkeipj2k3xfHxoqyKmjFZA6HOM12tQlLF1oMT6R/toarQQpd
+         jCS6uccDVY4K6hOUHgIik8zBc6XhkZwWU1piYzsbRjKgcOEQ183LwgvflvcS6EcHlXFA
+         D/usHNmDqHnZgcvJrhQxxmzcC4/drqkap04mNVViEU4AIuZlk/gOV1kRkT9AZtmuyL5R
+         P+gkRQT/H3h5lf3vCovfBEKmw9k6wV44M1QrLHEdQ1OGUXT8bbX8jKtlymwbJl2CIkUa
+         T4sQ==
+X-Gm-Message-State: AJIora8nFp4gWw0GgMuAjL4+G+K/ACesIFZmeAEmeyldfHR+scbBT6eH
+        25G6XQeVyPWH+MIW8WTMT0VgTpDn/LMW4oErwmbLDQ==
+X-Google-Smtp-Source: AGRyM1vfNop/ptWwAu46TOF54jRmU3XA7qR7mmDPRHfJviUn1W6HrxgfWJ2GoePQ4fSO345+zf+ZykLhIk+ddb12lsk=
+X-Received: by 2002:a2e:bf1c:0:b0:259:f33:a4db with SMTP id
+ c28-20020a2ebf1c000000b002590f33a4dbmr13322684ljr.454.1655803352545; Tue, 21
+ Jun 2022 02:22:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com> <20220620200644.1961936-5-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220620200644.1961936-5-aidanmacdonald.0x0@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 21 Jun 2022 11:22:03 +0200
-Message-ID: <CAHp75VePD-ROfnFtwU33Jt_h9a-qBC0QwRQcQfgmEbyOV22CKA@mail.gmail.com>
-Subject: Re: [PATCH 04/49] regmap-irq: Introduce config registers for irq types
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-3-mw@semihalf.com>
+ <YrCvFYaBuICKIQM/@smile.fi.intel.com>
+In-Reply-To: <YrCvFYaBuICKIQM/@smile.fi.intel.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 21 Jun 2022 11:22:23 +0200
+Message-ID: <CAPv3WKeX4=-vHE+292WpavDYwZJDiRcXosPT1uDUFSyV0tSYfQ@mail.gmail.com>
+Subject: Re: [net-next: PATCH 02/12] net: mdio: switch fixed-link PHYs API to fwnode_
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, tharvey@gateworks.com,
-        rjones@gateworks.com, Matti Vaittinen <mazziesaccount@gmail.com>,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-actions@lists.infradead.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+        Len Brown <lenb@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        vivien.didelot@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 10:08 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
+pon., 20 cze 2022 o 19:32 Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
 >
-> Config registers provide a more uniform approach to handling irq type
-> registers. They are essentially an extension of the virtual registers
-> used by the qcom-pm8008 driver.
+> On Mon, Jun 20, 2022 at 05:02:15PM +0200, Marcin Wojtas wrote:
+> > fixed-link PHYs API is used by DSA and a number of drivers
+> > and was depending on of_. Switch to fwnode_ so to make it
+> > hardware description agnostic and allow to be used in ACPI
+> > world as well.
 >
-> Config registers can be represented as a 2D array:
+> ...
 >
->     config_base[0]      reg0,0      reg0,1      reg0,2      reg0,3
->     config_base[1]      reg1,0      reg1,1      reg1,2      reg1,3
->     config_base[2]      reg2,0      reg2,1      reg2,2      reg2,3
+> > +bool fwnode_phy_is_fixed_link(struct fwnode_handle *fwnode)
+> > +{
+> > +     struct fwnode_handle *fixed_link_node;
+> > +     const char *managed;
+> > +     int len;
+> > +
+> > +     /* New binding */
+> > +     fixed_link_node =3D fwnode_get_named_child_node(fwnode, "fixed-li=
+nk");
+> > +     if (fixed_link_node) {
+> > +             fwnode_handle_put(fixed_link_node);
+> > +             return true;
+> > +     }
+> > +
+> > +     if (fwnode_property_read_string(fwnode, "managed", &managed) =3D=
+=3D 0 &&
+> > +         strcmp(managed, "auto") !=3D 0)
+> > +             return true;
+> > +
+> > +     /* Old binding */
+> > +     len =3D fwnode_property_read_u32_array(fwnode, "fixed-link", NULL=
+, 0);
 >
-> There are 'num_config_bases' base registers, each of which is used to
-> address 'num_config_regs' registers. The addresses are calculated in
-> the same way as for other bases. It is assumed that an irq's type is
-> controlled by one column of registers; that column is identified by
-> the irq's 'type_reg_offset'.
 >
-> The set_type_config() callback is responsible for updating the config
-> register contents. It receives an array of buffers (each represents a
-> row of registers) and the index of the column to update, along with
-> the 'struct regmap_irq' description and requested irq type.
+> fwnode_property_count_u32()
 >
-> Buffered values are written to registers in regmap_irq_sync_unlock().
-> Note that the entire register contents are overwritten, which is a
-> minor change in behavior from type registers via 'type_base'.
+> > +     if (len =3D=3D (5 * sizeof(u32)))
+>
+> I'm not sure how to interpret this. len will return a count of u32 elemen=
+ts.
+> What does the sizeof(u32) mean here?
+>
 
-...
+You are right, thanks for spotting. The total byte count remained
+after migrating from of_get_property ->
+fwnode_property_read_u32_array.
 
-> +                       ret = regmap_write(map, reg, d->config_buf[i][j]);
-> +                       if (ret != 0)
-
-if (ret)
-
-> +                               dev_err(d->map->dev,
-> +                                       "Failed to write config %x: %d\n",
-> +                                       reg, ret);
-> +               }
-
-...
-
-> + * regmap_irq_set_type_config_simple() - Simple IRQ type configuration callback.
-
-> + *
-
-Redundant line.
-
-...
-
-> +               d->config_buf = kcalloc(chip->num_config_bases,
-> +                                       sizeof(*d->config_buf), GFP_KERNEL);
-> +               if (!d->config_buf)
-> +                       goto err_alloc;
-> +
-> +               for (i = 0; i < chip->num_config_regs; i++) {
-> +                       d->config_buf[i] = kcalloc(chip->num_config_regs,
-> +                                                  sizeof(unsigned int),
-
-Can it be sizeof(**d->config_buf) ?
-
-> +                                                  GFP_KERNEL);
-> +                       if (!d->config_buf[i])
-> +                               goto err_alloc;
-> +               }
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Marcin

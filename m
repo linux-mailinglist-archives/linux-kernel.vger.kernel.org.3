@@ -2,120 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D97553E3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41695553E45
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 00:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354725AbiFUWBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 18:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S1355241AbiFUWER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 18:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiFUWA6 (ORCPT
+        with ESMTP id S235648AbiFUWEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:00:58 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052B82BB19
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:00:58 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id u37so14312895pfg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 15:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EZIbuxBI2vXlx9alO7M1qKlxyC2NDeWjgWUw9yax3xY=;
-        b=OLvrKQsmaWY+4H6Iza8bjw1306MSVN8kIcHTlih6pjSp3hmaK5k9cnzRUYXbmMa7V5
-         J1/3XOR8pEm4uoHSxXi/HwcFBOWLgjZ12Scdh0msdhnxMdncBTEFHgoGwTNavs8aE/Rj
-         TFoBZbJxHvAzLdSPHFNth6VGytbwBXiW8sOm0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EZIbuxBI2vXlx9alO7M1qKlxyC2NDeWjgWUw9yax3xY=;
-        b=s9fy2+4I+RLtHuMfUqNKMP7UrOL3mKZqQiEDjouXVJZIym0Nly8VgeAkVc2KvDpedE
-         qTo1Zu7W98JDvwPfKeqSOTw39Lu9L2+wlJ3ZYCpQChMR1zaJpcIGXBUF30aymNfvVpgA
-         90PSaZ4rK7QyALRd7Tz4hGrRHpLcLb0vfijMX/FIz6FfyCJnsF0gF6Uh+H6Ru5cXaoHk
-         6rEJhtO4PoQxkEUq90RKVVmXkIdQCZpENmVA8gOP51Y3xB//AjR0ViUu7ja6JZ8ZGjFD
-         ws68Js+omSoZ2XL5wxA3LJFmcS0OJnE+c8LePPraz2pj2IdFa89ZJUo2Taxd3Gvou04O
-         OeUQ==
-X-Gm-Message-State: AJIora+hw9Gk9pLHJMKc/JNe5d6W6+LlaGN8AtC8/hfI/S2p05j/XdDc
-        Ram+5Un+0VoOY8tUOwsBfOdc5Q==
-X-Google-Smtp-Source: AGRyM1vDCb8yw5CEmb7daNB5E44dsxC1bLHVLMwYiWQiVeC/9vM6jGGEKpS7QNAvl3vmHEX8sOg6tg==
-X-Received: by 2002:a63:84c8:0:b0:40c:7d4a:ac66 with SMTP id k191-20020a6384c8000000b0040c7d4aac66mr97592pgd.424.1655848857515;
-        Tue, 21 Jun 2022 15:00:57 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v9-20020a056a00148900b0051829b1595dsm11880008pfu.130.2022.06.21.15.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 15:00:57 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 15:00:56 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v2 4/9] efi: pstore: Omit efivars caching EFI varstore
- access layer
-Message-ID: <202206211500.B4B9EEB8@keescook>
-References: <20220621153623.3786960-1-ardb@kernel.org>
- <20220621153623.3786960-5-ardb@kernel.org>
- <202206211357.C66CD742E5@keescook>
- <CAMj1kXGPi+Cy-D8am8tr-rm8gbmUQ-G0bfibD3R3nx=rL7-XVw@mail.gmail.com>
- <202206211419.014C341BE@keescook>
- <CAMj1kXEWnXd3CyygbQpB8n1srqVA+vTOztevcYTQnDAWZ6-HiA@mail.gmail.com>
+        Tue, 21 Jun 2022 18:04:13 -0400
+X-Greylist: delayed 431 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 15:04:12 PDT
+Received: from mailout.easymail.ca (mailout.easymail.ca [64.68.200.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1FE2D1D0;
+        Tue, 21 Jun 2022 15:04:11 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id C97F261DF6;
+        Tue, 21 Jun 2022 21:56:59 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at emo09-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo09-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FLc2uL2Ic0RZ; Tue, 21 Jun 2022 21:56:59 +0000 (UTC)
+Received: from mail.gonehiking.org (unknown [38.15.45.1])
+        by mailout.easymail.ca (Postfix) with ESMTPA id 45ED161DF5;
+        Tue, 21 Jun 2022 21:56:59 +0000 (UTC)
+Received: from [192.168.1.4] (internal [192.168.1.4])
+        by mail.gonehiking.org (Postfix) with ESMTP id C716D3EF14;
+        Tue, 21 Jun 2022 15:56:58 -0600 (MDT)
+Message-ID: <7a6df2da-95e8-b2fd-7565-e4b7a51c5b63@gonehiking.org>
+Date:   Tue, 21 Jun 2022 15:56:58 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXEWnXd3CyygbQpB8n1srqVA+vTOztevcYTQnDAWZ6-HiA@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Reply-To: khalid@gonehiking.org
+Subject: Re: [PATCH v2 2/3] scsi: BusLogic remove bus_to_virt
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
+References: <20220617125750.728590-1-arnd@kernel.org>
+ <20220617125750.728590-3-arnd@kernel.org>
+From:   Khalid Aziz <khalid@gonehiking.org>
+In-Reply-To: <20220617125750.728590-3-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 11:33:29PM +0200, Ard Biesheuvel wrote:
-> On Tue, 21 Jun 2022 at 23:21, Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Tue, Jun 21, 2022 at 11:12:17PM +0200, Ard Biesheuvel wrote:
-> > > On Tue, 21 Jun 2022 at 23:00, Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > On Tue, Jun 21, 2022 at 05:36:18PM +0200, Ard Biesheuvel wrote:
-> > > > > Avoid the efivars layer and simply call the newly introduced EFI
-> > > > > varstore helpers instead. This simplifies the code substantially, and
-> > > > > also allows us to remove some hacks in the shared efivars layer that
-> > > > > were added for efi-pstore specifically.
-> > > > >
-> > > > > Since we don't store the name of the associated EFI variable into each
-> > > > > pstore record when enumerating them, we have to guess the variable name
-> > > > > it was constructed from at deletion time, since we no longer keep a
-> > > > > shadow copy of the variable store. To make this a bit more exact, store
-> > > > > the CRC-32 of the ASCII name into the pstore record's ECC region so we
-> > > > > can use it later to make an educated guess regarding the name of the EFI
-> > > > > variable.
-> > > >
-> > > > I wonder if pstore_record should have a "private" field for backends to
-> > > > use? That seems like it solve the need for overloading the ecc field,
-> > > > and allow for arbitrarily more information to be stored (i.e. store full
-> > > > efi var name instead of an easily-colliding crc32?)
-> > > >
-> > >
-> > > We could easily add that - we'd just have to decide how to free the
-> > > memory it points to.
-> >
-> > I assume the pstore core could do that since it manages the record
-> > lifetime already?
-> >
+On 6/17/22 06:57, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> So if priv is non-NULL when it frees the record, it passes it to kfree() ?
+> The BusLogic driver is the last remaining driver that relies on the
+> deprecated bus_to_virt() function, which in turn only works on a few
+> architectures, and is incompatible with both swiotlb and iommu support.
+> 
+> Before commit 391e2f25601e ("[SCSI] BusLogic: Port driver to 64-bit."),
+> the driver had a dependency on x86-32, presumably because of this
+> problem. However, the change introduced another bug that made it still
+> impossible to use the driver on any 64-bit machine.
+> 
+> This was in turn fixed in commit 56f396146af2 ("scsi: BusLogic: Fix
+> 64-bit system enumeration error for Buslogic"), 8 years later, which
+> shows that there are not a lot of users.
+> 
+> Maciej is still using the driver on 32-bit hardware, and Khalid mentioned
+> that the driver works with the device emulation used in VirtualBox
+> and VMware. Both of those only emulate it for Windows 2000 and older
+> operating systems that did not ship with the better LSI logic driver.
+> 
+> Do a minimum fix that searches through the list of descriptors to find
+> one that matches the bus address. This is clearly as inefficient as
+> was indicated in the code comment about the lack of a bus_to_virt()
+> replacement. A better fix would likely involve changing out the entire
+> descriptor allocation for a simpler one, but that would be much
+> more invasive.
+> 
+> Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+> Cc: Matt Wang <wwentao@vmware.com>
+> Cc: Khalid Aziz <khalid@gonehiking.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   drivers/scsi/BusLogic.c | 27 ++++++++++++++++-----------
+>   drivers/scsi/Kconfig    |  2 +-
+>   2 files changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+> index a897c8f914cf..d057abfcdd5c 100644
+> --- a/drivers/scsi/BusLogic.c
+> +++ b/drivers/scsi/BusLogic.c
+> @@ -2515,12 +2515,26 @@ static int blogic_resultcode(struct blogic_adapter *adapter,
+>   	return (hoststatus << 16) | tgt_status;
+>   }
+>   
+> +/*
+> + * turn the dma address from an inbox into a ccb pointer
+> + * This is rather inefficient.
+> + */
+> +static struct blogic_ccb *
+> +blogic_inbox_to_ccb(struct blogic_adapter *adapter, struct blogic_inbox *inbox)
+> +{
+> +	struct blogic_ccb *ccb;
+> +
+> +	for (ccb = adapter->all_ccbs; ccb; ccb = ccb->next_all)
+> +		if (inbox->ccb == ccb->dma_handle)
+> +			break;
+> +
+> +	return ccb;
+> +}
+>   
+>   /*
+>     blogic_scan_inbox scans the Incoming Mailboxes saving any
+>     Incoming Mailbox entries for completion processing.
+>   */
+> -
+>   static void blogic_scan_inbox(struct blogic_adapter *adapter)
+>   {
+>   	/*
+> @@ -2540,16 +2554,7 @@ static void blogic_scan_inbox(struct blogic_adapter *adapter)
+>   	enum blogic_cmplt_code comp_code;
+>   
+>   	while ((comp_code = next_inbox->comp_code) != BLOGIC_INBOX_FREE) {
+> -		/*
+> -		   We are only allowed to do this because we limit our
+> -		   architectures we run on to machines where bus_to_virt(
+> -		   actually works.  There *needs* to be a dma_addr_to_virt()
+> -		   in the new PCI DMA mapping interface to replace
+> -		   bus_to_virt() or else this code is going to become very
+> -		   innefficient.
+> -		 */
+> -		struct blogic_ccb *ccb =
+> -			(struct blogic_ccb *) bus_to_virt(next_inbox->ccb);
+> +		struct blogic_ccb *ccb = blogic_inbox_to_ccb(adapter, adapter->next_inbox);
 
-That's my idea, yeah. I *think* it'll work; I haven't taken a
-super-close look, though.
+This change looks good enough as workaround to not use bus_to_virt() for 
+now. There are two problems I see though. One, I do worry about 
+blogic_inbox_to_ccb() returning NULL for ccb which should not happen 
+unless the mailbox pointer was corrupted which would indicate a bigger 
+problem. Nevertheless a NULL pointer causing kernel panic concerns me. 
+How about adding a check before we dereference ccb?
 
--- 
-Kees Cook
+Second, with this patch applied, I am seeing errors from the driver:
+
+=====================
+[ 1623.902685]  sdb: sdb1 sdb2
+[ 1623.903245] sd 2:0:0:0: [sdb] Attached SCSI disk
+[ 1623.911000] scsi2: Illegal CCB #76 status 2 in Incoming Mailbox
+[ 1623.911005] scsi2: Illegal CCB #76 status 2 in Incoming Mailbox
+[ 1623.911070] scsi2: Illegal CCB #79 status 2 in Incoming Mailbox
+[ 1651.458008] scsi2: Warning: Partition Table appears to have Geometry 
+256/63 which is
+[ 1651.458013] scsi2: not compatible with current BusLogic Host Adapter 
+Geometry 255/63
+[ 1658.797609] scsi2: Resetting BusLogic BT-958D Failed
+[ 1659.533208] sd 2:0:0:0: Device offlined - not ready after error recovery
+[ 1659.533331] sd 2:0:0:0: Device offlined - not ready after error recovery
+[ 1659.533333] sd 2:0:0:0: Device offlined - not ready after error recovery
+[ 1659.533342] sd 2:0:0:0: [sdb] tag#101 FAILED Result: 
+hostbyte=DID_TIME_OUT driverbyte=DRIVER_OK cmd_age=35s
+[ 1659.533345] sd 2:0:0:0: [sdb] tag#101 CDB: Read(10) 28 00 00 00 00 28 
+00 00 10 00
+[ 1659.533346] I/O error, dev sdb, sector 40 op 0x0:(READ) flags 0x80700 
+phys_seg 1 prio class 0
+
+=================
+
+This is on VirtualBox using emulated BusLogic adapter.
+
+This patch needs more refinement.
+
+Thanks,
+Khalid
+
+
+
+>   		if (comp_code != BLOGIC_Cn erroneousMD_NOTFOUND) {
+>   			if (ccb->status == BLOGIC_CCB_ACTIVE ||
+>   					ccb->status == BLOGIC_CCB_RESET) {
+> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+> index cf75588a2587..56bdc08d0b77 100644
+> --- a/drivers/scsi/Kconfig
+> +++ b/drivers/scsi/Kconfig
+> @@ -513,7 +513,7 @@ config SCSI_HPTIOP
+>   
+>   config SCSI_BUSLOGIC
+>   	tristate "BusLogic SCSI support"
+> -	depends on PCI && SCSI && VIRT_TO_BUS
+> +	depends on PCI && SCSI
+>   	help
+>   	  This is support for BusLogic MultiMaster and FlashPoint SCSI Host
+>   	  Adapters. Consult the SCSI-HOWTO, available from
+

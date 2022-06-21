@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DD85539C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF355539C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 20:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351718AbiFUSxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 14:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S1351868AbiFUSyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 14:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351521AbiFUSxm (ORCPT
+        with ESMTP id S233766AbiFUSyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 14:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916A412ACD;
-        Tue, 21 Jun 2022 11:53:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 375D86170D;
-        Tue, 21 Jun 2022 18:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF49C3411C;
-        Tue, 21 Jun 2022 18:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655837620;
-        bh=+khD1q8RhpxPqrvYCBaL5xyl6Uw1nYGFYmqhJyFMJ+k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OypHFChoCPYE3niL5+cCNkjXQBktRM8PcAF9WPGY1TBZGHj/zHW5srbRdaWcBojKQ
-         Xqp2T9EVzX89bujTo1tZWbGddZyF3aAPrMqXDqYU/g+ONjEb3b+AVyVbLkW1ltyQS7
-         HZwQaCA8NLhe6F8GpHdX0sAv0gtt9QT+OO20/oJYqJvAA/PdLef/Nn73lGU9+4Mt5L
-         xuRU1CHD7vjxFKl0Zp3WF1fm251p8BGrVEICb8/oeujViCeSLF+ydG/N0AA/z9BSJ6
-         /rG4Ve8or+iK4kzZ5LY2pLPv/nA//c3eTrg5RSZgpr4H5UZ+K98HqLZVpq8Zal1cNE
-         EhkqpdvllX9jQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2D93D5C09AF; Tue, 21 Jun 2022 11:53:40 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 11:53:40 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Will Deacon <will@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH RESEND v1 0/2] docs/memory-barriers.txt: Fix confusing
- name of 'data dependency barrier'
-Message-ID: <20220621185340.GK1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <a84435e4-5342-f886-4388-e4c5909298a7@gmail.com>
+        Tue, 21 Jun 2022 14:54:04 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C9B1C10F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:54:00 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id c4so23865373lfj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 11:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RFX7qcewQK0v2EmS+idV9x3vB/fvAEQNEa76+40+avs=;
+        b=jZqhEFpK3QQGphLZKmjg+q65YfrtmwycqKc/lvf0/ReywmK3gajDEELmq1FepAqtjz
+         oedZB/ak8nhdwp3TOYg3oUrnDu+ibukq46pDEbU5dQokERlXqKWWeuUobOeHAPPLKp6g
+         EO3cZtp4tG4giJfsWQZ7U5uYnEGJSjX6FaEu03eCK5tBDXXBFOYGh4ADJIIe24rMwMJN
+         jO3bkZ7uaIUp9gR1uv1ndI/iw9YqoTffvYp09I29EQPNA2n6FGlN3MFUk8i5vFQTjRw7
+         hNOPSQL5FXbRAbWpRqJqaevnMSePynzJO8bViTCJAsVYbErE4bUR1fOsyYQ9hJn2ybKl
+         TBDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RFX7qcewQK0v2EmS+idV9x3vB/fvAEQNEa76+40+avs=;
+        b=WbFjNDq19KqiU8LQImux1Q2RvBlZ8QUHvTDjMQXcLRTqO3+/zhIklJT6w8DhXoRgOK
+         /j0+cPI7xVWRkHXZ/0T75/FtPc/QWvRUyATnFQ/EqKFAtK9Kx+NEPS65rzIeKj7DSf5Q
+         EMNFquZOd+rfyftMdo8dGLwYOEPl4K9MCj6q0Vs2+sVYRWucS+YB2Y9kvKD/Ye8O4/hD
+         DSXy0GJyUIA9nKud5c/rHBbYkimYNgHxUNDpAznNFM+oQDlsulg1xqZMA2ne/skIUQgC
+         iUHp2nL8Bs8WeVQod5zx9f2aIO2cqnB+ekMC6YscXspxanv695EzYbxKZ9Jc6RHegfBN
+         wy5g==
+X-Gm-Message-State: AJIora9qw85QduX1XFnxIyrCXJzli3Ey45Y+NGN52ddF2ztalEcuswHd
+        QiSFxHbNkwuPqgyVHpiphdX+8g==
+X-Google-Smtp-Source: AGRyM1tF9CVwxzUKw2Frb/QUWXJeJtXIvEV0Kl5rsOM1f85dxgXVFY0928uBhRAIlrcqMuzT8GhSBw==
+X-Received: by 2002:a05:6512:3c3:b0:47d:ab07:50e7 with SMTP id w3-20020a05651203c300b0047dab0750e7mr16062680lfp.261.1655837638471;
+        Tue, 21 Jun 2022 11:53:58 -0700 (PDT)
+Received: from [192.168.43.7] ([188.162.64.230])
+        by smtp.gmail.com with ESMTPSA id a25-20020a05651c031900b002556e77236dsm2072407ljp.62.2022.06.21.11.53.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 11:53:57 -0700 (PDT)
+Message-ID: <55f64230-b847-5edb-3596-e22744f84b06@linaro.org>
+Date:   Tue, 21 Jun 2022 21:53:56 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a84435e4-5342-f886-4388-e4c5909298a7@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [v3 1/5] drm/msm/dp: Add basic PSR support for eDP
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>, y@qualcomm.com,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com
+References: <y> <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1655808800-3996-2-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1655808800-3996-2-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,137 +78,772 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 05:16:04PM +0900, Akira Yokosawa wrote:
-> I used Paul's old email address in RFC and v1.  My bad.
-> Sorry for making noise to other recipients.
+On 21/06/2022 13:53, Vinod Polimera wrote:
+> Add support for basic panel self refresh (PSR) feature for eDP.
+> Add a new interface to set PSR state in the sink from DPU.
+> Program the eDP controller to issue PSR enter and exit SDP to
+> the sink.
 > 
-> Paul, please see RFC [1] for the discussion so far.
-> There was no response to v1.
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_catalog.c |  81 ++++++++++++++++++
+>   drivers/gpu/drm/msm/dp/dp_catalog.h |   4 +
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c    |  76 ++++++++++++++++-
+>   drivers/gpu/drm/msm/dp/dp_ctrl.h    |   3 +
+>   drivers/gpu/drm/msm/dp/dp_display.c |  14 +++
+>   drivers/gpu/drm/msm/dp/dp_display.h |   2 +
+>   drivers/gpu/drm/msm/dp/dp_drm.c     | 166 +++++++++++++++++++++++++++++++++++-
+>   drivers/gpu/drm/msm/dp/dp_link.c    |  36 ++++++++
+>   drivers/gpu/drm/msm/dp/dp_panel.c   |  22 +++++
+>   drivers/gpu/drm/msm/dp/dp_panel.h   |   6 ++
+>   drivers/gpu/drm/msm/dp/dp_reg.h     |  27 ++++++
+>   11 files changed, 433 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> index 7257515..b9021ed 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> @@ -47,6 +47,14 @@
+>   #define DP_INTERRUPT_STATUS2_MASK \
+>   	(DP_INTERRUPT_STATUS2 << DP_INTERRUPT_STATUS_MASK_SHIFT)
+>   
+> +#define DP_INTERRUPT_STATUS4 \
+> +	(PSR_UPDATE_INT | PSR_CAPTURE_INT | PSR_EXIT_INT | \
+> +	PSR_UPDATE_ERROR_INT | PSR_WAKE_ERROR_INT)
+> +
+> +#define DP_INTERRUPT_MASK4 \
+> +	(PSR_UPDATE_MASK | PSR_CAPTURE_MASK | PSR_EXIT_MASK | \
+> +	PSR_UPDATE_ERROR_MASK | PSR_WAKE_ERROR_MASK)
+> +
+>   struct dp_catalog_private {
+>   	struct device *dev;
+>   	struct drm_device *drm_dev;
+> @@ -359,6 +367,24 @@ void dp_catalog_ctrl_lane_mapping(struct dp_catalog *dp_catalog)
+>   			ln_mapping);
+>   }
+>   
+> +void dp_catalog_ctrl_psr_mainlink_enable(struct dp_catalog *dp_catalog,
+> +						bool enable)
+> +{
+> +	u32 val;
+> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +				struct dp_catalog_private, dp_catalog);
+> +
+> +	val = dp_read_link(catalog, REG_DP_MAINLINK_CTRL);
+> +	val &= ~DP_MAINLINK_CTRL_ENABLE;
+> +
+> +	if (enable)
+> +		val |= DP_MAINLINK_CTRL_ENABLE;
+> +	else
+> +		val &= ~DP_MAINLINK_CTRL_ENABLE;
+> +
+> +	dp_write_link(catalog, REG_DP_MAINLINK_CTRL, val);
+> +}
+> +
+>   void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog,
+>   						bool enable)
+>   {
+> @@ -610,6 +636,47 @@ void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
+>   	dp_write_aux(catalog, REG_DP_DP_HPD_CTRL, DP_DP_HPD_CTRL_HPD_EN);
+>   }
+>   
+> +static void dp_catalog_enable_sdp(struct dp_catalog_private *catalog)
+> +{
+> +	/* trigger sdp */
+> +	dp_write_link(catalog, MMSS_DP_SDP_CFG3, UPDATE_SDP);
+> +	dp_write_link(catalog, MMSS_DP_SDP_CFG3, !UPDATE_SDP);
+> +}
+> +
+> +void dp_catalog_ctrl_config_psr(struct dp_catalog *dp_catalog)
+> +{
+> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +				struct dp_catalog_private, dp_catalog);
+> +	u32 config;
+> +
+> +	/* enable PSR1 function */
+> +	config = dp_read_link(catalog, REG_PSR_CONFIG);
+> +	config |= PSR1_SUPPORTED;
+> +	dp_write_link(catalog, REG_PSR_CONFIG, config);
+> +
+> +	dp_write_ahb(catalog, REG_DP_INTR_MASK4, DP_INTERRUPT_MASK4);
+> +	dp_catalog_enable_sdp(catalog);
+> +}
+> +
+> +void dp_catalog_ctrl_set_psr(struct dp_catalog *dp_catalog, bool enter)
+> +{
+> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +			struct dp_catalog_private, dp_catalog);
+> +	u32 cmd;
+> +
+> +	cmd = dp_read_link(catalog, REG_PSR_CMD);
+> +
+> +	cmd &= ~(PSR_ENTER | PSR_EXIT);
+> +
+> +	if (enter)
+> +		cmd |= PSR_ENTER;
+> +	else
+> +		cmd |= PSR_EXIT;
+> +
+> +	dp_catalog_enable_sdp(catalog);
+> +	dp_write_link(catalog, REG_PSR_CMD, cmd);
+> +}
+> +
+>   u32 dp_catalog_link_is_connected(struct dp_catalog *dp_catalog)
+>   {
+>   	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> @@ -645,6 +712,20 @@ u32 dp_catalog_hpd_get_intr_status(struct dp_catalog *dp_catalog)
+>   	return isr & (mask | ~DP_DP_HPD_INT_MASK);
+>   }
+>   
+> +int dp_catalog_ctrl_read_psr_interrupt_status(struct dp_catalog *dp_catalog)
+> +{
+> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> +				struct dp_catalog_private, dp_catalog);
+> +	u32 intr, intr_ack;
+> +
+> +	intr = dp_read_ahb(catalog, REG_DP_INTR_STATUS4);
+> +	intr_ack = (intr & DP_INTERRUPT_STATUS4)
+> +			<< DP_INTERRUPT_STATUS_ACK_SHIFT;
+> +	dp_write_ahb(catalog, REG_DP_INTR_STATUS4, intr_ack);
+> +
+> +	return intr;
+> +}
+> +
+>   int dp_catalog_ctrl_get_interrupt(struct dp_catalog *dp_catalog)
+>   {
+>   	struct dp_catalog_private *catalog = container_of(dp_catalog,
+> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> index 1f717f4..6454845 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+> @@ -93,6 +93,7 @@ void dp_catalog_ctrl_state_ctrl(struct dp_catalog *dp_catalog, u32 state);
+>   void dp_catalog_ctrl_config_ctrl(struct dp_catalog *dp_catalog, u32 config);
+>   void dp_catalog_ctrl_lane_mapping(struct dp_catalog *dp_catalog);
+>   void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog, bool enable);
+> +void dp_catalog_ctrl_psr_mainlink_enable(struct dp_catalog *dp_catalog, bool enable);
+>   void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
+>   void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
+>   				u32 stream_rate_khz, bool fixed_nvid);
+> @@ -104,12 +105,15 @@ void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
+>   void dp_catalog_hpd_config_intr(struct dp_catalog *dp_catalog,
+>   			u32 intr_mask, bool en);
+>   void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog);
+> +void dp_catalog_ctrl_config_psr(struct dp_catalog *dp_catalog);
+> +void dp_catalog_ctrl_set_psr(struct dp_catalog *dp_catalog, bool enter);
+>   u32 dp_catalog_link_is_connected(struct dp_catalog *dp_catalog);
+>   u32 dp_catalog_hpd_get_intr_status(struct dp_catalog *dp_catalog);
+>   void dp_catalog_ctrl_phy_reset(struct dp_catalog *dp_catalog);
+>   int dp_catalog_ctrl_update_vx_px(struct dp_catalog *dp_catalog, u8 v_level,
+>   				u8 p_level);
+>   int dp_catalog_ctrl_get_interrupt(struct dp_catalog *dp_catalog);
+> +int dp_catalog_ctrl_read_psr_interrupt_status(struct dp_catalog *dp_catalog);
+>   void dp_catalog_ctrl_update_transfer_unit(struct dp_catalog *dp_catalog,
+>   				u32 dp_tu, u32 valid_boundary,
+>   				u32 valid_boundary2);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index d21971b..485e8f5 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -22,6 +22,7 @@
+>   
+>   #define DP_KHZ_TO_HZ 1000
+>   #define IDLE_PATTERN_COMPLETION_TIMEOUT_JIFFIES	(30 * HZ / 1000) /* 30 ms */
+> +#define PSR_OPERATION_COMPLETION_TIMEOUT_JIFFIES       (300 * HZ / 1000) /* 300 ms */
+>   #define WAIT_FOR_VIDEO_READY_TIMEOUT_JIFFIES (HZ / 2)
+>   
+>   #define DP_CTRL_INTR_READY_FOR_VIDEO     BIT(0)
+> @@ -80,6 +81,7 @@ struct dp_ctrl_private {
+>   	struct dp_catalog *catalog;
+>   
+>   	struct completion idle_comp;
+> +	struct completion psr_op_comp;
+>   	struct completion video_comp;
+>   };
+>   
+> @@ -153,6 +155,9 @@ static void dp_ctrl_config_ctrl(struct dp_ctrl_private *ctrl)
+>   	config |= DP_CONFIGURATION_CTRL_STATIC_DYNAMIC_CN;
+>   	config |= DP_CONFIGURATION_CTRL_SYNC_ASYNC_CLK;
+>   
+> +	if (ctrl->panel->psr_cap.version)
+> +		config |= DP_CONFIGURATION_CTRL_SEND_VSC;
+> +
+>   	dp_catalog_ctrl_config_ctrl(ctrl->catalog, config);
+>   }
+>   
+> @@ -1382,11 +1387,64 @@ static int dp_ctrl_enable_stream_clocks(struct dp_ctrl_private *ctrl)
+>   	return ret;
+>   }
+>   
+> -void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
+> +void dp_ctrl_config_psr(struct dp_ctrl *dp_ctrl)
+>   {
+> -	struct dp_ctrl_private *ctrl;
+> +	u8 cfg;
+> +	struct dp_ctrl_private *ctrl = container_of(dp_ctrl,
+> +			struct dp_ctrl_private, dp_ctrl);
+>   
+> -	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+> +	if (!ctrl->panel->psr_cap.version)
+> +		return;
+> +
+> +	dp_catalog_ctrl_config_psr(ctrl->catalog);
+> +
+> +	cfg = DP_PSR_ENABLE;
+> +	drm_dp_dpcd_write(ctrl->aux, DP_PSR_EN_CFG, &cfg, 1);
+> +}
+> +
+> +void dp_ctrl_set_psr(struct dp_ctrl *dp_ctrl, bool enter)
+> +{
+> +	struct dp_ctrl_private *ctrl = container_of(dp_ctrl,
+> +			struct dp_ctrl_private, dp_ctrl);
+> +
+> +	if (!ctrl->panel->psr_cap.version)
+> +		return;
+> +
+> +	/*
+> +	 * When entering PSR,
+> +	 * 1. Send PSR enter SDP and wait for the PSR_UPDATE_INT
+> +	 * 2. Turn off video
+> +	 * 3. Disable the mainlink
+> +	 *
+> +	 * When exiting PSR,
+> +	 * 1. Enable the mainlink
+> +	 * 2. Send the PSR exit SDP
+> +	 */
+> +	if (enter) {
+> +		reinit_completion(&ctrl->psr_op_comp);
+> +		dp_catalog_ctrl_set_psr(ctrl->catalog, true);
+> +
+> +		if (!wait_for_completion_timeout(&ctrl->psr_op_comp,
+> +			PSR_OPERATION_COMPLETION_TIMEOUT_JIFFIES)) {
+> +			DRM_ERROR("PSR_ENTRY timedout\n");
+> +			dp_catalog_ctrl_set_psr(ctrl->catalog, false);
+> +			return;
+> +		}
+> +
+> +		dp_catalog_ctrl_state_ctrl(ctrl->catalog, 0);
+> +
+> +		dp_catalog_ctrl_psr_mainlink_enable(ctrl->catalog, false);
+> +	} else {
+> +		dp_catalog_ctrl_psr_mainlink_enable(ctrl->catalog, true);
+> +
+> +		dp_catalog_ctrl_set_psr(ctrl->catalog, false);
+> +	}
+> +}
+> +
+> +void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
+> +{
+> +	struct dp_ctrl_private *ctrl = container_of(dp_ctrl,
+> +			struct dp_ctrl_private, dp_ctrl);
+>   
+>   	dp_catalog_ctrl_reset(ctrl->catalog);
+>   
+> @@ -1997,6 +2055,17 @@ void dp_ctrl_isr(struct dp_ctrl *dp_ctrl)
+>   
+>   	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>   
+> +	if (ctrl->panel->psr_cap.version) {
+> +		isr = dp_catalog_ctrl_read_psr_interrupt_status(ctrl->catalog);
+> +
+> +		if (isr == PSR_UPDATE_INT)
+> +			drm_dbg_dp(ctrl->drm_dev, "PSR frame update done\n");
+> +		else if (isr == PSR_EXIT_INT)
+> +			drm_dbg_dp(ctrl->drm_dev, "PSR exit done\n");
+> +
+> +		complete(&ctrl->psr_op_comp);
+> +	}
+> +
+>   	isr = dp_catalog_ctrl_get_interrupt(ctrl->catalog);
+>   
+>   	if (isr & DP_CTRL_INTR_READY_FOR_VIDEO) {
+> @@ -2043,6 +2112,7 @@ struct dp_ctrl *dp_ctrl_get(struct device *dev, struct dp_link *link,
+>   		dev_err(dev, "failed to add DP OPP table\n");
+>   
+>   	init_completion(&ctrl->idle_comp);
+> +	init_completion(&ctrl->psr_op_comp);
+>   	init_completion(&ctrl->video_comp);
+>   
+>   	/* in parameters */
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> index 0745fde..be074ae 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> @@ -38,4 +38,7 @@ void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl);
+>   void dp_ctrl_phy_exit(struct dp_ctrl *dp_ctrl);
+>   void dp_ctrl_irq_phy_exit(struct dp_ctrl *dp_ctrl);
+>   
+> +void dp_ctrl_set_psr(struct dp_ctrl *dp_ctrl, bool enable);
+> +void dp_ctrl_config_psr(struct dp_ctrl *dp_ctrl);
+> +
+>   #endif /* _DP_CTRL_H_ */
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index bce7793..2e779c2 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -388,6 +388,8 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
+>   
+>   	edid = dp->panel->edid;
+>   
+> +	dp->dp_display.psr_supported = !!dp->panel->psr_cap.version;
+> +
+>   	dp->audio_supported = drm_detect_monitor_audio(edid);
+>   	dp_panel_handle_sink_request(dp->panel);
+>   
+> @@ -895,6 +897,10 @@ static int dp_display_post_enable(struct msm_dp *dp_display)
+>   
+>   	/* signal the connect event late to synchronize video and display */
+>   	dp_display_handle_plugged_change(dp_display, true);
+> +
+> +	if (dp_display->psr_supported)
+> +		dp_ctrl_config_psr(dp->ctrl);
 
-Thank you for resending, Akira!  I have queued it, and also support
-the general consensus for creating a "historical" section.
+Dumb question. What if the first display reports psr as supported, but 
+the next DP display that gets plugged doesn't support PSR? Do we need to 
+do anything to clear this config?
 
-							Thanx, Paul
+> +
+>   	return 0;
+>   }
+>   
+> @@ -1094,6 +1100,14 @@ static void dp_display_config_hpd(struct dp_display_private *dp)
+>   	enable_irq(dp->irq);
+>   }
+>   
+> +void dp_display_set_psr(struct msm_dp *dp_display, bool enter)
+> +{
+> +	struct dp_display_private *dp;
+> +
+> +	dp = container_of(dp_display, struct dp_display_private, dp_display);
+> +	dp_ctrl_set_psr(dp->ctrl, enter);
+> +}
+> +
+>   static int hpd_event_thread(void *data)
+>   {
+>   	struct dp_display_private *dp_priv;
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+> index 4f9fe4d..1feaada 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+> @@ -29,6 +29,7 @@ struct msm_dp {
+>   
+>   	u32 max_dp_lanes;
+>   	struct dp_audio *dp_audio;
+> +	bool psr_supported;
+>   };
+>   
+>   int dp_display_set_plugged_cb(struct msm_dp *dp_display,
+> @@ -39,5 +40,6 @@ bool dp_display_check_video_test(struct msm_dp *dp_display);
+>   int dp_display_get_test_bpp(struct msm_dp *dp_display);
+>   void dp_display_signal_audio_start(struct msm_dp *dp_display);
+>   void dp_display_signal_audio_complete(struct msm_dp *dp_display);
+> +void dp_display_set_psr(struct msm_dp *dp, bool enter);
+>   
+>   #endif /* _DP_DISPLAY_H_ */
+> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+> index 62d58b9..cfe31ed 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+> @@ -60,6 +60,169 @@ static int dp_bridge_get_modes(struct drm_bridge *bridge, struct drm_connector *
+>   	return rc;
+>   }
+>   
+> +static struct drm_crtc *dp_bridge_get_old_connector_crtc(struct msm_dp *dp,
+> +					  struct drm_atomic_state *state)
+> +{
+> +	struct drm_encoder *encoder = dp->encoder;
+> +	struct drm_connector *connector;
+> +	struct drm_connector_state *conn_state;
+> +
+> +	connector = drm_atomic_get_old_connector_for_encoder(state, encoder);
+> +	if (!connector)
+> +		return NULL;
+> +
+> +	conn_state = drm_atomic_get_old_connector_state(state, connector);
+> +	if (!conn_state)
+> +		return NULL;
+> +
+> +	return conn_state->crtc;
+> +}
+> +
+> +static struct drm_crtc *dp_bridge_get_new_connector_crtc(struct msm_dp *dp,
+> +					  struct drm_atomic_state *state)
+> +{
+> +	struct drm_encoder *encoder = dp->encoder;
+> +	struct drm_connector *connector;
+> +	struct drm_connector_state *conn_state;
+> +
+> +	connector = drm_atomic_get_new_connector_for_encoder(state, encoder);
+> +	if (!connector)
+> +		return NULL;
+> +
+> +	conn_state = drm_atomic_get_new_connector_state(state, connector);
+> +	if (!conn_state)
+> +		return NULL;
+> +
+> +	return conn_state->crtc;
+> +}
 
-> -----
-> 
-> Hi all,
-> 
-> This is a revised patch set of RFC [1].
-> 
-> Discussion so far is about possible follow-up improvements,
-> so I hereby submit this set as a "v1".
-> 
-> Changes since RFC [1]:
-> 
->   - Rename title of Patch 1/2.
->   - Remove note on the rename of section "DATA DEPENDENCY BARRIER".
->     Rational in the changelog should suffice.
->   - Wordsmith by self review.
->   - Add Patch 2/2 (fixup of long lines).
-> 
-> [1]: https://lore.kernel.org/linux-doc/cc2c7885-ac75-24f3-e18a-e77f97c91b4c@gmail.com/ # RFC
-> 
-> For your convenience, diff of "v1 1/2" vs RFC is appended below.
-> 
-> Following is the explanation of background in RFC (with typo fixes):
-> -------------------------------------------------------------------
-> This is a response to Michael's report back in last November [2].
-> 
-> [2]: "data dependency naming inconsistency":
->      https://lore.kernel.org/r/20211011064233-mutt-send-email-mst@kernel.org/
-> 
-> In the thread, I suggested removing all the explanations of "data dependency
-> barriers", which Paul thought was reasonable.
-> 
-> However, such removal would require involved rewrites in the infamously
-> hard-to-grasp document, which is beyond my capability.
-> I have become more inclined to just substitute "data dependency barrier"
-> with "address-dependency barrier" considering that READ_ONCE() still has
-> an implicit address-dependency barrier.
-> 
-> This patch set is the result of such an attempt.
-> 
-> Note: I made a mistake in the thread above. Kernel APIs for explicit data
-> dependency barriers were removed in v5.9.
-> I was confused the removal with the addition of the barrier to Alpha's
-> READ_ONCE() in v4.15.
-> 
-> diff of "v1 1/2" vs RFC
-> ------------------------------------------------------------------
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index 306afa1f9347..bdbea3cc66a3 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -391,8 +391,8 @@ Memory barriers come in four basic varieties:
->       memory system as time progresses.  All stores _before_ a write barrier
->       will occur _before_ all the stores after the write barrier.
->  
-> -     [!] Note that write barriers should normally be paired with read- or address-
-> -     dependency barriers; see the "SMP barrier pairing" subsection.
-> +     [!] Note that write barriers should normally be paired with read or
-> +     address-dependency barriers; see the "SMP barrier pairing" subsection.
->  
->  
->   (2) Address-dependency barriers (historical).
-> @@ -561,17 +561,14 @@ As of v4.15 of the Linux kernel, an smp_mb() was added to READ_ONCE() for
->  DEC Alpha, which means that about the only people who need to pay attention
->  to this section are those working on DEC Alpha architecture-specific code
->  and those working on READ_ONCE() itself.  For those who need it, and for
-> -those who are interested in the history, here is the story of address-
-> -dependency barriers.
-> +those who are interested in the history, here is the story of
-> +address-dependency barriers.
->  
-> -[!] The title of this section was renamed from "DATA DEPENDENCY BARRIERS"
-> -to prevent developer confusion as "data dependencies" usually refers to
-> -load-to-store data dependencies.
-> -While address dependencies are observed in both load-to-load and load-to-
-> -store relations, address-dependency barriers concern only load-to-load
-> -situations.
-> +[!] While address dependencies are observed in both load-to-load and
-> +load-to-store relations, address-dependency barriers are not necessary
-> +for load-to-store situations.
->  
-> -The usage requirements of address-dependency barriers are a little subtle, and
-> +The requirement of address-dependency barriers is a little subtle, and
->  it's not always obvious that they're needed.  To illustrate, consider the
->  following sequence of events:
->  
-> @@ -602,8 +599,8 @@ While this may seem like a failure of coherency or causality maintenance, it
->  isn't, and this behaviour can be observed on certain real CPUs (such as the DEC
->  Alpha).
->  
-> -To deal with this, an implicit address-dependency barrier of READ_ONCE()
-> -or better must be inserted between the address load and the data load:
-> +To deal with this, READ_ONCE() provides an implicit address-dependency
-> +barrier since kernel release v4.15:
->  
->  	CPU 1		      CPU 2
->  	===============	      ===============
-> @@ -659,11 +656,9 @@ can be used to record rare error conditions and the like, and the CPUs'
->  naturally occurring ordering prevents such records from being lost.
->  
->  
-> -Note well that the ordering provided by an address or a data dependency is local to
-> +Note well that the ordering provided by an address dependency is local to
->  the CPU containing it.  See the section on "Multicopy atomicity" for
->  more information.
->  
-> ---------------------------------------------------------------------
-> 
->         Thanks, Akira
-> --
-> Akira Yokosawa (2):
->   docs/memory-barriers.txt: Fix confusing name of 'data dependency
->     barrier'
->   docs/memory-barriers.txt: Fixup long lines
-> 
->  Documentation/memory-barriers.txt | 177 ++++++++++++++++--------------
->  1 file changed, 95 insertions(+), 82 deletions(-)
-> 
-> 
-> base-commit: c09ca10d879bae4a8df842dbe8d6bd8b87830633
-> -- 
-> 2.25.1
-> 
+These two functions should become core DRM helpers. Please move them 
+accordingly to remove duplication with the bridge code.
+
+> +
+> +static int edp_bridge_atomic_check(struct drm_bridge *drm_bridge,
+> +			    struct drm_bridge_state *bridge_state,
+> +			    struct drm_crtc_state *crtc_state,
+> +			    struct drm_connector_state *conn_state)
+> +{
+> +	struct msm_dp *dp;
+> +
+> +	dp = to_dp_bridge(drm_bridge)->dp_display;
+> +	if (WARN_ON(!conn_state))
+> +		return -ENODEV;
+> +
+> +	if (dp->psr_supported)
+> +		conn_state->self_refresh_aware = true;
+> +
+> +	if (!conn_state->crtc || !crtc_state)
+> +		return 0;
+> +
+> +	if (crtc_state->self_refresh_active && !dp->psr_supported)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static void edp_bridge_atomic_enable(struct drm_bridge *drm_bridge,
+> +				struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *old_crtc_state;
+> +	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+> +	struct msm_dp *dp_display = dp_bridge->dp_display;
+> +
+> +	crtc = dp_bridge_get_new_connector_crtc(dp_display, old_state);
+> +	if (!crtc)
+> +		return;
+
+Why?
+
+> +
+> +	old_crtc_state = drm_atomic_get_old_crtc_state(old_state, crtc);
+> +
+> +	/* Exit from self refresh mode */
+> +	if (old_crtc_state && old_crtc_state->self_refresh_active) {
+> +		dp_display_set_psr(dp_display, false);
+> +		return;
+> +	}
+> +
+> +	dp_bridge_enable(drm_bridge);
+> +}
+> +
+> +static void edp_bridge_atomic_disable(struct drm_bridge *drm_bridge,
+> +				struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *new_crtc_state = NULL, *old_crtc_state = NULL;
+> +	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+> +	struct msm_dp *dp_display = dp_bridge->dp_display;
+> +
+> +	crtc = dp_bridge_get_old_connector_crtc(dp_display, old_state);
+> +	if (!crtc)
+> +		goto out;
+
+Why? And why old crtc?
+
+> +
+> +	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, crtc);
+> +	if (!new_crtc_state)
+> +		goto out;
+> +
+> +	old_crtc_state = drm_atomic_get_old_crtc_state(old_state, crtc);
+> +	if (!old_crtc_state)
+> +		goto out;
+> +
+> +	/*
+> +	 * Set self refresh mode if current crtc state is active.
+> +	 * If old crtc state is active, then this is a display disable
+> +	 * call while the sink is in psr state. So, exit psr here.
+> +	 * The eDP controller will be disabled in the
+> +	 * edp_bridge_atomic_post_disable function.
+> +	 *
+> +	 * We observed sink is stuck in self refresh if psr exit is skipped
+> +	 * when display disable occurs while the sink is in psr state.
+> +	 */
+> +	if (new_crtc_state->self_refresh_active) {
+> +		dp_display_set_psr(dp_display, true);
+> +		return;
+> +	} else if (old_crtc_state->self_refresh_active) {
+> +		dp_display_set_psr(dp_display, false);
+> +		return;
+> +	}
+> +
+> +out:
+> +	dp_bridge_disable(drm_bridge);
+> +}
+> +
+> +static void edp_bridge_atomic_post_disable(struct drm_bridge *drm_bridge,
+> +				struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *new_crtc_state = NULL;
+> +	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+> +	struct msm_dp *dp_display = dp_bridge->dp_display;
+> +
+> +	crtc = dp_bridge_get_old_connector_crtc(dp_display, old_state);
+> +	if (!crtc)
+> +		return;
+> +
+> +	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, crtc);
+> +	if (!new_crtc_state)
+> +		return;
+> +
+> +	/*
+> +	 * Self refresh mode is already set in edp_bridge_atomic_disable.
+> +	 */
+> +	if (new_crtc_state->self_refresh_active)
+> +		return;
+> +
+> +	dp_bridge_post_disable(drm_bridge);
+> +}
+> +
+> +static const struct drm_bridge_funcs edp_bridge_ops = {
+> +	.atomic_enable       = edp_bridge_atomic_enable,
+> +	.atomic_disable      = edp_bridge_atomic_disable,
+> +	.atomic_post_disable = edp_bridge_atomic_post_disable,
+
+If you are using the atomic ops here, please switch dp_bridge_ops to 
+atomic too.
+
+> +	.mode_set     = dp_bridge_mode_set,
+
+.mode_valid is missing. Is this intentional?
+
+> +	.atomic_reset = drm_atomic_helper_bridge_reset,
+> +	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+> +	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+> +	.atomic_check = edp_bridge_atomic_check,
+> +};
+> +
+>   static const struct drm_bridge_funcs dp_bridge_ops = {
+>   	.enable       = dp_bridge_enable,
+>   	.disable      = dp_bridge_disable,
+> @@ -84,7 +247,7 @@ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *
+>   	dp_bridge->dp_display = dp_display;
+>   
+>   	bridge = &dp_bridge->bridge;
+> -	bridge->funcs = &dp_bridge_ops;
+> +	bridge->funcs = &edp_bridge_ops;
+
+Please use ternary operator here.
+
+>   	bridge->type = dp_display->connector_type;
+>   
+>   	/*
+> @@ -99,6 +262,7 @@ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *
+>   	 *   modes.
+>   	 */
+>   	if (!dp_display->is_edp) {
+> +		bridge->funcs = &dp_bridge_ops;
+>   		bridge->ops =
+>   			DRM_BRIDGE_OP_DETECT |
+>   			DRM_BRIDGE_OP_HPD |
+> diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
+> index 36f0af0..81ac3c1 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_link.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_link.c
+> @@ -934,6 +934,38 @@ static int dp_link_process_phy_test_pattern_request(
+>   	return 0;
+>   }
+>   
+> +static bool dp_link_read_psr_error_status(struct dp_link_private *link)
+> +{
+> +	u8 status;
+> +
+> +	drm_dp_dpcd_read(link->aux, DP_PSR_ERROR_STATUS, &status, 1);
+> +
+> +	if (status & DP_PSR_LINK_CRC_ERROR)
+> +		DRM_ERROR("PSR LINK CRC ERROR\n");
+> +	else if (status & DP_PSR_RFB_STORAGE_ERROR)
+> +		DRM_ERROR("PSR RFB STORAGE ERROR\n");
+> +	else if (status & DP_PSR_VSC_SDP_UNCORRECTABLE_ERROR)
+> +		DRM_ERROR("PSR VSC SDP UNCORRECTABLE ERROR\n");
+> +	else
+> +		return 0;
+> +
+> +	return 1;
+
+If it's bool, it should return true/false and not 0/1.
+
+> +}
+> +
+> +static bool dp_link_psr_capability_changed(struct dp_link_private *link)
+> +{
+> +	u8 status;
+> +
+> +	drm_dp_dpcd_read(link->aux, DP_PSR_ESI, &status, 1);
+> +
+> +	if (status & DP_PSR_CAPS_CHANGE)
+> +		drm_dbg_dp(link->drm_dev, "PSR Capability Change\n");
+> +	else
+> +		return 0;
+> +
+> +	return 1;
+
+if (!(satus & DP_PSR_CAPS_CHANGE))
+     return false;
+
+drm_dbg_dp(..)
+return true;
+
+
+Or
+
+if (status & DP_PSR_CAPS_CHANGE) {
+   drm_dbg_dp(...)
+   return true;
+}
+
+return false;
+
+
+> +}
+> +
+>   static u8 get_link_status(const u8 link_status[DP_LINK_STATUS_SIZE], int r)
+>   {
+>   	return link_status[r - DP_LANE0_1_STATUS];
+> @@ -1053,6 +1085,10 @@ int dp_link_process_request(struct dp_link *dp_link)
+>   		dp_link->sink_request |= DP_TEST_LINK_TRAINING;
+>   	} else if (!dp_link_process_phy_test_pattern_request(link)) {
+>   		dp_link->sink_request |= DP_TEST_LINK_PHY_TEST_PATTERN;
+> +	} else if (dp_link_read_psr_error_status(link)) {
+> +		DRM_ERROR("PSR IRQ_HPD received\n");
+> +	} else if (dp_link_psr_capability_changed(link)) {
+> +		drm_dbg_dp(link->drm_dev, "PSR Capabiity changed");
+>   	} else {
+>   		ret = dp_link_process_link_status_update(link);
+>   		if (!ret) {
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+> index 5149ceb..8bf8ab4 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+> @@ -20,6 +20,27 @@ struct dp_panel_private {
+>   	bool aux_cfg_update_done;
+>   };
+>   
+> +static void dp_panel_read_psr_cap(struct dp_panel_private *panel)
+> +{
+> +	ssize_t rlen;
+> +	struct dp_panel *dp_panel;
+> +
+> +	dp_panel = &panel->dp_panel;
+> +
+> +	/* edp sink */
+> +	if (dp_panel->dpcd[DP_EDP_CONFIGURATION_CAP]) {
+> +		rlen = drm_dp_dpcd_read(panel->aux, DP_PSR_SUPPORT,
+> +				&dp_panel->psr_cap, sizeof(dp_panel->psr_cap));
+> +		if (rlen == sizeof(dp_panel->psr_cap)) {
+> +			drm_dbg_dp(panel->drm_dev,
+> +				"psr version: 0x%x, psr_cap: 0x%x\n",
+> +				dp_panel->psr_cap.version,
+> +				dp_panel->psr_cap.capabilities);
+> +		} else
+> +			DRM_ERROR("failed to read psr info, rlen=%zd\n", rlen);
+> +	}
+> +}
+> +
+>   static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
+>   {
+>   	int rc = 0;
+> @@ -106,6 +127,7 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
+>   		}
+>   	}
+>   
+> +	dp_panel_read_psr_cap(panel);
+>   end:
+>   	return rc;
+>   }
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
+> index d861197a..2d0826a 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.h
+> @@ -34,6 +34,11 @@ struct dp_panel_in {
+>   	struct dp_catalog *catalog;
+>   };
+>   
+> +struct dp_panel_psr {
+> +	u8 version;
+> +	u8 capabilities;
+> +};
+> +
+>   struct dp_panel {
+>   	/* dpcd raw data */
+>   	u8 dpcd[DP_RECEIVER_CAP_SIZE + 1];
+> @@ -46,6 +51,7 @@ struct dp_panel {
+>   	struct edid *edid;
+>   	struct drm_connector *connector;
+>   	struct dp_display_mode dp_mode;
+> +	struct dp_panel_psr psr_cap;
+>   	bool video_test;
+>   
+>   	u32 vic;
+> diff --git a/drivers/gpu/drm/msm/dp/dp_reg.h b/drivers/gpu/drm/msm/dp/dp_reg.h
+> index 2686028..ea85a69 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_reg.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_reg.h
+> @@ -22,6 +22,20 @@
+>   #define REG_DP_INTR_STATUS2			(0x00000024)
+>   #define REG_DP_INTR_STATUS3			(0x00000028)
+>   
+> +#define REG_DP_INTR_STATUS4			(0x0000002C)
+> +#define PSR_UPDATE_INT				(0x00000001)
+> +#define PSR_CAPTURE_INT				(0x00000004)
+> +#define PSR_EXIT_INT				(0x00000010)
+> +#define PSR_UPDATE_ERROR_INT			(0x00000040)
+> +#define PSR_WAKE_ERROR_INT			(0x00000100)
+> +
+> +#define REG_DP_INTR_MASK4			(0x00000030)
+> +#define PSR_UPDATE_MASK				(0x00000001)
+> +#define PSR_CAPTURE_MASK			(0x00000002)
+> +#define PSR_EXIT_MASK				(0x00000004)
+> +#define PSR_UPDATE_ERROR_MASK			(0x00000008)
+> +#define PSR_WAKE_ERROR_MASK			(0x00000010)
+> +
+>   #define REG_DP_DP_HPD_CTRL			(0x00000000)
+>   #define DP_DP_HPD_CTRL_HPD_EN			(0x00000001)
+>   
+> @@ -164,6 +178,16 @@
+>   #define MMSS_DP_AUDIO_TIMING_RBR_48		(0x00000094)
+>   #define MMSS_DP_AUDIO_TIMING_HBR_48		(0x00000098)
+>   
+> +#define REG_PSR_CONFIG				(0x00000100)
+> +#define DISABLE_PSR				(0x00000000)
+> +#define PSR1_SUPPORTED				(0x00000001)
+> +#define PSR2_WITHOUT_FRAMESYNC			(0x00000002)
+> +#define PSR2_WITH_FRAMESYNC			(0x00000003)
+> +
+> +#define REG_PSR_CMD				(0x00000110)
+> +#define PSR_ENTER				(0x00000001)
+> +#define PSR_EXIT				(0x00000002)
+> +
+>   #define MMSS_DP_PSR_CRC_RG			(0x00000154)
+>   #define MMSS_DP_PSR_CRC_B			(0x00000158)
+>   
+> @@ -184,6 +208,9 @@
+>   #define MMSS_DP_AUDIO_STREAM_0			(0x00000240)
+>   #define MMSS_DP_AUDIO_STREAM_1			(0x00000244)
+>   
+> +#define MMSS_DP_SDP_CFG3			(0x0000024c)
+> +#define UPDATE_SDP				(0x00000001)
+> +
+>   #define MMSS_DP_EXTENSION_0			(0x00000250)
+>   #define MMSS_DP_EXTENSION_1			(0x00000254)
+>   #define MMSS_DP_EXTENSION_2			(0x00000258)
+
+
+-- 
+With best wishes
+Dmitry

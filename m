@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A0E55302B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E01553036
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Jun 2022 12:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348128AbiFUKwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 06:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S1348671AbiFUKxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 06:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347851AbiFUKwN (ORCPT
+        with ESMTP id S1349002AbiFUKxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 06:52:13 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA37CE027;
-        Tue, 21 Jun 2022 03:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655808732; x=1687344732;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OwXcx+GuuP74ODQ1pL8evshto3I/UO+zbsBn3qxF9XA=;
-  b=Ft8NAvmGp1lw/Q2DZSLBSld/vNDa/4JH3iRxyjqbrIMRpGup8FxhTkLm
-   G5jDzSeiNWv6NgNy1I/eSOgCKnaov2JHmaPQuDnYZRv1JfmncbkERlOaU
-   FEkaM8QG+LD87rTk2dHndetgD7X5ZF9gCuubSnPJsxaftaKoVSOcHq+4Q
-   3CnQsbF2Gc9FK5x1KSlySwuGE7+WnJEOY5b0niXualspTE8cB/Y9Y2WeL
-   h+NZ1nR+ONKrY4LmeDGNQsAeuxbVpoaV1HeJqz+ZjgCKEQTBt/DU5yrzg
-   FIgfAFkkcnOTjgES2o+XNc8FH0W8j05lHrneADK6+q7xXKBdOvyAGT9wF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="268808102"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="268808102"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:52:11 -0700
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="676945083"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 03:52:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3bUL-000qwm-SB;
-        Tue, 21 Jun 2022 13:52:05 +0300
-Date:   Tue, 21 Jun 2022 13:52:05 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH v2 1/1] iio: adc: mxs-lradc-adc: Get rid of OF specifics
-Message-ID: <YrGi1Zo+sLF3fUgf@smile.fi.intel.com>
-References: <20220621103754.12771-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621103754.12771-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 06:53:47 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C8F25EA4;
+        Tue, 21 Jun 2022 03:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655808827; x=1687344827;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=mb5DQUx++WBYqHBb28dKoW1PAZ+4l8zH8PF2XnRF4bc=;
+  b=IwGQReI6tvZN6q7SY0h/bJL3oqEvZEqhguy5uApJnoMxUq6B71wPtDVt
+   0uQPcF4ZqF4l8/JC1AfS7W+MpZZpKtytzL+pDsbmxmQT7BjZteO5G/y0a
+   VmF2BBdXP9tqYJYdjKUW6KVs8jK/OvISl9VXrAQwMnm48QRI2qvxyEVDH
+   A=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 21 Jun 2022 03:53:47 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Jun 2022 03:53:45 -0700
+X-QCInternal: smtphost
+Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 21 Jun 2022 16:23:27 +0530
+Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
+        id 32B123CF4; Tue, 21 Jun 2022 16:23:26 +0530 (IST)
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     y@qualcomm.com, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_sbillaka@quicinc.com
+Subject: [v3 0/5] Add PSR support for eDP
+Date:   Tue, 21 Jun 2022 16:23:15 +0530
+Message-Id: <1655808800-3996-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <y>
+References: <y>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 01:37:54PM +0300, Andy Shevchenko wrote:
-> First of all, the additional conversion from vIRQ, and this is exactly
-> what is returned by platform_get_irq_byname(), to vIRQ is not needed.
-> Hence, drop no-op call to irq_of_parse_and_map().
+Changes in v2:
+  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+  - Don't modify whitespaces.
+  - Set self refresh aware from atomic_check.
+  - Set self refresh aware only if psr is supported.
+  - Provide a stub for msm_dp_display_set_psr.
+  - Move dp functions to bridge code.
 
-Actually this patch is not correct. The MFD supplies IRQ lines without any
-domain behind it, because of that the supplied list of IRQs is abstract to the
-hardware and has no meaning in the Linux kernel. I dunno how it's supposed to
-work (perhaps it involves the GIC driver hooks for IMX23/28 platforms).
+Changes in v3:
+  - Change callback names to reflect atomic interfaces.
+  - Move bridge callback change to separate patch as suggested by Dmitry.
+  - Remove psr function declaration from msm_drv.h.
+  - Set self_refresh_aware flag only if psr is supported.
+  - Modify the variable names to simpler form.
+  - Define bit fields for PSR settings.
+  - Add comments explaining the steps to enter/exit psr.
+  - Change DRM_INFO to drm_dbg_db. 
+
+Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+
+Vinod Polimera (5):
+  drm/msm/dp: Add basic PSR support for eDP
+  drm/bridge: use atomic enable/disable callbacks for panel bridge
+    functions
+  drm/bridge: add psr support during panel bridge enable & disable
+    sequence
+  drm/msm/disp/dpu1: use atomic enable/disable callbacks for encoder
+    functions
+  drm/msm/disp/dpu1: add PSR support for eDP interface in dpu driver
+
+ drivers/gpu/drm/bridge/panel.c              | 110 ++++++++++++++++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  36 +++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  30 ++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |   2 +-
+ drivers/gpu/drm/msm/dp/dp_catalog.c         |  81 ++++++++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h         |   4 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c            |  76 ++++++++++++-
+ drivers/gpu/drm/msm/dp/dp_ctrl.h            |   3 +
+ drivers/gpu/drm/msm/dp/dp_display.c         |  14 +++
+ drivers/gpu/drm/msm/dp/dp_display.h         |   2 +
+ drivers/gpu/drm/msm/dp/dp_drm.c             | 166 +++++++++++++++++++++++++++-
+ drivers/gpu/drm/msm/dp/dp_link.c            |  36 ++++++
+ drivers/gpu/drm/msm/dp/dp_panel.c           |  22 ++++
+ drivers/gpu/drm/msm/dp/dp_panel.h           |   6 +
+ drivers/gpu/drm/msm/dp/dp_reg.h             |  27 +++++
+ 15 files changed, 591 insertions(+), 24 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 

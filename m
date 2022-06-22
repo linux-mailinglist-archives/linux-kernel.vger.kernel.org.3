@@ -2,56 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5129554C27
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819AB554C2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343770AbiFVOGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
+        id S1357620AbiFVOHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235274AbiFVOGW (ORCPT
+        with ESMTP id S231863AbiFVOHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:06:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6A437BD1;
-        Wed, 22 Jun 2022 07:06:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7E31B81F2F;
-        Wed, 22 Jun 2022 14:06:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A2DC34114;
-        Wed, 22 Jun 2022 14:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655906778;
-        bh=V32Oq5PdZyE2PUlLwoGNPxQgY0tVovIx+oQ1azyoNT0=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=POjo8xAwHIgk0d94B/d1cMAHnUPwBOJC5GtCli01F/NRkB/tpT0OyudXuLTZVpuw3
-         JfrPzf+BiXbRfveuDt6f1yHYj9q03KbBg/HJN+40ph6OZJo217RPm2hzxItRwKx9Pj
-         DlaFFybb0QGFTds02CtmPnyBAHVLsuRRNSeyrimRp6XajDhYYAoMZSFQ2AS4g3EM2g
-         /xOkY6NrdbMrhZXCuCm1rUluqjGtjDlCYl83mbSWDnQBiOft25sg1IWTgogehYV/CH
-         sGvVd5YCeXm9WPeP6V7f7q/d9D9+zSbYfZKT5uKRgypXvNbtEoK9yUrqwFq8cG7+51
-         IPrwsJjWG6ViQ==
-Message-ID: <4c090b50-bfd1-ae90-ac72-ebae3963f578@kernel.org>
-Date:   Wed, 22 Jun 2022 22:06:15 +0800
+        Wed, 22 Jun 2022 10:07:04 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9A37BD3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:07:03 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id z17so9317001wmi.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MzKWleynAfOZzr1G32uJu4jvVPYdSV6qOcoCG8BDdeI=;
+        b=Yybid874HpfGUBNJPUpQicuLtK79W9BMcpg+PcvVhrK/OVuHkXUoO2oqO3aymUPI4H
+         NjAF+XpIeU4InRKHibe6EaWdY1PBtBghxcvFcZXuZVWsn9dEfxEbD8kYZ16iQuS+7Fyg
+         5Do1T/02aka/OxICUl+TNKuG09evEQSRXIOv4Z4j2KYRCT1TZdJ8bK1xUhG65QOFVYKl
+         B1vUz+CI8CSimhaytO2075oJnFb5Ul6L+h55TV5yYgA3AM2r8zCFoF+BYCaiFfcbb4A+
+         W3XSyCT1SxqdvvpkDHFX5njMe7qafyIXIppomoQAG6PsniNW9eb3Bq5mX8l6dr+41RCS
+         pVgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MzKWleynAfOZzr1G32uJu4jvVPYdSV6qOcoCG8BDdeI=;
+        b=SJCxIMK2PMkISV/qp1g1QwxOESvSkRkCWVOdGjI+LURz4l7QuUQ71ZPHZQvzRNR4ij
+         OOLF+yvxwZB+QL2BSiEVKyamohZfP0AG7nbUGe2uGkRzrusteOxbzl/WpALsfJwStHp4
+         iwXZ/5bHuP+etqFwZTFg5yhTwerurX63S+nvPX2MD0bX8LbW9EKuNNlPtSQhR9D60tVS
+         5FJwLJ6r/HNPb72/3WKPyqYax090BwcLj2WZzMYB4MJhiGT6ZLSelHRKA7TOkffcYqU8
+         yI+UB4dNp67hkaeJesU4KJMSOt8mF71hHOp0vDUwFakkP+3SURS59xJAkPqSVqaZxD6s
+         1CdA==
+X-Gm-Message-State: AOAM531+3u4p6JS7jGYN+GY7EUOIRJNsbyM0gl+9pvauuw0FiAWFZgn+
+        Dt5XLNgUZCjZ+BjKssiBhhI=
+X-Google-Smtp-Source: ABdhPJze2ccttYHD6Z+ReNpSXGvAL7/WlO9i1HO+wGVa0wB4egIBmMjI9h78jpnILe5ZX0+xYrulJA==
+X-Received: by 2002:a7b:c4cb:0:b0:39c:35b3:e8c1 with SMTP id g11-20020a7bc4cb000000b0039c35b3e8c1mr46816236wmk.183.1655906822523;
+        Wed, 22 Jun 2022 07:07:02 -0700 (PDT)
+Received: from [192.168.0.16] ([37.223.148.38])
+        by smtp.gmail.com with ESMTPSA id d7-20020adfef87000000b0021b9153f80fsm8644703wro.71.2022.06.22.07.07.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:07:01 -0700 (PDT)
+Message-ID: <d93c3721-8415-ad4d-2f68-2d55adbd1fff@gmail.com>
+Date:   Wed, 22 Jun 2022 16:06:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [f2fs-dev] [PATCH 1/3] f2fs: attach inline_data after setting
- compression
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] soc: mediatek: mutex: Use DDP_COMPONENT_DITHER0 mod index
+ for MT8365
 Content-Language: en-US
-From:   Chao Yu <chao@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     stable@vger.kernel.org
-References: <20220617223106.3517374-1-jaegeuk@kernel.org>
- <ae324c70-8671-8878-5854-c0910c744379@kernel.org>
-In-Reply-To: <ae324c70-8671-8878-5854-c0910c744379@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     fparent@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "jason-jh.lin" <jason-jh.lin@mediatek.com>
+References: <20220620102454.131417-1-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220620102454.131417-1-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,85 +77,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/19 8:35, Chao Yu wrote:
-> On 2022/6/18 6:31, Jaegeuk Kim wrote:
->> This fixes the below corruption.
->>
->> [345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
->>
->> Cc: <stable@vger.kernel.org>
->> Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
->> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->> ---
->>    fs/f2fs/namei.c | 16 ++++++++++------
->>    1 file changed, 10 insertions(+), 6 deletions(-)
->>
->> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
->> index c549acb52ac4..a841abe6a071 100644
->> --- a/fs/f2fs/namei.c
->> +++ b/fs/f2fs/namei.c
->> @@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
->>    	if (test_opt(sbi, INLINE_XATTR))
->>    		set_inode_flag(inode, FI_INLINE_XATTR);
->>    
->> -	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
->> -		set_inode_flag(inode, FI_INLINE_DATA);
->>    	if (f2fs_may_inline_dentry(inode))
->>    		set_inode_flag(inode, FI_INLINE_DENTRY);
->>    
->> @@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
->>    
->>    	f2fs_init_extent_tree(inode, NULL);
->>    
->> -	stat_inc_inline_xattr(inode);
->> -	stat_inc_inline_inode(inode);
->> -	stat_inc_inline_dir(inode);
->> -
->>    	F2FS_I(inode)->i_flags =
->>    		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
->>    
->> @@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
->>    			set_compress_context(inode);
->>    	}
->>    
->> +	/* Should enable inline_data after compression set */
->> +	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
->> +		set_inode_flag(inode, FI_INLINE_DATA);
->> +
->> +	stat_inc_inline_xattr(inode);
->> +	stat_inc_inline_inode(inode);
->> +	stat_inc_inline_dir(inode);
->> +
->>    	f2fs_set_inode_flags(inode);
->>    
->>    	trace_f2fs_new_inode(inode, 0);
->> @@ -325,6 +327,8 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
->>    		if (!is_extension_exist(name, ext[i], false))
->>    			continue;
->>    
->> +		/* Do not use inline_data with compression */
->> +		clear_inode_flag(inode, FI_INLINE_DATA);
-> 
-> if (is_inode_set_flag()) {
-> 	clear_inode_flag();
-> 	stat_dec_inline_inode();
-> }
 
-Missed to send new version to mailing list?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev&id=4cde00d50707c2ef6647b9b96b2cb40b6eb24397
+On 20/06/2022 12:24, AngeloGioacchino Del Regno wrote:
+> In commit
+> 4e8988c634a1 ("soc: mediatek: add DDP_DOMPONENT_DITHER0 enum for mt8195 vdosys0")
+> the enum mtk_ddp_comp_id was modified to add an index number to the
+> DITHER component because some new SoCs have multiple dither blocks.
+> 
+> As a result, all of the mutex mod arrays have been changed to use the
+> new definition instead of the old one (even if that's retained): for
+> consistency purposes, follow the same trend on the newly introduced
+> MT8365 mutex mod array.
+> 
+> This commit brings no functional changes.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Thanks,
+Applied, thanks!
 
+Matthias
+
+> ---
+>   drivers/soc/mediatek/mtk-mutex.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thanks,
-> 
->>    		set_compress_context(inode);
->>    		return;
->>    	}
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+> index fa8e0ba38803..2fd8318c3bdc 100644
+> --- a/drivers/soc/mediatek/mtk-mutex.c
+> +++ b/drivers/soc/mediatek/mtk-mutex.c
+> @@ -358,7 +358,7 @@ static const unsigned int mt8365_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+>   	[DDP_COMPONENT_AAL0] = MT8365_MUTEX_MOD_DISP_AAL,
+>   	[DDP_COMPONENT_CCORR] = MT8365_MUTEX_MOD_DISP_CCORR,
+>   	[DDP_COMPONENT_COLOR0] = MT8365_MUTEX_MOD_DISP_COLOR0,
+> -	[DDP_COMPONENT_DITHER] = MT8365_MUTEX_MOD_DISP_DITHER,
+> +	[DDP_COMPONENT_DITHER0] = MT8365_MUTEX_MOD_DISP_DITHER,
+>   	[DDP_COMPONENT_DPI0] = MT8365_MUTEX_MOD_DISP_DPI0,
+>   	[DDP_COMPONENT_DSI0] = MT8365_MUTEX_MOD_DISP_DSI0,
+>   	[DDP_COMPONENT_GAMMA] = MT8365_MUTEX_MOD_DISP_GAMMA,

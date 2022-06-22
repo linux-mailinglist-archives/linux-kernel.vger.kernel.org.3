@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F050F554B5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC409554B63
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiFVNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S240982AbiFVNeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiFVNb4 (ORCPT
+        with ESMTP id S234570AbiFVNed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:31:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFD2616F;
-        Wed, 22 Jun 2022 06:31:55 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 22 Jun 2022 09:34:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B112186DB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:34:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5A94566017B3;
-        Wed, 22 Jun 2022 14:31:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655904714;
-        bh=GXPW8eVZucPlabvBsj1O4A8AjaBWiHsVboTbgSoHxTA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JLPoC68GILDBMexQ17xPftwnfPgsXyisoN95ynJ5FFvZ+KnXtDVl1tkBCMu3nCIBo
-         P6SL0TVSKYV4VXFrD0QpYfYby2tCFSYtk/UiqurbS6d7G0WyJs25/jfhx+8MJ4EkN8
-         qKOLW/e6wDmsD1bfuViqWlt74K6dddUmyNxHdn+k5ORYLSZ4ZgJreaFdXtN/sU3oOA
-         ZAqyNQk08cdyUHIlbc6XOJwe8KbGEjjo8mZey708+TwvoFmLh64g2N0qDY4iZJ3dwV
-         TMC3FHkgOpsxy1NXG94K46X00EEHmc8P6HqnE3pzwBBbINCy80z5931SXOm8I4Vyfa
-         Eo71nviG5ZSXQ==
-Message-ID: <26854a9b-09c2-c14e-eabe-cfc574d6012e@collabora.com>
-Date:   Wed, 22 Jun 2022 15:31:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] soc: mediatek: mutex: add suffix 0 to
- DDP_COMPONENT_DITHER for mt8395
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220622131952.29583-1-jason-jh.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220622131952.29583-1-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 480641F9CB;
+        Wed, 22 Jun 2022 13:34:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655904870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tL5R6CgcdLWhC5WLpBa844ixXg1BzecaMDlHfUxUCKo=;
+        b=oTFsweeR2zWwsfHkFSd9fObMJoC1i/pkvs8e0E7OFgmHpd331ZU83Zxt4R4RefSx0GxPIF
+        BO6V6YFa6282U50nlEDfrHQi96LUt6jC+Iv8sgbTBwdEPqIp8U4GeAj0Lv9TtQo4fLDh10
+        RcRxRi2ZYv2T/rHmb1xo9ue9MgoCtp8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655904870;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tL5R6CgcdLWhC5WLpBa844ixXg1BzecaMDlHfUxUCKo=;
+        b=h1klysAQHh0dlXwzG0fc0dEjn8xJqACVkGI5r38y5k8yipDNrlHDQ/sSB7a4YOwhXDYpjg
+        JqhOk5hG1tbPYgDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 196B1134A9;
+        Wed, 22 Jun 2022 13:34:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id htnbBGYas2KuNgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 22 Jun 2022 13:34:30 +0000
+Date:   Wed, 22 Jun 2022 15:34:29 +0200
+Message-ID: <87wnd8n7oa.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v7 01/14] ALSA: hda: hda_cs_dsp_ctl: Add Library to support CS_DSP ALSA controls
+In-Reply-To: <20220622074653.179078-2-vitalyr@opensource.cirrus.com>
+References: <20220622074653.179078-1-vitalyr@opensource.cirrus.com>
+        <20220622074653.179078-2-vitalyr@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,57 +72,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/06/22 15:19, Jason-JH.Lin ha scritto:
-> Add suffix 0 to DDP_COMPONENT_DITHER for mt8395.
+On Wed, 22 Jun 2022 09:46:40 +0200,
+Vitaly Rodionov wrote:
 > 
-> Fixes: 141311b856d8 ("soc: mediatek: mutex: add MT8365 support")
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> +static int hda_cs_dsp_add_kcontrol(struct hda_cs_dsp_coeff_ctl *ctl)
+> +{
+> +	struct cs_dsp_coeff_ctl *cs_ctl = ctl->cs_ctl;
+> +	struct snd_kcontrol_new *kcontrol;
+> +	struct snd_kcontrol *kctl;
+> +	int ret = 0;
+> +
+> +	if (cs_ctl->len > ADSP_MAX_STD_CTRL_SIZE) {
+> +		dev_err(cs_ctl->dsp->dev, "Control %s: length %zu exceeds maximum %d\n", ctl->name,
+> +			cs_ctl->len, ADSP_MAX_STD_CTRL_SIZE);
+> +		return -EINVAL;
+> +	}
+> +
+> +	kcontrol = kzalloc(sizeof(*kcontrol), GFP_KERNEL);
+> +	if (!kcontrol)
+> +		return -ENOMEM;
+> +
+> +	kcontrol->name = ctl->name;
+> +	kcontrol->info = hda_cs_dsp_coeff_info;
+> +	kcontrol->iface = SNDRV_CTL_ELEM_IFACE_MIXER;
+> +	kcontrol->private_value = (unsigned long)ctl;
+> +	kcontrol->access = wmfw_convert_flags(cs_ctl->flags);
+> +
+> +	kcontrol->get = hda_cs_dsp_coeff_get;
+> +	kcontrol->put = hda_cs_dsp_coeff_put;
+> +
+> +	kctl = snd_ctl_new1(kcontrol, NULL);
+> +	if (!kctl) {
+> +		ret = -ENOMEM;
+> +		goto err;
+> +	}
+> +	ctl->kctl = kctl;
+> +
+> +	ret = snd_ctl_add(ctl->card, kctl);
+> +	if (ret)
+> +		dev_err(cs_ctl->dsp->dev, "Failed to add KControl: %s - Ret: %d\n", kcontrol->name,
+> +			ret);
+> +	else
+> +		dev_dbg(cs_ctl->dsp->dev, "Added KControl: %s\n", kcontrol->name);
+
+snd_ctl_add() releases the kctl automatically upon errors, hence
+assigning ctl->kctl may lead to a use-after-free.  Therefore ctl->kctl
+should be assigned after the success of snd_ctl_add().
+
+> +int hda_cs_dsp_control_add(struct cs_dsp_coeff_ctl *cs_ctl, struct hda_cs_dsp_ctl_info *info)
+> +{
+> +	struct cs_dsp *cs_dsp = cs_ctl->dsp;
+> +	char name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	struct hda_cs_dsp_coeff_ctl *ctl;
+> +	const char *region_name;
+> +	int ret;
+> +
+> +	if (cs_ctl->flags & WMFW_CTL_FLAG_SYS)
+> +		return 0;
+> +
+> +	region_name = cs_dsp_mem_region_name(cs_ctl->alg_region.type);
+> +	if (!region_name) {
+> +		dev_err(cs_dsp->dev, "Unknown region type: %d\n", cs_ctl->alg_region.type);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = scnprintf(name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN, "%s %s %.12s %x", info->device_name,
+> +			cs_dsp->name, hda_cs_dsp_fw_text[info->fw_type], cs_ctl->alg_region.alg);
+> +
+> +	if (cs_ctl->subname) {
+> +		int avail = SNDRV_CTL_ELEM_ID_NAME_MAXLEN - ret - 2;
+> +		int skip = 0;
+> +
+> +		/* Truncate the subname from the start if it is too long */
+> +		if (cs_ctl->subname_len > avail)
+> +			skip = cs_ctl->subname_len - avail;
+> +
+> +		snprintf(name + ret, SNDRV_CTL_ELEM_ID_NAME_MAXLEN - ret,
+> +			 " %.*s", cs_ctl->subname_len - skip, cs_ctl->subname + skip);
+> +	}
+> +
+> +	ctl = kzalloc(sizeof(*ctl), GFP_KERNEL);
+> +	if (!ctl)
+> +		return -ENOMEM;
+> +	ctl->cs_ctl = cs_ctl;
+> +	ctl->card = info->card;
+> +
+> +	ctl->name = kmemdup(name, strlen(name) + 1, GFP_KERNEL);
+
+This is kstrdup() :)
+
+But, we don't need to keep the name string persistently at all.
+It's copied onto kcontrol id field, and the original string is no
+longer needed after that point.  So you can pass the name as is to
+hda_cs_dsp_add_kcontrol().
 
 
-Hello Jason-JH,
+> +	if (!ctl->name) {
+> +		ret = -ENOMEM;
+> +		dev_err(cs_dsp->dev, "Cannot save ctl name\n");
+> +		goto err_ctl;
+> +	}
+> +
+> +	cs_ctl->priv = ctl;
+> +
+> +	return hda_cs_dsp_add_kcontrol(ctl);
 
-you must've missed my commit, sent two days ago, which is doing the same:
+Hm, this leaves ctl even if it returns an error, i.e. some leaks?
 
-https://lore.kernel.org/lkml/20220620102454.131417-1-angelogioacchino.delregno@collabora.com/T/#u
+> +err_ctl:
+> +	dev_err(cs_dsp->dev, "Error adding control: %s\n", name);
+> +	kfree(ctl);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(hda_cs_dsp_control_add, SND_HDA_CS_DSP_CONTROLS);
+> +
+> +void hda_cs_dsp_control_remove(struct cs_dsp_coeff_ctl *cs_ctl)
+> +{
+> +	struct hda_cs_dsp_coeff_ctl *ctl = cs_ctl->priv;
+> +
+> +	snd_ctl_remove_id(ctl->card, &ctl->kctl->id);
+> +	kfree(ctl->name);
+> +	kfree(ctl);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(hda_cs_dsp_control_remove, SND_HDA_CS_DSP_CONTROLS);
 
-Anyway, I have avoided to rename the definition, as from what I understand
-MT8365 has only one dither mod and that's called "DITHER", not "DITHER0"...
-...but I've added the suffix to the array assignment, as that's what we have
-in the enumeration.
+Is hda_cs_dsp_control_remove() *always* called explicitly for all
+added controls at the device removal / unbind?  ALSA control core also
+releases the remaining controls by itself, and if the objects are
+released there, it'll lead to memory leaks for ctl object.
 
-I think that #define MT8365_MUTEX_MOD_DISP_DITHER should be kept as-is.
-
-Also... this commit is not fixing anything, as it was already working before,
-so the Fixes tag shouldn't be present.
-
-Regards,
-Angelo
-
-> ---
->   drivers/soc/mediatek/mtk-mutex.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-> index fa8e0ba38803..3b25fd6b91aa 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -130,7 +130,7 @@
->   #define MT8365_MUTEX_MOD_DISP_CCORR		13
->   #define MT8365_MUTEX_MOD_DISP_AAL		14
->   #define MT8365_MUTEX_MOD_DISP_GAMMA		15
-> -#define MT8365_MUTEX_MOD_DISP_DITHER		16
-> +#define MT8365_MUTEX_MOD_DISP_DITHER0		16
->   #define MT8365_MUTEX_MOD_DISP_DSI0		17
->   #define MT8365_MUTEX_MOD_DISP_PWM0		20
->   #define MT8365_MUTEX_MOD_DISP_DPI0		22
-> @@ -358,7 +358,7 @@ static const unsigned int mt8365_mutex_mod[DDP_COMPONENT_ID_MAX] = {
->   	[DDP_COMPONENT_AAL0] = MT8365_MUTEX_MOD_DISP_AAL,
->   	[DDP_COMPONENT_CCORR] = MT8365_MUTEX_MOD_DISP_CCORR,
->   	[DDP_COMPONENT_COLOR0] = MT8365_MUTEX_MOD_DISP_COLOR0,
-> -	[DDP_COMPONENT_DITHER] = MT8365_MUTEX_MOD_DISP_DITHER,
-> +	[DDP_COMPONENT_DITHER0] = MT8365_MUTEX_MOD_DISP_DITHER0,
->   	[DDP_COMPONENT_DPI0] = MT8365_MUTEX_MOD_DISP_DPI0,
->   	[DDP_COMPONENT_DSI0] = MT8365_MUTEX_MOD_DISP_DSI0,
->   	[DDP_COMPONENT_GAMMA] = MT8365_MUTEX_MOD_DISP_GAMMA,
+If the snd_kcontrol may be freed by itself without
+hda_cs_dsp_control_remove() call, it should have a proper private_free
+callback to free the assigned ctl object (also better to reset
+ctl->cs_ctl->priv field, too).
 
 
+Takashi

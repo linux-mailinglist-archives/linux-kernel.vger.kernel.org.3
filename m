@@ -2,102 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938E3554D85
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E997F554D95
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358744AbiFVOg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S1358408AbiFVOiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358734AbiFVOgy (ORCPT
+        with ESMTP id S236254AbiFVOiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:36:54 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA19C3CA48;
-        Wed, 22 Jun 2022 07:36:53 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p5so10380845pjt.2;
-        Wed, 22 Jun 2022 07:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QPTQnnGMAlX9DR/Wnzz/rHtvgybIf6uKNn+Efoudg+A=;
-        b=hfCoQxsSr1AiUPED+rApz5o3D8pO/hGhEKqz4/3wZPQix+70o879IgeDEGHilYZGL6
-         HWj1U9BXuM0FK3F/sYqVWRloIUHVtXKz1DdaEaM1rATOLyK0uFm7qEi/C56CZiQoZf8j
-         jWG3lft0SgAJuAM4sqOQIBEVsj8A2HEokzEWTLARyhki2+zb/w3ccxPGPBwv+OeFHbDI
-         A8XkpMuMz2cJpWJdNxTzZfbI+1gG6vqpS5lTh6Ur4kuznKKm8pMpUoB2YjH30Aa193Zo
-         MiRrndHiDJz/C29k6Q/pt/pJrS3J2rGFNbg+jsKPQc/y1Hp98+iCv2psxMTWsQvBboCF
-         d/qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QPTQnnGMAlX9DR/Wnzz/rHtvgybIf6uKNn+Efoudg+A=;
-        b=H+vssoRVmpAKqA+INo9F7irndXWCYANdojnICpclu3nCNDWe4Wi80GztehxxRJ9BX4
-         S9s0GgUwjtW5z9zRImTks4J3Zw/clW+WKoe5NZCclftUQjATs9yVfp/EFh3vQUkj9Cas
-         iSDjcPj2Ppn8VbiWxh0OIH1gtcEe2ReraIbILSF809fuF+MR6uWcUWzMG6nDbeNUH+Y0
-         8Jf/ljP2kPMx44U2K1a91L7BUBzCNFXOWAqL+r1RZicS75SnRVo0AKRDcha48VogV5sZ
-         s+P6GYxUMcUFCJ4lO7Pu8+P5nW/xKJLABHx/t+dm2hIkzHnKCgeMpif685DsFZanlDCw
-         ldyA==
-X-Gm-Message-State: AJIora+ph7rRLuz8uDLQapGffqq7EOvcJYRFO1YXIXx9xt+HpaSOx0Nz
-        Tcu62efZxKc+qQT7S5yDqo0X0cQyc8I=
-X-Google-Smtp-Source: AGRyM1uLC611EYbwN9PQLKue9M+LWR2/yK9A7/CK60EWV+8yg7Fw2xjQsRI0T++TJXXz0BWWXwB1EQ==
-X-Received: by 2002:a17:90b:33c8:b0:1ea:c199:9794 with SMTP id lk8-20020a17090b33c800b001eac1999794mr4104778pjb.224.1655908613363;
-        Wed, 22 Jun 2022 07:36:53 -0700 (PDT)
-Received: from [192.168.1.24] (1-162-200-193.dynamic-ip.hinet.net. [1.162.200.193])
-        by smtp.gmail.com with ESMTPSA id x15-20020a63b34f000000b0040d027e1f0fsm3232444pgt.25.2022.06.22.07.36.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 07:36:52 -0700 (PDT)
-Message-ID: <eda3f331-6df4-c4d3-33e5-a872fecd6024@gmail.com>
-Date:   Wed, 22 Jun 2022 22:36:50 +0800
+        Wed, 22 Jun 2022 10:38:14 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59CF39B99;
+        Wed, 22 Jun 2022 07:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655908694; x=1687444694;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xA+AX77vbPPnWCLAuym9yD93ebv8XWnin6EN1d9z6Y0=;
+  b=SRYV1O6FgKmrZVxAA9Ie5YiCPMZke+LSNPyzzAFO7N9ihKhR1ptp9URy
+   M1TR3H17I9/gfvRNtANpwtpXNyTMqsYpJxZBzOozo5mOFkn7oQoyxWWgT
+   tjA6FuSp+hiKXKqfLhBKcYLv5OB6AvKPLrjJmPAb19Ez0rY6IOwlGGIvv
+   8oxKazXVTb79K1oouthU5xnFBOFZyfAr1jbUJrqZgE1mZdD7/EVRWZStE
+   BpnlKcyAL8aH+nIOLtthh6dvOzSPA7KB1WtW/0ujhKBfrRIn+foiziy9u
+   OXYXaebN/HhoZELeCzgKijQzDcWQD0+GzX4kvlk05jKenENw1fOpOQUfu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="280478914"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="280478914"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:37:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="715428449"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2022 07:37:43 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25MEbfrW014711;
+        Wed, 22 Jun 2022 15:37:41 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v4 0/8] bitops: let optimize out non-atomic bitops on compile-time constants
+Date:   Wed, 22 Jun 2022 16:37:39 +0200
+Message-Id: <20220622143739.291698-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <YrMlrjbue7twWLk1@smile.fi.intel.com>
+References: <20220621191553.69455-1-alexandr.lobakin@intel.com> <20220622122440.87087-1-alexandr.lobakin@intel.com> <YrMlrjbue7twWLk1@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 0/4] Update Facebook Bletchley BMC DTS
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>, Patrick Williams <patrick@stwcx.xyz>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        Potin Lai <potin.lai@quantatw.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220613095150.21917-1-potin.lai.pt@gmail.com>
- <Yqdr1ZS6d71QeACd@heinlein.stwcx.org.github.beta.tailscale.net>
-From:   Potin Lai <potin.lai.pt@gmail.com>
-In-Reply-To: <Yqdr1ZS6d71QeACd@heinlein.stwcx.org.github.beta.tailscale.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Wed, 22 Jun 2022 17:22:38 +0300
 
-Patrick Williams 於 6/14/2022 12:54 AM 寫道:
-> On Mon, Jun 13, 2022 at 05:51:46PM +0800, Potin Lai wrote:
->> Update below items for Facebook Bletchley BMC devicetree.
->>
->> Potin Lai (4):
->>   ARM: dts: aspeed: bletchley: change LED sys_log_id to active low
->>   ARM: dts: aspeed: bletchley: disable GPIOV2 pull-down
->>   ARM: dts: aspeed: bletchley: bind presence-sledX pins via gpio-keys
->>   ARM: dts: aspeed: bletchley: update fusb302 nodes
->>
->>  .../dts/aspeed-bmc-facebook-bletchley.dts     | 197 +++++++++++++-----
->>  1 file changed, 148 insertions(+), 49 deletions(-)
-Hi Joel,
-Could you help me review this patch series?
-Could you also backport this to linux-aspeed 5.15 if everything looks good to you?
-Thank you.
+> On Wed, Jun 22, 2022 at 02:24:40PM +0200, Alexander Lobakin wrote:
+> > From: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > Date: Tue, 21 Jun 2022 21:15:45 +0200
+> > 
+> > > While I was working on converting some structure fields from a fixed
+> > > type to a bitmap, I started observing code size increase not only in
+> > > places where the code works with the converted structure fields, but
+> > > also where the converted vars were on the stack. That said, the
+> > > following code:
+> > 
+> > [...]
+> > 
+> > Oh gosh, now s390 failed and 7/8 revealed one existing code flaw in
+> > the ice driver.
+> > I'll fix those, then will try to test more platforms (to not spam
+> > series again) and send v5 soon (mentioning this as bots CCs only
+> > myself).
+> 
+> One mail per person? Because I also got a report.
 
-Potin
-> The whole patch set looks good to me as the closest domain expert to the
-> Bletchley system after Potin.
->
-> Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
->
+From the headers:
+
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc: <llvm@lists.linux.dev>,
+ <kbuild-all@lists.01.org>,
+ <linux-kernel@vger.kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+I guess it's due to your Reviewed-by in the commit message, no one
+else from the original CCs list is present.
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+
+Thanks,
+Olek

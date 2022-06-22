@@ -2,91 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B9A553FF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4671455401E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355409AbiFVBQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 21:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        id S1355442AbiFVBgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 21:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiFVBQd (ORCPT
+        with ESMTP id S231727AbiFVBgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 21:16:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D331431513
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 18:16:31 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSQRT21M1zkWbq;
-        Wed, 22 Jun 2022 09:15:17 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 09:16:29 +0800
-Received: from zelda.huawei.com (10.175.103.14) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 09:16:28 +0800
-From:   Jin Xiaoyun <jinxiaoyun2@huawei.com>
-To:     <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>, <khilman@baylibre.com>,
-        <zhengbin13@huawei.com>, <gaochao49@huawei.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Jin Xiaoyun" <jinxiaoyun2@huawei.com>
-Subject: [PATCH -next] soc: mediatek: SVS: Make svs_resume and svs_suspend defined when CONFIG_PM_SLEEP is y
-Date:   Wed, 22 Jun 2022 09:34:10 +0800
-Message-ID: <20220622013410.2786760-1-jinxiaoyun2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 21 Jun 2022 21:36:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C75FF58F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 18:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655861801; x=1687397801;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zqCWDRHMK5Aix9ertSDJIJ+yaJFXeDzuTdpljbqYeik=;
+  b=X/vI6DfB+or4sla8wjx0RK0brB1zZYN+x9ld6v5eEnoYCONjw2Avm0gH
+   hfrFugpQiGd8AKyTw1opJ0LrPj1VdDf9nGEjgahqohdjPtyRtRL/mAZfD
+   kwAEDwabY/R4CbzsoZiF4KjrALC8VE2hGQTsLS6F31p4eVWVReM9mhldX
+   6cKwAxrrCjDgoR8pzIC2Gy8DcSpATGlgWNJanmzn+OEYpAk0sRaFWXFsM
+   5uVd9uufPc0BJqhraMl838iTEV346mwt/ej7IkI+8oCZgYYPm/W9b19Ik
+   hiU/3nx5LOG2BEDmMh5P7FSqSic9zvhmIuGyaLdklpMdQQLeUk8NpJR+N
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="366607050"
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="366607050"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 18:36:41 -0700
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="833849548"
+Received: from xzhan99-mobl1.ccr.corp.intel.com (HELO [10.249.172.26]) ([10.249.172.26])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 18:36:39 -0700
+Message-ID: <59002dbd-d72a-4f9c-7ad8-808ee8d2ff05@linux.intel.com>
+Date:   Wed, 22 Jun 2022 09:36:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.103.14]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux-foundation.org,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] iommu: Clean up release_device checks
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
+        will@kernel.org
+References: <cover.1655822151.git.robin.murphy@arm.com>
+ <02671dbfad7a3343fc25a44222350efcb455fe3c.1655822151.git.robin.murphy@arm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <02671dbfad7a3343fc25a44222350efcb455fe3c.1655822151.git.robin.murphy@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The svs_resume and svs_suspend is defined through SIMPLE_DEV_PM_OPS. If CONFIG_PM_SLEEP
-is not defined, SIMPLE_DEV_PM_OPS is equivalent to an empty function. In this case,
-the defination of svs_resume and svs_suspend is meaningless.
+On 2022/6/21 23:14, Robin Murphy wrote:
+> Since .release_device is now called through per-device ops, any call
+> which gets as far as a driver definitely*is*  for that driver, for a
+> device which has successfully passed .probe_device, so all the checks to
+> that effect are now redundant and can be removed. In the same vein we
+> can also skip freeing fwspecs which are now managed by core code.
 
-Fix build error:
-drivers/soc/mediatek/mtk-svs.c:1515:12: error: ‘svs_resume’ defined but not used [-Werror=unused-function]
-drivers/soc/mediatek/mtk-svs.c:1481:12: error: ‘svs_suspend’ defined but not used [-Werror=unused-function]
+Does this depend on any other series? I didn't see iommu_fwspec_free()
+called in the core code. Or I missed anything?
 
-Signed-off-by: Jin Xiaoyun <jinxiaoyun2@huawei.com>
----
- drivers/soc/mediatek/mtk-svs.c | 2 ++
- 1 file changed, 2 insertions(+)
+> 
+> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+> ---
+>   drivers/iommu/apple-dart.c                  |  3 ---
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  8 +-------
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c       | 14 +++-----------
+>   drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 11 -----------
+>   drivers/iommu/exynos-iommu.c                |  3 ---
+>   drivers/iommu/mtk_iommu.c                   |  5 -----
+>   drivers/iommu/mtk_iommu_v1.c                |  5 -----
+>   drivers/iommu/sprd-iommu.c                  | 11 -----------
+>   drivers/iommu/virtio-iommu.c                |  8 +-------
+>   9 files changed, 5 insertions(+), 63 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 606a00a2e57d..8440058784dc 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -1478,6 +1478,7 @@ static int svs_start(struct svs_platform *svsp)
- 	return 0;
- }
-
-+#ifdef CONFIG_PM_SLEEP
- static int svs_suspend(struct device *dev)
- {
- 	struct svs_platform *svsp = dev_get_drvdata(dev);
-@@ -1537,6 +1538,7 @@ static int svs_resume(struct device *dev)
-
- 	return 0;
- }
-+#endif
-
- static int svs_bank_resource_setup(struct svs_platform *svsp)
- {
---
-2.25.1
-
+Best regards,
+baolu

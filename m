@@ -2,218 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5C355473B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C435548B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355832AbiFVJFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S1356197AbiFVJGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbiFVJF1 (ORCPT
+        with ESMTP id S1355961AbiFVJF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:05:27 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7BD201A8;
-        Wed, 22 Jun 2022 02:05:26 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id o10so22942962edi.1;
-        Wed, 22 Jun 2022 02:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tDbYyeBEwGX8YAg3QUDWRyeGWxjD+ob964twAa4kWvc=;
-        b=T6Q7g41xrVHPb5/EXilFpXnlYnOVv3yYpEH50JccewrUSviM3mUvqSgrfQec6jzuqT
-         QmQdgEHQoQtM3w3cRWuR8gHZuyMVz1xG9IQ1DZXBbpE3NnJfGw6KQRe+9ykOFhRswK6M
-         WbtxG+U8RSROCzFeDazB2Mk4clWtOONEjq9ibBGxWUlMd+cuhKKXMSyCX2OITLa1ijML
-         PQMi7TwwJUSH+y8kAkMuSEplLoNrc9nGSJv5FvEGair385YnjpNarug0s1vlujT1imSJ
-         Ei83AzV++scBxJeAngyCdhPMSARVu7b2t58ECG5jso144HxibALj490wuFwQkU+XwL7T
-         AbKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tDbYyeBEwGX8YAg3QUDWRyeGWxjD+ob964twAa4kWvc=;
-        b=c4mndvZkzIKrT82EzGwcL3AVJxEM6kdvL05Mvytd+t9RDjekZxJokKUD9p37GjcZeM
-         H94rxalaIAM4iOFQ3lrbn7peSnKD+KxUZK+aVT7k3FXReOg6u/eTnPsc/UFjzjbJXeo2
-         2I6pPXwmI4t51QYfLjKpt2Sz9kZe7JekMF8cSs48OYI/ZBXTeZKSYfF9EHry48A8+3hK
-         7z2L2qJZJLjQSVC9w8NTjGkaEUEm8Zm5VSDRwsQXj6zsZHzb/8igrBC9mt+z6AvW8znu
-         saA3esQ2J5QIqHPzgzE5A5enDyjwx+VLrE/a0c9ELXMFrpG+tbNDTl687lahK3cV8ZAz
-         m7Gw==
-X-Gm-Message-State: AJIora/CjpmZij0fZJNKvEPqow3FM+L8xo03DJJ9hMU8jWdaNPCEUFLK
-        zyzKuJa1IcQjjKvYB8v9n7M=
-X-Google-Smtp-Source: AGRyM1sGjrBd+ZyLKbv9JrMmQVEw2WQSCnULGkU8C+b5nzWE2vH4+sK2Wwrmw/CVvFKBmg3vAZpouA==
-X-Received: by 2002:a05:6402:350f:b0:42f:68f9:ae5 with SMTP id b15-20020a056402350f00b0042f68f90ae5mr2954373edd.36.1655888725078;
-        Wed, 22 Jun 2022 02:05:25 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:8f77:c83:6a3d:ee86? ([2a02:908:1256:79a0:8f77:c83:6a3d:ee86])
-        by smtp.gmail.com with ESMTPSA id c19-20020aa7c753000000b004357063bf60sm9952412eds.41.2022.06.22.02.05.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 02:05:24 -0700 (PDT)
-Message-ID: <82500226-3ac5-c62c-ac5b-363ee184dbbc@gmail.com>
-Date:   Wed, 22 Jun 2022 11:05:23 +0200
+        Wed, 22 Jun 2022 05:05:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5510E2253F;
+        Wed, 22 Jun 2022 02:05:56 -0700 (PDT)
+X-UUID: 8c8a794047c74a1c94c15f2e59564d34-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:2d28897f-eff3-4765-b031-a28bc24fbfab,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:0e512a38-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 8c8a794047c74a1c94c15f2e59564d34-20220622
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1223484336; Wed, 22 Jun 2022 17:05:49 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 17:05:48 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 22 Jun 2022 17:05:48 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 17:05:47 +0800
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Fabien Parent <fparent@baylibre.com>
+CC:     Jakub Kicinski <kuba@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+        "John Crispin" <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Biao Huang <biao.huang@mediatek.com>,
+        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
+        <srv_heupstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: [PATCH net-next v3 00/10] add more features for mtk-star-emac
+Date:   Wed, 22 Jun 2022 17:05:35 +0800
+Message-ID: <20220622090545.23612-1-biao.huang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [Linaro-mm-sig] Re: DMA-buf and uncached system memory
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Andy.Hsieh" <andy.hsieh@mediatek.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org, lkml <linux-kernel@vger.kernel.org>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Sharma, Shashank" <Shashank.Sharma@amd.com>
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
- <cdb508e49eb1439f4e4c327d2a6738f219e04bf8.camel@ndufresne.ca>
- <5822b325-766e-ce3c-50eb-d7f54f14fd0b@mediatek.com>
- <39f7f41a-af8d-4700-37da-9401455afb98@amd.com>
- <2aabc41c8432d09b7ceeb8e67144a639d3d86c72.camel@ndufresne.ca>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <2aabc41c8432d09b7ceeb8e67144a639d3d86c72.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 21.06.22 um 17:42 schrieb Nicolas Dufresne:
-> Hi Christian and Andy,
->
-> Le mardi 21 juin 2022 à 12:34 +0200, Christian König a écrit :
->>   Hi Andy,
->>   
->>   Am 21.06.22 um 12:17 schrieb Andy.Hsieh:
->>   
->>> On 2/16/21 4:39 AM, Nicolas Dufresne wrote:
->>>> Le lundi 15 février 2021 à 09:58 +0100, Christian König a écrit :
->>>>> Hi guys,
->>>>>
->>>>> we are currently working an Freesync and direct scan out from system
->>>>> memory on AMD APUs in A+A laptops.
->>>>>
->>>>> On problem we stumbled over is that our display hardware needs to scan
->>>>> out from uncached system memory and we currently don't have a way to
->>>>> communicate that through DMA-buf.
->>>>>
->>>>> For our specific use case at hand we are going to implement something
->>>>> driver specific, but the question is should we have something more
->>>>> generic for this?
->>>> Hopefully I'm getting this right, but this makes me think of a long
->>>> standing
->>>> issue I've met with Intel DRM and UVC driver. If I let the UVC driver
->>>> allocate
->>>> the buffer, and import the resulting DMABuf (cacheable memory written with
->>>> a cpu
->>>> copy in the kernel) into DRM, we can see cache artifact being displayed.
->>>> While
->>>> if I use the DRM driver memory (dumb buffer in that case) it's clean
->>>> because
->>>> there is a driver specific solution to that.
->>>>
->>>> There is no obvious way for userspace application to know what's is
->>>> right/wrong
->>>> way and in fact it feels like the kernel could solve this somehow without
->>>> having
->>>> to inform userspace (perhaps).
->>>>
->>>>> After all the system memory access pattern is a PCIe extension and as
->>>>> such something generic.
->>>>>
->>>>> Regards,
->>>>> Christian.
->>>>
->>> Hi All,
->>>
->>> We also encountered the UVC cache issue on ARMv8 CPU in Mediatek SoC when
->>> using UVC dmabuf-export and feeding the dmabuf to the DRM display by the
->>> following GStreamer command:
->>>
->>> # gst-launch-1.0 v4l2src device=/dev/video0 io-mode=dmabuf ! kmssink
->>>
->>> UVC driver uses videobuf2-vmalloc to allocate buffers and is able to export
->>> them as dmabuf. But UVC uses memcpy() to fill the frame buffer by CPU
->>> without
->>> flushing the cache. So if the display hardware directly uses the buffer, the
->>> image shown on the screen will be dirty.
->>>
->>> Here are some experiments:
->>>
->>> 1. By doing some memory operations (e.g. devmem) when streaming the UVC,
->>>     the issue is mitigated. I guess the cache is swapped rapidly.
->>> 2. By replacing the memcpy() with memcpy_flushcache() in the UVC driver,
->>>     the issue disappears.
->>> 3. By adding .finish callback in videobuf2-vmalloc.c to flush the cache
->>>     before returning the buffer, the issue disappears.
->>>
->>> It seems to lack a cache flush stage in either UVC or Display. We may also
->>> need communication between the producer and consumer. Then, they can decide
->>> who is responsible for the flushing to avoid flushing cache unconditionally
->>> leading to the performance impact.
->>   
->>   Well, that's not what this mail thread was all about.
->>   
->>   The issue you are facing is that somebody is forgetting to flush caches, but
->> the issue discussed in this thread here is that we have hardware which
->> bypasses caches altogether.
->>   
->>   As far as I can see in your case UVC just allocates normal cached system
->> memory through videobuf2-vmalloc() and it is perfectly valid to fill that
->> using memcpy().
->>   
->>   If some hardware then accesses those buffers bypassing CPU caches then it is
->> the responsibility of the importing driver and/or DMA subsystem to flush the
->> caches accordingly.
-> I've tracked this down to videobuf2-vmalloc.c failing to look for coherency
-> during "attach()". It is also missing begin_/end access implementation for the
-> case it get attached to a non-coherent device. Seems fixable though, but "I'm
-> far from an expert", but more some random person reading code and comments.
+Changes in v3:
+1. refractor driver as Jakub's comments in patch
+   "net: ethernet: mtk-star-emac: separate tx/rx handling with two NAPIs".
+2. add acked-by as Rob's comments.
+3. add a new patch for halp-duplex support in driver.
 
-Well that is perfectly expected behavior, videobuf2-vmalloc return 
-normal cached system memory.
+Changes in v2:
+1. fix coding style as Bartosz's comments.
+2. add reviewed-by as Bartosz's comments.
 
-So it doesn't care for the coherency of the buffer.
+This series add more features for mtk-star-emac:
+1. add reference clock pad selection for RMII;
+2. add simple timing adjustment for RMII;
+3. add support for MII;
+4. add support for new IC MT8365;
+5. separate tx/rx interrupt handling.
 
-What should happen instead is that the display device needs to make sure 
-that it can coherently access the data and that's not the case here.
+Biao Huang (10):
+  net: ethernet: mtk-star-emac: store bit_clk_div in compat structure
+  net: ethernet: mtk-star-emac: modify IRQ trigger flags
+  net: ethernet: mtk-star-emac: add support for MT8365 SoC
+  dt-bindings: net: mtk-star-emac: add support for MT8365
+  net: ethernet: mtk-star-emac: add clock pad selection for RMII
+  net: ethernet: mtk-star-emac: add timing adjustment support
+  dt-bindings: net: mtk-star-emac: add description for new properties
+  net: ethernet: mtk-star-emac: add support for MII interface
+  net: ethernet: mtk-star-emac: separate tx/rx handling with two NAPIs
+  net: ethernet: mtk-star-emac: enable half duplex hardware support
 
-Regards,
-Christian.
+ .../bindings/net/mediatek,star-emac.yaml      |  17 +
+ drivers/net/ethernet/mediatek/mtk_star_emac.c | 508 ++++++++++++------
+ 2 files changed, 352 insertions(+), 173 deletions(-)
 
->
-> regards,
-> Nicolas
->
->>   
->>   Regards,
->>   Christian.
->>   
->>   
->>> Regards,
->>> Andy Hsieh
->>>
->>> ************* MEDIATEK Confidentiality Notice ********************
->>> The information contained in this e-mail message (including any
->>> attachments) may be confidential, proprietary, privileged, or otherwise
->>> exempt from disclosure under applicable laws. It is intended to be
->>> conveyed only to the designated recipient(s). Any use, dissemination,
->>> distribution, printing, retaining or copying of this e-mail (including its
->>> attachments) by unintended recipient(s) is strictly prohibited and may
->>> be unlawful. If you are not an intended recipient of this e-mail, or believe
->>> that you have received this e-mail in error, please notify the sender
->>> immediately (by replying to this e-mail), delete any and all copies of
->>> this e-mail (including any attachments) from your system, and do not
->>> disclose the content of this e-mail to any other person. Thank you!
->>   
->>   
-> _______________________________________________
-> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
-> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
+-- 
+2.18.0
+
 

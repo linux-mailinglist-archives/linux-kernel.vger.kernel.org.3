@@ -2,129 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211E3554EBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5C3554EB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359094AbiFVPJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        id S1359091AbiFVPJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359071AbiFVPIR (ORCPT
+        with ESMTP id S1359177AbiFVPIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:08:17 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC9E2BF3;
-        Wed, 22 Jun 2022 08:08:16 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id q15so9416867wmj.2;
-        Wed, 22 Jun 2022 08:08:16 -0700 (PDT)
+        Wed, 22 Jun 2022 11:08:43 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E733A2DA9D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:08:36 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id sb34so5848019ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:08:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mZxOn+wGDgrlZgu5R6pd78yHgsnhABm1ikEzbHnNwlo=;
-        b=pFG8rg6wtIF2HSc9z1qNlvDHz/ACH/3SyFxQgQQzpyq2IppbKs1km6zRfUFrkbDEHO
-         prqzoc2DhUyKHOCzomwpY/4tUzsf4dqdiAeRte6uZ5ieGtajl1E5tguHaywtw92tmffi
-         G1lyumoqRbHpBViIAe3gnjR1r2LFunCPi/cjrZ03XhTBo+EBF6txePEXGqGGWfUUopv/
-         rdanewfvKqghuZUptbB4pmhyfZgYj7I9wa/hAP/Y1acF0foZU0gQqMrn7NN68l5+nZyh
-         GjRBsLfaoMia3vavF9Um8JWjsPJMiw+F+vmcSpJ0827rwBluglAJ8mdAFr1oVEgVjJ2T
-         BSvw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=GbOJQbCPXXFQWcBB2NA2p6q5ubRmVUJFNDbSoq8WWes=;
+        b=QpzQ8IqF4+E6u9y6gcaykwSNvt+WZSEw6Qm8CfS5bdebU8w50WYSD+LhSNsFo7IqYI
+         wc6naJWlvFAenLoP/BlvW5dhD6KEHEwxGVTL4aovxDOwzHZUJQPPGVXy61e4C/XKkKdU
+         Kj0LOS5tZAHOLgOhXpIi1ia4LgBZasqViFzA7H8j/KGZTq5ySkG+Z2SQflqKiPvI1vvB
+         DDro1YRWeEmG4AqXPWBvXtuAMDjaYfsjKbLpJ0Hbw1ha9rnwOkbmkawRS8jnTw4cuSu/
+         bbDs3dgNQx3IF+4QSKhdWaTGBcB2dmNpAyALq5zGTwlQ6iWqCnqw1CTkUz2ogTEKq9/o
+         InKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mZxOn+wGDgrlZgu5R6pd78yHgsnhABm1ikEzbHnNwlo=;
-        b=1rDrzG5DMfdh9NYk+Od4To5peziPcGckAiSnOQy8+HwC4LNa65pIoRfD4pFQ8WhNi0
-         jDO2sFclZ7iTwvnxBbB3H4XkbA4OvBoc4LeCWEuoCmUPsHC++5LFqoToFA198evNXmxM
-         nRllv+Jf7xYp4jD6cxxryGSRaNN+cFpK4mLAipHZNM7fHzCEdEr2eGijZVH1lm48K7B/
-         N29K5sPWJOoWdfS1pAtNwmb286rm6WNcWcnCoKxoTosrmWDaWAHgfGwBy120P0MMrxF9
-         8RNNFBZkIKoFUHl6BvrGrsS3H3ja9qhUPRH7UnTmEfGM7tn1+uCOkNXn3/JnlhILCG0S
-         DNNw==
-X-Gm-Message-State: AOAM532tZb515pAnNPfLs3es7Skyih7kaMKPoCoYeDi10Kwe5ypS8flK
-        4Q25rNLKZgfOo4PVqS9s4dw=
-X-Google-Smtp-Source: ABdhPJyd68QRgFKL+CdJnQAxkQam33gqs5XxSyfigGKd7vlUvoEFMwo+8O33Sd8xbB7c6UcR4TWKdg==
-X-Received: by 2002:a05:600c:3847:b0:39c:6a85:d20c with SMTP id s7-20020a05600c384700b0039c6a85d20cmr47854662wmr.129.1655910494691;
-        Wed, 22 Jun 2022 08:08:14 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05600c4fcf00b0039c811077d3sm22954101wmq.22.2022.06.22.08.08.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 08:08:14 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 16:08:12 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang
- support")
-Message-ID: <YrMwXAs9apFRdkVo@debian>
-References: <YrLtpixBqWDmZT/V@debian>
- <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GbOJQbCPXXFQWcBB2NA2p6q5ubRmVUJFNDbSoq8WWes=;
+        b=PtQdI/m7q+auJVQoKkU43VcVpOPYXf/K9XPovL1EdTie2FoK376fDtAyi59DaUuAjs
+         4NmhpIkfvCzJBwzwzGnJgEIbiWukXNe7WkfWnHm7rsw/jBKiqsz77RgBgosnfK7WVzxt
+         B+n0T/f6pcNwVgC7B87sZkmdFWom81vy9sPM/7bBXcTGQvEOzHJyXztItliszy2cgv+k
+         YQc0E4n71TKaWVMYGpovAjevPOAztU7n/pCDm2jkR90N4sRM99oOfoMKABkowsSsczcW
+         WDRKI7N3g9Wlev/h4Z39km4oHAr3dy+HF0gjcQGj5Y7ojb7Y6yuCtAG+01zWQ19WagAl
+         LWZA==
+X-Gm-Message-State: AJIora/FMF6Qk1d/cqxXcA5Y8CMKDEHyQeAyXm7624EqkGVQfR+jytbl
+        4WTU7G0SPKKL3L/BmqNiXhvILg==
+X-Google-Smtp-Source: AGRyM1uQtjqkSd7z3x0Z+zwX6gwY0VPrtqmnMZ43RgvyIsvA51gBRnK4Lr4IJG+qwTZA2wb7ORRFQQ==
+X-Received: by 2002:a17:906:5d0b:b0:722:ebcc:b10c with SMTP id g11-20020a1709065d0b00b00722ebccb10cmr3488593ejt.175.1655910515407;
+        Wed, 22 Jun 2022 08:08:35 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id t24-20020a056402021800b004356a647d08sm11299011edv.94.2022.06.22.08.08.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 08:08:35 -0700 (PDT)
+Message-ID: <c9ec14db-1ddd-7316-4ef6-9d57509f3fad@linaro.org>
+Date:   Wed, 22 Jun 2022 17:08:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V2 3/8] clk: qcom: Add Global Clock controller (GCC)
+ driver for IPQ5018
+Content-Language: en-US
+To:     Sricharan R <quic_srichara@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, p.zabel@pengutronix.de,
+        quic_varada@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220621161126.15883-1-quic_srichara@quicinc.com>
+ <20220621161126.15883-4-quic_srichara@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220621161126.15883-4-quic_srichara@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-On Wed, Jun 22, 2022 at 08:47:22AM -0500, Linus Torvalds wrote:
-> On Wed, Jun 22, 2022 at 5:23 AM Sudip Mukherjee
-> <sudipm.mukherjee@gmail.com> wrote:
-> >
-> > I have recently (since yesterday) started building the mainline kernel
-> > with clang-14 and I am seeing a build failure with allmodconfig.
+On 21/06/2022 18:11, Sricharan R wrote:
+> From: Varadarajan Narayanan <quic_varada@quicinc.com>
 > 
-> Yeah, the clang build has never been allmodconfig-clean, although I
-> think it's starting to get pretty close.
+> Add support for the global clock controller found on IPQ5018
+> based devices.
 > 
-> I build the kernel I actually _use_ with clang, and make sure it's
-> clean in sane configurations, but my full allmodconfig build I do with
-> gcc.
+> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
+> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 
-After yesterday's stable report about clang build, I have now added clang
-to my nightly builds apart from running gcc also. Both x86_64 and arm64
-gave this error. Trying to add arm, mips, powerpc and riscv with clang
-also, which all failed due to some configuration issue and I might ask
-for help from Nick, Nathan if I can't figure that out.
+Thank you for your patch. There is something to discuss/improve.
 
+> ---
+>  drivers/clk/qcom/Kconfig       |    7 +
+>  drivers/clk/qcom/Makefile      |    1 +
+>  drivers/clk/qcom/gcc-ipq5018.c | 3995 ++++++++++++++++++++++++++++++++
+>  3 files changed, 4003 insertions(+)
+>  create mode 100644 drivers/clk/qcom/gcc-ipq5018.c
 > 
-> Partly because of that "the clang build hasn't quite gotten there yet"
-> and partly because last I tried it was even slower to build (not a big
-> issue for my default config, but does matter for the allmodconfig
-> build, even on my beefy home machine)
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index d01436be6d7a..294fb975db85 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -172,6 +172,13 @@ config IPQ_GCC_8074
+>  	  i2c, USB, SD/eMMC, etc. Select this for the root clock
+>  	  of ipq8074.
+>  
+> +config IPQ_GCC_5018
+> +	tristate "IPQ5018 Global Clock Controller"
+> +	help
+> +	 Support for global clock controller on ipq5018 devices.
+> +	 Say Y if you want to use peripheral devices such as UART, SPI,
+> +	 i2c, USB, SD/eMMC, etc.
+> +
+>  config MSM_GCC_8660
+>  	tristate "MSM8660 Global Clock Controller"
+>  	help
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index 671cf5821af1..33ab4ce9b863 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -26,6 +26,7 @@ obj-$(CONFIG_IPQ_GCC_4019) += gcc-ipq4019.o
+>  obj-$(CONFIG_IPQ_GCC_6018) += gcc-ipq6018.o
+>  obj-$(CONFIG_IPQ_GCC_806X) += gcc-ipq806x.o
+>  obj-$(CONFIG_IPQ_GCC_8074) += gcc-ipq8074.o
+> +obj-$(CONFIG_IPQ_GCC_5018) += gcc-ipq5018.o
+>  obj-$(CONFIG_IPQ_LCC_806X) += lcc-ipq806x.o
+>  obj-$(CONFIG_MDM_GCC_9607) += gcc-mdm9607.o
+>  obj-$(CONFIG_MDM_GCC_9615) += gcc-mdm9615.o
 
-I am going to run them every night and will report back problems.
+(...)
 
-> 
-> I would love for people to start doing allmodconfig builds with clang
-> too, but it would require some initial work to fix it... Hint, hint.
-> 
-> And in the case of this warning attribute case, the clang error messages are
-> 
->  (a) verbose
-> 
->  (b) useless
-> 
-> because they point to where the warning attribute is (I know where it
-> is), but don't point to where it's actually triggering (ie where it
-> was actually inlined and called from).
+> +
+> +static int gcc_ipq5018_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+> +	struct regmap *regmap;
+> +	struct qcom_cc_desc ipq5018_desc = gcc_ipq5018_desc;
+> +
+> +	regmap = qcom_cc_map(pdev, &ipq5018_desc);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	clk_alpha_pll_configure(&ubi32_pll_main, regmap, &ubi32_pll_config);
+> +
+> +	ret = qcom_cc_really_probe(pdev, &ipq5018_desc, regmap);
 
-Yeah, true. I had to check to find out its from the memcpy() in check_image_valid().
+return qcom_cc_really_probe(....)
+
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to register ipq5018 GCC clocks\n");
+> +		return ret;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "Registered ipq5018 GCC clocks provider");
+
+No probe success messages. This pollutes the log and there is other
+infrastructure to check for successful probe.
+
+> +
+> +	return ret;
+> +}
+> +
+> +static struct platform_driver gcc_ipq5018_driver = {
+> +	.probe = gcc_ipq5018_probe,
+> +	.driver = {
+> +		.name   = "qcom,gcc-ipq5018",
+> +		.owner  = THIS_MODULE,
+
+No need for owner.
+
+> +		.of_match_table = gcc_ipq5018_match_table,
+> +	},
+> +};
+> +
+> +static int __init gcc_ipq5018_init(void)
+> +{
+> +	return platform_driver_register(&gcc_ipq5018_driver);
+> +}
+> +core_initcall(gcc_ipq5018_init);
+> +
+> +static void __exit gcc_ipq5018_exit(void)
+> +{
+> +	platform_driver_unregister(&gcc_ipq5018_driver);
+> +}
+> +module_exit(gcc_ipq5018_exit);
+> +
+> +MODULE_DESCRIPTION("Qualcomm Technologies, Inc. GCC IPQ5018 Driver");
+> +MODULE_LICENSE("GPL v2");
 
 
---
-Regards
-Sudip
+Best regards,
+Krzysztof

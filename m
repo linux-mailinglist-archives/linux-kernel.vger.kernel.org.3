@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D003455464A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDDF554751
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357117AbiFVMEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S1357303AbiFVMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356235AbiFVMEX (ORCPT
+        with ESMTP id S234389AbiFVMFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:04:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3FD13DA75;
-        Wed, 22 Jun 2022 05:04:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F4CD1477;
-        Wed, 22 Jun 2022 05:04:18 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 666243F534;
-        Wed, 22 Jun 2022 05:04:17 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     alex.williamson@redhat.com, cohuck@redhat.com
-Cc:     kvm@vger.kernel.org, iommu@lists.linux.dev,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        jgg@nvidia.com
-Subject: [PATCH v2 2/2] vfio: Use device_iommu_capable()
-Date:   Wed, 22 Jun 2022 13:04:12 +0100
-Message-Id: <910aef11138e3b6702b29a3e78415235aa4bf773.1655898523.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.36.1.dirty
-In-Reply-To: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
-References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
+        Wed, 22 Jun 2022 08:05:23 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3265D3DA7B;
+        Wed, 22 Jun 2022 05:05:21 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-317710edb9dso160620597b3.0;
+        Wed, 22 Jun 2022 05:05:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yI4NkJ9tQG3vou1hx4UHFZoM6ZFYXNs0D2EVG0DuBZk=;
+        b=UM+X2l6xFPOy6XVwl53mVLkPeB7e/5m7gIfFRrWNnaF4HJqSwB3eZzZnTE91VODvpu
+         9r+3bYgZxuDvDFEWdkdpeUloUPu3wT5wK5r93zG9PKRkgeMf3Dw2ObGffXJE+Ye0kdjm
+         QYpU+FoBBwC2+MPI7IRpHJTmEzn5B2GH4Ldte/3m9KDgzfPy+W5hD6Im1LXQoSh+UOIq
+         DIg8D3v2TAug9qbvXA5zkbILL39U+otZ13WmFlxRGb1J965hms3Ga3O2y1JIpAUQqF1J
+         VPBDzeXuy5M27r/oqKpUQkX6XgbVQndVDwPPtdJQiWgq1ha24X+8Cd3xIQQWMJwF9QhZ
+         g9Mg==
+X-Gm-Message-State: AJIora97M1Fky5dHha4vNq3FFxx9Kryi5L+7urL2sgajBCZuqvy6ULpR
+        6AVMBu63Zo+Qb+HHXsMYW+KU7tgH6c6Y1DkCo30=
+X-Google-Smtp-Source: AGRyM1urPoZoQ3xrgU5g4oEtCQQYk48bScWTjyrE2eQR6nE0SK2a5mzoe+H9CGXazISsucOjFSDQJfs814O9L34ywCk=
+X-Received: by 2002:a81:24c7:0:b0:314:1e60:a885 with SMTP id
+ k190-20020a8124c7000000b003141e60a885mr3881609ywk.301.1655899520432; Wed, 22
+ Jun 2022 05:05:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-9-mw@semihalf.com>
+ <YrDFmw4rziGQJCAu@lunn.ch>
+In-Reply-To: <YrDFmw4rziGQJCAu@lunn.ch>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Jun 2022 14:05:09 +0200
+Message-ID: <CAJZ5v0g4q8N5wMgk7pRYpYoCLPQoH==Z+nrM0JLyFXSgF9y0+Q@mail.gmail.com>
+Subject: Re: [net-next: PATCH 08/12] ACPI: scan: prevent double enumeration of
+ MDIO bus children
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marcin Wojtas <mw@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new interface to check the capabilities for our device
-specifically.
+On Mon, Jun 20, 2022 at 9:08 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Mon, Jun 20, 2022 at 05:02:21PM +0200, Marcin Wojtas wrote:
+> > The MDIO bus is responsible for probing and registering its respective
+> > children, such as PHYs or other kind of devices.
+> >
+> > It is required that ACPI scan code should not enumerate such
+> > devices, leaving this task for the generic MDIO bus routines,
+> > which are initiated by the controller driver.
+>
+> I suppose the question is, should you ignore the ACPI way of doing
+> things, or embrace the ACPI way?
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/vfio/vfio.c             | 2 +-
- drivers/vfio/vfio_iommu_type1.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+What do you mean by "the ACPI way"?
 
-diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-index 73bab04880d0..765d68192c88 100644
---- a/drivers/vfio/vfio.c
-+++ b/drivers/vfio/vfio.c
-@@ -621,7 +621,7 @@ int vfio_register_group_dev(struct vfio_device *device)
- 	 * VFIO always sets IOMMU_CACHE because we offer no way for userspace to
- 	 * restore cache coherency.
- 	 */
--	if (!iommu_capable(device->dev->bus, IOMMU_CAP_CACHE_COHERENCY))
-+	if (!device_iommu_capable(device->dev, IOMMU_CAP_CACHE_COHERENCY))
- 		return -EINVAL;
- 
- 	return __vfio_register_dev(device,
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index e38b8bfde677..2107e95eb743 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -2247,7 +2247,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
- 	list_add(&group->next, &domain->group_list);
- 
- 	msi_remap = irq_domain_check_msi_remap() ||
--		    iommu_capable(iommu_api_dev->dev->bus, IOMMU_CAP_INTR_REMAP);
-+		    device_iommu_capable(iommu_api_dev->dev, IOMMU_CAP_INTR_REMAP);
- 
- 	if (!allow_unsafe_interrupts && !msi_remap) {
- 		pr_warn("%s: No interrupt remapping support.  Use the module param \"allow_unsafe_interrupts\" to enable VFIO IOMMU support on this platform\n",
--- 
-2.36.1.dirty
+> At least please add a comment why the ACPI way is wrong, despite this
+> being an ACPI binding.
 
+The question really is whether or not it is desirable to create
+platform devices for all of the objects found in the ACPI tables that
+correspond to the devices on the MDIO bus.
+
+I don't think it is, so it should be avoided.

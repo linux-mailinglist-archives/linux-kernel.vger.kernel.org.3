@@ -2,61 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DCF554A47
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1F5554A48
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243047AbiFVMpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S1343727AbiFVMqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiFVMpJ (ORCPT
+        with ESMTP id S237361AbiFVMqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:45:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5AB20BF0;
-        Wed, 22 Jun 2022 05:45:08 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id EDA901FCFE;
-        Wed, 22 Jun 2022 12:45:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655901906; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VXjJY4Luze5utSA7XTTpfAHSCLkMAaEkvH9dVFHpgnc=;
-        b=gA1ZSsbbfuu29Jzz6b/AS6vamPeW1qgGC+AC/x0ZFXR2QbNrvRe0vJUqPggPaRRhMhd4SC
-        YSvyf9PiChSJJtZQvB2LouPbwbqh//46InKgIHq9V2nw1XXgLCt+KoDQgyTiY6ek/iTPeg
-        kq87o0k+6gHyJiwHcEJZ3BvEw/MOY4Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655901906;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VXjJY4Luze5utSA7XTTpfAHSCLkMAaEkvH9dVFHpgnc=;
-        b=wMCmdKOXSByKa54e0mZTYBuBL+uhlBRyudUHlZ7UvBp7yjtNYGmV2jjSoD68T4Uk0VQBaT
-        7dSNSDPeveQ4yLDw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D47692C141;
-        Wed, 22 Jun 2022 12:45:06 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 4C923A062B; Wed, 22 Jun 2022 14:45:03 +0200 (CEST)
-Date:   Wed, 22 Jun 2022 14:45:03 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] ext4: avoid remove directory when directory is
- corrupted
-Message-ID: <20220622124503.i7cloht5g2xxrxhh@quack3.lan>
-References: <20220622090223.682234-1-yebin10@huawei.com>
+        Wed, 22 Jun 2022 08:46:30 -0400
+Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F0D326D7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:46:28 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 994612D0; Wed, 22 Jun 2022 14:46:26 +0200 (CEST)
+Date:   Wed, 22 Jun 2022 14:46:19 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     yf.wang@mediatek.com
+Cc:     Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, wsd_upstream@mediatek.com,
+        Libo Kang <Libo.Kang@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Yong Wu <Yong.Wu@mediatek.com>, Ning Li <ning.li@mediatek.com>
+Subject: Re: [PATCH] iommu/dma: Fix race condition during iova_domain
+ initialization
+Message-ID: <YrMPG4dIEnFkCbi9@8bytes.org>
+References: <20220530120748.31733-1-yf.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622090223.682234-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220530120748.31733-1-yf.wang@mediatek.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,44 +48,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 22-06-22 17:02:23, Ye Bin wrote:
-> Now if check directoy entry is corrupted, ext4_empty_dir may return true
-> then directory will be removed when file system mounted with "errors=continue".
-> In order not to make things worse just return false when directory is corrupted.
+Please re-send with
+
+	Robin Murphy <robin.murphy@arm.com>
+
+in Cc.
+
+On Mon, May 30, 2022 at 08:07:45PM +0800, yf.wang@mediatek.com wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
 > 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-
-OK, looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> When many devices share the same iova domain, iommu_dma_init_domain()
+> may be called at the same time. The checking of iovad->start_pfn will
+> all get false in iommu_dma_init_domain() and both enter init_iova_domain()
+> to do iovad initialization.
+> 
+> Fix this by protecting init_iova_domain() with iommu_dma_cookie->mutex.
+> 
+> Exception backtrace:
+> rb_insert_color(param1=0xFFFFFF80CD2BDB40, param3=1) + 64
+> init_iova_domain() + 180
+> iommu_setup_dma_ops() + 260
+> arch_setup_dma_ops() + 132
+> of_dma_configure_id() + 468
+> platform_dma_configure() + 32
+> really_probe() + 1168
+> driver_probe_device() + 268
+> __device_attach_driver() + 524
+> __device_attach() + 524
+> bus_probe_device() + 64
+> deferred_probe_work_func() + 260
+> process_one_work() + 580
+> worker_thread() + 1076
+> kthread() + 332
+> ret_from_fork() + 16
+> 
+> Signed-off-by: Ning Li <ning.li@mediatek.com>
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
 > ---
->  fs/ext4/namei.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+>  drivers/iommu/dma-iommu.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
 > 
-> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-> index 47d0ca4c795b..bc503e3275db 100644
-> --- a/fs/ext4/namei.c
-> +++ b/fs/ext4/namei.c
-> @@ -3066,11 +3066,8 @@ bool ext4_empty_dir(struct inode *inode)
->  		de = (struct ext4_dir_entry_2 *) (bh->b_data +
->  					(offset & (sb->s_blocksize - 1)));
->  		if (ext4_check_dir_entry(inode, NULL, de, bh,
-> -					 bh->b_data, bh->b_size, offset)) {
-> -			offset = (offset | (sb->s_blocksize - 1)) + 1;
-> -			continue;
-> -		}
-> -		if (le32_to_cpu(de->inode)) {
-> +					 bh->b_data, bh->b_size, offset) ||
-> +		    le32_to_cpu(de->inode)) {
->  			brelse(bh);
->  			return false;
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 09f6e1c0f9c0..b38c5041eeab 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -63,6 +63,7 @@ struct iommu_dma_cookie {
+>  
+>  	/* Domain for flush queue callback; NULL if flush queue not in use */
+>  	struct iommu_domain		*fq_domain;
+> +	struct mutex			mutex;
+>  };
+>  
+>  static DEFINE_STATIC_KEY_FALSE(iommu_deferred_attach_enabled);
+> @@ -309,6 +310,7 @@ int iommu_get_dma_cookie(struct iommu_domain *domain)
+>  	if (!domain->iova_cookie)
+>  		return -ENOMEM;
+>  
+> +	mutex_init(&domain->iova_cookie->mutex);
+>  	return 0;
+>  }
+>  
+> @@ -549,26 +551,33 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
+>  	}
+>  
+>  	/* start_pfn is always nonzero for an already-initialised domain */
+> +	mutex_lock(&cookie->mutex);
+>  	if (iovad->start_pfn) {
+>  		if (1UL << order != iovad->granule ||
+>  		    base_pfn != iovad->start_pfn) {
+>  			pr_warn("Incompatible range for DMA domain\n");
+> -			return -EFAULT;
+> +			ret = -EFAULT;
+> +			goto done_unlock;
 >  		}
+>  
+> -		return 0;
+> +		ret = 0;
+> +		goto done_unlock;
+>  	}
+>  
+>  	init_iova_domain(iovad, 1UL << order, base_pfn);
+>  	ret = iova_domain_init_rcaches(iovad);
+>  	if (ret)
+> -		return ret;
+> +		goto done_unlock;
+>  
+>  	/* If the FQ fails we can simply fall back to strict mode */
+>  	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
+>  		domain->type = IOMMU_DOMAIN_DMA;
+>  
+> -	return iova_reserve_iommu_regions(dev, domain);
+> +	ret = iova_reserve_iommu_regions(dev, domain);
+> +
+> +done_unlock:
+> +	mutex_unlock(&cookie->mutex);
+> +	return ret;
+>  }
+>  
+>  /**
 > -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> 2.18.0

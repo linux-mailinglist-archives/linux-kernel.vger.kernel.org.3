@@ -2,145 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBB1556EF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 01:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C4C556EF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 01:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359673AbiFVXQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 19:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S1377128AbiFVXSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 19:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377128AbiFVXQl (ORCPT
+        with ESMTP id S1345283AbiFVXSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 19:16:41 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B506A41F9D;
-        Wed, 22 Jun 2022 16:16:28 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 2342E3200564;
-        Wed, 22 Jun 2022 19:16:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 22 Jun 2022 19:16:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1655939785; x=1656026185; bh=zObwhBmn5V
-        RZQhkN+fOHap5f7+dJvPSHPdfpoTMXBqo=; b=Uadwy22QHZ5Zza1m0x2J1u6xkk
-        9IyYmOPRBeHqH93r7Tt2EcJvOOz5gF+Sp5tn/2dlBsUzNunGEpksWJxxdEaiTo+6
-        ydqW+ADPtCWA2INADQcJq4ySnQof99E4w6OgQUo01fwtUY5P+56i/tlY7LGVpp2O
-        bTqi+6xe6VMsRywO489lFgXl5U7COMpjQFCX/SAbTaSz7T7ZRco/ff2aKnIr7WNJ
-        TxeirXij9NOg5818MV2nQubMsYuqdQ1jyewR2s4D4RbMrKMtgglXoZ4P1gg6iIHA
-        IeuaSAfGuQDSnoCME/ya6QPK80+Hrw+BcFgm7OQOD0rIkepn0e8DVvnLNX2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1655939785; x=1656026185; bh=zObwhBmn5VRZQhkN+fOHap5f7+dJ
-        vPSHPdfpoTMXBqo=; b=XkpsJ1g+PBFOJbsZE3VfVl1Vn6L/ZwLtJeZuBeqyIt1K
-        8PvBdBV80Hb9jOPyCflrSP0Dpo1skHpP4rhp38TmsjgchStOHl5RRzZCc7GZu+8U
-        WDGszuHAomf8fuGwfuqc0CXGrxN5g/BO/fjwdf01vojlutLXEUl3OKO6OTiMH+IF
-        5MNveS+D5kWxd3jqmhjbWgrjCgRfUlJyA77pEG4e9gIs8ow/6EmxPe7b4S3AL3pC
-        HeJ5nvRzy6LHPFMktwKNSQb9DyyGNiY1U8x+ukgHWwUZLMDCXMAASBsqUx20wYwH
-        Z34Csdy9oDpvSU3ZB9LgDw/u3M57K8tz3H64EAEPPg==
-X-ME-Sender: <xms:yaKzYk8wAPOFdIyCYIenqmBHBmUXDJqA747EBLN54HmNPPqukZldvg>
-    <xme:yaKzYsunRfV5OKV3dX9ueS8ID1mcn1Zl8xaacdRvWdRdQGcoOCsTzIZvh8FomgF_M
-    Fb2cG4nrYm58iCGhQ>
-X-ME-Received: <xmr:yaKzYqAr7bPeybU5EqYgouUQ8HSu43HxqoSLy7CF12BhoZYh51LrBEUPxA1WaCJ4UPxBC-7B6cHpI5g2Uk-s49zJxml0jaWilc7DuVcUhHEWW7NSy0HJh5PcEd85>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefiedgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
-    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
-    grthhtvghrnhepueelhedvkeehvddvgeevleektefhteefueefhefhteeigffgtdegkeek
-    geeigeeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshesrghnrghrrgiivghl
-    rdguvg
-X-ME-Proxy: <xmx:yaKzYke_kO2ZHdKWQrbqWt-xD3-43BDRJkaK6eWOsmPjBUlt6SvkIw>
-    <xmx:yaKzYpP_MlZcAlE-halNcNedh0WZKhNykyLVN823M3Z9WzrLFa7icQ>
-    <xmx:yaKzYul_vxvxWWh0FSWpyhsJ-THQ6hDgtp5yazf-PnHLAPsoGcFLLQ>
-    <xmx:yaKzYqqZdp3Jj5jb89ilfvw0Nz3ry2um3i6Kv5YYXOR1xyOxdfvdvQ>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Jun 2022 19:16:25 -0400 (EDT)
-Date:   Wed, 22 Jun 2022 16:16:24 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrew Burgess <aburgess@redhat.com>
-Subject: Re: init_disassemble_info() signature changes causes compile failures
-Message-ID: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
-References: <20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de>
- <CACdoK4LeRPkACejq87VLFgP-b=y1ZoRX3196f7xEVo-UWm8jWA@mail.gmail.com>
+        Wed, 22 Jun 2022 19:18:05 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F4028723
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 16:18:04 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 89so27544888qvc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 16:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Lv2YHbzczEnD79dGcE3EqQq0j0lYfO0G5UeuRdLMomc=;
+        b=LKwLtr9tC1PCUSXdzoCFckZrE8VzaSY4CDmlz9azEjSyQxkZM2GS0CUHp1Mu+wqEtL
+         fThxINyXaVHVtWWxa9XjIf08YL+egNsTKnmI6MD8bBKhiInBE6e8KUfmYJvF6Rsv/+4h
+         DR66OOmipWp5iVrlRYu1SFNE1oMLeDf0G8scQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Lv2YHbzczEnD79dGcE3EqQq0j0lYfO0G5UeuRdLMomc=;
+        b=Ih/HfO8S68CPB5C4J5neS8FJn2FTrobv0Hvojgjm1IHhOtoxoI3YpvaPOrGMgw5MBZ
+         yJFNtDZDfbqePOM+GO3OWADV/PWPzAkM0pFn6B0j4SepMnmgxsmuSI0stssxDBXXMnC2
+         lEsZOb/daK1Z1J6P0R622ejjWwK2e/IDDyTR3T4kixJqRE/V8TvYKX/rMrYp/IHcBXOm
+         MnP/3PUx1KUGQJvtJJUW2u/X1w8iJKp6fUYcGohwjRuradZMD3CCeov4fqZ5Ft6N4Bjw
+         nONIjqO/zrZy5qVWD6Roh+lUoBs7nUgHoNmgdriOdNXhFpwGXCqKT2OxvgzdyYDB8tM5
+         +eMg==
+X-Gm-Message-State: AJIora8JMAiHz/yvACVgwni//YjnA9f98t2CDDDfCzowIdz7WHtlJKLn
+        C9r7xddfWqTr1DkMtv6G+j3rDMN5VDxRtw==
+X-Google-Smtp-Source: AGRyM1t6A+bwk6XS0jPFAY5czbG4n/cXc+iiNVLIfaJo1O+D+ctCSvdqMkpVzsUOo0p14n1sEB9p6g==
+X-Received: by 2002:a05:6214:20cf:b0:470:5256:c667 with SMTP id 15-20020a05621420cf00b004705256c667mr9542537qve.43.1655939883117;
+        Wed, 22 Jun 2022 16:18:03 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id e12-20020ac84e4c000000b00307cebe3e07sm13474875qtw.79.2022.06.22.16.18.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 16:18:02 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 23:18:02 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
+        paulmck@kernel.org, rostedt@goodmis.org, vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
+Message-ID: <YrOjKnMHo4/NNDwy@google.com>
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-3-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACdoK4LeRPkACejq87VLFgP-b=y1ZoRX3196f7xEVo-UWm8jWA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220622225102.2112026-3-joel@joelfernandes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 22, 2022 at 10:50:55PM +0000, Joel Fernandes (Google) wrote:
+[..]
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index 2ccf5845957d..fec4fad6654b 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -267,8 +267,9 @@ struct rcu_data {
+>  /* Values for nocb_defer_wakeup field in struct rcu_data. */
+>  #define RCU_NOCB_WAKE_NOT	0
+>  #define RCU_NOCB_WAKE_BYPASS	1
+> -#define RCU_NOCB_WAKE		2
+> -#define RCU_NOCB_WAKE_FORCE	3
+> +#define RCU_NOCB_WAKE_LAZY	2
+> +#define RCU_NOCB_WAKE		3
+> +#define RCU_NOCB_WAKE_FORCE	4
+>  
+>  #define RCU_JIFFIES_TILL_FORCE_QS (1 + (HZ > 250) + (HZ > 500))
+>  					/* For jiffies_till_first_fqs and */
+> @@ -436,9 +437,10 @@ static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+>  static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+>  static void rcu_init_one_nocb(struct rcu_node *rnp);
+>  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> -				  unsigned long j);
+> +				  unsigned long j, bool lazy);
+>  static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> -				bool *was_alldone, unsigned long flags);
+> +				bool *was_alldone, unsigned long flags,
+> +				bool lazy);
+>  static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_empty,
+>  				 unsigned long flags);
+>  static int rcu_nocb_need_deferred_wakeup(struct rcu_data *rdp, int level);
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index e369efe94fda..b9244f22e102 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -256,6 +256,8 @@ static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
+>  	return __wake_nocb_gp(rdp_gp, rdp, force, flags);
+>  }
+>  
+> +#define LAZY_FLUSH_JIFFIES (10 * HZ)
+> +
+>  /*
+>   * Arrange to wake the GP kthread for this NOCB group at some future
+>   * time when it is safe to do so.
+> @@ -272,7 +274,10 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+>  	 * Bypass wakeup overrides previous deferments. In case
+>  	 * of callback storm, no need to wake up too early.
+>  	 */
+> -	if (waketype == RCU_NOCB_WAKE_BYPASS) {
+> +	if (waketype == RCU_NOCB_WAKE_LAZY) {
+> +		mod_timer(&rdp_gp->nocb_timer, jiffies + LAZY_FLUSH_JIFFIES);
+> +		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
+> +	} else if (waketype == RCU_NOCB_WAKE_BYPASS) {
+>  		mod_timer(&rdp_gp->nocb_timer, jiffies + 2);
+>  		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
+>  	} else {
+> @@ -296,7 +301,7 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+>   * Note that this function always returns true if rhp is NULL.
+>   */
+>  static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> -				     unsigned long j)
+> +				     unsigned long j, bool lazy)
+>  {
+>  	struct rcu_cblist rcl;
+>  
+> @@ -310,7 +315,13 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  	/* Note: ->cblist.len already accounts for ->nocb_bypass contents. */
+>  	if (rhp)
+>  		rcu_segcblist_inc_len(&rdp->cblist); /* Must precede enqueue. */
+> -	rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> +
+> +	trace_printk("call_rcu_lazy callbacks = %ld\n", READ_ONCE(rdp->nocb_bypass.lazy_len));
 
-On 2022-06-22 23:53:58 +0100, Quentin Monnet wrote:
-> Too bad the libbfd API is changing again :/
+Before anyone yells at me, that trace_printk() has been politely asked to take
+a walk :-). It got mad at me, but on the next iteration, it wont be there.
 
-Yea, not great. Particularly odd that
-/* For compatibility with existing code.  */
-#define INIT_DISASSEMBLE_INFO(INFO, STREAM, FPRINTF_FUNC, FPRINTF_STYLED_FUNC)  \
+thanks,
 
-was changed. Leaving the "For compatibility with existing code." around,
-despite obviously not providing compatibility...
+ - Joel
 
-CCed the author of that commit, maybe worth fixing?
-
-Given that disassemble_set_printf() was added, it seems like it'd have been
-easy to not change init_disassemble_info() / INIT_DISASSEMBLE_INFO() and
-require disassemble_set_printf() to be called to get styled printf support.
-
-
-> > The fix is easy enough, add a wrapper around fprintf() that conforms to the
-> > new signature.
-> >
-> > However I assume the necessary feature test and wrapper should only be added
-> > once? I don't know the kernel stuff well enough to choose the right structure
-> > here.
-> 
-> We can probably find a common header for the wrapper under
-> tools/include/. One possibility could be a new header under
-> tools/include/tools/, like for libc_compat.h. Although personally I
-> don't mind too much about redefining the wrapper several times given
-> how short it is, and because maybe some tools could redefine it anyway
-> to use colour output in the future.
-
-I'm more bothered by duplicating the necessary ifdefery than duplicating the
-short fprintf wrapper...
-
-
-> The feature test would better be shared, it would probably be similar
-> to what was done in the following commit to accommodate for a previous
-> change in libbfd:
-> 
->     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fb982666e380c1632a74495b68b3c33a66e76430
-
-Ah, beautiful hand-rolled feature tests :)
-
-
-> > Attached is my local fix for perf. Obviously would need work to be a real
-> > solution.
-> 
-> Thanks a lot! Would you be willing to submit a patch for the feature
-> detection and wrapper?
-
-I'll give it a go, albeit probably not today.
-
-Greetings,
-
-Andres Freund
+ 

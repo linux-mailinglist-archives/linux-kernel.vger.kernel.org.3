@@ -2,150 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC8A554AC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699AC554ACC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353412AbiFVNSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S1352939AbiFVNT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236583AbiFVNSV (ORCPT
+        with ESMTP id S242604AbiFVNTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:18:21 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2031.outbound.protection.outlook.com [40.92.52.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AE7248C9;
-        Wed, 22 Jun 2022 06:18:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cqu/mlpp1eRYt1Fgl7LhQxSDoKOaEn4syGaWERhRbNKqvbD6YuJJnvrytgGdLx6n/YLdgF7MbVmrna9lgw9cP/1WJu0Ux4D/uMlWVb0tco5mRzTa8w2dCqJaWf+KpXgcz0xlR7bBF0KA1okhPvF6iF+YpdsytOD3DYb+STI3ux4LiAo7Z7LQBPXLg4VIiH3Tim9Vlfag+WHUdmjl7sZoSA7NiJTD/xnoc39fT55VNU8/E66TO98Vlg3u1ipJs0sMaR+4P54zW0khhV3yH9IYAqHaFT5SGeNZ7Ry9EBPJgia4nzubv0Wvd7MmMZx/Cio+b7JcmHMP0bOKM8yCuEVGDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cOZjP84hudn6rujTEHm3D3MWh2lcrzW3JP9RUlNWoxg=;
- b=QsDbSr9cUG87WjgAjDOl7rIjXxJJAp+RL0IwNyn+1/sGqXiTekCLDyfad9XU1HqFkkGSLDd2f+/7HekyYbL6NEBDBjs/ykygVQkXNX1xenBKgHpWXRTng3++UF/sJ7ed4wCd1uWwT9JBeWZo/VChR935wOxlLq+Jh09wCyovECsWMXQkolqmF+gc2NFNxWQZxbIpTRpVliHKvTCSN0bD72VPeDeMDQRVpNLuqmUc7rrzrn1wY38pBAFT2gxTqxasbydMYJ8Vtec3X7PCipvxsvxR7VgQB3mAU20ZwyerGzObhFeGKxPNCG6E2z86iIqISNEJOQbpvplwSc44So/u4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cOZjP84hudn6rujTEHm3D3MWh2lcrzW3JP9RUlNWoxg=;
- b=p9Pap3HksM7EBH+EykgjDBJUHzRdGN9GdS7QA70PU7Ni7jYohKUp2qfW59T+nB09loEPOjvPqyLUNF8xh8Iv8B6asFk9FHxGCpdICa7ABouMe8RtVPwderHSBqPE+OYJuLiI9DA5P51rJd41GHBj0nKBHnYbUBY571I5wiAtFi1HHSTAwv+jhuu1f2CxdYYUMdlBRkRxEw0sdeXifuFILoAJi8AOYdY1e1BtxDgYMkCqTUdnRi/cz56XSlfoRL7H1bKaNfgkwQkNnm1VpNVWjeCYpiw/mV2HxfnzS+zdzINYvOqxyBErjLFTuuGOA9SjdSlh47MgFbfHEz58Q/p2YA==
-Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- (2603:1096:203:95::22) by HK0PR01MB2067.apcprd01.prod.exchangelabs.com
- (2603:1096:203:28::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.22; Wed, 22 Jun
- 2022 13:18:17 +0000
-Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- ([fe80::a54b:32a8:b605:90d8]) by HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- ([fe80::a54b:32a8:b605:90d8%3]) with mapi id 15.20.5353.022; Wed, 22 Jun 2022
- 13:18:17 +0000
-From:   Kushagra Verma <kushagra765@outlook.com>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: serial: ark3116: Fix bare use of 'unsigned' checkpatch warning
-Date:   Wed, 22 Jun 2022 18:47:50 +0530
-Message-ID: <HK0PR01MB2801789671F56BDA8DA12A83F8B29@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
-X-Mailer: git-send-email 2.36.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [hw3oWh1ryZLIm/mX/dKiW+poXLNzoD2N]
-X-ClientProxiedBy: BMXP287CA0009.INDP287.PROD.OUTLOOK.COM
- (2603:1096:b00:2c::15) To HK0PR01MB2801.apcprd01.prod.exchangelabs.com
- (2603:1096:203:95::22)
-X-Microsoft-Original-Message-ID: <20220622131750.17945-1-kushagra765@outlook.com>
+        Wed, 22 Jun 2022 09:19:52 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAD82F01F;
+        Wed, 22 Jun 2022 06:19:51 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31772f8495fso161616017b3.4;
+        Wed, 22 Jun 2022 06:19:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JqOQ1mRCFn6Ej3pl8pj+iDE9h6BQbGKpcTypXijaYr0=;
+        b=0tQ8NA9u/3hnZsK81/BvJnnUSvICkO0g/Wp0ibQM1F3Odcv7enRTgwzVAALGz4rYeh
+         C8MihQmlQMiN0Yk0d4+e3cVfMupzbyKvlc3K2ct48spQ7WTEdTqYMoOr/A7N8wbOpeet
+         D5c2BDN6q1iW1OJuv5PvYbArmcd5wOhrVUcIFew84qZWc9StjxLQxDiG+nTso0HNR1x8
+         Zx8Ty8GWq1QiIRaFf/HiXZI7m8jt+6NDSrGxZzChDRfIUUuWboXa1rOuvXiRuzc0jvsL
+         6VN7xjrtq23gNOOjWbffMIgg/7zjOoPIO2j12C9QnyE7ZbtiAJZhPXs0Nn2VTRCy3zj9
+         5PRA==
+X-Gm-Message-State: AJIora8SE7fkp9w1HUvTN7+Lf63bcKnkun4/A+orbxayWH3IrBebTeKw
+        BDs/c8rKzRaHmmXdNc6Y++obyTTSFjdEDHd4E8E=
+X-Google-Smtp-Source: AGRyM1sn53Rt6HkhjVlMSbjNcbNLgVPQ9GwJB20ZiQABo8pxntYhAsovfB2VWcuhTxwAeGHL8rNEKt8B/xh/xVXVPjM=
+X-Received: by 2002:a0d:ed83:0:b0:317:50bb:5463 with SMTP id
+ w125-20020a0ded83000000b0031750bb5463mr4185434ywe.149.1655903990990; Wed, 22
+ Jun 2022 06:19:50 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3b3c3e8a-b6a8-4646-c2f5-08da5451ab37
-X-MS-TrafficTypeDiagnostic: HK0PR01MB2067:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DFjPCMgHKWBM7+mN/CLjOddKVhdTBvoipXjfxOX1rGBr6cYsYyEN0yAoTxTgpyZo3lWUDL5t6++DyhPhonVgog/j0RVtpMw2gGmAHowzilT+EZ55Jkoygzb/MJ7WB94lNqePONPM1lWDOs9ftL8LYgta9kkgaVU86J9kSqXrHqZSOXnUyfQSTf2xYu7CdO4mVz/eb7J0Nx8So8sO9DjQx+yJry2OnF4RQ5r49hs8NueSj1QGi3RtlgES6OmwBNs/TPQw6lZCp+h1svS9XPE65T+rDglUEVgf3SgB1SVHNeCa2N1zQwhV2JBNwG8bJuX1stHYBMhxy+SIUnmRHd2asefjN1KOaPm4ybu7i+XACD7LUWOC8Q6O1RPVrxDrvFVRaypvS7FibGo9XwyBwUs+WSKfEKaCvgxcLvDP8MPTzOIL7lnyRsbbo6i/rRAP3lyp7j/cKEZTu8lfBb2NRRCZNtO4W9Y4OcCyfwf4KGDZUt/8d/YKL4F394CRJeiJ0lxaz0RAMeHzG0n465gNKSkERFarjHuygE9nNfCEVD8QT/4oo1gfeztxSsBuZxU1PryDmTAiq61yfRY4kfp0Kwlht8cTqmjuv3c62fZc6IrAskOxSuzjHavbafAmmFdUrX7L
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BHlquWnXV0S00s6AU+E3jPhoezUGFo+Fj5Heu1sOctGjdcwK6+u2qMI/slUH?=
- =?us-ascii?Q?hBPeFMx/CycLTtlzhjet7+w4eZ7IzH7mxQV452vKmhN2nFwzs2uyB+77sqS7?=
- =?us-ascii?Q?TH34MvjLWNOZATGB6s8Ot+gesE5Un/qjdcO0IxUMhNI3lpJJRReOq2THIRNv?=
- =?us-ascii?Q?Uuva3F6XmUHHoA3jRFUhIDRzHE/pl6/lKU7Te1wo8fFPa5kX19AkqhwUd5Lq?=
- =?us-ascii?Q?XM6Dro0rI9efkVeWBsnFhSqFesE0eUrp9oRRFTozAABanNbyvzMdERbBf2PI?=
- =?us-ascii?Q?Di5j8flOu87hAtZSZ0c6IknbfbYPXb/GSo5drGjk6silwLKC+Em31GNIDMaS?=
- =?us-ascii?Q?68bPjhvMfLMk3tpr7SouO5frshORNy1piTDvgi2ROwlgAVd8Cp5urSuuSHcd?=
- =?us-ascii?Q?hMyfsjPqcay7qjx5MKX1/qNbqvMTriV9h5vXMAHdT5bqUDVkPXxtRARg/s2/?=
- =?us-ascii?Q?Vk8ReXVJO8xCvuMWUkqAM9/KzTjPwE6+afXrlqPVYaIPRRGGSOQvwFmAVW52?=
- =?us-ascii?Q?ujhj5bB4ritBpmVysCc+suLknUwddiREkRS7+RCe49n+WMYT2EVdt0S9kiDP?=
- =?us-ascii?Q?eC1QrPaJLW3bTlXx1L4oDo2rXMZLLl4ic+c9z14ss7raowWd8i+T8GuiJr4t?=
- =?us-ascii?Q?WCKaVkoimFDrFveVkoCm+IwXpn/DZn5xG+VK6IEljD4yNJqhs5CS4CE+Crpo?=
- =?us-ascii?Q?O/E4eQMaS0KU557hmWrmAIXSnab4Mfi4t9pGGYoedR27jt2ex6fFw/mnEsMo?=
- =?us-ascii?Q?7EHExY/kmM7wH5mOYBX3NHw2QDJl0/HN4OtLA95pRQHZpY4mnf7ahrrzMv9n?=
- =?us-ascii?Q?0qqedd/lj8GoF/gB532V8+g3EHkdTUtHUIUa1ZWhyjqoxnE+UbWsHNAvDolx?=
- =?us-ascii?Q?Bhwc1Euz5eJb4zQeXA2FVqJOLWh8ErcYgotIM+DcKXzxRWgsBC543hYhMOAd?=
- =?us-ascii?Q?4yyS8Yx90lxoBHGJ7GlDB3Ab7Z6vAhnI942sjdIGVMqGNiZVzqw18cyZEdDP?=
- =?us-ascii?Q?E1CLKkzWxVL6TMwKiGfHhgcVSvR6i/4IHiF+Ht/aKLf7uNgLT8ohU//rVjYM?=
- =?us-ascii?Q?5Iii+p03HL/bqWOJ0yQ2/MgaAbpjn/6I3yo4Y7Yl/eFtS7rPHqpnd2DS6lM1?=
- =?us-ascii?Q?yZdmWjmEWFjOba3INBzchFtfUw8Czz786AQ5rMSN+IrO1bvXkExX+ianYDM/?=
- =?us-ascii?Q?1SO4KEcK8dWsyWsTVNMTTJBsz74+2YP6YLNlDNBeSVIKkm8qe6cXuf9OV+N2?=
- =?us-ascii?Q?vIKvBt9i6wg1Qq5cOhaxoCAmw2hlEQsPVh0A5XR6jiRLuMKh3x9NrAKprHEZ?=
- =?us-ascii?Q?EXZ1j3WDHZN2ysCYX2wP9yDDyxZJgh6e1UgTdh1HLvb9nJUwlaKAgDr5fCCJ?=
- =?us-ascii?Q?/Wtp27jHQVAGV/NZVqqgfH9iOcPTvhkZYGVU8NkyuK5icnXpWFYp1qS6Gffo?=
- =?us-ascii?Q?zo3IifN6Yx5+SXccXH78Lsplxjr6ecvZ?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b3c3e8a-b6a8-4646-c2f5-08da5451ab37
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR01MB2801.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2022 13:18:17.1895
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR01MB2067
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220622130730.1573747-1-sbinding@opensource.cirrus.com> <20220622130730.1573747-2-sbinding@opensource.cirrus.com>
+In-Reply-To: <20220622130730.1573747-2-sbinding@opensource.cirrus.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Jun 2022 15:19:40 +0200
+Message-ID: <CAJZ5v0ij63HVTTWUBwv9WiWhCfKewJR48reUaGN3nvbzoS31tw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] ACPI: utils: Add api to read _SUB from ACPI
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the bare use of 'unsigned' checkpatch warning by changing 'unsigned'
-to 'unsigned int'.
+On Wed, Jun 22, 2022 at 3:08 PM Stefan Binding
+<sbinding@opensource.cirrus.com> wrote:
+>
+> Add a wrapper function to read the _SUB string from ACPI.
+>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+> ---
+>  drivers/acpi/utils.c | 26 ++++++++++++++++++++++++++
+>  include/linux/acpi.h |  8 ++++++++
+>  2 files changed, 34 insertions(+)
+>
+> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+> index 3a9773a09e19..5d1bdb79e372 100644
+> --- a/drivers/acpi/utils.c
+> +++ b/drivers/acpi/utils.c
+> @@ -291,6 +291,32 @@ int acpi_get_local_address(acpi_handle handle, u32 *addr)
+>  }
+>  EXPORT_SYMBOL(acpi_get_local_address);
+>
+> +int acpi_get_sub(acpi_handle handle, char *sub, size_t size)
 
-Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
----
- drivers/usb/serial/ark3116.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I'd call it acpi_get_subsystem_id().
 
-diff --git a/drivers/usb/serial/ark3116.c b/drivers/usb/serial/ark3116.c
-index 39eaa7b97c40..6632f4280bbd 100644
---- a/drivers/usb/serial/ark3116.c
-+++ b/drivers/usb/serial/ark3116.c
-@@ -75,7 +75,7 @@ struct ark3116_private {
- };
- 
- static int ark3116_write_reg(struct usb_serial *serial,
--			     unsigned reg, __u8 val)
-+			     unsigned int reg, __u8 val)
- {
- 	int result;
- 	 /* 0xfe 0x40 are magic values taken from original driver */
-@@ -90,7 +90,7 @@ static int ark3116_write_reg(struct usb_serial *serial,
- }
- 
- static int ark3116_read_reg(struct usb_serial *serial,
--			    unsigned reg, unsigned char *buf)
-+			    unsigned int reg, unsigned char *buf)
- {
- 	int result;
- 	/* 0xfe 0xc0 are magic values taken from original driver */
-@@ -398,7 +398,7 @@ static int ark3116_tiocmget(struct tty_struct *tty)
- }
- 
- static int ark3116_tiocmset(struct tty_struct *tty,
--			unsigned set, unsigned clr)
-+			unsigned int set, unsigned int clr)
- {
- 	struct usb_serial_port *port = tty->driver_data;
- 	struct ark3116_private *priv = usb_get_serial_port_data(port);
--- 
-2.36.1
+> +{
+> +       struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> +       union acpi_object *obj;
+> +       acpi_status status;
+> +       int ret;
+> +
+> +       status = acpi_evaluate_object(handle, METHOD_NAME__SUB, NULL, &buffer);
+> +       if (!ACPI_SUCCESS(status)) {
 
+Typically, ACPI_FAILURE() is used in checks like this.
+
+> +               acpi_handle_debug(handle, "Reading ACPI _SUB failed: %#x\n", status);
+
+It would be enough to say "_SUB evaluation failed".
+
+> +               return -ENOENT;
+
+Why not use -ENODATA here?
+
+> +       }
+> +
+> +       obj = buffer.pointer;
+> +       if (obj->type == ACPI_TYPE_STRING) {
+> +               ret = strscpy(sub, obj->string.pointer, size);
+
+It may be simpler to allocate the memory here so that callers don't
+have to worry about it.
+
+Also, this is expected to be a proper device ID, not just a string, so
+maybe some validation checks could be made here?
+
+> +       } else {
+> +               acpi_handle_warn(handle, "Warning ACPI _SUB did not return a string\n");
+> +               ret = -EINVAL;
+> +       }
+> +       acpi_os_free(buffer.pointer);
+> +
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_get_sub);
+> +
+>  acpi_status
+>  acpi_evaluate_reference(acpi_handle handle,
+>                         acpi_string pathname,
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 4f82a5bc6d98..9bf18adf5920 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -21,6 +21,8 @@
+>  #endif
+>  #include <acpi/acpi.h>
+>
+> +#define ACPI_MAX_SUB_BUF_SIZE  9
+> +
+>  #ifdef CONFIG_ACPI
+>
+>  #include <linux/list.h>
+> @@ -762,6 +764,7 @@ static inline u64 acpi_arch_get_root_pointer(void)
+>  #endif
+>
+>  int acpi_get_local_address(acpi_handle handle, u32 *addr);
+> +int acpi_get_sub(acpi_handle handle, char *sub, size_t size);
+>
+>  #else  /* !CONFIG_ACPI */
+>
+> @@ -1023,6 +1026,11 @@ static inline int acpi_get_local_address(acpi_handle handle, u32 *addr)
+>         return -ENODEV;
+>  }
+>
+> +static int acpi_get_sub(acpi_handle handle, char *sub, size_t size)
+> +{
+> +       return -ENODEV;
+> +}
+> +
+>  static inline int acpi_register_wakeup_handler(int wake_irq,
+>         bool (*wakeup)(void *context), void *context)
+>  {
+> --

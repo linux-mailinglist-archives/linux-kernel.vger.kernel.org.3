@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F0A554996
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840A155462D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243300AbiFVKuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S1351224AbiFVKwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbiFVKuL (ORCPT
+        with ESMTP id S1348285AbiFVKwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:50:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71B83BA75
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655895009; x=1687431009;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+q3LyYRSG8Prlp1Z2KGKSmSZST1o9tVZI3vEN0EE3rk=;
-  b=Ngyd+7SERj6l/66cTa98Af0KVSSGIlJaHEbrYBAnukz82OeaHJ7at7J5
-   t+5bpS5aQjJ8v/jmvYGDE0MoxP9YXmSlgpilvYKmsFa1UwIkksp0aAby1
-   1je5OTgSrpa9M2fOdOaA2g/AZ4AuPFmZrBdEvzZ8Q/uAuP3axuKX5Fqi8
-   DYoaSrhGa47d9rsEbfyWU6g1DQHr4dUcZnihlyq5GuDnJU6wr92fvwGc6
-   4N7HshlV48VYozbtVdsY7Ksc19cUEvZOs5a64r+qOUI9LAfn4JyIT2zoo
-   zZeWCx7jqxySN8XOZvaXl6A6249/V2d0UANr0USXu+kBI9qpj4we6ZUQZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="269103710"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="269103710"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:50:09 -0700
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="690440303"
-Received: from wterliko-mobl.ger.corp.intel.com (HELO [10.249.254.201]) ([10.249.254.201])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:50:06 -0700
-Message-ID: <453f12ce-e982-0d53-37e4-7e72f1538838@linux.intel.com>
-Date:   Wed, 22 Jun 2022 12:50:04 +0200
+        Wed, 22 Jun 2022 06:52:41 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E93A3BBC6;
+        Wed, 22 Jun 2022 03:52:40 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id g25so33299003ejh.9;
+        Wed, 22 Jun 2022 03:52:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oaXOVl5GbpzrwUwV/ImpOqO7sc14IuZ0zxyCyofIONY=;
+        b=fAYTDojmK1smvHwGNsWw7YZE+c033Tr1yoX1+0von2aMoUv1c6u/lXSW342IrQcP4M
+         xPN+GRDfDYCxmUIv6sDSqnaI8Em+Oh+JKrva7+3g/EzeKV1Ki583f+s9svwO4PTOK3VO
+         FNBVAE15VZ93Za7cLKMBU9l53ej2lPfk32eNT2dPoL31kpXd5JF9QExrHJGiNWskQaoi
+         GwbpG7yGkbThNaRXEKOmk3fTJtRnVtpyyhPasWlhFmRt+RC4liDaJM5tK4YKEVkPB0lZ
+         cAhCT1RJZQYl9ir4lgrKLNKqAQifLqf1rW/MelSqXTepRExaSRDBPQAnc0kZG468DnbP
+         an5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oaXOVl5GbpzrwUwV/ImpOqO7sc14IuZ0zxyCyofIONY=;
+        b=GcNvLXcE9tW7G6nUDJS/2kjcjmbbny+Zq3c7NsD2s4nBR3mw/JNhKvQ/t27uZ2MQBl
+         eD9wrKSLPmwfxY+00QAMbRQgiTJ/DnKJunbAVf4yFM0WGA9DuatGJeJpEGYh0PxuBfsB
+         NQ3e3XSKbX/pdszk1TjsbZJvTSG49sM4572CiOw44sb7bNDT6OatrQYXw5krTGFVVkYo
+         Tf2UfnAdLTvITHl4irZXu6G+LA9vBlsFZYUqqPryGV4hbvFJvUIFbd5/UH+d6wgVaPwl
+         z6jSc5aPasya2aBs0MlaKtUiG95ZSO0a+PTHAk7mYRlH2TSz++XLhZQBeRX+A4yUa7NS
+         BNkw==
+X-Gm-Message-State: AJIora/7Nr30JaVIyIEoYOjCS2mn6KHl5Fzl8ZBlgMjg7pI6dlShVq/V
+        YbpkyfV0EhK+lSITdzVeLAR+b2B+e8/pQ1aaERA=
+X-Google-Smtp-Source: AGRyM1uyQ/Y01CLF3k0VqbSatCLy5utHlTkfRj9OEacTCqDgiOfz+58yhgtrbg6k3a0mp5dlHgOdAW0EC2clcTJB1Rg=
+X-Received: by 2002:a17:906:149:b0:711:fca6:bc2f with SMTP id
+ 9-20020a170906014900b00711fca6bc2fmr2554745ejh.497.1655895158817; Wed, 22 Jun
+ 2022 03:52:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v8 03/10] drm/i915/ttm: only trust snooping for dgfx when
- deciding default cache_level
-Content-Language: en-US
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     kernel@collabora.com, Matthew Auld <matthew.auld@intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220621200058.3536182-1-bob.beckett@collabora.com>
- <20220621200058.3536182-4-bob.beckett@collabora.com>
-From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>
-In-Reply-To: <20220621200058.3536182-4-bob.beckett@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-8-saravanak@google.com> <20220622074756.GA1647@pengutronix.de>
+ <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
+In-Reply-To: <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 22 Jun 2022 12:52:02 +0200
+Message-ID: <CAHp75VdqjCoWAHV4AyYrju0o8buREA8pM5wyf8TD=rCMTs-tEA@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sascha Hauer <sha@pengutronix.de>,
+        Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 22, 2022 at 10:44 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Wed, Jun 22, 2022 at 9:48 AM Sascha Hauer <sha@pengutronix.de> wrote:
 
-On 6/21/22 22:00, Robert Beckett wrote:
-> By default i915_ttm_cache_level() decides I915_CACHE_LLC if HAS_SNOOP.
-> This is divergent from existing backends code which only considers
-> HAS_LLC.
-> Testing shows that trusting snooping on gen5- is unreliable and bsw via
-> ggtt mappings, so limit DGFX for now and maintain previous behaviour.
-Yeah, IIRC Matthew mentioned that HAS_SNOOP() can be overridden in 
-various ways, but not on DGFX, (at least not for DG1). So this looks 
-correct to me.
+...
+
+> > This patch has the effect that console UART devices which have "dmas"
+> > properties specified in the device tree get deferred for 10 to 20
+> > seconds. This happens on i.MX and likely on other SoCs as well. On i.MX
+> > the dma channel is only requested at UART startup time and not at probe
+> > time. dma is not used for the console. Nevertheless with this driver probe
+> > defers until the dma engine driver is available.
+> >
+> > It shouldn't go in as-is.
 >
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-
-Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-
-
-> ---
->   drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+> This affects all machines with the PL011 UART and DMAs specified as
+> well.
 >
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-> index 4c1de0b4a10f..40249fa28a7a 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-> @@ -46,7 +46,9 @@ static enum i915_cache_level
->   i915_ttm_cache_level(struct drm_i915_private *i915, struct ttm_resource *res,
->   		     struct ttm_tt *ttm)
->   {
-> -	return ((HAS_LLC(i915) || HAS_SNOOP(i915)) &&
-> +	bool can_snoop = HAS_SNOOP(i915) && IS_DGFX(i915);
-> +
-> +	return ((HAS_LLC(i915) || can_snoop) &&
->   		!i915_ttm_gtt_binds_lmem(res) &&
->   		ttm->caching == ttm_cached) ? I915_CACHE_LLC :
->   		I915_CACHE_NONE;
+> It would be best if the console subsystem could be treated special and
+> not require DMA devlink to be satisfied before probing.
+
+In 8250 we force disable DMA and PM on kernel consoles, because it's
+so-o PITA and has a lot of corner cases we may never chase down.
+
+089b6d365491 serial: 8250_port: Disable DMA operations for kernel console
+bedb404e91bb serial: 8250_port: Don't use power management for kernel console
+
+
+> It seems devlink is not quite aware of the concept of resources that are
+> necessary to probe vs resources that are nice to have and might be
+> added after probe. We need a strong devlink for the first category
+> and maybe a weak devlink for the latter category.
+>
+> I don't know if this is a generic hardware property for all operating
+> systems so it could be a DT property such as dma-weak-dependency?
+> Or maybe compromize and add a linux,dma-weak-dependency;
+> property?
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

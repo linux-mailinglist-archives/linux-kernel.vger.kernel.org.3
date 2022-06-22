@@ -2,46 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4A35543C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103EC5543E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354857AbiFVHyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S1354695AbiFVHyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354718AbiFVHyF (ORCPT
+        with ESMTP id S1350126AbiFVHx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:54:05 -0400
-Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830692EA3B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:53:59 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1655884341tb59pkwn
-Received: from localhost.localdomain ( [125.70.163.206])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 15:52:12 +0800 (CST)
-X-QQ-SSF: 0100000000200020B000B00A0000000
-X-QQ-FEAT: 1al0Ay5k4U3zy32h2+cL9Bj/nzhdZvtHEPp4Zgzg0Yx2lFQN5BPKd26xaupcm
-        hCCh81ivB1rljGvEbnpmisY90FvofLSpcfFjIlLSUHf0fIGTw+exuAgn/sViSuPnfRHG5kV
-        WnPZXZ9KYcr/HvOu8RixaKnEGUEtfeXSa1h9yEReLE6b9FV0NHgpMpYEjzuX4xGIEPCU97D
-        o9p3mRuEc4PHVBxfPFZ2u65qbgBfOLnx2fxgyIe8Bjg7Qv1opxxYVZ/H7aswHm19VUExHna
-        wpWReBYA5A6xjp85y52uVI0S9/EqA2D344I2w85RY4UIfV3ArluIjp9dp4aucUAUK8/31fL
-        AiptNTuE91u1oLu4JE=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        vgupta@kernel.org, Julia.Lawall@inria.fr,
-        deng.changcheng@zte.com.cn, libang.linuxer@gmail.com
-Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] ARC:kernel:Fix typos in comments
-Date:   Wed, 22 Jun 2022 15:52:04 +0800
-Message-Id: <20220622075204.35329-1-yuanjilin@cdjrlc.com>
+        Wed, 22 Jun 2022 03:53:59 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA39E2EA3B;
+        Wed, 22 Jun 2022 00:53:56 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25M7rjPH111761;
+        Wed, 22 Jun 2022 02:53:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1655884425;
+        bh=XRLpJuhaa+vyh1FAr3N8/cRnB8Vfl/3G2BsHH7apZ1M=;
+        h=From:To:CC:Subject:Date;
+        b=wKkdhaJEGmug5aW2A50jvnS+zGxAyZJsiR2OxQ0SWytnqCUhcqElq8HDLU8D5xwO5
+         Sf4kZzUaZr11bfflDS1QKtYkHZsRGcNfAFAt6nIZ5PjeOo59EsixviPsfgIprQR8pb
+         XODZj4T6m9e+l0ZdeAyyio9wbT+zCrvrvQIh7K18=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25M7rjS1115076
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 22 Jun 2022 02:53:45 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 22
+ Jun 2022 02:53:45 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 22 Jun 2022 02:53:45 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25M7ridD119679;
+        Wed, 22 Jun 2022 02:53:44 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <linux-phy@lists.infradead.org>, <kishon@ti.com>,
+        <vkoul@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <p.yadav@ti.com>, <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
+        <sjakhade@cadence.com>, <mparab@cadence.com>,
+        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
+        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
+Subject: [PATCH v2 0/3] Add support for DPHY TX on J721E
+Date:   Wed, 22 Jun 2022 13:23:37 +0530
+Message-ID: <20220622075340.16915-1-r-ravikumar@ti.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,26 +68,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'call'.
+Following series of patches adds support for DPHY TX on TI's J721E
+SoC. New compatible is added and required cdns dphy ops are implemented.
+The series also adds band ctrl configuration required for dphy tx
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- arch/arc/kernel/smp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
+-Fix a build error reported by kernel test robot <lkp@intel.com>
+ which uses clang compiler. Did not get the error with GNU Toolchain
+ 9.2-2019.12
 
-diff --git a/arch/arc/kernel/smp.c b/arch/arc/kernel/smp.c
-index d947473f1e6d..6c22a53711e9 100644
---- a/arch/arc/kernel/smp.c
-+++ b/arch/arc/kernel/smp.c
-@@ -393,7 +393,7 @@ irqreturn_t do_IPI(int irq, void *dev_id)
-  * API called by platform code to hookup arch-common ISR to their IPI IRQ
-  *
-  * Note: If IPI is provided by platform (vs. say ARC MCIP), their intc setup/map
-- * function needs to call call irq_set_percpu_devid() for IPI IRQ, otherwise
-+ * function needs to call irq_set_percpu_devid() for IPI IRQ, otherwise
-  * request_percpu_irq() below will fail
-  */
- static DEFINE_PER_CPU(int, ipi_dev);
+Rahul T R (3):
+  phy: dt-bindings: cdns,dphy: Add compatible for dphy on j721e
+  phy: cdns-dphy: Add band config for dphy tx
+  phy: cdns-dphy: Add support for DPHY TX on J721e
+
+ .../devicetree/bindings/phy/cdns,dphy.yaml    |   5 +-
+ drivers/phy/cadence/Kconfig                   |  10 ++
+ drivers/phy/cadence/cdns-dphy.c               | 114 +++++++++++++++++-
+ 3 files changed, 126 insertions(+), 3 deletions(-)
+
 -- 
 2.36.1
 

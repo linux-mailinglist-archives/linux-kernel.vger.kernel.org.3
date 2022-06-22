@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184D45547C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157A1554908
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352808AbiFVLxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S1357908AbiFVLyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357673AbiFVLxo (ORCPT
+        with ESMTP id S1357257AbiFVLxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:53:44 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7B432051;
-        Wed, 22 Jun 2022 04:53:41 -0700 (PDT)
-Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 22 Jun 2022 07:53:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B3C32051;
+        Wed, 22 Jun 2022 04:53:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id E207120603;
-        Wed, 22 Jun 2022 13:53:39 +0200 (CEST)
-Message-ID: <d0b55a37-428e-8081-6785-11be20aa14c7@somainline.org>
-Date:   Wed, 22 Jun 2022 13:53:39 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 737BFB81DDE;
+        Wed, 22 Jun 2022 11:53:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980ACC34114;
+        Wed, 22 Jun 2022 11:53:48 +0000 (UTC)
+Message-ID: <1da61f9c-0605-dc9d-63a3-21c18fcb74c7@xs4all.nl>
+Date:   Wed, 22 Jun 2022 13:53:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: Removal of qcom,board-id and qcom,msm-id
+Subject: Re: [PATCH v10 0/5] media: atmel: atmel-isc: implement media
+ controller
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        krzysztof.kozlowski@linaro.org
-Cc:     agross@kernel.org, arnd@arndb.de, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olof@lixom.net, robh@kernel.org,
-        sboyd@kernel.org
-References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
- <20220522195138.35943-1-konrad.dybcio@somainline.org>
- <c072077a-cc16-c8f8-fcfa-891b3357cb66@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <c072077a-cc16-c8f8-fcfa-891b3357cb66@linaro.org>
+To:     Eugen Hristev <eugen.hristev@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        claudiu.beznea@microchip.com, nicolas.ferre@microchip.com,
+        jacopo@jmondi.org
+References: <20220503095127.48710-1-eugen.hristev@microchip.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220503095127.48710-1-eugen.hristev@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,41 +50,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Eugen,
 
+On 03/05/2022 11:51, Eugen Hristev wrote:
+> This series is a split from the series :
+> [PATCH v9 00/13] media: atmel: atmel-isc: implement media controller
+> and it includes the media controller part.
+> previous fixes were sent on a different patch series.
+> 
+> As discussed on the ML, moving forward with having the media link validate at
+> start/stop streaming call.
+> I will test the patch :
+> [RFC PATCHv2] vb2: add support for (un)prepare_streaming queue ops
+> afterwards, but that patch requires moving my logic to the new vb2 callbacks.
 
-On 22.06.2022 10:21, Dmitry Baryshkov wrote:
-> On 22/05/2022 22:51, Konrad Dybcio wrote:
->> Hi,
->>
->> removing these properties will not bring almost any benefit (other than making
->> some checks happy any saving some <200 LoC) and will make the lives of almost
->> all people doing independent development for linux-on-msm harder. There are
->> almost unironically like 3 people outside Linaro and QUIC who have
->> non-vendor-fused development boards AND the sources to rebuild the
->> bootloader on their own. Making it harder to boot is only going to
->> discourage people from developing on these devices, which is already not
->> that pleasant, especially with newer platforms where you have to fight with
->> the oh-so-bright ideas of Android boot chain..
->>
->> This only concerns devices released before sm8350, as the new ones will not
->> even boot with these properties present (or at least SONY Sagami, but I
->> doubt it's an isolated case), so other than completing support for older
->> devices, it won't be an issue going forward, anyway.
-> 
-> I almost missed this part of the discussion (and Krzysztof had to point me to it in discussion of his patches).
-> 
-> I think this is a Sony peculiarity. At least the distributed SM8350 (lahaina) and SM8450 (waipio) Qualcomm device trees use these properties:
-> 
-> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-hdk.dts
-> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-v2.1.dtsi
-> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio-qrd-pm8010.dts
-> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio-v2.dtsi
-> 
-> 
-Hi, 
+I'm looking at merging this series, but I would like to have the output of
+'v4l2-compliance -m /dev/mediaX' to verify that the MC links etc. is all
+correct.
 
-I was puzzled on this back when I first tried to get mainline booting on 8350 too. What I think happened, is that msm-id is used in some code paths, but not others (remember there are plenty of combinations including various Google's inventions from all over the years: QCDT, DTBO, vendor_boot, AVB signage, A/B presence/absence of recovery partition, virtual partitions etc etc).
+And one more question which may have been answered already in the past:
 
-Frankly, I have no idea why they are still here, but for booting just the kernel (no vendor_boot / GKI / dtbo mess), they need to be absent, at least on Sagami devices. This may be a bug in the Qualcomm bootloader, but they officially have to go with the GKI path to pass Google's compatibility tests, so this may not have been thouroughly tested (if at all), though I highly doubt this is going to change, as vendors are generally reluctant to update their bootloaders and Qualcomm is probably not interested in messing with a useless-to-the-main-purpose feature.
+Changing to the MC will break existing applications, doesn't it? Or did I
+miss something?
 
-Konrad
+Regards,
+
+	Hans
+
+> 
+> Full series history:
+> 
+> Changes in v10:
+> -> split the series into this first fixes part.
+> -> moved IO_MC addition from first patch to the second patch on the driver changes
+> -> edited commit messages
+> -> DT nodes now disabled by default.
+> 
+> Changes in v9:
+> -> kernel robot reported isc_link_validate is not static, changed to static.
+> 
+> Changes in v8:
+> -> scaler: modified crop bounds to have the exact source size
+> 
+> Changes in v7:
+> -> scaler: modified crop bounds to have maximum isc size
+> -> format propagation: did small changes as per Jacopo review
+> 
+> 
+> Changes in v6:
+> -> worked a bit on scaler, added try crop and other changes as per Jacopo review
+> -> worked on isc-base enum_fmt , reworked as per Jacopo review
+> 
+> Changes in v5:
+> -> removed patch that removed the 'stop' variable as it was still required
+> -> added two new trivial patches
+> -> reworked some parts of the scaler and format propagation after discussions with Jacopo
+> 
+> 
+> Changes in v4:
+> -> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
+> one patch that was using it
+> -> as reviewed by Jacopo, reworked some parts of the media controller implementation
+> 
+> 
+> Changes in v3:
+> - change in bindings, small fixes in csi2dc driver and conversion to mc
+> for the isc-base.
+> - removed some MAINTAINERS patches and used patterns in MAINTAINERS
+> 
+> Changes in v2:
+> - integrated many changes suggested by Jacopo in the review of the v1 series.
+> - add a few new patches
+> 
+> Eugen Hristev (5):
+>   media: atmel: atmel-isc: prepare for media controller support
+>   media: atmel: atmel-isc: implement media controller
+>   ARM: dts: at91: sama7g5: add nodes for video capture
+>   ARM: configs: at91: sama7: add xisc and csi2dc
+>   ARM: multi_v7_defconfig: add atmel video pipeline modules
+> 
+>  arch/arm/boot/dts/sama7g5.dtsi                |  51 ++
+>  arch/arm/configs/multi_v7_defconfig           |   3 +
+>  arch/arm/configs/sama7_defconfig              |   2 +
+>  drivers/media/platform/atmel/Makefile         |   2 +-
+>  drivers/media/platform/atmel/atmel-isc-base.c | 485 +++++++++---------
+>  .../media/platform/atmel/atmel-isc-scaler.c   | 267 ++++++++++
+>  drivers/media/platform/atmel/atmel-isc.h      |  50 +-
+>  .../media/platform/atmel/atmel-sama5d2-isc.c  |  34 +-
+>  .../media/platform/atmel/atmel-sama7g5-isc.c  |  32 +-
+>  9 files changed, 685 insertions(+), 241 deletions(-)
+>  create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
+> 
+

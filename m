@@ -2,118 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02D55551CB
+	by mail.lfdr.de (Postfix) with ESMTP id 54D955551CA
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376716AbiFVQyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S1376852AbiFVQy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377568AbiFVQyI (ORCPT
+        with ESMTP id S1377634AbiFVQyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:54:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2280C39168;
-        Wed, 22 Jun 2022 09:53:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF12FB8204C;
-        Wed, 22 Jun 2022 16:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC87C34114;
-        Wed, 22 Jun 2022 16:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655916806;
-        bh=9Tsp3154yO2Z+AfH0+3B9Ry1RXBwikYidZBcM7W88zA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kA2RuE7L1wBfeASH4Kj8cKdyVKTWPFYNkldRvtV9vKIBfHwEWWrvlXNBo+UeSSVK3
-         YJGREQ/ts3GXNN+atQU20DVFDrKuiPoSo+qbAN5ekdKmKmUw0kyzb/N3bC/tPZvxT3
-         tEvshJ+RNABGNLhenFCvEsrb993/g6j9XLlu7jbZRD0uLxIPEdQEEddieZR8yPJv+8
-         lnq+vp326qSw8U6cza+gJkkESjVxATFMwWjl0Pp5asINKFm7GkASjYcsolFXjwtgHT
-         d6ImWtNc087pqfhxYlhbj/EPvJeSu9VAzRyHXpuIVZMf7XTofI3GhERjYoH+QTrpBv
-         +f9CUbsYeEh2g==
-Date:   Wed, 22 Jun 2022 09:53:24 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH 1/3 v2] f2fs: attach inline_data after setting compression
-Message-ID: <YrNJBMGpjPdtwVY+@google.com>
-References: <20220617223106.3517374-1-jaegeuk@kernel.org>
+        Wed, 22 Jun 2022 12:54:16 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D4DD80;
+        Wed, 22 Jun 2022 09:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655916855; x=1687452855;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=Mkvb6JV3WucgqjS4lQ47IhKgB1nOOh2VtgzcVyQdrB8=;
+  b=Hu2wpLNF2R1Zn9iDi15j6Hz64syuspCnW9BkVg7HhiTUk1m1QzCtcvoF
+   N7W7FpRNlzUqu6GEKAHU4ehFG7AJI5z4GEr9pbTzbA3LkEUGoRW2UXgRx
+   0cTYAVs0+2xuRj1YLR4uqUxwuYL0TzGI5NIZAKicQjGMCsRAeR0/I1oOd
+   8=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 22 Jun 2022 09:54:15 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 09:54:14 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 22 Jun 2022 09:54:14 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 22 Jun 2022 09:54:13 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dp: reset drm_dev to NULL at dp_display_unbind()
+Date:   Wed, 22 Jun 2022 09:54:05 -0700
+Message-ID: <1655916845-31760-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617223106.3517374-1-jaegeuk@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the below corruption.
+During msm initialize phase, dp_display_unbind() will be called to undo
+initializations had been done by dp_display_bind() previously if there is
+error happen at msm_drm_bind. Under this kind of circumstance, drm_device
+may not be populated completed which causes system crash at drm_dev_dbg().
+This patch reset drm_dev to NULL so that following drm_dev_dbg() will not
+refer to any internal fields of drm_device to prevent system from crashing.
+Below are panic stack trace,
 
-[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
+[   53.584904] Unable to handle kernel paging request at virtual address 0000000070018001
+.
+[   53.702212] Hardware name: Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+) (DT)
+[   53.710445] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   53.717596] pc : string_nocheck+0x1c/0x64
+[   53.721738] lr : string+0x54/0x60
+[   53.725162] sp : ffffffc013d6b650
+[   53.728590] pmr_save: 000000e0
+[   53.731743] x29: ffffffc013d6b650 x28: 0000000000000002 x27: 0000000000ffffff
+[   53.739083] x26: ffffffc013d6b710 x25: ffffffd07a066ae0 x24: ffffffd07a419f97
+[   53.746420] x23: ffffffd07a419f99 x22: ffffff81fef360d4 x21: ffffff81fef364d4
+[   53.753760] x20: ffffffc013d6b6f8 x19: ffffffd07a06683c x18: 0000000000000000
+[   53.761093] x17: 4020386678302f30 x16: 00000000000000b0 x15: ffffffd0797523c8
+[   53.768429] x14: 0000000000000004 x13: ffff0000ffffff00 x12: ffffffd07a066b2c
+[   53.775780] x11: 0000000000000000 x10: 000000000000013c x9 : 0000000000000000
+[   53.783117] x8 : ffffff81fef364d4 x7 : 0000000000000000 x6 : 0000000000000000
+[   53.790445] x5 : 0000000000000000 x4 : ffff0a00ffffff04 x3 : ffff0a00ffffff04
+[   53.797783] x2 : 0000000070018001 x1 : ffffffffffffffff x0 : ffffff81fef360d4
+[   53.805136] Call trace:
+[   53.807667]  string_nocheck+0x1c/0x64
+[   53.811439]  string+0x54/0x60
+[   53.814498]  vsnprintf+0x374/0x53c
+[   53.818009]  pointer+0x3dc/0x40c
+[   53.821340]  vsnprintf+0x398/0x53c
+[   53.824854]  vscnprintf+0x3c/0x88
+[   53.828274]  __trace_array_vprintk+0xcc/0x2d4
+[   53.832768]  trace_array_printk+0x8c/0xb4
+[   53.836900]  drm_trace_printf+0x74/0x9c
+[   53.840875]  drm_dev_dbg+0xfc/0x1b8
+[   53.844480]  dp_pm_suspend+0x70/0xf8
+[   53.848164]  dpm_run_callback+0x60/0x1a0
+[   53.852222]  __device_suspend+0x304/0x3f4
+[   53.856363]  dpm_suspend+0xf8/0x3a8
+[   53.859959]  dpm_suspend_start+0x8c/0xc0
 
-Cc: <stable@vger.kernel.org>
-Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 ---
- fs/f2fs/namei.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_display.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index c549acb52ac4..bf00d5057abb 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 	if (test_opt(sbi, INLINE_XATTR))
- 		set_inode_flag(inode, FI_INLINE_XATTR);
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 2b72639..02fff70 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -316,6 +316,8 @@ static void dp_display_unbind(struct device *dev, struct device *master,
  
--	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
--		set_inode_flag(inode, FI_INLINE_DATA);
- 	if (f2fs_may_inline_dentry(inode))
- 		set_inode_flag(inode, FI_INLINE_DENTRY);
+ 	dp_power_client_deinit(dp->power);
+ 	dp_aux_unregister(dp->aux);
++	dp->drm_dev = NULL;
++	dp->aux->drm_dev = NULL;
+ 	priv->dp[dp->id] = NULL;
+ }
  
-@@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 
- 	f2fs_init_extent_tree(inode, NULL);
- 
--	stat_inc_inline_xattr(inode);
--	stat_inc_inline_inode(inode);
--	stat_inc_inline_dir(inode);
--
- 	F2FS_I(inode)->i_flags =
- 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
- 
-@@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 			set_compress_context(inode);
- 	}
- 
-+	/* Should enable inline_data after compression set */
-+	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
-+		set_inode_flag(inode, FI_INLINE_DATA);
-+
-+	stat_inc_inline_xattr(inode);
-+	stat_inc_inline_inode(inode);
-+	stat_inc_inline_dir(inode);
-+
- 	f2fs_set_inode_flags(inode);
- 
- 	trace_f2fs_new_inode(inode, 0);
-@@ -325,6 +327,9 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
- 		if (!is_extension_exist(name, ext[i], false))
- 			continue;
- 
-+		/* Do not use inline_data with compression */
-+		stat_dec_inline_inode(inode);
-+		clear_inode_flag(inode, FI_INLINE_DATA);
- 		set_compress_context(inode);
- 		return;
- 	}
 -- 
-2.37.0.rc0.104.g0611611a94-goog
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

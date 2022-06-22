@@ -2,121 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC4D555257
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58CC555259
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359032AbiFVR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S1376726AbiFVR0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiFVR0J (ORCPT
+        with ESMTP id S1377042AbiFVR0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:26:09 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DB3289AF;
-        Wed, 22 Jun 2022 10:26:08 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id r7-20020a1c4407000000b003a02cc49774so67648wma.1;
-        Wed, 22 Jun 2022 10:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gx8MHjBKLUDJNFsntdrDoHFHXszbdB+MLB7TwASONiA=;
-        b=CeIyY61ktnfWz5ZbciV0WOC5VFw8HGSJ+5WUxqk65+0qibR3nxZpsCHGt+0uY/W6YG
-         aVCLgfoBrS8qPA0lAjeyCnF4l+Dn63W6qPg9e/RQMPZ1xno+OFhTG1z1USQYjhZK0A84
-         yFOIrl6+lT2aSQnuKCZB/3ZHaBCzPi/7PZFq7bS+/81ZQv9mZ2az7KE1gTk6RbfO5xpb
-         WHjx2mDimZ9lV3WsC+ofhxJ6OuKamj+DjaIwQWb9YBP2FaszDDKfsJm1Muhux9Wto2Ww
-         heCbY7CG1/C4a8UUfKLjRsWkiQn17wuFNQo5FPa5Z2MSndckB9DnXZVkLoA4/ddOX43c
-         YgEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gx8MHjBKLUDJNFsntdrDoHFHXszbdB+MLB7TwASONiA=;
-        b=OcGXQZOWxVz1Z7rcYGP0AvmmyKltykzMPTk29ep1Ze+6HK/LMoyUaA/EwKjuhNyhJQ
-         BYnUsUSMZDG9metb/OYUTPyEPa6FM9Qaklwc6W9917sApZhJW0u3nMbKOfGwKz2ddZsF
-         q5Zqeg2Q0fAVLcQCtisYBKPaAmNBwIgqXT90DWcGV+S5gXxvc+BraGs7meB4jhgHC5Bc
-         53IkFM3TQRt4NkP2TQ2Rx/rk5XpR+LeFq/mfjpltZdkSxfCHiojArtQg3gvp17wwi3sa
-         5CTFJkIA4f4R3qFvXbAmUfNV1DQFJUAeAjZPT3VOTzPaW7zhWLhje5pyDiOTRn1vypxD
-         OuUQ==
-X-Gm-Message-State: AOAM5325dvCXjpT0t9GLZMqLU8e2Y0OZ0uySq3kAcDR6MXi2LAm+QhY1
-        b3lTHvQ4eePPnDUXTlQL4FzF2Vsm5So=
-X-Google-Smtp-Source: ABdhPJw92zzWDOf4nX5co4h+yOaYfpvSE1lqWrAWyMnVuVIbDMJBNV5Z9nVcUfk7df9Z0MwcebHBGQ==
-X-Received: by 2002:a05:600c:2194:b0:39c:419c:1a24 with SMTP id e20-20020a05600c219400b0039c419c1a24mr47332513wme.186.1655918767173;
-        Wed, 22 Jun 2022 10:26:07 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id t5-20020a05600001c500b0020d106c0386sm11482007wrx.89.2022.06.22.10.26.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 10:26:06 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 18:26:04 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang
- support")
-Message-ID: <YrNQrPNF/XfriP99@debian>
-References: <YrLtpixBqWDmZT/V@debian>
- <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
- <YrMu5bdhkPzkxv/X@dev-arch.thelio-3990X>
- <CAHk-=wjTS9OJzggD8=tqtj0DoRCKhjjhpYWoB=bPQAv3QMa+eA@mail.gmail.com>
+        Wed, 22 Jun 2022 13:26:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1211B28E05;
+        Wed, 22 Jun 2022 10:26:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9B0EF1F92F;
+        Wed, 22 Jun 2022 17:26:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655918782; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jml0n4rcqjuj+OPSJZyRw7ItN6cmTrfRr6AuCXrU/lE=;
+        b=vNbktpf1xKsoPuXRFhRhomPfTR6dR5KLyWvi9TFcnR+ZqXyNArdoJuXxTgbYme3q8UadJH
+        XKlk6G10CYi/ZJCtdhvOwXdtgJDAVAV0aB+qpx8o39KbwaMH4vjcH/zIBlR0OxMdF2R3Il
+        4x7uE3VXXiNbg7wXwktEv49H5kyWf0Q=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7121213A5D;
+        Wed, 22 Jun 2022 17:26:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GhLIGr5Qs2JrKgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 22 Jun 2022 17:26:22 +0000
+Date:   Wed, 22 Jun 2022 19:26:21 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     tj@kernel.org, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH -next v5 4/8] blk-throttle: fix io hung due to config
+ updates
+Message-ID: <20220622172621.GA28246@blackbody.suse.cz>
+References: <20220528064330.3471000-1-yukuai3@huawei.com>
+ <20220528064330.3471000-5-yukuai3@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZPt4rx8FFjLCG7dd"
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjTS9OJzggD8=tqtj0DoRCKhjjhpYWoB=bPQAv3QMa+eA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220528064330.3471000-5-yukuai3@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:21:09AM -0500, Linus Torvalds wrote:
-> On Wed, Jun 22, 2022 at 10:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Right, we are working on a statically linked and optimized build of LLVM
-> > that people can use similar to the GCC builds provided on kernel.org,
-> > which should make the compile time problem not as bad as well as making
-> > it easier for developers to get access to a recent version of clang with
-> > all the fixes and improvements that we have made in upstream LLVM.
-> 
-> So I'm on the road, and will try to see how well I can do that
-> allmodconfig build on my poor laptop and see what else goes wrong for
-> now.
 
-Tried it after applying your patch. There was no build failure, but some warnings:
+--ZPt4rx8FFjLCG7dd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-fs/reiserfs/reiserfs.o: warning: objtool: leaf_copy_items_entirely+0x7fd: stack state mismatch: cfa1=4+240 cfa2=4+232
-arch/x86/kvm/kvm.o: warning: objtool: emulator_cmpxchg_emulated+0x705: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
-arch/x86/kvm/kvm.o: warning: objtool: paging64_update_accessed_dirty_bits+0x39e: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
-arch/x86/kvm/kvm.o: warning: objtool: paging32_update_accessed_dirty_bits+0x390: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
-arch/x86/kvm/kvm.o: warning: objtool: ept_update_accessed_dirty_bits+0x43f: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
-drivers/video/fbdev/smscufx.o: warning: objtool: ufx_ops_write() falls through to next function ufx_ops_setcolreg()
-drivers/video/fbdev/udlfb.o: warning: objtool: dlfb_ops_write() falls through to next function dlfb_ops_setcolreg()
-drivers/soc/qcom/qcom_rpmh.o: warning: objtool: rpmh_rsc_write_ctrl_data() falls through to next function trace_raw_output_rpmh_tx_done()
-drivers/scsi/mpi3mr/mpi3mr.o: warning: objtool: mpi3mr_op_request_post() falls through to next function mpi3mr_check_rh_fault_ioc()
-drivers/gpu/drm/radeon/radeon.o: warning: objtool: sumo_dpm_set_power_state() falls through to next function sumo_dpm_post_set_power_state()
-drivers/net/ethernet/wiznet/w5100.o: warning: objtool: w5100_tx_skb() falls through to next function w5100_get_drvinfo()
-drivers/net/ethernet/wiznet/w5100.o: warning: objtool: w5100_rx_skb() falls through to next function w5100_mmio_probe()
-vmlinux.o: warning: objtool: __startup_64() falls through to next function startup_64_setup_env()
-vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .noinstr.text section
-vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() leaves .noinstr.text section
-vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leaves .noinstr.text section
-vmlinux.o: warning: objtool: __sev_get_ghcb+0xa0: call to memcpy() leaves .noinstr.text section
-vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leaves .noinstr.text section
+(Apologies for taking so long before answering.)
 
-The build took 16 minutes 6 seconds on the build machines in my office (Codethink).
+On Sat, May 28, 2022 at 02:43:26PM +0800, Yu Kuai <yukuai3@huawei.com> wrot=
+e:
+> Some simple test:
+> 1)
+> cd /sys/fs/cgroup/blkio/
+> echo $$ > cgroup.procs
+> echo "8:0 2048" > blkio.throttle.write_bps_device
+> {
+>         sleep 2
+>         echo "8:0 1024" > blkio.throttle.write_bps_device
+> } &
+> dd if=3D/dev/zero of=3D/dev/sda bs=3D8k count=3D1 oflag=3Ddirect
+>=20
+> 2)
+> cd /sys/fs/cgroup/blkio/
+> echo $$ > cgroup.procs
+> echo "8:0 1024" > blkio.throttle.write_bps_device
+> {
+>         sleep 4
+>         echo "8:0 2048" > blkio.throttle.write_bps_device
+> } &
+> dd if=3D/dev/zero of=3D/dev/sda bs=3D8k count=3D1 oflag=3Ddirect
+>=20
+> test results: io finish time
+> 	before this patch	with this patch
+> 1)	10s			6s
+> 2)	8s			6s
+
+I agree these are consistent and correct times.
+
+And the new implementation won't make it worse (in terms of delaying a
+bio) than configuring minimal limits from the beginning, AFACT.
+
+> @@ -801,7 +836,8 @@ static bool tg_with_in_iops_limit(struct throtl_grp *=
+tg, struct bio *bio,
+> =20
+>  	/* Round up to the next throttle slice, wait time must be nonzero */
+>  	jiffy_elapsed_rnd =3D roundup(jiffy_elapsed + 1, tg->td->throtl_slice);
+> -	io_allowed =3D calculate_io_allowed(iops_limit, jiffy_elapsed_rnd);
+> +	io_allowed =3D calculate_io_allowed(iops_limit, jiffy_elapsed_rnd) +
+> +		     tg->io_skipped[rw];
+>  	if (tg->io_disp[rw] + 1 <=3D io_allowed) {
+>  		if (wait)
+>  			*wait =3D 0;
+> @@ -838,7 +874,8 @@ static bool tg_with_in_bps_limit(struct throtl_grp *t=
+g, struct bio *bio,
+>  		jiffy_elapsed_rnd =3D tg->td->throtl_slice;
+> =20
+>  	jiffy_elapsed_rnd =3D roundup(jiffy_elapsed_rnd, tg->td->throtl_slice);
+> -	bytes_allowed =3D calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd);
+> +	bytes_allowed =3D calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd)=
+ +
+> +			tg->bytes_skipped[rw];
+>  	if (tg->bytes_disp[rw] + bio_size <=3D bytes_allowed) {
+>  		if (wait)
+>  			*wait =3D 0;
+>
+
+Here we may allow to dispatch a bio above current slice's
+calculate_bytes_allowed() if bytes_skipped is already >0.
+
+bytes_disp + bio_size <=3D calculate_bytes_allowed() + bytes_skipped
+
+Then on the next update
+
+> [shuffle]
+> +static void __tg_update_skipped(struct throtl_grp *tg, bool rw)
+> +{
+> +	unsigned long jiffy_elapsed =3D jiffies - tg->slice_start[rw];
+> +	u64 bps_limit =3D tg_bps_limit(tg, rw);
+> +	u32 iops_limit =3D tg_iops_limit(tg, rw);
+> +
+> +	if (bps_limit !=3D U64_MAX)
+> +		tg->bytes_skipped[rw] +=3D
+> +			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
+> +			tg->bytes_disp[rw];
+> +	if (iops_limit !=3D UINT_MAX)
+> +		tg->io_skipped[rw] +=3D
+> +			calculate_io_allowed(iops_limit, jiffy_elapsed) -
+> +			tg->io_disp[rw];
+> +}
+
+the difference(s) here could be negative. bytes_skipped should be
+reduced to account for the additionally dispatched bio.
+This is all unsigned so negative numbers underflow, however, we add them
+again to the unsigned, so thanks to modular arithmetics the result is
+correctly updated bytes_skipped.
+
+Maybe add a comment about this (unsigned) intention?
+
+(But can this happen? The discussed bio would have to outrun another bio
+(the one which defined the current slice_end) but since blk-throttle
+uses queues (FIFO) everywhere this shouldn't really happen. But it's
+good to know this works as intended.)
+
+This patch can have
+Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
 
 
---
-Regards
-Sudip
+--ZPt4rx8FFjLCG7dd
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCYrNQpAAKCRAkDQmsBEOq
+uZ3BAQCL8oobgb+B0o8EQKGsxtLcjkKWGAXteGs1+CHNsFrUGAD/V+B+r/Bv3hQR
+A5tMH+4VD4tzI0yNIrKNYH5LIKu2ZgU=
+=HsKx
+-----END PGP SIGNATURE-----
+
+--ZPt4rx8FFjLCG7dd--

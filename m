@@ -2,179 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A315E554F29
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5095554F2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359406AbiFVP0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S1358381AbiFVP1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359347AbiFVP0h (ORCPT
+        with ESMTP id S1359386AbiFVP1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:26:37 -0400
-Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9E53B552
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655911587; bh=/6ibs5PwJZWhrNJzoAj7ZlgjTRVeUhaKc2p+U/9eA50=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=KlvMMewNeQxnqnpY6O2qxdw2+wa5nya2Z1goQnzPIeG8RuW0nKlaRdq0K7GSTF3HG4vBXkhuvAYAbQz2NS7jDRUz2WsKD6oLVNfYHzUx2YNZRVMIZHcWXe1iWCQLhZ+VVrQBKGrL4SRPgcKWVgprkrxUjEdv/3uRYowjxAGLxF9P+ydrY+CDqsSgPp5mrLLKcp5ODi3XfsAj75j37uSQvLNf2upsQduNnRwdpW6eezwTBHnkR1fI4JFXgJ5kLKgXETH3RdHZHn+2ouOPkPZ1Vkcwy42rFs2lZgLr8icglIDFWoluRXbEW2Tc60lFOqOIOEu1wKf+Zh79mpO88Odrpw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655911587; bh=o2HQ7ByRckABKGBAtlTp0o2B/g2Otr+E6MPfeaBX8yM=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jEHHjc5KVLo26SDxntXnoRSx3Nh4QjeHc81elQSCNKsJaSesSgc1JdIY5lRP0II6yzm/sdyclBiLB9V26eqFXdZZEdk2vQjCeHJUOOxPz81NBIKJ8qv2hoNlVRwskIiOS39lM8HoBWl9VgbGdtQ+5s/PILXxvcSgvr4mzu9kyBvR2RlR0xOkfghFoS0qIPAJFYkBuMr73n/4ilLFiN4iGhRJuAXtllW49tk22yxgVSmYkk60b5fbQ4mw6+cvqp3B1rb71poDe9Wk1ozYzu62VJx1vKA610X01UHUX18GOkuk1782U3REnFXbapAyonh5+3ZBxn+wLEFDdYsvaVFWvw==
-X-YMail-OSG: YeY3loMVM1lwNk2HSo55a7qZ8D4laXwPr5P7cqM9x7Iq34QIZCwCMGXvfd4TRRC
- DGXmQmF1zUNQRsi26pXIMYZ26Sev1PpC9JQu.mxo.huycJPzcmUWT8wEZjGPg9DSQpValwUKDBW6
- tws8s3njeG9XHA7eexoaLN6YLuED9qIs4xqm3qch57dm4wfIIYkxmGICYao3EZkwWC0GIbmCLze8
- Avz0DGsosO4UCXe0K26PES6bV.AIoKIeus0OlHBX6EUnGKQBDpC_BeaNrTCNH22zk1ly_Z1mFwwn
- _GRYfYuVXMjKBHpKbJUwjChPyUcZ6S0l69GS7M7qmbOszA0NdXhSGgaTRpGBxaWnGVcm800X2C86
- s6YK5sbxcQ2PVvOv1Q3SchEsDarjIsJOC2dZ3fV_9qGyad4x6zDoVidMEmqh1reCfnpFECTE3WUe
- Nddf9Gy81JNNzJOVhpnBpSTSlbnCEWQIWal3KZmyKxcpxv.Y8gG5LFelDmp.yc.CTNowuyAjEHhS
- I0Vg2Gq0afItvLDz.51zoxZgZUaZZDKSbxtjvS06gzRp7L03qpTpqPzHe4tIS_q9Iyx3nl9M3IoQ
- xmr3YYKxH3ogFdEKIcb4ZJ0QaHj_oJt06StgZ4Jo2EmxJPpgucHydjzVfnUC.FDE.IiJnjs14Oma
- XcLkeyuHfB0p1etlIO_4d_5YniNvCKxGvKk.3.A0ZCswNN8baHuyr9u7Izo7XTGv5T0ZV8SgOMxL
- cwiXn8McT2W9woHnqeoVDRxIEOe52DW0UEO4VbB0jP._jnn6lBszTndyxE_ahfkMMI5U4sZAB5F2
- _fzLUI7NdGN536qZHD6O86D2RyJJdk.7xeUw3_.WaHZNWqgrxAP60j941w2op_acLFJbbHShqgDN
- xkN0pJ1ZpD_7vOMeocDBwTtFPtCWKwOTnNRDjv9Dp1yX56f2RJ_VBSjadEAuWgRj4Fxg1GUemUVB
- VZ8ZehvJ59JY7Mka.83kFzKM0VKz7sD_IwwYqh_pAxytXi9UIL8SNNMbsvqg0_MAXOqaMKxSbh.k
- W_cXVqH_wQ4DQ7q_dlPezFB1xr46k3sX2QgIOl.69uPOQmzENZKtT6kXmfT_i9fjVs6zlyE2KR5F
- 8X0B03M5PrFTRm0P_Lc3EqhtWrWhkNbavPKxMFDC6OSvQFm7KCcgJaMqXPF59xQNmLAmV6gsJ7Pr
- xOph9KZpUH6N0fjq8uSs30uHLmicAu.z4jUBtx44stYA4jUhEZSYXDH6JRExbQmmeccBIQ9JYA_x
- 1U02hdSjE9Dcbch4QbOBkVyEnjV_nQNnk4_tZSITrxh2C3maNwSwYJ.NL5duuTCzhz8M30dpPnM2
- NLCyVyrqPnosjY5tvMveKhEn.lyPfWdR1BK3XZMGekaRBVevv2_2zv1VGkE51Ph2mc.ODlmivUtd
- lvbFKphrrlX5f2NK.7frSbU6NjUSnPAqw5kStv05yfRJi4v3gc6MLx0UJvMk0T1qbQIgu3oJZ93l
- 7_BdkTYY.mD3I7LFD9C2xhg6I_iL3pvmqZbcfBxnV0021_3OxcU9HL_qeLtYHhyrr1gEInWYDXyP
- 3KGjfRjqPUOXubVk_Bd6z5Dd0YI5KLHP_69BuonL7c7_VORE_Hf4D1wQus2Y6V9s7lLzAF6V2e4E
- e8YWVvLvvQcSNQj6JNsq.CRAwrTCNLfQp8glOJ7BDpbwcps1VbkKipEVAGYe3EAi0TEaDx7T3C.I
- F0PtiK2IA8lCvHS9PhKOt7MfcR6HaaW0vMt5fseKJQRbyzvoGw2npBYIgb6WwjeOuSH6I3tGCIHM
- gPKcq46kuJ0MnuD.cEJ2AVUf73a2hcc6.nNWmzyHYO23eLxCr28IyFMyHICRsvhsspeJCM_bOjeW
- 1AQnJEpAOD7iHbhTtQyzo.b9ppgnwbukpztYN2s.vKv2DEeaGrM8.7GY73CVVAzNO1oZBLZhp27N
- XEW4j4L4wS8P.mVmFiuzpf3687pX_5h9NFWOvRmOlOqH1HE2qQPLA3YhE1pSxWXok1U7pvnDPlXx
- Oz4Gmauds9h0cxvJJukRSSVa_0ahAPqJgggHun1jLpjyphHG0WzJ.2F2I_XI9vi75NvRfIRQ5W0_
- XbZCbODc6aY5htAzOQdN3kOlelauvZeKH8ESvGAFpSBz_VM9Jdvp8AbTiakivUAJrmM_IqdTVLSA
- 9aWx4u0Xm26h8Bc99rVYAE3hfYdM9ef7fU6.M9CMsB9Uu8JX8L6hoPTSgeYIJqYvP89BIqcOCpDp
- euN9muZT93bHC3ASznamM_DGRxRLRpgkCyQEyE.Pw1IHm0YobXAgwd8A-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Wed, 22 Jun 2022 15:26:27 +0000
-Received: by hermes--canary-production-bf1-8bb76d6cf-spklk (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e5e8de9273842f754433b90629d03f6d;
-          Wed, 22 Jun 2022 15:26:22 +0000 (UTC)
-Message-ID: <4b62f0c5-9f3c-e0bc-d836-1b7cdea429da@schaufler-ca.com>
-Date:   Wed, 22 Jun 2022 08:26:19 -0700
+        Wed, 22 Jun 2022 11:27:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE61D39165;
+        Wed, 22 Jun 2022 08:27:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81CB6B81F99;
+        Wed, 22 Jun 2022 15:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49CF9C34114;
+        Wed, 22 Jun 2022 15:27:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655911620;
+        bh=LofunbVPsAFbpla4sYsGRa5somVhJXmX25y4hisPFLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iO9wu6LuSXMwYekG555g50Hr2oFdpIYyQCDO13mFFXKh8nvTyB8I44mTfXYTvlXJl
+         6EYUFkKrVjcm88QWmgznWlYtnCAwDMZGOeozOy8qA1ZnfhVBnWK45C9D1pNjpGoJDZ
+         1IyngjrXXhi8+tzPD0j3UIOB40LjoNd0eLYelq9WKa44VyVIYqkASKERgtbQFL2PVZ
+         23ixMA8XKowPVtPTcJ1Jpaxzc7K5lMWP9uZAI20kmeg9kIYdqhyBH4dYdpJfpQyZ9T
+         s7P0wmOsIoaHrLUjbSr72tbNG+1GL/YWc/ey/3oBTp2bggi/gI+6bdZKiFAvGjF6Ki
+         3WzF+Cl2Ev6lA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o42Fq-0007Hf-IN; Wed, 22 Jun 2022 17:26:55 +0200
+Date:   Wed, 22 Jun 2022 17:26:54 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] arm64: dts: qcom: sc8280xp: Add reference device
+Message-ID: <YrM0vhXpY3uWgprs@hovoldconsulting.com>
+References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
+ <20220622041224.627803-5-bjorn.andersson@linaro.org>
+ <099cc82f-d52f-315f-189d-bcc40c1afd49@somainline.org>
+ <YrMccQXwsz/zC/gl@hovoldconsulting.com>
+ <9d0c1897-195f-0548-ea5d-ffc35768f518@somainline.org>
+ <b2c9faf0-95a8-772f-c211-f1599b35f8f8@linaro.org>
+ <51965fa3-d146-70f1-2ad8-db6197989348@somainline.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
-Content-Language: en-US
-To:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     brauner@kernel.org, paul@paul-moore.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220621233939.993579-1-fred@cloudflare.com>
- <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20280 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51965fa3-d146-70f1-2ad8-db6197989348@somainline.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/2022 7:24 AM, Frederick Lawler wrote:
-> Hi Casey,
->
-> On 6/21/22 7:19 PM, Casey Schaufler wrote:
->> On 6/21/2022 4:39 PM, Frederick Lawler wrote:
->>> While creating a LSM BPF MAC policy to block user namespace creation, we
->>> used the LSM cred_prepare hook because that is the closest hook to prevent
->>> a call to create_user_ns().
->>>
->>> The calls look something like this:
->>>
->>>      cred = prepare_creds()
->>>          security_prepare_creds()
->>>              call_int_hook(cred_prepare, ...
->>>      if (cred)
->>>          create_user_ns(cred)
->>>
->>> We noticed that error codes were not propagated from this hook and
->>> introduced a patch [1] to propagate those errors.
->>>
->>> The discussion notes that security_prepare_creds()
->>> is not appropriate for MAC policies, and instead the hook is
->>> meant for LSM authors to prepare credentials for mutation. [2]
->>>
->>> Ultimately, we concluded that a better course of action is to introduce
->>> a new security hook for LSM authors. [3]
->>>
->>> This patch set first introduces a new security_create_user_ns() function
->>> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
->>
->> Why restrict this hook to user namespaces? It seems that an LSM that
->> chooses to preform controls on user namespaces may want to do so for
->> network namespaces as well.
-> IIRC, CLONE_NEWUSER is the only namespace flag that does not require CAP_SYS_ADMIN.
+On Wed, Jun 22, 2022 at 05:10:50PM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 22.06.2022 16:48, Krzysztof Kozlowski wrote:
+> > On 22/06/2022 16:36, Konrad Dybcio wrote:
+> >>
+> >>
+> >> On 22.06.2022 15:43, Johan Hovold wrote:
+> >>> On Wed, Jun 22, 2022 at 02:33:02PM +0200, Konrad Dybcio wrote:
+> >>>> On 22.06.2022 06:12, Bjorn Andersson wrote:
+> >>>
+> >>>>> +&qup2_i2c5 {
+> >>>>> +	clock-frequency = <400000>;
+> >>>>> +
+> >>>>> +	pinctrl-names = "default";
+> >>>>> +	pinctrl-0 = <&qup2_i2c5_default>, <&kybd_default>, <&tpad_default>;
+> >>>>> +
+> >>>>> +	status = "okay";
+> >>>>> +
+> >>>> I think all device DTs generally have 'status = "okay"' at the beginning. Should we change that?
+> >>>>
+> >>>
+> >>> No, quite the opposite, status go at the end.
+> >> Then all other device DTs should be updated, as in dts/qcom/
+> >> everybody keeps it first in non-SoC/PMIC files.
+> > 
+> > The word "should" is a bit too much here, but I agree, we can update all
+> > of them to match one, chosen approach.
+> > 
+> > However the location for "status" property is more important for the
+> > definition of nodes in DTSI, because it's the least important piece
+> > there and also kind of expected - here go properties + I disable it. For
+> > me this is more important.
 
-LSM hooks are (or should be) orthogonal to capabilities, except for
-where they are required to implement capabilities.
+Right, and this is the argument for keeping status last, something which
+is well defined.
 
-> There is a security use case to prevent this namespace from being created within an unprivileged environment.
+If you look at some of the qcom dtsi it's hard to determine whether a
+node is disabled or not because the status property does not actually go
+"first" but is rather typically mixed up somewhere in the middle (or
+upper part) of nodes.
 
-Yes, which is why some people argued against allowing unprivileged creation of
-user namespaces.
+> > For node redefinition in DTS, I see benefits in two approaches:
+> > 1. Let me first enable the node and then configure it.
+> > 2. Let me configure the node and enable it.
 
-> I'm not opposed to a more generic hook, but I don't currently have a use case to block any others. We can also say the same is true for the other namespaces: add this generic security function to these too.
+So for consistency, just put status last everywhere (dtsi and dts) and
+be done with it.
 
-If the only reason to have the hook is to disallow unprivileged user namespaces
-it's probably time to revise the decision to always allow them. Make it a build
-or runtime option. That would address the issue more directly than creating a
-security module.
+> I looked around non-qcom device trees and it looks like the common
+> consensus is 2. Although I personally visually prefer 1. and it's
+> been used in all qcom arm64 DTs to date, I don't think there are any
+> blockers for us to switch to 1. going forward to keep it consistent.
 
->
-> I'm curious what others think about this too.
->
->
->> Also, the hook seems backwards. You should
->> decide if the creation of the namespace is allowed before you create it.
->> Passing the new namespace to a function that checks to see creating a
->> namespace is allowed doesn't make a lot off sense.
->>
->
-> I think having more context to a security hook is a good thing. I believe you brought up in the previous discussions that you'd like to use this hook for xattr purposes. Doesn't that require a namespace?
+You mean inconsistent with the majority of dts? ;)
 
-I'm not saying the information isn't required. But if you create a new namespace
-and then decide the user isn't allowed to create a namespace you have to tear it
-down. That's ugly. Better to pass the creation parameters to the hook before
-creating the namespace.
+> That's if we want to clean up the existing ones, as changing the rules
+> and not applying that to the older files will make for a huge mess as
+> time goes on and will unnecessarily prolong the review process (as
+> existing DTs are commonly a source of reference and people make
+> certain choices based on those).
 
-The relationship between xattrs and namespaces is it's own can of worms.
+That's a fair point. Consistency is good, and dt snipped tends to be
+copied, but it's not the end of the world to not update old dts either.
 
->
->>>
->>> Links:
->>> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
->>> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
->>> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
->>>
->>> Frederick Lawler (2):
->>>    security, lsm: Introduce security_create_user_ns()
->>>    bpf-lsm: Make bpf_lsm_create_user_ns() sleepable
->>>
->>>   include/linux/lsm_hook_defs.h | 2 ++
->>>   include/linux/lsm_hooks.h     | 5 +++++
->>>   include/linux/security.h      | 8 ++++++++
->>>   kernel/bpf/bpf_lsm.c          | 1 +
->>>   kernel/user_namespace.c       | 5 +++++
->>>   security/security.c           | 6 ++++++
->>>   6 files changed, 27 insertions(+)
->>>
->>> -- 
->>> 2.30.2
->>>
->
+> I don't think the DTS specification or the Linux docs explicitly which
+> one to choose though.
+
+No, but a praxis has been developed over time (e.g. compatible first,
+reg second, status last).
+
+Johan

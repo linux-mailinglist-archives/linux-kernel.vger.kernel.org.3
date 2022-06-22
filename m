@@ -2,70 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF23554D12
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB731554D1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357098AbiFVOcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S232542AbiFVOc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbiFVOcO (ORCPT
+        with ESMTP id S231616AbiFVOcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:32:14 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3F739BB5;
-        Wed, 22 Jun 2022 07:32:10 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1655908324tb0lfnn9
-Received: from ubuntu.localdomain ( [106.117.78.84])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 22:32:00 +0800 (CST)
-X-QQ-SSF: 01000000008000B0B000E00A0000000
-X-QQ-FEAT: HoyAXBWgskmNPZB93pOxP5cN3WyfcwcVTE81w7Gelm82zB/F8H07G6L7WAeaR
-        CMr9XIqPwLhobY5R53KYOu1uYvaJbI7OoY0Pxvg53cHFnRskfSGT8iPPyGu6YqpBs5oyl11
-        X4OF8DM8enTAW/qh4A2VlJjKyN9P+lj8lY4AS2VOoPE/nca08GbPj18se/2d7rKgtBM4nOw
-        yhuEF7xeibxRnVUr0Zc2AhbEdpgH5pwc72UZZgzde1bwV3TjkCfPXbmQppvuFLO4nxES1tI
-        1Ra7pjxTsDSYqyFRG0cZs+wdqmX1BZwZ1Zqe0ppfObcSKkxO9Y70WdIC/T0uIiAR1uS+wCF
-        N2kLzoGvT6Rh7b0Ss2FWzvfgr/FemktZTvJcsQV
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] dmaengine: ep93xx: Fix typo in comments
-Date:   Wed, 22 Jun 2022 22:31:58 +0800
-Message-Id: <20220622143158.15091-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 10:32:24 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1823A71C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:32:23 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id C985168AA6; Wed, 22 Jun 2022 16:32:19 +0200 (CEST)
+Date:   Wed, 22 Jun 2022 16:32:19 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Steven Price <steven.price@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Subject: Re: [PATCH] swiotlb: Remove redundant swiotlb_force
+Message-ID: <20220622143219.GA31314@lst.de>
+References: <20220622142952.320057-1-steven.price@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622142952.320057-1-steven.price@arm.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the repeated word 'and' from comments
+On Wed, Jun 22, 2022 at 03:29:52PM +0100, Steven Price wrote:
+> The variable (and enum) was removed in commit c6af2aa9ffc9 ("swiotlb:
+> make the swiotlb_init interface more useful") but the declaration was
+> left in swiotlb.h. Tidy up by removing the declaration as well.
+> 
+> Signed-off-by: Steven Price <steven.price@arm.com>
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/dma/ep93xx_dma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/dma/ep93xx_dma.c b/drivers/dma/ep93xx_dma.c
-index 971ff5f9ae84..d19ea885c63e 100644
---- a/drivers/dma/ep93xx_dma.c
-+++ b/drivers/dma/ep93xx_dma.c
-@@ -1183,7 +1183,7 @@ ep93xx_dma_prep_dma_cyclic(struct dma_chan *chan, dma_addr_t dma_addr,
-  *
-  * Synchronizes the DMA channel termination to the current context. When this
-  * function returns it is guaranteed that all transfers for previously issued
-- * descriptors have stopped and and it is safe to free the memory associated
-+ * descriptors have stopped and it is safe to free the memory associated
-  * with them. Furthermore it is guaranteed that all complete callback functions
-  * for a previously submitted descriptor have finished running and it is safe to
-  * free resources accessed from within the complete callbacks.
--- 
-2.17.1
-
+I just applied an identical patch from Dongli Zhang a few hours ago.

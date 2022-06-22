@@ -2,120 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB80B554625
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E3F5546EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355234AbiFVJ2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S1350096AbiFVJ1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356378AbiFVJ1p (ORCPT
+        with ESMTP id S231278AbiFVJ1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:27:45 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E6A37A14
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:27:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655890064; x=1687426064;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iiFLOMxIIm5NPds5E0AcgENCgnumF65jA2ZbRysJsY0=;
-  b=lShDsCpPjFsjZfQz4wF5pUsm0Dg3VL/atre8FQI36rp7vINMxGmMlSjs
-   +flEP++N+EDhtPeqXHGK5d/+c6ZAX4Oy2+rxj3I665rhN8rblQ5Laeu7a
-   bkD6oBzzVYIZoLGXJ0rAFQ0XuuCFIgm3IV0NBFx6u1zH8lxpufX2yNuYr
-   ZPjHijQDlBpQW38XS/CAfTZ9K9atgVf0jEpUz1GRj/5nhUPYErv5FdAz0
-   BJt/L5EarPf0ef43/pXgzR3TQIVy+DxOe2391u68c87s5DpJMVhnyQQeP
-   ydJacvSQBaN1o3VDNQg4TwHHdLoxDM6FxOg7Ja+Jxiobd7b4H5SAYJEg/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="263401180"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="263401180"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 02:27:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="620835546"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2022 02:27:41 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3weC-00015d-Ot;
-        Wed, 22 Jun 2022 09:27:40 +0000
-Date:   Wed, 22 Jun 2022 17:26:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Laurent Dufour <ldufour@linux.ibm.com>, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, nathanl@linux.ibm.com,
-        haren@linux.vnet.ibm.com, npiggin@gmail.com
-Cc:     kbuild-all@lists.01.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] powerpc/watchdog: introduce a LPM factor
-Message-ID: <202206221732.AujJ8kWm-lkp@intel.com>
-References: <20220614135414.37746-4-ldufour@linux.ibm.com>
+        Wed, 22 Jun 2022 05:27:30 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5B937034
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:27:29 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 68so10157160pgb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=dfkbm31L3zKee0XVbWLBYvO0rOgBHmKKNVCBeYg5Cvk=;
+        b=qcJuWk8Z9NSIeXr1gRlWpKfpYPNXI0lk2kQwXid3eCqYv3FgYcdA5gDmp9oT73nR+b
+         jcKZu6LLuRl4DlQ0n1vukhrHarRkD6q6MqdgKpLuq4S66ONKfccgdvm44LEeUB96YiU+
+         jQyyGHFk8AMiKhB5RaT4J4jkT8hRxnAdIcZ94ZTN37deUbtQrL1RQ3SXxg0FkcDqkXst
+         mOWrd6D0+TiOnnxAKD8uPUq7x5V7A2aJ58g1v8UEwt1ARN2p0yH72MtUxLd8lRzgWfhK
+         1i4PIo7iQwpcbd+SvoRmO8eWjq6D3Hit5+zQMHX0MYD1gYM2mssMYYB4+DxBAexf6hvp
+         0OaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=dfkbm31L3zKee0XVbWLBYvO0rOgBHmKKNVCBeYg5Cvk=;
+        b=UnxSlXdPUuW7fmk9y98HVo1F4z5gUVhOP5Gzz0/jrSQ20tZm3KhMZ+H5IsTo/4khqF
+         mf/BADAJjU/3POW25tbCTz1Ynm/D1GmIpKrZr/nGpuTkXTcJHNVSOL7FL+4ZvdENUgBv
+         IU/PW/n7BmMHzR41FHQq32lxPJXCgj/cTbR0ps5DzAADVSYf8qhHwepBT/aHB6Jd5kmm
+         uOy7CVdsTSzaf/a1DIZ9wQ+Q2f+k9hJkh50T39TCCE+954HaK5Hs3y+7rtvdFFow/Mii
+         D3NJ+fF80dNddBu4kW8fwBHSx3E5jlJ5dnsSkwJQxTLU37pCPbP1foH9bog4iGWGiULB
+         Dl/A==
+X-Gm-Message-State: AJIora9bj6a1uAkkXXqVnz8XMwJdXOcl6Uh77wZSzCMf7qFE/HlS34aJ
+        9Cp62QzG0wjWv11pAmQXzWgKp23gdPhHasYBso4=
+X-Google-Smtp-Source: AGRyM1u7qtA2F62q3z4L8rdHx+c4A4n7CKOABpUeVX4nvuDL/5r/MPaZ8acFsc5wpoH28/GuLavNHF9hTCgLCY9MqYA=
+X-Received: by 2002:a63:5248:0:b0:402:de14:ab74 with SMTP id
+ s8-20020a635248000000b00402de14ab74mr2227251pgl.18.1655890048603; Wed, 22 Jun
+ 2022 02:27:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614135414.37746-4-ldufour@linux.ibm.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a17:902:bc88:b0:163:e975:9efb with HTTP; Wed, 22 Jun 2022
+ 02:27:28 -0700 (PDT)
+Reply-To: susanbikram65@gmail.com
+From:   Susan Bikram <essehsedo002@gmail.com>
+Date:   Wed, 22 Jun 2022 09:27:28 +0000
+Message-ID: <CAB7Jepfd1p6LRCsr9G2P5esG8K64XnmN5sbEMS+Se03=XKnmOw@mail.gmail.com>
+Subject: please can i have your attention
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Dear ,
 
-Thank you for the patch! Yet something to improve:
+  Please can I have your attention and possibly help me for humanity's
+sake please. I am writing this message with a heavy heart filled with
+sorrows and sadness.
+Please if you can respond, i have an issue that i will be mostgrateful
+if you could help me deal with it please.
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on linus/master v5.19-rc3 next-20220621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Laurent-Dufour/Extending-NMI-watchdog-during-LPM/20220614-215716
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc-mgcoge_defconfig (https://download.01.org/0day-ci/archive/20220622/202206221732.AujJ8kWm-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/368bca30c0737461c2ed32a788293018c25fc9c7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Laurent-Dufour/Extending-NMI-watchdog-during-LPM/20220614-215716
-        git checkout 368bca30c0737461c2ed32a788293018c25fc9c7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/powerpc/kernel/traps.c:69:
->> arch/powerpc/include/asm/nmi.h:11:13: error: 'watchdog_nmi_set_lpm_factor' defined but not used [-Werror=unused-function]
-      11 | static void watchdog_nmi_set_lpm_factor(u64 factor) {}
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/watchdog_nmi_set_lpm_factor +11 arch/powerpc/include/asm/nmi.h
-
-     4	
-     5	#ifdef CONFIG_PPC_WATCHDOG
-     6	extern void arch_touch_nmi_watchdog(void);
-     7	long soft_nmi_interrupt(struct pt_regs *regs);
-     8	void watchdog_nmi_set_lpm_factor(u64 factor);
-     9	#else
-    10	static inline void arch_touch_nmi_watchdog(void) {}
-  > 11	static void watchdog_nmi_set_lpm_factor(u64 factor) {}
-    12	#endif
-    13	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Susan

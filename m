@@ -2,109 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D7A554DF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AD7554DF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355253AbiFVOwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S1357493AbiFVOwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiFVOw1 (ORCPT
+        with ESMTP id S1355951AbiFVOwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:52:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AB03DDE2;
-        Wed, 22 Jun 2022 07:52:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AD9FB81F54;
-        Wed, 22 Jun 2022 14:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D61C34114;
-        Wed, 22 Jun 2022 14:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655909543;
-        bh=uEQT3cFgGFRDHzj662KuPlWgg7A+Oe4RWTTdqfcTCi0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y7a+0gR+B3chebFU3urXcg713v/4XalaUaBAEym+qyDR0r/V12O/xsCEiRBbqseSf
-         zaHuRVN2+wOheNlByC56feBzGNny/P0lb1mtpp1AoTWsKAEfrgKIvlHgerQWu7btMv
-         kPDAgz3ILXp9qA/Ovby5YpBDcWtvY5GimAd8grs9mQim/SR/ByKjuiCgDKs8feB7+m
-         3z6+ImYuIwIjWx+NpD9z/stKgj/cz4GGYfrUth8md3/sNMjOmleGdUZ19KYmTTjomH
-         NdZ08g9qcHhkgxJaYzC8EjiSjqVbrxfp/7ToyGPJGlI+mxRlfT605COWQqqFNhE4Dp
-         Qs9dov19gQ2+w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o41iO-00074m-Js; Wed, 22 Jun 2022 16:52:20 +0200
-Date:   Wed, 22 Jun 2022 16:52:20 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Robert Marko <robimarko@gmail.com>, svarbanov@mm-sol.com,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, p.zabel@pengutronix.de, jingoohan1@gmail.com,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, johan+linaro@kernel.org
-Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
-Message-ID: <YrMspGTROJUFYQrN@hovoldconsulting.com>
-References: <20220621112330.448754-1-robimarko@gmail.com>
- <20220621203211.GA1330530@bhelgaas>
- <YrK7b1GaEMuANGtR@hovoldconsulting.com>
+        Wed, 22 Jun 2022 10:52:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455853E0C5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655909551; x=1687445551;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GdP+v9rWFJruBYGDlVuNU2He/W1X7NsvVGksa2exDM0=;
+  b=fZKnIQzEFOk+A7bJY67jUsZ1H36oD+IUP+LnW/BcI9BvyD3lO6zsMVye
+   4LxgzeBpHN2p0X+9fthida6lz3M2PdDzFq+BzICcqBvso4GoJ01VASLW6
+   x49wtoIeWG9wh2LrmOvhbfT0V+z7XrAVk/Z52WBeMXd90ek+Q6Bjj6SDk
+   2W4+ARmZjZPVjHtU3NK2or+ssqWhxOFjFCN805cyGQf4YbFl9l/L1kzQJ
+   n/S2ZBx4aSl11hWFX24x9Cj2kZXwPI7DNAsAJSmENN4/jH6ipxBx4yUgx
+   iG6kvXLlDsB/EQnIIOuyi6f9/7lgkdFUumJZmgJaCmm2r/n5ll04aT8Om
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="305890592"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="305890592"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:52:29 -0700
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="834148065"
+Received: from xzhan99-mobl1.ccr.corp.intel.com (HELO [10.249.172.26]) ([10.249.172.26])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:52:27 -0700
+Message-ID: <96984350-3a04-812a-60f1-a09138014fac@linux.intel.com>
+Date:   Wed, 22 Jun 2022 22:52:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrK7b1GaEMuANGtR@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
+Content-Language: en-US
+To:     Steve Wahl <steve.wahl@hpe.com>, Joerg Roedel <jroedel@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+References: <9d6177ac-802f-eb11-4307-b0e49d8126b5@linux.intel.com>
+ <20220615183650.32075-1-steve.wahl@hpe.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220615183650.32075-1-steve.wahl@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 08:49:19AM +0200, Johan Hovold wrote:
-> On Tue, Jun 21, 2022 at 03:32:11PM -0500, Bjorn Helgaas wrote:
-> > On Tue, Jun 21, 2022 at 01:23:30PM +0200, Robert Marko wrote:
-> > > IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
-> > > cause the system to hang as its using DBI registers in the .init
-> > > and those are only accesible after phy_power_on().
-> > 
-> > Is the fact that IPQ8074 has both a Gen2 and a Gen3 port relevant to
-> > this patch?  I don't see the connection.
-> > 
-> > I see that qcom_pcie_host_init() does:
-> > 
-> >   qcom_pcie_host_init
-> >     pcie->cfg->ops->init(pcie)
-> >     phy_power_on(pcie->phy)
-> >     pcie->cfg->ops->post_init(pcie)
-> > 
-> > and that you're moving DBI register accesses from
-> > qcom_pcie_init_2_3_3() to qcom_pcie_post_init_2_3_3().
-> > 
-> > But I also see DBI register accesses in other .init() functions:
-> > 
-> >   qcom_pcie_init_2_1_0
-> >   qcom_pcie_init_1_0_0      (oddly out of order)
-> >   qcom_pcie_init_2_3_2
-> >   qcom_pcie_init_2_4_0
-> > 
-> > Why do these accesses not need to be moved?  I assume it's because
-> > pcie->phy is an optional PHY and phy_power_on() does nothing on those
-> > controllers?
+On 2022/6/16 02:36, Steve Wahl wrote:
+> To support up to 64 sockets with 10 DMAR units each (640), make the
+> value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
+> CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
+> set.
 > 
-> At least the QMP PHY driver does not implement the PHY power_on op and
-> instead fires everything up already at phy_init(). That may explain the
-> difference in behaviour here.
+> If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
+> to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
+> allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
+> remapping doesn't support X2APIC mode x2apic disabled"; and the system
+> fails to boot properly.
+> 
+> Signed-off-by: Steve Wahl<steve.wahl@hpe.com>
+> Reviewed-by: Kevin Tian<kevin.tian@intel.com>
+> ---
+> 
+> Note that we could not find a reason for connecting
+> DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
+> it seemed like the two would continue to match on earlier processors.
+> There doesn't appear to be kernel code that assumes that the value of
+> one is related to the other.
+> 
+> v2: Make this value a config option, rather than a fixed constant.  The default
+> values should match previous configuration except in the MAXSMP case.  Keeping the
+> value at a power of two was requested by Kevin Tian.
+> 
+> v3: Make the config option dependent upon DMAR_TABLE, as it is not used without this.
+> 
+>   drivers/iommu/intel/Kconfig | 7 +++++++
+>   include/linux/dmar.h        | 6 +-----
+>   2 files changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
+> index 39a06d245f12..07aaebcb581d 100644
+> --- a/drivers/iommu/intel/Kconfig
+> +++ b/drivers/iommu/intel/Kconfig
+> @@ -9,6 +9,13 @@ config DMAR_PERF
+>   config DMAR_DEBUG
+>   	bool
+>   
+> +config DMAR_UNITS_SUPPORTED
+> +	int "Number of DMA Remapping Units supported"
+> +	depends on DMAR_TABLE
+> +	default 1024 if MAXSMP
+> +	default 128  if X86_64
+> +	default 64
 
-That was due to a bug in -next which as since been fixed by commit
+With this patch applied, the IOMMU configuration looks like:
 
-	5bef2838f1a0 ("phy: qcom-qmp: fix PCIe PHY support")
+[*]   AMD IOMMU support
+<M>     AMD IOMMU Version 2 driver
+[*]     Enable AMD IOMMU internals in DebugFS
+(1024) Number of DMA Remapping Units supported   <<<< NEW
+[*]   Support for Intel IOMMU using DMA Remapping Devices
+[*]     Export Intel IOMMU internals in Debugfs
+[*]     Support for Shared Virtual Memory with Intel IOMMU
+[*]     Enable Intel DMA Remapping Devices by default
+[*]     Enable Intel IOMMU scalable mode by default
+[*]   Support for Interrupt Remapping
+[*]   OMAP IOMMU Support
+[*]     Export OMAP IOMMU internals in DebugFS
+[*]   Rockchip IOMMU Support
 
-which again do all PHY init at phy_power_on() instead of at phy_init().
+The NEW item looks confusing. It looks to be a generic configurable
+value though it's actually Intel DMAR specific. Any thoughts?
 
-Note also that before commit cc1e06f033af ("phy: qcom: qmp: Use
-power_on/off ops for PCIe") everything was done at init.
-
-Johan
+Best regards,
+baolu

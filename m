@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB1155477E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A055546FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351295AbiFVKXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S238999AbiFVK1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353870AbiFVKXk (ORCPT
+        with ESMTP id S235031AbiFVK07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:23:40 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2405C17E07;
-        Wed, 22 Jun 2022 03:23:38 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id m1so14949641wrb.2;
-        Wed, 22 Jun 2022 03:23:38 -0700 (PDT)
+        Wed, 22 Jun 2022 06:26:59 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37683A5D5;
+        Wed, 22 Jun 2022 03:26:57 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id eq6so15895608edb.6;
+        Wed, 22 Jun 2022 03:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=qEPAGOxMSdk4gLCQ3Q2YT2MQlAarZo3S0qU7nlqQDf0=;
-        b=iukmiRMeggvZDo2T+uBsLZwNu7y4Cv0CuVYFQugMYYNcMTCo6eO7wxmfUngtI5qxa2
-         L3ljjtkIY5EZ0IFp0dd3M0DOso/yd8AAP7ic8zcOPnIeKvos0S2FNl6ai1D56JMVoruL
-         dFB7JBMJAKaKFN3e7pwoRdEiOcrXb4SP7Jyd9N76L8oO1yhwsrF6zd61ge2nL81JTRez
-         OIfSQxUbk5GrOF2hmjE4gTxF+oIJW4CDtubNht7FVpaDr5+bruRwBl3fvmhxebug2XPN
-         IrTTtofFsclXLCCa2I9eV7nH5laDTd6bX/TbxefJc8dJjsNl/N5RAGfTuzdnV52xgzfj
-         d94A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=37rSlhRpHHWymSWDtV1LKUaah1wVrGYKsjIbHejy7lI=;
+        b=HSqzpI56Wd/maCsUqAm6GW+vL3gDlxXpbeI5QmlV2sj6irWKRsz51o7VAbYl1Wpn7u
+         9Qvs50rqTlPfin6a86lUOvc2lOY1nAAwv0y+4iOmYDOd0x5QutPpPYamxVm6TgPELYmi
+         gzCgiliyXbrOuvFzQa4gIqPdvnpa8kEENRl1NiSetyJHJ7s5F81a4xyM1HKRhbhxAyJf
+         VniU9LZPctrAhCMMfajUERbfulXQabhYVLoue398el8ZQgWqWiiGg560nHtTFI4rtuvQ
+         zAIy5xLcytDz1ZutL5bs3KTPb5FK91rPHo6D2lBA0kgj5CEwk59d7KwiaVNiW2o2eyy2
+         r6Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=qEPAGOxMSdk4gLCQ3Q2YT2MQlAarZo3S0qU7nlqQDf0=;
-        b=7YkOV16uJBMIp3k3yu1RFnSARkvwQNfIZCX74WHLVXlUf0PUsbjsousFZw7griiVJU
-         xGVnghbwZTcnJYRn4ItiORMF8P9zeBbOrclxiwSffJ0SMZzr1KrC111/bjGwOdcUDjbR
-         g7m6bqqAfkZDtRigKl/SjLEZE/tSSw9qWgvS7haWSaZePZ+zpq7MgQy3qWhEUqURu6xL
-         X/Ia1pfnCNbgc9xsnnsBFaQ+rG3OelZWIXzP4P+Vt/YqrJF69pHCR2ZldUBTykwLqGY/
-         EEq0ISL85uUn101ksZj6grKayeMpnq7SLIokWsNvQzzcSVtFqoUM4WN43O/43Cfj0hiR
-         nVcQ==
-X-Gm-Message-State: AJIora+4D4C6eSr0USu9fFFqUtcoIlcp1nBaNNQiHm17XWc1agK1yZCG
-        9uqkLf/Oymvk/H8IMs3hAa4=
-X-Google-Smtp-Source: AGRyM1tP/HV5yFKgu/BaBt9sY7h56n9ysa8JINltQolzb2rgEIZZg37kIcvxX37CGw35EvC2jBFT1A==
-X-Received: by 2002:adf:f446:0:b0:21b:821f:a916 with SMTP id f6-20020adff446000000b0021b821fa916mr2486592wrp.11.1655893416626;
-        Wed, 22 Jun 2022 03:23:36 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id bp17-20020a5d5a91000000b0021b9870049dsm4526213wrb.82.2022.06.22.03.23.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 03:23:36 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 11:23:34 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: mainline build failure due to 281d0c962752 ("fortify: Add Clang
- support")
-Message-ID: <YrLtpixBqWDmZT/V@debian>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=37rSlhRpHHWymSWDtV1LKUaah1wVrGYKsjIbHejy7lI=;
+        b=GJHss/V5Ioy93Ju5vgyYr0k8xpq5mYQMzU7GXQaSbCabUjxecNzH1bjesBlOqnKWuf
+         JOe1GzeEERMUQZzDuAYOUmiHpRt6YNRUEWhmEPm6mNPatPOW8uiOH+UE20jOBFJpHwFQ
+         y8gh2sMoudcjU+DkTWP511tcyCZsZovSIUmI35wogXLo3rEQDHTPYwPiSTuGzqTG1RNh
+         QjE5xHmTYtOQiRbsP0nZ+p/pman9CikvOfB+/fURMqqOoVUadPR2RiLlF76w0ZuB8IQh
+         zxUZqhLxA6Ny0eJapklJYcvSDTlK2IYP7omQEJ97FBgZHw8vG1P1SFmZFkhijFl3yE8E
+         yv9Q==
+X-Gm-Message-State: AJIora/aJrHIGdsiTx7BOg9gaEHMlqx3Vo4MfyuVeNlO3uP2waHK+Peg
+        A9Z2nSYtJ//IZ5x/1rYI9RPEwYzY2BSuTTVfQeY=
+X-Google-Smtp-Source: AGRyM1v4azWWigiOn++l1Dtbx1fdOaa+R6QIGQ/aTOrCshjNUsBD3TDZWJE10f1vEBfdq0j3iu2c+b/URbfaYfSI9+k=
+X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id
+ eh13-20020a0564020f8d00b004356df2068amr3330060edb.209.1655893616422; Wed, 22
+ Jun 2022 03:26:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220622094233.3681843-1-clg@kaod.org> <20220622094233.3681843-2-clg@kaod.org>
+In-Reply-To: <20220622094233.3681843-2-clg@kaod.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 22 Jun 2022 12:26:19 +0200
+Message-ID: <CAHp75VdBO1yPVH6NCEj8ZSYF2-6q0soE=8qNGrh7G=t7adRBZw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] spi: aspeed: Add pr_debug in aspeed_spi_dirmap_create()
+To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,31 +76,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Wed, Jun 22, 2022 at 11:46 AM C=C3=A9dric Le Goater <clg@kaod.org> wrote=
+:
+>
+> It helps to analyze the default setting of the control register.
 
-I have recently (since yesterday) started building the mainline kernel
-with clang-14 and I am seeing a build failure with allmodconfig.
+Replace "It" with a slightly more descriptive "what is it?".
 
-In file included from drivers/net/ethernet/huawei/hinic/hinic_devlink.c:15:
-In file included from ./include/linux/netlink.h:7:
-In file included from ./include/linux/skbuff.h:15:
-In file included from ./include/linux/time.h:60:
-In file included from ./include/linux/time32.h:13:
-In file included from ./include/linux/timex.h:67:
-In file included from ./arch/x86/include/asm/timex.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:344:4: error: call to __write_overflow_field declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-                        __write_overflow_field(p_size_field, size);
+Also make the subject aligned with the contents of the patch.
 
-After a bisect it pointed to 281d0c962752 ("fortify: Add Clang support").
-Since it was introduced in v5.18, not sure if its already reported before.
-
-
---
-Regards
-Sudip
+--=20
+With Best Regards,
+Andy Shevchenko

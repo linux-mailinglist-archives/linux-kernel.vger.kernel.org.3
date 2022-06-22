@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F245355490C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6845A5548D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357525AbiFVJMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S1357151AbiFVJMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357324AbiFVJLv (ORCPT
+        with ESMTP id S1357276AbiFVJLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:11:51 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413D813D7B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:10:04 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so21635086fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:10:04 -0700 (PDT)
+        Wed, 22 Jun 2022 05:11:53 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEE12E9DB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:10:07 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id k24so20378293oij.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DfXx6OUKFv9lmYSVpe2VK14vOIkFTYrGx9cnZE6j00U=;
-        b=PuiztTqdl2RwR1NhqVtYKiAaZr1SnfcHUzvneUWy9YA6QQHXYrzdtpo0IqVP1O5Q4p
-         aNMN9UnfCEqmN1EdwSHZKH+tSrO6PC348HRxEXEc1s83gNEzLyb9vEusOfyGMrOEXtCV
-         Vob3cAkPMjZxdzz3GANlGjJTntmyLB3biU/JZvPih9f6Pgl7D1+BL3h1tZP55vFAWjtQ
-         fkzXNCZKuMoEjQvXAcKpyY/J8ul8j5Si0uCZElVAT5mt1XlUuBFmeYrsbxMFWRLWYsco
-         dCcIbnkO+v2bHUUZm54Pc8vnD4PwkYnGU64XdMktnQdi9b1r2z6bFvP+7AUHpsEBGrxK
-         kAew==
+        bh=hDwC4vjOEjWZbqEneYaa93PfkH0X3bD2FesquY/4DR0=;
+        b=ddZYRh2uAovuksEfFl7wy9zFfuql6B07z7ikh2xe2UtbGuFc/XNawArqOsKDkIZbyj
+         UvZ0wnXkQou25YTsm/Ir/kIwdu94Rxds8xg/GVjZ83+6OUjOhvteX2gV90AG/Ow6DM8U
+         4j5dDlsbBshgGX5koklMr7Jy+CTkY/1dtPoq6wPwHfNdn6QYLLRwXm20jY0ELh4hKW2m
+         Oy/moDJIsMjrZoP5JIKqOfS5gKpI7JN+wlYV/kOSfavmoe9H86AOvIzHMU4frOH1FdD6
+         SfVdjI3TLdI+MhiB8wVcfMshu2q0ci/icMKYnsrOw/usVV/THitbrw3iCZAdviux55fc
+         MpvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DfXx6OUKFv9lmYSVpe2VK14vOIkFTYrGx9cnZE6j00U=;
-        b=u9/lZGVKlIng3qrlUBv37E34arDsB24jPKSR0kQ7OZfnFvYSMNVBzesyaBrP8ASpB1
-         zlND0nXif6oWwoJEsqQzByRAJXLyL1i1x4idUeOxhUvJLLMfMCc+D7PcyZ+c6Jm/jqhv
-         f+cl75DeSI0YrhATh4p5WQKh2jeJmG0+EP5s4rt95hxhgbs1+Cqr7DUiCqE1pEl92Yhx
-         NP+XqGE3MzDE/gB2WAEVMNd3A4a/3Uod0TOUiUEoPXrmIT1Oj4YvPBTblgpGm0QKXi/1
-         kV0w9HS4KneP+zIsMSLtVmKb6uhnxKMelMQEGa55iavH6DQ4i7mBC2RazaqV11p1f+95
-         jYgA==
-X-Gm-Message-State: AJIora9gHAf6E/cZ90QAumlNTBXRl7nj4tUQsQxjAYpeQaYh7WFQdW+0
-        SVHOtNBjX3huX/nOrU+AhBk=
-X-Google-Smtp-Source: AGRyM1s6OZ6mHTCyIOGooSMYkri8CJ/yK32JItOIKeC2zQt29rWrX3ElmiYbaJrNtpypPq7cYMxKdw==
-X-Received: by 2002:a05:6870:b40a:b0:101:a393:4cb9 with SMTP id x10-20020a056870b40a00b00101a3934cb9mr1472021oap.12.1655889003627;
-        Wed, 22 Jun 2022 02:10:03 -0700 (PDT)
+        bh=hDwC4vjOEjWZbqEneYaa93PfkH0X3bD2FesquY/4DR0=;
+        b=pEf9H/vUctdyOFDEyHtTRkFN9rSHmRagDx2ZHcwIbt+SCw4HyDahUX5v+SX9UBxQ9f
+         SPNNRKYGhxwY+dVcAGe0KryKor1pJbcqB6A84kP9IW1QifQzF9eGP0ll+sSQjLFICbG7
+         y1g+3KCeBvroj7mVd2bM7jdZNaS5MWWRBUDzMq2o4iAxfn9NICBu+isFXhAxg6S8zh0O
+         3itTnWULzh5MUf0A4Su8JqRrLJnLpU3wVKXDPnh0m/MnuX6EuYSmL4wL3jhqIfD0FjtK
+         wzwdinYmBLD9Zx6dVbGpSu8Svlmj4Hrm1FEC0beIiQ9Do7sKkqYHDqLP47HTPVhpYXhR
+         vI9Q==
+X-Gm-Message-State: AJIora9W/o/S2PrwXeflgNbV0eHEAIRLvr8sR/5/MqRXsw26pJxBeC7r
+        OvudCvAi8iaRCEZESGmJaTU=
+X-Google-Smtp-Source: AGRyM1t2DR76KMK8Vkhp+YPhAZzxBiKAqnhljXSOyhF9iE+TI/WtTQFkNO7kwRRYXe15zOViiKptrg==
+X-Received: by 2002:a05:6808:1145:b0:333:28e0:ea2a with SMTP id u5-20020a056808114500b0033328e0ea2amr9674413oiu.184.1655889007096;
+        Wed, 22 Jun 2022 02:10:07 -0700 (PDT)
 Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id c5-20020a4ac305000000b0035eb4e5a6bdsm10913829ooq.19.2022.06.22.02.10.03
+        by smtp.gmail.com with ESMTPSA id q13-20020a056870e60d00b001048b819e13sm2185207oag.8.2022.06.22.02.10.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 02:10:03 -0700 (PDT)
+        Wed, 22 Jun 2022 02:10:06 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v2 3/4] memblock tests: set memblock_debug to enable memblock_dbg() messages
-Date:   Wed, 22 Jun 2022 04:09:45 -0500
-Message-Id: <d095338302d28d3835d0a031de6c37c99c1072a0.1655887571.git.remckee0@gmail.com>
+Subject: [PATCH v2 4/4] memblock tests: remove completed TODO items
+Date:   Wed, 22 Jun 2022 04:09:46 -0500
+Message-Id: <2d360d0a1f824e67c9209f631c62fdd65f5a5c70.1655887571.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1655887571.git.remckee0@gmail.com>
 References: <cover.1655887571.git.remckee0@gmail.com>
@@ -71,33 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If Memblock simulator was compiled with MEMBLOCK_DEBUG=1, set
-memblock_debug to 1 so that memblock_dbg() will print debug information
-when memblock functions are tested in Memblock simulator.
+Remove completed items from TODO list.
 
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- tools/testing/memblock/internal.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/memblock/TODO | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/memblock/internal.h b/tools/testing/memblock/internal.h
-index 94b52a8718b5..c2a492c05e0c 100644
---- a/tools/testing/memblock/internal.h
-+++ b/tools/testing/memblock/internal.h
-@@ -2,6 +2,13 @@
- #ifndef _MM_INTERNAL_H
- #define _MM_INTERNAL_H
+diff --git a/tools/testing/memblock/TODO b/tools/testing/memblock/TODO
+index cd1a30d5acc9..33044c634ea7 100644
+--- a/tools/testing/memblock/TODO
++++ b/tools/testing/memblock/TODO
+@@ -1,25 +1,17 @@
+ TODO
+ =====
  
-+/*
-+ * Enable memblock_dbg() messages
-+ */
-+#ifdef MEMBLOCK_DEBUG
-+static int memblock_debug = 1;
-+#endif
-+
- struct page {};
+-1. Add verbose output (e.g., what is being tested and how many tests cases are
+-   passing)
+-
+-2. Add flags to Makefile:
+-   + verbosity level
+-   + enable memblock_dbg() messages (i.e. pass "-D CONFIG_DEBUG_MEMORY_INIT"
+-     flag)
+-
+-3. Add tests trying to memblock_add() or memblock_reserve() 129th region.
++1. Add tests trying to memblock_add() or memblock_reserve() 129th region.
+    This will trigger memblock_double_array(), make sure it succeeds.
+    *Important:* These tests require valid memory ranges, use dummy physical
+                 memory block from common.c to implement them. It is also very
+                 likely that the current MEM_SIZE won't be enough for these
+                 test cases. Use realloc to adjust the size accordingly.
  
- void memblock_free_pages(struct page *page, unsigned long pfn,
+-4. Add test cases using this functions (implement them for both directions):
++2. Add test cases using this functions (implement them for both directions):
+    + memblock_alloc_raw()
+    + memblock_alloc_exact_nid_raw()
+    + memblock_alloc_try_nid_raw()
+ 
+-5. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
++3. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
+    for the new region
 -- 
 2.34.1
 

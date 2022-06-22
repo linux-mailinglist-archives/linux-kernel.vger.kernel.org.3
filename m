@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C989F55479B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84349554649
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235471AbiFVIVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S233938AbiFVIYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbiFVIVQ (ORCPT
+        with ESMTP id S229989AbiFVIYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:21:16 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B87381A4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:21:15 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id j22so11785829ljg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hH4k7mItas1ozJafGvT+HMnXj4jefZuKB4OxUVSVNAM=;
-        b=mJkFkMl2HoaHNHloqTF8OhEapW5qRboQ3QqXnKasJMpkRIzVZNkat8VeBcpTvmA6fE
-         i6ILOZgsDuHbTHwa+vsDXfq2jzHfqaO7eOmm9G28tI67ezFcu3tE2mjlJHgoZqVjCf3I
-         GYXmqEM+WWluAHFwKj26fzP9Z1BLgV/XHWXJ7+f1NrY8u8C8wrO3EJ/U9QU1AW3PWCAD
-         f2jGXng3nolkxfxTRwe7rCoQ+e7cG0mu2QxfXV5KT9d5kwL0sE+yD6Zd6vtLOIhYF6eS
-         ulN+9LndwNre2tKRSZZtdFiKkNoeXQF1VNujqPEAh+KWmgxQxCiuF3h5qTAf6AbV1bQP
-         SV5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hH4k7mItas1ozJafGvT+HMnXj4jefZuKB4OxUVSVNAM=;
-        b=aZE7xyK8dvQOx6/VN1DzuEV7oE4LodNZuKzcGZ/B8s/8QhBKiIdclHziwJF5SlXoCf
-         Y7ACYGrvlnR6FnkJgZnEislagJUcBI9MzhvYHGP3Z+hDS3He+aTy5BdtVGj1ZCaNxubW
-         lBJ1VFDNyziQz8EyG706upmhoazaUADxqV74vBqwUWWVFt0/chFimfFR1AgabHH2nFbg
-         QgVPtLVEUx/3EMo70hC9xJbYJ+UCMVjZCGEGbh0+v+DQiGdre15reRMXvLVzORKXTnAo
-         rM7XYoiqtX4ws5HyXiWhbYTGE/C3cMPNGAkAF0snQxyAwhut1+xjcdcWRD24tSYRE4qa
-         dqfQ==
-X-Gm-Message-State: AJIora9EPv4FCXUi0owIavBrbg/GrMEjp4KKKqy7uQ/EjLr/wPAW2x2X
-        2y8tyFxY1hkyokxSBT4WReGu6Q==
-X-Google-Smtp-Source: AGRyM1vZI4BCaoHbqoZW1pO9dUwTGGxOVqzVqDXrvgflmNzYZJzZL3puwPzeX8wGyGh3wFeYnsEV7w==
-X-Received: by 2002:a05:651c:20d:b0:255:7ad5:50c2 with SMTP id y13-20020a05651c020d00b002557ad550c2mr1159916ljn.438.1655886073351;
-        Wed, 22 Jun 2022 01:21:13 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id x27-20020a19e01b000000b0047975170628sm2474802lfg.96.2022.06.22.01.21.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 01:21:12 -0700 (PDT)
-Message-ID: <c072077a-cc16-c8f8-fcfa-891b3357cb66@linaro.org>
-Date:   Wed, 22 Jun 2022 11:21:12 +0300
+        Wed, 22 Jun 2022 04:24:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D08C11A1F;
+        Wed, 22 Jun 2022 01:24:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 097D361766;
+        Wed, 22 Jun 2022 08:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0BDC34114;
+        Wed, 22 Jun 2022 08:24:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655886270;
+        bh=YbuYr5/ie+xJQcPyfNne1QY4FDSlOh+xwavMqcIsMnU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qeE7pxOHB1owDbNrefzoSq4pKLcFSTifGgjLZlz5Vqg0MHXH7Un2gk9NlDFQw0L8H
+         tJeGbPX5BCTacAgEZpRXso9n9IfPTXYTgLGAMwwttl+GY4KuCmuqyFUGx7nPJS10/z
+         4kLiDY/g2Y8mIccxuXLTBl5Ky28evFXltp3I8A0g=
+Date:   Wed, 22 Jun 2022 10:24:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Yang Shen <shenyang39@huawei.com>
+Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
+Message-ID: <YrLRwF24FHV9nhA8@kroah.com>
+References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
+ <Yqn3spLZHpAkQ9Us@myrica>
+ <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
+ <YqrmdKNrYTCiS/MC@myrica>
+ <d90e8ea5-2f18-2eda-b4b2-711083aa7ecd@linaro.org>
+ <YrB1D9rv9G4h/BYU@myrica>
+ <YrB30M9yAbUbPFrG@kroah.com>
+ <b5011dd2-e8ec-a307-1b43-5aff6cbb6891@linaro.org>
+ <YrF2yypHZfiNVRBh@kroah.com>
+ <6fb8bed5-8d40-fd63-4537-44e9eb6aa053@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: Removal of qcom,board-id and qcom,msm-id
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        krzysztof.kozlowski@linaro.org
-Cc:     agross@kernel.org, arnd@arndb.de, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olof@lixom.net, robh@kernel.org,
-        sboyd@kernel.org
-References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
- <20220522195138.35943-1-konrad.dybcio@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220522195138.35943-1-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6fb8bed5-8d40-fd63-4537-44e9eb6aa053@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,36 +67,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/2022 22:51, Konrad Dybcio wrote:
-> Hi,
+On Wed, Jun 22, 2022 at 04:14:45PM +0800, Zhangfei Gao wrote:
+> Hi, Greg
 > 
-> removing these properties will not bring almost any benefit (other than making
-> some checks happy any saving some <200 LoC) and will make the lives of almost
-> all people doing independent development for linux-on-msm harder. There are
-> almost unironically like 3 people outside Linaro and QUIC who have
-> non-vendor-fused development boards AND the sources to rebuild the
-> bootloader on their own. Making it harder to boot is only going to
-> discourage people from developing on these devices, which is already not
-> that pleasant, especially with newer platforms where you have to fight with
-> the oh-so-bright ideas of Android boot chain..
+> On 2022/6/21 下午3:44, Greg Kroah-Hartman wrote:
+> > On Tue, Jun 21, 2022 at 03:37:31PM +0800, Zhangfei Gao wrote:
+> > > 
+> > > On 2022/6/20 下午9:36, Greg Kroah-Hartman wrote:
+> > > > On Mon, Jun 20, 2022 at 02:24:31PM +0100, Jean-Philippe Brucker wrote:
+> > > > > On Fri, Jun 17, 2022 at 02:05:21PM +0800, Zhangfei Gao wrote:
+> > > > > > > The refcount only ensures that the uacce_device object is not freed as
+> > > > > > > long as there are open fds. But uacce_remove() can run while there are
+> > > > > > > open fds, or fds in the process of being opened. And atfer uacce_remove()
+> > > > > > > runs, the uacce_device object still exists but is mostly unusable. For
+> > > > > > > example once the module is freed, uacce->ops is not valid anymore. But
+> > > > > > > currently uacce_fops_open() may dereference the ops in this case:
+> > > > > > > 
+> > > > > > > 	uacce_fops_open()
+> > > > > > > 	 if (!uacce->parent->driver)
+> > > > > > > 	 /* Still valid, keep going */		
+> > > > > > > 	 ...					rmmod
+> > > > > > > 						 uacce_remove()
+> > > > > > > 	 ...					 free_module()
+> > > > > > > 	 uacce->ops->get_queue() /* BUG */
+> > > > > > uacce_remove should wait for uacce->queues_lock, until fops_open release the
+> > > > > > lock.
+> > > > > > If open happen just after the uacce_remove: unlock, uacce_bind_queue in open
+> > > > > > should fail.
+> > > > > Ah yes sorry, I lost sight of what this patch was adding. But we could
+> > > > > have the same issue with the patch, just in a different order, no?
+> > > > > 
+> > > > > 	uacce_fops_open()
+> > > > > 	 uacce = xa_load()
+> > > > > 	 ...					rmmod
+> > > > Um, how is rmmod called if the file descriptor is open?
+> > > > 
+> > > > That should not be possible if the owner of the file descriptor is
+> > > > properly set.  Please fix that up.
+> > > Thanks Greg
+> > > 
+> > > Set cdev owner or use module_get/put can block rmmod once fops_open.
+> > > -       uacce->cdev->owner = THIS_MODULE;
+> > > +       uacce->cdev->owner = uacce->parent->driver->owner;
+> > > 
+> > > However, still not find good method to block removing parent pci device.
+> > > 
+> > > $ echo 1 > /sys/bus/pci/devices/0000:00:02.0/remove &
+> > > 
+> > > [   32.563350]  uacce_remove+0x6c/0x148
+> > > [   32.563353]  hisi_qm_uninit+0x12c/0x178
+> > > [   32.563356]  hisi_zip_remove+0xa0/0xd0 [hisi_zip]
+> > > [   32.563361]  pci_device_remove+0x44/0xd8
+> > > [   32.563364]  device_remove+0x54/0x88
+> > > [   32.563367]  device_release_driver_internal+0xec/0x1a0
+> > > [   32.563370]  device_release_driver+0x20/0x30
+> > > [   32.563372]  pci_stop_bus_device+0x8c/0xe0
+> > > [   32.563375]  pci_stop_and_remove_bus_device_locked+0x28/0x60
+> > > [   32.563378]  remove_store+0x9c/0xb0
+> > > [   32.563379]  dev_attr_store+0x20/0x38
+> > Removing the parent pci device does not remove the module code, it
+> > removes the device itself.  Don't confuse code vs. data here.
 > 
-> This only concerns devices released before sm8350, as the new ones will not
-> even boot with these properties present (or at least SONY Sagami, but I
-> doubt it's an isolated case), so other than completing support for older
-> devices, it won't be an issue going forward, anyway.
+> Do you mean even parent pci device is removed immediately, the code has to
+> wait, like dma etc?
 
-I almost missed this part of the discussion (and Krzysztof had to point 
-me to it in discussion of his patches).
+No, reads will fail, as will DMA transfers, all PCI drivers need to
+handle surprise removal like this as we have had PCI hotplug systems for
+decades now.
 
-I think this is a Sony peculiarity. At least the distributed SM8350 
-(lahaina) and SM8450 (waipio) Qualcomm device trees use these properties:
+> Currently parent driver has to ensure all dma stopped then call
+> uacce_remove,
+> ie, after uacce_fops_open succeed, parent driver need wait fops_release,
+> then uacce_remove can be called.
 
-https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-hdk.dts
-https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-v2.1.dtsi
-https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio-qrd-pm8010.dts
-https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio-v2.dtsi
+remove can be called before the file close can happen all the time, you
+need to handle that properly.
 
+> For example:
+> drivers/crypto/hisilicon/zip/zip_main.c:
+> hisi_qm_wait_task_finish
+> 
+> If remove this wait , there may other issue,
+> Unable to handle kernel paging request at virtual address ffff80000b700204
+> pc : hisi_qm_cache_wb.part.0+0x2c/0xa0
+> 
+> So uacce only need serialize uacce_fops_open and uacce_remove.
 
--- 
-With best wishes
-Dmitry
+That's not going to help much.
+
+> After uacce_fops_open, we can assume uacce_remove only happen after
+> uacce_fops_release?
+
+Nope, again, device remove can happen at any point in time and is
+independent of userspace open/close of file descriptors on the char
+device.
+
+This is a common problem/pattern that drivers need to handle, and
+unfortunatly they all need to handle it on their own.  We have discussed
+ways of making it easier (see the ksummit discuss list archives from
+last year), but no one has stepped up and done the work yet :(
+
+> Then it would be much simpler.
+
+Sorry.  If you treat the structures as independant, and properly grab
+some reference counts or a lock, you should be ok.
+
+greg k-h

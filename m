@@ -2,174 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DF85547A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6F85548B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbiFVLpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S1357731AbiFVLqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356662AbiFVLpQ (ORCPT
+        with ESMTP id S1355742AbiFVLqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:45:16 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C6C2F678;
-        Wed, 22 Jun 2022 04:45:12 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-317741c86fdso158073667b3.2;
-        Wed, 22 Jun 2022 04:45:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8WTX5K5BXaj2TDhZZlmgXid9tNKs4pj/o6tthvz/low=;
-        b=XymGisvmk2hNRg3ICbbGNxV1yO8m5GlNmDZ7gTpUL8RU7jQpkXciak9CbruEiiR3Re
-         BXu0sqowB5ANkoFnqq91WfD7nmDDTytxz0k9PMjFEYEZpwSCKEa0pXd1eDYzmG8pJaoE
-         Xjir3JAupS4v/EU1O7+oUWNmTcsY/+mdVRQiwzMPTzYQ4NRkurkVUO2O6PokZDnCGVJY
-         MymWtQbT0gla99g0+Ayws7kwZkWpWvZTt2ss6dMMt5FkPD5VpSWVfYBGK49jaFLQSOUs
-         os5WerQsg6j9nBojFZQiSRv2xhHFmR7px0Y4YlYDueXvGdVGHwCSaf5LU28cqdwUawnw
-         NwEA==
-X-Gm-Message-State: AJIora+FecAWgTN5sfQCGYvmku0WEpy1SEfrly8mFRmDJ4NeJ/FSL2lm
-        XOYRlje6IzSfCZQNBtMsAazFBYzX2uNTI3/TfN0=
-X-Google-Smtp-Source: AGRyM1vKezNUcA2B6JEFkznvZwjvQMXmsj14ucblc3UnJ6lN1obXSj885c+JN2R5PaIcPMi5MxcjQX+CLK48hm3jbeU=
-X-Received: by 2002:a81:6c06:0:b0:317:94ff:d1a with SMTP id
- h6-20020a816c06000000b0031794ff0d1amr3643424ywc.515.1655898311852; Wed, 22
- Jun 2022 04:45:11 -0700 (PDT)
+        Wed, 22 Jun 2022 07:46:47 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B1E33A23;
+        Wed, 22 Jun 2022 04:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655898406; x=1687434406;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PLePtGK/nNadtMrdup55F1Wn755t1dKBv+FuXP1GQkU=;
+  b=GWizppB8KtezXisVGMan2u3AF3nfi6qc8eW4/6Nblq5Dur8u7c/DcF6C
+   Oc6uwviUvHiLJNtJISaLWEvc2PevYt7vJVM/g86Bxql55R9ZsaiSeoeah
+   pCYgwzLVO+5tsZsuZTMN1ZoG/AAxuf8R81Z28yYulfKSDO2NxLXsiLc+p
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Jun 2022 04:46:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:46:45 -0700
+Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 22 Jun
+ 2022 04:46:43 -0700
+Message-ID: <65e9c3bf-af54-3726-dff5-208a70473f65@quicinc.com>
+Date:   Wed, 22 Jun 2022 17:16:39 +0530
 MIME-Version: 1.0
-References: <cover.1655894131.git.kai.huang@intel.com> <87dc19c47bad73509359c8e1e3a81d51d1681e4c.1655894131.git.kai.huang@intel.com>
-In-Reply-To: <87dc19c47bad73509359c8e1e3a81d51d1681e4c.1655894131.git.kai.huang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Jun 2022 13:45:01 +0200
-Message-ID: <CAJZ5v0jEJNdmkidvcOiRn+OVt01D5095t+nyXaJHKsqEAOvcBQ@mail.gmail.com>
-Subject: Re: [PATCH v5 03/22] cc_platform: Add new attribute to prevent ACPI
- memory hotplug
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kvm-devel <kvm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        isaku.yamahata@intel.com, Tom Lendacky <thomas.lendacky@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH rcu 01/12] rcu: Decrease FQS scan wait time in case of
+ callback overloading
+Content-Language: en-US
+To:     <paulmck@kernel.org>
+CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>, <rostedt@goodmis.org>
+References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
+ <20220620222032.3839547-1-paulmck@kernel.org>
+ <87c17e9a-565a-d717-3534-83a4c506b984@quicinc.com>
+ <20220621221925.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20220621221925.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 1:16 PM Kai Huang <kai.huang@intel.com> wrote:
->
-> Platforms with confidential computing technology may not support ACPI
-> memory hotplug when such technology is enabled by the BIOS.  Examples
-> include Intel platforms which support Intel Trust Domain Extensions
-> (TDX).
->
-> If the kernel ever receives ACPI memory hotplug event, it is likely a
-> BIOS bug.  For ACPI memory hot-add, the kernel should speak out this is
-> a BIOS bug and reject the new memory.  For hot-removal, for simplicity
-> just assume the kernel cannot continue to work normally, and just BUG().
->
-> Add a new attribute CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED to indicate the
-> platform doesn't support ACPI memory hotplug, so that kernel can handle
-> ACPI memory hotplug events for such platform.
->
-> In acpi_memory_device_{add|remove}(), add early check against this
-> attribute and handle accordingly if it is set.
->
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
->  drivers/acpi/acpi_memhotplug.c | 23 +++++++++++++++++++++++
->  include/linux/cc_platform.h    | 10 ++++++++++
->  2 files changed, 33 insertions(+)
->
-> diff --git a/drivers/acpi/acpi_memhotplug.c b/drivers/acpi/acpi_memhotplug.c
-> index 24f662d8bd39..94d6354ea453 100644
-> --- a/drivers/acpi/acpi_memhotplug.c
-> +++ b/drivers/acpi/acpi_memhotplug.c
-> @@ -15,6 +15,7 @@
->  #include <linux/acpi.h>
->  #include <linux/memory.h>
->  #include <linux/memory_hotplug.h>
-> +#include <linux/cc_platform.h>
->
->  #include "internal.h"
->
-> @@ -291,6 +292,17 @@ static int acpi_memory_device_add(struct acpi_device *device,
->         if (!device)
->                 return -EINVAL;
->
-> +       /*
-> +        * If the confidential computing platform doesn't support ACPI
-> +        * memory hotplug, the BIOS should never deliver such event to
-> +        * the kernel.  Report ACPI CPU hot-add as a BIOS bug and ignore
-> +        * the memory device.
-> +        */
-> +       if (cc_platform_has(CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED)) {
 
-Same comment as for the acpi_processor driver: this will affect the
-initialization too and it would be cleaner to reset the
-.hotplug.enabled flag of the scan handler.
 
-> +               dev_err(&device->dev, "[BIOS bug]: Platform doesn't support ACPI memory hotplug. New memory device ignored.\n");
-> +               return -EINVAL;
-> +       }
-> +
->         mem_device = kzalloc(sizeof(struct acpi_memory_device), GFP_KERNEL);
->         if (!mem_device)
->                 return -ENOMEM;
-> @@ -334,6 +346,17 @@ static void acpi_memory_device_remove(struct acpi_device *device)
->         if (!device || !acpi_driver_data(device))
->                 return;
->
-> +       /*
-> +        * The confidential computing platform is broken if ACPI memory
-> +        * hot-removal isn't supported but it happened anyway.  Assume
-> +        * it is not guaranteed that the kernel can continue to work
-> +        * normally.  Just BUG().
-> +        */
-> +       if (cc_platform_has(CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED)) {
-> +               dev_err(&device->dev, "Platform doesn't support ACPI memory hotplug. BUG().\n");
-> +               BUG();
-> +       }
-> +
->         mem_device = acpi_driver_data(device);
->         acpi_memory_remove_memory(mem_device);
->         acpi_memory_device_free(mem_device);
-> diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
-> index 9ce9256facc8..b831c24bd7f6 100644
-> --- a/include/linux/cc_platform.h
-> +++ b/include/linux/cc_platform.h
-> @@ -93,6 +93,16 @@ enum cc_attr {
->          * Examples include TDX platform.
->          */
->         CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED,
-> +
-> +       /**
-> +        * @CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED: ACPI memory hotplug is
-> +        *                                        not supported.
-> +        *
-> +        * The platform/os does not support ACPI memory hotplug.
-> +        *
-> +        * Examples include TDX platform.
-> +        */
-> +       CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED,
->  };
->
->  #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-> --
-> 2.36.1
->
+On 6/22/2022 3:49 AM, Paul E. McKenney wrote:
+> On Tue, Jun 21, 2022 at 10:59:58AM +0530, Neeraj Upadhyay wrote:
+>>
+>>
+>> On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
+>>> The force-quiesce-state loop function rcu_gp_fqs_loop() checks for
+>>> callback overloading and does an immediate initial scan for idle CPUs
+>>> if so.  However, subsequent rescans will be carried out at as leisurely a
+>>> rate as they always are, as specified by the rcutree.jiffies_till_next_fqs
+>>> module parameter.  It might be tempting to just continue immediately
+>>> rescanning, but this turns the RCU grace-period kthread into a CPU hog.
+>>> It might also be tempting to reduce the time between rescans to a single
+>>> jiffy, but this can be problematic on larger systems.
+>>>
+>>> This commit therefore divides the normal time between rescans by three,
+>>> rounding up.  Thus a small system running at HZ=1000 that is suffering
+>>> from callback overload will wait only one jiffy instead of the normal
+>>> three between rescans.
+>>>
+>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>> ---
+>>>    kernel/rcu/tree.c | 5 +++++
+>>>    1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+>>> index c25ba442044a6..c19d5926886fb 100644
+>>> --- a/kernel/rcu/tree.c
+>>> +++ b/kernel/rcu/tree.c
+>>> @@ -1993,6 +1993,11 @@ static noinline_for_stack void rcu_gp_fqs_loop(void)
+>>>    			WRITE_ONCE(rcu_state.jiffies_kick_kthreads,
+>>>    				   jiffies + (j ? 3 * j : 2));
+>>>    		}
+>>> +		if (rcu_state.cbovld) {
+>>> +			j = (j + 2) / 3;
+>>> +			if (j <= 0)
+>>> +				j = 1;
+>>> +		}
+>>
+>> We update 'j' here, after setting rcu_state.jiffies_force_qs
+>>
+>>      WRITE_ONCE(rcu_state.jiffies_force_qs, jiffies + j)
+>>
+>> So, we return from swait_event_idle_timeout_exclusive after 1/3 time
+>> duration.
+>>
+>>      swait_event_idle_timeout_exclusive(rcu_state.gp_wq,
+>> 				 rcu_gp_fqs_check_wake(&gf), j);
+>>
+>> This can result in !timer_after check to return false and we will
+>> enter the 'else' (stray signal block) code?
+>>
+>> This might not matter for first 2 fqs loop iterations, where
+>> RCU_GP_FLAG_OVLD is set in 'gf', but subsequent iterations won't benefit
+>> from this patch?
+>>
+>>
+>> if (!time_after(rcu_state.jiffies_force_qs, jiffies) ||
+>> 	(gf & (RCU_GP_FLAG_FQS | RCU_GP_FLAG_OVLD))) {
+>> 			...
+>> } else {
+>> 	/* Deal with stray signal. */
+>> }
+>>
+>>
+>> So, do we need to move this calculation above the 'if' block which sets
+>> rcu_state.jiffies_force_qs?
+>> 		if (!ret) {
+>>
+>> 			WRITE_ONCE(rcu_state.jiffies_force_qs, jiffies +
+>> 						j);...
+>> 		}
+> 
+> Good catch, thank you!  How about the updated patch shown below?
+> 
+
+Looks good to me.
+
+
+Thanks
+Neeraj
+
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> commit 77de092c78f549b5c28075bfee9998a525d21f84
+> Author: Paul E. McKenney <paulmck@kernel.org>
+> Date:   Tue Apr 12 15:08:14 2022 -0700
+> 
+>      rcu: Decrease FQS scan wait time in case of callback overloading
+>      
+>      The force-quiesce-state loop function rcu_gp_fqs_loop() checks for
+>      callback overloading and does an immediate initial scan for idle CPUs
+>      if so.  However, subsequent rescans will be carried out at as leisurely a
+>      rate as they always are, as specified by the rcutree.jiffies_till_next_fqs
+>      module parameter.  It might be tempting to just continue immediately
+>      rescanning, but this turns the RCU grace-period kthread into a CPU hog.
+>      It might also be tempting to reduce the time between rescans to a single
+>      jiffy, but this can be problematic on larger systems.
+>      
+>      This commit therefore divides the normal time between rescans by three,
+>      rounding up.  Thus a small system running at HZ=1000 that is suffering
+>      from callback overload will wait only one jiffy instead of the normal
+>      three between rescans.
+>      
+>      [ paulmck: Apply Neeraj Upadhyay feedback. ]
+>      
+>      Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index c25ba442044a6..52094e72866e5 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1983,7 +1983,12 @@ static noinline_for_stack void rcu_gp_fqs_loop(void)
+>   		gf = RCU_GP_FLAG_OVLD;
+>   	ret = 0;
+>   	for (;;) {
+> -		if (!ret) {
+> +		if (rcu_state.cbovld) {
+> +			j = (j + 2) / 3;
+> +			if (j <= 0)
+> +				j = 1;
+> +		}
+> +		if (!ret || time_before(jiffies + j, rcu_state.jiffies_force_qs)) {
+>   			WRITE_ONCE(rcu_state.jiffies_force_qs, jiffies + j);
+>   			/*
+>   			 * jiffies_force_qs before RCU_GP_WAIT_FQS state

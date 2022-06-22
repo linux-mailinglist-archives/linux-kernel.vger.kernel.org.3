@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8627A554733
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20E7554892
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238843AbiFVIfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S1354378AbiFVIfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235752AbiFVIfX (ORCPT
+        with ESMTP id S1353931AbiFVIfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:35:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E715C381B4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:21 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1o3vpW-0007nL-A9; Wed, 22 Jun 2022 10:35:18 +0200
-Message-ID: <a059f69470e39cf8928e53773ace6a97bb600821.camel@pengutronix.de>
-Subject: Re: [PATCH RFC 1/2] regmap: add option to disable debugfs
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Aisheng Dong <aisheng.dong@nxp.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dongas86@gmail.com" <dongas86@gmail.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-Date:   Wed, 22 Jun 2022 10:35:17 +0200
-In-Reply-To: <DB9PR04MB8477E77D4F6C8F7886418FD180B29@DB9PR04MB8477.eurprd04.prod.outlook.com>
-References: <20220620134758.1286480-1-aisheng.dong@nxp.com>
-         <20220620134758.1286480-2-aisheng.dong@nxp.com>
-         <YrCM0reni+x/KWsG@sirena.org.uk>
-         <DB9PR04MB84779EF2842D789FA66094C380B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
-         <YrCXILblKsp6DuN3@sirena.org.uk>
-         <DB9PR04MB8477CD99D5847291A629994180B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
-         <YrCznap77OyHu4bO@sirena.org.uk>
-         <DB9PR04MB847785E1861525FC1E4AD97280B39@DB9PR04MB8477.eurprd04.prod.outlook.com>
-         <YrHkXH1M4NydBfQT@sirena.org.uk>
-         <DB9PR04MB84772F73D4AA1B49F87BECCF80B39@DB9PR04MB8477.eurprd04.prod.outlook.com>
-         <abbc4d80377dcf5393afa143f9d3542cd2cd45a7.camel@pengutronix.de>
-         <DB9PR04MB8477E77D4F6C8F7886418FD180B29@DB9PR04MB8477.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 22 Jun 2022 04:35:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB38938794
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655886938; x=1687422938;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vUd05dvyBiM84Ezjr6E/K54uJBFgUb38qWnD0JwjrJs=;
+  b=NsbpYgnxzc1XCmS+a0+VDAzb7olOMhtMKzmkbWy8XBkoicAS8tL+v7Mm
+   chLSMzqeQyvxGcM+YGZkZLoPp2s4UoVvswjCyZdBvNjExkNhPM57S4ygu
+   MVupDcrob/MDCZQN+NZk4HXPA1kG1JQPd/DxBJoJUPhuniuz79wnJImjK
+   WG5Buloqrez7nJomYm26G45YMCxsYxBrPjryDIZ1IUORvopcIT84Ar+6M
+   onSLkimF6bPzwEcOKhCyOvVQkb1zkjS7tcf/WfEzZava4XTz4zjjpZsLe
+   fOJ14FWddCQdxSgpKO+SELx1hm/EK05JWjMgWZuTJu3ZoYrCiQgVssbXv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281429422"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="281429422"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 01:35:38 -0700
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="644076965"
+Received: from lzha111-mobl.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.215.232])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 01:35:34 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
+Subject: [PATCH -V4 2/3] memory tiering: rate limit NUMA migration throughput
+Date:   Wed, 22 Jun 2022 16:35:18 +0800
+Message-Id: <20220622083519.708236-3-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220622083519.708236-1-ying.huang@intel.com>
+References: <20220622083519.708236-1-ying.huang@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,193 +70,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 22.06.2022 um 08:18 +0000 schrieb Aisheng Dong:
-> > From: Lucas Stach <l.stach@pengutronix.de>
-> > Sent: Wednesday, June 22, 2022 4:08 PM
-> > 
-> > Hi Aisheng, hi Mark,
-> > 
-> > Am Dienstag, dem 21.06.2022 um 18:16 +0000 schrieb Aisheng Dong:
-> > > > From: Mark Brown <broonie@kernel.org>
-> > > > Sent: Tuesday, June 21, 2022 11:32 PM
-> > > > 
-> > > > On Tue, Jun 21, 2022 at 02:56:58PM +0000, Aisheng Dong wrote:
-> > > > 
-> > > > > > so if we can't satisfy the read from the cache then we'll
-> > > > > > hit
-> > > > > > the cache_only check and return -EBUSY before we start
-> > > > > > trying to
-> > > > > > do any physical I/O.  The debugfs code will handle that
-> > > > > > gracefully, indicating that it couldn't get a value for the
-> > > > > > volatile register by showing all Xs for the value.  If none
-> > > > > > of
-> > > > > > the registers are cached then the file won't be terribly
-> > > > > > useful
-> > > > > > but it at least shouldn't cause any
-> > > > errors with accessing the device when it's powered down.
-> > > > 
-> > > > > That means we have to use cache_only mode to workaround the
-> > > > > issue,
-> > > > > right?
-> > > > > I saw that cache_only mode has to be explicated
-> > > > > enable/disable by
-> > > > > driver, commonly used in device rpm in kernel right now.
-> > > > 
-> > > > Yes.
-> > > > 
-> > > > > However, things are a little bit complicated on i.MX that 1)
-> > > > > imx
-> > > > > blkctl needs follow strict registers r/w flow interleaved
-> > > > > with
-> > > > > handshakes with upstream gpc power operations and delay may
-> > > > > be
-> > > > > needed between registers writing
-> > > > > 2) blkctl itself does not enable runtime pm, it simply call
-> > > > > rpm to
-> > > > > resume upstream power domains devices and necessary clocks
-> > > > > before
-> > > > > r/w
-> > > > registers.
-> > > > 
-> > > > I'm not sure I fully understand the issue here?  If the driver
-> > > > can
-> > > > safely manage the hardware surely it can safely manage cache
-> > > > only
-> > > > mode too?  If there are duplicate resumes then cache only
-> > > > enable/disable is a boolean flag rather than refcounted so that
-> > > > shouldn't be a problem.
-> > > > 
-> > > 
-> > > I still can't see an easy and safe to way to do it.
-> > > What I'm wondering is whether it's worth to do it if need to
-> > > introducing considerable complexities in driver to overcome this
-> > > issue
-> > > if it can be simply disabled.
-> > > Anyway, I will try to investigate it.
-> > > 
-> > > > > Furthermore, current imx blkctl is a common driver used by
-> > > > > many
-> > > > > devices
-> > > > [1].
-> > > > > Introducing volatile registers and cache may bloat the driver
-> > > > > a
-> > > > > lot
-> > > > unnecessarily.
-> > > > 
-> > > > You don't actually need to have a cache to use cache only mode,
-> > > > if
-> > > > there are no cached registers then you'll just get -EBUSY on
-> > > > any
-> > > > access to the registers but that's hopefully fine since at the
-> > > > minute things will just fall over anyway.
-> > > > You shouldn't even need to flag registers as volatile if
-> > > > there's no
-> > > > cache since it's not really relevant without a cache.
-> > > > 
-> > > 
-> > > After a quick try initially, I found two issues:
-> > > 1. There's a warning dump if using cache_only without cache void
-> > > regcache_cache_only(struct regmap *map, bool enable) {
-> > >         map->lock(map->lock_arg);
-> > >         WARN_ON(map->cache_bypass && enable);
-> > >         ...
-> > > }
-> > > 2. It seems _regmap_write() did not handle cache_only case well
-> > > without cache.
-> > > It may still writes HW even for cache_only mode?
-> > > 
-> > > I guess we may need fix those two issues first before we can
-> > > safely
-> > > use it?
-> > > 
-> > Why would you write to a cache only regmap. The debugfs interface
-> > only
-> > allows to dump the registers, no?
-> 
-> I mean the _regmap_write() called in driver even we claim it's cache
-> only.
-> Not dumping registers from debugfs.
+In NUMA balancing memory tiering mode, if there are hot pages in slow
+memory node and cold pages in fast memory node, we need to
+promote/demote hot/cold pages between the fast and cold memory nodes.
 
-That should obviously never happen, as the regmap should only be marked
-cache-only while the power domain is collapsed. Writing any register in
-this state is invalid usage and the WARN_ON is totally warranted.
+A choice is to promote/demote as fast as possible.  But the CPU cycles
+and memory bandwidth consumed by the high promoting/demoting
+throughput will hurt the latency of some workload because of accessing
+inflating and slow memory bandwidth contention.
 
-> 
-> > 
-> > I think it wouldn't be too hard to fix this for the blk-ctrl
-> > drivers.
-> > I'll give it a try today.
-> > 
-> 
-> Great, looking forward to see it.
-> 
-> > > > > The simplest way for i.MX case may be just disabling debugfs
-> > > > > as it
-> > > > > can't reflect the actually HW state without power. So we
-> > > > > would
-> > > > > wish the
-> > > > regmap core could provide an option to users.
-> > > > 
-> > > > The goal here is to describe the regmap itself so that there's
-> > > > less
-> > > > fragility as things change and we don't needlessly disable
-> > > > anything
-> > > > else that happens to be added to debugfs in the future due to
-> > > > having
-> > > > an overly generic flag, and we get the ability to directly
-> > > > catch
-> > > > access to the hardware that misses doing power management
-> > > > properly
-> > > > while we're at it.
-> > > > 
-> > > > We already have a way to describe it being unsafe to access the
-> > > > hardware, we may as well use it.
-> > > > 
-> > > > > And I noticed that syscon [2] seems have the same issue since
-> > > > > the
-> > > > > following
-> > > > commit:
-> > > > 
-> > > > > commit 9b947a13e7f6017f18470f665992dbae267852b3
-> > > > > Author: David Lechner <david@lechnology.com>
-> > > > > Date:   Mon Feb 19 15:43:02 2018 -0600
-> > > > 
-> > > > >     regmap: use debugfs even when no device
-> > > > 
-> > > > >     This registers regmaps with debugfs even when they do not
-> > > > > have
-> > > > > an
-> > > > >     associated device. For example, this is common for syscon
-> > > > > regmaps.
-> > > > 
-> > > > That's a different thing, that's due to us naming the directory
-> > > > after the struct device but syscons being created before we
-> > > > have
-> > > > that struct device available.
-> > > 
-> > > Yes, but syscon has the same issue that the system may hang if
-> > > dump
-> > > registers through debugfs without power on.
-> > > How would you suggest for this case as syscon is also a common
-> > > driver?
-> > > 
-> > This is a general issue. If something uses a syscon that is inside
-> > a
-> > power-domain where the runtime PM is controlled by some other
-> > entity, how
-> > is it safe to use the syscon at all? Every access might end up
-> > locking up the
-> > system. So those syscons really need to learn some kind of runtime
-> > PM
-> > handling.
-> 
-> The regmap core does not support runtime pm.
-> It may be unsafe to dumping registers through debugfs.
+A way to resolve this issue is to restrict the max promoting/demoting
+throughput.  It will take longer to finish the promoting/demoting.
+But the workload latency will be better.  This is implemented in this
+patch as the page promotion rate limit mechanism.
 
-Right, that is a general issue, not only for debugfs. Any access to a
-syscon inside a power-domain may hang the system, as the syscon has no
-way to ensure that the power domain is up.
+The number of the candidate pages to be promoted to the fast memory
+node via NUMA balancing is counted, if the count exceeds the limit
+specified by the users, the NUMA balancing promotion will be stopped
+until the next second.
 
-Regards,
-Lucas
+A new sysctl knob kernel.numa_balancing_promote_rate_limit_MBps is
+added for the users to specify the limit.
+
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Yang Shi <shy828301@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>
+Cc: Wei Xu <weixugc@google.com>
+Cc: osalvador <osalvador@suse.de>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org
+---
+ Documentation/admin-guide/sysctl/kernel.rst | 11 +++++++
+ include/linux/mmzone.h                      |  7 +++++
+ include/linux/sched/sysctl.h                |  1 +
+ kernel/sched/fair.c                         | 33 +++++++++++++++++++--
+ kernel/sysctl.c                             |  8 +++++
+ mm/vmstat.c                                 |  1 +
+ 6 files changed, 59 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index ddccd1077462..c99bceafd162 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -623,6 +623,17 @@ different types of memory (represented as different NUMA nodes) to
+ place the hot pages in the fast memory.  This is implemented based on
+ unmapping and page fault too.
+ 
++numa_balancing_promote_rate_limit_MBps
++======================================
++
++Too high promotion/demotion throughput between different memory types
++may hurt application latency.  This can be used to rate limit the
++promotion throughput.  The per-node max promotion throughput in MB/s
++will be limited to be no more than the set value.
++
++A rule of thumb is to set this to less than 1/10 of the PMEM node
++write bandwidth.
++
+ oops_all_cpu_backtrace
+ ======================
+ 
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index aab70355d64f..994a0cd39595 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -221,6 +221,7 @@ enum node_stat_item {
+ #endif
+ #ifdef CONFIG_NUMA_BALANCING
+ 	PGPROMOTE_SUCCESS,	/* promote successfully */
++	PGPROMOTE_CANDIDATE,	/* candidate pages to promote */
+ #endif
+ 	NR_VM_NODE_STAT_ITEMS
+ };
+@@ -912,6 +913,12 @@ typedef struct pglist_data {
+ 	struct deferred_split deferred_split_queue;
+ #endif
+ 
++#ifdef CONFIG_NUMA_BALANCING
++	/* start time in ms of current promote rate limit period */
++	unsigned int nbp_rl_start;
++	/* number of promote candidate pages at start time of current rate limit period */
++	unsigned long nbp_rl_nr_cand;
++#endif
+ 	/* Fields commonly accessed by the page reclaim scanner */
+ 
+ 	/*
+diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+index e650946816d0..303ee7dd0c7e 100644
+--- a/include/linux/sched/sysctl.h
++++ b/include/linux/sched/sysctl.h
+@@ -27,6 +27,7 @@ enum sched_tunable_scaling {
+ 
+ #ifdef CONFIG_NUMA_BALANCING
+ extern int sysctl_numa_balancing_mode;
++extern unsigned int sysctl_numa_balancing_promote_rate_limit;
+ #else
+ #define sysctl_numa_balancing_mode	0
+ #endif
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index edc3d741ef84..d779a91a8ca0 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1073,6 +1073,9 @@ unsigned int sysctl_numa_balancing_scan_delay = 1000;
+ /* The page with hint page fault latency < threshold in ms is considered hot */
+ unsigned int sysctl_numa_balancing_hot_threshold = MSEC_PER_SEC;
+ 
++/* Restrict the NUMA promotion throughput (MB/s) for each target node. */
++unsigned int sysctl_numa_balancing_promote_rate_limit = 65536;
++
+ struct numa_group {
+ 	refcount_t refcount;
+ 
+@@ -1477,6 +1480,29 @@ static int numa_hint_fault_latency(struct page *page)
+ 	return (time - last_time) & PAGE_ACCESS_TIME_MASK;
+ }
+ 
++/*
++ * For memory tiering mode, too high promotion/demotion throughput may
++ * hurt application latency.  So we provide a mechanism to rate limit
++ * the number of pages that are tried to be promoted.
++ */
++static bool numa_promotion_rate_limit(struct pglist_data *pgdat,
++				      unsigned long rate_limit, int nr)
++{
++	unsigned long nr_cand;
++	unsigned int now, start;
++
++	now = jiffies_to_msecs(jiffies);
++	mod_node_page_state(pgdat, PGPROMOTE_CANDIDATE, nr);
++	nr_cand = node_page_state(pgdat, PGPROMOTE_CANDIDATE);
++	start = pgdat->nbp_rl_start;
++	if (now - start > MSEC_PER_SEC &&
++	    cmpxchg(&pgdat->nbp_rl_start, start, now) == start)
++		pgdat->nbp_rl_nr_cand = nr_cand;
++	if (nr_cand - pgdat->nbp_rl_nr_cand >= rate_limit)
++		return true;
++	return false;
++}
++
+ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+ 				int src_nid, int dst_cpu)
+ {
+@@ -1491,7 +1517,7 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+ 	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
+ 	    !node_is_toptier(src_nid)) {
+ 		struct pglist_data *pgdat;
+-		unsigned long latency, th;
++		unsigned long rate_limit, latency, th;
+ 
+ 		pgdat = NODE_DATA(dst_nid);
+ 		if (pgdat_free_space_enough(pgdat))
+@@ -1502,7 +1528,10 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+ 		if (latency >= th)
+ 			return false;
+ 
+-		return true;
++		rate_limit = sysctl_numa_balancing_promote_rate_limit << \
++			(20 - PAGE_SHIFT);
++		return !numa_promotion_rate_limit(pgdat, rate_limit,
++						  thp_nr_pages(page));
+ 	}
+ 
+ 	this_cpupid = cpu_pid_to_cpupid(dst_cpu, current->pid);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index e52b6e372c60..3188698e2c8e 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1597,6 +1597,14 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_FOUR,
+ 	},
++	{
++		.procname	= "numa_balancing_promote_rate_limit_MBps",
++		.data		= &sysctl_numa_balancing_promote_rate_limit,
++		.maxlen		= sizeof(unsigned int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++	},
+ #endif /* CONFIG_NUMA_BALANCING */
+ 	{
+ 		.procname	= "panic",
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 373d2730fcf2..068ca7d150ab 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1245,6 +1245,7 @@ const char * const vmstat_text[] = {
+ #endif
+ #ifdef CONFIG_NUMA_BALANCING
+ 	"pgpromote_success",
++	"pgpromote_candidate",
+ #endif
+ 
+ 	/* enum writeback_stat_item counters */
+-- 
+2.30.2
 

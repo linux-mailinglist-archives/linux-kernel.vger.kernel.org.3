@@ -2,108 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B222555161
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCD3555163
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359721AbiFVQjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S1376582AbiFVQjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359574AbiFVQjR (ORCPT
+        with ESMTP id S1359735AbiFVQjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:39:17 -0400
-Received: from mail.codeweavers.com (mail.codeweavers.com [50.203.203.244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9F7369C0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=codeweavers.com; s=6377696661; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=dnWIYXrLBvscXxO/tfjq0vzMqbp5Cf42JxTMCSeW13c=; b=cjFCGLODDwuy9Ww/ravkoWbsq
-        ED+2xNmdCb2VIaoIpgNaPxV0CFVLTAP245hzG1G1tpli5YR+k4HfzuwBzYgAKsMFC2XWNQK8QBoSR
-        PPI50A/YShjZwS+02hT+0OyoKeCOOs5PoJv0zWgck05hRUYqCtB3exKX1HPPhI287w+J0=;
-Received: from [10.69.141.126] (helo=localhost)
-        by mail.codeweavers.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <schapla@codeweavers.com>)
-        id 1o43Nq-00026d-0K; Wed, 22 Jun 2022 11:39:14 -0500
-Date:   Wed, 22 Jun 2022 12:39:00 -0400
-From:   "Shawn M. Chapla" <schapla@codeweavers.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH] perf data: Prefer sampled CPU when exporting JSON
-Message-ID: <YrNFpHjzAM9lWFp3@cw.chapla.email>
-References: <20220526201506.2028281-1-schapla@codeweavers.com>
- <YrMqY3KDWowLw3Ii@cw.chapla.email>
- <YrNDph39sfEi4bOM@kernel.org>
+        Wed, 22 Jun 2022 12:39:23 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89551369E4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:39:21 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id v81so31186080ybe.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hFEGuXQ8pK4dLxL00tb3iGKoWKxFFjHeOeemIT5G5fY=;
+        b=ejnhZWkwjnv2aEad9hfgM3U18d/V+KXP/XBPIap0IO6WH7tonq9Z5XNuk2ssK7IV32
+         aD3pjA/KtRGInpdjEJr/T/MWdcvASxOpewrMXWEp01TNjIHhuN12y0bmysiCkXhX1u2r
+         ib5XaEktSnEG264A93jIQl+SWjM4E5rXZIGu5nbJAmF4LQk6NxZ1zLDVj0qu2Ij+qQBu
+         j4U8RW0m+/NxKqIWLKdmT7vLWKAeXpn61uuqJSAkg/GUKIPbXjsnPR5/KU/FoZkngSsj
+         KHlM4yuhniP8iyxNyppsAPbGT/6BvOWePSUEzlXX8/V8Kfgba2CaeDMGjxcWBQtg0dBY
+         pYXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hFEGuXQ8pK4dLxL00tb3iGKoWKxFFjHeOeemIT5G5fY=;
+        b=JqVNpp/atR0x6eftTNQighMTutCwXprkPklY/H1OMdKtXk2s8w4wsXXOSTE+dLZTjm
+         yDRpmQBp4og/qqtXVtp24qMDv3G48jzNOLLP32ZiZ0/x/A4fYECJ7bpYrGcmCabMkNBa
+         fWbmwEVhCkizWKJYEDo2DNgltaEzxj43hMvmQ51eOkDI2vyQKgp2FI10VDzZcRt9hEXa
+         mn5vLr0TSOrLt6LQ0t2BKn7eCbiOmhq50JNEWkk9hQD2cUtoy3MYwW5U2k0SK9twVzRs
+         PBXDcmk56LbBS+zJzUj5d1LSnG0RtJ2Jf9r8shAs2CR4yjH4PoXIq1Krdcnv0AETAg43
+         uggA==
+X-Gm-Message-State: AJIora/r/gHrse6rDc/irQYIfxS93LRwowtwIJTElQX9rLXpM1bMMjR2
+        CNkbHIjIznJZJrsH9VObSj9tCLEo8LjNGhu89+UxlA==
+X-Google-Smtp-Source: AGRyM1uZUu+M59Kc5BR3AyPetczLJJl5qcJ6HT8XIVHSZtvdZjECKYCNrOasNs+rQNTUZ8eCn4ZEXiov2Bf/YR7cNqI=
+X-Received: by 2002:a25:6c5:0:b0:669:a17a:2289 with SMTP id
+ 188-20020a2506c5000000b00669a17a2289mr1473725ybg.231.1655915960442; Wed, 22
+ Jun 2022 09:39:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrNDph39sfEi4bOM@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220619003919.394622-1-i.maximets@ovn.org> <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
+ <20220622102813.GA24844@breakpoint.cc> <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
+ <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org> <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
+ <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org> <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
+In-Reply-To: <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 22 Jun 2022 18:39:08 +0200
+Message-ID: <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
+Subject: Re: [PATCH net] net: ensure all external references are released in
+ deferred skbuffs
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Florian Westphal <fw@strlen.de>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 01:30:30PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Jun 22, 2022 at 10:42:43AM -0400, Shawn M. Chapla escreveu:
-> > On Thu, May 26, 2022 at 04:14:47PM -0400, Shawn M. Chapla wrote:
-> > > When CPU has been explicitly sampled (via --sample-cpu), prefer this
-> > > sampled value over the thread CPU value when exporting to JSON.
-> 
-> > > Signed-off-by: Shawn M. Chapla <schapla@codeweavers.com>
-> > > ---
-> > >  tools/perf/util/data-convert-json.c | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/perf/util/data-convert-json.c b/tools/perf/util/data-convert-json.c
-> > > index f1ab6edba446..613d6ae82663 100644
-> > > --- a/tools/perf/util/data-convert-json.c
-> > > +++ b/tools/perf/util/data-convert-json.c
-> > > @@ -149,6 +149,7 @@ static int process_sample_event(struct perf_tool *tool,
-> > >  	struct convert_json *c = container_of(tool, struct convert_json, tool);
-> > >  	FILE *out = c->out;
-> > >  	struct addr_location al, tal;
-> > > +	u64 sample_type = __evlist__combined_sample_type(evsel->evlist);
-> > >  	u8 cpumode = PERF_RECORD_MISC_USER;
-> > >  
-> > >  	if (machine__resolve(machine, &al, sample) < 0) {
-> > > @@ -168,7 +169,9 @@ static int process_sample_event(struct perf_tool *tool,
-> > >  	output_json_key_format(out, true, 3, "pid", "%i", al.thread->pid_);
-> > >  	output_json_key_format(out, true, 3, "tid", "%i", al.thread->tid);
-> > >  
-> > > -	if (al.thread->cpu >= 0)
-> > > +	if ((sample_type & PERF_SAMPLE_CPU))
-> > > +		output_json_key_format(out, true, 3, "cpu", "%i", sample->cpu);
-> > > +	else if (al.thread->cpu >= 0)
-> > >  		output_json_key_format(out, true, 3, "cpu", "%i", al.thread->cpu);
-> > >  
-> > >  	output_json_key_string(out, true, 3, "comm", thread__comm_str(al.thread));
-> > > -- 
-> > > 2.36.1
-> > > 
-> > 
-> > Just checking in to see if anyone has had a chance to take a look at
-> > this yet.
-> 
-> Seems sensible, applying to perf/core for 5.20.
-> 
-> - Arnaldo
+On Wed, Jun 22, 2022 at 6:29 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
+> >
+> > On 6/22/22 13:43, Eric Dumazet wrote:
+>
+> >
+> > I tested the patch below and it seems to fix the issue seen
+> > with OVS testsuite.  Though it's not obvious for me why this
+> > happens.  Can you explain a bit more?
+>
+> Anyway, I am not sure we can call nf_reset_ct(skb) that early.
+>
+> git log seems to say that xfrm check needs to be done before
+> nf_reset_ct(skb), I have no idea why.
 
-Thank you! I appreciate it.
+Additional remark: In IPv6 side, xfrm6_policy_check() _is_ called
+after nf_reset_ct(skb)
 
-Cheers,
-Shawn
+Steffen, do you have some comments ?
+
+Some context:
+commit b59c270104f03960069596722fea70340579244d
+Author: Patrick McHardy <kaber@trash.net>
+Date:   Fri Jan 6 23:06:10 2006 -0800
+
+    [NETFILTER]: Keep conntrack reference until IPsec policy checks are done
+
+    Keep the conntrack reference until policy checks have been performed for
+    IPsec NAT support. The reference needs to be dropped before a packet is
+    queued to avoid having the conntrack module unloadable.
+
+    Signed-off-by: Patrick McHardy <kaber@trash.net>
+    Signed-off-by: David S. Miller <davem@davemloft.net>
+
+
+>
+> I suspect some incoming packets are not going through
+> xfrm4_policy_check() and end up being stored in a TCP receive queue.
+>
+> Maybe something is missing before calling tcp_child_process()
+>
+>
+> >
+> > >
+> > > I note that IPv6 does the nf_reset_ct() earlier, from ip6_protocol_deliver_rcu()
+> > >
+> > > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> > > index fda811a5251f2d76ac24a036e6b4f4e7d7d96d6f..a06464f96fe0cc94dd78272738ddaab2c19e87db
+> > > 100644
+> > > --- a/net/ipv4/tcp_ipv4.c
+> > > +++ b/net/ipv4/tcp_ipv4.c
+> > > @@ -1919,6 +1919,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> > >         struct sock *sk;
+> > >         int ret;
+> > >
+> > > +       nf_reset_ct(skb);
+> > > +
+> > >         drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+> > >         if (skb->pkt_type != PACKET_HOST)
+> > >                 goto discard_it;
+> > > @@ -2046,8 +2048,6 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> > >         if (drop_reason)
+> > >                 goto discard_and_relse;
+> > >
+> > > -       nf_reset_ct(skb);
+> > > -
+> > >         if (tcp_filter(sk, skb)) {
+> > >                 drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
+> > >                 goto discard_and_relse;
+> >

@@ -2,120 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00452554B67
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E54554B6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347518AbiFVNe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S234363AbiFVNfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348154AbiFVNez (ORCPT
+        with ESMTP id S243581AbiFVNfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:34:55 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4905B2FE43;
-        Wed, 22 Jun 2022 06:34:54 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ay16so14928344ejb.6;
-        Wed, 22 Jun 2022 06:34:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OeK/8QdFp7wFBFgH/EC0/Ik73wju5RsZbcSGwadd7AI=;
-        b=Cf8RC6oOqOGUqPeFjJriOh4Ys1+puSMMmg/5DMxhlajdhnHGOQFtRPfVxzmmgoLYIU
-         yz97RrPSOhFvuxElbuuFWgGkrTZpMpSAW2oA5vAurihaLg7awS+zY129QDE8+PIgGBi5
-         v1ndxqg0Y/MDTLG1OkaVVu004y3s46HBOcQZ2SLl+APxoPufF7WwA88Jt/+gkYwT2h4s
-         u0Hr6bCrUoptFNhjIw0N1/c4py3CktWBBjDCXbMFxb1Do/8PcBgQLEiK5FMfbRCLFvjz
-         beuV8Tmh4wKVlZ8KFWR+w2oiSw8EMMbgB0LDVHEhhKNfHzP+f7rHIgeZk8OlLlJaM/o7
-         xn3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OeK/8QdFp7wFBFgH/EC0/Ik73wju5RsZbcSGwadd7AI=;
-        b=HnzMzzThyEBv0dk5cj4XglWpxU8Oqactz5C373OuZ2TkOHoCV/cQ8VWguneRB0R7Bt
-         emis9PCFdtiF4OpEiwYNctUb5yuE7DXV8ED0vmmHJ6Alsg+ZpwwG6xXmWAHmFa4egz5n
-         L/D2gR2VIU4mA11QP9VcX5IWz451Dshz/haIehCvB+Q+/JkoajZkfouStCe4RxUnih0c
-         yNLl0U7FsnW2j4iTkPYGjdMQ8fLpXuOkybKi7d1g8OwWr3kI8yanC0L/9uWFHUPorfYe
-         8VcLeZtkuoah+A3KLT6vw/j/qbj/RaoIFbBuI331oJbXL0Ok7iu06BueeoySMQQ5ydHa
-         9OUQ==
-X-Gm-Message-State: AJIora+zkaoE7nzNjVCKxTbq0tlCzFs5i7852QhW/Tv1gnZjMFedlLjF
-        g8GrK1zSATfGhiwbv/9AEniWIDN8Svk=
-X-Google-Smtp-Source: AGRyM1tVL0H123jCdNzFWhBVQeF6U20wV28IcfaXChbqrFTFqTls17qIHZlfxgqyTYxATv2WJfQLoQ==
-X-Received: by 2002:a17:906:c10:b0:6f4:6c70:b00f with SMTP id s16-20020a1709060c1000b006f46c70b00fmr3180634ejf.660.1655904892723;
-        Wed, 22 Jun 2022 06:34:52 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id eq20-20020a056402299400b0042deea0e961sm14467142edb.67.2022.06.22.06.34.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 06:34:51 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 15:34:49 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: atmel-tcb: fix typo in comment
-Message-ID: <YrMaeYDPaoG/VkXz@orome>
-References: <20220521111145.81697-22-Julia.Lawall@inria.fr>
+        Wed, 22 Jun 2022 09:35:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F032FE43;
+        Wed, 22 Jun 2022 06:35:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6C4F61B0D;
+        Wed, 22 Jun 2022 13:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABC7C34114;
+        Wed, 22 Jun 2022 13:35:38 +0000 (UTC)
+Message-ID: <0455d962-d13e-9d88-c513-282defe07dd2@xs4all.nl>
+Date:   Wed, 22 Jun 2022 15:35:36 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AC9xZouUaILMuz1s"
-Content-Disposition: inline
-In-Reply-To: <20220521111145.81697-22-Julia.Lawall@inria.fr>
-User-Agent: Mutt/2.2.4 (c3baa83e) (2022-04-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v10 0/5] media: atmel: atmel-isc: implement media
+ controller
+Content-Language: en-US
+To:     Eugen.Hristev@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Claudiu.Beznea@microchip.com, Nicolas.Ferre@microchip.com,
+        jacopo@jmondi.org
+References: <20220503095127.48710-1-eugen.hristev@microchip.com>
+ <1da61f9c-0605-dc9d-63a3-21c18fcb74c7@xs4all.nl>
+ <a19d9e72-7609-1daa-93eb-fdedcaa672c4@microchip.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <a19d9e72-7609-1daa-93eb-fdedcaa672c4@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Eugen,
 
---AC9xZouUaILMuz1s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 22/06/2022 14:25, Eugen.Hristev@microchip.com wrote:
+> On 6/22/22 2:53 PM, Hans Verkuil wrote:
+>> Hi Eugen,
+>>
+>> On 03/05/2022 11:51, Eugen Hristev wrote:
+>>> This series is a split from the series :
+>>> [PATCH v9 00/13] media: atmel: atmel-isc: implement media controller
+>>> and it includes the media controller part.
+>>> previous fixes were sent on a different patch series.
+>>>
+>>> As discussed on the ML, moving forward with having the media link validate at
+>>> start/stop streaming call.
+>>> I will test the patch :
+>>> [RFC PATCHv2] vb2: add support for (un)prepare_streaming queue ops
+>>> afterwards, but that patch requires moving my logic to the new vb2 callbacks.
+>>
+>> I'm looking at merging this series, but I would like to have the output of
+>> 'v4l2-compliance -m /dev/mediaX' to verify that the MC links etc. is all
+>> correct.
+> 
+> Hello Hans,
+> 
+> Please have a look at attached file . Unless you want me to add the 
+> whole output to the e-mail ?
 
-On Sat, May 21, 2022 at 01:10:32PM +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
->=20
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->=20
-> ---
->  drivers/pwm/pwm-atmel-tcb.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+No, this is fine, thank you!
 
-Applied, thanks.
+> 
+> I also added output of media-ctl -p for your convenience.
+> the subdev2 is a device and driver that is not upstream and has some 
+> compliance issues, they are reported by the v4l2-compliance tool, but 
+> they should not affect this series, it's a synopsys driver that was 
+> rejected on mainline a few years ago, I took it for internal usage, but 
+> it's not cleaned up nor worked a lot upon.
 
-Thierry
+OK, good to know.
 
---AC9xZouUaILMuz1s
-Content-Type: application/pgp-signature; name="signature.asc"
+From the compliance output:
 
------BEGIN PGP SIGNATURE-----
+	v4l2-compliance 1.22.1, 32 bits, 32-bit time_t
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmKzGnkACgkQ3SOs138+
-s6FEdhAAnmBZFckEPHQ96OmAcrUUC/cjkJx3kAY8USDthta28AyTCiPsXXUYvYwh
-yZZJ5/6ooHcsNnT21np02G8MQxkfICDmCrjPXeqRGYDp+VyLyjDUnhahdz88suxO
-O7PpKAETxwFVmx6nT4P6PprNoON1VmdymUOGtCryE9RWrHL6idBqt4J39R/ewmfm
-vcgWXKV/MQ5iC1vzCKDxBi5AbWKaVoJTeOVsE99F2c9HGXu+IqtaxKuXTDJuPskP
-7gCE9N4qAQzuRy2DCrtJFJ++rpXl00uD3jtCBYpAQa6Xf8My9Z4tgsWof9yERcQn
-rBxIoxu0Kfpp0NR9PO6DRmhce8xUsp7Muo3KlfnrW4xzEMW2xQ8nBFRDP4ROsEUz
-RDnv9KGyb7iKirKkvUYBsr1Jb8offt0pVBi5Is65VCv61fZnGLm6iNQ7a3fAGwGj
-/XNFvoZwBzkTxhDLhS/rQasK0QWKu2BO2uO4k3RCmF7bjKxTCe8rhmx7VNVX8LLx
-gO0zoP/WAr9FFktyP/afbCe6GFZXB7q+BhaPpjlbdbMDe2Vuu9RnIUfCD3AFgLDG
-v3YKEHoXNZLiJSBlsmDLV3GHA72HZ9jy46H3B+CdkmgAFvhuoNzXx5siFs1zIV3x
-isEeJOipiHTwmGgWjHPp6AmQ+YPl3WBlbpVDDey3DjdIr4JzyVY=
-=DKem
------END PGP SIGNATURE-----
+This is an old v4l2-compliance version. Compile it directly from the
+v4l-utils git repo and check the output again.
 
---AC9xZouUaILMuz1s--
+	Compliance test for atmel_isc_commo device /dev/media0:
+
+As you can see, the driver name is cut off. Isn't 'atmel-isc'
+a better name?
+
+> 
+>>
+>> And one more question which may have been answered already in the past:
+>>
+>> Changing to the MC will break existing applications, doesn't it? Or did I
+>> miss something?
+>>
+> 
+> The existing applications will have to configure the pipeline now. It 
+> will no longer work by configuring just the top video node /dev/video0 .
+> They would have to use media-ctl for it, something similar with this set 
+> of commands:
+> 
+> media-ctl -d /dev/media0 --set-v4l2 '"imx219 
+> 1-0010":0[fmt:SRGGB10_1X10/1920x1080]'
+> media-ctl -d /dev/media0 --set-v4l2 
+> '"dw-csi.0":0[fmt:SRGGB10_1X10/1920x1080]'
+> media-ctl -d /dev/media0 --set-v4l2 '"csi2dc":0[fmt:SRGGB10_1X10/1920x1080]'
+> media-ctl -d /dev/media0 --set-v4l2 
+> '"atmel_isc_scaler":0[fmt:SRGGB10_1X10/1920x1080]'
+
+I'd like to see this documented in a new
+Documentation/admin-guide/media/atmel-isc.rst file. That can be a new patch.
+
+Regards,
+
+	Hans
+
+> 
+> Thank you for taking care of this !
+> 
+> Eugen
+> 
+>> Regards,
+>>
+>>          Hans
+>>
+>>>
+>>> Full series history:
+>>>
+>>> Changes in v10:
+>>> -> split the series into this first fixes part.
+>>> -> moved IO_MC addition from first patch to the second patch on the driver changes
+>>> -> edited commit messages
+>>> -> DT nodes now disabled by default.
+>>>
+>>> Changes in v9:
+>>> -> kernel robot reported isc_link_validate is not static, changed to static.
+>>>
+>>> Changes in v8:
+>>> -> scaler: modified crop bounds to have the exact source size
+>>>
+>>> Changes in v7:
+>>> -> scaler: modified crop bounds to have maximum isc size
+>>> -> format propagation: did small changes as per Jacopo review
+>>>
+>>>
+>>> Changes in v6:
+>>> -> worked a bit on scaler, added try crop and other changes as per Jacopo review
+>>> -> worked on isc-base enum_fmt , reworked as per Jacopo review
+>>>
+>>> Changes in v5:
+>>> -> removed patch that removed the 'stop' variable as it was still required
+>>> -> added two new trivial patches
+>>> -> reworked some parts of the scaler and format propagation after discussions with Jacopo
+>>>
+>>>
+>>> Changes in v4:
+>>> -> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
+>>> one patch that was using it
+>>> -> as reviewed by Jacopo, reworked some parts of the media controller implementation
+>>>
+>>>
+>>> Changes in v3:
+>>> - change in bindings, small fixes in csi2dc driver and conversion to mc
+>>> for the isc-base.
+>>> - removed some MAINTAINERS patches and used patterns in MAINTAINERS
+>>>
+>>> Changes in v2:
+>>> - integrated many changes suggested by Jacopo in the review of the v1 series.
+>>> - add a few new patches
+>>>
+>>> Eugen Hristev (5):
+>>>    media: atmel: atmel-isc: prepare for media controller support
+>>>    media: atmel: atmel-isc: implement media controller
+>>>    ARM: dts: at91: sama7g5: add nodes for video capture
+>>>    ARM: configs: at91: sama7: add xisc and csi2dc
+>>>    ARM: multi_v7_defconfig: add atmel video pipeline modules
+>>>
+>>>   arch/arm/boot/dts/sama7g5.dtsi                |  51 ++
+>>>   arch/arm/configs/multi_v7_defconfig           |   3 +
+>>>   arch/arm/configs/sama7_defconfig              |   2 +
+>>>   drivers/media/platform/atmel/Makefile         |   2 +-
+>>>   drivers/media/platform/atmel/atmel-isc-base.c | 485 +++++++++---------
+>>>   .../media/platform/atmel/atmel-isc-scaler.c   | 267 ++++++++++
+>>>   drivers/media/platform/atmel/atmel-isc.h      |  50 +-
+>>>   .../media/platform/atmel/atmel-sama5d2-isc.c  |  34 +-
+>>>   .../media/platform/atmel/atmel-sama7g5-isc.c  |  32 +-
+>>>   9 files changed, 685 insertions(+), 241 deletions(-)
+>>>   create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
+>>>
+>>
+> 
+

@@ -2,162 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31495554F93
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B73554F99
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358948AbiFVPkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S1359285AbiFVPlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357795AbiFVPko (ORCPT
+        with ESMTP id S1359247AbiFVPkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:40:44 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144D92EA1D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:40:43 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id n15so8225756ljg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:40:42 -0700 (PDT)
+        Wed, 22 Jun 2022 11:40:52 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA392ED76;
+        Wed, 22 Jun 2022 08:40:51 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id z9so9465352wmf.3;
+        Wed, 22 Jun 2022 08:40:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NafZMYQCxpTzzA44HRDjWFQLpFRFEgWuFrU/vn1P5ls=;
-        b=bIFbveGmaARo6DLnm9N7A7esU0afWho8khAtI5lMDMqriteCF6mqPo9ORENl9XeWai
-         hMmWwyZP6Sr2xnhY54rB+3dbauG3bYiGw1evjrRgG5o4T/wrPvOb9l1/O9kV7fkyAjSl
-         6iMdqlb2FRGMB1SfL8bR5ZH55d8rAbJMFZsC6ysVtiJ0s5xCxw6u/dynBJC6SFtxe4K3
-         soEqNoDY4eVhkpzFdW4W8wWLCcU2OvlXJjr84F6FLZc74VmXVhsCbKG4LUFxqjjybclN
-         E2M1kYnyZxh/NNZPpBX+8rqs9ZYUKuuCW6mXyk5g7gQExoCMM9RwIZGOua8cebxFB9pq
-         B+mw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6HvjioZHPtwBf4fSwa9wIuwFcez8I2M80JFO0QJMojs=;
+        b=dpZHPTmcfuFjzjJ0Lys34TeMfY59Nf1bKZM5XTxOYpqqCBsl7Y6AhxrXkzb+gPakMK
+         FloXTG3essSGnodFfCg3jtPf0tPM+4wamt0q6BPSfR89FBPb/HfsmktFXGDn/eile+Y8
+         /yK/eD6l6WjEX6SjenLshLSETc34Dq0GIAUxh5to/GL+FYMWttj7fc3sYov1tPtYCCOR
+         dBP/PX7cqo2YrMZAIB7/zxxxT0TtRBoETiX67M1AssNL8bCqTidpwSyWiO3dm0cdg1ES
+         JdHLImitJR/7Tnz6Cv6zOWfoqt9Zh8aGFUZVk+pLR7jGoIrbbaB8qllQxWmm2FDQhN5q
+         Yt4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NafZMYQCxpTzzA44HRDjWFQLpFRFEgWuFrU/vn1P5ls=;
-        b=TOxHlWs8ax0/8bn8ymoDzOJUtOStYsSrCQda98yihplda9UBVl3VYwfP172yRSXgTh
-         I+geuYeEMRzMQYI8iev18Pt0RHrvi+BQ8gxSNOBIqaN4f68vYwKLZarmK1CypHqxuIJt
-         Ycaiw0Z/knmIKe1RuUweVkA+thqhveX6M7HAP+4fFrTedarm2Y0T1CG576F1O07YXSzj
-         EmHgVkxWBUFsUNBfTYafU994TVzwHv/I3qjIakyt6bKSOKhQnuxGBFUWuwB3Sk2Flie/
-         gNgPsfFNstRD8AyWud70bfITO2QDjwRaxlUES+MI57GN85erE9b8Vmvd4FhlUjYqGwG4
-         OobA==
-X-Gm-Message-State: AJIora+FrTkHT9f3mx0D5+cIeCf8ryHFJDrKD30RUmsPjg6H5zwZsB/u
-        sGxQykDk/ZesgAH4HTR0dpCK4VKvOW57blDhC76ipg==
-X-Google-Smtp-Source: AGRyM1sPC6AtPgAR9cfWXxYUkXfDlY7ikTcaR+WHRUCnvAtzUFnpmLIjZAWSxITLcS0xEfeFJH1gMeKxmqmuLnceAaQ=
-X-Received: by 2002:a2e:9581:0:b0:24f:2dc9:6275 with SMTP id
- w1-20020a2e9581000000b0024f2dc96275mr2236784ljh.486.1655912441217; Wed, 22
- Jun 2022 08:40:41 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6HvjioZHPtwBf4fSwa9wIuwFcez8I2M80JFO0QJMojs=;
+        b=PA8F2uSqZZooPnDPLKJO+B75lJxoyIxtPni3WDIK3dJI+0Z7boygya/ye/Z+TnfPPt
+         mHMu0kDn8yi7Y+tRCYuseEX5jxg0SXDnw6kKlwjgJleo+rEDEzUmr4Ik/QdohVOv3Dg8
+         bHRrjJZgfDQ4Z4GV4CcaGfOBuznLSeQZGIJnE6ibgxsGa+KAXK/y8YfKZ7l40oBdfAQB
+         47RdJBKZzSvm4O9fNETwz1iHQvE9I/Ud7IsG0I1AHATwruhBEM9NeoozUO1rFL6XINMM
+         JU6bJDYwzqxA2CHkz4qEHU44S1NoQZMBc2duaHYqGCYECy5vehY3dlAmRUTGMG+dEDbF
+         zLvg==
+X-Gm-Message-State: AJIora/USaZmMK+7EboWDXmue9v04GyOGU+YO7eh7cAJVAlRxR8I8VAb
+        t9WJJR8w+nCFBMyPWoOvl5Q=
+X-Google-Smtp-Source: AGRyM1ulMlpI/C9yUV5vRRJTaw3SQd1l5jIXTUtRosaGOoW6+N4l7XU10IynPKr7U0RVMv8wVfr7bw==
+X-Received: by 2002:a7b:c402:0:b0:3a0:2ba7:1fa7 with SMTP id k2-20020a7bc402000000b003a02ba71fa7mr3160994wmi.152.1655912449594;
+        Wed, 22 Jun 2022 08:40:49 -0700 (PDT)
+Received: from [192.168.0.16] ([37.223.148.38])
+        by smtp.gmail.com with ESMTPSA id r64-20020a1c4443000000b003942a244f39sm31645408wma.18.2022.06.22.08.40.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 08:40:48 -0700 (PDT)
+Message-ID: <37fb545a-bc45-65b0-b67b-5ef1b0346777@gmail.com>
+Date:   Wed, 22 Jun 2022 17:40:43 +0200
 MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <YrC0oKdDSjQTgUtM@lunn.ch>
- <YrC3ZKsMQK3PYKkR@smile.fi.intel.com> <YrDAMcGg1uF9m/L+@lunn.ch> <CAPv3WKeeZwNAs06thrYvgXaTPA9KP-9dQZNZsYWx3UXS8LStAQ@mail.gmail.com>
-In-Reply-To: <CAPv3WKeeZwNAs06thrYvgXaTPA9KP-9dQZNZsYWx3UXS8LStAQ@mail.gmail.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Wed, 22 Jun 2022 17:40:29 +0200
-Message-ID: <CAPv3WKeYBE=ybXQw_3Hn2NoLVzO0da1ecged73=frzQKhGh6OQ@mail.gmail.com>
-Subject: Re: [net-next: PATCH 00/12] ACPI support for DSA
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com, Jon Nettleton <jon@solid-run.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v11 0/3] Add basic node support for MediaTek MT8186 SoC
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>, hsinyi@chromium.org
+References: <20220520122217.30716-1-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220520122217.30716-1-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-wt., 21 cze 2022 o 12:46 Marcin Wojtas <mw@semihalf.com> napisa=C5=82(a):
->
-> pon., 20 cze 2022 o 20:45 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
-> >
-> > > You beat me up to this. I also was about to mention that the problem =
-with such
-> > > conversions (like this series does) is not in the code. It's simplest=
- part. The
-> > > problem is bindings and how you get them to be a standard (at least d=
-e facto).
-> >
-> > De facto is easy. Get it merged. After that, i will simply refuse
-> > anything else, the same way i and other Maintainers would refuse a
-> > different DT binding.
-> >
-> > If the ACPI committee approve and publish a binding, we will naturally
-> > accept that as well. So in the end we might have two bindings. But so
-> > far in this whole ACPI for networking story, i've not heard anybody
-> > say they are going to submit anything for standardisation. So this
-> > might be a mute point.
-> >
->
-> I understand your concern and of course it's better to be on a safe
-> side from the beginning. Based on the hitherto discussion under this
-> patchset, I would split the question about standardization to 2
-> orthogonal topics:
->
-> 1. Relation to the bus and enumeration:
->   * As pointed out in another patch some switches can be attached to
->     SPI or I2C. In such a case this is simple - SPISerialBus /
-> I2CSerialBus structures
->     in _CRS are included in the ACPI Spec. They allow to comprise more
-> bus specific
->     information and the code in acpi/scan.c marks those child devices
-> as to be enumerated
->     by parent bus.
->   * MDIO bus doesn't have its own _CRS macro in the Spec, on the other
-> hand the _ADR
->     seems to be the only object required for proper operation - this
-> was my base for
->     proposed solution in patch 06/12.
->
-> 2. The device description (unrelated to which bus it is attached)
->   * In Linux and other OS's there is a great amount of devices
-> conforming the guidelines
->     and using only the standard device identification/configuration
-> objects as per [1].
->   * Above do not contain custom items and entire information can be obtai=
-ned by
->     existing, generic ACPI accessors - those devices (e.g. NICs,
-> SD/MMC controllers and
->     many others) are not explicitly mentioned in official standards.
->   * The question, also related to this DSA case - is the ACPI device()
-> hierarchical
->     structure of this kind a subject for standardization for including
-> in official ACPI specification?
->   * In case not, where to document it? Is Linux' Documentation enough?
->     I agree that in the moment of merge it becomes de facto standard ABI =
-and
->     it's worth to sort it out.
->
-> Rafael, Len, any other ACPI expert - I would appreciate your inputs
-> and clarification
-> of the above. Your recommendation would be extremely helpful.
->
 
-Thank you all for vivid discussions. As it may take some time for the
-MDIOSerialBus _CRS macro review and approval, for now I plan to submit
-v2 of_ -> fwnode_/device_ migration (patches 1-7,11/12) and skip
-ACPI-specific additions until it is unblocked by spec extension.
+On 20/05/2022 14:22, Allen-KH Cheng wrote:
+> MT8186 is a SoC based on 64bit ARMv8 architecture.
+> It contains 6 CA55 and 2 CA76 cores.
+> MT8186 share many HW IP with MT65xx series.
+> 
+> This patchset was tested on MT8186 evaluation board to shell.
+> 
 
-Best regards,
-Marcin
+Applied, thanks!
+
+> Based on next-20220519, linux-next/master
+> 
+> changes since v9:
+>   - remove some merged PATCHs from series
+>   - reorder nodes in dts (cpu-map)
+>   - remove okay status in auxadc
+>   - remove unnecessary suffix node name for i2c
+>   - add pwm node
+>   - add dsi-phy node
+>   - add dpi node
+> 
+> changes since v9:
+>   - add one space before equal sign of drive-strength-adv
+>   - corect compatible name for big cores (ca76)
+>   - use upper case of address in pinctrl
+>   - add pwrap node
+>   - add pwm node
+> 
+> changes since v8:
+>   - change name from pins_bus to pins-sda-scl
+>   - correct email address
+>   - add capacity-dmips-mhz for each CPU
+>   - add ppi-partitions in gic node
+>   - change name to power-domain
+>   - remove status "okay" in scp node
+>   - update timer and pericfg compatible in series
+> 
+> changes since v7:
+>   - add scp&auxadc node
+> 
+> changes since v6:
+>   - remove unnecessary blank line
+> 
+> changes since v5:
+>   - replace Mediatek a to MediaTek
+>   - use GPL-2.0-only OR BSD-2-Clause
+> 
+> changes since v4:
+>   - correct driver clock of mt8186
+>   - add power domains controller and clock controllers
+>   - add pinctrl, usb host, spi and i2c nodes
+>   - add node status in mt8186-evb.dts
+>   - correct some dtbs_check warnings
+> 
+> changes since v3:
+>   - remove serial, mmc and phy patch from series. (already merged)
+>   - remove mcusysoff node
+>   - move oscillator nodes at the head of dts
+>   - change name from usb-phy to t-phy
+> 
+> changes since v2:
+>   - add soc {} in mt8186.dtsi
+> 
+> changes since v1:
+>   - add dt-bindings: arm: Add compatible for MediaTek MT8186
+> 
+> Allen-KH Cheng (3):
+>    dt-bindings: arm: mediatek: Add mt8186 pericfg compatible
+>    dt-bindings: arm: Add compatible for MediaTek MT8186
+>    arm64: dts: Add MediaTek SoC MT8186 dts and evaluation board and
+>      Makefile
+> 
+>   .../devicetree/bindings/arm/mediatek.yaml     |    4 +
+>   .../arm/mediatek/mediatek,pericfg.yaml        |    1 +
+>   arch/arm64/boot/dts/mediatek/Makefile         |    1 +
+>   arch/arm64/boot/dts/mediatek/mt8186-evb.dts   |  232 ++++
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi      | 1016 +++++++++++++++++
+>   5 files changed, 1254 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> 

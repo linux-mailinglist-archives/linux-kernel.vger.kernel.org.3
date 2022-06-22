@@ -2,371 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACB0553FDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F177553FE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353746AbiFVBFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 21:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
+        id S1354547AbiFVBLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 21:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiFVBFM (ORCPT
+        with ESMTP id S1349006AbiFVBLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 21:05:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E3831929;
-        Tue, 21 Jun 2022 18:05:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LSQCh4vQ6z4xD9;
-        Wed, 22 Jun 2022 11:05:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655859905;
-        bh=6Wjb0uO4MuZpIMApUk52dwtBGgeFbM2Wn3vL3VkInMk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K4x4mDjyHAgW06UifO5sAwvGITMG+N5vHm9eapfJCnV0Q2Cse7+0Cgv2bkw1YngDG
-         4lhjcoiyxLS7d1T+Sb2E15JjTULRore1GNToOao3D7cVkPQJcldCyALyEl/k00cJAD
-         jdqft7z1mfNeZSbVtEqWbw28JOhaSIapN4fw80m5xzNcjiVcKmLJNIQJES2+aWXeXb
-         LYBYvjnfTVN4UZ2U+alVbBROs2h+yVthVj+p+ldAZ+eur9eiZCaD447O6K2u+7JR4x
-         qaqE+CnTNeX5nec2cFapr4O1+NdAzwnT4VRF/oCGLDM+edMRXxkazYI9vi4MXBMkHX
-         LAEWU31MtO/Dg==
-Date:   Wed, 22 Jun 2022 11:04:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20220622110451.27c68263@canb.auug.org.au>
-In-Reply-To: <YrF3wfumVi3q3bFj@intel.com>
-References: <20220621123656.7a479ad9@canb.auug.org.au>
-        <YrF3wfumVi3q3bFj@intel.com>
+        Tue, 21 Jun 2022 21:11:04 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B103151F;
+        Tue, 21 Jun 2022 18:11:01 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so10159774wms.5;
+        Tue, 21 Jun 2022 18:11:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uugx3RS7oxGS2ZFarjyKn4uAaMCIluxrPYwER0fWx5o=;
+        b=oPQXlZOy+TuQD3tx2ScCNgB2s8o+82kcA9dOz7cdnIIeyPvsZfR0tQWEwCtYxs0jH/
+         gszJ6osfTkHDh5QSPvT4sbxI99sTGTxlhbAkuUO/iDnHpLTQ6/FmXnAN1PgboTi6NQjE
+         Xi/UtwXIBMS6TyptJLqjNzXKPDR94rhY+FjXw1qyRCuco0WrBy6IHx29XqdJLnzA8e45
+         oftYmXCB+W5pqlCGSwZFy0QvWWBnunSp8tk91szpTFHN4H+3+Ptn7Rgao0CSPPqKxthF
+         yw0gMHUG+K4/3IWd+iyh8s8Qutq7b4/Sq2BIPIYQaVmWs1P7wvr2Wl5Ab5JH0kbQJIZR
+         rtGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uugx3RS7oxGS2ZFarjyKn4uAaMCIluxrPYwER0fWx5o=;
+        b=AC3rXr7ROZ7Hg3q+Hh3+KWk+Kf5XXcFppuwvS1aDO3G/aRWDU8Arl3nTLr8sPBY11C
+         qhK41PjoX47TW4v90ZUWkoGSAmwgzGahphRbJacdvgj4j+6cFIP2tVFej7X8/1JJQa/+
+         3+9KXroaFfzJcRWs/AQCILsdkBY+7kn+CFwsT5P8gareYKNiLsPmPb9OfB1IEo2h6bxe
+         EKegY46vZLyihD818J0qJx4bRwsyqjGdemd0YUrDGQkOUR8W4wzgTwTvSh5x8BxUL6cD
+         Ji9ao3IX/5DxUOj9I/0zXGAbY7q8hWQ0qqDjz61S4FfBA5gdSp+i65O25PhBq7Mg6jTE
+         V4xg==
+X-Gm-Message-State: AJIora8mt2T8gS6JMzv7cfeHdgPP9+1ww0Igi9qA5brH5LEqw4bMI9Cg
+        IPkF0KwX2tG/qVGaKLX4FUVb4uHNWhI=
+X-Google-Smtp-Source: AGRyM1trL93S5hxPBvcmQwe6wXBXySM33gUM2C7+uBdjW4tLcfv1R2G0sZJFnhghWaWR2AVO0GmpoQ==
+X-Received: by 2002:a05:600c:190b:b0:39c:7704:74a4 with SMTP id j11-20020a05600c190b00b0039c770474a4mr900241wmq.92.1655860259728;
+        Tue, 21 Jun 2022 18:10:59 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id x13-20020adfdd8d000000b0021b81855c1csm16560086wrl.27.2022.06.21.18.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 18:10:58 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        =?UTF-8?q?=EF=BF=BDecki?= <rafal@milecki.pl>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/3] Add nvmem support for dynamic partitions
+Date:   Wed, 22 Jun 2022 03:06:25 +0200
+Message-Id: <20220622010628.30414-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DaBt2U5eE6eb97Ubf0U=Ci3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/DaBt2U5eE6eb97Ubf0U=Ci3
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+This very small series comes to fix the very annyoing problem of
+partitions declared by parser at runtime NOT supporting nvmem cells
+definition.
 
-Hi all,
+The current implementation is very generic. The idea is to provide an of
+node if defined for everyone and not strictly limit this to nvmem stuff.
+But still the actual change is done only for nvmem-cells mtd. (just to
+make sure) This can totally change by removing the compatible check.
 
-On Tue, 21 Jun 2022 10:48:17 +0300 Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@l=
-inux.intel.com> wrote:
->
-> On Tue, Jun 21, 2022 at 12:36:56PM +1000, Stephen Rothwell wrote:
-> >=20
-> > After merging the drm-misc tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > drivers/gpu/drm/xlnx/zynqmp_disp.c: In function 'zynqmp_disp_create_pla=
-nes':
-> > drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:17: error: implicit declaration=
- of function 'drm_plane_create_zpos_immutable_property'; did you mean 'drm_=
-plane_create_scaling_filter_property'? [-Werror=3Dimplicit-function-declara=
-tion]
-> >  1260 |                 drm_plane_create_zpos_immutable_property(&layer=
-->plane, i);
-> >       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >       |                 drm_plane_create_scaling_filter_property
-> > drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:25: error: implicit declaration=
- of function 'drm_plane_create_alpha_property'; did you mean 'drm_plane_cre=
-ate_color_properties'? [-Werror=3Dimplicit-function-declaration]
-> >  1262 |                         drm_plane_create_alpha_property(&layer-=
->plane);
-> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >       |                         drm_plane_create_color_properties
-> > cc1: all warnings being treated as errors
-> >=20
-> > Presumably caused by one of the commits that dropped includes from
-> > drm-ctrc.h.
-> >=20
-> > I have used the drm-misc tree from next-20220620 for today. =20
->=20
-> Sorry about that. Looks like my .config was missing some
-> dependencies of the zynqmp driver so it wasn't getting built.
-> I'll cook up a fix.
+The idea here is that a user can still use these dynamic parsers
+instead of declaring a fixed-partition and also declare how nvmem-cells
+are defined for the partition.
+This live with the assumption that dynamic partition have always the
+same name and they are known. (this is the case for smem-part partition
+that would require a bootloader reflash to change and for parsers like
+cmdlinepart where the name is always the same.)
+With this assumption, it's easy to fix this problem. Just introduce a
+new partition node that will declare just these special partition.
+Mtdcore then will check if these special declaration are present and
+connect the dynamic partition with the OF node present in the dts. Nvmem
+will automagically find the OF node and cells will be works based on the
+data provided by the parser.
 
-And today, I get these:
+The initial idea was to create a special nvmem driver with a special
+compatible where a user would declare the mtd partition name and this
+driver would search it and register the nvmem cells but that became
+difficult really fast, mtd notifier system is problematic for this kind
+of stuff. So here is the better implementation. A variant of this is
+already tested on openwrt where we have devices that use cmdlinepart.
+(that current variant have defined in the dts the exact copy of
+cmdlinepart in the fixed-partition scheme and we patched the cmdlinepart
+parser to scan this fixed-partition node (that is ignored as cmdlinepart
+have priority) and connect the dynamic partition with the dts node)
 
-In file included from include/linux/list.h:5,
-                 from include/linux/preempt.h:11,
-                 from include/linux/spinlock.h:55,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:6,
-                 from include/linux/mm.h:7,
-                 from include/linux/hyperv.h:17,
-                 from drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:6:
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_blit_to_vr=
-am_rect':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:48: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                                ^~
-include/linux/container_of.h:18:33: note: in definition of macro 'container=
-_of'
-   18 |         void *__mptr =3D (void *)(ptr);                            =
-       \
-      |                                 ^~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-In file included from include/linux/bits.h:22,
-                 from include/linux/ratelimit_types.h:5,
-                 from include/linux/printk.h:9,
-                 from include/asm-generic/bug.h:22,
-                 from arch/x86/include/asm/bug.h:87,
-                 from include/linux/bug.h:5,
-                 from include/linux/mmdebug.h:5,
-                 from include/linux/mm.h:6,
-                 from include/linux/hyperv.h:17,
-                 from drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:6:
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:48: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                                ^~
-include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
-ert'
-   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-      |                                                        ^~~~
-include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
-rt'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |         ^~~~~~~~~~~~~
-include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
-e'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |                       ^~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm.h:40:21: note: in expansion of macro 'con=
-tainer_of'
-   40 | #define to_hv(_dev) container_of(_dev, struct hyperv_drm_device, de=
-v)
-      |                     ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:48: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                                ^~
-include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
-ert'
-   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-      |                                                        ^~~~
-include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
-rt'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |         ^~~~~~~~~~~~~
-include/linux/container_of.h:20:23: note: in expansion of macro '__same_typ=
-e'
-   20 |                       __same_type(*(ptr), void),                   =
-     \
-      |                       ^~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm.h:40:21: note: in expansion of macro 'con=
-tainer_of'
-   40 | #define to_hv(_dev) container_of(_dev, struct hyperv_drm_device, de=
-v)
-      |                     ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-include/linux/compiler_types.h:293:27: error: expression in static assertio=
-n is not an integer
-  293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), t=
-ypeof(b))
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
-ert'
-   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-      |                                                        ^~~~
-include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
-rt'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |         ^~~~~~~~~~~~~
-include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
-e'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |                       ^~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm.h:40:21: note: in expansion of macro 'con=
-tainer_of'
-   40 | #define to_hv(_dev) container_of(_dev, struct hyperv_drm_device, de=
-v)
-      |                     ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:33:37: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   33 |         dst +=3D drm_fb_clip_offset(fb->pitches[0], fb->format, rec=
-t);
-      |                                     ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:33:53: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   33 |         dst +=3D drm_fb_clip_offset(fb->pitches[0], fb->format, rec=
-t);
-      |                                                     ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:34:35: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   34 |         drm_fb_memcpy_toio(dst, fb->pitches[0], vmap, fb, rect);
-      |                                   ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_blit_to_vr=
-am_fullscreen':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:46:25: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   46 |                 .x2 =3D fb->width,
-      |                         ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:48:25: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   48 |                 .y2 =3D fb->height,
-      |                         ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_connector_=
-get_modes':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:58:17: error: implicit declarat=
-ion of function 'drm_add_modes_noedid' [-Werror=3Dimplicit-function-declara=
-tion]
-   58 |         count =3D drm_add_modes_noedid(connector,
-      |                 ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:61:9: error: implicit declarati=
-on of function 'drm_set_preferred_mode'; did you mean 'drm_mm_reserve_node'=
-? [-Werror=3Dimplicit-function-declaration]
-   61 |         drm_set_preferred_mode(connector, hv->preferred_width,
-      |         ^~~~~~~~~~~~~~~~~~~~~~
-      |         drm_mm_reserve_node
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_check_size=
-':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:93:27: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   93 |                 pitch =3D fb->pitches[0];
-      |                           ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_pipe_enabl=
-e':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:112:48: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  112 |                                 plane_state->fb->pitches[0]);
-      |                                                ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_pipe_check=
-':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:123:15: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  123 |         if (fb->format->format !=3D DRM_FORMAT_XRGB8888)
-      |               ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:126:15: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  126 |         if (fb->pitches[0] * fb->height > hv->fb_size) {
-      |               ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:126:32: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  126 |         if (fb->pitches[0] * fb->height > hv->fb_size) {
-      |                                ^~
-In file included from include/linux/device.h:15,
-                 from include/linux/hyperv.h:23,
-                 from drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:6:
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:128:42: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  128 |                         current->comm, fb->width, fb->height, fb->p=
-itches[0], hv->fb_size);
-      |                                          ^~
-include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk=
-_index_wrap'
-  110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                  =
-     \
-      |                                     ^~~~~~~~~~~
-include/drm/drm_print.h:425:9: note: in expansion of macro 'dev_err'
-  425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-      |         ^~~~
-include/drm/drm_print.h:438:9: note: in expansion of macro '__drm_printk'
-  438 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:17: note: in expansion of m=
-acro 'drm_err'
-  127 |                 drm_err(&hv->dev, "fb size requested by %s for %dX%=
-d (pitch %d) greater than %ld\n",
-      |                 ^~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:128:53: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  128 |                         current->comm, fb->width, fb->height, fb->p=
-itches[0], hv->fb_size);
-      |                                                     ^~
-include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk=
-_index_wrap'
-  110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                  =
-     \
-      |                                     ^~~~~~~~~~~
-include/drm/drm_print.h:425:9: note: in expansion of macro 'dev_err'
-  425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-      |         ^~~~
-include/drm/drm_print.h:438:9: note: in expansion of macro '__drm_printk'
-  438 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:17: note: in expansion of m=
-acro 'drm_err'
-  127 |                 drm_err(&hv->dev, "fb size requested by %s for %dX%=
-d (pitch %d) greater than %ld\n",
-      |                 ^~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:128:65: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  128 |                         current->comm, fb->width, fb->height, fb->p=
-itches[0], hv->fb_size);
-      |                                                                 ^~
-include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk=
-_index_wrap'
-  110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                  =
-     \
-      |                                     ^~~~~~~~~~~
-include/drm/drm_print.h:425:9: note: in expansion of macro 'dev_err'
-  425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-      |         ^~~~
-include/drm/drm_print.h:438:9: note: in expansion of macro '__drm_printk'
-  438 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:17: note: in expansion of m=
-acro 'drm_err'
-  127 |                 drm_err(&hv->dev, "fb size requested by %s for %dX%=
-d (pitch %d) greater than %ld\n",
-      |                 ^~~~~~~
-cc1: all warnings being treated as errors
+I provided an example of this in the documentation commit.
+In short it's needed to add to the partitions where the compatible parser
+is declared, a partition with just the label declared (instead of the reg).
+Then declare some nvmem-cells and it will all work at runtime.
+Mtdcore will check if a node with the same label is present and assign an
+OF node to the MTD.
 
-Please do some allmodconfig builds.
+I currently tested this on my device that have smem-part and the
+gmac driver use nvmem to get the mac-address. This works correctly and
+the same address is provided.
 
-I have used the drm-misc tree from next-20220620 again for today.
---=20
-Cheers,
-Stephen Rothwell
+v6:
+- Fix Sob tag
+- Add review tag by Rob
+- Reintroduce name support for partition
+- Make the "partition-" prefix mandatory
+v5:
+- Simplify Documentation and move it generic partition.yaml
+- Split commit and move smem example to dedicated commit.
+v4:
+- Make it simple. No suffix. Make label mandatory again.
+- Update Documentation with new implementation.
+- Rename files to a better and correct name
+v3:
+- Fix warning from bot (function not declared as static)
+- Updated code to support also node name
+- Made partition label optional
+v2:
+- Simplify this. Drop dynamic-partition
+- Fix problem with parser with ko
+- Do not pollude mtd_get_of_node
+- Fix problem with Documentation
 
---Sig_/DaBt2U5eE6eb97Ubf0U=Ci3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Christian Marangi (3):
+  dt-bindings: mtd: partitions: support label/name only partition
+  dt-bindings: mtd: partitions: add additional example for
+    qcom,smem-part
+  mtd: core: introduce of support for dynamic partitions
 
------BEGIN PGP SIGNATURE-----
+ .../bindings/mtd/partitions/partition.yaml    | 20 +++++-
+ .../mtd/partitions/qcom,smem-part.yaml        | 27 ++++++++
+ drivers/mtd/mtdcore.c                         | 61 +++++++++++++++++++
+ 3 files changed, 106 insertions(+), 2 deletions(-)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKyarMACgkQAVBC80lX
-0Gx1IAgAi0+rRfrP+pQqJVFqdO7+LV4fuhNO5+znr5R1NADfACsREQ7zne4U802p
-n/cholc1NOJA3OQPQf4bK+9qTLOH0gu3vQOyfKKcZ870Tt+gjtYgm396jIt5mYT4
-DRgo2gfNdsFnanJoNEth8Czz9Qr6bYn+WCDrRnDGtWmML7oP3A9AgQFNPIbtv294
-eHnkBI8lB6GkUl2VnEKVDb8y/GyaKu9SAuZ1oPZ53pHfB8ft6aZ7ibrREPF+vVWA
-e07x/iMK55m15+InEVWsVtdbxFJyCiL/z2es169i2HJSgxvSygVKQ5r7Zywz84MY
-Xsrn5m+Tt5YhnLBJQ5FqMi3e1xQvzQ==
-=KInL
------END PGP SIGNATURE-----
+-- 
+2.36.1
 
---Sig_/DaBt2U5eE6eb97Ubf0U=Ci3--

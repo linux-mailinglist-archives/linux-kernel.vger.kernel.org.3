@@ -2,207 +2,509 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE70D5540CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241C75540D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356434AbiFVDQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 23:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S1356470AbiFVDQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 23:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiFVDQ0 (ORCPT
+        with ESMTP id S1356460AbiFVDQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 23:16:26 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFAA2ED5C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:16:24 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id f39so9922788lfv.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9MJRbgYqBVvHHWCXDuWt7RjZ0olsk+Nr5RQqp/foNWs=;
-        b=TC9MEj2s14PmEycElP7NtPyJtvkqKsYcVCEV9IYkQfSoHP28/mNoFXESTk53Dl4zPW
-         lgJOdnNeI+bG9bg38LflvT2EZ1E5rYm/8+dvnxMJddy3G57Vi6V/J3Icq/JUvn+ySx/D
-         Z9b9EnPcjx19ZEHGqIVbRMmOm3PMJJQ0gjwRLorxVcML6BpP+r9TNQJ3n5JRqiq2VwoF
-         RAUXKENpQyuBS091oxlurqu2KXvUFQqCzNlcqi2AID1QSfqtoT5ZnBj6zC3VoHU9hVMs
-         vkF2hDX101f8p+NSHctT6SqR6qn7neJb1xBumaBwq5BAys2IcM0GMarTjfh4RahWhsRQ
-         VSJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9MJRbgYqBVvHHWCXDuWt7RjZ0olsk+Nr5RQqp/foNWs=;
-        b=VttPp8OxNxazVMsE54r27ujUHBgIL3SrK3WJBug06+pm4spibVcaGJLw4EsfZXzE34
-         5LAJWVsKdQJSeKL87yY6XPbS84IzhS5P5oY5rApD9DIkbv8/hjONz5/uKv/C5XHi2Jh4
-         jZB0RsSAB+zis8zyCJ2Nie9Dme207EOcQAL3CYn2S/vm3WrB0HSewTAYuHhhTSvh8/t6
-         OeYH5I9urSujLzwPkoyI5uLK36cqCqh9VX2VNk0uDahggeihBaJvwV8/2+F34EaSb+yN
-         SVHGvFUmlgF5G6NwA5pBypo6kqTY5ZTArVKf3W8FhlpW7z+XENuwZfCLgCXFVp0FrMn7
-         ycJQ==
-X-Gm-Message-State: AJIora/qGilCfANfGQPGbA++Ep1sthwsg2HNhjfM3YBMRujTt2+cJvDN
-        odyJ0dZKC8PQSQPk197TTPaEZBZfX5DQkRjG4d8=
-X-Google-Smtp-Source: AGRyM1s0aA0sF76rxXRjEbyw6HlYUqGZIVF1aEJv8hr6ftczqYq1dQySeO/1QXrqWg2DJpNgQoUybD6Ei344w17J2T0=
-X-Received: by 2002:ac2:484d:0:b0:47f:7ebf:336 with SMTP id
- 13-20020ac2484d000000b0047f7ebf0336mr904019lfy.130.1655867782079; Tue, 21 Jun
- 2022 20:16:22 -0700 (PDT)
+        Tue, 21 Jun 2022 23:16:34 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094EB2F3A3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655867792; x=1687403792;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yt1vb0hVk0OwIr1zqCzjXfXIp/fT1ImoYqNN9PzKe5w=;
+  b=IyLCNK2CEjhj0ODIuPVdzjKrkcBmL1LiGYvoNJYvpGj+cA9vu5zm5GUR
+   +2oo3l4jMiVZmwuz1M4+YJBYDyoRAdnHL2mGki7Dj7SHW/oMIoJB39gB7
+   nDZz7VChGOe/P9RQLEkbtq+tbsLA9lU1/ZsQaosX8iGO4bVDg2q6qL1FS
+   dL7mBWbkRVKg0+G9728iNOkhLY+RnRlYhhtRbf49sWh3K4DA9yvZ6nJbD
+   Zr/SKKG63DqFxUF4/IrFmlDHuXsve6BDqC4Mad+U8m9JhPe1uwSemIfvd
+   7l/jLLJouYWd0N+HGcFyFEZLxrakI3AzI8ILgfhSK/UnBR/R6S0w5DVDE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="260120108"
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="260120108"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 20:16:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="715218758"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Jun 2022 20:16:29 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3qqy-0000mO-Q1;
+        Wed, 22 Jun 2022 03:16:28 +0000
+Date:   Wed, 22 Jun 2022 11:16:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: test.c:undefined reference to `kunit_binary_ptr_assert_format'
+Message-ID: <202206221109.wLYXax4K-lkp@intel.com>
 MIME-Version: 1.0
-References: <1653447164-15017-1-git-send-email-zhaoyang.huang@unisoc.com>
- <CAB8ipk9cAoP6yV_-Gn8bwbn5ezCZujLeMpioa0TiNU5=akBaug@mail.gmail.com>
- <Yq+PMWlARgDhv8uL@pc638.lan> <CAGWkznHPdk_yqn2GWPDJaT32+4MnFLnRjdjBkaFv9BLMh4yM=g@mail.gmail.com>
- <CA+KHdyXpdow7SYsbq_7F0zDd5-nYGi6db7R11R3--g3gUu-59w@mail.gmail.com>
- <CAGWkznE5cFfdtmQ2j57goWtpfPGYPsd5Oi3pvb9vcfifodR9OQ@mail.gmail.com>
- <YrGO4cae/03r3PzP@pc638.lan> <CAGWkznFdZ1_jrSWSOPkSDyLY1OSodZBy6MTfdwPKo3VoW67GBg@mail.gmail.com>
- <YrHVsryZlnpO/Vha@pc638.lan>
-In-Reply-To: <YrHVsryZlnpO/Vha@pc638.lan>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Wed, 22 Jun 2022 11:15:52 +0800
-Message-ID: <CAGWkznEha+6aPi6hoqzSt0ZKpY2_0P4gFx-OFxufqDt6sZc9kw@mail.gmail.com>
-Subject: Re: [PATCH] mm: fix racing of vb->va when kasan enabled
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>, Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 10:29 PM Uladzislau Rezki <urezki@gmail.com> wrote:
->
-> > On Tue, Jun 21, 2022 at 5:27 PM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > >
-> > > > On Mon, Jun 20, 2022 at 6:44 PM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > > >
-> > > > > > > >
-> > > > > > > Is it easy to reproduce? If so could you please describe the steps? As i see
-> > > > > > > the freeing of the "vb" is RCU safe whereas vb->va is not. But from the first
-> > > > > > > glance i do not see how it can accessed twice. Hm..
-> > > > > > It was raised from a monkey test on A13_k515 system and got 1/20 pcs
-> > > > > > failed. IMO, vb->va which out of vmap_purge_lock protection could race
-> > > > > > with a concurrent ra freeing within __purge_vmap_area_lazy.
-> > > > > >
-> > > > > Do you have exact steps how you run "monkey" test?
-> > > > There are about 30+ kos inserted during startup which could be a
-> > > > specific criteria for reproduction. Do you have doubts about the test
-> > > > result or the solution?
-> > > > >
-> > > I do not have any doubt about your test results, so if you can trigger it
-> > > then there is an issue at least on the 5.4.161-android12 kernel.
-> > >
-> > > 1. With your fix we get expanded mutex range, thus the worst case of vmalloc
-> > > allocation can be increased when it fails and repeat. Because it also invokes
-> > > the purge_vmap_area_lazy() that access the same mutex.
-> > I am not sure I get your point. _vm_unmap_aliases calls
-> > _purge_vmap_area_lazy instead of purge_vmap_area_lazy. Do you have any
-> > other solutions? I really don't think my patch is the best way as I
-> > don't have a full view of vmalloc mechanism.
-> >
-> Yep, but it holds the mutex:
->
-> <snip>
-> mutex_lock(&vmap_purge_lock);
-> purge_fragmented_blocks_allcpus();
-> if (!__purge_vmap_area_lazy(start, end) && flush)
->         flush_tlb_kernel_range(start, end);
-> mutex_unlock(&vmap_purge_lock);
-> <snip>
->
-> I do not have a solution yet. I am trying still to figure out how you can
-> trigger it.
->
-> <snip>
->         rcu_read_lock();
->         list_for_each_entry_rcu(vb, &vbq->free, free_list) {
->                 spin_lock(&vb->lock);
->                 if (vb->dirty && vb->dirty != VMAP_BBMAP_BITS) {
->                         unsigned long va_start = vb->va->va_start;
-> <snip>
->
-> so you say that "vb->va->va_start" can be accessed twice. I do not see
-> how it can happen. The purge_fragmented_blocks() removes "vb" from the
-> free_list and set vb->dirty to the VMAP_BBMAP_BITS to prevent purging
-> it again. It is protected by the spin_lock(&vb->lock):
->
-> <snip>
-> spin_lock(&vb->lock);
-> if (vb->free + vb->dirty == VMAP_BBMAP_BITS && vb->dirty != VMAP_BBMAP_BITS) {
->         vb->free = 0; /* prevent further allocs after releasing lock */
->         vb->dirty = VMAP_BBMAP_BITS; /* prevent purging it again */
->         vb->dirty_min = 0;
->         vb->dirty_max = VMAP_BBMAP_BITS;
-> <snip>
->
-> so the VMAP_BBMAP_BITS is set under spinlock. The _vm_unmap_aliases() checks it:
->
-> <snip>
-> list_for_each_entry_rcu(vb, &vbq->free, free_list) {
->         spin_lock(&vb->lock);
->         if (vb->dirty && vb->dirty != VMAP_BBMAP_BITS) {
->                 unsigned long va_start = vb->va->va_start;
->                 unsigned long s, e;
-> <snip>
->
-> if the "vb->dirty != VMAP_BBMAP_BITS". I am missing your point here?
-Could the racing be like bellowing scenario?  vb->va accessed in [2]
-has been freed in [1]
+tree:   https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220621-165710
+head:   7bfabdc25e47572121004b8e6bcfc74d4bda3252
+commit: 645eaaa1b362ad721c49e0bb208f95f068dfed46 thunderbolt: test: Use kunit_test_suite() macro
+date:   18 hours ago
+config: arc-randconfig-r016-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221109.wLYXax4K-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/645eaaa1b362ad721c49e0bb208f95f068dfed46
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220621-165710
+        git checkout 645eaaa1b362ad721c49e0bb208f95f068dfed46
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-_vm_unmap_aliases
-               _vm_unmap_aliases
-{
-                               {
-              list_for_each_entry_rcu(vb, &vbq->free, free_list) {
-             __purge_vmap_area_lazy
-                     spin_lock(&vb->lock);
-                                merge_or_add_vmap_area
-                     if (vb->dirty) {
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-kmem_cache_free(vmap_area_cachep, va)[1]
-                            unsigned long va_start = vb->va->va_start;
-[2]
->
-> > >
-> > > 2. You run 5.4.161-android12 kernel what is quite old. Could you please
-> > > retest with latest kernel? I am asking because on the latest kernel with
-> > > CONFIG_KASAN i am not able to reproduce it.
-> > >
-> > > I do a lot of: vm_map_ram()/vm_unmap_ram()/vmalloc()/vfree() in parallel
-> > > by 64 kthreads on my 64 CPUs test system.
-> > The failure generates at 20s from starting up, I think it is a rare timing.
-> > >
-> > > Could you please confirm that you can trigger an issue on the latest kernel?
-> > Sorry, I don't have an available latest kernel for now.
-> >
-> Can you do: "gdb ./vmlinux", execute "l *_vm_unmap_aliases+0x164" and provide
-> output?
-Sorry, I have lost the vmlinux with KASAN enabled and just got some
-instructions from logs.
+All errors (new ones prefixed by >>):
 
-0xffffffd010678da8 <_vm_unmap_aliases+0x134>: sub x22, x26, #0x28
-               x26 vbq->free
-0xffffffd010678dac <_vm_unmap_aliases+0x138>: lsr x8, x22, #3
-0xffffffd010678db0 <_vm_unmap_aliases+0x13c>: ldrb w8, [x8,x24]
-0xffffffd010678db4 <_vm_unmap_aliases+0x140>: cbz w8,
-0xffffffd010678dc0 <_vm_unmap_aliases+0x14c>
-0xffffffd010678db8 <_vm_unmap_aliases+0x144>: mov x0, x22
-0xffffffd010678dbc <_vm_unmap_aliases+0x148>: bl 0xffffffd0106c9a34
-<__asan_report_load8_noabort>
-0xffffffd010678dc0 <_vm_unmap_aliases+0x14c>: ldr x22, [x22]
-0xffffffd010678dc4 <_vm_unmap_aliases+0x150>: lsr x8, x22, #3
-0xffffffd010678dc8 <_vm_unmap_aliases+0x154>: ldrb w8, [x8,x24]
-0xffffffd010678dcc <_vm_unmap_aliases+0x158>: cbz w8,
-0xffffffd010678dd8 <_vm_unmap_aliases+0x164>
-0xffffffd010678dd0 <_vm_unmap_aliases+0x15c>: mov x0, x22
-0xffffffd010678dd4 <_vm_unmap_aliases+0x160>: bl 0xffffffd0106c9a34
-<__asan_report_load8_noabort>
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `compare_dirs':
+>> test.c:(.text+0x24): undefined reference to `kunit_binary_ptr_assert_format'
+>> arceb-elf-ld: test.c:(.text+0x24): undefined reference to `kunit_binary_ptr_assert_format'
+>> arceb-elf-ld: test.c:(.text+0x30): undefined reference to `kunit_do_failed_assertion'
+>> arceb-elf-ld: test.c:(.text+0x30): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x7a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x7a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x82): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x82): undefined reference to `kunit_do_failed_assertion'
+>> arceb-elf-ld: test.c:(.text+0xba): undefined reference to `kunit_binary_assert_format'
+>> arceb-elf-ld: test.c:(.text+0xba): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0xce): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0xce): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x106): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x106): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x11a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x11a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x142): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x142): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x14c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x14c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x17c): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x17c): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x188): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x188): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1b0): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1b0): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1bc): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1bc): undefined reference to `kunit_do_failed_assertion'
+>> arceb-elf-ld: test.c:(.text+0x1e8): undefined reference to `kunit_binary_str_assert_format'
+>> arceb-elf-ld: test.c:(.text+0x1e8): undefined reference to `kunit_binary_str_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x21a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x21a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x226): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x226): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x24c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x24c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x258): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x258): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x28e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x28e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x29a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x29a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2b8): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2b8): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2c4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2c4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2ee): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2ee): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2fa): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2fa): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x318): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x318): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x324): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x324): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x36e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x36e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x37a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x37a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x398): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x398): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x3a4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x3a4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x3c4): undefined reference to `kunit_binary_str_assert_format'
+   arceb-elf-ld: test.c:(.text+0x3c4): undefined reference to `kunit_binary_str_assert_format'
+   arceb-elf-ld: test.c:(.text+0x3e6): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x3e6): undefined reference to `kunit_binary_assert_format'
+>> arceb-elf-ld: test.c:(.text+0x416): undefined reference to `kunit_fail_assert_format'
+>> arceb-elf-ld: test.c:(.text+0x416): undefined reference to `kunit_fail_assert_format'
+   arceb-elf-ld: test.c:(.text+0x41c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x41c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `TB_TEST_PCIE_TUNNEL':
+   test.c:(.text+0x47a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x47a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x486): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x486): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x4a8): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x4a8): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x4b8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x4b8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x4e2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x4e2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x4ee): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x4ee): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x510): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x510): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x520): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x520): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x544): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x544): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x554): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x554): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x576): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x576): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x586): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x586): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x5b2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x5b2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x5ba): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x5ba): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x5e4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x5e4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x5f0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x5f0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x612): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x612): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x622): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x622): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x646): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x646): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x656): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x656): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x678): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x678): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x688): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x688): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x6b4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x6b4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x6bc): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x6bc): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `TB_TEST_DP_TUNNEL1':
+   test.c:(.text+0x70e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x70e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x71a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x71a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x73c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x73c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x74c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x74c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x776): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x776): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x782): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x782): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x7a6): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x7a6): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x7b6): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x7b6): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x7d8): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x7d8): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x7e8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x7e8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x80c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x80c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x81c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x81c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x83e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x83e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x84e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x84e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x878): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x878): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x884): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x884): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x8a6): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x8a6): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x8b6): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x8b6): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x8da): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x8da): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x8ea): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x8ea): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x90c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x90c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x91c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x91c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x940): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x940): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x950): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x950): undefined reference to `kunit_do_failed_assertion'
+--
+   arceb-elf-ld: test.c:(.text+0x1082): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `TB_TEST_DMA_TUNNEL1':
+   test.c:(.text+0x10d6): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x10d6): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x10e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x10e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1104): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1104): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1114): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1114): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x113e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x113e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x114a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x114a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x116c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x116c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x117c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x117c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x11a0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x11a0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x11b0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x11b0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x11d2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x11d2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x11e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x11e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1206): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1206): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1216): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1216): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1240): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1240): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x124c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x124c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x126e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x126e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x127e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x127e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x12a0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x12a0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x12b0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x12b0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x12d2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x12d2): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x12e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x12e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1306): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1306): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1316): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1316): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `TB_TEST_DMA_TUNNEL2':
+   test.c:(.text+0x136e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x136e): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x137a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x137a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x139c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x139c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x13ac): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x13ac): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x13d6): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x13d6): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x13e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x13e2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1404): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1404): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1414): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1414): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1438): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1438): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1448): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1448): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x146a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x146a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x147a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x147a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x149e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x149e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x14ae): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x14ae): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x14d8): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x14d8): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x14e4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x14e4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1506): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1506): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1516): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1516): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1538): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1538): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1548): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1548): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x156a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x156a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x157a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x157a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x159e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x159e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x15ae): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x15ae): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `kunit_kmalloc.constprop.0':
+>> test.c:(.text+0x15cc): undefined reference to `kunit_kmalloc_array'
+>> arceb-elf-ld: test.c:(.text+0x15cc): undefined reference to `kunit_kmalloc_array'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `tb_test_property_format':
+   test.c:(.text+0x1600): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1600): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1614): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1614): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x164c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x164c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1650): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1650): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1678): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1678): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1684): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1684): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x16b4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x16b4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x16c0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x16c0): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x16f4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x16f4): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1700): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1700): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `tb_test_property_copy':
+   test.c:(.text+0x1742): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1742): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x174e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x174e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1774): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1774): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1780): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1780): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x17c0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x17c0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x17c4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x17c4): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x17ec): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x17ec): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x17f8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x17f8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1824): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1824): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x185a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x185a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x186e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x186e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `kunit_ida_init':
+>> test.c:(.text+0x18e8): undefined reference to `__kunit_add_resource'
+>> arceb-elf-ld: test.c:(.text+0x18e8): undefined reference to `__kunit_add_resource'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `tb_test_tunnel_dma_tx':
+   test.c:(.text+0x1ec2): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1ec2): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1ece): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1ece): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1ef0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1ef0): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f00): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f00): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f22): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f22): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f2a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f2a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f4c): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f4c): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f52): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f52): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f74): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f74): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1f84): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1f84): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1fae): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1fae): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1fba): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1fba): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1fe2): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1fe2): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x1fea): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x1fea): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2016): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2016): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2022): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2022): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x204a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x204a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2050): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2050): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x207c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x207c): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2088): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2088): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `tb_test_tunnel_dma_rx':
+   test.c:(.text+0x20e0): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x20e0): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x20ec): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x20ec): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x210e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x210e): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x211e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x211e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2140): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2140): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2148): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2148): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x216a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x216a): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2170): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2170): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2192): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2192): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x21a2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x21a2): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x21cc): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x21cc): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x21d8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x21d8): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2200): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2200): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2206): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2206): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2232): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2232): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x223e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x223e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2266): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2266): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x226e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x226e): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x229a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x229a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x22a6): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x22a6): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: drivers/thunderbolt/test.o: in function `tb_test_tunnel_dma':
+   test.c:(.text+0x22fc): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x22fc): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2308): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2308): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x232a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x232a): undefined reference to `kunit_binary_assert_format'
+   arceb-elf-ld: test.c:(.text+0x233a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x233a): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x235c): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x235c): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2364): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2364): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x2386): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x2386): undefined reference to `kunit_binary_ptr_assert_format'
+   arceb-elf-ld: test.c:(.text+0x238c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x238c): undefined reference to `kunit_do_failed_assertion'
+   arceb-elf-ld: test.c:(.text+0x23ae): undefined reference to `kunit_binary_assert_format'
 
->
-> --
-> Uladzislau Rezki
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

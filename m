@@ -2,64 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646DF55463D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E7C5548C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353489AbiFVJye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S229981AbiFVJy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352645AbiFVJyX (ORCPT
+        with ESMTP id S239935AbiFVJyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:54:23 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BDB3A5DD;
-        Wed, 22 Jun 2022 02:54:21 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LSdxs0C8dz689t8;
-        Wed, 22 Jun 2022 17:53:53 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 11:54:18 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 22 Jun 2022 11:54:18 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     John Fastabend <john.fastabend@gmail.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>
-CC:     "dhowells@redhat.com" <dhowells@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel test robot" <lkp@intel.com>
-Subject: RE: [PATCH v5 3/5] bpf: Add bpf_verify_pkcs7_signature() helper
-Thread-Topic: [PATCH v5 3/5] bpf: Add bpf_verify_pkcs7_signature() helper
-Thread-Index: AQHYhY1kCHhKSR2HMUKh5v3j7X869a1aT6EAgADgkDA=
-Date:   Wed, 22 Jun 2022 09:54:18 +0000
-Message-ID: <03b67c7a6161428c9ff8a5dde0450402@huawei.com>
-References: <20220621163757.760304-1-roberto.sassu@huawei.com>
- <20220621163757.760304-4-roberto.sassu@huawei.com>
- <62b245e22effa_1627420871@john.notmuch>
-In-Reply-To: <62b245e22effa_1627420871@john.notmuch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 22 Jun 2022 05:54:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 763D13A1A1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655891690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jofTkgsnDKNrdl+quQ8vd9teh2p/+pfuwaKR/nt++vc=;
+        b=hvonht38az8eBnHRF4Eq42n0AXrkm8iHy4shNasbuY06O0hXkOtS2wYr2Fm18Wehq5delE
+        ChA6+NWh61Jby90QmO/A1o7Jvn1+vOwgz0AKBC24sxqO/WiZrerFwfdDUyPagbSnLjkUTq
+        CcYhtXxy6/AuEdTqWugz7gqRU16FZZs=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-146-eTf4F5YeNxW2c2yDKX4h_w-1; Wed, 22 Jun 2022 05:54:49 -0400
+X-MC-Unique: eTf4F5YeNxW2c2yDKX4h_w-1
+Received: by mail-ed1-f70.google.com with SMTP id z20-20020a05640235d400b0042dfc1c0e80so12926989edc.21
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:54:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jofTkgsnDKNrdl+quQ8vd9teh2p/+pfuwaKR/nt++vc=;
+        b=eaydX6rsa8i8A2K+k1rc+MMcICX+UN7AJ/VK12GI1BOB1pLwpC6F109rzcrcBsBwI2
+         xTfwxaoWGGefGNK7L11ATxGA6/kt0hz8ODDUuiVSzvzcASi31U4z7YbIF4QjZsQo+5zm
+         Nt6SQB6zzZW2/SWC+B2nO8ImJYqkMonOEHSxTd4S/dPnZRizpLGnBKcgeaKD5MA9LCHQ
+         zHEX8FvJ6/OZdZIs5e78YHa+1DbpwDeKnkCXaEmq5hkV2FlAU+9e4nx4MnhUcr2UfYSE
+         RWNnEvTD9v30OfUipFoCzQly2apNDqQjCuJIZurP89GK2gsky8rSC9DgerGy0n71PBbp
+         rprw==
+X-Gm-Message-State: AJIora8GGPaQd5iIrncCKeB6Eh4e200jlpALEQ2eSZDbPg5O1dMCacRA
+        n53mxArOnTznjlMe2hLwyelYhv64isIX2iYaxT+5tpjVm56TyV7WPT6Am4EiERrV7syuD9vJjZD
+        NBGPBpddUuQ900xQmNKoo/E9U
+X-Received: by 2002:a17:907:da0:b0:722:c42e:25b9 with SMTP id go32-20020a1709070da000b00722c42e25b9mr2321411ejc.260.1655891688016;
+        Wed, 22 Jun 2022 02:54:48 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tqUcAdFloVOxwEZT3h6eNGJ+n/ggRPrXVY/n1VnJSSfARWPvCeaXSDNBsmHzLluCEPyIY4WQ==
+X-Received: by 2002:a17:907:da0:b0:722:c42e:25b9 with SMTP id go32-20020a1709070da000b00722c42e25b9mr2321390ejc.260.1655891687793;
+        Wed, 22 Jun 2022 02:54:47 -0700 (PDT)
+Received: from [192.168.43.127] ([109.37.135.195])
+        by smtp.gmail.com with ESMTPSA id e27-20020a170906315b00b0071d3b6ed4eesm7797779eje.160.2022.06.22.02.54.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 02:54:47 -0700 (PDT)
+Message-ID: <63a191ba-4949-04ad-4c73-03e577933745@redhat.com>
+Date:   Wed, 22 Jun 2022 11:54:46 +0200
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 0/4] platform/x86: Use backlight helpers
+Content-Language: en-US
+To:     Stephen Kitt <steve@sk2.org>, "Lee, Chun-Yi" <jlee@suse.com>,
+        Mark Gross <markgross@kernel.org>,
+        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220607184635.1127913-1-steve@sk2.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220607184635.1127913-1-steve@sk2.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,71 +83,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKb2huIEZhc3RhYmVuZCBbbWFpbHRvOmpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbV0N
-Cj4gU2VudDogV2VkbmVzZGF5LCBKdW5lIDIyLCAyMDIyIDEyOjI4IEFNDQo+IFJvYmVydG8gU2Fz
-c3Ugd3JvdGU6DQo+ID4gQWRkIHRoZSBicGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSgpIGhlbHBl
-ciwgdG8gZ2l2ZSBlQlBGIHNlY3VyaXR5IG1vZHVsZXMNCj4gPiB0aGUgYWJpbGl0eSB0byBjaGVj
-ayB0aGUgdmFsaWRpdHkgb2YgYSBzaWduYXR1cmUgYWdhaW5zdCBzdXBwbGllZCBkYXRhLCBieQ0K
-PiA+IHVzaW5nIHVzZXItcHJvdmlkZWQgb3Igc3lzdGVtLXByb3ZpZGVkIGtleXMgYXMgdHJ1c3Qg
-YW5jaG9yLg0KPiA+DQo+ID4gVGhlIG5ldyBoZWxwZXIgbWFrZXMgaXQgcG9zc2libGUgdG8gZW5m
-b3JjZSBtYW5kYXRvcnkgcG9saWNpZXMsIGFzIGVCUEYNCj4gPiBwcm9ncmFtcyBtaWdodCBiZSBh
-bGxvd2VkIHRvIG1ha2Ugc2VjdXJpdHkgZGVjaXNpb25zIG9ubHkgYmFzZWQgb24gZGF0YQ0KPiA+
-IHNvdXJjZXMgdGhlIHN5c3RlbSBhZG1pbmlzdHJhdG9yIGFwcHJvdmVzLg0KPiA+DQo+ID4gVGhl
-IGNhbGxlciBzaG91bGQgcHJvdmlkZSBib3RoIHRoZSBkYXRhIHRvIGJlIHZlcmlmaWVkIGFuZCB0
-aGUgc2lnbmF0dXJlIGFzDQo+ID4gZUJQRiBkeW5hbWljIHBvaW50ZXJzICh0byBtaW5pbWl6ZSB0
-aGUgbnVtYmVyIG9mIHBhcmFtZXRlcnMpLg0KPiA+DQo+ID4gVGhlIGNhbGxlciBzaG91bGQgYWxz
-byBwcm92aWRlIGEga2V5cmluZyBwb2ludGVyIG9idGFpbmVkIHdpdGgNCj4gPiBicGZfbG9va3Vw
-X3VzZXJfa2V5KCkgb3IsIGFsdGVybmF0aXZlbHksIGEga2V5cmluZyBJRCB3aXRoIHZhbHVlcyBk
-ZWZpbmVkDQo+ID4gaW4gdmVyaWZpY2F0aW9uLmguIFdoaWxlIHRoZSBmaXJzdCBjaG9pY2UgZ2l2
-ZXMgdXNlcnMgbW9yZSBmbGV4aWJpbGl0eSwgdGhlDQo+ID4gc2Vjb25kIG9mZmVycyBiZXR0ZXIg
-c2VjdXJpdHkgZ3VhcmFudGVlcywgYXMgdGhlIGtleXJpbmcgc2VsZWN0aW9uIHdpbGwgbm90DQo+
-ID4gZGVwZW5kIG9uIHBvc3NpYmx5IHVudHJ1c3RlZCB1c2VyIHNwYWNlIGJ1dCBvbiB0aGUga2Vy
-bmVsIGl0c2VsZi4NCj4gPg0KPiA+IERlZmluZWQga2V5cmluZyBJRHMgYXJlOiAwIGZvciB0aGUg
-cHJpbWFyeSBrZXlyaW5nIChpbW11dGFibGUga2V5cmluZyBvZg0KPiA+IHN5c3RlbSBrZXlzKTsg
-MSBmb3IgYm90aCB0aGUgcHJpbWFyeSBhbmQgc2Vjb25kYXJ5IGtleXJpbmcgKHdoZXJlIGtleXMg
-Y2FuDQo+ID4gYmUgYWRkZWQgb25seSBpZiB0aGV5IGFyZSB2b3VjaGVkIGZvciBieSBleGlzdGlu
-ZyBrZXlzIGluIHRob3NlIGtleXJpbmdzKTsNCj4gPiAyIGZvciB0aGUgcGxhdGZvcm0ga2V5cmlu
-ZyAocHJpbWFyaWx5IHVzZWQgYnkgdGhlIGludGVncml0eSBzdWJzeXN0ZW0gdG8NCj4gPiB2ZXJp
-ZnkgYSBrZXhlYydlZCBrZXJuZWQgaW1hZ2UgYW5kLCBwb3NzaWJseSwgdGhlIGluaXRyYW1mcyBz
-aWduYXR1cmUpLg0KPiA+DQo+ID4gTm90ZTogc2luY2UgdGhlIGtleXJpbmcgSUQgYXNzaWdubWVu
-dCBpcyB1bmRlcnN0b29kIG9ubHkgYnkNCj4gPiB2ZXJpZnlfcGtjczdfc2lnbmF0dXJlKCksIGl0
-IG11c3QgYmUgcGFzc2VkIGRpcmVjdGx5IHRvIHRoZSBjb3JyZXNwb25kaW5nDQo+ID4gaGVscGVy
-LCByYXRoZXIgdGhhbiB0byBhIHNlcGFyYXRlIG5ldyBoZWxwZXIgcmV0dXJuaW5nIGEgc3RydWN0
-IGtleSBwb2ludGVyDQo+ID4gd2l0aCB0aGUga2V5cmluZyBJRCBhcyBhIHBvaW50ZXIgdmFsdWUu
-IElmIHN1Y2ggcG9pbnRlciBpcyBwYXNzZWQgdG8gYW55DQo+ID4gb3RoZXIgaGVscGVyIHdoaWNo
-IGRvZXMgbm90IGNoZWNrIGl0cyB2YWxpZGl0eSwgYW4gaWxsZWdhbCBtZW1vcnkgYWNjZXNzDQo+
-ID4gY291bGQgb2NjdXIuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxy
-b2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+ID4gUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJv
-Ym90IDxsa3BAaW50ZWwuY29tPiAoY2FzdCB3YXJuaW5nKQ0KPiA+IC0tLQ0KPiA+ICBpbmNsdWRl
-L3VhcGkvbGludXgvYnBmLmggICAgICAgfCAxNyArKysrKysrKysrKysrKysNCj4gPiAga2VybmVs
-L2JwZi9icGZfbHNtLmMgICAgICAgICAgIHwgMzkgKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKw0KPiA+ICB0b29scy9pbmNsdWRlL3VhcGkvbGludXgvYnBmLmggfCAxNyArKysrKysr
-KysrKysrKysNCj4gPiAgMyBmaWxlcyBjaGFuZ2VkLCA3MyBpbnNlcnRpb25zKCspDQo+ID4NCj4g
-PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvaW5jbHVkZS91YXBpL2xp
-bnV4L2JwZi5oDQo+ID4gaW5kZXggN2JiY2YyY2QxMDVkLi41MjRiZWQ0ZDcxNzAgMTAwNjQ0DQo+
-ID4gLS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gKysrIGIvaW5jbHVkZS91YXBp
-L2xpbnV4L2JwZi5oDQo+ID4gQEAgLTUzMzksNiArNTMzOSwyMiBAQCB1bmlvbiBicGZfYXR0ciB7
-DQo+ID4gICAqCQlicGZfbG9va3VwX3VzZXJfa2V5KCkgaGVscGVyLg0KPiA+ICAgKglSZXR1cm4N
-Cj4gPiAgICoJCTANCj4gPiArICoNCj4gPiArICogbG9uZyBicGZfdmVyaWZ5X3BrY3M3X3NpZ25h
-dHVyZShzdHJ1Y3QgYnBmX2R5bnB0ciAqZGF0YV9wdHIsIHN0cnVjdA0KPiBicGZfZHlucHRyICpz
-aWdfcHRyLCBzdHJ1Y3Qga2V5ICp0cnVzdGVkX2tleXMsIHVuc2lnbmVkIGxvbmcga2V5cmluZ19p
-ZCkNCj4gPiArICoJRGVzY3JpcHRpb24NCj4gPiArICoJCVZlcmlmeSB0aGUgUEtDUyM3IHNpZ25h
-dHVyZSAqc2lnKiBhZ2FpbnN0IHRoZSBzdXBwbGllZCAqZGF0YSoNCj4gPiArICoJCXdpdGgga2V5
-cyBpbiAqdHJ1c3RlZF9rZXlzKiBvciBpbiBhIGtleXJpbmcgd2l0aCBJRA0KPiA+ICsgKgkJKmtl
-eXJpbmdfaWQqLg0KPiANCj4gV291bGQgYmUgbmljZSB0byBnaXZlIHByZWNlZGVuY2UgaGVyZSBz
-byB0aGF0IGl0cyBvYnZpb3VzIG9yZGVyIGJldHdlZW4NCj4gdHJ1c3RlZF9rZXlzIGFuZCBrZXly
-aW5nX2lkLg0KDQpEaWQgeW91IG1lYW4gdG8gYWRkIGF0IHRoZSBlbmQgb2YgdGhlIHNlbnRlbmNl
-Og0KDQpvciBpbiBhIGtleXJpbmcgd2l0aCBJRCAqa2V5cmluZ19pZCosIGlmICp0cnVzdGVkX2tl
-eXMqIGlzIE5VTEwuDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMg
-RHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywg
-WWFuZyBYaSwgTGkgSGUNCg0KPiA+ICsgKg0KPiA+ICsgKgkJKmtleXJpbmdfaWQqIGNhbiBoYXZl
-IHRoZSBmb2xsb3dpbmcgdmFsdWVzIGRlZmluZWQgaW4NCj4gPiArICoJCXZlcmlmaWNhdGlvbi5o
-OiAwIGZvciB0aGUgcHJpbWFyeSBrZXlyaW5nIChpbW11dGFibGUga2V5cmluZyBvZg0KPiA+ICsg
-KgkJc3lzdGVtIGtleXMpOyAxIGZvciBib3RoIHRoZSBwcmltYXJ5IGFuZCBzZWNvbmRhcnkga2V5
-cmluZw0KPiA+ICsgKgkJKHdoZXJlIGtleXMgY2FuIGJlIGFkZGVkIG9ubHkgaWYgdGhleSBhcmUg
-dm91Y2hlZCBmb3IgYnkNCj4gPiArICoJCWV4aXN0aW5nIGtleXMgaW4gdGhvc2Uga2V5cmluZ3Mp
-OyAyIGZvciB0aGUgcGxhdGZvcm0ga2V5cmluZw0KPiA+ICsgKgkJKHByaW1hcmlseSB1c2VkIGJ5
-IHRoZSBpbnRlZ3JpdHkgc3Vic3lzdGVtIHRvIHZlcmlmeSBhIGtleGVjJ2VkDQo+ID4gKyAqCQlr
-ZXJuZWQgaW1hZ2UgYW5kLCBwb3NzaWJseSwgdGhlIGluaXRyYW1mcyBzaWduYXR1cmUpLg0KPiA+
-ICsgKglSZXR1cm4NCj4gPiArICoJCTAgb24gc3VjY2VzcywgYSBuZWdhdGl2ZSB2YWx1ZSBvbiBl
-cnJvci4NCj4gPiAgICovDQo=
+Hi,
+
+On 6/7/22 20:46, Stephen Kitt wrote:
+> backlight_properties.fb_blank is deprecated. The states it represents
+> are handled by other properties; but instead of accessing those
+> properties directly, drivers should use the helpers provided by
+> backlight.h.
+> 
+> This will ultimately allow fb_blank to be removed.
+> 
+> Stephen Kitt (4):
+>   platform/x86: acer-wmi: Use backlight helper
+>   platform/x86: apple-gmux: Use backlight helper
+>   platform/x86: compal-laptop: Use backlight helper
+>   platform/x86: thinkpad_acpi: Use backlight helper
+> 
+>  drivers/platform/x86/acer-wmi.c      | 7 +------
+>  drivers/platform/x86/apple-gmux.c    | 5 +----
+>  drivers/platform/x86/compal-laptop.c | 4 +---
+>  drivers/platform/x86/thinkpad_acpi.c | 5 +----
+>  4 files changed, 4 insertions(+), 17 deletions(-)
+
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+

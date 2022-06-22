@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017D3554261
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE47554262
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 07:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356628AbiFVFtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 01:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S1357062AbiFVFuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 01:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbiFVFtr (ORCPT
+        with ESMTP id S1357048AbiFVFuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 01:49:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB96A36681
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 22:49:46 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3tF4-0002bW-Th; Wed, 22 Jun 2022 07:49:30 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3tF0-001yAk-Gu; Wed, 22 Jun 2022 07:49:27 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3tF1-000LxY-59; Wed, 22 Jun 2022 07:49:27 +0200
-Date:   Wed, 22 Jun 2022 07:49:27 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, ardeleanalex@gmail.com,
-        andy.shevchenko@gmail.com, antoniu.miclaus@analog.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iio: magnetometer: hmc5843: Remove duplicate 'the'
-Message-ID: <20220622054927.u7im55jm5ya3n43l@pengutronix.de>
-References: <20220622035925.5008-1-jiangjian@cdjrlc.com>
+        Wed, 22 Jun 2022 01:50:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D403668C;
+        Tue, 21 Jun 2022 22:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAC7BB81C24;
+        Wed, 22 Jun 2022 05:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70ED6C36AE9;
+        Wed, 22 Jun 2022 05:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655877014;
+        bh=zFTcpDkQx08dBR+1kPcZE7RFg9ZDHD+25+N4itjWW0E=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mHo6DTLhtLpzH+VYm74yylETa4cKHTdxSNAzonDwiMv1cUvpcxEXPUdgy4Nohxs52
+         JDKw2tsOrmMPlnzyl2h45c7L4QG3Lz8XC1HGfqEPOIdiN4jxqUhV/YlFc6Fr1sMBjy
+         Nx4rFIzjxf6NFaXkczfbCvz6kJs4HZ9fR/wvXCNSuHX7TDnzlTwk19fBavJSzRk8B0
+         7xXPtFIBYu1g1Pk6iQ+8RxfPolGIeVrcAx//2aoHhy8Ytgdgk7EO+auIl5c9vCpj1U
+         O+bQiynR7dhb1tjKtpox2wtRfGIwp2D3ouHRezT16SlEHu2Zes0gS+VfbL2J9L3xyN
+         cLWUcd+Vpjy2w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CEEFE574DA;
+        Wed, 22 Jun 2022 05:50:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pi74chydd7ox3t34"
-Content-Disposition: inline
-In-Reply-To: <20220622035925.5008-1-jiangjian@cdjrlc.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 1/1] net: phy: dp83td510: add SQI support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165587701437.11274.5244454746330832022.git-patchwork-notify@kernel.org>
+Date:   Wed, 22 Jun 2022 05:50:14 +0000
+References: <20220620115601.2035452-1-o.rempel@pengutronix.de>
+In-Reply-To: <20220620115601.2035452-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,40 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---pi74chydd7ox3t34
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Hello,
+On Mon, 20 Jun 2022 13:56:01 +0200 you wrote:
+> Convert MSE (mean-square error) values to SNR and split it SQI (Signal Quality
+> Indicator) ranges. The used ranges are taken from "OPEN ALLIANCE - Advanced
+> diagnostic features for 100BASE-T1 automotive Ethernet PHYs"
+> specification.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> 
+> [...]
 
-On Wed, Jun 22, 2022 at 11:59:25AM +0800, Jiang Jian wrote:
-> Fix an obvious typing error, found by spellcheck(1).
+Here is the summary with links:
+  - [net-next,v4,1/1] net: phy: dp83td510: add SQI support
+    https://git.kernel.org/netdev/net-next/c/a80d8fb70cc7
 
-Oh, did I guess the real tool that found the issue, or did you just copy
-my suggestion without adapting it to reality?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Best regards
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---pi74chydd7ox3t34
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKyrV0ACgkQwfwUeK3K
-7AmWLQf9Fso4Hn6ayY6q6Kynp1uQf/BejFjELME6RopXauLx5o3JalrQTlc65czn
-sfSTFPFKGHe/wucCKzjhvfsBtehFgUUDkHylWfLh27gIUIMEB0qzE49SHemTId0b
-Hum4jmvm1NYZG1xjavXW7qWs449xHCd6A6sZxPcfXccd3yncZFbBm2IFG979oJFG
-39gSNNIfXFyrRJpxwzjAheZwiJ7v3sb+G8pRH6fmEth/+iJ1e2ukpF+DU3w033Th
-/HulLDDouby+VPk10MAM+xlR2UmoI5TTedAWs9Bve+WczDi5164uQDWAHzxPfuHR
-asjDXrfGkEpGnCbTqSjahdSQZNci6w==
-=zJAQ
------END PGP SIGNATURE-----
-
---pi74chydd7ox3t34--

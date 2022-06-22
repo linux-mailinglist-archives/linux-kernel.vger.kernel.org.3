@@ -2,343 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7995549D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633D55549D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbiFVMQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S236113AbiFVMRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242442AbiFVMQp (ORCPT
+        with ESMTP id S235799AbiFVMQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:16:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D7E336176
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655900190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XoDeMBCeVzMlgBfTAwYB0I3631v+ktVlhk8JNQ3EZfU=;
-        b=J3rLlm7hoGQ1iuGM8+TIBu4+7mEi4cSTFP6iDoP8mawss82DDFar74NMHGXaxwIFYY6pid
-        es1G40gH9X8zvl2NlH8K4cDfC2zsKd/uELlyai6mVcDScZQH99KRn4hy0KeNxkeI+pXBBb
-        fB7pRcOMWvnGOwhnYvdG/4DIWfDqkcU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-jUlL5MkjPM2DNdVsst6E_A-1; Wed, 22 Jun 2022 08:16:29 -0400
-X-MC-Unique: jUlL5MkjPM2DNdVsst6E_A-1
-Received: by mail-wm1-f69.google.com with SMTP id m22-20020a7bcb96000000b0039c4f6ade4dso5468211wmi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:16:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XoDeMBCeVzMlgBfTAwYB0I3631v+ktVlhk8JNQ3EZfU=;
-        b=5SHRyV6ZEZvqEE0HLBQmFpSFX7ImasicK2z52lAzONaICmq3hHkZ1n3rEc/2znGznP
-         f4x+rdWYF0Mdq+L5H7KxTcvlKMXi+MhVqz9+SKAKpz4ehYafMsi3+RTvIjV6kJJX1zS7
-         lsLkCJv7QEwcrLeM+6FcFozEQrPCcndV2IxoFV1/NPBlwjt4ajiV74aKOQ5ylzKMRO/1
-         HNPB9pTQqZbz/igeCHsNy+2O/BzJ6YllATumGsx0SFYNXKyaUNTp/XdsCkT4nyg0lKAk
-         0R5n86Z3CjCE5UDIXi5PFW5Esz9LMZfz97Qnx6rXnvls0HP90MWOY8fzR3lGL0DFmtY6
-         5NPg==
-X-Gm-Message-State: AJIora+i/KzMaWkv1gcbsNETyIGiIgRnx3BhWrdiy9GuPdtlykGcWLUU
-        2hViGhxTO/T0t/FOUGd5PKemBIVR3HZU5cH1wuJOi1imuBBAHBSvyhAjQJHfGaC4nK2d3VigCxz
-        a8MUIpwZOZeQ/wGzQ6SLpSrGi
-X-Received: by 2002:a05:600c:19c7:b0:39c:30b0:2b05 with SMTP id u7-20020a05600c19c700b0039c30b02b05mr3597025wmq.170.1655900187633;
-        Wed, 22 Jun 2022 05:16:27 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sc9uxDXxMU62BbIEFuMDI9eM3c4B0YBdqfnGn471XscoRoAtj8LU6P6b5cA5xPMdZfZu8sEg==
-X-Received: by 2002:a05:600c:19c7:b0:39c:30b0:2b05 with SMTP id u7-20020a05600c19c700b0039c30b02b05mr3596990wmq.170.1655900187280;
-        Wed, 22 Jun 2022 05:16:27 -0700 (PDT)
-Received: from redhat.com ([147.235.217.93])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05600c2cb100b00397393419e3sm26688154wmc.28.2022.06.22.05.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 05:16:26 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 08:16:24 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Albert Huang <huangjie.albert@bytedance.com>,
-        yuanzhu@bytedance.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] virtio_ring : keep used_wrap_counter in
- vq->last_used_idx
-Message-ID: <20220622081543-mutt-send-email-mst@kernel.org>
-References: <20220616101823-mutt-send-email-mst@kernel.org>
- <20220617020411.80367-1-huangjie.albert@bytedance.com>
- <CACGkMEutq89farjWTdPY8R8wq8gCJLU2SWJrv+x=pPA5fv6+Uw@mail.gmail.com>
+        Wed, 22 Jun 2022 08:16:56 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF88340C6;
+        Wed, 22 Jun 2022 05:16:53 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5FCDB10000A;
+        Wed, 22 Jun 2022 12:16:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1o3zHr-0099t6-5Y; Wed, 22 Jun 2022 14:16:47 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     <michal.simek@xilinx.com>, <hao.wu@intel.com>, <trix@redhat.com>,
+        <mdf@kernel.org>, <yilun.xu@intel.com>,
+        <gregkh@linuxfoundation.org>, <ronak.jain@xilinx.com>,
+        <rajan.vaja@xilinx.com>, <abhyuday.godhasara@xilinx.com>,
+        <piyush.mehta@xilinx.com>, <harsha.harsha@xilinx.com>,
+        <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <git@xilinx.com>
+Subject: Re: [PATCH v2 3/3] fpga: zynqmp-fpga: Adds status interface
+References: <20220621092833.1057408-1-nava.manne@xilinx.com>
+        <20220621092833.1057408-4-nava.manne@xilinx.com>
+Date:   Wed, 22 Jun 2022 14:16:47 +0200
+In-Reply-To: <20220621092833.1057408-4-nava.manne@xilinx.com> (Nava kishore
+        Manne's message of "Tue, 21 Jun 2022 14:58:33 +0530")
+Message-ID: <87edzg51w0.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEutq89farjWTdPY8R8wq8gCJLU2SWJrv+x=pPA5fv6+Uw@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 04:51:22PM +0800, Jason Wang wrote:
-> On Fri, Jun 17, 2022 at 10:04 AM Albert Huang
-> <huangjie.albert@bytedance.com> wrote:
-> >
-> > From: "huangjie.albert" <huangjie.albert@bytedance.com>
-> >
-> > the used_wrap_counter and the vq->last_used_idx may get
-> > out of sync if they are separate assignment，and interrupt
-> > might use an incorrect value to check for the used index.
-> >
-> > for example:OOB access
-> > ksoftirqd may consume the packet and it will call:
-> > virtnet_poll
-> >         -->virtnet_receive
-> >                 -->virtqueue_get_buf_ctx
-> >                         -->virtqueue_get_buf_ctx_packed
-> > and in virtqueue_get_buf_ctx_packed:
-> >
-> > vq->last_used_idx += vq->packed.desc_state[id].num;
-> > if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
-> >          vq->last_used_idx -= vq->packed.vring.num;
-> >          vq->packed.used_wrap_counter ^= 1;
-> > }
-> >
-> > if at the same time, there comes a vring interrupt，in vring_interrupt:
-> > we will call:
-> > vring_interrupt
-> >         -->more_used
-> >                 -->more_used_packed
-> >                         -->is_used_desc_packed
-> > in is_used_desc_packed, the last_used_idx maybe >= vq->packed.vring.num.
-> > so this could case a memory out of bounds bug.
-> >
-> > this patch is to keep the used_wrap_counter in vq->last_used_idx
-> > so we can get the correct value to check for used index in interrupt.
-> >
-> > v3->v4:
-> > - use READ_ONCE/WRITE_ONCE to get/set vq->last_used_idx
-> >
-> > v2->v3:
-> > - add inline function to get used_wrap_counter and last_used
-> > - when use vq->last_used_idx, only read once
-> >   if vq->last_used_idx is read twice, the values can be inconsistent.
-> > - use last_used_idx & ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR))
-> >   to get the all bits below VRING_PACKED_EVENT_F_WRAP_CTR
-> >
-> > v1->v2:
-> > - reuse the VRING_PACKED_EVENT_F_WRAP_CTR
-> > - Remove parameter judgment in is_used_desc_packed,
-> > because it can't be illegal
-> >
-> > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-> > ---
-> >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++--------------
-> >  1 file changed, 47 insertions(+), 28 deletions(-)
-> >
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > index 13a7348cedff..719fbbe716d6 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -111,7 +111,12 @@ struct vring_virtqueue {
-> >         /* Number we've added since last sync. */
-> >         unsigned int num_added;
-> >
-> > -       /* Last used index we've seen. */
-> > +       /* Last used index  we've seen.
-> > +        * for split ring, it just contains last used index
-> > +        * for packed ring:
-> > +        * bits up to VRING_PACKED_EVENT_F_WRAP_CTR include the last used index.
-> > +        * bits from VRING_PACKED_EVENT_F_WRAP_CTR include the used wrap counter.
-> > +        */
-> >         u16 last_used_idx;
-> >
-> >         /* Hint for event idx: already triggered no need to disable. */
-> > @@ -154,9 +159,6 @@ struct vring_virtqueue {
-> >                         /* Driver ring wrap counter. */
-> >                         bool avail_wrap_counter;
-> >
-> > -                       /* Device ring wrap counter. */
-> > -                       bool used_wrap_counter;
-> > -
-> >                         /* Avail used flags. */
-> >                         u16 avail_used_flags;
-> >
-> > @@ -973,6 +975,15 @@ static struct virtqueue *vring_create_virtqueue_split(
-> >  /*
-> >   * Packed ring specific functions - *_packed().
-> >   */
-> > +static inline bool packed_used_wrap_counter(u16 last_used_idx)
-> > +{
-> > +       return !!(last_used_idx & (1 << VRING_PACKED_EVENT_F_WRAP_CTR));
-> > +}
-> > +
-> > +static inline u16 packed_last_used(u16 last_used_idx)
-> > +{
-> > +       return last_used_idx & ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR));
-> > +}
-> 
-> Any reason we need a minus after the shift?
+>>>>> "Nava" == Nava kishore Manne <nava.manne@xilinx.com> writes:
 
-The point is to say "all bits above VRING_PACKED_EVENT_F_WRAP_CTR".
-Has no effect currently but will if last_used_idx is extended to 32 bit.
+ > Adds status interface for zynqmp-fpga, It's a read only
+ > interface which allows the user to get the PL status.
 
+ > Usage:
+ > To read the PL configuration status
+ >         cat /sys/class/fpga_manager/<fpga>/status
 
-> Others look good.
-> 
-> Thanks
-> 
-> >
-> >  static void vring_unmap_extra_packed(const struct vring_virtqueue *vq,
-> >                                      struct vring_desc_extra *extra)
-> > @@ -1406,8 +1417,14 @@ static inline bool is_used_desc_packed(const struct vring_virtqueue *vq,
-> >
-> >  static inline bool more_used_packed(const struct vring_virtqueue *vq)
-> >  {
-> > -       return is_used_desc_packed(vq, vq->last_used_idx,
-> > -                       vq->packed.used_wrap_counter);
-> > +       u16 last_used;
-> > +       u16 last_used_idx;
-> > +       bool used_wrap_counter;
-> > +
-> > +       last_used_idx = READ_ONCE(vq->last_used_idx);
-> > +       last_used = packed_last_used(last_used_idx);
-> > +       used_wrap_counter = packed_used_wrap_counter(last_used_idx);
-> > +       return is_used_desc_packed(vq, last_used, used_wrap_counter);
-> >  }
-> >
-> >  static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> > @@ -1415,7 +1432,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> >                                           void **ctx)
-> >  {
-> >         struct vring_virtqueue *vq = to_vvq(_vq);
-> > -       u16 last_used, id;
-> > +       u16 last_used, id, last_used_idx;
-> > +       bool used_wrap_counter;
-> >         void *ret;
-> >
-> >         START_USE(vq);
-> > @@ -1434,7 +1452,9 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> >         /* Only get used elements after they have been exposed by host. */
-> >         virtio_rmb(vq->weak_barriers);
-> >
-> > -       last_used = vq->last_used_idx;
-> > +       last_used_idx = READ_ONCE(vq->last_used_idx);
-> > +       used_wrap_counter = packed_used_wrap_counter(last_used_idx);
-> > +       last_used = packed_last_used(last_used_idx);
-> >         id = le16_to_cpu(vq->packed.vring.desc[last_used].id);
-> >         *len = le32_to_cpu(vq->packed.vring.desc[last_used].len);
-> >
-> > @@ -1451,12 +1471,15 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> >         ret = vq->packed.desc_state[id].data;
-> >         detach_buf_packed(vq, id, ctx);
-> >
-> > -       vq->last_used_idx += vq->packed.desc_state[id].num;
-> > -       if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
-> > -               vq->last_used_idx -= vq->packed.vring.num;
-> > -               vq->packed.used_wrap_counter ^= 1;
-> > +       last_used += vq->packed.desc_state[id].num;
-> > +       if (unlikely(last_used >= vq->packed.vring.num)) {
-> > +               last_used -= vq->packed.vring.num;
-> > +               used_wrap_counter ^= 1;
-> >         }
-> >
-> > +       last_used = (last_used | (used_wrap_counter << VRING_PACKED_EVENT_F_WRAP_CTR));
-> > +       WRITE_ONCE(vq->last_used_idx, last_used);
-> > +
-> >         /*
-> >          * If we expect an interrupt for the next entry, tell host
-> >          * by writing event index and flush out the write before
-> > @@ -1465,9 +1488,7 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> >         if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
-> >                 virtio_store_mb(vq->weak_barriers,
-> >                                 &vq->packed.vring.driver->off_wrap,
-> > -                               cpu_to_le16(vq->last_used_idx |
-> > -                                       (vq->packed.used_wrap_counter <<
-> > -                                        VRING_PACKED_EVENT_F_WRAP_CTR)));
-> > +                               cpu_to_le16(vq->last_used_idx));
-> >
-> >         LAST_ADD_TIME_INVALID(vq);
-> >
-> > @@ -1499,9 +1520,7 @@ static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
-> >
-> >         if (vq->event) {
-> >                 vq->packed.vring.driver->off_wrap =
-> > -                       cpu_to_le16(vq->last_used_idx |
-> > -                               (vq->packed.used_wrap_counter <<
-> > -                                VRING_PACKED_EVENT_F_WRAP_CTR));
-> > +                       cpu_to_le16(vq->last_used_idx);
-> >                 /*
-> >                  * We need to update event offset and event wrap
-> >                  * counter first before updating event flags.
-> > @@ -1518,8 +1537,7 @@ static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
-> >         }
-> >
-> >         END_USE(vq);
-> > -       return vq->last_used_idx | ((u16)vq->packed.used_wrap_counter <<
-> > -                       VRING_PACKED_EVENT_F_WRAP_CTR);
-> > +       return vq->last_used_idx;
-> >  }
-> >
-> >  static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wrap)
-> > @@ -1537,7 +1555,7 @@ static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wrap)
-> >  static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
-> >  {
-> >         struct vring_virtqueue *vq = to_vvq(_vq);
-> > -       u16 used_idx, wrap_counter;
-> > +       u16 used_idx, wrap_counter, last_used_idx;
-> >         u16 bufs;
-> >
-> >         START_USE(vq);
-> > @@ -1550,9 +1568,10 @@ static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
-> >         if (vq->event) {
-> >                 /* TODO: tune this threshold */
-> >                 bufs = (vq->packed.vring.num - vq->vq.num_free) * 3 / 4;
-> > -               wrap_counter = vq->packed.used_wrap_counter;
-> > +               last_used_idx = READ_ONCE(vq->last_used_idx);
-> > +               wrap_counter = packed_used_wrap_counter(last_used_idx);
-> >
-> > -               used_idx = vq->last_used_idx + bufs;
-> > +               used_idx = packed_last_used(last_used_idx) + bufs;
-> >                 if (used_idx >= vq->packed.vring.num) {
-> >                         used_idx -= vq->packed.vring.num;
-> >                         wrap_counter ^= 1;
-> > @@ -1582,9 +1601,10 @@ static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
-> >          */
-> >         virtio_mb(vq->weak_barriers);
-> >
-> > -       if (is_used_desc_packed(vq,
-> > -                               vq->last_used_idx,
-> > -                               vq->packed.used_wrap_counter)) {
-> > +       last_used_idx = READ_ONCE(vq->last_used_idx);
-> > +       wrap_counter = packed_used_wrap_counter(last_used_idx);
-> > +       used_idx = packed_last_used(last_used_idx);
-> > +       if (is_used_desc_packed(vq, used_idx, wrap_counter)) {
-> >                 END_USE(vq);
-> >                 return false;
-> >         }
-> > @@ -1689,7 +1709,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
-> >         vq->notify = notify;
-> >         vq->weak_barriers = weak_barriers;
-> >         vq->broken = true;
-> > -       vq->last_used_idx = 0;
-> > +       vq->last_used_idx = 0 | (1 << VRING_PACKED_EVENT_F_WRAP_CTR);
-> >         vq->event_triggered = false;
-> >         vq->num_added = 0;
-> >         vq->packed_ring = true;
-> > @@ -1720,7 +1740,6 @@ static struct virtqueue *vring_create_virtqueue_packed(
-> >
-> >         vq->packed.next_avail_idx = 0;
-> >         vq->packed.avail_wrap_counter = 1;
-> > -       vq->packed.used_wrap_counter = 1;
-> >         vq->packed.event_flags_shadow = 0;
-> >         vq->packed.avail_used_flags = 1 << VRING_PACKED_DESC_F_AVAIL;
-> >
-> > --
-> > 2.31.1
-> >
+ > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+ > ---
+ > Changes for v2:
+ >               - Updated status messages handling logic as suggested by Xu Yilun.
 
+ >  drivers/fpga/zynqmp-fpga.c | 53 ++++++++++++++++++++++++++++++++++++++
+ >  1 file changed, 53 insertions(+)
+
+ > diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+ > index c60f20949c47..e194bba91d3f 100644
+ > --- a/drivers/fpga/zynqmp-fpga.c
+ > +++ b/drivers/fpga/zynqmp-fpga.c
+ > @@ -14,6 +14,19 @@
+ 
+ >  /* Constant Definitions */
+ >  #define IXR_FPGA_DONE_MASK	BIT(3)
+ > +#define READ_DMA_SIZE		256U
+ > +
+ > +/* Error Register */
+ > +#define IXR_FPGA_ERR_CRC_ERR		BIT(0)
+ > +#define IXR_FPGA_ERR_SECURITY_ERR	BIT(16)
+ > +
+ > +/* Signal Status Register. For details refer ug570 */
+ > +#define IXR_FPGA_END_OF_STARTUP		BIT(4)
+ > +#define IXR_FPGA_GST_CFG_B		BIT(5)
+ > +#define IXR_FPGA_INIT_B_INTERNAL	BIT(11)
+ > +#define IXR_FPGA_DONE_INTERNAL_SIGNAL	BIT(13)
+ > +
+ > +#define IXR_FPGA_CONFIG_STAT_OFFSET	7U
+ 
+ >  /**
+ >   * struct zynqmp_fpga_priv - Private data structure
+ > @@ -77,8 +90,48 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
+ >  	return FPGA_MGR_STATE_UNKNOWN;
+ >  }
+ 
+ > +static ssize_t zynqmp_fpga_ops_status(struct fpga_manager *mgr, char *buf)
+ > +{
+ > +	unsigned int *kbuf, reg_val;
+ > +	dma_addr_t dma_addr;
+ > +	ssize_t len = 0;
+ > +	int ret;
+ > +
+ > +	kbuf = dma_alloc_coherent(mgr->dev.parent, READ_DMA_SIZE,
+ > +				  &dma_addr, GFP_KERNEL);
+ > +	if (!kbuf)
+ > +		return -ENOMEM;
+
+What is kbuf used for? You don't seem to ever access it?
+
+-- 
+Bye, Peter Korsgaard

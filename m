@@ -2,136 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9665E5551C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02D55551CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376511AbiFVQyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S1376716AbiFVQyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377492AbiFVQyE (ORCPT
+        with ESMTP id S1377568AbiFVQyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:54:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882D7634A;
-        Wed, 22 Jun 2022 09:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655916781; x=1687452781;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TSFLA2qyuJA9wYZda6wrVZj9J7j1LtYkgSeLmW6I7HY=;
-  b=PqkWooUiXqRAwbFYj8ljJcqbO4ma1bdUH+JrP+YAuzGMkvny4/aMEBEU
-   dshZCdLLgDQzVSfhyokQ0USV4Jb+WiuQ9YIdF4W75uHMlWjJ6IxbMP+pw
-   72b7lGU1Wc12Pf+GXg/GYfZU50CZsc6m32Zclf0S3nySGUBLpM8jNclBl
-   bacdK0d70yJM7ju1rvDq9QujpjhNZZyCyUnN9YHtxmDL/fcSI6bcqVGf9
-   oFzAetaZiYqxQ4i//EztajbOQk4EtG8xRIzPSNvaTIuuRbcttbGsky1CB
-   b+8j39lsGcRCyUc4VCHzthM6SZQP/tBvdhPbJmVOJoISxbJvRNyjF4GQr
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="344464393"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="344464393"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 09:52:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="655754028"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Jun 2022 09:52:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D6044136; Wed, 22 Jun 2022 19:53:02 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] clk: Remove never used devm_clk_*unregister()
-Date:   Wed, 22 Jun 2022 19:52:54 +0300
-Message-Id: <20220622165254.85184-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 22 Jun 2022 12:54:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2280C39168;
+        Wed, 22 Jun 2022 09:53:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF12FB8204C;
+        Wed, 22 Jun 2022 16:53:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC87C34114;
+        Wed, 22 Jun 2022 16:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655916806;
+        bh=9Tsp3154yO2Z+AfH0+3B9Ry1RXBwikYidZBcM7W88zA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kA2RuE7L1wBfeASH4Kj8cKdyVKTWPFYNkldRvtV9vKIBfHwEWWrvlXNBo+UeSSVK3
+         YJGREQ/ts3GXNN+atQU20DVFDrKuiPoSo+qbAN5ekdKmKmUw0kyzb/N3bC/tPZvxT3
+         tEvshJ+RNABGNLhenFCvEsrb993/g6j9XLlu7jbZRD0uLxIPEdQEEddieZR8yPJv+8
+         lnq+vp326qSw8U6cza+gJkkESjVxATFMwWjl0Pp5asINKFm7GkASjYcsolFXjwtgHT
+         d6ImWtNc087pqfhxYlhbj/EPvJeSu9VAzRyHXpuIVZMf7XTofI3GhERjYoH+QTrpBv
+         +f9CUbsYeEh2g==
+Date:   Wed, 22 Jun 2022 09:53:24 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH 1/3 v2] f2fs: attach inline_data after setting compression
+Message-ID: <YrNJBMGpjPdtwVY+@google.com>
+References: <20220617223106.3517374-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617223106.3517374-1-jaegeuk@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the entire history of the devm_clk_*unregister() existence they were
-used only once (*) in 2015. Remove them.
+This fixes the below corruption.
 
-*) The commit 264e3b75de4e ("clk: s2mps11: Simplify s2mps11_clk_probe unwind
-   paths") exactly supports the point of the change proposed here.
+[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: <stable@vger.kernel.org>
+Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- drivers/clk/clk.c            | 31 -------------------------------
- include/linux/clk-provider.h |  2 --
- 2 files changed, 33 deletions(-)
+ fs/f2fs/namei.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index f00d4c1158d7..d1ab3c9161eb 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -4296,37 +4296,6 @@ static int devm_clk_hw_match(struct device *dev, void *res, void *data)
- 	return hw == data;
- }
+diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
+index c549acb52ac4..bf00d5057abb 100644
+--- a/fs/f2fs/namei.c
++++ b/fs/f2fs/namei.c
+@@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 	if (test_opt(sbi, INLINE_XATTR))
+ 		set_inode_flag(inode, FI_INLINE_XATTR);
  
--/**
-- * devm_clk_unregister - resource managed clk_unregister()
-- * @dev: device that is unregistering the clock data
-- * @clk: clock to unregister
-- *
-- * Deallocate a clock allocated with devm_clk_register(). Normally
-- * this function will not need to be called and the resource management
-- * code will ensure that the resource is freed.
-- */
--void devm_clk_unregister(struct device *dev, struct clk *clk)
--{
--	WARN_ON(devres_release(dev, devm_clk_unregister_cb, devm_clk_match, clk));
--}
--EXPORT_SYMBOL_GPL(devm_clk_unregister);
+-	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+-		set_inode_flag(inode, FI_INLINE_DATA);
+ 	if (f2fs_may_inline_dentry(inode))
+ 		set_inode_flag(inode, FI_INLINE_DENTRY);
+ 
+@@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 
+ 	f2fs_init_extent_tree(inode, NULL);
+ 
+-	stat_inc_inline_xattr(inode);
+-	stat_inc_inline_inode(inode);
+-	stat_inc_inline_dir(inode);
 -
--/**
-- * devm_clk_hw_unregister - resource managed clk_hw_unregister()
-- * @dev: device that is unregistering the hardware-specific clock data
-- * @hw: link to hardware-specific clock data
-- *
-- * Unregister a clk_hw registered with devm_clk_hw_register(). Normally
-- * this function will not need to be called and the resource management
-- * code will ensure that the resource is freed.
-- */
--void devm_clk_hw_unregister(struct device *dev, struct clk_hw *hw)
--{
--	WARN_ON(devres_release(dev, devm_clk_hw_unregister_cb, devm_clk_hw_match,
--				hw));
--}
--EXPORT_SYMBOL_GPL(devm_clk_hw_unregister);
--
- static void devm_clk_release(struct device *dev, void *res)
- {
- 	clk_put(*(struct clk **)res);
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index c10dc4c659e2..72d937c03a3e 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -1176,10 +1176,8 @@ int __must_check devm_clk_hw_register(struct device *dev, struct clk_hw *hw);
- int __must_check of_clk_hw_register(struct device_node *node, struct clk_hw *hw);
+ 	F2FS_I(inode)->i_flags =
+ 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
  
- void clk_unregister(struct clk *clk);
--void devm_clk_unregister(struct device *dev, struct clk *clk);
+@@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 			set_compress_context(inode);
+ 	}
  
- void clk_hw_unregister(struct clk_hw *hw);
--void devm_clk_hw_unregister(struct device *dev, struct clk_hw *hw);
++	/* Should enable inline_data after compression set */
++	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
++		set_inode_flag(inode, FI_INLINE_DATA);
++
++	stat_inc_inline_xattr(inode);
++	stat_inc_inline_inode(inode);
++	stat_inc_inline_dir(inode);
++
+ 	f2fs_set_inode_flags(inode);
  
- /* helper functions */
- const char *__clk_get_name(const struct clk *clk);
+ 	trace_f2fs_new_inode(inode, 0);
+@@ -325,6 +327,9 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+ 		if (!is_extension_exist(name, ext[i], false))
+ 			continue;
+ 
++		/* Do not use inline_data with compression */
++		stat_dec_inline_inode(inode);
++		clear_inode_flag(inode, FI_INLINE_DATA);
+ 		set_compress_context(inode);
+ 		return;
+ 	}
 -- 
-2.35.1
+2.37.0.rc0.104.g0611611a94-goog
 

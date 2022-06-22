@@ -2,93 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00CB556E88
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FA7556E91
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359458AbiFVWdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 18:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S1359698AbiFVWej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 18:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359295AbiFVWdN (ORCPT
+        with ESMTP id S1359649AbiFVWec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 18:33:13 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCF7222A8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:33:12 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso829505pjk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:33:12 -0700 (PDT)
+        Wed, 22 Jun 2022 18:34:32 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCAB40921
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:34:27 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id x38so32675816ybd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:34:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=QAYDnhWBUumQJXLfjLM/HrotAv8NVofKnBHrbwoQ4uI=;
-        b=T4SQKvmVgykOMJflWwdcXiHwHaW6ppUL6HpcoyV5P5YmLv05PZ6ywgtWJGQ81+ry4m
-         KszItlKZ3EpSACiBoKNrLwpXRyen8O2vs6mNbpNljaC5f++yyLxx9MZMY2XBeRgdaKGS
-         A09Kxam4vbOBqas6DMCnXxbiHv2vgOyUg+nis+ZaifLjO2p3D62Uamrmaacp3j6HzKLd
-         gCaxNXS5PcwEZ9PvFm7wmN9+rrIK3WKQrtYGPvw3alATQw6CJ/odCJ1ugivLjM2GCFEs
-         cQDUIfAud4wtRq7y5/IGcX6YRcyll6JC9SwX3zx14ytWSwCqmz1r1cPZ2rC2SAw1Tj2n
-         6x8g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WKylA8pYtIvxwg5/dZiB/uZdIVVN/P980vi4sBmsa8g=;
+        b=J4pi/aKDOGnb+AER5hiC/Ur9ZSPqxLhl9mnB71A7+WIlfY2oiT/T5y5JfIyXfOCApX
+         pLilMQlV84wpeyWcdPvtM97nw68tnuZyysLqMtJ7DRRJ6ajeonNGzDXJprWOIg8xBf0y
+         NTH6Wl1a1nlYUaFdI4qtAMzn8cW7xPEjL5f7QJ94kT2HJ1ci6OAaAPqD1UX+0NL/zHh7
+         304JDEDsF/c/vE8OS7ScZ5S8psqurQ00bjxfdujGxOif8q+MEh1dX6y/brQOOJs5BypF
+         iAv8odstd+qJJe5X1KPMo+1qvBAD62prH31qb5OR0/0XW3vKz526q1m+3AN2s9rHhIps
+         PBRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=QAYDnhWBUumQJXLfjLM/HrotAv8NVofKnBHrbwoQ4uI=;
-        b=K6Y8XEGPDRBD5LzvzTdo0pXQXR5ZX64RkCHP5iqlCWkVr7iuzgeccln2Ob3UtrlhgR
-         p3JRQeLZLptpA9Zds8M+mLmpE8c1WGISr3oro3o0rN8BryjylZrzfUma+kkbTj8OZPgZ
-         UxquffEkIhPM9Z3o0O/+fOouhMUqdYrYtt2zt8CiEnqnfrwhP8c0PiDnauHYcAIDxDrN
-         WyQ1nPKewNRCiP6Qy23NLYoKjw350CymqsRafDxSq25jGNCKGod+MC5yxiOs/GtlJcVs
-         Js6B3RCpkviFgUSU40yjacGG33TaTkl2R3pCefamC9ZHb5hg8MN5BUAjWCj6mfQPhyX4
-         woYQ==
-X-Gm-Message-State: AJIora8NN9LlffSJvm8pBJdnmAtSeb28ne6q3zRBIKbOup0PRGASpAt2
-        jIkCdtRjDvwX57kqBe+U/Aichw==
-X-Google-Smtp-Source: AGRyM1sVc1ogbU/b7rlbzF68iEfptv2tG9a4AJSUp9uVgyMRQ81sfKMlvvYWh45MR18JSdkr1pN45Q==
-X-Received: by 2002:a17:902:e810:b0:16a:2934:c8f7 with SMTP id u16-20020a170902e81000b0016a2934c8f7mr16468040plg.171.1655937191761;
-        Wed, 22 Jun 2022 15:33:11 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id m14-20020a63ed4e000000b0040d2717473fsm2191066pgk.38.2022.06.22.15.33.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 15:33:11 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     christoph.boehmwalder@linbit.com
-Cc:     lars.ellenberg@linbit.com, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        philipp.reisner@linbit.com
-In-Reply-To: <20220622204932.196830-1-christoph.boehmwalder@linbit.com>
-References: <20220622204932.196830-1-christoph.boehmwalder@linbit.com>
-Subject: Re: [PATCH] drbd: bm_page_async_io: fix spurious bitmap "IO error" on large volumes
-Message-Id: <165593719059.163762.1120892404181433441.b4-ty@kernel.dk>
-Date:   Wed, 22 Jun 2022 16:33:10 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WKylA8pYtIvxwg5/dZiB/uZdIVVN/P980vi4sBmsa8g=;
+        b=kqipz92WJo0xUYLbX4mN7t/i3L0QlQxG7J4/YeVyMLPDt93l4mwi6EM5qs+s+kKCyK
+         yqc3L2PxQcO4au3JYZeb7C5wV2rnmWDc2yniOqb7a6IMqraThYLDEqI3lUiBQ1o9ICs5
+         FPdoQEzVMMiKv/HSQQCOa7xmVleJJDSR9qME2RyUwxWJ/NB04RfViDf9z76mGUf5PVbM
+         llg0NKL2oya5c1mzuNvCwLS82WNQDqlPoOKRyVMP9Y1Mwa8xN78ZaNZVFh5dZKv3+caK
+         cia3oem80AFFNmg/wPnznnCYa1Z7sgyjUsTV17z15TvGeLBhQqqGaqHINKTX0Hdg6o8v
+         rFkA==
+X-Gm-Message-State: AJIora+ZIn91HVRlEqZtd/ryTzhCieMvKH0qdANYynsfFZQqLW/n6UBb
+        qREpAmANmNqMSu5xE3INegAteSV0Pb4tdndeZ/ErGA==
+X-Google-Smtp-Source: AGRyM1vtP8cTHTShZ6uWcl+OVMszNehOV5bCtDdbKW/msmtH+Wdf1HHxNjR1QJIjKUG41gGaaaYuCgB7moTXz8XY7EE=
+X-Received: by 2002:a25:d112:0:b0:669:17:8d98 with SMTP id i18-20020a25d112000000b0066900178d98mr6124766ybg.447.1655937266678;
+ Wed, 22 Jun 2022 15:34:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220622215912.550419-1-saravanak@google.com> <DU0PR04MB941733BFD323D3542B7F75A888B29@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB941733BFD323D3542B7F75A888B29@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 22 Jun 2022 15:33:50 -0700
+Message-ID: <CAGETcx-h4iDx+WG+HnN0_ej0qtLOp66oOXvkppm060TRCG3_Jg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] Fix console probe delay due to fw_devlink
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Sascha Hauer <sha@pengutronix.de>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 22:49:32 +0200, Christoph Böhmwalder wrote:
-> From: Lars Ellenberg <lars.ellenberg@linbit.com>
-> 
-> We usually do all our bitmap IO in units of PAGE_SIZE.
-> 
-> With very small or oddly sized external meta data, or with
-> PAGE_SIZE != 4k, it can happen that our last on-disk bitmap page
-> is not fully PAGE_SIZE aligned, so we may need to adjust the size
-> of the IO.
-> 
-> [...]
+On Wed, Jun 22, 2022 at 3:32 PM Peng Fan <peng.fan@nxp.com> wrote:
+>
+> > Subject: [PATCH v1 0/2] Fix console probe delay due to fw_devlink
+> >
+> > fw_devlink.strict=1 has been enabled by default. This was delaying the probe
+> > of console devices. This series fixes that.
+> >
+> > Sasha/Peng,
+> >
+> > Can you test this please?
+>
+> Thanks, just give a test on i.MX8MP-EVK, works well now.
+>
+> Tested-by: Peng Fan <peng.fan@nxp.com> #i.MX8MP-EVK
 
-Applied, thanks!
+Lol, that was quick! Thanks!
 
-[1/1] drbd: bm_page_async_io: fix spurious bitmap "IO error" on large volumes
-      commit: 66923326b519bbc4ebcb5275645b58427f801824
+-Saravana
 
-Best regards,
--- 
-Jens Axboe
-
-
+>
+> Thanks,
+> Peng.
+>
+> >
+> > -Saravana
+> >
+> > Cc: Sascha Hauer <sha@pengutronix.de>
+> > Cc: Peng Fan <peng.fan@nxp.com>
+> > Cc: Kevin Hilman <khilman@kernel.org>
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Pavel Machek <pavel@ucw.cz>
+> > Cc: Joerg Roedel <joro@8bytes.org>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> > Cc: Russell King <linux@armlinux.org.uk>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> > Cc: David Ahern <dsahern@kernel.org>
+> > Cc: kernel-team@android.com
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: iommu@lists.linux-foundation.org
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-gpio@vger.kernel.org
+> > Cc: kernel@pengutronix.de
+> >
+> > Saravana Kannan (2):
+> >   driver core: fw_devlink: Allow firmware to mark devices as best effort
+> >   of: base: Avoid console probe delay when fw_devlink.strict=1
+> >
+> >  drivers/base/core.c    | 3 ++-
+> >  drivers/of/base.c      | 2 ++
+> >  include/linux/fwnode.h | 4 ++++
+> >  3 files changed, 8 insertions(+), 1 deletion(-)
+> >
+> > --
+> > 2.37.0.rc0.161.g10f37bed90-goog
+>

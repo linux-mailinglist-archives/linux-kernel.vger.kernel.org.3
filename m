@@ -2,176 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D7655460C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76014554939
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245070AbiFVKHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S1343603AbiFVKIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244780AbiFVKHp (ORCPT
+        with ESMTP id S1347121AbiFVKHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:07:45 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C72413E04
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:07:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655892464; x=1687428464;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cc/TCIsEYW1PMEk9yJmil6X0x14+wRVccmqBRFmtOWA=;
-  b=AzoHLHPFyCci0ruSquXLql0rjmgDALnqvsfMtI5NYuLPvvJtGxgInPaP
-   H61EsVMBFvtr3+7V69sBS1/XeBCJU+zILpOnpMdvi+E2ZjpbxHPdA9tIG
-   eKtA4iiDUCNWzwiqtmRCCwQk6Y3qc0i1/oTxYoemPgnZDt2E+da3mMn4z
-   F4A0c/N6iCx0MvGC2PFd3yOqbbXR3sWe9Zh6tOIGZ0Fv+l8UQ3pJ9xWFo
-   X3gZh7xoYeQNGBJcIaVKKKqGZO/upAWKpCrEBx9SjedvNITzPc+FtCUcE
-   GR7MECn7H93kRaz3UuIBHfceuWHYAzrQVgBMuCCh8XUsmTaPWjoyAFSjM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342061012"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="342061012"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:07:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="834035083"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2022 03:07:42 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3xGv-00017Z-PR;
-        Wed, 22 Jun 2022 10:07:41 +0000
-Date:   Wed, 22 Jun 2022 18:07:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ruijing Dong <ruijing.dong@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 224/274]
- drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:333:6: warning: no previous
- prototype for function 'amdgpu_vcn_using_unified_queue'
-Message-ID: <202206221801.KxFJ3e97-lkp@intel.com>
+        Wed, 22 Jun 2022 06:07:55 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B67CCDA;
+        Wed, 22 Jun 2022 03:07:52 -0700 (PDT)
+Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1565820554;
+        Wed, 22 Jun 2022 12:07:46 +0200 (CEST)
+Message-ID: <bc646661-9be5-5256-5ec9-a27623003693@somainline.org>
+Date:   Wed, 22 Jun 2022 12:07:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 1/6] arm64: dts: qcom: sm8350: Replace integers with
+ rpmpd defines
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>, bjorn.andersson@linaro.org,
+        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20220621233412.506768-1-robert.foss@linaro.org>
+ <20220621233412.506768-2-robert.foss@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220621233412.506768-2-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   eec53143b7fe1ccaace434e03b5959c9117bf9c5
-commit: 4ed49c954e35559cb4a34ba049a15f54ec7fccf6 [224/274] drm/amdgpu/vcn: add unified queue ib test
-config: s390-buildonly-randconfig-r004-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221801.KxFJ3e97-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 4ed49c954e35559cb4a34ba049a15f54ec7fccf6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/panfrost/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:29:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:29:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:29:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:333:6: warning: no previous prototype for function 'amdgpu_vcn_using_unified_queue' [-Wmissing-prototypes]
-   bool amdgpu_vcn_using_unified_queue(struct amdgpu_ring *ring)
-        ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:333:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool amdgpu_vcn_using_unified_queue(struct amdgpu_ring *ring)
-   ^
-   static 
-   13 warnings generated.
 
 
-vim +/amdgpu_vcn_using_unified_queue +333 drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c
+On 22.06.2022 01:34, Robert Foss wrote:
+> Replace &rpmhpd power domain integers with their respective defines
+> in order to improve legibility.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-   331	
-   332	/* from vcn4 and above, only unified queue is used */
- > 333	bool amdgpu_vcn_using_unified_queue(struct amdgpu_ring *ring)
-   334	{
-   335		struct amdgpu_device *adev = ring->adev;
-   336		bool ret = false;
-   337	
-   338		if (adev->ip_versions[UVD_HWIP][0] >= IP_VERSION(4, 0, 0))
-   339			ret = true;
-   340	
-   341		return ret;
-   342	}
-   343	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index c0137bdcf94b..52428b6df64e 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -1656,8 +1656,8 @@ mpss: remoteproc@4080000 {
+>  			clocks = <&rpmhcc RPMH_CXO_CLK>;
+>  			clock-names = "xo";
+>  
+> -			power-domains = <&rpmhpd 0>,
+> -					<&rpmhpd 12>;
+> +			power-domains = <&rpmhpd SM8350_CX>,
+> +					<&rpmhpd SM8350_MSS>;
+>  			power-domain-names = "cx", "mss";
+>  
+>  			interconnects = <&mc_virt MASTER_LLCC &mc_virt SLAVE_EBI1>;
+> @@ -2167,8 +2167,8 @@ slpi: remoteproc@5c00000 {
+>  			clocks = <&rpmhcc RPMH_CXO_CLK>;
+>  			clock-names = "xo";
+>  
+> -			power-domains = <&rpmhpd 4>,
+> -					<&rpmhpd 5>;
+> +			power-domains = <&rpmhpd SM8350_LCX>,
+> +					<&rpmhpd SM8350_LMX>;
+>  			power-domain-names = "lcx", "lmx";
+>  
+>  			memory-region = <&pil_slpi_mem>;
+> @@ -2235,8 +2235,8 @@ cdsp: remoteproc@98900000 {
+>  			clocks = <&rpmhcc RPMH_CXO_CLK>;
+>  			clock-names = "xo";
+>  
+> -			power-domains = <&rpmhpd 0>,
+> -					<&rpmhpd 10>;
+> +			power-domains = <&rpmhpd SM8350_CX>,
+> +					<&rpmhpd SM8350_MXC>;
+>  			power-domain-names = "cx", "mxc";
+>  
+>  			interconnects = <&compute_noc MASTER_CDSP_PROC &mc_virt SLAVE_EBI1>;
+> @@ -2540,8 +2540,8 @@ adsp: remoteproc@17300000 {
+>  			clocks = <&rpmhcc RPMH_CXO_CLK>;
+>  			clock-names = "xo";
+>  
+> -			power-domains = <&rpmhpd 4>,
+> -					<&rpmhpd 5>;
+> +			power-domains = <&rpmhpd SM8350_LCX>,
+> +					<&rpmhpd SM8350_LMX>;
+>  			power-domain-names = "lcx", "lmx";
+>  
+>  			memory-region = <&pil_adsp_mem>;

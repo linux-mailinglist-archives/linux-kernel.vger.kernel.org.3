@@ -2,43 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2CD554492
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580785548B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351178AbiFVIKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S238065AbiFVIOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350705AbiFVIKp (ORCPT
+        with ESMTP id S236923AbiFVIOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:10:45 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E582A37AB0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:10:43 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id RGH00140;
-        Wed, 22 Jun 2022 16:10:40 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201610.home.langchao.com (10.100.2.10) with Microsoft SMTP Server id
- 15.1.2308.27; Wed, 22 Jun 2022 16:10:40 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] virtio_ring: remove unnecessary to_vvq call in virtqueue_enable_cb_prepare_packed
-Date:   Wed, 22 Jun 2022 04:10:38 -0400
-Message-ID: <20220622081038.1681-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 22 Jun 2022 04:14:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE26837AAF;
+        Wed, 22 Jun 2022 01:14:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4981C617CF;
+        Wed, 22 Jun 2022 08:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C0CC34114;
+        Wed, 22 Jun 2022 08:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655885654;
+        bh=H/Z/L8MiVmpkhuhNiZ0YLz7K84HAGPmdn7jyCa4MN9A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DqcmkzqIgiPhDuCL3zs7tDTdyNhdcSW7JZxHf6IhQLOSjKp7meg0v7Z72fPP/OiGn
+         tQP3yW3HoD3vSE3x8Ieuo/O2JJJj62iRITfSm2fVE2ySUUGb3xBsbHk8dWOutDYLUD
+         +vcDU8dw/mXuzHKcw15ZcNrPN867vnR9giTeHR301feC4arHge9ZYppJVSWPQmCM1x
+         2/o45zw2zLszpOcxSi31lk2dv4VvXRNt35c/lYfqMoOIHqPuPwyGrjx+8ucBBP4XfD
+         Rwxx1ol6qnf07b/1vo9W2ijeWrtkHx1h6QBh19ISSqWbv+l9x3OMMJjFxpwwmRuBHp
+         pwF/N/wv5n2jw==
+Date:   Wed, 22 Jun 2022 13:44:03 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     quic_hemantk@quicinc.com, gregkh@linuxfoundation.org,
+        loic.poulain@linaro.org, dnlplm@gmail.com, bbhatt@codeaurora.org,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] bus: mhi: host: pci_generic: Add Cinterion MV31-W
+ with new baseline
+Message-ID: <20220622081403.GA6263@thinkpad>
+References: <20220622032544.17713-1-slark_xiao@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   2022622161040b21c479fd5829ea88279af39af35a8f5
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220622032544.17713-1-slark_xiao@163.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,40 +58,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It passes '_vq' to virtqueue_use_indirect(), which still calls
-to_vvq to get 'vq', let's directly pass 'vq'. It can avoid
-unnecessary call of to_vvq in hot path.
+On Wed, Jun 22, 2022 at 11:25:44AM +0800, Slark Xiao wrote:
+> Cinterion MV31-W modem with a new baseline (firmware) is sold as a separate
+> product with different device ID. So add support for the same reusing the
+> config.
+> 
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- drivers/virtio/virtio_ring.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 13a7348cedff..3418e10f21a5 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -1486,10 +1486,8 @@ static void virtqueue_disable_cb_packed(struct virtqueue *_vq)
- 	}
- }
- 
--static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
-+static unsigned int virtqueue_enable_cb_prepare_packed(struct vring_virtqueue *vq)
- {
--	struct vring_virtqueue *vq = to_vvq(_vq);
--
- 	START_USE(vq);
- 
- 	/*
-@@ -2032,7 +2030,7 @@ unsigned int virtqueue_enable_cb_prepare(struct virtqueue *_vq)
- 	if (vq->event_triggered)
- 		vq->event_triggered = false;
- 
--	return vq->packed_ring ? virtqueue_enable_cb_prepare_packed(_vq) :
-+	return vq->packed_ring ? virtqueue_enable_cb_prepare_packed(vq) :
- 				 virtqueue_enable_cb_prepare_split(_vq);
- }
- EXPORT_SYMBOL_GPL(virtqueue_enable_cb_prepare);
+Thanks,
+Mani
+
+> ---
+>  drivers/bus/mhi/host/pci_generic.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> index 841626727f6b..062662b3778b 100644
+> --- a/drivers/bus/mhi/host/pci_generic.c
+> +++ b/drivers/bus/mhi/host/pci_generic.c
+> @@ -578,6 +578,9 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+>  	/* MV31-W (Cinterion) */
+>  	{ PCI_DEVICE(0x1269, 0x00b3),
+>  		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+> +	/* MV31-W (Cinterion), based on new baseline */
+> +	{ PCI_DEVICE(0x1269, 0x00b4),
+> +		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+>  	/* MV32-WA (Cinterion) */
+>  	{ PCI_DEVICE(0x1269, 0x00ba),
+>  		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
+> -- 
+> 2.25.1
+> 
+
 -- 
-2.27.0
-
+மணிவண்ணன் சதாசிவம்

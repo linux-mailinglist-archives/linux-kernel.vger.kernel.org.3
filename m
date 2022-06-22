@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69FD554813
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5C355473B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355255AbiFVJF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S1355832AbiFVJFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbiFVJFY (ORCPT
+        with ESMTP id S232756AbiFVJF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:05:24 -0400
-X-Greylist: delayed 75945 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Jun 2022 02:05:19 PDT
-Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E29CE;
-        Wed, 22 Jun 2022 02:05:19 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 949814C0236;
-        Wed, 22 Jun 2022 11:05:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1655888716;
-        bh=Yr78Voy6/ZWAI8Ex/Aure+xnmqoVC4pzJJ8L88wVTWw=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=foT1bnOBe3f+w23asVxwVtrsg/xXUnglKYhpV/et7W3LMwgtIBkuBCOYWq7Ly5hCF
-         5piqdFf+MdrGVM+5S8xjHK/I/x888WBgwp+3PiTgfyAooXOaPKYmY+gL1654gQXeKA
-         UmsDvOEIwcCHvc5oqBRTtOW0EpNn6hsE4TlT9J/5kwuwZ0GQRn879OcQMB8cnhc1qn
-         xgBT7HFcmxP81pm7ELlkj0O9lGrT4lvhlfCKo4vvW3Rk2Uw2Yvx34niU0I4TThlWp4
-         N9QO26urbRLHzVWsW0FdYzY61pphN2wJ3YKwmgJvDIOr62/KjXI/0tEBR/udn+TGER
-         YyBfrzd1hqgLg==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 83AC3DD; Wed, 22 Jun 2022 11:05:16 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 6159FD6;
-        Wed, 22 Jun 2022 11:05:16 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 5C7ADCE;
-        Wed, 22 Jun 2022 11:05:16 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 572E54A02E7; Wed, 22 Jun 2022 11:05:16 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 489D14A013B;
-        Wed, 22 Jun 2022 11:05:15 +0200 (CEST)
-        (Extended-Queue-bit xtech_yi@fff.in.tum.de)
-Content-Type: multipart/signed;
-        boundary="Apple-Mail=_60399BCD-725C-4105-B4F1-1543619E21D4";
-        protocol="application/pkcs7-signature";
-        micalg=sha-256
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: Dangerous addr to ctrl dependency transformation in
- fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <CAKwvOdkrZbRTfrK_cFRseoONGi7qQ-_4vB=Zm9KH3Bb2KZ5tww@mail.gmail.com>
-Date:   Wed, 22 Jun 2022 11:05:15 +0200
-Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C90EF3D6-CB26-48D3-A600-A4237C4BE4EC@in.tum.de>
-References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
- <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
- <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local>
- <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
- <CAKwvOdkrZbRTfrK_cFRseoONGi7qQ-_4vB=Zm9KH3Bb2KZ5tww@mail.gmail.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 22 Jun 2022 05:05:27 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7BD201A8;
+        Wed, 22 Jun 2022 02:05:26 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id o10so22942962edi.1;
+        Wed, 22 Jun 2022 02:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tDbYyeBEwGX8YAg3QUDWRyeGWxjD+ob964twAa4kWvc=;
+        b=T6Q7g41xrVHPb5/EXilFpXnlYnOVv3yYpEH50JccewrUSviM3mUvqSgrfQec6jzuqT
+         QmQdgEHQoQtM3w3cRWuR8gHZuyMVz1xG9IQ1DZXBbpE3NnJfGw6KQRe+9ykOFhRswK6M
+         WbtxG+U8RSROCzFeDazB2Mk4clWtOONEjq9ibBGxWUlMd+cuhKKXMSyCX2OITLa1ijML
+         PQMi7TwwJUSH+y8kAkMuSEplLoNrc9nGSJv5FvEGair385YnjpNarug0s1vlujT1imSJ
+         Ei83AzV++scBxJeAngyCdhPMSARVu7b2t58ECG5jso144HxibALj490wuFwQkU+XwL7T
+         AbKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tDbYyeBEwGX8YAg3QUDWRyeGWxjD+ob964twAa4kWvc=;
+        b=c4mndvZkzIKrT82EzGwcL3AVJxEM6kdvL05Mvytd+t9RDjekZxJokKUD9p37GjcZeM
+         H94rxalaIAM4iOFQ3lrbn7peSnKD+KxUZK+aVT7k3FXReOg6u/eTnPsc/UFjzjbJXeo2
+         2I6pPXwmI4t51QYfLjKpt2Sz9kZe7JekMF8cSs48OYI/ZBXTeZKSYfF9EHry48A8+3hK
+         7z2L2qJZJLjQSVC9w8NTjGkaEUEm8Zm5VSDRwsQXj6zsZHzb/8igrBC9mt+z6AvW8znu
+         saA3esQ2J5QIqHPzgzE5A5enDyjwx+VLrE/a0c9ELXMFrpG+tbNDTl687lahK3cV8ZAz
+         m7Gw==
+X-Gm-Message-State: AJIora/CjpmZij0fZJNKvEPqow3FM+L8xo03DJJ9hMU8jWdaNPCEUFLK
+        zyzKuJa1IcQjjKvYB8v9n7M=
+X-Google-Smtp-Source: AGRyM1sGjrBd+ZyLKbv9JrMmQVEw2WQSCnULGkU8C+b5nzWE2vH4+sK2Wwrmw/CVvFKBmg3vAZpouA==
+X-Received: by 2002:a05:6402:350f:b0:42f:68f9:ae5 with SMTP id b15-20020a056402350f00b0042f68f90ae5mr2954373edd.36.1655888725078;
+        Wed, 22 Jun 2022 02:05:25 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:8f77:c83:6a3d:ee86? ([2a02:908:1256:79a0:8f77:c83:6a3d:ee86])
+        by smtp.gmail.com with ESMTPSA id c19-20020aa7c753000000b004357063bf60sm9952412eds.41.2022.06.22.02.05.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 02:05:24 -0700 (PDT)
+Message-ID: <82500226-3ac5-c62c-ac5b-363ee184dbbc@gmail.com>
+Date:   Wed, 22 Jun 2022 11:05:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [Linaro-mm-sig] Re: DMA-buf and uncached system memory
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Andy.Hsieh" <andy.hsieh@mediatek.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org, lkml <linux-kernel@vger.kernel.org>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Sharma, Shashank" <Shashank.Sharma@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+ <cdb508e49eb1439f4e4c327d2a6738f219e04bf8.camel@ndufresne.ca>
+ <5822b325-766e-ce3c-50eb-d7f54f14fd0b@mediatek.com>
+ <39f7f41a-af8d-4700-37da-9401455afb98@amd.com>
+ <2aabc41c8432d09b7ceeb8e67144a639d3d86c72.camel@ndufresne.ca>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <2aabc41c8432d09b7ceeb8e67144a639d3d86c72.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,207 +84,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 21.06.22 um 17:42 schrieb Nicolas Dufresne:
+> Hi Christian and Andy,
+>
+> Le mardi 21 juin 2022 à 12:34 +0200, Christian König a écrit :
+>>   Hi Andy,
+>>   
+>>   Am 21.06.22 um 12:17 schrieb Andy.Hsieh:
+>>   
+>>> On 2/16/21 4:39 AM, Nicolas Dufresne wrote:
+>>>> Le lundi 15 février 2021 à 09:58 +0100, Christian König a écrit :
+>>>>> Hi guys,
+>>>>>
+>>>>> we are currently working an Freesync and direct scan out from system
+>>>>> memory on AMD APUs in A+A laptops.
+>>>>>
+>>>>> On problem we stumbled over is that our display hardware needs to scan
+>>>>> out from uncached system memory and we currently don't have a way to
+>>>>> communicate that through DMA-buf.
+>>>>>
+>>>>> For our specific use case at hand we are going to implement something
+>>>>> driver specific, but the question is should we have something more
+>>>>> generic for this?
+>>>> Hopefully I'm getting this right, but this makes me think of a long
+>>>> standing
+>>>> issue I've met with Intel DRM and UVC driver. If I let the UVC driver
+>>>> allocate
+>>>> the buffer, and import the resulting DMABuf (cacheable memory written with
+>>>> a cpu
+>>>> copy in the kernel) into DRM, we can see cache artifact being displayed.
+>>>> While
+>>>> if I use the DRM driver memory (dumb buffer in that case) it's clean
+>>>> because
+>>>> there is a driver specific solution to that.
+>>>>
+>>>> There is no obvious way for userspace application to know what's is
+>>>> right/wrong
+>>>> way and in fact it feels like the kernel could solve this somehow without
+>>>> having
+>>>> to inform userspace (perhaps).
+>>>>
+>>>>> After all the system memory access pattern is a PCIe extension and as
+>>>>> such something generic.
+>>>>>
+>>>>> Regards,
+>>>>> Christian.
+>>>>
+>>> Hi All,
+>>>
+>>> We also encountered the UVC cache issue on ARMv8 CPU in Mediatek SoC when
+>>> using UVC dmabuf-export and feeding the dmabuf to the DRM display by the
+>>> following GStreamer command:
+>>>
+>>> # gst-launch-1.0 v4l2src device=/dev/video0 io-mode=dmabuf ! kmssink
+>>>
+>>> UVC driver uses videobuf2-vmalloc to allocate buffers and is able to export
+>>> them as dmabuf. But UVC uses memcpy() to fill the frame buffer by CPU
+>>> without
+>>> flushing the cache. So if the display hardware directly uses the buffer, the
+>>> image shown on the screen will be dirty.
+>>>
+>>> Here are some experiments:
+>>>
+>>> 1. By doing some memory operations (e.g. devmem) when streaming the UVC,
+>>>     the issue is mitigated. I guess the cache is swapped rapidly.
+>>> 2. By replacing the memcpy() with memcpy_flushcache() in the UVC driver,
+>>>     the issue disappears.
+>>> 3. By adding .finish callback in videobuf2-vmalloc.c to flush the cache
+>>>     before returning the buffer, the issue disappears.
+>>>
+>>> It seems to lack a cache flush stage in either UVC or Display. We may also
+>>> need communication between the producer and consumer. Then, they can decide
+>>> who is responsible for the flushing to avoid flushing cache unconditionally
+>>> leading to the performance impact.
+>>   
+>>   Well, that's not what this mail thread was all about.
+>>   
+>>   The issue you are facing is that somebody is forgetting to flush caches, but
+>> the issue discussed in this thread here is that we have hardware which
+>> bypasses caches altogether.
+>>   
+>>   As far as I can see in your case UVC just allocates normal cached system
+>> memory through videobuf2-vmalloc() and it is perfectly valid to fill that
+>> using memcpy().
+>>   
+>>   If some hardware then accesses those buffers bypassing CPU caches then it is
+>> the responsibility of the importing driver and/or DMA subsystem to flush the
+>> caches accordingly.
+> I've tracked this down to videobuf2-vmalloc.c failing to look for coherency
+> during "attach()". It is also missing begin_/end access implementation for the
+> case it get attached to a non-coherent device. Seems fixable though, but "I'm
+> far from an expert", but more some random person reading code and comments.
 
---Apple-Mail=_60399BCD-725C-4105-B4F1-1543619E21D4
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
+Well that is perfectly expected behavior, videobuf2-vmalloc return 
+normal cached system memory.
 
+So it doesn't care for the coherency of the buffer.
 
-> On 22. Jun 2022, at 00:05, Nick Desaulniers <ndesaulniers@google.com> =
-wrote:
->=20
-> On Tue, May 17, 2022 at 3:29 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
->> On Fri, Apr 22, 2022 at 3:39 AM Paul Heidekr=C3=BCger
->> <paul.heidekrueger@in.tum.de> wrote:
->>> On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
->>>> On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekr=C3=BCger
->>>> <paul.heidekrueger@in.tum.de> wrote:
->>>>> Hi all,
->>>>>=20
->>>>> work on my dependency checker tool is progressing nicely, and it =
-is
->>>>> flagging, what I believe is, a harmful addr to ctrl dependency
->>>>> transformation. For context, see [1] and [2]. I'm using the Clang
->>>>> compiler.
->>>>> [1]: =
-https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/10=
-75/LPC_2020_--_Dependency_ordering.pdf
->>>>> [2]: =
-https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
->>>>=20
->>>> Hi Paul,
->>>> Thanks for the report and your (and your team's) work on this tool.
->>>> Orthogonal to your report, Jose (cc'ed) and I are currently in the
->>>> planning process to put together a Kernel+Toolchain microconference
->>>> track at Linux Plumbers Conference [0] this year (Sept 12-14) in
->>>> Dublin, Ireland. Would you or someone from your group be able and
->>>> interested in presenting more information about your work to an
->>>> audience of kernel and toolchain developers at such an event?
->>>>=20
->>>> Would others be interested in such a topic? (What do they say in
->>>> Starship Troopers...?...Would you like to know more?)
->>>>=20
->>>> [0] https://lpc.events/event/16/
->>>> --
->>>> Thanks,
->>>> ~Nick Desaulniers
->>>=20
->>> Hi Nick and Jose,
->>>=20
->>> Many thanks for inviting us! I would love to do a talk at LPC! =
-Hopefully
->>> in person too.
->>>=20
->>> Given that there have been several talks around this topic at LPC
->>> already, it seems very fitting, and we'll hopefully have more to =
-share
->>> by then. Actually we have more to share already :-)
->>>=20
->>> =
-https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/T/#=
-u
->>>=20
->>> I assume we will have to submit an abstract soon?
->>=20
->> Yes, if you go to: https://lpc.events/event/16/abstracts/
->>=20
->> click "Submit new abstract" in the bottom right.
->>=20
->> Under the "Track" dropdown, please select "Toolchains Track."
->=20
-> Hi Paul, we'll need all proposals soon.
-> If you're still considering attending Linux Plumbers conf, please
-> submit a proposal:
-> https://lpc.events/event/16/abstracts/
-> Please make sure to select "Toolchains Track" as the "Track" after
-> clicking on "Submit new abstract."
+What should happen instead is that the display device needs to make sure 
+that it can coherently access the data and that's not the case here.
 
-Hi Nick,
+Regards,
+Christian.
 
-Of course! :-)
+>
+> regards,
+> Nicolas
+>
+>>   
+>>   Regards,
+>>   Christian.
+>>   
+>>   
+>>> Regards,
+>>> Andy Hsieh
+>>>
+>>> ************* MEDIATEK Confidentiality Notice ********************
+>>> The information contained in this e-mail message (including any
+>>> attachments) may be confidential, proprietary, privileged, or otherwise
+>>> exempt from disclosure under applicable laws. It is intended to be
+>>> conveyed only to the designated recipient(s). Any use, dissemination,
+>>> distribution, printing, retaining or copying of this e-mail (including its
+>>> attachments) by unintended recipient(s) is strictly prohibited and may
+>>> be unlawful. If you are not an intended recipient of this e-mail, or believe
+>>> that you have received this e-mail in error, please notify the sender
+>>> immediately (by replying to this e-mail), delete any and all copies of
+>>> this e-mail (including any attachments) from your system, and do not
+>>> disclose the content of this e-mail to any other person. Thank you!
+>>   
+>>   
+> _______________________________________________
+> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
+> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
 
-Sorry for taking so long, and thanks for reminding! I was under the
-impression the deadline was sometime mid-August and therefore hadn't
-prioritised it high enough - sorry!
-
-You'll have the proposal ASAP.
-
-Many thanks,
-Paul
-
->> --
->> Thanks,
->> ~Nick Desaulniers
->=20
->=20
->=20
-> --=20
-> Thanks,
-> ~Nick Desaulniers
-
---Apple-Mail=_60399BCD-725C-4105-B4F1-1543619E21D4
-Content-Disposition: attachment;
-	filename=smime.p7s
-Content-Type: application/pkcs7-signature;
-	name=smime.p7s
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEWow
-ggUSMIID+qADAgECAgkA4wvV+K8l2YEwDQYJKoZIhvcNAQELBQAwgYIxCzAJBgNVBAYTAkRFMSsw
-KQYDVQQKDCJULVN5c3RlbXMgRW50ZXJwcmlzZSBTZXJ2aWNlcyBHbWJIMR8wHQYDVQQLDBZULVN5
-c3RlbXMgVHJ1c3QgQ2VudGVyMSUwIwYDVQQDDBxULVRlbGVTZWMgR2xvYmFsUm9vdCBDbGFzcyAy
-MB4XDTE2MDIyMjEzMzgyMloXDTMxMDIyMjIzNTk1OVowgZUxCzAJBgNVBAYTAkRFMUUwQwYDVQQK
-EzxWZXJlaW4genVyIEZvZXJkZXJ1bmcgZWluZXMgRGV1dHNjaGVuIEZvcnNjaHVuZ3NuZXR6ZXMg
-ZS4gVi4xEDAOBgNVBAsTB0RGTi1QS0kxLTArBgNVBAMTJERGTi1WZXJlaW4gQ2VydGlmaWNhdGlv
-biBBdXRob3JpdHkgMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMtg1/9moUHN0vqH
-l4pzq5lN6mc5WqFggEcVToyVsuXPztNXS43O+FZsFVV2B+pG/cgDRWM+cNSrVICxI5y+NyipCf8F
-XRgPxJiZN7Mg9mZ4F4fCnQ7MSjLnFp2uDo0peQcAIFTcFV9Kltd4tjTTwXS1nem/wHdN6r1ZB+Ba
-L2w8pQDcNb1lDY9/Mm3yWmpLYgHurDg0WUU2SQXaeMpqbVvAgWsRzNI8qIv4cRrKO+KA3Ra0Z3qL
-NupOkSk9s1FcragMvp0049ENF4N1xDkesJQLEvHVaY4l9Lg9K7/AjsMeO6W/VRCrKq4Xl14zzsjz
-9AkH4wKGMUZrAcUQDBHHWekCAwEAAaOCAXQwggFwMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQU
-k+PYMiba1fFKpZFK4OpL4qIMz+EwHwYDVR0jBBgwFoAUv1kgNgB5oKAia4zV8mHSuCzLgkowEgYD
-VR0TAQH/BAgwBgEB/wIBAjAzBgNVHSAELDAqMA8GDSsGAQQBga0hgiwBAQQwDQYLKwYBBAGBrSGC
-LB4wCAYGZ4EMAQICMEwGA1UdHwRFMEMwQaA/oD2GO2h0dHA6Ly9wa2kwMzM2LnRlbGVzZWMuZGUv
-cmwvVGVsZVNlY19HbG9iYWxSb290X0NsYXNzXzIuY3JsMIGGBggrBgEFBQcBAQR6MHgwLAYIKwYB
-BQUHMAGGIGh0dHA6Ly9vY3NwMDMzNi50ZWxlc2VjLmRlL29jc3ByMEgGCCsGAQUFBzAChjxodHRw
-Oi8vcGtpMDMzNi50ZWxlc2VjLmRlL2NydC9UZWxlU2VjX0dsb2JhbFJvb3RfQ2xhc3NfMi5jZXIw
-DQYJKoZIhvcNAQELBQADggEBAIcL/z4Cm2XIVi3WO5qYi3FP2ropqiH5Ri71sqQPrhE4eTizDnS6
-dl2e6BiClmLbTDPo3flq3zK9LExHYFV/53RrtCyD2HlrtrdNUAtmB7Xts5et6u5/MOaZ/SLick0+
-hFvu+c+Z6n/XUjkurJgARH5pO7917tALOxrN5fcPImxHhPalR6D90Bo0fa3SPXez7vTXTf/D6OWS
-T1k+kEcQSrCFWMBvf/iu7QhCnh7U3xQuTY+8npTD5+32GPg8SecmqKc22CzeIs2LgtjZeOJVEqM7
-h0S2EQvVDFKvaYwPBt/QolOLV5h7z/0HJPT8vcP9SpIClxvyt7bPZYoaorVyGTkwggWsMIIElKAD
-AgECAgcbY7rQHiw9MA0GCSqGSIb3DQEBCwUAMIGVMQswCQYDVQQGEwJERTFFMEMGA1UEChM8VmVy
-ZWluIHp1ciBGb2VyZGVydW5nIGVpbmVzIERldXRzY2hlbiBGb3JzY2h1bmdzbmV0emVzIGUuIFYu
-MRAwDgYDVQQLEwdERk4tUEtJMS0wKwYDVQQDEyRERk4tVmVyZWluIENlcnRpZmljYXRpb24gQXV0
-aG9yaXR5IDIwHhcNMTYwNTI0MTEzODQwWhcNMzEwMjIyMjM1OTU5WjCBjTELMAkGA1UEBhMCREUx
-RTBDBgNVBAoMPFZlcmVpbiB6dXIgRm9lcmRlcnVuZyBlaW5lcyBEZXV0c2NoZW4gRm9yc2NodW5n
-c25ldHplcyBlLiBWLjEQMA4GA1UECwwHREZOLVBLSTElMCMGA1UEAwwcREZOLVZlcmVpbiBHbG9i
-YWwgSXNzdWluZyBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ07eRxH3h+Gy8Zp
-1xCeOdfZojDbchwFfylfS2jxrRnWTOFrG7ELf6Gr4HuLi9gtzm6IOhDuV+UefwRRNuu6cG1joL6W
-LkDh0YNMZj0cZGnlm6Stcq5oOVGHecwX064vXWNxSzl660Knl5BpBb+Q/6RAcL0D57+eGIgfn5mI
-TQ5HjUhfZZkQ0tkqSe3BuS0dnxLLFdM/fx5ULzquk1enfnjK1UriGuXtQX1TX8izKvWKMKztFwUk
-P7agCwf9TRqaA1KgNpzeJIdl5Of6x5ZzJBTN0OgbaJ4YWa52fvfRCng8h0uwN89Tyjo4EPPLR22M
-ZD08WkVKusqAfLjz56dMTM0CAwEAAaOCAgUwggIBMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P
-AQH/BAQDAgEGMCkGA1UdIAQiMCAwDQYLKwYBBAGBrSGCLB4wDwYNKwYBBAGBrSGCLAEBBDAdBgNV
-HQ4EFgQUazqYi/nyU4na4K2yMh4JH+iqO3QwHwYDVR0jBBgwFoAUk+PYMiba1fFKpZFK4OpL4qIM
-z+EwgY8GA1UdHwSBhzCBhDBAoD6gPIY6aHR0cDovL2NkcDEucGNhLmRmbi5kZS9nbG9iYWwtcm9v
-dC1nMi1jYS9wdWIvY3JsL2NhY3JsLmNybDBAoD6gPIY6aHR0cDovL2NkcDIucGNhLmRmbi5kZS9n
-bG9iYWwtcm9vdC1nMi1jYS9wdWIvY3JsL2NhY3JsLmNybDCB3QYIKwYBBQUHAQEEgdAwgc0wMwYI
-KwYBBQUHMAGGJ2h0dHA6Ly9vY3NwLnBjYS5kZm4uZGUvT0NTUC1TZXJ2ZXIvT0NTUDBKBggrBgEF
-BQcwAoY+aHR0cDovL2NkcDEucGNhLmRmbi5kZS9nbG9iYWwtcm9vdC1nMi1jYS9wdWIvY2FjZXJ0
-L2NhY2VydC5jcnQwSgYIKwYBBQUHMAKGPmh0dHA6Ly9jZHAyLnBjYS5kZm4uZGUvZ2xvYmFsLXJv
-b3QtZzItY2EvcHViL2NhY2VydC9jYWNlcnQuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQCBeEWkTqR/
-DlXwCbFqPnjMaDWpHPOVnj/z+N9rOHeJLI21rT7H8pTNoAauusyosa0zCLYkhmI2THhuUPDVbmCN
-T1IxQ5dGdfBi5G5mUcFCMWdQ5UnnOR7Ln8qGSN4IFP8VSytmm6A4nwDO/afr0X9XLchMX9wQEZc+
-lgQCXISoKTlslPwQkgZ7nu7YRrQbtQMMONncsKk/cQYLsgMHM8KNSGMlJTx6e1du94oFOO+4oK4v
-9NsH1VuEGMGpuEvObJAaguS5Pfp38dIfMwK/U+d2+dwmJUFvL6Yb+qQTkPp8ftkLYF3sv8pBoGH7
-EUkp2KgtdRXYShjqFu9VNCIaE40GMIIGoDCCBYigAwIBAgIMJsvrSvlWNPKp0vJrMA0GCSqGSIb3
-DQEBCwUAMIGNMQswCQYDVQQGEwJERTFFMEMGA1UECgw8VmVyZWluIHp1ciBGb2VyZGVydW5nIGVp
-bmVzIERldXRzY2hlbiBGb3JzY2h1bmdzbmV0emVzIGUuIFYuMRAwDgYDVQQLDAdERk4tUEtJMSUw
-IwYDVQQDDBxERk4tVmVyZWluIEdsb2JhbCBJc3N1aW5nIENBMB4XDTIyMDYxNzEyMDQxM1oXDTIz
-MDgxMTE0MDM0OVowge4xCzAJBgNVBAYTAkRFMQ8wDQYDVQQIDAZCYXllcm4xETAPBgNVBAcMCE11
-ZW5jaGVuMSkwJwYDVQQKDCBUZWNobmlzY2hlIFVuaXZlcnNpdGFldCBNdWVuY2hlbjEiMCAGA1UE
-CwwZRmFrdWx0YWV0IGZ1ZXIgSW5mb3JtYXRpazEVMBMGA1UEBAwMSGVpZGVrcnVlZ2VyMQ0wCwYD
-VQQqDARQYXVsMRowGAYDVQQDDBFQYXVsIEhlaWRla3J1ZWdlcjEqMCgGCSqGSIb3DQEJARYbUGF1
-bC5IZWlkZWtydWVnZXJAaW4udHVtLmRlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-s8gdDu7n1qQK6/QRJemihL7fh5yVIaGugo3Hn8qvlKzDwHfM9fHhXzrjBp8VHYSFRi6fPoHjV3OL
-UM7ZLqFEmNEcaoioH5prXfx+N686Vu4w3FsZyQd5/lQO5qD7AJ1zu0N78uJyBLMfnlv7mmMKupkz
-FmnLbKzurYdbpdiYxBHF0ej/h2oMJeOKI26sZ0ItW11cFxqBe4gD+DYQ4PIXzMXkqNbK4n7tIu5s
-uzZt3B3dW/52kNi1vjI+Fi373AhIseAE3mZ/zixFyI9Ib/tqtA2iXLZaINhPEm05+H/IdKYqdwAW
-NO/SiL6nXxnoHmOJzToqfiN9ERDaN7K3lzb3ewIDAQABo4ICmzCCApcwPgYDVR0gBDcwNTAPBg0r
-BgEEAYGtIYIsAQEEMBAGDisGAQQBga0hgiwBAQQKMBAGDisGAQQBga0hgiwCAQQKMAkGA1UdEwQC
-MAAwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDAdBgNVHQ4E
-FgQUA2y9lnfs17UBHlCWzGGaJ5gDAhMwHwYDVR0jBBgwFoAUazqYi/nyU4na4K2yMh4JH+iqO3Qw
-bQYDVR0RBGYwZIESaGVpZGVrcnBAaW4udHVtLmRlgRtQYXVsLkhlaWRla3J1ZWdlckBpbi50dW0u
-ZGWBE2hlaWRla3JwQGNzLnR1bS5lZHWBHFBhdWwuSGVpZGVrcnVlZ2VyQGNzLnR1bS5lZHUwgY0G
-A1UdHwSBhTCBgjA/oD2gO4Y5aHR0cDovL2NkcDEucGNhLmRmbi5kZS9kZm4tY2EtZ2xvYmFsLWcy
-L3B1Yi9jcmwvY2FjcmwuY3JsMD+gPaA7hjlodHRwOi8vY2RwMi5wY2EuZGZuLmRlL2Rmbi1jYS1n
-bG9iYWwtZzIvcHViL2NybC9jYWNybC5jcmwwgdsGCCsGAQUFBwEBBIHOMIHLMDMGCCsGAQUFBzAB
-hidodHRwOi8vb2NzcC5wY2EuZGZuLmRlL09DU1AtU2VydmVyL09DU1AwSQYIKwYBBQUHMAKGPWh0
-dHA6Ly9jZHAxLnBjYS5kZm4uZGUvZGZuLWNhLWdsb2JhbC1nMi9wdWIvY2FjZXJ0L2NhY2VydC5j
-cnQwSQYIKwYBBQUHMAKGPWh0dHA6Ly9jZHAyLnBjYS5kZm4uZGUvZGZuLWNhLWdsb2JhbC1nMi9w
-dWIvY2FjZXJ0L2NhY2VydC5jcnQwDQYJKoZIhvcNAQELBQADggEBAC1bKIVMA6w7eSFfxv+1vQXR
-YQ6WQujz3MVSfYeplJXWKgKkUzpSzI7juw5sT3OkqStl+CGjIKaJiyYhZ/uP6/YMEpifBncsygjw
-+K+2K+L8lov4wokWMVaLSoaaPeGrP20rzkumyUSvsI1ILZzplggsDmdS8D4H/Vc66cMWkrUkeurt
-Diorn6fG0gfy18YCq9XGQV+NxozwRkAfxkmvF0fzviQnSJ/lkzs4AadJ8sH5AzZXHPzydIK/Lcle
-dc6wi287tsRDpDMh+UOR4xe73+72oZabULSwhuM3iD50vr8o+Tm8Sg+mWIPNFivjY/FkNKPleiTW
-y3z7OxbaF19HnEgxggOdMIIDmQIBATCBnjCBjTELMAkGA1UEBhMCREUxRTBDBgNVBAoMPFZlcmVp
-biB6dXIgRm9lcmRlcnVuZyBlaW5lcyBEZXV0c2NoZW4gRm9yc2NodW5nc25ldHplcyBlLiBWLjEQ
-MA4GA1UECwwHREZOLVBLSTElMCMGA1UEAwwcREZOLVZlcmVpbiBHbG9iYWwgSXNzdWluZyBDQQIM
-JsvrSvlWNPKp0vJrMA0GCWCGSAFlAwQCAQUAoIIBzzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA2MjIwOTA1MTVaMC8GCSqGSIb3DQEJBDEiBCDcHusrtXVVwMq+
-e5SqAtQZNVAKO+X9++3/KFlY9JkVjDCBrwYJKwYBBAGCNxAEMYGhMIGeMIGNMQswCQYDVQQGEwJE
-RTFFMEMGA1UECgw8VmVyZWluIHp1ciBGb2VyZGVydW5nIGVpbmVzIERldXRzY2hlbiBGb3JzY2h1
-bmdzbmV0emVzIGUuIFYuMRAwDgYDVQQLDAdERk4tUEtJMSUwIwYDVQQDDBxERk4tVmVyZWluIEds
-b2JhbCBJc3N1aW5nIENBAgwmy+tK+VY08qnS8mswgbEGCyqGSIb3DQEJEAILMYGhoIGeMIGNMQsw
-CQYDVQQGEwJERTFFMEMGA1UECgw8VmVyZWluIHp1ciBGb2VyZGVydW5nIGVpbmVzIERldXRzY2hl
-biBGb3JzY2h1bmdzbmV0emVzIGUuIFYuMRAwDgYDVQQLDAdERk4tUEtJMSUwIwYDVQQDDBxERk4t
-VmVyZWluIEdsb2JhbCBJc3N1aW5nIENBAgwmy+tK+VY08qnS8mswDQYJKoZIhvcNAQELBQAEggEA
-F51R73UXQemY4Wkdf9CLIEBDtrx/WicfN7zj4wfIe7HPzdyDK7U4E3r+Kx4zIzYmOYNwaSC36aKH
-KvhADMP6hGBQZWW05JexiDyHcZcIRqWrZ9A0YMoPCKvBkThaGPxO2zczJ378FsKBFnKSi/hNUJdd
-/6Wu2abrHmAQcmrxdJI6l9gFENeWCZDo/KIjVoMpY7NHV82q9qnjyMth5GLWnZe+xEPp1GajEUht
-GGAtnAHbkFUVSxwb9JzS/ZM6K1wi5L5xT6+8+HwM5XFfQrEubX04voYKoEwQZkZRL7RmjutLGqOB
-jlOIxWi7DOS7E1lbsuigl+NsR8BdImSJhyDdRAAAAAAAAA==
---Apple-Mail=_60399BCD-725C-4105-B4F1-1543619E21D4--

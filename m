@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035B055436E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193EC554353
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351644AbiFVGvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S1351671AbiFVGwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351334AbiFVGvc (ORCPT
+        with ESMTP id S1351663AbiFVGwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:51:32 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2045B35DC0;
-        Tue, 21 Jun 2022 23:51:31 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id s185so9530306pgs.3;
-        Tue, 21 Jun 2022 23:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=niUUVRIRw4J6TsPTvzTZNTwxYV2pE3XjscebFTdFk/s=;
-        b=aDzOpZs430kj0B3FbQJdRU99FdbqzgXH5ogGDVHmt2zc88EkmYFIvkfjTrb36sVHNQ
-         +Fq/Sa7ZdiCLazdgbhnfpHsfZixsJrNSmBJq4cgbUS4Y/FDQOCn92kk7snSjhdyG6Mdi
-         VqKYElPoFWKZG8hYa5QFUwbLsiUJMPFdhuFJBMAc9XDj9bOFm8/ceoqG71WJVdScQE1s
-         H9aSK7RiP8SXerWZWl1pvtqEn+CNDRkWycE5pYUkbCLr/KxECC82/GEBl6ucNzEiqwPV
-         yOwPMNm7uUVuBATNan3CGxFnaBIKsE1UX1gGi2kyNRq7mQqTEtoV9aZrmqzstB4delFg
-         s6og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=niUUVRIRw4J6TsPTvzTZNTwxYV2pE3XjscebFTdFk/s=;
-        b=DRnod1t8SN7FadpfyK+cJC9f3wjd1j+SCdX6bwNSQhA7DC9+561KSLFMBv29WnRjWB
-         n2QSgXvSHzlVO7GBEd0/B/SFsvV2pdRhFJ43nBVBqh5KAsLXL0T8Nat/l5stcxxTLip2
-         4Ayu2TjsATOdj4MakvtXT8Mmdg0lj2vVXmVTupsjYs6l66D4hKxadqQqAmhNp7t2nmHM
-         7wTxsBrXpczHYgb7KY/IiD5qocBKdFlb9EKa6sh++jo5TUR/aiQ4JEJTK6+gntpaT2CS
-         KbITeXb9AL76ODPiqHOT0d32JcApSfjMgyfC7M2ykmDIWF3a6MM27cv1OQWhupxR6zkF
-         2mHA==
-X-Gm-Message-State: AJIora9Y/ZSt1a0ZtxPBiirY5jchPWYI1IxEt81VixWKmrUbCLrsmLoE
-        2HaDKV0nuf/Fn36cskXGi2k=
-X-Google-Smtp-Source: AGRyM1ucRbo0zkixEc3lxNBaFFOCSRntJD+QdEDuVi0zQvwm8xxuW+tLf4pkaPcZSNa1NKFz8Rz9GQ==
-X-Received: by 2002:a63:35c4:0:b0:40c:99f6:8889 with SMTP id c187-20020a6335c4000000b0040c99f68889mr1684738pga.387.1655880690601;
-        Tue, 21 Jun 2022 23:51:30 -0700 (PDT)
-Received: from localhost.localdomain ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id bx5-20020a17090af48500b001e0899052f1sm13585858pjb.3.2022.06.21.23.51.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 23:51:30 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     krzysztof.kozlowski@linaro.org, sameo@linux.intel.com,
-        christophe.ricard@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] nfc: st21nfca: fix possible double free in st21nfca_im_recv_dep_res_cb()
-Date:   Wed, 22 Jun 2022 14:51:17 +0800
-Message-Id: <20220622065117.23210-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 22 Jun 2022 02:52:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201E7369C0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:52:11 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o3uDV-0002vo-Q5; Wed, 22 Jun 2022 08:51:57 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-0ddb-1bbb-e3fd-3cee.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:ddb:1bbb:e3fd:3cee])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3C3799C01B;
+        Wed, 22 Jun 2022 06:51:56 +0000 (UTC)
+Date:   Wed, 22 Jun 2022 08:51:55 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1] arm64: dts: imx8mm-verdin: update CAN clock to 40MHz
+Message-ID: <20220622065155.uoo2matz36a45nfa@pengutronix.de>
+References: <20220512104019.19725-1-andrejs.cainikovs@toradex.com>
+ <20220621180749.GA22098@francesco-nb.int.toradex.com>
+ <20220621195046.rnv66d2333wjmtow@pengutronix.de>
+ <7d04c05771ded0f8302d716fa5289d94df27c8eb.camel@toradex.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="76kamf7d6dnpz6x3"
+Content-Disposition: inline
+In-Reply-To: <7d04c05771ded0f8302d716fa5289d94df27c8eb.camel@toradex.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nfc_tm_data_received will free skb internally when it fails. There is no
-need to free skb in st21nfca_im_recv_dep_res_cb again.
 
-Fix this by setting skb to NULL when nfc_tm_data_received fails.
+--76kamf7d6dnpz6x3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 1892bf844ea0 ("NFC: st21nfca: Adding P2P support to st21nfca in Initiator & Target mode")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- drivers/nfc/st21nfca/dep.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 22.06.2022 08:38:04, Andrejs Cainikovs wrote:
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0can1: can@0 {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "microchip,mcp251xfd";
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0clocks =3D <&clk20m>;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0clocks =3D <&clk40m>;
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0interrupts-extended =3D <&gpio1 6
+> > > > IRQ_TYPE_EDGE_FALLING>;
+> >=20
+> > You don't want to use an edge triggered interrupt with the mcp251xfd
+> > chip. You will be losing interrupts, better use IRQ_TYPE_LEVEL_LOW.
+>=20
+> This particular change is not about interrupts.
 
-diff --git a/drivers/nfc/st21nfca/dep.c b/drivers/nfc/st21nfca/dep.c
-index 1ec651e31064..07ac5688011c 100644
---- a/drivers/nfc/st21nfca/dep.c
-+++ b/drivers/nfc/st21nfca/dep.c
-@@ -594,7 +594,8 @@ static void st21nfca_im_recv_dep_res_cb(void *context, struct sk_buff *skb,
- 			    ST21NFCA_NFC_DEP_PFB_PNI(dep_res->pfb + 1);
- 			size++;
- 			skb_pull(skb, size);
--			nfc_tm_data_received(info->hdev->ndev, skb);
-+			if (nfc_tm_data_received(info->hdev->ndev, skb))
-+				skb = NULL;
- 			break;
- 		case ST21NFCA_NFC_DEP_PFB_SUPERVISOR_PDU:
- 			pr_err("Received a SUPERVISOR PDU\n");
--- 
-2.25.1
+Sure, I just noticed it.
 
+> But thanks for a hint, I'll make sure this is addressed.
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--76kamf7d6dnpz6x3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKyvAkACgkQrX5LkNig
+010wLwgAilTVnq+l3oHfKypqDgkOYJt5Clt1qpWaDjQR3y7xem66KBUD262Cvjhh
+LJScmqZNUUUIXS65kl2JDPuOLvm6RmR83+oGF0j9AyWWEk50g2FU3sJX5TZCpm+G
+2chxh01cuppbO8Lf8TZLKJtzfimWxtZZpJ25AJJP7Mwl1Nqo+CjXJuRuL0IRVr/v
+/BTzry3IjLirEFjy+0coO5LnSj6tX9fb0+WnREqkvN9nLI6X1ZPD4YIeidaN8kig
+Y5sAgvN/4iWno0uUl4YK/H/hH9OFddkK0ctgIgqnXi/8h8qpZqJlfjZQGbaXq/iv
+OXBkBjZoDkVCfuwPI6tNz/FwxIgJkA==
+=kWUK
+-----END PGP SIGNATURE-----
+
+--76kamf7d6dnpz6x3--

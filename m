@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1D0556E05
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD6B556E09
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241889AbiFVVwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 17:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S229737AbiFVV5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 17:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbiFVVwH (ORCPT
+        with ESMTP id S229794AbiFVV47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 17:52:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1AD3F885;
-        Wed, 22 Jun 2022 14:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655934727; x=1687470727;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OKSjDCXBPWAqYOO2qdqkra9IDNhXCaifuwSh1mco7lw=;
-  b=n3V2YEHp6hS6lhXR2hE5PiSf52yrE2/AVjGx3oy2bDh/q2NOTiX4cKdC
-   +i3myZL3HYgUrziMxkSsfjYSyOW2TJZH7dithQpwdTYN3KeN+7OvMhEKl
-   KBH051ycH9dfHDzb+zA3ZxepqLT1zGo2YLatlRs+pu/mBHl2/KuK0FaPI
-   eNl5UwjrfFKmsXg4aN3YrBfF8ag5Huz0fSvxeiy49qAxGht7OkOtFTNPJ
-   KcWx9dgoIVxEjFYXbbYlpw+1GSaV5OFxHuxGpZ7R6R2cMTLzxsIJJHEmT
-   WCC7hPOi/2AiZJLhlCoF7FqI/cr3+uhvFO4Aicdx5xmTfonCrMkhrh74M
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="366876566"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="366876566"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 14:52:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="765057657"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jun 2022 14:52:03 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o48GY-0001jI-TA;
-        Wed, 22 Jun 2022 21:52:02 +0000
-Date:   Thu, 23 Jun 2022 05:51:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: Re: [PATCH] tty: serial: qcom-geni-serial: Fix get_clk_div_rate()
- which otherwise could return a sub-optimal clock rate.
-Message-ID: <202206230511.W02MMaf8-lkp@intel.com>
-References: <1655834239-20812-1-git-send-email-quic_vnivarth@quicinc.com>
+        Wed, 22 Jun 2022 17:56:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC354091F;
+        Wed, 22 Jun 2022 14:56:52 -0700 (PDT)
+X-UUID: 6cab5ec6d26c4b64a2758275354ba7a7-20220623
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:f070b29b-1b90-403b-959e-e22f7ef95d15,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:100
+X-CID-INFO: VERSION:1.1.6,REQID:f070b29b-1b90-403b-959e-e22f7ef95d15,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
+        ION:quarantine,TS:100
+X-CID-META: VersionHash:b14ad71,CLOUDID:c7ab3438-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:76d87f2229d8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 6cab5ec6d26c4b64a2758275354ba7a7-20220623
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 969767491; Thu, 23 Jun 2022 05:56:45 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 23 Jun 2022 05:56:44 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 23 Jun 2022 05:56:43 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
+CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
+        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
+        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
+        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
+        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
+        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
+        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
+        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
+        <jsiuda@google.com>, <frankgor@google.com>,
+        <abhishekpandit@google.com>, <michaelfsun@google.com>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Yake Yang" <yake.yang@mediatek.com>
+Subject: [PATCH v2] Bluetooth: btmtksdio: Add in-band wakeup support
+Date:   Thu, 23 Jun 2022 05:56:43 +0800
+Message-ID: <52b63a1be094a1ccbb20f2c89472580d95f0652a.1655934689.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1655834239-20812-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,44 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vijaya,
+From: Sean Wang <sean.wang@mediatek.com>
 
-Thank you for the patch! Yet something to improve:
+Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")
+adds the wake on bluethooth via a dedicated GPIO.
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on linus/master v5.19-rc3 next-20220622]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup),
+when supported by the SDIO host driver.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220622-015826
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: arm-randconfig-r036-20220622 (https://download.01.org/0day-ci/archive/20220623/202206230511.W02MMaf8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/668659f1481053090a9dbe9c83bd769de527a5c2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220622-015826
-        git checkout 668659f1481053090a9dbe9c83bd769de527a5c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Co-developed-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+---
+v2: enhance the patch description and comments
+---
+ drivers/bluetooth/btmtksdio.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: __aeabi_uldivmod
-   >>> referenced by qcom_geni_serial.c
-   >>>               tty/serial/qcom_geni_serial.o:(find_clk_rate_in_tol) in archive drivers/built-in.a
-   >>> did you mean: __aeabi_uidivmod
-   >>> defined in: arch/arm/lib/lib.a(lib1funcs.o)
-
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index d6700efcfe8c..9d79c9107b3a 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
+ #define BTMTKSDIO_FUNC_ENABLED		3
+ #define BTMTKSDIO_PATCH_ENABLED		4
+ #define BTMTKSDIO_HW_RESET_ACTIVE	5
++#define BTMTKSDIO_INBAND_WAKEUP		6
+ 
+ struct mtkbtsdio_hdr {
+ 	__le16	len;
+@@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
+ 		.wakeup_delay = cpu_to_le16(0x20),
+ 	};
+ 
++	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
++		return may_wakeup;
++
+ 	if (may_wakeup && bdev->data->chipid == 0x7921) {
+ 		struct sk_buff *skb;
+ 
+@@ -1384,6 +1388,10 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	 */
+ 	pm_runtime_put_noidle(bdev->dev);
+ 
++	/* Mark if MMC host supports wake on bluetooth by SDIO */
++	if (device_can_wakeup(func->card->host->parent))
++		set_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state);
++
+ 	err = device_init_wakeup(bdev->dev, true);
+ 	if (err)
+ 		bt_dev_err(hdev, "failed to initialize device wakeup");
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

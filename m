@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BAF554DC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18648554DBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356276AbiFVOrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S237361AbiFVOqQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Jun 2022 10:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234468AbiFVOrD (ORCPT
+        with ESMTP id S231462AbiFVOqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:47:03 -0400
-Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F407E3D482;
-        Wed, 22 Jun 2022 07:46:58 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1655909132tayjd3s4
-Received: from ubuntu.localdomain ( [106.117.78.84])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 22:45:27 +0800 (CST)
-X-QQ-SSF: 01000000008000B0B000E00A0000000
-X-QQ-FEAT: ZHWZeLXy+8ccYDnDNqsyMZI0CU3GWcmP17rM7zdSPdGRVVfYdwz8jIwc2eo2I
-        kfbolRK+ICh7uYcO4+gSiajaAdeDAso1iTjpXJuoPayKQT/9OQGjDYfNUYApeKfRUGNUVFv
-        1biMHBy6j+nBgUG3OnmNw6V6dYNLchttO/+xLBhV3YvWhXvaIHC+KG7n1O2ofBhf1/ZKTTU
-        MNxNP0lu0cB20qkr1yXRH4QFRVQQy4qkU6YafFNAfRPuY/UxYozI1AA/6EVsE+41ozYyEwS
-        wOb1EkF5xUu2ly2XeD4C8gI3mZigLpZDyi/TQSSWT2Uz7HV7JV0iJZLpuOi0GReSvN9h+qn
-        ZOvILq/yw9WZ0WJa/thXqE+erLUBd2TMbUl3AXE
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     michael.chan@broadcom.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] bnxt: Fix typo in comments
-Date:   Wed, 22 Jun 2022 22:45:26 +0800
-Message-Id: <20220622144526.20659-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 10:46:14 -0400
+Received: from relay4.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008C53CA4E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:46:12 -0700 (PDT)
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 880A0211D8;
+        Wed, 22 Jun 2022 14:46:11 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 1E1AA38;
+        Wed, 22 Jun 2022 14:46:06 +0000 (UTC)
+Message-ID: <37d560bc5267408eb9cc806339025418094cf5bb.camel@perches.com>
+Subject: Re: [PATCH] MIPS: Fix 2 typos
+From:   Joe Perches <joe@perches.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Zhang Jiaming <jiaming@nfschina.com>, tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com
+Date:   Wed, 22 Jun 2022 07:46:01 -0700
+In-Reply-To: <d2112863-bd28-d6db-c353-1b7b94b45fcb@infradead.org>
+References: <20220622090713.24370-1-jiaming@nfschina.com>
+         <d2112863-bd28-d6db-c353-1b7b94b45fcb@infradead.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
+MIME-Version: 1.0
+X-Stat-Signature: abnynm7f41xexum4qqrwzek1ynrc653a
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 1E1AA38
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19lgcxluOxcGqjU5XTKXoTq92I4KprCEbA=
+X-HE-Tag: 1655909166-228282
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the repeated word 'and' from comments
+On Wed, 2022-06-22 at 07:28 -0700, Randy Dunlap wrote:
+> On 6/22/22 02:07, Zhang Jiaming wrote:
+> > Change 'modifed' to 'modified'.
+> > Change 'relys' to 'relays'.
+[]
+> > diff --git a/arch/mips/cavium-octeon/executive/cvmx-helper-board.c b/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
+[]
+> > @@ -282,9 +282,9 @@ union cvmx_helper_link_info __cvmx_helper_board_link_get(int ipd_port)
+> >   * support and should return the number of actual ports on the
+> >   * board.
+> >   *
+> > - * This function must be modifed for every new Octeon board.
+> > + * This function must be modified for every new Octeon board.
+> >   * Internally it uses switch statements based on the cvmx_sysinfo
+> > - * data to determine board types and revisions. It relys on the
+> 
+>                                                       relies
+> 
+> But it would be better to restrict this barrage (or swarm) of patches
+> to Kconfig help text problems and/or strings that are printed to users.
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I believe fixing typos isn't a particular problem and is
+overall rather a good thing.
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 56b46b8206a7..b474a4fe4039 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -10658,7 +10658,7 @@ static void __bnxt_close_nic(struct bnxt *bp, bool irq_re_init,
- 	while (bnxt_drv_busy(bp))
- 		msleep(20);
- 
--	/* Flush rings and and disable interrupts */
-+	/* Flush rings and disable interrupts */
- 	bnxt_shutdown_nic(bp, irq_re_init);
- 
- 	/* TODO CHIMP_FW: Link/PHY related cleanup if (link_re_init) */
--- 
-2.17.1
+Though backporting these patches would be silly.
 

@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFB15550FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F40F555101
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359322AbiFVQMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S1376372AbiFVQN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235461AbiFVQMt (ORCPT
+        with ESMTP id S1376571AbiFVQNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:12:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083923C71A;
-        Wed, 22 Jun 2022 09:12:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 986BB61A0D;
-        Wed, 22 Jun 2022 16:12:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C743BC34114;
-        Wed, 22 Jun 2022 16:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655914367;
-        bh=PCgP866NI3UvwGJGkteVd/VryH9Qe+1ogwHzwOkGjbo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YntJBVHOMYYGl74h02wD97NMioNXX2hQ/LMrwHYkMezUw9ODnOqtVm+NeCVCdWJNs
-         j1JXiALO8TWn/L4DgYz0EzTcUBW2d0WHtWWRrSD6y3m8rJfLH0YosJ//kRtKyvGdPA
-         0h1qiW6iUm8LjK6ZIbsv9qdQx/j8lcq+SOQfoOTN942ePvU3NDZqkmM7QI3vBYoZhA
-         NVguUeIBxhvwhogFE48r/sQ8fL1SVzo8Mm0tu3Lz8Q8KUmZUpdMIwZodKIV2p5xNw6
-         HHpJ3CWOFrWJEt7MLv88xC7WxKSBayU0AMBF0LRcUbxXi0gRoI2UAS/gbEYwFNkcGv
-         +j/XmFAHCcACg==
-Date:   Wed, 22 Jun 2022 12:12:45 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Julian Haller <julian.haller@philips.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 5.4 1/2] hwmon: Introduce
- hwmon_device_register_for_thermal
-Message-ID: <YrM/fbnU71g4Jn4o@sashalap>
-References: <20220622150234.GC1861763@roeck-us.net>
- <20220622153950.3001449-1-jhaller@bbl.ms.philips.com>
- <20220622154454.GA1864037@roeck-us.net>
- <YrM+wxRWV+RFTfjY@kroah.com>
+        Wed, 22 Jun 2022 12:13:52 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A71E25E9F;
+        Wed, 22 Jun 2022 09:13:51 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id c13so20139110eds.10;
+        Wed, 22 Jun 2022 09:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cE/2OYYz5mN+xKGqyzZkM7i8jyDkRjpQ6WY0c9nnpkI=;
+        b=nUQ08BYK5oFMjhuwIdhfb68k27dg61OmpVwaXYMS2hbVZ9fdyf4oALt66tdaAUL1B3
+         rWBbo4MtyGKruasxn6e7dLhgHxT7LvmG0Pv//40q50rgMdT2GxH75jMdCs2hmJWfoBAA
+         b0rday1T6F/TkSeyE2Q/HBQBDt5gmvhgDjldLPtLkUD1T2+gjpW9bvme1SJnwqbMN4Pg
+         m2ToIWwJfj8bYsPP2DD4hddV+T6+336irst/x0Qkk+OmjsdYvg5Cn72N7wSYlVDKsKAv
+         t/xheAfXiJoPoZL/hy7MrwiCT23C/OylmEHjICTSiQq0MSMLxXIvM87lGKoLoy7Ag+0e
+         aYdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cE/2OYYz5mN+xKGqyzZkM7i8jyDkRjpQ6WY0c9nnpkI=;
+        b=rG46YWwaT1ZlnUHJNnYLBqCAUBAFOrl0Bo4tqoiIA6nfJEBFaAH0oO+IX24llsGIZ5
+         7PxtQKcjjiUUxsfj1CIeVKnXb/XjceUonDllX9UDFBRi4qjLiWrdp26BW4hHhZxZGDOD
+         Byc17Iy9d25cPo08+uTExJUPLJC5i0R79N+vPjAAqMuRI6oGX0reEkQs+fqfGOQxe/un
+         2X7YMOhFupeFHiM2vjFVSxS+xNKLD0F5e3vpLQQFlxJxf6ENJSZ4zsXsqdZCieRjj0/r
+         YaKQdNbeqtWsdH75fe1oEX8LpFqU8/a29XkoOFJg73HxsEg+g7Fr9Sybe8kzaVqNjqU0
+         al+w==
+X-Gm-Message-State: AJIora88chQXhsgato30gS/5kiZ2wq3b150Bgf6g9wBkUZdij4pbv2U9
+        zm//uvMfSB3Q319w9PyFZCs=
+X-Google-Smtp-Source: AGRyM1tWD6g6LO0qhLnaY9KN6b/00f7QxioRtjLEKur7v1cPD63I0UcdtnaoF4NQCs9CgxoC6rjd9w==
+X-Received: by 2002:a05:6402:348e:b0:435:a912:355f with SMTP id v14-20020a056402348e00b00435a912355fmr4947487edc.326.1655914429451;
+        Wed, 22 Jun 2022 09:13:49 -0700 (PDT)
+Received: from localhost.localdomain ([185.107.95.225])
+        by smtp.gmail.com with ESMTPSA id sd14-20020a1709076e0e00b007072dc80e06sm9576036ejc.190.2022.06.22.09.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 09:13:48 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] ASoC: dt-bindings: Add bindings for WCD9335 DAIs
+Date:   Wed, 22 Jun 2022 20:13:19 +0400
+Message-Id: <20220622161322.168017-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YrM+wxRWV+RFTfjY@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 06:09:39PM +0200, Greg KH wrote:
->On Wed, Jun 22, 2022 at 08:44:54AM -0700, Guenter Roeck wrote:
->> On Wed, Jun 22, 2022 at 05:39:50PM +0200, Julian Haller wrote:
->> > > On Wed, Jun 22, 2022 at 04:49:01PM +0200, Julian Haller wrote:
->> > > > From: Guenter Roeck <linux@roeck-us.net>
->> > > >
->> > > > [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
->> > > >
->> > > > The thermal subsystem registers a hwmon driver without providing
->> > > > chip or sysfs group information. This is for legacy reasons and
->> > > > would be difficult to change. At the same time, we want to enforce
->> > > > that chip information is provided when registering a hwmon device
->> > > > using hwmon_device_register_with_info(). To enable this, introduce
->> > > > a special API for use only by the thermal subsystem.
->> > > >
->> > > > Acked-by: Rafael J . Wysocki <rafael@kernel.org>
->> > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> > >
->> > > What is the point of applying those patches to the 5.4 kernel ?
->> > > This was intended for use with new code, not for stable releases.
->> > >
->> > > Guenter
->> >
->> > The upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ("hwmon: Make chip
->> > parameter for with_info API mandatory") was backported to the 5.4 kernel as
->> > part of v5.4.198, see commit 1ec0bc72f5dab3ab367ae5230cf6f212d805a225. This
->> > breaks the hwmon device registration in the thermal drivers as these two
->> > patches here have been left out. We either need to include them as well or
->> > revert the original commit.
->> >
->> > I'm also not sure why the original commit found its way into the 5.4 stable
->> > branch.
->> >
->>
->> I had complained about this backport to other branches before. That patch
->> was not a bug fix, it was neither intended nor marked for stable releases,
->> and it should be reverted from all stable branches.
->
->Yes, that's not right, let me go revert that.  Odd that it only went
->into 4.19 and 5.4, I think Sasha's scripts went wonky there...
+Add DT bindings for WCD9335 DAIs and use them in the driver as well
+as all device trees currently using WCD9335.
 
-Yes, I definitely remember dropping it - not sure how it ended up on
-those two kernels. I'll dig into what happened here. sorry :(
+Changes since v1:
+ - Make header guard match path
+ - Maintain the alphabetical order in msm8996-xiaomi-gemini includes
+
+Yassine Oudjana (3):
+  ASoC: dt-bindings: Add bindings for WCD9335 DAIs
+  ASoC: wcd9335: Use DT bindings instead of local DAI definitions
+  arm64: dts: qcom: Use WCD9335 DT bindings
+
+ MAINTAINERS                                       |  1 +
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts       |  5 +++--
+ .../arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts |  5 +++--
+ .../boot/dts/qcom/msm8996-xiaomi-scorpio.dts      |  5 +++--
+ include/dt-bindings/sound/qcom,wcd9335.h          | 15 +++++++++++++++
+ sound/soc/codecs/wcd9335.c                        | 13 ++-----------
+ 6 files changed, 27 insertions(+), 17 deletions(-)
+ create mode 100644 include/dt-bindings/sound/qcom,wcd9335.h
 
 -- 
-Thanks,
-Sasha
+2.36.1
+

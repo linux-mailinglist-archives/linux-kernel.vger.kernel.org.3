@@ -2,218 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BE855506D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57F7554FD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359811AbiFVPzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S1359650AbiFVPtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359665AbiFVPxC (ORCPT
+        with ESMTP id S1359637AbiFVPta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:53:02 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F4E2F385;
-        Wed, 22 Jun 2022 08:52:49 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LSnvK21rJzDs3V;
-        Wed, 22 Jun 2022 23:52:13 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:46 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:46 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kbuild@vger.kernel.org>, <live-patching@vger.kernel.org>
-CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
-        <ndesaulniers@google.com>, <mark.rutland@arm.com>,
-        <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
-        <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
-        <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 25/33] arm64: crypto: Mark constant as data
-Date:   Wed, 22 Jun 2022 23:49:12 +0800
-Message-ID: <20220622154920.95075-26-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
-References: <20220622154920.95075-1-chenzhongjin@huawei.com>
+        Wed, 22 Jun 2022 11:49:30 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD3438B7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:49:22 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id c205so9750218pfc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding:content-disposition;
+        bh=dyf36lr5WZ/lcylyR7cKNfLAoZGPSwRPa77iGVuLEGo=;
+        b=I/HqCZsUvFcBEUwF5a8rWR9LwJWFXxynBLCTN2zjgAvRzcchfojW0XPIPCjKZC/jBX
+         DBDFHleMZwSotQritRYltSPNNSDcHJ1Pj3wmEvUblrpglWBNqOJWd0FXte/YoLEqkU7w
+         4b3OuU3wa5rBAN/+8COviRjPsO275zs3Ol8n0FSswTtcdusIwN2aEAW9OTyimame1Tv7
+         U9Z0fn+UNfbI+pvIsTzzi+tIrg0PSPMs5vHygixFUXRLUYBr9s5outrasPTKKpGwBvYL
+         X08UExd5sL0/zkC0CrCYOa5kSCBNY+rp+JzE68IMy3hOtBRjqAS9zh7dgBzFQYwUnt5m
+         Nthg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding
+         :content-disposition;
+        bh=dyf36lr5WZ/lcylyR7cKNfLAoZGPSwRPa77iGVuLEGo=;
+        b=rCFzDgnQGew6xWOe982Bp09vGazJydHLdfPXhOkcUVfjgP3N8iZBJA1SJQ6JJ1Fu6u
+         PFGbLQvapK4BqrMh1GdnHKVZxM2bIGL4yDmoXt6N7ktfte0DarxMC42nZzyg0yFqItua
+         1HXzHL4HjeDRoEGlERwn37x60EGvR/WWWVC/lK16iyDbPJIYd/o/nYrNLXgTmDNdcbsm
+         gK7SaXKK/AEchlvD8UbWrFVYNZJ2ZBxyRZ+JFRLofNpWC1axIelGYbDGfuqXOrY9545C
+         4Pjt8FLBDeoGK8Fo5RzSczdWIM92rT/EHcV0t2tplfTWP7F3GHUuJT3txKWmMur4TONk
+         KKng==
+X-Gm-Message-State: AJIora/eQuL3qTJ3jkjmd8lUthS2FwiuloMWaquoDv5nr36JouGsIA+Q
+        9c5Hl90p3Vl9Apn1CsUlEmeHyiknq7sayw==
+X-Google-Smtp-Source: AGRyM1sRaCby6qfulXBJB2lxN+sUHUI8bG0YnCIYXJiNPA1yocuIdWKsg7TcjpuPf8HfzKaaQpIFpw==
+X-Received: by 2002:aa7:8c51:0:b0:525:4141:fe5e with SMTP id e17-20020aa78c51000000b005254141fe5emr6171423pfd.51.1655912961288;
+        Wed, 22 Jun 2022 08:49:21 -0700 (PDT)
+Received: from pc ([103.142.140.127])
+        by smtp.gmail.com with ESMTPSA id p11-20020a170902e34b00b001690a6394b6sm1610542plc.247.2022.06.22.08.49.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 Jun 2022 08:49:20 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 23:49:13 +0800
+From:   Zackary Liu <zackary.liu.pro@gmail.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "=?utf-8?Q?mingo=40redhat.com?=" <mingo@redhat.com>,
+        "=?utf-8?Q?peterz=40infradead.org?=" <peterz@infradead.org>,
+        "=?utf-8?Q?juri.lelli=40redhat.com?=" <juri.lelli@redhat.com>,
+        "=?utf-8?Q?dietmar.eggemann=40arm.com?=" <dietmar.eggemann@arm.com>,
+        "=?utf-8?Q?rostedt=40goodmis.org?=" <rostedt@goodmis.org>,
+        "=?utf-8?Q?bsegall=40google.com?=" <bsegall@google.com>,
+        "=?utf-8?Q?mgorman=40suse.de?=" <mgorman@suse.de>,
+        "=?utf-8?Q?bristot=40redhat.com?=" <bristot@redhat.com>,
+        "=?utf-8?Q?vschneid=40redhat.com?=" <vschneid@redhat.com>,
+        "=?utf-8?Q?kuyo.chang=40mediatek.com?=" <kuyo.chang@mediatek.com>,
+        "=?utf-8?Q?linux-kernel=40vger.kernel.org?=" 
+        <linux-kernel@vger.kernel.org>
+Message-ID: <7CD2EF28-F810-4733-8246-28D9821C180B@getmailspring.com>
+In-Reply-To: <CAKfTPtCgbtKkjA+tU2DFJgKAsXV+kFKipMxTuReaT5QKNvvAGA@mail.gmail.com>
+References: <CAKfTPtCgbtKkjA+tU2DFJgKAsXV+kFKipMxTuReaT5QKNvvAGA@mail.gmail.com>
+Subject: Re: [PATCH] sched/pelt: simplify load_sum assignment code in
+ attach_entity_load_avg()
+X-Mailer: Mailspring
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use SYM_DATA_* macros to annotate data bytes in the middle of .text
-sections.
+On Jun 22 2022, at 11:20 pm, Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
 
-For local symbols, ".L" prefix needs to be dropped as the assembler
-exclude the symbols from the .o symbol table, making objtool unable
-to see them.
+> On Tue, 21 Jun 2022 at 17:45, Zhaoyu Liu <zackary.liu.pro@gmail.com> wrote:
+>> 
+>> In commit 40f5aa4c5eae ("sched/pelt: Fix attach_entity_load_avg()
+>> corner case"),
+>> these code was committed:
+>>         if (se_weight(se) < se->avg.load_sum)
+>>                 se->avg.load_sum = div_u64(se->avg.load_sum, se_weight(se));
+>>         else
+>>                 se->avg.load_sum = 1;
+>> 
+>> they could be replace with:
+>>         se->avg.load_sum = div_u64(se->avg.load_sum, se_weight(se))
+>> ?: 1;
+>> 
+>> to make the code cleaner.
+> 
+> This quite subjective as I consider current version cleaner than your proposal
 
-Signed-off-by: Julien Thierry <jthierry@redhat.com>
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- arch/arm64/crypto/aes-neonbs-core.S | 14 +++++++-------
- arch/arm64/crypto/poly1305-armv8.pl |  4 ++++
- arch/arm64/crypto/sha512-armv8.pl   | 24 ++++++++++++++----------
- 3 files changed, 25 insertions(+), 17 deletions(-)
+Thanks for your reply, vincent
 
-diff --git a/arch/arm64/crypto/aes-neonbs-core.S b/arch/arm64/crypto/aes-neonbs-core.S
-index d427f4556b6e..fa161d1bf264 100644
---- a/arch/arm64/crypto/aes-neonbs-core.S
-+++ b/arch/arm64/crypto/aes-neonbs-core.S
-@@ -367,15 +367,15 @@
- 
- 
- 	.align		6
--M0:	.octa		0x0004080c0105090d02060a0e03070b0f
-+SYM_DATA_LOCAL(M0,	.octa		0x0004080c0105090d02060a0e03070b0f)
- 
--M0SR:	.octa		0x0004080c05090d010a0e02060f03070b
--SR:	.octa		0x0f0e0d0c0a09080b0504070600030201
--SRM0:	.octa		0x01060b0c0207080d0304090e00050a0f
-+SYM_DATA_LOCAL(M0SR,	.octa		0x0004080c05090d010a0e02060f03070b)
-+SYM_DATA_LOCAL(SR,	.octa		0x0f0e0d0c0a09080b0504070600030201)
-+SYM_DATA_LOCAL(SRM0,	.octa		0x01060b0c0207080d0304090e00050a0f)
- 
--M0ISR:	.octa		0x0004080c0d0105090a0e0206070b0f03
--ISR:	.octa		0x0f0e0d0c080b0a090504070602010003
--ISRM0:	.octa		0x0306090c00070a0d01040b0e0205080f
-+SYM_DATA_LOCAL(M0ISR,	.octa		0x0004080c0d0105090a0e0206070b0f03)
-+SYM_DATA_LOCAL(ISR,	.octa		0x0f0e0d0c080b0a090504070602010003)
-+SYM_DATA_LOCAL(ISRM0,	.octa		0x0306090c00070a0d01040b0e0205080f)
- 
- 	/*
- 	 * void aesbs_convert_key(u8 out[], u32 const rk[], int rounds)
-diff --git a/arch/arm64/crypto/poly1305-armv8.pl b/arch/arm64/crypto/poly1305-armv8.pl
-index cbc980fb02e3..f460f33c127a 100644
---- a/arch/arm64/crypto/poly1305-armv8.pl
-+++ b/arch/arm64/crypto/poly1305-armv8.pl
-@@ -47,6 +47,8 @@ my ($mac,$nonce)=($inp,$len);
- my ($h0,$h1,$h2,$r0,$r1,$s1,$t0,$t1,$d0,$d1,$d2) = map("x$_",(4..14));
- 
- $code.=<<___;
-+#include <linux/linkage.h>
-+
- #ifndef __KERNEL__
- # include "arm_arch.h"
- .extern	OPENSSL_armcap_P
-@@ -888,8 +890,10 @@ poly1305_blocks_neon:
- .align	5
- .Lzeros:
- .long	0,0,0,0,0,0,0,0
-+SYM_DATA_START_LOCAL(POLY1305_str)
- .asciz	"Poly1305 for ARMv8, CRYPTOGAMS by \@dot-asm"
- .align	2
-+SYM_DATA_END(POLY1305_str)
- #if !defined(__KERNEL__) && !defined(_WIN64)
- .comm	OPENSSL_armcap_P,4,4
- .hidden	OPENSSL_armcap_P
-diff --git a/arch/arm64/crypto/sha512-armv8.pl b/arch/arm64/crypto/sha512-armv8.pl
-index 35ec9ae99fe1..1882c4110026 100644
---- a/arch/arm64/crypto/sha512-armv8.pl
-+++ b/arch/arm64/crypto/sha512-armv8.pl
-@@ -193,6 +193,8 @@ ___
- }
- 
- $code.=<<___;
-+#include <linux/linkage.h>
-+
- #ifndef	__KERNEL__
- # include "arm_arch.h"
- #endif
-@@ -208,11 +210,11 @@ ___
- $code.=<<___	if ($SZ==4);
- #ifndef	__KERNEL__
- # ifdef	__ILP32__
--	ldrsw	x16,.LOPENSSL_armcap_P
-+	ldrsw	x16,OPENSSL_armcap_P_rel
- # else
--	ldr	x16,.LOPENSSL_armcap_P
-+	ldr	x16,OPENSSL_armcap_P_rel
- # endif
--	adr	x17,.LOPENSSL_armcap_P
-+	adr	x17,OPENSSL_armcap_P_rel
- 	add	x16,x16,x17
- 	ldr	w16,[x16]
- 	tst	w16,#ARMV8_SHA256
-@@ -237,7 +239,7 @@ $code.=<<___;
- 	ldp	$E,$F,[$ctx,#4*$SZ]
- 	add	$num,$inp,$num,lsl#`log(16*$SZ)/log(2)`	// end of input
- 	ldp	$G,$H,[$ctx,#6*$SZ]
--	adr	$Ktbl,.LK$BITS
-+	adr	$Ktbl,K$BITS
- 	stp	$ctx,$num,[x29,#96]
- 
- .Loop:
-@@ -287,8 +289,7 @@ $code.=<<___;
- .size	$func,.-$func
- 
- .align	6
--.type	.LK$BITS,%object
--.LK$BITS:
-+SYM_DATA_START_LOCAL(K$BITS)
- ___
- $code.=<<___ if ($SZ==8);
- 	.quad	0x428a2f98d728ae22,0x7137449123ef65cd
-@@ -353,18 +354,21 @@ $code.=<<___ if ($SZ==4);
- 	.long	0	//terminator
- ___
- $code.=<<___;
--.size	.LK$BITS,.-.LK$BITS
-+SYM_DATA_END(K$BITS)
- #ifndef	__KERNEL__
- .align	3
--.LOPENSSL_armcap_P:
-+SYM_DATA_START_LOCAL(OPENSSL_armcap_P_rel)
- # ifdef	__ILP32__
- 	.long	OPENSSL_armcap_P-.
- # else
- 	.quad	OPENSSL_armcap_P-.
- # endif
-+SYM_DATA_END(OPENSSL_armcap_P_rel)
- #endif
-+SYM_DATA_START_LOCAL(OPENSSL_str)
- .asciz	"SHA$BITS block transform for ARMv8, CRYPTOGAMS by <appro\@openssl.org>"
- .align	2
-+SYM_DATA_END(OPENSSL_str)
- ___
- 
- if ($SZ==4) {
-@@ -385,7 +389,7 @@ sha256_block_armv8:
- 	add		x29,sp,#0
- 
- 	ld1.32		{$ABCD,$EFGH},[$ctx]
--	adr		$Ktbl,.LK256
-+	adr		$Ktbl,K256
- 
- .Loop_hw:
- 	ld1		{@MSG[0]-@MSG[3]},[$inp],#64
-@@ -648,7 +652,7 @@ sha256_block_neon:
- 	mov	x29, sp
- 	sub	sp,sp,#16*4
- 
--	adr	$Ktbl,.LK256
-+	adr	$Ktbl,K256
- 	add	$num,$inp,$num,lsl#6	// len to point at the end of inp
- 
- 	ld1.8	{@X[0]},[$inp], #16
--- 
-2.17.1
+Perhaps, this code is more concise, and this form can exist in many
+places in the kernel, and can be searched with 'grep "?: 1;" -nR kernel'
 
+--
+zackary

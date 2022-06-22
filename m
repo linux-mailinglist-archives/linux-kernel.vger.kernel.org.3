@@ -2,99 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7EB554EDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37607554EE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359138AbiFVPOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S1359174AbiFVPQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359238AbiFVPOV (ORCPT
+        with ESMTP id S1359127AbiFVPQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:14:21 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47313BBFA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:14:19 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z7so24333708edm.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=MrbZtaLd72AWbUNZUvq+3EUC9TFqAA/Ym3AEvzkLNkQ=;
-        b=RtkZJ0W24qnsBx8EJBAs5r569tN8kJedXETYlMi1T5FjsGZVbGwmCLEwhBpOYxC4YZ
-         neDhjYhVyFrIjkuIbq85C8MAHs/NyTShod3cTHY+I2UhJxzFS8BBdGt13Uy6MGqVPCO8
-         BraKMmGvWW1dCGwdjMVgYWan2ZAcQz/PZRzIK16BuDxsDvQb0322zIggL9LQHd3MV76W
-         gJsOW1Ag4JjlQ0mQbRQ3HizozpWos3mxfQ8PVZvM81TVX5xZrDJcA/gQq/rxkH78pdhu
-         LLMAJm57sxF5ohAbGyw5ay7pCZ07AwnBIQH34Bh/GKy+IhR/oDQyBODX4wTmsB4wtKr+
-         7MUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MrbZtaLd72AWbUNZUvq+3EUC9TFqAA/Ym3AEvzkLNkQ=;
-        b=sX82/l/9BtwYB0QOUzUZw6z5TOU1V1lB5UdtedYapGCWJLeJn3L/LGyvsd0GhF2iSm
-         qY06cuEiAW+NBajpK8+KWsxZkypqGvUj+0SIbPH+ZEGrXTIvM2483x6FLr+1oUZJzVvp
-         a61X6qfKVigOVkheC0XoQK6Ae+C6SL92Iv6MxHoRyJZpyJI6tRxgxVuNGkbKoP5WYpeK
-         Z+iuGmNBiTWMfqMEIoxRgkbzwo51r713nf0ENzaK4/Cbz7nQenA5o0EgDLlW7Y+i/PL8
-         HGWoNLHRRtlPv9yyeUwb4s76OfKQ0HmknrQ+t4o5cQ8/ELbp4xKA3th3+3g7LzdxB92M
-         J9Pw==
-X-Gm-Message-State: AJIora9moAcy9Wsfm3oaOTeZEKtW4+wRNEXM3kF5Vh3TaSkRVI4uQLaQ
-        k8WHuK2kgCibgn073+dDOVAXHQ==
-X-Google-Smtp-Source: AGRyM1s2PrI91CQS76o4vHYX7nL2Klo+CzdTyknqWI0pfwCxZ0Srhg/foHX3Wb4KMaJnGGlL1UyvrQ==
-X-Received: by 2002:a05:6402:51d3:b0:431:6c7b:28d with SMTP id r19-20020a05640251d300b004316c7b028dmr4549790edd.281.1655910858371;
-        Wed, 22 Jun 2022 08:14:18 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b0070b7875aa6asm6737858ejh.166.2022.06.22.08.14.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 08:14:17 -0700 (PDT)
-Message-ID: <317d18af-e4a0-523e-960f-5e2df66afe19@linaro.org>
-Date:   Wed, 22 Jun 2022 17:14:16 +0200
+        Wed, 22 Jun 2022 11:16:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79A7C2CDFF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:16:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5936C12FC;
+        Wed, 22 Jun 2022 08:16:15 -0700 (PDT)
+Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B701F3F792;
+        Wed, 22 Jun 2022 08:16:12 -0700 (PDT)
+Subject: Re: [PATCH v4 19/21] x86/resctrl: Rename and change the units of
+ resctrl_cqm_threshold
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        lcherian@marvell.com, bobo.shaobowang@huawei.com,
+        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
+        baolin.wang@linux.alibaba.com
+References: <20220412124419.30689-1-james.morse@arm.com>
+ <20220412124419.30689-20-james.morse@arm.com>
+ <Yp/MUBOKvu+EqBmz@fyu1.sc.intel.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <f876523c-762d-3877-652f-4c62800d7236@arm.com>
+Date:   Wed, 22 Jun 2022 16:16:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2 6/8] dt-bindings: qcom: Add ipq5018 bindings
-Content-Language: en-US
-To:     Sricharan R <quic_srichara@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, p.zabel@pengutronix.de,
-        quic_varada@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220621161126.15883-1-quic_srichara@quicinc.com>
- <20220621161126.15883-7-quic_srichara@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220621161126.15883-7-quic_srichara@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <Yp/MUBOKvu+EqBmz@fyu1.sc.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 18:11, Sricharan R wrote:
-> From: Varadarajan Narayanan <quic_varada@quicinc.com>
+Hi Fenghua,
+
+On 07/06/2022 23:08, Fenghua Yu wrote:
+> On Tue, Apr 12, 2022 at 12:44:17PM +0000, James Morse wrote:
+>> resctrl_cqm_threshold is stored in a hardware specific chunk size,
+>> but exposed to user-space as bytes.
+>>
+>> This means the filesystem parts of resctrl need to know how the hardware
+>> counts, to convert the user provided byte value to chunks. The interface
+>> between the architecture's resctrl code and the filesystem ought to
+>> treat everything as bytes.
+>>
+>> Change the unit of resctrl_cqm_threshold to bytes. resctrl_arch_rmid_read()
+>> still returns its value in chunks, so this needs converting to bytes.
+>> As all the users have been touched, rename the variable to
+>> resctrl_rmid_realloc_threshold, which describes what the value is for.
+>>
+>> Neither r->num_rmid nor hw_res->mon_scale are guaranteed to be a power
+>> of 2, so the existing code introduces a rounding error from resctrl's
+>> theoretical fraction of the cache usage. This behaviour is kept as it
+>> ensures the user visible value matches the value read from hardware
+>> when the rmid will be reallocated.
+
+>> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+>> index 88988de0c96c..00f6e27e4e0d 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+>> @@ -762,10 +764,15 @@ int rdt_get_mon_l3_config(struct rdt_resource *r)
+>>  	 *
+>>  	 * For a 35MB LLC and 56 RMIDs, this is ~1.8% of the LLC.
+>>  	 */
+>> -	resctrl_cqm_threshold = cl_size * 1024 / r->num_rmid;
+>> +	threshold = cl_size * 1024 / r->num_rmid;
+>>  
+>> -	/* h/w works in units of "boot_cpu_data.x86_cache_occ_scale" */
+
+
+> Could you please keep this comment? This comment is still helpful and
+> meaningful in the context.
+
+Not in this context anymore:
+
+>> -	resctrl_cqm_threshold /= hw_res->mon_scale;
+
+But if you think its important I'll move it to resctrl_arch_round_mon_val(), which got
+added after Reinette's comment about the change in behaviour visible via the
+max_threshold_occupancy file.
+
+
+>> +	/*
+>> +	 * Because num_rmid may not be a power of two, round the value
+>> +	 * to the nearest multiple of hw_res->mon_scale so it matches a
+>> +	 * value the hardware will measure. mon_scale may not be a power of 2.
+>> +	 */
+>> +	threshold /= hw_res->mon_scale;
+>> +	resctrl_rmid_realloc_threshold = threshold * hw_res->mon_scale;
+>>  
+>>  	ret = dom_data_init(r);
+>>  	if (ret)
+
+>> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> index f494ca6b8bdd..7c35561e5216 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+
+>> @@ -1066,8 +1062,7 @@ static ssize_t max_threshold_occ_write(struct kernfs_open_file *of,
+>>  	if (bytes > (boot_cpu_data.x86_cache_size * 1024))
+>>  		return -EINVAL;
+>>  
+>> -	hw_res = resctrl_to_arch_res(of->kn->parent->priv);
+>> -	resctrl_cqm_threshold = bytes / hw_res->mon_scale;
+>> +	resctrl_rmid_realloc_threshold = bytes;
 > 
-> Document the new ipq5018 SOC/board device tree bindings.
-> 
-> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Shouldn't bytes be multiples of hw_res->mon_scale? If user inputs non-multiples
+> value, resctrl_rmid_realloc_threshold will keep the value in the kernel. Is that
+> right?
 
-Your chain is wrong. Since you send it, your SoB is the last. We have
-nice example for this:
+I'd argue its the value user-space supplied, and its weird if you don't read back the
+value you wrote.
 
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L473
+But Reinette argued this was a change in behaviour, so v5 has a helper that does this:
+| static inline unsigned int resctrl_arch_round_mon_val(unsigned int val)
+| {
+|	unsigned int scale = boot_cpu_data.x86_cache_occ_scale;
+|
+|	/* h/w works in units of "boot_cpu_data.x86_cache_occ_scale" */
+|	val /= scale;
+|	return val * scale;
+| }
 
 
-Best regards,
-Krzysztof
+> But if you convert the input into multiples, user may see a different value when
+> read it.
+
+Weird huh! But that is what the max_threshold_occupancy file does today.
+
+
+> Does this argument override the reason why this patch is needed?
+
+No, this is about making more of resctrl handle the values in a platform agnostic unit,
+like bytes, so it can be moved to live in /fs/ instead of arch/x86.
+
+
+Thanks,
+
+James

@@ -2,136 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD14554BE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D71554BE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357754AbiFVNzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
+        id S1357711AbiFVNzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357744AbiFVNzN (ORCPT
+        with ESMTP id S231184AbiFVNzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:55:13 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5296434641;
-        Wed, 22 Jun 2022 06:55:12 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id t1so30318853ybd.2;
-        Wed, 22 Jun 2022 06:55:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l+Te2BnivL/GDh47o/VHeU0l1HC9J0+Yk21/+4/HIRE=;
-        b=bd+szFrvexwX4QF3e367hnx8NGTV/mWXSaeOcmfsedAiRMEs8rvhv8EKyt7f+/wDsT
-         WFaAGUpcyDa6TZERpP2NGGJL2whYEvfZuhY0W/eqsapWKDMsOE/TNKZVqpMucTDEMwxS
-         MEfQknukqDPaXSSdlG4ypsyybbyM3af90mmkjdYUM4SCuciwlY0Cs5rhDHrdhztNuIW3
-         TJaIiH2r4hlrDTMQq1NE5vSZl/btBU079kRHVcP6mY0fgL4iacPLmXqPhBvzx1gPLwU5
-         yelxGjagk/cRyrrxEWJO69TLYDA6/ata3zliMAdg54dfZLmjiSaVUfpx5EkTAGNpu9ip
-         FXKg==
-X-Gm-Message-State: AJIora9Rk1dTPkJ7SjwGWTqAy0Bmn+/w1p+mamWSH8vD4/GmhQDZfLrp
-        Z/W82ZSokj4Bp5UZbg6ekcV23iCtOrHr7UnmLnk=
-X-Google-Smtp-Source: AGRyM1tvapLMkiK2jTWM8/8nhIRYdhtY7A1W5pRXs/vQD0eLsIOlkR/goPIutaoplkt+REApSulMtqh7Id6MzyM+6aI=
-X-Received: by 2002:a25:d841:0:b0:668:ab2f:7b01 with SMTP id
- p62-20020a25d841000000b00668ab2f7b01mr3854953ybg.482.1655906111500; Wed, 22
- Jun 2022 06:55:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620131953.16575-1-di.shen@unisoc.com>
-In-Reply-To: <20220620131953.16575-1-di.shen@unisoc.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Jun 2022 15:55:00 +0200
-Message-ID: <CAJZ5v0j380_UEsy6qJ_KuRf8YbL3KtiY-h+RdkSsfd8SRCLy_A@mail.gmail.com>
-Subject: Re: [PATCH 1/1] thermal/sysfs: Clear the slot left in cooling_device_attr_groups
-To:     Di Shen <di.shen@unisoc.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>, xuewen.yan@unisoc.com,
-        cindygm567@gmail.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        Wed, 22 Jun 2022 09:55:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4569A344E9;
+        Wed, 22 Jun 2022 06:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655906105; x=1687442105;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BQH0ib7BJP53+vv9qm6VL+9HqIy4C+9f1swlr6W4v7M=;
+  b=ctfOvCK9nZZwOi+t3gtXS3pyuNr+5iW7/l9wOFTXQ+l/8b0BaPg8liv0
+   OOgsgjvQRxW/Zvu0s4kSW3GDreFbOvwJxEQ/PIQ7Jv+cUg/vBrWxsgzSr
+   WzLaPwHgtmO4/wsNwwiGGBKYSbWHOcYPN8ui2z/PnkWymEMNwl7ED+6f6
+   tykZYYLzLyTauPx8lhdwvU1X3/uUe+zU7kA1LY399+1fyCPqwMZvL5HHE
+   wuvIzCbpXko6Z7nb/Hcgvsw60FlNX0IxBV/RXqjoblrmY8ulkaXQLoEuK
+   tIeAPf3tOO1NSLxhcDuShNg5VYHH5KrCN56O2on3jVWCtq/o1T3ps6wKt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="366743034"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="366743034"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 06:55:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="585731566"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.163])
+  by orsmga007.jf.intel.com with SMTP; 22 Jun 2022 06:55:01 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Wed, 22 Jun 2022 16:55:00 +0300
+Date:   Wed, 22 Jun 2022 16:55:00 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <YrMfNBP4xSnSF+YS@intel.com>
+References: <20220621123656.7a479ad9@canb.auug.org.au>
+ <YrF3wfumVi3q3bFj@intel.com>
+ <20220622110451.27c68263@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220622110451.27c68263@canb.auug.org.au>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 3:20 PM Di Shen <di.shen@unisoc.com> wrote:
->
-> There's a space allocated for cooling_device_stats_attr_group within co-
+On Wed, Jun 22, 2022 at 11:04:51AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Tue, 21 Jun 2022 10:48:17 +0300 Ville Syrjälä <ville.syrjala@linux.intel.com> wrote:
+> >
+> > On Tue, Jun 21, 2022 at 12:36:56PM +1000, Stephen Rothwell wrote:
+> > > 
+> > > After merging the drm-misc tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > > 
+> > > drivers/gpu/drm/xlnx/zynqmp_disp.c: In function 'zynqmp_disp_create_planes':
+> > > drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:17: error: implicit declaration of function 'drm_plane_create_zpos_immutable_property'; did you mean 'drm_plane_create_scaling_filter_property'? [-Werror=implicit-function-declaration]
+> > >  1260 |                 drm_plane_create_zpos_immutable_property(&layer->plane, i);
+> > >       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >       |                 drm_plane_create_scaling_filter_property
+> > > drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:25: error: implicit declaration of function 'drm_plane_create_alpha_property'; did you mean 'drm_plane_create_color_properties'? [-Werror=implicit-function-declaration]
+> > >  1262 |                         drm_plane_create_alpha_property(&layer->plane);
+> > >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >       |                         drm_plane_create_color_properties
+> > > cc1: all warnings being treated as errors
+> > > 
+> > > Presumably caused by one of the commits that dropped includes from
+> > > drm-ctrc.h.
+> > > 
+> > > I have used the drm-misc tree from next-20220620 for today.  
+> > 
+> > Sorry about that. Looks like my .config was missing some
+> > dependencies of the zynqmp driver so it wasn't getting built.
+> > I'll cook up a fix.
+> 
+> And today, I get these:
+> 
+> In file included from include/linux/list.h:5,
+>                  from include/linux/preempt.h:11,
+>                  from include/linux/spinlock.h:55,
+>                  from include/linux/mmzone.h:8,
+>                  from include/linux/gfp.h:6,
+>                  from include/linux/mm.h:7,
+>                  from include/linux/hyperv.h:17,
+>                  from drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:6:
+> drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_blit_to_vram_rect':
+> drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:48: error: invalid use of undefined type 'struct drm_framebuffer'
+<snip>
+> cc1: all warnings being treated as errors
+> 
+> Please do some allmodconfig builds.
 
-Please don't break words in the changelog (and variable names in
-particular) like this.
+Ugh, I really wish kconfig had a reasonable way to enable exactly
+the things I want rather than having to build absolutely everything...
 
-> oling_device_attr_groups. This space is shared by all cooling devices.
->
-> If not clear this space before cooling_device_stats_attr_group is initi-
-> alized, the next cooling device will still create stats sysfs file node.
-> At this time, read or write related nodes will cause kernel crash.
+Anyways, someone else beat me to a fix:
+https://lists.freedesktop.org/archives/dri-devel/2022-June/360608.html
 
-A bit more of an explanation here wouldn't hurt IMV.  In particular,
-what does "the next cooling device" mean and what are "related nodes"?
+Sorry for the continued woes.
 
-> [exception_reboot_reason]: kernel_crash
-> [exception_panic_reason]: Fatal exception
-> [exception_time]: 2022-06-07_06-32-25
-> [exception_file_info]: not-bugon
-> [exception_task_id]: 3154
-> [exception_task_family]: [cat, 3154][sh, 2597][sh, 2362][adbd, 1804]
-> [exception_pc_symbol]: [<747516ae>] _raw_spin_lock+0x20/0x60
-> [exception_stack_info]: [<4cbe9ac1>] prepare_exception_info+0x19c/0x1a4
-> [<03041be7>] sysdump_panic_event+0x57c/0x6f4
-> [<b16f865e>] atomic_notifier_call_chain+0x48/0x7c
-> [<5baac8d4>] panic+0x1b4/0x3c8
-> [<9d287b0f>] arm_notify_die+0x0/0x78
-> [<094fc22c>] __do_kernel_fault+0x94/0xa4
-> [<3b4b69a4>] do_page_fault+0xd4/0x364
-> [<23793e7a>] do_translation_fault+0x38/0xc0
-> [<6e5cc52a>] do_DataAbort+0x4c/0xd0
-> [<a28c16b8>] __dabt_svc+0x5c/0xa0
-> [<747516ae>] _raw_spin_lock+0x20/0x60
-> [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-> [<cb78325e>] dev_attr_show+0x38/0x64
-> [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-> [<c0a843ab>] seq_read+0x244/0x620
-> [<b316b374>] vfs_read+0xd8/0x218
-> [<3aebf5fa>] sys_read+0x80/0xe4
-> [<7cf100f5>] ret_fast_syscall+0x0/0x28
-> [<08cbe22f>] 0xbe8c1198
->
-> So clear the slot left in cooling_device_attr_groups before cooling_dev-
-> ice_stats_attr_group is initialized to avoid kernel crash.
->
-> Signed-off-by: Di Shen <di.shen@unisoc.com>
-> ---
->  drivers/thermal/thermal_sysfs.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index 1c4aac8464a7..fbc3dbc85841 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -817,6 +817,11 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
->         unsigned long states;
->         int var;
->
-> +       /* Clear the slot left in cooling_device_attr_groups */
-
-The comment is a bit too vague IMO.  In particular, what slot do you mean?
-
-> +       var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-> +       if (cooling_device_attr_groups[var])
-> +               cooling_device_attr_groups[var] = NULL;
-
-The NULL check above is redundant (it can be cleared even if it is
-NULL already) and it all can be done in one code line.
-
-> +
->         if (cdev->ops->get_max_state(cdev, &states))
->                 return;
->
-> --
+-- 
+Ville Syrjälä
+Intel

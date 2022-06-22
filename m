@@ -2,113 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82918554107
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4C2554113
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356547AbiFVD4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 23:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S1356150AbiFVD6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 23:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbiFVD4a (ORCPT
+        with ESMTP id S1355783AbiFVD6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 23:56:30 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B35E0AC
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:56:29 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d5so14255989plo.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7h4tU4Rx3U/aIsjIhPJPJ//Klp0wPGPWFG+nXRn0z4k=;
-        b=VoGA3tGfVl0A535ILyhPoL2KpOukdlOj3rNC5fsvPcm3///hr+HGF7a0rFpP8pHwug
-         Ea21Uv2xLBA0CcShpV/WJBq2HirQkCEvE/jTFghhSG4buBAj+24nc7n/OwDZX77uQfIh
-         UmJ5Cy+kXhjpC0hjjWlvjd7msMTEtfdXsH2c2GWRz7uplQ7NV6M6xfJgUPBh871m6CQ7
-         qvPhdMAMD1eTig2ShT/piDj3yfdwvo2OEGhdY5Nk5J5UUylEAhhVLZMyyfCX7ugB/Z6f
-         fnzq4elp5dEXjZ49mx4oCcMiCEvwbDx3kJpD5Pq18mZFVOAZQ8waL2fpiOfXLbJ7Trmd
-         ieBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7h4tU4Rx3U/aIsjIhPJPJ//Klp0wPGPWFG+nXRn0z4k=;
-        b=YEDyRCT9GYVrCAKcIl1yxfy7pHjfKaZ8BAAC/hcRbeRaoqH8tSAVe0aL+Ss+VwPjuP
-         UAbBFSRs4ZVSelG74otLDfICWTaCBoI+S97eFri6jnQXpAl6A8eoMXAlo4FWQnnCAKtH
-         4c7SAHs2wkhUxrOLCegMKfRx+inryT8OofMEISKyMYllB6skxGbZK3KHhsLqe+CuCk7W
-         ysJ+o6VtD/u2n8+l7wN4GvdLpEHXZ/O2/XAW4n0U/T/MFi+qTMwdLYmd+vC6xLWn6KX3
-         S2VwnR981K8TDCXwzDDLuzW8JzqgR+4Vb54yixAdX37yrUqGxOgi5znFPwDEGnN4UA/J
-         KphA==
-X-Gm-Message-State: AJIora8pjXo1nIiZjysxwyEaMlw3kHrtMcGlE7fN5ihJq4V8ZFv/ZzwD
-        sBBMwDmqktEn6AxqBPk/UzzmtGNS13Fnn3pj
-X-Google-Smtp-Source: AGRyM1vomi7WtYi0MwLGcNqNMDkpdNI3UJkQxUuWSDdYYFFOq/OjMCfULai2r84xUu1AoWniSXrphg==
-X-Received: by 2002:a17:90a:eb05:b0:1ec:b85a:e1ac with SMTP id j5-20020a17090aeb0500b001ecb85ae1acmr1434571pjz.103.1655870188983;
-        Tue, 21 Jun 2022 20:56:28 -0700 (PDT)
-Received: from localhost ([2404:9dc0:cd01::23])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902d88900b001663185e654sm11440301plz.280.2022.06.21.20.56.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 20:56:28 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 11:56:25 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/page_alloc: Do not calculate node's total
- pages and memmap pages when empty
-Message-ID: <YrKS6aFHKRyZzAwi@FVFYT0MHHV2J.usts.net>
-References: <20220621041717.6355-1-osalvador@suse.de>
- <20220621041717.6355-2-osalvador@suse.de>
- <506203e3-1de0-1187-5234-7afc66d4ddfe@redhat.com>
- <YrKQyhwDwMvueOUc@localhost.localdomain>
+        Tue, 21 Jun 2022 23:58:13 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B470240A0;
+        Tue, 21 Jun 2022 20:58:10 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSV1R1Y3PzkWLt;
+        Wed, 22 Jun 2022 11:56:27 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 11:58:07 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 11:58:01 +0800
+Subject: Re: [PATCH RFC -next] sbitmap: fix possible io hung due to lost
+ wakeups
+To:     Jan Kara <jack@suse.cz>
+CC:     <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220617141125.3024491-1-yukuai3@huawei.com>
+ <20220620122413.2fewshn5u6t2y4oi@quack3.lan>
+ <20220620124831.g7bswgivvg5urv3d@quack3.lan>
+ <d0e2639b-885e-2789-7d1b-13057abc67f4@huawei.com>
+ <20220620170231.c656cs4ksqcve4td@quack3.lan>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <4fbc3052-b9b7-607d-1b8c-6ad8b21dfc3c@huawei.com>
+Date:   Wed, 22 Jun 2022 11:58:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrKQyhwDwMvueOUc@localhost.localdomain>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220620170231.c656cs4ksqcve4td@quack3.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 05:47:22AM +0200, Oscar Salvador wrote:
-> On Tue, Jun 21, 2022 at 09:44:47AM +0200, David Hildenbrand wrote:
-> > 
-> > 
-> > It's worth noting that the check in pgdat_is_empty() is slightly
-> > different. I *think* it doesn't matter in practice, yet I wonder if we
-> > should simply fixup (currently unused) pgdat_is_empty().
+在 2022/06/21 1:02, Jan Kara 写道:
+> On Mon 20-06-22 21:44:16, Yu Kuai wrote:
+>> 在 2022/06/20 20:48, Jan Kara 写道:
+>>> On Mon 20-06-22 14:24:13, Jan Kara wrote:
+>>>> On Fri 17-06-22 22:11:25, Yu Kuai wrote:
+>>>>> Currently, same waitqueue might be woken up continuously:
+>>>>>
+>>>>> __sbq_wake_up		__sbq_wake_up
+>>>>>    sbq_wake_ptr -> assume	0
+>>>>> 			 sbq_wake_ptr -> 0
+>>>>>    atomic_dec_return
+>>>>> 			atomic_dec_return
+>>>>>    atomic_cmpxchg -> succeed
+>>>>> 			 atomic_cmpxchg -> failed
+>>>>> 			  return true
+>>>>>
+>>>>> 			__sbq_wake_up
+>>>>> 			 sbq_wake_ptr
+>>>>> 			  atomic_read(&sbq->wake_index) -> still 0
+>>>>>    sbq_index_atomic_inc -> inc to 1
+>>>>> 			  if (waitqueue_active(&ws->wait))
+>>>>> 			   if (wake_index != atomic_read(&sbq->wake_index))
+>>>>> 			    atomic_set -> reset from 1 to 0
+>>>>>    wake_up_nr -> wake up first waitqueue
+>>>>> 			    // continue to wake up in first waitqueue
+>>>>>
+>>>>> What's worse, io hung is possible in theory because wakeups might be
+>>>>> missed. For example, 2 * wake_batch tags are put, while only wake_batch
+>>>>> threads are worken:
+>>>>>
+>>>>> __sbq_wake_up
+>>>>>    atomic_cmpxchg -> reset wait_cnt
+>>>>> 			__sbq_wake_up -> decrease wait_cnt
+>>>>> 			...
+>>>>> 			__sbq_wake_up -> wait_cnt is decreased to 0 again
+>>>>> 			 atomic_cmpxchg
+>>>>> 			 sbq_index_atomic_inc -> increase wake_index
+>>>>> 			 wake_up_nr -> wake up and waitqueue might be empty
+>>>>>    sbq_index_atomic_inc -> increase again, one waitqueue is skipped
+>>>>>    wake_up_nr -> invalid wake up because old wakequeue might be empty
+>>>>>
+>>>>> To fix the problem, refactor to make sure waitqueues will be woken up
+>>>>> one by one,
+>>>>>
+>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>>
+>>>> So as far as I can tell your patch does not completely fix this race. See
+>>>> below:
+>>>>
+>>>>> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+>>>>> index ae4fd4de9ebe..dc2959cb188c 100644
+>>>>> --- a/lib/sbitmap.c
+>>>>> +++ b/lib/sbitmap.c
+>>>>> @@ -574,66 +574,69 @@ void sbitmap_queue_min_shallow_depth(struct sbitmap_queue *sbq,
+>>>>>    }
+>>>>>    EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
+>>>>> -static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+>>>>> +static void sbq_update_wake_index(struct sbitmap_queue *sbq,
+>>>>> +				  int old_wake_index)
+>>>>>    {
+>>>>>    	int i, wake_index;
+>>>>> -
+>>>>> -	if (!atomic_read(&sbq->ws_active))
+>>>>> -		return NULL;
+>>>>> +	struct sbq_wait_state *ws;
+>>>>>    	wake_index = atomic_read(&sbq->wake_index);
+>>>>> -	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+>>>>> -		struct sbq_wait_state *ws = &sbq->ws[wake_index];
+>>>>> +	if (old_wake_index != wake_index)
+>>>>> +		return;
+>>>>> +	for (i = 1; i < SBQ_WAIT_QUEUES; i++) {
+>>>>> +		wake_index = sbq_index_inc(wake_index);
+>>>>> +		ws = &sbq->ws[wake_index];
+>>>>> +		/* Find the next active waitqueue in round robin manner */
+>>>>>    		if (waitqueue_active(&ws->wait)) {
+>>>>> -			if (wake_index != atomic_read(&sbq->wake_index))
+>>>>> -				atomic_set(&sbq->wake_index, wake_index);
+>>>>> -			return ws;
+>>>>> +			atomic_cmpxchg(&sbq->wake_index, old_wake_index,
+>>>>> +				       wake_index);
+>>>>> +			return;
+>>>>>    		}
+>>>>> -
+>>>>> -		wake_index = sbq_index_inc(wake_index);
+>>>>>    	}
+>>>>> -
+>>>>> -	return NULL;
+>>>>>    }
+>>>>>    static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+>>>>>    {
+>>>>>    	struct sbq_wait_state *ws;
+>>>>>    	unsigned int wake_batch;
+>>>>> -	int wait_cnt;
+>>>>> +	int wait_cnt, wake_index;
+>>>>> -	ws = sbq_wake_ptr(sbq);
+>>>>> -	if (!ws)
+>>>>> +	if (!atomic_read(&sbq->ws_active))
+>>>>>    		return false;
+>>>>> -	wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>> -	if (wait_cnt <= 0) {
+>>>>> -		int ret;
+>>>>> -
+>>>>> -		wake_batch = READ_ONCE(sbq->wake_batch);
+>>>>> -
+>>>>> -		/*
+>>>>> -		 * Pairs with the memory barrier in sbitmap_queue_resize() to
+>>>>> -		 * ensure that we see the batch size update before the wait
+>>>>> -		 * count is reset.
+>>>>> -		 */
+>>>>> -		smp_mb__before_atomic();
+>>>>> +	wake_index = atomic_read(&sbq->wake_index);
+>>>>> +	ws = &sbq->ws[wake_index];
+>>>>> +	/*
+>>>>> +	 * This can only happen in the first wakeup when sbitmap waitqueues
+>>>>> +	 * are no longer idle.
+>>>>> +	 */
+>>>>> +	if (!waitqueue_active(&ws->wait)) {
+>>>>> +		sbq_update_wake_index(sbq, wake_index);
+>>>>> +		return true;
+>>>>> +	}
+>>>>> -		/*
+>>>>> -		 * For concurrent callers of this, the one that failed the
+>>>>> -		 * atomic_cmpxhcg() race should call this function again
+>>>>> -		 * to wakeup a new batch on a different 'ws'.
+>>>>> -		 */
+>>>>> -		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
+>>>>> -		if (ret == wait_cnt) {
+>>>>> -			sbq_index_atomic_inc(&sbq->wake_index);
+>>>>> -			wake_up_nr(&ws->wait, wake_batch);
+>>>>> -			return false;
+>>>>> -		}
+>>>>> +	wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>> +	if (wait_cnt > 0)
+>>>>> +		return false;
+>>>>
+>>>> The following race is still possible:
+>>>>
+>>>> CPU1					CPU2
+>>>> __sbq_wake_up				__sbq_wake_up
+>>>>     wake_index = atomic_read(&sbq->wake_index);
+>>>> 					  wake_index = atomic_read(&sbq->wake_index);
+>>>>
+>>>>     if (!waitqueue_active(&ws->wait)) -> not taken
+>>>> 					  if (!waitqueue_active(&ws->wait)) -> not taken
+>>>>     wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>     /* decremented to 0 now */
+>>>>     if (wait_cnt > 0) -> not taken
+>>>>     sbq_update_wake_index(sbq, wake_index);
+>>>>     if (wait_cnt < 0) -> not taken
+>>>>     ...
+>>>>     atomic_set(&ws->wait_cnt, wake_batch);
+>>>>     wake_up_nr(&ws->wait, wake_batch);
+>>>> 					  wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>> 					  /*
+>>>> 					   * decremented to wake_batch - 1 but
+>>>> 					   * there are no tasks waiting anymore
+>>>> 					   * so the wakeup should have gone
+>>>> 					   * to a different waitqueue.
+>>>> 					   */
+>>>>
+>>>> I have an idea how to fix all these lost wakeups, I'll try to code it
+>>>> whether it would look usable...
+>> Hi, Jan
+>>
+>> Thanks for the analysis, it's right this is possible.
+>>>
+>>> Thinking a bit more about it your code would just need a small tweak like:
+>>>
+>>> 	wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>> 	/*
+>>> 	 * Concurrent callers should call this function again
+>>> 	 * to wakeup a new batch on a different 'ws'.
+>>> 	 */
+>>> 	if (wait_cnt < 0 || !waitqueue_active(&ws->wait)) {
+>>> 		sbq_update_wake_index(sbq, wake_index);
+>>> 		return true;
+>>> 	}
+>>
+>> I'm thinking that if the wait_queue is still active, this will decrease
+>> 'wait_cnt' in old waitqueue while 'wake_index' is already moved to next
+>> waitqueue. This really broke the design...
 > 
-> I guess we could change it to
-> 
->  static inline bool pgdat_is_empty(pg_data_t *pgdat)
->  {
-> 	 return node_start_pfn(pgdat->node_id) == node_end_pfn(pgdat->node_id)
->  }
-> 
-> ? And maybe even rename it to to node_is_empty (not sure why but I tend to like
+> I agree this can happen and it is not ideal. On the other hand the wakeup
+> is not really lost, just effectively delayed until we select this waitqueue
+> again so it should not result in any hangs. And other ways to avoid the
+> race seem more expensive to me...
 
-At least I like this name (node_is_empty) as well.
+Hi, Jan
 
-Thanks.
+Before you reviewed this version, I aready posted v2... It semms v2 is
+using exactly the same logic that you suggested here 😉.
 
-> that more than pgdat) 
+Thanks,
+Kuai
 > 
-> I could squeeze a "fixup" patch for that before this one. 
+> 								Honza
 > 
-> > 
-> > Anyhow
-> > 
-> > Reviewed-by: David Hildenbrand <david@redhat.com>
-> 
-> Thanks!
-> 
-> 
-> -- 
-> Oscar Salvador
-> SUSE Labs
-> 
+>>> 	if (wait_cnt > 0)
+>>> 		return false;
+>>> 	sbq_update_wake_index(sbq, wake_index);
+>>>
+>>> 	wake_batch = READ_ONCE(sbq->wake_batch);
+>>> 	wake_up_nr(&ws->wait, wake_batch);
+>>> 	/*
+>>> 	 * Pairs with the memory barrier in sbitmap_queue_resize() to
+>>> 	 * ensure that we see the batch size update before the wait
+>>> 	 * count is reset.
+>>> 	 *
+>>> 	 * Also pairs with the implicit barrier between decrementing
+>>> 	 * wait_cnt and checking for waitqueue_active() to make sure
+>>> 	 * waitqueue_active() sees results of the wakeup if
+>>> 	 * atomic_dec_return() has seen results of the atomic_set.
+>>> 	 */
+>>> 	smp_mb__before_atomic();
+>>> 	atomic_set(&ws->wait_cnt, wake_batch);
+>>>
+>>> 								Honza
+>>>
+>>>>> +	sbq_update_wake_index(sbq, wake_index);
+>>>>> +	/*
+>>>>> +	 * Concurrent callers should call this function again
+>>>>> +	 * to wakeup a new batch on a different 'ws'.
+>>>>> +	 */
+>>>>> +	if (wait_cnt < 0)
+>>>>>    		return true;
+>>>>> -	}
+>>>>> +
+>>>>> +	wake_batch = READ_ONCE(sbq->wake_batch);
+>>>>> +	/*
+>>>>> +	 * Pairs with the memory barrier in sbitmap_queue_resize() to
+>>>>> +	 * ensure that we see the batch size update before the wait
+>>>>> +	 * count is reset.
+>>>>> +	 */
+>>>>> +	smp_mb__before_atomic();
+>>>>> +	atomic_set(&ws->wait_cnt, wake_batch);
+>>>>> +	wake_up_nr(&ws->wait, wake_batch);
+>>>>>    	return false;
+>>>>>    }
+>>>>> -- 
+>>>>> 2.31.1
+>>>>>
+>>>> -- 
+>>>> Jan Kara <jack@suse.com>
+>>>> SUSE Labs, CR

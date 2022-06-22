@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049095551ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601B95551E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376940AbiFVRGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S1377013AbiFVRGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358339AbiFVRGb (ORCPT
+        with ESMTP id S1376586AbiFVRGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:06:31 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449C43EF06
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:06:30 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSqT36mZDzSh9m;
-        Thu, 23 Jun 2022 01:03:03 +0800 (CST)
+        Wed, 22 Jun 2022 13:06:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FE23EF06
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:06:31 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSqVY0PsfzhYfV;
+        Thu, 23 Jun 2022 01:04:21 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 23 Jun
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>
 CC:     <shy828301@gmail.com>, <willy@infradead.org>, <zokeefe@google.com>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 02/16] mm/huge_memory: access vm_page_prot with READ_ONCE in remove_migration_pmd
-Date:   Thu, 23 Jun 2022 01:06:13 +0800
-Message-ID: <20220622170627.19786-3-linmiaohe@huawei.com>
+Subject: [PATCH 03/16] mm/huge_memory: fix comment of __pud_trans_huge_lock
+Date:   Thu, 23 Jun 2022 01:06:14 +0800
+Message-ID: <20220622170627.19786-4-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220622170627.19786-1-linmiaohe@huawei.com>
 References: <20220622170627.19786-1-linmiaohe@huawei.com>
@@ -49,28 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vma->vm_page_prot is read lockless from the rmap_walk, it may be updated
-concurrently. Using READ_ONCE to prevent the risk of reading intermediate
-values.
+__pud_trans_huge_lock returns page table lock pointer if a given pud maps
+a thp instead of 'true' since introduced. Fix corresponding comments.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/huge_memory.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/huge_memory.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index fd6da053a13e..83fb6c3442ff 100644
+index 83fb6c3442ff..a26580da8011 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -3202,7 +3202,7 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+@@ -1903,10 +1903,10 @@ spinlock_t *__pmd_trans_huge_lock(pmd_t *pmd, struct vm_area_struct *vma)
+ }
  
- 	entry = pmd_to_swp_entry(*pvmw->pmd);
- 	get_page(new);
--	pmde = pmd_mkold(mk_huge_pmd(new, vma->vm_page_prot));
-+	pmde = pmd_mkold(mk_huge_pmd(new, READ_ONCE(vma->vm_page_prot)));
- 	if (pmd_swp_soft_dirty(*pvmw->pmd))
- 		pmde = pmd_mksoft_dirty(pmde);
- 	if (is_writable_migration_entry(entry))
+ /*
+- * Returns true if a given pud maps a thp, false otherwise.
++ * Returns page table lock pointer if a given pud maps a thp, NULL otherwise.
+  *
+- * Note that if it returns true, this routine returns without unlocking page
+- * table lock. So callers must unlock it.
++ * Note that if it returns page table lock pointe, this routine returns without
++ * unlocking page table lock. So callers must unlock it.
+  */
+ spinlock_t *__pud_trans_huge_lock(pud_t *pud, struct vm_area_struct *vma)
+ {
 -- 
 2.23.0
 

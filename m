@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCD4555196
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862C6555195
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376700AbiFVQrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
+        id S1359404AbiFVQrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376671AbiFVQqo (ORCPT
+        with ESMTP id S1376658AbiFVQqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Jun 2022 12:46:44 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E463FBE8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:46:00 -0700 (PDT)
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE69138D8A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:45:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655916360; x=1687452360;
+  t=1655916359; x=1687452359;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7ccKqyXYKVwJv71q5J9RKGEr3PdUchbiSLz0u5zwIT0=;
-  b=X9dn9pRAuaDSgdJkINoUtz299UEYaf+uFbDGSz5TmRpWBx8FzKPbF0p9
-   7BexeWJ8uTP8Kcb7f/4ENVIcEboXVxMOpEu+N4P/+F6uvaz6IB/eqJ4/1
-   S3ULaeU8JZhjshKymYZ6jdz8st+uB9bxeKdpqXw10XaoVE5tsN0hHrRp3
-   cFvwfraho3+NtcU9+7bS4s8o8pv9Pgh04d/bNFY7GptCvS1jdRtDnkAHy
-   qlr39B772SUIEx6iFBlqA3qtjkJa/T+S78O1Vp+ZiK/Nw8QMmoSPh8nHg
-   OqZ43kExlBvaS3rUJGG/FnIe5t8eLxCOZkySx3IGuPmAaKqJpNYpYjONn
+  bh=6zL8tHWbGxp6vXRCJEQd10MDHQbrRulKnUz4mQ889oU=;
+  b=deyURbYRVuw7HX4aQfcO4N9V3XmBBSKRF+VhRZAIy5bEABY0cJmkgq+N
+   rFCW3awC8v9GBu7HxyoYjqBUAmxfe4ZNKUyir6XYK5oYUvYnL2GiKBXbx
+   +iMBr97PexFlefc924KmXFT2eiDGyGnxuqcaBL5SG27lIPPhUnw3JiA6I
+   nqL3CcmZr+vTQN34VHhmyLTo1jbudT2woCr2NWq+GI+Dj0jboWFTeMH60
+   mLEeje1LXeoUqFhQQBmSFfXFTBfZyMplsgF7SMhL8dwGY0okrTMqps9FG
+   w67Ec0Dn/pBIe5bH07sng/1+RSSzjyBjzSYwUd+hdNjPtthAHRQX4lENz
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="278020182"
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281547356"
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="278020182"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 09:45:56 -0700
+   d="scan'208";a="281547356"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 09:45:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="730433678"
+   d="scan'208";a="620981578"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Jun 2022 09:45:54 -0700
+  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2022 09:45:54 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o43UH-0001UZ-VC;
+        id 1o43UH-0001UT-SR;
         Wed, 22 Jun 2022 16:45:53 +0000
-Date:   Thu, 23 Jun 2022 00:45:49 +0800
+Date:   Thu, 23 Jun 2022 00:45:51 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+Cc:     kbuild-all@lists.01.org,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
 Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-multiqueue 5/9]
- net/rxrpc/af_rxrpc.c:948:2: warning: compat_setsockopt disappeared
-Message-ID: <202206230014.cPat244L-lkp@intel.com>
+ net/rxrpc/af_rxrpc.c:948:2: warning: #warning compat_setsockopt disappeared
+Message-ID: <202206230036.pBsx3VvP-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,28 +66,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-multiqueue
 head:   83e1620a43190584ecbc51e8afc8b94a7b14286c
 commit: 79ccb581e080d255dae79131e273d2db3cd5b51a [5/9] rxrpc: Allow the call to interact with to be preselected
-config: hexagon-randconfig-r041-20220622 (https://download.01.org/0day-ci/archive/20220623/202206230014.cPat244L-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220623/202206230036.pBsx3VvP-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
         # https://github.com/ammarfaizi2/linux-block/commit/79ccb581e080d255dae79131e273d2db3cd5b51a
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-multiqueue
         git checkout 79ccb581e080d255dae79131e273d2db3cd5b51a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/rxrpc/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/rxrpc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/rxrpc/af_rxrpc.c:948:2: warning: compat_setsockopt disappeared [-W#warnings]
-   #warning compat_setsockopt disappeared
-    ^
-   1 warning generated.
+   net/rxrpc/af_rxrpc.c: In function 'rxrpc_setsockopt':
+>> net/rxrpc/af_rxrpc.c:948:2: warning: #warning compat_setsockopt disappeared [-Wcpp]
+     948 | #warning compat_setsockopt disappeared
+         |  ^~~~~~~
+--
+>> net/rxrpc/af_rxrpc.c:948:2: warning: #warning compat_setsockopt disappeared [-Wcpp]
+     948 | #warning compat_setsockopt disappeared
+         |  ^~~~~~~
 
 
 vim +948 net/rxrpc/af_rxrpc.c

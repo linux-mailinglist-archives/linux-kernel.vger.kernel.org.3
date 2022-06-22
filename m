@@ -2,144 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ADD5540B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C4F5540BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356159AbiFVC7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 22:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        id S1356321AbiFVDBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 23:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354017AbiFVC7n (ORCPT
+        with ESMTP id S1354017AbiFVDBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 22:59:43 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF38A3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 19:59:42 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-101ab23ff3fso17130599fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 19:59:42 -0700 (PDT)
+        Tue, 21 Jun 2022 23:01:05 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A3A111F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:01:03 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id o18so7136394plg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=QkbVDi6oZOvTPDcMwZXGsoYfGdqUPPUk7tJ+2+elX5s=;
-        b=THYrB1E9k91TCnr+V74Cuctr7fnR5f25+6XK/hEIc0Gif5IUpqNWE73dTSwmcJpggO
-         XWrydg+/DLYqpayTOjK7lMa/upuYVQpdjRKb5oBp5LuXjA6bonQsm1/LJtNtWYqyqU3z
-         qk+UkVZ+F0eEg6q0/uvotetNpCZcmBqTdYiso=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ouk7+Ke+HW093nWEFwQ5D14yOFTrhJHXFT/fgT162bQ=;
+        b=jA3j6FyEGH1/5+bAOoD0Ib6WIKkZ8k/bg0Bzh4SHDOYIX6jgNPmYo0CZ/UQuaxDX82
+         QhRVKdI1oq0Y3/NM2baS1JMSBo6vgjYgZmMw3fEsdr5hOYZtkbpK31n0c37FcL5u3wR3
+         V9snxpgc69x/y6owSUvi0gCiZom2KJ6j0q+dt9BnBKNi9K+KV8hbTJJDKgBAc0cN8lrO
+         LjK1V9saaKmDQhIURvWjvQixzioaM9CTFXT2AC4FYniZrdfiirM8cg0U9nqSPlF7dz3q
+         feqbriu0sGFdTsoHBwfOJj5UvT0kfLCh0QteCTOsUqW03a+7gjSxoWOL4rZE3xfKOiuy
+         srlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=QkbVDi6oZOvTPDcMwZXGsoYfGdqUPPUk7tJ+2+elX5s=;
-        b=r9e0oJJDEHDxiFylfYF2GjbhABF6CC6KOhKdssN9LOyC1h0zeOQM8PF9h5ZM/rITMh
-         FSQMJo+p1usNyd705aglEALtGNAng5y+Y9Z2VadR1+From+OXUqz6Pf4oJ3EYiebALQD
-         CVxFK4nB8hmUYHXs6X+khTnF05TR3mn+vUvS4lhmcKf90RXHxjLEm+GLuGGumkTJCnGN
-         oTklfVVhzCKk4XwRMlBtP0K/VMZwYOnICkHvlLzl9HD2uGbicghc7qa0MaHYjM6XEzXe
-         IOfs/Guj6LAK0BSmG9OrtGNeD5rI/dOl7dCYHLisazwf5a3tMvDAyvHwOFP1KPjgRo2J
-         wDJQ==
-X-Gm-Message-State: AJIora8EHfplCRWOk9Z4mx7HR1oVVPdNGYmaKN87udqWK+s2nBMBt6FT
-        mvRtVc2b4MfEr8cuycb+j78GbX3Hp+FBLW6IsCW/FQ==
-X-Google-Smtp-Source: AGRyM1uopL3zeCsqA5w30zHRns6v+RvwzmYQSxJqB4ZSOOW5tSWTRM/NTziAL3zCVDH56+dcJU0kjl17IwBIClIWsPs=
-X-Received: by 2002:a05:6870:b627:b0:102:f25:a460 with SMTP id
- cm39-20020a056870b62700b001020f25a460mr748273oab.193.1655866781557; Tue, 21
- Jun 2022 19:59:41 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 21 Jun 2022 22:59:41 -0400
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ouk7+Ke+HW093nWEFwQ5D14yOFTrhJHXFT/fgT162bQ=;
+        b=DLnjJ1/Sj1hwgNQsX+OeRUTWPaCgqIUGltbbhQ4+PNbvBl5UL6kE+BAcw9Q5sTCJwg
+         iTPjIcimZjUqI3FK5ytVrZ6PdGK+qR9knmZLOlbldlWtG6IS52DeLDBGRI5HdrNehE3m
+         vgwTORkEmE/xI7LhOO8573KRQDXcHn5SZyyJDoGroG7zTY9jdD0dsQMEyYTVUHXgTpr7
+         o6mtJAEsrbM2m0Dsay8pxmRq1kOuUXfWMSp+YfTJTAiEkBlw/jGEIBaNau+fV2AIHaPI
+         qxP8/s9RheVvS6GGAxg0qkrPrje4rBRUIOI6LaV7u2hRvSAqSfI9jINiLPJqhmzZP/pN
+         tCsQ==
+X-Gm-Message-State: AJIora+X6VazTDyr8PLaC+ki1bWa41pmOqQWFvI9ngQU/nRZrVJGYb2u
+        CpP1qi8o0DW4VGUoogbHKZjEtzP/aTETaA==
+X-Google-Smtp-Source: AGRyM1sIw0vkJI0h3xc94T1nViSALDbu1qL270YXWZwxWkMDEIkDFHduJOG0UYjLJS+cTW+qxf2ywA==
+X-Received: by 2002:a17:90b:3d91:b0:1ec:d594:31f5 with SMTP id pq17-20020a17090b3d9100b001ecd59431f5mr1281779pjb.114.1655866863236;
+        Tue, 21 Jun 2022 20:01:03 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([61.120.150.78])
+        by smtp.gmail.com with ESMTPSA id r13-20020a63b10d000000b003fe28130b12sm11769790pgf.62.2022.06.21.20.00.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 20:01:01 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v1] perf stat: Enable ignore_missing_thread for stat
+Date:   Wed, 22 Jun 2022 11:00:37 +0800
+Message-Id: <20220622030037.15005-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <bb98ca29-8752-6864-ddbd-19547fb6f73b@linaro.org>
-References: <20220617204750.2347797-1-swboyd@chromium.org> <20220617204750.2347797-3-swboyd@chromium.org>
- <bb98ca29-8752-6864-ddbd-19547fb6f73b@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 21 Jun 2022 22:59:41 -0400
-Message-ID: <CAE-0n51_zysbkktVEfhvXtGqpADTWcaPBAX7A7rD1FV+vcK3Uw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] drm/msm/dp: Remove pixel_rate from struct dp_ctrl
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Dmitry Baryshkov (2022-06-17 16:07:58)
-> On 17/06/2022 23:47, Stephen Boyd wrote:
-> > This struct member is stored to in the function that calls the function
-> > which uses it. That's possible with a function argument instead of
-> > storing to a struct member. Pass the pixel_rate as an argument instead
-> > to simplify the code. Note that dp_ctrl_link_maintenance() was storing
-> > the pixel_rate but never using it so we just remove the assignment from
-> > there.
-> >
-> > Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/dp/dp_ctrl.c | 57 ++++++++++++++++----------------
-> >   drivers/gpu/drm/msm/dp/dp_ctrl.h |  1 -
-> >   2 files changed, 28 insertions(+), 30 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> > index bd445e683cfc..e114521af2e9 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> > +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> > @@ -1336,7 +1336,7 @@ static void dp_ctrl_set_clock_rate(struct dp_ctrl_private *ctrl,
-> >                               name, rate);
-> >   }
-> >
-> > -static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl)
-> > +static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl, unsigned long pixel_rate)
->
->
-> I think we can read pixel_rate here rather than getting it as an
-> argument. We'd need to move handling (DP_TEST_LINK_PHY_TEST_PATTERN &&
-> !ctrl->panel->dp_mode.drm_mode.clock) case here from dp_ctrl_on_link().
+perf already support ignore_missing_thread for -p, but not yet
+applied to `perf stat -p <pid>`. This patch enables ignore_missing_thread
+for `perf stat -p <pid>`.
 
-This is also called from dp_ctrl_on_stream() and
-dp_ctrl_reinitialize_mainlink(). In the dp_ctrl_on_stream() case we may
-divide the pixel_rate by 2 with widebus. We could move the
-dp_ctrl_on_link() code here, but then we also need to move widebus, and
-then I'm not sure which pixel rate to use.
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+---
+ tools/perf/builtin-stat.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-It looks like the test code doesn't care about widebus? And similarly,
-we may run the pixel clk faster until we get a modeset and then divide
-it for widebus. Is that why you're suggesting to check
-!ctrl->panel->dp_mode.drm_mode.clock? I hesitate because it isn't a
-direct conversion, instead it checks some other stashed struct member.
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 4ce87a8eb7d7..d2ecd4d29624 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -2586,6 +2586,8 @@ int cmd_stat(int argc, const char **argv)
+ 	if (evlist__initialize_ctlfd(evsel_list, stat_config.ctl_fd, stat_config.ctl_fd_ack))
+ 		goto out;
+ 
++	/* Enable ignoring missing threads when -p option is defined. */
++	evlist__first(evsel_list)->ignore_missing_thread = target.pid;
+ 	status = 0;
+ 	for (run_idx = 0; forever || run_idx < stat_config.run_count; run_idx++) {
+ 		if (stat_config.run_count != 1 && verbose > 0)
+-- 
+2.20.1
 
-I'll also note that dp_ctrl_enable_mainlink_clocks() doesn't really use
-this argument except to print the value in drm_dbg_dp(). Maybe we should
-simply remove it from here instead?
-
-> > @@ -1588,12 +1586,12 @@ static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-> >   {
-> >       int ret;
-> >       struct dp_ctrl_private *ctrl;
-> > +     unsigned long pixel_rate;
-> >
-> >       ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-> >
-> > -     ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> > -
-> > -     ret = dp_ctrl_enable_stream_clocks(ctrl);
-> > +     pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> > +     ret = dp_ctrl_enable_stream_clocks(ctrl, pixel_rate);
->
-> I think we can take another step forward here. Read the
-> ctrl->panel->dp_mode.drm_mode.clock from within the
-> dp_ctrl_enable_stream_clocks() function. This removes the need to pass
-> pixel_rate as an argument here.
-
-This is also affected by widebus and if the function is called from
-dp_ctrl_on_stream() or dp_ctrl_on_stream_phy_test_report(). Maybe it
-would be better to inline dp_ctrl_enable_stream_clocks() to the
-callsites? That would probably simplify things because the function is
-mostly a wrapper around a couple functions.

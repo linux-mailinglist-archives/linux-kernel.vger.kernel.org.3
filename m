@@ -2,116 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A8D5553FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19FB555405
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356636AbiFVTJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S1377734AbiFVTKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232911AbiFVTJi (ORCPT
+        with ESMTP id S231178AbiFVTKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:09:38 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788C915806
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Oj8H7zsJ4ndt3MK4sIJED6AFUWOF
-        E1yzy5hFgKjZV28=; b=jRgDKwJGfrTY38pfQNNKvIQfPb8DTrus3E0WJk5md+Le
-        c9TarJXe/2O4u79AhQMGXsoXfWFIIJhV02eq6zC2LcTmf2vHgw5LmdFT5LGcZgLe
-        2Pohd2kPsx5L5NpCEuiLaBcLTYqR9uTj1dpHi3WwufCBslOzIW8Psv2XAMPmsHU=
-Received: (qmail 730482 invoked from network); 22 Jun 2022 21:09:31 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Jun 2022 21:09:31 +0200
-X-UD-Smtp-Session: l3s3148p1@xLOEEw7i1JcgAwDtxwdRADDX0JnqoDnA
-Date:   Wed, 22 Jun 2022 21:09:28 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pavel Machek <pavel@denx.de>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 2/2] mmc: renesas_sdhi: Fix typo's
-Message-ID: <YrNo6LLDixpZ16k/@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pavel Machek <pavel@denx.de>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220622173614.12778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220622173614.12778-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdWbQ1VHH4ugQs2mamS2KGEj5AdWmNtmg=6eUJmyGRDTVw@mail.gmail.com>
- <CA+V-a8vDem8=QaSdJr5mjHC+qbGmUtTBWEsf9T8njMZMT3BGJw@mail.gmail.com>
+        Wed, 22 Jun 2022 15:10:10 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4850615806
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:10:08 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-317710edb9dso172784277b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m2EKhR0TRoyufPiu9Flo4efSG9iVQ7Sr7NIfxXnG//E=;
+        b=q0iBpeFzXmVjuV9RJ2U0tO6ECKKIgXqLxhTrd/XuqGhMkas+He99laUPoyLdnfoNFL
+         +PttCvM62NPrGDH6bN6Tam5nPc4Jt6Lhqq9iRLcdZDXmODHt/VANxFARtdqBpIOWNqbl
+         AatF7ctiFGf72C+0OC82zliefxVYa8dtkAaYmnq0JCPtTgfz1cWUVQ87m5452KZkW/cW
+         SPNNeBKYphGmdKaYImVx82HxgMYh2fon8Z8I1JzFAAU0CLZraMDpT8R9qd8YGH1YLF5l
+         z+/MLbNzdLViy90RdBW0wFmvw6BnGUFs9HZsF90abo3WhbF4Ja8pDA24KBOpYxV847T2
+         I7ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m2EKhR0TRoyufPiu9Flo4efSG9iVQ7Sr7NIfxXnG//E=;
+        b=lOIACkrqM7cpDIyQ8GSYHHtzdcsxT01D38YkcEiw2JW1FCw1s6bLLV2Bn81EJplntI
+         w/8q1XW0Mr6UNKo7w1A5SDV7B8BvGrgkWrW2Di47M0PyXY3bGZ3NMO7VjP1W0KCkhJvK
+         VrxGh8VyNtu4obERIMlidbf1Ig4RYJOE+857kCni2Uh5wIhuVQNxudN/+1LbcUtLAh7Z
+         AKH9DgbyQ7oGycE7I2TUtDAhVeD8l8j6bFsOCXysigcnJR5183wRmF30efU0nPcCRCWY
+         EW508TzlUBEPQ+BrAQx12lcWg5nd/L2vBmye5R+wRpmLA7IOTmyy1wfQSzkCGVf9UszI
+         LNoA==
+X-Gm-Message-State: AJIora9V1MPHCYiocyOA6FBoHxh9lIkKozpGSFFmhyibenQHXd6S6iV1
+        APSMIHx51Ez3JQCY55fSYkVPzhR9af6X3sJnnnWFvA==
+X-Google-Smtp-Source: AGRyM1solygMwSWCkiPF1NFwzx5BeilY1scDMXVDLNy5qaonwBsI4xn5J0zOBjmp0RWdt2LaZxnizqSGP3n3TRaTEKc=
+X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
+ t197-20020a0deace000000b0031787acb3a8mr6074480ywe.126.1655925007151; Wed, 22
+ Jun 2022 12:10:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RQzW6Ax7wtYuMWw+"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8vDem8=QaSdJr5mjHC+qbGmUtTBWEsf9T8njMZMT3BGJw@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
+ <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com> <YrKhkmj3jCQA39X/@atomide.com>
+In-Reply-To: <YrKhkmj3jCQA39X/@atomide.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 22 Jun 2022 12:09:31 -0700
+Message-ID: <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---RQzW6Ax7wtYuMWw+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-
-> > > -       /* This DMAC cannot handle if buffer is not 128-bytes alignment */
-> > > +       /* This DMAC cannot handle if buffer is not 128 byte aligned */
+On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
+>
+> Hi,
+>
+> * Saravana Kannan <saravanak@google.com> [220621 19:29]:
+> > On Tue, Jun 21, 2022 at 12:28 AM Tony Lindgren <tony@atomide.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
+> > > > Now that fw_devlink=on by default and fw_devlink supports
+> > > > "power-domains" property, the execution will never get to the point
+> > > > where driver_deferred_probe_check_state() is called before the supplier
+> > > > has probed successfully or before deferred probe timeout has expired.
+> > > >
+> > > > So, delete the call and replace it with -ENODEV.
+> > >
+> > > Looks like this causes omaps to not boot in Linux next.
 > >
-> > 128-byte? ;-)
+> > Can you please point me to an example DTS I could use for debugging
+> > this? I'm assuming you are leaving fw_devlink=on and not turning it
+> > off or putting it in permissive mode.
+>
+> Sure, this seems to happen at least with simple-pm-bus as the top
+> level interconnect with a configured power-domains property:
+>
+> $ git grep -A10 "ocp {" arch/arm/boot/dts/*.dtsi | grep -B3 -A4 simple-pm-bus
+
+Thanks for the example. I generally start looking from dts (not dtsi)
+files in case there are some DT property override/additions after the
+dtsi files are included in the dts file. But I'll assume for now
+that's not the case. If there's a specific dts file for a board I can
+look from that'd be helpful to rule out those kinds of issues.
+
+For now, I looked at arch/arm/boot/dts/omap4.dtsi.
+
+>
+> This issue is no directly related fw_devlink. It is a side effect of
+> removing driver_deferred_probe_check_state(). We no longer return
+> -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
+
+Yes, I understand the issue. But driver_deferred_probe_check_state()
+was deleted because fw_devlink=on should have short circuited the
+probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
+probe function and hitting this -ENOENT failure. That's why I was
+asking the other questions.
+
+> > > On platform_probe() genpd_get_from_provider() returns
+> > > -ENOENT.
 > >
-> In the previous version of the patch Wolfram never came back on your
-> reply, so I went with 128 byte instead.
+> > This error is with the series I assume?
+>
+> On the first probe genpd_get_from_provider() will return -ENOENT in
+> both cases. The list is empty on the first probe and there are no
+> genpd providers at this point.
+>
+> Earlier with driver_deferred_probe_check_state(), the initial -ENOENT
+> ends up getting changed to -EPROBE_DEFER at the end of
+> driver_deferred_probe_check_state(), we are now missing that.
 
-I hoped for a native speaker to chime in. I don't care about the '-' but
-maybe we should rephrase it to:
+Right, I was aware -ENOENT would be returned if we got this far. But
+the point of this series is that you shouldn't have gotten that far
+before your pm domain device is ready. Hence my questions from the
+earlier reply.
 
-/* This DMAC needs buffers to be 128-byte aligned */
+Can I get answers to rest of my questions in the first reply please?
+That should help us figure out why fw_devlink let us get this far.
+Summarize them here to make it easy:
+* Are you running with fw_devlink=on?
+* Is the"ti,omap4-prm-inst"/"ti,omap-prm-inst" built-in in this case?
+* If it's not built-in, can you please try deferred_probe_timeout=0
+and deferred_probe_timeout=30 and see if either one of them help?
+* Can I get the output of "ls -d supplier:*" and "cat
+supplier:*/status" output from the sysfs dir for the ocp device
+without this series where it boots properly.
 
-?
-
-
---RQzW6Ax7wtYuMWw+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKzaOQACgkQFA3kzBSg
-Kbbpew/+MQbQyIXLYfz6qKuhS5xIaU2T6054B+58JVY835yCxrowf0om5JfPQKpq
-6rM61/AMQzJWLgfNRJIvAKgYvdJiVppd/t7HPCV/yD7tpAygWfciepusnF2P7fXf
-IlfOeRwTzLSR4PwQcnq/FrWsoGvM4IrcPnyXLgPVIwBOmd9qJBYoGKwTYcoPUYVZ
-cU3WtgXo9cgiszZIj1cgaBtr8Xg7u60BbgG2T1GYs+LlD9/pO/vK8H3vHJflnYE5
-0lD5fOlnkJbqtMu9uSTPCHKEfoDUMb8bFPwhXPS6Uos+j8uG+A1sj0y4tlEcWuZw
-7hLbXyn+vRMEdRTfb16XjplyXzOSOZcYiP+jOiczSMfkxI7obzsLpA5YyBbTrMYG
-AW/Tdcq1jvL1mKWdyKO7bRRNgETalDjHex1YyEpWBohkhY/BjQjFAx0M4uzkpbu8
-T/qRYyOh/KR4JDNtNnxWm2BRAbO+VIOh8IP+0g8M2AnHMHdElhFMu/mJsf0BCwDh
-WgpZMBOqArDQ1UfFIupLkYdk6NW0iH+La1UK+mXBTGYWwoyA7hKhGfSCaPf6oEa5
-lAqoDlhxtvIZJPM3YHl4VRvNwY5iLxY9jsziWknGg0vgSLTzMz1mj1sy4LqBbeW3
-GRndizepa2B/eG+8gdaJHpHIKeC2P4lwx0z9IIhIYdadWmQrQDQ=
-=Ryfs
------END PGP SIGNATURE-----
-
---RQzW6Ax7wtYuMWw+--
+Thanks,
+Saravana

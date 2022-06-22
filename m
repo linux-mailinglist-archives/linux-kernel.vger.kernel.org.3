@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37A255441D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891CE554456
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351946AbiFVHGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S1350531AbiFVHGS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Jun 2022 03:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbiFVHGT (ORCPT
+        with ESMTP id S230070AbiFVHGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:06:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CB436B4F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:06:18 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3uRD-0004HY-5U; Wed, 22 Jun 2022 09:06:07 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3uR8-001z48-QP; Wed, 22 Jun 2022 09:06:04 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o3uR9-000MZh-Dv; Wed, 22 Jun 2022 09:06:03 +0200
-Date:   Wed, 22 Jun 2022 09:06:00 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, hvilleneuve@dimonoff.com,
-        l.stach@pengutronix.de, abbaraju.manojsai@amarulasolutions.com,
-        jagan@amarulasolutions.com, matteo.lisi@engicam.com,
-        tharvey@gateworks.com, t.remmet@phytec.de, t.remmet@phytec.deh,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 00/14] arm64: dts: imx8mp: correct pad settings
-Message-ID: <20220622070600.gb3wep7rltwdivkk@pengutronix.de>
-References: <20220622061410.853301-1-peng.fan@oss.nxp.com>
+        Wed, 22 Jun 2022 03:06:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150A936B47;
+        Wed, 22 Jun 2022 00:06:15 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LSZB70KnBz67mnw;
+        Wed, 22 Jun 2022 15:04:15 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 09:06:12 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 22 Jun 2022 09:06:12 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v5 5/5] selftests/bpf: Add test for
+ bpf_verify_pkcs7_signature() helper
+Thread-Topic: [PATCH v5 5/5] selftests/bpf: Add test for
+ bpf_verify_pkcs7_signature() helper
+Thread-Index: AQHYhY2R+7oGNnsbDU2QqyKkP3n2X61aULGAgACwS9A=
+Date:   Wed, 22 Jun 2022 07:06:12 +0000
+Message-ID: <76c319d5ad1e4ac69ae5d3f71e9d62f7@huawei.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-6-roberto.sassu@huawei.com>
+ <20220621223135.puwe3m55yznaevm5@macbook-pro-3.dhcp.thefacebook.com>
+In-Reply-To: <20220621223135.puwe3m55yznaevm5@macbook-pro-3.dhcp.thefacebook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lubhnzxzir5q7thf"
-Content-Disposition: inline
-In-Reply-To: <20220622061410.853301-1-peng.fan@oss.nxp.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> Sent: Wednesday, June 22, 2022 12:32 AM
+> On Tue, Jun 21, 2022 at 06:37:57PM +0200, Roberto Sassu wrote:
+> > +	if (child_pid == 0) {
+> > +		snprintf(path, sizeof(path), "%s/signing_key.pem", tmp_dir);
+> > +
+> > +		return execlp("./sign-file", "./sign-file", "-d", "sha256",
+> > +			      path, path, data_template, NULL);
+> 
+> Did you miss my earlier reply requesting not to do this module_signature append
+> and use signature directly?
 
---lubhnzxzir5q7thf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I didn't miss. sign-file is producing the raw PKCS#7 signature here (-d).
 
-Hello,
+I'm doing something slightly different, to test the keyring ID part.
+I'm retrieving an existing kernel module (actually this does not work
+in the CI), parsing it to extract the raw signature, and passing it to the
+eBPF program for verification.
 
-On Wed, Jun 22, 2022 at 02:13:56PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> i.MX8MP iomux pad BIT3 and BIT0 are reserved bits. Writing 1 to the
-> reserved bit will be ignored and reading will still return 0. Although
-> function not broken with reserved bits set, we should not set reserved
-> bits.
+Since the kernel module is signed with a key in the built-in keyring,
+passing 1 or 0 as ID should work.
 
-I wonder how you found these. Some time ago I wrote a tool for such
-issues[1]. Currently it only supports i.MX25, i.MX6DL and i.MX6Q, but
-extending it for the other SoCs should be only some industious effort.
+Roberto
 
-Best regards
-Uwe
+(sorry, I have to keep the email signature by German law)
 
-[1] https://git.pengutronix.de/cgit/tools/dt-utils/tree/src/dtblint-imx-pin=
-mux.c
-
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---lubhnzxzir5q7thf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKyv1UACgkQwfwUeK3K
-7Ak5tQf+OE38jVlL1zck0KGSrmTkCjS5+6rj/je/5cZayMomqkMUgZOntcQtpNkA
-kmCVLSqHz0yu0zOAuHu0c0ka82B8le6jUvpC3LhbDpRnqeNXyBeMIR+U3AtlEpti
-uAA4VECVjHRwHIHmIdQ9FWEA2M+sJCjcQrSl0Xa8JXWnPxEF5vJ8USbzV54ku/oc
-yYvfLxwnoDrUVNN3APnAekj6O7JZLKGkCHe4SFr9wjeKMnPjH+L0t/uO6/Ype20z
-bUbVGC5dnp0i2+2Fi4q72BtWZmwK6wrwbcCpbMWCbps0e+Q1EAJ/XGuOUfB3cEjG
-6c0RlhF9h/FWG+hiZYCcdsoLGU32cg==
-=57EK
------END PGP SIGNATURE-----
-
---lubhnzxzir5q7thf--
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Yang Xi, Li He

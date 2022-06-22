@@ -2,151 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95D4555337
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345D6555339
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377358AbiFVSTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 14:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        id S1377624AbiFVST0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 14:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377592AbiFVSTQ (ORCPT
+        with ESMTP id S1359782AbiFVSTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 14:19:16 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC1A63C3;
-        Wed, 22 Jun 2022 11:19:14 -0700 (PDT)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 572D460004;
-        Wed, 22 Jun 2022 18:19:09 +0000 (UTC)
-Message-ID: <673a6f2b-dab2-e00f-b37c-15f8775b2121@ovn.org>
-Date:   Wed, 22 Jun 2022 20:19:08 +0200
+        Wed, 22 Jun 2022 14:19:24 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD00101C9;
+        Wed, 22 Jun 2022 11:19:23 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B9FDB3200944;
+        Wed, 22 Jun 2022 14:19:20 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 22 Jun 2022 14:19:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1655921960; x=1656008360; bh=BOv4zfNJ43
+        lhXbjUgMokcKvSsmqFJ3GbVqMgFbujkcE=; b=mdJUuWzirR/P8hMbptpAD4g8Fh
+        LImJfkZ9hI0GD7bEKnt8qiBrUrP8AhMel4ULyqF7VihPUC/q4aAxjr++9Oher/2W
+        fZLoohOTohGX7hwXQ7evWdrLrUAWgv4JtHxTUnaJupvhIc9pa1IXzkCQdHcfrzMo
+        fd9gBe2FnZRVOcDmpZJzTLkoG4H74i2EPFbZUKMesUTpdLVGYnfPeK1+xlcAamuS
+        QuDifaykE/y1EnxMmF90UMqB7WJvsK3bBsI9KQuO6LHczXcF3P1vlsEYg4w1FE1t
+        qQ8RgVrB8PCtmCAXff8AcImDM3ffktIOIbRxU+UhBjwcuMPFOV8mnPRjmyDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:date:feedback-id:feedback-id:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1655921960; x=1656008360; bh=BOv4zfNJ43lhXbjUgMokcKvSsmqF
+        J3GbVqMgFbujkcE=; b=hGMTqY61Hvpqs/2+evnS+K0/LYzuCEMPN1jy1h04BVZ2
+        N1qI80eSHyarrLp6gd33BZ798ApAlEksAY1RhT6yZrL0f20XwcDW6ZzicD1uA7c9
+        xhMh/bxNQvKy4+rkVrvz8umsnGb6yPDt2wk5Kz9Cdcm3MGD8TkpkhZo5scTqmpcj
+        pBwQQ8Il62DdLrP+Zc0ArAnnP24kn29cmx2AJCvrj5BNMWhXVw4KhaDeqhiKn82W
+        IRHd8N1EYtX98tAL4rdUmKmDDCngadLTUBw1GUmbwLniMra7N68eOFpYZ+72TOpV
+        NgHbBKu2dlBd+6h4QEtRFj+8qqmleNg45vbDe9rekA==
+X-ME-Sender: <xms:J12zYlFJlJbKz20mk3qUSGZdrlPGwQH-fKXg0BLUtKM8K-U1CGP4QQ>
+    <xme:J12zYqUZpHOZkgdIBvaBkhfOozxoZy2mKsCOEpuLeMKL5zfdM4AQGBDjRqGP3b0YD
+    N1WNIxVmTSTKpAMNQ>
+X-ME-Received: <xmr:J12zYnKBZV1xKyoLHtaClR9mVT_Hm53eruePoDpwnd-INCNa3ctPmXbb5mqlFiZgMqYfQvxuZscyGls38_Yg4GhocG4a8xxxr3FYkyblTrL9b-VEnug8d-FX2yl9>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefhedguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkgggtugfgsehmkeerredttdejnecuhfhrohhmpeetnhgurhgv
+    shcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtffrrg
+    htthgvrhhnpeehtedtueegueekkeelkeehleffteejjeekheeifeelvefgvddugfefkeel
+    feekleenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvghssegrnhgrrhgr
+    iigvlhdruggv
+X-ME-Proxy: <xmx:J12zYrH1f2xubPTW4NkCcUjYnLOyGyIkkDAVFfX_gR1AhAxfuN9bvQ>
+    <xmx:J12zYrVmqGLdCk7VSdDJb6nUatl_PdWyozSImL52Arj5-d7JusCICg>
+    <xmx:J12zYmP1vHN-M5cuMkQaP0QqCmTfex9z635CG7guFHv0A_dLyWK4jQ>
+    <xmx:KF2zYoi1c0-83PiLAK0B9Z-673tMjYLy1_P7SIF-vgUP2RTDAOd6Ww>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Jun 2022 14:19:19 -0400 (EDT)
+Date:   Wed, 22 Jun 2022 11:19:18 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Quentin Monnet <quentin@isovalent.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: init_disassemble_info() signature changes causes compile failures
+Message-ID: <20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     i.maximets@ovn.org,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Florian Westphal <fw@strlen.de>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-References: <20220619003919.394622-1-i.maximets@ovn.org>
- <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
- <20220622102813.GA24844@breakpoint.cc>
- <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
- <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org>
- <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
- <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org>
- <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
- <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
- <CANn89iLVHAE5aMwo0dow14mdFK0JjokE9y5KV+67AxKJdSjx=w@mail.gmail.com>
- <CANn89i+5pWbXyFBnMqdfz6SqRV9enFNHbcd_2irJub1Ag7vxNw@mail.gmail.com>
-From:   Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [PATCH net] net: ensure all external references are released in
- deferred skbuffs
-In-Reply-To: <CANn89i+5pWbXyFBnMqdfz6SqRV9enFNHbcd_2irJub1Ag7vxNw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="yy7koo44v5in4hu5"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/22 19:03, Eric Dumazet wrote:
-> On Wed, Jun 22, 2022 at 6:47 PM Eric Dumazet <edumazet@google.com> wrote:
->>
->> On Wed, Jun 22, 2022 at 6:39 PM Eric Dumazet <edumazet@google.com> wrote:
->>>
->>> On Wed, Jun 22, 2022 at 6:29 PM Eric Dumazet <edumazet@google.com> wrote:
->>>>
->>>> On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
->>>>>
->>>>> On 6/22/22 13:43, Eric Dumazet wrote:
->>>>
->>>>>
->>>>> I tested the patch below and it seems to fix the issue seen
->>>>> with OVS testsuite.  Though it's not obvious for me why this
->>>>> happens.  Can you explain a bit more?
->>>>
->>>> Anyway, I am not sure we can call nf_reset_ct(skb) that early.
->>>>
->>>> git log seems to say that xfrm check needs to be done before
->>>> nf_reset_ct(skb), I have no idea why.
->>>
->>> Additional remark: In IPv6 side, xfrm6_policy_check() _is_ called
->>> after nf_reset_ct(skb)
->>>
->>> Steffen, do you have some comments ?
->>>
->>> Some context:
->>> commit b59c270104f03960069596722fea70340579244d
->>> Author: Patrick McHardy <kaber@trash.net>
->>> Date:   Fri Jan 6 23:06:10 2006 -0800
->>>
->>>     [NETFILTER]: Keep conntrack reference until IPsec policy checks are done
->>>
->>>     Keep the conntrack reference until policy checks have been performed for
->>>     IPsec NAT support. The reference needs to be dropped before a packet is
->>>     queued to avoid having the conntrack module unloadable.
->>>
->>>     Signed-off-by: Patrick McHardy <kaber@trash.net>
->>>     Signed-off-by: David S. Miller <davem@davemloft.net>
->>>
->>
->> Oh well... __xfrm_policy_check() has :
->>
->> nf_nat_decode_session(skb, &fl, family);
->>
->> This  answers my questions.
->>
->> This means we are probably missing at least one XFRM check in TCP
->> stack in some cases.
->> (Only after adding this XFRM check we can call nf_reset_ct(skb))
->>
-> 
-> Maybe this will help ?
 
-I tested this patch and it seems to fix the OVS problem.
-I did not test the xfrm part of it.
+--yy7koo44v5in4hu5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Will you post an official patch?
+Hi,
 
-> 
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index fe8f23b95d32ca4a35d05166d471327bc608fa91..49c1348e40b6c7b6a98b54d716f29c948e00ba33
-> 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -2019,12 +2019,19 @@ int tcp_v4_rcv(struct sk_buff *skb)
->                 if (nsk == sk) {
->                         reqsk_put(req);
->                         tcp_v4_restore_cb(skb);
-> -               } else if (tcp_child_process(sk, nsk, skb)) {
-> -                       tcp_v4_send_reset(nsk, skb);
-> -                       goto discard_and_relse;
->                 } else {
-> -                       sock_put(sk);
-> -                       return 0;
-> +                       if (!xfrm4_policy_check(nsk, XFRM_POLICY_IN, skb)) {
-> +                               drop_reason = SKB_DROP_REASON_XFRM_POLICY;
-> +                               goto discard_and_relse;
-> +                       }
-> +                       nf_reset_ct(skb);
-> +                       if (tcp_child_process(sk, nsk, skb)) {
-> +                               tcp_v4_send_reset(nsk, skb);
-> +                               goto discard_and_relse;
-> +                       } else {
-> +                               sock_put(sk);
-> +                               return 0;
-> +                       }
->                 }
->         }
+binutils changed the signature of init_disassemble_info(), which now causes
+perf and bpftool to fail to compile (e.g. on debian unstable).
 
+Relevant binutils commit: https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=60a3da00bd5407f07d64dff82a4dae98230dfaac
+
+util/annotate.c: In function ‘symbol__disassemble_bpf’:
+util/annotate.c:1765:9: error: too few arguments to function ‘init_disassemble_info’
+ 1765 |         init_disassemble_info(&info, s,
+      |         ^~~~~~~~~~~~~~~~~~~~~
+In file included from util/annotate.c:1718:
+/usr/include/dis-asm.h:472:13: note: declared here
+  472 | extern void init_disassemble_info (struct disassemble_info *dinfo, void *stream,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+
+with equivalent failures in
+
+tools/bpf/bpf_jit_disasm.c
+tools/bpf/bpftool/jit_disasm.c
+
+The fix is easy enough, add a wrapper around fprintf() that conforms to the
+new signature.
+
+However I assume the necessary feature test and wrapper should only be added
+once? I don't know the kernel stuff well enough to choose the right structure
+here.
+
+Attached is my local fix for perf. Obviously would need work to be a real
+solution.
+
+Greetings,
+
+Andres Freund
+
+--yy7koo44v5in4hu5
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment; filename="perf-compile-bfd.diff"
+
+diff --git i/tools/perf/util/annotate.c w/tools/perf/util/annotate.c
+index 82cc396ef516..b0e364d235b4 100644
+--- i/tools/perf/util/annotate.c
++++ w/tools/perf/util/annotate.c
+@@ -1721,6 +1721,18 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ #include <bpf/libbpf.h>
+ #include <linux/btf.h>
+ 
++static int fprintf_styled(void *, enum disassembler_style, const char* fmt, ...)
++{
++  va_list args;
++  int r;
++
++  va_start(args, fmt);
++  r = vprintf(fmt, args);
++  va_end(args);
++
++  return r;
++}
++
+ static int symbol__disassemble_bpf(struct symbol *sym,
+ 				   struct annotate_args *args)
+ {
+@@ -1763,7 +1775,8 @@ static int symbol__disassemble_bpf(struct symbol *sym,
+ 		goto out;
+ 	}
+ 	init_disassemble_info(&info, s,
+-			      (fprintf_ftype) fprintf);
++			      (fprintf_ftype) fprintf,
++			      fprintf_styled);
+ 
+ 	info.arch = bfd_get_arch(bfdf);
+ 	info.mach = bfd_get_mach(bfdf);
+
+--yy7koo44v5in4hu5--

@@ -2,101 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1E3554772
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19239554603
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbiFVIPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S234249AbiFVIQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiFVIPo (ORCPT
+        with ESMTP id S233543AbiFVIQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:15:44 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06C537BCD
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655885743; x=1687421743;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dqUl1qLKhSTbBSPE+HwF8+sPOml0pgG4RVSizv+lwCg=;
-  b=hSyWk38I31Am+0lcoWZxq7NMPgYOiBJh90LEKd5fxinmZai5fCaOOVu2
-   11qClQ7Kk9Wj/TUuy9vNmJ0omY1TE/Q7LQFpYczdqQh6AKMjHsoEZJ0E+
-   jIXNXfa0eriEZxPfSqh+k5alsDwxm5DZ1Ln9/gOY2l9/E4gcV+3nJsXEz
-   Mx5KhrjsIEZQnqI2QLZxaprDNQpuNMFcJ3xU37cQHLS9GOAvIq3laBUsc
-   E7MQhuzQCaYVMyJ6ZkFE8zN4Th/R4609K+UPJpXcmsFa9hCvh4pUE72DQ
-   hO7OyOx3J2o7X96qTVIyKa2znfWxnh4Pdg6YhdN61+fhZlk58BJvYep6N
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342035461"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="342035461"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 01:15:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="592068965"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Jun 2022 01:15:39 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3vWU-00012T-H7;
-        Wed, 22 Jun 2022 08:15:38 +0000
-Date:   Wed, 22 Jun 2022 16:15:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jarkko Sakkinen <jarkko@profian.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jarkko-tpmdd:kprobes 3/3] arch/powerpc/kernel/module_alloc.c:31:46:
- error: '_etext' undeclared
-Message-ID: <202206221611.lYrZWqbt-lkp@intel.com>
+        Wed, 22 Jun 2022 04:16:35 -0400
+Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4051B37BEC
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=kN6/r
+        hU/2QYB7HknJbEH3z7r4SRj8x+O+RgWXUCDTNs=; b=aUqqWwhqoHTQ646YOPpFs
+        6fcaMZiAohrk7MVT9G/VR1fhkyH7cq9L+UzXWscyhgvZTKpuSvazkcmllAee1s1h
+        n8GuJzlakeB4RfdMAIM12RTbl+LAx8DhiON8fiWYPM87rxkR0aRtPKmOWLRU3e3T
+        3YwdJWFeDKHa/dvNvel/8I=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr50
+ (Coremail) ; Wed, 22 Jun 2022 16:15:56 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Wed, 22 Jun 2022 16:15:56 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Marc Zyngier" <maz@kernel.org>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        "Miaoqian Lin" <linmq006@gmail.com>
+Subject: Re:Re: [PATCH] irqchip: Add missing of_ndoe_get() in its_of_probe()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <87mte52khd.wl-maz@kernel.org>
+References: <20220622062138.4095598-1-windhl@126.com>
+ <87mte52khd.wl-maz@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <229e8ea9.5a09.1818a7b7a35.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: MsqowAAnfPC+z7JihnM7AA--.2131W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuB4oF2JVj-e7IgAAsP
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git kprobes
-head:   8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-commit: 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3 [3/3] kprobes: Enable tracing for mololithic kernel images
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220622/202206221611.lYrZWqbt-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd kprobes
-        git checkout 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/powerpc/kernel/module_alloc.c: In function 'module_alloc':
->> arch/powerpc/kernel/module_alloc.c:31:46: error: '_etext' undeclared (first use in this function)
-      31 |         unsigned long limit = (unsigned long)_etext - SZ_32M;
-         |                                              ^~~~~~
-   arch/powerpc/kernel/module_alloc.c:31:46: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/_etext +31 arch/powerpc/kernel/module_alloc.c
-
-    27	
-    28	void *module_alloc(unsigned long size)
-    29	{
-    30	#ifdef MODULES_VADDR
-  > 31		unsigned long limit = (unsigned long)_etext - SZ_32M;
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+CgpBdCAyMDIyLTA2LTIyIDE2OjAzOjI2LCAiTWFyYyBaeW5naWVyIiA8bWF6QGtlcm5lbC5vcmc+
+IHdyb3RlOgo+KyBNaWFvcWlhbiBMaW4KPgo+T24gV2VkLCAyMiBKdW4gMjAyMiAwNzoyMTozOCAr
+MDEwMCwKPkxpYW5nIEhlIDx3aW5kaGxAMTI2LmNvbT4gd3JvdGU6Cj4+IAo+PiBXZSBuZWVkIHRv
+IGFkZCBtaXNzaW5nIG9mX25vZGVfZ2V0KCkgZm9yIG9mX2ZpbmRfbWF0Y2hpbmdfbm9kZSgpIHRv
+Cj4+IGtlZXAgcmVmY291bnQgYmFsYW5jZS4KPj4gCj4+IE5vdGU6IG9mX2ZpbmRfbWF0Y2hpbmdf
+bm9kZSgpIHdpbGwgZGVjcmVhc2UgdGhlIHJlZmNvdW50IG9mIGl0cyBmaXJzdAo+PiBhcmcuCj4+
+IAo+PiBTaWduZWQtb2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+Cj4KPlsuLi5dCj4K
+PlBsZWFzZSBzZW5kIHRoZXNlIHJlZmNvdW50IGZpeGVzIGFzIGEgc2VyaWVzIGZvciBhbGwgdGhl
+IGlycWNoaXAKPmRyaXZlcnMsIG5vdCBvbmUgZXZlcnkgb3RoZXIgZGF5Lgo+CgpTb3JyeSwgSSB3
+aWxsIGdyb3VwIHNpbWlsYXIgYnVncyAgaW4gZnV0dXJlLgoKCj5BbmQgcGxlYXNlIHN5bmNocm9u
+aXNlIHdpdGggTWlhb3FpYW4gTGluLCBhcyB5b3UgYXJlIG9idmlvdXNseSBib3RoCj5jaGFzaW5n
+IHRoZSBzYW1lIGJ1Z3MuCj4KPlRoYW5rcywKPgo+CU0uCgpZZXMsICBiZWZvcmUgSSBzZW5kIGFu
+eSBuZXcgYnVnLCBJIHdpbGwgY29uZmlybSB0aGF0IHRoaXMgYnVnIGhhcyBub3QgYmVlbiByZXBv
+cnRlZCBpbiBsb3JlLmtlcm5lbC5vcmcuCgpCeSB0aGUgd2F5LCB0aGlzIGlzIGEgYnVnIG1pc3Np
+bmcgfEdFVHwsIG5vdCB8UFVUfCwgd2hpY2ggaXMgZGlmZmVyZW50IHdpdGggTWlhb3FpYW4ncyBh
+bmQgbXkgcGF0Y2hlcyBiZWZvcmUuCgo+Cj4tLSAKPldpdGhvdXQgZGV2aWF0aW9uIGZyb20gdGhl
+IG5vcm0sIHByb2dyZXNzIGlzIG5vdCBwb3NzaWJsZS4K

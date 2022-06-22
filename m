@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B379554090
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744C3554092
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354905AbiFVCcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 22:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S1355750AbiFVCfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 22:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiFVCcW (ORCPT
+        with ESMTP id S1355532AbiFVCfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 22:32:22 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C7433A22;
-        Tue, 21 Jun 2022 19:32:20 -0700 (PDT)
-X-UUID: 47ec2e72a6094c4284d6e95c42f7a1f0-20220622
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:50bf1460-bb55-4385-8336-6a96b99c6943,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:70
-X-CID-INFO: VERSION:1.1.6,REQID:50bf1460-bb55-4385-8336-6a96b99c6943,OB:0,LOB:
-        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:70
-X-CID-META: VersionHash:b14ad71,CLOUDID:337429ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:7f036f2b718d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 47ec2e72a6094c4284d6e95c42f7a1f0-20220622
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1016340308; Wed, 22 Jun 2022 10:32:14 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 22 Jun 2022 10:32:14 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 22 Jun 2022 10:32:14 +0800
-Message-ID: <efd33799d1b7da447113c6edd6cf7409b05e3f3d.camel@mediatek.com>
-Subject: Re: [PATCH v13 01/14] dt-bindings: mediatek,dpi: Add DP_INTF
- compatible
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 22 Jun 2022 10:32:14 +0800
-In-Reply-To: <20220621113732.11595-2-rex-bc.chen@mediatek.com>
-References: <20220621113732.11595-1-rex-bc.chen@mediatek.com>
-         <20220621113732.11595-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 22:35:10 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEC4193E4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 19:35:09 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id l6so5982978plg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 19:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sGl5+ehxGLowleALKzjeGZ3rc803Ngllm888LIuNvsg=;
+        b=VnSeM+TIr/QKBFk6gml/hHQpsnIEappV2NO0YNXNvzqho/5OwT2bSkTkgVw7aBqaqj
+         WBmAErFIKMAcMurvSHpjhakvBhtB9ttIM2zdqaVRZ8L+ervOtdO8ERPa9fVyHQ+GF4pV
+         fgY8bpVPoxVuaZIDRoyNgZouHIMQ24/OmUW14=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sGl5+ehxGLowleALKzjeGZ3rc803Ngllm888LIuNvsg=;
+        b=5dIIKqmIVn6cPHtgOY8wdUYrVzGreZQjXBecI6kNpLySEcR5+JPn79WdRboRiWEyj/
+         FD0RAD2GXGX8VTN2IgF7V8aV0peKa7pQqetAHSS6AmFP6ea5g4iixFCgu8OCZTi/Vavh
+         Ie4P+ib8arw2p+WsbVXkam4T0VANsc6D0W3hCELNfVtVauQfoavnIJ7ePS9H8saEnYxH
+         aVBZT+4Zl7OVU0PSfSi5/7pMHjRuzJ7hzB+nMdKlOsO+0Vc+/HMtfOG25IaRqnmLR9sK
+         LHVeuGKfb9GeTkMktpiKk0Oshx5JII4ua69vO9oXcZgihlXIyzXUJGyYBQva3OAUf9Fv
+         kEPA==
+X-Gm-Message-State: AJIora92Nf+Yce+9PTHNeLWWV0lnSth2MTsUqMPR+ujS/LXA4M+Ahuk9
+        Roog6OgNoSLXBJYO4F96ZQAP5Tx/HOuZJw==
+X-Google-Smtp-Source: AGRyM1ve8EpdrHDDtoCMYvUHnzTm2dlt4MX4QTcOCfexmssRE74lOtugg9gSecI8FR/TbYd4g4O9eA==
+X-Received: by 2002:a17:902:c2ca:b0:168:db72:16a with SMTP id c10-20020a170902c2ca00b00168db72016amr32526387pla.171.1655865308850;
+        Tue, 21 Jun 2022 19:35:08 -0700 (PDT)
+Received: from senozhatsky.kddi.com ([240f:75:7537:3187:1922:709:82a7:e4d3])
+        by smtp.gmail.com with ESMTPSA id c11-20020a62f84b000000b0051844a64d3dsm11991277pfm.25.2022.06.21.19.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 19:35:08 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH] zram: do not lookup algorithm in backends table
+Date:   Wed, 22 Jun 2022 11:35:01 +0900
+Message-Id: <20220622023501.517125-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,94 +66,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+Always use crypto_has_comp() so that crypto can lookup module,
+call usermodhelper to load the modules, wait for usermodhelper
+to finish and so on. Otherwise crypto will do all of these steps
+under CPU hot-plug lock and this looks like too much stuff to
+handle under the CPU hot-plug lock. Besides this can end up in
+a deadlock when usermodhelper triggers a code path that attempts
+to lock the CPU hot-plug lock, that zram already holds.
 
-On Tue, 2022-06-21 at 19:37 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> DP_INTF is similar to DPI but does not have the exact same feature
-> set
-> or register layouts.
-> 
-> DP_INTF is the sink of the display pipeline that is connected to the
-> DisplayPort controller and encoder unit. It takes the same clocks as
-> DPI.
-> 
-> In this patch, we also do these string replacement:
-> - s/mediatek/MediaTek/ in title.
-> - s/Mediatek/MediaTek/ in description.
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ drivers/block/zram/zcomp.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-I would like one patch do one thing. The patch title is "Add DP_INTF
-compatible" so it would not imply refining the case of "MediaTek". So
-separate this to an independent patch.
-
-Regards,
-CK
-
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Modify reviewers' comments.]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->  .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++---
-> --
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> index 77ee1b923991..5bb23e97cf33 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> @@ -4,16 +4,16 @@
->  $id: 
-> http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: mediatek DPI Controller Device Tree Bindings
-> +title: MediaTek DPI and DP_INTF Controller
->  
->  maintainers:
->    - CK Hu <ck.hu@mediatek.com>
->    - Jitao shi <jitao.shi@mediatek.com>
->  
->  description: |
-> -  The Mediatek DPI function block is a sink of the display subsystem
-> and
-> -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
-> parallel
-> -  output bus.
-> +  The MediaTek DPI and DP_INTF function blocks are a sink of the
-> display
-> +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
-> pixel data on a
-> +  parallel output bus.
->  
->  properties:
->    compatible:
-> @@ -24,6 +24,7 @@ properties:
->        - mediatek,mt8183-dpi
->        - mediatek,mt8186-dpi
->        - mediatek,mt8192-dpi
-> +      - mediatek,mt8195-dp-intf
->  
->    reg:
->      maxItems: 1
-> @@ -55,7 +56,7 @@ properties:
->      $ref: /schemas/graph.yaml#/properties/port
->      description:
->        Output port node. This port should be connected to the input
-> port of an
-> -      attached HDMI or LVDS encoder chip.
-> +      attached HDMI, LVDS or DisplayPort encoder chip.
->  
->  required:
->    - compatible
+diff --git a/drivers/block/zram/zcomp.c b/drivers/block/zram/zcomp.c
+index 052aa3f65514..398eb9e24eff 100644
+--- a/drivers/block/zram/zcomp.c
++++ b/drivers/block/zram/zcomp.c
+@@ -63,12 +63,6 @@ static int zcomp_strm_init(struct zcomp_strm *zstrm, struct zcomp *comp)
+ 
+ bool zcomp_available_algorithm(const char *comp)
+ {
+-	int i;
+-
+-	i = sysfs_match_string(backends, comp);
+-	if (i >= 0)
+-		return true;
+-
+ 	/*
+ 	 * Crypto does not ignore a trailing new line symbol,
+ 	 * so make sure you don't supply a string containing
+-- 
+2.37.0.rc0.104.g0611611a94-goog
 

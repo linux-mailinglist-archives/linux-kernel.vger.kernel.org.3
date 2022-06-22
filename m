@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5639155474A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9134D554824
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350820AbiFVKQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S240926AbiFVKOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244791AbiFVKQL (ORCPT
+        with ESMTP id S230264AbiFVKOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:16:11 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C142C3AA4C;
-        Wed, 22 Jun 2022 03:16:04 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSfMV4mZMzShB9;
-        Wed, 22 Jun 2022 18:12:38 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 18:15:57 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 18:15:56 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jpoimboe@kernel.org>,
-        <peterz@infradead.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <arnd@arndb.de>
-Subject: [PATCH v2 5/5] objtool: use arch_jump_destination in read_intra_function_calls
-Date:   Wed, 22 Jun 2022 18:13:44 +0800
-Message-ID: <20220622101344.38002-6-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220622101344.38002-1-chenzhongjin@huawei.com>
-References: <20220622101344.38002-1-chenzhongjin@huawei.com>
+        Wed, 22 Jun 2022 06:14:48 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936B13A5F5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:14:47 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id i10-20020a1c3b0a000000b003a0297a61ddso171544wma.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZGMHT1uhjCKvxJm1ObjOuYivPXVQOnihHYXcGYcwvas=;
+        b=nKEBuDo2khsFXyhhiCOkz3xLQFq3fpyOaakLCcIfD0KQAYYeMqHG16/xfV/Jh5RvAh
+         M8m4z3dO2KOg2upsEK1hxI3CvHEsyBaeFn/Svcx/sepUahoZyVs9lMsnFu0REWnTl+kd
+         bMXxgXxU4oyqzJNctDhaCrhitdpZhCJHSmHqFNPFxjnhQz9SurO5mUjZtf9xatk5TSBA
+         ojl6+imXM7cXFJd8DipOpp1sfoofm2Itv9+eD3alkAbv/4rA2ihQD5QyhX694kNJIMP3
+         XM7D0ku5dxdl+h+JBX3bxtI4y9S2gNR5SUX4EDLy99hrnxo665PzGWJHzq0Ba6+wKyOY
+         kbtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZGMHT1uhjCKvxJm1ObjOuYivPXVQOnihHYXcGYcwvas=;
+        b=RdMo9puFDuEENroBXHAFGZjkMTe3PjHq3YQKdmicFv5DBmdrSjYq+C4icKHfu9KsDk
+         hChXNyVHVTvSSQgB5nbdlWfMqXRyj136b4kshOxyPSjXTAraGnM9if9yHE4gqRlI3aaf
+         UZdnJXCHws1924z6YY6bNcn6exxDJdxGa89Qy23GDcrJ2OUQzdw2RyntlhmKrsgj3f8n
+         vmE1t4NcD/e4MLohLKnJOELvD2tF0QkRqubqfqlVz4KYyLRQtWf4d2xKKrnqJZmyRML9
+         YqscUdgBAuu4tSKuqzowFoFL4c+7yp1gtKSvNTC9UR7bLMavarSs0ORRwGKcxSyhWhX/
+         sPKQ==
+X-Gm-Message-State: AJIora+YlIG+Bfll/VYDG6e85ZaJszv5tNOGN1nQCys6P0j22XvBHzKL
+        054QFr7Z7f+HvHfYvRrQhO7sveLMuN5fOA==
+X-Google-Smtp-Source: AGRyM1v007oGF6GyrHQNq0+BOyS4cdvxLvwNXS3/IfxgfWnvBjzy2ucrJT/HKxalC4BaUp9+fdNlSw==
+X-Received: by 2002:a7b:cb88:0:b0:39d:16a7:dac7 with SMTP id m8-20020a7bcb88000000b0039d16a7dac7mr3060353wmi.128.1655892886072;
+        Wed, 22 Jun 2022 03:14:46 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id w5-20020a05600018c500b00210320d9fbfsm22184549wrq.18.2022.06.22.03.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 03:14:45 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     David_Wang6097@jabil.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        edward_chen@jabil.com, ben_pai@jabil.com
+Subject: Re: (subset) [PATCH v5 3/3] dt-bindings: arm: aspeed: document board compatibles
+Date:   Wed, 22 Jun 2022 12:14:43 +0200
+Message-Id: <165589284658.28441.5142469500178504592.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220531011100.882643-2-David_Wang6097@jabil.com>
+References: <20220531011100.882643-1-David_Wang6097@jabil.com> <20220531011100.882643-2-David_Wang6097@jabil.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,28 +73,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we use arch_jump_destination() instead of offset + len + immediate
-for jump destination.
-But in read_intra_function_calls it didn't get changed. Fix it.
+On Tue, 31 May 2022 09:10:59 +0800, David Wang wrote:
+> Document jabil board compatible.
+> 
+> 
 
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- tools/objtool/check.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks with fixing up the white space.
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 11ab13fd99fd..35d0a1bc4279 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2127,7 +2127,7 @@ static int read_intra_function_calls(struct objtool_file *file)
- 		 */
- 		insn->type = INSN_JUMP_UNCONDITIONAL;
- 
--		dest_off = insn->offset + insn->len + insn->immediate;
-+		dest_off = arch_jump_destination(insn);
- 		insn->jump_dest = find_insn(file, insn->sec, dest_off);
- 		if (!insn->jump_dest) {
- 			WARN_FUNC("can't find call dest at %s+0x%lx",
+Please be sure git format-patch and checkpatch do not complain on your patches.
+
+[3/3] dt-bindings: arm: aspeed: document board compatibles
+      https://git.kernel.org/krzk/linux-dt/c/ae8980247d5af8528145713e07f1338abc57a00d
+
+Best regards,
 -- 
-2.17.1
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

@@ -2,168 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BFF5541D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7195541DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356925AbiFVElQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 00:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
+        id S1356973AbiFVEph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 00:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiFVElO (ORCPT
+        with ESMTP id S229644AbiFVEpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 00:41:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278535848;
-        Tue, 21 Jun 2022 21:41:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63904B81B08;
-        Wed, 22 Jun 2022 04:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0657BC3411B;
-        Wed, 22 Jun 2022 04:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655872870;
-        bh=eEq1/2iPDzNz1B5Oou72nRfVOsUdg1B5WvvRswLKrBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b+QXBEoaieKF6aDG6vUNkd0kuxYfFerKo7EkAuTsOIK4VUAmqA9o6W1sMonggZy14
-         H4TVLn+gmLIIPFknf5xspz2pSX2gTsuSvmH/PFUVt/jkcRXnkxW15x11IbAwJm/wV4
-         2wenMK2FnO94kUXkHZrITh7Pvng3C9mjBe770eZgba2/qavFem6QLFZUVdWtq+LeHG
-         UO9J/lIJFDVBO3h0LTJwB+buoGcBJ1ZYTV7rFmRoSdgzCdktyFHWfreVsbn4mU/1Yb
-         PFhlUFdhJxYo4l3iFGiVmf48eJhV6rJl51Qa9qJIddgZlNa0Pta5llu7jyldip7AQJ
-         8sWYu8NS1Q9Aw==
-Date:   Tue, 21 Jun 2022 21:41:09 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shida Zhang <starzhangzsd@gmail.com>
-Cc:     dchinner@redhat.com, zhangshida@kylinos.cn,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v3] xfs: add check before calling xfs_mod_fdblocks
-Message-ID: <YrKdZc0fBBDWGjld@magnolia>
-References: <20220621084238.1235880-1-zhangshida@kylinos.cn>
+        Wed, 22 Jun 2022 00:45:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D1633E17;
+        Tue, 21 Jun 2022 21:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655873131; x=1687409131;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CMoUcpPlVSjI5v0iYxRqec/ZANBG5N/XfEwKajaEL7s=;
+  b=as/lceldjPvQp6YwREXLnBwWv4B1SFfv6oGHKcgDWvruBDFIYcYHv+e5
+   upRxJ0j4+4FnHEX0uGMYltAZ37F3BBjsyN5J1LzxR3mAKgeJlfdM4YstD
+   pAwaQ5WSPuTM4BtyQsgoGGDqmDTIIFGMHrl20OxfuwZqHIeDs59IN4k+c
+   C12k/M/aBuCxfDTpWq+gj8m+vls3cQicN4bSeHfwbiJ1t60/AHK0W4Alz
+   ryQgNQXzJwBpLqQphQqIdNRBcTd98HWqYjYqlxLSZ9qPZnud2UyUZpfpn
+   ZUuu/mYLM7IduQ+6RNo7ZvDptw1r/xnenKaKSQ4THqlaahz0XV+3REo4T
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="366635091"
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="366635091"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 21:45:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="833907396"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Jun 2022 21:45:28 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Cc:     Chenyi Qiang <chenyi.qiang@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 1/1] iommu/vt-d: Fix RID2PASID setup failure
+Date:   Wed, 22 Jun 2022 12:41:20 +0800
+Message-Id: <20220622044120.21813-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621084238.1235880-1-zhangshida@kylinos.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 04:42:38PM +0800, Shida Zhang wrote:
-> Checks are missing when delta equals 0 in __xfs_ag_resv_free() and
-> __xfs_ag_resv_init().
-> 
-> the case that the delta equals 0 is reachable with the command
-> sequence below:
-> 
->  # mkfs.xfs -f /dev/sdb5
->  # mount /dev/sdb5 /mnt/scratch/
-> 
-> where /dev/sdb5 is my disk for test. And if the patch below is
-> applied:
-> 
-> ====
-> xfs_mod_freecounter(
->         if (rsvd)
->                 ASSERT(has_resv_pool);
-> 
-> +       if (delta == 0)
-> +               dump_stack();
-> +
->         if (delta > 0) {
->                 /*
->                  * If the reserve pool is depleted, put blocks back into it
-> ====
-> 
-> the following stack will be shown in the message:
-> 
-> =>  xfs_mod_freecounter+0x84/0x2b8
-> =>  __xfs_ag_resv_free+0xc4/0x188
-> =>  xfs_ag_resv_free+0x24/0x50
-> =>  xfs_fs_unreserve_ag_blocks+0x40/0x160
-> =>  xfs_mountfs+0x500/0x900
-> =>  xfs_fs_fill_super+0x3d8/0x810
-> =>  get_tree_bdev+0x164/0x258
-> =>  xfs_fs_get_tree+0x20/0x30
-> =>  vfs_get_tree+0x30/0xf8
-> =>  path_mount+0x3c4/0xa58
-> =>  do_mount+0x74/0x98
-> 
-> =>  xfs_mod_freecounter+0x84/0x2b8
-> =>  __xfs_ag_resv_init+0x64/0x1d0
-> =>  xfs_ag_resv_init+0x108/0x1c8
-> =>  xfs_fs_reserve_ag_blocks+0x4c/0x110
-> =>  xfs_mountfs+0x57c/0x900
-> =>  xfs_fs_fill_super+0x3d8/0x810
-> =>  get_tree_bdev+0x164/0x258
-> =>  xfs_fs_get_tree+0x20/0x30
-> =>  vfs_get_tree+0x30/0xf8
-> =>  path_mount+0x3c4/0xa58
-> =>  do_mount+0x74/0x98
-> 
-> After applying this patch, we can avoid to call xfs_mod_fdblocks when
-> delta equals 0.
-> 
-> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
-> ---
->  Changes from v1:
->  -Add checks before calling xfs_mod_fdblocks instead.
->  Changes from v2:
->  -Rephrase the commit description.
-> 
->  fs/xfs/libxfs/xfs_ag_resv.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/xfs/libxfs/xfs_ag_resv.c b/fs/xfs/libxfs/xfs_ag_resv.c
-> index fe94058d4e9e..c8fa032e4b00 100644
-> --- a/fs/xfs/libxfs/xfs_ag_resv.c
-> +++ b/fs/xfs/libxfs/xfs_ag_resv.c
-> @@ -149,7 +149,12 @@ __xfs_ag_resv_free(
->  		oldresv = resv->ar_orig_reserved;
->  	else
->  		oldresv = resv->ar_reserved;
-> -	error = xfs_mod_fdblocks(pag->pag_mount, oldresv, true);
-> +
-> +	if (oldresv)
-> +		error = xfs_mod_fdblocks(pag->pag_mount, oldresv, true);
-> +	else
-> +		error = 0;
-> +
->  	resv->ar_reserved = 0;
->  	resv->ar_asked = 0;
->  	resv->ar_orig_reserved = 0;
-> @@ -215,8 +220,13 @@ __xfs_ag_resv_init(
->  
->  	if (XFS_TEST_ERROR(false, mp, XFS_ERRTAG_AG_RESV_FAIL))
->  		error = -ENOSPC;
-> -	else
-> -		error = xfs_mod_fdblocks(mp, -(int64_t)hidden_space, true);
-> +	else {
-> +		error = 0;
-> +		if (hidden_space)
-> +			error = xfs_mod_fdblocks(mp, -(int64_t)hidden_space,
-> +						true);
+The IOMMU driver shares the pasid table for PCI alias devices. When the
+RID2PASID entry of the shared pasid table has been filled by the first
+device, the subsequent devices will encounter the "DMAR: Setup RID2PASID
+failed" failure as the pasid entry has already been marked as present. As
+the result, the IOMMU probing process will be aborted.
 
-I understand that calling __xfs_ag_resv_init on an AG with a maximally
-sized data structure can result in @hidden_space being zero here, but
-why does that matter enough to change the code?  Are you experiencing
-problems when this happens?  Unnecessary slowdowns at mount time?
-Something else?
+This fixes it by skipping RID2PASID setting if the pasid entry has been
+populated. This works because the IOMMU core ensures that only the same
+IOMMU domain can be attached to all PCI alias devices at the same time.
+Therefore the subsequent devices just try to setup the RID2PASID entry
+with the same domain, which is negligible. This also adds domain validity
+checks for more confidence anyway.
 
-This is v3 of a patch and I still can't tell why I should care ...?
+Fixes: ef848b7e5a6a0 ("iommu/vt-d: Setup pasid entry for RID2PASID support")
+Reported-by: Chenyi Qiang <chenyi.qiang@intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+---
+ drivers/iommu/intel/pasid.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
---D
+Change log:
+v2:
+ - Add domain validity check in RID2PASID entry setup.
 
-> +	}
-> +
->  	if (error) {
->  		trace_xfs_ag_resv_init_error(pag->pag_mount, pag->pag_agno,
->  				error, _RET_IP_);
-> -- 
-> 2.25.1
-> 
+diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
+index cb4c1d0cf25c..4f3525f3346f 100644
+--- a/drivers/iommu/intel/pasid.c
++++ b/drivers/iommu/intel/pasid.c
+@@ -575,6 +575,19 @@ static inline int pasid_enable_wpe(struct pasid_entry *pte)
+ 	return 0;
+ };
+ 
++/*
++ * Return true if @pasid is RID2PASID and the domain @did has already
++ * been setup to the @pte. Otherwise, return false. PCI alias devices
++ * probably share the single RID2PASID pasid entry in the shared pasid
++ * table. It's reasonable that those devices try to set a share domain
++ * in their probe paths.
++ */
++static inline bool
++rid2pasid_domain_valid(struct pasid_entry *pte, u32 pasid, u16 did)
++{
++	return pasid == PASID_RID2PASID && pasid_get_domain_id(pte) == did;
++}
++
+ /*
+  * Set up the scalable mode pasid table entry for first only
+  * translation type.
+@@ -595,9 +608,8 @@ int intel_pasid_setup_first_level(struct intel_iommu *iommu,
+ 	if (WARN_ON(!pte))
+ 		return -EINVAL;
+ 
+-	/* Caller must ensure PASID entry is not in use. */
+ 	if (pasid_pte_is_present(pte))
+-		return -EBUSY;
++		return rid2pasid_domain_valid(pte, pasid, did) ? 0 : -EBUSY;
+ 
+ 	pasid_clear_entry(pte);
+ 
+@@ -698,9 +710,8 @@ int intel_pasid_setup_second_level(struct intel_iommu *iommu,
+ 		return -ENODEV;
+ 	}
+ 
+-	/* Caller must ensure PASID entry is not in use. */
+ 	if (pasid_pte_is_present(pte))
+-		return -EBUSY;
++		return rid2pasid_domain_valid(pte, pasid, did) ? 0 : -EBUSY;
+ 
+ 	pasid_clear_entry(pte);
+ 	pasid_set_domain_id(pte, did);
+@@ -738,9 +749,8 @@ int intel_pasid_setup_pass_through(struct intel_iommu *iommu,
+ 		return -ENODEV;
+ 	}
+ 
+-	/* Caller must ensure PASID entry is not in use. */
+ 	if (pasid_pte_is_present(pte))
+-		return -EBUSY;
++		return rid2pasid_domain_valid(pte, pasid, did) ? 0 : -EBUSY;
+ 
+ 	pasid_clear_entry(pte);
+ 	pasid_set_domain_id(pte, did);
+-- 
+2.25.1
+

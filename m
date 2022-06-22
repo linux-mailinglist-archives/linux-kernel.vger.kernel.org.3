@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1159A55552F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79A6555536
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359680AbiFVUEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 16:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S1376964AbiFVUGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 16:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbiFVUEf (ORCPT
+        with ESMTP id S1357409AbiFVUGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 16:04:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB853205C5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655928270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=azMoc3MuHzEFRLZqvDPUKx486juejRj8cxPvSP7WFUA=;
-        b=DrJHN2rGgGPWtP2Y6xPFXvaKTYwc7wnqlI5mu5o0/+vh0TqjG4oSzK5tkyub+b256z9FH6
-        Q/bSSVacBTFVMq82HePNZjb6J+plk26WforO6SGIRAhzwD3uSEaDu/Ltv0ukEQF8R3idmR
-        0g1ZoVSGG6BbAabtevT7zB4MNIV/5pE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-T0_kzLE-Pp6zI8_NKfjStA-1; Wed, 22 Jun 2022 16:04:27 -0400
-X-MC-Unique: T0_kzLE-Pp6zI8_NKfjStA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4F4DA29DD9AB;
-        Wed, 22 Jun 2022 20:04:27 +0000 (UTC)
-Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DEE4492CA5;
-        Wed, 22 Jun 2022 20:04:27 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Hillf Danton <hdanton@sina.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v2] locking/rwsem: Allow slowpath writer to ignore handoff bit if not set by first waiter
-Date:   Wed, 22 Jun 2022 16:04:19 -0400
-Message-Id: <20220622200419.778799-1-longman@redhat.com>
+        Wed, 22 Jun 2022 16:06:08 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4F53192F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:06:05 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-fe023ab520so23817939fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=PdIR578qkfbKEcvQNXC0L2iYidYBiONlxgchRJAPFVg=;
+        b=CWfpOsAP3+yAGVgEg7CaAGl7nTfhoFTeMo6tQpVxiVQcz+025TJlBQirRqTIKqM1+C
+         awM/prI+3VNBTa4Hkd5qPpoaT7E/YfE25xzSpPRlw9JxiNRNa4uxk2qh9W25tGTj93UI
+         AbRim75fKPiT3V43uX5d1ITQwVxlPHL2LuPuQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=PdIR578qkfbKEcvQNXC0L2iYidYBiONlxgchRJAPFVg=;
+        b=iyGn9stvr8o0Rpc0A2G3EvtMv0G6R1clDlYyt1xPIyj+hqLiPviN1wpKpZChIJYUft
+         u5QBVv6b7hssI6XpJYs5cRh2pcWD9D2f169XXwXRHuQY+jQQ7osBXWJGhtCbCUeMtVno
+         RalHsZlMeTB1xs5c2an1k2vEzSbtfTmmrX7gMO1YblpqNh2g9VJ4/vBaP/A27G6YdoRM
+         9RePTqGy97vZYZixU4H4KY6md5xoISHbUUkAUmb91/ojAmru/quHmjTV51AVOwvUVEl3
+         FqnzTZQVyAecvHXqEHph03ekstwZZWY/tD3Qxb7osL0CC4k0OMZZmq5L+sunnm8lESJT
+         KnpQ==
+X-Gm-Message-State: AJIora96lzRlxVv090CpvkqVnJIwp9uUTAYm92l6bJ/Y0wGE3zSSPfHV
+        LbUHtfBPARsnp/hy/36pJs2HQ1GTWzRHGy0kofDUvA==
+X-Google-Smtp-Source: AGRyM1t44NdWATjICNmPxtuR1+UpcCvkiOmc6pskgeLN9hxebiN1yqBMmXk2WwhGES/Sa+F/HtJydS6rBvsU8+Ut28Y=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr54701oap.63.1655928363679; Wed, 22 Jun
+ 2022 13:06:03 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 22 Jun 2022 16:06:03 -0400
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1655927731-22396-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1655927731-22396-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 22 Jun 2022 16:06:03 -0400
+Message-ID: <CAE-0n51jSuSyuw7RQqco6nEhhJHND5_9e4kNggJDnQAq8CoPug@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dp: reset drm_dev to NULL at dp_display_unbind()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,105 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more
-consistent"), the writer that sets the handoff bit can be interrupted
-out without clearing the bit if the wait queue isn't empty. This disables
-reader and writer optimistic lock spinning and stealing.
+Quoting Kuogee Hsieh (2022-06-22 12:55:31)
+> During msm initialize phase, dp_display_unbind() will be called to undo
+> initializations had been done by dp_display_bind() previously if there is
+> error happen at msm_drm_bind. Under this kind of circumstance, drm_device
+> may not be populated completed which causes system crash at drm_dev_dbg().
+> This patch reset drm_dev to NULL so that following drm_dev_dbg() will not
+> refer to any internal fields of drm_device to prevent system from crashing.
+> Below are panic stack trace,
+>
+> [   53.584904] Unable to handle kernel paging request at virtual address 0000000070018001
+> .
+> [   53.702212] Hardware name: Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+) (DT)
+> [   53.710445] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   53.717596] pc : string_nocheck+0x1c/0x64
+> [   53.721738] lr : string+0x54/0x60
+> [   53.725162] sp : ffffffc013d6b650
+> [   53.728590] pmr_save: 000000e0
+> [   53.731743] x29: ffffffc013d6b650 x28: 0000000000000002 x27: 0000000000ffffff
+> [   53.739083] x26: ffffffc013d6b710 x25: ffffffd07a066ae0 x24: ffffffd07a419f97
+> [   53.746420] x23: ffffffd07a419f99 x22: ffffff81fef360d4 x21: ffffff81fef364d4
+> [   53.753760] x20: ffffffc013d6b6f8 x19: ffffffd07a06683c x18: 0000000000000000
+> [   53.761093] x17: 4020386678302f30 x16: 00000000000000b0 x15: ffffffd0797523c8
+> [   53.768429] x14: 0000000000000004 x13: ffff0000ffffff00 x12: ffffffd07a066b2c
+> [   53.775780] x11: 0000000000000000 x10: 000000000000013c x9 : 0000000000000000
+> [   53.783117] x8 : ffffff81fef364d4 x7 : 0000000000000000 x6 : 0000000000000000
+> [   53.790445] x5 : 0000000000000000 x4 : ffff0a00ffffff04 x3 : ffff0a00ffffff04
+> [   53.797783] x2 : 0000000070018001 x1 : ffffffffffffffff x0 : ffffff81fef360d4
+> [   53.805136] Call trace:
+> [   53.807667]  string_nocheck+0x1c/0x64
+> [   53.811439]  string+0x54/0x60
+> [   53.814498]  vsnprintf+0x374/0x53c
+> [   53.818009]  pointer+0x3dc/0x40c
+> [   53.821340]  vsnprintf+0x398/0x53c
+> [   53.824854]  vscnprintf+0x3c/0x88
+> [   53.828274]  __trace_array_vprintk+0xcc/0x2d4
+> [   53.832768]  trace_array_printk+0x8c/0xb4
+> [   53.836900]  drm_trace_printf+0x74/0x9c
+> [   53.840875]  drm_dev_dbg+0xfc/0x1b8
+> [   53.844480]  dp_pm_suspend+0x70/0xf8
+> [   53.848164]  dpm_run_callback+0x60/0x1a0
+> [   53.852222]  __device_suspend+0x304/0x3f4
+> [   53.856363]  dpm_suspend+0xf8/0x3a8
+> [   53.859959]  dpm_suspend_start+0x8c/0xc0
+>
+> Fixes: a65c95ff88f2 ("drm/msm/dp: stop event kernel thread when DP unbind")
 
-Now if a non-first writer in the queue is somehow woken up or a new
-waiter enters the slowpath, it can't acquire the lock.  This is not the
-case before commit d257cc8cb8d5 as the writer that set the handoff bit
-will clear it when exiting out via the out_nolock path. This is less
-efficient as the busy rwsem stays in an unlock state for a longer time.
+Commit doesn't exist. I guess it's
 
-In some cases, this new behavior may cause lockups as shown in [1] and
-[2].
-
-This patch allows a non-first writer to ignore the handoff bit if it
-is not originally set or initiated by the first waiter. This patch is
-shown to be effective in fixing the lockup problem reported in [1].
-
-[1] https://lore.kernel.org/lkml/20220617134325.GC30825@techsingularity.net/
-[2] https://lore.kernel.org/lkml/3f02975c-1a9d-be20-32cf-f1d8e3dfafcc@oracle.com/
-
-Fixes: d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more consistent")
-Signed-off-by: Waiman Long <longman@redhat.com>
-Tested-by: Mel Gorman <mgorman@techsingularity.net>
----
- kernel/locking/rwsem.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 9d1db4a54d34..ffd6188d4a7c 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -335,8 +335,6 @@ struct rwsem_waiter {
- 	struct task_struct *task;
- 	enum rwsem_waiter_type type;
- 	unsigned long timeout;
--
--	/* Writer only, not initialized in reader */
- 	bool handoff_set;
- };
- #define rwsem_first_waiter(sem) \
-@@ -459,10 +457,12 @@ static void rwsem_mark_wake(struct rw_semaphore *sem,
- 			 * to give up the lock), request a HANDOFF to
- 			 * force the issue.
- 			 */
--			if (!(oldcount & RWSEM_FLAG_HANDOFF) &&
--			    time_after(jiffies, waiter->timeout)) {
--				adjustment -= RWSEM_FLAG_HANDOFF;
--				lockevent_inc(rwsem_rlock_handoff);
-+			if (time_after(jiffies, waiter->timeout)) {
-+				if (!(oldcount & RWSEM_FLAG_HANDOFF)) {
-+					adjustment -= RWSEM_FLAG_HANDOFF;
-+					lockevent_inc(rwsem_rlock_handoff);
-+				}
-+				waiter->handoff_set = true;
- 			}
- 
- 			atomic_long_add(-adjustment, &sem->count);
-@@ -599,7 +599,7 @@ rwsem_del_wake_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter,
- static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
- 					struct rwsem_waiter *waiter)
- {
--	bool first = rwsem_first_waiter(sem) == waiter;
-+	struct rwsem_waiter *first =  rwsem_first_waiter(sem);
- 	long count, new;
- 
- 	lockdep_assert_held(&sem->wait_lock);
-@@ -609,11 +609,20 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
- 		bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
- 
- 		if (has_handoff) {
--			if (!first)
-+			/*
-+			 * Honor handoff bit and yield only when the first
-+			 * waiter is the one that set it. Otherwisee, we
-+			 * still try to acquire the rwsem.
-+			 */
-+			if (first->handoff_set && (waiter != first))
- 				return false;
- 
--			/* First waiter inherits a previously set handoff bit */
--			waiter->handoff_set = true;
-+			/*
-+			 * First waiter can inherit a previously set handoff
-+			 * bit and spin on rwsem if lock acquisition fails.
-+			 */
-+			if (waiter == first)
-+				waiter->handoff_set = true;
- 		}
- 
- 		new = count;
-@@ -1027,6 +1036,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	waiter.task = current;
- 	waiter.type = RWSEM_WAITING_FOR_READ;
- 	waiter.timeout = jiffies + RWSEM_WAIT_TIMEOUT;
-+	waiter.handoff_set = false;
- 
- 	raw_spin_lock_irq(&sem->wait_lock);
- 	if (list_empty(&sem->wait_list)) {
--- 
-2.31.1
-
+Fixes: 570d3e5d28db ("drm/msm/dp: stop event kernel thread when DP unbind")

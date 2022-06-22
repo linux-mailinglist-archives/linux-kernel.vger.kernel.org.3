@@ -2,143 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09D7556DD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA65F556DDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbiFVVbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 17:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S233125AbiFVVhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 17:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiFVVbL (ORCPT
+        with ESMTP id S230357AbiFVVhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 17:31:11 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382D012A91;
-        Wed, 22 Jun 2022 14:31:10 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id x6-20020a1c7c06000000b003972dfca96cso360394wmc.4;
-        Wed, 22 Jun 2022 14:31:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:cc:from:in-reply-to:content-transfer-encoding;
-        bh=LfYvC0Oyatj+4xO7FlqsMGvYvnlW1iYymFPQsq+aXcI=;
-        b=BAihApAwCeabWwTaYpZYkTYDnk7xt0xUjPipoZGYLoRAR4UkCnqoV6JcwlB11c2aBi
-         tP4g4c/ni+GqbDT/eU7uXz6uub4NIYQ/5A5tSJbCp+eaWtV+abHHn3+uyitX6t9J9+rD
-         Nx3wq6nO6fdauyFEIrQOtRj3J/RcHt1kXrCZe8zLm0FH0zuW5eI8tw+dKzeMrFwTwyCH
-         aCSiHZ56SbrrPVofmuVjy5XpcYzexhgE6DW/fAgsyZmt0cduT5g+T6r4EeouTwOVLx25
-         ha2X4DHhjnVt/dY5Ul5z5VAEF5piJaYbtb2vyW++k6SDcvGEibO5h7strjQGfMNQ9ep0
-         7+eg==
+        Wed, 22 Jun 2022 17:37:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0C9435DC6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655933823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Axt2VUkACz79svdtMZMKZayRpMe+CkTeXYc5hsBMhwY=;
+        b=brh6/ZpZZ5UXMpzrZ1CMz+rOLjZi1+yUXWU1V0s+2lRzdTVinrWm+HC0rpGHqPN+zv3Ft9
+        VnUmSf3f6nvLRrmUdWEdFAtvkxMHwM1Da6E/0PKqatLbiXGqK45Wrs127v8FN2BtcdGlmQ
+        yLq65664Nk3HgGla1phicmXAnJ12C+g=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-P-YBjRL_PSiSPafC9FrZ4g-1; Wed, 22 Jun 2022 17:37:02 -0400
+X-MC-Unique: P-YBjRL_PSiSPafC9FrZ4g-1
+Received: by mail-io1-f70.google.com with SMTP id m65-20020a6b3f44000000b00669c2aae17dso9798950ioa.23
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:37:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:cc:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LfYvC0Oyatj+4xO7FlqsMGvYvnlW1iYymFPQsq+aXcI=;
-        b=Ils6rSUHpl20U+iul6kqMteZKci9oLEeCsrvySEKBjSPgFZVN1HVV9FuASScW1Xh64
-         gXv7XKgB0tUyUGZFLcA8RjJTVwZi/C2kunqonEc1rdmt6DPv8Eu+AqLiFdjrBIBgTwrg
-         S4R72iucA9+jlfefH70VZkV5K4I9GCoAMgJKwHMetYV7Qs9mtdoHqfIwCzi6GQ4FQo4l
-         5cVgIlAZ+n8bnuO6zRqUgHXfkoX1BCS2dvBB8cqSth9+AKBCYac3BLETIZKoI6UPZIW8
-         3PtaPnKBlTz7I4UpdMr+peHvQohA3q0puOrNdDFRtmMKK64t8WM4yHZMMIG2mentoVT/
-         rDGw==
-X-Gm-Message-State: AJIora/eMKCHXTNNNhxhnA2lcXdoa4BFtGzQNAIDzw1sW/2he+TQxLdR
-        dWWV3y1nAeWFMegaM9I4QxH9tt1ikM/pvg==
-X-Google-Smtp-Source: AGRyM1tcrUK22QbgTjbidfZUWrgg7Ox34Ew7yet8onoDV4ahyusBEkCcITGbJ+m/bL5Y5MErXZiYNg==
-X-Received: by 2002:a05:600c:2241:b0:39c:405f:fba5 with SMTP id a1-20020a05600c224100b0039c405ffba5mr348955wmm.75.1655933468672;
-        Wed, 22 Jun 2022 14:31:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:6d40:29d:ba85:78f8:3d80:548? ([2a02:810d:6d40:29d:ba85:78f8:3d80:548])
-        by smtp.gmail.com with ESMTPSA id n16-20020a5d4850000000b0021b829d111csm16300187wrs.112.2022.06.22.14.31.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 14:31:07 -0700 (PDT)
-Message-ID: <c856a79c-1d42-6af5-0ff3-589688701fc0@gmail.com>
-Date:   Wed, 22 Jun 2022 23:31:05 +0200
+        bh=Axt2VUkACz79svdtMZMKZayRpMe+CkTeXYc5hsBMhwY=;
+        b=C+y14XwFxP8wZSxov9XNydk2j2vxYafFjbeCWpiyyUdgta7vSWXH3EoBKA7dzmWpjq
+         pk0nPyuWQ3DQLyius5l+EEcxIScbAHQTdawrUQfwrTAe48Q2EtX1XrUtRbml0sB4C71E
+         oC5fHvpfBKB4P8H6EoP/Q8foY8KM5BCEqwCq+TzWOnW7X1rRCI1AGA+TtlKRYyc2O2bT
+         vSSHTlIWVXRXa+1EQ2cQ/G8FlixUtwFdA4zxlYfqApK9n1tZi4g2RnBVjNfliYu4cywa
+         iYd+ZZD16FY5wdFVl++PHNkHwKCCyzLgSThFDm2TbA8euWERMFwGDyEnBS0KEaFZzwDk
+         463w==
+X-Gm-Message-State: AJIora9TFCg+pjutjxszbSjSiV39UAmNXjCJjjX1OQzRZ3fWrhifhV8o
+        eTL+g0ZCQCsuc1mdkik3uDffqN4Xz3HUSD178+8xjgtC/li+nckegOZCn7F5UtPcdv4B5tR7AzU
+        SIh5nsbc/bhBtQOvHbGqsuuaZ
+X-Received: by 2002:a05:6e02:1885:b0:2d9:18c2:c5b6 with SMTP id o5-20020a056e02188500b002d918c2c5b6mr3160393ilu.201.1655933821464;
+        Wed, 22 Jun 2022 14:37:01 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tKHnYViqxUOrsvW9fXe1CgwbG8CKvA7EufZmS7uLsZVAwWsBFk0s/qvUqeQP0pi/F5OXDiow==
+X-Received: by 2002:a05:6e02:1885:b0:2d9:18c2:c5b6 with SMTP id o5-20020a056e02188500b002d918c2c5b6mr3160383ilu.201.1655933821199;
+        Wed, 22 Jun 2022 14:37:01 -0700 (PDT)
+Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id g7-20020a0566380c4700b00339d892cc89sm1510446jal.83.2022.06.22.14.36.58
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 22 Jun 2022 14:37:00 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     peterx@redhat.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: [PATCH 0/4] kvm/mm: Allow GUP to respond to non fatal signals
+Date:   Wed, 22 Jun 2022 17:36:52 -0400
+Message-Id: <20220622213656.81546-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] hid: Add support for the xp-pen deco mini7 tablet
-Content-Language: en-US
-To:     Jiri Kosina <jikos@kernel.org>
-References: <85312611-797f-2dd2-f864-f7c13cb889f9@gmail.com>
- <nycvar.YFH.7.76.2206091058530.14340@cbobk.fhfr.pm>
-Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-From:   Stefan Berzl <stefanberzl@gmail.com>
-In-Reply-To: <nycvar.YFH.7.76.2206091058530.14340@cbobk.fhfr.pm>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+rfc->v1:
+- Fix non-x86 build reported by syzbot
+- Removing RFC tag
 
->> >From f9bb82e400effd3aea37b2be710add9e2bb832da Mon Sep 17 00:00:00 2001
->> From: Stefan Berzl <stefanberzl@gmail.com>
->> Date: Fri, 11 Mar 2022 04:04:30 +0100
->> Subject: [PATCH] hid: Add support for the xp-pen deco mini7 tablet
->>
->> ...
-> 
-> Stefan,
-> 
-> sorry for not responding earlier, but this patch somehow fell in between 
-> cracks. Please for your further submissions do not forget to at least CC 
-> some of the relevant malinglists as well.
+One issue was reported that libvirt won't be able to stop the virtual
+machine using QMP command "stop" during a paused postcopy migration [1].
 
-Will do... I am still new to the process and tend to forget things, but 
-I'll do my best.
+It won't work because "stop the VM" operation requires the hypervisor to
+kick all the vcpu threads out using SIG_IPI in QEMU (which is translated to
+a SIGUSR1).  However since during a paused postcopy, the vcpu threads are
+hang death at handle_userfault() so there're simply not responding to the
+kicks.  Further, the "stop" command will further hang the QMP channel.
 
-> Quite a lot has changed in uclogic driver since then, as José has been 
-> pushing quite a lot of code there from DIGImend project ... could you 
-> please update your patch on top of current codebase and resend it?
-> 
-> Thanks,
-> 
+The mm has facility to process generic signal (FAULT_FLAG_INTERRUPTIBLE),
+however it's only used in the PF handlers only, not in GUP. Unluckily, KVM
+is a heavy GUP user on guest page faults.  It means we won't be able to
+interrupt a long page fault for KVM fetching guest pages with what we have
+right now.
 
-I think you'll be pleased to find that José's work is basically a 
-superset of mine, therefore eliminating the need for my patch 
-altogether. When running his newest deco l code, the deco mini 7 is 
-fully supported as well. I should have given a tested-by or something, 
-but since I am still new to this, I was kinda hesitant with the big 
-changes introduced by the newest digimend work. As you know, there is no 
-sort of registry to differentiate devices by ability, so one or two
-useless evdev devices are generated for hardware the tablet may or may 
-not have, like "Touch Ring" or "Touch Strip". I thought that this might 
-cause confusion and would have to be amended.
+I think it's reasonable for GUP to only listen to fatal signals, as most of
+the GUP users are not really ready to handle such case.  But actually KVM
+is not such an user, and KVM actually has rich infrastructure to handle
+even generic signals, and properly deliver the signal to the userspace.
+Then the page fault can be retried in the next KVM_RUN.
 
-There is however one caveat that seems to be unique to the mini7, which 
-is the ack packet that is sent when switching to the vendor defined 
-usage. It doesn't do much though, as currently it gets interpreted as a 
-pen report and since it doesn't have useful values, causes the cursor to 
-go to the top left screen position. Since the ack packet is only sent 
-once, it ought to be of little consequence.
+This patchset added FOLL_INTERRUPTIBLE to enable FAULT_FLAG_INTERRUPTIBLE,
+and let KVM be the first one to use it.
 
-I would of course fix this, but I don't really know what's the preferred 
-way. One can obviously simply set up an urb to catch this, but it would 
-have to be a special corner case for the mini 7, as José assures me that 
-none of his tablets display similar behavior. Is this acceptable?
-José already had a look at some firmware device descriptor string that 
-reports the number of buttons and what not, but as far as I know, it 
-doesn't say anything about ack packets (right José? Does it say 
-anything about touch strips or similar?).
+One thing to mention is that this is not allowing all KVM paths to be able
+to respond to non fatal signals, but only on x86 slow page faults.  In the
+future when more code is ready for handling signal interruptions, we can
+explore possibility to have more gup callers using FOLL_INTERRUPTIBLE.
 
-Everything said, I think this can be closed
-https://patchwork.kernel.org/project/linux-input/patch/b401e453-9c66-15e3-1a1d-21f33b7a64e8@gmail.com/
+Tests
+=====
 
-Also I made this patch, which is very trivial and simplifies the hot path
-https://patchwork.kernel.org/project/linux-input/patch/17153eb3-0eb9-cc05-4b65-9c0f4e8d3c90@gmail.com/
+I created a postcopy environment, pause the migration by shutting down the
+network to emulate a network failure (so the handle_userfault() will stuck
+for a long time), then I tried three things:
 
-Thanks for your work on the linux input subsystem!
+  (1) Sending QMP command "stop" to QEMU monitor,
+  (2) Hitting Ctrl-C from QEMU cmdline,
+  (3) GDB attach to the dest QEMU process.
 
+Before this patchset, all three use case hang.  After the patchset, all
+work just like when there's not network failure at all.
 
-Kind Regards
-Stefan Berzl
+Please have a look, thanks.
 
+[1] https://gitlab.com/qemu-project/qemu/-/issues/1052
 
-PS: notice how I put the right CCs and stuff :)
+Peter Xu (4):
+  mm/gup: Add FOLL_INTERRUPTIBLE
+  kvm: Merge "atomic" and "write" in __gfn_to_pfn_memslot()
+  kvm: Add new pfn error KVM_PFN_ERR_INTR
+  kvm/x86: Allow to respond to generic signals during slow page faults
+
+ arch/arm64/kvm/mmu.c                   |  5 ++--
+ arch/powerpc/kvm/book3s_64_mmu_hv.c    |  5 ++--
+ arch/powerpc/kvm/book3s_64_mmu_radix.c |  5 ++--
+ arch/x86/kvm/mmu/mmu.c                 | 19 ++++++++----
+ include/linux/kvm_host.h               | 21 ++++++++++++-
+ include/linux/mm.h                     |  1 +
+ mm/gup.c                               | 33 ++++++++++++++++++---
+ virt/kvm/kvm_main.c                    | 41 ++++++++++++++++----------
+ virt/kvm/kvm_mm.h                      |  6 ++--
+ virt/kvm/pfncache.c                    |  2 +-
+ 10 files changed, 104 insertions(+), 34 deletions(-)
+
+-- 
+2.32.0
+

@@ -2,72 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2106D55428F
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9D8554290
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 08:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356889AbiFVGIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S1357049AbiFVGJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiFVGIx (ORCPT
+        with ESMTP id S230006AbiFVGJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:08:53 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171E51CB21;
-        Tue, 21 Jun 2022 23:08:53 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id o23so10928834ljg.13;
-        Tue, 21 Jun 2022 23:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=S7mjpK/M+Dj2QUAMVzQMxy95Nz35P2kWVi4qmBs9FaI=;
-        b=c8zZsZw4yF2vD84Jltja4RRpT8reCc8d2zsGZN+JAw2NKxHlnoRrcjI9V34HOhYhrq
-         yJybnHfegsg7hw3BdOmAgjmocK5GbfRu2BiUJKZUtSC7De/YGZoi+T0W5JtjTeHNAirH
-         plrQKjHHERe62ewez8bYjDlUV46Cwb5hoaq6AXfSSU3aTs7xeQF3uwWQTSHmVSZf1aG+
-         ztzA8kjRd6Zr5zX2pAmYig55b8hX5lU2YLFzj7beYA78qmjkgJ7E62dx08/9Jz5UUXVZ
-         Pf0zQpKOjXk1Dg+Z59xiB10nXn53xZrq5mNNn+RJ9peIGLXbbdFjgNy4eDhPVI9DCD9q
-         nGJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=S7mjpK/M+Dj2QUAMVzQMxy95Nz35P2kWVi4qmBs9FaI=;
-        b=Zcu3ykLrjeew5KQaXB3bOBkDLQFAxTbxBynBUApTgkTHhKjaUIQNCAUW+IaY7PaMCC
-         AYQmx+F0A0Axalb1bNf64+hwVy7RM+DnQBc2mVnJFDPai8pKLWNCG6X8HfIOOXWkfEIE
-         Jjsqj/CNn6b8MhHS9ZYr99ND3LqZq3GRnb2aRfVVRMo4r7iEBzjb/PnCxs8bOmRSEvag
-         K1KlbhIOsGO8uMXOQIXPcgHDTfT4huQ0tP3SjoVhG0PR3DajSXWcwwAeVhtT9MBJcOjl
-         1IGxiqPz+Z0/8t40TUJnVHRqtScSZ5086FXiVxCpBjL9FSaz2v4q/nnJqwJ3Imc5wHjn
-         fIrQ==
-X-Gm-Message-State: AJIora/1lcmhCUxsIrNqyhXIMgATKE1f1fXMVZ8zTXQVZdDiDuDlABbn
-        3eiQhWb2VnhlpvJjR+h2WGnGitGpieb0pBxFWXozkLF8m/o=
-X-Google-Smtp-Source: AGRyM1vrxPgqDsyEq10YQi7/hA0k/MFiCT6W4kGM/zAv7zqFDWew9S1J/2y1HFNsMJX+ZjPKyZrUt2lxRoprmaXzj2g=
-X-Received: by 2002:a2e:a90c:0:b0:258:edc3:4d2b with SMTP id
- j12-20020a2ea90c000000b00258edc34d2bmr956668ljq.225.1655878130979; Tue, 21
- Jun 2022 23:08:50 -0700 (PDT)
+        Wed, 22 Jun 2022 02:09:29 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1EB1CB21;
+        Tue, 21 Jun 2022 23:09:22 -0700 (PDT)
+X-UUID: c1ce7ed61733451c84386834803eea27-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:c7d4467c-1ff9-4c03-bb4d-d48211e0bc06,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:9b602fea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: c1ce7ed61733451c84386834803eea27-20220622
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <peter.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2137778895; Wed, 22 Jun 2022 14:09:18 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 14:09:17 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 14:09:16 +0800
+Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release
+ supplier
+To:     <matthias.bgg@gmail.com>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <rafael@kernel.org>, <gregkh@linuxfoundation.org>,
+        <stanley.chu@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
+CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
+        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>, <powen.kao@mediatek.com>,
+        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+        <tun-yu.yu@mediatek.com>
+References: <20220613120755.14306-1-peter.wang@mediatek.com>
+From:   Peter Wang <peter.wang@mediatek.com>
+Message-ID: <a6ed562c-5ec0-231d-0eee-a35f2ba7a344@mediatek.com>
+Date:   Wed, 22 Jun 2022 14:09:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Wed, 22 Jun 2022 11:38:39 +0530
-Message-ID: <CAHhAz+jSYb6=x89oFin=AHBrNhg_Q61YQvanb=2ZGkZBDiLyiw@mail.gmail.com>
-Subject: Linux: Use-After-Free exploitation
-To:     linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220613120755.14306-1-peter.wang@mediatek.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Hi all,
 
-Use-After-Free bugs result in kernel crashes. If these bugs result in
-kernel crashes then how is it possible to exploit this vulnerability
-for local privilege escalation?
 
--- 
-Thanks,
-Sekhar
+gentle ping for this bug fix review.
+
+
+Thanks.
+
+
+On 6/13/22 8:07 PM, peter.wang@mediatek.com wrote:
+> From: Peter Wang <peter.wang@mediatek.com>
+>
+> With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
+> to prevent supplier enter suspend, pm_runtime_release_supplier should
+> check supplier_preactivated before let supplier enter suspend.
+>
+> If the link is drop or release, bypass check supplier_preactivated.
+>
+> Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+> ---
+>   drivers/base/core.c          |  2 +-
+>   drivers/base/power/runtime.c | 15 ++++++++++++---
+>   include/linux/pm_runtime.h   |  5 +++--
+>   3 files changed, 16 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 7cd789c4985d..3b9cc559928f 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -486,7 +486,7 @@ static void device_link_release_fn(struct work_struct *work)
+>   	/* Ensure that all references to the link object have been dropped. */
+>   	device_link_synchronize_removal();
+>   
+> -	pm_runtime_release_supplier(link, true);
+> +	pm_runtime_release_supplier(link, true, true);
+>   
+>   	put_device(link->consumer);
+>   	put_device(link->supplier);
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 676dc72d912d..3c4f425937a1 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -314,10 +314,19 @@ static int rpm_get_suppliers(struct device *dev)
+>    * and if @check_idle is set, check if that device is idle (and so it can be
+>    * suspended).
+>    */
+> -void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
+> +void pm_runtime_release_supplier(struct device_link *link, bool check_idle,
+> +	bool drop)
+>   {
+>   	struct device *supplier = link->supplier;
+>   
+> +	/*
+> +	 * When consumer hold supplier, supplier cannot enter suspend.
+> +	 * Driect release supplier and let supplier enter suspend is not allow.
+> +	 * Unless the link is drop, direct relsease supplier should be okay.
+> +	 */
+> +	if (link->supplier_preactivated && !drop)
+> +		return;
+> +
+>   	/*
+>   	 * The additional power.usage_count check is a safety net in case
+>   	 * the rpm_active refcount becomes saturated, in which case
+> @@ -338,7 +347,7 @@ static void __rpm_put_suppliers(struct device *dev, bool try_to_suspend)
+>   
+>   	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+>   				device_links_read_lock_held())
+> -		pm_runtime_release_supplier(link, try_to_suspend);
+> +		pm_runtime_release_supplier(link, try_to_suspend, false);
+>   }
+>   
+>   static void rpm_put_suppliers(struct device *dev)
+> @@ -1838,7 +1847,7 @@ void pm_runtime_drop_link(struct device_link *link)
+>   		return;
+>   
+>   	pm_runtime_drop_link_count(link->consumer);
+> -	pm_runtime_release_supplier(link, true);
+> +	pm_runtime_release_supplier(link, true, true);
+>   }
+>   
+>   static bool pm_runtime_need_not_resume(struct device *dev)
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 9e4d056967c6..354ffb1eaec0 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -88,7 +88,8 @@ extern void pm_runtime_get_suppliers(struct device *dev);
+>   extern void pm_runtime_put_suppliers(struct device *dev);
+>   extern void pm_runtime_new_link(struct device *dev);
+>   extern void pm_runtime_drop_link(struct device_link *link);
+> -extern void pm_runtime_release_supplier(struct device_link *link, bool check_idle);
+> +extern void pm_runtime_release_supplier(struct device_link *link,
+> +	bool check_idle, bool drop);
+>   
+>   extern int devm_pm_runtime_enable(struct device *dev);
+>   
+> @@ -315,7 +316,7 @@ static inline void pm_runtime_put_suppliers(struct device *dev) {}
+>   static inline void pm_runtime_new_link(struct device *dev) {}
+>   static inline void pm_runtime_drop_link(struct device_link *link) {}
+>   static inline void pm_runtime_release_supplier(struct device_link *link,
+> -					       bool check_idle) {}
+> +					       bool check_idle, bool drop) {}
+>   
+>   #endif /* !CONFIG_PM */
+>   

@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45318554823
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A192155489E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242329AbiFVLCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S1354683AbiFVLDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbiFVLCF (ORCPT
+        with ESMTP id S1353850AbiFVLDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:02:05 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA9139166;
-        Wed, 22 Jun 2022 04:01:58 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1655895704tlz2roqm
-Received: from ubuntu.localdomain ( [223.104.103.173])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 19:01:39 +0800 (CST)
-X-QQ-SSF: 01000000008000B0B000B00A0000000
-X-QQ-FEAT: 12WmTNdz4A2AySGFjMf1nLtEWLIUTiBdBK8GGy3alLtapAVa/Z0Vq8r4sVVAP
-        ihaj4Ww3x5h7E8Je5xL4n7iyrfePzH9urEmVAqW8B1xA9jqo/FyAPGtQ1flRMUa5Ltweo9F
-        ciBf3tJxoWlydWKAULwbHibBCwa30JfIA6vZufICh3QoOBJkYYwV36f8Op39Rse9nqLku0v
-        kaSeX0T6ylnGXLts9J/aWREJBZV8IEEiKUfjL0slFNbBSNBBl7L0Vvb/Ho/pfEHpjt+vIhm
-        jsw82BsKHmgO0xDS05hlMKu4qmmn3gmyf3FYtqNOO6Rycjk6fU1MiVzGlAM+p/xF/D9PKem
-        JL9MNKpLo9fKLHbkpEx7djQU2/rKUQq+twcMqCH
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     jinpu.wang@cloud.ionos.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] scsi: pm8001: drop unexpected word "the" in the comments
-Date:   Wed, 22 Jun 2022 19:01:37 +0800
-Message-Id: <20220622110137.10033-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 07:03:39 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B700B39B81
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:03:37 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 7271A22238;
+        Wed, 22 Jun 2022 13:03:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1655895815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aBtd961AtvmJMz12rN1xdgEhy6lx5FNcxorgMS7aEYk=;
+        b=l5mm9mk8jW1WKydNdLijg4SMlz53lnrVVQOXqiE5Ql70KDKnf+W2Paawv4CAzycYsJTYjh
+        VNT74Hw8oTPepOgBqb05gvIkWxz4aXuwaJy0oJAPnbUeWaDgGpChvwv/nkZ8AqN54LJH8i
+        lf6sleRhgncqfm7/P84gbI9jRneWltI=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 22 Jun 2022 13:03:33 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sudeep Holla <Sudeep.Holla@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH RESEND v2 0/7] soc: fsl: guts: cleanups and serial_number
+ support
+In-Reply-To: <20220404095609.3932782-1-michael@walle.cc>
+References: <20220404095609.3932782-1-michael@walle.cc>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0bde7550b0bbd1b0a478139d296f92a2@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word "the" in the comments that need to be dropped
+Am 2022-04-04 11:56, schrieb Michael Walle:
+> [Resend because of new development cycle. Shawn, can this series get
+> through your tree? Sorry you weren't on CC on the former submissions.]
+> 
+> This series converts the guts driver from a platform driver to just an
+> core_initcall. The driver itself cannot (or rather should never) be
+> unloaded because others depends on detecting the current SoC revision
+> to apply chip errata. Other SoC drivers do it the same way. Overall I
+> got rid of all the global static variables.
+> 
+> The last patch finally adds unique id support to the guts driver. DT
+> binding can be found at:
+>   Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+> 
+> changes since v1:
+>  - call kfree() in error case, thanks Dan
+>  - add missing of_node_put(np), thanks Dan
+> 
+> Michael Walle (7):
+>   soc: fsl: guts: machine variable might be unset
+>   soc: fsl: guts: remove module_exit() and fsl_guts_remove()
+>   soc: fsl: guts: embed fsl_guts_get_svr() in probe()
+>   soc: fsl: guts: allocate soc_dev_attr on the heap
+>   soc: fsl: guts: use of_root instead of own reference
+>   soc: fsl: guts: drop platform driver
+>   soc: fsl: guts: add serial_number support
+> 
+>  drivers/soc/fsl/guts.c | 219 ++++++++++++++++++++++-------------------
+>  1 file changed, 118 insertions(+), 101 deletions(-)
 
-file: drivers/scsi/pm8001/pm8001_hwi.c
-line: 3141
+There goes another kernel release without any comments on this
+series :(
 
-  * the sas toplogy has formed, please discover the the whole sas domain,
+Shawn, can you pick this up and give it some time in linux-next?
 
-changed to:
-
-  * the sas toplogy has formed, please discover the whole sas domain,
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index a37595621d51..6a3c4c347061 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -3138,7 +3138,7 @@ int pm8001_mpi_local_phy_ctl(struct pm8001_hba_info *pm8001_ha, void *piomb)
-  *
-  * when HBA driver received the identify done event or initiate FIS received
-  * event(for SATA), it will invoke this function to notify the sas layer that
-- * the sas toplogy has formed, please discover the the whole sas domain,
-+ * the sas toplogy has formed, please discover the whole sas domain,
-  * while receive a broadcast(change) primitive just tell the sas
-  * layer to discover the changed domain rather than the whole domain.
-  */
--- 
-2.17.1
-
+-michael

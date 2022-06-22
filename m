@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB60554716
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAD055486C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356224AbiFVKyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
+        id S1356378AbiFVKyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356021AbiFVKyC (ORCPT
+        with ESMTP id S1356759AbiFVKyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:54:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317BA3BA69
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:54:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1F0E6128E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:54:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C635C34114;
-        Wed, 22 Jun 2022 10:53:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655895241;
-        bh=G4XroPUQxa6e/wOY4UG53P8PsXH1RZHdojRCRxtIFkk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rYovtcRPdYqEUX1Yg7P6xGKNzlkeHiuI8UBV2EJsEeVSqkz0989+AH4S/1o3VfUC8
-         p1UFB8Ycr54oZ2Y5Mm1LPKyXTMD4CIf+bp13SgdufvpiqCqGwLhwFsAkuOlPHxMTvf
-         g/j3fKfAf+oQ805lgMLxegAaE2H3V3ujhgKbdzLm1brWB0sxgkBufBup+s/QNjG13J
-         yM/h1pNKs7fLedLBxqkk2Oze5iTqBXWbXJW8nR+OMZY0RTRc1WSwr/EeVuvXUn9gd9
-         WiQkL/7orpicNW2QwOWP9tSsMxrhB2e/RWtwyvL/M/yOy9Cl/qMjjTUToUCLuNvNR9
-         y3NeBX07/dQeQ==
-Date:   Wed, 22 Jun 2022 11:53:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     judyhsiao@chromium.org,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        linux-kernel <linux-kernel@vger.kernel.org>, wenst@chromium.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        briannorris@chromium.org, Rob Herring <robh+dt@kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>
-Subject: Re: (subset) [PATCH v4 0/3] ASoC: rockchip: i2s: switch BCLK to GPIO
-Message-ID: <YrL0wzzfeQwmyHfK@sirena.org.uk>
-References: <20220619095324.492678-1-judyhsiao@chromium.org>
- <165583076931.271995.9857794745310978104.b4-ty@kernel.org>
- <CAGb2v66+ZjKFvCfq-H3F_ZdyxiKHY6=7juhSCmHPK3o8kgw+Og@mail.gmail.com>
+        Wed, 22 Jun 2022 06:54:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647563BBC1;
+        Wed, 22 Jun 2022 03:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=h6Ni4JY3NSS01Nb6TQNOQZ0HSFRdoJBUQ6dpTFFJhdY=; b=JyZxBr61+7LNv2xOpLLWy09ECs
+        vXy9cu8Ppj0Kz441rbC9FXoY/AYGrnLU8edkf3+09otEtbWkxjeQdtMWfeGTao48tTp/skcnsCPhv
+        YE/YhvZycdAO7sdt3v1ZmKoDyW1MLxzIhQDMzh5PcHLQlKdrTetEBnHoTfeDyAdysxXKji2UTfiOE
+        uniVcOW8H52tnK/dOCU740qNa3JpbRpT0tQkKke9pJ5vlscSN3X7P+IWYvKH1ZCutvs0LYIHWz4ve
+        W3eEO9m8exFyOPu6rLAGqVCJrSLKJLGAGDrFdsdANidX80xJ8bgIYFLIje0mLfJ/uJDSyq4y0r+he
+        hMuBFJ3w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o3y03-00A1BF-EA; Wed, 22 Jun 2022 10:54:19 +0000
+Date:   Wed, 22 Jun 2022 03:54:19 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     corbet@lwn.net, hch@infradead.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, paulmck@kernel.org,
+        akpm@linux-foundation.org, bp@suse.de, tglx@linutronix.de,
+        songmuchun@bytedance.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, michael.h.kelley@microsoft.com,
+        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
+        kirill.shutemov@intel.com, andi.kleen@intel.com,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [RFC PATCH V4 1/1] swiotlb: Split up single swiotlb lock
+Message-ID: <YrL02y/fYxDkDRlA@infradead.org>
+References: <20220617144741.921308-1-ltykernel@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4AruQWY53Tdw7RRr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGb2v66+ZjKFvCfq-H3F_ZdyxiKHY6=7juhSCmHPK3o8kgw+Og@mail.gmail.com>
-X-Cookie: Truckers welcome.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220617144741.921308-1-ltykernel@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,36 +60,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks,
 
---4AruQWY53Tdw7RRr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+this looks pretty good to me.  A few comments below:
 
-On Wed, Jun 22, 2022 at 01:58:40AM +0800, Chen-Yu Tsai wrote:
-> On Wed, Jun 22, 2022 at 1:00 AM Mark Brown <broonie@kernel.org> wrote:
-> > On Sun, 19 Jun 2022 09:53:21 +0000, Judy Hsiao wrote:
+On Fri, Jun 17, 2022 at 10:47:41AM -0400, Tianyu Lan wrote:
+> +/**
+> + * struct io_tlb_area - IO TLB memory area descriptor
+> + *
+> + * This is a single area with a single lock.
+> + *
+> + * @used:	The number of used IO TLB block.
+> + * @index:	The slot index to start searching in this area for next round.
+> + * @lock:	The lock to protect the above data structures in the map and
+> + *		unmap calls.
+> + */
+> +struct io_tlb_area {
+> +	unsigned long used;
+> +	unsigned int index;
+> +	spinlock_t lock;
+> +};
 
-> > [1/3] ASoC: rockchip: i2s: switch BCLK to GPIO
-> >       commit: 44f362c2cc6dd0c5e3cb499c4fb4ed45b63a6196
+This can go into swiotlb.c.
 
-> Seems you applied v1 instead of v4?
+> +void __init swiotlb_adjust_nareas(unsigned int nareas);
 
-b4 will reply to anything it knows about that thinks is close enough to
-something that got applied.
+And this should be marked static.
 
---4AruQWY53Tdw7RRr
-Content-Type: application/pgp-signature; name="signature.asc"
+> +#define DEFAULT_NUM_AREAS 1
 
------BEGIN PGP SIGNATURE-----
+I'd drop this define, the magic 1 and a > 1 comparism seems to
+convey how it is used much better as the checks aren't about default
+or not, but about larger than one.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKy9MIACgkQJNaLcl1U
-h9COkgf9HKKAvRzjNs2p5CEqeFNtnVzhD95omRkCIyXAyPgMzsXQ86HrXzkr7Qf6
-6aty2J1RMF1ryi1b4Jw+B8DfhbDCjmS9nB7H4IV/GlQCmkoUzbFmCdf8qSPLuQNk
-bVTyLRDSCh0FUFJXvc894JrLpg1DkjGqfTKmT3OWmAENtixWknby7elcr+CnNAqM
-hZujXhxdwazBRH5RtQLO+z8cMOnLgpEWoklHTmzsPrW7EPGMzgBaCbFe4fNac1oI
-teB7zkGZqX242LJoeBs9m/yIzPhQYGBAtAie5witncajUnxnAFaWx+Zrbr7PTGci
-LOU8M7FkgC0tpcUbs+Eec0tfnEZLsA==
-=nzIr
------END PGP SIGNATURE-----
+I also think that we want some good way to size the default, e.g.
+by number of CPUs or memory size.
 
---4AruQWY53Tdw7RRr--
+> +void __init swiotlb_adjust_nareas(unsigned int nareas)
+> +{
+> +	if (!is_power_of_2(nareas)) {
+> +		pr_err("swiotlb: Invalid areas parameter %d.\n", nareas);
+> +		return;
+> +	}
+> +
+> +	default_nareas = nareas;
+> +
+> +	pr_info("area num %d.\n", nareas);
+> +	/* Round up number of slabs to the next power of 2.
+> +	 * The last area is going be smaller than the rest if
+> +	 * default_nslabs is not power of two.
+> +	 */
+
+Please follow the normal kernel comment style with a /* on its own line.
+

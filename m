@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C08554BC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38270554BC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357537AbiFVNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        id S1357543AbiFVNuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357493AbiFVNtj (ORCPT
+        with ESMTP id S1357456AbiFVNuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:49:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5D62AC40;
-        Wed, 22 Jun 2022 06:49:38 -0700 (PDT)
+        Wed, 22 Jun 2022 09:50:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D591F623
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:50:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E7C461B4A;
-        Wed, 22 Jun 2022 13:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C63C34114;
-        Wed, 22 Jun 2022 13:49:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0FB8B81EF0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6588CC34114;
+        Wed, 22 Jun 2022 13:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655905777;
-        bh=s/BTpD1smaZjhWjSTCDLGZE1k7ODXU40+GIAkraIWEQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lPDad96kmLy1MwuS+kg2oxCr9Nk6F3628i7Kiy47bUuA0TS5uOATOvW6gzIk1Va+V
-         caZvU+/G7izv4S4DqVGWXOA+eMtxn1fSugp21S7xU+Uuq9SdnVrTL1Zpk04VXSWDQR
-         FX9S6HLtqrSHtxVeOu0mt4BB/cmGoy909NoL73S+JytR5f+fFE8q4sz8tSf7iXXn7F
-         nPrWBDHDYbF9N4+tAiEDz79h9R4rVB5NchFcZ6wjzdO7k0ggS7+t4E1v6neH/O0fNL
-         FPtJBA1eMIgWwk6Ajs6ednHOBHLV2e6WQWuqY8O87Co3d+VAsB4x3b2qAaWoYWjw7K
-         HlstxSM6BA4Pg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o40je-0006ZX-CV; Wed, 22 Jun 2022 15:49:34 +0200
-Date:   Wed, 22 Jun 2022 15:49:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad
- X13s devicetree
-Message-ID: <YrMd7nX8Tu5eu6hU@hovoldconsulting.com>
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-7-bjorn.andersson@linaro.org>
- <fb234ad7-6a95-d5f2-9ebc-48ac2dd8fb8a@somainline.org>
+        s=k20201202; t=1655905818;
+        bh=ya9bqHBDJvc1AcWbARdp9qu/ISmbWxRfpR+xvLAIZLs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Zk0iqeknSgIo6vL+FZoYBf3foeVOgFqPWHcUK+jo8KELqfsFT/V1RYIDYaVjMUILe
+         QCXkdx5C49M8TRxA+EFJu9Xf3upzGlYRuI07ibHd9nSuP5Q2+vjBHWCOxQ61Pr1x2M
+         CohAIgEHJTCz5xKzkoJwacpMOPdvyDPmC6+8GMpVB80c2iqzlDXfk5UV94QVH9l2y0
+         muFQrqcC6rIepNuGy3KANVqGdjQ9DEcg9mNovUcytRdKk8GFWonqN4qWdiMfsOXlok
+         Cat6tUdy1exaqz7NuJyIx9o35xS87HEV1A6I7HZHxhJ2uRdETmswPv3Xx2ajuBMt9A
+         bF8dq8xRVln5A==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o40kK-002Jtk-4F;
+        Wed, 22 Jun 2022 14:50:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb234ad7-6a95-d5f2-9ebc-48ac2dd8fb8a@somainline.org>
+Date:   Wed, 22 Jun 2022 14:50:15 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Tony Lindgren <tony@atomide.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] ARM: spectre-v2: fix smp_processor_id() warning
+In-Reply-To: <795c9463-452e-bf64-1cc0-c318ccecb1da@I-love.SAKURA.ne.jp>
+References: <795c9463-452e-bf64-1cc0-c318ccecb1da@I-love.SAKURA.ne.jp>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e5bdea6c767d3a8260360afaddab5f7c@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: penguin-kernel@i-love.sakura.ne.jp, linux@armlinux.org.uk, tony@atomide.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,95 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 02:39:43PM +0200, Konrad Dybcio wrote:
-> On 22.06.2022 06:12, Bjorn Andersson wrote:
-> > From: Johan Hovold <johan+linaro@kernel.org>
-> > 
-> > Add an initial Lenovo Thinkpad X13s devicetree.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> > 
-> > Changs since v1:
-> > - New patch
-> > 
-> >  arch/arm64/boot/dts/qcom/Makefile             |   1 +
-> >  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 393 ++++++++++++++++++
-> >  2 files changed, 394 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> > index 2f416b84b71c..43053f1f6be9 100644
-> > --- a/arch/arm64/boot/dts/qcom/Makefile
-> > +++ b/arch/arm64/boot/dts/qcom/Makefile
-> > @@ -91,6 +91,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
-> > +dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > new file mode 100644
-> > index 000000000000..58d3d8035751
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > @@ -0,0 +1,393 @@
-> > +// SPDX-License-Identifier: BSD-3-Clause
-> > +/*
-> > + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> > + * Copyright (c) 2022, Linaro Limited
-> > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include <dt-bindings/gpio/gpio.h>
-> Can be moved to SoC dtsi.
-
-Again, no, the SoC dtsi does not need that header and we include files
-where they are used.
-
-> > +&qup0_i2c4 {
-> > +	clock-frequency = <400000>;
-> > +
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&qup0_i2c4_default>, <&ts0_default>;
-> > +
-> > +	status = "okay";
-> Again, the ordering of status= question from one of the previous patches.
-
-This is the right order, but the ADP dts hasn't been updated yet.
- 
+On 2022-06-22 07:49, Tetsuo Handa wrote:
+> syzbot complains smp_processor_id() from harden_branch_predictor()
+>  from page fault path [1]. Explicitly disable preemption and use
+> raw_smp_processor_id().
 > 
-> > +
-> > +	/* FIXME: verify, missing on some x13s */
-> Won't this fail gracefully-ish if it's absent?
+> Link: https://syzkaller.appspot.com/bug?extid=a7ee43e564223f195c84 [1]
+> Reported-by: syzbot 
+> <syzbot+a7ee43e564223f195c84@syzkaller.appspotmail.com>
+> Fixes: f5fe12b1eaee220c ("ARM: spectre-v2: harden user aborts in kernel 
+> space")
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> ---
+> This patch is completely untested.
+> 
+>  arch/arm/include/asm/system_misc.h | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/include/asm/system_misc.h
+> b/arch/arm/include/asm/system_misc.h
+> index 98b37340376b..a92446769acd 100644
+> --- a/arch/arm/include/asm/system_misc.h
+> +++ b/arch/arm/include/asm/system_misc.h
+> @@ -20,8 +20,11 @@ typedef void (*harden_branch_predictor_fn_t)(void);
+>  DECLARE_PER_CPU(harden_branch_predictor_fn_t, 
+> harden_branch_predictor_fn);
+>  static inline void harden_branch_predictor(void)
+>  {
+> -	harden_branch_predictor_fn_t fn = per_cpu(harden_branch_predictor_fn,
+> -						  smp_processor_id());
+> +	harden_branch_predictor_fn_t fn;
+> +
+> +	preempt_disable_notrace();
+> +	fn = per_cpu(harden_branch_predictor_fn, raw_smp_processor_id());
+> +	preempt_enable_no_resched_notrace();
+>  	if (fn)
+>  		fn();
+>  }
 
-Sure, but that's not the point. I don't access to a X13s with a
-touchscreen yet so the i2c address and hid descriptor address has not
-been verified yet.
+I don't think that's required.
 
-> > +	touchscreen@10 {
-> > +		compatible = "hid-over-i2c";
-> > +		reg = <0x10>;
-> > +		hid-descr-addr = <0x1>;
-> > +		interrupts-extended = <&tlmm 175 IRQ_TYPE_LEVEL_LOW>;
-> > +		vdd-supply = <&vreg_misc_3p3>;
-> > +	};
-> > +};
+harden_branch_predictor() is always called on the fault path,
+from __do_user_fault(), and that's always non-preemptible.
 
-> > +/* PINCTRL - additions to nodes defined in sc8280xp.dtsi */
-> Seems redundant.
+My hunch is that we're missing some tracking that indicates
+to the kernel that we're already non-preemptible by virtue
+of being in an exception handler.
 
-Again, no. But I've dropped the reference to sc8280xp.dtsi.
+Russell, what do you think?
 
-> > +	tpad_default: tpad-default-state {
-
-> > +		int-n {
-> Same comment as in the reference device dt.
-
-I think it's better to keep the child node as documentation.
-
-Johan
+         M.
+-- 
+Jazz is not dead. It just smells funny...

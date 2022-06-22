@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6352A553F5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD5A553F60
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbiFVAOZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 20:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S236866AbiFVAQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 20:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiFVAOX (ORCPT
+        with ESMTP id S230342AbiFVAQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 20:14:23 -0400
-Received: from mailgateway.xchanging.com (mail9.xchanging.com [213.219.10.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6788919C28;
-        Tue, 21 Jun 2022 17:14:22 -0700 (PDT)
-Received: from pps.filterd (ACTXTSPRDPFTV05.xchanginghosting.com [127.0.0.1])
-        by ACTXTSPRDPFTV05.xchanginghosting.com (8.16.1.2/8.16.1.2) with SMTP id 25M09aRi013779;
-        Wed, 22 Jun 2022 01:14:06 +0100
-Received: from [91.103.252.181] ([10.146.3.241])
-        by ACTXTSPRDPFTV05.xchanginghosting.com with ESMTP id 3gufw640sy-10
-        (version=TLSv1 cipher=AES256-SHA bits=256 verify=NOT);
-        Wed, 22 Jun 2022 01:14:05 +0100
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: RE
-To:     Recipients <p.nataraj@xchanging.com>
-From:   "Mr Elisabeth" <p.nataraj@xchanging.com>
-Date:   Tue, 21 Jun 2022 17:13:56 -0700
-Reply-To: mariaelisabethschaeffler505@gmail.com
-Message-ID: <3gufw640sy-10@ACTXTSPRDPFTV05.xchanginghosting.com>
-X-Proofpoint-GUID: Qpd5cxPxialm_SMip1WCmveTvv8eueYG
-X-Proofpoint-ORIG-GUID: Qpd5cxPxialm_SMip1WCmveTvv8eueYG
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-21_11:2022-06-21,2022-06-21 signatures=0
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
-        NIXSPAM_IXHASH,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_ZBI,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -2.3 RCVD_IN_DNSWL_MED RBL: Sender listed at https://www.dnswl.org/,
-        *       medium trust
-        *      [213.219.10.34 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [213.219.10.34 listed in bl.score.senderscore.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mariaelisabethschaeffler505[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        *  0.3 HK_NAME_MR_MRS No description available.
-        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 RCVD_IN_MSPIKE_ZBI No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+        Tue, 21 Jun 2022 20:16:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F1819F88
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 17:16:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3191617B9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D927C3411C;
+        Wed, 22 Jun 2022 00:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1655856976;
+        bh=PgcuBqHZZbQa503bM4Scmsi3N1vfutVANcvd63kNuss=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YHoqI6jQZ9n64iK1Jnv8hF/5uCm+hiv+wdBc20tt7b8V8OZ7QWtrkQlxj2VNsvJKj
+         7sskAV1Hp8mo7yYAlK6aUvFLWEPI43CTBovgt3bBjIIDNbIE+3D/VqolRzlITy0Lzw
+         qUEUuqLFPqy0DqUx5v/1U2vrl5kwVd0WsTTagsTM=
+Date:   Tue, 21 Jun 2022 17:15:54 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Michael Larabel <Michael@MichaelLarabel.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Re: [patch v5] mm: lru_cache_disable: replace work queue
+ synchronization with synchronize_rcu
+Message-Id: <20220621171554.7ad01842c933b3049afeb3b6@linux-foundation.org>
+In-Reply-To: <67d39f78-8eed-f49a-b3b0-18f77f9821cd@leemhuis.info>
+References: <YhUI1wUtV8yguijO@fuller.cnet>
+        <YhUKRzEKxMvlGQ5n@fuller.cnet>
+        <YiI+a9gTr/UBCf0X@fuller.cnet>
+        <20220304163554.8872fe5d5a9d634f7a2884f5@linux-foundation.org>
+        <Yin7hDxdt0s/x+fp@fuller.cnet>
+        <YkWyLaom/r7jXgbA@zn.tnic>
+        <YmrWK/KoU1zrAxPI@fuller.cnet>
+        <20220528141809.732788db257253396462c79e@linux-foundation.org>
+        <134065a4-0446-bbbc-fca8-59f32798cf08@MichaelLarabel.com>
+        <0ce05ce7-1a00-82df-f37a-bf7f9e216504@MichaelLarabel.com>
+        <67d39f78-8eed-f49a-b3b0-18f77f9821cd@leemhuis.info>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Schöner Tag! Hast du meine vorherige Nachricht erhalten? Ich habe Ihnen eine E-Mail bezüglich der Spende von  Maria-Elisabeth Schaeffler) gesendet. E-Mail-Antwort an: mariaelisabethschaeffler505@gmail.com
+On Sun, 19 Jun 2022 14:14:03 +0200 Thorsten Leemhuis <regressions@leemhuis.info> wrote:
+
+> Andrew, is there a reason why this patch afaics isn't mainlined yet and
+> lingering in linux-next for so long? 
+
+I didn't bother doing a hotfixes merge last week because there wasn't anything
+very urgent-looking in there.  I'll be putting together a pull request later this week.

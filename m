@@ -2,192 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AC15546CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF46F5546C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238862AbiFVKWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S1348255AbiFVKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345131AbiFVKWi (ORCPT
+        with ESMTP id S1351561AbiFVKXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:22:38 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D0E3B3D1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:22:37 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b23so10192849ljh.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/3scupapn9W2y2IwLBRCTxOKFHLpEAemTlHO5CeKx/A=;
-        b=JRkeP6hK/0SBN+umjfYDlNvt5CfTBBZdNZh9CMRBuXf5udkHnZYDwm9Qugs9BISi7a
-         c1tNL3TYOLT5YejRanE5NvVB8WoJ/bywqf9w01eTlwm88B+z/bFWIxXVbBQK2dx/AkjW
-         DADt2URp3m+poaK/sxloGFC9fCWx3suat4BDkxsm0iHWOy1HH6XnNecf3W5NfVPo+T88
-         LWhj1Ss4d92YRytTOVjwmH7jgh+qJNIh2W43PHSGO8UZnBNHxEZ4/o6ibaJUTqo8ds6j
-         dFBb1zhzAg8Bshcy1mIgJX2mGUXxyrQ6wv5dI/VvT6VNm2K595qzOhBO1k0cIESp+ZAz
-         Ha+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/3scupapn9W2y2IwLBRCTxOKFHLpEAemTlHO5CeKx/A=;
-        b=FGfX0CTfk+XynuZ9xvO62v/u15S6uRk3S5PMSFj+FGFGHZ0eirFG6Dies8MIfa0eqG
-         BLOrgwdTGgpVXWilNreVISXTZUL3KtYCKSxdHx+RZt3m6rkNUN2Ej0bBH7EkuS4ugbXa
-         iNdN4YxVDNpG/Mn7mB//DLNvO/D0E9ZlwSSlqmF6FgewpK6Q8pynhawHXQAruAkLaUR9
-         IFzgiUDisnuGI3K8FXgFehC/JNnhnlG81CUzZJBXLSZDsiKcgJQLktmleKYY9V4wQ0x8
-         SUxn7GFRyeyH3oZ6RsYi+T3Zok8+tYMnRVcFqNB4s7kKyxYn1IdiZ3WAJg09e9JsprET
-         F2sQ==
-X-Gm-Message-State: AJIora8ApDz/SO2zpkgftAUjplcBLB0OfJt0IzVVKngqgwpZG39dZ/ZX
-        0XVZsQdQOzRVwhFRVN9k3FFM/M8H7hb4z53IaDirNg==
-X-Google-Smtp-Source: AGRyM1se2BoPLHvWhFpwxYBadNS6jT4kJliR5w7Cbw9fSZJg6SHpakhu5R0sF3cJYRLKc74VRpNrRHZevfSU0YtBG8k=
-X-Received: by 2002:a2e:860e:0:b0:25a:6dbe:abb5 with SMTP id
- a14-20020a2e860e000000b0025a6dbeabb5mr1516302lji.474.1655893355719; Wed, 22
- Jun 2022 03:22:35 -0700 (PDT)
+        Wed, 22 Jun 2022 06:23:09 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C744615A0B;
+        Wed, 22 Jun 2022 03:22:59 -0700 (PDT)
+Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 459CA20597;
+        Wed, 22 Jun 2022 12:22:57 +0200 (CEST)
+Message-ID: <adf27e62-246a-9c5f-e517-f225d17fe1cd@somainline.org>
+Date:   Wed, 22 Jun 2022 12:22:56 +0200
 MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-10-mw@semihalf.com>
- <YrDO05TMK8SVgnBP@lunn.ch> <YrGm2jmR7ijHyQjJ@smile.fi.intel.com>
- <YrGpDgtm4rPkMwnl@lunn.ch> <YrGukfw4uiQz0NpW@smile.fi.intel.com>
- <CAPv3WKf_2QYh0F2LEr1DeErvnMeQqT0M5t40ROP2G6HSUwKpQQ@mail.gmail.com> <YrLft+BrP2jI5lwp@lunn.ch>
-In-Reply-To: <YrLft+BrP2jI5lwp@lunn.ch>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Wed, 22 Jun 2022 12:22:23 +0200
-Message-ID: <CAPv3WKcAPb1Kc7=YpfmOWKa_kZYQvN8HyvjG91SiMK9c8yZa-Q@mail.gmail.com>
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA description
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 4/6] clk: qcom: add support for SM8350 DISPCC
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>, bjorn.andersson@linaro.org,
+        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20220621233412.506768-1-robert.foss@linaro.org>
+ <20220621233412.506768-5-robert.foss@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220621233412.506768-5-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C5=9Br., 22 cze 2022 o 11:24 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
->
-> On Wed, Jun 22, 2022 at 11:08:13AM +0200, Marcin Wojtas wrote:
-> > wt., 21 cze 2022 o 13:42 Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> napisa=C5=82(a):
-> > >
-> > > On Tue, Jun 21, 2022 at 01:18:38PM +0200, Andrew Lunn wrote:
-> > > > On Tue, Jun 21, 2022 at 02:09:14PM +0300, Andy Shevchenko wrote:
-> > > > > On Mon, Jun 20, 2022 at 09:47:31PM +0200, Andrew Lunn wrote:
-> > >
-> > > ...
-> > >
-> > > > > > > +        Name (_CRS, ResourceTemplate ()
-> > > > > > > +        {
-> > > > > > > +            Memory32Fixed (ReadWrite,
-> > > > > > > +                0xf212a200,
-> > > > > > > +                0x00000010,
-> > > > > >
-> > > > > > What do these magic numbers mean?
-> > > > >
-> > > > > Address + Length, it's all described in the ACPI specification.
-> > > >
-> > > > The address+plus length of what? This device is on an MDIO bus. As
-> > > > such, there is no memory! It probably makes sense to somebody who
-> > > > knows ACPI, but to me i have no idea what it means.
-> > >
-> > > I see what you mean. Honestly I dunno what the device this descriptio=
-n is for.
-> > > For the DSA that's behind MDIO bus? Then it's definitely makes no sen=
-se and
-> > > MDIOSerialBus() resources type is what would be good to have in ACPI
-> > > specification.
-> > >
-> >
-> > It's not device on MDIO bus, but the MDIO controller's register itself
->
-> Ah. So this is equivalent to
->
->                 CP11X_LABEL(mdio): mdio@12a200 {
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "marvell,orion-mdio";
->                         reg =3D <0x12a200 0x10>;
->                         clocks =3D <&CP11X_LABEL(clk) 1 9>, <&CP11X_LABEL=
-(clk) 1 5>,
->                                  <&CP11X_LABEL(clk) 1 6>, <&CP11X_LABEL(c=
-lk) 1 18>;
->                         status =3D "disabled";
->                 };
->
-> DT seems a lot more readable, "marvell,orion-mdio" is a good hint that
-> device this is. But maybe it is more readable because that is what i'm
-> used to.
 
-No worries, this reaction is not uncommon (including myself), I agree
-it becomes more readable, the longer you work with it :).
 
-IMO the ACPI node of orion-mdio looks very similar. Please take a look:
+On 22.06.2022 01:34, Robert Foss wrote:
+> From: Jonathan Marek <jonathan@marek.ca>
+> 
+> Add support to the SM8350 display clock controller by extending the SM8250
+> display clock controller, which is almost identical but has some minor
+> differences.
+> 
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+> 
+> Changes since v1
+>  - Remove comment - Dmitry
+> 
+> Changes since v2
+>  - Add my SoB - Bjorn
+>  - Remove CLK_ASSUME_ENABLED_WHEN_UNUSED flag
+> 
+> Changes since v3
+>  - Add kconfig dependency on SM_GCC_8350 - Konrad
+>  - Change hex to lowercase - Konrad
+>  - Split from dispcc-sm8250.c implementation
+>  - Switch from .fw_name to .index
+> 
+> Changes since v4
+>  - Hex to lowercase - Konrad
+>  - Remove bad match table entries - Konrad
+> 
+> Changes since v5
+>  - Reverted split from dispcc-sm8250
+>  - Re-added tags from v3
+> 
+> 
+>  drivers/clk/qcom/Kconfig         |  4 +--
+>  drivers/clk/qcom/dispcc-sm8250.c | 60 +++++++++++++++++++++++++++++++-
+>  2 files changed, 61 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index b11235c21952..4c3d1a548b7a 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -618,11 +618,11 @@ config SM_DISPCC_6125
+>  	  splash screen
+>  
+>  config SM_DISPCC_8250
+> -	tristate "SM8150 and SM8250 Display Clock Controller"
+> +	tristate "SM8150/SM8250/SM8350 Display Clock Controller"
+>  	depends on SM_GCC_8150 || SM_GCC_8250
+|| SM_GCC_8350
 
-        Device (SMI0)
-        {
-            Name (_HID, "MRVL0100")              // _HID: Hardware ID
-            Name (_UID, 0x00)                          // _UID: Unique ID
-            Method (_STA)                                 // _STA: Device s=
-tatus
-            {
-                Return (0xF)
-            }
-            Name (_CRS, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0xf212a200,                        // Address Base
-                    0x00000010,                       // Address Length
-                    )
-            })
-        }
+>  	help
+>  	  Support for the display clock controller on Qualcomm Technologies, Inc
+> -	  SM8150 and SM8250 devices.
+> +	  SM8150/SM8250/SM8350 devices.
+>  	  Say Y if you want to support display devices and functionality such as
+>  	  splash screen.
+>  
+> diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
+> index db9379634fb2..4e101d584115 100644
+> --- a/drivers/clk/qcom/dispcc-sm8250.c
+> +++ b/drivers/clk/qcom/dispcc-sm8250.c
+> @@ -43,6 +43,10 @@ static struct pll_vco vco_table[] = {
+>  	{ 249600000, 2000000000, 0 },
+>  };
+>  
+> +static struct pll_vco lucid_5lpe_vco[] = {
+> +	{ 249600000, 1750000000, 0 },
+> +};
+> +
+>  static struct alpha_pll_config disp_cc_pll0_config = {
+>  	.l = 0x47,
+>  	.alpha = 0xE000,
+> @@ -1228,6 +1232,7 @@ static const struct of_device_id disp_cc_sm8250_match_table[] = {
+>  	{ .compatible = "qcom,sc8180x-dispcc" },
+>  	{ .compatible = "qcom,sm8150-dispcc" },
+>  	{ .compatible = "qcom,sm8250-dispcc" },
+> +	{ .compatible = "qcom,sm8350-dispcc" },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, disp_cc_sm8250_match_table);
+> @@ -1258,7 +1263,7 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+>  		return PTR_ERR(regmap);
+>  	}
+>  
+> -	/* note: trion == lucid, except for the prepare() op */
+> +	/* Apply differences for SM8150 and SM8350 */
+I think both comments should stay, as the one you're adding doesn't explain the BUILD_BUG_ON()
 
-You can "map" the objects/methods to what you know from DT farly easily:
-_HID -> compatible string
-_STA -> 'status' property
-_CRS & Memory32Fixed  -> 'reg' property (_CRS can also comprise IRQs
-and other kind of resources, you can check [1] for more details).
 
-Clocks are configured by firmware, so they are not referenced in the
-tables and touched by the orion-mdio driver.
-
->
-> Please could you add a lot more comments. Given that nobody currently
-> actually does networking via ACPI, we have to assume everybody trying
-> to use it is a newbie, and more comments are better than less.
-
-I can add more verbose description of the example and probably a
-reference to https://www.kernel.org/doc/Documentation/firmware-guide/acpi/d=
-sd/phy.rst
-("DSDT entry for MDIO node").
-
-[1] https://uefi.org/specs/ACPI/6.4/06_Device_Configuration/Device_Configur=
-ation.html#crs-current-resource-settings
-
-Best regards,
-Marcin
-
->
-> Thanks
->         Andrew
+Konrad
+>  	BUILD_BUG_ON(CLK_ALPHA_PLL_TYPE_TRION != CLK_ALPHA_PLL_TYPE_LUCID);
+>  	if (of_device_is_compatible(pdev->dev.of_node, "qcom,sc8180x-dispcc") ||
+>  	    of_device_is_compatible(pdev->dev.of_node, "qcom,sm8150-dispcc")) {
+> @@ -1270,6 +1275,59 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+>  		disp_cc_pll1_config.config_ctl_hi1_val = 0x00000024;
+>  		disp_cc_pll1_config.user_ctl_hi1_val = 0x000000D0;
+>  		disp_cc_pll1_init.ops = &clk_alpha_pll_trion_ops;
+> +	} else if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8350-dispcc")) {
+> +		static struct clk_rcg2 * const rcgs[] = {
+> +			&disp_cc_mdss_byte0_clk_src,
+> +			&disp_cc_mdss_byte1_clk_src,
+> +			&disp_cc_mdss_dp_aux1_clk_src,
+> +			&disp_cc_mdss_dp_aux_clk_src,
+> +			&disp_cc_mdss_dp_link1_clk_src,
+> +			&disp_cc_mdss_dp_link_clk_src,
+> +			&disp_cc_mdss_dp_pixel1_clk_src,
+> +			&disp_cc_mdss_dp_pixel2_clk_src,
+> +			&disp_cc_mdss_dp_pixel_clk_src,
+> +			&disp_cc_mdss_esc0_clk_src,
+> +			&disp_cc_mdss_mdp_clk_src,
+> +			&disp_cc_mdss_pclk0_clk_src,
+> +			&disp_cc_mdss_pclk1_clk_src,
+> +			&disp_cc_mdss_rot_clk_src,
+> +			&disp_cc_mdss_vsync_clk_src,
+> +		};
+> +		static struct clk_regmap_div * const divs[] = {
+> +			&disp_cc_mdss_byte0_div_clk_src,
+> +			&disp_cc_mdss_byte1_div_clk_src,
+> +			&disp_cc_mdss_dp_link1_div_clk_src,
+> +			&disp_cc_mdss_dp_link_div_clk_src,
+> +		};
+> +		unsigned int i;
+> +		static bool offset_applied;
+> +
+> +		/* only apply the offsets once (in case of deferred probe) */
+> +		if (!offset_applied) {
+> +			for (i = 0; i < ARRAY_SIZE(rcgs); i++)
+> +				rcgs[i]->cmd_rcgr -= 4;
+> +
+> +			for (i = 0; i < ARRAY_SIZE(divs); i++) {
+> +				divs[i]->reg -= 4;
+> +				divs[i]->width = 4;
+> +			}
+> +
+> +			disp_cc_mdss_ahb_clk.halt_reg -= 4;
+> +			disp_cc_mdss_ahb_clk.clkr.enable_reg -= 4;
+> +
+> +			offset_applied = true;
+> +		}
+> +
+> +		disp_cc_mdss_ahb_clk_src.cmd_rcgr = 0x22a0;
+> +
+> +		disp_cc_pll0_config.config_ctl_hi1_val = 0x2a9a699c;
+> +		disp_cc_pll0_config.test_ctl_hi1_val = 0x01800000;
+> +		disp_cc_pll0_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
+> +		disp_cc_pll0.vco_table = lucid_5lpe_vco;
+> +		disp_cc_pll1_config.config_ctl_hi1_val = 0x2a9a699c;
+> +		disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
+> +		disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
+> +		disp_cc_pll1.vco_table = lucid_5lpe_vco;
+>  	}
+>  
+>  	clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);

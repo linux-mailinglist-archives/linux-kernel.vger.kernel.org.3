@@ -2,50 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77ED554A3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A33554A40
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237223AbiFVMkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
+        id S1343691AbiFVMkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350684AbiFVMkP (ORCPT
+        with ESMTP id S232260AbiFVMkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:40:15 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFF3E5E3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:39:45 -0700 (PDT)
-Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id EDF492063E;
-        Wed, 22 Jun 2022 14:39:43 +0200 (CEST)
-Message-ID: <fb234ad7-6a95-d5f2-9ebc-48ac2dd8fb8a@somainline.org>
-Date:   Wed, 22 Jun 2022 14:39:43 +0200
+        Wed, 22 Jun 2022 08:40:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244D626E2;
+        Wed, 22 Jun 2022 05:40:10 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25MCdwAG011042;
+        Wed, 22 Jun 2022 12:40:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2yh73+PddBgzAIuT91eOCUgq6YOUR3YZPn64h3ptw48=;
+ b=U93eE+V5ELZJMHW3CuOeNAs4aSibCtEnQoKiGA5+fuUYVMyTG8paS9igalmoKy6BkMXT
+ KnPRjNnL1i0x5yTdAGD+VcqsI8x4c/4az0OM8hMrWeMJNF7eNovQuYs5mfCnn0d8bVwK
+ 9lmhELImQmtbsUTCd6pwPknzqLwUKvx/flvdUACJypcWIwFmi5dTBs0mCk3w8myW/zmL
+ 1nkUfgm4k2PrLBhOZWKBtZxOvFt4YBMhrwKwRk8wOTheFpxfSZISPpm+UqoHuiLM8VJt
+ J7M6oXFr63cgq/zCOnxyckU7MKqKO4tTGRjBI5x9yxsgS9KQjcdwpLZrAsVmipx4Thu9 +Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gv2qcrxay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jun 2022 12:40:08 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25MCe7jR014796;
+        Wed, 22 Jun 2022 12:40:07 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gv2qcrxaa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jun 2022 12:40:07 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25MCZxDc004115;
+        Wed, 22 Jun 2022 12:40:06 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma02dal.us.ibm.com with ESMTP id 3gt009ak2f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jun 2022 12:40:06 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25MCe5gN36372842
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Jun 2022 12:40:05 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 22C05BE059;
+        Wed, 22 Jun 2022 12:40:05 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17BB8BE054;
+        Wed, 22 Jun 2022 12:40:04 +0000 (GMT)
+Received: from [9.160.18.227] (unknown [9.160.18.227])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Jun 2022 12:40:03 +0000 (GMT)
+Message-ID: <14631333-995b-e6f8-71ea-f6a65855f3f3@linux.ibm.com>
+Date:   Wed, 22 Jun 2022 08:40:03 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad
- X13s devicetree
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v20 00/20] s390/vfio-ap: dynamic configuration support
 Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-7-bjorn.andersson@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220622041224.627803-7-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jjherne@linux.ibm.com, freude@linux.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220621155134.1932383-1-akrowiak@linux.ibm.com>
+ <7b94f1fa-82c7-413e-ca32-02ddf4bec035@de.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <7b94f1fa-82c7-413e-ca32-02ddf4bec035@de.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: KyUILBCm3ECa3yjigQo0ME4ul3T19_oH
+X-Proofpoint-ORIG-GUID: AaaE3BG_nTKCEXUvcnCxxOOvSPLpV3LM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-22_04,2022-06-22_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ clxscore=1015 priorityscore=1501 malwarescore=0 impostorscore=0
+ phishscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206220063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,447 +101,184 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 22.06.2022 06:12, Bjorn Andersson wrote:
-> From: Johan Hovold <johan+linaro@kernel.org>
-> 
-> Add an initial Lenovo Thinkpad X13s devicetree.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> Changs since v1:
-> - New patch
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 393 ++++++++++++++++++
->  2 files changed, 394 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 2f416b84b71c..43053f1f6be9 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -91,6 +91,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> new file mode 100644
-> index 000000000000..58d3d8035751
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -0,0 +1,393 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2022, Linaro Limited
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-Can be moved to SoC dtsi.
-> +#include <dt-bindings/input/gpio-keys.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +
-> +#include "sc8280xp.dtsi"
-> +#include "sc8280xp-pmics.dtsi"
-> +
-> +/ {
-> +	model = "Lenovo ThinkPad X13s";
-> +	compatible = "lenovo,thinkpad-x13s", "qcom,sc8280xp";
-> +
-> +	backlight {
-> +		compatible = "pwm-backlight";
-> +		pwms = <&pmc8280c_lpg 3 1000000>;
-> +		enable-gpios = <&pmc8280_1_gpios 8 GPIO_ACTIVE_HIGH>;
-> +		power-supply = <&vreg_edp_bl>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
-> +	};
-> +
-> +	vreg_edp_bl: edp-bl-regulator {
-> +		compatible = "regulator-fixed";
-> +
-> +		regulator-name = "VBL9";
-> +		regulator-min-microvolt = <3600000>;
-> +		regulator-max-microvolt = <3600000>;
-> +
-> +		gpio = <&pmc8280_1_gpios 9 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&edp_bl_reg_en>;
-> +
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vreg_misc_3p3: misc-3p3-regulator {
-> +		compatible = "regulator-fixed";
-> +
-> +		regulator-name = "VCC3B";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +
-> +		gpio = <&pmc8280_1_gpios 1 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&misc_3p3_reg_en>;
-> +
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +	};
-> +
-> +	reserved-memory {
-> +	};
-Seems redundant.
+On 6/22/22 2:48 AM, Christian Borntraeger wrote:
+> Am 21.06.22 um 17:51 schrieb Tony Krowiak:
+>> The current design for AP pass-through does not support making dynamic
+>> changes to the AP matrix of a running guest resulting in a few
+>> deficiencies this patch series is intended to mitigate:
+>>
+>> 1. Adapters, domains and control domains can not be added to or removed
+>>      from a running guest. In order to modify a guest's AP 
+>> configuration,
+>>      the guest must be terminated; only then can AP resources be 
+>> assigned
+>>      to or unassigned from the guest's matrix mdev. The new AP
+>>      configuration becomes available to the guest when it is 
+>> subsequently
+>>      restarted.
+>>
+>> 2. The AP bus's /sys/bus/ap/apmask and /sys/bus/ap/aqmask interfaces can
+>>      be modified by a root user without any restrictions. A change to
+>>      either mask can result in AP queue devices being unbound from the
+>>      vfio_ap device driver and bound to a zcrypt device driver even if a
+>>      guest is using the queues, thus giving the host access to the 
+>> guest's
+>>      private crypto data and vice versa.
+>>
+>> 3. The APQNs derived from the Cartesian product of the APIDs of the
+>>      adapters and APQIs of the domains assigned to a matrix mdev must
+>>      reference an AP queue device bound to the vfio_ap device driver. 
+>> The
+>>      AP architecture allows assignment of AP resources that are not
+>>      available to the system, so this artificial restriction is not
+>>      compliant with the architecture.
+>>
+>> 4. The AP configuration profile can be dynamically changed for the linux
+>>      host after a KVM guest is started. For example, a new domain can be
+>>      dynamically added to the configuration profile via the SE or an HMC
+>>      connected to a DPM enabled lpar. Likewise, AP adapters can be
+>>      dynamically configured (online state) and deconfigured (standby 
+>> state)
+>>      using the SE, an SCLP command or an HMC connected to a DPM enabled
+>>      lpar. This can result in inadvertent sharing of AP queues 
+>> between the
+>>      guest and host.
+>>
+>> 5. A root user can manually unbind an AP queue device representing a
+>>      queue in use by a KVM guest via the vfio_ap device driver's sysfs
+>>      unbind attribute. In this case, the guest will be using a queue 
+>> that
+>>      is not bound to the driver which violates the device model.
+>>
+>> This patch series introduces the following changes to the current design
+>> to alleviate the shortcomings described above as well as to implement
+>> more of the AP architecture:
+>>
+>> 1. A root user will be prevented from making edits to the AP bus's
+>>      /sys/bus/ap/apmask or /sys/bus/ap/aqmask if the change would 
+>> transfer
+>>      ownership of an APQN from the vfio_ap device driver to a zcrypt 
+>> driver
+>>      while the APQN is assigned to a matrix mdev.
+>>
+>> 2. Allow a root user to hot plug/unplug AP adapters, domains and control
+>>      domains for a KVM guest using the matrix mdev via its sysfs
+>>      assign/unassign attributes.
+>>
+>> 4. Allow assignment of an AP adapter or domain to a matrix mdev even if
+>>      it results in assignment of an APQN that does not reference an AP
+>>      queue device bound to the vfio_ap device driver, as long as the 
+>> APQN
+>>      is not reserved for use by the default zcrypt drivers (also 
+>> known as
+>>      over-provisioning of AP resources). Allowing over-provisioning 
+>> of AP
+>>      resources better models the architecture which does not preclude
+>>      assigning AP resources that are not yet available in the system. 
+>> Such
+>>      APQNs, however, will not be assigned to the guest using the matrix
+>>      mdev; only APQNs referencing AP queue devices bound to the vfio_ap
+>>      device driver will actually get assigned to the guest.
+>>
+>> 5. Handle dynamic changes to the AP device model.
+>>
+>> 1. Rationale for changes to AP bus's apmask/aqmask interfaces:
+>> ----------------------------------------------------------
+>> Due to the extremely sensitive nature of cryptographic data, it is
+>> imperative that great care be taken to ensure that such data is secured.
+>> Allowing a root user, either inadvertently or maliciously, to configure
+>> these masks such that a queue is shared between the host and a guest is
+>> not only avoidable, it is advisable. It was suggested that this scenario
+>> is better handled in user space with management software, but that does
+>> not preclude a malicious administrator from using the sysfs interfaces
+>> to gain access to a guest's crypto data. It was also suggested that this
+>> scenario could be avoided by taking access to the adapter away from the
+>> guest and zeroing out the queues prior to the vfio_ap driver 
+>> releasing the
+>> device; however, stealing an adapter in use from a guest as a by-product
+>> of an operation is bad and will likely cause problems for the guest
+>> unnecessarily. It was decided that the most effective solution with the
+>> least number of negative side effects is to prevent the situation at the
+>> source.
+>>
+>> 2. Rationale for hot plug/unplug using matrix mdev sysfs interfaces:
+>> ----------------------------------------------------------------
+>> Allowing a user to hot plug/unplug AP resources using the matrix mdev
+>> sysfs interfaces circumvents the need to terminate the guest in order to
+>> modify its AP configuration. Allowing dynamic configuration makes
+>> reconfiguring a guest's AP matrix much less disruptive.
+>>
+>> 3. Rationale for allowing over-provisioning of AP resources:
+>> -----------------------------------------------------------
+>> Allowing assignment of AP resources to a matrix mdev and ultimately to a
+>> guest better models the AP architecture. The architecture does not
+>> preclude assignment of unavailable AP resources. If a queue subsequently
+>> becomes available while a guest using the matrix mdev to which its APQN
+>> is assigned, the guest will be given access to it. If an APQN
+>> is dynamically unassigned from the underlying host system, it will
+>> automatically become unavailable to the guest.
+>>
+>> Change log v19-v20:
+>> ------------------
+>> * Fixed patch 02/20: failed to move creation of status attribute
+>>    for a queue device to the vfio_ap_mdev_probe_queue function in
+>>    drivers/s390/crypto/vfio_ap_ops.c. (Jason)
+>>
+>> * Fixed signature of get_update_locks_for_queue macro
+>>
+>> * Take lock in get_update_locks_for_queue macro before
+>>    accessing q->matrix_mdev
+>>
+>> * Renamed vfio_ap_mdev_get_update_locks_for_apqn function to
+>>    get_update_locks_for_apqn (Jason)
+>>
+>> * Fix comments in function implementing the AP bus's in_use callback 
+>> (Jason)
+>>
+>> * Fix function name in prologue for ap_owned_by_def_drv function
+>>
+>> Tony Krowiak (20):
+>>    s390/vfio-ap: use new AP bus interface to search for queue devices
+>>    s390/vfio-ap: move probe and remove callbacks to vfio_ap_ops.c
+>>    s390/vfio-ap: manage link between queue struct and matrix mdev
+>>    s390/vfio-ap: introduce shadow APCB
+>>    s390/vfio-ap: refresh guest's APCB by filtering AP resources assigned
+>>      to mdev
+>>    s390/vfio-ap: allow assignment of unavailable AP queues to mdev 
+>> device
+>>    s390/vfio-ap: rename matrix_dev->lock mutex to matrix_dev->mdevs_lock
+>>    s390/vfio-ap: introduce new mutex to control access to the KVM 
+>> pointer
+>>    s390/vfio-ap: use proper locking order when setting/clearing KVM
+>>      pointer
+>>    s390/vfio-ap: prepare for dynamic update of guest's APCB on
+>>      assign/unassign
+>>    s390/vfio-ap: prepare for dynamic update of guest's APCB on queue
+>>      probe/remove
+>>    s390/vfio-ap: allow hot plug/unplug of AP devices when
+>>      assigned/unassigned
+>>    s390/vfio-ap: hot plug/unplug of AP devices when probed/removed
+>>    s390/vfio-ap: reset queues after adapter/domain unassignment
+>>    s390/vfio-ap: implement in-use callback for vfio_ap driver
+>>    s390/vfio-ap: sysfs attribute to display the guest's matrix
+>>    s390/vfio-ap: handle config changed and scan complete notification
+>>    s390/vfio-ap: update docs to include dynamic config support
+>>    s390/Docs: new doc describing lock usage by the vfio_ap device driver
+>>    MAINTAINERS: pick up all vfio_ap docs for VFIO AP maintainers
+>>
+>>   Documentation/s390/vfio-ap-locking.rst |  105 ++
+>>   Documentation/s390/vfio-ap.rst         |  492 +++++---
+>>   MAINTAINERS                            |    2 +-
+>>   drivers/s390/crypto/ap_bus.c           |   35 +-
+>>   drivers/s390/crypto/vfio_ap_drv.c      |  124 +-
+>>   drivers/s390/crypto/vfio_ap_ops.c      | 1436 ++++++++++++++++++------
+>>   drivers/s390/crypto/vfio_ap_private.h  |   47 +-
+>>   7 files changed, 1648 insertions(+), 593 deletions(-)
+>>   create mode 100644 Documentation/s390/vfio-ap-locking.rst
+>
+> Unless somebody disagrees, I think we will carry these patches via the 
+> s390 tree.
+
+Fine by me.
 
 
-> +};
-> +
-> +&apps_rsc {
-> +	pmc8280-1-rpmh-regulators {
-> +		compatible = "qcom,pm8350-rpmh-regulators";
-> +		qcom,pmic-id = "b";
-> +
-> +		vdd-l3-l5-supply = <&vreg_s11b>;
-> +
-> +		vreg_s11b: smps11 {
-> +			regulator-name = "vreg_s11b";
-> +			regulator-min-microvolt = <1272000>;
-> +			regulator-max-microvolt = <1272000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		vreg_l3b: ldo3 {
-> +			regulator-name = "vreg_l3b";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +			regulator-boot-on;
-> +		};
-> +
-> +		vreg_l4b: ldo4 {
-> +			regulator-name = "vreg_l4b";
-> +			regulator-min-microvolt = <912000>;
-> +			regulator-max-microvolt = <912000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		vreg_l6b: ldo6 {
-> +			regulator-name = "vreg_l6b";
-> +			regulator-min-microvolt = <880000>;
-> +			regulator-max-microvolt = <880000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +			regulator-boot-on;
-> +			regulator-always-on;	// FIXME: VDD_A_EDP_0_0P9
-> +		};
-> +	};
-> +
-> +	pmc8280c-rpmh-regulators {
-> +		compatible = "qcom,pm8350c-rpmh-regulators";
-> +		qcom,pmic-id = "c";
-> +
-> +		vreg_l1c: ldo1 {
-> +			regulator-name = "vreg_l1c";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		vreg_l12c: ldo12 {
-> +			regulator-name = "vreg_l12c";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		vreg_l13c: ldo13 {
-> +			regulator-name = "vreg_l13c";
-> +			regulator-min-microvolt = <3072000>;
-> +			regulator-max-microvolt = <3072000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +	};
-> +
-> +	pmc8280-2-rpmh-regulators {
-> +		compatible = "qcom,pm8350-rpmh-regulators";
-> +		qcom,pmic-id = "d";
-> +
-> +		vdd-l1-l4-supply = <&vreg_s11b>;
-> +
-> +		vreg_l3d: ldo3 {
-> +			regulator-name = "vreg_l3d";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		vreg_l4d: ldo4 {
-> +			regulator-name = "vreg_l4d";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		vreg_l7d: ldo7 {
-> +			regulator-name = "vreg_l7d";
-> +			regulator-min-microvolt = <3072000>;
-> +			regulator-max-microvolt = <3072000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		vreg_l9d: ldo9 {
-> +			regulator-name = "vreg_l9d";
-> +			regulator-min-microvolt = <912000>;
-> +			regulator-max-microvolt = <912000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +	};
-> +};
-> +
-> +&pmc8280c_lpg {
-> +	status = "okay";
-> +};
-> +
-> +&pmk8280_pon_pwrkey {
-> +	status = "okay";
-> +};
-> +
-> +&qup0 {
-> +	status = "okay";
-> +};
-> +
-> +&qup0_i2c4 {
-> +	clock-frequency = <400000>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&qup0_i2c4_default>, <&ts0_default>;
-> +
-> +	status = "okay";
-Again, the ordering of status= question from one of the previous patches.
-
-
-> +
-> +	/* FIXME: verify, missing on some x13s */
-Won't this fail gracefully-ish if it's absent?
-
-
-> +	touchscreen@10 {
-> +		compatible = "hid-over-i2c";
-> +		reg = <0x10>;
-> +		hid-descr-addr = <0x1>;
-> +		interrupts-extended = <&tlmm 175 IRQ_TYPE_LEVEL_LOW>;
-> +		vdd-supply = <&vreg_misc_3p3>;
-> +	};
-> +};
-> +
-> +&qup1 {
-> +	status = "okay";
-> +};
-> +
-> +&qup2 {
-> +	status = "okay";
-> +};
-> +
-> +&qup2_i2c5 {
-> +	clock-frequency = <400000>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&qup2_i2c5_default>, <&kybd_default>, <&tpad_default>;
-> +
-> +	status = "okay";
-> +
-> +	touchpad@2c {
-> +		compatible = "hid-over-i2c";
-> +		reg = <0x2c>;
-> +		hid-descr-addr = <0x20>;
-> +		interrupts-extended = <&tlmm 182 IRQ_TYPE_LEVEL_LOW>;
-> +		vdd-supply = <&vreg_misc_3p3>;
-> +	};
-> +
-> +	keyboard@68 {
-> +		compatible = "hid-over-i2c";
-> +		reg = <0x68>;
-> +		hid-descr-addr = <0x1>;
-> +		interrupts-extended = <&tlmm 104 IRQ_TYPE_LEVEL_LOW>;
-> +		vdd-supply = <&vreg_misc_3p3>;
-> +	};
-> +};
-> +
-> +&remoteproc_adsp {
-> +	firmware-name = "qcom/sc8280xp/qcadsp8280.mbn";
-> +
-> +	status = "okay";
-> +};
-> +
-> +&remoteproc_nsp0 {
-> +	firmware-name = "qcom/sc8280xp/qccdsp8280.mbn";
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_0 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_0_dwc3 {
-> +	/* TODO: Define USB-C connector properly */
-> +	dr_mode = "host";
-> +};
-> +
-> +&usb_0_hsphy {
-> +	vdda-pll-supply = <&vreg_l9d>;
-> +	vdda18-supply = <&vreg_l1c>;
-> +	vdda33-supply = <&vreg_l7d>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_0_qmpphy {
-> +	vdda-phy-supply = <&vreg_l9d>;
-> +	vdda-pll-supply = <&vreg_l4d>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_1_dwc3 {
-> +	/* TODO: Define USB-C connector properly */
-> +	dr_mode = "host";
-> +};
-> +
-> +&usb_1_hsphy {
-> +	vdda-pll-supply = <&vreg_l4b>;
-> +	vdda18-supply = <&vreg_l1c>;
-> +	vdda33-supply = <&vreg_l13c>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_1_qmpphy {
-> +	vdda-phy-supply = <&vreg_l4b>;
-> +	vdda-pll-supply = <&vreg_l3b>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&xo_board_clk {
-> +	clock-frequency = <38400000>;
-> +};
-> +
-> +/* PINCTRL - additions to nodes defined in sc8280xp.dtsi */
-Seems redundant.
-
-> +
-> +&pmc8280_1_gpios {
-> +	edp_bl_en: edp-bl-en-state {
-> +		pins = "gpio8";
-> +		function = "normal";
-> +	};
-> +
-> +	edp_bl_reg_en: edp-bl-reg-en-state {
-> +		pins = "gpio9";
-> +		function = "normal";
-> +	};
-> +
-> +	misc_3p3_reg_en: misc-3p3-reg-en-state {
-> +		pins = "gpio1";
-> +		function = "normal";
-> +	};
-> +};
-> +
-> +&pmc8280c_gpios {
-> +	edp_bl_pwm: edp-bl-pwm-state {
-> +		pins = "gpio8";
-> +		function = "func1";
-> +	};
-> +};
-> +
-> +&tlmm {
-> +	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
-> +
-> +	kybd_default: kybd-default-state {
-> +		disable {
-> +			pins = "gpio102";
-> +			function = "gpio";
-> +			output-low;
-> +		};
-> +
-> +		int-n {
-> +			pins = "gpio104";
-> +			function = "gpio";
-> +			bias-disable;
-> +		};
-> +
-> +		reset {
-> +			pins = "gpio105";
-> +			function = "gpio";
-> +			bias-disable;
-> +		};
-> +	};
-> +
-> +	qup0_i2c4_default: qup0-i2c4-default-state {
-> +		pins = "gpio171", "gpio172";
-> +		function = "qup4";
-> +
-> +		bias-disable;
-> +		drive-strength = <16>;
-> +	};
-> +
-> +	qup2_i2c5_default: qup2-i2c5-default-state {
-> +		pins = "gpio81", "gpio82";
-> +		function = "qup21";
-> +
-> +		bias-disable;
-> +		drive-strength = <16>;
-> +	};
-> +
-> +	tpad_default: tpad-default-state {
-> +		int-n {
-Same comment as in the reference device dt.
-
-Konrad
-> +			pins = "gpio182";
-> +			function = "gpio";
-> +			bias-disable;
-> +		};
-> +	};
-> +
-> +	ts0_default: ts0-default-state {
-> +		int-n {
-> +			pins = "gpio175";
-> +			function = "gpio";
-> +			bias-pull-up;
-> +		};
-> +
-> +		reset-n {
-> +			pins = "gpio99";
-> +			function = "gpio";
-> +			output-high;
-> +			drive-strength = <16>;
-> +		};
-> +	};
-> +};
-> 

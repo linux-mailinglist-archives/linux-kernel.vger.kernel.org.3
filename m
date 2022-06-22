@@ -2,99 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85C7555561
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F473555574
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbiFVU0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 16:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S235223AbiFVUgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 16:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiFVU0r (ORCPT
+        with ESMTP id S229473AbiFVUgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 16:26:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85A136682;
-        Wed, 22 Jun 2022 13:26:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0470061738;
-        Wed, 22 Jun 2022 20:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2427CC34114;
-        Wed, 22 Jun 2022 20:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655929605;
-        bh=kXEUTw/N4tbohAVX+9EPs5JvigCwZ5p1wSKw76VkLGg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LxVMS/Q/AXjq/CFLjx4GJiLjQKJ1DETmISnpLERNDTg2bTZi4w9aDIBxvLnuWHHlP
-         uMOqpinUDwRQ+HTyi7KMHnZXBnVNrcnH/UxO8QsTWuwAJ7kdPuCvRgke06RfZxQZt7
-         QgEL+qw7tt9eRLTpjPoy7ssl0bW/Tyjx5mt1eNzRdQ+1zLOSY0fxJbjLJDF8D0cahZ
-         nDWudeSbzuQUmMQ4tlgD5EEkUGAZ1IJ66qk3fgaONAN4C8A/znTSv2/BJZuhZJtOGZ
-         b5OYUF+e4/fmbJ4zisPg/pv7Mlrd0UahYo0SSImMXQ5rb4mVfhbixGAom1IIeVs0wR
-         niIalZUMbk1mQ==
-Date:   Wed, 22 Jun 2022 15:26:43 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
-        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        johan+linaro@kernel.org
-Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
-Message-ID: <20220622202643.GA1387264@bhelgaas>
+        Wed, 22 Jun 2022 16:36:10 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD0938BEA
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:36:03 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3178ea840easo136720877b3.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:36:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k0Q20J3OyFK4BXoHp26oZBRHT0NT/TPRkGHoG9EjHBM=;
+        b=AIh/u0M6R759JTz79TyCN93gK6bgpHDzPVQZ1c1GJ5mwFOuIeCYHJ4edi50jml847F
+         YlyEIG6KHqq8aPkZTHE9o8riSh+o+aPdQkAJtuBIbSQJ1Qvz8SxbjAaqCBGJVWgX2P/S
+         /lWL8gVqkrxuDaPOll9RogYmQJePhkDfIDDmdpqwgFqUaxnpkJlZlOJqH2LK8OYh0EHS
+         NkvT2u3I65Z8qEvtK4yyQHIJoLFYRlLWUJzUrck6e096qTWwpgSy4j4OJNJBxKuqt4cm
+         +0dfDWU9Ra9WoP4nC6yrNay035tCUQh6UFCC2SBvyjlcMQdeY4uW7Ka6L/TCcUlvjRXY
+         RbvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k0Q20J3OyFK4BXoHp26oZBRHT0NT/TPRkGHoG9EjHBM=;
+        b=XYjxqVu+hfI6mBRJSyx3s2mAQeithydN1YVakghzKkB9n3GZE186E4V64DhBwOXftL
+         6ix0MZg37cZiKv1TWyLAGpNjNoRAxhCMw5Beq9FWYksvj4+IlfMvI9xP9guAGoCwC1Ol
+         VcSCQsl7Ij9YObduOpanzX2hLFZKUrbUcWNesGjxpd9IOfkT8elVyIcH/2Cn8ka+WN0c
+         2P0jQowcZXB15+0zWCjf2ysgrzXLQf4xJtFgdvFfIzZKdrNbebQqt2IdgF21erYl0H5A
+         +FOvSnRylQmMRnH94e5BZyfSBCwKWc7WCy3p0jwZmTF44b52ne/AHgkre6KhO9A/wnyJ
+         Ldow==
+X-Gm-Message-State: AJIora/hd4PlxIDMr4jI3PvDxEIXLmYH7G0oBffWFFFRXG9j4ddcnpvO
+        8dcYbwWPWnmiR0wuQsUSIP03sA5/eDtjn1dsc0If3w==
+X-Google-Smtp-Source: AGRyM1tZz2wdFHKMCQcrlrsexZuCcN2icaf5UPnPLdD9I4E6Eu6Q2ruY0h+nLZ4RTx4/aeKVzxa/AbO9gvemQvBe43c=
+X-Received: by 2002:a81:a095:0:b0:317:d4ce:38b6 with SMTP id
+ x143-20020a81a095000000b00317d4ce38b6mr6426893ywg.83.1655930162762; Wed, 22
+ Jun 2022 13:36:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOX2RU6isNEF4LYRDUEjnKwOcsEoPJR2ekn2kD9RjKFwusF4DA@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-8-saravanak@google.com> <20220622074756.GA1647@pengutronix.de>
+ <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com> <CAGETcx_qm7DWbNVTLfF9jTgGA8uH8oAQzbPcMDh4L6+5mdRFog@mail.gmail.com>
+In-Reply-To: <CAGETcx_qm7DWbNVTLfF9jTgGA8uH8oAQzbPcMDh4L6+5mdRFog@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 22 Jun 2022 13:35:26 -0700
+Message-ID: <CAGETcx8i9R51T-mGuV9_LUz-GXDCncpRWQ1Rj_7i2JrvCttq3w@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sascha Hauer <sha@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 04:23:49PM +0200, Robert Marko wrote:
-> On Tue, 21 Jun 2022 at 23:43, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Tue, Jun 21, 2022 at 11:05:17PM +0200, Robert Marko wrote:
-> > > On Tue, 21 Jun 2022 at 22:32, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Tue, Jun 21, 2022 at 01:23:30PM +0200, Robert Marko wrote:
-> > > > > IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
-> > > > > cause the system to hang as its using DBI registers in the .init
-> > > > > and those are only accesible after phy_power_on().
-> ...
+On Wed, Jun 22, 2022 at 12:40 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Wed, Jun 22, 2022 at 1:44 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> >
+> > On Wed, Jun 22, 2022 at 9:48 AM Sascha Hauer <sha@pengutronix.de> wrote:
+> >
+> > > This patch has the effect that console UART devices which have "dmas"
+> > > properties specified in the device tree get deferred for 10 to 20
+> > > seconds. This happens on i.MX and likely on other SoCs as well. On i.MX
+> > > the dma channel is only requested at UART startup time and not at probe
+> > > time. dma is not used for the console. Nevertheless with this driver probe
+> > > defers until the dma engine driver is available.
+>
+> FYI, if most of the drivers are built in, you could set
+> deferred_probe_timeout=1 to reduce the impact of this (should drop
+> down to 1 to 2 seconds). Is that an option until we figure out
+> something better?
+>
+> Actually, why isn't earlyconsole being used? That doesn't get blocked
+> on anything and the main point of that is to have console working from
+> really early on.
+>
+> > >
+> > > It shouldn't go in as-is.
+> >
+> > This affects all machines with the PL011 UART and DMAs specified as
+> > well.
+> >
+> > It would be best if the console subsystem could be treated special and
+> > not require DMA devlink to be satisfied before probing.
+>
+> If we can mark the console devices somehow before their drivers probe
+> them, I can make fw_devlink give them special treatment. Is there any
+> way I could identify them before their drivers probe?
+>
+> > It seems devlink is not quite aware of the concept of resources that are
+> > necessary to probe vs resources that are nice to have and might be
+> > added after probe.
+>
+> Correct, it can't tell them apart. Which is why it tries its best to
+> enforce them, get most of them ordered properly and then gives up
+> enforcing the rest after deferred_probe_timeout= expires. There's a
+> bit more nuance than what I explained here (explained in earlier
+> commit texts, LPC talks), but that's the gist of it. That's what's
+> going on in this case Sascha is pointing out.z
+>
+> > We need a strong devlink for the first category
+> > and maybe a weak devlink for the latter category.
+> >
+> > I don't know if this is a generic hardware property for all operating
+> > systems so it could be a DT property such as dma-weak-dependency?
+> >
+> > Or maybe compromize and add a linux,dma-weak-dependency;
+> > property?
+>
+> The linux,dma-weak-dependency might be an option, but then if the
+> kernel version changes and we want to enforce it because we now have a
+> dma driver (not related to Shasha's example) support, then the
+> fw_devlink still can't enforce it because of that property. But maybe
+> that's okay? The consumer can try to use dma and defer probe if it
+> fails?
+>
+> Another option is to mark console devices in DT with some property and
+> we can give special treatment for those without waiting for
+> deferred_probe_timeout= to expire.
 
-> > Unless there's a reason *not* to move the DBI accesses for other
-> > variants, I think we should move them all to .post_init().  Otherwise
-> > it's just magic -- there's no indication in the code about why IPQ8074
-> > needs to be different from all the rest.
-> 
-> I am not sure how to do it properly, especially for the 2.1.0 IP that
-> IPQ8064 uses
-> and that is already filled with tweaks to get it properly working.
-> 
-> As far as I can tell, the reason why it works for all of the others
-> is that they dont use a PHY driver at all (2.1.0 in IPQ8064 and
-> 2.4.0 in IPQ4019), 1.1.0 in APQ8084 appears to be unused completely
-> as its compatible is not used in any of the DTS-es.  2.3.2 in
-> MSM8996 and MSM8998 also use QMP, so I am not sure why these work.
-> ...
+Heh, looks like there's already a property for that: stdout-path.
 
-> This patch applies to 5.19 as well, though I will send a v4 with the
-> updated description.  Like, I said, I am not sure how to move DBI
-> accesses in other IP-s without breaking them.
+Let me send a series that'll use that to give special treatment to
+console devices.
 
-Why would they break?  I don't see anything that indicates the DBI
-accesses are required to be before phy_power_on() or would fail after
-phy_power_on().
-
-I agree there's always a risk of unintended breakage.  It just doesn't
-seem very likely.
-
-Bjorn
+-Saravana

@@ -2,183 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF95A55490F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA8E55491E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239353AbiFVIOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S230272AbiFVIO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236923AbiFVIOf (ORCPT
+        with ESMTP id S229872AbiFVIOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:14:35 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10083.outbound.protection.outlook.com [40.107.1.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775B637BCD;
-        Wed, 22 Jun 2022 01:14:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X411y5Z5aYqRAqA5sIFFp3TXdQM/o+OvrHObwfwgEGVOKeeSWbTa3Ig8noz+Mm8CBvlc0NWDix53A/S/Pybh6iCFxyuWGfX73Uz+y1wybLBBH/C9a3lM1yMgtvaWh38tkmoMHgTLtwOCdQhTk09t1OYURNHmS1sU5vQKj+gTKKK9Gz8toCltiABNJhcf5PydMGSwzOnK0J0leXcGQVXidvCAAn9Cb5y3higohTB2iNUjYeYITOzAtlIaxQn0OG67zsGOhJdzAOtSjEdwRk//U71B2OGPTkgctLcMl2bh9IJX/4/v+DsqFVBGrI5ybCII3TOpbxjWoHrXzQCfNtTlaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7DNnyCcJvFYg51qz8AF1zFIda98HUszENlljTgUIBNs=;
- b=NlVA/5Acvu8iO3Iq8yHoiVnoLdh/yFfeb1i+wP85M4sO2smfJthRauGkOVJOM8qkyrCKAJgdQq7vUdIlSd3dGxdJUqd7eWsaHh9HaHxC3P59UI3SPh1UjcCbXW0bBDG6bsV9fA+QPVDuImgUPi/3xElD2R9Dc/WTmgOkE/aAt3jQAVhpSsjt9FtdogOxJJBAyNV+gt6QsmeoVnGAQ8ulTZhdf2vM5pvd5krV175O1Mgx8IB80CgLkuNdAsSQl8VlKH7KHt9/wilhp4LiVEEAEBoPncuB9pXE/PsUZO9Mptk67LMYKvU2ctPIQwB2v1bBEQHRe5PwLqXAB6ZiwXFciA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7DNnyCcJvFYg51qz8AF1zFIda98HUszENlljTgUIBNs=;
- b=j6yyqsrfkb9yffMZnz4BMpkW2IiicF1BRpa9I2Cn/eogeQdnaaK7MqufT6M7cFkXb/PdW8buH+vI5h9rCnwUsDXMWP2xQ+etr7vb+NjqWN8eLVZweB2/a4IVuZ5lukb2x+Rx8cEW3MS70CHcwMTL8NLYUXcKi/m07E3VpC7KTWI=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by VE1PR04MB7246.eurprd04.prod.outlook.com (2603:10a6:800:1ae::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Wed, 22 Jun
- 2022 08:14:31 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::71af:d414:52be:d531]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::71af:d414:52be:d531%6]) with mapi id 15.20.5353.022; Wed, 22 Jun 2022
- 08:14:31 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "hvilleneuve@dimonoff.com" <hvilleneuve@dimonoff.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "abbaraju.manojsai@amarulasolutions.com" 
-        <abbaraju.manojsai@amarulasolutions.com>,
-        "jagan@amarulasolutions.com" <jagan@amarulasolutions.com>,
-        "matteo.lisi@engicam.com" <matteo.lisi@engicam.com>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "t.remmet@phytec.de" <T.remmet@phytec.de>,
-        "t.remmet@phytec.deh" <t.remmet@phytec.deh>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 00/14] arm64: dts: imx8mp: correct pad settings
-Thread-Topic: [PATCH 00/14] arm64: dts: imx8mp: correct pad settings
-Thread-Index: AQHYhf8Ork2RMCYk4EmRaOhujPGoda1bAQ8AgAARnbA=
-Date:   Wed, 22 Jun 2022 08:14:30 +0000
-Message-ID: <DU0PR04MB9417922C5D6CEE8560F0A60988B29@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220622061410.853301-1-peng.fan@oss.nxp.com>
- <20220622070600.gb3wep7rltwdivkk@pengutronix.de>
-In-Reply-To: <20220622070600.gb3wep7rltwdivkk@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 61fe4bc1-9ef5-4ab5-d454-08da54273bc3
-x-ms-traffictypediagnostic: VE1PR04MB7246:EE_
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <VE1PR04MB724691A57E94A6AA4CC40CFC88B29@VE1PR04MB7246.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tKYnRRTPBCMrLvz15dGu/gq6IutUFVUpVVQh5bDm2PI8Nm+p9ZOjIeRoJzE6stz675MjUysofl33e/c2XKhb6YI1gCBBfHmpn+X1vbODpbsrSz5YjxgNUKweAgxbR4lVRhTJAtgI5XrUBH2NKULysaSKzrSm4S47Xvo39Z/73uJbLt/WPX9x3mhXuqCc48cRPhikfxv2i4g9uJfR1EYnNuSb2hpONhRWdgOlHvswMOC84Bl/fxGZSxAQM1Qt18MeAXKwyWxE3B6HEYAjGGiQRWoYOoVAuu/qwu1uWSF+KqsWJMo7XpF28BKPD68P5iH7Vwm09eAF0X+bkDYzBbNHh/PI7QdYbj0Zm5K4HrLIZYps3CfigJxZIUDJdbgdPrSfZDOL1bEsWZufX/jHrcx3c3aodBC88n0A9bIW4PjkJZAGng63Y6iilGHEwPeSxfm/U+15he8xg/SVe7T3IHF02scCM1Ap/7f1UwiEPBzBF1ect4kJyjdBYRkhr3JlAEY6KzRZZqeeu63wT9xJeQQ9HZUSewOU3tL2hGJcBSKO5/3mnk7RcYbdPWYyfs45akJ45vCItrA+JOh8b2nB19aulBKJSPSyEMbQarhbUVTTPjUFyIRQ5rFriyWT5LeD0VA7RkcoERmVHYhOMppDTNY5KpTXcl3Yu8QG5Z6kyUHCvEaHGRa++uM/xj/vlbGMS1EXATqTdLusds30GePNGUOuVLFkcjbZLcTcRIdFe9APhqp2tA13jw5jG0qrOVpJzmdzBMsdWx0kggcl7CcA5scMbsVKJyOA+1vkQQyd5w8/wvVG+S7dXuGxsFl7bw5zg9Q+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(366004)(376002)(39860400002)(396003)(2906002)(110136005)(54906003)(316002)(38100700002)(52536014)(7416002)(44832011)(8936002)(5660300002)(66946007)(122000001)(64756008)(38070700005)(66446008)(4326008)(66476007)(66556008)(9686003)(8676002)(6506007)(26005)(7696005)(33656002)(41300700001)(76116006)(186003)(478600001)(71200400001)(966005)(55016003)(86362001)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?lC4rmJMtJkTL7SXGPbqXU7nV3sM+MxeCM9dPRLuzkGSEQyfWMtBkyOzJzG?=
- =?iso-8859-1?Q?1HwI3x9ctMMOw54K/JTjNQ8FOZQ0E0vbEn0BLSL/yf6XsXJiOXVrQPGXYE?=
- =?iso-8859-1?Q?Hg7weNrT1PThiZ2lbWrkB48B+kh+BYA6nqXo70tGMKtGJoKLhnZAFvzIfz?=
- =?iso-8859-1?Q?IZDa4any32/tnM7Qzn+J77Sx81oWKPGUvQmQNyJ/CnxMusAkQ7SADE4iW0?=
- =?iso-8859-1?Q?wlkSDkoOCOhZoWYptQBLI9SWlWU1XbFzTI/eD1qcMAqFP+ilD53KK9VL2R?=
- =?iso-8859-1?Q?8REKR/jvl0GYffutP5Fx/4fx6+wfWCl+pIvtuN4w0OWc2pNO7cWhDN7BfA?=
- =?iso-8859-1?Q?wUTyzIYAS2d/w9zyXkWbBA1nwau0OMi6A0smM2yVCDLgE1smQ9wkS0R/tn?=
- =?iso-8859-1?Q?QiOiqeTIgOlIDBZ/WeKHGyh1M0cyebZRWAiI+WhzcCTU3zc1Qr4Z8BC1rt?=
- =?iso-8859-1?Q?UdnAgE/e7VqCSFlnMA/4rfbZ3rF3lOjFQS4tnBQnuBssn4+t9/KsbnIbqK?=
- =?iso-8859-1?Q?zq8CX4iOECZCCan+ygJ1SHIo4A2wuyo3U54+mG2ZT35q1e0FZ64+iPPlpy?=
- =?iso-8859-1?Q?G+SpKmoOdRFlHh0cIRxuObD3tsqJ/JgQIMd7DRtSrxPlOuVU1jLyBqEKA2?=
- =?iso-8859-1?Q?GOGhA6qTsJjRfGTWFQV4lIZKCDPoisky3cFaM/wvAAGbr7AE4u9M+pLj1X?=
- =?iso-8859-1?Q?oeWzNiMWvoNHwwkLpEr7YUgAw85NFo1pNK+bBx4+YtKBN/bVG2DQR9evUg?=
- =?iso-8859-1?Q?x2Kn+b+RyCdUnUE9hqCmZSgCatd5LPnsws9yHrX7sr+ByhmA4xWdm/82y9?=
- =?iso-8859-1?Q?3pQWRe45UNuQOcfzspIyN2TsRl+ljiMgCvCxh35W6moKS2WCJmPQ/292wk?=
- =?iso-8859-1?Q?ZdxY5yvF730BtveW0rX5EYI3t52impwT2qQwsTA25IBOXmr67pWy4QrwTs?=
- =?iso-8859-1?Q?YnLngfjXcpm1aDWz0jjLKPwkzv+PFlsS2ugvGMKvnG50eh2Gx/+UHAu3Pe?=
- =?iso-8859-1?Q?wOVF82zJ2p5Cvmwt+fOHslyL5JZPSxErk+5e0nYSOwE2l+zxvP9AteqaWR?=
- =?iso-8859-1?Q?k6kU0CE1kXcj4pvIzDQGrrXa94/ua986b5PVzo0NA7BN9Th+ByI0nYueue?=
- =?iso-8859-1?Q?IQZlwQ4WHpL345ZivEyC3jPOJ42V4Kzkbr/OBeFAyFuz74FYX/RtCmPAhI?=
- =?iso-8859-1?Q?lYjwMN5glqGTpWFsY/XPtkzB0e6e0gCarLjcC0edWfatSdquzy2iIxH/6O?=
- =?iso-8859-1?Q?ORwgCZh7p74Yb+AlIY41btBCIkAGh/uYeoMWl48ortnro3edkb+PDsU8z/?=
- =?iso-8859-1?Q?vI/ReKaDc+z0laXSUdnHsO6IVz46S4STywTwevl04xWR4Tuksw0zKDsGkq?=
- =?iso-8859-1?Q?X/JNfBjn6lOVXw94+drPYIiBkddKtWbfP2mku0z1K1wwgPS4287PVqN9Rf?=
- =?iso-8859-1?Q?TFJQlpRVrjBwN1W6/jtK692dtIIVp73nR1dhmUFhiOF4hAqhFUB15UiXa5?=
- =?iso-8859-1?Q?dla59Jfz3waytzIXxpy5fAJmlnK8dNp5EL03RlTrrZmFbOjwNOj8D/NW2S?=
- =?iso-8859-1?Q?n1oSNcmXpDA4RJjgj34Jo8R6MFZQfXi6WBnZvYgpp9MzUSPYMgkhEAZtN1?=
- =?iso-8859-1?Q?E6r8d291FA9yg6JMBAdg9UazNXQ8dyOX/7cT8Rxf8jTICP9lLrga6bgdp5?=
- =?iso-8859-1?Q?ZvjgaM3Suk3AC+gbf7raFmbc6Z7mvkQ1MblFr91u1lDfMakvaIKDrJSoR3?=
- =?iso-8859-1?Q?/DLJuvwORRSbal2QRiHRARhPyAWLjBrOdls4HxY27QjC9Gw4/a9KuJwfjv?=
- =?iso-8859-1?Q?/CwOVsByig=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 22 Jun 2022 04:14:53 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294F737BD7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:14:52 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so12039513pjr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=kZTnS3VTllrLoaJqF/w8mR2VHKq3Lk7ph/8GKtgAs1s=;
+        b=kwtFYGvf5kooG2LYNIEXgMNdUgRE2PTCmzJmp4fCELFGTNJ3ZyNNa8TjWnqpWfaXVD
+         7G9kCTpUy/GYrDCymhpu1QZDUkcd7WmQbLPGaXPr4inPEshWm0TwY/F9Plr8F1Wi+jt2
+         eRTtLt6grfJNlBaWbpMas44jwiDdBxXFI+G28HDXly5Tr8il7cx2B4Qe6rwShYKN/TSr
+         hMT2nfAAICylX/8y3nSv7y9FINJEM78JgXndoTziueNznyT6SCLfbsqPqGTYOXiEZ1xT
+         oOrMwZQpq2c14O60h2LwA7+WnU1zEYQtRHzCeBymb+wsiW0fMOCnrMnslpt4rSjVMF8d
+         TDmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=kZTnS3VTllrLoaJqF/w8mR2VHKq3Lk7ph/8GKtgAs1s=;
+        b=feIw1lAGZZLk+TwzmDQJQ34O86wmNiI9E6vAIG3V6XHCkPNOxZabXXN/aexd9boti3
+         a0t7i3memD/dMI7+DuKuRh66g8mNiCTrUa240SVSczIPPBTV4J3BSfy34azwY+ri8vrI
+         tsAgckUMUrj1LlH0q3wPAUTYJ22I7nuD8oKMW/qvAX4f24KmrkbeTG4cdtWWA6Fndz/T
+         xXq7RnTyhHkusGpnNIFIO/9D80XJ7SIcxIqI/v6Lu69XpDnDnm5KBDhSdLD9QxwsQm8o
+         QtXGJiVQqOm265rNln7kne8U2hX0ad2aLEQH9IJa+OpaFO+cVKNk6Z6oro8i8RVm6sE/
+         Zz0A==
+X-Gm-Message-State: AJIora/pT7g/8PH/VmA53H+Wt6G7x2499+KYvkqOvHx09l8coYyslzE+
+        4Ci8JjsLHCoeJiPpHBHnOaNU3619RGeaqttG
+X-Google-Smtp-Source: AGRyM1vbNjUQdcM5L8IS2ZvOJX1TwTUio7KEYjbj54a3TQmeH7w7l0VX34LQDWIEY7SIyt+4Vt0fcw==
+X-Received: by 2002:a17:903:11c6:b0:167:90e5:59c2 with SMTP id q6-20020a17090311c600b0016790e559c2mr32466748plh.50.1655885691654;
+        Wed, 22 Jun 2022 01:14:51 -0700 (PDT)
+Received: from [10.166.0.6] ([199.101.192.137])
+        by smtp.gmail.com with ESMTPSA id cp1-20020a170902e78100b00168f329b282sm12053860plb.155.2022.06.22.01.14.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 01:14:51 -0700 (PDT)
+Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Yang Shen <shenyang39@huawei.com>
+References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
+ <Yqn3spLZHpAkQ9Us@myrica> <fdc8d8b0-4e04-78f5-1e8a-4cf44c89a37f@linaro.org>
+ <YqrmdKNrYTCiS/MC@myrica> <d90e8ea5-2f18-2eda-b4b2-711083aa7ecd@linaro.org>
+ <YrB1D9rv9G4h/BYU@myrica> <YrB30M9yAbUbPFrG@kroah.com>
+ <b5011dd2-e8ec-a307-1b43-5aff6cbb6891@linaro.org>
+ <YrF2yypHZfiNVRBh@kroah.com>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Message-ID: <6fb8bed5-8d40-fd63-4537-44e9eb6aa053@linaro.org>
+Date:   Wed, 22 Jun 2022 16:14:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61fe4bc1-9ef5-4ab5-d454-08da54273bc3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2022 08:14:30.9025
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hoRNpJJO1GKlr4Tl4BA760zM+6q1RQAlIK/rRQ27YnrSH22AktRN6WmjnarlYBqXTe1cTEgVj2uMN64XtbzpTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7246
+In-Reply-To: <YrF2yypHZfiNVRBh@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH 00/14] arm64: dts: imx8mp: correct pad settings
->=20
-> Hello,
->=20
-> On Wed, Jun 22, 2022 at 02:13:56PM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > i.MX8MP iomux pad BIT3 and BIT0 are reserved bits. Writing 1 to the
-> > reserved bit will be ignored and reading will still return 0. Although
-> > function not broken with reserved bits set, we should not set reserved
-> > bits.
->=20
-> I wonder how you found these. Some time ago I wrote a tool for such issue=
-s[1].
-> Currently it only supports i.MX25, i.MX6DL and i.MX6Q, but extending it f=
-or
-> the other SoCs should be only some industious effort.
+Hi, Greg
 
-We have customer has question about the dts pad settings in U-Boot. Since t=
-he
-dts in U-Boot was synced from Linux kernel tree, and I found
-the current settings in kernel dts not match with latest reference manual.
+On 2022/6/21 下午3:44, Greg Kroah-Hartman wrote:
+> On Tue, Jun 21, 2022 at 03:37:31PM +0800, Zhangfei Gao wrote:
+>>
+>> On 2022/6/20 下午9:36, Greg Kroah-Hartman wrote:
+>>> On Mon, Jun 20, 2022 at 02:24:31PM +0100, Jean-Philippe Brucker wrote:
+>>>> On Fri, Jun 17, 2022 at 02:05:21PM +0800, Zhangfei Gao wrote:
+>>>>>> The refcount only ensures that the uacce_device object is not freed as
+>>>>>> long as there are open fds. But uacce_remove() can run while there are
+>>>>>> open fds, or fds in the process of being opened. And atfer uacce_remove()
+>>>>>> runs, the uacce_device object still exists but is mostly unusable. For
+>>>>>> example once the module is freed, uacce->ops is not valid anymore. But
+>>>>>> currently uacce_fops_open() may dereference the ops in this case:
+>>>>>>
+>>>>>> 	uacce_fops_open()
+>>>>>> 	 if (!uacce->parent->driver)
+>>>>>> 	 /* Still valid, keep going */		
+>>>>>> 	 ...					rmmod
+>>>>>> 						 uacce_remove()
+>>>>>> 	 ...					 free_module()
+>>>>>> 	 uacce->ops->get_queue() /* BUG */
+>>>>> uacce_remove should wait for uacce->queues_lock, until fops_open release the
+>>>>> lock.
+>>>>> If open happen just after the uacce_remove: unlock, uacce_bind_queue in open
+>>>>> should fail.
+>>>> Ah yes sorry, I lost sight of what this patch was adding. But we could
+>>>> have the same issue with the patch, just in a different order, no?
+>>>>
+>>>> 	uacce_fops_open()
+>>>> 	 uacce = xa_load()
+>>>> 	 ...					rmmod
+>>> Um, how is rmmod called if the file descriptor is open?
+>>>
+>>> That should not be possible if the owner of the file descriptor is
+>>> properly set.  Please fix that up.
+>> Thanks Greg
+>>
+>> Set cdev owner or use module_get/put can block rmmod once fops_open.
+>> -       uacce->cdev->owner = THIS_MODULE;
+>> +       uacce->cdev->owner = uacce->parent->driver->owner;
+>>
+>> However, still not find good method to block removing parent pci device.
+>>
+>> $ echo 1 > /sys/bus/pci/devices/0000:00:02.0/remove &
+>>
+>> [   32.563350]  uacce_remove+0x6c/0x148
+>> [   32.563353]  hisi_qm_uninit+0x12c/0x178
+>> [   32.563356]  hisi_zip_remove+0xa0/0xd0 [hisi_zip]
+>> [   32.563361]  pci_device_remove+0x44/0xd8
+>> [   32.563364]  device_remove+0x54/0x88
+>> [   32.563367]  device_release_driver_internal+0xec/0x1a0
+>> [   32.563370]  device_release_driver+0x20/0x30
+>> [   32.563372]  pci_stop_bus_device+0x8c/0xe0
+>> [   32.563375]  pci_stop_and_remove_bus_device_locked+0x28/0x60
+>> [   32.563378]  remove_store+0x9c/0xb0
+>> [   32.563379]  dev_attr_store+0x20/0x38
+> Removing the parent pci device does not remove the module code, it
+> removes the device itself.  Don't confuse code vs. data here.
 
-Regards,
-Peng.
+Do you mean even parent pci device is removed immediately, the code has 
+to wait, like dma etc?
 
->=20
-> Best regards
-> Uwe
->=20
-> [1]
-> https://git.pengutronix.de/cgit/tools/dt-utils/tree/src/dtblint-imx-pinmu=
-x.c
->=20
->=20
-> --
-> Pengutronix e.K.                           | Uwe Kleine-K=F6nig
-> |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/
-> |
+Currently parent driver has to ensure all dma stopped then call 
+uacce_remove,
+ie, after uacce_fops_open succeed, parent driver need wait fops_release, 
+then uacce_remove can be called.
+For example:
+drivers/crypto/hisilicon/zip/zip_main.c:
+hisi_qm_wait_task_finish
+
+If remove this wait , there may other issue,
+Unable to handle kernel paging request at virtual address ffff80000b700204
+pc : hisi_qm_cache_wb.part.0+0x2c/0xa0
+
+So uacce only need serialize uacce_fops_open and uacce_remove.
+After uacce_fops_open, we can assume uacce_remove only happen after 
+uacce_fops_release?
+Then it would be much simpler.
+
+Thanks
+
+

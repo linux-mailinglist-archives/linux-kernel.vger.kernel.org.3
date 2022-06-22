@@ -2,154 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CECD554729
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB6A55472F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244678AbiFVKDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S1345996AbiFVKDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244783AbiFVKCt (ORCPT
+        with ESMTP id S241522AbiFVKCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:02:49 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06DE3B00D
+        Wed, 22 Jun 2022 06:02:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ACF010C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655892170;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i/eL/PHNNzRBjNtZdC844dkLISla6uJITnCexEQnYOY=;
+        b=GzaLaK+YRKWjVc+Jg1nvW/0y3dW3PryjHTAjWFljDCG2peNyHBrjuRpiLUhTXLcPc3vdHu
+        lyJN8dArec1JqiZWsixVRqmc7YGYhx8XgcqZQopoog5BpAPqW8Dy3h2uilKNm3VrFXYy6m
+        WIvWNvRU9T+mXyrRJOpESaRP+zTCYD4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-84-DHx3msDYPWKJdvrhPPPT8A-1; Wed, 22 Jun 2022 06:02:49 -0400
+X-MC-Unique: DHx3msDYPWKJdvrhPPPT8A-1
+Received: by mail-ed1-f69.google.com with SMTP id g7-20020a056402424700b00435ac9c7a8bso1089291edb.14
         for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:02:48 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id v81so29337089ybe.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i5TcadfDwpNkHBHIGjc2aejtAjCEkDrL44PzWJy8/V0=;
-        b=L3XsTDjK6bd7Lklt/VqZOZHzMPK51HDrkj40KLhiL3PYWfI42oo542VKJrW9hpm/Tp
-         VCXGOSA8SUS6Keb+m635xGx/eS3Yas4Kq3fJCIGqApKcx2bme9EUR8rpN2Aw1OsQsVuf
-         biE8iLSSVzRF1pXBcVAp/zHWcaPLqwQHBtWk9/HxBcYTKtmDHFg2um2GE1G0MG1LhCbJ
-         llSDUKeGQAN6aX3zqn0Ms8hW4KwlWBwHR8aS/NTbvfgXfAv6Wr66i8WKvUiWP0lvA3+Q
-         tl/2YOGACARIcMzwvrZwvRdohnnV7CPjVczI5rz0NnSju3sQTYc59xuofhQCndxokN8m
-         2LjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i5TcadfDwpNkHBHIGjc2aejtAjCEkDrL44PzWJy8/V0=;
-        b=vdmkBWdOFHUTwhj5a0qiP+n4CKVRsdj/RJ7Nq37vKrMyjDVDRugb4XtVYkVMUSDag3
-         vlpIDXXbS1mhPd4oQhYabhNSgmjzt+pZvKDsVc0QQqLTWWXD32t7fqiINPD2J307LqO7
-         CMed2QXXAv+jOQ8xd4h+d38SAagFBL6eikw6lfk13WYNa9/BvXHUKrtGUJwtyAh3g8H1
-         DE67v6Aud2zqBE9VJ4jYyD0ynt/Q2OlhvXVBT3P/KMzjWfchFch+ukQHNMPjE8QDFk5C
-         KB+CJ3spuLBSm/WjDdC7XMkaM+9N1+X4JbjkAzm1JweJGJJiDgsQF8wNKHKszmzQwZtI
-         F58Q==
-X-Gm-Message-State: AJIora8vrC7ghoenO5+BpKdizucC0PWwExDeHBWM32qsuWM+LMdXIqHh
-        MabMvLuf8Ea/nM7Imec74WV2vNm4J9B1Dtueek72ew==
-X-Google-Smtp-Source: AGRyM1sV6bezNTxFdNk13U3p+VXhOBJQu0/mI+L7VnjJbxiSkdDBQbNDUQOmO/4J4gjHVebjZL+eDU+pfoHNNyUCsAw=
-X-Received: by 2002:a25:e211:0:b0:669:9cf9:bac7 with SMTP id
- h17-20020a25e211000000b006699cf9bac7mr328830ybe.407.1655892167707; Wed, 22
- Jun 2022 03:02:47 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=i/eL/PHNNzRBjNtZdC844dkLISla6uJITnCexEQnYOY=;
+        b=vuSHts4unmQUprDrgPGoyIB2Cz4K+jguvE5Fv1xbLl2Irp9L/YyniOhfTIWI36Pj+o
+         t7CKrHdTuGgC6SXdx20UGICPG5lV48BLDKMLKy6ugZZgqrdmYWJQModak6bnIDaIstoc
+         1fkoBaUbi39BlbwcK1U69/EjX2OqUUFmcm1od1eOBlqokudRhu1rQoExwdjW0DminKbG
+         JlqTXLJmsf6JvX1oKGuD2Sc8SaA6eR6ObXYeTr893qHERRZJB0QG0OjOzypHtr7KoWSe
+         WhBVIxscuRiN+pBQf2V79iY4nbuvk2Qu5JCNyuHgPMjmi+4yYzcsc0e8fC4qDIo33z3i
+         4ovw==
+X-Gm-Message-State: AJIora+2i+/A0va6tXAnFY3UoD+kmZfPX7IyJyNRISLxtOlBs6FDTgYE
+        N+htS9105aSJoRJZeMdk3DwblcWhmzQocWY9nN3iQ9lBWj2mzFZoPKFY1zY7n2rEFO2lLMpy8Rr
+        2/vFpdTmOkKug0aXtlH8/jYIv
+X-Received: by 2002:a17:906:1003:b0:718:cca8:6cd6 with SMTP id 3-20020a170906100300b00718cca86cd6mr2394618ejm.428.1655892167856;
+        Wed, 22 Jun 2022 03:02:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uyAJHafbjvRgIph1bMmP2S5uZKelMBRwUV8V7g4QloK6ti2Wq2Asn4p0wRL/TQfKhjTYOANA==
+X-Received: by 2002:a17:906:1003:b0:718:cca8:6cd6 with SMTP id 3-20020a170906100300b00718cca86cd6mr2394600ejm.428.1655892167660;
+        Wed, 22 Jun 2022 03:02:47 -0700 (PDT)
+Received: from [192.168.43.127] ([109.37.135.195])
+        by smtp.gmail.com with ESMTPSA id r17-20020a17090609d100b007052b183d51sm9112972eje.132.2022.06.22.03.02.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 03:02:47 -0700 (PDT)
+Message-ID: <17d3745b-f86d-a864-2b61-e00cad6414cd@redhat.com>
+Date:   Wed, 22 Jun 2022 12:02:45 +0200
 MIME-Version: 1.0
-References: <20220619003919.394622-1-i.maximets@ovn.org>
-In-Reply-To: <20220619003919.394622-1-i.maximets@ovn.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 22 Jun 2022 12:02:36 +0200
-Message-ID: <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
-Subject: Re: [PATCH net] net: ensure all external references are released in
- deferred skbuffs
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Westphal <fw@strlen.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] tools/power/x86/intel-speed-select: Remove duplicate
+ macro
+Content-Language: en-US
+To:     Risheng1128 <hi4u29ck02@gmail.com>,
+        srinivas.pandruvada@linux.intel.com
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220610172714.27772-1-hi4u29ck02@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220610172714.27772-1-hi4u29ck02@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 2:39 AM Ilya Maximets <i.maximets@ovn.org> wrote:
->
-> Open vSwitch system test suite is broken due to inability to
-> load/unload netfilter modules.  kworker thread is getting trapped
-> in the infinite loop while running a net cleanup inside the
-> nf_conntrack_cleanup_net_list, because deferred skbuffs are still
-> holding nfct references and not being freed by their CPU cores.
->
-> In general, the idea that we will have an rx interrupt on every
-> CPU core at some point in a near future doesn't seem correct.
-> Devices are getting created and destroyed, interrupts are getting
-> re-scheduled, CPUs are going online and offline dynamically.
-> Any of these events may leave packets stuck in defer list for a
-> long time.  It might be OK, if they are just a piece of memory,
-> but we can't afford them holding references to any other resources.
->
-> In case of OVS, nfct reference keeps the kernel thread in busy loop
-> while holding a 'pernet_ops_rwsem' semaphore.  That blocks the
-> later modprobe request from user space:
->
->   # ps
->    299 root  R  99.3  200:25.89 kworker/u96:4+
->
->   # journalctl
->   INFO: task modprobe:11787 blocked for more than 1228 seconds.
->         Not tainted 5.19.0-rc2 #8
->   task:modprobe     state:D
->   Call Trace:
->    <TASK>
->    __schedule+0x8aa/0x21d0
->    schedule+0xcc/0x200
->    rwsem_down_write_slowpath+0x8e4/0x1580
->    down_write+0xfc/0x140
->    register_pernet_subsys+0x15/0x40
->    nf_nat_init+0xb6/0x1000 [nf_nat]
->    do_one_initcall+0xbb/0x410
->    do_init_module+0x1b4/0x640
->    load_module+0x4c1b/0x58d0
->    __do_sys_init_module+0x1d7/0x220
->    do_syscall_64+0x3a/0x80
->    entry_SYSCALL_64_after_hwframe+0x46/0xb0
->
-> At this point OVS testsuite is unresponsive and never recover,
-> because these skbuffs are never freed.
->
-> Solution is to make sure no external references attached to skb
-> before pushing it to the defer list.  Using skb_release_head_state()
-> for that purpose.  The function modified to be re-enterable, as it
-> will be called again during the defer list flush.
->
-> Another approach that can fix the OVS use-case, is to kick all
-> cores while waiting for references to be released during the net
-> cleanup.  But that sounds more like a workaround for a current
-> issue rather than a proper solution and will not cover possible
-> issues in other parts of the code.
->
-> Additionally checking for skb_zcopy() while deferring.  This might
-> not be necessary, as I'm not sure if we can actually have zero copy
-> packets on this path, but seems worth having for completeness as we
-> should never defer such packets regardless.
->
-> CC: Eric Dumazet <edumazet@google.com>
-> Fixes: 68822bdf76f1 ("net: generalize skb freeing deferral to per-cpu lists")
-> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Hi all,
+
+Srinivas, I assume that you will review and pick this one up?
+
+Regards,
+
+Hans
+
+On 6/10/22 19:27, Risheng1128 wrote:
+> There are some macros such as `GENMASK` and `GENMASK_ULL` are redefined in
+> `include/linux/bits.h`. Simultaneously, the `GENMASK` in
+> `include/linux/bits.h` is more secure and prevents the following situation.
+> 1. [net: stmmac: Fix misuses of GENMASK macro](https://reurl.cc/loMWvl)
+> 2. [clocksource/drivers/npcm: Fix misuse of GENMASK macro](
+> https://reurl.cc/b2yr96)
+> 
+> Therefore, I think these macro could be removed.
+> 
+> Signed-off-by: Risheng1128 <hi4u29ck02@gmail.com>
 > ---
->  net/core/skbuff.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
+>  tools/power/x86/intel-speed-select/Makefile | 1 +
+>  tools/power/x86/intel-speed-select/isst.h   | 7 +------
+>  2 files changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/power/x86/intel-speed-select/Makefile b/tools/power/x86/intel-speed-select/Makefile
+> index 7221f2f55e8b..760d49d61955 100644
+> --- a/tools/power/x86/intel-speed-select/Makefile
+> +++ b/tools/power/x86/intel-speed-select/Makefile
+> @@ -14,6 +14,7 @@ endif
+>  # (this improves performance and avoids hard-to-debug behaviour);
+>  MAKEFLAGS += -r
+>  override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include -I/usr/include/libnl3
+> +override CFLAGS += -I../../../include
+>  override LDFLAGS += -lnl-genl-3 -lnl-3
+>  
+>  ALL_TARGETS := intel-speed-select
+> diff --git a/tools/power/x86/intel-speed-select/isst.h b/tools/power/x86/intel-speed-select/isst.h
+> index 0796d8c6a882..44de990d182e 100644
+> --- a/tools/power/x86/intel-speed-select/isst.h
+> +++ b/tools/power/x86/intel-speed-select/isst.h
+> @@ -27,12 +27,7 @@
+>  
+>  #include <stdarg.h>
+>  #include <sys/ioctl.h>
+> -
+> -#define BIT(x) (1 << (x))
+> -#define BIT_ULL(nr) (1ULL << (nr))
+> -#define GENMASK(h, l) (((~0UL) << (l)) & (~0UL >> (sizeof(long) * 8 - 1 - (h))))
+> -#define GENMASK_ULL(h, l)                                                      \
+> -	(((~0ULL) << (l)) & (~0ULL >> (sizeof(long long) * 8 - 1 - (h))))
+> +#include <linux/bits.h>
+>  
+>  #define CONFIG_TDP				0x7f
+>  #define CONFIG_TDP_GET_LEVELS_INFO		0x00
 
-I do not think this patch is doing the right thing.
-
-Packets sitting in TCP receive queues should not hold state that is
-not relevant for TCP recvmsg().
-
-This consumes extra memory for no good reason, and defer expensive
-atomic operations.
-
-We for instance release skb dst before skb is queued, we should do the
-same for conntrack state.
-
-This would increase performance anyway, as we free ct state while cpu
-caches are hot.

@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A356556E47
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D700556E2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358546AbiFVWAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 18:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S1358763AbiFVWAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 18:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355951AbiFVV7h (ORCPT
+        with ESMTP id S1357335AbiFVV7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 17:59:37 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3764E1B785
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:59:25 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id w19-20020a17090a8a1300b001ec79064d8dso696237pjn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:59:25 -0700 (PDT)
+        Wed, 22 Jun 2022 17:59:39 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D023A1AA
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:59:26 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id i64so17277002pfc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uf+HuQ1ItIoNqZupwoKpU9pz3NkBB1lHPNxwiXXD+2w=;
-        b=hyxmfFfu07K7sLrUw5QkwMAAH5ndrOSwzb2F+Qa+rgiNxY+si7NLFnfB4OUCOWIn10
-         oN8ExJ2bMCOMfo4CtAEf+AfYnDH/WOFG3JKiDvfLcVhXnAVlySyYE+t+eUsGWusIEax9
-         wrzbT1hbSVVVYlWdmVa1sU+zx14CnhZTAgavA=
+        bh=1pdhObJ96JAdNQFR2R9fpWGMOXrHx/rMFv6zCCsOHAk=;
+        b=hVrctEGuVG5RsRxCqLMNa7VyAR77RxPywMJC0ts/2Tv/RtkdREBNccc2tLIg9h2/Hy
+         w64cbCFd8tk1LcJE4sC2dtKLvhuRyc+MUQOmTLlMNsp0uyaLhUwakkQhQZPZXiV72ATy
+         lkZXPjA+9Rv8jlfhnOmZEzYcZDmEawypUh47I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uf+HuQ1ItIoNqZupwoKpU9pz3NkBB1lHPNxwiXXD+2w=;
-        b=3giVc0KgdYsfroDAIfQprRkgaZ+gBNzJjM67/AJ4434f5wGkifGGtR9NxWqEB7SEEK
-         BN4aJYzJRbBX9K51iZMMbwfzpGYFoFN5KEfT6GgmmP69pxgrcj8DY/YMXdtfW63ttGkH
-         l0ATgBomxUFI4gp+k2WU77sMspEx1jNAEiO6Xxsjxe+xN1XoDb3BAVlj07wqccIsiJ5M
-         PuwxQxnHaIu6kiSyveJsEu6T+cq+GU3uLw7SJ90ffmx5rVgGMhH1vOSRUe8DM6+gM2KF
-         ON0s5CA7doVNbldD330RDGDbI3bO4fK8lLmm/0PsexL9uRQqDf03eJQx97AkR0VT6gRf
-         T3Rg==
-X-Gm-Message-State: AJIora+saYox+LO9VvQJsNeRUZZT0Z7pqz4G/66xrdcNe/VrrMfaZcNM
-        uhiPwk2qbWPeUlwfUzjk4D/qyHtYVRKw8w==
-X-Google-Smtp-Source: AGRyM1sYH7FA2SAitMGkc4Qvvg1WF3u1cjELIfHo5tVKuKUjc52erulNEgjNcztldxbzadeP7bTMIA==
-X-Received: by 2002:a17:903:228c:b0:16a:24d7:6a9e with SMTP id b12-20020a170903228c00b0016a24d76a9emr17618429plh.27.1655935164423;
-        Wed, 22 Jun 2022 14:59:24 -0700 (PDT)
+        bh=1pdhObJ96JAdNQFR2R9fpWGMOXrHx/rMFv6zCCsOHAk=;
+        b=BwdlfidHgNCvdUZmnaoFoNj9LOwROBf378A20Z+yn/8KagLZVrE68gk3NII7wQEGCC
+         Vksg5Exc0mNqHbB+zWLqq58FYHUc1FwXytE+8CXRnz0g0p4ns1urYFngGXrN60xYTPYR
+         yDdoka7MiaCVmfJMYNGW0e7f7cLvuTR5S00DKqfQxl0+GMK+JLa0hQBWHvb88vWztoW7
+         oh6MFBfEaV/c6Yg4raHs8Kb+yXg97QerGbcXdKtO5zh/CwFzV65JjJBhOfb95HEDsYVp
+         X1ORMPnerEl2G5h/9+cN6IwS5YY+JuVH1h+93yg9kbCQu4Zwi8uTNelKVb4gwEt/NaAx
+         7F0g==
+X-Gm-Message-State: AJIora/+tpw82yymuR6H7eOzQQKhdNykl2x1vcK9dyMw5t0fTKtADM0U
+        Blz1zxfBwjdW1MfmapG1rcKNyxszQycBKg==
+X-Google-Smtp-Source: AGRyM1vf9pMP4Tou3fz1iLeTLO+gLSIOfI+g/h5s5a0eua2xRAP9kBxmB0nBOjXM0LMGaraNojvT9A==
+X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr4559579pgw.223.1655935165832;
+        Wed, 22 Jun 2022 14:59:25 -0700 (PDT)
 Received: from joebar-glaptop.lan (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
-        by smtp.gmail.com with ESMTPSA id nk15-20020a17090b194f00b001ec9d45776bsm255916pjb.42.2022.06.22.14.59.22
+        by smtp.gmail.com with ESMTPSA id nk15-20020a17090b194f00b001ec9d45776bsm255916pjb.42.2022.06.22.14.59.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 14:59:23 -0700 (PDT)
+        Wed, 22 Jun 2022 14:59:25 -0700 (PDT)
 From:   "Joseph S. Barrera III" <joebar@chromium.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Stephen Boyd <swboyd@chromium.org>,
@@ -56,9 +56,9 @@ Cc:     Stephen Boyd <swboyd@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH v10 4/5] arm64: dts: qcom: sc7180: Add pazquel dts files
-Date:   Wed, 22 Jun 2022 14:58:04 -0700
-Message-Id: <20220622145717.v10.4.I41e2c2dc12961fe000ebc4d4ef6f0bc5da1259ea@changeid>
+Subject: [PATCH v10 5/5] arm64: dts: qcom: sc7180: Add kingoftown dts files
+Date:   Wed, 22 Jun 2022 14:58:05 -0700
+Message-Id: <20220622145717.v10.5.Ib62291487a664a65066d18a3e83c5428a6d2cc6c@changeid>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220622215805.1121982-1-joebar@chromium.org>
 References: <20220622215805.1121982-1-joebar@chromium.org>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,101 +74,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pazquel is a trogdor-based board. These dts files are unchanged copies
+Kingoftown is a trogdor-based board. These dts files are unchanged copies
 from the downstream Chrome OS 5.4 kernel.
 
 Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
 ---
 
 Changes in v10:
-- Remove 'include sc7180.dtsi' from *all* sc7180-trogdor-pazquel* files.
-- Move "okay" for ap_tp_i2c to proper location.
+- Remove 'include sc7180.dtsi' from *all* sc7180-trogdor-kingoftown* files.
 
 Changes in v9:
-- Restore two lines accidentally removed from ap_sar_sensor.
 - Simplify trackpad enabling (51d30402be75).
 
 Changes in v7:
-- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
 - Simplify spi0/spi6 labeling (d277cab7afc7).
 - Remove #include of <arm/cros-ec-keyboard.dtsi>.
-- Accidentally removed two lines from ap_sar_sensor.
 
 Changes in v6:
-- Copy changes to ap_sar_sensor from v5.4.
-- Add #include of <arm/cros-ec-keyboard.dtsi>.
+- Add #include of <arm/cros-ec-keyboard.dtsi> from v5.4.
 
 Changes in v4:
 - Fix description (no downstream bits removed).
 - Add missing version history.
 
-Changes in v3:
+Changes in v2:
 - First inclusion in series.
 
- arch/arm64/boot/dts/qcom/Makefile             |   4 +
- .../sc7180-trogdor-pazquel-lte-parade.dts     |  21 ++
- .../qcom/sc7180-trogdor-pazquel-lte-ti.dts    |  21 ++
- .../qcom/sc7180-trogdor-pazquel-parade.dts    |  16 ++
- .../dts/qcom/sc7180-trogdor-pazquel-ti.dts    |  16 ++
- .../boot/dts/qcom/sc7180-trogdor-pazquel.dtsi | 221 ++++++++++++++++++
- 6 files changed, 299 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+ arch/arm64/boot/dts/qcom/Makefile             |   2 +
+ .../dts/qcom/sc7180-trogdor-kingoftown-r0.dts |  43 ++++
+ .../dts/qcom/sc7180-trogdor-kingoftown-r1.dts |  16 ++
+ .../dts/qcom/sc7180-trogdor-kingoftown.dtsi   | 224 ++++++++++++++++++
+ 4 files changed, 285 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi
 
 diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 5cfd6316768c..dc26704dfe34 100644
+index dc26704dfe34..a9f2ad013179 100644
 --- a/arch/arm64/boot/dts/qcom/Makefile
 +++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -79,6 +79,10 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-auo.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-boe.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-auo.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-boe.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-parade.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-ti.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-parade.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-ti.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+@@ -60,6 +60,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r3-lte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-homestar-r4.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-kingoftown-r0.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-kingoftown-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-r0.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-r1-kb.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
 new file mode 100644
-index 000000000000..407adca19652
+index 000000000000..d9ee042a16d9
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
-@@ -0,0 +1,21 @@
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
+@@ -0,0 +1,43 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Pazquel board device tree source
-+ *
-+ * Copyright 2021 Google LLC.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sc7180-trogdor-parade-ps8640.dtsi"
-+#include "sc7180-trogdor-pazquel.dtsi"
-+#include "sc7180-trogdor-lte-sku.dtsi"
-+
-+/ {
-+	model = "Google Pazquel (Parade,LTE)";
-+	compatible = "google,pazquel-sku4", "qcom,sc7180";
-+};
-+
-+&ap_sar_sensor_i2c {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
-new file mode 100644
-index 000000000000..857877cf1565
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Pazquel board device tree source
++ * Google Kingoftown board device tree source
 + *
 + * Copyright 2021 Google LLC.
 + */
@@ -176,127 +138,118 @@ index 000000000000..857877cf1565
 +/dts-v1/;
 +
 +#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
-+#include "sc7180-trogdor-pazquel.dtsi"
-+#include "sc7180-trogdor-lte-sku.dtsi"
++#include "sc7180-trogdor-kingoftown.dtsi"
 +
 +/ {
-+	model = "Google Pazquel (TI,LTE)";
-+	compatible = "google,pazquel-sku0", "google,pazquel-sku2", "qcom,sc7180";
++	model = "Google Kingoftown (rev0)";
++	compatible = "google,kingoftown-rev0", "qcom,sc7180";
 +};
 +
-+&ap_sar_sensor_i2c {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
-new file mode 100644
-index 000000000000..f28c6c7f522c
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Pazquel board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
++ * In rev1+, the enable pin of pp3300_fp_tp will be tied to pp1800_l10a
++ * power rail instead, since kingoftown does not have FP.
 + */
++&pp3300_fp_tp {
++	gpio = <&tlmm 74 GPIO_ACTIVE_HIGH>;
++	enable-active-high;
 +
-+/dts-v1/;
-+
-+#include "sc7180-trogdor-parade-ps8640.dtsi"
-+#include "sc7180-trogdor-pazquel.dtsi"
-+
-+/ {
-+	model = "Google Pazquel (Parade)";
-+	compatible = "google,pazquel-sku5", "qcom,sc7180";
++	pinctrl-names = "default";
++	pinctrl-0 = <&en_fp_rails>;
 +};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
++
++&tlmm {
++	en_fp_rails: en-fp-rails {
++		pinmux {
++			pins = "gpio74";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio74";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
 new file mode 100644
-index 000000000000..9f950f596fa1
+index 000000000000..4c178696dd8f
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
 @@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Pazquel board device tree source
++ * Google Kingoftown board device tree source
 + *
 + * Copyright 2021 Google LLC.
 + */
 +
 +/dts-v1/;
 +
-+#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
-+#include "sc7180-trogdor-pazquel.dtsi"
++#include "sc7180-trogdor-parade-ps8640.dtsi"
++#include "sc7180-trogdor-kingoftown.dtsi"
 +
 +/ {
-+	model = "Google Pazquel (TI)";
-+	compatible = "google,pazquel-sku1", "qcom,sc7180";
++	model = "Google Kingoftown (rev1+)";
++	compatible = "google,kingoftown", "qcom,sc7180";
 +};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi
 new file mode 100644
-index 000000000000..5e4731b24d34
+index 000000000000..2268f3e7b5f2
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
-@@ -0,0 +1,221 @@
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi
+@@ -0,0 +1,224 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Google Pazquel board device tree source
++ * Google Kingoftown board device tree source
 + *
 + * Copyright 2021 Google LLC.
 + */
 +
 +#include "sc7180-trogdor.dtsi"
++#include "sc7180-trogdor-lte-sku.dtsi"
 +
-+&ap_sar_sensor {
-+	compatible = "semtech,sx9324";
-+	semtech,ph0-pin = <1 3 3>;
-+	semtech,ph1-pin = <3 1 3>;
-+	semtech,ph2-pin = <1 3 3>;
-+	semtech,ph3-pin = <0 0 0>;
-+	semtech,ph01-resolution = <1024>;
-+	semtech,ph23-resolution = <1024>;
-+	semtech,startup-sensor = <1>;
-+	semtech,ph01-proxraw-strength = <3>;
-+	semtech,ph23-proxraw-strength = <1>;
-+	semtech,avg-pos-strength = <128>;
-+	semtech,input-analog-gain = <0>;
-+	semtech,cs-idle-sleep = "gnd";
-+
-+	/delete-property/ svdd-supply;
-+	vdd-supply = <&pp1800_prox>;
++&alc5682 {
++	compatible = "realtek,rt5682s";
++	realtek,dmic1-clk-pin = <2>;
++	realtek,dmic-clk-rate-hz = <2048000>;
 +};
 +
-+/delete-node/&trackpad;
 +&ap_tp_i2c {
 +	status = "okay";
-+	trackpad: trackpad@15 {
-+		compatible = "hid-over-i2c";
-+		reg = <0x15>;
++};
++
++ap_ts_pen_1v8: &i2c4 {
++	status = "okay";
++	clock-frequency = <400000>;
++
++	ap_ts: touchscreen@10 {
++		compatible = "elan,ekth3500";
++		reg = <0x10>;
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&tp_int_odl>;
++		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
 +
 +		interrupt-parent = <&tlmm>;
-+		interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
++		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
 +
-+		vcc-supply = <&pp3300_fp_tp>;
-+		post-power-on-delay-ms = <100>;
-+		hid-descr-addr = <0x0001>;
++		vcc33-supply = <&pp3300_ts>;
 +
-+		wakeup-source;
++		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
 +	};
 +};
 +
 +&keyboard_controller {
 +	function-row-physmap = <
-+		MATRIX_KEY(0x00, 0x02, 0)	/* T1 */
-+		MATRIX_KEY(0x03, 0x02, 0)	/* T2 */
-+		MATRIX_KEY(0x02, 0x02, 0)	/* T3 */
-+		MATRIX_KEY(0x01, 0x02, 0)	/* T4 */
-+		MATRIX_KEY(0x03, 0x04, 0)	/* T5 */
-+		MATRIX_KEY(0x02, 0x04, 0)	/* T6 */
-+		MATRIX_KEY(0x01, 0x04, 0)	/* T7 */
-+		MATRIX_KEY(0x02, 0x09, 0)	/* T8 */
-+		MATRIX_KEY(0x01, 0x09, 0)	/* T9 */
-+		MATRIX_KEY(0x00, 0x04, 0)	/* T10 */
++		MATRIX_KEY(0x00, 0x02, 0)       /* T1 */
++		MATRIX_KEY(0x03, 0x02, 0)       /* T2 */
++		MATRIX_KEY(0x02, 0x02, 0)       /* T3 */
++		MATRIX_KEY(0x01, 0x02, 0)       /* T4 */
++		MATRIX_KEY(0x03, 0x04, 0)       /* T5 */
++		MATRIX_KEY(0x02, 0x04, 0)       /* T6 */
++		MATRIX_KEY(0x01, 0x04, 0)       /* T7 */
++		MATRIX_KEY(0x02, 0x09, 0)       /* T8 */
++		MATRIX_KEY(0x01, 0x09, 0)       /* T9 */
++		MATRIX_KEY(0x00, 0x04, 0)       /* T10 */
 +	>;
 +	linux,keymap = <
 +		MATRIX_KEY(0x00, 0x02, KEY_BACK)
@@ -309,6 +262,7 @@ index 000000000000..5e4731b24d34
 +		MATRIX_KEY(0x02, 0x09, KEY_MUTE)
 +		MATRIX_KEY(0x01, 0x09, KEY_VOLUMEDOWN)
 +		MATRIX_KEY(0x00, 0x04, KEY_VOLUMEUP)
++
 +		CROS_STD_MAIN_KEYMAP
 +	>;
 +};
@@ -320,6 +274,17 @@ index 000000000000..5e4731b24d34
 +&pp3300_dx_edp {
 +	gpio = <&tlmm 67 GPIO_ACTIVE_HIGH>;
 +};
++
++&sound {
++	compatible = "google,sc7180-trogdor";
++	model = "sc7180-rt5682s-max98357a-1mic";
++};
++
++&wifi {
++	qcom,ath10k-calibration-variant = "GO_KINGOFTOWN";
++};
++
++/* PINCTRL - modifications to sc7180-trogdor.dtsi */
 +
 +&en_pp3300_dx_edp {
 +	pinmux {
@@ -334,7 +299,7 @@ index 000000000000..5e4731b24d34
 +/* PINCTRL - board-specific pinctrl */
 +
 +&tlmm {
-+	gpio-line-names = "TP_INT_ODL",
++	gpio-line-names = "TP_INT_L",		/* 0 */
 +			  "AP_RAM_ID0",
 +			  "AP_SKU_ID2",
 +			  "AP_RAM_ID1",
@@ -344,7 +309,7 @@ index 000000000000..5e4731b24d34
 +			  "AP_TP_I2C_SCL",
 +			  "TS_RESET_L",
 +			  "TS_INT_L",
-+			  "",
++			  "",			/* 10 */
 +			  "EDP_BRIJ_IRQ",
 +			  "AP_EDP_BKLTEN",
 +			  "",
@@ -354,17 +319,17 @@ index 000000000000..5e4731b24d34
 +			  "HUB_RST_L",
 +			  "",
 +			  "",
-+			  "",
++			  "",			/* 20 */
 +			  "",
 +			  "",
 +			  "AMP_EN",
-+			  "P_SENSOR_INT_L",
-+			  "AP_SAR_SENSOR_SDA",
-+			  "AP_SAR_SENSOR_SCL",
++			  "",
++			  "",
++			  "",
 +			  "",
 +			  "HP_IRQ",
 +			  "",
-+			  "",
++			  "",			/* 30 */
 +			  "AP_BRD_ID2",
 +			  "BRIJ_SUSPEND",
 +			  "AP_BRD_ID0",
@@ -372,10 +337,10 @@ index 000000000000..5e4731b24d34
 +			  "AP_H1_SPI_MOSI",
 +			  "AP_H1_SPI_CLK",
 +			  "AP_H1_SPI_CS_L",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
++			  "BT_UART_CTS",
++			  "BT_UART_RTS",
++			  "BT_UART_TXD",	/* 40 */
++			  "BT_UART_RXD",
 +			  "H1_AP_INT_ODL",
 +			  "",
 +			  "UART_AP_TX_DBG_RX",
@@ -384,7 +349,7 @@ index 000000000000..5e4731b24d34
 +			  "HP_I2C_SCL",
 +			  "FORCED_USB_BOOT",
 +			  "AMP_BCLK",
-+			  "AMP_LRCLK",
++			  "AMP_LRCLK",		/* 50 */
 +			  "AMP_DIN",
 +			  "",
 +			  "HP_BCLK",
@@ -394,7 +359,7 @@ index 000000000000..5e4731b24d34
 +			  "HP_MCLK",
 +			  "AP_SKU_ID0",
 +			  "AP_EC_SPI_MISO",
-+			  "AP_EC_SPI_MOSI",
++			  "AP_EC_SPI_MOSI",	/* 60 */
 +			  "AP_EC_SPI_CLK",
 +			  "AP_EC_SPI_CS_L",
 +			  "AP_SPI_CLK",
@@ -408,17 +373,17 @@ index 000000000000..5e4731b24d34
 +			  "EN_PP3300_DX_EDP",
 +			  "AP_SPI_CS0_L",
 +			  "",
++			  "",			/* 70 */
 +			  "",
 +			  "",
 +			  "",
-+			  "",
-+			  "",
++			  "EN_FP_RAILS",
 +			  "UIM2_DATA",
 +			  "UIM2_CLK",
 +			  "UIM2_RST",
-+			  "UIM2_PRESENT",
++			  "UIM2_PRESENT_L",
 +			  "UIM1_DATA",
-+			  "UIM1_CLK",
++			  "UIM1_CLK",		/* 80 */
 +			  "UIM1_RST",
 +			  "",
 +			  "CODEC_PWR_EN",
@@ -428,7 +393,7 @@ index 000000000000..5e4731b24d34
 +			  "",
 +			  "",
 +			  "",
-+			  "AP_SKU_ID1",
++			  "AP_SKU_ID1",		/* 90 */
 +			  "AP_RST_REQ",
 +			  "",
 +			  "AP_BRD_ID1",
@@ -438,7 +403,7 @@ index 000000000000..5e4731b24d34
 +			  "",
 +			  "",
 +			  "",
-+			  "",
++			  "",			/* 100 */
 +			  "",
 +			  "",
 +			  "",
@@ -448,7 +413,7 @@ index 000000000000..5e4731b24d34
 +			  "",
 +			  "",
 +			  "",
-+			  "",
++			  "",			/* 110 */
 +			  "",
 +			  "",
 +			  "",

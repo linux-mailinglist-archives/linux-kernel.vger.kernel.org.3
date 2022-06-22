@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58047554CAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01A2554CB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358261AbiFVOSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S1358138AbiFVOTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358083AbiFVOSI (ORCPT
+        with ESMTP id S1358078AbiFVOST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:18:08 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3171B3C706;
-        Wed, 22 Jun 2022 07:17:28 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id u12so34557196eja.8;
-        Wed, 22 Jun 2022 07:17:28 -0700 (PDT)
+        Wed, 22 Jun 2022 10:18:19 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052622E08D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:18:07 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id ej4so20177641edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=kdeSlF5fWHZ3xXKBzKY62W+xebc6UMKioDmTRwyUM5I=;
-        b=a3an+DWnKpt2DOtE2474+dpyWuKuuqp8cZVdW/LNxjfmHudnzTYBQ5HGDjGCVHI6TK
-         0YV0twS6tEDlqOqIbncsXYNFrMZheYXU4f45+TlMmfeFRtipFBJYAYol6gd35vXM8nm8
-         21/TujgU7Bj63LzBSs/dwhtQvHlL2M4DHxSYsb7KjZ7DHD1uzVd5W8oG2CjyrrC4H6zK
-         ZTkfw06DnQzzHhjH8Jo2zsf4rdcxpeHiMWlUbV0EVoxy112jL3kXMCHfFpAg6cax4NN0
-         hlSZD8qc3NZfXs4/WV6vDg3bVSM1M5wUUL0THtu1GlnTBt8EHGQaDMMVy72ur6G1utWo
-         AnEg==
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QpQTfmUdTKRwCxGO0jA6r2xEp5W5muPwnPlhJzJ0An0=;
+        b=dWh7HnH44d6vuZ9fE3bmvUBY+wqWvGgEldwna09o9kMdOqXGZR7QTIOXWzbrJHdF1v
+         PWWrDEImTU83EjU1LWrVrGUNUOubeN6hWfl9Ek6ajCRD7JPySgbc6ZtuvjSmPhzn3D89
+         Cx1jS3ylPu+HP4oANS+zl96/xRdCQYNvMOkGGdBULipg2i9Kw2XZO+UbAi/OyjcPAsdl
+         exUaY7vlwEiWaOV9k39YAx2Kx5uov/wuAHFtshWPXcn8rKOskc9640JMYt8fO7+SJCUZ
+         4xdjCciJQfh5YUCCCOZHXCZAEDrkv4khuhjMIT5HyU8tSQImE6wmTPthrBMqEHXT5wIk
+         dyqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=kdeSlF5fWHZ3xXKBzKY62W+xebc6UMKioDmTRwyUM5I=;
-        b=cuLrnSirt8dGrtciiW0aZSULLKY3KhhQ3g+YxGFLnECMJUhpE8B0Q/1yGTOorEmiiP
-         J11W4NaY50htP2o72zbZcWecaao1c9gwdCx7JPU6Ep5dVBVRBq3V4BnDxouXbUbNNboD
-         gv1bal/1GqIkDWSVSEFV+PfzgGRSkfwjopMJIUXsmWAgdZuq4SxeIuKvFtmGDy2CZ0vL
-         nYcpk2chOraK+hGlpxr16YD6ynX/qQTirQRh2d62tYxsrab1MTgZ+uhdWeRi3Rbij305
-         gomfa0pfsYFdAG5pD9jKPbHHUEK5V9c1HpG9dZn+jlu+6xOcUJ8jmzKwCrzhKkiSPYAB
-         Semw==
-X-Gm-Message-State: AJIora9msSMzmKbYoPlkXzlCxBRDa5SU7uJVTsxcg98bKdFfJLQe9Qd0
-        db+cc8r4VD1RpCd5eulIFvE=
-X-Google-Smtp-Source: AGRyM1tzJAEA91jxTi42bg0jzLDgIiPpJr86EGq+c8M1jJUUBWaaiyXJ/8e9nNQgCTcL9ByigtTVdw==
-X-Received: by 2002:a17:907:1c07:b0:711:c966:f02e with SMTP id nc7-20020a1709071c0700b00711c966f02emr3441603ejc.221.1655907446732;
-        Wed, 22 Jun 2022 07:17:26 -0700 (PDT)
-Received: from [192.168.0.16] ([37.223.148.38])
-        by smtp.gmail.com with ESMTPSA id lb13-20020a170907784d00b006fe9ec4ba9esm9419558ejc.52.2022.06.22.07.17.25
+        bh=QpQTfmUdTKRwCxGO0jA6r2xEp5W5muPwnPlhJzJ0An0=;
+        b=ojEDu1+EQQ1+0axZL9Vmc3f1GhrmMAHupd+bSx6ezt0bVpRLi+3jVZ5v6xHYB0IqI2
+         C+rha1us2Stl0HFAN/364ZJSA8Oh3acBsZSUrlGdXRShwDZBkfyR5BYW75LB4ClT3k5c
+         wUrcgOmTpQgQOSyinR5ZrFwiRJRK2kt8wjZGUe0rAQrt1qZQq7eECAxPl4UNcAFrnaj2
+         UV+qJAVCWncZ0aukrbUjqNZ857URqHpyeWSPBQ/trohHbj42pUalr3sIhOJzOBJ6sxEf
+         D9CMUhVTioRks16tcN2Dpfej81rDDUgAhEBgU0ciHKY3Y/mz3zuDhV0vsb7ZykN+kOEZ
+         48Cw==
+X-Gm-Message-State: AJIora/b1L9Q9zFIA6+76AnqPrphsV3LB601bBNd9puXYA31ESMTaiLU
+        njpMiQa9Res23E6pGUptig3jYQ==
+X-Google-Smtp-Source: AGRyM1tST5OqWHL1DDARx8o3mZQ7lpDnQqQ2k2nLeZV0MIDXdudnJDntwx5CLU+YY2PCyKCdurKKAQ==
+X-Received: by 2002:a05:6402:1f0a:b0:435:6e0a:7aba with SMTP id b10-20020a0564021f0a00b004356e0a7abamr4513357edb.318.1655907485535;
+        Wed, 22 Jun 2022 07:18:05 -0700 (PDT)
+Received: from [192.168.0.225] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id nb36-20020a1709071ca400b0070beb9401d9sm9615013ejc.171.2022.06.22.07.18.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 07:17:25 -0700 (PDT)
-Message-ID: <ec6b910e-01fd-94ef-945c-31d48b2d47f7@gmail.com>
-Date:   Wed, 22 Jun 2022 16:17:24 +0200
+        Wed, 22 Jun 2022 07:18:05 -0700 (PDT)
+Message-ID: <2fd94a25-0d0e-98d2-a06e-b0439f4d31be@linaro.org>
+Date:   Wed, 22 Jun 2022 16:18:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] arm64: dts: mediatek: mt7622-rfb1: remove wrong gpio-keys
- property
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad X13s
+ devicetree
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220617232124.7022-1-krzysztof.kozlowski@linaro.org>
- <834af774-ecdd-1929-86eb-6a814c5d774c@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <834af774-ecdd-1929-86eb-6a814c5d774c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <YrMVqifgV4kZaP7F@hovoldconsulting.com>
+ <20220622132617.24604-1-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220622132617.24604-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/06/2022 01:22, Krzysztof Kozlowski wrote:
-> On 17/06/2022 16:21, Krzysztof Kozlowski wrote:
->> gpio-keys (regular, not polling) does not use "poll-interval" property.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Changes since v3:
->> 1. Correct commit msg (Matthias)
->> ---
+On 22/06/2022 15:26, Johan Hovold wrote:
+> Add an initial devicetree for the Lenovo Thinkpad X13s with support for
+> USB, backlight, keyboard, touchpad, touchscreen (to be verified), PMICs
+> and remoteprocs.
 > 
-> Eh, jetlag hurts the brain. This should be [PATCH v4] in the subject.
-
-No worries, applied now. Thanks!
-
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
 > 
+> Changes since v2
+>  - Amend commit message
+>  - Drop unused include files (depends on updating sc8280xp-pmics.dtsi)
+>  - Rename fixed-regulator nodes
+>  - Shorten two comments
+>  - Drop a couple of newline separators in the pinctrl nodes
 > 
-> Best regards,
-> Krzysztof
+> Changs since v1:
+>  - New patch
+> 
+
+For the v3:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

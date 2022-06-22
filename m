@@ -2,116 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD3F55533E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929ED55534A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377088AbiFVSVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 14:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S1359157AbiFVSbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 14:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357635AbiFVSVa (ORCPT
+        with ESMTP id S1359813AbiFVSbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 14:21:30 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2143F627F;
-        Wed, 22 Jun 2022 11:21:30 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-317a66d62dfso110611167b3.7;
-        Wed, 22 Jun 2022 11:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kDAGZ5oaKET8ZY2scbsG21nVOzoPsTcGCkjRzgJZ53w=;
-        b=g9RCLBn7M8sBhhxv+amPLgoKXSDAQxKxCS22mkJsoJPriQ8MAhDweFUOzj+UCG1tLO
-         Oij8eI9qnAKwdFhn6uuPvzxUowjKLHuFdX3fAo7toE9+skrseObn2kRitlH/bHExhfOJ
-         nCej3PwXX4uS3BqloNnaxhlfRlCA6M5d9256AGoQVcZovl1g497aY/eU8J50OqfBlMVD
-         OCLmk6tX/zN8ANxjyj7y65ueWomtF1hsFe+8wUPg20suESZhmOkbiW7Qr0Hpn1rSDFM4
-         J8p3173pf/mBLbouPej8bGIdilyBBMFZmGElHDXH7YvcQ0uaFtD1VH04EcL3Bq8LY/DJ
-         h0Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kDAGZ5oaKET8ZY2scbsG21nVOzoPsTcGCkjRzgJZ53w=;
-        b=QeklCNYfbpa1SoSqw9jWtapLt66GaF8eass3lUHHLb6E3vw5wSNCe/ByBTG10wumzY
-         bV9qXehvcAs88oRD76w8Z4nejQjH252i7l8YNQnItpEBz1iSVm+XHpBkPy+zjZ77HVl7
-         DXlluNN7V3+bKbndvHMeR0H3pkYi1dxGdn4F6qSJTKJgpDTLJnKiQJY48zPxXQo7VVH9
-         NDwM5aDbgWRaBjmkGAs2oj+asX4AJPZwBS7acT4EDvLBSXJN5tRfEb2MEi9qWdmTCm6Y
-         d9wh/HAmlxbdSWC+46m1RukFB9AaYmRIGB2lOmCQ6JuxBn53DvJsCcHwHuiUQTlejyI9
-         9kgQ==
-X-Gm-Message-State: AJIora8Q0zExir4yOXXeEUL+812FOfu1ZrqPn5CYhQOHm+vR6LvthF3f
-        zGrJbn09jeHMV02wLEPS02ppv+HQmAB7Wp4RB5l/5VZEnEzNsPDW
-X-Google-Smtp-Source: AGRyM1tKGzFOHd28RGEedRsQr5Lj83Cx4CBMX1UnkuPCCnPoFsqePRP/XsocC4DX7VQ7mdnrHUMhl+f2KRI1DfldF7Y=
-X-Received: by 2002:a05:690c:58d:b0:317:dd62:f6d9 with SMTP id
- bo13-20020a05690c058d00b00317dd62f6d9mr6030982ywb.78.1655922089325; Wed, 22
- Jun 2022 11:21:29 -0700 (PDT)
+        Wed, 22 Jun 2022 14:31:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6EA3B01C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 11:31:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB4D761CFE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:31:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8979C3411D;
+        Wed, 22 Jun 2022 18:31:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655922684;
+        bh=pzH6hj8j/kFXqthSTB8eJImhhYfeX2wo3uou69fArlQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rv6ljAbirYNV2k94rRc26evmnqJIAnJNJoycxA2L5Zlo6narzRjbeOpTv7A/X6xtm
+         2uFz59QZjmIouAN8kTlT5RfGOJPj5fQc7W+ex6kezvH47KK0x1VCCUuxONAe1oX0TL
+         n/VRBNrevI6g0knfHIHWLJG85wKFjpYNs03TEu/r8lNrH+GRb/BJt8UXiQe6OixWiv
+         JHL4eFjKpgDlgyOTge3E6tgbkkS0pcaSQ4jpn9SO1XJCmrS4ibrZ0dBB7Ttm03iXwZ
+         LpZqG5LGlsWQRAKro3Ci9c+Uk0KNeKSJ/vOGW1LqxQ/jaKRHHr0JLl6dsRAppxyZmy
+         3xsg7mKkNAOdA==
+Date:   Wed, 22 Jun 2022 11:31:22 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     qixiaoyu1 <qxy65535@gmail.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, liuchao12@xiaomi.com,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>
+Subject: Re: [PATCH v3 2/2] resize.f2fs: update man page for options -i, -s
+ and -V
+Message-ID: <YrNf+lVYFrlenL7L@google.com>
+References: <5627a654-d605-6840-a133-e583c804aadd@kernel.org>
+ <20220620115629.9169-1-qixiaoyu1@xiaomi.com>
+ <20220620115629.9169-2-qixiaoyu1@xiaomi.com>
+ <b4861302-a4bc-9022-c1b3-084f16d8ee87@kernel.org>
 MIME-Version: 1.0
-References: <20220622173614.12778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220622173614.12778-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdWbQ1VHH4ugQs2mamS2KGEj5AdWmNtmg=6eUJmyGRDTVw@mail.gmail.com>
-In-Reply-To: <CAMuHMdWbQ1VHH4ugQs2mamS2KGEj5AdWmNtmg=6eUJmyGRDTVw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 22 Jun 2022 19:21:03 +0100
-Message-ID: <CA+V-a8vDem8=QaSdJr5mjHC+qbGmUtTBWEsf9T8njMZMT3BGJw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mmc: renesas_sdhi: Fix typo's
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pavel Machek <pavel@denx.de>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4861302-a4bc-9022-c1b3-084f16d8ee87@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+Thanks, I combined two patches into one.
 
-Thank you for the review.
-
-On Wed, Jun 22, 2022 at 7:11 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Wed, Jun 22, 2022 at 7:36 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Fix typo's,
-> > * difference -> different
-> > * alignment -> aligned
-> >
-> > While at it replaced 128-bytes -> 128 byte.
-> >
-> > Reported-by: Pavel Machek <pavel@denx.de>
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> > --- a/drivers/mmc/host/renesas_sdhi_internal_dmac.c
-> > +++ b/drivers/mmc/host/renesas_sdhi_internal_dmac.c
-> > @@ -355,7 +355,7 @@ renesas_sdhi_internal_dmac_map(struct tmio_mmc_host *host,
-> >
-> >         data->host_cookie = cookie;
-> >
-> > -       /* This DMAC cannot handle if buffer is not 128-bytes alignment */
-> > +       /* This DMAC cannot handle if buffer is not 128 byte aligned */
->
-> 128-byte? ;-)
->
-In the previous version of the patch Wolfram never came back on your
-reply, so I went with 128 byte instead.
-
-Cheers,
-Prabhakar
+On 06/22, Chao Yu wrote:
+> On 2022/6/20 19:56, qixiaoyu1 wrote:
+> > Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+> 
+> Reviewed-by: Chao Yu <chao@kernel.org>
+> 
+> Thanks,

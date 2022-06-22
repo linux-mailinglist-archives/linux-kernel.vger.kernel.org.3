@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8567F55493F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8371554697
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353167AbiFVL0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S1356954AbiFVL2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiFVL0j (ORCPT
+        with ESMTP id S1351464AbiFVL2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:26:39 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2920E2FFD4;
-        Wed, 22 Jun 2022 04:26:39 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3178acf2a92so125422537b3.6;
-        Wed, 22 Jun 2022 04:26:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lE9iqImghkiie75m0MiePRNUMGYeC1JJZ9fd+mwV2eU=;
-        b=oRd0dhizUxQ7zXUoY+9xztduJJJvPkhBCikG31zcKq4CJUc0kKtAlrKySPxd65Xv4t
-         Qacgq4rTqnBrRA2tr2nAm3bUOuk324eTLtq2wUSYUqT3mezh4RJdqIxSapIDYfO1rz0w
-         qGD2mfL/RbmX9I+YB6hbeIqOlFerfvQ2HJbh5zyMAJFB0KbUZgV632bcQSXxJK7ylnMd
-         cB/YMU3lhy3TQCzTw+mX/3gO4ugcVf2zsNNiJVBSoVFdTXTBN13kZrnvZ+pVfAe4mg3l
-         Spo3n0JQhFgi9vek23AoQGwu+C2Xn+bu4Ajw0AvTFLrj/yJscu1zd17QjPpiU+d6ivYm
-         hQMQ==
-X-Gm-Message-State: AJIora8/ldkxX9EbkcLWYOTyMPLvokZR2VdaNO6LfI4d2s1Lb1roMsG7
-        evLCFYpuk7ZUwRsFOapfKQnBfHuM18gzarCW82gNOhoJ
-X-Google-Smtp-Source: AGRyM1vVLe1jPc5wb5TYX403fUEVdAJoGmjvIdslyb0ARdVTHi/6tJahc7rdCC2tMFf1CMQQOs8BG6gIuH5yfdgaw/M=
-X-Received: by 2002:a81:6c06:0:b0:317:94ff:d1a with SMTP id
- h6-20020a816c06000000b0031794ff0d1amr3552102ywc.515.1655897198330; Wed, 22
- Jun 2022 04:26:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621150436.3303431-1-sudeep.holla@arm.com> <CAHp75VfX7ZbK67WhRjuw-s0VF5QZk+dvYEYrN+Kw1ucXofN=yg@mail.gmail.com>
-In-Reply-To: <CAHp75VfX7ZbK67WhRjuw-s0VF5QZk+dvYEYrN+Kw1ucXofN=yg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Jun 2022 13:26:27 +0200
-Message-ID: <CAJZ5v0jY2ugfw_NVR+hbT4Nc1a7p129hz9yVu1=f-Zyrqv8-8Q@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: ACPI: Update links and references to DSD
- related docs
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 07:28:10 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E2CE6F;
+        Wed, 22 Jun 2022 04:27:54 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1655897202tx041d9n
+Received: from ubuntu.localdomain ( [223.104.103.173])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 19:26:36 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000B00A0000000
+X-QQ-FEAT: ZHWZeLXy+8dQ4P92o0vLTgxDkCcPa7CHSCaLCem5mT2Di0F36ZMXLTE5DMC70
+        SZ8lsdJxYyZsvHQEDeQOOb0YqqoPPPl6oAZMaYYYcQROaFPjJg2emikD3xHrOQl+1ubFE91
+        j7HZmiLUGcy83SnoJZ7FcCcW+IAR696512fNC/0tKfqQ7mv3bD+E0wDFdghKsZcNRqfaOKB
+        +1fnjl9+qjDciaeO5kV9WspjMLH69CvZg4anZpfOem2wMgxh8sg6e3B5Ov+1mGFlhiVTcKa
+        q7M3jQfRNwallc4cRSVXAjMYW2aDPMSCeRZjuMSEeAhrlhwMB4809KGrQnZZ+bBZ6CyuLQ5
+        v6d13jF+NbAmkVbVoA3SojUfP8iIW7v8nEO8bvN
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] scsi: lpfc: fix typos in the comments.
+Date:   Wed, 22 Jun 2022 19:26:34 +0800
+Message-Id: <20220622112634.12313-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 12:42 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jun 21, 2022 at 5:12 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > The existing references to DSD are stale and outdated. The new process
-> > and guidance is maintained @https://github.com/UEFI/DSD-Guide
-> >
-> > Update the existing documents to reflect the same.
->
-> Hmm... On one hand I like the change, on the other the mentioned
-> repository doesn't look like it is officially supported by ASWG (or
-> did I misread something?). If I'm not mistaken, then I would rather
-> see both mentioned. Otherwise it looks good, thanks!
+Changed unexpected word 'the' to 'that' for more understandable.
 
-The new project officially replaces the "legacy" documentation hosted
-on the UEFI Forum web site.
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index fb36f26170e4..e70fae75ff03 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -2453,7 +2453,7 @@ static void lpfc_sli4_fcf_pri_list_del(struct lpfc_hba *phba,
+  * @phba: pointer to lpfc hba data structure.
+  * @fcf_index: the index of the fcf record to update
+  * This routine acquires the hbalock and then set the LPFC_FCF_FLOGI_FAILED
+- * flag so the the round robin slection for the particular priority level
++ * flag so that the round robin slection for the particular priority level
+  * will try a different fcf record that does not have this bit set.
+  * If the fcf record is re-read for any reason this flag is cleared brfore
+  * adding it to the priority list.
+-- 
+2.17.1
+

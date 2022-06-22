@@ -2,132 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1485543CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A293855445E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352758AbiFVHZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S1353096AbiFVHZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242604AbiFVHZm (ORCPT
+        with ESMTP id S1353071AbiFVHZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:25:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8213937009
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655882741; x=1687418741;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8fyiOEj6UXqgECBF8WA2TpvzXotNKsxOEFLSCQo4M8I=;
-  b=M59hpnol7i9/iLSXhreD3BuI2Q65liZMkyKxH90nVhJjgqG0eqq0FNOw
-   9O5dNXtrZiDuhZtFF2UeIW8oGByXjw25w16wEtygB7h5jHHR+J0T4cIp1
-   f6u31E3F6eyzkDCVnIDMHOIYia3kTqoKx6A5CYykzhd74/tCQOS065+nN
-   nBFtYw/HDkKHnIo/NjMbPFHXsV4T2XAnNK+4iXFvq55NTPtOPcuP3YvqW
-   I0lyGPBALVkzaVdeyHnuU0/gzBVLyQ78BP3UCxjDWCZF4k2/rdOGPfzOI
-   uKauJ9DHlstDtAOcx1gGgRhUgibE+iFcQoUawU8nnXgDwrh/XmX4nH7ih
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281071382"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="281071382"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 00:25:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="655519227"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Jun 2022 00:25:37 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3uk5-0000zR-6F;
-        Wed, 22 Jun 2022 07:25:37 +0000
-Date:   Wed, 22 Jun 2022 15:24:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [alobakin:bitops 7/8] include/linux/bitmap.h:447:22: warning:
- 'possible_idx[0]' is used uninitialized
-Message-ID: <202206221502.VUxmhVnV-lkp@intel.com>
+        Wed, 22 Jun 2022 03:25:01 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458F937012
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:24:57 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id j22so11627113ljg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YoxQ8bxKC0+9JiwXWf9XJ6/TU9qeci3gtMH9RdtmUOM=;
+        b=FVZppPq+HgRatwdw9mBhIyBcCuKYUO7KIg3b6WyzTtn+ieiK8qj+2cBHNMpm800a2U
+         SEw7Klt8bH3yx2pmX/BSp14akymYv4+pjfBJfk95Lojo3KD/vLL1QpRJ7bawo/okeOuc
+         HmVl6T87jKVCEdIyvTNTGl4wqdEgJsco7NxmDtpihocUGddJ1z9Z/HwJQLsrMYKqX1Ge
+         saeBBv6O30zdfGt+Dd+YXYjsJrvT4/7fbtSFwGFrcPWGc9LVhjc8Zm4EtGcetyMdJ4Ge
+         VOGV00WKkCRLVUExu3eXS4B257gR1+LxMorxZWsse67I3eByQH1lMR+j3WU4vf/jhpma
+         mDjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YoxQ8bxKC0+9JiwXWf9XJ6/TU9qeci3gtMH9RdtmUOM=;
+        b=Y0H1UDNBburYazc5GayYaCqfbnZNgyvrCx8Lz2MXSUVCBKHvJV6FHW1e44KVmTyjSS
+         c6ywZbf0iyJ60p2LdFCsvUfO4EiJKShDmPdr/hs73Wg+hHtn4cZb30fihNOTzcyB4WAx
+         oITIl4UpepkgPiEEXpCa2hz50qSk1reUSEQyzgme48XffeHuNLZYOvEN3jkH5XXGfzsV
+         IdzHXhjrD/AASXUGoUyGo1ICMqEDwF2n0Wr68PKr5ns7o1naYdsQWh2PQcHvB6ycFP5V
+         MnVOUtQbKilbE/Ulw+/4W09YWbr6+HmH2gmLjznR0CMVsQ8dtBE8SUfBOjAzaE5H3BfY
+         Kwjw==
+X-Gm-Message-State: AJIora97GsMb5P215BZM0FZZoDirBjMvIkSG11p2Ghxstnm6iwQn+d0f
+        jggC81JcUDv0BN1+0O9/fnzYBbD1vJRQM/3c
+X-Google-Smtp-Source: AGRyM1tJbMHkXYq5UeLE2gCpcSsVO14ibqDJLnV2+fNPbMOaQD6RYhO/nsbxzZgK41uH0WPuqTjCBg==
+X-Received: by 2002:a2e:8e94:0:b0:25a:83fd:eeec with SMTP id z20-20020a2e8e94000000b0025a83fdeeecmr1087524ljk.493.1655882695577;
+        Wed, 22 Jun 2022 00:24:55 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u9-20020a199209000000b0047da6e495b1sm2449615lfd.4.2022.06.22.00.24.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 00:24:55 -0700 (PDT)
+Message-ID: <48d83380-edb1-ad61-3878-5fa3ac3e5169@linaro.org>
+Date:   Wed, 22 Jun 2022 10:24:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/3] drm/msm/dp: Remove pixel_rate from struct dp_ctrl
+Content-Language: en-GB
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+References: <20220617204750.2347797-1-swboyd@chromium.org>
+ <20220617204750.2347797-3-swboyd@chromium.org>
+ <bb98ca29-8752-6864-ddbd-19547fb6f73b@linaro.org>
+ <CAE-0n51_zysbkktVEfhvXtGqpADTWcaPBAX7A7rD1FV+vcK3Uw@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAE-0n51_zysbkktVEfhvXtGqpADTWcaPBAX7A7rD1FV+vcK3Uw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alobakin/linux bitops
-head:   53dc46e3f72d9b77c9c4ec23a3261d452b3bd67a
-commit: 37c8723a2d98c5edce8fb5e9c2e7b8e2d9b4291c [7/8] bitmap: don't assume compiler evaluates small mem*() builtins calls
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220622/202206221502.VUxmhVnV-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/alobakin/linux/commit/37c8723a2d98c5edce8fb5e9c2e7b8e2d9b4291c
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin bitops
-        git checkout 37c8723a2d98c5edce8fb5e9c2e7b8e2d9b4291c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/intel/ice/
+On 22/06/2022 05:59, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2022-06-17 16:07:58)
+>> On 17/06/2022 23:47, Stephen Boyd wrote:
+>>> This struct member is stored to in the function that calls the function
+>>> which uses it. That's possible with a function argument instead of
+>>> storing to a struct member. Pass the pixel_rate as an argument instead
+>>> to simplify the code. Note that dp_ctrl_link_maintenance() was storing
+>>> the pixel_rate but never using it so we just remove the assignment from
+>>> there.
+>>>
+>>> Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>>> ---
+>>>    drivers/gpu/drm/msm/dp/dp_ctrl.c | 57 ++++++++++++++++----------------
+>>>    drivers/gpu/drm/msm/dp/dp_ctrl.h |  1 -
+>>>    2 files changed, 28 insertions(+), 30 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>> index bd445e683cfc..e114521af2e9 100644
+>>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>>> @@ -1336,7 +1336,7 @@ static void dp_ctrl_set_clock_rate(struct dp_ctrl_private *ctrl,
+>>>                                name, rate);
+>>>    }
+>>>
+>>> -static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl)
+>>> +static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private *ctrl, unsigned long pixel_rate)
+>>
+>>
+>> I think we can read pixel_rate here rather than getting it as an
+>> argument. We'd need to move handling (DP_TEST_LINK_PHY_TEST_PATTERN &&
+>> !ctrl->panel->dp_mode.drm_mode.clock) case here from dp_ctrl_on_link().
+> 
+> This is also called from dp_ctrl_on_stream() and
+> dp_ctrl_reinitialize_mainlink(). In the dp_ctrl_on_stream() case we may
+> divide the pixel_rate by 2 with widebus. We could move the
+> dp_ctrl_on_link() code here, but then we also need to move widebus, and
+> then I'm not sure which pixel rate to use.
+> 
+> It looks like the test code doesn't care about widebus? And similarly,
+> we may run the pixel clk faster until we get a modeset and then divide
+> it for widebus.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Good question. I'll let Kuogee or somebody else from Qualcomm to comment 
+on test code vs widebus vs pixel rate, as I don't know these details.
 
-All warnings (new ones prefixed by >>):
+I'm not sure if we should halve the pixel clock in 
+dp_ctrl_on_stream_phy_test_report() or not if the widebus is supported.
+ From the current code I'd assume that we have to do this. Let's raise 
+this question in the corresponding patch discussion.
 
-   In file included from include/linux/cpumask.h:12,
-                    from arch/x86/include/asm/cpumask.h:5,
-                    from arch/x86/include/asm/msr.h:11,
-                    from arch/x86/include/asm/processor.h:22,
-                    from arch/x86/include/asm/timex.h:5,
-                    from include/linux/timex.h:67,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from drivers/net/ethernet/intel/ice/ice.h:10,
-                    from drivers/net/ethernet/intel/ice/ice_lib.h:7,
-                    from drivers/net/ethernet/intel/ice/ice_switch.c:4:
-   drivers/net/ethernet/intel/ice/ice_switch.c: In function 'ice_find_free_recp_res_idx.constprop':
->> include/linux/bitmap.h:447:22: warning: 'possible_idx[0]' is used uninitialized [-Wuninitialized]
-     447 |                 *map |= GENMASK(start + nbits - 1, start);
-         |                      ^~
-   In file included from drivers/net/ethernet/intel/ice/ice.h:7,
-                    from drivers/net/ethernet/intel/ice/ice_lib.h:7,
-                    from drivers/net/ethernet/intel/ice/ice_switch.c:4:
-   drivers/net/ethernet/intel/ice/ice_switch.c:4929:24: note: 'possible_idx[0]' was declared here
-    4929 |         DECLARE_BITMAP(possible_idx, ICE_MAX_FV_WORDS);
-         |                        ^~~~~~~~~~~~
-   include/linux/types.h:11:23: note: in definition of macro 'DECLARE_BITMAP'
-      11 |         unsigned long name[BITS_TO_LONGS(bits)]
-         |                       ^~~~
+> Is that why you're suggesting to check
+> !ctrl->panel->dp_mode.drm_mode.clock? I hesitate because it isn't a
+> direct conversion, instead it checks some other stashed struct member.
+> 
+> I'll also note that dp_ctrl_enable_mainlink_clocks() doesn't really use
+> this argument except to print the value in drm_dbg_dp(). Maybe we should
+> simply remove it from here instead?
 
+Yes, do it please.
 
-vim +447 include/linux/bitmap.h
+> 
+>>> @@ -1588,12 +1586,12 @@ static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
+>>>    {
+>>>        int ret;
+>>>        struct dp_ctrl_private *ctrl;
+>>> +     unsigned long pixel_rate;
+>>>
+>>>        ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>>>
+>>> -     ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+>>> -
+>>> -     ret = dp_ctrl_enable_stream_clocks(ctrl);
+>>> +     pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+>>> +     ret = dp_ctrl_enable_stream_clocks(ctrl, pixel_rate);
+>>
+>> I think we can take another step forward here. Read the
+>> ctrl->panel->dp_mode.drm_mode.clock from within the
+>> dp_ctrl_enable_stream_clocks() function. This removes the need to pass
+>> pixel_rate as an argument here.
+> 
+> This is also affected by widebus and if the function is called from
+> dp_ctrl_on_stream() or dp_ctrl_on_stream_phy_test_report(). Maybe it
+> would be better to inline dp_ctrl_enable_stream_clocks() to the
+> callsites? That would probably simplify things because the function is
+> mostly a wrapper around a couple functions.
 
-   440	
-   441	static __always_inline void bitmap_set(unsigned long *map, unsigned int start,
-   442			unsigned int nbits)
-   443	{
-   444		if (__builtin_constant_p(nbits) && nbits == 1)
-   445			__set_bit(start, map);
-   446		else if (small_const_nbits(start + nbits))
- > 447			*map |= GENMASK(start + nbits - 1, start);
-   448		else if (__builtin_constant_p(start & BITMAP_MEM_MASK) &&
-   449			 IS_ALIGNED(start, BITMAP_MEM_ALIGNMENT) &&
-   450			 __builtin_constant_p(nbits & BITMAP_MEM_MASK) &&
-   451			 IS_ALIGNED(nbits, BITMAP_MEM_ALIGNMENT))
-   452			memset((char *)map + start / 8, 0xff, nbits / 8);
-   453		else
-   454			__bitmap_set(map, start, nbits);
-   455	}
-   456	
+Yes, this sounds good. Then we can drop the drm_dbg_dp from it (as it 
+nearly duplicates the data that was just printed.
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With best wishes
+Dmitry

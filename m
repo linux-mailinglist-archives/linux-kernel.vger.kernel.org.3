@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FE1554686
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF94C5546B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbiFVLh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S1357719AbiFVLiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbiFVLhv (ORCPT
+        with ESMTP id S1354590AbiFVLhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:37:51 -0400
+        Wed, 22 Jun 2022 07:37:53 -0400
 Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B613B3FE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EAB3C733;
         Wed, 22 Jun 2022 04:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
         s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
@@ -21,26 +21,26 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=pGQX1JKxanPmqedEue8d2htEoS8AyrUnifwuz1TiUYY=; b=yZHHvO2gAsgUTeABTWjkXK6I86
-        uL+FGvQ8hCleHf04RcwKn7ew5zDDjJmRCs9J5/TI86enbi60883jwpFqmqBqgU2TYJ87OmG3t2Bqp
-        roIC5dtquTKQ8EKdLQZ0zNXcuyHrTDZg7pCNkj7D8PI16GOA2uQva+Qb5VRGNay/cGm+gxxJxD3Lx
-        dF0emDMIES3Nrdf/5IByChBhvP8xv1s6NKz6YRvVOgKXJ324RiNMmZK+cInTd3JI0fJCgn/lq+RKy
-        mxV9V/LtTKek37spbZDN8qxONg+BXxEi3BTkVZDhRCz5kLIxpiDXmZufS5QgVLirs3c3ewbPYqQeZ
-        WPYE2lXQ==;
+        bh=n5fftUEvkFxqEj5rq74Mb5X3DmU+ng2FZSz30Wp76JY=; b=RzyK1+BusDAc55RQOghHuS07Nu
+        5PpLu8Juu1OK292BjpLuADIO359VRqiUa6bwNHJmDlpyBVS0d9wiKqPpnDdhE4E91QyTjgrQuXpzS
+        uFPbJxFdIbEX1sWP0L3VA2lnO6wKweQpEJCSmnlRm32t4CXAldiOqUCeq/mNikL5pcERE7PE7J1M2
+        YrQM7aKV+tzuLcXD6ygK0w+GUGdDRsLzrKndHe5CbpQs374qeSzYoaT1k4wu4dMjqkBfHWXBZmmSE
+        eNJK7fSkVu/CHaF2oJbHCI8mQBVxN9dtiVrdQX/V3lYNDassERwnwZgcMXWKJ8XUEz9sqLoI0foZ1
+        n+Ov1OXA==;
 Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
         by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <cyndis@kapsi.fi>)
-        id 1o3yg4-0001Xl-9t; Wed, 22 Jun 2022 14:37:43 +0300
+        id 1o3yg4-0001Xl-CJ; Wed, 22 Jun 2022 14:37:43 +0300
 From:   Mikko Perttunen <cyndis@kapsi.fi>
 To:     thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, digetx@gmail.com
 Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mikko Perttunen <mperttunen@nvidia.com>
-Subject: [PATCH v2 12/13] gpu: host1x: Use RESTART_W to skip timed out jobs on Tegra186+
-Date:   Wed, 22 Jun 2022 14:37:32 +0300
-Message-Id: <20220622113733.1710471-13-cyndis@kapsi.fi>
+Subject: [PATCH v2 13/13] drm/tegra: vic: Add Tegra234 support
+Date:   Wed, 22 Jun 2022 14:37:33 +0300
+Message-Id: <20220622113733.1710471-14-cyndis@kapsi.fi>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220622113733.1710471-1-cyndis@kapsi.fi>
 References: <20220622113733.1710471-1-cyndis@kapsi.fi>
@@ -60,47 +60,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mikko Perttunen <mperttunen@nvidia.com>
 
-When MLOCK enforcement is enabled, the 0-word write currently done
-is rejected by the hardware outside of an MLOCK region. As such,
-on these chips, which also have the newer, more convenient RESTART_W
-opcode, use that instead to skip over the timed out job.
+Add Tegra234 support for VIC. It is backwards compatible with
+Tegra194.
 
 Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
 ---
- drivers/gpu/host1x/cdma.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/tegra/drm.c |  1 +
+ drivers/gpu/drm/tegra/vic.c | 12 ++++++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/drivers/gpu/host1x/cdma.c b/drivers/gpu/host1x/cdma.c
-index 765e5aa64eb6..bb1f3c746be4 100644
---- a/drivers/gpu/host1x/cdma.c
-+++ b/drivers/gpu/host1x/cdma.c
-@@ -457,9 +457,24 @@ void host1x_cdma_update_sync_queue(struct host1x_cdma *cdma,
- 				 * to offset 0xbad. This does nothing but
- 				 * has a easily detected signature in debug
- 				 * traces.
-+				 *
-+				 * On systems with MLOCK enforcement enabled,
-+				 * the above 0 word writes would fall foul of
-+				 * the enforcement. As such, in the first slot
-+				 * put a RESTART_W opcode to the beginning
-+				 * of the next job. We don't use this for older
-+				 * chips since those only support the RESTART
-+				 * opcode with inconvenient alignment requirements.
- 				 */
--				mapped[2*slot+0] = 0x1bad0000;
--				mapped[2*slot+1] = 0x1bad0000;
-+				if (i == 0 && host1x->info->has_wide_gather) {
-+					unsigned int next_job = (job->first_get/8 + job->num_slots)
-+						% HOST1X_PUSHBUFFER_SLOTS;
-+					mapped[2*slot+0] = (0xd << 28) | (next_job * 2);
-+					mapped[2*slot+1] = 0x0;
-+				} else {
-+					mapped[2*slot+0] = 0x1bad0000;
-+					mapped[2*slot+1] = 0x1bad0000;
-+				}
- 			}
+diff --git a/drivers/gpu/drm/tegra/drm.c b/drivers/gpu/drm/tegra/drm.c
+index 9464f522e257..426ffeb51f72 100644
+--- a/drivers/gpu/drm/tegra/drm.c
++++ b/drivers/gpu/drm/tegra/drm.c
+@@ -1380,6 +1380,7 @@ static const struct of_device_id host1x_drm_subdevs[] = {
+ 	{ .compatible = "nvidia,tegra194-sor", },
+ 	{ .compatible = "nvidia,tegra194-vic", },
+ 	{ .compatible = "nvidia,tegra194-nvdec", },
++	{ .compatible = "nvidia,tegra234-vic", },
+ 	{ /* sentinel */ }
+ };
  
- 			job->cancelled = true;
+diff --git a/drivers/gpu/drm/tegra/vic.c b/drivers/gpu/drm/tegra/vic.c
+index c5526bda88d6..c1734f823d04 100644
+--- a/drivers/gpu/drm/tegra/vic.c
++++ b/drivers/gpu/drm/tegra/vic.c
+@@ -447,11 +447,20 @@ static const struct vic_config vic_t194_config = {
+ 	.supports_sid = true,
+ };
+ 
++#define NVIDIA_TEGRA_234_VIC_FIRMWARE "nvidia/tegra234/vic.bin"
++
++static const struct vic_config vic_t234_config = {
++	.firmware = NVIDIA_TEGRA_234_VIC_FIRMWARE,
++	.version = 0x23,
++	.supports_sid = true,
++};
++
+ static const struct of_device_id tegra_vic_of_match[] = {
+ 	{ .compatible = "nvidia,tegra124-vic", .data = &vic_t124_config },
+ 	{ .compatible = "nvidia,tegra210-vic", .data = &vic_t210_config },
+ 	{ .compatible = "nvidia,tegra186-vic", .data = &vic_t186_config },
+ 	{ .compatible = "nvidia,tegra194-vic", .data = &vic_t194_config },
++	{ .compatible = "nvidia,tegra234-vic", .data = &vic_t234_config },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, tegra_vic_of_match);
+@@ -590,3 +599,6 @@ MODULE_FIRMWARE(NVIDIA_TEGRA_186_VIC_FIRMWARE);
+ #if IS_ENABLED(CONFIG_ARCH_TEGRA_194_SOC)
+ MODULE_FIRMWARE(NVIDIA_TEGRA_194_VIC_FIRMWARE);
+ #endif
++#if IS_ENABLED(CONFIG_ARCH_TEGRA_234_SOC)
++MODULE_FIRMWARE(NVIDIA_TEGRA_234_VIC_FIRMWARE);
++#endif
 -- 
 2.36.1
 

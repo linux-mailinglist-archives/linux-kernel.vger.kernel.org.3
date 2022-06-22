@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD745552BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C175552C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377399AbiFVRp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S1377266AbiFVRrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377384AbiFVRpz (ORCPT
+        with ESMTP id S1377425AbiFVRrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:45:55 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E26D3467E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:45:54 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso147712pjh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:45:54 -0700 (PDT)
+        Wed, 22 Jun 2022 13:47:21 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECD635AAB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:47:19 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id l4so16713636pgh.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HUYHW95AtLLmO7V4imqn0bSxETrjySQOkszCKZgpB8c=;
-        b=lbchqIqZHE9CwsidR5WeollNQ6dBNgdTnBG0KNFSuSMHXIevxj6D7aC9O2Teg3vixK
-         WJ1Jr3arfzfufi6xxT/db/9/UlXuAuGrZ5BnHzfyMgsT3ULuzk/danAHku6hBy6TgC2+
-         7TZUUjQWMf/S6gPNFwmWDdi8AbH1Y1mJRKcXo=
+        bh=ozFhzYmR4E95kB5IvCCZ7Zhda6htukA9ft1DlgyNV/o=;
+        b=CawAhneHC/p+xXOIC1j1y4DXWjBHk+xdf6T6b/IRcKfJO4W8BAHwZpeasTZ1klNF3/
+         xT1GD6SgQ4uPMuEjxQ0Lo+dOzXTfddCoudLE/Ty7XjhN2tAQkL6oX2e1sDtRfIbGMTrI
+         0iuXYklU8zG8BWpFmjtnIFTnAVshfx6NdPHB4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HUYHW95AtLLmO7V4imqn0bSxETrjySQOkszCKZgpB8c=;
-        b=zkXsxfUuq76YTd+YmJJjQazhOlnrnJ8Cg8cFcd5SNX2L5jHKkU6yPW68juKLYj94zj
-         PWrh+AWZ9SERRELuwAfgjL4w1AvzsSqvkeVxE7iDwmp8RFELxSOyMpiNKYVvezdJj0BF
-         Oq+c/JOBR3t7lHnj7Iv8r+ZMpV9cWQ3FCms93pqpRCl+adeO7C2asfbEimJmi62lx5E+
-         I11Nhlknom00rSlzjgyWgPbsVxD6vxUB2uiB2eI/AjOptLoIK6LvnXQhcZfYMx8QH69/
-         ZTpl7N8bXq14Xg8Ve8u/RfFHomfApBiVXnMRveVtoY3nt3g+CSVEA5hDppsjCFkS1JQy
-         +osQ==
-X-Gm-Message-State: AJIora9/4+6FJbXjFAGt/+Y8uCHc20ZMco8o/PR+k9FGgxRbv51/F5Pu
-        L02sgYB5mTSc+qiiiheIFpwpoFljYvfH2w==
-X-Google-Smtp-Source: AGRyM1sFxe9GH21t/auStPnBEkJHItewIiphX9U6txtmcstedWPu/2gRKDpmd2xjVTxW4cdMr9LGMw==
-X-Received: by 2002:a17:903:2285:b0:16a:2ee7:4779 with SMTP id b5-20020a170903228500b0016a2ee74779mr13121137plh.43.1655919953548;
-        Wed, 22 Jun 2022 10:45:53 -0700 (PDT)
+        bh=ozFhzYmR4E95kB5IvCCZ7Zhda6htukA9ft1DlgyNV/o=;
+        b=JPkx5JzUjokf4w+XC5b3DMxwRd6NAkTZYV6A338jT2vc1K2XRclVB+nZIxddEPCc2q
+         TRmMjiL7ZuYUlFLWMXNF7QC24HB0s5sGhetW7DcDbgeEww45/sGsaGOpGBcp7b2Fouhi
+         b5Z97BVWS4O7x6dIEV5IeQj7th0FrhJgSIOvZgynfmjiCXPsUGMMX4xxHqZqgVh71o8G
+         0w571SPcua53bLs2cW7ZIskv3xA1C8Y5dUqV9zOgHMNFhhaN2m/2maE2vAKUke1h6IZ0
+         CFH0sxYD7z9PR2ATHE8GQDUA4pC/kLLQrhOsVeE0glgkUyKZ2pLApqmqWQy4JdZlZA71
+         UeDQ==
+X-Gm-Message-State: AJIora8pLnM1OK3bASwP6BT4Kp+NTtLzh5tlbUP3RbKLM0E5hTW0cBDm
+        enbpyO2VtSEmgeesPvnfk/pxyVWilNus5A==
+X-Google-Smtp-Source: AGRyM1tBbILrL9IcBn2sx8C63vhIXgPha/EGUevChjROlBAs1HDcrrQphyTY41RUJ1/FuutnDCyUnA==
+X-Received: by 2002:a63:8842:0:b0:40d:4365:907f with SMTP id l63-20020a638842000000b0040d4365907fmr1254341pgd.568.1655920039161;
+        Wed, 22 Jun 2022 10:47:19 -0700 (PDT)
 Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l17-20020a17090b079100b001ece55aec38sm35470pjz.30.2022.06.22.10.45.52
+        by smtp.gmail.com with ESMTPSA id l17-20020a17090b079100b001ece55aec38sm35470pjz.30.2022.06.22.10.47.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 10:45:53 -0700 (PDT)
+        Wed, 22 Jun 2022 10:47:18 -0700 (PDT)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     bleung@chromium.org, swboyd@chromium.org,
@@ -75,9 +75,9 @@ Cc:     bleung@chromium.org, swboyd@chromium.org,
         Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Xin Ji <xji@analogixsemi.com>
-Subject: [PATCH v5 7/9] drm/bridge: it6505: Register number of Type C switches
-Date:   Wed, 22 Jun 2022 17:34:36 +0000
-Message-Id: <20220622173605.1168416-8-pmalani@chromium.org>
+Subject: [PATCH v5 8/9] drm/bridge: it6505: Register Type-C mode switches
+Date:   Wed, 22 Jun 2022 17:34:37 +0000
+Message-Id: <20220622173605.1168416-9-pmalani@chromium.org>
 X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 In-Reply-To: <20220622173605.1168416-1-pmalani@chromium.org>
 References: <20220622173605.1168416-1-pmalani@chromium.org>
@@ -95,13 +95,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pin-Yen Lin <treapking@chromium.org>
 
-Parse the "switches" node, if available, and count and store the number
-of Type-C switches within it. The extcon registration is still
-supported, but we don't expect both extcon and typec-switch be
-registered at the same time.
+When the DT node has "switches" available, register a Type-C mode-switch
+for each listed "switch". This allows the driver to receive state
+information about what operating mode a Type-C port and its connected
+peripherals are in, as well as status information (like VDOs) related to
+that state.
 
-This patch sets a foundation for the actual registering of Type-C
-switches with the Type-C connector class framework.
+The callback function is currently a stub, but subsequent patches will
+implement the required functionality.
 
 Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
 Signed-off-by: Prashant Malani <pmalani@chromium.org>
@@ -109,76 +110,150 @@ Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
 v5 is the first version for this patch.
 
- drivers/gpu/drm/bridge/ite-it6505.c | 34 +++++++++++++++++++++++++----
- 1 file changed, 30 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/bridge/ite-it6505.c | 85 ++++++++++++++++++++++++++++-
+ 1 file changed, 82 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index 4b673c4792d7..b259f9f367f6 100644
+index b259f9f367f6..cb1dd4cbd33b 100644
 --- a/drivers/gpu/drm/bridge/ite-it6505.c
 +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -452,6 +452,7 @@ struct it6505 {
- 	struct delayed_work delayed_audio;
+@@ -17,6 +17,7 @@
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/types.h>
++#include <linux/usb/typec_mux.h>
+ #include <linux/wait.h>
+ 
+ #include <crypto/hash.h>
+@@ -402,6 +403,11 @@ struct debugfs_entries {
+ 	const struct file_operations *fops;
+ };
+ 
++struct it6505_port_data {
++	struct typec_mux_dev *typec_mux;
++	struct it6505 *it6505;
++};
++
+ struct it6505 {
+ 	struct drm_dp_aux aux;
+ 	struct drm_bridge bridge;
+@@ -453,6 +459,7 @@ struct it6505 {
  	struct it6505_audio_data audio;
  	struct dentry *debugfs;
-+	int num_typec_switches;
+ 	int num_typec_switches;
++	struct it6505_port_data *typec_ports;
  
  	/* it6505 driver hold option */
  	bool enable_drv_hold;
-@@ -3229,13 +3230,28 @@ static void it6505_shutdown(struct i2c_client *client)
+@@ -3230,9 +3237,59 @@ static void it6505_shutdown(struct i2c_client *client)
  		it6505_lane_off(it6505);
  }
  
-+static int it6505_register_typec_switches(struct device *device, struct it6505 *it6505)
++static int it6505_typec_mux_set(struct typec_mux_dev *mux,
++				struct typec_mux_state *state)
 +{
-+	struct device_node *of;
-+
-+	of = of_get_child_by_name(device->of_node, "switches");
-+	if (!of)
-+		return -ENODEV;
-+
-+	it6505->num_typec_switches = of_get_child_count(of);
-+	if (it6505->num_typec_switches <= 0)
-+		return -ENODEV;
-+
 +	return 0;
 +}
 +
- static int it6505_i2c_probe(struct i2c_client *client,
- 			    const struct i2c_device_id *id)
++static int it6505_register_mode_switch(struct device *dev, struct device_node *node,
++					struct it6505 *it6505)
++{
++	struct it6505_port_data *port_data;
++	struct typec_mux_desc mux_desc = {};
++	char name[32];
++	u32 port_num;
++	int ret;
++
++	ret = of_property_read_u32(node, "reg", &port_num);
++	if (ret)
++		return ret;
++
++	if (port_num >= it6505->num_typec_switches) {
++		dev_err(dev, "Invalid port number specified: %d\n", port_num);
++		return -EINVAL;
++	}
++
++	port_data = &it6505->typec_ports[port_num];
++	port_data->it6505 = it6505;
++	mux_desc.fwnode = &node->fwnode;
++	mux_desc.drvdata = port_data;
++	snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
++	mux_desc.name = name;
++	mux_desc.set = it6505_typec_mux_set;
++
++	port_data->typec_mux = typec_mux_register(dev, &mux_desc);
++	if (IS_ERR(port_data->typec_mux)) {
++		ret = PTR_ERR(port_data->typec_mux);
++		dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
++	}
++
++	return ret;
++}
++
++static void it6505_unregister_typec_switches(struct it6505 *it6505)
++{
++	int i;
++
++	for (i = 0; i < it6505->num_typec_switches; i++)
++		typec_mux_unregister(it6505->typec_ports[i].typec_mux);
++}
++
+ static int it6505_register_typec_switches(struct device *device, struct it6505 *it6505)
  {
- 	struct it6505 *it6505;
- 	struct device *dev = &client->dev;
- 	struct extcon_dev *extcon;
--	int err, intp_irq;
-+	int err, intp_irq, ret;
+-	struct device_node *of;
++	struct device_node *of, *sw;
++	int ret = 0;
  
- 	it6505 = devm_kzalloc(&client->dev, sizeof(*it6505), GFP_KERNEL);
- 	if (!it6505)
-@@ -3255,11 +3271,21 @@ static int it6505_i2c_probe(struct i2c_client *client,
- 	if (PTR_ERR(extcon) == -EPROBE_DEFER)
- 		return -EPROBE_DEFER;
- 	if (IS_ERR(extcon)) {
--		dev_err(dev, "can not get extcon device!");
--		return PTR_ERR(extcon);
-+		if (PTR_ERR(extcon) != -ENODEV)
-+			dev_warn(dev, "Cannot get extcon device: %ld", PTR_ERR(extcon));
-+		it6505->extcon = NULL;
-+	} else {
-+		it6505->extcon = extcon;
- 	}
+ 	of = of_get_child_by_name(device->of_node, "switches");
+ 	if (!of)
+@@ -3241,8 +3298,28 @@ static int it6505_register_typec_switches(struct device *device, struct it6505 *
+ 	it6505->num_typec_switches = of_get_child_count(of);
+ 	if (it6505->num_typec_switches <= 0)
+ 		return -ENODEV;
++	it6505->typec_ports = devm_kzalloc(device,
++					   it6505->num_typec_switches *
++					   sizeof(struct it6505_port_data),
++					   GFP_KERNEL);
++	if (!it6505->typec_ports)
++		return -ENOMEM;
  
--	it6505->extcon = extcon;
-+	ret = it6505_register_typec_switches(dev, it6505);
-+	if (ret) {
-+		dev_dbg(dev, "Didn't register Type C switches, err: %d", ret);
-+		if (!it6505->extcon) {
-+			dev_err(dev, "Both extcon and typec-switch are not registered.");
-+			return -EINVAL;
+-	return 0;
++	/* Register switches for each connector. */
++	for_each_available_child_of_node(of, sw) {
++		if (!of_property_read_bool(sw, "mode-switch"))
++			continue;
++		ret = it6505_register_mode_switch(device, sw, it6505);
++		if (ret) {
++			dev_err(device, "Failed to register mode switch: %d\n", ret);
++			break;
 +		}
 +	}
++
++	if (ret)
++		it6505_unregister_typec_switches(it6505);
++
++	return ret;
+ }
  
- 	it6505->regmap = devm_regmap_init_i2c(client, &it6505_regmap_config);
- 	if (IS_ERR(it6505->regmap)) {
+ static int it6505_i2c_probe(struct i2c_client *client,
+@@ -3280,7 +3357,8 @@ static int it6505_i2c_probe(struct i2c_client *client,
+ 
+ 	ret = it6505_register_typec_switches(dev, it6505);
+ 	if (ret) {
+-		dev_dbg(dev, "Didn't register Type C switches, err: %d", ret);
++		if (ret != -ENODEV)
++			dev_warn(dev, "Didn't register Type C switches, err: %d", ret);
+ 		if (!it6505->extcon) {
+ 			dev_err(dev, "Both extcon and typec-switch are not registered.");
+ 			return -EINVAL;
+@@ -3350,6 +3428,7 @@ static int it6505_i2c_remove(struct i2c_client *client)
+ 	drm_dp_aux_unregister(&it6505->aux);
+ 	it6505_debugfs_remove(it6505);
+ 	it6505_poweroff(it6505);
++	it6505_unregister_typec_switches(it6505);
+ 
+ 	return 0;
+ }
 -- 
 2.37.0.rc0.104.g0611611a94-goog
 

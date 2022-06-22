@@ -2,259 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0996D5543CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C11D55447C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352635AbiFVHbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S1352903AbiFVHdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiFVHb1 (ORCPT
+        with ESMTP id S1350820AbiFVHdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:31:27 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3803701E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:31:26 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id e4so18288789ljl.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mRfcyZt+nnbGBIJgn9azMqSuPxdBFrJVag5LBfIwDKs=;
-        b=NqtZLW1cvxMKFd7JYa3zwD1lcbRcUChVmZTc9wPrBtXN2C5oHrOCRGVgEJApVNcQ23
-         IZ1J+SMdUYKxVBt8PRTVVpKSEcXJIz8dWz61jE56fPBqIT/UYx4dKB2VmyFj2x6xRaZy
-         FLAixflAtWuQB9nwgmP86YzZhnRg1ReJJz5T419/Exk/kov8nszkb/n+fqQ53FCbVqk9
-         YV9wLw/kHRz6MtYNJUpNHSOenPgZ0xInSeCFZbsD09flPRKVkTGFbz8W5MtwoFez2+c0
-         t0WbnzxbfHMpLNps73qRr0u4EnGU+33Wi4mOf2tozQqVKxlaASVl9NdObVLfS6y/IIet
-         NAJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mRfcyZt+nnbGBIJgn9azMqSuPxdBFrJVag5LBfIwDKs=;
-        b=EpVWNP4Z9JZZc9oIvfvWEETtqPiZtDhYHxzw154CfaKnuspqALbFIfekYhVheqwkSA
-         RafkR7BiRKdmwR1IYJbkuNqmDR9xU2NQ93zT5V0f8f6J6kjtp2++8zdohrSJxqe6fS89
-         iKOawcPYbrDQaWs03dmyNu4d4ryXlvW5AMzpM6wUKz2/RRsGsHTt8bdrfN0O7cI0RYr5
-         BnfOA+ObQm/A424eDQQK6/AupyZ9Bhx+bKP/uHfsppG7M6/ipQA6ReqqNXUnnzAFcXt4
-         BCDpE/NYzfMYao7Qy6IcVMbmvc/WmY0Tlv/Qgl6X71BKt4FDusuI6OHIfORInJ8+8ne1
-         DZoA==
-X-Gm-Message-State: AJIora/ZUjyQ0l6fHmyulXAjSQvuTsEE0FvlamsXaZrF9UPFdBJdCvkr
-        /4MbE32UEKVIQfcJjLY0lD6/5Q==
-X-Google-Smtp-Source: AGRyM1vSZt6sTbeMAihWpRwuOLqdKpTdFhhOfwhu3HhkjnPPM8QWKsD7uBUmfF4h/SxWQpv0WyqVTg==
-X-Received: by 2002:a2e:a7c7:0:b0:255:8ecd:14b0 with SMTP id x7-20020a2ea7c7000000b002558ecd14b0mr1104245ljp.472.1655883084375;
-        Wed, 22 Jun 2022 00:31:24 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s19-20020a056512215300b004796a17246esm1603388lfr.252.2022.06.22.00.31.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 00:31:23 -0700 (PDT)
-Message-ID: <0739a09c-1281-379f-98db-76ab395c0853@linaro.org>
-Date:   Wed, 22 Jun 2022 10:31:23 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Wed, 22 Jun 2022 03:33:39 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2061.outbound.protection.outlook.com [40.107.223.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1632237035;
+        Wed, 22 Jun 2022 00:33:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nCCeZTQ9ie0nSnuGJnmjHu9JgKD9bIUp1++tVtJ3x1naFFmvxSX9HVm6l9Lb6VLft5uL64pXvjDZVNZkDbbeTkuXohDYJYC+eHWqCU6Er5N2SUmq+4tR3P4J+XDU3Cj4X2KJelWPg+g/w+C71Td9gKxw8cz3mgLOB9rHcgHSW3Mec6kBSVleDL2Sh0jXB29NvN93HaPfJWOGijz87ETHk9xelMTGUeo4j+Q7MiUzFT/7jQqeccnkk/g7QI6GbUFhVEIQCyzWDWwjHN0XXQw2E2zcSHb8hwjonqPdRqJL8H4Tn/Wb72Is3y/YV+Wq5jy/VBR1Wn7cJiVkwgSxMgAVkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jhN1Lo5tLDqFXK2Iz6lFsG9WMsqZR5UcXCn2/qUbWR0=;
+ b=fpNYdGLStXQxqq2YX3taE0T2D7T7deBj0F/oxaUBu2dLhwCsZGBIJt03OxbV0v24oCk+FPQQKD61Tz003Oh+SRrcKb92F6WtWFAHN2nGuiHEnltXP+5IIQn4obHZu9SKJ88DqtM0MszfbitxFqvRnqGOIliHH9CYAchqc6KE0Ji/eXgNXoicAFoL6kYvVRTm/qZTGqL9QVhxGxjhdjmByuDpMPhQFo4wVEGXOIPXsniNEikea70wjb26CRUECqrD1FBAN+6dmZDkgB6H3KMgVurWtCCqxKPpclbbkIpkoCcU+xVskKEpcex/UBdx7yt95+cE8n1+bqKHMqiPDYdPmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jhN1Lo5tLDqFXK2Iz6lFsG9WMsqZR5UcXCn2/qUbWR0=;
+ b=J9fud3U8WX4fqyiWBbX+MwAKrzONoyNGQu8kuRVr6p7oV1mP1hWmyXzwls+J4q+n8GP8DLyWT62kT04pND1NrUsx0GfVqwG+W9AAyEOu0VvBAYS9w1+7gRG74lftQD8cRW4H/Gsv1QvOEB5QwA98tgkhaG4FY4N8ZNVuK4Cu31A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ DM8PR12MB5414.namprd12.prod.outlook.com (2603:10b6:8:3e::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5353.14; Wed, 22 Jun 2022 07:33:34 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::14b:372d:338c:a594]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::14b:372d:338c:a594%9]) with mapi id 15.20.5353.022; Wed, 22 Jun 2022
+ 07:33:34 +0000
+Message-ID: <e45beb9c-684a-4485-d6c4-29bc1455c161@amd.com>
+Date:   Wed, 22 Jun 2022 14:33:16 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: document qcom,msm-id and
- qcom,board-id
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Kumar Gala <galak@codeaurora.org>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <20220621185649.37391-1-krzysztof.kozlowski@linaro.org>
- <20220621185649.37391-2-krzysztof.kozlowski@linaro.org>
- <609d1f0f-daca-4fde-3315-5d8e171ca5c4@linaro.org>
- <7ef854a5-0e56-c71e-447a-f52cdcf51ef0@linaro.org>
- <CAA8EJpp3HqsPOcz1t9W=cjExuddjEV2MaA10L5mMgcUrmqUmAQ@mail.gmail.com>
- <70300b95-8b4d-5029-bfbb-544abbc64441@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <70300b95-8b4d-5029-bfbb-544abbc64441@linaro.org>
+Subject: Re: [PATCH Part2 v6 02/49] iommu/amd: Introduce function to check
+ SEV-SNP support
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>,
+        "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <12df64394b1788156c8a3c2ee8dfd62b51ab3a81.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6r+WSYXLZj-Bs5jpo4CR3+H5cpND0GHjsmgPacBK1GH_Q@mail.gmail.com>
+ <SN6PR12MB2767A51D40E7F53395770DE58EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <CAMkAt6qorwbAXaPaCaSm0SC9o2uQ9ZQzB6s1kBkvAv2D4tkUug@mail.gmail.com>
+From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+In-Reply-To: <CAMkAt6qorwbAXaPaCaSm0SC9o2uQ9ZQzB6s1kBkvAv2D4tkUug@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR01CA0038.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::20) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 18b95b09-f6bb-4f90-1046-08da54218355
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5414:EE_
+X-Microsoft-Antispam-PRVS: <DM8PR12MB5414204D37B8CAE1A85A9EC9F3B29@DM8PR12MB5414.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y9tBPFOT2l1qMwpUmJDiSq/MvDBfiRedsE+I7GcbZTBJT7v/I9QqdzYBbIcLmD1x5HZUrzeOZEl1Cv/7j9uVIEGjEEoIgkbDOHANs5U0qyUWc4124ejaexFvEo+seat4P9iuuNfrqNs2eCl3vmuCEACxwap0u1S8P44GzojXf+UyikZPbymyQSSsAUhnY60GEFmN1E6kk8AkfDLxhT1/GpQFi4k8zXCLw7gMTDh8LSd5gGGznEkQhA4LBHGAo4CDM4794c3ugcfyya3Oa4ri1HBnTUEs5HqdlfCQKjmRpeixCZ0s36vci9kOoIfUJDnGWi2MRG2vDwQUzsAcSWBnrquEyKjtYF1aiVrF/sZ+U4+Y/vuwNx21kRASxf4XsowJ06QBZ1ymEpUzJ3ahypKDvuoYzCJzdjsfj8m3E71wwAfNDdka4o7nJHB67kS5Ntdw/q6kCCOH+H8JCFBYfk6ZmwaLEd/w5gVbXTfYDVdtE7WIOlmMU57OY1DIFeaDM1MMiqeVOzA/efCNUtNYNp2eemGa6G/UsIctGRZvgSS1f1CR7HWZB6a50pCu5syvw+bggvPvdSok3Wjww4NligXms7EmB7YLTSBAboX8n+Vmf7xW8G6R1kXb3roeJV90M+CqDHMV7FPLsnRLFgy8EJEpl7FS6hf1Yp6kBqEp91xlN4JgJq04Dte+zPvSHZSCX0VMMKVmAeOeoM3SoJy3DWfJMOLSZT7LFTkXNXDqo+EsV4EdkO8OytgaqMHbTPxjJ2bpg5cN7zGw9tn5AliJVloaUBbWW/avw0BgDqwdBqfkovjMCjrt/lTmwQ1J4WO1mhTyMB+4AdJNW8b4/7GNJJOC5Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(376002)(346002)(396003)(136003)(6506007)(6666004)(186003)(6512007)(26005)(7416002)(6636002)(54906003)(31686004)(2616005)(8936002)(31696002)(53546011)(2906002)(5660300002)(316002)(36756003)(7406005)(8676002)(83380400001)(66476007)(38100700002)(66946007)(66556008)(478600001)(41300700001)(110136005)(966005)(4326008)(6486002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkFXR3FqZC9ZQnh3bURzMDE3Vm1wTEhoRXVWS2RidXlmUllJeXZjNjVUNnVO?=
+ =?utf-8?B?NHpDTXRQdkp1QjVNZ2xjS0k1b3ZCYzRyM3diK3JtRHZQSzFEK0FMUWFldHlX?=
+ =?utf-8?B?bDRDb2tSRG9INW9taThSUXVsVVlIS05FZ0pDVVV0d3I0QWJYb04wMTAra3Vv?=
+ =?utf-8?B?K3dGNVdldlhaUmxDdi9sRWhlQmQwdVg0M0ptQmJvYnEvdVFSSW53QnNTSG5i?=
+ =?utf-8?B?YWwvUVpSQzVMQ0pWUThtZ1gyNmcreVpTbG1rTjFCT2JndkZkemxjdWt5dnI2?=
+ =?utf-8?B?YlVLUTJYNVlxMlJrbk1OR0dSMDJxWjNqYUdSZTZ2Vkd4OXpTR2Z3Y2lsaWVS?=
+ =?utf-8?B?ZytBcHVJVDdVbFZBbGV6dENpK2VlaENwbHA2V1hRbEoxRVkwdmE1VW0xS0tY?=
+ =?utf-8?B?Y0lXUDBvNStZSTZrL2dxWlluYUxTdDdTRzR2ZXFIK1lBWnNlamE5dmVQUHpF?=
+ =?utf-8?B?VGNQNzNDaW1Hb0dyejE5Q0RjMmswZmQweFlsRWw4bllsZHozc2s2RDZvNzNX?=
+ =?utf-8?B?TFdmcEFnYjdDeU40cXRDcktEQTcxTFdDZ09CclNGNTh4TzhnVThRSU1wK292?=
+ =?utf-8?B?TzdlTzRmZzFsWlBtWWNmMVdHSnNrRVpNeDBGZTBrVmgwbVlIekI3SWdXZmVM?=
+ =?utf-8?B?VVdlU2I5aHJjNktLUWNVeGlUVjhicm9uTEQycSs1S1ZkaTRPUUJHaHQ2MU1t?=
+ =?utf-8?B?UmJzK3IvUk8weVNma3cxUDFPWktyYXpVam5GYnpQM3kwTm00N0kzNVh1Rlky?=
+ =?utf-8?B?ZUdSMk5BakppWXppbjhFcE9COXgwQml3N093RmdZZGRLNTRvSUlOODB5cUlN?=
+ =?utf-8?B?Z0NxMitpYm9kdWZhSkpkTFExSzBwaHJOY2FWOU1TZnB3RWtKZUtlTE96eFl2?=
+ =?utf-8?B?Rjd4Z0xQaFlXMmx4bWZjcXpZeU15bXhIOGJJQlVhL3pRVkhVL1Q2R24zNkNZ?=
+ =?utf-8?B?cjl3ME9pSDVQVHZxMzlUazg0N0N0cjY5UDRJcFdpS2JLNU5yZHFURndYcmx3?=
+ =?utf-8?B?akh0UWh4YUZSaWJLRGxaMEZRcVBFM0FIb01tVUY3SkVueWJWelBrb01HbUE2?=
+ =?utf-8?B?dTRNdXcvOVZCS1lPU3NteFRtL3I5V1hzY0tFRDJ0VjBocE5sWWlxdkRUWXBm?=
+ =?utf-8?B?TGR0aUk4TlFvK1lsdk9JQjVSU3NScit6ZjF3YnM0VkQ3L3A5cmV5MldnZThC?=
+ =?utf-8?B?ZkpzV0Rrb3Y4RHVuVDdhZmltVVZaRys3ZkpjbTlham5lZ0dLM05CRUJGeWZt?=
+ =?utf-8?B?WENmSjhYL3JkRER5N3gxbHpOTTRLTmtnNDk3RlVNZnl5STNpUGlFdWltbmJr?=
+ =?utf-8?B?WHh4N0lhTnNoc0tLbWNZSTVkWmxoUmtPb1Brb2d3ZThrYVZPUjI5am9NcGV3?=
+ =?utf-8?B?UU9VZTRIU21vMG5XQXpyWkIwcDVSYS9XUnJnbkk3b1ZaUFo2Sm55YkRJVFFi?=
+ =?utf-8?B?UC9QbkQ0czJnWG44ZUI1MGFZZUFmK0RFUDdxbVFLQUZyYXFuREN6VzRDUXA5?=
+ =?utf-8?B?bDFMMmZxVVdhNUdFTXJXUFpxQVhyVnYxODlzUXpBVDNUSlMvbFpjQ2R1Q3FC?=
+ =?utf-8?B?UytZaE9nY0o2T0tHWXFTTXQ2Wk8yQmhDdHVSamt2SVYvK1ltc0orbXlOT0di?=
+ =?utf-8?B?QzB3RzVlVVljMTFvTXRvc214dTQ0VFRJN2hOYWk3S1A5cE5mSjhyNmdGTThO?=
+ =?utf-8?B?cUs0cGJyUWVaenhCYUlORzE3SG5VbWIxcEYrdmdiUnhwcHgzZGNwaTBFVXFq?=
+ =?utf-8?B?dkgxcVJyVmh3bjlxdTY2em9UdEM1R05PdkhXdGZRbXRhYVY4U3djbS82a3hH?=
+ =?utf-8?B?RTdWS3BiWWF0cjRYTHd6azBjSG9sQmZuK2N6T1ZXWHhIbVh2MnAvdkE0YjdH?=
+ =?utf-8?B?czJTMzdCOGpQTXFMN3BWaUlPNDM5Ujg3enNqeW5IYkpUUkdsYnFZMU53V2Fy?=
+ =?utf-8?B?ZXZaSmhPVThxRUNQQWxxWUE2K1NVSTN4RGJzV2RFbWJRVnBVUWxMRFowZ2Ru?=
+ =?utf-8?B?VVJFeW9vZWQwZDZRZU9JVHV1Y1FaVG9EdHB1Z1pUT0N0RmJnT241WDMrZFE4?=
+ =?utf-8?B?ckFGc1VCNXBZWlNaMCtZRXpzTld2MzZwTzYrWjdodVBtUHRXRmhobGp3ejV2?=
+ =?utf-8?B?N0FDMDFlMEQya3JvV2VMeTZIK3BaSitpMmI1U0lQakxmS2JKTlBsOTNsMklv?=
+ =?utf-8?B?cktmakIzWnVvNTRLTU5zQ1pBQndMV3Z2VmtHQmFsOHh1R3M0a0dLbElIdVM4?=
+ =?utf-8?B?elBVMG9TVEU4TEVlQlNiS3FWS2RpMzJGd0U0S3NDR1J0OUMydWZWUGxvN3Ns?=
+ =?utf-8?B?bTVjOUtpVGl4ZkdGMUU1SFgrNHVYMTF4RjhMZzFoNlRicytDVmRydz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18b95b09-f6bb-4f90-1046-08da54218355
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2022 07:33:34.3671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3TE8V4bF5sP8nbJC5aikovDXmDobrNUvCFqB7UWZet4N7/RwjPB/WSUywLs6KDBOA4mVeh3cOz/lubC83+fI7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5414
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 10:00, Krzysztof Kozlowski wrote:
-> On 21/06/2022 21:49, Dmitry Baryshkov wrote:
->> On Tue, 21 Jun 2022 at 22:32, Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 21/06/2022 21:26, Dmitry Baryshkov wrote:
->>>> On 21/06/2022 21:56, Krzysztof Kozlowski wrote:
->>>>> The top level qcom,msm-id and qcom,board-id properties are utilized by
->>>>> bootloaders on Qualcomm MSM platforms to determine which device tree
->>>>> should be used and passed to the kernel.
->>>>>
->>>>> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
->>>>> compatible format") from 2015 was a consensus during discussion about
->>>>> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
->>>>> problems with that consensus:
->>>>> 1. It was reached 7 years ago but it turned out its implementation did
->>>>>      not reach all possible products.
->>>>>
->>>>> 2. Initially additional tool (dtbTool) was needed for parsing these
->>>>>      fields to create a QCDT image consisting of multiple DTBs, later the
->>>>>      bootloaders were improved and they use these qcom,msm-id and
->>>>>      qcom,board-id properties directly.
->>>>
->>>> I might be mistaken here. I think it was expected that dtbTool would use
->>>> board compat strings to generate qcom,msm-id and qcom,board-id
->>>> properties. It's not that the bootloaders were improved.
->>>
->>> Don't ask me, I am new to this.
->>>
->>> https://lore.kernel.org/all/02ab0276-b078-fe66-8596-fcec4378722b@somainline.org/
+
+
+On 6/22/2022 12:50 AM, Peter Gonda wrote:
+> On Tue, Jun 21, 2022 at 11:45 AM Kalra, Ashish <Ashish.Kalra@amd.com> wrote:
 >>
+>> [AMD Official Use Only - General]
 >>
+>> Hello Peter,
 >>
+>>>> +bool iommu_sev_snp_supported(void)
+>>>> +{
+>>>> +       struct amd_iommu *iommu;
+>>>> +
+>>>> +       /*
+>>>> +        * The SEV-SNP support requires that IOMMU must be enabled, and is
+>>>> +        * not configured in the passthrough mode.
+>>>> +        */
+>>>> +       if (no_iommu || iommu_default_passthrough()) {
+>>>> +               pr_err("SEV-SNP: IOMMU is either disabled or
+>>>> + configured in passthrough mode.\n");
 >>
->>>
->>>>
->>>>>
->>>>> 3. Extracting relevant information from the board compatible requires
->>>>>      this additional tool (dtbTool), which makes the build process more
->>>>>      complicated and not easily reproducible (DTBs are modified after the
->>>>>      kernel build).
->>>>>
->>>>> 4. Some versions of Qualcomm bootloaders expect these properties even
->>>>>      when booting with a single DTB.  The community is stuck with these
->>>>>      bootloaders thus they require properties in the DTBs.
->>>>>
->>>>> Since several upstreamed Qualcomm SoC-based boards require these
->>>>> properties to properly boot and the properties are reportedly used by
->>>>> bootloaders, document them.
->>>>>
->>>>> Link: https://lore.kernel.org/r/a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org/
->>>>> Co-developed-by: Kumar Gala <galak@codeaurora.org>
->>>>> Signed-off-by: Kumar Gala <galak@codeaurora.org>
->>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>> ---
->>>>>    .../devicetree/bindings/arm/qcom.yaml         | 123 ++++++++++++++++++
->>>>>    include/dt-bindings/arm/qcom,ids.h            |  30 +++++
->>>>>    2 files changed, 153 insertions(+)
->>>>>    create mode 100644 include/dt-bindings/arm/qcom,ids.h
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
->>>>> index 6c38c1387afd..05b98cde4653 100644
->>>>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
->>>>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
->>>>> @@ -403,6 +403,129 @@ properties:
->>>>>                  - qcom,sm8450-qrd
->>>>>              - const: qcom,sm8450
->>>>>
->>>>> +  # Board compatibles go above
->>>>> +
->>>>> +  qcom,msm-id:
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
->>>>> +    minItems: 1
->>>>> +    maxItems: 8
->>>>> +    items:
->>>>> +      items:
->>>>> +        - description: |
->>>>> +            MSM chipset ID - an exact match value consisting of three bitfields::
->>>>
->>>> two bitfields
->>>
->>> Right, thanks.
->>>
->>>>
->>>>> +             - bits 0-15  - The unique MSM chipset ID
->>>>> +             - bits 16-31 - Reserved; should be 0
->>>>> +        - description: |
->>>>> +            Hardware revision ID - a chipset specific 32-bit ID representing
->>>>> +            the version of the chipset.  It is best a match value - the
->>>>> +            bootloader will look for the closest possible match.
->>>>> +    deprecated: true
->>>>> +    description:
->>>>> +      The MSM chipset and hardware revision use by Qualcomm bootloaders.  It
->>>>> +      can optionally be an array of these to indicate multiple hardware that
->>>>> +      use the same device tree.  It is expected that the bootloader will use
->>>>> +      this information at boot-up to decide which device tree to use when given
->>>>> +      multiple device trees, some of which may not be compatible with the
->>>>> +      actual hardware.  It is the bootloader's responsibility to pass the
->>>>> +      correct device tree to the kernel.
->>>>> +      The property is deprecated - it is not expected on newer boards
->>>>> +      (starting with SM8350).
->>>>
->>>> Could you please elaborate this?
->>>
->>> Second paragraph:
->>> https://lore.kernel.org/all/20220522195138.35943-1-konrad.dybcio@somainline.org/
+>>> Like below could this say something like snp support is disabled because of iommu settings.
 >>
->> I think this is something peculiar to Sony. Public lahaina (sm8350)
->> dts files contain both these properties:
->>
->> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-hdk.dts
->> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-v2.1.dtsi
->>
->>>
->>> Plus consensus with Rob:
->>> https://lore.kernel.org/all/CAL_JsqKL-mtAQ8Q9H4vLGM8izVVzDPbUAVWSdS8AmGjN6X6kcA@mail.gmail.com/
->>
->> I'm not sure here. But sm8350 and sm8450 dtsi files use these
->> properties. I've linked lahaina files above.
->> The waiptio dtsi (sm8450) are present at the same URL.
+>> Here we may need to be more precise with the error information indicating why SNP is not enabled.
+>> Please note that this patch may actually become part of the IOMMU + SNP patch series, where
+>> additional checks are done, for example, not enabling SNP if IOMMU v2 page tables are enabled,
+>> so precise error information will be useful here.
 > 
-> If you did not like where the consensus is going during the discussion
-> last week, I would expect to join the discussion. Not to comment after I
-> implement it.
+> I agree we should be more precise. I just thought we should explicitly
+> state something like: "SEV-SNP: IOMMU is either disabled or configured
+> in passthrough mode, SNP cannot be supported".
 
-Please excuse me. I probably missed that part of the discussion. Yes, it 
-was my fault.
+I can update this in the other patch series here
 
->>>> If the AOSP team were to add e.g.
->>>> SM8350-HDK to their single RB3+RB5 images, they would still need the
->>>> qcom,board-id/qcom,msm-id properties to let the bootloader choose proper
->>>> DTB.
->>>
->>> If you have any email addresses in mind, please Cc them to invite in
->>> discussions. Otherwise I am afraid it won't be allowed. The feedback I
->>> got before was that SM8350 and newer do not require this property. Feel
->>> free to propose other way to solve comments (see "consensus with Rob"
->>> above).
->>
->> Amit is in CC list. In the past he used these properties to allow
->> single-image booting of RB3 and RB5.
->> In fact I might prefer adding more of these properties to the dts
->> files, where it makes sense, to allow adding more dt files to the
->> images we create.
->> I'd really like to be able to boot a single image on all my boards
->> (rb3, rb5, db410c, db820, ifc6560, etc).
-> 
-> You have several options here. Use the board-compatible-encoded-scheme,
-> which was merged like 6 years ago or something. Bootloader could parse
-> it, dtbTool as well. Add a generic property, like Rob wanted (and
-> probably fix bootloader). Or find any other way to satisfy Rob's
-> comments. These properties were not accepted 6 years ago and the board
-> compatible approach was merged instead. If 6 years is not enough to
-> change the bootloaders, nothing will happen here ever, so we need to
-> make some statement.
+https://lists.linuxfoundation.org/pipermail/iommu/2022-June/066399.html
 
-Let me respond to his email. Amit, you might have something to add there 
-too.
-
-Basically I think we should allow these properties to be used for all 
-the Qcom boards. Marking them as 'deprecated' is fine to me, thus we 
-would not endorse them. But we would still be able to use them when 
-needed/wanted (like AOSP requirements for the single boot image).
-
--- 
-With best wishes
-Dmitry
+Thank you,
+Suravee

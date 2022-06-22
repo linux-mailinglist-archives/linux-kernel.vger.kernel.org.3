@@ -2,54 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB43D554EC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B960B554EC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359179AbiFVPLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S1359302AbiFVPLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359111AbiFVPKy (ORCPT
+        with ESMTP id S1359153AbiFVPLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:10:54 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC663DDFA;
-        Wed, 22 Jun 2022 08:10:53 -0700 (PDT)
-Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        Wed, 22 Jun 2022 11:11:40 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD173E0E1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:11:39 -0700 (PDT)
+Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25MEiubJ001259;
+        Wed, 22 Jun 2022 15:11:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=OedAOhst26QfWtP8BHOkw2gDpxpg/uYyrOKM+3cYtVw=;
+ b=Y9gvDzQBmhf9mWP03Tvwl4wQrUBiDwOMrqNf4k0k9QVeTGlCcA+aKk5bfla2C8mtTc3j
+ qUB4FiCcSTLf+w4VgTZp8zjNN5dlPF9IdCpvBywUqdXcg2FCBGzFzyjI77uNwwyERaeb
+ 7O3WPh5Zsz7XiNrB/jegQKnmXtsO7om5TxFASZAjiije5skbjsAKDOHpyAabbTgk0l5S
+ vMljznYy1OvLpQ/ADiEWqONtPr7mHAJyTjjNXtksY9xfsQyrRWYWLSHYZG3I944JefH9
+ nvDwYRjmw/V93PpawZKYwG3x0vPBCuu/dkl5P+RMaNIdCmNp28Q8OS2ahQ7h1snLKc4d Wg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3gv542889c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jun 2022 15:11:07 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4C27420569;
-        Wed, 22 Jun 2022 17:10:51 +0200 (CEST)
-Message-ID: <51965fa3-d146-70f1-2ad8-db6197989348@somainline.org>
-Date:   Wed, 22 Jun 2022 17:10:50 +0200
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 5263812EA4;
+        Wed, 22 Jun 2022 15:11:06 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id 74E7E804D05;
+        Wed, 22 Jun 2022 15:11:04 +0000 (UTC)
+Date:   Wed, 22 Jun 2022 10:11:02 -0500
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
+Message-ID: <YrMxBt9ZUe+T+wXV@swahl-home.5wahls.com>
+References: <9d6177ac-802f-eb11-4307-b0e49d8126b5@linux.intel.com>
+ <20220615183650.32075-1-steve.wahl@hpe.com>
+ <96984350-3a04-812a-60f1-a09138014fac@linux.intel.com>
+ <CALzcdduhpOebY18hiOpMcXLcH83bY_u4fZT09pBcoz2ObqXnGg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 4/6] arm64: dts: qcom: sc8280xp: Add reference device
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-5-bjorn.andersson@linaro.org>
- <099cc82f-d52f-315f-189d-bcc40c1afd49@somainline.org>
- <YrMccQXwsz/zC/gl@hovoldconsulting.com>
- <9d0c1897-195f-0548-ea5d-ffc35768f518@somainline.org>
- <b2c9faf0-95a8-772f-c211-f1599b35f8f8@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <b2c9faf0-95a8-772f-c211-f1599b35f8f8@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzcdduhpOebY18hiOpMcXLcH83bY_u4fZT09pBcoz2ObqXnGg@mail.gmail.com>
+X-Proofpoint-GUID: RMIDAG1JjmqcHeyGTgot2wm1c55FpcUd
+X-Proofpoint-ORIG-GUID: RMIDAG1JjmqcHeyGTgot2wm1c55FpcUd
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-22_04,2022-06-22_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206220076
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,57 +88,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22.06.2022 16:48, Krzysztof Kozlowski wrote:
-> On 22/06/2022 16:36, Konrad Dybcio wrote:
->>
->>
->> On 22.06.2022 15:43, Johan Hovold wrote:
->>> On Wed, Jun 22, 2022 at 02:33:02PM +0200, Konrad Dybcio wrote:
->>>> On 22.06.2022 06:12, Bjorn Andersson wrote:
->>>
->>>>> +&qup2_i2c5 {
->>>>> +	clock-frequency = <400000>;
->>>>> +
->>>>> +	pinctrl-names = "default";
->>>>> +	pinctrl-0 = <&qup2_i2c5_default>, <&kybd_default>, <&tpad_default>;
->>>>> +
->>>>> +	status = "okay";
->>>>> +
->>>> I think all device DTs generally have 'status = "okay"' at the beginning. Should we change that?
->>>>
->>>
->>> No, quite the opposite, status go at the end.
->> Then all other device DTs should be updated, as in dts/qcom/
->> everybody keeps it first in non-SoC/PMIC files.
+On Wed, Jun 22, 2022 at 08:05:12AM -0700, Jerry Snitselaar wrote:
+> On Wed, Jun 22, 2022 at 7:52 AM Baolu Lu <baolu.lu@linux.intel.com> wrote:
+> >
+> > On 2022/6/16 02:36, Steve Wahl wrote:
+> > > To support up to 64 sockets with 10 DMAR units each (640), make the
+> > > value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
+> > > CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
+> > > set.
+> > >
+> > > If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
+> > > to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
+> > > allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
+> > > remapping doesn't support X2APIC mode x2apic disabled"; and the system
+> > > fails to boot properly.
+> > >
+> > > Signed-off-by: Steve Wahl<steve.wahl@hpe.com>
+> > > Reviewed-by: Kevin Tian<kevin.tian@intel.com>
+> > > ---
+> > >
+> > > Note that we could not find a reason for connecting
+> > > DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
+> > > it seemed like the two would continue to match on earlier processors.
+> > > There doesn't appear to be kernel code that assumes that the value of
+> > > one is related to the other.
+> > >
+> > > v2: Make this value a config option, rather than a fixed constant.  The default
+> > > values should match previous configuration except in the MAXSMP case.  Keeping the
+> > > value at a power of two was requested by Kevin Tian.
+> > >
+> > > v3: Make the config option dependent upon DMAR_TABLE, as it is not used without this.
+> > >
+> > >   drivers/iommu/intel/Kconfig | 7 +++++++
+> > >   include/linux/dmar.h        | 6 +-----
+> > >   2 files changed, 8 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
+> > > index 39a06d245f12..07aaebcb581d 100644
+> > > --- a/drivers/iommu/intel/Kconfig
+> > > +++ b/drivers/iommu/intel/Kconfig
+> > > @@ -9,6 +9,13 @@ config DMAR_PERF
+> > >   config DMAR_DEBUG
+> > >       bool
+> > >
+> > > +config DMAR_UNITS_SUPPORTED
+> > > +     int "Number of DMA Remapping Units supported"
+> > > +     depends on DMAR_TABLE
+> > > +     default 1024 if MAXSMP
+> > > +     default 128  if X86_64
+> > > +     default 64
+> >
+> > With this patch applied, the IOMMU configuration looks like:
+> >
+> > [*]   AMD IOMMU support
+> > <M>     AMD IOMMU Version 2 driver
+> > [*]     Enable AMD IOMMU internals in DebugFS
+> > (1024) Number of DMA Remapping Units supported   <<<< NEW
+> > [*]   Support for Intel IOMMU using DMA Remapping Devices
+> > [*]     Export Intel IOMMU internals in Debugfs
+> > [*]     Support for Shared Virtual Memory with Intel IOMMU
+> > [*]     Enable Intel DMA Remapping Devices by default
+> > [*]     Enable Intel IOMMU scalable mode by default
+> > [*]   Support for Interrupt Remapping
+> > [*]   OMAP IOMMU Support
+> > [*]     Export OMAP IOMMU internals in DebugFS
+> > [*]   Rockchip IOMMU Support
+> >
+> > The NEW item looks confusing. It looks to be a generic configurable
+> > value though it's actually Intel DMAR specific. Any thoughts?
+> >
+> > Best regards,
+> > baolu
+> >
 > 
-> The word "should" is a bit too much here, but I agree, we can update all
-> of them to match one, chosen approach.
+> Would moving it under INTEL_IOMMU at least have it show up below
+> "Support for Intel IOMMU using DMA Remapping Devices"? I'm not sure it
+> can be better than that, because IRQ_REMAP selects DMAR_TABLE, so we
+> can't stick it in the if INTEL_IOMMU section.
 > 
-> However the location for "status" property is more important for the
-> definition of nodes in DTSI, because it's the least important piece
-> there and also kind of expected - here go properties + I disable it. For
-> me this is more important.
-> 
-> For node redefinition in DTS, I see benefits in two approaches:
-> 1. Let me first enable the node and then configure it.
-> 2. Let me configure the node and enable it.
-I looked around non-qcom device trees and it looks like the common
-consensus is 2. Although I personally visually prefer 1. and it's
-been used in all qcom arm64 DTs to date, I don't think there are any
-blockers for us to switch to 1. going forward to keep it consistent.
+> Regards,
+> Jerry
 
-That's if we want to clean up the existing ones, as changing the rules
-and not applying that to the older files will make for a huge mess as
-time goes on and will unnecessarily prolong the review process (as
-existing DTs are commonly a source of reference and people make
-certain choices based on those).
+I have no qualms with Jerry's suggestion.
 
-I don't think the DTS specification or the Linux docs explicitly which
-one to choose though.
+--> Steve Wahl
 
-Konrad
-> 
-> Best regards,
-> Krzysztof
+-- 
+Steve Wahl, Hewlett Packard Enterprise

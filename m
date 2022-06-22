@@ -2,64 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DB0554DB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BAF554DC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359006AbiFVOoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S1356276AbiFVOrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358820AbiFVOof (ORCPT
+        with ESMTP id S234468AbiFVOrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:44:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2DE21E38;
-        Wed, 22 Jun 2022 07:44:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7783461CB1;
-        Wed, 22 Jun 2022 14:44:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B0CC34114;
-        Wed, 22 Jun 2022 14:44:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655909073;
-        bh=DvOFF7F0A27YyDsZqMZhQnsZrCWCC28sBjO2oOSKtFs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aqemJjh7RAzid6Eqe2FpJ0pCHqf7rMsnpT74Q9lSTjNClC9uho60KjLHoNXGrUXSW
-         wPfcbw7H1eYAC5IGAU1mFt/rv+g9Fn30E5DdMV5Kxg4iFi6xWiX4T83zQ+ucdX6KU2
-         B86KfyHhGp95kdrBV2xwvySK6fjT3aKDhcEHiBvXe8AUl+PM/fWGtGHpsaMGpKbkHY
-         cuxjN6Z/o9CL76CFInCmxfacK+GDcVlmh5ABben+Px1Fozmx4XnQmIRYBn5Zf6rvFN
-         b/uGlfUN+urr0/nEsXl/gsVXG/IlfnvCUQlldKvnxxSOEN3kEa7Tv0aBhMNrEmA7Yt
-         BhRgiT+48XBsA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o41ap-00071I-4d; Wed, 22 Jun 2022 16:44:31 +0200
-Date:   Wed, 22 Jun 2022 16:44:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] arm64: dts: qcom: sc8280xp: Add reference device
-Message-ID: <YrMqz4P//iTfx0sz@hovoldconsulting.com>
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-5-bjorn.andersson@linaro.org>
- <099cc82f-d52f-315f-189d-bcc40c1afd49@somainline.org>
- <YrMccQXwsz/zC/gl@hovoldconsulting.com>
- <9d0c1897-195f-0548-ea5d-ffc35768f518@somainline.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d0c1897-195f-0548-ea5d-ffc35768f518@somainline.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 22 Jun 2022 10:47:03 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F407E3D482;
+        Wed, 22 Jun 2022 07:46:58 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1655909132tayjd3s4
+Received: from ubuntu.localdomain ( [106.117.78.84])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 22:45:27 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000E00A0000000
+X-QQ-FEAT: ZHWZeLXy+8ccYDnDNqsyMZI0CU3GWcmP17rM7zdSPdGRVVfYdwz8jIwc2eo2I
+        kfbolRK+ICh7uYcO4+gSiajaAdeDAso1iTjpXJuoPayKQT/9OQGjDYfNUYApeKfRUGNUVFv
+        1biMHBy6j+nBgUG3OnmNw6V6dYNLchttO/+xLBhV3YvWhXvaIHC+KG7n1O2ofBhf1/ZKTTU
+        MNxNP0lu0cB20qkr1yXRH4QFRVQQy4qkU6YafFNAfRPuY/UxYozI1AA/6EVsE+41ozYyEwS
+        wOb1EkF5xUu2ly2XeD4C8gI3mZigLpZDyi/TQSSWT2Uz7HV7JV0iJZLpuOi0GReSvN9h+qn
+        ZOvILq/yw9WZ0WJa/thXqE+erLUBd2TMbUl3AXE
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     michael.chan@broadcom.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] bnxt: Fix typo in comments
+Date:   Wed, 22 Jun 2022 22:45:26 +0800
+Message-Id: <20220622144526.20659-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,28 +47,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 04:36:35PM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 22.06.2022 15:43, Johan Hovold wrote:
-> > On Wed, Jun 22, 2022 at 02:33:02PM +0200, Konrad Dybcio wrote:
-> >> On 22.06.2022 06:12, Bjorn Andersson wrote:
-> > 
-> >>> +&qup2_i2c5 {
-> >>> +	clock-frequency = <400000>;
-> >>> +
-> >>> +	pinctrl-names = "default";
-> >>> +	pinctrl-0 = <&qup2_i2c5_default>, <&kybd_default>, <&tpad_default>;
-> >>> +
-> >>> +	status = "okay";
-> >>> +
-> >> I think all device DTs generally have 'status = "okay"' at the beginning. Should we change that?
-> >>
-> > 
-> > No, quite the opposite, status go at the end.
-> Then all other device DTs should be updated, as in dts/qcom/
-> everybody keeps it first in non-SoC/PMIC files.
+Remove the repeated word 'and' from comments
 
-Seems like a lot of churn so maybe not worth it.
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Johan
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 56b46b8206a7..b474a4fe4039 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -10658,7 +10658,7 @@ static void __bnxt_close_nic(struct bnxt *bp, bool irq_re_init,
+ 	while (bnxt_drv_busy(bp))
+ 		msleep(20);
+ 
+-	/* Flush rings and and disable interrupts */
++	/* Flush rings and disable interrupts */
+ 	bnxt_shutdown_nic(bp, irq_re_init);
+ 
+ 	/* TODO CHIMP_FW: Link/PHY related cleanup if (link_re_init) */
+-- 
+2.17.1
+

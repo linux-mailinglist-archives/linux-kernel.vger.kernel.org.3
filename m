@@ -2,81 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAE15554CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AE15554A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358756AbiFVTjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S1358086AbiFVTiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358574AbiFVTi0 (ORCPT
+        with ESMTP id S230075AbiFVTiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:38:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BF217E0E;
-        Wed, 22 Jun 2022 12:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=jzZ8niIo7Smg65/52ka6uwTAHWOyxG3OOMUtsy1PEeE=; b=frN2qRKLQlK5xMP5cQT3Lb9HVI
-        62WleJi7obpCi+3NJcwyjVzbqMUv/A6bothq/yL01s1j0b27k6EIsNFLe2zlnAZ3u/qyea7ep6jRG
-        OWdN4qSgIs4Kf8e1FPIGsnUKcLjCjPDdnPUHTX4Iu52F3zr8L4elecDhTr6fdmAT/ZObCJltnrtvc
-        VgpR65+FbzffP8eLhU+qX7j/2P851jaQhS4oZ9d6qJh1COdadmSJy6HZu3ls4Alk1xLSd8AaGVC7q
-        DtSW53jX8g8vvZ7FzFBDwnULpwRuY95QoTBBAvkW+Mxx23lGlNihpqne20stVeHbO+J1ImLxYljE/
-        JqUGhlzA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o46AI-00BGiS-IS; Wed, 22 Jun 2022 19:38:16 +0000
-Message-ID: <afe8b072-466f-c180-eeef-5c501bf523e3@infradead.org>
-Date:   Wed, 22 Jun 2022 12:37:21 -0700
+        Wed, 22 Jun 2022 15:38:07 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA6612A9E;
+        Wed, 22 Jun 2022 12:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655926686; x=1687462686;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cHrCL4JWXzk2Mz/dlOWv5+b6kPn7/ZVdLbQR+KDXk7s=;
+  b=fMCfAhSh6jyLtYKaX6TqqDdhfK/mKRSbL/qkXDHf32jW99Tx/5mtHUjW
+   aaehpN3ERXsvONttCsg24Xg01eleA6ibPJ0H1j0bIDkTjo5ilGkJel5/N
+   unwazKjTu4+mWT+aF3WzIfxh4X65iHqMEAiIjbdcdiTTJt7RZNd/M5dcj
+   7gCymBrQlFuQLm456szPl5uDi7ikRtvipeWeJVcyL4m7Eo5bXa4sCfy7c
+   sg4hry+lVlj0IrooMXSRQ16nSOvUfPPHHMbg3t57Z7gV6c2P1bEud4pVc
+   MVERq7GCpOuSkHoOP6KpcLY630biH+A/ECI2+Shk0On+8JyySW87dYfnB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281255445"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="281255445"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 12:38:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="715542046"
+Received: from bwalker-desk.ch.intel.com ([143.182.136.162])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2022 12:38:05 -0700
+From:   Ben Walker <benjamin.walker@intel.com>
+To:     vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/15] dmaengine: Support polling for out of order completions
+Date:   Wed, 22 Jun 2022 12:37:38 -0700
+Message-Id: <20220622193753.3044206-1-benjamin.walker@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220503200728.2321188-1-benjamin.walker@intel.com>
+References: <20220503200728.2321188-1-benjamin.walker@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: =?UTF-8?B?UmU6IFtQQVRDSF0gQ29tbW9uIGNsb2NrOiDigIvigItUbyBsaXN0IGFj?=
- =?UTF-8?Q?tive_consumers_of_clocks?=
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, mturquette@baylibre.com,
-        inux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        badolevishal1116@gmail.com
-Cc:     chinmoyghosh2001@gmail.com, mintupatel89@gmail.com
-References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
- <20220610194013.DD39DC34114@smtp.kernel.org> <20220622163209.GA6246@Mahakal>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220622163209.GA6246@Mahakal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds support for polling async transactions for completion
+even if interrupts are disabled and transactions can complete out of
+order.
 
+To do this, all DMA client assumptions about the behavior of
+dma_cookie_t have to be removed. Prior to this series, dma_cookie_t was
+a monotonically increasing integer and cookies could be compared to one
+another to determine if earlier operations had completed (up until the
+cookie wraps around, then it would break).
 
-On 6/22/22 09:32, <Vishal Badole> wrote:
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index c44247d..549cdda 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -23,6 +23,14 @@ config COMMON_CLK
->  menu "Common Clock Framework"
->  	depends on COMMON_CLK
->  
-> +config DEBUG_CLK_CONSUMER
-> +	bool "Debug feature to list clocks and their active consumers"
-> +	depends on DEBUG_FS && COMMON_CLK
-> +	help
-> +	  Clock consumer debug feature supports for clock debugging. Chose y
+Fortunately, only one out of the many, many DMA clients had any
+dependency on dma_cookie_t being anything more than an opaque handle.
+This is the pxa_camera driver and it is dealt with in patch 7 of this
+series.
 
-	                                                             Choose y
+The series also does some API clean up and documents how dma_cookie_t
+should behave (i.e. there are no rules, it's just a handle).
 
-> +	  to get debug entry in file system to list clocks and their active
-> +	  consumer devices.
+This closes out by adding support for .device_tx_status() to the idxd
+driver and then reverting the DMA_OUT_OF_ORDER patch that previously
+allowed idxd to opt-out of support for polling, which I think is a nice
+overall simplification to the dmaengine API.
 
+Changes since version 3:
+ - Fixed Message-Id in emails. Sorry they were all stripped! Won't
+   happen again.
+
+Changes since version 2:
+ - None. Rebased as requested without conflict.
+
+Changes since version 1:
+ - Broke up the change to remove dma_async_is_tx_complete into a single
+   patch for each driver
+ - Renamed dma_async_is_tx_complete to dmaengine_async_is_tx_complete.
+
+Ben Walker (15):
+  dmaengine: Remove dma_async_is_complete from client API
+  dmaengine: Move dma_set_tx_state to the provider API header
+  dmaengine: Add dmaengine_async_is_tx_complete
+  crypto: stm32/hash: Use dmaengine_async_is_tx_complete
+  media: omap_vout: Use dmaengine_async_is_tx_complete
+  rapidio: Use dmaengine_async_is_tx_complete
+  media: pxa_camera: Use dmaengine_async_is_tx_complete
+  dmaengine: Remove dma_async_is_tx_complete
+  dmaengine: Remove last, used from dma_tx_state
+  dmaengine: Providers should prefer dma_set_residue over
+    dma_set_tx_state
+  dmaengine: Remove dma_set_tx_state
+  dmaengine: Add provider documentation on cookie assignment
+  dmaengine: idxd: idxd_desc.id is now a u16
+  dmaengine: idxd: Support device_tx_status
+  dmaengine: Revert "cookie bypass for out of order completion"
+
+ Documentation/driver-api/dmaengine/client.rst | 24 ++----
+ .../driver-api/dmaengine/provider.rst         | 64 ++++++++------
+ drivers/crypto/stm32/stm32-hash.c             |  3 +-
+ drivers/dma/amba-pl08x.c                      |  1 -
+ drivers/dma/at_hdmac.c                        |  3 +-
+ drivers/dma/dmaengine.c                       |  2 +-
+ drivers/dma/dmaengine.h                       | 12 ++-
+ drivers/dma/dmatest.c                         | 14 +--
+ drivers/dma/idxd/device.c                     |  1 +
+ drivers/dma/idxd/dma.c                        | 86 ++++++++++++++++++-
+ drivers/dma/idxd/idxd.h                       |  3 +-
+ drivers/dma/imx-sdma.c                        |  3 +-
+ drivers/dma/mmp_tdma.c                        |  3 +-
+ drivers/dma/mxs-dma.c                         |  3 +-
+ drivers/media/platform/intel/pxa_camera.c     | 15 +++-
+ .../media/platform/ti/omap/omap_vout_vrfb.c   |  2 +-
+ drivers/rapidio/devices/rio_mport_cdev.c      |  3 +-
+ include/linux/dmaengine.h                     | 58 +------------
+ 18 files changed, 164 insertions(+), 136 deletions(-)
+
+Cc:linux-crypto@vger.kernel.org
+Cc:linux-stm32@st-md-mailman.stormreply.com
+Cc:linux-media@vger.kernel.org
+Cc:mporter@kernel.crashing.org
 -- 
-~Randy
+2.35.1
+

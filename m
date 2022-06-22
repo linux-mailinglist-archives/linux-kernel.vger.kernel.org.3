@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD109554CE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFCB554CED
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357761AbiFVOZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
+        id S1355448AbiFVO03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357540AbiFVOZZ (ORCPT
+        with ESMTP id S236583AbiFVO02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:25:25 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386F93B558
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:25:18 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id c65so1130075edf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:25:18 -0700 (PDT)
+        Wed, 22 Jun 2022 10:26:28 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9FA226;
+        Wed, 22 Jun 2022 07:26:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=o8BQszykOO01GSg6GqcelFQFdO6aAlqQ4V6nI9Ak9xU=;
-        b=PL/Jy2/6E29/4T6R7ah0BIsvf2/tYs4P99/RVkkS2epNWM1/8L0TeK4CyZUQChD/Nr
-         iwirMg82FxYllvVcN4WQY0tbm0ahAPbCNHooc8EK63IDLEns5AevQpDagl1dBBkeCPOp
-         5Uhgn47SVJ6GGggGu3qETpIKjween7omIMWy0YqWc8c426EerA5HwXHznhZxFW90h3Kc
-         HKWGmBe+PWvAl6/cMAS1mGBawpsmhyoUzct0G/iqk0vNcgoL9S6EF7cQ3JVESuqKZXG/
-         XqNuWNP/u51ZXZDWYltK6VXhHt8YTRoaQs4WqNLBvJJTOuAjNFBeLW3vedWgBCxb6CVG
-         EPPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=o8BQszykOO01GSg6GqcelFQFdO6aAlqQ4V6nI9Ak9xU=;
-        b=Lz5jYA+OlCw4qA4yiBw8sp8REmOYneK6I6EtsediALuCIDmcSKZ8B1sBrhoXeEXjAh
-         jDcpVDlWjFZPW5qVJK6XhcOnUX8tHm5/ZWudaoQ9ksjkfb7kzftIh3dhKeESJly/oZzy
-         thuam0KZTntCBB8Ja2X7mGyCjzZefoYE0JS5tfs9zynl/eF9TRmsvW1em2sGuPAusAPc
-         7ehV3/zx9rhZTdgQ0Bbs+GtJl3kEwFZrSFiwtBBavU9hQEHlPwvpGfE6b9PNiAENYxMk
-         OFZpT9FZmLlIAxnIGiOeIsGAtd/hYGQqf31L9BK6fQYK8ryyRHk6jzbn2ZvTllySLiVP
-         1Rvw==
-X-Gm-Message-State: AJIora+/33/d4/eou9s3xLcun/aOrZsFfC8l2BiU03ufhWok0H4lHYR0
-        g3uOQQht5H44WypO1T/VlJ/INw==
-X-Google-Smtp-Source: AGRyM1usJfLNlqwF3SOJlrmxqF0s/Afh6Lg9nbMm7/FV4DlxjCxOcEI6qm1P5bDVYjGEghLhPUEdQw==
-X-Received: by 2002:a05:6402:278f:b0:435:9bd4:be9d with SMTP id b15-20020a056402278f00b004359bd4be9dmr4383865ede.154.1655907916760;
-        Wed, 22 Jun 2022 07:25:16 -0700 (PDT)
-Received: from [192.168.0.225] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170906370400b006fec56c57f3sm9604429ejc.178.2022.06.22.07.25.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 07:25:16 -0700 (PDT)
-Message-ID: <56c45859-a4a4-07dd-6166-d4fa09769d8a@linaro.org>
-Date:   Wed, 22 Jun 2022 16:25:15 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655907985; x=1687443985;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RkC7CSKPsBmpnFx2b7MQAkEllShuNN7t7DR2zozOlqM=;
+  b=Vb2Ep/YdTqj1LMfrD3JaiMX4QIxyR6VVzqyO8WHxhJju83Tet7hZJ+U7
+   Iil12z6Chrq/Ou6SH3eXP2wtcDPXrvbRCA4VwsZ/OVJ4FvVXJMEP+vlOL
+   1Tw218EUVhUATlz9/AgzL40dYA/Z5PqTLC2BLIZm0H9UdHjuwYlTaV+Ma
+   A=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Jun 2022 07:26:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:26:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 22 Jun 2022 07:26:24 -0700
+Received: from ubuntu.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 22 Jun
+ 2022 07:26:22 -0700
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+CC:     Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Qian Cai <quic_qiancai@quicinc.com>
+Subject: [PATCH] arm64/crypto: Select AEAD2 for GHASH_ARM64_CE
+Date:   Wed, 22 Jun 2022 10:25:57 -0400
+Message-ID: <20220622142557.144536-1-quic_qiancai@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 00/13] Host1x support on Tegra234
-Content-Language: en-US
-To:     Mikko Perttunen <cyndis@kapsi.fi>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, digetx@gmail.com
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mikko Perttunen <mperttunen@nvidia.com>
-References: <20220622113733.1710471-1-cyndis@kapsi.fi>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220622113733.1710471-1-cyndis@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 13:37, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
-> 
-> -------------
-> Merging notes
-> -------------
-> 
-> This series should be applied on top of the Host1x context isolation
-> series.
-> 
+Otherwise, we could fail to compile.
 
-The dependency should be first merged into next, so automated tools can
-process it.
+ld: arch/arm64/crypto/ghash-ce-glue.o: in function 'ghash_ce_mod_exit':
+ghash-ce-glue.c:(.exit.text+0x24): undefined reference to 'crypto_unregister_aead'
+ld: arch/arm64/crypto/ghash-ce-glue.o: in function 'ghash_ce_mod_init':
+ghash-ce-glue.c:(.init.text+0x34): undefined reference to 'crypto_register_aead'
 
-Best regards,
-Krzysztof
+Fixes: 37b6aab68fae ("crypto: arm64/ghash - drop PMULL based shash")
+Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
+---
+ arch/arm64/crypto/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
+index 4391a463abd7..6b2ecc193bc0 100644
+--- a/arch/arm64/crypto/Kconfig
++++ b/arch/arm64/crypto/Kconfig
+@@ -71,6 +71,7 @@ config CRYPTO_GHASH_ARM64_CE
+ 	select CRYPTO_HASH
+ 	select CRYPTO_GF128MUL
+ 	select CRYPTO_LIB_AES
++	select CRYPTO_AEAD2
+ 
+ config CRYPTO_POLYVAL_ARM64_CE
+ 	tristate "POLYVAL using ARMv8 Crypto Extensions (for HCTR2)"
+-- 
+2.34.1
+

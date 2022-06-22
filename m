@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C3255477D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC0F554866
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350092AbiFVIrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S1353393AbiFVIt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236729AbiFVIrP (ORCPT
+        with ESMTP id S1351923AbiFVItz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:47:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F1E396A2;
-        Wed, 22 Jun 2022 01:47:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DCA5B81CEE;
-        Wed, 22 Jun 2022 08:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD63CC34114;
-        Wed, 22 Jun 2022 08:47:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655887631;
-        bh=9Cic3CRnN/+87wCqzwhlvsAQjVOpaTeW1l6o5THs8CI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cVkLQHWzW3Yw9TVz2dzzKzeR+QnUq7x4+bB64283XnsAVsrEODYwYX6FfUrgY6xrH
-         nutrHVc3eirGnmejV5vkOXo90XofpO/yl0Uj3Kaqn1ip/DQJU76WjxQtCj+4DrQQ0n
-         G81OuSPJX0C9G6bABNgG6GrkH3f+4cAjBS3l7tGWXHxKzKlo9MwjsDe2SM5YFp7Cqt
-         iBHl/ezc/P6nuNMx312+xM2QzF9gSNAnj4aw8Lu4XIqg0PWcLad7EskZK8x4obrTXc
-         Rm2ocVRqmeukupGMAZEPk2zTFv1VGor1JiiXNfHTEQtCc+kURThcfDNSdxo/xn56p5
-         F79Cz7Y6CW/4g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3w0x-0002Su-Ct; Wed, 22 Jun 2022 10:47:07 +0200
-Date:   Wed, 22 Jun 2022 10:47:07 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: arm: qcom: Document additional
- sc8280xp devices
-Message-ID: <YrLXCx90bn7Id4Bn@hovoldconsulting.com>
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-2-bjorn.andersson@linaro.org>
+        Wed, 22 Jun 2022 04:49:55 -0400
+Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2DBC37A00;
+        Wed, 22 Jun 2022 01:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=w9smT
+        9c7AimDj+0qXZ7d9XMDCS+o+Pqmaur0QQu32Rc=; b=YTUKCFSTAYSRF68e3j9a4
+        T1WapaOY27khueUPi/l8Ec/pftVTLcy4EcKZUaseI9sFassBQXTEqgmx2wtGHY3N
+        m3D48pfN6kJeMUVkAcnHtPV9hUb72gnulOKXrFv84ATkPT9R5ATjnuiFF/5J/+wo
+        jU18qxzXdFWrkRpxNOTIJU=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
+ (Coremail) ; Wed, 22 Jun 2022 16:49:43 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Wed, 22 Jun 2022 16:49:43 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re:Re: [PATCH] memory/tegra: Add missing of_node_get() in
+ tegra_emc_find_node_by_ram_code
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <2f3e843e-b72b-ee71-7465-b2b6c8d51b0d@linaro.org>
+References: <20220622042824.4094625-1-windhl@126.com>
+ <2f3e843e-b72b-ee71-7465-b2b6c8d51b0d@linaro.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622041224.627803-2-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <11875304.61a4.1818a9a66bb.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: GMqowABHTyeo17JiAdI6AA--.27634W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AgoF1pEDxshpAAAsk
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 09:12:19PM -0700, Bjorn Andersson wrote:
-> Add the CRD (Customer Reference Design?) and the Lenovo Thinkpad X13s to
-
-Qualcomm refers to "Compute Reference Design", for example, in commit
-427b249504ea ("arm64: dts: qcom: sc7280-crd: Add device tree files for
-CRD").
-
-> the valid device compatibles found on the sc8280xp platform.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> Changes since v1:
-> - Added the two missing board compatibles
-> 
->  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 5c06d1bfc046..6ec7521be19d 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -238,6 +238,8 @@ properties:
->  
->        - items:
->            - enum:
-> +              - lenovo,thinkpad-x13s
-> +              - qcom,sc8280xp-crd
->                - qcom,sc8280xp-qrd
-
-I believe the "qcom,sc8280xp-qrd" entry was a mistake and should have
-been "-crd" all along? Perhaps you should remove that entry in this
-patch.
-
->            - const: qcom,sc8280xp
-
-Looks good otherwise:
-
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-
-Johan
+CgpBdCAyMDIyLTA2LTIyIDE2OjQxOjI4LCAiS3J6eXN6dG9mIEtvemxvd3NraSIgPGtyenlzenRv
+Zi5rb3psb3dza2lAbGluYXJvLm9yZz4gd3JvdGU6Cj5PbiAyMi8wNi8yMDIyIDA2OjI4LCBMaWFu
+ZyBIZSB3cm90ZToKPj4gb2ZfZmluZF9ub2RlX2J5X25hbWUoKSB3aWxsIGRlY3JlYXNlIHRoZSBy
+ZWZjb3VudCBvZiBpdHMgZmlyc3QgYXJnIGFuZAo+PiB3ZSBuZWVkIHRvIGFkZCBhIG9mX25vZGVf
+cHV0KCkgdG8ga2VlcCByZWZjb3VudCBiYWxhbmNlLgo+PiAKPj4gQmVzaWRlcywgZHVyaW5nIHRo
+ZSAnZm9yJyBsb29wIGV4ZWN1dGlvbiwgdGhlIHJlZmNvdW50IG9mICducCcgd2lsbCBiZQo+PiBh
+dXRvbWF0aWNhbGx5IGluY3JlYXNlZCBhbmQgZGVjcmVhc2VkLiBUaGVyZSBpcyBubyBuZWVkIHRv
+IGNhbGwKPj4gb2Zfbm9kZV9wdXQoKSBhZ2Fpbi4KPj4gCj4+IFNpZ25lZC1vZmYtYnk6IExpYW5n
+IEhlIDx3aW5kaGxAMTI2LmNvbT4KPj4gLS0tCj4+ICBkcml2ZXJzL21lbW9yeS90ZWdyYS90ZWdy
+YTIwLWVtYy5jIHwgMyArKy0KPj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEg
+ZGVsZXRpb24oLSkKPj4gCj4KPlRoZSBwYXRjaCB3YXMgbm90IGV2ZW4gY29tcGlsZWQuLi4gSSBj
+b25zaWRlciBpdCBoYXJtZnVsIGFwcHJvYWNoLiBOQUsuCj5TZWU6IGh0dHBzOi8vbHduLm5ldC9B
+cnRpY2xlcy84NTQ2NDUvCj4KPkJlc3QgcmVnYXJkcywKPktyenlzenRvZgoKU29ycnksIEtyenlz
+enRvZi4KCkFzIHRoZSBwYXRjaCBpcyBzbyBzaW1wbGUgdHdvIGxpbmVzICwgSSB0aG91Z2h0IEkg
+Y2FuIGhhbmRsZSBpdCB3aXRob3V0IGNvbXBpbGluZyBpdC4KClRoYW5rcyB2ZXJ5IG11Y2ggZm9y
+IHlvdXIgbm90aWNlIGFib3V0IHRoZSBhcnRpY2xlIGFuZCBJIGhvcGUgSSBoYXZlIG5vdCBkb25l
+IGFueW90aGVyIGhhcm1mdWwgdGhpbmdzLgoKQW5kIEkgd2lsbCB0YWtlIGNhcmUgb2YgbXkgcGF0
+Y2ggY29kZSBpbiBmdXR1cmUgbm8gbWF0dGVyIGhvdyBzaW1wbGUgaXQgaXMuCgoK

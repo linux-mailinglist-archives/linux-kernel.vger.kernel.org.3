@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44F8554CAF
+	by mail.lfdr.de (Postfix) with ESMTP id 58047554CAE
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358422AbiFVOSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S1358261AbiFVOSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358277AbiFVOSL (ORCPT
+        with ESMTP id S1358083AbiFVOSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:18:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CD13CFFF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:17:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E1F4B81EB6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:17:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E50FC34114;
-        Wed, 22 Jun 2022 14:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655907451;
-        bh=zRN8pMikC873iNt1UJIlldjE9fXl+iAWKj+fmNVfc4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BL1Gxil96ejsriMZjrrBOYuKst8H/GStZG+U7S+PB9tgm1raxZ3FEJZF6NQWqs0lP
-         FZHE2HSITFEisrke+GN2B4gwihEPE6H5pX2MRQqNLGVzPkHJyLvfJilvUZBpjlpYMk
-         MYmSLdEyAFvq1w/9O6PuwLQ54Im1bxHmwMi0TIFPYNxcqCOTeZRTx6RdF3aNJwDllc
-         uW/ypMZ29kksalATXvIhNnWHibxCPy0UKxZY4OZzymQzWBiI+Z0zDXAIkV1gXcJxfp
-         +gnwU/e9Gl8L52aeHYKSGp2/TSKR2lhg4a8jibYV5PUoXICCGfCuQg+zKfT3XMAXhv
-         GlyrJA3lu7dug==
-Date:   Wed, 22 Jun 2022 09:17:24 -0500
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rebecca Mckeever <remckee0@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v3 0/4] memblock tests: add VERBOSE and MEMBLOCK_DEBUG
- Makefile options
-Message-ID: <YrMkdPjftJz2J7Vx@kernel.org>
-References: <cover.1655889641.git.remckee0@gmail.com>
+        Wed, 22 Jun 2022 10:18:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3171B3C706;
+        Wed, 22 Jun 2022 07:17:28 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id u12so34557196eja.8;
+        Wed, 22 Jun 2022 07:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=kdeSlF5fWHZ3xXKBzKY62W+xebc6UMKioDmTRwyUM5I=;
+        b=a3an+DWnKpt2DOtE2474+dpyWuKuuqp8cZVdW/LNxjfmHudnzTYBQ5HGDjGCVHI6TK
+         0YV0twS6tEDlqOqIbncsXYNFrMZheYXU4f45+TlMmfeFRtipFBJYAYol6gd35vXM8nm8
+         21/TujgU7Bj63LzBSs/dwhtQvHlL2M4DHxSYsb7KjZ7DHD1uzVd5W8oG2CjyrrC4H6zK
+         ZTkfw06DnQzzHhjH8Jo2zsf4rdcxpeHiMWlUbV0EVoxy112jL3kXMCHfFpAg6cax4NN0
+         hlSZD8qc3NZfXs4/WV6vDg3bVSM1M5wUUL0THtu1GlnTBt8EHGQaDMMVy72ur6G1utWo
+         AnEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kdeSlF5fWHZ3xXKBzKY62W+xebc6UMKioDmTRwyUM5I=;
+        b=cuLrnSirt8dGrtciiW0aZSULLKY3KhhQ3g+YxGFLnECMJUhpE8B0Q/1yGTOorEmiiP
+         J11W4NaY50htP2o72zbZcWecaao1c9gwdCx7JPU6Ep5dVBVRBq3V4BnDxouXbUbNNboD
+         gv1bal/1GqIkDWSVSEFV+PfzgGRSkfwjopMJIUXsmWAgdZuq4SxeIuKvFtmGDy2CZ0vL
+         nYcpk2chOraK+hGlpxr16YD6ynX/qQTirQRh2d62tYxsrab1MTgZ+uhdWeRi3Rbij305
+         gomfa0pfsYFdAG5pD9jKPbHHUEK5V9c1HpG9dZn+jlu+6xOcUJ8jmzKwCrzhKkiSPYAB
+         Semw==
+X-Gm-Message-State: AJIora9msSMzmKbYoPlkXzlCxBRDa5SU7uJVTsxcg98bKdFfJLQe9Qd0
+        db+cc8r4VD1RpCd5eulIFvE=
+X-Google-Smtp-Source: AGRyM1tzJAEA91jxTi42bg0jzLDgIiPpJr86EGq+c8M1jJUUBWaaiyXJ/8e9nNQgCTcL9ByigtTVdw==
+X-Received: by 2002:a17:907:1c07:b0:711:c966:f02e with SMTP id nc7-20020a1709071c0700b00711c966f02emr3441603ejc.221.1655907446732;
+        Wed, 22 Jun 2022 07:17:26 -0700 (PDT)
+Received: from [192.168.0.16] ([37.223.148.38])
+        by smtp.gmail.com with ESMTPSA id lb13-20020a170907784d00b006fe9ec4ba9esm9419558ejc.52.2022.06.22.07.17.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:17:25 -0700 (PDT)
+Message-ID: <ec6b910e-01fd-94ef-945c-31d48b2d47f7@gmail.com>
+Date:   Wed, 22 Jun 2022 16:17:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1655889641.git.remckee0@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] arm64: dts: mediatek: mt7622-rfb1: remove wrong gpio-keys
+ property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220617232124.7022-1-krzysztof.kozlowski@linaro.org>
+ <834af774-ecdd-1929-86eb-6a814c5d774c@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <834af774-ecdd-1929-86eb-6a814c5d774c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rebecca,
 
-On Wed, Jun 22, 2022 at 04:29:05AM -0500, Rebecca Mckeever wrote:
-> These patches add options VERBOSE and MEMBLOCK_DEBUG to Memblock
-> simulator, which can be specified when running make. These patches also
-> implement the functionality for these options.
-> 
-> VERBOSE
-> Usage:
-> 
-> $ make VERBOSE=1
-> 
-> Passing VERBOSE=1 will enable verbose output from Memblock simulator. For
-> each test, the verbose output includes the name of the memblock function
-> being tested, the name of the test, and whether the test passed or failed.
-> Since all the tests in Memblock simulator run as one monolithic test, this
-> output is a quick way to get a summary of test results.
-> 
-> MEMBLOCK_DEBUG
-> Usage:
-> 
-> $ make MEMBLOCK_DEBUG=1
-> 
-> Passing MEMBLOCK_DEBUG=1 will enable memblock_dbg() messages. These
-> are debug messages built into several functions in memblock that include
-> information such as the name of the function and the size and start and
-> end addresses of the memblock region.
-> 
-> Rebecca Mckeever (4):
->   memblock tests: add user-provided arguments to Makefile
->   memblock tests: add verbose output to memblock tests
->   memblock tests: set memblock_debug to enable memblock_dbg() messages
->   memblock tests: remove completed TODO items
-> 
->  tools/testing/memblock/Makefile               |   4 +
->  tools/testing/memblock/README                 |  10 +-
->  tools/testing/memblock/TODO                   |  14 +-
->  tools/testing/memblock/internal.h             |   7 +
->  .../testing/memblock/scripts/Makefile.include |  10 +
->  tools/testing/memblock/tests/alloc_api.c      | 241 ++++++++----
->  .../memblock/tests/alloc_helpers_api.c        | 135 +++++--
->  tools/testing/memblock/tests/alloc_nid_api.c  | 371 ++++++++++++------
->  tools/testing/memblock/tests/basic_api.c      | 365 ++++++++++++-----
->  tools/testing/memblock/tests/common.c         |  58 +++
->  tools/testing/memblock/tests/common.h         |  54 +++
->  11 files changed, 913 insertions(+), 356 deletions(-)
-> 
-> ---
-> Changes
-> 
-> v1 -> v2
-> PATCH 2, in common.c:
->   Remove #ifdef VERBOSE around prefixes and related constants
->   Add __maybe_unused to prefixes
->   Move PREFIXES_LEN_MAX, DELIM, and DELIM_LEN so that they are
->     immediately after the other constants
->   Add #ifdef VERBOSE around definitions for test_*() and prefix_*()
-> 
-> v2 -> v3
-> PATCH 1:
->   Add Reviewed-by tag
-> ---
 
-The patch changelog in a cover letter usually goes before the commit list
-and diffstat. 
- 
-> -- 
-> 2.34.1
+On 18/06/2022 01:22, Krzysztof Kozlowski wrote:
+> On 17/06/2022 16:21, Krzysztof Kozlowski wrote:
+>> gpio-keys (regular, not polling) does not use "poll-interval" property.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Changes since v3:
+>> 1. Correct commit msg (Matthias)
+>> ---
 > 
+> Eh, jetlag hurts the brain. This should be [PATCH v4] in the subject.
 
--- 
-Sincerely yours,
-Mike.
+No worries, applied now. Thanks!
+
+> 
+> 
+> Best regards,
+> Krzysztof

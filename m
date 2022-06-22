@@ -2,152 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AB7555199
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE02E5551AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376633AbiFVQsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S1376896AbiFVQuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359763AbiFVQrs (ORCPT
+        with ESMTP id S1359267AbiFVQs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:47:48 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D3837BE2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:47:11 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:37884)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o43VW-00AWlO-PX; Wed, 22 Jun 2022 10:47:10 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57378 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o43VV-00FwIL-GT; Wed, 22 Jun 2022 10:47:10 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@kernel.org,
-        bigeasy@linutronix.de, Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Keno Fischer <keno@juliacomputing.com>
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
-        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-        <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Wed, 22 Jun 2022 11:47:02 -0500
-In-Reply-To: <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Wed, 22 Jun 2022 11:43:37 -0500")
-Message-ID: <875yksd4s9.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 22 Jun 2022 12:48:29 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD4663F6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:48:01 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3185f5623edso8648727b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kp/yh5bW8TY1dw8lD/1Ylcedrm+ARISJLh6F2D0W1cA=;
+        b=PWBElkZJqkDtHVG9XPIEPuTSazCJ9NORWl85Rkm97/RzMnzrcQgeO45lKXkqhn1Shp
+         5QNG+YIhtG/eQi/VWtkTOHwTTZ2vjJmMCzZ8yj68cfd8Pb1/ZuNa7MtPaRdPcpYTXKJN
+         j7WXElGkHxpgHHkWcwa/ZKm9/Zvdyi7nUm6oQ3zHuObjUfijkYjrxwDD/TY2t5zoXQ3o
+         BDaKDnl5jLDemAWp3iB44WExeyUrjCIoVik7pZkIrBEOeP3MVsCB8arbkG4XHzjKHyc9
+         geUWSL9Nnpk9FP+jlnd7alivOiB0Cs4pcpM+lbM4owjdJD5KP2T7A+dWAKPxq+4mW4jk
+         Ph5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kp/yh5bW8TY1dw8lD/1Ylcedrm+ARISJLh6F2D0W1cA=;
+        b=yQjY6X8y+i2uqX68lQ2tRmh17JyI0/c1kUBK9YnB8R5O/611kQ0/ULLsrP8mIlTfU0
+         E55dPHqfZMma+RWx5F0VV1Ip4EMXOO8JPd6cXKdoXHtuiANCSo5e9LGtJtgnjzuzt6d/
+         oxuejNAdmKGaDKShQ0y94APqdbaB5UGf4Nif3KRqWnaL5gtdrG+9a4bP58O3q1kOIsBd
+         1jT1IT2kmjXQWHPGOIlJFkwMg/IFsYCEeKjfs7aFSlVblQadvIyKxWcpJINW8xvBpy7S
+         lCAIuMkx13QqPxgJ89tI/ZaFNm06FPpKebUpW72YzcP2JlHUUZVJMSmaHtvjZOmY0lUy
+         9zRA==
+X-Gm-Message-State: AJIora+raoh0G4ceDB1+oJcBX7jjV3bhAF7lmCk4+fsIqXHDby0f5KV5
+        81n+V8rpbejuocAFy/6VTHt9Gu+XTU5ayQeCq9Mjdg==
+X-Google-Smtp-Source: AGRyM1tWj+cwpVYjfap8gVH72OmUbiehYc/hbn491XF/tfwmgdAP1iGoGe1mWaa9dreJ/2rqLr6HwIcoB6qMIeBf6ak=
+X-Received: by 2002:a0d:fac6:0:b0:317:5202:b8c1 with SMTP id
+ k189-20020a0dfac6000000b003175202b8c1mr5252536ywf.467.1655916480918; Wed, 22
+ Jun 2022 09:48:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1o43VV-00FwIL-GT;;;mid=<875yksd4s9.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19r0/CpyEf7c9BvUdaOre1lAKO5rEMaStY=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220619003919.394622-1-i.maximets@ovn.org> <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
+ <20220622102813.GA24844@breakpoint.cc> <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
+ <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org> <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
+ <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org> <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
+ <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
+In-Reply-To: <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 22 Jun 2022 18:47:49 +0200
+Message-ID: <CANn89iLVHAE5aMwo0dow14mdFK0JjokE9y5KV+67AxKJdSjx=w@mail.gmail.com>
+Subject: Re: [PATCH net] net: ensure all external references are released in
+ deferred skbuffs
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Florian Westphal <fw@strlen.de>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 732 ms - load_scoreonly_sql: 0.02 (0.0%),
-        signal_user_changed: 4.4 (0.6%), b_tie_ro: 3.0 (0.4%), parse: 1.17
-        (0.2%), extract_message_metadata: 11 (1.5%), get_uri_detail_list: 1.73
-        (0.2%), tests_pri_-1000: 11 (1.5%), tests_pri_-950: 1.10 (0.2%),
-        tests_pri_-900: 0.80 (0.1%), tests_pri_-90: 156 (21.3%), check_bayes:
-        154 (21.0%), b_tokenize: 6 (0.8%), b_tok_get_all: 8 (1.1%),
-        b_comp_prob: 1.92 (0.3%), b_tok_touch_all: 135 (18.5%), b_finish: 0.83
-        (0.1%), tests_pri_0: 534 (72.9%), check_dkim_signature: 0.40 (0.1%),
-        check_dkim_adsp: 1.90 (0.3%), poll_dns_idle: 0.48 (0.1%),
-        tests_pri_10: 2.7 (0.4%), tests_pri_500: 8 (1.1%), rewrite_mail: 0.00
-        (0.0%)
-Subject: [PATCH 3/3] signal: Drop signals received after a fatal signal has
- been processed
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 22, 2022 at 6:39 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Wed, Jun 22, 2022 at 6:29 PM Eric Dumazet <edumazet@google.com> wrote:
+> >
+> > On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
+> > >
+> > > On 6/22/22 13:43, Eric Dumazet wrote:
+> >
+> > >
+> > > I tested the patch below and it seems to fix the issue seen
+> > > with OVS testsuite.  Though it's not obvious for me why this
+> > > happens.  Can you explain a bit more?
+> >
+> > Anyway, I am not sure we can call nf_reset_ct(skb) that early.
+> >
+> > git log seems to say that xfrm check needs to be done before
+> > nf_reset_ct(skb), I have no idea why.
+>
+> Additional remark: In IPv6 side, xfrm6_policy_check() _is_ called
+> after nf_reset_ct(skb)
+>
+> Steffen, do you have some comments ?
+>
+> Some context:
+> commit b59c270104f03960069596722fea70340579244d
+> Author: Patrick McHardy <kaber@trash.net>
+> Date:   Fri Jan 6 23:06:10 2006 -0800
+>
+>     [NETFILTER]: Keep conntrack reference until IPsec policy checks are done
+>
+>     Keep the conntrack reference until policy checks have been performed for
+>     IPsec NAT support. The reference needs to be dropped before a packet is
+>     queued to avoid having the conntrack module unloadable.
+>
+>     Signed-off-by: Patrick McHardy <kaber@trash.net>
+>     Signed-off-by: David S. Miller <davem@davemloft.net>
+>
 
-In 403bad72b67d ("coredump: only SIGKILL should interrupt the
-coredumping task") Oleg modified the kernel to drop all signals that
-come in during a coredump except SIGKILL, and suggested that it might
-be a good idea to generalize that to other cases after the process has
-received a fatal signal.
+Oh well... __xfrm_policy_check() has :
 
-Semantically it does not make sense to perform any signal delivery
-after the process has already been killed.
+nf_nat_decode_session(skb, &fl, family);
 
-When a signal is sent while a process is dying today the signal is
-placed in the signal queue by __send_signal and a single task of the
-process is woken up with signal_wake_up, if there are any tasks that
-have not set PF_EXITING.
+This  answers my questions.
 
-Take things one step farther and have prepare_signal report that all
-signals that come after a process has been killed should be ignored.
-While retaining the historical exception of allowing SIGKILL to
-interrupt coredumps.
+This means we are probably missing at least one XFRM check in TCP
+stack in some cases.
+(Only after adding this XFRM check we can call nf_reset_ct(skb))
 
-Update the comment in fs/coredump.c to make it clear coredumps are
-special in being able to receive SIGKILL.
-
-This changes things so that a process stopped in PTRACE_EVENT_EXIT can
-not be made to escape it's ptracer and finish exiting by sending it
-SIGKILL.  That a process can be made to leave PTRACE_EVENT_EXIT and
-escape it's tracer by sending the process a SIGKILL has been
-complicating tracer's for no apparent advantage.  If the process needs
-to be made to leave PTRACE_EVENT_EXIT all that needs to happen is to
-kill the proceses's tracer.  This differs from the coredump code where
-there is no other mechanism besides honoring SIGKILL to expedite the
-end of coredumping.
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- fs/coredump.c   | 2 +-
- kernel/signal.c | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/fs/coredump.c b/fs/coredump.c
-index ebc43f960b64..b836948c9543 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -354,7 +354,7 @@ static int zap_process(struct task_struct *start, int exit_code)
- 	struct task_struct *t;
- 	int nr = 0;
- 
--	/* ignore all signals except SIGKILL, see prepare_signal() */
-+	/* Allow SIGKILL, see prepare_signal() */
- 	start->signal->flags = SIGNAL_GROUP_EXIT;
- 	start->signal->group_exit_code = exit_code;
- 	start->signal->group_stop_count = 0;
-diff --git a/kernel/signal.c b/kernel/signal.c
-index edb1dc9b00dc..369d65b06025 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -913,8 +913,9 @@ static bool prepare_signal(int sig, struct task_struct *p, bool force)
- 		if (signal->core_state)
- 			return sig == SIGKILL;
- 		/*
--		 * The process is in the middle of dying, nothing to do.
-+		 * The process is in the middle of dying, drop the signal.
- 		 */
-+		return false;
- 	} else if (sig_kernel_stop(sig)) {
- 		/*
- 		 * This is a stop signal.  Remove SIGCONT from all queues.
--- 
-2.35.3
-
+>
+> >
+> > I suspect some incoming packets are not going through
+> > xfrm4_policy_check() and end up being stored in a TCP receive queue.
+> >
+> > Maybe something is missing before calling tcp_child_process()
+> >
+> >
+> > >
+> > > >
+> > > > I note that IPv6 does the nf_reset_ct() earlier, from ip6_protocol_deliver_rcu()
+> > > >
+> > > > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> > > > index fda811a5251f2d76ac24a036e6b4f4e7d7d96d6f..a06464f96fe0cc94dd78272738ddaab2c19e87db
+> > > > 100644
+> > > > --- a/net/ipv4/tcp_ipv4.c
+> > > > +++ b/net/ipv4/tcp_ipv4.c
+> > > > @@ -1919,6 +1919,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> > > >         struct sock *sk;
+> > > >         int ret;
+> > > >
+> > > > +       nf_reset_ct(skb);
+> > > > +
+> > > >         drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+> > > >         if (skb->pkt_type != PACKET_HOST)
+> > > >                 goto discard_it;
+> > > > @@ -2046,8 +2048,6 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> > > >         if (drop_reason)
+> > > >                 goto discard_and_relse;
+> > > >
+> > > > -       nf_reset_ct(skb);
+> > > > -
+> > > >         if (tcp_filter(sk, skb)) {
+> > > >                 drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
+> > > >                 goto discard_and_relse;
+> > >

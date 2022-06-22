@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98B0554364
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06ED55434D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351788AbiFVGxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S1351813AbiFVGxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351767AbiFVGxL (ORCPT
+        with ESMTP id S1352098AbiFVGx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:53:11 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736ADAE56
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655880789; x=1687416789;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ABLekP1DeJgDEsR/LSwop4OZSr2BAo0sZd/g3m629qA=;
-  b=jlwr/PO1toXzJjzNVWRYJXuBxgaHFXjyfB53TZI1Kt5BvC9KvmQzpoFh
-   GD8fDp1wYlDzQYZ99Jr12zrmd4LyK5BOb20InCVa+Jphi13xJcar68HLC
-   Q+J1S5hqMylAAwobA75BXMUG8AVPtOJz/j+2A5CeGr/5UtrbHFYUs4RV7
-   CKJJ1K5U86CEOtx5a7qQRS+n82aeR2l/sCJuC8W2mwgAFxOcOg/OLTjQu
-   X/xQ89ydGz7yuZ5KTWw2Qj9MqNKSsvXvJSbWaVn8XKgqalsA1r36PzbM6
-   jQYn7q+lr0VYgQTOJ7GwFb/YAhz9JsebS3IsM0X8SAN1PpHrY5dD+hCtZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="277881741"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="277881741"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 23:53:09 -0700
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="615039874"
-Received: from ebrazil-mobl1.amr.corp.intel.com (HELO [10.213.200.60]) ([10.213.200.60])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 23:53:06 -0700
-Message-ID: <529b043a-e6af-cd1c-c6b8-a7778c2799d0@linux.intel.com>
-Date:   Wed, 22 Jun 2022 07:53:05 +0100
+        Wed, 22 Jun 2022 02:53:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65843FD1C;
+        Tue, 21 Jun 2022 23:53:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB92B81A8C;
+        Wed, 22 Jun 2022 06:53:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A1DC34114;
+        Wed, 22 Jun 2022 06:53:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655880803;
+        bh=fkCnpyOGxXVQBQzpIq+Cax/ef+Xx5fbgJz5m7udLC4Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=la0eq7ccOqwl+3Lvmh43wZ9e3iiF0FnyS9XkdlnBatlX35ZzkaVpGY3dY6ZAniJZH
+         C4ByUlmUd6reQ/Z5XRZtmMxCA06QEnV+DlmFY8eMJagmb6Wx0HPrx+SlOQT29dimf/
+         e24paj8OcscGYq92PM5deNGqXGRACavtsuf/dfgACY+L/iLuSxmz0QkAOaow4lcTQT
+         4AtCCKAM+ER1fJtr9Hm4cAmAeQ6epvJOUucm9KOHQ2YGg/zNyPX8b/x0zXyaGSFQl3
+         JXAAuRfjawt0l1Fr13j9pDU5RcUr9O2Y5POs3Eg/WEjIIwTFDb8V0os664Qz/iYkoe
+         EyftOkdCoCnqA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3uEo-0004NB-UT; Wed, 22 Jun 2022 08:53:19 +0200
+Date:   Wed, 22 Jun 2022 08:53:18 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        charles-yeh@prolific.com.tw, Charles Yeh <charlesyeh522@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: pl2303: add support for more HXN (G) types
+Message-ID: <YrK8Xmv3vT1VFw+q@hovoldconsulting.com>
+References: <20220621085855.6252-1-johan@kernel.org>
+ <YrGKK7Ua20Boz1oZ@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] drm/i915: Fix spelling typo in comment
-Content-Language: en-US
-To:     1064094935@qq.com, Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, pengfuyuan <pengfuyuan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-References: <tencent_7B226C4A9BC2B5EEB37B70C188B5015D290A@qq.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <tencent_7B226C4A9BC2B5EEB37B70C188B5015D290A@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrGKK7Ua20Boz1oZ@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 21, 2022 at 11:06:51AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 21, 2022 at 10:58:55AM +0200, Johan Hovold wrote:
+> > Add support for further HXN (G) type devices (GT variant, GL variant, GS
+> > variant and GR) and document the bcdDevice mapping.
+> > 
+> > Note that the TA and TB types use the same bcdDevice as some GT and GE
+> > variants, respectively, but that the HX status request can be used to
+> > determine which is which.
+> > 
+> > Also note that we currently do not distinguish between the various HXN
+> > (G) types in the driver but that this may change eventually (e.g. when
+> > adding GPIO support).
+> > 
+> > Reported-by: Charles Yeh <charlesyeh522@gmail.com>
+> > Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
+> > Cc: stable@vger.kernel.org	# 5.13
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
 
-On 16/06/2022 08:08, 1064094935@qq.com wrote:
-> From: pengfuyuan <pengfuyuan@kylinos.cn>
-> 
-> Fix spelling typo in comment.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: pengfuyuan <pengfuyuan@kylinos.cn>
-> ---
->   drivers/gpu/drm/i915/gem/i915_gem_tiling.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_tiling.c b/drivers/gpu/drm/i915/gem/i915_gem_tiling.c
-> index 80ac0db1ae8c..85518b28cd72 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_tiling.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_tiling.c
-> @@ -114,7 +114,7 @@ u32 i915_gem_fence_alignment(struct drm_i915_private *i915, u32 size,
->   	return i915_gem_fence_size(i915, size, tiling, stride);
->   }
->   
-> -/* Check pitch constriants for all chips & tiling formats */
-> +/* Check pitch constraints for all chips & tiling formats */
->   static bool
->   i915_tiling_ok(struct drm_i915_gem_object *obj,
->   	       unsigned int tiling, unsigned int stride)
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Merged to drm-intel-gt-next - thanks for the patch!
+Thanks for reviewing. Now applied.
 
-Regards,
-
-Tvrtko
+Johan

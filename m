@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A1D55425D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 07:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017D3554261
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 07:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356545AbiFVFq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 01:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S1356628AbiFVFtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 01:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiFVFqy (ORCPT
+        with ESMTP id S232386AbiFVFtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 01:46:54 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6293633D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 22:46:53 -0700 (PDT)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25M5kXZX046524;
-        Wed, 22 Jun 2022 14:46:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Wed, 22 Jun 2022 14:46:33 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 25M5kWuf046519
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 22 Jun 2022 14:46:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a636d8e0-ad32-5888-acac-671f7f553bb3@I-love.SAKURA.ne.jp>
-Date:   Wed, 22 Jun 2022 14:46:31 +0900
+        Wed, 22 Jun 2022 01:49:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB96A36681
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 22:49:46 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o3tF4-0002bW-Th; Wed, 22 Jun 2022 07:49:30 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o3tF0-001yAk-Gu; Wed, 22 Jun 2022 07:49:27 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o3tF1-000LxY-59; Wed, 22 Jun 2022 07:49:27 +0200
+Date:   Wed, 22 Jun 2022 07:49:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jiang Jian <jiangjian@cdjrlc.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, ardeleanalex@gmail.com,
+        andy.shevchenko@gmail.com, antoniu.miclaus@analog.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] iio: magnetometer: hmc5843: Remove duplicate 'the'
+Message-ID: <20220622054927.u7im55jm5ya3n43l@pengutronix.de>
+References: <20220622035925.5008-1-jiangjian@cdjrlc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH] lib/smp_processor_id: fix imbalanced instrumentation_end()
- call
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pi74chydd7ox3t34"
+Content-Disposition: inline
+In-Reply-To: <20220622035925.5008-1-jiangjian@cdjrlc.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently instrumentation_end() won't be called if printk_ratelimit()
-returned false.
 
-Fixes: 126f21f0e8d46e2c ("lib/smp_processor_id: Move it into noinstr section")
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
- lib/smp_processor_id.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--pi74chydd7ox3t34
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/lib/smp_processor_id.c b/lib/smp_processor_id.c
-index 046ac6297c78..a2bb7738c373 100644
---- a/lib/smp_processor_id.c
-+++ b/lib/smp_processor_id.c
-@@ -47,9 +47,9 @@ unsigned int check_preemption_disabled(const char *what1, const char *what2)
- 
- 	printk("caller is %pS\n", __builtin_return_address(0));
- 	dump_stack();
--	instrumentation_end();
- 
- out_enable:
-+	instrumentation_end();
- 	preempt_enable_no_resched_notrace();
- out:
- 	return this_cpu;
--- 
-2.18.4
+Hello,
+
+On Wed, Jun 22, 2022 at 11:59:25AM +0800, Jiang Jian wrote:
+> Fix an obvious typing error, found by spellcheck(1).
+
+Oh, did I guess the real tool that found the issue, or did you just copy
+my suggestion without adapting it to reality?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--pi74chydd7ox3t34
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKyrV0ACgkQwfwUeK3K
+7AmWLQf9Fso4Hn6ayY6q6Kynp1uQf/BejFjELME6RopXauLx5o3JalrQTlc65czn
+sfSTFPFKGHe/wucCKzjhvfsBtehFgUUDkHylWfLh27gIUIMEB0qzE49SHemTId0b
+Hum4jmvm1NYZG1xjavXW7qWs449xHCd6A6sZxPcfXccd3yncZFbBm2IFG979oJFG
+39gSNNIfXFyrRJpxwzjAheZwiJ7v3sb+G8pRH6fmEth/+iJ1e2ukpF+DU3w033Th
+/HulLDDouby+VPk10MAM+xlR2UmoI5TTedAWs9Bve+WczDi5164uQDWAHzxPfuHR
+asjDXrfGkEpGnCbTqSjahdSQZNci6w==
+=zJAQ
+-----END PGP SIGNATURE-----
+
+--pi74chydd7ox3t34--

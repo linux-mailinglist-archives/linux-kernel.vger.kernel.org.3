@@ -2,76 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0979554C30
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20ED554C3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357882AbiFVOHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S1357384AbiFVOJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233499AbiFVOH2 (ORCPT
+        with ESMTP id S1357971AbiFVOJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:07:28 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96486381B0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:07:27 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id jb13so1910770plb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=e9oD0W0ylRYnkIlTyiKZwIapNVPUeC7hKoZrwz+0k8Y=;
-        b=rc8s6ZIwt9RUA9gTUANp/tC0i4E9+YxpvS4tpGBDrQNBgjZ0eTnPSoj5FBbFcaxiWT
-         0sH3ckRQNBBTBzaa6Xyb4MLHztJGB3DX4RnZrlNEl+dohrhjX42bNi60gasOnADB6E+v
-         9lydJ6EKoFifKzMstT3ABLjNsuumcURA0fzgZzbD+7BmO9GYWVB990JViJcY+gaNXUnq
-         jTQ6hNdIZ9CaCOnsTEs6YMlbZFVXbYT2lA9/6D/+U8G5fnBL9YCmSMxtSlCxfUQHT65Z
-         dHOCQgXeFPw/LYlcme2wHVwPTOsVh7M7AcGFUFNbWnI6mM2dIRTztCnvJ/zM6wYAX4gg
-         TkDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=e9oD0W0ylRYnkIlTyiKZwIapNVPUeC7hKoZrwz+0k8Y=;
-        b=n4F/ESNoCHClBekMSlPXWkYbd0W2VMKUCEX4++KsHshKKQLPs8pHIEN2ByjnYu8rOT
-         fZpRIqxZBMU+rVlj8MTSRvbKhv0h7Je8UPWiz6OxHLKmng+h0ai0B6KtYmDp6K4eQK3P
-         rmF51oNhpcPjvn4mRIhj3fALO99c8QCbDPeSo+YgaxVzx0kGYn0j5KGM9eihfKXprgTC
-         xJxU8JmmUMUZ7RGgIaUGmbDp2c2K5QckRNX8FbxAD3nqYl3kn1yCa2fvechycsgHupFI
-         MvO5dj3Mpf+C3gcuU/IdiPIz2kDTNl8+FVgQn3u+VI13mJcIqObEK5WjcCDtBNR/BqEc
-         tINQ==
-X-Gm-Message-State: AJIora96fIqjn6E6HrDLGzVl5RNwqGn43U1J4ZSwRuuhOvU57mWPTvZh
-        B1eNQXLw2FIS5bpQkiCGVIzagw==
-X-Google-Smtp-Source: AGRyM1tNiYBj57sFkmJtXiMiuQlgRK9d7swr7qhm/sS8KIyogJ13HhMpOsZ4wLTWDH7PPHj4ALFQBw==
-X-Received: by 2002:a17:902:e74b:b0:166:4d34:3be3 with SMTP id p11-20020a170902e74b00b001664d343be3mr34821376plf.102.1655906846962;
-        Wed, 22 Jun 2022 07:07:26 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id mp15-20020a17090b190f00b001ec92c52285sm7633207pjb.21.2022.06.22.07.07.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 07:07:26 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 19:37:23 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 3/8] OPP: Reuse _opp_compare_key() in _opp_add_static_v2()
-Message-ID: <20220622140723.msm3sxsuvtshotld@vireshk-i7>
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <2e335a6c263704a8d465bd02896fc5fff0533fdc.1654849214.git.viresh.kumar@linaro.org>
- <eb9558fd-4f2d-4e83-f9a3-86ff5dd51784@nvidia.com>
+        Wed, 22 Jun 2022 10:09:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE30938BFD;
+        Wed, 22 Jun 2022 07:09:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF3E41042;
+        Wed, 22 Jun 2022 07:09:01 -0700 (PDT)
+Received: from bogus (unknown [10.57.36.82])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8D783F792;
+        Wed, 22 Jun 2022 07:08:59 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 15:07:48 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/2] arm64: remove generic ARM cpuidle support
+Message-ID: <20220622140748.laklytigxtfdbbg2@bogus>
+References: <20220529181329.2345722-1-michael@walle.cc>
+ <09f392794c815cbfb38e5103d92310da@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <eb9558fd-4f2d-4e83-f9a3-86ff5dd51784@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <09f392794c815cbfb38e5103d92310da@walle.cc>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,35 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-06-22, 14:58, Jon Hunter wrote:
-> FYI ... if I checkout commit 00d776d33da9 ("OPP: Reuse
-> _opp_compare_key() in _opp_add_static_v2()") from next-20220622
-> it does not compile ...
+On Wed, Jun 22, 2022 at 01:59:07PM +0200, Michael Walle wrote:
+> Am 2022-05-29 20:13, schrieb Michael Walle:
+> > Playing with an own PSCI implementation, I've noticed that the
+> > cpuidle-arm
+> > driver doesn't work on arm64. It doesn't probe because since commit
+> > 788961462f34 ("ARM: psci: cpuidle: Enable PSCI CPUidle driver") the
+> > arm_cpuidle_init() can only return -EOPNOTSUPP, because the commit
+> > removed
+> > the cpu_idle_init and cpu_suspend ops.
+> > 
+> > It left me puzzled for quite some time. It seems that the cpuidle-psci
+> > is
+> > the preferred one and this has been the case for quite some time. The
+> > mentioned commit first appeared in v5.4.
+> > 
+> > Remove the ARM64 support for the cpuidle-arm driver, which then let us
+> > remove all the supporting arch code.
+> > 
+> > Michael Walle (2):
+> >   cpuidle: cpuidle-arm: remove arm64 support
+> >   arm64: cpuidle: remove generic cpuidle support
+> > 
+> >  arch/arm64/include/asm/cpu_ops.h |  9 ---------
+> >  arch/arm64/include/asm/cpuidle.h | 15 ---------------
+> >  arch/arm64/kernel/cpuidle.c      | 29 -----------------------------
+> >  drivers/cpuidle/Kconfig.arm      |  3 ++-
+> >  4 files changed, 2 insertions(+), 54 deletions(-)
 > 
-> drivers/opp/of.c: In function ‘_opp_add_static_v2’:
-> drivers/opp/of.c:933:25: error: passing argument 1 of ‘_opp_compare_key’ from incompatible pointer type [-Werror=incompatible-pointer-types]
->     if (_opp_compare_key(opp_table, new_opp, opp_table->suspend_opp) == 1) {
->                          ^~~~~~~~~
-> In file included from drivers/opp/of.c:22:0:
-> drivers/opp/opp.h:228:5: note: expected ‘struct dev_pm_opp *’ but argument is of type ‘struct opp_table *’
->  int _opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
->      ^~~~~~~~~~~~~~~~
-> drivers/opp/of.c:933:8: error: too many arguments to function ‘_opp_compare_key’
->     if (_opp_compare_key(opp_table, new_opp, opp_table->suspend_opp) == 1) {
->         ^~~~~~~~~~~~~~~~
-> In file included from drivers/opp/of.c:22:0:
-> drivers/opp/opp.h:228:5: note: declared here
->  int _opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
->      ^~~~~~~~~~~~~~~~
+> Through which tree should this patchset go? I've seen it is marked as
+> "Handled Elsewere" in the linux pm patchwork [1].
 > 
-> This breaks bisecting -next and so would be good to fix this.
 
-Yeah, this was reported yesterday and is already fixed in my branch, along with
-few more fixes.
+Generally based on the changes, it is decided. I can see why Rafael would
+have marked so in PM patchwork. Daniel has already acked small change in
+CPUidle config file while the bulk is removal of arm64 code. So, it is
+better to route it via arm64 tree.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+Will,
 
-It hasn't landed into linux-next/master yet though.
+Assuming you will handle v5.20, can you pick this up ?
 
 -- 
-viresh
+Regards,
+Sudeep

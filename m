@@ -2,123 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DE05570CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5E0557138
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376548AbiFWCAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 22:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S231756AbiFWCz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 22:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbiFWCAE (ORCPT
+        with ESMTP id S236612AbiFWCyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 22:00:04 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4841A8;
-        Wed, 22 Jun 2022 19:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655949568;
-        bh=eHLrXoaVIZ1xfowGuPkrjSutjDijEW9mNY1mSSTy7Hs=;
-        h=X-UI-Sender-Class:From:Subject:To:Cc:References:Date:In-Reply-To;
-        b=dVxayAJtkrKhwCe8TAok0nyRmqcUoR/obTtkgJ73SdCpCAfxI1YvayXkd8jAABJLB
-         RhPekNgr0zWGV2msj/svCbaK12vILTcFW3eIrOuT9JcmBLN40QZ/R2E2RJehlrvftT
-         3/v/3A4rQoe0JRZjUBhqsdiilf1CuQF7cma0tkIM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.181]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6bk4-1nbzTy32Cc-0180Px; Thu, 23
- Jun 2022 03:59:28 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: Re: [PATCH 1/8] serial: core: only get RS485 termination gpio if
- supported
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vz@mleia.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukas@wunner.de, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-2-LinoSanfilippo@gmx.de>
- <YrNLtg+BZlwKsBbF@smile.fi.intel.com>
-Message-ID: <2dda5707-6f13-6d33-863d-a88b89e88a88@gmx.de>
-Date:   Thu, 23 Jun 2022 03:59:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 22 Jun 2022 22:54:12 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0532C43491;
+        Wed, 22 Jun 2022 19:53:56 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id RYY00152;
+        Thu, 23 Jun 2022 10:53:52 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201610.home.langchao.com (10.100.2.10) with Microsoft SMTP Server id
+ 15.1.2308.27; Thu, 23 Jun 2022 10:53:53 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <vgoyal@redhat.com>, <stefanha@redhat.com>, <miklos@szeredi.hu>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] virtio_fs: Modify format for virtio_fs_direct_access
+Date:   Wed, 22 Jun 2022 17:17:58 -0400
+Message-ID: <20220622211758.4728-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <YrNLtg+BZlwKsBbF@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1h6TWrYpfJlbjpVfY8XbPGnncDZ0s81dGshYVaZQhCahGxzh20d
- 2PQcSUMKU/60rn4UawD2s2L9Eovlnw35HjykR4G7onljbtwQ5t8NoZpI22IBCPWvcA/ucDP
- /fDNCkCCt77EOIWr/2DQVypWMx2/R0HhEpktSIgvK96AFXuPZMAxtGGdqtvHpHiXvTg/679
- hNatqpKiYPA+mYDPULOmQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:J6FyruJLVLI=:AUQtvNTc+wsJKhm6A2Ij/2
- BVwnrDgOse//leMfUapxhuBGd/5ButtZsKBy1oOEXJ0NSbaku34B+ylYPHJ1UJVWy5KO/RMfg
- x82ZksE29wEETS3T+6x2R8QKRn32qfehAF6lPQHmWur5BjWjIkgT5MQnZipUWpfh+JtjM7pFb
- FMyKOFg0L6HQTJlOvDLG9rxonntBHwezWN2guUurgVxJTQJsCVHeCG41aolkev7eTvpEFyjqY
- iNZWxMVsWZlyEooViSeOIx5W8ncMrtkHtx3maorkgEjPEO02JBvMvcJv3PhfvIpRaEDfSzk8a
- 94MRYWFsvNT0sgYc4GZbJ2hHhxi9iCpmJyLcREIANu1ZTBKebVPNFKq7RP6YKOnjH10e74msL
- 7THz65ICyn9qQiRXPFugVnOk7peXcg6+qluvSU5baP0lJQtoIpp9zLV+Wtz+KtGDjcNEUWeQG
- ejXeARIiFkoib2lwGm8MgWuR52uOauUXdZ9ZPF2LlbP/kKzOQjP9w5WSfKpjrYvkqrATs2pYg
- ndFDDuGlm75vRWMNY0Tgq8NEYCoUNs5rItjrnUQUr0ZOf+ioZ5h4VXnytk5BmaG/6oAF4M0Yi
- Irl/dw2Q0xlkPlfPxxMNGYc777S7bGf/gZ2po5xlDlP55hDXD/TSb1P/8M3FZvKwAiFIads3Q
- Cd7O+8qYHfAG8BOeBnQhQkmxMJgPYuYxqvk1SqyBywQRnAAaGhXzWCLLznStF+vvNfzlF0eP0
- QSFe7nIB77BBen3nBGTLo+5dOy4kxG7Yt0B2puZ5nFVcT9Csszy3j+IStONqlglbrJYAYnS2e
- 1IqSMIWGe5HEr/+yIJyTbKbGLHQwF1/PhkEMZ4juY7iCKXZpFeShHJp8hk5p/UWGNWz6JrIQ7
- N7tyqW/Wh6jMhyuU8Tkl2TZ25YPoSladO0gVFKYGqxCn9GNaJuLYIq3DN6Ou07qPnopYk8OQa
- 1Kzp61yY4YaHuuNVhUry6EhuQo4KB214QN71jWiOOFgjumIzAunN/dMTm6K5bJOa9P8kmtaHE
- +JKwvacZuosOjMpFdulHzXmb7WaBrQMNMUl4Uce1aja2UEgKp3FnVh4XlZS8yfYLHjnvv+tpt
- NVqloygSF75oUPV+ByluyzRoCsyrUfkrschW4m65bmNqTYEHShku62SkA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.200.104.82]
+tUid:   202262310535293590e0ae65060e827a8cf915736874a
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We should isolate operators with spaces.
 
-Hi,
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
+---
+ fs/fuse/virtio_fs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 22.06.22 at 19:04, Andy Shevchenko wrote:
-> On Wed, Jun 22, 2022 at 05:46:52PM +0200, Lino Sanfilippo wrote:
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> In uart_get_rs485_mode() only try to get a termination GPIO if RS485 bu=
-s
->> termination is supported by the driver.
->
-> I'm not sure I got the usefulness of this change.
-> We request GPIO line as optional, so if one is defined it in the DT/ACPI=
-, then
-> they probably want to (opportunistically) have it>
->
-> With your change it's possible to have a DTS where GPIO line defined in =
-a
-> broken way and user won't ever know about it, if they are using platform=
-s
-> without termination support.
->
-
-This behavior is not introduced with this patch, also in the current code =
-the driver
-wont inform the user if it does not make use erroneous defined termination=
- GPIO.
-
-This patch at least prevents the driver from allocating and holding a GPIO=
- descriptor across
-the drivers lifetime that will never be used.
-
-Furthermore it simplifies the code in patch 2 when we want to set the GPIO=
-, since we can
-skip the check whether or not the termination GPIO is supported by the dri=
-ver.
-
-
-
-Regards,
-Lino
+diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
+index 8db53fa67359..e962c29967eb 100644
+--- a/fs/fuse/virtio_fs.c
++++ b/fs/fuse/virtio_fs.c
+@@ -757,7 +757,7 @@ static long virtio_fs_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,
+ {
+ 	struct virtio_fs *fs = dax_get_private(dax_dev);
+ 	phys_addr_t offset = PFN_PHYS(pgoff);
+-	size_t max_nr_pages = fs->window_len/PAGE_SIZE - pgoff;
++	size_t max_nr_pages = fs->window_len / PAGE_SIZE - pgoff;
+ 
+ 	if (kaddr)
+ 		*kaddr = fs->window_kaddr + offset;
+-- 
+2.27.0
 

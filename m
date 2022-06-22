@@ -2,131 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9CF5555B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80372556DB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbiFVVGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 17:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
+        id S1355987AbiFVVH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 17:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiFVVGQ (ORCPT
+        with ESMTP id S229693AbiFVVHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 17:06:16 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11A83F8AE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:06:15 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so24006013fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=76nBAAwaqrTlWdOy83Weff0cq7sUUQgoIpTvu/weE60=;
-        b=ws5vzg8YDl2rVjeKq0/ejT9iB0I0EBany/LQ3Zf4sz4GXU0pHEpuNIus47qOCFGzA0
-         NNNOkrA7SQ3DBDnWEswpC2FowcUH9h8K0n0uGjPrJtpslkITCGJQCjVrDoKETVV6wQhA
-         iizKH7cph+Dcn+Mv1PhYuwJmyPJex45D5D7t3SX/qL67Kos+qLIV9uF61L14v/qSercK
-         9/02wKB2UQtts+X5zqB3NBDeBBlLjESQlovWqx6izlmJupkN0ycQn7LBJGzsP3c4pbcE
-         C38/+NpT9MNtFoj+QDlZs4HkaICbFuIok9kiaFdP4J+C9LTkeNBER+6o/iiuaUVP2jej
-         CU3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=76nBAAwaqrTlWdOy83Weff0cq7sUUQgoIpTvu/weE60=;
-        b=TdK8SGatKcQEjp34lmpdL0v1mpuEom02ylCPQYT7EI7qthf+GcLzPJDcto7C3XdBEX
-         XQYbt7CuyUIf7wPWgoaVnRog41PFELV67S4H6kTqVwsR3xAKc7HHTYD1fY281zZzsdee
-         Ue2wypqk055GCZYnSUfS2a8fc1I2fHNwzFcLflXTAt0RKBhHK51436w/wtjftCIl5Z6p
-         aRSrOtDc8eY4R9EkyKA+p5dQs9+OYwrk8RfVAkQaQtInOyxCI/vobZmckDpf0rPq8c6f
-         R8rMJVFYxOUsl61gxIaPGXsa1N64O6nEqJJSjpIU/nRKdtFIlATfgDJsoU0nylQCeLYv
-         bLIw==
-X-Gm-Message-State: AJIora/zsOvxGLdt4LPN4hg+KLTHaoOy0mjhmiNGmR2hZWwdyqhWxY1r
-        cfuTENPjqYl3fiHDps3L3UiiVw==
-X-Google-Smtp-Source: AGRyM1tXfsG7aKhHAIKjiAxDLVyWaekfv1oJVncfIz0/sdO+UnQeg2nhSH8A+Kraebr4HFfDUTaG7g==
-X-Received: by 2002:a05:6870:d791:b0:101:ad64:1e74 with SMTP id bd17-20020a056870d79100b00101ad641e74mr216310oab.162.1655931975221;
-        Wed, 22 Jun 2022 14:06:15 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b28-20020a0568301dfc00b0061691db3807sm521774otj.23.2022.06.22.14.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 14:06:14 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 16:06:12 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: arm: qcom: Document additional
- sc8280xp devices
-Message-ID: <YrOERL276MFbG2mb@builder.lan>
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-2-bjorn.andersson@linaro.org>
- <YrLXCx90bn7Id4Bn@hovoldconsulting.com>
+        Wed, 22 Jun 2022 17:07:18 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4042FD8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:07:17 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7557BDD;
+        Wed, 22 Jun 2022 23:07:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1655932035;
+        bh=hlTDQWFzV4JSxpRbykgQQwJUvt43T8XrutUdxr4Yt1g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hot08ZXuPwC6POLdDYIB93/0Tm8W/KjlW6qwXGl1lhCuYJ/Q3j4upD9yxYThyLK6i
+         DSlOsrlB9ACOdG6qEgQG8NsHR/gBnc3GQ5MwbCxqIfN0VGUhTnKWzHdvgtvHXDiBW8
+         k01ia0ztHuHiIdkUCh0WhnG6zFsqPwINuZZgIctQ=
+Date:   Thu, 23 Jun 2022 00:06:59 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Venkateshwar Rao Gannavarapu 
+        <venkateshwar.rao.gannavarapu@xilinx.com>
+Cc:     sam@ravnborg.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+        vgannava@xilinx.com
+Subject: Re: [PATCH V2 1/2] dt-bindings: display: xlnx: Add DSI 2.0 Tx
+ subsystem documentation
+Message-ID: <YrOEc/K3BqT9F8Ye@pendragon.ideasonboard.com>
+References: <1655389056-37044-1-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
+ <1655389056-37044-2-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YrLXCx90bn7Id4Bn@hovoldconsulting.com>
+In-Reply-To: <1655389056-37044-2-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 22 Jun 03:47 CDT 2022, Johan Hovold wrote:
+Hi GVRao,
 
-> On Tue, Jun 21, 2022 at 09:12:19PM -0700, Bjorn Andersson wrote:
-> > Add the CRD (Customer Reference Design?) and the Lenovo Thinkpad X13s to
+Thank you for the patch.
+
+On Thu, Jun 16, 2022 at 07:47:35PM +0530, Venkateshwar Rao Gannavarapu wrote:
+> This patch adds dt binding for Xilinx DSI-TX subsystem.
 > 
-> Qualcomm refers to "Compute Reference Design", for example, in commit
-> 427b249504ea ("arm64: dts: qcom: sc7280-crd: Add device tree files for
-> CRD").
+> The Xilinx MIPI DSI (Display serial interface) Transmitter Subsystem
+> implements the Mobile Industry Processor Interface (MIPI) based display
+> interface. It supports the interface with the programmable logic (FPGA).
 > 
-
-I'll align with that expansion of the abbreviation, thanks.
-
-> > the valid device compatibles found on the sc8280xp platform.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> > 
-> > Changes since v1:
-> > - Added the two missing board compatibles
-> > 
-> >  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > index 5c06d1bfc046..6ec7521be19d 100644
-> > --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > @@ -238,6 +238,8 @@ properties:
-> >  
-> >        - items:
-> >            - enum:
-> > +              - lenovo,thinkpad-x13s
-> > +              - qcom,sc8280xp-crd
-> >                - qcom,sc8280xp-qrd
+> Signed-off-by: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
+> ---
+>  .../bindings/display/xlnx/xlnx,dsi-tx.yaml         | 101 +++++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
 > 
-> I believe the "qcom,sc8280xp-qrd" entry was a mistake and should have
-> been "-crd" all along? Perhaps you should remove that entry in this
-> patch.
+> diff --git a/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml b/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
+> new file mode 100644
+> index 0000000..644934d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
+> @@ -0,0 +1,101 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/xlnx/xlnx,dsi-tx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx DSI Transmitter subsystem Device Tree Bindings
+> +
+> +maintainers:
+> +  - Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
+> +
+> +description: |
+> +  The Xilinx DSI Transmitter Subsystem implements the Mobile Industry
+> +  Processor Interface based display interface. It supports the interface
+> +  with the programmable logic (FPGA).
+> +
+> +  For more details refer to PG238 Xilinx MIPI DSI-V2.0 Tx Subsystem.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,dsi-tx-v2.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: AXI Lite CPU clock
+> +      - description: D-PHY clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: s_axis_aclk
+> +      - const: dphy_clk_200M
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          This port should be the input endpoint.
 
-It was a mistake on my part adding the QRD when apparently I had a CRD,
-but I still believe both exists, so I'd prefer to just keep them around.
+Port and endpoint are two different things. You can just write "Input
+port of the DSI encoder".
 
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          This port should be the output endpoint.
+
+And here, "Output port of the DSI encoder".
+
+> +
+> +required:
+> +  - "#address-cells"
+> +  - "#size-cells"
+
+I think those should be listed in the properties above, with fixed
+values.
+
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    dsi0: dsi_tx@80020000 {
+> +        compatible = "xlnx,dsi-tx-v2.0";
+> +        reg = <0x80020000 0x20000>;
+> +        clocks = <&misc_clk_0>, <&misc_clk_1>;
+> +        clock-names = "s_axis_aclk", "dphy_clk_200M";
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        ports {
+> +              #address-cells = <1>;
+> +              #size-cells = <0>;
+> +
+> +              port@0 {
+> +                    reg = <0>;
+> +                    mipi_dsi_in: endpoint {
+> +                        remote-endpoint = <&pl_disp>;
+> +                    };
+> +              };
+> +
+> +              port@1 {
+> +                    reg = <1>;
+> +                    mipi_dsi_out: endpoint {
+> +                        remote-endpoint = <&panel_in>;
+> +                    };
+> +              };
+> +        };
+> +
+> +        panel@0 {
+> +              compatible = "auo,b101uan01";
+> +              reg = <0>;
+> +              port {
+> +                    panel_in: endpoint {
+> +                        remote-endpoint = <&mipi_dsi_out>;
+> +                    };
+> +              };
+> +        };
+
+Does this example validate (with `make dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml`)
+without listing the panel node in the properties ?
+
+> +    };
+> +
+> +...
+
+-- 
 Regards,
-Bjorn
 
-> 
-> >            - const: qcom,sc8280xp
-> 
-> Looks good otherwise:
-> 
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> Johan
+Laurent Pinchart

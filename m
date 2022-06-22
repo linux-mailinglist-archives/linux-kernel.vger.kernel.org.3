@@ -2,133 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC93A5542DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 08:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4725542D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 08:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbiFVGVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S233490AbiFVGVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346528AbiFVGVg (ORCPT
+        with ESMTP id S238932AbiFVGVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:21:36 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A5B02F380;
-        Tue, 21 Jun 2022 23:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=UD322
-        BUk78+thKcSE3P4/OwKjkRfw/qsc7uMSsGIU4M=; b=Jc8j3JlttaHNFZdijmVL+
-        Ag1wnn5iPSIoQxuTjAWr1BE9hxM2c5v7bDZ4+EzHi/wbolAMV9FiOEFE+yK3rpcr
-        vPDnwLuIvXM8UZpCNqJrPM39h25ZKe/c+xpFoURYHUDIUM8FgM/7CyRVs8NeXIYX
-        J1sPh9PtcRjVznPi+dbUHo=
-Received: from localhost.localdomain (unknown [112.97.63.176])
-        by smtp5 (Coremail) with SMTP id HdxpCgDHWhLctLJiJI2+KQ--.3868S2;
-        Wed, 22 Jun 2022 14:21:18 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH v2] USB: serial: use kmemdup instead of kmalloc + memcpy
-Date:   Wed, 22 Jun 2022 14:21:13 +0800
-Message-Id: <20220622062113.8762-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 22 Jun 2022 02:21:31 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2B0369C1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:21:30 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso15786568pja.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2l9YHnTCHEZbmX1vqIKgTsBl4LuPnmzfnEVIEO95Yuk=;
+        b=Vl93CrA/UtQLYvuumeHVdrEweooBfop0R+dDLntKS4n2ikh/TXiUNXQbmHovjn/s6w
+         G0c1JCo8UyQc3UNEzuYovHxq0f2lsG4hhC8lrA/vVLRD1C4atRIBGy7b+fpsfpE+ymVg
+         e9wEzdOabfUlvuIV4H2GfIUL21uG76AZEqSjXIH/8jwYkL5ZF/H5014CciBuUtQy0e8T
+         Ab+U6g6fxmIGgtKmsTCC+gtDBqrS08XRYJv6udAhG8Y6SZGBftVk+Rh4KKJ5f1T+Ke/5
+         fb7vDdswWfQ7Bcpks0fig5C67kQBVCteU9kBD4ikKxjYnK9IF1/DTFiEdCvIA8UIyeeS
+         X/3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2l9YHnTCHEZbmX1vqIKgTsBl4LuPnmzfnEVIEO95Yuk=;
+        b=3og+3B76EhX7dARQN817QFBeEPPNBL2iX+Ne76U/UQvbtpo4iyK5LwQxFEiEV1LeG2
+         qwkxZF9ErosdFlUdacJU8Jna5bH3oYVa2O7eM7hLq69bL40uBybLRm9HDd0/KxKC/un8
+         sjS6/LICCT6eqDu/gKeb2ZryoJah3dd2dD9MJKbDIL8nuUB3zaw3zpW1x6fv19tYwpjg
+         o/sjfJyZ31g9rdcOwaC5WFVhhz1LQO/9XOpecOLho517PLYsBeAch9vD8yBhqaNNtuDV
+         0J/ryIw37eFx2nC0Pi3iY0ofD97QczvODucPmvEsg43MZahS7+omdj2WWuU/WrD1UhRm
+         XcFQ==
+X-Gm-Message-State: AJIora+QBDwuP65UZeJzM0sfODJ/JTIKug6uQstz5CJ3ykpXwlPqj6yV
+        t/dyqIZYRf6mcAyKdoo4/CGQPQ==
+X-Google-Smtp-Source: AGRyM1uYRu1M8vsdu4fWKSIrkfoZvszKA5zB9WnFh2GsKIMSN2uogA/zjFuVFCiBFUMQ21o8FhZhqQ==
+X-Received: by 2002:a17:90a:6809:b0:1ec:c213:56c8 with SMTP id p9-20020a17090a680900b001ecc21356c8mr9884251pjj.82.1655878889648;
+        Tue, 21 Jun 2022 23:21:29 -0700 (PDT)
+Received: from localhost ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id z8-20020a1709027e8800b0015e8d4eb1easm8942900pla.52.2022.06.21.23.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 23:21:29 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 14:21:25 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Gang Li <ligang.bdlg@bytedance.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] mm, hugetlb: skip irrelevant nodes in
+ hugetlb_show_meminfo()
+Message-ID: <YrK05aLPyfwVusN8@FVFYT0MHHV2J.usts.net>
+References: <20220622040043.25462-1-ligang.bdlg@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgDHWhLctLJiJI2+KQ--.3868S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWFyrWw15Xry8Kw17XrWxCrg_yoW5XrykpF
-        4Fgayjqr18tr13Xr1DCrs8Z3W5WanFgry2k347C3yavr43twnag3WxtF90gr10yr97Jr1S
-        qw4v9rW0kF1xKw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRJ5r3UUUUU=
-X-Originating-IP: [112.97.63.176]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQYoZGBbD9PNagAAs-
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622040043.25462-1-ligang.bdlg@bytedance.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For code neat purpose, we can use kmemdup to replace
-kmalloc + memcpy.
+On Wed, Jun 22, 2022 at 12:00:42PM +0800, Gang Li wrote:
+> show_free_areas() allows to filter out node specific data which is
+> irrelevant to the allocation request. But hugetlb_show_meminfo() still
+> show hugetlb on all nodes, which is redundant and unnecessary.
+> 
+> Use show_mem_node_skip() to skip irrelevant nodes in
+> hugetlb_show_meminfo().
+> 
+> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+> ---
+>  include/linux/hugetlb.h | 4 ++--
+>  include/linux/mm.h      | 1 +
+>  mm/hugetlb.c            | 7 +++++--
+>  mm/page_alloc.c         | 4 ++--
+>  4 files changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 642a39016f9a..1913ac6bf10a 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -155,7 +155,7 @@ void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+>  			  struct page *ref_page, zap_flags_t zap_flags);
+>  void hugetlb_report_meminfo(struct seq_file *);
+>  int hugetlb_report_node_meminfo(char *buf, int len, int nid);
+> -void hugetlb_show_meminfo(void);
+> +void hugetlb_show_meminfo(unsigned int filter, nodemask_t *nodemask);
+>  unsigned long hugetlb_total_pages(void);
+>  vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+>  			unsigned long address, unsigned int flags);
+> @@ -300,7 +300,7 @@ static inline int hugetlb_report_node_meminfo(char *buf, int len, int nid)
+>  	return 0;
+>  }
+>  
+> -static inline void hugetlb_show_meminfo(void)
+> +static inline void hugetlb_show_meminfo(unsigned int filter, nodemask_t *nodemask)
+>  {
+>  }
+>  
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 764dc0fdae5e..f72c1b21cde3 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1873,6 +1873,7 @@ extern void pagefault_out_of_memory(void);
+>   */
+>  #define SHOW_MEM_FILTER_NODES		(0x0001u)	/* disallowed nodes */
+>  
+> +extern bool show_mem_node_skip(unsigned int flags, int nid, nodemask_t *nodemask);
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
-v2: Add garmin_gps.c
----
- drivers/usb/serial/garmin_gps.c | 4 +---
- drivers/usb/serial/opticon.c    | 4 +---
- drivers/usb/serial/sierra.c     | 4 +---
- 3 files changed, 3 insertions(+), 9 deletions(-)
+Exporting this to the only user of HugeTLB is not a good idea.
 
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index e5c75944ebb7..f1a8d8343623 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -988,7 +988,7 @@ static int garmin_write_bulk(struct usb_serial_port *port,
- 	garmin_data_p->flags &= ~FLAGS_DROP_DATA;
- 	spin_unlock_irqrestore(&garmin_data_p->lock, flags);
- 
--	buffer = kmalloc(count, GFP_ATOMIC);
-+	buffer = kmemdup(buf, count, GFP_ATOMIC);
- 	if (!buffer)
- 		return -ENOMEM;
- 
-@@ -998,8 +998,6 @@ static int garmin_write_bulk(struct usb_serial_port *port,
- 		return -ENOMEM;
- 	}
- 
--	memcpy(buffer, buf, count);
--
- 	usb_serial_debug_data(&port->dev, __func__, count, buffer);
- 
- 	usb_fill_bulk_urb(urb, serial->dev,
-diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
-index aed28c35caff..bca6766a63e6 100644
---- a/drivers/usb/serial/opticon.c
-+++ b/drivers/usb/serial/opticon.c
-@@ -208,7 +208,7 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
- 	priv->outstanding_bytes += count;
- 	spin_unlock_irqrestore(&priv->lock, flags);
- 
--	buffer = kmalloc(count, GFP_ATOMIC);
-+	buffer = kmemdup(buf, count, GFP_ATOMIC);
- 	if (!buffer)
- 		goto error_no_buffer;
- 
-@@ -216,8 +216,6 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
- 	if (!urb)
- 		goto error_no_urb;
- 
--	memcpy(buffer, buf, count);
--
- 	usb_serial_debug_data(&port->dev, __func__, count, buffer);
- 
- 	/* The connected devices do not have a bulk write endpoint,
-diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
-index 9d56138133a9..865d1237d611 100644
---- a/drivers/usb/serial/sierra.c
-+++ b/drivers/usb/serial/sierra.c
-@@ -453,7 +453,7 @@ static int sierra_write(struct tty_struct *tty, struct usb_serial_port *port,
- 		goto error_simple;
- 	}
- 
--	buffer = kmalloc(writesize, GFP_ATOMIC);
-+	buffer = kmemdup(buf, writesize, GFP_ATOMIC);
- 	if (!buffer) {
- 		retval = -ENOMEM;
- 		goto error_no_buffer;
-@@ -465,8 +465,6 @@ static int sierra_write(struct tty_struct *tty, struct usb_serial_port *port,
- 		goto error_no_urb;
- 	}
- 
--	memcpy(buffer, buf, writesize);
--
- 	usb_serial_debug_data(&port->dev, __func__, writesize, buffer);
- 
- 	usb_fill_bulk_urb(urb, serial->dev,
--- 
-2.25.1
+>  extern void show_free_areas(unsigned int flags, nodemask_t *nodemask);
+>  
+>  #ifdef CONFIG_MMU
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 98492733cc64..632826e6fea5 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -4486,7 +4486,7 @@ int hugetlb_report_node_meminfo(char *buf, int len, int nid)
+>  			     nid, h->surplus_huge_pages_node[nid]);
+>  }
+>  
+> -void hugetlb_show_meminfo(void)
+> +void hugetlb_show_meminfo(unsigned int filter, nodemask_t *nodemask)
+>  {
 
+I suggest making this function show meminfo for a specific node.
+like hugetlb_show_meminfo_node(int nid) which only show meminfo
+for node @nid.
+
+>  	struct hstate *h;
+>  	int nid;
+> @@ -4494,7 +4494,9 @@ void hugetlb_show_meminfo(void)
+>  	if (!hugepages_supported())
+>  		return;
+>  
+> -	for_each_node_state(nid, N_MEMORY)
+> +	for_each_node_state(nid, N_MEMORY) {
+> +		if (show_mem_node_skip(filter, nid, nodemask))
+> +			continue;
+>  		for_each_hstate(h)
+>  			pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
+>  				nid,
+> @@ -4502,6 +4504,7 @@ void hugetlb_show_meminfo(void)
+>  				h->free_huge_pages_node[nid],
+>  				h->surplus_huge_pages_node[nid],
+>  				huge_page_size(h) / SZ_1K);
+> +	}
+>  }
+>  
+>  void hugetlb_report_usage(struct seq_file *m, struct mm_struct *mm)
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 84781094b478..5896b5a9101f 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5951,7 +5951,7 @@ void si_meminfo_node(struct sysinfo *val, int nid)
+>   * Determine whether the node should be displayed or not, depending on whether
+>   * SHOW_MEM_FILTER_NODES was passed to show_free_areas().
+>   */
+> -static bool show_mem_node_skip(unsigned int flags, int nid, nodemask_t *nodemask)
+> +bool show_mem_node_skip(unsigned int flags, int nid, nodemask_t *nodemask)
+>  {
+>  	if (!(flags & SHOW_MEM_FILTER_NODES))
+>  		return false;
+> @@ -6196,7 +6196,7 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+>  		printk(KERN_CONT "= %lukB\n", K(total));
+>  	}
+>
+
+Just like the above case. We can check nid here instead of in hugetlb_show_meminfo().
+Then you do not need to export show_mem_node_skip().
+
+for_each_online_node(nid) {
+	if (show_mem_node_skip(filter, nid, nodemask))
+		continue;
+	hugetlb_show_meminfo_node(nid);
+}
+
+Thanks.
+
+> -	hugetlb_show_meminfo();
+> +	hugetlb_show_meminfo(filter, nodemask);
+>  
+>  	printk("%ld total pagecache pages\n", global_node_page_state(NR_FILE_PAGES));
+>  
+> -- 
+> 2.20.1
+> 
+> 

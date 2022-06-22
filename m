@@ -2,238 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61CD554DE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D7A554DF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358783AbiFVOvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S1355253AbiFVOwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358756AbiFVOu4 (ORCPT
+        with ESMTP id S229534AbiFVOw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:50:56 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E682C3CA7E;
-        Wed, 22 Jun 2022 07:50:55 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id g186so16320760pgc.1;
-        Wed, 22 Jun 2022 07:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HwGgXv57vIH+vNvmwOGexPPvL9K+C+WCJj+G6bet3ZE=;
-        b=K7eZU5ocjviFrvddUIWA8/SYtQoAHHvL/J4hg4OHdkvpE5b9PKZgdLvNBHGKscYUeX
-         lqmRg+lHOqLL70Py4esnQtMmo/IMRD10svIwiywrM1/7tTshKZFQoX+27l/SUzpIbKJq
-         q3ix5miUFGAM/J1OUQc8cIYTsgukNlWhXpIOqrMoCamxkhwo/QBnPKDA6im+da6hjBdv
-         fTf+K/vIi9XKv2v1jOQu/2bnInOws3OGGRB9sgfpLjt4JgT6pE6sIb0b6WcyzfauxEJm
-         sLf70ZNGxi2hDCziaATozP7nfkB1CAvFeY+imykxdGg+yl7L9mjdjz2V6oj8HUTji9tg
-         6W3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HwGgXv57vIH+vNvmwOGexPPvL9K+C+WCJj+G6bet3ZE=;
-        b=lw+AqSWoI5arsyxgyWX/UKO9jVs+k48+whcMeSm5U9uIl9G0gMrADszATA+0aGcHg3
-         Vtzhpl/RLYZSqA3EfR8oDI8YBxbu+2V19DC6HAE/AFPIRPs7vN/0kFCL/p0lTQEa6TYN
-         jg7ojUR+hPtgU76qNGKJ160QY0KrtFuHxUNEpZU0aNDWu801WvJHO+dWcU7b8FFFgZMv
-         qw0mcFLSP+havwvGL0Gqne4AqsNuL7glT4OLO0HT3g4u6yNwuw9y4KrdPCYh+Px2ruNY
-         XTHYPTdIG9bUMngUVQYhNu5KKII6tazNulII2KbhBpPxf63fHnfyt90L3queMd9iA2xk
-         73bQ==
-X-Gm-Message-State: AJIora9w991dlMZW6iXfGR/2poA58re9f/xPmBW8+RvRzAiv11E094ip
-        aumrzGUbG0CMP2j9ho4szz4=
-X-Google-Smtp-Source: AGRyM1vETBSZjozRlOirypbBkscRSt7sV+KO4H1vgtPEU6hGtgwIhm92CaQOU49KL79G7Xf6SbWG7w==
-X-Received: by 2002:a63:b34d:0:b0:40c:76b2:b725 with SMTP id x13-20020a63b34d000000b0040c76b2b725mr3271773pgt.440.1655909455367;
-        Wed, 22 Jun 2022 07:50:55 -0700 (PDT)
-Received: from [192.168.1.24] (1-162-200-193.dynamic-ip.hinet.net. [1.162.200.193])
-        by smtp.gmail.com with ESMTPSA id h2-20020a170902f70200b0015e8d4eb231sm12863122plo.123.2022.06.22.07.50.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 07:50:54 -0700 (PDT)
-Message-ID: <47e7eb15-e38d-ead3-de84-b7454e2c6eb8@gmail.com>
-Date:   Wed, 22 Jun 2022 22:50:51 +0800
+        Wed, 22 Jun 2022 10:52:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AB03DDE2;
+        Wed, 22 Jun 2022 07:52:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AD9FB81F54;
+        Wed, 22 Jun 2022 14:52:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D61C34114;
+        Wed, 22 Jun 2022 14:52:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655909543;
+        bh=uEQT3cFgGFRDHzj662KuPlWgg7A+Oe4RWTTdqfcTCi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y7a+0gR+B3chebFU3urXcg713v/4XalaUaBAEym+qyDR0r/V12O/xsCEiRBbqseSf
+         zaHuRVN2+wOheNlByC56feBzGNny/P0lb1mtpp1AoTWsKAEfrgKIvlHgerQWu7btMv
+         kPDAgz3ILXp9qA/Ovby5YpBDcWtvY5GimAd8grs9mQim/SR/ByKjuiCgDKs8feB7+m
+         3z6+ImYuIwIjWx+NpD9z/stKgj/cz4GGYfrUth8md3/sNMjOmleGdUZ19KYmTTjomH
+         NdZ08g9qcHhkgxJaYzC8EjiSjqVbrxfp/7ToyGPJGlI+mxRlfT605COWQqqFNhE4Dp
+         Qs9dov19gQ2+w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o41iO-00074m-Js; Wed, 22 Jun 2022 16:52:20 +0200
+Date:   Wed, 22 Jun 2022 16:52:20 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, svarbanov@mm-sol.com,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, p.zabel@pengutronix.de, jingoohan1@gmail.com,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, johan+linaro@kernel.org
+Subject: Re: [PATCH v2] PCI: qcom: fix IPQ8074 Gen2 support
+Message-ID: <YrMspGTROJUFYQrN@hovoldconsulting.com>
+References: <20220621112330.448754-1-robimarko@gmail.com>
+ <20220621203211.GA1330530@bhelgaas>
+ <YrK7b1GaEMuANGtR@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 1/2] aspeed: i2c: add clock duty cycle property
-Content-Language: en-US
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rayn Chen <rayn_chen@aspeedtech.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220610054722.32229-1-potin.lai.pt@gmail.com>
- <20220610054722.32229-2-potin.lai.pt@gmail.com>
-From:   Potin Lai <potin.lai.pt@gmail.com>
-In-Reply-To: <20220610054722.32229-2-potin.lai.pt@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrK7b1GaEMuANGtR@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Potin Lai 於 6/10/2022 1:47 PM 寫道:
-> Introduce i2c-clk-high-min-percent property for setting a minimum clock
-> high percentage.
->
-> This driver calculate clk_high and clk_low with giving duty cycle. If it
-> could not find a suit clk_high and clk_low, it apply default duty cycle
-> 50%.
->
-> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-aspeed.c | 56 ++++++++++++++++++++++++++-------
->  1 file changed, 45 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index 67e8b97c0c95..9715dc4f933f 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -19,6 +19,7 @@
->  #include <linux/irqchip/chained_irq.h>
->  #include <linux/irqdomain.h>
->  #include <linux/kernel.h>
-> +#include <linux/math.h>
->  #include <linux/module.h>
->  #include <linux/of_address.h>
->  #include <linux/of_irq.h>
-> @@ -27,6 +28,8 @@
->  #include <linux/reset.h>
->  #include <linux/slab.h>
->  
-> +#define DEFAULT_I2C_CLK_DUTY_CYCLE			50
-> +
->  /* I2C Register */
->  #define ASPEED_I2C_FUN_CTRL_REG				0x00
->  #define ASPEED_I2C_AC_TIMING_REG1			0x04
-> @@ -149,9 +152,11 @@ struct aspeed_i2c_bus {
->  	spinlock_t			lock;
->  	struct completion		cmd_complete;
->  	u32				(*get_clk_reg_val)(struct device *dev,
-> -							   u32 divisor);
-> +							   u32 divisor,
-> +							   u32 duty_cycle);
->  	unsigned long			parent_clk_frequency;
->  	u32				bus_frequency;
-> +	u32				duty_cycle;
->  	/* Transaction state. */
->  	enum aspeed_i2c_master_state	master_state;
->  	struct i2c_msg			*msgs;
-> @@ -798,9 +803,11 @@ static const struct i2c_algorithm aspeed_i2c_algo = {
->  
->  static u32 aspeed_i2c_get_clk_reg_val(struct device *dev,
->  				      u32 clk_high_low_mask,
-> -				      u32 divisor)
-> +				      u32 divisor,
-> +				      u32 duty_cycle)
->  {
->  	u32 base_clk_divisor, clk_high_low_max, clk_high, clk_low, tmp;
-> +	u32 tmp_base_clk_divisor;
->  
->  	/*
->  	 * SCL_high and SCL_low represent a value 1 greater than what is stored
-> @@ -842,10 +849,32 @@ static u32 aspeed_i2c_get_clk_reg_val(struct device *dev,
->  			"clamping clock divider: divider requested, %u, is greater than largest possible divider, %u.\n",
->  			divisor, (1 << base_clk_divisor) * clk_high_low_max);
->  	} else {
-> -		tmp = (divisor + (1 << base_clk_divisor) - 1)
-> +		for (tmp_base_clk_divisor = base_clk_divisor;
-> +		    tmp_base_clk_divisor <= ASPEED_I2CD_TIME_BASE_DIVISOR_MASK;
-> +		    tmp_base_clk_divisor++) {
-> +			/* calculate clk_high and clk_low with duty cycle */
-> +			tmp = (divisor + (1 << tmp_base_clk_divisor) - 1)
-> +				>> tmp_base_clk_divisor;
-> +
-> +			clk_high = DIV_ROUND_UP(tmp * duty_cycle, 100);
-> +			clk_low = tmp - clk_high;
-> +
-> +			if (max(clk_high, clk_low) <= (clk_high_low_mask + 1))
-> +				break;
-> +		}
-> +
-> +		if (tmp_base_clk_divisor <= ASPEED_I2CD_TIME_BASE_DIVISOR_MASK)
-> +			base_clk_divisor = tmp_base_clk_divisor;
-> +		else {
-> +			dev_err(dev,
-> +				"could not find clk_high and clk_low with duty cycle %u%%\n, recalculate with base_clk_divisor %u and duty_cycle 50%%",
-> +				duty_cycle, base_clk_divisor);
-> +			duty_cycle = 50;
-> +			tmp = (divisor + (1 << base_clk_divisor) - 1)
->  				>> base_clk_divisor;
-> -		clk_low = tmp / 2;
-> -		clk_high = tmp - clk_low;
-> +			clk_high = DIV_ROUND_UP(tmp * duty_cycle, 100);
-> +			clk_low = tmp - clk_high;
-> +		}
->  
->  		if (clk_high)
->  			clk_high--;
-> @@ -863,22 +892,22 @@ static u32 aspeed_i2c_get_clk_reg_val(struct device *dev,
->  			   & ASPEED_I2CD_TIME_BASE_DIVISOR_MASK);
->  }
->  
-> -static u32 aspeed_i2c_24xx_get_clk_reg_val(struct device *dev, u32 divisor)
-> +static u32 aspeed_i2c_24xx_get_clk_reg_val(struct device *dev, u32 divisor, u32 duty_cycle)
->  {
->  	/*
->  	 * clk_high and clk_low are each 3 bits wide, so each can hold a max
->  	 * value of 8 giving a clk_high_low_max of 16.
->  	 */
-> -	return aspeed_i2c_get_clk_reg_val(dev, GENMASK(2, 0), divisor);
-> +	return aspeed_i2c_get_clk_reg_val(dev, GENMASK(2, 0), divisor, duty_cycle);
->  }
->  
-> -static u32 aspeed_i2c_25xx_get_clk_reg_val(struct device *dev, u32 divisor)
-> +static u32 aspeed_i2c_25xx_get_clk_reg_val(struct device *dev, u32 divisor, u32 duty_cycle)
->  {
->  	/*
->  	 * clk_high and clk_low are each 4 bits wide, so each can hold a max
->  	 * value of 16 giving a clk_high_low_max of 32.
->  	 */
-> -	return aspeed_i2c_get_clk_reg_val(dev, GENMASK(3, 0), divisor);
-> +	return aspeed_i2c_get_clk_reg_val(dev, GENMASK(3, 0), divisor, duty_cycle);
->  }
->  
->  /* precondition: bus.lock has been acquired. */
-> @@ -891,7 +920,7 @@ static int aspeed_i2c_init_clk(struct aspeed_i2c_bus *bus)
->  	clk_reg_val &= (ASPEED_I2CD_TIME_TBUF_MASK |
->  			ASPEED_I2CD_TIME_THDSTA_MASK |
->  			ASPEED_I2CD_TIME_TACST_MASK);
-> -	clk_reg_val |= bus->get_clk_reg_val(bus->dev, divisor);
-> +	clk_reg_val |= bus->get_clk_reg_val(bus->dev, divisor, bus->duty_cycle);
->  	writel(clk_reg_val, bus->base + ASPEED_I2C_AC_TIMING_REG1);
->  	writel(ASPEED_NO_TIMEOUT_CTRL, bus->base + ASPEED_I2C_AC_TIMING_REG2);
->  
-> @@ -1009,11 +1038,16 @@ static int aspeed_i2c_probe_bus(struct platform_device *pdev)
->  		bus->bus_frequency = I2C_MAX_STANDARD_MODE_FREQ;
->  	}
->  
-> +	ret = of_property_read_u32(pdev->dev.of_node,
-> +				   "i2c-clk-high-min-percent", &bus->duty_cycle);
-> +	if (ret < 0 || !bus->duty_cycle || bus->duty_cycle > 100)
-> +		bus->duty_cycle = DEFAULT_I2C_CLK_DUTY_CYCLE;
-> +
->  	match = of_match_node(aspeed_i2c_bus_of_table, pdev->dev.of_node);
->  	if (!match)
->  		bus->get_clk_reg_val = aspeed_i2c_24xx_get_clk_reg_val;
->  	else
-> -		bus->get_clk_reg_val = (u32 (*)(struct device *, u32))
-> +		bus->get_clk_reg_val = (u32 (*)(struct device *, u32, u32))
->  				match->data;
->  
->  	/* Initialize the I2C adapter */
-Hi Maintainers,
-Could someone please help me review this patch and give me some advice?
-Thanks!
+On Wed, Jun 22, 2022 at 08:49:19AM +0200, Johan Hovold wrote:
+> On Tue, Jun 21, 2022 at 03:32:11PM -0500, Bjorn Helgaas wrote:
+> > On Tue, Jun 21, 2022 at 01:23:30PM +0200, Robert Marko wrote:
+> > > IPQ8074 has one Gen2 and one Gen3 port, currently the Gen2 port will
+> > > cause the system to hang as its using DBI registers in the .init
+> > > and those are only accesible after phy_power_on().
+> > 
+> > Is the fact that IPQ8074 has both a Gen2 and a Gen3 port relevant to
+> > this patch?  I don't see the connection.
+> > 
+> > I see that qcom_pcie_host_init() does:
+> > 
+> >   qcom_pcie_host_init
+> >     pcie->cfg->ops->init(pcie)
+> >     phy_power_on(pcie->phy)
+> >     pcie->cfg->ops->post_init(pcie)
+> > 
+> > and that you're moving DBI register accesses from
+> > qcom_pcie_init_2_3_3() to qcom_pcie_post_init_2_3_3().
+> > 
+> > But I also see DBI register accesses in other .init() functions:
+> > 
+> >   qcom_pcie_init_2_1_0
+> >   qcom_pcie_init_1_0_0      (oddly out of order)
+> >   qcom_pcie_init_2_3_2
+> >   qcom_pcie_init_2_4_0
+> > 
+> > Why do these accesses not need to be moved?  I assume it's because
+> > pcie->phy is an optional PHY and phy_power_on() does nothing on those
+> > controllers?
+> 
+> At least the QMP PHY driver does not implement the PHY power_on op and
+> instead fires everything up already at phy_init(). That may explain the
+> difference in behaviour here.
 
-Potin
+That was due to a bug in -next which as since been fixed by commit
+
+	5bef2838f1a0 ("phy: qcom-qmp: fix PCIe PHY support")
+
+which again do all PHY init at phy_power_on() instead of at phy_init().
+
+Note also that before commit cc1e06f033af ("phy: qcom: qmp: Use
+power_on/off ops for PCIe") everything was done at init.
+
+Johan

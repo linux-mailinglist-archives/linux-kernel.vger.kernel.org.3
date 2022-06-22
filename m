@@ -2,166 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19FB555405
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34D255540F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377734AbiFVTKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
+        id S1377702AbiFVTM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiFVTKK (ORCPT
+        with ESMTP id S231967AbiFVTMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:10:10 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4850615806
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:10:08 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-317710edb9dso172784277b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m2EKhR0TRoyufPiu9Flo4efSG9iVQ7Sr7NIfxXnG//E=;
-        b=q0iBpeFzXmVjuV9RJ2U0tO6ECKKIgXqLxhTrd/XuqGhMkas+He99laUPoyLdnfoNFL
-         +PttCvM62NPrGDH6bN6Tam5nPc4Jt6Lhqq9iRLcdZDXmODHt/VANxFARtdqBpIOWNqbl
-         AatF7ctiFGf72C+0OC82zliefxVYa8dtkAaYmnq0JCPtTgfz1cWUVQ87m5452KZkW/cW
-         SPNNeBKYphGmdKaYImVx82HxgMYh2fon8Z8I1JzFAAU0CLZraMDpT8R9qd8YGH1YLF5l
-         z+/MLbNzdLViy90RdBW0wFmvw6BnGUFs9HZsF90abo3WhbF4Ja8pDA24KBOpYxV847T2
-         I7ig==
+        Wed, 22 Jun 2022 15:12:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9600F2BE3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:12:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655925173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zhjwqkPhJ9xw/9qovQS6fJqX4XywzD52eVaz4HaaZtQ=;
+        b=IyDlSK5caWluxhX1Iqmer4g3X3vPDBm3bZx0FHfdj7D96LKJAhQx7fX+hbBx4OEIrwnBst
+        ky3BkMB2qf8XO+rgt6AdFxJyw0Yz9+/XNHP+tsBUB5YaDj1SM+b9S5gU0D7Cp3MCrlD2Nj
+        cltJPHPW2D/RSsl8mUkIrTuvP+0lv5I=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-527-ObPU_-5HOVCXrIW5SrZAtw-1; Wed, 22 Jun 2022 15:12:52 -0400
+X-MC-Unique: ObPU_-5HOVCXrIW5SrZAtw-1
+Received: by mail-qv1-f69.google.com with SMTP id g29-20020a0caadd000000b004702ed3c3f5so12437460qvb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:12:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m2EKhR0TRoyufPiu9Flo4efSG9iVQ7Sr7NIfxXnG//E=;
-        b=lOIACkrqM7cpDIyQ8GSYHHtzdcsxT01D38YkcEiw2JW1FCw1s6bLLV2Bn81EJplntI
-         w/8q1XW0Mr6UNKo7w1A5SDV7B8BvGrgkWrW2Di47M0PyXY3bGZ3NMO7VjP1W0KCkhJvK
-         VrxGh8VyNtu4obERIMlidbf1Ig4RYJOE+857kCni2Uh5wIhuVQNxudN/+1LbcUtLAh7Z
-         AKH9DgbyQ7oGycE7I2TUtDAhVeD8l8j6bFsOCXysigcnJR5183wRmF30efU0nPcCRCWY
-         EW508TzlUBEPQ+BrAQx12lcWg5nd/L2vBmye5R+wRpmLA7IOTmyy1wfQSzkCGVf9UszI
-         LNoA==
-X-Gm-Message-State: AJIora9V1MPHCYiocyOA6FBoHxh9lIkKozpGSFFmhyibenQHXd6S6iV1
-        APSMIHx51Ez3JQCY55fSYkVPzhR9af6X3sJnnnWFvA==
-X-Google-Smtp-Source: AGRyM1solygMwSWCkiPF1NFwzx5BeilY1scDMXVDLNy5qaonwBsI4xn5J0zOBjmp0RWdt2LaZxnizqSGP3n3TRaTEKc=
-X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
- t197-20020a0deace000000b0031787acb3a8mr6074480ywe.126.1655925007151; Wed, 22
- Jun 2022 12:10:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
- <CAGETcx_1USPRbFKV5j00qkQ-QXJkp7=FAfnFcfiNnM4J5KF1cQ@mail.gmail.com> <YrKhkmj3jCQA39X/@atomide.com>
-In-Reply-To: <YrKhkmj3jCQA39X/@atomide.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 22 Jun 2022 12:09:31 -0700
-Message-ID: <CAGETcx_11wO-HkZ2QsBF8o1+L9L3Xe1QBQ_GzegwozxAx1i0jg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=zhjwqkPhJ9xw/9qovQS6fJqX4XywzD52eVaz4HaaZtQ=;
+        b=nLrzTYVdl1N6P4iRTqoSZSeYVa1zTLDhzZSCNiVgb2ZxkrbPr84GqJlcgBNBoSimcx
+         uJdz2Lfc88z9Eaecb9H4H49EHZJ0tTg2Ay/YBl2DmsPIG2kyu9OdjOaTn5nlbBoUXF2+
+         BE6/PuD1Hfvv09/UUD3yFIdr2sAp0JtDGKN1NHtdoyJ7juHnkidkvpbpWkTIWBe67SUR
+         fV4bQO2sU3qyLtkeX1n0ez2aTB7/vK3ejVjuNups02YQ/ivHw/hS3it116q+g9jiA4M6
+         LnFDc0FvEaK3HD/LqGuou0KS6MeXsyzJvg4G/Rnw1EyWaWBi5c1DTTynf5VdjGkc99VN
+         8vxg==
+X-Gm-Message-State: AJIora8Aj5PHEoSsHppK6OrZz4lpHxM6MPj1VVwlc+GR3mE2knylRYKO
+        vFV2bbPux8QnwU4NyAaA9f0RhzTLtLQfDydUlzCsvmWmSv29N+/7cpel0+dw1RJx3BXDHI5C2mj
+        s7QTTu//GvP/aEHBTFn/KqeO7
+X-Received: by 2002:ac8:570b:0:b0:305:e83:af43 with SMTP id 11-20020ac8570b000000b003050e83af43mr4620304qtw.416.1655925171815;
+        Wed, 22 Jun 2022 12:12:51 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u2yK6CJukE0PWUjhgIUO/v1rQGRwOO/j+saV7GVNjDPEvsJ8FGIj5m8+xhCHJwjmfYxEXiRg==
+X-Received: by 2002:ac8:570b:0:b0:305:e83:af43 with SMTP id 11-20020ac8570b000000b003050e83af43mr4620282qtw.416.1655925171532;
+        Wed, 22 Jun 2022 12:12:51 -0700 (PDT)
+Received: from t14s.localdomain (c-73-69-212-193.hsd1.ma.comcast.net. [73.69.212.193])
+        by smtp.gmail.com with ESMTPSA id bb33-20020a05622a1b2100b00304ea0a86cesm14906820qtb.81.2022.06.22.12.12.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 12:12:50 -0700 (PDT)
+Message-ID: <4a9629d0e8f14afbbb3c342c17c1633c9e882e9a.camel@redhat.com>
+Subject: Re: Plumbers conf presentation on -fanalyze?
+From:   David Malcolm <dmalcolm@redhat.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Wed, 22 Jun 2022 15:12:49 -0400
+In-Reply-To: <CAKwvOdmJgU_MZjwuVXz5QvFdA4+eTHKqxT06HMAq=Hau03ar9Q@mail.gmail.com>
+References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
+         <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
+         <CAKwvOdmJgU_MZjwuVXz5QvFdA4+eTHKqxT06HMAq=Hau03ar9Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 9:59 PM Tony Lindgren <tony@atomide.com> wrote:
->
-> Hi,
->
-> * Saravana Kannan <saravanak@google.com> [220621 19:29]:
-> > On Tue, Jun 21, 2022 at 12:28 AM Tony Lindgren <tony@atomide.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > > > Now that fw_devlink=on by default and fw_devlink supports
-> > > > "power-domains" property, the execution will never get to the point
-> > > > where driver_deferred_probe_check_state() is called before the supplier
-> > > > has probed successfully or before deferred probe timeout has expired.
-> > > >
-> > > > So, delete the call and replace it with -ENODEV.
-> > >
-> > > Looks like this causes omaps to not boot in Linux next.
-> >
-> > Can you please point me to an example DTS I could use for debugging
-> > this? I'm assuming you are leaving fw_devlink=on and not turning it
-> > off or putting it in permissive mode.
->
-> Sure, this seems to happen at least with simple-pm-bus as the top
-> level interconnect with a configured power-domains property:
->
-> $ git grep -A10 "ocp {" arch/arm/boot/dts/*.dtsi | grep -B3 -A4 simple-pm-bus
+On Tue, 2022-06-21 at 15:06 -0700, Nick Desaulniers wrote:
+> On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com>
+> wrote:
+> > 
+> > On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
+> > > Hi David,
+> > > Jose and I are currently in the planning process to put together
+> > > a
+> > > Kernel+Toolchain microconference track at Linux Plumbers
+> > > Conference
+> > > this year (Sept 12-14) in Dublin, Ireland.
+> > > 
+> > > We had seen
+> > >  
+> > > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
+> > > particularly the section on The Linux kernel and were wondering
+> > > if
+> > > you'd be interested in presenting more information about -
+> > > fanalyze to
+> > > kernel and toolchain developers there?
+> > 
+> > Thanks!  I'm very much interested, but am not yet sure about travel
+> > (both in terms of (a) budget and (b) possible new virus strains). 
+> > Is
+> > this conference going to be purely in-person, or hybrid virtual/in-
+> > person?
+> 
+> Hi David,
+> If you're still considering attending Linux Plumbers conf, please
+> submit a proposal:
+> https://lpc.events/event/16/abstracts/
+> Please make sure to select "Toolchains Track" as the "Track" after
+> clicking on "Submit new abstract."
+> 
 
-Thanks for the example. I generally start looking from dts (not dtsi)
-files in case there are some DT property override/additions after the
-dtsi files are included in the dts file. But I'll assume for now
-that's not the case. If there's a specific dts file for a board I can
-look from that'd be helpful to rule out those kinds of issues.
+Hi Nick
 
-For now, I looked at arch/arm/boot/dts/omap4.dtsi.
+Thanks, I've registered to attend, and have submitted this abstract:
 
->
-> This issue is no directly related fw_devlink. It is a side effect of
-> removing driver_deferred_probe_check_state(). We no longer return
-> -EPROBE_DEFER at the end of driver_deferred_probe_check_state().
+  https://lpc.events/event/16/abstracts/1293/
 
-Yes, I understand the issue. But driver_deferred_probe_check_state()
-was deleted because fw_devlink=on should have short circuited the
-probe attempt with an  -EPROBE_DEFER before reaching the bus/driver
-probe function and hitting this -ENOENT failure. That's why I was
-asking the other questions.
+("GCC's -fanalyzer and the Linux kernel" #177)
 
-> > > On platform_probe() genpd_get_from_provider() returns
-> > > -ENOENT.
-> >
-> > This error is with the series I assume?
->
-> On the first probe genpd_get_from_provider() will return -ENOENT in
-> both cases. The list is empty on the first probe and there are no
-> genpd providers at this point.
->
-> Earlier with driver_deferred_probe_check_state(), the initial -ENOENT
-> ends up getting changed to -EPROBE_DEFER at the end of
-> driver_deferred_probe_check_state(), we are now missing that.
+Hope the above looks good.
 
-Right, I was aware -ENOENT would be returned if we got this far. But
-the point of this series is that you shouldn't have gotten that far
-before your pm domain device is ready. Hence my questions from the
-earlier reply.
+Dave
 
-Can I get answers to rest of my questions in the first reply please?
-That should help us figure out why fw_devlink let us get this far.
-Summarize them here to make it easy:
-* Are you running with fw_devlink=on?
-* Is the"ti,omap4-prm-inst"/"ti,omap-prm-inst" built-in in this case?
-* If it's not built-in, can you please try deferred_probe_timeout=0
-and deferred_probe_timeout=30 and see if either one of them help?
-* Can I get the output of "ls -d supplier:*" and "cat
-supplier:*/status" output from the sysfs dir for the ocp device
-without this series where it boots properly.
 
-Thanks,
-Saravana

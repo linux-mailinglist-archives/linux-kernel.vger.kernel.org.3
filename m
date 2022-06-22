@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431975541D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BFF5541D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356913AbiFVEjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 00:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S1356925AbiFVElQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 00:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356770AbiFVEjk (ORCPT
+        with ESMTP id S229644AbiFVElO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 00:39:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7760634BB1;
-        Tue, 21 Jun 2022 21:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655872778; x=1687408778;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AMhZegtFWYVx//Lb0JAJ2PWASXQIxUvUTb3GUIaBbv8=;
-  b=cC+D2yO49b41AToNl7cg1a9DabVtd4/Duvv8LbUAW9F2PmiURuTnEDe4
-   CURD9/6c/3rSLhcga3S/YXzfYXdbDYlU2e4HdRtxAZmJOosEA1xGl8KZt
-   f34DYTQD4xWelayvDO5Tmh0CdBvTBvdqUmm4rhoJgi99bH2Sqf3x4+K6w
-   32x268QSrtqV3l2w0jiybU5OU+NJhzDqdOGiZPmQK6B4xL/opF40qIGEF
-   tOSAKq0Lplc+a0L7r0ZIfoRAXAC102siXDmgzhIC/x+vS3KivWVqR7oaF
-   GoTgTTEaClDtq5Rhbe7jHPfEPctOaZDmfL0HZlVKarxGQgle0cTg8KPId
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="344302209"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="344302209"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 21:39:38 -0700
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="833905619"
-Received: from xzhan99-mobl1.ccr.corp.intel.com (HELO [10.249.172.26]) ([10.249.172.26])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 21:39:35 -0700
-Message-ID: <95845c03-d191-7228-c83f-92f5589a70db@linux.intel.com>
-Date:   Wed, 22 Jun 2022 12:39:34 +0800
+        Wed, 22 Jun 2022 00:41:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278535848;
+        Tue, 21 Jun 2022 21:41:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63904B81B08;
+        Wed, 22 Jun 2022 04:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0657BC3411B;
+        Wed, 22 Jun 2022 04:41:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655872870;
+        bh=eEq1/2iPDzNz1B5Oou72nRfVOsUdg1B5WvvRswLKrBM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b+QXBEoaieKF6aDG6vUNkd0kuxYfFerKo7EkAuTsOIK4VUAmqA9o6W1sMonggZy14
+         H4TVLn+gmLIIPFknf5xspz2pSX2gTsuSvmH/PFUVt/jkcRXnkxW15x11IbAwJm/wV4
+         2wenMK2FnO94kUXkHZrITh7Pvng3C9mjBe770eZgba2/qavFem6QLFZUVdWtq+LeHG
+         UO9J/lIJFDVBO3h0LTJwB+buoGcBJ1ZYTV7rFmRoSdgzCdktyFHWfreVsbn4mU/1Yb
+         PFhlUFdhJxYo4l3iFGiVmf48eJhV6rJl51Qa9qJIddgZlNa0Pta5llu7jyldip7AQJ
+         8sWYu8NS1Q9Aw==
+Date:   Tue, 21 Jun 2022 21:41:09 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shida Zhang <starzhangzsd@gmail.com>
+Cc:     dchinner@redhat.com, zhangshida@kylinos.cn,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v3] xfs: add check before calling xfs_mod_fdblocks
+Message-ID: <YrKdZc0fBBDWGjld@magnolia>
+References: <20220621084238.1235880-1-zhangshida@kylinos.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, "Qiang, Chenyi" <chenyi.qiang@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/1] iommu/vt-d: Fix RID2PASID setup failure
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>
-References: <20220620081729.4610-1-baolu.lu@linux.intel.com>
- <BN9PR11MB52764F60972DF52EEF945D408CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <5d13cab5-1f0a-51c7-78a3-fb5d3d793ab1@linux.intel.com>
- <BN9PR11MB527671B3B4C1F786E40D67408CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <80457871-a760-69ba-70be-5e95344182ea@linux.intel.com>
- <BN9PR11MB5276A8B4E2466BE080CA9E9B8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ff4d8dab-e409-1e5d-74c5-ddbb65c2ba03@linux.intel.com>
- <BN9PR11MB52763B34313DD178B44BA2578CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
- <4316fa3e-3183-beb0-9c4a-d6045c6b5340@linux.intel.com>
- <BN9PR11MB52764776AA25E73721396DC88CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB52764776AA25E73721396DC88CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621084238.1235880-1-zhangshida@kylinos.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,96 +54,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/22 11:31, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Wednesday, June 22, 2022 11:28 AM
->>
->> On 2022/6/22 11:06, Tian, Kevin wrote:
->>>> From: Baolu Lu<baolu.lu@linux.intel.com>
->>>> Sent: Tuesday, June 21, 2022 5:04 PM
->>>>
->>>> On 2022/6/21 13:48, Tian, Kevin wrote:
->>>>>> From: Baolu Lu<baolu.lu@linux.intel.com>
->>>>>> Sent: Tuesday, June 21, 2022 12:28 PM
->>>>>>
->>>>>> On 2022/6/21 11:46, Tian, Kevin wrote:
->>>>>>>> From: Baolu Lu<baolu.lu@linux.intel.com>
->>>>>>>> Sent: Tuesday, June 21, 2022 11:39 AM
->>>>>>>>
->>>>>>>> On 2022/6/21 10:54, Tian, Kevin wrote:
->>>>>>>>>> From: Lu Baolu<baolu.lu@linux.intel.com>
->>>>>>>>>> Sent: Monday, June 20, 2022 4:17 PM
->>>>>>>>>> @@ -2564,7 +2564,7 @@ static int domain_add_dev_info(struct
->>>>>>>>>> dmar_domain *domain, struct device *dev)
->>>>>>>>>>       			ret = intel_pasid_setup_second_level(iommu,
->>>>>>>>>> domain,
->>>>>>>>>>       					dev, PASID_RID2PASID);
->>>>>>>>>>       		spin_unlock_irqrestore(&iommu->lock, flags);
->>>>>>>>>> -		if (ret) {
->>>>>>>>>> +		if (ret && ret != -EBUSY) {
->>>>>>>>>>       			dev_err(dev, "Setup RID2PASID failed\n");
->>>>>>>>>>       			dmar_remove_one_dev_info(dev);
->>>>>>>>>>       			return ret;
->>>>>>>>>> --
->>>>>>>>>> 2.25.1
->>>>>>>>> It's cleaner to avoid this error at the first place, i.e. only do the
->>>>>>>>> setup when the first device is attached to the pasid table.
->>>>>>>> The logic that identifies the first device might introduce additional
->>>>>>>> unnecessary complexity. Devices that share a pasid table are rare. I
->>>>>>>> even prefer to give up sharing tables so that the code can be
->>>>>>>> simpler.:-)
->>>>>>>>
->>>>>>> It's not that complex if you simply move device_attach_pasid_table()
->>>>>>> out of intel_pasid_alloc_table(). Then do the setup if
->>>>>>> list_empty(&pasid_table->dev) and then attach device to the
->>>>>>> pasid table in domain_add_dev_info().
->>>>>> The pasid table is part of the device, hence a better place to
->>>>>> allocate/free the pasid table is in the device probe/release paths.
->>>>>> Things will become more complicated if we change relationship
->> between
->>>>>> device and it's pasid table when attaching/detaching a domain. That's
->>>>>> the reason why I thought it was additional complexity.
->>>>>>
->>>>> If you do want to follow current route it’s still cleaner to check
->>>>> whether the pasid entry has pointed to the domain in the individual
->>>>> setup function instead of blindly returning -EBUSY and then ignoring
->>>>> it even if a real busy condition occurs. The setup functions can
->>>>> just return zero for this benign alias case.
->>>> Kevin, how do you like this one?
->>>>
->>>> diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
->>>> index cb4c1d0cf25c..ecffd0129b2b 100644
->>>> --- a/drivers/iommu/intel/pasid.c
->>>> +++ b/drivers/iommu/intel/pasid.c
->>>> @@ -575,6 +575,16 @@ static inline int pasid_enable_wpe(struct
->>>> pasid_entry *pte)
->>>>     	return 0;
->>>>     };
->>>>
->>>> +/*
->>>> + * Return true if @pasid is RID2PASID and the domain @did has already
->>>> + * been setup to the @pte. Otherwise, return false.
->>>> + */
->>>> +static inline bool
->>>> +rid2pasid_domain_valid(struct pasid_entry *pte, u32 pasid, u16 did)
->>>> +{
->>>> +	return pasid == PASID_RID2PASID && pasid_get_domain_id(pte) ==
->>>> did;
->>>> +}
->>> better this is not restricted to RID2PASID only, e.g.
->> pasid_pte_match_domain()
->>> and then read pasid from the pte to compare with the pasid argument.
->>>
->>
->> The pasid value is not encoded in the pasid table entry. This validity
->> check is only for RID2PASID as alias devices share the single RID2PASID
->> entry. For other cases, we should always return -EBUSY as what the code
->> is doing now.
->>
+On Tue, Jun 21, 2022 at 04:42:38PM +0800, Shida Zhang wrote:
+> Checks are missing when delta equals 0 in __xfs_ag_resv_free() and
+> __xfs_ag_resv_init().
 > 
-> You are right.
+> the case that the delta equals 0 is reachable with the command
+> sequence below:
+> 
+>  # mkfs.xfs -f /dev/sdb5
+>  # mount /dev/sdb5 /mnt/scratch/
+> 
+> where /dev/sdb5 is my disk for test. And if the patch below is
+> applied:
+> 
+> ====
+> xfs_mod_freecounter(
+>         if (rsvd)
+>                 ASSERT(has_resv_pool);
+> 
+> +       if (delta == 0)
+> +               dump_stack();
+> +
+>         if (delta > 0) {
+>                 /*
+>                  * If the reserve pool is depleted, put blocks back into it
+> ====
+> 
+> the following stack will be shown in the message:
+> 
+> =>  xfs_mod_freecounter+0x84/0x2b8
+> =>  __xfs_ag_resv_free+0xc4/0x188
+> =>  xfs_ag_resv_free+0x24/0x50
+> =>  xfs_fs_unreserve_ag_blocks+0x40/0x160
+> =>  xfs_mountfs+0x500/0x900
+> =>  xfs_fs_fill_super+0x3d8/0x810
+> =>  get_tree_bdev+0x164/0x258
+> =>  xfs_fs_get_tree+0x20/0x30
+> =>  vfs_get_tree+0x30/0xf8
+> =>  path_mount+0x3c4/0xa58
+> =>  do_mount+0x74/0x98
+> 
+> =>  xfs_mod_freecounter+0x84/0x2b8
+> =>  __xfs_ag_resv_init+0x64/0x1d0
+> =>  xfs_ag_resv_init+0x108/0x1c8
+> =>  xfs_fs_reserve_ag_blocks+0x4c/0x110
+> =>  xfs_mountfs+0x57c/0x900
+> =>  xfs_fs_fill_super+0x3d8/0x810
+> =>  get_tree_bdev+0x164/0x258
+> =>  xfs_fs_get_tree+0x20/0x30
+> =>  vfs_get_tree+0x30/0xf8
+> =>  path_mount+0x3c4/0xa58
+> =>  do_mount+0x74/0x98
+> 
+> After applying this patch, we can avoid to call xfs_mod_fdblocks when
+> delta equals 0.
+> 
+> Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+> ---
+>  Changes from v1:
+>  -Add checks before calling xfs_mod_fdblocks instead.
+>  Changes from v2:
+>  -Rephrase the commit description.
+> 
+>  fs/xfs/libxfs/xfs_ag_resv.c | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/xfs/libxfs/xfs_ag_resv.c b/fs/xfs/libxfs/xfs_ag_resv.c
+> index fe94058d4e9e..c8fa032e4b00 100644
+> --- a/fs/xfs/libxfs/xfs_ag_resv.c
+> +++ b/fs/xfs/libxfs/xfs_ag_resv.c
+> @@ -149,7 +149,12 @@ __xfs_ag_resv_free(
+>  		oldresv = resv->ar_orig_reserved;
+>  	else
+>  		oldresv = resv->ar_reserved;
+> -	error = xfs_mod_fdblocks(pag->pag_mount, oldresv, true);
+> +
+> +	if (oldresv)
+> +		error = xfs_mod_fdblocks(pag->pag_mount, oldresv, true);
+> +	else
+> +		error = 0;
+> +
+>  	resv->ar_reserved = 0;
+>  	resv->ar_asked = 0;
+>  	resv->ar_orig_reserved = 0;
+> @@ -215,8 +220,13 @@ __xfs_ag_resv_init(
+>  
+>  	if (XFS_TEST_ERROR(false, mp, XFS_ERRTAG_AG_RESV_FAIL))
+>  		error = -ENOSPC;
+> -	else
+> -		error = xfs_mod_fdblocks(mp, -(int64_t)hidden_space, true);
+> +	else {
+> +		error = 0;
+> +		if (hidden_space)
+> +			error = xfs_mod_fdblocks(mp, -(int64_t)hidden_space,
+> +						true);
 
-Very appreciated for your input. I will update it with a v2.
+I understand that calling __xfs_ag_resv_init on an AG with a maximally
+sized data structure can result in @hidden_space being zero here, but
+why does that matter enough to change the code?  Are you experiencing
+problems when this happens?  Unnecessary slowdowns at mount time?
+Something else?
 
-Best regards,
-baolu
+This is v3 of a patch and I still can't tell why I should care ...?
+
+--D
+
+> +	}
+> +
+>  	if (error) {
+>  		trace_xfs_ag_resv_init_error(pag->pag_mount, pag->pag_agno,
+>  				error, _RET_IP_);
+> -- 
+> 2.25.1
+> 

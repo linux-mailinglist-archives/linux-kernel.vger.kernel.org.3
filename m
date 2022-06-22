@@ -2,141 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674FE554F50
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664DB554F56
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358535AbiFVPa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
+        id S1358565AbiFVPbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245413AbiFVPa1 (ORCPT
+        with ESMTP id S236904AbiFVPbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:30:27 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5837BCA;
-        Wed, 22 Jun 2022 08:30:26 -0700 (PDT)
-Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id AAC532054D;
-        Wed, 22 Jun 2022 17:30:24 +0200 (CEST)
-Message-ID: <e7d9150b-8332-6394-f6cf-0e59d0cf931b@somainline.org>
-Date:   Wed, 22 Jun 2022 17:30:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 4/6] arm64: dts: qcom: sc8280xp: Add reference device
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-5-bjorn.andersson@linaro.org>
- <099cc82f-d52f-315f-189d-bcc40c1afd49@somainline.org>
- <YrMccQXwsz/zC/gl@hovoldconsulting.com>
- <9d0c1897-195f-0548-ea5d-ffc35768f518@somainline.org>
- <b2c9faf0-95a8-772f-c211-f1599b35f8f8@linaro.org>
- <51965fa3-d146-70f1-2ad8-db6197989348@somainline.org>
- <YrM0vhXpY3uWgprs@hovoldconsulting.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <YrM0vhXpY3uWgprs@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 11:31:33 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D7D38D9F;
+        Wed, 22 Jun 2022 08:31:27 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1655911843trynz47q
+Received: from ubuntu.localdomain ( [106.117.78.84])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 23:30:31 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000E00A0000000
+X-QQ-FEAT: Mzskoac49OhJzI5Pv8Mj9o2FIj6xOcNrBDvWJ3hTpBVkV722THm8ctn7nR7Yg
+        0XIja2PyZBaM3+xY19y9b1mL/ANmV8kEMyoK72Auoi4R/rLePZUVkn6/3tXgWxVjtL5/8/5
+        1o+E21YbV38vSSqM7rCP0kSbt45HVhIGk/mb7qXkdbCmIXdAQgEeHa02uVvXx51T+qniteD
+        /uQTIIwP6CTXT/mYBBxPTzI8E59mk60pYBt8StL/QbI29dwCwqmX4ZuVwgFoAUsNT13I8zw
+        DNBh2DRdnCOF1vEKTiFa1noGQnhXNxpICCEDoeq2jtS1oWos0zvSZDLdS+Y3qvSB/R9KBTY
+        C3eFAl2VE2w0c/LqadH67PYETNEPOIvZD7lKGZF
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] scsi: sg: Fix typo in comments
+Date:   Wed, 22 Jun 2022 23:30:29 +0800
+Message-Id: <20220622153029.4137-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+there is an unexpected word 'is' in the comments that need to be dropped
 
+file: drivers/scsi/sg.c
+line: 697
 
-On 22.06.2022 17:26, Johan Hovold wrote:
-> On Wed, Jun 22, 2022 at 05:10:50PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 22.06.2022 16:48, Krzysztof Kozlowski wrote:
->>> On 22/06/2022 16:36, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 22.06.2022 15:43, Johan Hovold wrote:
->>>>> On Wed, Jun 22, 2022 at 02:33:02PM +0200, Konrad Dybcio wrote:
->>>>>> On 22.06.2022 06:12, Bjorn Andersson wrote:
->>>>>
->>>>>>> +&qup2_i2c5 {
->>>>>>> +	clock-frequency = <400000>;
->>>>>>> +
->>>>>>> +	pinctrl-names = "default";
->>>>>>> +	pinctrl-0 = <&qup2_i2c5_default>, <&kybd_default>, <&tpad_default>;
->>>>>>> +
->>>>>>> +	status = "okay";
->>>>>>> +
->>>>>> I think all device DTs generally have 'status = "okay"' at the beginning. Should we change that?
->>>>>>
->>>>>
->>>>> No, quite the opposite, status go at the end.
->>>> Then all other device DTs should be updated, as in dts/qcom/
->>>> everybody keeps it first in non-SoC/PMIC files.
->>>
->>> The word "should" is a bit too much here, but I agree, we can update all
->>> of them to match one, chosen approach.
->>>
->>> However the location for "status" property is more important for the
->>> definition of nodes in DTSI, because it's the least important piece
->>> there and also kind of expected - here go properties + I disable it. For
->>> me this is more important.
-> 
-> Right, and this is the argument for keeping status last, something which
-> is well defined.
-> 
-> If you look at some of the qcom dtsi it's hard to determine whether a
-> node is disabled or not because the status property does not actually go
-> "first" but is rather typically mixed up somewhere in the middle (or
-> upper part) of nodes.
-> 
->>> For node redefinition in DTS, I see benefits in two approaches:
->>> 1. Let me first enable the node and then configure it.
->>> 2. Let me configure the node and enable it.
-> 
-> So for consistency, just put status last everywhere (dtsi and dts) and
-> be done with it.
-That works.
+* but is is possible that the app intended SG_DXFER_TO_DEV, because there
 
+changed to:
 
-> 
->> I looked around non-qcom device trees and it looks like the common
->> consensus is 2. Although I personally visually prefer 1. and it's
->> been used in all qcom arm64 DTs to date, I don't think there are any
->> blockers for us to switch to 1. going forward to keep it consistent.
-> 
-> You mean inconsistent with the majority of dts? ;)
-Not like anything involving Qualcomm was ever consistent or compliant with the majority :D
+* but is possible that the app intended SG_DXFER_TO_DEV, because there
 
-Konrad
-> 
->> That's if we want to clean up the existing ones, as changing the rules
->> and not applying that to the older files will make for a huge mess as
->> time goes on and will unnecessarily prolong the review process (as
->> existing DTs are commonly a source of reference and people make
->> certain choices based on those).
-> 
-> That's a fair point. Consistency is good, and dt snipped tends to be
-> copied, but it's not the end of the world to not update old dts either.
-> 
->> I don't think the DTS specification or the Linux docs explicitly which
->> one to choose though.
-> 
-> No, but a praxis has been developed over time (e.g. compatible first,
-> reg second, status last).
-> 
-> Johan
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/scsi/sg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index 118c7b4a8af2..047761f62b23 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -694,7 +694,7 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
+ 	}
+ 	/*
+ 	 * SG_DXFER_TO_FROM_DEV is functionally equivalent to SG_DXFER_FROM_DEV,
+-	 * but is is possible that the app intended SG_DXFER_TO_DEV, because there
++	 * but is possible that the app intended SG_DXFER_TO_DEV, because there
+ 	 * is a non-zero input_size, so emit a warning.
+ 	 */
+ 	if (hp->dxfer_direction == SG_DXFER_TO_FROM_DEV) {
+-- 
+2.17.1
+

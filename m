@@ -2,106 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08209554CDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC96A554CE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbiFVOYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S1358305AbiFVOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358517AbiFVOX5 (ORCPT
+        with ESMTP id S1358370AbiFVOYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:23:57 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6B55580
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:23:56 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z11so17993601edp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:23:55 -0700 (PDT)
+        Wed, 22 Jun 2022 10:24:49 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E073A5FD
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:24:35 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-101ec2d6087so12177188fac.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=cloudflare.com; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ASFP5IP9NFXmeexPLRW7qWJpEpGv0lKpIUxpCQWgUGg=;
-        b=XdOLqhNxL7lmkLKULp9Ztpbq+zF0iuuPKXJVOBPylr6Blak5hUecuSf5XJBQVWuSnv
-         RVs0AQSC+RepxEmPKVkauvYKAH/mqWMBcDW33/NJ8uMCbKLnbCbbzwvHSqWaZoTbBL8W
-         bzRxiDHY3fz0B0rTVUfZ92iwn4bfCZehABZI7kyUnm3yEgPGrVwt+zwMvg66IegAnlln
-         SjKXLjNMEjBU0WQC2KQwB/t/nrKm40Pa7WgUjDQSaJfLKR3fy/LCIerQ2aEGkNo21q5/
-         wGI4MW+Hotjd3W4iOAp2DNe6+7KDtiLFTRnks10ZzTlloBt2anznfpv9512OEIR71G0z
-         pXlg==
+        bh=RTCiI3z/FejuYZ8fuG7ALGW0XqlrQSjMbaE9qwJX9Cg=;
+        b=ZQVTbEN7aUSDEdVs2YzfZWlgi3LbLYER2SLB8yHQY9UzSHPRwUSbJ/NDygAsKrAd7J
+         aCH94nDm4GL5jbWvtBLV8vfQuiMl7/ZDQHOeePpUKtuiYYEaVMFgNk3doBxXIONUBjgv
+         I6Rp+PmtrGPbaTovYHGreme6UXJYrZb4m5Bjs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ASFP5IP9NFXmeexPLRW7qWJpEpGv0lKpIUxpCQWgUGg=;
-        b=CKOWmcoyE51yqcZs1vUG1391s9EZF/3ULCJBg76782wMyDDuOleJ5olZ2FV47nAK4k
-         yUHxrlce1lKI4f/XZqtcmBUkrHS3grjeQGTw830S4OvSZq37LyIhm/9iqpgxc1BvpXgK
-         O7DTOvTJLLd7LDLVYfB5USwvfwjm20g9KQC/PDIpKQahwxPIuvrkAYnTVKKuT+TemfbQ
-         z8SSIdZYxLZOn2m0TH+4K+9lNY6mvz2l7ZQ5CcX/ceGN8EZ96dq0eHQUUnVkvErnoner
-         GnfqvtHEKB7Kc7rnII55drHrIDMXsLGQWQdCsudE4WmTrANsQ1dRmGAmoG2MnhPw2vrW
-         mRYQ==
-X-Gm-Message-State: AJIora+gsuVo4xLiy6HWmjg4484TZxUKqYZH7bItBa0iMYuul27wPXz6
-        1SMoA9sZFPlptroTqTyd9pzuLw==
-X-Google-Smtp-Source: AGRyM1seX4ZkksCXeRPMkaLKK5W0HwS2FvD9c/bqAUsr+AUyprpmhST58KhyYKsR0XgOay0M5lAMhA==
-X-Received: by 2002:a05:6402:d0a:b0:421:10e6:2ecc with SMTP id eb10-20020a0564020d0a00b0042110e62eccmr4430327edb.329.1655907834622;
-        Wed, 22 Jun 2022 07:23:54 -0700 (PDT)
-Received: from [192.168.0.225] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b006f3ef214e20sm9337863ejd.134.2022.06.22.07.23.53
+        bh=RTCiI3z/FejuYZ8fuG7ALGW0XqlrQSjMbaE9qwJX9Cg=;
+        b=8KgUb2WefqnNG1g8p9egWSsYDSVFtWLL+EmaOtjSLSG+PXwDmX8x98NxV/dmI5/GH5
+         pShBircQOkDYtcPfvdPPGNaQNqM82dYeJmQpHdMZEIghnh+bV7SovPBvzUGBbBIBNoA2
+         h4DZQh7en3LxruaZmZZxemVrCsolrAniYDBg2TSEyFQC7pmgm6gNt4YlG+SPvXex2D5Q
+         oNVEPEv9AXFNDAanOfbaKHpqsX5lnVWXqbj2Vy1VQE7P85IXUNRDss0rlcDDsWdVL3Zb
+         /XwTumJn0nPGzeJPhZfDtRO5F4wbAqER5+H2c1mTbQvd4Mj1aDfAtnkTMMrPklrmfxLb
+         P/gQ==
+X-Gm-Message-State: AJIora9jL7TDkme/7QqGLKRxtMKJXU1zGm3I1gq8DXmP/gR4iVsRnyjg
+        EPN65nFojTKoGyTsWFWiYdpi8w==
+X-Google-Smtp-Source: AGRyM1v60GyMFZawKSzE9AV+dokDeZ2oOw03of096v2vdWHskT34HNJlwjkQbYpYkHqZslvi3hON/w==
+X-Received: by 2002:a05:6870:3320:b0:fd:a944:1abf with SMTP id x32-20020a056870332000b000fda9441abfmr24133333oae.251.1655907874821;
+        Wed, 22 Jun 2022 07:24:34 -0700 (PDT)
+Received: from [192.168.0.115] ([172.58.70.161])
+        by smtp.gmail.com with ESMTPSA id w25-20020a4a7659000000b0035eb4e5a6cesm11612512ooe.36.2022.06.22.07.24.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 07:23:54 -0700 (PDT)
-Message-ID: <b6a8e40d-ca4d-a688-988d-6800150d4e68@linaro.org>
-Date:   Wed, 22 Jun 2022 16:23:53 +0200
+        Wed, 22 Jun 2022 07:24:34 -0700 (PDT)
+Message-ID: <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
+Date:   Wed, 22 Jun 2022 09:24:31 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 02/13] dt-bindings: Add headers for Host1x and VIC on
- Tegra234
+Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
 Content-Language: en-US
-To:     Mikko Perttunen <cyndis@kapsi.fi>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, digetx@gmail.com
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mikko Perttunen <mperttunen@nvidia.com>
-References: <20220622113733.1710471-1-cyndis@kapsi.fi>
- <20220622113733.1710471-3-cyndis@kapsi.fi>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220622113733.1710471-3-cyndis@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Casey Schaufler <casey@schaufler-ca.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     brauner@kernel.org, paul@paul-moore.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com
+References: <20220621233939.993579-1-fred@cloudflare.com>
+ <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 13:37, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
+Hi Casey,
+
+On 6/21/22 7:19 PM, Casey Schaufler wrote:
+> On 6/21/2022 4:39 PM, Frederick Lawler wrote:
+>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>> used the LSM cred_prepare hook because that is the closest hook to 
+>> prevent
+>> a call to create_user_ns().
+>>
+>> The calls look something like this:
+>>
+>>      cred = prepare_creds()
+>>          security_prepare_creds()
+>>              call_int_hook(cred_prepare, ...
+>>      if (cred)
+>>          create_user_ns(cred)
+>>
+>> We noticed that error codes were not propagated from this hook and
+>> introduced a patch [1] to propagate those errors.
+>>
+>> The discussion notes that security_prepare_creds()
+>> is not appropriate for MAC policies, and instead the hook is
+>> meant for LSM authors to prepare credentials for mutation. [2]
+>>
+>> Ultimately, we concluded that a better course of action is to introduce
+>> a new security hook for LSM authors. [3]
+>>
+>> This patch set first introduces a new security_create_user_ns() function
+>> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
 > 
-> Add clock, memory controller, powergate and reset dt-binding headers
-> for Host1x and VIC on Tegra234.
+> Why restrict this hook to user namespaces? It seems that an LSM that
+> chooses to preform controls on user namespaces may want to do so for
+> network namespaces as well.
+IIRC, CLONE_NEWUSER is the only namespace flag that does not require 
+CAP_SYS_ADMIN. There is a security use case to prevent this namespace 
+from being created within an unprivileged environment. I'm not opposed 
+to a more generic hook, but I don't currently have a use case to block 
+any others. We can also say the same is true for the other namespaces: 
+add this generic security function to these too.
+
+I'm curious what others think about this too.
+
+
+> Also, the hook seems backwards. You should
+> decide if the creation of the namespace is allowed before you create it.
+> Passing the new namespace to a function that checks to see creating a
+> namespace is allowed doesn't make a lot off sense.
 > 
-> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
-> ---
->  include/dt-bindings/clock/tegra234-clock.h     | 4 ++++
->  include/dt-bindings/memory/tegra234-mc.h       | 5 +++++
->  include/dt-bindings/power/tegra234-powergate.h | 1 +
->  include/dt-bindings/reset/tegra234-reset.h     | 1 +
->  4 files changed, 11 insertions(+)
-> 
 
-It's not the fault of this patch but in the past you started encoding
-some register offsets or values in the bindings. That's not what
-bindings headers are for. Store here hardware-independent IDs or
-nothing. For new Tegra SoCs I might start pushing this back...
+I think having more context to a security hook is a good thing. I 
+believe you brought up in the previous discussions that you'd like to 
+use this hook for xattr purposes. Doesn't that require a namespace?
 
-Anyway, it's not this patch which introduced it, so:
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> Links:
+>> 1. 
+>> https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+>> 2. 
+>> https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/ 
+>>
+>> 3. 
+>> https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/ 
+>>
+>>
+>> Frederick Lawler (2):
+>>    security, lsm: Introduce security_create_user_ns()
+>>    bpf-lsm: Make bpf_lsm_create_user_ns() sleepable
+>>
+>>   include/linux/lsm_hook_defs.h | 2 ++
+>>   include/linux/lsm_hooks.h     | 5 +++++
+>>   include/linux/security.h      | 8 ++++++++
+>>   kernel/bpf/bpf_lsm.c          | 1 +
+>>   kernel/user_namespace.c       | 5 +++++
+>>   security/security.c           | 6 ++++++
+>>   6 files changed, 27 insertions(+)
+>>
+>> -- 
+>> 2.30.2
+>>
 
-
-Best regards,
-Krzysztof

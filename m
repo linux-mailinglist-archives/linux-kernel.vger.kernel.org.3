@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A7B555443
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872EA555438
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239923AbiFVT12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S1357558AbiFVT1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiFVT1Q (ORCPT
+        with ESMTP id S237166AbiFVT1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:27:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E27AFDAD
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:27:14 -0700 (PDT)
+        Wed, 22 Jun 2022 15:27:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B0B5DAD
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:27:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655926034;
+        s=mimecast20190719; t=1655926037;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UetEegWFrSI4DxaQkVqPZAaYbNMpqePnjSLMmI2uAtM=;
-        b=Kaif2yG83Ff/NpnEo43LLDR6iE+sDojc/nGfkVLBb/ezn+ifyI246VDIb0u8E2nAgn0kz8
-        +wvR3nZBBA/j62UOZE/uxurXt0tfuoUxnu4NEM5DsZXZaxWb4Y/cqN1RxQ9YBguAeiivPb
-        5jhXoFI2ZJruEnEJo5pb0BPN7WAtq7o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=2kItQM/cRpS0FZ1TtSe+3txCMcE2niKoJ8Hcd5NrfAY=;
+        b=XMpoJrdj5Xxoj+oU9o1LJirkiu4RpdIM6TWCW9McxWAnXZeo/GaR2FZ7wkj9kajf2PP1ze
+        ibYFhtItZYetLs2y7oxZJQVdiBRqlQhO0GQalYB4uNOvxBdq8v+ALWAitYNw2g8zSBSgaY
+        PN0wTdYofo27vf/Q08pJ1M57ZcZtFG4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-464-nl_lej8DNwCY7ROTjZCaaA-1; Wed, 22 Jun 2022 15:27:12 -0400
-X-MC-Unique: nl_lej8DNwCY7ROTjZCaaA-1
+ us-mta-463-GFk2Rc8VNGe5eImtWf-Tow-1; Wed, 22 Jun 2022 15:27:12 -0400
+X-MC-Unique: GFk2Rc8VNGe5eImtWf-Tow-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D5ED102F0C1;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EFB7B294EDC5;
         Wed, 22 Jun 2022 19:27:11 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 36C8B1121314;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 95B7C1121314;
         Wed, 22 Jun 2022 19:27:11 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     maz@kernel.org, anup@brainfault.org, seanjc@google.com,
         kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
         kvm-riscv@lists.infradead.org, pfeiner@google.com,
         jiangshanlai@gmail.com, dmatlack@google.com
-Subject: [PATCH v7 01/23] KVM: x86/mmu: Optimize MMU page cache lookup for all direct SPs
-Date:   Wed, 22 Jun 2022 15:26:48 -0400
-Message-Id: <20220622192710.2547152-2-pbonzini@redhat.com>
+Subject: [PATCH v7 02/23] KVM: x86/mmu: Use a bool for direct
+Date:   Wed, 22 Jun 2022 15:26:49 -0400
+Message-Id: <20220622192710.2547152-3-pbonzini@redhat.com>
 In-Reply-To: <20220622192710.2547152-1-pbonzini@redhat.com>
 References: <20220622192710.2547152-1-pbonzini@redhat.com>
 MIME-Version: 1.0
@@ -56,7 +56,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,52 +66,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Matlack <dmatlack@google.com>
 
-Commit fb58a9c345f6 ("KVM: x86/mmu: Optimize MMU page cache lookup for
-fully direct MMUs") skipped the unsync checks and write flood clearing
-for full direct MMUs. We can extend this further to skip the checks for
-all direct shadow pages. Direct shadow pages in indirect MMUs (i.e.
-shadow paging) are used when shadowing a guest huge page with smaller
-pages. Such direct shadow pages, like their counterparts in fully direct
-MMUs, are never marked unsynced or have a non-zero write-flooding count.
-
-Checking sp->role.direct also generates better code than checking
-direct_map because, due to register pressure, direct_map has to get
-shoved onto the stack and then pulled back off.
+The parameter "direct" can either be true or false, and all of the
+callers pass in a bool variable or true/false literal, so just use the
+type bool.
 
 No functional change intended.
 
 Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
 Reviewed-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
-Message-Id: <20220516232138.1783324-2-dmatlack@google.com>
+Message-Id: <20220516232138.1783324-3-dmatlack@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
  arch/x86/kvm/mmu/mmu.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 27b2a5603496..c0afb4f1c8ae 100644
+index c0afb4f1c8ae..844b58ddb3bb 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2000,7 +2000,6 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 					     int direct,
+@@ -1664,7 +1664,7 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
+ 	mmu_spte_clear_no_track(parent_pte);
+ }
+ 
+-static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct)
++static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, bool direct)
+ {
+ 	struct kvm_mmu_page *sp;
+ 
+@@ -1997,7 +1997,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
+ 					     gfn_t gfn,
+ 					     gva_t gaddr,
+ 					     unsigned level,
+-					     int direct,
++					     bool direct,
  					     unsigned int access)
  {
--	bool direct_mmu = vcpu->arch.mmu->root_role.direct;
  	union kvm_mmu_page_role role;
- 	struct hlist_head *sp_list;
- 	unsigned quadrant;
-@@ -2060,7 +2059,8 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 			continue;
- 		}
- 
--		if (direct_mmu)
-+		/* unsync and write-flooding only apply to indirect SPs. */
-+		if (sp->role.direct)
- 			goto trace_get_page;
- 
- 		if (sp->unsync) {
 -- 
 2.31.1
 

@@ -2,274 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8413955435A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AF3554351
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiFVGix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S238620AbiFVGlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350791AbiFVGiq (ORCPT
+        with ESMTP id S233626AbiFVGlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:38:46 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E4E2B1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:38:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2FB3421BD0;
-        Wed, 22 Jun 2022 06:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655879924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m9f7VaM7LHywgL8edWFIK8hnsYgPrl1K1+9FwdnrA7I=;
-        b=vWn95FYtCaOSmLs/qVgOFeVWZTPG7+811NqLHkzlTvdHZAEM+uKhWNhSIzKroY9Tx4StIW
-        9LRziyk8K/BhqzQQjfPycSfV65ys+LzcM05IUG2+GeA5wdikMrBaGOgvb25qF1yd5sYE4g
-        biRC2G6v9qRHicsZBZzi4xvaKXdrFeE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFDE2134A9;
-        Wed, 22 Jun 2022 06:38:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ECZ+LfO4smKNUAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 22 Jun 2022 06:38:43 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: [PATCH v3 3/3] xen: don't require virtio with grants for non-PV guests
-Date:   Wed, 22 Jun 2022 08:38:38 +0200
-Message-Id: <20220622063838.8854-4-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220622063838.8854-1-jgross@suse.com>
-References: <20220622063838.8854-1-jgross@suse.com>
+        Wed, 22 Jun 2022 02:41:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B317C3464E;
+        Tue, 21 Jun 2022 23:41:47 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSYdj0XbRzhYYP;
+        Wed, 22 Jun 2022 14:39:37 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 14:41:44 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 14:41:43 +0800
+Subject: Re: [PATCH RFC -next] sbitmap: fix possible io hung due to lost
+ wakeups
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     Jan Kara <jack@suse.cz>
+CC:     <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220617141125.3024491-1-yukuai3@huawei.com>
+ <20220620122413.2fewshn5u6t2y4oi@quack3.lan>
+ <20220620124831.g7bswgivvg5urv3d@quack3.lan>
+ <d0e2639b-885e-2789-7d1b-13057abc67f4@huawei.com>
+ <20220620170231.c656cs4ksqcve4td@quack3.lan>
+ <4fbc3052-b9b7-607d-1b8c-6ad8b21dfc3c@huawei.com>
+Message-ID: <d7d460ee-17d2-5f68-9338-a26a52b588db@huawei.com>
+Date:   Wed, 22 Jun 2022 14:41:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <4fbc3052-b9b7-607d-1b8c-6ad8b21dfc3c@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit fa1f57421e0b ("xen/virtio: Enable restricted memory access using
-Xen grant mappings") introduced a new requirement for using virtio
-devices: the backend now needs to support the VIRTIO_F_ACCESS_PLATFORM
-feature.
+在 2022/06/22 11:58, Yu Kuai 写道:
+> 在 2022/06/21 1:02, Jan Kara 写道:
+>> On Mon 20-06-22 21:44:16, Yu Kuai wrote:
+>>> 在 2022/06/20 20:48, Jan Kara 写道:
+>>>> On Mon 20-06-22 14:24:13, Jan Kara wrote:
+>>>>> On Fri 17-06-22 22:11:25, Yu Kuai wrote:
+>>>>>> Currently, same waitqueue might be woken up continuously:
+>>>>>>
+>>>>>> __sbq_wake_up        __sbq_wake_up
+>>>>>>    sbq_wake_ptr -> assume    0
+>>>>>>              sbq_wake_ptr -> 0
+>>>>>>    atomic_dec_return
+>>>>>>             atomic_dec_return
+>>>>>>    atomic_cmpxchg -> succeed
+>>>>>>              atomic_cmpxchg -> failed
+>>>>>>               return true
+>>>>>>
+>>>>>>             __sbq_wake_up
+>>>>>>              sbq_wake_ptr
+>>>>>>               atomic_read(&sbq->wake_index) -> still 0
+>>>>>>    sbq_index_atomic_inc -> inc to 1
+>>>>>>               if (waitqueue_active(&ws->wait))
+>>>>>>                if (wake_index != atomic_read(&sbq->wake_index))
+>>>>>>                 atomic_set -> reset from 1 to 0
+>>>>>>    wake_up_nr -> wake up first waitqueue
+>>>>>>                 // continue to wake up in first waitqueue
+>>>>>>
+>>>>>> What's worse, io hung is possible in theory because wakeups might be
+>>>>>> missed. For example, 2 * wake_batch tags are put, while only 
+>>>>>> wake_batch
+>>>>>> threads are worken:
+>>>>>>
+>>>>>> __sbq_wake_up
+>>>>>>    atomic_cmpxchg -> reset wait_cnt
+>>>>>>             __sbq_wake_up -> decrease wait_cnt
+>>>>>>             ...
+>>>>>>             __sbq_wake_up -> wait_cnt is decreased to 0 again
+>>>>>>              atomic_cmpxchg
+>>>>>>              sbq_index_atomic_inc -> increase wake_index
+>>>>>>              wake_up_nr -> wake up and waitqueue might be empty
+>>>>>>    sbq_index_atomic_inc -> increase again, one waitqueue is skipped
+>>>>>>    wake_up_nr -> invalid wake up because old wakequeue might be empty
+>>>>>>
+>>>>>> To fix the problem, refactor to make sure waitqueues will be woken up
+>>>>>> one by one,
+>>>>>>
+>>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>>>
+>>>>> So as far as I can tell your patch does not completely fix this 
+>>>>> race. See
+>>>>> below:
+>>>>>
+>>>>>> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+>>>>>> index ae4fd4de9ebe..dc2959cb188c 100644
+>>>>>> --- a/lib/sbitmap.c
+>>>>>> +++ b/lib/sbitmap.c
+>>>>>> @@ -574,66 +574,69 @@ void sbitmap_queue_min_shallow_depth(struct 
+>>>>>> sbitmap_queue *sbq,
+>>>>>>    }
+>>>>>>    EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
+>>>>>> -static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue 
+>>>>>> *sbq)
+>>>>>> +static void sbq_update_wake_index(struct sbitmap_queue *sbq,
+>>>>>> +                  int old_wake_index)
+>>>>>>    {
+>>>>>>        int i, wake_index;
+>>>>>> -
+>>>>>> -    if (!atomic_read(&sbq->ws_active))
+>>>>>> -        return NULL;
+>>>>>> +    struct sbq_wait_state *ws;
+>>>>>>        wake_index = atomic_read(&sbq->wake_index);
+>>>>>> -    for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+>>>>>> -        struct sbq_wait_state *ws = &sbq->ws[wake_index];
+>>>>>> +    if (old_wake_index != wake_index)
+>>>>>> +        return;
+>>>>>> +    for (i = 1; i < SBQ_WAIT_QUEUES; i++) {
+>>>>>> +        wake_index = sbq_index_inc(wake_index);
+>>>>>> +        ws = &sbq->ws[wake_index];
+>>>>>> +        /* Find the next active waitqueue in round robin manner */
+>>>>>>            if (waitqueue_active(&ws->wait)) {
+>>>>>> -            if (wake_index != atomic_read(&sbq->wake_index))
+>>>>>> -                atomic_set(&sbq->wake_index, wake_index);
+>>>>>> -            return ws;
+>>>>>> +            atomic_cmpxchg(&sbq->wake_index, old_wake_index,
+>>>>>> +                       wake_index);
+>>>>>> +            return;
+>>>>>>            }
+>>>>>> -
+>>>>>> -        wake_index = sbq_index_inc(wake_index);
+>>>>>>        }
+>>>>>> -
+>>>>>> -    return NULL;
+>>>>>>    }
+>>>>>>    static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+>>>>>>    {
+>>>>>>        struct sbq_wait_state *ws;
+>>>>>>        unsigned int wake_batch;
+>>>>>> -    int wait_cnt;
+>>>>>> +    int wait_cnt, wake_index;
+>>>>>> -    ws = sbq_wake_ptr(sbq);
+>>>>>> -    if (!ws)
+>>>>>> +    if (!atomic_read(&sbq->ws_active))
+>>>>>>            return false;
+>>>>>> -    wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>>> -    if (wait_cnt <= 0) {
+>>>>>> -        int ret;
+>>>>>> -
+>>>>>> -        wake_batch = READ_ONCE(sbq->wake_batch);
+>>>>>> -
+>>>>>> -        /*
+>>>>>> -         * Pairs with the memory barrier in 
+>>>>>> sbitmap_queue_resize() to
+>>>>>> -         * ensure that we see the batch size update before the wait
+>>>>>> -         * count is reset.
+>>>>>> -         */
+>>>>>> -        smp_mb__before_atomic();
+>>>>>> +    wake_index = atomic_read(&sbq->wake_index);
+>>>>>> +    ws = &sbq->ws[wake_index];
+>>>>>> +    /*
+>>>>>> +     * This can only happen in the first wakeup when sbitmap 
+>>>>>> waitqueues
+>>>>>> +     * are no longer idle.
+>>>>>> +     */
+>>>>>> +    if (!waitqueue_active(&ws->wait)) {
+>>>>>> +        sbq_update_wake_index(sbq, wake_index);
+>>>>>> +        return true;
+>>>>>> +    }
+>>>>>> -        /*
+>>>>>> -         * For concurrent callers of this, the one that failed the
+>>>>>> -         * atomic_cmpxhcg() race should call this function again
+>>>>>> -         * to wakeup a new batch on a different 'ws'.
+>>>>>> -         */
+>>>>>> -        ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
+>>>>>> -        if (ret == wait_cnt) {
+>>>>>> -            sbq_index_atomic_inc(&sbq->wake_index);
+>>>>>> -            wake_up_nr(&ws->wait, wake_batch);
+>>>>>> -            return false;
+>>>>>> -        }
+>>>>>> +    wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>>> +    if (wait_cnt > 0)
+>>>>>> +        return false;
+>>>>>
+>>>>> The following race is still possible:
+>>>>>
+>>>>> CPU1                    CPU2
+>>>>> __sbq_wake_up                __sbq_wake_up
+>>>>>     wake_index = atomic_read(&sbq->wake_index);
+>>>>>                       wake_index = atomic_read(&sbq->wake_index);
+>>>>>
+>>>>>     if (!waitqueue_active(&ws->wait)) -> not taken
+>>>>>                       if (!waitqueue_active(&ws->wait)) -> not taken
+>>>>>     wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>>     /* decremented to 0 now */
+>>>>>     if (wait_cnt > 0) -> not taken
+>>>>>     sbq_update_wake_index(sbq, wake_index);
+>>>>>     if (wait_cnt < 0) -> not taken
+>>>>>     ...
+>>>>>     atomic_set(&ws->wait_cnt, wake_batch);
+>>>>>     wake_up_nr(&ws->wait, wake_batch);
+>>>>>                       wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>>                       /*
+>>>>>                        * decremented to wake_batch - 1 but
+>>>>>                        * there are no tasks waiting anymore
+>>>>>                        * so the wakeup should have gone
+>>>>>                        * to a different waitqueue.
+>>>>>                        */
+>>>>>
+>>>>> I have an idea how to fix all these lost wakeups, I'll try to code it
+>>>>> whether it would look usable...
+>>> Hi, Jan
+>>>
+>>> Thanks for the analysis, it's right this is possible.
+>>>>
+>>>> Thinking a bit more about it your code would just need a small tweak 
+>>>> like:
+>>>>
+>>>>     wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>>>>     /*
+>>>>      * Concurrent callers should call this function again
+>>>>      * to wakeup a new batch on a different 'ws'.
+>>>>      */
+>>>>     if (wait_cnt < 0 || !waitqueue_active(&ws->wait)) {
+>>>>         sbq_update_wake_index(sbq, wake_index);
+>>>>         return true;
+>>>>     }
+>>>
+>>> I'm thinking that if the wait_queue is still active, this will decrease
+>>> 'wait_cnt' in old waitqueue while 'wake_index' is already moved to next
+>>> waitqueue. This really broke the design...
+>>
+>> I agree this can happen and it is not ideal. On the other hand the wakeup
+>> is not really lost, just effectively delayed until we select this 
+>> waitqueue
+>> again so it should not result in any hangs. And other ways to avoid the
+>> race seem more expensive to me...
+> 
+> Hi, Jan
+> 
+> Before you reviewed this version, I aready posted v2... It semms v2 is
+> using exactly the same logic that you suggested here 😉.
+> 
+> Thanks,
+> Kuai
+>>
+>>                                 Honza
+>>
+>>>>     if (wait_cnt > 0)
+>>>>         return false;
+>>>>     sbq_update_wake_index(sbq, wake_index);
+>>>>
+>>>>     wake_batch = READ_ONCE(sbq->wake_batch);
+>>>>     wake_up_nr(&ws->wait, wake_batch);
+>>>>     /*
+>>>>      * Pairs with the memory barrier in sbitmap_queue_resize() to
+>>>>      * ensure that we see the batch size update before the wait
+>>>>      * count is reset.
+>>>>      *
+>>>>      * Also pairs with the implicit barrier between decrementing
+>>>>      * wait_cnt and checking for waitqueue_active() to make sure
+>>>>      * waitqueue_active() sees results of the wakeup if
+>>>>      * atomic_dec_return() has seen results of the atomic_set.
+>>>>      */
+>>>>     smp_mb__before_atomic();
+>>>>     atomic_set(&ws->wait_cnt, wake_batch);
+Hi, Jan
 
-This is an undue requirement for non-PV guests, as those can be operated
-with existing backends without any problem, as long as those backends
-are running in dom0.
+Sorry that I missed this.. The key is not just the judgement if
+waitqueue is active, we also need to make sure to wakeup before
+setting 'wait_cnt' here.
 
-Per default allow virtio devices without grant support for non-PV
-guests.
-
-On Arm require VIRTIO_F_ACCESS_PLATFORM for devices having been listed
-in the device tree to use grants.
-
-Add a new config item to always force use of grants for virtio.
-
-Fixes: fa1f57421e0b ("xen/virtio: Enable restricted memory access using Xen grant mappings")
-Reported-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- remove command line parameter (Christoph Hellwig)
-V3:
-- rebase to callback method
----
- arch/arm/xen/enlighten.c     |  4 +++-
- arch/x86/xen/enlighten_hvm.c |  4 +++-
- arch/x86/xen/enlighten_pv.c  |  5 ++++-
- drivers/xen/Kconfig          |  9 +++++++++
- drivers/xen/grant-dma-ops.c  | 10 ++++++++++
- include/xen/xen-ops.h        |  6 ++++++
- include/xen/xen.h            |  8 --------
- 7 files changed, 35 insertions(+), 11 deletions(-)
-
-diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
-index 1f9c3ba32833..93c8ccbf2982 100644
---- a/arch/arm/xen/enlighten.c
-+++ b/arch/arm/xen/enlighten.c
-@@ -34,6 +34,7 @@
- #include <linux/timekeeping.h>
- #include <linux/timekeeper_internal.h>
- #include <linux/acpi.h>
-+#include <linux/virtio_anchor.h>
- 
- #include <linux/mm.h>
- 
-@@ -443,7 +444,8 @@ static int __init xen_guest_init(void)
- 	if (!xen_domain())
- 		return 0;
- 
--	xen_set_restricted_virtio_memory_access();
-+	if (IS_ENABLED(CONFIG_XEN_VIRTIO))
-+		virtio_set_mem_acc_cb(xen_virtio_mem_acc);
- 
- 	if (!acpi_disabled)
- 		xen_acpi_guest_init();
-diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
-index 8b71b1dd7639..28762f800596 100644
---- a/arch/x86/xen/enlighten_hvm.c
-+++ b/arch/x86/xen/enlighten_hvm.c
-@@ -4,6 +4,7 @@
- #include <linux/cpu.h>
- #include <linux/kexec.h>
- #include <linux/memblock.h>
-+#include <linux/virtio_anchor.h>
- 
- #include <xen/features.h>
- #include <xen/events.h>
-@@ -195,7 +196,8 @@ static void __init xen_hvm_guest_init(void)
- 	if (xen_pv_domain())
- 		return;
- 
--	xen_set_restricted_virtio_memory_access();
-+	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
-+		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
- 
- 	init_hvm_pv_info();
- 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index e3297b15701c..5aaae8a77f55 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -31,6 +31,7 @@
- #include <linux/gfp.h>
- #include <linux/edd.h>
- #include <linux/reboot.h>
-+#include <linux/virtio_anchor.h>
- 
- #include <xen/xen.h>
- #include <xen/events.h>
-@@ -109,7 +110,9 @@ static DEFINE_PER_CPU(struct tls_descs, shadow_tls_desc);
- 
- static void __init xen_pv_init_platform(void)
- {
--	xen_set_restricted_virtio_memory_access();
-+	/* PV guests can't operate virtio devices without grants. */
-+	if (IS_ENABLED(CONFIG_XEN_VIRTIO))
-+		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
- 
- 	populate_extra_pte(fix_to_virt(FIX_PARAVIRT_BOOTMAP));
- 
-diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-index bfd5f4f706bc..a65bd92121a5 100644
---- a/drivers/xen/Kconfig
-+++ b/drivers/xen/Kconfig
-@@ -355,4 +355,13 @@ config XEN_VIRTIO
- 
- 	  If in doubt, say n.
- 
-+config XEN_VIRTIO_FORCE_GRANT
-+	bool "Require Xen virtio support to use grants"
-+	depends on XEN_VIRTIO
-+	help
-+	  Require virtio for Xen guests to use grant mappings.
-+	  This will avoid the need to give the backend the right to map all
-+	  of the guest memory. This will need support on the backend side
-+	  (e.g. qemu or kernel, depending on the virtio device types used).
-+
- endmenu
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index fc0142484001..8973fc1e9ccc 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -12,6 +12,8 @@
- #include <linux/of.h>
- #include <linux/pfn.h>
- #include <linux/xarray.h>
-+#include <linux/virtio_anchor.h>
-+#include <linux/virtio.h>
- #include <xen/xen.h>
- #include <xen/xen-ops.h>
- #include <xen/grant_table.h>
-@@ -287,6 +289,14 @@ bool xen_is_grant_dma_device(struct device *dev)
- 	return has_iommu;
- }
- 
-+bool xen_virtio_mem_acc(struct virtio_device *dev)
-+{
-+	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
-+		return true;
-+
-+	return xen_is_grant_dma_device(dev->dev.parent);
-+}
-+
- void xen_grant_setup_dma_ops(struct device *dev)
- {
- 	struct xen_grant_dma_data *data;
-diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
-index 80546960f8b7..98c399a960a3 100644
---- a/include/xen/xen-ops.h
-+++ b/include/xen/xen-ops.h
-@@ -5,6 +5,7 @@
- #include <linux/percpu.h>
- #include <linux/notifier.h>
- #include <linux/efi.h>
-+#include <linux/virtio_anchor.h>
- #include <xen/features.h>
- #include <asm/xen/interface.h>
- #include <xen/interface/vcpu.h>
-@@ -217,6 +218,7 @@ static inline void xen_preemptible_hcall_end(void) { }
- #ifdef CONFIG_XEN_GRANT_DMA_OPS
- void xen_grant_setup_dma_ops(struct device *dev);
- bool xen_is_grant_dma_device(struct device *dev);
-+bool xen_virtio_mem_acc(struct virtio_device *dev);
- #else
- static inline void xen_grant_setup_dma_ops(struct device *dev)
- {
-@@ -225,6 +227,10 @@ static inline bool xen_is_grant_dma_device(struct device *dev)
- {
- 	return false;
- }
-+static inline bool xen_virtio_mem_acc(struct virtio_device *dev)
-+{
-+	return false;
-+}
- #endif /* CONFIG_XEN_GRANT_DMA_OPS */
- 
- #endif /* INCLUDE_XEN_OPS_H */
-diff --git a/include/xen/xen.h b/include/xen/xen.h
-index ac5a144c6a65..a99bab817523 100644
---- a/include/xen/xen.h
-+++ b/include/xen/xen.h
-@@ -52,14 +52,6 @@ bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
- extern u64 xen_saved_max_mem_size;
- #endif
- 
--#include <linux/virtio_anchor.h>
--
--static inline void xen_set_restricted_virtio_memory_access(void)
--{
--	if (IS_ENABLED(CONFIG_XEN_VIRTIO) && xen_domain())
--		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
--}
--
- #ifdef CONFIG_XEN_UNPOPULATED_ALLOC
- int xen_alloc_unpopulated_pages(unsigned int nr_pages, struct page **pages);
- void xen_free_unpopulated_pages(unsigned int nr_pages, struct page **pages);
--- 
-2.35.3
-
+Thanks,
+Kuai
+>>>>
+>>>>                                 Honza
+>>>>
+>>>>>> +    sbq_update_wake_index(sbq, wake_index);
+>>>>>> +    /*
+>>>>>> +     * Concurrent callers should call this function again
+>>>>>> +     * to wakeup a new batch on a different 'ws'.
+>>>>>> +     */
+>>>>>> +    if (wait_cnt < 0)
+>>>>>>            return true;
+>>>>>> -    }
+>>>>>> +
+>>>>>> +    wake_batch = READ_ONCE(sbq->wake_batch);
+>>>>>> +    /*
+>>>>>> +     * Pairs with the memory barrier in sbitmap_queue_resize() to
+>>>>>> +     * ensure that we see the batch size update before the wait
+>>>>>> +     * count is reset.
+>>>>>> +     */
+>>>>>> +    smp_mb__before_atomic();
+>>>>>> +    atomic_set(&ws->wait_cnt, wake_batch);
+>>>>>> +    wake_up_nr(&ws->wait, wake_batch);
+>>>>>>        return false;
+>>>>>>    }
+>>>>>> -- 
+>>>>>> 2.31.1
+>>>>>>
+>>>>> -- 
+>>>>> Jan Kara <jack@suse.com>
+>>>>> SUSE Labs, CR

@@ -2,103 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4308554116
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6ED155411A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiFVEAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 00:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S1356201AbiFVEBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 00:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiFVEAc (ORCPT
+        with ESMTP id S233018AbiFVEBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 00:00:32 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56062EA3E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655870431; x=1687406431;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q6h8WulSh+ENgoPqn3e+4bZfRdJ5VakAV3CDijVfD/g=;
-  b=f5UaZau2tgfeySfbJWvcD4k22iQMhYXCHSG49pswmD9vGX74+3rHiJx5
-   wyLcCt2DsCfqeOCMEE04nNtm+MsX/13nbjVKoQGerPstpjgCOkWjnw2cF
-   1wPQdzCLBSDag1GdZ9rtysLUoo4i4inDFDoRm74qL+UTSi4PUA/aJZQEi
-   myRcikzQ7LPu+dyUVth9epJCo+3dnyj9K7sppeq18/MjcQBzNFaNaI4yO
-   vmXTDPoz3Jc8J39ORN5qVX1mJxgE5P+03UM8solEE0CeoGWM3LjqREPxK
-   Hkyi8z3CnsM6VFWI7MIoSFvrjBsDKuqZ03obcOlr0ue3guDevT4I5ldP6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="279074235"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="279074235"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 21:00:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="833892571"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Jun 2022 21:00:30 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3rXZ-0000oH-SQ;
-        Wed, 22 Jun 2022 04:00:29 +0000
-Date:   Wed, 22 Jun 2022 12:00:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jarkko Sakkinen <jarkko@profian.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Wed, 22 Jun 2022 00:01:38 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7626F33EAE
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:01:37 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id bo5so14936834pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yYa4yiJ07M3lgAUara1ddh2Fl/2EMqAxZqq+KQ/z45A=;
+        b=2yBsnXHi0sJ5gksnfpXBlu6OIcXsiyZ8E3CKsc1rFx/zdoQHwR0GIDkgQoEpHQn5xc
+         3oahsnfTh5X7fL0qelOXgwPDDCtIjqL3rZl48ID7UDkxXCCHl5Hqma12n/8ce+JSHqwO
+         UiHhuACbNgvHA1pVAfqqMdjeLUE79q9EkUb/8y3GweUvZVQamPv5UaLY0aYMxcZWcM4U
+         6ZxmCtIQxUpILv6F4BoFY3c6o4jERnG/u2I75R01yyYpwjFJvIIlJ/2F52EQy8+gYe6O
+         XRe3q4aAitZCZ9JSOFc2/Hp7m3E27pGzU8xYvbkQ6pO4xuUyZ8K0Jy1+M96AF2+Nb6NA
+         URFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yYa4yiJ07M3lgAUara1ddh2Fl/2EMqAxZqq+KQ/z45A=;
+        b=AubepHPmdCETIksDZg8CR1P6l5AablfbB70rwGb4NgS9ryWvtsTKUB1XEaSg+Rppml
+         BvdAaRoFKmyrM4nAjwOPJmnG8d7I7oXOaeKUbOUNsmut/qCKj8tIO9D600YvkQaJs/jd
+         hykPLaacHe2LfAlTMJWlRc4CgjjWWIhIy5M+FtbDJzD6bv7mugBABIt578yBTOltmGwU
+         QBD0qZOsQlTmWIvt/ScqhtkqwiY4HJtwqwBukt1NeJfsp/kAerFkCQJ6IzHgX7F1tYqc
+         RF5SFIsEjvwbu8R+DlMOxSi4HJAEQMijIebxh41j4Dzi4zQQCn3Mde3JbDGbwWr3ps1F
+         doQQ==
+X-Gm-Message-State: AJIora/neW9Eu3un/wDpaRf2k2LAIiAJfX6SDfatEHQexX/DEZ6783hs
+        DRjfTuWvfnSme6PLYRpkdA/8MA==
+X-Google-Smtp-Source: AGRyM1vd6fmMfsIYhhjorbNqQH/xakz3eNiYI12x3eZPYGIlasO/NTSUnQBFu+lH5JNe2Bd3nX3K2A==
+X-Received: by 2002:a63:7a49:0:b0:40c:ca38:aed7 with SMTP id j9-20020a637a49000000b0040cca38aed7mr1192901pgn.11.1655870496958;
+        Tue, 21 Jun 2022 21:01:36 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([61.120.150.78])
+        by smtp.gmail.com with ESMTPSA id t66-20020a637845000000b004088f213f68sm12091082pgc.56.2022.06.21.21.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 21:01:36 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [jarkko-tpmdd:kprobes 3/3] arch/powerpc/kernel/module_alloc.c:31:39:
- error: use of undeclared identifier '_etext'
-Message-ID: <202206221119.cyyF058c-lkp@intel.com>
+Subject: [PATCH v1] mm, hugetlb: skip irrelevant nodes in hugetlb_show_meminfo()
+Date:   Wed, 22 Jun 2022 12:00:42 +0800
+Message-Id: <20220622040043.25462-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git kprobes
-head:   8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-commit: 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3 [3/3] kprobes: Enable tracing for mololithic kernel images
-config: powerpc-mpc8313_rdb_defconfig (https://download.01.org/0day-ci/archive/20220622/202206221119.cyyF058c-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd kprobes
-        git checkout 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+show_free_areas() allows to filter out node specific data which is
+irrelevant to the allocation request. But hugetlb_show_meminfo() still
+show hugetlb on all nodes, which is redundant and unnecessary.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Use show_mem_node_skip() to skip irrelevant nodes in
+hugetlb_show_meminfo().
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+---
+ include/linux/hugetlb.h | 4 ++--
+ include/linux/mm.h      | 1 +
+ mm/hugetlb.c            | 7 +++++--
+ mm/page_alloc.c         | 4 ++--
+ 4 files changed, 10 insertions(+), 6 deletions(-)
 
->> arch/powerpc/kernel/module_alloc.c:31:39: error: use of undeclared identifier '_etext'
-           unsigned long limit = (unsigned long)_etext - SZ_32M;
-                                                ^
-   1 error generated.
-
-
-vim +/_etext +31 arch/powerpc/kernel/module_alloc.c
-
-    27	
-    28	void *module_alloc(unsigned long size)
-    29	{
-    30	#ifdef MODULES_VADDR
-  > 31		unsigned long limit = (unsigned long)_etext - SZ_32M;
-
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 642a39016f9a..1913ac6bf10a 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -155,7 +155,7 @@ void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+ 			  struct page *ref_page, zap_flags_t zap_flags);
+ void hugetlb_report_meminfo(struct seq_file *);
+ int hugetlb_report_node_meminfo(char *buf, int len, int nid);
+-void hugetlb_show_meminfo(void);
++void hugetlb_show_meminfo(unsigned int filter, nodemask_t *nodemask);
+ unsigned long hugetlb_total_pages(void);
+ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			unsigned long address, unsigned int flags);
+@@ -300,7 +300,7 @@ static inline int hugetlb_report_node_meminfo(char *buf, int len, int nid)
+ 	return 0;
+ }
+ 
+-static inline void hugetlb_show_meminfo(void)
++static inline void hugetlb_show_meminfo(unsigned int filter, nodemask_t *nodemask)
+ {
+ }
+ 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 764dc0fdae5e..f72c1b21cde3 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1873,6 +1873,7 @@ extern void pagefault_out_of_memory(void);
+  */
+ #define SHOW_MEM_FILTER_NODES		(0x0001u)	/* disallowed nodes */
+ 
++extern bool show_mem_node_skip(unsigned int flags, int nid, nodemask_t *nodemask);
+ extern void show_free_areas(unsigned int flags, nodemask_t *nodemask);
+ 
+ #ifdef CONFIG_MMU
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 98492733cc64..632826e6fea5 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4486,7 +4486,7 @@ int hugetlb_report_node_meminfo(char *buf, int len, int nid)
+ 			     nid, h->surplus_huge_pages_node[nid]);
+ }
+ 
+-void hugetlb_show_meminfo(void)
++void hugetlb_show_meminfo(unsigned int filter, nodemask_t *nodemask)
+ {
+ 	struct hstate *h;
+ 	int nid;
+@@ -4494,7 +4494,9 @@ void hugetlb_show_meminfo(void)
+ 	if (!hugepages_supported())
+ 		return;
+ 
+-	for_each_node_state(nid, N_MEMORY)
++	for_each_node_state(nid, N_MEMORY) {
++		if (show_mem_node_skip(filter, nid, nodemask))
++			continue;
+ 		for_each_hstate(h)
+ 			pr_info("Node %d hugepages_total=%u hugepages_free=%u hugepages_surp=%u hugepages_size=%lukB\n",
+ 				nid,
+@@ -4502,6 +4504,7 @@ void hugetlb_show_meminfo(void)
+ 				h->free_huge_pages_node[nid],
+ 				h->surplus_huge_pages_node[nid],
+ 				huge_page_size(h) / SZ_1K);
++	}
+ }
+ 
+ void hugetlb_report_usage(struct seq_file *m, struct mm_struct *mm)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 84781094b478..5896b5a9101f 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5951,7 +5951,7 @@ void si_meminfo_node(struct sysinfo *val, int nid)
+  * Determine whether the node should be displayed or not, depending on whether
+  * SHOW_MEM_FILTER_NODES was passed to show_free_areas().
+  */
+-static bool show_mem_node_skip(unsigned int flags, int nid, nodemask_t *nodemask)
++bool show_mem_node_skip(unsigned int flags, int nid, nodemask_t *nodemask)
+ {
+ 	if (!(flags & SHOW_MEM_FILTER_NODES))
+ 		return false;
+@@ -6196,7 +6196,7 @@ void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+ 		printk(KERN_CONT "= %lukB\n", K(total));
+ 	}
+ 
+-	hugetlb_show_meminfo();
++	hugetlb_show_meminfo(filter, nodemask);
+ 
+ 	printk("%ld total pagecache pages\n", global_node_page_state(NR_FILE_PAGES));
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1
+

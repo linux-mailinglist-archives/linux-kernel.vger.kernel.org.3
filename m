@@ -2,124 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1735555150
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E152C555154
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358840AbiFVQ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S1359188AbiFVQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350478AbiFVQ1Q (ORCPT
+        with ESMTP id S1358957AbiFVQ3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:27:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BE83F8BA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:27:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D00061913
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 16:27:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03AF3C34114;
-        Wed, 22 Jun 2022 16:27:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655915234;
-        bh=DyYH6uhmU3zMb9mouFy6uFvKCKUdXZL2QKDEo9cMQ6Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D1pF3q3OV1E0qnjTJ39Cl/qlC0tc/6MJhpW6XeIjEae7qHLfIa0e3Aa/7bMOGpCqG
-         4xeEkGNo/pbhXtd3hSkfusVcHkz/rvZ3Yu7JrKRu7VTi6acVHfLArDjxvBvMKB7mrN
-         i40OfSFaH+I2uBbnLxAFaY0lctI5NlrTPzJPyA/31yoZoRNL8oBNZm9UTq+8iQBG/Q
-         yVH5Px98afK1GYtsKBPwUQDYSkP3niBeTx94pkOkVy9S2LRQfW/hwrtmzW4JRPZays
-         7ONpB2vSJsddTDbkH8jxB/+SnRCRg7C65sZjjxNORWIDfEfFp0+gPleY/yKkD2+kHs
-         kfvsYi9f9hdFA==
-Date:   Wed, 22 Jun 2022 17:27:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dong Aisheng <dongas86@gmail.com>
-Cc:     Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-Subject: Re: [PATCH RFC 1/2] regmap: add option to disable debugfs
-Message-ID: <YrNC3eHx7ARQy/Vd@sirena.org.uk>
-References: <DB9PR04MB84779EF2842D789FA66094C380B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
- <YrCXILblKsp6DuN3@sirena.org.uk>
- <DB9PR04MB8477CD99D5847291A629994180B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
- <YrCznap77OyHu4bO@sirena.org.uk>
- <DB9PR04MB847785E1861525FC1E4AD97280B39@DB9PR04MB8477.eurprd04.prod.outlook.com>
- <YrHkXH1M4NydBfQT@sirena.org.uk>
- <DB9PR04MB84772F73D4AA1B49F87BECCF80B39@DB9PR04MB8477.eurprd04.prod.outlook.com>
- <CAA+hA=RQVRHzdy_ZpwcC-ZB8mwUYuMYu_iLNAfuPcMCS1G9WXA@mail.gmail.com>
- <YrMMzizzE7rIji5x@sirena.org.uk>
- <CAA+hA=SA7BY8WxrbuRAOsuHyz+bx-EJq-UT_YLW5wYMS+io+pg@mail.gmail.com>
+        Wed, 22 Jun 2022 12:29:51 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2074C33893
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:29:47 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id l11so31062961ybu.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5L9B2F5DxgxEwUF4SO/M3juq2QVguuraKNG6M5m+j8w=;
+        b=YX7lGMmSIM0ipx4rHeLX1aZjiMzymgIc1RdgkkYLyLBaKs/tyo6Ld8mO0XwMREmTBL
+         83BaVvRSJjwXgcApbA7Y6yb+Ved5XPvqJa8rV5a6ZbaZLobZjVgbF2f3Hu/w14VGTOMG
+         OFpLd2tPUNK439bPNRlIlR9xu8J6lEH0oSzPIIG4ragPD0yLYPPxUOtugpzycVcFzqKd
+         xzMI/cnq9ckM8XSG0mIpUizTlLxikuN30/vORy0Qw8JweLevj2A2rfCZZmsI3tpQOZ/7
+         ivfazIJfvotbGN87aof2YIcO+tLhDf9a8qsEyM8X3f19PqWWCuDvN2PnbiRDJUkwAhdf
+         Uf8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5L9B2F5DxgxEwUF4SO/M3juq2QVguuraKNG6M5m+j8w=;
+        b=PODneTBdpVAymk3xqkXBWyn5+IEFt0XIH3nmG5nBr/4QtmCqhoJq6Z2xaSA6HAUgUR
+         JLfIb0h57yy+xyFrjRrC1L2IA+MirtztuiyGyP9d5lIiZX1RGOxEk0MMl322+A1zhCfe
+         50jmNaxmqlrMR7E4rXNLKtVF/FyIjvOAa7qF2zFunORyRWG1VDo+CnRzgsKdilDtkioh
+         dTvDZYhxtWYRUaI0sZ6Q6rt50j622hCwqxlLNYvgIWAlMM6baASNgKzYxS50/frOzAG9
+         KjMBPs9ZShFFHSUraLC2Hv7+38WwXEVG9J4z5vGxsMENXeyZDxyggFgMQWmh5L80b8yq
+         xesA==
+X-Gm-Message-State: AJIora9pgP00wQ7/4RVvjO0AiDU+Hvn+mndq3xpSAyN4lesA3xIdPyEb
+        177TI3dPk3pCrTAx/A/uXfyBQZG4QU0OdOV2mBgMuQ==
+X-Google-Smtp-Source: AGRyM1sQz53n+2/kWSmsSLyW/gQtsFKwxxZ8XtEPZg6/+Mc2e4hy4Jp5GsQoh9O+a3UB5nIl3YUncb9FVze3GSqpFgs=
+X-Received: by 2002:a25:ae23:0:b0:668:daf8:c068 with SMTP id
+ a35-20020a25ae23000000b00668daf8c068mr4570417ybj.427.1655915385986; Wed, 22
+ Jun 2022 09:29:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VcQDeV43aI8PD0Ko"
-Content-Disposition: inline
-In-Reply-To: <CAA+hA=SA7BY8WxrbuRAOsuHyz+bx-EJq-UT_YLW5wYMS+io+pg@mail.gmail.com>
-X-Cookie: Truckers welcome.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220619003919.394622-1-i.maximets@ovn.org> <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
+ <20220622102813.GA24844@breakpoint.cc> <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
+ <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org> <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
+ <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org>
+In-Reply-To: <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 22 Jun 2022 18:29:33 +0200
+Message-ID: <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
+Subject: Re: [PATCH net] net: ensure all external references are released in
+ deferred skbuffs
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Florian Westphal <fw@strlen.de>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
+>
+> On 6/22/22 13:43, Eric Dumazet wrote:
 
---VcQDeV43aI8PD0Ko
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>
+> I tested the patch below and it seems to fix the issue seen
+> with OVS testsuite.  Though it's not obvious for me why this
+> happens.  Can you explain a bit more?
 
-On Thu, Jun 23, 2022 at 12:05:46AM +0800, Dong Aisheng wrote:
-> On Wed, Jun 22, 2022 at 8:36 PM Mark Brown <broonie@kernel.org> wrote:
+Anyway, I am not sure we can call nf_reset_ct(skb) that early.
 
-> > On Wed, Jun 22, 2022 at 06:12:49PM +0800, Dong Aisheng wrote:
+git log seems to say that xfrm check needs to be done before
+nf_reset_ct(skb), I have no idea why.
+
+I suspect some incoming packets are not going through
+xfrm4_policy_check() and end up being stored in a TCP receive queue.
+
+Maybe something is missing before calling tcp_child_process()
+
+
+>
 > >
-> > > NOTE:  i didn't fix _regmap_write() as i.MX controls regmap write well in driver
-> > > with power enabled first, so don't have issues in reality.
-
-> > I can't tell what you think the problem is with _regmap_write()?
-
-> Because from what I see,  _regmap_write() seems still can write to HW
-> register even with cache_only mode set theoretically.
-
-Ah, I see - we don't enforce cache_only if bypass is enabled somehow,
-but we will complain if you try to enable both at the same time so I'm
-not sure that's an issue?
-
-> > > -       WARN_ON(map->cache_bypass && enable);
-> > > +//     WARN_ON(map->cache_bypass && enable);
-
-> > What is the purpose of this change?  Why would the combination of cache
-> > only and bypass modes work be a good idea, and how should things behave
-> > in that case?
-
-> Because without this change, there will be a kernel dump caused by
-> WARN_ON when drivers call regcache_cache_only(map, true) after power
-> is off. There's no cache used in the imx blkctl driver. So map->cache_bypass
-> is default to true.
-
-cache_bypass is only going to be true if something enabled bypass, why
-would a device that doesn't use a cache enable bypass?  It does get
-turned on transiently by things like patching but those only make sense
-if the device can be accessed so caceh_only shouldn't be on then.
-
---VcQDeV43aI8PD0Ko
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKzQtwACgkQJNaLcl1U
-h9BB7Qf/QfSoUpqy0MvH/JvWmZwOVLno2deYkhInVLyqUuLwPvh/GT/q6VOMiho9
-FIykZbViiNKvegquav32trRYCkfIDc1qN3p00y1iXudZs5fQ/AWcxy47yAcOjOvN
-CWye/H2quJTdKC+lNc6VVjR6u2FuRtUHfB9okNnYzqrDbeWutUHgDL8WA+kan9X1
-JrtOTtr5iP9Ps+KjYI/uZY5F5Gi5yu8zXN9BBsq/CzVjugC4JFe63SWnTOCfQFeG
-fYxI9BZpE3ikkXPhlkzsuf1keuaRs4CqjNj9vY8Y8TstMl7UTecLNqs7/SzdCFyD
-la5/sOJ+CQMDpPeZGgd02VtTFKmE9w==
-=u7Zw
------END PGP SIGNATURE-----
-
---VcQDeV43aI8PD0Ko--
+> > I note that IPv6 does the nf_reset_ct() earlier, from ip6_protocol_deliver_rcu()
+> >
+> > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> > index fda811a5251f2d76ac24a036e6b4f4e7d7d96d6f..a06464f96fe0cc94dd78272738ddaab2c19e87db
+> > 100644
+> > --- a/net/ipv4/tcp_ipv4.c
+> > +++ b/net/ipv4/tcp_ipv4.c
+> > @@ -1919,6 +1919,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> >         struct sock *sk;
+> >         int ret;
+> >
+> > +       nf_reset_ct(skb);
+> > +
+> >         drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+> >         if (skb->pkt_type != PACKET_HOST)
+> >                 goto discard_it;
+> > @@ -2046,8 +2048,6 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> >         if (drop_reason)
+> >                 goto discard_and_relse;
+> >
+> > -       nf_reset_ct(skb);
+> > -
+> >         if (tcp_filter(sk, skb)) {
+> >                 drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
+> >                 goto discard_and_relse;
+>

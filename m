@@ -2,94 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405E2554C23
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5129554C27
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbiFVOFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
+        id S1343770AbiFVOGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbiFVOFN (ORCPT
+        with ESMTP id S235274AbiFVOGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:05:13 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89992326CF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:05:11 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id mf9so14169591ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UE1r6lMX1LSKeFLb/8EsOLr5fmA/Z61QnVe45iog/zI=;
-        b=htE6GCh2vnEGMBL5lrnsbYR45vdl28LfLNMWLEEshX6SzWblWskBdUnGbX0nXtc7s3
-         y03iqpFLQUk27Aid5UzHoBlpYQ2rD6XgtMFLyxMgZlnRsU5kq5dlR8GkYaM8d52J8HBE
-         f7HvghdigHQ/njXsQmktBklyLfuoFNmocna1SID3my6jUrJNf8WlAKIIfy+Caxkb539M
-         Rwbc6Ydn3aqbM6Xl8FIW+Q6qaB7ks1mxR1EsQhKAANiZqzj/zGmCGGXYViAJeSymm1/F
-         BJjA/DzToixOcq2SJFD6bnS4vb8CvWD/HkP04sopNPmaNfkIcvNCiw9bZ/Ra9bVqcuzD
-         B1Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UE1r6lMX1LSKeFLb/8EsOLr5fmA/Z61QnVe45iog/zI=;
-        b=dP6fWS6t7a1mXjDsNyj0bdIYKyig/KiROOt7qtwDj7sy2EIyT3MKFeYPw0awVIO4Mo
-         qVPE4ePBE+8GW12heOTz6Z5DmRNNIdpmHJs5teo/RWKKWBP+ZtIqeIAU+dPsOQEmL/xN
-         be/LhMEWkP6o5C9MVJSo8dKrHhNCaDz5AFili/vsiczAdI9732EhTjHUe5TgcAn8aHKW
-         e98bMzmN2k/pHNnhhfKJZbdL0n9N1+zZuCdh1fKNa74t00LbHAuBiD5agLRCzEC51nT+
-         KdBzToNmmOq2cZjULlLTEzmV+YrlXxYLUcOcjnyJNa6xs04YGKddVrouPdzPQgubKV8L
-         oTqQ==
-X-Gm-Message-State: AJIora8Mq1OCONf4IDnqh+Nx6Alnew3gIaodszArS827Rk59BrVWqnYA
-        XJpGISEbl1tty5zFq9oRws7LHA==
-X-Google-Smtp-Source: AGRyM1slfBibZDlu5JXLddr1PQXZ6Z5bDa5qcMSAicpyowa3br/kP6DsF2xLoR8e8QZUOJCOZQuQng==
-X-Received: by 2002:a17:906:5d08:b0:6ff:8ed:db63 with SMTP id g8-20020a1709065d0800b006ff08eddb63mr3262078ejt.408.1655906709967;
-        Wed, 22 Jun 2022 07:05:09 -0700 (PDT)
-Received: from [192.168.0.224] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ek6-20020a056402370600b0042bdb6a3602sm14526265edb.69.2022.06.22.07.05.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 07:05:09 -0700 (PDT)
-Message-ID: <f32f6b2c-462a-da3f-d74a-cec7d42f7dac@linaro.org>
-Date:   Wed, 22 Jun 2022 16:05:08 +0200
+        Wed, 22 Jun 2022 10:06:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6A437BD1;
+        Wed, 22 Jun 2022 07:06:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7E31B81F2F;
+        Wed, 22 Jun 2022 14:06:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A2DC34114;
+        Wed, 22 Jun 2022 14:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655906778;
+        bh=V32Oq5PdZyE2PUlLwoGNPxQgY0tVovIx+oQ1azyoNT0=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=POjo8xAwHIgk0d94B/d1cMAHnUPwBOJC5GtCli01F/NRkB/tpT0OyudXuLTZVpuw3
+         JfrPzf+BiXbRfveuDt6f1yHYj9q03KbBg/HJN+40ph6OZJo217RPm2hzxItRwKx9Pj
+         DlaFFybb0QGFTds02CtmPnyBAHVLsuRRNSeyrimRp6XajDhYYAoMZSFQ2AS4g3EM2g
+         /xOkY6NrdbMrhZXCuCm1rUluqjGtjDlCYl83mbSWDnQBiOft25sg1IWTgogehYV/CH
+         sGvVd5YCeXm9WPeP6V7f7q/d9D9+zSbYfZKT5uKRgypXvNbtEoK9yUrqwFq8cG7+51
+         IPrwsJjWG6ViQ==
+Message-ID: <4c090b50-bfd1-ae90-ac72-ebae3963f578@kernel.org>
+Date:   Wed, 22 Jun 2022 22:06:15 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/6] dt-bindings: arm: qcom: Document additional
- sc8280xp devices
+Subject: Re: [f2fs-dev] [PATCH 1/3] f2fs: attach inline_data after setting
+ compression
 Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-2-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220622041224.627803-2-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Chao Yu <chao@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     stable@vger.kernel.org
+References: <20220617223106.3517374-1-jaegeuk@kernel.org>
+ <ae324c70-8671-8878-5854-c0910c744379@kernel.org>
+In-Reply-To: <ae324c70-8671-8878-5854-c0910c744379@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 06:12, Bjorn Andersson wrote:
-> Add the CRD (Customer Reference Design?) and the Lenovo Thinkpad X13s to
-> the valid device compatibles found on the sc8280xp platform.
+On 2022/6/19 8:35, Chao Yu wrote:
+> On 2022/6/18 6:31, Jaegeuk Kim wrote:
+>> This fixes the below corruption.
+>>
+>> [345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
+>>
+>> Cc: <stable@vger.kernel.org>
+>> Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
+>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>> ---
+>>    fs/f2fs/namei.c | 16 ++++++++++------
+>>    1 file changed, 10 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
+>> index c549acb52ac4..a841abe6a071 100644
+>> --- a/fs/f2fs/namei.c
+>> +++ b/fs/f2fs/namei.c
+>> @@ -89,8 +89,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+>>    	if (test_opt(sbi, INLINE_XATTR))
+>>    		set_inode_flag(inode, FI_INLINE_XATTR);
+>>    
+>> -	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+>> -		set_inode_flag(inode, FI_INLINE_DATA);
+>>    	if (f2fs_may_inline_dentry(inode))
+>>    		set_inode_flag(inode, FI_INLINE_DENTRY);
+>>    
+>> @@ -107,10 +105,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+>>    
+>>    	f2fs_init_extent_tree(inode, NULL);
+>>    
+>> -	stat_inc_inline_xattr(inode);
+>> -	stat_inc_inline_inode(inode);
+>> -	stat_inc_inline_dir(inode);
+>> -
+>>    	F2FS_I(inode)->i_flags =
+>>    		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
+>>    
+>> @@ -127,6 +121,14 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+>>    			set_compress_context(inode);
+>>    	}
+>>    
+>> +	/* Should enable inline_data after compression set */
+>> +	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+>> +		set_inode_flag(inode, FI_INLINE_DATA);
+>> +
+>> +	stat_inc_inline_xattr(inode);
+>> +	stat_inc_inline_inode(inode);
+>> +	stat_inc_inline_dir(inode);
+>> +
+>>    	f2fs_set_inode_flags(inode);
+>>    
+>>    	trace_f2fs_new_inode(inode, 0);
+>> @@ -325,6 +327,8 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+>>    		if (!is_extension_exist(name, ext[i], false))
+>>    			continue;
+>>    
+>> +		/* Do not use inline_data with compression */
+>> +		clear_inode_flag(inode, FI_INLINE_DATA);
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> if (is_inode_set_flag()) {
+> 	clear_inode_flag();
+> 	stat_dec_inline_inode();
+> }
 
+Missed to send new version to mailing list?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev&id=4cde00d50707c2ef6647b9b96b2cb40b6eb24397
 
+Thanks,
 
-Best regards,
-Krzysztof
+> 
+> Thanks,
+> 
+>>    		set_compress_context(inode);
+>>    		return;
+>>    	}
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

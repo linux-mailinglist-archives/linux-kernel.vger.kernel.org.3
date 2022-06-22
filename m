@@ -2,242 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F89554AD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAEA554B0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354522AbiFVNWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S1357092AbiFVNXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236201AbiFVNWb (ORCPT
+        with ESMTP id S239935AbiFVNXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:22:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0823121F;
-        Wed, 22 Jun 2022 06:22:30 -0700 (PDT)
-Received: from notapiano (unknown [194.36.25.10])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 17BDC66017B3;
-        Wed, 22 Jun 2022 14:22:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655904148;
-        bh=QGer2+WExG8zvGaah1wIlZ38pfIs0JV+iFqSuscS98w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bg9jN1q4MqLcePbJVH15YQvXfV+TiSmR6IMIqxnXBapnL/C8uo+tx+ruFIXNEVT8M
-         M96gdCtX+gsWrui7vwRbxImJHDHcVw8kLrQvX0IuoZLc+1YMRsncEB0CpiQm3cVmwJ
-         Ie6dRKu2vyiFEKgnTrSEINfl8iP4UrB8T7vrmBFhbtKUpHumPyNPleoQPfs//nXCcG
-         g9kmBIsAHTYZ1IQTmPMzSspPechoh6Sm8KBLSZpIH3YQ65xSuAjaKp5mBide0Pc1CT
-         ElNlhLpoF0Fpi4CQo4VQBIqM6iKe9cGz0ox44PNOixqj1Akug37n628Lwh7MSFqAGu
-         u27BAThLBZL3w==
-Date:   Wed, 22 Jun 2022 09:22:19 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Wenbin Mei <wenbin.mei@mediatek.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional
- clocks to be missing
-Message-ID: <20220622132219.36rvznhip2egujec@notapiano>
-References: <20220617222916.2435618-3-nfraprado@collabora.com>
- <8639e64d-c659-7090-2d0a-078fd96cfbd4@linaro.org>
- <bb460aa483cc888ffa36709d9e9c1f2e3be0e000.camel@mediatek.com>
- <bc5458fe-083c-d679-9fcb-95810a290da8@linaro.org>
- <af50210b95d0cd8b2e3103b3d4a9702aeeba9452.camel@mediatek.com>
- <a24c24e6-fdee-df79-fd2f-6a71540bd9b3@linaro.org>
- <20220620155057.a6qilnhm7snzhapa@notapiano>
- <afae6179-3681-f5c6-4615-3228f16f1271@linaro.org>
- <ba6cccfa05aed087d14f5adc6db06496547a5094.camel@mediatek.com>
- <2705069844be7b3152a810e21b9f737a88d0302d.camel@mediatek.com>
+        Wed, 22 Jun 2022 09:23:09 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C57A2FE70;
+        Wed, 22 Jun 2022 06:23:07 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 80E021C8112B;
+        Wed, 22 Jun 2022 21:23:05 +0800 (CST)
+Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 22
+ Jun 2022 21:23:05 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
+ (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 22 Jun
+ 2022 21:23:04 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Wed, 22 Jun 2022 21:23:04 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id BEC5D61E08; Wed, 22 Jun 2022 16:23:03 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
+        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
+        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
+        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
+        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v5 00/18] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Wed, 22 Jun 2022 16:22:44 +0300
+Message-ID: <20220622132302.267010-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2705069844be7b3152a810e21b9f737a88d0302d.camel@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 02:10:55PM +0800, Wenbin Mei wrote:
-> On Wed, 2022-06-22 at 09:57 +0800, Chunfeng Yun wrote:
-> > On Tue, 2022-06-21 at 09:14 +0200, Krzysztof Kozlowski wrote:
-> > > On 20/06/2022 17:50, Nícolas F. R. A. Prado wrote:
-> > > > On Mon, Jun 20, 2022 at 10:50:57AM +0200, Krzysztof Kozlowski
-> > > > wrote:
-> > > > > On 20/06/2022 08:59, Chunfeng Yun wrote:
-> > > > > > On Sun, 2022-06-19 at 14:05 +0200, Krzysztof Kozlowski wrote:
-> > > > > > > On 19/06/2022 09:46, Chunfeng Yun wrote:
-> > > > > > > > On Fri, 2022-06-17 at 18:25 -0700, Krzysztof Kozlowski
-> > > > > > > > wrote:
-> > > > > > > > > On 17/06/2022 15:29, Nícolas F. R. A. Prado wrote:
-> > > > > > > > > > The current clock list in the binding doesn't allow
-> > > > > > > > > > for
-> > > > > > > > > > one of
-> > > > > > > > > > the
-> > > > > > > > > > optional clocks to be missing and a subsequent clock
-> > > > > > > > > > to
-> > > > > > > > > > be
-> > > > > > > > > > present.
-> > > > > > > > > > An
-> > > > > > > > > > example where this is an issue is in mt8192.dtsi,
-> > > > > > > > > > which
-> > > > > > > > > > has
-> > > > > > > > > > "sys_ck",
-> > > > > > > > > > "ref_ck", "xhci_ck" and would cause dtbs_check
-> > > > > > > > > > warnings.
-> > > > > > > > > > 
-> > > > > > > > > > Change the clock list in a way that allows the middle
-> > > > > > > > > > optional
-> > > > > > > > > > clocks to
-> > > > > > > > > > be missing, while still guaranteeing a fixed order.
-> > > > > > > > > > The
-> > > > > > > > > > "ref_ck" is
-> > > > > > > > > > kept
-> > > > > > > > > > as a const even though it is optional for simplicity,
-> > > > > > > > > > since it
-> > > > > > > > > > is
-> > > > > > > > > > present in all current dts files.
-> > > > > > > > > > 
-> > > > > > > > > > Signed-off-by: Nícolas F. R. A. Prado <
-> > > > > > > > > > nfraprado@collabora.com>
-> > > > > > > > > > ---
-> > > > > > > > > > 
-> > > > > > > > > >  .../devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > > > xhci.yaml       | 9
-> > > > > > > > > > +++++++--
-> > > > > > > > > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > > > > > > > > > 
-> > > > > > > > > > diff --git
-> > > > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > > > xhci.yaml
-> > > > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > > > xhci.yaml
-> > > > > > > > > > index 63cbc2b62d18..99a1b233ec90 100644
-> > > > > > > > > > ---
-> > > > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > > > xhci.yaml
-> > > > > > > > > > +++
-> > > > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > > > xhci.yaml
-> > > > > > > > > > @@ -80,8 +80,13 @@ properties:
-> > > > > > > > > >      items:
-> > > > > > > > > >        - const: sys_ck  # required, the following
-> > > > > > > > > > ones
-> > > > > > > > > > are
-> > > > > > > > > > optional
-> > > > > > > > > >        - const: ref_ck
-> > > > > > > > > > -      - const: mcu_ck
-> > > > > > > > > > -      - const: dma_ck
-> > > > > > > > > > +      - enum:
-> > > > > > > > > > +          - mcu_ck
-> > > > > > > > > > +          - dma_ck
-> > > > > > > > > > +          - xhci_ck
-> > > > > > > > > > +      - enum:
-> > > > > > > > > > +          - dma_ck
-> > > > > > > > > > +          - xhci_ck
-> > > > > > > > > >        - const: xhci_ck
-> > > > > > > > > 
-> > > > > > > > > You allow now almost any order here, including
-> > > > > > > > > incorrect
-> > > > > > > > > like
-> > > > > > > > > sys,ref,xhci,xhci,xhci.
-> > > > > > > > > 
-> > > > > > > > > The order of clocks has to be fixed and we cannot allow
-> > > > > > > > > flexibility.
-> > > > > > > > > Are
-> > > > > > > > > you sure that these clocks are actually optional (not
-> > > > > > > > > wired to
-> > > > > > > > > the
-> > > > > > > > > device)?
-> > > > > > > > 
-> > > > > > > > In fact, these optional clocks are fixed, due to no gates
-> > > > > > > > are
-> > > > > > > > provided,
-> > > > > > > > SW can't control them by CCF;
-> > > > > > > > In this case, I usually use a fixed clock, or ignore it.
-> > > > > > > 
-> > > > > > > But in some versions these clocks are controllable or not?
-> > > > > > 
-> > > > > > Some SoCs are controllable, some ones are not (fixed clock).
-> > > > > 
-> > > > > Thanks for confirming. Then I would prefer to make these clocks
-> > > > > required
-> > > > > (not optional) and always provide them - via common clock
-> > > > > framework or
-> > > > > fixed-clock.
-> > > > 
-> > > > Hi Krzysztof and Chunfeng,
-> > > > 
-> > > > thank you both for the feedback.
-> > > > 
-> > > > Since the solution I proposed in this patch is not acceptable I
-> > > > see
-> > > > two options:
-> > > > 1. Split the clocks in several if blocks matched by compatibles
-> > > > 2. Make the clocks required and use fixed-clock nodes for the
-> > > > missing clocks in
-> > > >    the DT
-> > > > 
-> > > > My understanding is that 1 is the desirable solution if the clock
-> > > > is really
-> > > > missing in some hardware variants, while 2 is desirable if all
-> > > > hardware variants
-> > > > really receive all the clocks, only that on some variants they're
-> > > > fixed and not
-> > > > controlable by SW.
-> > > > 
-> > > > From what I'm reading of this discussion it seems that the latter
-> > > > is the case
-> > > > here and thus we should go for 2. Is this correct?
-> > > 
-> > > This is how I understood it as well, so correct from my side.
-> > 
-> > Also right for me.
-> > 
-> > > 
-> > > > 
-> > > > Also Chunfeng, do you have information on whether the same is
-> > > > true
-> > > > for the MMC
-> > > > HW block? I recently submitted some changes to that binding [1]
-> > > > but
-> > > > I followed
-> > > > approach 1 there instead. However if all the clocks are present
-> > > > in
-> > > > the HW level
-> > > > there as well it would make more sense for me to change it to
-> > > > follow approach 2.
-> > 
-> > I discussed it with Wenbin, MMC seems a little different with USB,
-> > 
-> > Hi Wenbin,
-> > 
-> >    Please give some comments about MMC, thanks
-> > 
-> Hi Chunfeng,
-> 
-> As we discussed, the following change is the desirable solution for the
-> Mediatek MMC HW.
-> 
-> https://lists.infradead.org/pipermail/linux-mediatek/2022-June/043691.html
+This patchset  adds initial support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family. 
 
-Got it, thank you both. I'll keep that approach for MMC then, and change the one
-here for USB.
+The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
+The NPCM8XX computing subsystem comprises a quadcore ARM 
+Cortex A35 ARM-V8 architecture.
 
-Thanks,
-Nícolas
+This patchset adds minimal architecture and drivers such as:
+Clocksource, Clock, Reset, and WD.
+
+Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
+
+This patchset was tested on the Arbel NPCM8XX evaluation board.
+
+Addressed comments from:
+ - Krzysztof Kozlowski: https://www.spinics.net/lists/arm-kernel/msg990506.html
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+ - NPCM reset driver
+	- Add ref phandle to dt-binding.
+
+Changes since version 2:
+ - Remove NPCM8xx WDT compatible patch.
+ - Remove NPCM8xx UART compatible patch.
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+ - NPCM reset driver
+	- Revert to npcm7xx dt-binding.
+	- Skip dt binding quotes.
+	- Adding DTS backward compatibility.
+	- Remove NPCM8xx binding include file.
+	- Warp commit message.
+- NPCM8XX device tree:
+	- Remove unused clock nodes (used in the clock driver)
+	- Modify gcr and rst node names.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+ - NPCM reset driver
+	- Modify dt-binding.
+	- Modify syscon name.
+	- Add syscon support to NPCM7XX dts reset node.
+	- use data structure.
+ - NPCM8XX device tree:
+	- Modify evb compatible name.
+	- Add NPCM7xx compatible.
+	- Remove disable nodes from the EVB DTS.
+
+Tomer Maimon (18):
+  dt-bindings: timer: npcm: Add npcm845 compatible string
+  clocksource: timer-npcm7xx: Add NPCM845 timer support
+  dt-bindings: serial: 8250: Add npcm845 compatible string
+  dt-bindings: watchdog: npcm: Add npcm845 compatible string
+  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+  clk: npcm8xx: add clock controller
+  dt-bindings: reset: npcm: add GCR syscon property
+  ARM: dts: nuvoton: add reset syscon property
+  reset: npcm: using syscon instead of device data
+  dt-bindings: reset: npcm: Add support for NPCM8XX
+  reset: npcm: Add NPCM8XX support
+  dt-bindings: arm: npcm: Add maintainer
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+  arm64: dts: nuvoton: Add initial NPCM8XX device tree
+  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+  arm64: defconfig: Add Nuvoton NPCM family support
+
+ .../devicetree/bindings/arm/npcm/npcm.yaml    |   7 +
+ .../bindings/arm/npcm/nuvoton,gcr.yaml        |   2 +
+ .../bindings/clock/nuvoton,npcm845-clk.yaml   |  49 ++
+ .../bindings/reset/nuvoton,npcm750-reset.yaml |  10 +-
+ .../devicetree/bindings/serial/8250.yaml      |   1 +
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   2 +
+ .../bindings/watchdog/nuvoton,npcm-wdt.txt    |   3 +-
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   1 +
+ arch/arm64/Kconfig.platforms                  |  11 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 170 +++++
+ .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  |  30 +
+ .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/clk/Kconfig                           |   6 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-npcm8xx.c                     | 594 ++++++++++++++++++
+ drivers/clocksource/timer-npcm7xx.c           |   1 +
+ drivers/reset/reset-npcm.c                    | 206 +++++-
+ .../dt-bindings/clock/nuvoton,npcm845-clk.h   |  49 ++
+ 22 files changed, 1191 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
+
+-- 
+2.33.0
+

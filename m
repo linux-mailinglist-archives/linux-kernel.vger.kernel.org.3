@@ -2,122 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF78D554C14
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7578554C1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357791AbiFVOBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
+        id S1357849AbiFVOCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357163AbiFVOBj (ORCPT
+        with ESMTP id S1357735AbiFVOCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:01:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0A4369E2;
-        Wed, 22 Jun 2022 07:01:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 99CEA1FD05;
-        Wed, 22 Jun 2022 14:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655906497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nNqejIK4XkB/g6M1yCpdVMg3lyKunZ50J756bTwwnb4=;
-        b=latYMzbpEH+tp6J2mRBhpyrz5+GCu85gL3h1OlrTM2vHUkkOMGv0cv5d7k3L2z11yvijoI
-        pbOnSa3eZhTgcrxdFpc6Kw+2ov8RCT7S9/lQ9SNLOwQI8o+p8mPkTUGdBeaENqkAxO99QN
-        8gAqZHRSBbI0SZ424InEkwp5PbGcU3E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655906497;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nNqejIK4XkB/g6M1yCpdVMg3lyKunZ50J756bTwwnb4=;
-        b=BmXV7YgRO9SIg/rRI4fK6Gex9oJZ6fFx426Q5WoROO/nKthZMOyCyjhWvMD5M1jP2gWZCd
-        nYGSnTrwMGfiJTBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4AA7713AC7;
-        Wed, 22 Jun 2022 14:01:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EOhfEcEgs2IVRwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 22 Jun 2022 14:01:37 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     alex.williamson@redhat.com, corbet@lwn.net,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, deller@gmx.de,
-        gregkh@linuxfoundation.org, javierm@redhat.com, lersek@redhat.com,
-        kraxel@redhat.com
-Cc:     linux-doc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: [PATCH v3 3/3] vfio/pci: Remove console drivers
-Date:   Wed, 22 Jun 2022 16:01:34 +0200
-Message-Id: <20220622140134.12763-4-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220622140134.12763-1-tzimmermann@suse.de>
-References: <20220622140134.12763-1-tzimmermann@suse.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 22 Jun 2022 10:02:45 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE63D36E0C;
+        Wed, 22 Jun 2022 07:02:35 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1655906526tzcri551
+Received: from ubuntu.localdomain ( [106.117.78.84])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 22:02:02 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000B00A0000000
+X-QQ-FEAT: c2aLWwQTF5igxUUED4g1cAq0SdDidm8CRr68pIbYernnYftDCXnJ007BfYZyW
+        0KKhWHfNNmUSswnaNid2i+8vc3YeOzHoFjV7raXX18OoXiXCzrciyEPdKxBq4ujbvpfinBS
+        ctTbacficMFTVvamufbt18iNFot5LUEjSd/9w/iJFqrXprYTtPE0SEptD9p5pcKRkCs7ZYc
+        kdmA9TJaZAmd8DH+wEIBZ99YRg5w0XDYEzuugP/tkIl1UDVTWyIc/txfTmY+EOPS9zBp2qp
+        JV4oZcaJlhkCP0fEXR/yCflovrYwIXbJ7lb3qhXMPP4+7ia55bEni1NMPggKG7YGDQi7JiN
+        ZJYMZlAKi7sLs/NQ2wM18IwVwtsfo4d51OBskB/FFc4zdJRp0M=
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] alpha: irq_i8259: drop unexpected word 'and' in the comments
+Date:   Wed, 22 Jun 2022 22:02:01 +0800
+Message-Id: <20220622140201.5458-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Williamson <alex.williamson@redhat.com>
+there is an unexpected word 'and' in the comments that need to be dropped
 
-Console drivers can create conflicts with PCI resources resulting in
-userspace getting mmap failures to memory BARs.  This is especially
-evident when trying to re-use the system primary console for userspace
-drivers.  Use the aperture helpers to remove these conflicts.
+file: arch/alpha/kernel/irq_i8259.c
+line: 150
 
-v3:
-	* call aperture_remove_conflicting_pci_devices()
+*  Therefore, read the mask register and and out those lines
 
-Reported-by: Laszlo Ersek <lersek@redhat.com>
-Suggested-by: Gerd Hoffmann <kraxel@redhat.com>
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-Tested-by: Laszlo Ersek <lersek@redhat.com>
+changed to:
+
+*  Therefore, read the mask register and and out those lines
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 ---
- drivers/vfio/pci/vfio_pci_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/alpha/kernel/irq_i8259.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index a0d69ddaf90d..756d049bd9cf 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -10,6 +10,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/aperture.h>
- #include <linux/device.h>
- #include <linux/eventfd.h>
- #include <linux/file.h>
-@@ -1793,6 +1794,10 @@ static int vfio_pci_vga_init(struct vfio_pci_core_device *vdev)
- 	if (!vfio_pci_is_vga(pdev))
- 		return 0;
- 
-+	ret = aperture_remove_conflicting_pci_devices(pdev, vdev->vdev.ops->name);
-+	if (ret)
-+		return ret;
-+
- 	ret = vga_client_register(pdev, vfio_pci_set_decode);
- 	if (ret)
- 		return ret;
+diff --git a/arch/alpha/kernel/irq_i8259.c b/arch/alpha/kernel/irq_i8259.c
+index 1dcf0d9038fd..db574dcd6675 100644
+--- a/arch/alpha/kernel/irq_i8259.c
++++ b/arch/alpha/kernel/irq_i8259.c
+@@ -147,7 +147,7 @@ isa_no_iack_sc_device_interrupt(unsigned long vector)
+ 	 */
+ 	/* 
+ 	 *  The first read of gives you *all* interrupting lines.
+-	 *  Therefore, read the mask register and and out those lines
++	 *  Therefore, read the mask register and out those lines
+ 	 *  not enabled.  Note that some documentation has 21 and a1 
+ 	 *  write only.  This is not true.
+ 	 */
 -- 
-2.36.1
+2.17.1
 

@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4CD55405B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D470C55405D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355923AbiFVCD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 22:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S1355969AbiFVCEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 22:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356009AbiFVCDY (ORCPT
+        with ESMTP id S1355930AbiFVCEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 22:03:24 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C21B30543;
-        Tue, 21 Jun 2022 19:03:23 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 9C70D1E80CD1;
-        Wed, 22 Jun 2022 10:03:15 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id B_IKXUawNFvw; Wed, 22 Jun 2022 10:03:13 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 5DBFA1E80C7D;
-        Wed, 22 Jun 2022 10:03:12 +0800 (CST)
-From:   Li Qiong <liqiong@nfschina.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     linux-crypto@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        yuzhe@nfschina.com, renyu@nfschina.com,
-        Li Qiong <liqiong@nfschina.com>
-Subject: [PATCH] crypto: stm32 - Handle failure of kmalloc_array()
-Date:   Wed, 22 Jun 2022 10:02:08 +0800
-Message-Id: <20220622020208.25776-1-liqiong@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 22:04:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044CF30570;
+        Tue, 21 Jun 2022 19:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UwYS1fleEkwHqCTxt9TqeynEno6WGfVCt95eWwDoh48=; b=oFz9SwmDa1bZv3chDU5jkQhsSe
+        R2iCifbmH+0k99UszZKlaTqKz58dFkoFNW1h/Vp65tW/jrPxxU3Hr22Jj5F1tkcYsdc8TsQYOHRvV
+        MC+9Q8HQN4SZ8eBi2OGLnmTAebiFps40BdTLR09HqfvXpe0cdgT/uWQFecL56XK9gnIK0zrPTnyNq
+        xECHdmFE9h7xnZGherUDQhlrb4xO1FPm7o5Hoa2BShu+8ATZZ0NckUzLjdGSXKYAZ7dtetfWIWsOL
+        eDHO6E0VO38z0cvhSLODmw6H38jfUxJcuV84rvnCyykhVfQJ4HFbtB0Xi3QTgxrVfS1MG/yJ7JL5K
+        ch7uuj0g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o3pjU-006dr4-HF; Wed, 22 Jun 2022 02:04:40 +0000
+Date:   Wed, 22 Jun 2022 03:04:40 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: linux-next: build failures after merge of the mm tree
+Message-ID: <YrJ4uPNlIk1QifAL@casper.infradead.org>
+References: <20220620164246.0d3f7784@canb.auug.org.au>
+ <CAMZfGtWmGOr1LRBnKGVeqP8p47xyaA0ny_rotdHmgLx8DOk6xg@mail.gmail.com>
+ <YrB7Vq/WlGK99fxz@casper.infradead.org>
+ <20220621152845.16c801b4efd747173dc08559@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621152845.16c801b4efd747173dc08559@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the kmalloc_array(), therefore it
-should be better to check it and return '-ENOMEM' on error.
+On Tue, Jun 21, 2022 at 03:28:45PM -0700, Andrew Morton wrote:
+> On Mon, 20 Jun 2022 14:51:18 +0100 Matthew Wilcox <willy@infradead.org> wrote:
+> 
+> > On Mon, Jun 20, 2022 at 03:11:31PM +0800, Muchun Song wrote:
+> > > Thanks for your report. It is fixed in thread [1].
+> > > 
+> > > https://lore.kernel.org/all/20220619133851.68184-3-songmuchun@bytedance.com/ [1]
+> > 
+> > No, it's a different problem.  I suggest dropping/reverting
+> > 
+> > https://lore.kernel.org/linux-mm/20220617175020.717127-20-willy@infradead.org/
+> 
+> Dropping that creates awkwardness.  How about just uninlining it?
 
-Signed-off-by: Li Qiong <liqiong@nfschina.com>
----
- drivers/crypto/stm32/stm32-hash.c | 2 ++
- 1 file changed, 2 insertions(+)
+Sure!  We can also make compound_page_dtors static and drop the
+declaration in linux/mm.h if we do that.  I think there's a pile of
+cleanup to be done around freeing pages/folios, partly from accretions
+over the decades, and partly from the existence of folios between order
+0 and 9.  Not to mention Mel's recent addition of high-order PCP caching.
 
-diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index d33006d43f76..fc03e32e364f 100644
---- a/drivers/crypto/stm32/stm32-hash.c
-+++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -970,6 +970,8 @@ static int stm32_hash_export(struct ahash_request *req, void *out)
- 	rctx->hw_context = kmalloc_array(3 + HASH_CSR_REGISTER_NUMBER,
- 					 sizeof(u32),
- 					 GFP_KERNEL);
-+	if (!rctx->hw_context)
-+		return -ENOMEM;
- 
- 	preg = rctx->hw_context;
- 
--- 
-2.11.0
-
+But I don't want to do that for this merge window.

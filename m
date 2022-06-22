@@ -2,149 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231B455537B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFBE555387
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376692AbiFVSr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 14:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S1376753AbiFVStH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 14:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiFVSr0 (ORCPT
+        with ESMTP id S1376728AbiFVStB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 14:47:26 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C832DD48
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 11:47:25 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id t5so3661682eje.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 11:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=G+CACZy3Mxqt2TdD/PGEXumJzA2wixKKRDT9daZiP3c=;
-        b=o6jn9j2lXpVzeSsFW8lIMJD2FICQqWpBbxlCNOxwbXeMpjJTeD58bupZS2q24Cmlfk
-         SPxeRixrduH/9d5it/xQvKGeUzVawm3ooAubTb1JgYmD5O6GlzDxZcKN60JQ4A+B6jPn
-         Ri1abaj9MmmCcWw/fKs6ISKZTO/CN39vc1d91NHjLXeNEGYSGYsCXnJXnaWUi4/zLj5C
-         YPCllGolqmZA7mBCALskOYOlfoxoneJ8ToXJ9D30ndSVIGSg9btK5c6VpRFvnWmiZzDd
-         9ngDr++brL0QJ5OIzADsAUd8QWrBItO+sPzHIMtW+RM5Crg+vgye0fHRV38DQID8EEuM
-         Vhvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=G+CACZy3Mxqt2TdD/PGEXumJzA2wixKKRDT9daZiP3c=;
-        b=YSF6z6t1MDn2yfvFHqzZI5JiDcspUlBt4WMtvCc3c2+YLtHn9pFEHnYh8K8WJqMvH/
-         /Muta49stzio9jaUQAB41DTMs4rxnAa/6QehVE0joDtA6pALvqs7G8lnttEC2uMpOmJd
-         uB8r8GzmBvwlT9PK1ZuHGIe6XW0pDFr1G+7o7sxkYBBDpfhrYQu/gz1CILHDZu+2FiXf
-         NomaDj0zfSuR8szL82z7TytpNpKJYys+VGrBMOWu/85rscXUD4Ojx6F/yD8UHJ+NCMM6
-         Z6n1NNH5CWzxk9rk0/zYASO31t+HcTxB2eGwNGZ1pNt+U1lPkBtQyebNZ++ptKs9uCP/
-         P5Lg==
-X-Gm-Message-State: AJIora8e9Y7FEEhX+mwfnwi6vQYlr7bttwlU6J0g48ryiHODtNKy3xXh
-        TuzcWbPdah6Ml+Ja83CTEjJvFSqlnBmUNYr91zQ=
-X-Google-Smtp-Source: AGRyM1uvOjttkKJarHebvSGxiaguvPTg97iaFQSlND6h0S/OvEothPCoC+FRjaPv1QR0gPFXvDB3yBSKili0mzPRkhE=
-X-Received: by 2002:a17:906:74c2:b0:722:e1e2:edea with SMTP id
- z2-20020a17090674c200b00722e1e2edeamr4536987ejl.658.1655923643901; Wed, 22
- Jun 2022 11:47:23 -0700 (PDT)
+        Wed, 22 Jun 2022 14:49:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0011E31925
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 11:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655923739; x=1687459739;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SofzAOQt246ZzevvfaHBIKpmaAJnUwuBuyeaEwETKg8=;
+  b=fHDBDsBX0OWnHDOcb6WNGsW4vc/LtaiDIV63GFOksu6llVTRLdm6Wt18
+   R4OKutQ3vl/1Pj9kTqIHY8n7jz+cgglSLrVlaWNT7+PM3P3AAHwAoowzF
+   vVlaw7SAI2ZaBc6zYw8Zi7p1gZnNuImrn/aQAustPdYkC/sDM0gxPzIx2
+   kO19KqgF05ST7z6vKystHAO9bBDvtK4iHOSpOhGW1zpo5FnoL8aSfcpEP
+   Nug/0ws9H2KSr3uT2yLBVU9/Ycx+f1HgW6pM1/tnXgMJzNoRBgrBjXK6W
+   s4W1+C3TgfKj4TGRUkKs4ym/rInh2z+ff6SusimWg3Z/OdtIJZddF6QTH
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="269236145"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="269236145"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:48:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="690645438"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Jun 2022 11:48:57 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o45PM-0001Zh-G4;
+        Wed, 22 Jun 2022 18:48:56 +0000
+Date:   Thu, 23 Jun 2022 02:47:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-5.10.y 499/6724] arch/powerpc/kernel/smp.c:1380:14:
+ error: variable 'ret' set but not used
+Message-ID: <202206230232.8JS8X70r-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220621203921.3594920-1-cmllamas@google.com> <uvR86emMYmXwy4OxDiY5OlpRs9UIoEce59p_VukwHwNa368FpqXYVtN7tqccW6WzG5Vz08ycVdxXonbMczsohHw8O8Dx7WdJv8pnrYb9V34=@emersion.fr>
-In-Reply-To: <uvR86emMYmXwy4OxDiY5OlpRs9UIoEce59p_VukwHwNa368FpqXYVtN7tqccW6WzG5Vz08ycVdxXonbMczsohHw8O8Dx7WdJv8pnrYb9V34=@emersion.fr>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 22 Jun 2022 14:47:12 -0400
-Message-ID: <CADnq5_MLUi5LL0cXFU=1m3r_TEWw=rTSXHm3V+6NYT_LfdmK+A@mail.gmail.com>
-Subject: Re: [PATCH] drm/fourcc: fix integer type usage in uapi header
-To:     Simon Ser <contact@emersion.fr>
-Cc:     Carlos Llamas <cmllamas@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alex Deucher <alexander.deucher@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi Srikar,
 
-Alex
+FYI, the error/warning still remains.
 
-On Wed, Jun 22, 2022 at 3:02 AM Simon Ser <contact@emersion.fr> wrote:
->
-> On Tuesday, June 21st, 2022 at 22:39, Carlos Llamas <cmllamas@google.com>=
- wrote:
->
-> > Kernel uapi headers are supposed to use __[us]{8,16,32,64} types define=
-d
-> > by <linux/types.h> as opposed to 'uint32_t' and similar. See [1] for th=
-e
-> > relevant discussion about this topic. In this particular case, the usag=
-e
-> > of 'uint64_t' escaped headers_check as these macros are not being calle=
-d
-> > here. However, the following program triggers a compilation error:
-> >
-> >   #include <drm/drm_fourcc.h>
-> >
-> >   int main()
-> >   {
-> >       unsigned long x =3D AMD_FMT_MOD_CLEAR(RB);
-> >       return 0;
-> >   }
-> >
-> > gcc error:
-> >   drm.c:5:27: error: =E2=80=98uint64_t=E2=80=99 undeclared (first use i=
-n this function)
-> >       5 |         unsigned long x =3D AMD_FMT_MOD_CLEAR(RB);
-> >         |                           ^~~~~~~~~~~~~~~~~
-> >
-> > This patch changes AMD_FMT_MOD_{SET,CLEAR} macros to use the correct
-> > integer types, which fixes the above issue.
-> >
-> >   [1] https://lkml.org/lkml/2019/6/5/18
-> >
-> > Fixes: 8ba16d599374 ("drm/fourcc: Add AMD DRM modifiers.")
-> > Signed-off-by: Carlos Llamas <cmllamas@google.com>
->
-> Reviewed-by: Simon Ser <contact@emersion.fr>
->
-> Cc'ing Bas as well
->
-> > ---
-> >  include/uapi/drm/drm_fourcc.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourc=
-c.h
-> > index f1972154a594..0980678d502d 100644
-> > --- a/include/uapi/drm/drm_fourcc.h
-> > +++ b/include/uapi/drm/drm_fourcc.h
-> > @@ -1444,11 +1444,11 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64=
- modifier)
-> >  #define AMD_FMT_MOD_PIPE_MASK 0x7
-> >
-> >  #define AMD_FMT_MOD_SET(field, value) \
-> > -     ((uint64_t)(value) << AMD_FMT_MOD_##field##_SHIFT)
-> > +     ((__u64)(value) << AMD_FMT_MOD_##field##_SHIFT)
-> >  #define AMD_FMT_MOD_GET(field, value) \
-> >       (((value) >> AMD_FMT_MOD_##field##_SHIFT) & AMD_FMT_MOD_##field##=
-_MASK)
-> >  #define AMD_FMT_MOD_CLEAR(field) \
-> > -     (~((uint64_t)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_=
-SHIFT))
-> > +     (~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHI=
-FT))
-> >
-> >  #if defined(__cplusplus)
-> >  }
-> > --
-> > 2.37.0.rc0.104.g0611611a94-goog
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+head:   4f3fee72a74c88c9039ce0405a715f6221791d06
+commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [499/6724] powerpc/smp: Update cpu_core_map on all PowerPc systems
+config: powerpc-pasemi_defconfig (https://download.01.org/0day-ci/archive/20220623/202206230232.8JS8X70r-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.10.y
+        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/powerpc/kernel/smp.c: In function 'add_cpu_to_masks':
+>> arch/powerpc/kernel/smp.c:1380:14: error: variable 'ret' set but not used [-Werror=unused-but-set-variable]
+    1380 |         bool ret;
+         |              ^~~
+   cc1: all warnings being treated as errors
+
+
+vim +/ret +1380 arch/powerpc/kernel/smp.c
+
+b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
+bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
+e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
+df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
+425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
+2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
+b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
+e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
+e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
+e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
+e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
+bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
+84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
+a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
+a8a5356cd511db Paul Mackerras    2013-08-12  1427  
+
+:::::: The code at line 1380 was first introduced by commit
+:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
+
+:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

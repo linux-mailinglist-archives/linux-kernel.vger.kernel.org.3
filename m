@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE5755476F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139A3554962
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354004AbiFVIfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S1344962AbiFVIfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346190AbiFVIfc (ORCPT
+        with ESMTP id S245146AbiFVIfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:35:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719263879E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655886931; x=1687422931;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=O3XlJdFKMMXZ/3uT7ErsQxlftSciCG/DfbQ0W2TTX/o=;
-  b=k5juTKudJfqBNaTKO27RuG8YjXPK2Tu8+17WOW+4oot33dYzHrIRIDLg
-   OphZEzDFzZASYUZLU5VXs+bBOSRMqsBiO3CCk59Cy5MpC3KSngcbXT3+n
-   c790Qso3iJdIhdtt0fzZO0P/gdt2vy9G2MebZA9c5cgEYtHluSSTD4Zpc
-   leGC5z/TEtQdeb35XD9+pfbJsiLx2/BO34y6Mm+jbJwn5t3KahmedUGgJ
-   eP6GiDSLqXFIb7agzKMc9xe7rj5dNhdu6nVwtQ0oxYkhHSUc4JLRWmaHO
-   NBIITpEhozD4VCBP1YrgO1m4ibbAmHZOiOmIkTdQzvxLXzJbOOK3KQ+PD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281429367"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="281429367"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 01:35:30 -0700
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="644076883"
-Received: from lzha111-mobl.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.215.232])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 01:35:26 -0700
-From:   Huang Ying <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
-Subject: [PATCH -V4 0/3] memory tiering: hot page selection
+        Wed, 22 Jun 2022 04:35:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A24738794
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655886929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FXbG8YAYtCcHZc9mu4c2Nm+a/RYeu4/cnHXEYuhco7U=;
+        b=VhIcEmy9j9x3FeabZaRe+8Fb+g75MHWMV5rjp1tm0TnzLfMLXUPGZi7c4KSfvK3FmpUCHI
+        szD3VnFlX2ThczSibQEPs8L3HlADRYFd92sBtaaOxQLetNLx4HgeZQCIe2asDGBLCaw7Ym
+        HyshX5dd0r/2CtD9g9qsyN9C9N02Tzs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-44-MIsd6_-XM4S793yov44VGw-1; Wed, 22 Jun 2022 04:35:25 -0400
+X-MC-Unique: MIsd6_-XM4S793yov44VGw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 094F48001EA;
+        Wed, 22 Jun 2022 08:35:24 +0000 (UTC)
+Received: from localhost (ovpn-13-227.pek2.redhat.com [10.72.13.227])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 33F7CC28115;
+        Wed, 22 Jun 2022 08:35:22 +0000 (UTC)
 Date:   Wed, 22 Jun 2022 16:35:16 +0800
-Message-Id: <20220622083519.708236-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
+From:   Baoquan He <bhe@redhat.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        liushixin <liushixin2@huawei.com>
+Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
+ high memory
+Message-ID: <YrLUREAoBMSZo7RR@MiWiFi-R3L-srv>
+References: <20220613080932.663-1-thunder.leizhen@huawei.com>
+ <20220613080932.663-6-thunder.leizhen@huawei.com>
+ <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
+ <3f66323d-f371-b931-65fb-edfae0f01c88@huawei.com>
+ <YrIIJkhKWSuAqkCx@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <YrIIJkhKWSuAqkCx@arm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,97 +86,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To optimize page placement in a memory tiering system with NUMA
-balancing, the hot pages in the slow memory nodes need to be
-identified.  Essentially, the original NUMA balancing implementation
-selects the mostly recently accessed (MRU) pages to promote.  But this
-isn't a perfect algorithm to identify the hot pages.  Because the
-pages with quite low access frequency may be accessed eventually given
-the NUMA balancing page table scanning period could be quite long
-(e.g. 60 seconds).  So in this patchset, we implement a new hot page
-identification algorithm based on the latency between NUMA balancing
-page table scanning and hint page fault.  Which is a kind of mostly
-frequently accessed (MFU) algorithm.
+Hi Catalin,
 
-In NUMA balancing memory tiering mode, if there are hot pages in slow
-memory node and cold pages in fast memory node, we need to
-promote/demote hot/cold pages between the fast and cold memory nodes.
+On 06/21/22 at 07:04pm, Catalin Marinas wrote:
+> On Tue, Jun 21, 2022 at 02:24:01PM +0800, Kefeng Wang wrote:
+> > On 2022/6/21 13:33, Baoquan He wrote:
+> > > On 06/13/22 at 04:09pm, Zhen Lei wrote:
+> > > > If the crashkernel has both high memory above DMA zones and low memory
+> > > > in DMA zones, kexec always loads the content such as Image and dtb to the
+> > > > high memory instead of the low memory. This means that only high memory
+> > > > requires write protection based on page-level mapping. The allocation of
+> > > > high memory does not depend on the DMA boundary. So we can reserve the
+> > > > high memory first even if the crashkernel reservation is deferred.
+> > > > 
+> > > > This means that the block mapping can still be performed on other kernel
+> > > > linear address spaces, the TLB miss rate can be reduced and the system
+> > > > performance will be improved.
+> > > 
+> > > Ugh, this looks a little ugly, honestly.
+> > > 
+> > > If that's for sure arm64 can't split large page mapping of linear
+> > > region, this patch is one way to optimize linear mapping. Given kdump
+> > > setting is necessary on arm64 server, the booting speed is truly
+> > > impacted heavily.
+> > 
+> > Is there some conclusion or discussion that arm64 can't split large page
+> > mapping?
+> > 
+> > Could the crashkernel reservation (and Kfence pool) be splited dynamically?
+> > 
+> > I found Mark replay "arm64: remove page granularity limitation from
+> > KFENCE"[1],
+> > 
+> >   "We also avoid live changes from block<->table mappings, since the
+> >   archtitecture gives us very weak guarantees there and generally requires
+> >   a Break-Before-Make sequence (though IIRC this was tightened up
+> >   somewhat, so maybe going one way is supposed to work). Unless it's
+> >   really necessary, I'd rather not split these block mappings while
+> >   they're live."
+> 
+> The problem with splitting is that you can end up with two entries in
+> the TLB for the same VA->PA mapping (e.g. one for a 4KB page and another
+> for a 2MB block). In the lucky case, the CPU will trigger a TLB conflict
+> abort (but can be worse like loss of coherency).
 
-A choice is to promote/demote as fast as possible.  But the CPU cycles
-and memory bandwidth consumed by the high promoting/demoting
-throughput will hurt the latency of some workload because of accessing
-inflating and slow memory bandwidth contention.
+Thanks for this explanation. Is this a drawback of arm64 design? X86
+code do the same thing w/o issue, is there way to overcome this on
+arm64 from hardware or software side?
 
-A way to resolve this issue is to restrict the max promoting/demoting
-throughput.  It will take longer to finish the promoting/demoting.
-But the workload latency will be better.  This is implemented in this
-patchset as the page promotion rate limit mechanism.
+I ever got a arm64 server with huge memory, w or w/o crashkernel setting 
+have different bootup time. And the more often TLB miss and flush will
+cause performance cost. It is really a pity if we have very powerful
+arm64 cpu and system capacity, but bottlenecked by this drawback.
 
-The promotion hot threshold is workload and system configuration
-dependent.  So in this patchset, a method to adjust the hot threshold
-automatically is implemented.  The basic idea is to control the number
-of the candidate promotion pages to match the promotion rate limit.
+> 
+> Prior to FEAT_BBM (added in ARMv8.4), such scenario was not allowed at
+> all, the software would have to unmap the range, TLBI, remap. With
+> FEAT_BBM (level 2), we can do this without tearing the mapping down but
+> we still need to handle the potential TLB conflict abort. The handler
+> only needs a TLBI but if it touches the memory range being changed it
+> risks faulting again. With vmap stacks and the kernel image mapped in
+> the vmalloc space, we have a small window where this could be handled
+> but we probably can't go into the C part of the exception handling
+> (tracing etc. may access a kmalloc'ed object for example).
+> 
+> Another option is to do a stop_machine() (if multi-processor at that
+> point), disable the MMUs, modify the page tables, re-enable the MMU but
+> it's also complicated.
+> 
+> -- 
+> Catalin
+> 
 
-We used the pmbench memory accessing benchmark tested the patchset on
-a 2-socket server system with DRAM and PMEM installed.  The test
-results are as follows,
-
-		pmbench score		promote rate
-		 (accesses/s)			MB/s
-		-------------		------------
-base		  146887704.1		       725.6
-hot selection     165695601.2		       544.0
-rate limit	  162814569.8		       165.2
-auto adjustment	  170495294.0                  136.9
-
-From the results above,
-
-With hot page selection patch [1/3], the pmbench score increases about
-12.8%, and promote rate (overhead) decreases about 25.0%, compared with
-base kernel.
-
-With rate limit patch [2/3], pmbench score decreases about 1.7%, and
-promote rate decreases about 69.6%, compared with hot page selection
-patch.
-
-With threshold auto adjustment patch [3/3], pmbench score increases
-about 4.7%, and promote rate decrease about 17.1%, compared with rate
-limit patch.
-
-Baolin helped to test the patchset with MySQL on a machine which
-contains 1 DRAM node (30G) and 1 PMEM node (126G).
-
-sysbench /usr/share/sysbench/oltp_read_write.lua \
-......
---tables=200 \
---table-size=1000000 \
---report-interval=10 \
---threads=16 \
---time=120
-
-The tps can be improved about 5%.
-
-Changelogs:
-
-v4:
-
-- Rebased on v5.19-rc3
-
-- Collected reviewed-by and tested-by.
-
-v3:
-
-- Rebased on v5.19-rc1
-
-- Renamed newly-added fields in struct pglist_data.
-
-v2:
-
-- Added ABI document for promote rate limit per Andrew's comments.  Thanks!
-
-- Added function comments when necessary per Andrew's comments.
-
-- Address other comments from Andrew Morton.
-
-Best Regards,
-Huang, Ying

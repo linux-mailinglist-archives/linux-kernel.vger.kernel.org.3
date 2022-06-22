@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0371554D04
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA268554CFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357677AbiFVO30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S1358365AbiFVO3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358476AbiFVO2u (ORCPT
+        with ESMTP id S234575AbiFVO3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:28:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0DE92F019
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655908127;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x34IRi49NgING8whuhdPrWa3tANXSDCipF9OzN2jvL4=;
-        b=KTXOE1ZTOUP8gbxNKFlgx4Hj5P++HdlFHX6WhNau+QeGuOQITie5OsH2GUZqKz+FUsh1Rg
-        Xp0D4ssm0Tx0ci4JOUjtO7a6j8iw1VGFabmhBpDJhE7ubQnc1eGTcqH7oLxhkOghx/fW5w
-        YcsCY2Mng0I1nIq05ny7yvCNtRgWiCc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-0BuHuD2ENV2s97005W8YUg-1; Wed, 22 Jun 2022 10:28:46 -0400
-X-MC-Unique: 0BuHuD2ENV2s97005W8YUg-1
-Received: by mail-wm1-f72.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so7916000wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:28:45 -0700 (PDT)
+        Wed, 22 Jun 2022 10:29:06 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252B631DFD
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:29:05 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z19so7334139edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eY6hl7x2OmQan4PYUD1Bjl8LlhVtyhv+gi/IBaGVvk0=;
+        b=i3ZR2WI0WybHw6Ud95ax651bUgjBXx7D2e/cL+4L9Pa4tohtPtl+zZ2Ou1ft+cC8ye
+         g/gsFaHRK6KB/KtjAjC3Jf2ucw4oIuy6GBfr7V8r83/JfljSuZRcfnkNWA0UqCEd4a47
+         6a14DYRD8+bW/RNoj6kM5Ay5nsQi5bvfb0dIQBn/DImeaJ+Kyru2ENkUFlRCsW0MjOI+
+         KiJpOiTOjFWV3hO3k5fApEu7LZ7ZowWgJOuMhlOvNRRyYj/kvKMtMxZJypCsdLEcCHiy
+         0rlNzif5MF4qcSBUn8yt1NRtESbuVrWXYDG7yUPqVyAyySbJFtVQ/cyKah1GVIC6LF73
+         iJoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=x34IRi49NgING8whuhdPrWa3tANXSDCipF9OzN2jvL4=;
-        b=vtkzxkiQ0QWMzcX7eBgz+c+atT9ZhCO4QQwGLUxs3OYCn73QkcHSa+5E7nrGuNpVo5
-         19PqkkqCV/8JDl0Xdy5DH79ST+PhpBpvkWmekFJdZX76byaI1oyTe4qU/V03Bi5TDzKE
-         5F7iO2i+7a72EOBKz6E324EYKM5vu4okwM/mPkTEgp4OiU8S8yZmVvWKA8bwzfMqBu6q
-         dboSIJLJ5f1qQMWLDemlPFdAc0jB7W6A2fmOjQM9KWEmKy7koGLDTbU5Hl75SNiuo2hJ
-         hZ0DVptNNsMIslt7+2wT6Whnw5mRgI9n0og4Fy3ts1TkKt13xJpaLO2m9ZCKP81TPx9F
-         r0sw==
-X-Gm-Message-State: AJIora/9G4r5TViF8m4Ip98UqZ+l5ZR//4NIUZJmWUMLiP2Wj447V0Ne
-        2FRZxPPzhRbQaMatzqhzc61GLWbR6sXQxdshq3yfliNa88SrZTxCAopuv1Mi+lzwmfQUPBoXGrP
-        2Luy+LclDj8CX67FZGlgmM4Q2U7iqgPmQ4lWmYlA4EGVx4I7q3o4Tp35GVf97oi/rhkH7as7nnm
-        um
-X-Received: by 2002:a5d:5984:0:b0:219:e396:d3d1 with SMTP id n4-20020a5d5984000000b00219e396d3d1mr3649487wri.701.1655908124763;
-        Wed, 22 Jun 2022 07:28:44 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vuhyEjREFg3dGcH7vFPn3yakH8vgcXSr8DuJhoDWbuzWlidbf8KyA6iZoKwjJuqao0HuIjng==
-X-Received: by 2002:a5d:5984:0:b0:219:e396:d3d1 with SMTP id n4-20020a5d5984000000b00219e396d3d1mr3649464wri.701.1655908124542;
-        Wed, 22 Jun 2022 07:28:44 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id c130-20020a1c3588000000b0039c798b2dc5sm25959911wma.8.2022.06.22.07.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 07:28:44 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 10/39] KVM: x86: hyper-v: Don't use
- sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
-In-Reply-To: <36f2de4e-43fe-7280-8cac-f44de89b2b98@redhat.com>
-References: <20220613133922.2875594-1-vkuznets@redhat.com>
- <20220613133922.2875594-11-vkuznets@redhat.com>
- <17a2e85a-a1f2-99e1-fc69-1baed2275bd5@redhat.com>
- <87zgi640mm.fsf@redhat.com>
- <36f2de4e-43fe-7280-8cac-f44de89b2b98@redhat.com>
-Date:   Wed, 22 Jun 2022 16:28:43 +0200
-Message-ID: <87tu8cydpg.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eY6hl7x2OmQan4PYUD1Bjl8LlhVtyhv+gi/IBaGVvk0=;
+        b=3h0WQLh8RqeTg4G1Kl1fa8PkpDunNZqIbPmcDOkQ+X4qu22Pe7EDZzFx0+VBfQ6zJ3
+         uFHq0PIcNMf+yUwO8cz7frCzRGwF8iV8LUKgeln0yaftR57rsIKV4alI0DEokdfV+Ypl
+         pTygow1TddaEHOylUkostqR/NpT7xsCiJGTC7mCZLNF4bXg4HeMTRvCjDljnF7S3hGFm
+         2n2TNjgk08JeifPquYxhjy7/0/tHM82jpjt6sg6Za7U+/576DK1RNmx0MZbBRm1vBVwZ
+         k2/LyaaPsphQB07XO7/r9EaCpsFe6WQ4HfP/hJL7eWoUMuORKC88dGgsBIziYgv3SSu3
+         jqEQ==
+X-Gm-Message-State: AJIora//lxvrJQHqv6b7vVxih8Gq+GtLq4FnrwmcxqHxs6DUozgSJ87n
+        6p16qLt1/blyZ9VAxQqqaF3lNw==
+X-Google-Smtp-Source: AGRyM1srgj2iJtoHexTQ9IsSqs2aSBpb/QKqY7iWJ8uB+/1bmVRho+nrxcHIX3oN0e2HZIqTmd1j6g==
+X-Received: by 2002:aa7:c38d:0:b0:435:9257:99a5 with SMTP id k13-20020aa7c38d000000b00435925799a5mr4476690edq.204.1655908143688;
+        Wed, 22 Jun 2022 07:29:03 -0700 (PDT)
+Received: from [192.168.0.225] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s2-20020a1709060d6200b006f3ef214e2csm9700954ejh.146.2022.06.22.07.29.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:29:03 -0700 (PDT)
+Message-ID: <7c707d16-1237-e587-3768-245b710e0663@linaro.org>
+Date:   Wed, 22 Jun 2022 16:29:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/3] phy: dt-bindings: cdns,dphy: Add compatible for
+ dphy on j721e
+Content-Language: en-US
+To:     Rahul T R <r-ravikumar@ti.com>, linux-phy@lists.infradead.org,
+        kishon@ti.com, vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     p.yadav@ti.com, tomi.valkeinen@ideasonboard.com,
+        linux-kernel@vger.kernel.org, jpawar@cadence.com,
+        sjakhade@cadence.com, mparab@cadence.com,
+        devicetree@vger.kernel.org, vigneshr@ti.com, lee.jones@linaro.org
+References: <20220622105311.21415-1-r-ravikumar@ti.com>
+ <20220622105311.21415-2-r-ravikumar@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220622105311.21415-2-r-ravikumar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,23 +81,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+On 22/06/2022 12:53, Rahul T R wrote:
+> Add compatible to support dphy tx on j721e
+> 
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
 
-> On 6/21/22 15:17, Vitaly Kuznetsov wrote:
->>>
->>> Just to be clear, PV IPI does*not*  support the VP_ID, right?
->> Hm, with Hyper-V PV IPI hypercall vCPUs are also addressed by their
->> VP_IDs, not by their APIC ids so similar to Hyper-V PV TLB flush we need
->> to convert the supplied set (either flat u64 bitmask of VP_IDs for
->> non-EX hypercall or a sparse set for -EX).
->> 
->
-> So this means the series needs a v8, right?
->
 
-No, I was just trying to explaini what the patch is doing in the series,
-it looks good to me (but I'm biased, of course).
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Vitaly
 
+Best regards,
+Krzysztof

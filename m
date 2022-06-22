@@ -2,69 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE91A55493C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF205549C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357591AbiFVLy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S1357448AbiFVL43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357448AbiFVLyX (ORCPT
+        with ESMTP id S1357293AbiFVL4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:54:23 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB28E3A5CE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:54:20 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z19so6703505edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOoIKcOn+fn/RzKHn0fJ4NUU3G2nfTfnTHFn7LdhAks=;
-        b=AdfKtmV9Lu5Dt/1foY+ADpByGOmR6vTr3UhT2CHJkEafEFmh+aBZY1LlNvZoL+6oaS
-         rfZKXGozkdDUBO74Co9cPX1yn7kFje05B43dvIFiAsXGGqB6iwlQPvn2tiIWz1++4SOs
-         QgiYW11SLh3HAii9geZPiPVY1g48pmTO9n/0z8YuUPicJ2OvlWaC8ReKLUFQLTYNtz7n
-         Cfdcyp0MYxJGGk+naL5uJCzFbrnxvY+G66l+jUKujcq0qGa1DOiyzy0hpEMOIHQmE4WB
-         QZI5t7OXNKMB4jhDsTHdTCSrfGSKz63+A5EXwBAZ6+681cIThUrD8W2vadq/bnTnmnNM
-         tARg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOoIKcOn+fn/RzKHn0fJ4NUU3G2nfTfnTHFn7LdhAks=;
-        b=dLm1rWQHk/hZtMG8dYtRM+UcTnm1Dab2btVMT8wGKzLa76uqmEcDADG4bBi1+CJMvw
-         QEWHxvldnmjbiefyha/bJATIqknNrMDyXaOADYoPU9Q5KMz5JQBGKnj9rkxf25jvazsN
-         frUFvO9+N+Lx7aSBbFMXI05Is5NWHOghSayKpJT7tvX968DuE2G5HT6vj2+fhGlS+GH0
-         vboH5af63VozN5l3vbgCjxufUrLcrj2LkDW44Ai7ufxBtfKdAIup9+5WCAQbLAl2api5
-         aoDObOFwwmoq4IByrSo7QCPZ73SYHPVrg7KcQDGgkTpUfKyxTFbM5ZvUF0UU+i4Ydrwg
-         2amg==
-X-Gm-Message-State: AJIora+Rqp5KF648Neul77NXRi8gAfDkxOa0jsKdY653TZmY5Cxc9w0B
-        dFgs1HPoPqG/apAeSQu+e9JEgg==
-X-Google-Smtp-Source: AGRyM1t5fihARfpTKUOLQNCjVONdWR8oHH8X3XzLJMf74aL9Msfa7frCy3ERB9yehacvDsepOq0mPQ==
-X-Received: by 2002:a05:6402:2398:b0:435:9685:1581 with SMTP id j24-20020a056402239800b0043596851581mr3658655eda.333.1655898859243;
-        Wed, 22 Jun 2022 04:54:19 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id qa39-20020a17090786a700b007030c97ae62sm9063007ejc.191.2022.06.22.04.54.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 04:54:18 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND PATCH] net/ncsi: use proper "mellanox" DT vendor prefix
-Date:   Wed, 22 Jun 2022 13:54:16 +0200
-Message-Id: <20220622115416.7400-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 22 Jun 2022 07:56:20 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86493D1F2;
+        Wed, 22 Jun 2022 04:56:13 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1655898957tcalen1y
+Received: from ubuntu.localdomain ( [223.104.103.173])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 19:55:52 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000B00A0000000
+X-QQ-FEAT: RMVj0UrY8cCFOea5C5ARBmv0k7vBcpfkzIQziTBbryMHCxKiCBHSQJn+bq9x9
+        GMVbFEThT1NEVg7Wfti3c1hpYxvR1iBZ02eEDPBT9YB+BSIt0gm7oF0IMIoIr9yXx9WtHc3
+        UjTWKBSXsESFfZgU2CquUtRbqKniZ2XHcX/etJOHAGvRDLU5LzUJsWoOUAg5UDTKZ2BKVuN
+        EjyXSnh3XE+IZbCflWkqht+4WfiyCRXuugQc9ftEqPionE8OFN9eAlJFfh6Oy6VNfWm4Uwh
+        Z3SMabF7w68Mazn/h4vLdjPbn6gBtRb0c3CnrZBbjAU/Rc64cGO1P1NPjfeY4TYiWeKyu9o
+        0Mswb6s5edJx/nwUdI99Qvq4w7TUR+uMTw799cI
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     hare@suse.de, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] scsi: fcoe: drop unexpected word "the" in the comments
+Date:   Wed, 22 Jun 2022 19:55:49 +0800
+Message-Id: <20220622115549.14771-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,33 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"mlx" Devicetree vendor prefix is not documented and instead "mellanox"
-should be used.
+there is an unexpected word "the" in the comments that need to be dropped
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+file: drivers/scsi/fcoe/fcoe_ctlr.c
+line: 208
 
+      * age_fcfs are protected by the the fcoe_ctlr's mutex.
+changed to:
+      * age_fcfs are protected by the fcoe_ctlr's mutex.
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 ---
+ drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reason for resend: split from DTS patch. The patch is safe to take
-independently.
----
- net/ncsi/ncsi-manage.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/ncsi/ncsi-manage.c b/net/ncsi/ncsi-manage.c
-index 78814417d753..80713febfac6 100644
---- a/net/ncsi/ncsi-manage.c
-+++ b/net/ncsi/ncsi-manage.c
-@@ -1803,7 +1803,8 @@ struct ncsi_dev *ncsi_register_dev(struct net_device *dev,
- 	pdev = to_platform_device(dev->dev.parent);
- 	if (pdev) {
- 		np = pdev->dev.of_node;
--		if (np && of_get_property(np, "mlx,multi-host", NULL))
-+		if (np && (of_get_property(np, "mellanox,multi-host", NULL) ||
-+			   of_get_property(np, "mlx,multi-host", NULL)))
- 			ndp->mlx_multi_host = true;
- 	}
- 
+diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+index 39e16eab47aa..28e8b9f1e1a4 100644
+--- a/drivers/scsi/fcoe/fcoe_ctlr.c
++++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+@@ -205,7 +205,7 @@ static int fcoe_sysfs_fcf_add(struct fcoe_fcf *new)
+ 		 * that doesn't have a priv (fcf was deleted). However,
+ 		 * libfcoe will always delete FCFs before trying to add
+ 		 * them. This is ensured because both recv_adv and
+-		 * age_fcfs are protected by the the fcoe_ctlr's mutex.
++		 * age_fcfs are protected by the fcoe_ctlr's mutex.
+ 		 * This means that we should never get a FCF with a
+ 		 * non-NULL priv pointer.
+ 		 */
 -- 
-2.34.1
+2.17.1
 

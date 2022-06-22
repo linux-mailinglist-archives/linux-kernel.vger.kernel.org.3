@@ -2,163 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE02E5551AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B415551B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376896AbiFVQuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S1376999AbiFVQuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359267AbiFVQs3 (ORCPT
+        with ESMTP id S1376825AbiFVQsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:48:29 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD4663F6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:48:01 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3185f5623edso8648727b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:48:01 -0700 (PDT)
+        Wed, 22 Jun 2022 12:48:55 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16673DDC2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:48:14 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i15so15877547plr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kp/yh5bW8TY1dw8lD/1Ylcedrm+ARISJLh6F2D0W1cA=;
-        b=PWBElkZJqkDtHVG9XPIEPuTSazCJ9NORWl85Rkm97/RzMnzrcQgeO45lKXkqhn1Shp
-         5QNG+YIhtG/eQi/VWtkTOHwTTZ2vjJmMCzZ8yj68cfd8Pb1/ZuNa7MtPaRdPcpYTXKJN
-         j7WXElGkHxpgHHkWcwa/ZKm9/Zvdyi7nUm6oQ3zHuObjUfijkYjrxwDD/TY2t5zoXQ3o
-         BDaKDnl5jLDemAWp3iB44WExeyUrjCIoVik7pZkIrBEOeP3MVsCB8arbkG4XHzjKHyc9
-         geUWSL9Nnpk9FP+jlnd7alivOiB0Cs4pcpM+lbM4owjdJD5KP2T7A+dWAKPxq+4mW4jk
-         Ph5A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EPjBWJp4+cnUmhtsaExpC0uH3Ar9b7Yqno9YlbKDpEM=;
+        b=O/WI9RxqyY3j9zZPBjaivC4PBQRKM241XaCzEoMcdZCZTaGiYw5vhL0IzXVEeZ9/cu
+         AfzrnymnQw3E1bgnkaS1k+2DFHWec4a+AZuK3hAage/ENOYpm2dD8Z9M7e5BmGsmhX5M
+         cvZh0UuXxLxLDa1UHU6e2uVEKX93bEm5xoncoyPX6AqX9KyS7X9r4NOwTuBYMN3eSDVP
+         i2tOv6T/D30iwOCZdCgvOrVLW/fJ+JYJMS3WSKTk7Dp8La6AAiKBEK3z+eYYndqeVoZ9
+         5oLHSzh9t87UCBwDWN2LjbIb5ypDPhnPGz6qQsD75wgIuDAoMEVuOMdd3S/OHMKGCeIR
+         bwyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kp/yh5bW8TY1dw8lD/1Ylcedrm+ARISJLh6F2D0W1cA=;
-        b=yQjY6X8y+i2uqX68lQ2tRmh17JyI0/c1kUBK9YnB8R5O/611kQ0/ULLsrP8mIlTfU0
-         E55dPHqfZMma+RWx5F0VV1Ip4EMXOO8JPd6cXKdoXHtuiANCSo5e9LGtJtgnjzuzt6d/
-         oxuejNAdmKGaDKShQ0y94APqdbaB5UGf4Nif3KRqWnaL5gtdrG+9a4bP58O3q1kOIsBd
-         1jT1IT2kmjXQWHPGOIlJFkwMg/IFsYCEeKjfs7aFSlVblQadvIyKxWcpJINW8xvBpy7S
-         lCAIuMkx13QqPxgJ89tI/ZaFNm06FPpKebUpW72YzcP2JlHUUZVJMSmaHtvjZOmY0lUy
-         9zRA==
-X-Gm-Message-State: AJIora+raoh0G4ceDB1+oJcBX7jjV3bhAF7lmCk4+fsIqXHDby0f5KV5
-        81n+V8rpbejuocAFy/6VTHt9Gu+XTU5ayQeCq9Mjdg==
-X-Google-Smtp-Source: AGRyM1tWj+cwpVYjfap8gVH72OmUbiehYc/hbn491XF/tfwmgdAP1iGoGe1mWaa9dreJ/2rqLr6HwIcoB6qMIeBf6ak=
-X-Received: by 2002:a0d:fac6:0:b0:317:5202:b8c1 with SMTP id
- k189-20020a0dfac6000000b003175202b8c1mr5252536ywf.467.1655916480918; Wed, 22
- Jun 2022 09:48:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EPjBWJp4+cnUmhtsaExpC0uH3Ar9b7Yqno9YlbKDpEM=;
+        b=Jfin5JsUEoaGzePxA8Hv6z+HtpCpxXiol/c/z0cTzkSM0XoZerdhDZvwiDBHSksAz/
+         ZNJsuQiyHOXACOQxQBfkvaDtTEXzxAms+rlPCW6GzNDvNEOj08D0xqT80Wewn2zAgGh8
+         1cfHOoEgVHJv0t6By99Loq7sZLZj4IWWsxahGZyZbD0w1lvbzSklqD7tPgc/Kcb2BMfh
+         ebMwCS8gbTGQ2DV8wVnh5jORRczzo9gkDaDEPd4JouLbWzR6Liz+/2cI17/oHOGun3Q2
+         mPShg9HR+1TBL1BO4zE/u1paA+IJcKD2GqhtSYao8ZvBrG2/ke1xIyqFm0oYNR/JT1xe
+         gPbg==
+X-Gm-Message-State: AJIora+SLV9pQcIz2d5+bpNAwQKsrJgNwB8y3mGoXayxsBUXnFjsADfi
+        CsnKFQg82pUaw4GNNQYC0mMlog==
+X-Google-Smtp-Source: AGRyM1vZBhmsccGkxKPwH1Yo3egL09IVaEXsJhBfwL5fLkZIk1hFm8xi2xqkz2GE870z9R+SkO1ZgQ==
+X-Received: by 2002:a17:902:8689:b0:14e:f1a4:d894 with SMTP id g9-20020a170902868900b0014ef1a4d894mr35075563plo.65.1655916493753;
+        Wed, 22 Jun 2022 09:48:13 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id x82-20020a627c55000000b0052089e1b88esm7425385pfc.192.2022.06.22.09.48.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 09:48:12 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 10:48:10 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] remoteproc: imx_rproc: Fix refcount leak in
+ imx_rproc_addr_init
+Message-ID: <20220622164810.GB1606016@p14s>
+References: <20220512045558.7142-1-linmq006@gmail.com>
 MIME-Version: 1.0
-References: <20220619003919.394622-1-i.maximets@ovn.org> <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
- <20220622102813.GA24844@breakpoint.cc> <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
- <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org> <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
- <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org> <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
- <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
-In-Reply-To: <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 22 Jun 2022 18:47:49 +0200
-Message-ID: <CANn89iLVHAE5aMwo0dow14mdFK0JjokE9y5KV+67AxKJdSjx=w@mail.gmail.com>
-Subject: Re: [PATCH net] net: ensure all external references are released in
- deferred skbuffs
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Florian Westphal <fw@strlen.de>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512045558.7142-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 6:39 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Wed, Jun 22, 2022 at 6:29 PM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> > On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
-> > >
-> > > On 6/22/22 13:43, Eric Dumazet wrote:
-> >
-> > >
-> > > I tested the patch below and it seems to fix the issue seen
-> > > with OVS testsuite.  Though it's not obvious for me why this
-> > > happens.  Can you explain a bit more?
-> >
-> > Anyway, I am not sure we can call nf_reset_ct(skb) that early.
-> >
-> > git log seems to say that xfrm check needs to be done before
-> > nf_reset_ct(skb), I have no idea why.
->
-> Additional remark: In IPv6 side, xfrm6_policy_check() _is_ called
-> after nf_reset_ct(skb)
->
-> Steffen, do you have some comments ?
->
-> Some context:
-> commit b59c270104f03960069596722fea70340579244d
-> Author: Patrick McHardy <kaber@trash.net>
-> Date:   Fri Jan 6 23:06:10 2006 -0800
->
->     [NETFILTER]: Keep conntrack reference until IPsec policy checks are done
->
->     Keep the conntrack reference until policy checks have been performed for
->     IPsec NAT support. The reference needs to be dropped before a packet is
->     queued to avoid having the conntrack module unloadable.
->
->     Signed-off-by: Patrick McHardy <kaber@trash.net>
->     Signed-off-by: David S. Miller <davem@davemloft.net>
->
+On Thu, May 12, 2022 at 08:55:58AM +0400, Miaoqian Lin wrote:
+> of_parse_phandle() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when not needed anymore.
+> This function has two paths missing of_node_put().
+> 
+> Fixes: 6e962bfe56b9 ("remoteproc: imx_rproc: add missing of_node_put")
+> Fixes: a0ff4aa6f010 ("remoteproc: imx_rproc: add a NXP/Freescale imx_rproc driver")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/remoteproc/imx_rproc.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 7a096f1891e6..6363ed40854a 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -559,16 +559,17 @@ static int imx_rproc_addr_init(struct imx_rproc *priv,
+>  
+>  		node = of_parse_phandle(np, "memory-region", a);
+>  		/* Not map vdevbuffer, vdevring region */
+> -		if (!strncmp(node->name, "vdev", strlen("vdev")))
+> +		if (!strncmp(node->name, "vdev", strlen("vdev"))) {
+> +			of_node_put(node);
+>  			continue;
+> +		}
+>  		err = of_address_to_resource(node, 0, &res);
+> +		of_node_put(node);
 
-Oh well... __xfrm_policy_check() has :
+Applied.
 
-nf_nat_decode_session(skb, &fl, family);
+Thanks,
+Mathieu
 
-This  answers my questions.
-
-This means we are probably missing at least one XFRM check in TCP
-stack in some cases.
-(Only after adding this XFRM check we can call nf_reset_ct(skb))
-
->
-> >
-> > I suspect some incoming packets are not going through
-> > xfrm4_policy_check() and end up being stored in a TCP receive queue.
-> >
-> > Maybe something is missing before calling tcp_child_process()
-> >
-> >
-> > >
-> > > >
-> > > > I note that IPv6 does the nf_reset_ct() earlier, from ip6_protocol_deliver_rcu()
-> > > >
-> > > > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> > > > index fda811a5251f2d76ac24a036e6b4f4e7d7d96d6f..a06464f96fe0cc94dd78272738ddaab2c19e87db
-> > > > 100644
-> > > > --- a/net/ipv4/tcp_ipv4.c
-> > > > +++ b/net/ipv4/tcp_ipv4.c
-> > > > @@ -1919,6 +1919,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
-> > > >         struct sock *sk;
-> > > >         int ret;
-> > > >
-> > > > +       nf_reset_ct(skb);
-> > > > +
-> > > >         drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
-> > > >         if (skb->pkt_type != PACKET_HOST)
-> > > >                 goto discard_it;
-> > > > @@ -2046,8 +2048,6 @@ int tcp_v4_rcv(struct sk_buff *skb)
-> > > >         if (drop_reason)
-> > > >                 goto discard_and_relse;
-> > > >
-> > > > -       nf_reset_ct(skb);
-> > > > -
-> > > >         if (tcp_filter(sk, skb)) {
-> > > >                 drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
-> > > >                 goto discard_and_relse;
-> > >
+>  		if (err) {
+>  			dev_err(dev, "unable to resolve memory region\n");
+>  			return err;
+>  		}
+>  
+> -		of_node_put(node);
+> -
+>  		if (b >= IMX_RPROC_MEM_MAX)
+>  			break;
+>  
+> -- 
+> 2.25.1
+> 

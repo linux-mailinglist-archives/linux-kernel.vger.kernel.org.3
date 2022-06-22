@@ -2,99 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3575F555347
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95D4555337
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359446AbiFVSaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 14:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S1377358AbiFVSTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 14:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiFVSaQ (ORCPT
+        with ESMTP id S1377592AbiFVSTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 14:30:16 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578A930576;
-        Wed, 22 Jun 2022 11:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655922614; x=1687458614;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BRzTC2ut2r56R1WtccznIDmkHwKaDpfAh5dNdlDBT60=;
-  b=jfuI3Z2USxqvHsqokQgXnZqquri8S5wGOXpEscLhErPSdNcSWYxi+heV
-   qwn7EVG7oXV+TjyPL+NdEglPA8+78Yy1lGDXUpMiorIkLD2joebXydIQ/
-   GI9eTTgw8rDAmHRA4TB4IEO5OHJR5kiz7RxSwQsPl1QCH6YNzoKLmmpAU
-   iTq4Lvo5G6UYBpIk/yUVz+IG0GfqPXzDMi/WXcAfEvNvJuOj0AMkR+qo9
-   E5D+wZOAuH11vVI3QHpIQRZHAitSO6H72RxsS6fTAlfpomA3GNKAZ6Mz9
-   x4dYT8TQtp/hyBspt3RF+71FuKP8JAcIo7MJKSTrqR4q2qvq0H8oxVphK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="278055245"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="278055245"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:18:10 -0700
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="677681186"
-Received: from bshakya-mobl.amr.corp.intel.com (HELO [10.212.188.76]) ([10.212.188.76])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:18:08 -0700
-Message-ID: <681e4e45-eff1-600c-9b81-1fa9bdf24232@intel.com>
-Date:   Wed, 22 Jun 2022 11:17:49 -0700
+        Wed, 22 Jun 2022 14:19:16 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC1A63C3;
+        Wed, 22 Jun 2022 11:19:14 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 572D460004;
+        Wed, 22 Jun 2022 18:19:09 +0000 (UTC)
+Message-ID: <673a6f2b-dab2-e00f-b37c-15f8775b2121@ovn.org>
+Date:   Wed, 22 Jun 2022 20:19:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
+ Thunderbird/91.8.0
+Cc:     i.maximets@ovn.org,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Florian Westphal <fw@strlen.de>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
 Content-Language: en-US
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>, "bp@alien8.de" <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <8f63961f00fd170ba0e561f499292175f3155d26.1655761627.git.ashish.kalra@amd.com>
- <cc0c6bd1-a1e3-82ee-8148-040be21cad5c@intel.com>
- <BYAPR12MB2759A8F48D6D68EE879EEF648EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <25be3068-be13-a451-86d4-ff4cc12ddb23@intel.com>
- <BYAPR12MB27599BCEA9F692E173911C3B8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <BYAPR12MB27599BCEA9F692E173911C3B8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+To:     Eric Dumazet <edumazet@google.com>
+References: <20220619003919.394622-1-i.maximets@ovn.org>
+ <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
+ <20220622102813.GA24844@breakpoint.cc>
+ <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
+ <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org>
+ <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
+ <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org>
+ <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
+ <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
+ <CANn89iLVHAE5aMwo0dow14mdFK0JjokE9y5KV+67AxKJdSjx=w@mail.gmail.com>
+ <CANn89i+5pWbXyFBnMqdfz6SqRV9enFNHbcd_2irJub1Ag7vxNw@mail.gmail.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [PATCH net] net: ensure all external references are released in
+ deferred skbuffs
+In-Reply-To: <CANn89i+5pWbXyFBnMqdfz6SqRV9enFNHbcd_2irJub1Ag7vxNw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,10 +60,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/22 11:15, Kalra, Ashish wrote:
-> So actually this RPM entry definition is platform dependent and will
-> need to be changed for different AMD processors and that change has
-> to be handled correspondingly in the dump_rmpentry() code.
+On 6/22/22 19:03, Eric Dumazet wrote:
+> On Wed, Jun 22, 2022 at 6:47 PM Eric Dumazet <edumazet@google.com> wrote:
+>>
+>> On Wed, Jun 22, 2022 at 6:39 PM Eric Dumazet <edumazet@google.com> wrote:
+>>>
+>>> On Wed, Jun 22, 2022 at 6:29 PM Eric Dumazet <edumazet@google.com> wrote:
+>>>>
+>>>> On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
+>>>>>
+>>>>> On 6/22/22 13:43, Eric Dumazet wrote:
+>>>>
+>>>>>
+>>>>> I tested the patch below and it seems to fix the issue seen
+>>>>> with OVS testsuite.  Though it's not obvious for me why this
+>>>>> happens.  Can you explain a bit more?
+>>>>
+>>>> Anyway, I am not sure we can call nf_reset_ct(skb) that early.
+>>>>
+>>>> git log seems to say that xfrm check needs to be done before
+>>>> nf_reset_ct(skb), I have no idea why.
+>>>
+>>> Additional remark: In IPv6 side, xfrm6_policy_check() _is_ called
+>>> after nf_reset_ct(skb)
+>>>
+>>> Steffen, do you have some comments ?
+>>>
+>>> Some context:
+>>> commit b59c270104f03960069596722fea70340579244d
+>>> Author: Patrick McHardy <kaber@trash.net>
+>>> Date:   Fri Jan 6 23:06:10 2006 -0800
+>>>
+>>>     [NETFILTER]: Keep conntrack reference until IPsec policy checks are done
+>>>
+>>>     Keep the conntrack reference until policy checks have been performed for
+>>>     IPsec NAT support. The reference needs to be dropped before a packet is
+>>>     queued to avoid having the conntrack module unloadable.
+>>>
+>>>     Signed-off-by: Patrick McHardy <kaber@trash.net>
+>>>     Signed-off-by: David S. Miller <davem@davemloft.net>
+>>>
+>>
+>> Oh well... __xfrm_policy_check() has :
+>>
+>> nf_nat_decode_session(skb, &fl, family);
+>>
+>> This  answers my questions.
+>>
+>> This means we are probably missing at least one XFRM check in TCP
+>> stack in some cases.
+>> (Only after adding this XFRM check we can call nf_reset_ct(skb))
+>>
+> 
+> Maybe this will help ?
 
-So, if the RMP entry format changes in future processors, how do we make
-sure that the kernel does not try to use *this* code on those processors?
+I tested this patch and it seems to fix the OVS problem.
+I did not test the xfrm part of it.
+
+Will you post an official patch?
+
+> 
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index fe8f23b95d32ca4a35d05166d471327bc608fa91..49c1348e40b6c7b6a98b54d716f29c948e00ba33
+> 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -2019,12 +2019,19 @@ int tcp_v4_rcv(struct sk_buff *skb)
+>                 if (nsk == sk) {
+>                         reqsk_put(req);
+>                         tcp_v4_restore_cb(skb);
+> -               } else if (tcp_child_process(sk, nsk, skb)) {
+> -                       tcp_v4_send_reset(nsk, skb);
+> -                       goto discard_and_relse;
+>                 } else {
+> -                       sock_put(sk);
+> -                       return 0;
+> +                       if (!xfrm4_policy_check(nsk, XFRM_POLICY_IN, skb)) {
+> +                               drop_reason = SKB_DROP_REASON_XFRM_POLICY;
+> +                               goto discard_and_relse;
+> +                       }
+> +                       nf_reset_ct(skb);
+> +                       if (tcp_child_process(sk, nsk, skb)) {
+> +                               tcp_v4_send_reset(nsk, skb);
+> +                               goto discard_and_relse;
+> +                       } else {
+> +                               sock_put(sk);
+> +                               return 0;
+> +                       }
+>                 }
+>         }
+

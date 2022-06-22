@@ -2,57 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809F5555514
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0733D555515
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376798AbiFVTuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S1358612AbiFVTuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235098AbiFVTuH (ORCPT
+        with ESMTP id S1376812AbiFVTuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:50:07 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C14240903;
-        Wed, 22 Jun 2022 12:50:06 -0700 (PDT)
-Received: from [192.168.192.153] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id BDA954162B;
-        Wed, 22 Jun 2022 19:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1655927404;
-        bh=EkPLoMlB5urjTl/KfgKOygiZqi6zn+K/seeJTHaMOME=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=FSNbigvl5J71VArTsLrqadPIQK76Q8y+Ll+gjMoPoF4ZDMzxmEKfCIy/bUBXYuxxb
-         x/PSOaQY8hS1Egjv5/a4nvocVSJO8cPuWTO83ppDM4qugJuyJvU/CX6z+O/b7aHijr
-         TvChCox9Fs214d4wWnsgugtQobh3h6BOZJxelzyAQu3n/0O2Lvm/jFVlfpp0CTK0Gr
-         1SY7W3OOD8HClN3PHJktYqPGA9a0C6SG3BbbBkXylsL4+OBA9xouogdOKzx4Kd0rdr
-         EEL+bCJnEJMeekndLPNb3XjRoMBtMwkGyPpnAptMvgNCOeuJXjA/owdGPoLwCdrV5k
-         /k38nwUDRIqXQ==
-Message-ID: <3839b02b-36b2-a722-83f9-1e86e66746f2@canonical.com>
-Date:   Wed, 22 Jun 2022 12:49:48 -0700
+        Wed, 22 Jun 2022 15:50:14 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBDA40A1B;
+        Wed, 22 Jun 2022 12:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655927413; x=1687463413;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jK+Ip8TKjyJwk/sGYsCBvnwDGqA6k0xPk+0Grxe5TNg=;
+  b=AzRM+lW1vSgSDKYqlWgBDP1lvHBoQcbJaSvfwEQPttkhO3c6gtB87PRs
+   zpUW3ZfuzpNjJjmT0AUxv83MDTcVd+Jip0Q5AUsgagJtyg3WVNcswTcFR
+   RbrptCYzPRiE1mzy9PanXblclzJdH7k2R8a9JU6R9pcxDm9kR3UvHDc0V
+   gCYgOXza5SKC44XeEm0oMXnJIUfk1UEVPiQpbc6ZOiuoroyGTMtDKngsQ
+   zj3XteXfjQfZaxk9ohCOzsxM2tNDzWsG+J224AVrxtFQlJg2Cm67UDCO9
+   9esRzFohY4nLL3enarajt8VhWxYCFlETZaRNWNiLg3PTJPWaUivF+YWiq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="280576076"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="280576076"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 12:50:13 -0700
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="677720725"
+Received: from bshakya-mobl.amr.corp.intel.com (HELO [10.212.188.76]) ([10.212.188.76])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 12:50:11 -0700
+Message-ID: <5db37cc2-4fb1-7a73-c39a-3531260414d0@intel.com>
+Date:   Wed, 22 Jun 2022 12:49:52 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH -next] apparmor: Fix memleak in
- aa_simple_write_to_buffer()
+Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
 Content-Language: en-US
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220614090001.155107-1-xiujianfeng@huawei.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20220614090001.155107-1-xiujianfeng@huawei.com>
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>, "bp@alien8.de" <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <8f63961f00fd170ba0e561f499292175f3155d26.1655761627.git.ashish.kalra@amd.com>
+ <cc0c6bd1-a1e3-82ee-8148-040be21cad5c@intel.com>
+ <BYAPR12MB2759A8F48D6D68EE879EEF648EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <25be3068-be13-a451-86d4-ff4cc12ddb23@intel.com>
+ <BYAPR12MB27599BCEA9F692E173911C3B8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <681e4e45-eff1-600c-9b81-1fa9bdf24232@intel.com>
+ <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
+ <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,35 +106,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry this feel through the cracks some how.
+On 6/22/22 12:43, Kalra, Ashish wrote:
+>> I think that needs to be fixed.  It should be as simple as a
+>> model/family check, though.  If someone (for example) attempts to
+>> use SNP (and thus snp_lookup_rmpentry() and dump_rmpentry()) code
+>> on a newer CPU, the kernel should refuse.
+> More specifically I am thinking of adding RMP entry field accessors
+> so that they can do this cpu model/family check and return the
+> correct field as per processor architecture.
 
-Acked-by: John Johansen <john.johansen@canonical.com>
-
-I will pull this into my tree and send it up with my next pull request.
-
-On 6/14/22 02:00, Xiu Jianfeng wrote:
-> When copy_from_user failed, the memory is freed by kvfree. however the
-> management struct and data blob are allocated independently, so only
-> kvfree(data) cause a memleak issue here. Use aa_put_loaddata(data) to
-> fix this issue.
-> 
-> Fixes: a6a52579e52b5 ("apparmor: split load data into management struct and data blob")
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->  security/apparmor/apparmorfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorfs.c
-> index 8b9c92f3ff95..0275a350dc23 100644
-> --- a/security/apparmor/apparmorfs.c
-> +++ b/security/apparmor/apparmorfs.c
-> @@ -403,7 +403,7 @@ static struct aa_loaddata *aa_simple_write_to_buffer(const char __user *userbuf,
->  
->  	data->size = copy_size;
->  	if (copy_from_user(data->data, userbuf, copy_size)) {
-> -		kvfree(data);
-> +		aa_put_loaddata(data);
->  		return ERR_PTR(-EFAULT);
->  	}
->  
-
+That will be helpful down the road when there's more than one format.
+But, the real issue is that the kernel doesn't *support* a different RMP
+format.  So, the SNP support should be disabled when encountering a
+model/family other than the known good one.

@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDDC555225
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5254555224
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377327AbiFVRSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S1358862AbiFVRR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377410AbiFVRSk (ORCPT
+        with ESMTP id S1358735AbiFVRRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:18:40 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2DD1EADA;
-        Wed, 22 Jun 2022 10:18:35 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1655918238tuso5z1q
-Received: from ubuntu.localdomain ( [106.117.78.84])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 23 Jun 2022 01:17:13 +0800 (CST)
-X-QQ-SSF: 01000000008000B0C000B00A0000000
-X-QQ-FEAT: Nw/vDu2WDVA7O0siZPWF1CRMSkUbier2nbLlOrsrUy/N9WElWlqOGeZoD9p+H
-        Rmkgyy0foCWBQqCgTvf0I1qtRuZuLoYvbNtvT4FdGAsi6N80AMx8GSPkv/Mk5y1blLy0NPr
-        vMyjiqX0JSwurAtdCUwRz8d1kONVj1hnmoq9QQY3MK03uLBHRFeyA6xoVIInSzYmWEH9Z37
-        q1Zt5l8Die+yZCEwFtMOII8hPx5xv0LTM0Qoo9ZXhI6SPnyfhPJsS+43KuXgdS1vB2Eh1hj
-        LsgJap+yDldFeSCoTv1P0bnuUF97BH6p4Jf0S0yVmo0zWVkn4BMk15yXM5wYAdG0wOauGj8
-        pxBQ4iU7Hpoe68Zs4o=
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     jiangjian@cdjrlc.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: sun: cassini: drop unexpected word 'is' in comments
-Date:   Thu, 23 Jun 2022 01:17:11 +0800
-Message-Id: <20220622171711.6969-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 13:17:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A051A1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:17:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A64BE61BA6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 17:17:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16193C34114;
+        Wed, 22 Jun 2022 17:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655918271;
+        bh=X5zHmARP4o9w5Als0RrcdIqb8TjGKy4BRH9KZCUBEl0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ciH6giKXozyPDS82RKGfyWHSbyB1w1IbONC/j50IW0bii2dJ5MsURoITpKeFXMwvI
+         IX71ob3yU28+KUS32zrFV/IsX6533KbkkmBBchnAo+88MHh7VbxNDmeJl4t1fa4zo5
+         SXtPJB7/35lwE+1zigwGcPNXJgveUnZUSJQDCNF5L3OsPeK7DX9VLrnuM5s1RX8F/B
+         /A17Y/QJYmmr+hyeSXmsM9RuatYmTZ0Lmw7gHkw5p/bGdQBFuCB6+6GOulgYCSHCYQ
+         zqnF/qBvHKg5HkUosAYeo2LUGCEumMOo2FnlA04TPBkc74F4LeXALkNf9sMbV9m+Y6
+         i3ks+2GwfJNhQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dong Aisheng <dongas86@gmail.com>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] regmap: Don't warn about cache only mode for devices with no cache
+Date:   Wed, 22 Jun 2022 18:17:23 +0100
+Message-Id: <20220622171723.1235749-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1114; h=from:subject; bh=X5zHmARP4o9w5Als0RrcdIqb8TjGKy4BRH9KZCUBEl0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBis06B5RFEDqmaW/J9L4VaTdUXHiSq04nH81ud5S2y 9cCC/1OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYrNOgQAKCRAk1otyXVSH0DxSB/ 92mPU+4++0OlnB7T9dw5w6e+cmCQx8WhRmHJe4OJg0iPdY3bO3rqDgmaMFVkO431fKsdmMB3OyTDfP X4dd7wADpPn1oqtkPWPN1G4A1gLK1fTpUX0ftwp2ZQtroXqDuMTjOpydzXrFn4aTY7BT94L+73RyAX AC+qIshQsrLkEWx6vRAkR2xbZ6gUAt2kwOa/MUJELhYhzAeFYAiyqbiFDbym2CAjqjmEyx17fIKg5q 8HgCD0p1WPNfQnA5BhlRlvN1ZLVQL73QoYaF8UoR+TgJlPFWJtDDOA0s3p2qotR0XUyVE4GOn9c18A JDQJJjUxmyEszG/Tox2z5Xv8qW0syP
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word 'is' in the comments that need to be dropped
+For devices with no cache it can make sense to use cache only mode as a
+mechanism for trapping writes to hardware which is inaccessible but since
+no cache is equivalent to cache bypass we force such devices into bypass
+mode. This means that our check that bypass and cache only mode aren't both
+enabled simultanously is less sensible for devices without a cache so relax
+it.
 
-file - drivers/net/ethernet/sun/cassini.h
-line - 767
-
-* value is is 0x6F.
-
-changed to
-* value is 0x6F.
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/net/ethernet/sun/cassini.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/regmap/regcache.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/sun/cassini.h b/drivers/net/ethernet/sun/cassini.h
-index ae5f05f03f88..2d91f4936d52 100644
---- a/drivers/net/ethernet/sun/cassini.h
-+++ b/drivers/net/ethernet/sun/cassini.h
-@@ -764,7 +764,7 @@
-  * PAUSE thresholds defined in terms of FIFO occupancy and may be translated
-  * into FIFO vacancy using RX_FIFO_SIZE. setting ON will trigger XON frames
-  * when FIFO reaches 0. OFF threshold should not be > size of RX FIFO. max
-- * value is is 0x6F.
-+ * value is 0x6F.
-  * DEFAULT: 0x00078
-  */
- #define  REG_RX_PAUSE_THRESH               0x4020  /* RX pause thresholds */
+diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
+index 2eaffd3224c9..ef62ec225d81 100644
+--- a/drivers/base/regmap/regcache.c
++++ b/drivers/base/regmap/regcache.c
+@@ -495,7 +495,8 @@ EXPORT_SYMBOL_GPL(regcache_drop_region);
+ void regcache_cache_only(struct regmap *map, bool enable)
+ {
+ 	map->lock(map->lock_arg);
+-	WARN_ON(map->cache_bypass && enable);
++	WARN_ON(map->cache_type != REGCACHE_NONE &&
++		map->cache_bypass && enable);
+ 	map->cache_only = enable;
+ 	trace_regmap_cache_only(map, enable);
+ 	map->unlock(map->lock_arg);
 -- 
-2.17.1
+2.30.2
 

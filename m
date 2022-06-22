@@ -2,193 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0787554D76
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DCB554D79
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358707AbiFVOfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        id S1358613AbiFVOgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358700AbiFVOfk (ORCPT
+        with ESMTP id S1358735AbiFVOgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:35:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1A5A3BF88
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655908537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mqHBzJ5IikLI/T/Qp0b//MpzSAkflYAqrEPzT2O75eE=;
-        b=aixs+p4fAV0GO6DMQYL0UW5oCmYuL4X9xEjPb4r388MsWi5D0UYTuzVVb0rHZnZbS3Ru/B
-        nOFX9hkweJzPHO5XUMw0jEaqPEo34RShIWMHj7EZ2M1UDRfOMnft5YcJk7Noz6lA7HZH9/
-        4Er5GRk8aDQhd3zFRqKyPJ2JPXpH818=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-KDuqqufBMWeyXi-Hm9YH9A-1; Wed, 22 Jun 2022 10:35:31 -0400
-X-MC-Unique: KDuqqufBMWeyXi-Hm9YH9A-1
-Received: by mail-wm1-f70.google.com with SMTP id h131-20020a1c2189000000b003a029826d21so1102392wmh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:35:30 -0700 (PDT)
+        Wed, 22 Jun 2022 10:36:07 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86D93C4B6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:36:04 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id u9so20389045ybq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AADFmGIO4mgkp5nXfooqecJpYvaPKWix00lSiCiStrE=;
+        b=JT/rzL1tMmEIZ5R3WvrDugxXqOGKZT6f9Ku78G2rrirkMI4ApVnfrxScIRFg9B2d+l
+         cPUQ1pFCH7qk+puh29jbU2UIptPRtZ8JXshIsfKd0F9rXSLg9UxQHpN79f8q+UngOnpr
+         yBbvOe5s/6210lbIbzGJX7hJqhboyZHo5HzfgS0kRVk3vdO7BjTr9sKOwO8eGREIYl7J
+         E8rTMyKgZ1LnZ2cYPK4tkSPAebWTLnN8JeS3u+Sf/CEn86uOHondY27KiUrKBCaKdja9
+         JgJrKHRWTFIvY9qzXP0FArLdYajCnuG7tmBtG0DHhxYHaG67yJiODMW/iZGPeEWRGxhZ
+         o61g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=mqHBzJ5IikLI/T/Qp0b//MpzSAkflYAqrEPzT2O75eE=;
-        b=T8G2QcPp/Mnk25bHJdflaT9ESAvARhGTpcNqNvXiSFz/JoJ6HPoP29KjX4MLH0l9+I
-         8WCW8ugLD5Uz/v7l0IxJkGkL90rjBtyTzVLAPSuFTKE44fK+mp8h8lAUSXXL6mqKqvSC
-         Zg44eRGmjQwzjlgNyqa4nE3sOPK6H7MxDsG/9dFDcpoIy00VzbeYEdWRArqAiKONUUus
-         zU2EXc8sVtOMumxVQ11ydSihPVNTVZltVWzBaxGZ932o/+vmz62AuPt+8E+ax9xVpX6g
-         5u37Eyo4XxK2yhDxZ9HAARHXKAkgawdt6lCOy+Kq6wGTRW39M+0UxFLF3jtdZ9v5FgOs
-         wfBw==
-X-Gm-Message-State: AJIora80Zxc2YZgUgc+i/a7qEZEfozQDteE8sgM3CLj+YR9OUgcDRwLj
-        Z3xwmMg+ZzAT3ft19cosjXY303D8PkI8vpPrfsszkWJvzJDweM6Xq1dEzC/7tovOUmSe82w2uFi
-        RVamHTjf2K4MRWomp8Ey3OBC3vvpc+dZxigBgUBX35e25nAm4qQ73gfokBgnND6g7XKR19S1cEm
-        hx
-X-Received: by 2002:a5d:59a6:0:b0:21b:a234:8314 with SMTP id p6-20020a5d59a6000000b0021ba2348314mr2724835wrr.316.1655908529960;
-        Wed, 22 Jun 2022 07:35:29 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uRzNKe1o2TRsk2pdleUVR343vFzLH3P88s0wFu9UOAwdJNQdDmkRYfBHgnvCVsa8OT7/f4qA==
-X-Received: by 2002:a5d:59a6:0:b0:21b:a234:8314 with SMTP id p6-20020a5d59a6000000b0021ba2348314mr2724792wrr.316.1655908529685;
-        Wed, 22 Jun 2022 07:35:29 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c418b00b00397342e3830sm4923089wmh.0.2022.06.22.07.35.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 07:35:28 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Ilias Stamatis <ilstam@amazon.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, mail@anirudhrb.com,
-        kumarpraveen@linux.microsoft.com, wei.liu@kernel.org,
-        robert.bradford@intel.com, liuwe@microsoft.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
-In-Reply-To: <YrMenI1mTbqA9MaR@anrayabh-desk>
-References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
- <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
- <YqdsjW4/zsYaJahf@google.com> <YqipLpHI24NdhgJO@anrayabh-desk>
- <YqiwoOP4HX2LniI4@google.com> <87zgi5xh42.fsf@redhat.com>
- <YrMenI1mTbqA9MaR@anrayabh-desk>
-Date:   Wed, 22 Jun 2022 16:35:27 +0200
-Message-ID: <87r13gyde8.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AADFmGIO4mgkp5nXfooqecJpYvaPKWix00lSiCiStrE=;
+        b=43kNufLPs1vxE0x8Fi5k61M6x43X4EAVMLYdDaxIlMX1+kDuW0vvd4YPF043WQOlni
+         LFMkDVrk9eROT+THDihLUIh4oKJIbSizrqrqlc9RFctaDYeCjvojd0qp2mn2PeHaWEYl
+         Nc/pvJpIie9zsVl+ZfUqvUgNkNXlrLiaQ+8CbUPswdzsLNR+VswW4Wqlh6r0Y8obFA8N
+         +Vao9d335SXrkXUVbIzsVfJGwbSLANL4oD0rrQ+SICQHYa8QcOPywVpF1Q8t4QhR4CiA
+         U/0B2juEtOFF6Qpkq+pwQL2aIWYXaUQVn2Jkgt2M2dNDl1UA1xgzC/SmHzdSuEn4maTv
+         U6uw==
+X-Gm-Message-State: AJIora9vPzGIhpo4HyrWX8mcjrLsFPPdoEk6qcLcu1ojDn0fyuqmMV/q
+        Gj/P6q+SDriSKVHuMqX3zGQwx3HvpUGqSm2kGwu7Qg==
+X-Google-Smtp-Source: AGRyM1tFDZmyPaNDRnPeAh38rs7gUFBJVpZfQJLC9pT4s3vyM4vSovN/fIP33Fb12DUEEk/M90QCDQR8pkkH6x79Zrk=
+X-Received: by 2002:a25:8181:0:b0:668:c835:eb7c with SMTP id
+ p1-20020a258181000000b00668c835eb7cmr4162382ybk.598.1655908563718; Wed, 22
+ Jun 2022 07:36:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220619003919.394622-1-i.maximets@ovn.org> <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
+ <20220622102813.GA24844@breakpoint.cc> <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
+ <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org> <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
+ <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org>
+In-Reply-To: <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 22 Jun 2022 16:35:52 +0200
+Message-ID: <CANn89iKV7as_oog+HQOKj+N5Qomae7aa9ZNidePMbQ7tv11mZw@mail.gmail.com>
+Subject: Re: [PATCH net] net: ensure all external references are released in
+ deferred skbuffs
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Florian Westphal <fw@strlen.de>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
-
-> On Wed, Jun 22, 2022 at 10:00:29AM +0200, Vitaly Kuznetsov wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> 
->> > On Tue, Jun 14, 2022, Anirudh Rayabharam wrote:
->> >> On Mon, Jun 13, 2022 at 04:57:49PM +0000, Sean Christopherson wrote:
->> 
->> ...
->> 
->> >> > 
->> >> > Any reason not to use the already sanitized vmcs_config?  I can't think of any
->> >> > reason why the nested path should blindly use the raw MSR values from hardware.
->> >> 
->> >> vmcs_config has the sanitized exec controls. But how do we construct MSR
->> >> values using them?
->> >
->> > I was thinking we could use the sanitized controls for the allowed-1 bits, and then
->> > take the required-1 bits from the CPU.  And then if we wanted to avoid the redundant
->> > RDMSRs in a follow-up patch we could add required-1 fields to vmcs_config.
->> >
->> > Hastily constructed and compile-tested only, proceed with caution :-)
->> 
->> Independently from "[PATCH 00/11] KVM: VMX: Support TscScaling and
->> EnclsExitingBitmap whith eVMCS" which is supposed to fix the particular
->> TSC scaling issue, I like the idea to make nested_vmx_setup_ctls_msrs()
->> use both allowed-1 and required-1 bits from vmcs_config. I'll pick up
->> the suggested patch and try to construct something for required-1 bits.
+On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
 >
-> I tried this patch today but it causes some regression which causes
-> /dev/kvm to be unavailable in L1. I didn't get a chance to look into it
-> closely but I am guessing it has something to do with the fact that
-> vmcs_config reflects the config that L0 chose to use rather than what is
-> available to use. So constructing allowed-1 MSR bits based on what bits
-> are set in exec controls maybe isn't correct.
+> On 6/22/22 13:43, Eric Dumazet wrote:
+> > On Wed, Jun 22, 2022 at 1:32 PM Ilya Maximets <i.maximets@ovn.org> wrote:
+> >>
+> >> On 6/22/22 12:36, Eric Dumazet wrote:
+> >>> On Wed, Jun 22, 2022 at 12:28 PM Florian Westphal <fw@strlen.de> wrote:
+> >>>>
+> >>>> Eric Dumazet <edumazet@google.com> wrote:
+> >>>>> On Sun, Jun 19, 2022 at 2:39 AM Ilya Maximets <i.maximets@ovn.org> wrote:
+> >>>>>>
+> >>>>>> Open vSwitch system test suite is broken due to inability to
+> >>>>>> load/unload netfilter modules.  kworker thread is getting trapped
+> >>>>>> in the infinite loop while running a net cleanup inside the
+> >>>>>> nf_conntrack_cleanup_net_list, because deferred skbuffs are still
+> >>>>>> holding nfct references and not being freed by their CPU cores.
+> >>>>>>
+> >>>>>> In general, the idea that we will have an rx interrupt on every
+> >>>>>> CPU core at some point in a near future doesn't seem correct.
+> >>>>>> Devices are getting created and destroyed, interrupts are getting
+> >>>>>> re-scheduled, CPUs are going online and offline dynamically.
+> >>>>>> Any of these events may leave packets stuck in defer list for a
+> >>>>>> long time.  It might be OK, if they are just a piece of memory,
+> >>>>>> but we can't afford them holding references to any other resources.
+> >>>>>>
+> >>>>>> In case of OVS, nfct reference keeps the kernel thread in busy loop
+> >>>>>> while holding a 'pernet_ops_rwsem' semaphore.  That blocks the
+> >>>>>> later modprobe request from user space:
+> >>>>>>
+> >>>>>>   # ps
+> >>>>>>    299 root  R  99.3  200:25.89 kworker/u96:4+
+> >>>>>>
+> >>>>>>   # journalctl
+> >>>>>>   INFO: task modprobe:11787 blocked for more than 1228 seconds.
+> >>>>>>         Not tainted 5.19.0-rc2 #8
+> >>>>>>   task:modprobe     state:D
+> >>>>>>   Call Trace:
+> >>>>>>    <TASK>
+> >>>>>>    __schedule+0x8aa/0x21d0
+> >>>>>>    schedule+0xcc/0x200
+> >>>>>>    rwsem_down_write_slowpath+0x8e4/0x1580
+> >>>>>>    down_write+0xfc/0x140
+> >>>>>>    register_pernet_subsys+0x15/0x40
+> >>>>>>    nf_nat_init+0xb6/0x1000 [nf_nat]
+> >>>>>>    do_one_initcall+0xbb/0x410
+> >>>>>>    do_init_module+0x1b4/0x640
+> >>>>>>    load_module+0x4c1b/0x58d0
+> >>>>>>    __do_sys_init_module+0x1d7/0x220
+> >>>>>>    do_syscall_64+0x3a/0x80
+> >>>>>>    entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> >>>>>>
+> >>>>>> At this point OVS testsuite is unresponsive and never recover,
+> >>>>>> because these skbuffs are never freed.
+> >>>>>>
+> >>>>>> Solution is to make sure no external references attached to skb
+> >>>>>> before pushing it to the defer list.  Using skb_release_head_state()
+> >>>>>> for that purpose.  The function modified to be re-enterable, as it
+> >>>>>> will be called again during the defer list flush.
+> >>>>>>
+> >>>>>> Another approach that can fix the OVS use-case, is to kick all
+> >>>>>> cores while waiting for references to be released during the net
+> >>>>>> cleanup.  But that sounds more like a workaround for a current
+> >>>>>> issue rather than a proper solution and will not cover possible
+> >>>>>> issues in other parts of the code.
+> >>>>>>
+> >>>>>> Additionally checking for skb_zcopy() while deferring.  This might
+> >>>>>> not be necessary, as I'm not sure if we can actually have zero copy
+> >>>>>> packets on this path, but seems worth having for completeness as we
+> >>>>>> should never defer such packets regardless.
+> >>>>>>
+> >>>>>> CC: Eric Dumazet <edumazet@google.com>
+> >>>>>> Fixes: 68822bdf76f1 ("net: generalize skb freeing deferral to per-cpu lists")
+> >>>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+> >>>>>> ---
+> >>>>>>  net/core/skbuff.c | 16 +++++++++++-----
+> >>>>>>  1 file changed, 11 insertions(+), 5 deletions(-)
+> >>>>>
+> >>>>> I do not think this patch is doing the right thing.
+> >>>>>
+> >>>>> Packets sitting in TCP receive queues should not hold state that is
+> >>>>> not relevant for TCP recvmsg().
+> >>>>
+> >>>> Agree, but tcp_v4/6_rcv() already call nf_reset_ct(), else it would
+> >>>> not be possible to remove nf_conntrack module in practice.
+> >>>
+> >>> Well, existing nf_reset_ct() does not catch all cases, like TCP fastopen ?
+> >>
+> >> Yeah, that is kind of the main problem I have with the current
+> >> code.  It's very hard to find all the cases where skb has to be
+> >> cleaned up and almost impossible for someone who doesn't know
+> >> every aspect of every network subsystem in the kernel.  That's
+> >> why I went with the more or less bulletproof approach of cleaning
+> >> up while actually deferring.  I can try and test the code you
+> >> proposed in the other reply, but at least, I think, we need a
+> >> bunch of debug warnings in the skb_attempt_defer_free() to catch
+> >> possible issues.
+> >
+> > Debug warnings are expensive if they need to bring new cache lines.
+> >
+> > So far skb_attempt_defer_free() is only used by TCP in well known conditions.
+>
+> That's true for skb_attempt_defer_free() itself, but it's
+> hard to tell the same for all the parts of the code that
+> are enqueuing these skbuffs.  Even if all the places are
+> well known, it looks to me highly error prone.  Having
+> a couple of DEBUG_NET_WARN_ON_ONCE should not cause any
+> performance issues, IIUC, unless debug is enabled, right?
+>
+> e.g.
+>
+>         DEBUG_NET_WARN_ON_ONCE(skb_nfct(skb));
+>         DEBUG_NET_WARN_ON_ONCE(skb_dst(skb));
 
-I've tried to pick it up but it's actually much harder than I think. The
-patch has some minor issues ('&vmcs_config.nested' needs to be switched
-to '&vmcs_conf->nested' in nested_vmx_setup_ctls_msrs()), but the main
-problem is that the set of controls nested_vmx_setup_ctls_msrs() needs
-is NOT a subset of vmcs_config (setup_vmcs_config()). I was able to
-identify at least:
+Sure, but we need to put them at the right place.
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 5e14e4c40007..8076352174ad 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2483,8 +2483,14 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
-              CPU_BASED_INVLPG_EXITING |
-              CPU_BASED_RDPMC_EXITING;
- 
--       opt = CPU_BASED_TPR_SHADOW |
-+       opt = CPU_BASED_INTR_WINDOW_EXITING |
-+             CPU_BASED_NMI_WINDOW_EXITING |
-+             CPU_BASED_TPR_SHADOW |
-+             CPU_BASED_USE_IO_BITMAPS |
-              CPU_BASED_USE_MSR_BITMAPS |
-+             CPU_BASED_MONITOR_TRAP_FLAG |
-+             CPU_BASED_RDTSC_EXITING |
-+             CPU_BASED_PAUSE_EXITING |
-              CPU_BASED_ACTIVATE_SECONDARY_CONTROLS |
-              CPU_BASED_ACTIVATE_TERTIARY_CONTROLS;
-        if (adjust_vmx_controls(min, opt, MSR_IA32_VMX_PROCBASED_CTLS,
-@@ -2582,6 +2588,7 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- #endif
-        opt = VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |
-              VM_EXIT_LOAD_IA32_PAT |
-+             VM_EXIT_SAVE_IA32_PAT |
-              VM_EXIT_LOAD_IA32_EFER |
-              VM_EXIT_CLEAR_BNDCFGS |
-              VM_EXIT_PT_CONCEAL_PIP |
-@@ -2604,7 +2611,11 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
-                _pin_based_exec_control &= ~PIN_BASED_POSTED_INTR;
- 
-        min = VM_ENTRY_LOAD_DEBUG_CONTROLS;
--       opt = VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |
-+       opt =
-+#ifdef CONFIG_X86_64
-+             VM_ENTRY_IA32E_MODE |
-+#endif
-+             VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |
-              VM_ENTRY_LOAD_IA32_PAT |
-              VM_ENTRY_LOAD_IA32_EFER |
-              VM_ENTRY_LOAD_BNDCFGS |
+Doing these checks in skb_attempt_defer_free() is too late.
 
-but it is 1) not sufficient because some controls are smartly filtered
-out just because we don't want them for L1 -- and this doesn't mean that
-L2 doesn't need them and 2) because if we add some 'opt' controls to
-setup_vmcs_config() we need to filter them out somewhere else.
+>
+> >
+> >
+> >>
+> >> Also, what about cleaning up extensions?  IIUC, at least one
+> >> of them can hold external references.  SKB_EXT_SEC_PATH holds
+> >> xfrm_state.  We should, probably, free them as well?
+> >
+> > I do not know about this, I would ask XFRM maintainers
+>
+> @Steffen, @Herbert, what do you think?  Is it a problem if the
+> skb holding SKB_EXT_SEC_PATH extension is held not freed in
+> a defer list indefinitely (for a very long time)?  Or is it
+> even possible for an skb with SKB_EXT_SEC_PATH extension present
+> to be enqueued to a TCP receive queue without releasing all
+> the references?
+>
+> This seems like a long existing problem though, so can be fixed
+> separately, if it is a problem.
+>
+> >
+> >>
+> >> And what about zerocopy skb?  I think, we should still not
+> >> allow them to be deferred as they seem to hold HW resources.
+> >
+> > The point of skb_attempt_defer_free() i is to make the freeing happen
+> > at producer
+> >  much instead of consumer.
+> >
+> > I do not think there is anything special in this regard with zero
+> > copy. I would leave the current code as is.
+>
+> The problem is that these skbuffs are never actually freed,
+> so if they do hold HW resources, these resources will never be
+> released (never == for a very long time, hours, days).
 
-I'm starting to think we may just want to store raw VMX MSR values in
-vmcs_config first, then sanitize them (eVMCS, vmx preemtoion timer bug,
-perf_ctrl bug,..) and then do the adjust_vmx_controls() magic. 
+This is fine. Number of such skbs per cpu is limited.
 
-I'm not giving up yet but don't expect something small and backportable
-to stable :-) 
+Or if some HW feature needs buffers to be released _immediately_, we
+have to implement
+a method for doing so.
 
--- 
-Vitaly
+Please point why buffers sitting in TCP receive queues are not causing issues ?
+Do we need a general method "Please scan all TCP sockets and release
+skb holding HW resources immediately"
 
+>
+> Not a blocker from my point of view, just trying to highlight
+> a possible issue.
+
+The tradeoff is known really, as for any cache.
+
+>
+> >
+> > A simpler patch might be to move the existing nf_reset_ct() earlier,
+> > can you test this ?
+>
+> I tested the patch below and it seems to fix the issue seen
+> with OVS testsuite.  Though it's not obvious for me why this
+> happens.  Can you explain a bit more?
+
+I think the bug predates my recent change.
+
+skb_attempt_defer_free() is increasing the probability of hitting the bug.
+
+>
+> >
+> > I note that IPv6 does the nf_reset_ct() earlier, from ip6_protocol_deliver_rcu()
+> >
+> > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> > index fda811a5251f2d76ac24a036e6b4f4e7d7d96d6f..a06464f96fe0cc94dd78272738ddaab2c19e87db
+> > 100644
+> > --- a/net/ipv4/tcp_ipv4.c
+> > +++ b/net/ipv4/tcp_ipv4.c
+> > @@ -1919,6 +1919,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> >         struct sock *sk;
+> >         int ret;
+> >
+> > +       nf_reset_ct(skb);
+> > +
+> >         drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+> >         if (skb->pkt_type != PACKET_HOST)
+> >                 goto discard_it;
+> > @@ -2046,8 +2048,6 @@ int tcp_v4_rcv(struct sk_buff *skb)
+> >         if (drop_reason)
+> >                 goto discard_and_relse;
+> >
+> > -       nf_reset_ct(skb);
+> > -
+> >         if (tcp_filter(sk, skb)) {
+> >                 drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
+> >                 goto discard_and_relse;
+>

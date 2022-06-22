@@ -2,66 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B84554D47
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1D7554D5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358638AbiFVOeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S1358649AbiFVOfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358551AbiFVOd4 (ORCPT
+        with ESMTP id S1358437AbiFVOfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:33:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B2D2ED64;
-        Wed, 22 Jun 2022 07:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655908435; x=1687444435;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/WUAZrN1zyWhIxKQEqmG7Ipp9FUtpkQKAS8q9yj5bhQ=;
-  b=E+sGlAx/K+3Nhy3DeyYlfIB+15yCbZEYOf5SY7U0NYmPl4Y4omnuryAC
-   Y+gVA/ZkPrZMSMNPOy3dDJNmU/HOHUlT33DnCLZfE0pVC5M4qysYsexxZ
-   oXLPBdfHJeVkr5Oe04Y0GBhp604P2fIbFfMOqwOjyjeWvvIdRFbNO6mXz
-   4S9H+ihqX6QfwE6Y9OUDCNZPBHkxi2na99nJeXDREsL6m7sQ5iom8vmCM
-   cPGz4pR2wWEwZv+zCQxrrElorx5/6IlxwCCHnIuDwqaUS1/MI6vt/b2hC
-   eb89r5xhlC0jhzvhZ6RBczwAEYDq/4VqUA5BnoGNk0FneZ1HdwJjz74c9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="279200100"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="279200100"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:33:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="644225513"
-Received: from xpf.sh.intel.com ([10.239.182.112])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2022 07:33:52 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
-        Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bae Chang Seok <chang.seok.bae@intel.com>
-Subject: [PATCH v10 2/2] selftests/x86/xstate: Add xstate fork test for XSAVE feature
-Date:   Wed, 22 Jun 2022 22:33:13 +0800
-Message-Id: <39f3d46f7731617cb84e6c9f16698e369aa5fd77.1655906573.git.pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1655906573.git.pengfei.xu@intel.com>
-References: <cover.1655906573.git.pengfei.xu@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 22 Jun 2022 10:35:02 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72457387B0;
+        Wed, 22 Jun 2022 07:34:57 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1655908488t2wplegy
+Received: from ubuntu.localdomain ( [106.117.78.84])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 22:34:45 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000E00A0000000
+X-QQ-FEAT: HMSvG+9aVfOvI0ncvrQ8fWQeSncCCBYRAdRTgt6HQakK/JFo+V4kshxZkvURu
+        5Jr07Eii/6jb+1TtT3Lb93QyyAa14rh2sG5ZWLiRyN7tNBwTHvHDfn8qmdBXuip19YL5HaW
+        KtzUVrHNaMBADg562QdMQlAGTWGzvxEraGzFVmNQHr+jJmvqO5PQZqLhZnftBj2kV0qtgGt
+        xsWWRV3PIdB9/sXs8PaPNE0KpyRdMXCOwF25UPCmXZmBozyicffLyenYVGRbAS65mXJKeX2
+        uCVIsTUsFqLsH8T/JXmvMThvc0Mx4swUNzznVMVY35eKJIVQ6RUCFyL9RN/LQmIxWWLLq+1
+        hLalhlqnkHeJDvKK6eMZ76o6LFloEf38E+533tz
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     mchehab@kernel.org
+Cc:     sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, jiangjian@cdjrlc.com
+Subject: [PATCH] media: atomisp: Fix typo in comments
+Date:   Wed, 22 Jun 2022 22:34:42 +0800
+Message-Id: <20220622143442.16942-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,175 +47,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to ensure that XSAVE works correctly, add XSAVE most basic fork
-test:
-1. The contents of these xstates in the child process should be the same as
-   the contents of the xstate in the parent process after the fork syscall.
-2. The contents of xstates in the parent process should not change after
-   the context switch.
+Remove the repeated word 'and' from comments
 
-  [ Dave Hansen; Chang S. Bae; Shuah Khan: bunches of cleanups ]
+file: drivers/staging/media/atomisp/pci/hive_isp_css_include/host/debug_public.h
+line: 28
 
-Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+* The buffer has a remote and and a local store
+
+changed to:
+
+* The buffer has a remote and a local store
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 ---
- tools/testing/selftests/x86/xstate.c         | 22 ++++++-
- tools/testing/selftests/x86/xstate.h         |  1 +
- tools/testing/selftests/x86/xstate_helpers.c | 67 ++++++++++++++++++++
- tools/testing/selftests/x86/xstate_helpers.h |  2 +
- 4 files changed, 91 insertions(+), 1 deletion(-)
+ .../media/atomisp/pci/hive_isp_css_include/host/debug_public.h  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-index 4eff539e783d..4abb46fe40dc 100644
---- a/tools/testing/selftests/x86/xstate.c
-+++ b/tools/testing/selftests/x86/xstate.c
-@@ -39,7 +39,7 @@
- #include "xstate_helpers.h"
- #include "../kselftest.h"
- 
--#define NUM_TESTS	1
-+#define NUM_TESTS	3
- #define xstate_test_array_init(idx, init_opt, fill_opt)	\
- 	do {						\
- 		xstate_tests[idx].init = init_opt;	\
-@@ -106,6 +106,25 @@ static void test_xstate_sig_handle(void)
- 	compare_buf_result(valid_xbuf, compared_xbuf, case_name1);
- }
- 
-+static void test_xstate_fork(void)
-+{
-+	const char *case_name2 = "xstate of child process should be same as xstate of parent";
-+	const char *case_name3 = "parent xstate should be same after context switch";
-+
-+	ksft_print_msg("[RUN]\tParent pid:%d check xstate around fork test.\n",
-+		       getpid());
-+	/* Child process xstate should be same as the parent process xstate. */
-+	if (xstate_fork(valid_xbuf, compared_xbuf, xstate_info.mask,
-+	    xstate_size)) {
-+		ksft_test_result_pass("The case: %s.\n", case_name2);
-+	} else {
-+		ksft_test_result_fail("The case: %s.\n", case_name2);
-+	}
-+
-+	/* The parent process xstate should not change after context switch. */
-+	compare_buf_result(valid_xbuf, compared_xbuf, case_name3);
-+}
-+
- static void prepare_xstate_test(void)
- {
- 	xstate_test_array_init(XFEATURE_FP, init_legacy_info,
-@@ -124,6 +143,7 @@ static void prepare_xstate_test(void)
- 			       fill_pkru_xstate_buf);
- 
- 	xstate_tests[XSTATE_CASE_SIG].xstate_case = test_xstate_sig_handle;
-+	xstate_tests[XSTATE_CASE_FORK].xstate_case = test_xstate_fork;
- }
- 
- static void test_xstate(void)
-diff --git a/tools/testing/selftests/x86/xstate.h b/tools/testing/selftests/x86/xstate.h
-index 92c853d64e99..c9ec4cbf141e 100644
---- a/tools/testing/selftests/x86/xstate.h
-+++ b/tools/testing/selftests/x86/xstate.h
-@@ -82,6 +82,7 @@ enum xfeature {
- 
- enum xstate_case {
- 	XSTATE_CASE_SIG,
-+	XSTATE_CASE_FORK,
- 	XSTATE_CASE_MAX,
- };
- 
-diff --git a/tools/testing/selftests/x86/xstate_helpers.c b/tools/testing/selftests/x86/xstate_helpers.c
-index 93838c95aaea..e06b07a662b5 100644
---- a/tools/testing/selftests/x86/xstate_helpers.c
-+++ b/tools/testing/selftests/x86/xstate_helpers.c
-@@ -73,6 +73,22 @@ inline void fill_fp_mxcsr_xstate_buf(void *buf, int xfeature_num,
- 	__xsave(buf, MASK_FP_SSE);
- }
- 
-+/*
-+ * Because xstate like XMM, YMM registers are not preserved across function
-+ * calls, so use inline function with assembly code only for fork syscall.
-+ */
-+static inline long __fork(void)
-+{
-+	long ret, nr = SYS_fork;
-+
-+	asm volatile("syscall"
-+		     : "=a" (ret)
-+		     : "a" (nr), "b" (nr)
-+		     : "rcx", "r11", "memory", "cc");
-+
-+	return ret;
-+}
-+
- /*
-  * Because xstate like XMM, YMM registers are not preserved across function
-  * calls, so use inline function with assembly code only to raise signal.
-@@ -140,3 +156,54 @@ bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
- 
- 	return sigusr1_done;
- }
-+
-+bool xstate_fork(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
-+		 uint32_t xstate_size)
-+{
-+	pid_t child;
-+	int status, fd[2];
-+	bool child_result;
-+
-+	memset(compared_xbuf, 0, xstate_size);
-+	/* Use pipe to transfer test result to parent process. */
-+	if (pipe(fd) < 0)
-+		fatal_error("create pipe failed");
-+	/*
-+	 * Xrstor the valid_xbuf and call syscall assembly instruction, then
-+	 * save the xstate to compared_xbuf in child process for comparison.
-+	 */
-+	__xrstor(valid_xbuf, mask);
-+	child = __fork();
-+	if (child < 0) {
-+		/* Fork syscall failed */
-+		fatal_error("fork failed");
-+	} else if (child == 0) {
-+		/* Fork syscall succeeded, now in the child. */
-+		__xsave(compared_xbuf, mask);
-+
-+		if (memcmp(valid_xbuf, compared_xbuf, xstate_size))
-+			child_result = false;
-+		else
-+			child_result = true;
-+
-+		/*
-+		 * Transfer the child process test result to
-+		 * the parent process for aggregation.
-+		 */
-+		close(fd[0]);
-+		if (!write(fd[1], &child_result, sizeof(child_result)))
-+			fatal_error("write fd failed");
-+		_exit(0);
-+	} else {
-+		/* Fork syscall succeeded, now in the parent. */
-+		__xsave(compared_xbuf, mask);
-+		if (waitpid(child, &status, 0) != child || !WIFEXITED(status)) {
-+			fatal_error("Child exit with error status");
-+		} else {
-+			close(fd[1]);
-+			if (!read(fd[0], &child_result, sizeof(child_result)))
-+				fatal_error("read fd failed");
-+			return child_result;
-+		}
-+	}
-+}
-diff --git a/tools/testing/selftests/x86/xstate_helpers.h b/tools/testing/selftests/x86/xstate_helpers.h
-index 1806c0bf484b..307781708ffa 100644
---- a/tools/testing/selftests/x86/xstate_helpers.h
-+++ b/tools/testing/selftests/x86/xstate_helpers.h
-@@ -6,3 +6,5 @@ extern void fill_fp_mxcsr_xstate_buf(void *buf, int xfeature_num,
- 				     uint8_t ui8_fp);
- extern bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf,
- 			      uint64_t mask, uint32_t xstate_size);
-+extern bool xstate_fork(void *valid_xbuf, void *compared_xbuf,
-+			uint64_t mask, uint32_t xstate_size);
+diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_include/host/debug_public.h b/drivers/staging/media/atomisp/pci/hive_isp_css_include/host/debug_public.h
+index ee861ddb8e92..5660bd4221be 100644
+--- a/drivers/staging/media/atomisp/pci/hive_isp_css_include/host/debug_public.h
++++ b/drivers/staging/media/atomisp/pci/hive_isp_css_include/host/debug_public.h
+@@ -25,7 +25,7 @@
+  * Simple queuing trace buffer for debug data
+  * instantiatable in SP DMEM
+  *
+- * The buffer has a remote and and a local store
++ * The buffer has a remote and a local store
+  * which contain duplicate data (when in sync).
+  * The buffers are automatically synched when the
+  * user dequeues, or manualy using the synch function
 -- 
-2.31.1
+2.17.1
 

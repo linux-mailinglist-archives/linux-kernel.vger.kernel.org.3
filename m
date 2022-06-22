@@ -2,102 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1ED556E72
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93582556E79
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbiFVW3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 18:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S235106AbiFVWbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 18:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiFVW3K (ORCPT
+        with ESMTP id S234110AbiFVWbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 18:29:10 -0400
-Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3223F193ED
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655936948; bh=dZC6eUKWDJPOTz/ILqg/qfRTRRpuLgPdjkd8hAWc1/Q=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=gmA5qq8KBrWCdVlEiApeNXxhc7d26NhcZizNy2hTxaXzMAdBF7Pm+zzwAd+J04rb7xiUsRQuggGNLlQdBsYFth7QVxfZ1cvk9zlBrWgafE55gQgKuVqdapm3eqHpuVuuDA4Keir38vy16T5roVbsgMgVeVtIU9WgLzGa8k/sfNCcO+jmGwdGHTcIMzx4m4D6Fx8sQY0u4nzRdihhAlgKZ5MPUy57Gvrp83z0oD+S16u6zK78CA0Sx0yRoIYoASRhUQPMpUsYReJTwObuduZQjXMcxhp+5dKt71MCeKy6ZJHWTiOHXA9DKUa4lzXW3gBV83yhIeFvQMkFUdcVLzUzJA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655936948; bh=eWvgXRw/NN9Soa6GuLG55pF5QCgnCTIj2Opi7yZiQ9H=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=VawDe6+LVHybt/oRwkcXYQviRKqUlss8RY/YPnDkrsXC54hKT2oo7lUamyL6z+91wRQcU5dsXLelKFJn0yODLt6BO+fRBmAvEsK0JzSkULmhVi6l+0cSx29AmQ8bVhpcv/b9qO8Hxg15n4thxyv1CwW71GTAl2eC9rg6kWLTHF+HtsNRxwv3FKmS1LqSVjV3yyTri1CxkWffPlwvRKjCQ5aZN16HkI6k2wqvuPJVo4MVP1Op2eOAHDSd+RRyFVL/v7eOZb4hLRRrjBfm7MJ6pZk0O9uYLu8WJBr9Gcyul9/Cwda1quYO8jvqltiPRzq34/U1bAtCQlTm2Upc8JmAaQ==
-X-YMail-OSG: x72rNU0VM1nEYZaFdpF0mO.I7gF2rRQ4WqrLnJClgRUeN7S5lpig9biLmMI1dqM
- xx2i1dL5JGPVyEOqLlfgaEVf0JNMh5gtoHY3AtVJBfZ3wvhmQXMGNKC1wGSjElot2LDaX1reSvrG
- Nc8Ntl8MfqSP5PwJCQbA2SCaN62cKdboWAgzYuo7Jp0KK_fuCoWu1LSFRVPBgMRApIWRtbqXapNi
- hm1PFMO8x3JK.t40V8ZL9Fb9ZtQdE0soRWMsfgLhyehdcinj1SNFjKEAoDuV4Ku4Z94tjnc29UJH
- sjycwX0zheeUaJGWsIZiuERfBBhpRyxXhlCS1zvjwaKz5bKWQFgL6BxA9_7ne.4ukC_Ty3_.ZepB
- CUHPYAWaKiYJhW9fLlOU3Rxw3ksXccsi_r1YophLPv.oxGA2GoMO7WGT1yovCFrIDPlW.XXjuB17
- YM1HeiNcLTBV4T2hZxNQWQmMd8TfFAFfjQrbqe37XztM8yx4BSe8tIdorgZAKQlBNmMWd4USPlYI
- VPe4wZFDzsWCPgFKpdlXB4dxEw3mp_uu6Wx.s_4DPszkQ_VOLTcZfRNWHLhtAyxFyHeTFntdJSyg
- jYCz8.XeW.Ve.fosLlu6InV1uLkEvQRVwuIjN7Q5AIQrh5ZcVuSX2_fnEnTo6A4G6W4BVhbD1ex2
- f0rhxp27pDz.m5rvYbH8WRUPX2mgI5mU5eSsRCSlS5EUxULLgoTMMpcY0Ut9Phlla3Ibdd6r1CB1
- DfoZXIfSl1IQJKTVGd5mjwJ_Owrv8bTSz5Y4K7qQwCiGHw9FtjM4JogXIm4sKXtr8fpPRhLyfut0
- eAxQv9HDr1MJIjbhoAUTGLG2dxIxEb7z5iTVE42i9_3ke2E5f1Lbk8tlCjdKZeV959XXIVgl2W8l
- OWDpey49qZTW.iHRVbx4bv1OBxaMpaFR56Ymczk04TaDJNx1Bz7woC2AbgqS4xvufzSpJtKFyGFz
- yLwNHPOO3kk1N6dihGoA3wreDDJ0gpFi.AiOlgFPQsCbFpUTOAvw3x16g1tIocaIfmDNwLJnXjEj
- 8i2LxaUrRh6_96mOS1ki9bXIqZpIUas3kWR68dJUDB0tmIwOYG8XOD3EKGjFW1LVsqXCbDAToxoR
- JvCPWGUwfTWaSZp4Ge_AvY8Xff9wP7OyuFaoFZ2agwlKOcXyQJR5mbxhNP5PrGg.1Wep3g1tv5AW
- Vr87U2MmeFoL4zF.mgJoMCYjk1fwwJH15.9sqjXmluUUq9MKq0EOEZgt6z8Y4O7C6YydjILezgcE
- VB426gpMht7VeA0Dy1_c_FME3mOhIfWkemP65OJDnRkY1bDTBgdkqEfzzjGgoDvdCKNR40J2QuJ5
- As83a6J4fK9z_eJzu18MQaiEPbBbtB0YqkCMPJKrnFLnu1g4wEUwS_div48o0Lz_fYhfwQ_gccjQ
- XwrYWPYHTzbUr54Knfyv59VTdeDfLIYpy9vWVtaD4Kghc67.8uyMa8YSB62A9xYe0ifVh2Vn3lUc
- rhVPJhz5b94tE3lHGDNWMTTjdYXkAVhfEoX0OH8kFBew74IOVTlSV6bIlP_ILHEQMHJr8FRiiBIr
- dHVxlTTY07kxaZUjf7Xk1.gOfRCcte4ynMEEQhHBYQ9Ru3z6rjOSKa8fk9cUs4sR3QWwbx6dAtZJ
- vpTKeKpyS3LSDenPo.YYGH.ZllD.T4kj2i_aHIYbx.9HQwvZ1dUebYTNN50XazgnQp1a4k1F3hRU
- zQU_qkp25XKFzgBehVSrA16kRsBEbZvbmNpNW78AIW1wxERQxC4Dsjx0Gem5SU4k1Wi3.5WqSonX
- S2tY1ckr5sJw44WgBtO4GH3B2krIO_KOAJYAC425FY6iJCF03.TI2jxr5ZGzFf4xDfcac4n.uXxG
- uU0X49ThlUAwj3vT5vMkZiNcKgv.xpa1Oq_q5RYZ63dv5p_lX2VHPsu8zm_It2pCIg9TY4LhdcnZ
- DIeSXwHeAKdESrASswRNTGY2irc.RGq0ZA.OKD.A4M0HDXMeo1u5JDtlIVMw9zMFzmtIBkv2f.12
- SyDk0wFRY81wdx9mdPFdj5GsyC040eMEEKeqce5aRkFhpHNAGe_mEZD0dcParvZNnlZpZ5s1P5Mu
- 79uGXcrBVPN4Twq5E51IibEZgxWZ.u01LmjIwZzl8of4UlLLa0j0yePwwxBfOOHle5K7dM1bzdJF
- q8cpzfyobvhkq8qDvwKXU3isaaWRErmryWIWpZqYrEG_Aj.qthdDgZadVLUBG7_spxZutDMSMQiT
- Qo0pb.AzxdbOh1ExfblvSmmboJBPHHKSabQ2AR9lZ75Csbo0qcWQJ7Lz2b91mQHUgTd4-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Wed, 22 Jun 2022 22:29:08 +0000
-Received: by hermes--canary-production-bf1-8bb76d6cf-xkxwt (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4ef53ffbd9b7aee469fc3bb4f33f3a85;
-          Wed, 22 Jun 2022 22:29:03 +0000 (UTC)
-Message-ID: <e5399b47-5382-99e6-9a79-c0947a696917@schaufler-ca.com>
-Date:   Wed, 22 Jun 2022 15:29:01 -0700
+        Wed, 22 Jun 2022 18:31:01 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9C731506
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:31:00 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3137316bb69so176964827b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9SfIkHxS+Q1Jb8k0oSMqRlf7MlpWHzDTC+soyTtijyM=;
+        b=NebdBOf6fdS4nX2gfyfe8m1T6/C9zAE+3VIuCNVBM6MPWjXuoJzdqqPsTsUAR6pfvG
+         xA4MVTApPXt06pwHKnuxwV1EYeC4UcXbEXYkkIdwQyxlj/bO1PmEbgnS2x2hgpF3lHP4
+         h4UqwgdlMJTc14qMEg5zU9/3ErEGdK4mjOqA8Eftkugl+g7j+weQvtGSUWigyARlr1O/
+         Bs+mhgd3gJiFyzFiiuJ+PVCKt6Z+Vtj9jRHkqKHTlRfColtigSBwNJxsrLimrFlpRpDJ
+         QixEZsgjs01NM5W7QvGFsEB3Zd0eeS22AhTr5GnnlvMKF4SYTr1gGHBVfrUyl3Ptpb/A
+         t32w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9SfIkHxS+Q1Jb8k0oSMqRlf7MlpWHzDTC+soyTtijyM=;
+        b=IJxCfs4XyM76ivNjSq4vKG+7kGtRdvWuLWyUp65Rf4yfzhlqBqCtcXWUOLSE1zyFiP
+         IWfG+TeSLr8seWaOcmRjIfJeQF9nZPxbG8WxSLELTnKTuJc4ndukX10l1Ad2ZP31I1lV
+         kheRH7zLY10jCZP5CnqmUjJWolRE2ZuatT+5aasYD7xkdKI8QefrBApo1QTZ1XWqOGG6
+         4031Xp7TjylCtHah3wsHdeHYkw8FkLPaKxqz1o81+s8AY8k53Hr+6Lu3MfUbvR1o07XT
+         2tw9ZQ72rCNQLafZLraruSnFCzLp3zmsQlkXABIt33Sr5skPkH2M+AzbnFcOY3l+8xgJ
+         U/5g==
+X-Gm-Message-State: AJIora8n0XG0j+wBCHr9ZQApe2Mwh3/6Z2G1RabH072wLOM0lMz59pk7
+        xq73jJ5/E7X/TcbymTOSZdtX8YZjhRiJHiM+USjang==
+X-Google-Smtp-Source: AGRyM1uYQIJJIqU5tgV6IO3uAtRp3fBa6488p3xRR/8VoSm4ObswB9eZF/y0HTd/1fbTAGXMYHZo8GPW9b+ZXRnH0VI=
+X-Received: by 2002:a81:8486:0:b0:317:a4af:4e0a with SMTP id
+ u128-20020a818486000000b00317a4af4e0amr6985709ywf.455.1655937059385; Wed, 22
+ Jun 2022 15:30:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v2 2/3] fs: define a firmware security filesystem
- named fwsecurityfs
-Content-Language: en-US
-To:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-efi@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-8-saravanak@google.com> <20220622074756.GA1647@pengutronix.de>
+ <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
+ <CAGETcx_qm7DWbNVTLfF9jTgGA8uH8oAQzbPcMDh4L6+5mdRFog@mail.gmail.com> <CAGETcx8i9R51T-mGuV9_LUz-GXDCncpRWQ1Rj_7i2JrvCttq3w@mail.gmail.com>
+In-Reply-To: <CAGETcx8i9R51T-mGuV9_LUz-GXDCncpRWQ1Rj_7i2JrvCttq3w@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 22 Jun 2022 15:30:23 -0700
+Message-ID: <CAGETcx9XnyceCRBhgQc_YAYyJRca_Q-GPD8sh0cgCCuohzG16A@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sascha Hauer <sha@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>, gjoyce@ibm.com,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220622215648.96723-1-nayna@linux.ibm.com>
- <20220622215648.96723-3-nayna@linux.ibm.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220622215648.96723-3-nayna@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20280 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/2022 2:56 PM, Nayna Jain wrote:
-> securityfs is meant for linux security subsystems to expose policies/logs
-> or any other information. However, there are various firmware security
-> features which expose their variables for user management via kernel.
-> There is currently no single place to expose these variables. Different
-> platforms use sysfs/platform specific filesystem(efivarfs)/securityfs
-> interface as find appropriate. Thus, there is a gap in kernel interfaces
-> to expose variables for security features.
+On Wed, Jun 22, 2022 at 1:35 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Wed, Jun 22, 2022 at 12:40 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > On Wed, Jun 22, 2022 at 1:44 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > >
+> > > On Wed, Jun 22, 2022 at 9:48 AM Sascha Hauer <sha@pengutronix.de> wrote:
+> > >
+> > > > This patch has the effect that console UART devices which have "dmas"
+> > > > properties specified in the device tree get deferred for 10 to 20
+> > > > seconds. This happens on i.MX and likely on other SoCs as well. On i.MX
+> > > > the dma channel is only requested at UART startup time and not at probe
+> > > > time. dma is not used for the console. Nevertheless with this driver probe
+> > > > defers until the dma engine driver is available.
+> >
+> > FYI, if most of the drivers are built in, you could set
+> > deferred_probe_timeout=1 to reduce the impact of this (should drop
+> > down to 1 to 2 seconds). Is that an option until we figure out
+> > something better?
+> >
+> > Actually, why isn't earlyconsole being used? That doesn't get blocked
+> > on anything and the main point of that is to have console working from
+> > really early on.
+> >
+> > > >
+> > > > It shouldn't go in as-is.
+> > >
+> > > This affects all machines with the PL011 UART and DMAs specified as
+> > > well.
+> > >
+> > > It would be best if the console subsystem could be treated special and
+> > > not require DMA devlink to be satisfied before probing.
+> >
+> > If we can mark the console devices somehow before their drivers probe
+> > them, I can make fw_devlink give them special treatment. Is there any
+> > way I could identify them before their drivers probe?
+> >
+> > > It seems devlink is not quite aware of the concept of resources that are
+> > > necessary to probe vs resources that are nice to have and might be
+> > > added after probe.
+> >
+> > Correct, it can't tell them apart. Which is why it tries its best to
+> > enforce them, get most of them ordered properly and then gives up
+> > enforcing the rest after deferred_probe_timeout= expires. There's a
+> > bit more nuance than what I explained here (explained in earlier
+> > commit texts, LPC talks), but that's the gist of it. That's what's
+> > going on in this case Sascha is pointing out.z
+> >
+> > > We need a strong devlink for the first category
+> > > and maybe a weak devlink for the latter category.
+> > >
+> > > I don't know if this is a generic hardware property for all operating
+> > > systems so it could be a DT property such as dma-weak-dependency?
+> > >
+> > > Or maybe compromize and add a linux,dma-weak-dependency;
+> > > property?
+> >
+> > The linux,dma-weak-dependency might be an option, but then if the
+> > kernel version changes and we want to enforce it because we now have a
+> > dma driver (not related to Shasha's example) support, then the
+> > fw_devlink still can't enforce it because of that property. But maybe
+> > that's okay? The consumer can try to use dma and defer probe if it
+> > fails?
+> >
+> > Another option is to mark console devices in DT with some property and
+> > we can give special treatment for those without waiting for
+> > deferred_probe_timeout= to expire.
+>
+> Heh, looks like there's already a property for that: stdout-path.
+>
+> Let me send a series that'll use that to give special treatment to
+> console devices.
 
-Why not put the firmware entries under /sys/kernel/security/firmware?
+Here's the fix.
+https://lore.kernel.org/lkml/20220622215912.550419-1-saravanak@google.com/
 
+Sascha, can you give it a shot?
+
+-Saravana

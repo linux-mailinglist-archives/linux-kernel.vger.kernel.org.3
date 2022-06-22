@@ -2,228 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8FF555271
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA133555278
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359795AbiFVRcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
+        id S234704AbiFVRe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239201AbiFVRcB (ORCPT
+        with ESMTP id S1377535AbiFVRdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:32:01 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3FD30F78;
-        Wed, 22 Jun 2022 10:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655919120; x=1687455120;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=lsmubUdAOEUHHLn1XIgdZ4ZYqRRm6ZQyxNW8eA930jQ=;
-  b=be9AawWozdtiTrKo2/EqoiqhTsvZB6Nnjp7hOxwAZEXPFPXP5XD/4rH1
-   2VzbOlcj6TfRPe4j3JpIeAC2F0QyTFIDcz+UMAFomSxao6ou6lTg+CBzT
-   QN7NnFEVzV7c1b5jCL9aa48hvXxCe4+eoxCiV7JK7g2bh3WdfG3Y4a+Le
-   LtgLvxZBFr+8uu7ZrJImBxZx5m7zDRDValKvSWEmmuDLnmmRuLrifmCFO
-   3sYTwa6R1tl2OK6POSkGHewpcQqVR0rQuYrw3hzinh8eQXUPH0in70KJl
-   ySGJk0yc3g+PkJv9nL97bHfc1xaUPN7x59CnAYc9llioyq36prrfBAkQs
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="269207055"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="269207055"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 10:31:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="644304729"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2022 10:31:59 -0700
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 22 Jun 2022 10:31:58 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 22 Jun 2022 10:31:58 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.42) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Wed, 22 Jun 2022 10:31:52 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eRWmpYqaCTaZsU7pg55Hz1nawJlq8SIkJOeKZK9dMGbXA9S2WX1+3zSD5mhMYd0UaMWJ9qx3qKatOnbHD2uq8lR2ZAe9RZd48HjGBW+vCvzAsYwMbzpz4bYmUL54DNzh19tt8STtvGTrSb7i/LOlYowFfSETIdgJzM+enaqRpHVgTNItcHBCkr/pZsrmupH/mJVGCqcnROk4cjKx87WLfmR1pXUKmAVmTQpTyRSGpUMqcIH3i6Mg7nskJVDrgOUSz6xphp2CIjXtC1fCKMTVL8XuPBOqyQ33IoOJ/OcKhxlSlzC/WdiSOATomcz2QW409BJKV3rsw6+pwVtHx9d3Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mm0tiC2AXydwL1co/4ni4VEP+0Gcu3TpQimpbkakoPE=;
- b=d1Rb5vzvCcWhOejSxYoqBcQLEjJ3qdKVhwTmwo7LwAdKnsBs8OpKlp9znolj/+mj+sbbXs+jWCHvkW7Wl53EGs5kVLYGcU3cwipetiDcqOnMd/o8Xai3OLzhSe9BUf+ziUpDiNKfeOcFvD8MoTwrE8gFvqFn7XTco/9FGdwJRpn1yGIWXiJ13CCIGh6XV4pJ5fxfLtWrOXQkJuRVZE8e2euVmzqwFDqmaLvD6TRpn6AOCYb9rtYhBA9ugd4/Ng8JfF1D93FWQ4w/0jTr9tNdelsvEJ369GbrY0bRvbloGlm1UaoW+PdQFI5+zi8f3rvpyq6lVbahZ2kenVVvcimqGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- CY4PR11MB0070.namprd11.prod.outlook.com (2603:10b6:910:78::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.16; Wed, 22 Jun 2022 17:31:50 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::f0ac:be8f:9429:d262]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::f0ac:be8f:9429:d262%5]) with mapi id 15.20.5353.018; Wed, 22 Jun 2022
- 17:31:50 +0000
-Date:   Wed, 22 Jun 2022 10:31:45 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-CC:     <linux-doc@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] Documentation: highmem: Use literal block for code
- example in highmem.h comment
-Message-ID: <YrNSASPBivsb60qu@iweiny-desk3>
-References: <20220622084546.17745-1-bagasdotme@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220622084546.17745-1-bagasdotme@gmail.com>
-X-ClientProxiedBy: YT3PR01CA0082.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:84::24) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
+        Wed, 22 Jun 2022 13:33:49 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AD72C656
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:33:47 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r20so3999090wra.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bpaCjOapTAdRzLf+qPNGfdtVaNsXQvV0h/9qPiGYMOA=;
+        b=ffkFg2lbSb3JovwNfGx8zubU8Dwr+HwSn1U+ippQGAK0MbFuUCFwMj6Q3zcjkVBMJX
+         r06VQt8A5L7uBOALduThYx4AbJnjfy/uAvteehzEHk8XIS7JpWonwdwFDL+Pf91iF6FC
+         lamNLMveY3aEeIXPeYL9cG3rYD2eb7DABBe4kG/H3Daa53Hg0KM6JkxXkHtiKQzqw4km
+         IGReMEivIQV7k7sLscKNP858QT8xEhag4zRzqzl9R/lNA6wYBjS7fcfTIR48kRHzd2sW
+         nz+ES14mNwxbUONGki81ysA8iLmMbqVDmy75WyzbjwMLziYaBRLe235vOWsU3gH4nn2m
+         8b/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bpaCjOapTAdRzLf+qPNGfdtVaNsXQvV0h/9qPiGYMOA=;
+        b=gp4MFWmoLrz9P6ZS0VzIFUNfDnyTXvZjqET2EP03DX1Q5mfgO6Dbo+zKt9ts7udWZI
+         VRnmlzv/0b/8fJCF6geBmBcG8rFO7OWTrj5ZoIxhlrBNH7WC/xlo+iO6MtLL2Gmjk0BW
+         TuwiTnELtI5RA19KVfpAJCdxXZCzAQZQ+mIp2BtqjgOi2t4SQK7OZ4cS6OT7SBhhrsv7
+         yzsw2jDQVSDLHjn2pqzZ0BR9WDsBHec06OOuU+m0LzMmJQgdpZC4H1Uj7tau+RxWWYDq
+         FGBc5kjlknPeSU0mShHQcruaGhSoZrKB4z8AaKprmFwRtN9g0rd786I84+nO4er+ljV0
+         cA3w==
+X-Gm-Message-State: AJIora9Zer9kU4IlHb22tma8YR+joV/lDaGdTlENm7gn4Y7AuKLswzhr
+        NbK9scBYMj2eH7/Jy1i+hBFDBSBUW48IW3waY7bpM9MX0+w=
+X-Google-Smtp-Source: AGRyM1uz4RIBAAr9I6m/BSWmy5hlU/Uode9MHQ3l9QxEYbOAEn1AyvqKX6/1vBCiFE69RkoEkU2Z+yxukKJ7svgM5ls=
+X-Received: by 2002:adf:eb45:0:b0:21a:efae:4b9f with SMTP id
+ u5-20020adfeb45000000b0021aefae4b9fmr4447308wrn.585.1655919225863; Wed, 22
+ Jun 2022 10:33:45 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3bbd575d-5ca7-4d96-0629-08da547516e0
-X-MS-TrafficTypeDiagnostic: CY4PR11MB0070:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR11MB0070BAC2FCAE54EF6E8DFC65F7B29@CY4PR11MB0070.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XnCBbuAp9okIVDI9NlCBOMWD40NjH/JDlB3po2Pl1/DD6B/I+3R2bTvhR4qVqe+kFjV9ndgn1RzFocUJtjtVJJ8WQYJmQ0QoQbCnreGf55FxDASxTFZ3KzMbbULEpc0dlpiGux4+ASlLC9P1f5BGhYqyFjpjDT3zV6rVLxna4KVNMFdzqoEFMuvRgR6u1OLjvbU1XnJZJ1JjyilRtVgayBUbzg2fONq83KV8sbpJxB3ZH4sipVXkm9J5h1qj1fhYs1xZACgBg+KsD6PR+QjoAbdcHID1z34zPBZDCQQ0tq8Qq0NBwpD/Wob8mEzqiTD/iRVVgNEzNBUfWGqEgtqMjHcd4SHg0Pf/sbgmyb1CFdD8AeU+I4/EOaD70TAdbUz7PdgGh2CO55/KAg6LkeXJpucV//mB1OxY7ZH+tUEu78RmOvmzPaumCPdnM7nChCLvTpIx7ri1snYDKGbIEWZJZz2Vh12phLXLeTtRR6F0KBpMKmwksizT27w6aetiFeQv94hgatgvSrM7BTyjHEOF8ch/k+5GZU5amy1/AL/bwC7oel8LklfzU1pIlIhc1I6Jd+ViFpwYDnsprgoAbPvOHwUHfCBk5MYBJ8NleSNboLtm+L14XvOti1Mbl0KS4x+sd8fCfZcieIurNKJMADTitK4aPkRZEXeApmcLmjrZJE8TbeZbQtR7dw8v6PME/Zg5D/6IhYhtpDVcvhfNH8tXTxSEZuo027hTpFjum3XmKYU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(396003)(346002)(136003)(39860400002)(366004)(83380400001)(316002)(38100700002)(66556008)(82960400001)(66946007)(86362001)(8676002)(66476007)(9686003)(6666004)(2906002)(4326008)(478600001)(5660300002)(6506007)(6486002)(8936002)(966005)(54906003)(186003)(41300700001)(6916009)(33716001)(26005)(44832011)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v99ZMEtEg2S6EssECUEH1HfmLlAd1T9Pd2EamvMJWD4OT7kWYQ0V1EHicWpb?=
- =?us-ascii?Q?qHvH5QAfZcyBU2BjciI3WMWg9YBw4EjbCJ9qzu5BL/w39AgWMe1V+qFk5T6r?=
- =?us-ascii?Q?RUlxQX+oW01eQau704AA1mj7ke+fdtejCYbYinN4FV6Jl1wic5fx8GzYmpS9?=
- =?us-ascii?Q?Xl55jstMJX+TzlqI7qRTLlahZHE+cAtZXlA7tsOG+48mkQdrqPkSqLXc+pXN?=
- =?us-ascii?Q?ufRqxPg3hILuEebZJmtZwLo4/1SOvIiLPLrwhjwb1fKqTWX5pNRu8Ie18z5V?=
- =?us-ascii?Q?/YTmMh4vx0zYqi3bKR/xFcHb2EvRJUDD9UAoH2QIlYa0fAsgaLTdasZMYur0?=
- =?us-ascii?Q?Uk7BAdZgdXyWtobgP3jzpsx0W8EU6JAobSPRXDxO1xkagBn4Pcwsc3sHsBFk?=
- =?us-ascii?Q?+GS5uQ/U/08cZ/kQmcRYC5cOtk/lqKKK5TWYcDbFDarNIEn1I7AWaDROof+3?=
- =?us-ascii?Q?SFXDTKAcCG6fOcjX04mlLBJzP17JlGxpPXBZhZsUAB3BqXfk1Wb1U0rmPo4L?=
- =?us-ascii?Q?+lTSO8XNntQoDU7+Hg5rsSnf3PP5qZr/PBuRfO3+PpvxUQuuMbgjENC4Ex11?=
- =?us-ascii?Q?4hzJfZ1M5eYtsdwhvakVs3TIDHCqwgViVJc7lEcONrr/u00kOJW22agW7N1T?=
- =?us-ascii?Q?p+M+yyu5DrYoQIG8NXaIrM1cMSz536nQ8djZwW/MaYwJXSi5nkXlS0QMRDy4?=
- =?us-ascii?Q?18waAk8uOklTBy5oWu0QJ4yFUVIlgF4VYD+VSDeNcW0QcwKq3/MoQFqIJ0sQ?=
- =?us-ascii?Q?YCR7C1cLNQYUcTnFKHefnZ9lqlKrnab8HJftpz2+AmkCEucIt4CYy0uK3VIE?=
- =?us-ascii?Q?SWXmUUzG/MSuh+CSLrzWfohIcP5JFqi+bSj61SQsDfbVYWREp6XKDTODRbm6?=
- =?us-ascii?Q?Q2qggcI9W4RwFwaMilv1SRdcPEppM0q6RxV2/A25RCYV8OtPpKwaBX/weg8W?=
- =?us-ascii?Q?tvQh8AuoKN8JCOMbo41nwLjCYYlKRkOgINA5xakCyOfzZGuNnxqiARmn/0C4?=
- =?us-ascii?Q?K1ECWMQ/IXUJ6G9ezyc1SpbMXgqR/6PWpKKe3d3x9dsrxsp1kQGRAgPwIIOx?=
- =?us-ascii?Q?9tgtYm3jKBO/g1uou8aUfau+r+POO3OBDin1hwEZ8iWKlsDF854jxHIFh3zT?=
- =?us-ascii?Q?cZI+mEmVx59NF+XviclovJ1sCix4yGXdHsU7K+WRieH4K1154ZvpA4C51ZJc?=
- =?us-ascii?Q?ML9TiewjVahwxP3Y64N25zGNY8FoAfu0Xw2VIwDeYpl9kccgGV+L9iJvsA7X?=
- =?us-ascii?Q?sb46GeYuWuvBxDgFnH0++AaIjpKktnVlhJoO6TLAowB+gXrw/qofojch/7jc?=
- =?us-ascii?Q?7MNEHfS8OfRx/tkyGzD/W5so4ftK+9qkEjJ1pdDegPmRkYJUpcpc2pF7EVXj?=
- =?us-ascii?Q?bIneKOaQzCWlTbGXP9JJx8+uTcieCoE8ynxjhyfY0T8ruNHn9wKjQLpoRIkL?=
- =?us-ascii?Q?uaAWDk4BnmjRjftZkiZNhNofxDGpEvNpW4wd1Krvh+e4Sulovjw4bcycY59x?=
- =?us-ascii?Q?IzvYw+itT4aolEyCwAuBJ7KkKYrNzWJ6xbAnuBrw83IjG2sFkSM0FJq6djKh?=
- =?us-ascii?Q?vfIO23s1mn5aIYI6u/AvlJdta9FRS0CYxCT1E+VaVFM+1p6M9vlCk797AR7M?=
- =?us-ascii?Q?1bf8c2dCBdBrPTZ51H8ScEi3VTp9i3Wve/2BUkKo6MPllGccWiG/cuYB9sRi?=
- =?us-ascii?Q?+3jZfK7Fk8CF7/0kPJPpdD3VBvJp3aBoOVE5ufpcYHAaR6ueZ2cYsVIKHAl/?=
- =?us-ascii?Q?UCD6Sl+8RMmbUNI7Bfq2x0kA9SE77sQ=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bbd575d-5ca7-4d96-0629-08da547516e0
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2022 17:31:49.8971
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E7Hv4xF2UBvZDVdu78iKawVx1VQROj1gzIC5YV/1aZZeb19cU4bWOEHJ9faGCrRVX4RQCzynIGNzwdBg547ihg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB0070
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220622023855.2970913-1-swboyd@chromium.org> <b133b67f-0d99-af6b-94a5-d5ff4b5752f1@quicinc.com>
+In-Reply-To: <b133b67f-0d99-af6b-94a5-d5ff4b5752f1@quicinc.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 22 Jun 2022 10:33:33 -0700
+Message-ID: <CAF6AEGuL0+3162jGb2YLsYoW-fmNsARuKcvE-+d5hRkCiicp4g@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dpu: Increment vsync_cnt before waking up userspace
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patches@lists.linux.dev, Sean Paul <sean@poorly.run>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 03:45:46PM +0700, Bagas Sanjaya wrote:
-> When building htmldocs on Linus' tree, there are inline emphasis warnings
-> on include/linux/highmem.h:
-> 
-> Documentation/vm/highmem:166: ./include/linux/highmem.h:154: WARNING: Inline emphasis start-string without end-string.
-> Documentation/vm/highmem:166: ./include/linux/highmem.h:157: WARNING: Inline emphasis start-string without end-string.
-> 
-> These warnings above are due to comments in code example at the
-> mentioned lines above are enclosed by double dash (--), which confuses
-> Sphinx as inline markup delimiters instead.
-> 
-> Fix these warnings by indenting the code example with literal block
-> indentation and making the comments C comments.
-> 
-> Fixes: 85a85e7601263f ("Documentation/vm: move "Using kmap-atomic" to highmem.h")
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Ira Weiny <ira.weiny@intel.com>
+On Wed, Jun 22, 2022 at 10:24 AM Abhinav Kumar
+<quic_abhinavk@quicinc.com> wrote:
+>
+>
+>
+> On 6/21/2022 7:38 PM, Stephen Boyd wrote:
+> > The 'vsync_cnt' is used to count the number of frames for a crtc.
+> > Unfortunately, we increment the count after waking up userspace via
+> > dpu_crtc_vblank_callback() calling drm_crtc_handle_vblank().
+> > drm_crtc_handle_vblank() wakes up userspace processes that have called
+> > drm_wait_vblank_ioctl(), and if that ioctl is expecting the count to
+> > increase it won't.
+> >
+> > Increment the count before calling into the drm APIs so that we don't
+> > have to worry about ordering the increment with anything else in drm.
+> > This fixes a software video decode test that fails to see frame counts
+> > increase on Trogdor boards.
+> >
+> > Cc: Mark Yacoub <markyacoub@chromium.org>
+> > Cc: Jessica Zhang <quic_jesszhan@quicinc.com>
+> > Fixes: 885455d6bf82 ("drm/msm: Change dpu_crtc_get_vblank_counter to use vsync count.")
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>
+> This is right, we should increment before drm_crtc_handle_vblank() as
+> that will query the vblank counter. This also matches what we do
+> downstream, hence
+>
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>
+> One small nit though, shouldnt the fixes tag be
+>
+> 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
 
-Thanks!
+*Kinda*.. but the sw vblank counter wasn't used for reporting frame nr
+to userspace until 885455d6bf82.  You could possibly list both,
+perhaps, but 885455d6bf82 is the important one for folks backporting
+to stable kernels to be aware of
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Tested-by: Ira Weiny <ira.weiny@intel.com>
+BR,
+-R
 
-> Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Changes since v3 [1]:
->    - Say "C comments" rephrase (suggested by Ira)
-> 
->  [1]: https://lore.kernel.org/linux-doc/20220620083649.18172-1-bagasdotme@gmail.com/
-> 
->  include/linux/highmem.h | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-> index 3af34de54330cb..56d6a019653489 100644
-> --- a/include/linux/highmem.h
-> +++ b/include/linux/highmem.h
-> @@ -149,19 +149,19 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
->   * It is used in atomic context when code wants to access the contents of a
->   * page that might be allocated from high memory (see __GFP_HIGHMEM), for
->   * example a page in the pagecache.  The API has two functions, and they
-> - * can be used in a manner similar to the following:
-> + * can be used in a manner similar to the following::
->   *
-> - * -- Find the page of interest. --
-> - * struct page *page = find_get_page(mapping, offset);
-> + *   // Find the page of interest.
-> + *   struct page *page = find_get_page(mapping, offset);
->   *
-> - * -- Gain access to the contents of that page. --
-> - * void *vaddr = kmap_atomic(page);
-> + *   // Gain access to the contents of that page.
-> + *   void *vaddr = kmap_atomic(page);
->   *
-> - * -- Do something to the contents of that page. --
-> - * memset(vaddr, 0, PAGE_SIZE);
-> + *   // Do something to the contents of that page.
-> + *   memset(vaddr, 0, PAGE_SIZE);
->   *
-> - * -- Unmap that page. --
-> - * kunmap_atomic(vaddr);
-> + *   // Unmap that page.
-> + *   kunmap_atomic(vaddr);
->   *
->   * Note that the kunmap_atomic() call takes the result of the kmap_atomic()
->   * call, not the argument.
-> 
-> base-commit: a111daf0c53ae91e71fd2bfe7497862d14132e3e
-> -- 
-> An old man doll... just what I always wanted! - Clara
-> 
+>
+> This code has been this way since that commit itself.
+>
+> > ---
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> > index 3a462e327e0e..a1b8c4592943 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> > @@ -1251,12 +1251,13 @@ static void dpu_encoder_vblank_callback(struct drm_encoder *drm_enc,
+> >       DPU_ATRACE_BEGIN("encoder_vblank_callback");
+> >       dpu_enc = to_dpu_encoder_virt(drm_enc);
+> >
+> > +     atomic_inc(&phy_enc->vsync_cnt);
+> > +
+> >       spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+> >       if (dpu_enc->crtc)
+> >               dpu_crtc_vblank_callback(dpu_enc->crtc);
+> >       spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+> >
+> > -     atomic_inc(&phy_enc->vsync_cnt);
+> >       DPU_ATRACE_END("encoder_vblank_callback");
+> >   }
+> >
+> >
+> > base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56

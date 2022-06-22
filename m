@@ -2,140 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AEF554802
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B6B55470C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357119AbiFVJG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S1357247AbiFVJIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356308AbiFVJGM (ORCPT
+        with ESMTP id S1357137AbiFVJHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:06:12 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFFB2251E;
-        Wed, 22 Jun 2022 02:06:07 -0700 (PDT)
-X-UUID: c50ded026a214356aade371bea5fc932-20220622
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:f81614f0-ff3f-4552-bf4e-6190cdfff317,OB:10,L
-        OB:30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,
-        ACTION:release,TS:100
-X-CID-INFO: VERSION:1.1.6,REQID:f81614f0-ff3f-4552-bf4e-6190cdfff317,OB:10,LOB
-        :30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,
-        ACTION:quarantine,TS:100
-X-CID-META: VersionHash:b14ad71,CLOUDID:79ccbd2d-1756-4fa3-be7f-474a6e4be921,C
-        OID:9e1b96a75a71,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c50ded026a214356aade371bea5fc932-20220622
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 699344263; Wed, 22 Jun 2022 17:06:02 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 22 Jun 2022 17:06:01 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 22 Jun 2022 17:06:00 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 22 Jun 2022 17:05:59 +0800
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Fabien Parent <fparent@baylibre.com>
-CC:     Jakub Kicinski <kuba@kernel.org>, Felix Fietkau <nbd@nbd.name>,
-        "John Crispin" <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Biao Huang <biao.huang@mediatek.com>,
-        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: [PATCH net-next v3 10/10] net: ethernet: mtk-star-emac: enable half duplex hardware support
-Date:   Wed, 22 Jun 2022 17:05:45 +0800
-Message-ID: <20220622090545.23612-11-biao.huang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220622090545.23612-1-biao.huang@mediatek.com>
-References: <20220622090545.23612-1-biao.huang@mediatek.com>
+        Wed, 22 Jun 2022 05:07:54 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F813A1AF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:06:48 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id c1so23827417qvi.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:06:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ct+WoF/8EA0gYLIVTa+7U23fzJ0aSx4jkfEHvfFCTRE=;
+        b=e8kc8L6CkT86R8wXfH8H+X7goI4UhzY8+zMUr66kDCkte3RUEJ0RM5TIIrK9oZYVdo
+         BircPDiXYkCVFdRsj8VTsWv6NyI/owcYqAprnxzG9exbvy3eAKwZqcYT0KvFGU2XROsP
+         lsNsnljviCcHbzFP71jJdE9KVWN2su+kY4NqkarxEGtvyJ0plc3WUsvTsZM9gtx7Ow4o
+         XgCE9NgmgP6eIvz3UWf/ULZC4oMmK9LDMXduYVQ+ZcaE2+G6O8XwMFVh/n4qEQDEHcqm
+         3zRQsR6DTsoARE1K9VHOi6QbHd3xSS7rgSb+bCbemTpBZPtF65ljbb1dFZy2O1aaX79/
+         aTkg==
+X-Gm-Message-State: AJIora9mKxlrDI5s8rgKtgUaT2BsdeOX0KKym/8FFyab6p5LjDH9FANJ
+        v94BjOxW10k5qsdfYBD7SKfmcw3B/7mOtA==
+X-Google-Smtp-Source: AGRyM1s/QJ5sQUNS6dE12knoGaYPJ1n+Kgn0O7ugxVY5kipBz3NG6tb3w1Sko/SXs5+soLFG6xbCFQ==
+X-Received: by 2002:a05:6214:518e:b0:470:64d8:ed05 with SMTP id kl14-20020a056214518e00b0047064d8ed05mr1049268qvb.77.1655888807437;
+        Wed, 22 Jun 2022 02:06:47 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id y9-20020a05620a25c900b006ab93e0e053sm12545429qko.30.2022.06.22.02.06.46
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 02:06:46 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id x38so29070418ybd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:06:46 -0700 (PDT)
+X-Received: by 2002:a05:6902:1141:b0:669:3f2a:c6bb with SMTP id
+ p1-20020a056902114100b006693f2ac6bbmr2581553ybu.365.1655888806340; Wed, 22
+ Jun 2022 02:06:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <43645c9b5cd657664c1340d40133f2116c8cef43.1655818025.git.geert+renesas@glider.be>
+ <88f11e5c4704bd8510c2c6a171536484a2232f82.camel@nxp.com>
+In-Reply-To: <88f11e5c4704bd8510c2c6a171536484a2232f82.camel@nxp.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 22 Jun 2022 11:06:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUAh+m-tuAem0qENGEnuTw9LB_nBO3SXbVAMW8wbBtqiQ@mail.gmail.com>
+Message-ID: <CAMuHMdUAh+m-tuAem0qENGEnuTw9LB_nBO3SXbVAMW8wbBtqiQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: imx: i.MX8 bridge drivers should depend on ARCH_MXC
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Marek Vasut <marex@denx.de>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current driver don't support 100/10M duplex half function.
-This patch enable half duplex capability in hardware.
+Hi Liu,
 
-Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-Signed-off-by: Yinghua Pan <ot_yinghua.pan@mediatek.com>
----
- drivers/net/ethernet/mediatek/mtk_star_emac.c | 30 ++++++++-----------
- 1 file changed, 12 insertions(+), 18 deletions(-)
+On Tue, Jun 21, 2022 at 5:47 PM Liu Ying <victor.liu@nxp.com> wrote:
+> On Tue, 2022-06-21 at 15:30 +0200, Geert Uytterhoeven wrote:
+> > The various Freescale i.MX8MP display bridges are only present on
+> > Freescale i.MX8 SoCs.  Hence add a dependency on ARCH_MXC, to prevent
+> > asking the user about these drivers when configuring a kernel without
+> > i.MX SoC support.
+>
+> s/i.MX8MP/i.MX8/
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_star_emac.c b/drivers/net/ethernet/mediatek/mtk_star_emac.c
-index 87e5bc9c343a..67e85705b770 100644
---- a/drivers/net/ethernet/mediatek/mtk_star_emac.c
-+++ b/drivers/net/ethernet/mediatek/mtk_star_emac.c
-@@ -883,32 +883,26 @@ static void mtk_star_phy_config(struct mtk_star_priv *priv)
- 	val <<= MTK_STAR_OFF_PHY_CTRL1_FORCE_SPD;
- 
- 	val |= MTK_STAR_BIT_PHY_CTRL1_AN_EN;
--	val |= MTK_STAR_BIT_PHY_CTRL1_FORCE_FC_RX;
--	val |= MTK_STAR_BIT_PHY_CTRL1_FORCE_FC_TX;
--	/* Only full-duplex supported for now. */
--	val |= MTK_STAR_BIT_PHY_CTRL1_FORCE_DPX;
--
--	regmap_write(priv->regs, MTK_STAR_REG_PHY_CTRL1, val);
--
- 	if (priv->pause) {
--		val = MTK_STAR_VAL_FC_CFG_SEND_PAUSE_TH_2K;
--		val <<= MTK_STAR_OFF_FC_CFG_SEND_PAUSE_TH;
--		val |= MTK_STAR_BIT_FC_CFG_UC_PAUSE_DIR;
-+		val |= MTK_STAR_BIT_PHY_CTRL1_FORCE_FC_RX;
-+		val |= MTK_STAR_BIT_PHY_CTRL1_FORCE_FC_TX;
-+		val |= MTK_STAR_BIT_PHY_CTRL1_FORCE_DPX;
- 	} else {
--		val = 0;
-+		val &= ~MTK_STAR_BIT_PHY_CTRL1_FORCE_FC_RX;
-+		val &= ~MTK_STAR_BIT_PHY_CTRL1_FORCE_FC_TX;
-+		val &= ~MTK_STAR_BIT_PHY_CTRL1_FORCE_DPX;
- 	}
-+	regmap_write(priv->regs, MTK_STAR_REG_PHY_CTRL1, val);
- 
-+	val = MTK_STAR_VAL_FC_CFG_SEND_PAUSE_TH_2K;
-+	val <<= MTK_STAR_OFF_FC_CFG_SEND_PAUSE_TH;
-+	val |= MTK_STAR_BIT_FC_CFG_UC_PAUSE_DIR;
- 	regmap_update_bits(priv->regs, MTK_STAR_REG_FC_CFG,
- 			   MTK_STAR_MSK_FC_CFG_SEND_PAUSE_TH |
- 			   MTK_STAR_BIT_FC_CFG_UC_PAUSE_DIR, val);
- 
--	if (priv->pause) {
--		val = MTK_STAR_VAL_EXT_CFG_SND_PAUSE_RLS_1K;
--		val <<= MTK_STAR_OFF_EXT_CFG_SND_PAUSE_RLS;
--	} else {
--		val = 0;
--	}
--
-+	val = MTK_STAR_VAL_EXT_CFG_SND_PAUSE_RLS_1K;
-+	val <<= MTK_STAR_OFF_EXT_CFG_SND_PAUSE_RLS;
- 	regmap_update_bits(priv->regs, MTK_STAR_REG_EXT_CFG,
- 			   MTK_STAR_MSK_EXT_CFG_SND_PAUSE_RLS, val);
- }
--- 
-2.25.1
+Oops. Fixed.
 
+> For now, only i.MX8qm and i.MX8qxp display bridge drivers are in
+> bridge/imx directory, no i.MX8MP display bridge driver.
+>
+> With this fixed:
+> Reviewed-by: Liu Ying <victor.liu@nxp.com>
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

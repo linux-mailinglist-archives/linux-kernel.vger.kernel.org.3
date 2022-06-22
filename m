@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274C65543F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A99855448B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiFVIGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S1350231AbiFVIIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiFVIGe (ORCPT
+        with ESMTP id S229918AbiFVIIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:06:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38B3CBE32
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655885192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J5FesIEJNUAYWwzRo/YOZ1QtVKtqRp3mnHCOXbnUhhM=;
-        b=LfFbxj7HPcmtsxrvUXYlqraRTMYJwSfwpaFOk0QAoU4jubBYJI2YtYWmXAG3/sSsJiZf79
-        NBEX6jGqgrhbSVuGWEArtfQM9eon9ozqBmUKi9aaijspbTUF7Wni1uRy67LJnfN3Us/06S
-        TpHsnGwOKqWOnj+r++IP/5yXUhy2E64=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-WzcUTnwyO9Cl96lsk0XMdQ-1; Wed, 22 Jun 2022 04:06:30 -0400
-X-MC-Unique: WzcUTnwyO9Cl96lsk0XMdQ-1
-Received: by mail-lf1-f70.google.com with SMTP id u5-20020a056512128500b00479784f526cso8127005lfs.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:06:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J5FesIEJNUAYWwzRo/YOZ1QtVKtqRp3mnHCOXbnUhhM=;
-        b=gRanUKiTF0XPHUvBp3JvW5RUGxpECDKQHDvteVBezMvwhbhUlBHyNbhHCfcYEKWFlY
-         24S1S3CfMrlZ1U7qZG6+yac5LVywXJ0hthlgaf4D3ATx43rzzQESJQ57APWW1FLkV9f8
-         AQU0IKQp0VjEnByaDe24ACm4b5KgUuPgEPvM4lhe5Y0PXy57J4jeLibCFog5V6wumvYl
-         BgiKKHg4iViAEvklNQ3F+jr3Fp7VLC3bKXDKSgQU0frJUCu7RaiMYoGxxB2qGYFSnBRn
-         k1nX4JKJ8GFx/be1LM6L8kShF6iWkifkFkCJiSDoGJnO0xRT145JzH5dDo/uolSNYBkU
-         3BcA==
-X-Gm-Message-State: AJIora/PtlphTlgeKu84ep6ugmzkq0KDnw+V/N7RNb+0Gj967CADgLyC
-        gtHKnPNYJGT8Dfyh6u5Mz8mYfofFXBbVypEOc9gfdT77PFpJc5IrfLXds78PFL0pmdTdimf/miQ
-        nMQ/np4NZqOUaN4ap4WJqguHxIgcpAvN3bomMmu6c
-X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id p37-20020a05651213a500b0047dc1d9dea8mr1420546lfa.442.1655885189237;
-        Wed, 22 Jun 2022 01:06:29 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tkxcyuPKm08huxiqWuTWt7AWd6nEXg9wjIHlQsqNsaLpWQeLuiYvLUwu9t7gVY0n8kDnn3TbP+HM4y52lv6qk=
-X-Received: by 2002:a05:6512:13a5:b0:47d:c1d9:dea8 with SMTP id
- p37-20020a05651213a500b0047dc1d9dea8mr1420532lfa.442.1655885188954; Wed, 22
- Jun 2022 01:06:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621114845.3650258-1-stephan.gerhold@kernkonzept.com>
-In-Reply-To: <20220621114845.3650258-1-stephan.gerhold@kernkonzept.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 22 Jun 2022 16:06:17 +0800
-Message-ID: <CACGkMEskKF4O7_Dz5=JxB2noVV5qJQusN9DLLzUFc4d149kS7g@mail.gmail.com>
-Subject: Re: [PATCH net] virtio_net: fix xdp_rxq_info bug after suspend/resume
-To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
+        Wed, 22 Jun 2022 04:08:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6F735DE9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:08:15 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o3vPI-0003t3-C9; Wed, 22 Jun 2022 10:08:12 +0200
+Message-ID: <abbc4d80377dcf5393afa143f9d3542cd2cd45a7.camel@pengutronix.de>
+Subject: Re: [PATCH RFC 1/2] regmap: add option to disable debugfs
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Aisheng Dong <aisheng.dong@nxp.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dongas86@gmail.com" <dongas86@gmail.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+Date:   Wed, 22 Jun 2022 10:08:10 +0200
+In-Reply-To: <DB9PR04MB84772F73D4AA1B49F87BECCF80B39@DB9PR04MB8477.eurprd04.prod.outlook.com>
+References: <20220620134758.1286480-1-aisheng.dong@nxp.com>
+         <20220620134758.1286480-2-aisheng.dong@nxp.com>
+         <YrCM0reni+x/KWsG@sirena.org.uk>
+         <DB9PR04MB84779EF2842D789FA66094C380B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
+         <YrCXILblKsp6DuN3@sirena.org.uk>
+         <DB9PR04MB8477CD99D5847291A629994180B09@DB9PR04MB8477.eurprd04.prod.outlook.com>
+         <YrCznap77OyHu4bO@sirena.org.uk>
+         <DB9PR04MB847785E1861525FC1E4AD97280B39@DB9PR04MB8477.eurprd04.prod.outlook.com>
+         <YrHkXH1M4NydBfQT@sirena.org.uk>
+         <DB9PR04MB84772F73D4AA1B49F87BECCF80B39@DB9PR04MB8477.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,111 +58,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 7:50 PM Stephan Gerhold
-<stephan.gerhold@kernkonzept.com> wrote:
->
-> The following sequence currently causes a driver bug warning
-> when using virtio_net:
->
->   # ip link set eth0 up
->   # echo mem > /sys/power/state (or e.g. # rtcwake -s 10 -m mem)
->   <resume>
->   # ip link set eth0 down
->
->   Missing register, driver bug
->   WARNING: CPU: 0 PID: 375 at net/core/xdp.c:138 xdp_rxq_info_unreg+0x58/0x60
->   Call trace:
->    xdp_rxq_info_unreg+0x58/0x60
->    virtnet_close+0x58/0xac
->    __dev_close_many+0xac/0x140
->    __dev_change_flags+0xd8/0x210
->    dev_change_flags+0x24/0x64
->    do_setlink+0x230/0xdd0
->    ...
->
-> This happens because virtnet_freeze() frees the receive_queue
-> completely (including struct xdp_rxq_info) but does not call
-> xdp_rxq_info_unreg(). Similarly, virtnet_restore() sets up the
-> receive_queue again but does not call xdp_rxq_info_reg().
->
-> Actually, parts of virtnet_freeze_down() and virtnet_restore_up()
-> are almost identical to virtnet_close() and virtnet_open(): only
-> the calls to xdp_rxq_info_(un)reg() are missing. This means that
-> we can fix this easily and avoid such problems in the future by
-> just calling virtnet_close()/open() from the freeze/restore handlers.
->
-> Aside from adding the missing xdp_rxq_info calls the only difference
-> is that the refill work is only cancelled if netif_running(). However,
-> this should not make any functional difference since the refill work
-> should only be active if the network interface is actually up.
->
-> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Hi Aisheng, hi Mark,
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Am Dienstag, dem 21.06.2022 um 18:16 +0000 schrieb Aisheng Dong:
+> > From: Mark Brown <broonie@kernel.org>
+> > Sent: Tuesday, June 21, 2022 11:32 PM
+> > 
+> > On Tue, Jun 21, 2022 at 02:56:58PM +0000, Aisheng Dong wrote:
+> > 
+> > > > so if we can't satisfy the read from the cache then we'll hit
+> > > > the
+> > > > cache_only check and return -EBUSY before we start trying to do
+> > > > any
+> > > > physical I/O.  The debugfs code will handle that gracefully,
+> > > > indicating that it couldn't get a value for the volatile
+> > > > register by
+> > > > showing all Xs for the value.  If none of the registers are
+> > > > cached
+> > > > then the file won't be terribly useful but it at least
+> > > > shouldn't cause any
+> > errors with accessing the device when it's powered down.
+> > 
+> > > That means we have to use cache_only mode to workaround the
+> > > issue, right?
+> > > I saw that cache_only mode has to be explicated enable/disable by
+> > > driver, commonly used in device rpm in kernel right now.
+> > 
+> > Yes.
+> > 
+> > > However, things are a little bit complicated on i.MX that 1) imx
+> > > blkctl needs follow strict registers r/w flow interleaved with
+> > > handshakes with upstream gpc power operations and delay may be
+> > > needed
+> > > between registers writing
+> > > 2) blkctl itself does not enable runtime pm, it simply call rpm
+> > > to
+> > > resume upstream power domains devices and necessary clocks before
+> > > r/w
+> > registers.
+> > 
+> > I'm not sure I fully understand the issue here?  If the driver can
+> > safely manage
+> > the hardware surely it can safely manage cache only mode too?  If
+> > there are
+> > duplicate resumes then cache only enable/disable is a boolean flag
+> > rather than
+> > refcounted so that shouldn't be a problem.
+> > 
+> 
+> I still can't see an easy and safe to way to do it.
+> What I'm wondering is whether it's worth to do it if need to
+> introducing considerable
+> complexities in driver to overcome this issue if it can be simply
+> disabled.
+> Anyway, I will try to investigate it.
+> 
+> > > Furthermore, current imx blkctl is a common driver used by many
+> > > devices
+> > [1].
+> > > Introducing volatile registers and cache may bloat the driver a
+> > > lot
+> > unnecessarily.
+> > 
+> > You don't actually need to have a cache to use cache only mode, if
+> > there are
+> > no cached registers then you'll just get -EBUSY on any access to
+> > the registers
+> > but that's hopefully fine since at the minute things will just fall
+> > over anyway.
+> > You shouldn't even need to flag registers as volatile if there's no
+> > cache since it's
+> > not really relevant without a cache.
+> > 
+> 
+> After a quick try initially, I found two issues:
+> 1. There's a warning dump if using cache_only without cache
+> void regcache_cache_only(struct regmap *map, bool enable)
+> {
+>         map->lock(map->lock_arg);
+>         WARN_ON(map->cache_bypass && enable);
+>         ...
+> }
+> 2. It seems _regmap_write() did not handle cache_only case well
+> without cache.
+> It may still writes HW even for cache_only mode?
+> 
+> I guess we may need fix those two issues first before we can safely
+> use it?
+> 
+Why would you write to a cache only regmap. The debugfs interface only
+allows to dump the registers, no?
 
-> ---
->  drivers/net/virtio_net.c | 25 ++++++-------------------
->  1 file changed, 6 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index db05b5e930be..969a67970e71 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -2768,7 +2768,6 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
->  static void virtnet_freeze_down(struct virtio_device *vdev)
->  {
->         struct virtnet_info *vi = vdev->priv;
-> -       int i;
->
->         /* Make sure no work handler is accessing the device */
->         flush_work(&vi->config_work);
-> @@ -2776,14 +2775,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
->         netif_tx_lock_bh(vi->dev);
->         netif_device_detach(vi->dev);
->         netif_tx_unlock_bh(vi->dev);
-> -       cancel_delayed_work_sync(&vi->refill);
-> -
-> -       if (netif_running(vi->dev)) {
-> -               for (i = 0; i < vi->max_queue_pairs; i++) {
-> -                       napi_disable(&vi->rq[i].napi);
-> -                       virtnet_napi_tx_disable(&vi->sq[i].napi);
-> -               }
-> -       }
-> +       if (netif_running(vi->dev))
-> +               virtnet_close(vi->dev);
->  }
->
->  static int init_vqs(struct virtnet_info *vi);
-> @@ -2791,7 +2784,7 @@ static int init_vqs(struct virtnet_info *vi);
->  static int virtnet_restore_up(struct virtio_device *vdev)
->  {
->         struct virtnet_info *vi = vdev->priv;
-> -       int err, i;
-> +       int err;
->
->         err = init_vqs(vi);
->         if (err)
-> @@ -2800,15 +2793,9 @@ static int virtnet_restore_up(struct virtio_device *vdev)
->         virtio_device_ready(vdev);
->
->         if (netif_running(vi->dev)) {
-> -               for (i = 0; i < vi->curr_queue_pairs; i++)
-> -                       if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
-> -                               schedule_delayed_work(&vi->refill, 0);
-> -
-> -               for (i = 0; i < vi->max_queue_pairs; i++) {
-> -                       virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
-> -                       virtnet_napi_tx_enable(vi, vi->sq[i].vq,
-> -                                              &vi->sq[i].napi);
-> -               }
-> +               err = virtnet_open(vi->dev);
-> +               if (err)
-> +                       return err;
->         }
->
->         netif_tx_lock_bh(vi->dev);
-> --
-> 2.30.2
->
+I think it wouldn't be too hard to fix this for the blk-ctrl drivers.
+I'll give it a try today.
+
+> > > The simplest way for i.MX case may be just disabling debugfs as
+> > > it
+> > > can't reflect the actually HW state without power. So we would
+> > > wish the
+> > regmap core could provide an option to users.
+> > 
+> > The goal here is to describe the regmap itself so that there's less
+> > fragility as
+> > things change and we don't needlessly disable anything else that
+> > happens to
+> > be added to debugfs in the future due to having an overly generic
+> > flag, and we
+> > get the ability to directly catch access to the hardware that
+> > misses doing
+> > power management properly while we're at it.
+> > 
+> > We already have a way to describe it being unsafe to access the
+> > hardware, we
+> > may as well use it.
+> > 
+> > > And I noticed that syscon [2] seems have the same issue since the
+> > > following
+> > commit:
+> > 
+> > > commit 9b947a13e7f6017f18470f665992dbae267852b3
+> > > Author: David Lechner <david@lechnology.com>
+> > > Date:   Mon Feb 19 15:43:02 2018 -0600
+> > 
+> > >     regmap: use debugfs even when no device
+> > 
+> > >     This registers regmaps with debugfs even when they do not
+> > > have an
+> > >     associated device. For example, this is common for syscon
+> > > regmaps.
+> > 
+> > That's a different thing, that's due to us naming the directory
+> > after the struct
+> > device but syscons being created before we have that struct device
+> > available.
+> 
+> Yes, but syscon has the same issue that the system may hang if dump
+> registers
+> through debugfs without power on.
+> How would you suggest for this case as syscon is also a common
+> driver?
+> 
+This is a general issue. If something uses a syscon that is inside a
+power-domain where the runtime PM is controlled by some other entity,
+how is it safe to use the syscon at all? Every access might end up
+locking up the system. So those syscons really need to learn some kind
+of runtime PM handling.
+
+Regards,
+Lucas
+
 

@@ -2,166 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4BC55535A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9080555366
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359681AbiFVSh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 14:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S1359516AbiFVSnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 14:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235461AbiFVShx (ORCPT
+        with ESMTP id S230122AbiFVSnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 14:37:53 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C406285;
-        Wed, 22 Jun 2022 11:37:52 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 983B13200A9A;
-        Wed, 22 Jun 2022 14:37:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 22 Jun 2022 14:37:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1655923070; x=
-        1656009470; bh=G//CkjAGkuIcoptemdXndQWn8Sa4+wndH+LOM6l7TvA=; b=n
-        PEcyOHEtW0K+ETUp+g66Lc6Z88MJBFha1ofsD1XFG5htaV716jQGQM9EzbfCJPjZ
-        UIB1yXaT3jkg2UFZxFEE3gZVmDyB0oEkt5Ypew+rPh/yCWyZV6IUJ2uv8rhbp9M0
-        r1IvSUrHV/RvGxwh9Fhk16qTZdjRa1Rap3m/08VQ7h/tuVhmYzas19B/fzXKuJ0B
-        j1K3IVi0yr28zH89jdHmUDuLrevS1zZqw0Sgr1O6kJyy5QmtUGlRm/j4rHuUJxzT
-        cSHgJwtwerKdB/0JySWG3WmAP4uyRlvbYDMZ/sUwM4hrXBI9pYyzwTLG0S8dUQA0
-        bgs5YDTgv2QCSUoLAmmUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655923070; x=
-        1656009470; bh=G//CkjAGkuIcoptemdXndQWn8Sa4+wndH+LOM6l7TvA=; b=u
-        uWOx219fW6zjPxYL2C13oMAgtA+1eYJoFyp8onqHqKU4w8gVOkEYoCPpNf6FUp/N
-        ROCcDFMNLyKmRq5JA7pBdEyZPk3ZuxlTCDpzdyShZYv0LmqEZkJOTIQOqwcoySkw
-        0PZlneck89KLIL12LviSYPMB+xoViW94xmfjR74IkllzBRnLUg1whkCkLgQ6Wq8L
-        vdFLTML6bfd8IhwpJYDtyyqynxNUouIYISv1h9O5B60LKIrsH8ESOIhUt6FF0Aip
-        Juu8DXuqWsgYBLQcjFskqHv8jRLE2HSfYaTJ7BoEbXGcif9g8OAVL3zXzsb7ecuZ
-        ob1u8pDRI8SJBXIV9/jvw==
-X-ME-Sender: <xms:fWGzYg4qY9npe2RMrMAVV8QFd_P8wxcoW0Z0lNaCR_uKRQAsLVYs4g>
-    <xme:fWGzYh6Y39eHy69A1SuP7YAOOtPNgOfcYUAKCAxFDaI29MMpK-N0WZb5Remn1WDPC
-    7WZpYwS-a32799yzg>
-X-ME-Received: <xmr:fWGzYvcQ5wMnVXW16iYHNQ6CFHruoOBIeeAKt1EbOB_FtKfz0lLReOHRN39UqQ-r4_pDKHhAv8NxdpPSvZ03pWvPWE4D8qGVC2SB7gNbvC9WYV3k-aVrpT8x1kYu>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefhedguddvlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheptehn
-    ughrvghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecugg
-    ftrfgrthhtvghrnhephfeitefgleevtedtffejvedujeekjedugfdtveffjeelvddtfeek
-    gefgjefhgfegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnughrvghssegrnhgrrhgriigvlhdruggv
-X-ME-Proxy: <xmx:fWGzYlKPN11Lt1H9dFsxEar1lwO3k_hhezikt1A88iw1SNIuFEbyQw>
-    <xmx:fWGzYkJ2RxNxp6JH6kH7tmiYv76cl5X0V14Hacul6GtCxXA5JAdgsg>
-    <xmx:fWGzYmxCaysowl7Y6m5_2CO6ejbAS656_cpuvK4I_SJU6nU1vMjtdw>
-    <xmx:fmGzYizIRrTjSmNiUjRHfC814ZqPh7PsNdnJKxfp5En40magH5qBQg>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Jun 2022 14:37:49 -0400 (EDT)
-Date:   Wed, 22 Jun 2022 11:37:47 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Willy Tarreau <w@1wt.eu>, Kees Cook <keescook@chromium.org>,
-        keyrings@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Stephane Eranian <eranian@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
- and OpenSSL v3.0.x
-Message-ID: <20220622183747.mhhlfr6aufbkyhag@alap3.anarazel.de>
-References: <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
- <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
- <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
- <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
- <CA+icZUUOQcc4uiVbv+tJzPr_ED7e4tD0u9tC8mcn2BRe3sdPAg@mail.gmail.com>
- <CAHk-=wiOrXUr0wqHL+hfkzGg_+b7UvtLeB=59KsX8W939bTY-A@mail.gmail.com>
- <CA+icZUUma1B8KFWF-ed9sjXH4QpCRZ+B2pON3uAFkTUs77tMzw@mail.gmail.com>
- <20220609192308.GB10732@1wt.eu>
- <CAHk-=wimC_B+nCJrXwuvWULz6ycFFmRMT1Uc+PeM5wJdma_VFw@mail.gmail.com>
- <CA+icZUUCOoE8x3Js=DYEjgyV_rz-T-M7gPZdFQu7tsKcUoA0hg@mail.gmail.com>
+        Wed, 22 Jun 2022 14:43:08 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1C595B2;
+        Wed, 22 Jun 2022 11:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655923387; x=1687459387;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vLhzMi2QzzK4JidKA8EX0YX95XP0Zt+Cm+d/NMCKTa8=;
+  b=cRrpQJbDCIAiOurfHHNVOVFnui/lDCkecrxJ+MMK+RxRfPeuybe4FM8u
+   Sqhlgeh2tM6P5ZCGyv+Gg12+lRQkSqM0i5E1DYh256gqvk5rqJ9EsOr63
+   r11qlccXPkay4cwD9amf/40NDUhIj1LpcOvS9nQIUZGVL23pY3EGbmyae
+   zKO/a407RL+vVIx49IPi276CtjPXNGJWQ/hfaEpi8run84JF3B/OrL4g5
+   uDTy4DwUWQBNzGxvP+tIyrsGcqveoGF9zNF6eiP1fF+N+wFXlaUOAU2EQ
+   Tgqn+WTcxizqsCe1G/feei7EL6FRyXDTec+Cq8H3dMm/dB6xtjk+RD+vC
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="263545743"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="263545743"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:43:07 -0700
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="677695719"
+Received: from bshakya-mobl.amr.corp.intel.com (HELO [10.212.188.76]) ([10.212.188.76])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:43:05 -0700
+Message-ID: <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
+Date:   Wed, 22 Jun 2022 11:42:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+icZUUCOoE8x3Js=DYEjgyV_rz-T-M7gPZdFQu7tsKcUoA0hg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
+Content-Language: en-US
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>, "bp@alien8.de" <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <8f63961f00fd170ba0e561f499292175f3155d26.1655761627.git.ashish.kalra@amd.com>
+ <cc0c6bd1-a1e3-82ee-8148-040be21cad5c@intel.com>
+ <BYAPR12MB2759A8F48D6D68EE879EEF648EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <25be3068-be13-a451-86d4-ff4cc12ddb23@intel.com>
+ <BYAPR12MB27599BCEA9F692E173911C3B8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <681e4e45-eff1-600c-9b81-1fa9bdf24232@intel.com>
+ <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 6/22/22 11:34, Kalra, Ashish wrote:
+>> So, if the RMP entry format changes in future processors, how do we
+>> make sure that the kernel does not try to use *this* code on those
+>> processors?
+> Functions snp_lookup_rmpentry() and dump_rmpentry() which rely on
+> this structure definition will need to handle it accordingly.
 
-On 2022-06-09 21:31:44 +0200, Sedat Dilek wrote:
-> On Thu, Jun 9, 2022 at 9:25 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Thu, Jun 9, 2022 at 12:23 PM Willy Tarreau <w@1wt.eu> wrote:
-> > >
-> > > IIRC you can also disable the deprecation warnings by defining the
-> > > OPENSSL_SUPPRESS_DEPRECATED macro. It doesn't require to change the
-> > > compiler's options and allows us to put our head in the sand.
-> >
-> > That one had the downside that you have to know what you're doing to
-> > make such a change ;)
-> >
-> > I just wanted to be able to start doing pulls again after mistakenly
-> > thinking that an upgrade would be pain-free.
-> >
-> 
-> My first approach in making this work....
-> 
-> From 3b019a241a72742c7f239965ed92385e9ffd9ed3 Mon Sep 17 00:00:00 2001
-> From: Sedat Dilek <sedat.dilek@gmail.com>
-> Date: Fri, 27 May 2022 09:25:45 +0200
-> Subject: [PATCH] extract-cert: Suppress warnings with OpenSSL v3 API
-> 
-> Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
-> ---
-> certs/Makefile | 1 +
-> 1 file changed, 1 insertion(+)
-> 
-> diff --git a/certs/Makefile b/certs/Makefile
-> index d8443cfb1c40..52f71f0925e2 100644
-> --- a/certs/Makefile
-> +++ b/certs/Makefile
-> @@ -75,4 +75,5 @@ targets += x509_revocation_list
-> hostprogs := extract-cert
-> 
-> HOSTCFLAGS_extract-cert.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
-> +HOSTCFLAGS_extract-cert.o += -Wno-deprecated-declarations
-> HOSTLDLIBS_extract-cert = $(shell pkg-config --libs libcrypto 2>
-> /dev/null || echo -lcrypto)
-> --
+In other words, old kernels will break on new hardware?
 
-FWIW, these deprecation warnings also cause perf to fail to detect libcrypto:
-
-test-libcrypto.c: In function ‘main’:
-test-libcrypto.c:11:9: error: ‘MD5_Init’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
-   11 |         MD5_Init(&context);
-      |         ^~~~~~~~
-In file included from test-libcrypto.c:3:
-...
-cc1: all warnings being treated as errors
-
-
-Perhaps it's worth applying this fix a bit more broadly?
-
-Greetings,
-
-Andres Freund
+I think that needs to be fixed.  It should be as simple as a
+model/family check, though.  If someone (for example) attempts to use
+SNP (and thus snp_lookup_rmpentry() and dump_rmpentry()) code on a newer
+CPU, the kernel should refuse.

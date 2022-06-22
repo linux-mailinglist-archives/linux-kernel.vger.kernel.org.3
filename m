@@ -2,197 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C5C554966
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259215546DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351027AbiFVKOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        id S1352261AbiFVKQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351214AbiFVKNz (ORCPT
+        with ESMTP id S234833AbiFVKQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:13:55 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F14425280;
-        Wed, 22 Jun 2022 03:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655892834; x=1687428834;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=N444SvRB40SKbqAwsQm2TSEKlF7bTgWg3nWfEMVWa7E=;
-  b=fMjb4uD4tnc+HtMhW5eNqYvkMbxrIIMZfiFwDz8bp57MlPaQx2vxAqG7
-   EYUAlx9vSHIN/BFg+ai3UbM4XeTJDQPZ1uXKR7nkFz3TTMSHeZ0Eyk+P3
-   tDB/xiq3SSINoEQ/GeMacEh7/Eyf9dWNhRxLDenPb/g0WaYPgwwy2a6nO
-   A=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Jun 2022 03:13:54 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:13:53 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 22 Jun 2022 03:13:52 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 22 Jun 2022 03:13:47 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH 2/2] ASoC: qcom: Add driver support for audioreach solution
-Date:   Wed, 22 Jun 2022 15:43:19 +0530
-Message-ID: <1655892799-29641-3-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655892799-29641-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1655892799-29641-1-git-send-email-quic_srivasam@quicinc.com>
+        Wed, 22 Jun 2022 06:16:08 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787C53B3C3;
+        Wed, 22 Jun 2022 03:16:04 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSfMV2w5KzSh96;
+        Wed, 22 Jun 2022 18:12:38 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 18:15:56 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 18:15:56 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>, <jpoimboe@kernel.org>,
+        <peterz@infradead.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <arnd@arndb.de>
+Subject: [PATCH v2 0/5] objtool: Reorganize x86 arch-specific code
+Date:   Wed, 22 Jun 2022 18:13:39 +0800
+Message-ID: <20220622101344.38002-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Machine driver support for audioreach solution, which uses
-ADSP in SC7280 based paltforms.
+This patch set reorganize current x86 related code in objtool, [1-3] move
+arch-specific to arch files and extract some common codes, [4] fixes a
+cross-compile problem and [5] fixes a call destination search bug.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+It make objtool more arch-generic, which makes other patches on different
+architectures easier to be reviewed and merged.
+
+Tested on x86 with unwind on kernel and module context.
+
 ---
- sound/soc/qcom/sc7280.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+v2 Change:
+[5/5] objtool: use arch_jump_destination in read_intra_function_calls
+---
+Chen Zhongjin (3):
+  objtool: Add generic symbol for relocation type
+  objtool: Specify host-arch for making LIBSUBCMD
+  objtool: use arch_jump_destination in read_intra_function_calls
 
-diff --git a/sound/soc/qcom/sc7280.c b/sound/soc/qcom/sc7280.c
-index 34cdb99..abe261c 100644
---- a/sound/soc/qcom/sc7280.c
-+++ b/sound/soc/qcom/sc7280.c
-@@ -19,9 +19,11 @@
- #include "../codecs/rt5682s.h"
- #include "common.h"
- #include "lpass.h"
-+#include "qdsp6/q6afe.h"
- 
- #define DEFAULT_MCLK_RATE              19200000
- #define RT5682_PLL_FREQ (48000 * 512)
-+#define MI2S_BCLK_RATE		1536000
- 
- struct sc7280_snd_data {
- 	struct snd_soc_card card;
-@@ -79,6 +81,7 @@ static int sc7280_headset_init(struct snd_soc_pcm_runtime *rtd)
- 	case MI2S_PRIMARY:
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_TX3:
-+	case TX_CODEC_DMA_TX_3:
- 		for_each_rtd_codec_dais(rtd, i, codec_dai) {
- 			rval = snd_soc_component_set_jack(component, &pdata->hs_jack, NULL);
- 			if (rval != 0 && rval != -ENOTSUPP) {
-@@ -164,10 +167,14 @@ static int sc7280_init(struct snd_soc_pcm_runtime *rtd)
- 	switch (cpu_dai->id) {
- 	case MI2S_PRIMARY:
- 	case LPASS_CDC_DMA_TX3:
-+	case TX_CODEC_DMA_TX_3:
- 		return sc7280_headset_init(rtd);
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_VA_TX0:
- 	case MI2S_SECONDARY:
-+	case RX_CODEC_DMA_RX_0:
-+	case SECONDARY_MI2S_RX:
-+	case VA_CODEC_DMA_TX_0:
- 		return 0;
- 	case LPASS_DP_RX:
- 		return sc7280_hdmi_init(rtd);
-@@ -195,6 +202,10 @@ static int sc7280_snd_hw_params(struct snd_pcm_substream *substream,
- 	switch (cpu_dai->id) {
- 	case LPASS_CDC_DMA_TX3:
- 	case LPASS_CDC_DMA_RX0:
-+	case RX_CODEC_DMA_RX_0:
-+	case SECONDARY_MI2S_RX:
-+	case TX_CODEC_DMA_TX_3:
-+	case VA_CODEC_DMA_TX_0:
- 		for_each_rtd_codec_dais(rtd, i, codec_dai) {
- 			sruntime = snd_soc_dai_get_stream(codec_dai, substream->stream);
- 			if (sruntime != ERR_PTR(-ENOTSUPP))
-@@ -245,6 +256,9 @@ static int sc7280_snd_prepare(struct snd_pcm_substream *substream)
- 	switch (cpu_dai->id) {
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_TX3:
-+	case RX_CODEC_DMA_RX_0:
-+	case TX_CODEC_DMA_TX_3:
-+	case VA_CODEC_DMA_TX_0:
- 		return sc7280_snd_swr_prepare(substream);
- 	default:
- 		break;
-@@ -263,6 +277,9 @@ static int sc7280_snd_hw_free(struct snd_pcm_substream *substream)
- 	switch (cpu_dai->id) {
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_TX3:
-+	case RX_CODEC_DMA_RX_0:
-+	case TX_CODEC_DMA_TX_3:
-+	case VA_CODEC_DMA_TX_0:
- 		if (sruntime && data->stream_prepared[cpu_dai->id]) {
- 			sdw_disable_stream(sruntime);
- 			sdw_deprepare_stream(sruntime);
-@@ -291,6 +308,10 @@ static void sc7280_snd_shutdown(struct snd_pcm_substream *substream)
- 					       SNDRV_PCM_STREAM_PLAYBACK);
- 		}
- 		break;
-+	case SECONDARY_MI2S_RX:
-+		snd_soc_dai_set_sysclk(cpu_dai, Q6AFE_LPASS_CLK_ID_SEC_MI2S_IBIT,
-+					       0, SNDRV_PCM_STREAM_PLAYBACK);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -298,14 +319,26 @@ static void sc7280_snd_shutdown(struct snd_pcm_substream *substream)
- 
- static int sc7280_snd_startup(struct snd_pcm_substream *substream)
- {
-+	unsigned int fmt = SND_SOC_DAIFMT_CBS_CFS;
-+	unsigned int codec_dai_fmt = SND_SOC_DAIFMT_CBS_CFS;
- 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
- 	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
- 	int ret = 0;
- 
- 	switch (cpu_dai->id) {
- 	case MI2S_PRIMARY:
- 		ret = sc7280_rt5682_init(rtd);
- 		break;
-+	case SECONDARY_MI2S_RX:
-+		codec_dai_fmt |= SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_I2S;
-+
-+		snd_soc_dai_set_sysclk(cpu_dai, Q6AFE_LPASS_CLK_ID_SEC_MI2S_IBIT,
-+			MI2S_BCLK_RATE, SNDRV_PCM_STREAM_PLAYBACK);
-+
-+		snd_soc_dai_set_fmt(cpu_dai, fmt);
-+		snd_soc_dai_set_fmt(codec_dai, codec_dai_fmt);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -361,6 +394,7 @@ static int sc7280_snd_platform_probe(struct platform_device *pdev)
- 
- static const struct of_device_id sc7280_snd_device_id[]  = {
- 	{ .compatible = "google,sc7280-herobrine" },
-+	{ .compatible = "google,sc7280-audioreach-herobrine" },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, sc7280_snd_device_id);
+Madhavan T. Venkataraman (2):
+  objtool: Make ORC type code arch-specific
+  objtool: Make ORC init and lookup code arch-generic
+
+ arch/x86/include/asm/unwind.h                 |   5 -
+ arch/x86/kernel/module.c                      |   7 +-
+ arch/x86/kernel/unwind_orc.c                  | 256 +----------------
+ arch/x86/kernel/vmlinux.lds.S                 |   2 +-
+ .../asm => include/asm-generic}/orc_lookup.h  |  42 +++
+ kernel/Makefile                               |   2 +
+ kernel/orc_lookup.c                           | 261 ++++++++++++++++++
+ tools/objtool/Makefile                        |   2 +-
+ tools/objtool/arch/x86/Build                  |   1 +
+ tools/objtool/arch/x86/include/arch/elf.h     |   5 +-
+ tools/objtool/arch/x86/orc.c                  | 137 +++++++++
+ tools/objtool/arch/x86/special.c              |   5 +-
+ tools/objtool/check.c                         |  14 +-
+ tools/objtool/include/objtool/orc.h           |  17 ++
+ tools/objtool/orc_dump.c                      |  59 +---
+ tools/objtool/orc_gen.c                       |  79 +-----
+ 16 files changed, 492 insertions(+), 402 deletions(-)
+ rename {arch/x86/include/asm => include/asm-generic}/orc_lookup.h (51%)
+ create mode 100644 kernel/orc_lookup.c
+ create mode 100644 tools/objtool/arch/x86/orc.c
+ create mode 100644 tools/objtool/include/objtool/orc.h
+
 -- 
-2.7.4
+2.17.1
 

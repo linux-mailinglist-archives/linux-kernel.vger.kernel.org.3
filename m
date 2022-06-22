@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B2355523F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC18E555249
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358896AbiFVRT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S1359750AbiFVRYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376847AbiFVRTy (ORCPT
+        with ESMTP id S1344588AbiFVRY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:19:54 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF1205EF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:19:52 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id z9so9612034wmf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:19:52 -0700 (PDT)
+        Wed, 22 Jun 2022 13:24:27 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B5824092
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:24:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=g7rgKaNRu6VI+rL2tcZJVezyj5b7Lszc6RDU2QcG3NQ=;
-        b=Dsp3eLP695OxhLmAxgCpTladrks0d9cl3c4pqEG8IsiuYRxlbmyT9zMcfK+VdJOEhP
-         vqcEAnywIUG3D4hOvDO4vgW7mTKDWa4FOUacvv0rZZ1u/SO4iaTUMJT1YLVZARqV4UnP
-         VVaOZc6pGpqsRfWobvfoyII6hejsz2rE4brC494B2LoC31jIRjDfn1jZaLdHctRIJGTs
-         eYVx6Mr13FW6Ezg18RcNdgljwra6zUmgwIfkDvEWL26pByjsiHrTuzgpz4XG6qL9VH6q
-         2R9XZ6ufukStzJFEMcZ2MrXmX7/nzP3kY80P4OPxqAvqF9i9lBRjwSybCsaRqRMoajR9
-         c2mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g7rgKaNRu6VI+rL2tcZJVezyj5b7Lszc6RDU2QcG3NQ=;
-        b=sN24nybhajdUosm+11seUXYg/n+0MC3xb6ConqfVvrNonC8fZfw5kar6gob4bggOsG
-         9eCceGEV+pc/R+Dt+sNsb8aGiheeEYcbv5/CDVt3Nxxj95eIwLTUSAS0UT3VSYIcpmQk
-         3agI3rfSmR+IlvhZbboyDLZGqNgy7IZidePrhi5CyRV9t4HzRNwIRiP4HsxzEt8SCqkn
-         7z1n2yMAICOfn/q/UOkPQzB8P+zms5VNCEekzfqD0fPSm2Qdjt+btB+/4YHWz95aqVR2
-         LrvNhxaZTQpJgDr1CaOwdADWauvDh/AHVq9/MV4+z7KR0EJ4U6XB33TvHePbHVqlMsa0
-         YQVA==
-X-Gm-Message-State: AOAM531aaFlDl9jYqSoKN2bIsDmSsUJqC94OIGWWZLBRz1mI4wM6h9N/
-        2KFpz0bJ/2yPrDlDnMUEpu7H/w==
-X-Google-Smtp-Source: ABdhPJzonljILXzP/YeUVGmI5wxNQjklVcp+NVX87qobxoQHEtny1OoVzedlkPsbhH9Zvj4Jv4dkKA==
-X-Received: by 2002:a05:600c:3229:b0:39c:65b2:8935 with SMTP id r41-20020a05600c322900b0039c65b28935mr48023528wmp.155.1655918390841;
-        Wed, 22 Jun 2022 10:19:50 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id j18-20020a05600c42d200b003a02b9c47e4sm26041wme.27.2022.06.22.10.19.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 10:19:49 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 18:19:46 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        live-patching@vger.kernel.org, jpoimboe@kernel.org,
-        peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
-        masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, mark.rutland@arm.com,
-        pasha.tatashin@soleen.com, broonie@kernel.org,
-        rmk+kernel@armlinux.org.uk, madvenka@linux.microsoft.com,
-        christophe.leroy@csgroup.eu
-Subject: Re: [PATCH v5 00/33] objtool: add base support for arm64
-Message-ID: <20220622171946.mc3cd375fy4fou3b@maple.lan>
-References: <20220622154920.95075-1-chenzhongjin@huawei.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655918666; x=1687454666;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+T1Ha1FXIGuZiI7WiovZ/I2vnWbuysSEufGaNGb5xFw=;
+  b=pokxT3lrHnUNDT8h5pTJ+SrgaSdCyoK8OczhWQA1cRYza5nOAj2JNfrn
+   fvsevM8Xv0q5/uaS6JXy0dqTZY61S83Y5gkRqv4FfT3WSyvBpb7YkUkwi
+   knH2RGn1nJFjPyWBOCR94DUT9RS1vhfrJT4j3KMwr4g2IXKj1rZeVq8EA
+   8=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Jun 2022 10:24:26 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 10:24:25 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 22 Jun 2022 10:24:25 -0700
+Received: from [10.111.161.199] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 22 Jun
+ 2022 10:24:23 -0700
+Message-ID: <b133b67f-0d99-af6b-94a5-d5ff4b5752f1@quicinc.com>
+Date:   Wed, 22 Jun 2022 10:24:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: Increment vsync_cnt before waking up
+ userspace
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
+        Sean Paul <sean@poorly.run>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+References: <20220622023855.2970913-1-swboyd@chromium.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220622023855.2970913-1-swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,30 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:48:47PM +0800, Chen Zhongjin wrote:
-> This series enables objtool to start doing stack validation and orc
-> generation on arm64 kernel builds.
+
+
+On 6/21/2022 7:38 PM, Stephen Boyd wrote:
+> The 'vsync_cnt' is used to count the number of frames for a crtc.
+> Unfortunately, we increment the count after waking up userspace via
+> dpu_crtc_vblank_callback() calling drm_crtc_handle_vblank().
+> drm_crtc_handle_vblank() wakes up userspace processes that have called
+> drm_wait_vblank_ioctl(), and if that ioctl is expecting the count to
+> increase it won't.
 > 
-> Based on Julien's previous work(1)(2), Now I have finished most of work
-> for objtool enable on arm64. This series includes objtool part [1-13]
-> and arm64 support part [14-33], the second part is to make objtool run
-> correctly with no warning on arm64 so if necessary it can be taken apart
-> as two series.
+> Increment the count before calling into the drm APIs so that we don't
+> have to worry about ordering the increment with anything else in drm.
+> This fixes a software video decode test that fails to see frame counts
+> increase on Trogdor boards.
 > 
-> ORC generation feature is implemented but not used because we don't have
-> an unwinder_orc on arm64, now it only be used to check whether objtool
-> has correct validation.
+> Cc: Mark Yacoub <markyacoub@chromium.org>
+> Cc: Jessica Zhang <quic_jesszhan@quicinc.com>
+> Fixes: 885455d6bf82 ("drm/msm: Change dpu_crtc_get_vblank_counter to use vsync count.")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+
+This is right, we should increment before drm_crtc_handle_vblank() as 
+that will query the vblank counter. This also matches what we do 
+downstream, hence
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+One small nit though, shouldnt the fixes tag be
+
+25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+
+This code has been this way since that commit itself.
+
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> This series depends on (https://lkml.org/lkml/2022/6/22/463)
-> I moved some changes which work for all architectures to that series
-> because this one becomes too big now.
-> And it is rebased to tip/objtool/core branch.
-
-What is the sha1 of the base?
-
-With b4 and git am the patch series is derailing at patch 6 and I'm even
-after a bit of fixup (had to use rediff) I'm still getting a cascade of
-errors in later patches to decode.c .
-
-
-Daniel.
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 3a462e327e0e..a1b8c4592943 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1251,12 +1251,13 @@ static void dpu_encoder_vblank_callback(struct drm_encoder *drm_enc,
+>   	DPU_ATRACE_BEGIN("encoder_vblank_callback");
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+>   
+> +	atomic_inc(&phy_enc->vsync_cnt);
+> +
+>   	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+>   	if (dpu_enc->crtc)
+>   		dpu_crtc_vblank_callback(dpu_enc->crtc);
+>   	spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+>   
+> -	atomic_inc(&phy_enc->vsync_cnt);
+>   	DPU_ATRACE_END("encoder_vblank_callback");
+>   }
+>   
+> 
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56

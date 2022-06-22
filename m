@@ -2,60 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D293B5545FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE20554668
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355939AbiFVIxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S1355603AbiFVIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351982AbiFVIxt (ORCPT
+        with ESMTP id S1355915AbiFVIxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:53:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D6833E3A;
-        Wed, 22 Jun 2022 01:53:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDF22B81CEE;
-        Wed, 22 Jun 2022 08:53:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88973C34114;
-        Wed, 22 Jun 2022 08:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655888026;
-        bh=iSb5M17woSiTADzSijbtIRw8hX+XtC+OWCTSk3ksZCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q2RaElH3dn6s/QduGLVM2i8PXTKLbEhqqB6eprDa+Tjfq/QBvyRe7LWGSXIUEBIBG
-         MnRXUdAFTKc3k0RDXaNs33NnRz3iXwHASJaFt9JKIriwf1bc6unCWwB9jMp7+nxZgg
-         exe3ZNrZgHxM4AXE2KeTppw1SPYlUd/5OxPI4krwZfyqM/88/VfI4u9FnOJFxkPfd1
-         om/2Zs8gSTT/Nukijmgu6sNp3fps6e9RQ4kFcuDObcQmq00E2SWMdb6Cx0rYz4fFA1
-         Ttn4YR5KP/B+P/0sPUarUyvWVgaWqgeb2PAsmk1f79P4md0kRNQbYc8c7gtgEPypsm
-         VWQ46CXvgD+Zw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3w7K-0002Vz-A4; Wed, 22 Jun 2022 10:53:43 +0200
-Date:   Wed, 22 Jun 2022 10:53:42 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] arm64: dts: qcom: add SC8280XP platform
-Message-ID: <YrLYluEf292Jqgti@hovoldconsulting.com>
-References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
- <20220622041224.627803-4-bjorn.andersson@linaro.org>
+        Wed, 22 Jun 2022 04:53:52 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E296B33E89;
+        Wed, 22 Jun 2022 01:53:50 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id C79321E80CD1;
+        Wed, 22 Jun 2022 16:53:40 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id vYMZDhLlUPhD; Wed, 22 Jun 2022 16:53:38 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.64.61.97])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id BEA741E80C7D;
+        Wed, 22 Jun 2022 16:53:37 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] rtc: Fix some spelling mistakes
+Date:   Wed, 22 Jun 2022 16:53:44 +0800
+Message-Id: <20220622085344.23519-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622041224.627803-4-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,55 +46,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 09:12:21PM -0700, Bjorn Andersson wrote:
-> Introduce initial support for the Qualcomm SC8280XP platform, aka 8cx
-> Gen 3. This initial contribution supports SMP, CPUfreq, CPU cluster
-> idling, GCC, TLMM, SMMU, RPMh regulators, power-domains and clocks,
-> interconnects, some QUPs, UFS, remoteprocs, USB, watchdog, LLCC and
-> tsens.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> Changes since v1:
-> - Reordered "status" last
-> - Fixed invalid unit addresses on USB phys
-> - Dropped multiport USB controller for now
-> - Fixed system-cache-controller sort ordering
-> - Moved &xo_board_clk frequency to board dts
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2145 ++++++++++++++++++++++++
->  1 file changed, 2145 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> new file mode 100644
-> index 000000000000..ac13965a181e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+Change 'modifed' to 'modified'.
+Change 'Updata' to 'Update'.
+Change 'Initiatlize' to 'Initialize'.
 
-> +		CPU1: cpu@100 {
-> +			device_type = "cpu";
-> +			compatible = "qcom,kryo";
-> +			reg = <0x0 0x100>;
-> +			enable-method = "psci";
-> +			capacity-dmips-mhz = <602>;
-> +			next-level-cache = <&L2_100>;
-> +			power-domains = <&CPU_PD1>;
-> +			power-domain-names = "psci";
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
-> +			operating-points-v2 = <&cpu0_opp_table>;
-> +			#cooling-cells = <2>;
-> +			L2_100: l2-cache {
-> +				compatible = "cache";
-> +				next-level-cache = <&L3_0>;
-> +			};
-> +
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ drivers/rtc/rtc-rs5c313.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Nit: stray newline you can drop when applying.
+diff --git a/drivers/rtc/rtc-rs5c313.c b/drivers/rtc/rtc-rs5c313.c
+index e98f85f34206..712a08e9e52d 100644
+--- a/drivers/rtc/rtc-rs5c313.c
++++ b/drivers/rtc/rtc-rs5c313.c
+@@ -2,7 +2,7 @@
+  * Ricoh RS5C313 RTC device/driver
+  *  Copyright (C) 2007 Nobuhiro Iwamatsu
+  *
+- *  2005-09-19 modifed by kogiidena
++ *  2005-09-19 modified by kogiidena
+  *
+  * Based on the old drivers/char/rs5c313_rtc.c  by:
+  *  Copyright (C) 2000 Philipp Rumpf <prumpf@tux.org>
+@@ -36,7 +36,7 @@
+  *      1.11a   Daniele Bellucci: Audit create_proc_read_entry in rtc_init
+  *	1.12	Venkatesh Pallipadi: Hooks for emulating rtc on HPET base-timer
+  *		CONFIG_HPET_EMULATE_RTC
+- *	1.13	Nobuhiro Iwamatsu: Updata driver.
++ *	1.13	Nobuhiro Iwamatsu: Update driver.
+  */
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+@@ -280,7 +280,7 @@ static int rs5c313_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	while (1) {
+ 		RS5C313_CEENABLE;	/* CE:H */
+ 
+-		/* Initiatlize control reg. 24 hour */
++		/* Initialize control reg. 24 hour */
+ 		rs5c313_write_cntreg(0x04);
+ 
+ 		if (!(rs5c313_read_cntreg() & RS5C313_CNTREG_ADJ_BSY))
+-- 
+2.25.1
 
-> +		};
-
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-
-Johan

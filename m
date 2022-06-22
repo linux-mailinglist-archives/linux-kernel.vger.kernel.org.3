@@ -2,118 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E92554068
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E018B554075
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356226AbiFVCKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 22:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        id S1355942AbiFVCRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 22:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356136AbiFVCKb (ORCPT
+        with ESMTP id S229734AbiFVCRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 22:10:31 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10245338AE;
-        Tue, 21 Jun 2022 19:10:31 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25M0IiLt002242;
-        Wed, 22 Jun 2022 02:10:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Uh2KVX83UjniT/X3eBrQjsKFrVSNSOBjSj6MbRV+RM8=;
- b=d2HrjYXPPj6DSaai5niGRZw6POBnEcuy0OU1ED0W4wV3Kz3QeRxPDS5BWRipxLt76giS
- 7KjzVwQnV0qbbmf6J9eXUHdIRw+X9Zny1H0kkLCBKgKJJlBqC4mnS0dkDsfE9mv3A3y4
- 1/CyPY+Vy+2JMxI4KUXAxsju79wtRY9ZNVGm61T+gybdcH1vngNpj49syiVATkXOHisx
- Sxlty68FGNPqsoOhlQJKsZSShHOv6+QF2bJT7eKD35z1Rf3bdSIMbyvoLTzo6CfMnSVC
- orkLdd6UhVrEVBtOi33jM2OWww3hFeOIXIZ6JWEthj5Ardww54bkUxE3irK02UsL4XSi KA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs5a0f6wk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jun 2022 02:10:22 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25M26bgV038209;
-        Wed, 22 Jun 2022 02:10:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtd9usx4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jun 2022 02:10:21 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25M29Biw002724;
-        Wed, 22 Jun 2022 02:10:21 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtd9usx36-6;
-        Wed, 22 Jun 2022 02:10:20 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     bvanassche@acm.org, jejb@linux.ibm.com,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        linux-scsi@vger.kernel.org, avri.altman@wdc.com,
-        alim.akhtar@samsung.com, linux-kernel@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        cc.chou@mediatek.com, chun-hung.wu@mediatek.com,
-        qilin.tan@mediatek.com, chaotian.jing@mediatek.com,
-        lin.gui@mediatek.com, jiajie.hao@mediatek.com,
-        eddie.huang@mediatek.com, powen.kao@mediatek.com,
-        peter.wang@mediatek.com, alice.chao@mediatek.com,
-        tun-yu.yu@mediatek.com, mason.zhang@mediatek.com
-Subject: Re: [PATCH v5 00/11] scsi: ufs: Fix PMC and low-power mode on MediaTek UFS platforms
-Date:   Tue, 21 Jun 2022 22:10:16 -0400
-Message-Id: <165586371838.21830.10837067016201802350.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220616053725.5681-1-stanley.chu@mediatek.com>
-References: <20220616053725.5681-1-stanley.chu@mediatek.com>
+        Tue, 21 Jun 2022 22:17:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8071230F5B;
+        Tue, 21 Jun 2022 19:17:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C42DB81A94;
+        Wed, 22 Jun 2022 02:17:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795D1C3411C;
+        Wed, 22 Jun 2022 02:17:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655864265;
+        bh=Hy9uGehsjDlrdBYoTgczfaFinnYGX3nIlRrm+aT86Og=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=noM6Oiz4Kaq06o4h5aJoVXOy0efNuPqWT5OzeXiF8OE5vs5tp70Zxmdl9WLlU3jq+
+         GDofdZOxO6pnNby1wq3vEL6RKRT+/VL0pwTkYQC9ao8dIdFnTJC9bv0ynQ3wBw2xHd
+         Jj0guKo7mojh6JO/tgvsCWNcj06xDX5JFuaXhwTUILmMsFvuUorzQYaxUok11prGXb
+         l9QxK69CWeyS/SxvL9h5RpuZS023g8aclu35BOAweLB0MkXrpmpfDAWTJNy5ArVdeA
+         /ZSV6GM20lshTmgHaGoHLzYLuD+qhX5ECG/qIiqZ7rz5GqIHIZRHL+gqb/CzUNYev+
+         r2cwiZcfbfQ7Q==
+Date:   Tue, 21 Jun 2022 19:17:43 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     xiujianfeng <xiujianfeng@huawei.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] evm: Use IS_ENABLED to initialize .enabled
+Message-ID: <YrJ7x3kCTy3ZutZ/@sol.localdomain>
+References: <20220606101042.89638-1-xiujianfeng@huawei.com>
+ <64511312-df94-c40b-689c-5fc3823e91f5@pengutronix.de>
+ <812c4ee9-56f7-900a-df48-f3ca3e15542f@huawei.com>
+ <5d0c291bb4a674a6733a18f9eb67cf40193732f4.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: GWhTys5xcKuFfbQu_U5O6KuMkUa_kQM8
-X-Proofpoint-GUID: GWhTys5xcKuFfbQu_U5O6KuMkUa_kQM8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5d0c291bb4a674a6733a18f9eb67cf40193732f4.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 13:37:14 +0800, Stanley Chu wrote:
-
-> This series provides some fixes on MediaTek UFS platforms, please consider this patch series for kernel v5.20.
+On Tue, Jun 21, 2022 at 10:03:39AM -0400, Mimi Zohar wrote:
+> On Tue, 2022-06-21 at 18:58 +0800, xiujianfeng wrote:
+> > Hi, Ahmad
+> > 
+> > 在 2022/6/7 14:06, Ahmad Fatoum 写道:
+> > > On 06.06.22 12:10, Xiu Jianfeng wrote:
+> > >> Use IS_ENABLED(CONFIG_XXX) instead of #ifdef/#endif statements to
+> > >> initialize .enabled, minor simplicity improvement.
 > 
-> - Provide workaround for power mode change for HS-G5
-> - Fix and provide regulator features
+> The difference between using ifdef's and IS_ENABLED is when the
+> decision is made - build time, run time.   Please update the patch
+> description providing an explanation for needing to make the decision
+> at run time.
 > 
-> Changes compared to v4:
-> - Add one patch to disable unused VCCQx
-> - Fix the invoking location of ufs_mtk_vreg_fix_vccqx()
-> 
-> [...]
+> thanks,
 
-Applied to 5.20/scsi-queue, thanks!
+IS_ENABLED() is a compile time constant.  So the patch looks fine to me.
 
-[01/11] scsi: ufs: Export ufshcd_uic_change_pwr_mode()
-        https://git.kernel.org/mkp/scsi/c/fc53683b45b0
-[02/11] scsi: ufs: Fix ADAPT logic for HS-G5
-        https://git.kernel.org/mkp/scsi/c/d81c4c6f7170
-[03/11] scsi: ufs-mediatek: Introduce workaround for power mode change
-        https://git.kernel.org/mkp/scsi/c/3f9b6cec12e2
-[04/11] scsi: ufs-mediatek: Fix the timing of configuring device regulators
-        https://git.kernel.org/mkp/scsi/c/3fd23b8dfb54
-[05/11] scsi: ufs-mediatek: Prevent device regulators setting as LPM incorrectly
-        https://git.kernel.org/mkp/scsi/c/005ffdf09cd3
-[06/11] scsi: ufs-mediatek: Support low-power mode for VCCQ
-        https://git.kernel.org/mkp/scsi/c/0836cc252a52
-[07/11] scsi: ufs-mediatek: Support flexible parameters for smc calls
-        https://git.kernel.org/mkp/scsi/c/bc602ae977f3
-[08/11] scsi: ufs-mediatek: Support low-power mode for parents of VCCQx
-        https://git.kernel.org/mkp/scsi/c/42b1928360a3
-[09/11] scsi: ufs: Export regulator functions
-        https://git.kernel.org/mkp/scsi/c/1d6f9decb60a
-[10/11] scsi: ufs-mediatek: Support multiple VCC sources
-        https://git.kernel.org/mkp/scsi/c/ece418d02911
-[11/11] scsi: ufs-mediatek: Disable unused VCCQx power rails
-        https://git.kernel.org/mkp/scsi/c/cb142b6d2f60
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+- Eric

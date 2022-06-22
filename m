@@ -2,149 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB7955462B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5D5554656
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351827AbiFVI3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S1352141AbiFVI3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354215AbiFVI2b (ORCPT
+        with ESMTP id S1355420AbiFVI24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:28:31 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F1A39166
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:27:26 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id q9so22272976wrd.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:27:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yHEkZ4f8EPJnKRi58/HD9Y5sbQwKZUo9tMe5hK1B3uM=;
-        b=djvq1G5LNo0VLBefGWrMkuEjf+FmzOFlU/laH4dizg7t8aPiRpSXSR/nA2db8bbc03
-         SxIXVGW7jQ2IHOd96Gt6nccU4AKYsAScPf0KJiObTCicw5Ym9B23j8JwkSBhABa7QwW+
-         RD5EHro7doNCDsSiGd6bkAK4nwDNAF7jbkOnl23Hzi6kVEypyGpJvlhBM8MQJ9LfPGTl
-         zbX1+/1620eJpyCWSFHX94C4dHTZo8g+RH8bnxFGgDIuTcIkDz+xX/SYzDe/6JVg3CXL
-         C4YJyynPnFPVqvNu1e/8B+lEoQwswodoj3fSqxBf8iEs0Y0yjZ3wmCD0JqdQSwTv40n+
-         KgNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yHEkZ4f8EPJnKRi58/HD9Y5sbQwKZUo9tMe5hK1B3uM=;
-        b=Bi+ikc7D0dbux4JZy7whKksZAsjsXFXUlxnqNgvYAevCq/I/Z6cmwAahYUThwHyMse
-         rGbx+M7523TpGsB+imbnehiRp1HBpDkM6+Pdvt5nUwMmKH0wQshT0DMT9udXtQyddNyx
-         kZVujOzb6ijgkEkWuw3UCbdrvUKlWBarq5tr1sNZW8tKCXWUNlBdoeZ/D7COvXhCF2oN
-         k6i1mIzBq41ZwuG3ksZaoUD2fXkJO8PZRJsqdlsbbowOjM9sNozo3oKa62YxdUNdqn+V
-         7XxcvxdB4i1B3nxhGFgrdrjB/cEZeBUyA3LmqMD8ggCSU5E0K4JaX505bzCHMQ1ILpGc
-         8Mhw==
-X-Gm-Message-State: AJIora+9lyYQ3nblla+r4q0nbgoP8KhSrkn+MK7D279vdUYTNTuLSQyG
-        lRryO02CH78JRatTpdqRlqzAsA==
-X-Google-Smtp-Source: AGRyM1soJWg//Zzca+Z03MzWthu6TXIUlwOvwmKxduEf/gUdv2NVMtKrSG7Fur/W2gUv96vBiSkPNQ==
-X-Received: by 2002:a5d:52d2:0:b0:21b:8507:a68 with SMTP id r18-20020a5d52d2000000b0021b85070a68mr1998726wrv.643.1655886440423;
-        Wed, 22 Jun 2022 01:27:20 -0700 (PDT)
-Received: from joneslee-l.cable.virginm.net (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id x5-20020a5d54c5000000b0021b88ec99cesm11145871wrv.94.2022.06.22.01.27.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 01:27:20 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, stable@kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Subject: [RESEND 1/1] Bluetooth: Use chan_list_lock to protect the whole put/destroy invokation
-Date:   Wed, 22 Jun 2022 09:27:16 +0100
-Message-Id: <20220622082716.478486-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+        Wed, 22 Jun 2022 04:28:56 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E2F38D8D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:27:49 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id RGY00035;
+        Wed, 22 Jun 2022 16:27:35 +0800
+Received: from localhost.localdomain (10.200.104.82) by
+ jtjnmail201610.home.langchao.com (10.100.2.10) with Microsoft SMTP Server id
+ 15.1.2308.27; Wed, 22 Jun 2022 16:27:36 +0800
+From:   Deming Wang <wangdeming@inspur.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
+Subject: [PATCH] virtio_ring: remove unnecessary to_vvq call in poll_packed
+Date:   Wed, 22 Jun 2022 04:27:35 -0400
+Message-ID: <20220622082735.1780-1-wangdeming@inspur.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.200.104.82]
+tUid:   202262216273535ccf849eb8e6e404e80fec5e573b8c6
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change prevents a use-after-free caused by one of the worker
-threads starting up (see below) *after* the final channel reference
-has been put() during sock_close() but *before* the references to the
-channel have been destroyed.
+It passes '_vq' to virtqueue_use_indirect(), which still calls
+to_vvq to get 'vq', let's directly pass 'vq'. It can avoid
+unnecessary call of to_vvq in virtqueue_poll_packed.
 
-  refcount_t: increment on 0; use-after-free.
-  BUG: KASAN: use-after-free in refcount_dec_and_test+0x20/0xd0
-  Read of size 4 at addr ffffffc114f5bf18 by task kworker/u17:14/705
-
-  CPU: 4 PID: 705 Comm: kworker/u17:14 Tainted: G S      W       4.14.234-00003-g1fb6d0bd49a4-dirty #28
-  Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 Google Inc. MSM sm8150 Flame DVT (DT)
-  Workqueue: hci0 hci_rx_work
-  Call trace:
-   dump_backtrace+0x0/0x378
-   show_stack+0x20/0x2c
-   dump_stack+0x124/0x148
-   print_address_description+0x80/0x2e8
-   __kasan_report+0x168/0x188
-   kasan_report+0x10/0x18
-   __asan_load4+0x84/0x8c
-   refcount_dec_and_test+0x20/0xd0
-   l2cap_chan_put+0x48/0x12c
-   l2cap_recv_frame+0x4770/0x6550
-   l2cap_recv_acldata+0x44c/0x7a4
-   hci_acldata_packet+0x100/0x188
-   hci_rx_work+0x178/0x23c
-   process_one_work+0x35c/0x95c
-   worker_thread+0x4cc/0x960
-   kthread+0x1a8/0x1c4
-   ret_from_fork+0x10/0x18
-
-Cc: stable@kernel.org
-Cc: Marcel Holtmann <marcel@holtmann.org>
-Cc: Johan Hedberg <johan.hedberg@gmail.com>
-Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-bluetooth@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Deming Wang <wangdeming@inspur.com>
 ---
- net/bluetooth/l2cap_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/virtio/virtio_ring.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index ae78490ecd3d4..82279c5919fd8 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -483,9 +483,7 @@ static void l2cap_chan_destroy(struct kref *kref)
- 
- 	BT_DBG("chan %p", chan);
- 
--	write_lock(&chan_list_lock);
- 	list_del(&chan->global_l);
--	write_unlock(&chan_list_lock);
- 
- 	kfree(chan);
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 13a7348cedff..cb6323e0088b 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -1522,9 +1522,8 @@ static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
+ 			VRING_PACKED_EVENT_F_WRAP_CTR);
  }
-@@ -501,7 +499,9 @@ void l2cap_chan_put(struct l2cap_chan *c)
+ 
+-static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wrap)
++static bool virtqueue_poll_packed(struct vring_virtqueue *vq, u16 off_wrap)
  {
- 	BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
+-	struct vring_virtqueue *vq = to_vvq(_vq);
+ 	bool wrap_counter;
+ 	u16 used_idx;
  
-+	write_lock(&chan_list_lock);
- 	kref_put(&c->kref, l2cap_chan_destroy);
-+	write_unlock(&chan_list_lock);
+@@ -2054,7 +2053,7 @@ bool virtqueue_poll(struct virtqueue *_vq, unsigned int last_used_idx)
+ 		return false;
+ 
+ 	virtio_mb(vq->weak_barriers);
+-	return vq->packed_ring ? virtqueue_poll_packed(_vq, last_used_idx) :
++	return vq->packed_ring ? virtqueue_poll_packed(vq, last_used_idx) :
+ 				 virtqueue_poll_split(_vq, last_used_idx);
  }
- EXPORT_SYMBOL_GPL(l2cap_chan_put);
- 
+ EXPORT_SYMBOL_GPL(virtqueue_poll);
 -- 
-2.36.1.255.ge46751e96f-goog
+2.27.0
 

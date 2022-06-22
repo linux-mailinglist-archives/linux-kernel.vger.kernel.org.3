@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52581554744
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184D45547C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357653AbiFVLxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S1352808AbiFVLxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357734AbiFVLxM (ORCPT
+        with ESMTP id S1357673AbiFVLxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:53:12 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E422713D2A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:53:10 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31772f8495fso159141687b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cdkJSuyjbr2EQOFoPEFwlniKrWgKWxzaIKhASWgR6lo=;
-        b=grBjndnrBLggQNfyCQZEiK731bM02i25bZ++Sjhf5Xfo/5gTnI0z0KljbrQaT+H1YQ
-         /9ymdQVAr9FAkXDCU/OWiycMNp/EkHRv0/xOJ5uy2/NrqXTlvAOxRXV43ltskB+yVmCv
-         KGMGSnKptmVBtWlKupxBUYzdamJDstM/zPtMrG8Y3fxJimZ7jMTKqFb4gUbUZPgSYgd+
-         RKL/W5mAWW5r0ueWnTLLEuSFHAempt5r+5nGJbwN+EmK9eCTCgqBp6BsVbJl/YrUE8VH
-         p7hTpNsOD++DyY42Zw+JjtdZBIE/0gbGnNbZrCQ83MYmLsav9irOfLHwKBcpvtTLvD2d
-         oPpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cdkJSuyjbr2EQOFoPEFwlniKrWgKWxzaIKhASWgR6lo=;
-        b=MuXeHw8eQt2mpzAah13a4z8K52hMbxSlkxLfFRoQ65nISIxmsuausm18T9XasVkLwM
-         P2TcDr1u32BqLL9e8ntCR7c2Sba9iHFMGjJVz0yKP0iecDRmhMfZA25HESZmhCkVF25G
-         isNWpg8sr3Cnwij4fhx8PiCIJVTWO6clh+VsavRQNGTKPTBYnskBCUVlIaZ0iaY/adI8
-         tnRYsIYHcUomKLiMkdRGpTQ3U9UxTVSKPy/zDRaAjlQV01LA571MFQT6dZkaIFmQVGbO
-         6f89L2ibCCgLwA+oY/mfPIqmGVMauf1fzDEHAmmNxLOVDWX5NSmZmN6tJVgt5P/YYji3
-         SPEA==
-X-Gm-Message-State: AJIora90SMeuL+QTeVzOyDTs5diOeLlMi1uO6q1IBCo0rEPERKxLzgie
-        vRdtGufkfFXZmGDxnzSArGAj6scDQkjfT7Zsn+YPqg==
-X-Google-Smtp-Source: AGRyM1tWPj893Gig5gXXOeELDaxqcWxGPeJnl0HlqSTLfsWgodKEjFifMXzzGTYiqbK4zVsWHaOn6tIogEPEfTBiCNs=
-X-Received: by 2002:a0d:df50:0:b0:317:9c40:3b8b with SMTP id
- i77-20020a0ddf50000000b003179c403b8bmr3871970ywe.332.1655898789892; Wed, 22
- Jun 2022 04:53:09 -0700 (PDT)
+        Wed, 22 Jun 2022 07:53:44 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7B432051;
+        Wed, 22 Jun 2022 04:53:41 -0700 (PDT)
+Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id E207120603;
+        Wed, 22 Jun 2022 13:53:39 +0200 (CEST)
+Message-ID: <d0b55a37-428e-8081-6785-11be20aa14c7@somainline.org>
+Date:   Wed, 22 Jun 2022 13:53:39 +0200
 MIME-Version: 1.0
-References: <20220622114912.18351-1-colin.i.king@gmail.com>
-In-Reply-To: <20220622114912.18351-1-colin.i.king@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 22 Jun 2022 13:52:58 +0200
-Message-ID: <CANn89iLNPi3jrSH9wDN4Vkh3aY_Pq3PVMqrmuVzo4hoaxdaRZQ@mail.gmail.com>
-Subject: Re: [PATCH][next] raw: remove redundant pointers saddr and daddr
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: Removal of qcom,board-id and qcom,msm-id
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        krzysztof.kozlowski@linaro.org
+Cc:     agross@kernel.org, arnd@arndb.de, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, olof@lixom.net, robh@kernel.org,
+        sboyd@kernel.org
+References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
+ <20220522195138.35943-1-konrad.dybcio@somainline.org>
+ <c072077a-cc16-c8f8-fcfa-891b3357cb66@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <c072077a-cc16-c8f8-fcfa-891b3357cb66@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 1:49 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->
-> Pointers saddr and daddr are being assigned and are never used. The
-> pointers are redundant and can be removed.
->
-> Cleans up clang scan-build warnings:
-> net/ipv6/raw.c:348:3: warning: Value stored to 'saddr' is never read
-> net/ipv6/raw.c:349:3: warning: Value stored to 'daddr' is never read
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Thanks, I have posted this already, with proper tags:
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20220622032303.159394-1-edumazet@google.com/
+On 22.06.2022 10:21, Dmitry Baryshkov wrote:
+> On 22/05/2022 22:51, Konrad Dybcio wrote:
+>> Hi,
+>>
+>> removing these properties will not bring almost any benefit (other than making
+>> some checks happy any saving some <200 LoC) and will make the lives of almost
+>> all people doing independent development for linux-on-msm harder. There are
+>> almost unironically like 3 people outside Linaro and QUIC who have
+>> non-vendor-fused development boards AND the sources to rebuild the
+>> bootloader on their own. Making it harder to boot is only going to
+>> discourage people from developing on these devices, which is already not
+>> that pleasant, especially with newer platforms where you have to fight with
+>> the oh-so-bright ideas of Android boot chain..
+>>
+>> This only concerns devices released before sm8350, as the new ones will not
+>> even boot with these properties present (or at least SONY Sagami, but I
+>> doubt it's an isolated case), so other than completing support for older
+>> devices, it won't be an issue going forward, anyway.
+> 
+> I almost missed this part of the discussion (and Krzysztof had to point me to it in discussion of his patches).
+> 
+> I think this is a Sony peculiarity. At least the distributed SM8350 (lahaina) and SM8450 (waipio) Qualcomm device trees use these properties:
+> 
+> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-hdk.dts
+> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/lahaina-v2.1.dtsi
+> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio-qrd-pm8010.dts
+> https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio-v2.dtsi
+> 
+> 
+Hi, 
 
-> ---
->  net/ipv6/raw.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
-> index 46b560aacc11..722de9dd0ff7 100644
-> --- a/net/ipv6/raw.c
-> +++ b/net/ipv6/raw.c
-> @@ -332,7 +332,6 @@ static void rawv6_err(struct sock *sk, struct sk_buff *skb,
->  void raw6_icmp_error(struct sk_buff *skb, int nexthdr,
->                 u8 type, u8 code, int inner_offset, __be32 info)
->  {
-> -       const struct in6_addr *saddr, *daddr;
->         struct net *net = dev_net(skb->dev);
->         struct hlist_nulls_head *hlist;
->         struct hlist_nulls_node *hnode;
-> @@ -345,8 +344,6 @@ void raw6_icmp_error(struct sk_buff *skb, int nexthdr,
->         sk_nulls_for_each(sk, hnode, hlist) {
->                 /* Note: ipv6_hdr(skb) != skb->data */
->                 const struct ipv6hdr *ip6h = (const struct ipv6hdr *)skb->data;
-> -               saddr = &ip6h->saddr;
-> -               daddr = &ip6h->daddr;
->
->                 if (!raw_v6_match(net, sk, nexthdr, &ip6h->saddr, &ip6h->daddr,
->                                   inet6_iif(skb), inet6_iif(skb)))
-> --
-> 2.35.3
->
+I was puzzled on this back when I first tried to get mainline booting on 8350 too. What I think happened, is that msm-id is used in some code paths, but not others (remember there are plenty of combinations including various Google's inventions from all over the years: QCDT, DTBO, vendor_boot, AVB signage, A/B presence/absence of recovery partition, virtual partitions etc etc).
+
+Frankly, I have no idea why they are still here, but for booting just the kernel (no vendor_boot / GKI / dtbo mess), they need to be absent, at least on Sagami devices. This may be a bug in the Qualcomm bootloader, but they officially have to go with the GKI path to pass Google's compatibility tests, so this may not have been thouroughly tested (if at all), though I highly doubt this is going to change, as vendors are generally reluctant to update their bootloaders and Qualcomm is probably not interested in messing with a useless-to-the-main-purpose feature.
+
+Konrad

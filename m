@@ -2,226 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EC8554EF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C04554EF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359227AbiFVPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S1359234AbiFVPTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359240AbiFVPS6 (ORCPT
+        with ESMTP id S1358543AbiFVPTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:18:58 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6B5377F3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:18:55 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id g26so13573856ejb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:18:55 -0700 (PDT)
+        Wed, 22 Jun 2022 11:19:51 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F204037A18
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:19:50 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id g25so34931583ejh.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:19:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=KGHN8V/MAIJRoZiVsIc82ytAURP+6QoR2xSizEhnqIE=;
-        b=AwntirR+Sp6DAcIOzmk1WFjzqReFE9ry4/mzdDiW/OfsDDT8ENg01M/2hHXYwwHIKN
-         UooNHpmJMqQqfs7Vkqjin/cA8QdWusjILhtlqMcPWI7VKybsJI4dWRJZJXInr5goSpPq
-         n8v9K8A7lygcL+vLnN//TVwxYquc+uAuoiChh2bgha6kzVQtWN71h6HZoRSaip3TNtJE
-         vE/ayPdvnq4af59PIp/Uqt+Am9pXmPhdysxOlzlhodvasafulr70t9t0F+PrAtUKbQxr
-         to8pHyECA4pe/rw9u4NXpjCmYwKYlN2pMNBsIcTcfcpfg+0nUsm4QYFmll7mIyUQiLMo
-         IVYg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fL0cpK7LWs+wtjTpXEysTDKhA1+C2iKr938rtJlnymk=;
+        b=GvfsdTBmWyUjk9gg9yIDNOY9pWXwZpSazxMnvIHYUTAT4sO4mm4iC+WrG83ULgLwBi
+         QtBCMGf25OQ+7Ho+NdkvZzvhBdy0akfEaA68slA7C5N5ZDC46Rfqh50C/YZ9XO/vmVqA
+         3eV5iTj/g8q0Qp6DxxUqZdHPySmTSs8jND17Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KGHN8V/MAIJRoZiVsIc82ytAURP+6QoR2xSizEhnqIE=;
-        b=UT0iXp20cUFARbtlsQp2cZn0wzfTeychnFujnl7Xi5H9TFkBQgOond36xOWYb7KtDX
-         8pFo17GHgTSBGbMzAdKtJF/gxf3AKOnE98eAg5Mw98uFrbkwzwp2h1tEcczxmLTEWRNa
-         pXD3hevN8BnLu6F65eILdLU85hF0S/VRQ90EgwFa8do2ua3eHDdiNhJr7R4UZI8ack5T
-         shrrOo7DGqJxHIuNbUDeoIrCZZOjRH2kARZhB2EEfAfthwe+lDmSXIqZL4jKxfKpyi2t
-         jMi2onrHsgqoEK5bnCtawpmqCmn6byz8COOTLsAf7gTBDDLTbPcewxQeqWBrNu6d47h2
-         8JHg==
-X-Gm-Message-State: AJIora9Pt5KYySotw+Ky+EwvAKCd8qJHZ2LO9FkJeV5FnkFR9XPGNx0G
-        Pun4doQOYHRT1xDpwF4G8dZ6WQ==
-X-Google-Smtp-Source: AGRyM1uK824g/kFW/aTUbMXWwczn4JMyDfIciJmyAMAlZ5C5rNgycx6YKUE3YERXNZd/x/RKDRi6zw==
-X-Received: by 2002:a17:907:868f:b0:702:f865:55de with SMTP id qa15-20020a170907868f00b00702f86555demr3704720ejc.24.1655911134088;
-        Wed, 22 Jun 2022 08:18:54 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kx7-20020a170907774700b00722ea7a7febsm1568756ejc.194.2022.06.22.08.18.52
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fL0cpK7LWs+wtjTpXEysTDKhA1+C2iKr938rtJlnymk=;
+        b=URf6pwXbq43B2B7kc25N4oabjAEv6Ja03gJHqt6czAO98DTmAhBg90hXYyHU4/Oak7
+         JF/5ry7Rl2H9oQJNewTi5iLgWoMQi4lWA1FxPWS9wo/b5yDuji+k1jQBu86zb9k8iQXO
+         KxQSIlkBD6nBj43EdH4UaLS0Qeekd5Lh5iLMHQiDDl7LoruTn0tJ+Y4s0k1xiRgACCcu
+         IHrU2sdv7WUg01FpErsLFIzp6ngAVBcOYJYeFwVMHFrjCAKv5U+wPEA1MZ5jAUEoa4h6
+         Kk/UWORzKV34gTfaoP2Q3gkLxz3TzcG6iqe6QdX+dr4yc/NDGiVueh/xzeJ3DvoNm1qu
+         Hffw==
+X-Gm-Message-State: AJIora8AMumWmeofvS37PoHZUe3KH7waezBFju55X7Weit8oL9DWx/Xo
+        tDggLiMCgv4x62pP2E2uXnvYGx3xTNH/V96O
+X-Google-Smtp-Source: AGRyM1sdEDek1xkPLf2oSmzkwx8IWUa1up5g1iWsOhl6vTgUAO7G1wfcwjyg6OplG3LVLY/fnKqOCQ==
+X-Received: by 2002:a17:906:ce:b0:715:705e:52fb with SMTP id 14-20020a17090600ce00b00715705e52fbmr3562711eji.303.1655911189246;
+        Wed, 22 Jun 2022 08:19:49 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id h7-20020a0564020e8700b004355dc75066sm12916446eda.86.2022.06.22.08.19.48
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 08:18:53 -0700 (PDT)
-Message-ID: <876c9580-48ca-0491-24bc-4f20871277f0@linaro.org>
-Date:   Wed, 22 Jun 2022 17:18:52 +0200
+        Wed, 22 Jun 2022 08:19:48 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id v14so23906429wra.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:19:48 -0700 (PDT)
+X-Received: by 2002:a5d:48c1:0:b0:21a:3574:e70c with SMTP id
+ p1-20020a5d48c1000000b0021a3574e70cmr3769039wrs.97.1655911187876; Wed, 22 Jun
+ 2022 08:19:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2 7/8] arm64: dts: Add ipq5018 SoC and MP03 board support
-Content-Language: en-US
-To:     Sricharan R <quic_srichara@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, p.zabel@pengutronix.de,
-        quic_varada@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220621161126.15883-1-quic_srichara@quicinc.com>
- <20220621161126.15883-8-quic_srichara@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220621161126.15883-8-quic_srichara@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+ <YrMwXAs9apFRdkVo@debian>
+In-Reply-To: <YrMwXAs9apFRdkVo@debian>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 22 Jun 2022 10:19:31 -0500
+X-Gmail-Original-Message-ID: <CAHk-=wjmREcirYi4k_CBT+2U8X5VOAjQn0tVD28OdcKJKpA0zg@mail.gmail.com>
+Message-ID: <CAHk-=wjmREcirYi4k_CBT+2U8X5VOAjQn0tVD28OdcKJKpA0zg@mail.gmail.com>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000224f9505e20ade6b"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_RED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 18:11, Sricharan R wrote:
-> From: Varadarajan Narayanan <quic_varada@quicinc.com>
-> 
-> Add initial device tree support for the Qualcomm IPQ5018 SoC and
-> MP03.1-C2 board.
-> 
-> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+--000000000000224f9505e20ade6b
+Content-Type: text/plain; charset="UTF-8"
 
-Chain needs fixes.
+On Wed, Jun 22, 2022 at 10:08 AM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Yeah, true. I had to check to find out its from the memcpy() in check_image_valid().
 
-> ---
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts |  29 +++
->  arch/arm64/boot/dts/qcom/ipq5018.dtsi         | 221 ++++++++++++++++++
->  3 files changed, 251 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index f9e6343acd03..c44e701f093c 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -10,6 +10,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-huawei-g7.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-mp03.1-c2.dtb
+Funky but true - I can reproduce it, and just commenting out that
+memcpy fixes the warning.
 
-This does not look like in proper order.
+And I see nothing wrong with that code - it's copying a 'struct
+fw_section_info_st' between two other structs that seem to have arrays
+that are appropriately sized.
 
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-longcheer-l8150.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-longcheer-l8910.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-mtp.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts b/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
-> new file mode 100644
-> index 000000000000..d1cd080ec3db
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/ipq5018-mp03.1-c2.dts
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
-> +/*
-> + * IPQ5018 CP01 board device tree source
-> + *
-> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "ipq5018.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. IPQ5018/AP-MP03-C2";
-> +	compatible = "qcom,ipq5018-mp03", "qcom,ipq5018";
-> +
-> +	aliases {
-> +		serial0 = &blsp1_uart1;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +};
-> +
-> +&blsp1_uart1 {
-> +	pinctrl-0 = <&serial_1_pins>;
-> +	pinctrl-names = "default";
-> +	status = "ok";
+Replacing the memcpy() with just a structure assignment seems to get
+rid of the warning, and seems to be a simple fix (patch attached), but
+I don't understand why that memcpy() would warn.
 
-"okay" is preferred.
+This looks like a clang bug to me, but maybe I'm missing something.
 
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> new file mode 100644
-> index 000000000000..084fb7b30dfd
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> @@ -0,0 +1,221 @@
-> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
-> +/*
-> + * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
-> + */
-> +/*
-> + * IPQ5018 SoC device tree source
-> + *
-> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+                  Linus
 
-Combine these two comments.
+--000000000000224f9505e20ade6b
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l4pqr5ry0>
+X-Attachment-Id: f_l4pqr5ry0
 
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/clock/qcom,gcc-ipq5018.h>
-> +#include <dt-bindings/reset/qcom,gcc-ipq5018.h>
-> +
-> +/ {
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +	interrupt-parent = <&intc>;
-> +
-> +	sleep_clk: sleep-clk {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <32000>;
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	xo: xo {
-
-Node name: xo-clk
-
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <24000000>;
-
-The clock is provided by board, so at least frequency should be defined
-there.
-
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	gen2clk0: gen2clk0 {
-
-Keep consistent prefixes, so gen2-clk or gen2-0-clk
-
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <125000000>;
-> +		clock-output-names = "pcie20_phy0_pipe_clk";
-> +	};
-> +
-> +	gen2clk1: gen2clk1 {
-
-gen2-1-clk
-
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <125000000>;
-> +		clock-output-names = "pcie20_phy1_pipe_clk";
-> +	};
-> +
-
-
-Best regards,
-Krzysztof
+IGRyaXZlcnMvbmV0L2V0aGVybmV0L2h1YXdlaS9oaW5pYy9oaW5pY19kZXZsaW5rLmMgfCA0ICst
+LS0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYg
+LS1naXQgYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9odWF3ZWkvaGluaWMvaGluaWNfZGV2bGluay5j
+IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaHVhd2VpL2hpbmljL2hpbmljX2RldmxpbmsuYwppbmRl
+eCA2MGFlOGJmYzVmNjkuLjE3NDlkMjZmNGJlZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvZXRo
+ZXJuZXQvaHVhd2VpL2hpbmljL2hpbmljX2RldmxpbmsuYworKysgYi9kcml2ZXJzL25ldC9ldGhl
+cm5ldC9odWF3ZWkvaGluaWMvaGluaWNfZGV2bGluay5jCkBAIC00Myw5ICs0Myw3IEBAIHN0YXRp
+YyBib29sIGNoZWNrX2ltYWdlX3ZhbGlkKHN0cnVjdCBoaW5pY19kZXZsaW5rX3ByaXYgKnByaXYs
+IGNvbnN0IHU4ICpidWYsCiAKIAlmb3IgKGkgPSAwOyBpIDwgZndfaW1hZ2UtPmZ3X2luZm8uZndf
+c2VjdGlvbl9jbnQ7IGkrKykgewogCQlsZW4gKz0gZndfaW1hZ2UtPmZ3X3NlY3Rpb25faW5mb1tp
+XS5md19zZWN0aW9uX2xlbjsKLQkJbWVtY3B5KCZob3N0X2ltYWdlLT5pbWFnZV9zZWN0aW9uX2lu
+Zm9baV0sCi0JCSAgICAgICAmZndfaW1hZ2UtPmZ3X3NlY3Rpb25faW5mb1tpXSwKLQkJICAgICAg
+IHNpemVvZihzdHJ1Y3QgZndfc2VjdGlvbl9pbmZvX3N0KSk7CisJCWhvc3RfaW1hZ2UtPmltYWdl
+X3NlY3Rpb25faW5mb1tpXSA9IGZ3X2ltYWdlLT5md19zZWN0aW9uX2luZm9baV07CiAJfQogCiAJ
+aWYgKGxlbiAhPSBmd19pbWFnZS0+ZndfbGVuIHx8Cg==
+--000000000000224f9505e20ade6b--

@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEBE554811
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617AE554692
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353280AbiFVLFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S1353711AbiFVLF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbiFVLFI (ORCPT
+        with ESMTP id S234590AbiFVLFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:05:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0B93BBC6;
-        Wed, 22 Jun 2022 04:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655895904; x=1687431904;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=rXGfo5TTPJwt5jxUV2HzNzGOHPZqSFUbroQvi0MTJtU=;
-  b=iJPc+90YX3cbc0j7aNdAhCoYE2BHhRRE94Ca+q1g87E8u9BQ53egU+IY
-   4Bwq7+0eY4bNobPcesg8RpZJ6vjMhvwcy0Tba4UWdt8hCBk3JRpkKcilg
-   ng2E7VSfYlAXLwvInwgg2FAWD+R0KV93OYBhddhsOL+jUleVDw9vF3d1G
-   /Iamzg64WLRGjNSY/4ZWHJnKl9xoTa+VyEoKUMFGNb6Eu7F3hiodwny35
-   EDAvIiqREfygDiryKkJ9qgn/u3GbURO5MhbRRAo0eUX9TKZKSY/oCAaSN
-   FxacSJ5Jgn/L+aGk31u3qDkRFnXjXHmCDX13BgxCDdFArI5XYhI59tp8v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281462478"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="281462478"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:05:00 -0700
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="620872649"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:04:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3yAE-000sGc-W2;
-        Wed, 22 Jun 2022 14:04:50 +0300
-Date:   Wed, 22 Jun 2022 14:04:50 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
- description
-Message-ID: <YrL3UtIYjmBiWmuH@smile.fi.intel.com>
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-10-mw@semihalf.com>
- <YrDO05TMK8SVgnBP@lunn.ch>
- <YrGm2jmR7ijHyQjJ@smile.fi.intel.com>
- <YrGpDgtm4rPkMwnl@lunn.ch>
- <YrGukfw4uiQz0NpW@smile.fi.intel.com>
- <CAPv3WKf_2QYh0F2LEr1DeErvnMeQqT0M5t40ROP2G6HSUwKpQQ@mail.gmail.com>
- <YrLft+BrP2jI5lwp@lunn.ch>
+        Wed, 22 Jun 2022 07:05:24 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC853BBD2;
+        Wed, 22 Jun 2022 04:05:17 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ej4so19413036edb.7;
+        Wed, 22 Jun 2022 04:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BsWeZKTMRUjS4UGWGKXKi/F6OhLV9oNlEr0sqKPjdhY=;
+        b=goSSVIS2xMmIt8+zQ+4MnTruyoXO+gM/WRoEM6Cuo0Prstx1aOOwxieSEas175GI/Y
+         pR2Ri8ptjhMZM/G7BHcC7rgqDl7INoPAriq7bsCHGZaWu/qkjeRlUw4V0ROTlGdz8Jsz
+         ZGNVA9rlMFvvpoELJv0Gr/0V7oP28iDObt/v/9fSfFXohainHuDFWRfYpz0WhcPFSn5v
+         TZkEbd++U+4Lt5ORaWDswJ87h+OTBxqy3lfL3eFCaJcKfpk3IXE4l8eYzXXW4G6vNZaq
+         /7L3bJjNz22oFeOw74YdcXFiGlAiK/Hpa+Ha3pZuSu6M0TMMTi0rSX0YXOE9lEsDAZtb
+         l3oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BsWeZKTMRUjS4UGWGKXKi/F6OhLV9oNlEr0sqKPjdhY=;
+        b=gwWPpagxg2tym0yF/TD0jGE4LAX/u3gka7dvKYdEcUELY1WEyBLs5jwSpzqWAKNLCn
+         Zo9mifafSVtbchn3n84YYOVA6b2Pnta+Bzi7vMXgLBKT3b8em40/EdNGpT3qH7JhEkuI
+         ESho1wW8uHmjzpv2TgHb4ZBZRxS2MieNcRbiH6rod8nJqDjeiPNgcPKmC7dVdrVwX5IS
+         2ztDEIAzfqhy/9DNBPrPlbmbx8yPWTNit6XRmtcQ8NDd96OvL8lpposXfThD0h2AzAAW
+         XZqGNh9kmUBTTU6DezDODB9D0o4LYf1MN9fFJbHEAyPqmnMr1fPWFDlnJN/nCxJjdXEU
+         rbqA==
+X-Gm-Message-State: AJIora9OBXkgtVf4P9PEZVqYcYxPG4LxyTOq4xBg4aviCMJhaUwYoEl6
+        uI/TKVwPq8utOiG02mjjLGM=
+X-Google-Smtp-Source: AGRyM1s9nDUowq9+/oNlBIcMXsoZizGRGfHc6q9TiQd5vkG3V7Wuhzig5PXTkxlYtZVA2ciTT6f/JA==
+X-Received: by 2002:a05:6402:4385:b0:435:9104:955b with SMTP id o5-20020a056402438500b004359104955bmr3470937edc.45.1655895915755;
+        Wed, 22 Jun 2022 04:05:15 -0700 (PDT)
+Received: from [192.168.0.24] (80.174.78.229.dyn.user.ono.com. [80.174.78.229])
+        by smtp.gmail.com with ESMTPSA id b12-20020a17090630cc00b00722edb5fb53sm1007705ejb.116.2022.06.22.04.05.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 04:05:14 -0700 (PDT)
+Message-ID: <6b4f108c-b4bc-72cf-5972-222fbb2f3fca@gmail.com>
+Date:   Wed, 22 Jun 2022 13:05:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrLft+BrP2jI5lwp@lunn.ch>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v6 15/16] arm64: dts: mediatek: Add infra #reset-cells
+ property for MT8192
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
+        chun-jie.chen@mediatek.com, wenst@chromium.org,
+        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
+ <20220503093856.22250-16-rex-bc.chen@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220503093856.22250-16-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:24:07AM +0200, Andrew Lunn wrote:
-> On Wed, Jun 22, 2022 at 11:08:13AM +0200, Marcin Wojtas wrote:
-> > wt., 21 cze 2022 o 13:42 Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> napisał(a):
-> > > On Tue, Jun 21, 2022 at 01:18:38PM +0200, Andrew Lunn wrote:
-> > > > On Tue, Jun 21, 2022 at 02:09:14PM +0300, Andy Shevchenko wrote:
-> > > > > On Mon, Jun 20, 2022 at 09:47:31PM +0200, Andrew Lunn wrote:
 
-...
 
-> > > > > > > +            Memory32Fixed (ReadWrite,
-> > > > > > > +                0xf212a200,
-> > > > > > > +                0x00000010,
-> > > > > >
-> > > > > > What do these magic numbers mean?
-> > > > >
-> > > > > Address + Length, it's all described in the ACPI specification.
-> > > >
-> > > > The address+plus length of what? This device is on an MDIO bus. As
-> > > > such, there is no memory! It probably makes sense to somebody who
-> > > > knows ACPI, but to me i have no idea what it means.
-> > >
-> > > I see what you mean. Honestly I dunno what the device this description is for.
-> > > For the DSA that's behind MDIO bus? Then it's definitely makes no sense and
-> > > MDIOSerialBus() resources type is what would be good to have in ACPI
-> > > specification.
-> > 
-> > It's not device on MDIO bus, but the MDIO controller's register itself
+On 03/05/2022 11:38, Rex-BC Chen wrote:
+> To support reset of infra, we add property of #reset-cells.
 > 
-> Ah. So this is equivalent to
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Applied, thanks!
+
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
 > 
->                 CP11X_LABEL(mdio): mdio@12a200 {
->                         #address-cells = <1>;
->                         #size-cells = <0>;
->                         compatible = "marvell,orion-mdio";
->                         reg = <0x12a200 0x10>;
->                         clocks = <&CP11X_LABEL(clk) 1 9>, <&CP11X_LABEL(clk) 1 5>,
->                                  <&CP11X_LABEL(clk) 1 6>, <&CP11X_LABEL(clk) 1 18>;
->                         status = "disabled";
->                 };
-> 
-> DT seems a lot more readable, "marvell,orion-mdio" is a good hint that
-> device this is. But maybe it is more readable because that is what i'm
-> used to.
-
-In ACPI we have _HID and _DDN. _DDN may put a descriptive string.
-
-> Please could you add a lot more comments. Given that nobody currently
-> actually does networking via ACPI, we have to assume everybody trying
-> to use it is a newbie, and more comments are better than less.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 411feb294613..79803420d8ef 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -269,6 +269,7 @@
+>   			compatible = "mediatek,mt8192-infracfg", "syscon";
+>   			reg = <0 0x10001000 0 0x1000>;
+>   			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+>   		};
+>   
+>   		pericfg: syscon@10003000 {

@@ -2,209 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D763B5543DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE28F554414
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353802AbiFVHi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S1353500AbiFVHj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353866AbiFVHiL (ORCPT
+        with ESMTP id S1350702AbiFVHjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:38:11 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0F9377F8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:38:05 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 477DB5C00FC;
-        Wed, 22 Jun 2022 03:38:05 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 22 Jun 2022 03:38:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1655883485; x=1655969885; bh=Cn6Z2/p9SO
-        EAnDYDOhTo2hgXRX/uuhVY54GGM0ULJDw=; b=DA/ngi2a9qaz8ulm8WmNEkiUu2
-        RedJpyOR7IZNZOztxMmZDhGdT/qWo3HXsJFLIHoLkMxrpwVFYXruscBQVWZR1RjW
-        KmeQBWBDgf8NGjLa0n4XoPuu4wjRBHuOuc2QZ8kxvlG8IKPaRTd7ZUUsgksNYOS2
-        Tkrbd+yqsefy+rGUcxgEnjGLA0Vu7eQpZlyywN7VPBo0H+5LVUpe9bhI6Bf0l03D
-        06OleAholZGW4cZpCgnzm8KM2WRgeXkZYr4gNOGbptrA0j53mPq5TZ6OCJ6mWc52
-        5g6YnE4fqpNecJK5saU1Abf12YIWVsZu9mrms7o1+NLSv+DNi/yxG5fy+uoA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1655883485; x=1655969885; bh=Cn6Z2/p9SOEAnDYDOhTo2hgXRX/u
-        uhVY54GGM0ULJDw=; b=ubw0mNuagzWqjF49CTycXdreJzpRYvW2/0Y/wkiagD2p
-        oIU2fuVhbP8zFGtxmA12S2N0N49e+AmbtocvC4WHR1KErspQS80fdzV4Et+Sr4r3
-        Kbn8Oc+XlD3Wn4K/2Z/mgwTzVyz6fXfu4tQ87wgyym5sxpWXHTIODNaHeEp9XB30
-        h6AKudFamehCS5bdl7nrTE62WcNbCiBH8L/ZwyNL+lwpd0ux4B/gCo2YD4gW1QTU
-        HEt9Zs8DKUJeNsobJ+ksxucnqIbqlvwml+fTpYO0uEjdJcy6RJrWopLpYx6sKXB6
-        yUzHJuo5E3Qby1ns7ol6OXCQ3bNnavuxZ3qFe9y/AA==
-X-ME-Sender: <xms:3cayYrz2qFL3rz1pPngsL0q2bjsgO6vyqOzRM-r48HWZ6LblKrjVNQ>
-    <xme:3cayYjQS5MSHDWA5sjHkauiGDqFFQcn4OgxsonNp3BH-RqKjxYuVC5Z2KKjKh2W_k
-    XAXsP-xVG-3oiuWpDc>
-X-ME-Received: <xmr:3cayYlXQxpQoCbJpS3WOff6FwhPpJQe4aztqPI-Fan-0IMJK5jU7fZ7iTK-qNki1ssfIUeuFVithMFE9tAQOY_c0mmae5xzM4OZtI-M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgedguddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
-    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:3cayYlh-EgGxubOScnDIUo9zasxwuuSjD3I895M_XCXCZefkHlW_EQ>
-    <xmx:3cayYtCfxhdTnsA0B4FvkRn45dIaReniW5cIMR49KKGvZ7lELhG99w>
-    <xmx:3cayYuKHzcdcAwdgneTqwwW3-w3YpD_f3HxxX_NwpDrg2HsPSv0zIQ>
-    <xmx:3cayYh14TtKm7JTq5MnkFIWemOh7O5WcKWTtilekvgxV-3kJxyavVg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Jun 2022 03:38:04 -0400 (EDT)
-Date:   Wed, 22 Jun 2022 09:38:03 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>, wens@csie.org,
-        airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/sun4i: Add DMA mask and segment size
-Message-ID: <20220622073803.34awgg6lm3ps6xmx@houat>
-References: <20220620181333.650301-1-jernej.skrabec@gmail.com>
- <45ef3221-8f27-0ae7-8cd9-48575812d797@arm.com>
+        Wed, 22 Jun 2022 03:39:54 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122A81147
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:39:53 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id a2so26338442lfg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tpoFW+roLjNkfVzi27lotcXGbUONBYrO8j5K1bb79oY=;
+        b=kbCMinHOHgJ+dY7rP49xrxv17YR3b4E3lNHnF25ix/0UcD5RTbhhbbuTleAnphBnuy
+         1QbJaLTFNanF6zG/XcV4fUks+L6DG+iAbYh4Qt26UPtukymJA8KMxtG1C4uwMJdCC/SC
+         ZTFBw5A84FJdM+UljGYp6ZraFaTPuLj+Gbzdn9fsvanvrDxt6PEkg27XvuWQA3wadMAs
+         uPZS3dZK1PC4UCLsfRw2lNSO2DgZcphU/bc6/1G6Tm+GUiETuHgT6opppEoLBPbvfzgf
+         0JkmXJAuOKbe22KaUQJaqC/9ELamJo7mrgkTn2mKhDTlve1cqmppv1mJ0XDaN/f0UfNL
+         Sjaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tpoFW+roLjNkfVzi27lotcXGbUONBYrO8j5K1bb79oY=;
+        b=3drsWBCdfwycjWad6wHOCqEasL3vJsvmmUHBK7emK/VggdwDJy2K3wwoQGlPNCkMJl
+         AbHWZ1BY8nB2nXhyjpTJXpQ4yL8n47xxFDlkoRd+5HifMWnzUVQZS0Ar/pE7/wJdsIxO
+         rYcc0ja5PSx8iLd7u8ZW2W0tCLwxB0Riq5jVjZcq+2SJ8NiQaXCUE93TY0iW9DTFwJI6
+         azmwnYS+ONCx04SuBM4cjE0R/vYuT5deFCYrsA+ttQDupeJKHAbtVbaMCA2W4y6cwHPQ
+         UmkVGOYVe9BQ2QgktkSda4YOpnyufRuZHba/Aw1LEI3TtwMpEC7BXE+mWfhCDkujU2P/
+         1EmQ==
+X-Gm-Message-State: AJIora9e0Mw0DM/19TbqR5lHvIJhCnryTO/WxXCZZTicQmbI0uqXRiKj
+        pozmgr4P+AyHaJ/RDFwD1FnbCJZcnL1Z++aKKXy3Mw==
+X-Google-Smtp-Source: AGRyM1t+GS4+ww9D2RWi17NlG1U7emwJiyYYkN5EY+G3jwwmYRlylz+ImRKFxipBBH8zh99ZU1pqk6h8SOf/Ba96RDA=
+X-Received: by 2002:a05:6512:1056:b0:47f:6f00:66c2 with SMTP id
+ c22-20020a056512105600b0047f6f0066c2mr1306154lfb.410.1655883591113; Wed, 22
+ Jun 2022 00:39:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hp2rj7odld5eb4tp"
-Content-Disposition: inline
-In-Reply-To: <45ef3221-8f27-0ae7-8cd9-48575812d797@arm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <000000000000f5004705e1db8bad@google.com> <YrGVYfPINRobj+cF@example.org>
+ <8735fyhyvy.fsf@email.froward.int.ebiederm.org> <YrJJJMQa1qAspI/J@example.org>
+In-Reply-To: <YrJJJMQa1qAspI/J@example.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 22 Jun 2022 09:39:39 +0200
+Message-ID: <CACT4Y+aMNM+_ud_pJQs1ocG86R0v6rzVZCuLJ8Dh=ePTyfHH+Q@mail.gmail.com>
+Subject: Re: [syzbot] memory leak in setup_mq_sysctls
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        syzbot <syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Catalin Marinas <catalin.marinas@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 22 Jun 2022 at 00:41, Alexey Gladkov <legion@kernel.org> wrote:
+>
+> On Tue, Jun 21, 2022 at 09:30:57AM -0500, Eric W. Biederman wrote:
+> > Alexey Gladkov <gladkov.alexey@gmail.com> writes:
+> >
+> > > On Sun, Jun 19, 2022 at 11:52:25PM -0700, syzbot wrote:
+> > >> Hello,
+> > >>
+> > >> syzbot found the following issue on:
+> > >>
+> > >> HEAD commit:    979086f5e006 Merge tag 'fs.fixes.v5.19-rc3' of git://git.k..
+> > >> git tree:       upstream
+> > >> console output: https://syzkaller.appspot.com/x/log.txt?x=1284331bf00000
+> > >> kernel config:  https://syzkaller.appspot.com/x/.config?x=c696a83383a77f81
+> > >> dashboard link: https://syzkaller.appspot.com/bug?extid=b4b0d1b35442afbf6fd2
+> > >> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > >> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=163e740ff00000
+> > >> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132b758bf00000
+> > >>
+> > >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > >> Reported-by: syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com
+> > >
+> > > I'm working on a fix that will remove this memory allocation entirely.
+> >
+> > Hmm. The memory should be freed when the corresponding namespace exits.
+> > I see retire_mq_sysctls is being called to free this memory.  Alex do
+> > you see any leaks when you read that code?
+>
+> I don't see a leak either. retire_mq_sysctls and retire_ipc_sysctls
+> functions are identical and are called one by one. I don't understand how
+> there can be an mq leak without an ipc leak. Unless it has something to do
+> with mq_init_ns (just guess).
 
---hp2rj7odld5eb4tp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Are they feed on this error path:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/ipc/namespace.c?id=979086f5e0066b4eff66e1eee123da228489985c#n64
+?
+I don't see where it calls retire_mq_sysctls.
 
-Hi Robin,
-
-On Tue, Jun 21, 2022 at 01:44:44PM +0100, Robin Murphy wrote:
-> On 2022-06-20 19:13, Jernej Skrabec wrote:
-> > Kernel occasionally complains that there is mismatch in segment size
-> > when trying to render HW decoded videos and rendering them directly with
-> > sun4i DRM driver. Following message can be observed on H6 SoC:
-> >=20
-> > [  184.298308] ------------[ cut here ]------------
-> > [  184.298326] DMA-API: sun4i-drm display-engine: mapping sg segment lo=
-nger than device claims to support [len=3D6144000] [max=3D65536]
-> > [  184.298364] WARNING: CPU: 1 PID: 382 at kernel/dma/debug.c:1162 debu=
-g_dma_map_sg+0x2b0/0x350
-> > [  184.322997] CPU: 1 PID: 382 Comm: ffmpeg Not tainted 5.19.0-rc1+ #13=
-31
-> > [  184.329533] Hardware name: Tanix TX6 (DT)
-> > [  184.333544] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BT=
-YPE=3D--)
-> > [  184.340512] pc : debug_dma_map_sg+0x2b0/0x350
-> > [  184.344882] lr : debug_dma_map_sg+0x2b0/0x350
-> > [  184.349250] sp : ffff800009f33a50
-> > [  184.352567] x29: ffff800009f33a50 x28: 0000000000010000 x27: ffff000=
-001b86c00
-> > [  184.359725] x26: ffffffffffffffff x25: ffff000005d8cc80 x24: 0000000=
-000000000
-> > [  184.366879] x23: ffff80000939ab18 x22: 0000000000000001 x21: 0000000=
-000000001
-> > [  184.374031] x20: 0000000000000000 x19: ffff0000018a7410 x18: fffffff=
-fffffffff
-> > [  184.381186] x17: 0000000000000000 x16: 0000000000000000 x15: fffffff=
-fffffffff
-> > [  184.388338] x14: 0000000000000001 x13: ffff800009534e86 x12: 6f70707=
-573206f74
-> > [  184.395493] x11: 20736d69616c6320 x10: 000000000000000a x9 : 0000000=
-000010000
-> > [  184.402647] x8 : ffff8000093b6d40 x7 : ffff800009f33850 x6 : 0000000=
-00000000c
-> > [  184.409800] x5 : ffff0000bf997940 x4 : 0000000000000000 x3 : 0000000=
-000000027
-> > [  184.416953] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000=
-003960e80
-> > [  184.424106] Call trace:
-> > [  184.426556]  debug_dma_map_sg+0x2b0/0x350
-> > [  184.430580]  __dma_map_sg_attrs+0xa0/0x110
-> > [  184.434687]  dma_map_sgtable+0x28/0x4c
-> > [  184.438447]  vb2_dc_dmabuf_ops_map+0x60/0xcc
-> > [  184.442729]  __map_dma_buf+0x2c/0xd4
-> > [  184.446321]  dma_buf_map_attachment+0xa0/0x130
-> > [  184.450777]  drm_gem_prime_import_dev+0x7c/0x18c
-> > [  184.455410]  drm_gem_prime_fd_to_handle+0x1b8/0x214
-> > [  184.460300]  drm_prime_fd_to_handle_ioctl+0x2c/0x40
-> > [  184.465190]  drm_ioctl_kernel+0xc4/0x174
-> > [  184.469123]  drm_ioctl+0x204/0x420
-> > [  184.472534]  __arm64_sys_ioctl+0xac/0xf0
-> > [  184.476474]  invoke_syscall+0x48/0x114
-> > [  184.480240]  el0_svc_common.constprop.0+0x44/0xec
-> > [  184.484956]  do_el0_svc+0x2c/0xc0
-> > [  184.488283]  el0_svc+0x2c/0x84
-> > [  184.491354]  el0t_64_sync_handler+0x11c/0x150
-> > [  184.495723]  el0t_64_sync+0x18c/0x190
-> > [  184.499397] ---[ end trace 0000000000000000 ]---
-> >=20
-> > Fix that by setting DMA mask and segment size.
-> >=20
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > ---
-> > Changes from v1:
-> > - added comment
-> > - updated commit message with kernel report
-> >=20
-> >   drivers/gpu/drm/sun4i/sun4i_drv.c | 8 ++++++++
-> >   1 file changed, 8 insertions(+)
-> >=20
-> > diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/=
-sun4i_drv.c
-> > index 275f7e4a03ae..f135a6b3cadb 100644
-> > --- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-> > +++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-> > @@ -7,6 +7,7 @@
-> >    */
-> >   #include <linux/component.h>
-> > +#include <linux/dma-mapping.h>
-> >   #include <linux/kfifo.h>
-> >   #include <linux/module.h>
-> >   #include <linux/of_graph.h>
-> > @@ -367,6 +368,13 @@ static int sun4i_drv_probe(struct platform_device =
-*pdev)
-> >   	INIT_KFIFO(list.fifo);
-> > +	/*
-> > +	 * DE2 and DE3 cores actually supports 40-bit addresses, but
-> > +	 * driver does not.
-> > +	 */
-> > +	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-> > +	dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
->=20
-> Nit: this one is a number, not a bitmask, so UINT_MAX would be more
-> appropriate semantically.
-
-Thanks for the suggestion, I've fixed it while applying
-
-Maxime
-
---hp2rj7odld5eb4tp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYrLG2wAKCRDj7w1vZxhR
-xVqLAP908SepTKlaW7ljl34wwmEyK8rFL3xIkpMke8JZsv1LzQD/VH5C1zsAONBE
-tvabgS329bcFnEQzeo2rWq9zDbyuDAM=
-=SM9K
------END PGP SIGNATURE-----
-
---hp2rj7odld5eb4tp--
+> > So it looks like either someone broke this in linux-next or there
+> > is a bug in the memory leak detector, or something truly strange
+> > like a memory stop is going on.
+>
+> I will take a look.
+>
+> > I don't see any changes to the ipc subdirectory since v5.19-rc1 in
+> > commit 979086f5e006 ("Merge tag 'fs.fixes.v5.19-rc3' of git://git.k.." )
+> > so the idea that the code is broken in linux-next is out.
+> >
+> > Which leaves the memory leak detector having trouble with this,
+> > or something like a memory stomp is causing problems.
+> >
+> > Catalin is it possible that the clever use of ctl_table_arg to hold the
+> > reference to the table before it is freed is confusing the memory leak
+> > detector?  The idiom is old enough I don't expect so, but I have seen
+> > bugs lurk for a long time.
+> >
+> > Which leaves just a memory stomp or something even stranger in the code.
+> > syzkaller can you reproduce this on Linus's branch?
+> >
+> > Eric
+> >
+> > >> executing program
+> > >> BUG: memory leak
+> > >> unreferenced object 0xffff888112fc9200 (size 512):
+> > >>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+> > >>   hex dump (first 32 bytes):
+> > >>     ef d3 60 85 ff ff ff ff 0c 9b d2 12 81 88 ff ff  ..`.............
+> > >>     04 00 00 00 a4 01 00 00 00 00 00 00 00 00 00 00  ................
+> > >>   backtrace:
+> > >>     [<ffffffff814b6eb3>] kmemdup+0x23/0x50 mm/util.c:129
+> > >>     [<ffffffff82219a9b>] kmemdup include/linux/fortify-string.h:456 [inline]
+> > >>     [<ffffffff82219a9b>] setup_mq_sysctls+0x4b/0x1c0 ipc/mq_sysctl.c:89
+> > >>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+> > >>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+> > >>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+> > >>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+> > >>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+> > >>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+> > >>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+> > >>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+> > >>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > >>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > >>
+> > >> BUG: memory leak
+> > >> unreferenced object 0xffff888112fd5f00 (size 256):
+> > >>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+> > >>   hex dump (first 32 bytes):
+> > >>     00 92 fc 12 81 88 ff ff 00 00 00 00 01 00 00 00  ................
+> > >>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > >>   backtrace:
+> > >>     [<ffffffff816fea1b>] kmalloc include/linux/slab.h:605 [inline]
+> > >>     [<ffffffff816fea1b>] kzalloc include/linux/slab.h:733 [inline]
+> > >>     [<ffffffff816fea1b>] __register_sysctl_table+0x7b/0x7f0 fs/proc/proc_sysctl.c:1344
+> > >>     [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+> > >>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+> > >>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+> > >>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+> > >>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+> > >>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+> > >>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+> > >>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+> > >>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+> > >>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > >>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > >>
+> > >> BUG: memory leak
+> > >> unreferenced object 0xffff888112fbba00 (size 256):
+> > >>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+> > >>   hex dump (first 32 bytes):
+> > >>     78 ba fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
+> > >>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > >>   backtrace:
+> > >>     [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
+> > >>     [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
+> > >>     [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
+> > >>     [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+> > >>     [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
+> > >>     [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+> > >>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+> > >>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+> > >>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+> > >>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+> > >>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+> > >>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+> > >>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+> > >>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+> > >>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > >>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > >>
+> > >> BUG: memory leak
+> > >> unreferenced object 0xffff888112fbb900 (size 256):
+> > >>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+> > >>   hex dump (first 32 bytes):
+> > >>     78 b9 fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
+> > >>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > >>   backtrace:
+> > >>     [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
+> > >>     [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
+> > >>     [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
+> > >>     [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+> > >>     [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
+> > >>     [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+> > >>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+> > >>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+> > >>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+> > >>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+> > >>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+> > >>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+> > >>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+> > >>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+> > >>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > >>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > >>
+> > >>
+> > >>
+> > >> ---
+> > >> This report is generated by a bot. It may contain errors.
+> > >> See https://goo.gl/tpsmEJ for more information about syzbot.
+> > >> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > >>
+> > >> syzbot will keep track of this issue. See:
+> > >> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > >> syzbot can test patches for this issue, for details see:
+> > >> https://goo.gl/tpsmEJ#testing-patches

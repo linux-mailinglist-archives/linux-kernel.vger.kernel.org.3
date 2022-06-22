@@ -2,82 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8545543DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930F6554420
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352998AbiFVHO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S1352488AbiFVHPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352488AbiFVHOU (ORCPT
+        with ESMTP id S1350659AbiFVHPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:14:20 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B30369DE;
-        Wed, 22 Jun 2022 00:14:20 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LSZPF2MvCz67YZ9;
-        Wed, 22 Jun 2022 15:13:53 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 09:14:18 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 22 Jun 2022 09:14:18 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     John Fastabend <john.fastabend@gmail.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>
-CC:     "dhowells@redhat.com" <dhowells@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v5 4/5] selftests/bpf: Add test for unreleased key
- references
-Thread-Topic: [PATCH v5 4/5] selftests/bpf: Add test for unreleased key
- references
-Thread-Index: AQHYhY1lWBqFnG8Z5ki4oxpvmYhP1q1aUdKAgACyOvA=
-Date:   Wed, 22 Jun 2022 07:14:18 +0000
-Message-ID: <b93622dffbfa41f99a18d8883a890879@huawei.com>
-References: <20220621163757.760304-1-roberto.sassu@huawei.com>
- <20220621163757.760304-5-roberto.sassu@huawei.com>
- <62b247b975506_162742082f@john.notmuch>
-In-Reply-To: <62b247b975506_162742082f@john.notmuch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 22 Jun 2022 03:15:19 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE2F36E1D;
+        Wed, 22 Jun 2022 00:15:18 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id n15so19900375qvh.12;
+        Wed, 22 Jun 2022 00:15:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lHEhufuR0BCwdgBJ9UiDykLCzo+7fjj1KMdN8Y47avc=;
+        b=osZL6e19UyN+wUDEWFphga5cbgcSKq902CLx+IBBOgQH2ryjjvsrsV4gHRg0+jCvdM
+         l7+9VPhaDlDy/zOnPdxwiX39Tdpd3RloXlpAQZ1biUT6y/zwBSsR8ZqPERrcuYJNNUO1
+         yKJkh1Ek+AWj+CYKERuKtaZx866REk4LS+uRwkqC6eP1+TkUzLzQc5g/AVtN+WNAu64X
+         +Gb/52jCszcKvRO4gTLw/T+CSeFasnRwOMfghvVGHWfuWb+I0hOvBeWTsr8tol41haUv
+         7gv+mQdnlTMU9IIa5imCN+zyIo0WsljlQaIep6aUxfPKLruxR1Dq6wJBUpnDxFzahFdm
+         8ykA==
+X-Gm-Message-State: AJIora8pTZB0yxE7PjkuNhge68t5IfSVfBROPfCUfBfI7J2iKrJ5FdWZ
+        Dpe/nBLTJfYmhjGsEGexHYtL2PxEIudn0g==
+X-Google-Smtp-Source: AGRyM1vLlVlUEYkp6KfhJmCWmyg6tRO82+0hpeHTNPYk9pbj49uvmhJFD3QGvb+9g2InOcnCWzg2bQ==
+X-Received: by 2002:ac8:7dc2:0:b0:306:6881:2693 with SMTP id c2-20020ac87dc2000000b0030668812693mr1803460qte.16.1655882117867;
+        Wed, 22 Jun 2022 00:15:17 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id bp15-20020a05620a458f00b006a72b38e2ecsm15450053qkb.51.2022.06.22.00.15.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 00:15:17 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3176b6ed923so153599027b3.11;
+        Wed, 22 Jun 2022 00:15:17 -0700 (PDT)
+X-Received: by 2002:a81:574c:0:b0:317:7c3a:45be with SMTP id
+ l73-20020a81574c000000b003177c3a45bemr2586631ywb.316.1655882117218; Wed, 22
+ Jun 2022 00:15:17 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220621204928.249907-1-sashal@kernel.org> <20220621204928.249907-5-sashal@kernel.org>
+In-Reply-To: <20220621204928.249907-5-sashal@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 22 Jun 2022 09:15:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVmkr2sQ6-1pu=B7EscXWY-ZwONo=WGGwDOK_D6VxKc=A@mail.gmail.com>
+Message-ID: <CAMuHMdVmkr2sQ6-1pu=B7EscXWY-ZwONo=WGGwDOK_D6VxKc=A@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.18 05/22] eeprom: at25: Split reads into chunks
+ and cap write size
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Brad Bishop <bradleyb@fuzziesquirrel.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKb2huIEZhc3RhYmVuZCBbbWFpbHRvOmpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbV0N
-Cj4gU2VudDogV2VkbmVzZGF5LCBKdW5lIDIyLCAyMDIyIDEyOjM2IEFNDQo+IFJvYmVydG8gU2Fz
-c3Ugd3JvdGU6DQo+ID4gRW5zdXJlIHRoYXQgdGhlIHZlcmlmaWVyIGRldGVjdHMgdGhlIGF0dGVt
-cHQgb2YgYWNxdWlyaW5nIGEgcmVmZXJlbmNlIG9mIGENCj4gPiBrZXkgdGhyb3VnaCB0aGUgaGVs
-cGVyIGJwZl9sb29rdXBfdXNlcl9rZXkoKSwgd2l0aG91dCByZWxlYXNpbmcgdGhhdA0KPiA+IHJl
-ZmVyZW5jZSB3aXRoIGJwZl9rZXlfcHV0KCksIGFuZCByZWZ1c2VzIHRvIGxvYWQgdGhlIHByb2dy
-YW0uDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1
-QGh1YXdlaS5jb20+DQo+ID4gLS0tDQo+IA0KPiBBbnkgcmVhc29uIG5vdCB0byBhZGQgdGhlc2Ug
-dG8gLi92ZXJpZmllci9yZWZfdHJhY2tpbmcuYyB0ZXN0cz8gU2VlbXMgaXQNCj4gbWlnaHQgYmUg
-ZWFzaWVyIHRvIGZvbGxvdyB0aGVyZSBhbmQgdGVzdCBib3RoIGdvb2QvYmFkIGNhc2VzLg0KDQpP
-aCwgSSBkaWRuJ3Qga25vdyBhYm91dCBpdC4gV2lsbCBtb3ZlIHRoZSB0ZXN0Lg0KDQpUaGFua3MN
-Cg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1
-NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFlhbmcgWGksIExpIEhlDQo=
+Hi Sasha,
+
+On Tue, Jun 21, 2022 at 10:57 PM Sasha Levin <sashal@kernel.org> wrote:
+> From: Brad Bishop <bradleyb@fuzziesquirrel.com>
+>
+> [ Upstream commit 0a35780c755ccec097d15c6b4ff8b246a89f1689 ]
+>
+> Make use of spi_max_transfer_size to avoid requesting transfers that are
+> too large for some spi controllers.
+>
+> Signed-off-by: Brad Bishop <bradleyb@fuzziesquirrel.com>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Link: https://lore.kernel.org/r/20220524215142.60047-1-eajames@linux.ibm.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+Please drop this, as it breaks operation on devices that don't need
+the split, and may cause a buffer overflow on those that do.
+
+https://lore.kernel.org/r/7ae260778d2c08986348ea48ce02ef148100e088.1655817534.git.geert+renesas@glider.be/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

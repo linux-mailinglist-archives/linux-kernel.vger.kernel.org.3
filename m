@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A74554B32
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCEF554B1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357153AbiFVNYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S1357324AbiFVNXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355693AbiFVNXN (ORCPT
+        with ESMTP id S1355446AbiFVNXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:23:13 -0400
+        Wed, 22 Jun 2022 09:23:12 -0400
 Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A956F2FE75;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A50D12FE43;
         Wed, 22 Jun 2022 06:23:09 -0700 (PDT)
 Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 895971C811F1;
+        by maillog.nuvoton.com (Postfix) with ESMTP id 849D61C811EE;
         Wed, 22 Jun 2022 21:23:06 +0800 (CST)
-Received: from NTHCCAS02.nuvoton.com (10.1.9.121) by NTHCCAS01.nuvoton.com
+Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS01.nuvoton.com
  (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Wed, 22 Jun
  2022 21:23:06 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS02.nuvoton.com
- (10.1.9.121) with Microsoft SMTP Server (version=TLS1_2,
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
+ (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 22 Jun
  2022 21:23:06 +0800
 Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
  (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
  Transport; Wed, 22 Jun 2022 21:23:05 +0800
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 5A60063A4F; Wed, 22 Jun 2022 16:23:04 +0300 (IDT)
+        id 6734F63A50; Wed, 22 Jun 2022 16:23:04 +0300 (IDT)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
         <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
@@ -52,9 +52,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 13/18] dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
-Date:   Wed, 22 Jun 2022 16:22:57 +0300
-Message-ID: <20220622132302.267010-14-tmaimon77@gmail.com>
+Subject: [PATCH v5 14/18] dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+Date:   Wed, 22 Jun 2022 16:22:58 +0300
+Message-ID: <20220622132302.267010-15-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220622132302.267010-1-tmaimon77@gmail.com>
 References: <20220622132302.267010-1-tmaimon77@gmail.com>
@@ -72,30 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible string for Nuvoton BMC NPCM845 SoC and a board specific
-device tree for the NPCM845 (Arbel) evaluation board.
+Add a compatible string for Nuvoton BMC NPCM845 global control registers.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/npcm/npcm.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/npcm/npcm.yaml b/Documentation/devicetree/bindings/arm/npcm/npcm.yaml
-index ea9c3103761d..43409e5721d5 100644
---- a/Documentation/devicetree/bindings/arm/npcm/npcm.yaml
-+++ b/Documentation/devicetree/bindings/arm/npcm/npcm.yaml
-@@ -27,4 +27,10 @@ properties:
-               - nuvoton,npcm750-evb         # NPCM750 evaluation board
-           - const: nuvoton,npcm750
+diff --git a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
+index aad7c85e787f..94e72f25b331 100644
+--- a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
++++ b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
+@@ -21,6 +21,7 @@ properties:
+       - enum:
+           - nuvoton,wpcm450-gcr
+           - nuvoton,npcm750-gcr
++          - nuvoton,npcm845-gcr
+       - const: syscon
+       - const: simple-mfd
  
-+      - description: NPCM845 based boards
-+        items:
-+          - enum:
-+              - nuvoton,npcm845-evb         # NPCM845 evaluation board
-+          - const: nuvoton,npcm845
-+
- additionalProperties: true
 -- 
 2.33.0
 

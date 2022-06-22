@@ -2,122 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281115548E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CE8554657
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbiFVIyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
+        id S1349115AbiFVI6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiFVIyv (ORCPT
+        with ESMTP id S230053AbiFVI6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:54:51 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2345733E88
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:54:50 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id d129so15516181pgc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NPz6aysJ4lKE5JHLkll4+SwUhp9oiQCtyExa/aZASL4=;
-        b=t8+Nm/Nm3fXHIky43hvB+9u58dnsstVeJtDa1cLpnYXi3KWOTWJz9oC0BVaeFQB+ge
-         mtdYrumXWF5Lr6HmweRlNPE1tDXUKb+tj8tT2BeJoyl4uKUK6fc3JCnCZTD7C87gqKTx
-         GO+0JsZnSnzpyuc+rLCfG1Ek4tUtEWC62rGye6AGP3UvKsyajg8FS7uHZqMc7W90I8ZM
-         hWfWwo1gp9RlFLdW2W3ApzWN9o2kHzFIczO6MzuT8b04PIDl4n9BL6eu7MACppiaA8xk
-         AKZ1UPPELrH8bHYsgRZPJzT8EdtqN5RQ7L7rDPhyq/L2lhtB/eksIqnXQHMKKreH2W2Q
-         jXcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NPz6aysJ4lKE5JHLkll4+SwUhp9oiQCtyExa/aZASL4=;
-        b=Se/fBSCaHJjRUXXLgiJM4xQx7sRfQEl+m8d7tsivIInPEVOGMUHXRQpDQnBI0ctVCg
-         czu1+gbXy0CHvCYQMjRXqJFhLhT+NMqhUebMMo1OX9RHgZg1MUWvU7vp/kXzo0Gxlp89
-         3Ool4lx5uKYZ67v2GuaIlxWtIj7ILC4JMiQ4yzKenZxrizGJoZql28RNCXewy7hN8+qP
-         f4K/92jG4w1HL251+eczYJZjSDn452xgQR5Xk/GZJwOm5sVwnBYUAypDS2IN3393b/Wl
-         YToKR9nqhQnQLyQ8vAQwL5Y33PlvDOajCIfcl9NaaCJ3HxxzHKqnUK2N9/1AeNMsiSzo
-         lshQ==
-X-Gm-Message-State: AJIora+D4Jv+Z55l27aTNwfYo+nIGFk+M0zA3CIkYNPsBV95usser4cu
-        u9ayq6lOz0qtQMynZXyuJcHAag==
-X-Google-Smtp-Source: AGRyM1uo0P4pX8SHoZRe2EUDrLwxiOIPYCP6UvpzcVZkKBOhowttVZ9N680TUQINuxLGzg8z8AUNDA==
-X-Received: by 2002:a05:6a00:1a09:b0:525:a0d:d1d3 with SMTP id g9-20020a056a001a0900b005250a0dd1d3mr21848009pfv.27.1655888089663;
-        Wed, 22 Jun 2022 01:54:49 -0700 (PDT)
-Received: from localhost ([139.177.225.231])
-        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b00163f3e91ea0sm1641513pln.238.2022.06.22.01.54.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 01:54:49 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 16:54:46 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/page_alloc: Do not calculate node's total
- pages and memmap pages when empty
-Message-ID: <YrLY1ru0qrvZfqU2@FVFYT0MHHV2J.usts.net>
-References: <20220621041717.6355-1-osalvador@suse.de>
- <20220621041717.6355-2-osalvador@suse.de>
- <506203e3-1de0-1187-5234-7afc66d4ddfe@redhat.com>
- <YrKQyhwDwMvueOUc@localhost.localdomain>
- <YrKS6aFHKRyZzAwi@FVFYT0MHHV2J.usts.net>
- <bb71d77e-583a-d216-1aae-2bc062318888@redhat.com>
+        Wed, 22 Jun 2022 04:58:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEB8E34;
+        Wed, 22 Jun 2022 01:58:07 -0700 (PDT)
+X-UUID: b768fae71ca547b7b5dd424f82c0d88c-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:c7be37e6-56a1-4dcb-953c-d51da3c76ffd,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:100
+X-CID-INFO: VERSION:1.1.6,REQID:c7be37e6-56a1-4dcb-953c-d51da3c76ffd,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
+        ION:quarantine,TS:100
+X-CID-META: VersionHash:b14ad71,CLOUDID:190135ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:47c063911d5b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: b768fae71ca547b7b5dd424f82c0d88c-20220622
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1474948226; Wed, 22 Jun 2022 16:58:01 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 16:58:00 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 16:57:59 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        Julian Scheel <julian@jusst.de>,
+        xin lin <xin.lin@mediatek.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH] usb: gadget: f_uac1: add IAD descriptor
+Date:   Wed, 22 Jun 2022 16:57:57 +0800
+Message-ID: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb71d77e-583a-d216-1aae-2bc062318888@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 10:31:12AM +0200, David Hildenbrand wrote:
-> On 22.06.22 05:56, Muchun Song wrote:
-> > On Wed, Jun 22, 2022 at 05:47:22AM +0200, Oscar Salvador wrote:
-> >> On Tue, Jun 21, 2022 at 09:44:47AM +0200, David Hildenbrand wrote:
-> >>>
-> >>>
-> >>> It's worth noting that the check in pgdat_is_empty() is slightly
-> >>> different. I *think* it doesn't matter in practice, yet I wonder if we
-> >>> should simply fixup (currently unused) pgdat_is_empty().
-> >>
-> >> I guess we could change it to
-> >>
-> >>  static inline bool pgdat_is_empty(pg_data_t *pgdat)
-> >>  {
-> >> 	 return node_start_pfn(pgdat->node_id) == node_end_pfn(pgdat->node_id)
-> >>  }
-> >>
-> >> ? And maybe even rename it to to node_is_empty (not sure why but I tend to like
-> > 
-> > At least I like this name (node_is_empty) as well.
-> > 
-> 
-> Let's try keeping it consistent. I think node_is_empty() might indicate
-> that we're punching in a node id instead of a pgdat.
->
+From: xin lin <xin.lin@mediatek.com>
 
-I suspect Oscar will change the argument to "nid" as well, like:
+Win10 can not enumerate composite device of UVC+UAC1+ADB without IAD descriptor
+in uac1.0, so add it.
 
-static inline bool node_is_empty(int nid)
-{
-	return node_start_pfn(nid) == node_end_pfn(nid);
-}
+Signed-off-by: xin lin <xin.lin@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Does this look good?
-
-Thanks.
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 6f0e1d803dc2..8390207bc513 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
+  * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
+  */
  
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
-> 
++static struct usb_interface_assoc_descriptor iad_desc = {
++	.bLength = sizeof(iad_desc),
++	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
++
++	.bFirstInterface = 0,
++	.bInterfaceCount = 3,
++	.bFunctionClass = USB_CLASS_AUDIO,
++	.bFunctionSubClass = 0,
++	.bFunctionProtocol = UAC_VERSION_1,
++};
++
+ /* B.3.1  Standard AC Interface Descriptor */
+ static struct usb_interface_descriptor ac_interface_desc = {
+ 	.bLength =		USB_DT_INTERFACE_SIZE,
+@@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ };
+ 
+ static struct usb_descriptor_header *f_audio_desc[] = {
++	(struct usb_descriptor_header *)&iad_desc,
+ 	(struct usb_descriptor_header *)&ac_interface_desc,
+ 	(struct usb_descriptor_header *)&ac_header_desc,
+ 
+@@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ };
+ 
+ enum {
++	STR_ASSOC,
+ 	STR_AC_IF,
+ 	STR_USB_OUT_IT,
+ 	STR_USB_OUT_IT_CH_NAMES,
+@@ -310,6 +323,7 @@ enum {
+ 
+ static struct usb_string strings_uac1[] = {
+ 	/* [STR_AC_IF].s = DYNAMIC, */
++	[STR_ASSOC].s = "Source/Sink",
+ 	[STR_USB_OUT_IT].s = "Playback Input terminal",
+ 	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
+ 	[STR_IO_OUT_OT].s = "Playback Output terminal",
+@@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
+ 	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
+ 
++	iad_desc.bInterfaceCount = 1;
+ 	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
+ 
+ 	if (EPIN_EN(opts)) {
+@@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUIN_EN(opts))
+ 			len += in_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 	if (EPOUT_EN(opts)) {
+ 		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
+@@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUOUT_EN(opts))
+ 			len += out_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 
+ 	i = 0;
++	f_audio_desc[i++] = USBDHDR(&iad_desc);
+ 	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+ 	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+ 
+@@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 	}
+ 
++	iad_desc.iFunction = us[STR_ASSOC].id;
+ 	ac_interface_desc.iInterface = us[STR_AC_IF].id;
+ 	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
+ 	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
+@@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 	status = usb_interface_id(c, f);
+ 	if (status < 0)
+ 		goto err_free_fu;
++
++	iad_desc.bFirstInterface = status;
+ 	ac_interface_desc.bInterfaceNumber = status;
+ 	uac1->ac_intf = status;
+ 	uac1->ac_alt = 0;
+-- 
+2.18.0
+

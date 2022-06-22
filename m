@@ -2,185 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F706555538
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DFA55553A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358691AbiFVUHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 16:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S1376986AbiFVUHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 16:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358758AbiFVUHl (ORCPT
+        with ESMTP id S1376916AbiFVUHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 16:07:41 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D212F31DD5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:07:39 -0700 (PDT)
+        Wed, 22 Jun 2022 16:07:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9090532069
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:07:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655928465;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b2Cyh8ITNZ+gZ6xEYsgwg61dMFDvIXxq2c4v5+G6gs0=;
+        b=M62JFLSG+o2uniOykJ6+vX0dGlVvHs4GtWa3GwZWRTLqWS5TDZoRxY87UIuhdUfF7yVowJ
+        U0Cu42ZpvVqFm+JUsuMahphkyKCuaQwu0D2YuIkss/OVwkNzCTJcZO4gjtXKUwX2o+kJLZ
+        6X3mozN/UrMp49oAnVrukB1KC1/gR2s=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-510-tiqLrDOmP0egyC1vcjU4OA-1; Wed, 22 Jun 2022 16:07:35 -0400
-X-MC-Unique: tiqLrDOmP0egyC1vcjU4OA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-675-rXvd6mGtNwCedqorPZnMhA-1; Wed, 22 Jun 2022 16:07:43 -0400
+X-MC-Unique: rXvd6mGtNwCedqorPZnMhA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E6AF89C7DB;
-        Wed, 22 Jun 2022 20:07:34 +0000 (UTC)
-Received: from comp-core-i7-2640m-0182e6.redhat.com (unknown [10.40.208.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B4B4492CA5;
-        Wed, 22 Jun 2022 20:07:32 +0000 (UTC)
-From:   Alexey Gladkov <legion@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        syzkaller-bugs@googlegroups.com,
-        syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com
-Subject: [PATCH] ipc: Free mq_sysctls if ipc namespace creation failed
-Date:   Wed, 22 Jun 2022 22:07:29 +0200
-Message-Id: <20220622200729.2639663-1-legion@kernel.org>
-In-Reply-To: <8735fyhyvy.fsf@email.froward.int.ebiederm.org>
-References: <8735fyhyvy.fsf@email.froward.int.ebiederm.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 904C3101AA47;
+        Wed, 22 Jun 2022 20:07:43 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 19E8C40D2969;
+        Wed, 22 Jun 2022 20:07:43 +0000 (UTC)
+Message-ID: <627771df-19a5-a0a0-e27d-81be87d6d1f2@redhat.com>
+Date:   Wed, 22 Jun 2022 16:07:42 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] locking/rwsem: Allow slowpath writer to ignore handoff
+ bit if not set by first waiter
+Content-Language: en-US
+To:     john.p.donnelly@oracle.com, Hillf Danton <hdanton@sina.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20220428012342.3713-1-hdanton@sina.com>
+ <368f1ad6-83b9-01cd-1fba-3e87a0f73725@oracle.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <368f1ad6-83b9-01cd-1fba-3e87a0f73725@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The problem that Dmitry Vyukov pointed out is that if setup_ipc_sysctls fails,
-mq_sysctls must be freed before return.
+On 6/22/22 13:48, john.p.donnelly@oracle.com wrote:
+> On 4/27/22 8:23 PM, Hillf Danton wrote:
+>> On  Wed, 27 Apr 2022 13:31:24 -0400 Waiman Long wrote:
+>>> With commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling 
+>>> more
+>>> consistent"), the writer that sets the handoff bit can be interrupted
+>>> out without clearing the bit if the wait queue isn't empty. This 
+>>> disables
+>>> reader and writer optimistic lock spinning and stealing.
+>>>
+>>> Now if a non-first writer in the queue is somehow woken up or first
+>>> entering the waiting loop, it can't acquire the lock.  This is not
+>>> the case before that commit as the writer that set the handoff bit
+>>> will clear it when exiting out via the out_nolock path. This is less
+>>> efficient as the busy rwsem stays in an unlock state for a longer time.
+>>>
+>>> This patch allows a non-first writer to ignore the handoff bit if it
+>>> is not originally set or initiated by the first waiter.
+>>>
+>>> Fixes: d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more 
+>>> consistent")
+>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>> ---
+>>>   kernel/locking/rwsem.c | 30 ++++++++++++++++++++----------
+>>>   1 file changed, 20 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+>>> index 9d1db4a54d34..65f0262f635e 100644
+>>> --- a/kernel/locking/rwsem.c
+>>> +++ b/kernel/locking/rwsem.c
+>>> @@ -335,8 +335,6 @@ struct rwsem_waiter {
+>>>       struct task_struct *task;
+>>>       enum rwsem_waiter_type type;
+>>>       unsigned long timeout;
+>>> -
+>>> -    /* Writer only, not initialized in reader */
+>>>       bool handoff_set;
+>>>   };
+>>>   #define rwsem_first_waiter(sem) \
+>>> @@ -459,10 +457,12 @@ static void rwsem_mark_wake(struct 
+>>> rw_semaphore *sem,
+>>>                * to give up the lock), request a HANDOFF to
+>>>                * force the issue.
+>>>                */
+>>> -            if (!(oldcount & RWSEM_FLAG_HANDOFF) &&
+>>> -                time_after(jiffies, waiter->timeout)) {
+>>> -                adjustment -= RWSEM_FLAG_HANDOFF;
+>>> -                lockevent_inc(rwsem_rlock_handoff);
+>>> +            if (time_after(jiffies, waiter->timeout)) {
+>>> +                if (!(oldcount & RWSEM_FLAG_HANDOFF)) {
+>>> +                    adjustment -= RWSEM_FLAG_HANDOFF;
+>>> +                    lockevent_inc(rwsem_rlock_handoff);
+>>> +                }
+>>> +                waiter->handoff_set = true;
+>>>               }
+>>
+>> Handoff is tracked in both sem->count and waiter->handoff_set,
+>>
+>>> atomic_long_add(-adjustment, &sem->count);
+>>> @@ -599,7 +599,7 @@ rwsem_del_wake_waiter(struct rw_semaphore *sem, 
+>>> struct rwsem_waiter *waiter,
+>>>   static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+>>>                       struct rwsem_waiter *waiter)
+>>>   {
+>>> -    bool first = rwsem_first_waiter(sem) == waiter;
+>>> +    struct rwsem_waiter *first = rwsem_first_waiter(sem);
+>>>       long count, new;
+>>>         lockdep_assert_held(&sem->wait_lock);
+>>> @@ -609,11 +609,20 @@ static inline bool rwsem_try_write_lock(struct 
+>>> rw_semaphore *sem,
+>>>           bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
+>>>             if (has_handoff) {
+>>> -            if (!first)
+>>> +            /*
+>>> +             * Honor handoff bit and yield only when the first
+>>> +             * waiter is the one that set it. Otherwisee, we
+>>> +             * still try to acquire the rwsem.
+>>> +             */
+>>> +            if (first->handoff_set && (waiter != first))
+>>>                   return false;
+>>
+>> and checked against both parties, thus in a simpler manner 
+>> RWSEM_FLAG_HANDOFF
+>> in sem->count means the first waiter has been waiting for lock long 
+>> enough.
+>>
+>> Feel free to ignore the comment given the Fixes tag above.
+>>
+>> Hillf
+>>>   -            /* First waiter inherits a previously set handoff bit */
+>>> -            waiter->handoff_set = true;
+>>> +            /*
+>>> +             * First waiter can inherit a previously set handoff
+>>> +             * bit and spin on rwsem if lock acquisition fails.
+>>> +             */
+>>> +            if (waiter == first)
+>>> +                waiter->handoff_set = true;
+>>>           }
+>>>             new = count;
+>>> @@ -1027,6 +1036,7 @@ rwsem_down_read_slowpath(struct rw_semaphore 
+>>> *sem, long count, unsigned int stat
+>>>       waiter.task = current;
+>>>       waiter.type = RWSEM_WAITING_FOR_READ;
+>>>       waiter.timeout = jiffies + RWSEM_WAIT_TIMEOUT;
+>>> +    waiter.handoff_set = false;
+>>>         raw_spin_lock_irq(&sem->wait_lock);
+>>>       if (list_empty(&sem->wait_list)) {
+>>> -- 
+>>> 2.27.0
+>
+>
+> Was this ever added ?
+>
+> I don't see it in
+>
+>
+> a111daf0c53ae 2022-06-19 | Linux 5.19-rc3
 
-executing program
-BUG: memory leak
-unreferenced object 0xffff888112fc9200 (size 512):
-  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
-  hex dump (first 32 bytes):
-    ef d3 60 85 ff ff ff ff 0c 9b d2 12 81 88 ff ff  ..`.............
-    04 00 00 00 a4 01 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814b6eb3>] kmemdup+0x23/0x50 mm/util.c:129
-    [<ffffffff82219a9b>] kmemdup include/linux/fortify-string.h:456 [inline]
-    [<ffffffff82219a9b>] setup_mq_sysctls+0x4b/0x1c0 ipc/mq_sysctl.c:89
-    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
-    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
-    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
-    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
-    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
-    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
-    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
-    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
-    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+This patch hasn't been taken up by upstream yet. I have reposted a v2 
+with update to the patch description.
 
-BUG: memory leak
-unreferenced object 0xffff888112fd5f00 (size 256):
-  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
-  hex dump (first 32 bytes):
-    00 92 fc 12 81 88 ff ff 00 00 00 00 01 00 00 00  ................
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816fea1b>] kmalloc include/linux/slab.h:605 [inline]
-    [<ffffffff816fea1b>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff816fea1b>] __register_sysctl_table+0x7b/0x7f0 fs/proc/proc_sysctl.c:1344
-    [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
-    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
-    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
-    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
-    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
-    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
-    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
-    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
-    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
-    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-BUG: memory leak
-unreferenced object 0xffff888112fbba00 (size 256):
-  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
-  hex dump (first 32 bytes):
-    78 ba fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
-    [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
-    [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
-    [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
-    [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
-    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
-    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
-    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
-    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
-    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
-    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
-    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
-    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
-    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-BUG: memory leak
-unreferenced object 0xffff888112fbb900 (size 256):
-  comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
-  hex dump (first 32 bytes):
-    78 b9 fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
-    [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
-    [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
-    [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
-    [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
-    [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
-    [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
-    [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
-    [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
-    [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
-    [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
-    [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
-    [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
-    [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Reported-by: syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com
-Signed-off-by: Alexey Gladkov <legion@kernel.org>
----
- ipc/namespace.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/ipc/namespace.c b/ipc/namespace.c
-index 754f3237194a..e1fcaedba4fa 100644
---- a/ipc/namespace.c
-+++ b/ipc/namespace.c
-@@ -64,7 +64,7 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
- 		goto fail_put;
- 
- 	if (!setup_ipc_sysctls(ns))
--		goto fail_put;
-+		goto fail_mq;
- 
- 	sem_init_ns(ns);
- 	msg_init_ns(ns);
-@@ -72,6 +72,9 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
- 
- 	return ns;
- 
-+fail_mq:
-+	retire_mq_sysctls(ns);
-+
- fail_put:
- 	put_user_ns(ns->user_ns);
- 	ns_free_inum(&ns->ns);
--- 
-2.33.3
+Cheers,
+Longman
 

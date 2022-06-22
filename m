@@ -2,132 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840A155462D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F2E55465E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351224AbiFVKwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S237687AbiFVKwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348285AbiFVKwl (ORCPT
+        with ESMTP id S232140AbiFVKwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:52:41 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E93A3BBC6;
-        Wed, 22 Jun 2022 03:52:40 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id g25so33299003ejh.9;
-        Wed, 22 Jun 2022 03:52:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oaXOVl5GbpzrwUwV/ImpOqO7sc14IuZ0zxyCyofIONY=;
-        b=fAYTDojmK1smvHwGNsWw7YZE+c033Tr1yoX1+0von2aMoUv1c6u/lXSW342IrQcP4M
-         xPN+GRDfDYCxmUIv6sDSqnaI8Em+Oh+JKrva7+3g/EzeKV1Ki583f+s9svwO4PTOK3VO
-         FNBVAE15VZ93Za7cLKMBU9l53ej2lPfk32eNT2dPoL31kpXd5JF9QExrHJGiNWskQaoi
-         GwbpG7yGkbThNaRXEKOmk3fTJtRnVtpyyhPasWlhFmRt+RC4liDaJM5tK4YKEVkPB0lZ
-         cAhCT1RJZQYl9ir4lgrKLNKqAQifLqf1rW/MelSqXTepRExaSRDBPQAnc0kZG468DnbP
-         an5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oaXOVl5GbpzrwUwV/ImpOqO7sc14IuZ0zxyCyofIONY=;
-        b=GcNvLXcE9tW7G6nUDJS/2kjcjmbbny+Zq3c7NsD2s4nBR3mw/JNhKvQ/t27uZ2MQBl
-         eD9wrKSLPmwfxY+00QAMbRQgiTJ/DnKJunbAVf4yFM0WGA9DuatGJeJpEGYh0PxuBfsB
-         NQ3e3XSKbX/pdszk1TjsbZJvTSG49sM4572CiOw44sb7bNDT6OatrQYXw5krTGFVVkYo
-         Tf2UfnAdLTvITHl4irZXu6G+LA9vBlsFZYUqqPryGV4hbvFJvUIFbd5/UH+d6wgVaPwl
-         z6jSc5aPasya2aBs0MlaKtUiG95ZSO0a+PTHAk7mYRlH2TSz++XLhZQBeRX+A4yUa7NS
-         BNkw==
-X-Gm-Message-State: AJIora/7Nr30JaVIyIEoYOjCS2mn6KHl5Fzl8ZBlgMjg7pI6dlShVq/V
-        YbpkyfV0EhK+lSITdzVeLAR+b2B+e8/pQ1aaERA=
-X-Google-Smtp-Source: AGRyM1uyQ/Y01CLF3k0VqbSatCLy5utHlTkfRj9OEacTCqDgiOfz+58yhgtrbg6k3a0mp5dlHgOdAW0EC2clcTJB1Rg=
-X-Received: by 2002:a17:906:149:b0:711:fca6:bc2f with SMTP id
- 9-20020a170906014900b00711fca6bc2fmr2554745ejh.497.1655895158817; Wed, 22 Jun
- 2022 03:52:38 -0700 (PDT)
+        Wed, 22 Jun 2022 06:52:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40DD3BBC4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:52:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B0CFB81C12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCBDEC34114;
+        Wed, 22 Jun 2022 10:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655895148;
+        bh=rwk8hgLhyEq75QrfTeWAqx8ejeRm0e1M99H+oLicMnk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nX24UuZL9S4TE9/a6fogP5oLkCv/s7fHSepSKb2LVz54fUPotYpsmnEIhfOKUIaCq
+         qImBTvDQ9ZRzZ0YJSI7gJA5n5i6tXJRCUO5IYQh4dWAfJ2N18IwNsGrAH+vlykRvre
+         5WryU7ziTXzslzbjqacGzayPAum1ExcBrGnfiRuJSiOozRlQjrOQKTP50n3uYaGp+E
+         YD7kLVD/9z0b92Q3Y+1iN0M1GpCDKbge6YO59HMXf7zjVX0fLvUuWuJnuamRPwrNBg
+         XVBtKySVNv8jAklhn3X1YwYfz1TCMGwJWXkePEN1WRpMbjWn1J4eJI14QZghK8FoaC
+         r89fOCTTbgktQ==
+Date:   Wed, 22 Jun 2022 11:52:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Chen-Yu Tsai <wens@kernel.org>
+Cc:     Judy Hsiao <judyhsiao@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/3] ASoC: rockchip: i2s: switch BCLK to GPIO
+Message-ID: <YrL0ZkIKF1U2OWNp@sirena.org.uk>
+References: <20220619095324.492678-1-judyhsiao@chromium.org>
+ <20220619095324.492678-2-judyhsiao@chromium.org>
+ <CAGb2v64WsRV_pPsD4BQOjtFXOwca5xVkrXRxyxz2OLvQqKifPg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-8-saravanak@google.com> <20220622074756.GA1647@pengutronix.de>
- <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
-In-Reply-To: <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Jun 2022 12:52:02 +0200
-Message-ID: <CAHp75VdqjCoWAHV4AyYrju0o8buREA8pM5wyf8TD=rCMTs-tEA@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Sascha Hauer <sha@pengutronix.de>,
-        Saravana Kannan <saravanak@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BIVYhsqQd7Iog8ZD"
+Content-Disposition: inline
+In-Reply-To: <CAGb2v64WsRV_pPsD4BQOjtFXOwca5xVkrXRxyxz2OLvQqKifPg@mail.gmail.com>
+X-Cookie: Truckers welcome.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 10:44 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Wed, Jun 22, 2022 at 9:48 AM Sascha Hauer <sha@pengutronix.de> wrote:
 
-...
+--BIVYhsqQd7Iog8ZD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > This patch has the effect that console UART devices which have "dmas"
-> > properties specified in the device tree get deferred for 10 to 20
-> > seconds. This happens on i.MX and likely on other SoCs as well. On i.MX
-> > the dma channel is only requested at UART startup time and not at probe
-> > time. dma is not used for the console. Nevertheless with this driver probe
-> > defers until the dma engine driver is available.
+On Wed, Jun 22, 2022 at 02:02:41AM +0800, Chen-Yu Tsai wrote:
+> Hi,
+>=20
+> On Sun, Jun 19, 2022 at 5:54 PM Judy Hsiao <judyhsiao@chromium.org> wrote:
 > >
-> > It shouldn't go in as-is.
->
-> This affects all machines with the PL011 UART and DMAs specified as
-> well.
->
-> It would be best if the console subsystem could be treated special and
-> not require DMA devlink to be satisfied before probing.
+> > We discoverd that the state of BCLK on, LRCLK off and SD_MODE on
+> > may cause the speaker melting issue. Removing LRCLK while BCLK
+> > is present can cause unexpected output behavior including a large
+> > DC output voltage as described in the Max98357a datasheet.
+> >
+> > In order to:
+> >   1. prevent BCLK from turning on by other component.
+> >   2. keep BCLK and LRCLK being present at the same time
+> >
+> > This patch switches BCLK to GPIO func before LRCLK output, and
 
-In 8250 we force disable DMA and PM on kernel consoles, because it's
-so-o PITA and has a lot of corner cases we may never chase down.
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
 
-089b6d365491 serial: 8250_port: Disable DMA operations for kernel console
-bedb404e91bb serial: 8250_port: Don't use power management for kernel console
+--BIVYhsqQd7Iog8ZD
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-> It seems devlink is not quite aware of the concept of resources that are
-> necessary to probe vs resources that are nice to have and might be
-> added after probe. We need a strong devlink for the first category
-> and maybe a weak devlink for the latter category.
->
-> I don't know if this is a generic hardware property for all operating
-> systems so it could be a DT property such as dma-weak-dependency?
-> Or maybe compromize and add a linux,dma-weak-dependency;
-> property?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKy9GUACgkQJNaLcl1U
+h9A7MQf7BlCSyORrbv1Z1U1fwvocqMOp/zQ3ScF3gRjRuDSNSrc3rkFkEHkeviE/
+1LpuBEcnpUIETJy3OltG1wNBZDQwx7lvGEhCEqn8JWCmdX9njKXd4tdU9Zs6/37v
+nTJwRCJajfq+qlLJZIMjdycECSojoUe2VSQwwe+recGeE+glYfFMLD1JuWsHU/IO
+LhhFX7Xt9gtFPjZ+lavlytNdY+r9F7kttndFGKy9gcEIw4u23tNIde48Fu0Fr5JA
+9fAMlQB8BV4bgAwet7As6wudbSaK7xbmUPAxnK9bX1P44XO5VmmuCbtzZM0J09Gs
+Y0IzBvxAq8WKbOfhZzfTE9g4wYjzDA==
+=VY9T
+-----END PGP SIGNATURE-----
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+--BIVYhsqQd7Iog8ZD--

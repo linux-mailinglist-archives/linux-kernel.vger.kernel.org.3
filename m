@@ -2,116 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E59B5554F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7B75554FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376409AbiFVTrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S1359412AbiFVTrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376550AbiFVTqe (ORCPT
+        with ESMTP id S1376536AbiFVTrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:46:34 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDED3FD9C;
-        Wed, 22 Jun 2022 12:46:30 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C6C443AB802;
-        Wed, 22 Jun 2022 15:46:29 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id m-jy1RtUmQVv; Wed, 22 Jun 2022 15:46:29 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 8C0B73AB36A;
-        Wed, 22 Jun 2022 15:46:29 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 8C0B73AB36A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1655927189;
-        bh=TcQ14VO8gGnhK+1+KLJBgnTqON0UY5FC/xRWU4kIMH0=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=gJHu2MmSqaAMhjO6HKJCbXeZ07MHwLkQowshbIqSnmkP4RpLCvImgWLC7oMv8K6IQ
-         I7jnjJnEZagtd3DN/1JFgeaUbv1/fryjfss+2oaZ5b7+jcX//tQiCtzycLQbe4s7lw
-         DJOtwhBZzS87Z0Q69eqwoyQQZ4ev26No+9HtO/qrbr7W3ZxpQmP/C5OGt51r+kAoOh
-         BokpAJmCwI4T5T4kNVY/fKnS7Qi/9gQrhnszplVp+3JAXiqxI9DPUQmwHHs1YBlxUm
-         z3qum0Qvx3umK99f90MMj6oOtDg3jU5NmiKX/1Qb9N0p48bM2w0DFKPxQdpEjFHRH4
-         N5RLfnfAER4CQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KdzmRRtccORe; Wed, 22 Jun 2022 15:46:29 -0400 (EDT)
-Received: from thinkos.internal.efficios.com (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id 4936E3AB698;
-        Wed, 22 Jun 2022 15:46:29 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Peter Oskolkov <posk@posk.io>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 2/2] rseq: Kill process when unknown flags are encountered in ABI structures
-Date:   Wed, 22 Jun 2022 15:46:17 -0400
-Message-Id: <20220622194617.1155957-2-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220622194617.1155957-1-mathieu.desnoyers@efficios.com>
-References: <20220622194617.1155957-1-mathieu.desnoyers@efficios.com>
+        Wed, 22 Jun 2022 15:47:18 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B703FDB3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:47:16 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so23737236fac.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:47:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=P5X0i3YLR+vH/xCKeSIiyUzkgZgxeJh3Gr3zEWyGWZw=;
+        b=eEevZBp5hzAVO7OVafpFcG7EK/jyT2qs+fcQnakr40EPZB5gEKRLfLtb6iT4RXMmbx
+         6itUVdVsCCEnkiujkl3V2MIuXLMOUIaAvjvmT06nYQ07dX1mO4XoDvkKcTdu5rnm0Gcg
+         233mkWVIGvdB7XGJZfOVDuqaRuirMlFKKjPzQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=P5X0i3YLR+vH/xCKeSIiyUzkgZgxeJh3Gr3zEWyGWZw=;
+        b=pEhOyQHMMBIVVWTKqdWzF5KmyNEmFiXaTF+GS+mBNDMwmMkiWT1gwGF7U+zeMWvSum
+         +Q2pthRdG9EU1l9ZGPqKeyqBOOwrkKiWbOTGXPIax2lp7AoeulOLMpx0yvjqXaWevdsy
+         6Ia80MioWhaAJLzjOD/DF4ukZ8hAwCHaGko1Bqc/2rXkxMO4hQq4zhCJtddn93jvMq9y
+         2j0lFW/WGBKIsDbxEk3Kia1tLl6Y8Yg19qpwcv3cNI4bDsX/DopKjJB20p0nkaHHKOgE
+         PkZSFOqQHiiFP8AfF1sO4nloEPulrJX1S86kZ3i6eExlTDib+4WhVHM6ZRcDCxwouAyP
+         XNuQ==
+X-Gm-Message-State: AJIora/NkOu13FBMo5iZmWzYY9MN2cpSnzGVwB06h89bfKnI7UB8seWC
+        BdgClqp89bHXK8peaKYRWCaJ2Cj7LEgREZtEZkTVRw==
+X-Google-Smtp-Source: AGRyM1vZGszeqoU+XZtNEjQiK9wIw0YFJSaflA/w5PO2Z8WdsymdanQ/ymyF27U0fMlIl/UySOprRauZcbmkCjlv4IU=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr8306oap.63.1655927236348; Wed, 22 Jun
+ 2022 12:47:16 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 22 Jun 2022 15:47:15 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1655916845-31760-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1655916845-31760-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 22 Jun 2022 15:47:15 -0400
+Message-ID: <CAE-0n52+DSD4Ub5MDD4bBdfHPG-mQzkQjGdB0PwqiRRmWF0HMQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: reset drm_dev to NULL at dp_display_unbind()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rseq_abi()->flags and rseq_abi()->rseq_cs->flags 29 upper bits are
-currently unused.
+Quoting Kuogee Hsieh (2022-06-22 09:54:05)
+> During msm initialize phase, dp_display_unbind() will be called to undo
+> initializations had been done by dp_display_bind() previously if there is
+> error happen at msm_drm_bind. Under this kind of circumstance, drm_device
+> may not be populated completed which causes system crash at drm_dev_dbg().
+> This patch reset drm_dev to NULL so that following drm_dev_dbg() will not
+> refer to any internal fields of drm_device to prevent system from crashing.
+> Below are panic stack trace,
+>
+> [   53.584904] Unable to handle kernel paging request at virtual address 0000000070018001
+> .
+> [   53.702212] Hardware name: Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+) (DT)
+> [   53.710445] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   53.717596] pc : string_nocheck+0x1c/0x64
+> [   53.721738] lr : string+0x54/0x60
+> [   53.725162] sp : ffffffc013d6b650
+> [   53.728590] pmr_save: 000000e0
+> [   53.731743] x29: ffffffc013d6b650 x28: 0000000000000002 x27: 0000000000ffffff
+> [   53.739083] x26: ffffffc013d6b710 x25: ffffffd07a066ae0 x24: ffffffd07a419f97
+> [   53.746420] x23: ffffffd07a419f99 x22: ffffff81fef360d4 x21: ffffff81fef364d4
+> [   53.753760] x20: ffffffc013d6b6f8 x19: ffffffd07a06683c x18: 0000000000000000
+> [   53.761093] x17: 4020386678302f30 x16: 00000000000000b0 x15: ffffffd0797523c8
+> [   53.768429] x14: 0000000000000004 x13: ffff0000ffffff00 x12: ffffffd07a066b2c
+> [   53.775780] x11: 0000000000000000 x10: 000000000000013c x9 : 0000000000000000
+> [   53.783117] x8 : ffffff81fef364d4 x7 : 0000000000000000 x6 : 0000000000000000
+> [   53.790445] x5 : 0000000000000000 x4 : ffff0a00ffffff04 x3 : ffff0a00ffffff04
+> [   53.797783] x2 : 0000000070018001 x1 : ffffffffffffffff x0 : ffffff81fef360d4
+> [   53.805136] Call trace:
+> [   53.807667]  string_nocheck+0x1c/0x64
+> [   53.811439]  string+0x54/0x60
+> [   53.814498]  vsnprintf+0x374/0x53c
+> [   53.818009]  pointer+0x3dc/0x40c
+> [   53.821340]  vsnprintf+0x398/0x53c
+> [   53.824854]  vscnprintf+0x3c/0x88
+> [   53.828274]  __trace_array_vprintk+0xcc/0x2d4
+> [   53.832768]  trace_array_printk+0x8c/0xb4
+> [   53.836900]  drm_trace_printf+0x74/0x9c
+> [   53.840875]  drm_dev_dbg+0xfc/0x1b8
+> [   53.844480]  dp_pm_suspend+0x70/0xf8
+> [   53.848164]  dpm_run_callback+0x60/0x1a0
+> [   53.852222]  __device_suspend+0x304/0x3f4
+> [   53.856363]  dpm_suspend+0xf8/0x3a8
+> [   53.859959]  dpm_suspend_start+0x8c/0xc0
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
 
-The current behavior when those bits are set is to ignore them. This is
-not an ideal behavior, because when future features will start using
-those flags, if user-space fails to correctly validate that the kernel
-indeed supports those flags (e.g. with a new sys_rseq flags bit) before
-using them, it may incorrectly assume that the kernel will handle those
-flags way when in fact those will be silently ignored on older kernels.
+Any fixes tag?
 
-Validating that unused flags bits are cleared will allow a smoother
-transition when those flags will start to be used by allowing
-applications to fail early, and obviously, when they attempt to use the
-new flags on an older kernel that does not support them.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- kernel/rseq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index 81d7dc80787b..bda8175f8f99 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -176,7 +176,7 @@ static int rseq_need_restart(struct task_struct *t, u=
-32 cs_flags)
- 	u32 flags, event_mask;
- 	int ret;
-=20
--	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS))
-+	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
- 		return -EINVAL;
-=20
- 	/* Get thread flags. */
-@@ -184,7 +184,7 @@ static int rseq_need_restart(struct task_struct *t, u=
-32 cs_flags)
- 	if (ret)
- 		return ret;
-=20
--	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS))
-+	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
- 		return -EINVAL;
-=20
- 	/*
---=20
-2.30.2
-
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

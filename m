@@ -2,49 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEBE5549D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107D25549D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358354AbiFVMPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S240157AbiFVMPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358158AbiFVMOP (ORCPT
+        with ESMTP id S1358341AbiFVMPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:14:15 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A4118B20;
-        Wed, 22 Jun 2022 05:14:13 -0700 (PDT)
-Received: (Authenticated sender: peter@korsgaard.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 157A0C0004;
-        Wed, 22 Jun 2022 12:14:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
-        (envelope-from <peter@korsgaard.com>)
-        id 1o3zFG-0099lr-Vg; Wed, 22 Jun 2022 14:14:06 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     <michal.simek@xilinx.com>, <hao.wu@intel.com>, <trix@redhat.com>,
-        <mdf@kernel.org>, <yilun.xu@intel.com>,
-        <gregkh@linuxfoundation.org>, <ronak.jain@xilinx.com>,
-        <rajan.vaja@xilinx.com>, <abhyuday.godhasara@xilinx.com>,
-        <piyush.mehta@xilinx.com>, <harsha.harsha@xilinx.com>,
-        <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
-        <git@xilinx.com>
-Subject: Re: [PATCH v2 2/3] firmware: xilinx: Add pm api function for PL
- readback
-References: <20220621092833.1057408-1-nava.manne@xilinx.com>
-        <20220621092833.1057408-3-nava.manne@xilinx.com>
-Date:   Wed, 22 Jun 2022 14:14:06 +0200
-In-Reply-To: <20220621092833.1057408-3-nava.manne@xilinx.com> (Nava kishore
-        Manne's message of "Tue, 21 Jun 2022 14:58:32 +0530")
-Message-ID: <87ilos520h.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 22 Jun 2022 08:15:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47855340C5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655900120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EQ0/S4hTGe/CYe8u/0j1fhgzO/f/h03uTX6vN/h92Tk=;
+        b=bMYnECgmd86SOKnLOzS/7vDaZLYXsKGssjQEpxQ20rBwl3wY+li/C3D7rIJFv0sno8ARfg
+        SbSnbKmoUCdekLhL+GB8VZrA4hsFzmsQ+6+juFlR/HPRVyww4UoV+Eshg6DWoK53S8iql9
+        kfXdwZjagPXB9rt9hwncReviXJuOx/g=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-Q_msMRW9Pe2umA16aVfbNg-1; Wed, 22 Jun 2022 08:15:17 -0400
+X-MC-Unique: Q_msMRW9Pe2umA16aVfbNg-1
+Received: by mail-wr1-f69.google.com with SMTP id y18-20020adfdf12000000b0021b94ba4c37so1647623wrl.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:15:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EQ0/S4hTGe/CYe8u/0j1fhgzO/f/h03uTX6vN/h92Tk=;
+        b=mvraAc+Vtr+7zjrsOhmx7jhphcXwbnY0lZYm9agfCnmLeaB42k5mIQOsB8e8jtdnto
+         X73sQh7HKKGuH0C6s5zx8rBrPY0pg8BCxp72IS4eXv5WjTqQeThceB5OiHb9rSEOnIkd
+         UH5PaMhn//Zw0bBLQUf/AKF7+aTsdcV8UDfbUHgpAXVDsPrRYSV7ixczxNPa2SYenODI
+         H8ydDnTGhw3pXGo69FoqGCaJvj37d81ADJIeDoGwSDcYKQ0wWjWKKoHM6iplQEoZIRIQ
+         4WQ2UgXqxeY9a5p1HjxIldHXAS4xmh6t4kgm31u9tn8GNUy46jzRa6CGq+vYne0QbUti
+         Xv9w==
+X-Gm-Message-State: AJIora+yA7RcK5EXRn1rmpuFg5lQJCcVoDMhNbD6cWQhJ+qACyzcuidU
+        MGpwQfQwABnqVxGnDxCKOrdK3/hWthYacUvD14VGb+3JLHSsoy38kmc/7C6b6CvLN6bBzTftLsL
+        BH9qGKk4kAseqZGuNi6cxmQ6U
+X-Received: by 2002:adf:f7c7:0:b0:21b:9452:e8fe with SMTP id a7-20020adff7c7000000b0021b9452e8femr3211545wrq.640.1655900115861;
+        Wed, 22 Jun 2022 05:15:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uw/M5KspGlqskc/kFQvcJ3XkxHAQCDS3r8X8uIM7gfQdn0B5UzoYAktVnD2Jx/JTdYhXLqyA==
+X-Received: by 2002:adf:f7c7:0:b0:21b:9452:e8fe with SMTP id a7-20020adff7c7000000b0021b9452e8femr3211525wrq.640.1655900115574;
+        Wed, 22 Jun 2022 05:15:15 -0700 (PDT)
+Received: from redhat.com ([147.235.217.93])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c2ccf00b003974a00697esm26140287wmc.38.2022.06.22.05.15.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 05:15:14 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 08:15:12 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_ring: remove unnecessary to_vvq call in
+ virtqueue_disable_cb_packed
+Message-ID: <20220622081411-mutt-send-email-mst@kernel.org>
+References: <20220622075052.1560-1-wangdeming@inspur.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622075052.1560-1-wangdeming@inspur.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,77 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "Nava" == Nava kishore Manne <nava.manne@xilinx.com> writes:
+On Wed, Jun 22, 2022 at 03:50:52AM -0400, Deming Wang wrote:
+> It passes '_vq' to virtqueue_use_indirect(), which still calls
+> to_vvq to get 'vq', let's directly pass 'vq'. It can avoid
+> unnecessary call of to_vvq in hot path.
+> 
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
 
- > Adds PM API for performing PL configuration readback.
- > It provides an interface to the pmufw to readback the
- > FPGA configuration registers as well as configuration
- > data.
-
- > For more detailed info related to the configuration
- > registers and configuration data refer ug570.
-
- > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
- > ---
- > Changes for v2:
- >               - None.
-
- >  drivers/firmware/xilinx/zynqmp.c     | 33 ++++++++++++++++++++++++++++
- >  include/linux/firmware/xlnx-zynqmp.h | 14 ++++++++++++
- >  2 files changed, 47 insertions(+)
-
- > diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
- > index 7977a494a651..40b99299b662 100644
- > --- a/drivers/firmware/xilinx/zynqmp.c
- > +++ b/drivers/firmware/xilinx/zynqmp.c
- > @@ -927,6 +927,39 @@ int zynqmp_pm_fpga_get_status(u32 *value)
- >  }
- >  EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_status);
- 
- > +/**
- > + * zynqmp_pm_fpga_read - Perform the fpga configuration readback
- > + * @reg_numframes: Configuration register offset (or) Number of frames to read
-
-An offset OR a length? That sounds odd.
+I do not see the point of any of these patches. Sorry.
+If this is supposed to be an optimization, post some numbers pls.
 
 
- > + * @phys_address: Physical Address of the buffer
- > + * @readback_type: Type of fpga readback operation
- > + *                 0 - FPGA configuration register readback
- > + *                 1 - FPGA configuration data readback
+> ---
+>  drivers/virtio/virtio_ring.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 13a7348cedff..af2b7785ed77 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -1475,10 +1475,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+>  	return ret;
+>  }
+>  
+> -static void virtqueue_disable_cb_packed(struct virtqueue *_vq)
+> +static void virtqueue_disable_cb_packed(struct vring_virtqueue *vq)
+>  {
+> -	struct vring_virtqueue *vq = to_vvq(_vq);
+> -
+>  	if (vq->packed.event_flags_shadow != VRING_PACKED_EVENT_FLAG_DISABLE) {
+>  		vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
+>  		vq->packed.vring.driver->flags =
+> @@ -2007,7 +2005,7 @@ void virtqueue_disable_cb(struct virtqueue *_vq)
+>  		return;
+>  
+>  	if (vq->packed_ring)
+> -		virtqueue_disable_cb_packed(_vq);
+> +		virtqueue_disable_cb_packed(vq);
+>  	else
+>  		virtqueue_disable_cb_split(_vq);
+>  }
+> -- 
+> 2.27.0
 
-readback_type is a boolean, so how about calling it `bool data` or
-something like that?
-
-
- > + * @value: Value to read
-
-what is the relation between phys_address and this value output
-argument?
-
- > + *
- > + * This function provides access to xilfpga library to perform
- > + * fpga configuration readback.
- > + *
- > + * Return:	Returns status, either success or error+reason
- > + */
- > +int zynqmp_pm_fpga_read(const u32 reg_numframes, const phys_addr_t phys_address,
- > +			bool readback_type, u32 *value)
- > +{
- > +	u32 ret_payload[PAYLOAD_ARG_CNT];
- > +	int ret;
- > +
- > +	if (!value)
- > +		return -EINVAL;
- > +
- > +	ret = zynqmp_pm_invoke_fn(PM_FPGA_READ, reg_numframes,
- > +				  lower_32_bits(phys_address),
- > +				  upper_32_bits(phys_address), readback_type,
-
-You are adding PM_FPGA_READ_CONFIG_ defines, so how about using them,
-E.G.
-
-data ? PM_FPGA_READ_CONFIG_DATA : PM_FPGA_READ_CONFIG_REG
-
--- 
-Bye, Peter Korsgaard

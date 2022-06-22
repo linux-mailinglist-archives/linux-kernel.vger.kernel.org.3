@@ -2,261 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736F95543FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC5D554446
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352099AbiFVHJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S1352130AbiFVHLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiFVHJs (ORCPT
+        with ESMTP id S232097AbiFVHLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:09:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D44236B61
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655881786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1j0naFDRK4ezIvjusKXtbA3Bm71U034ui+b38Iv9ly0=;
-        b=DQ5IXs2nPdc0hmDod4LQh6BAex0YyEFsLrSdXJKD+3t0d9aQsH4m8SDFRrtL7UDAUwjswI
-        1tYGTbglEtWcyAdnvolEghPFujSJ/7HOhQghsp0gczb9gEQ6NO7M3zyqpswXTpnIAaK6XN
-        YWjbIDo7kuJuWFV7q3RTtmiiVLN3wGo=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-400-vNjChodUONixtVXITlqQow-1; Wed, 22 Jun 2022 03:09:44 -0400
-X-MC-Unique: vNjChodUONixtVXITlqQow-1
-Received: by mail-lj1-f198.google.com with SMTP id z10-20020a05651c022a00b00255a0bf5ccfso2162126ljn.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:09:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1j0naFDRK4ezIvjusKXtbA3Bm71U034ui+b38Iv9ly0=;
-        b=F9Udh0oyuOaqYIMBEbwPflpNPe3o1/jl6XwBn8ACV6Eto8baZCSFe9QkGbHOMoQeJw
-         YMxC/zyLOwILsgqOIkykhw0Hatvm88zg+UPDHNZVFhOxKAXw2EzEA/Ia/1RFNjYY9byk
-         Yh43YduYqgXjHdqVKcBURcLsQEXKkM8FrwekU2nE8nHEZu+fIF0X+Ts3YwPcGrjmGwIa
-         e31lNxpYgrw5nD92p2I1WtzbjGOsL7bLch4t6xCk2qD9d0mtXt4UlzPaUBzUTP3/fwUM
-         ZbGy1eJe0GAevi359s1UqOZ4hG9XVsG8yl5WWpWdBCF8n/tY4b/SNG6i8NmbnHvbpNax
-         s8Xg==
-X-Gm-Message-State: AJIora8fjzTOwtwr8+WiUQGEvno0dZPm/yE2HClTZMhELB2cjX6MMSyP
-        MbzqRpS63/n06iZsP5p65CZmYCS4xUyKsiYjxMfkQXky2lTO5I+Ca5OuXC6YtrpyPGXPOGiYGnL
-        3jKRacrDyCvzyfg3OSEBiv2qlBh/BO2Ex8nEPKQqN
-X-Received: by 2002:ac2:51a5:0:b0:47f:79a1:5c02 with SMTP id f5-20020ac251a5000000b0047f79a15c02mr1252860lfk.575.1655881783024;
-        Wed, 22 Jun 2022 00:09:43 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tq42OMcdXjoSnnpCbSjESrNsMW03LT2BQ9mcgGzfwle50vtAU5p80ztyv3WPK0HK2yNJdCKqUoZQoVQawiuxo=
-X-Received: by 2002:ac2:51a5:0:b0:47f:79a1:5c02 with SMTP id
- f5-20020ac251a5000000b0047f79a15c02mr1252846lfk.575.1655881782745; Wed, 22
- Jun 2022 00:09:42 -0700 (PDT)
+        Wed, 22 Jun 2022 03:11:33 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626A036B6D;
+        Wed, 22 Jun 2022 00:11:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LSZLS3mP6z4xYD;
+        Wed, 22 Jun 2022 17:11:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655881888;
+        bh=C+XLyUJ+FVz7Fk/fEFlMlBGYk8u2KjFmr+Uy6ezbShU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OHIxUiNDzWOafELFL0RZZ80G9St9kMJ/6pq6c5QcEzNlQ/YlP/YIAmfuoDu4vjD04
+         4/8PNP5NPb504cMJ0DevGyHEX4BK59URY5p1E4iU1ZSdot3BNc2DF4hGzJRIcRGOSH
+         gRCoA9hevp+00uhunRFXpFrfLgLyJ3YDgdcsQxS+qSMN5MgmKqayul9iCim+QBsxHS
+         D3a9uOyaf2mRyHvoSJBJWWe81vleG213yGRdq4iS84ozJk7kxMlz0WAvS2ZEH8OHu0
+         PKseZSGB1uEK98MaBn/MhuN79di0RAHHCLO1ZSMx9IiEthxw9T3RRe7CKMxYmIg1wk
+         VGGnqbdkTgf5g==
+Date:   Wed, 22 Jun 2022 17:11:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the mm tree
+Message-ID: <20220622171117.70850960@canb.auug.org.au>
+In-Reply-To: <20220622155408.3ba2a9b7@canb.auug.org.au>
+References: <20220622155408.3ba2a9b7@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220622012940.21441-1-jasowang@redhat.com> <20220622025047-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220622025047-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 22 Jun 2022 15:09:31 +0800
-Message-ID: <CACGkMEtJY2ioD0L8ifTrCPatG6-NqQ01V=d2L1FeoweKV74LaA@mail.gmail.com>
-Subject: Re: [PATCH V3] virtio: disable notification hardening by default
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        David Hildenbrand <david@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/lvTGmMDyENx41tvhX22XQf4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 3:03 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Wed, Jun 22, 2022 at 09:29:40AM +0800, Jason Wang wrote:
-> > We try to harden virtio device notifications in 8b4ec69d7e09 ("virtio:
-> > harden vring IRQ"). It works with the assumption that the driver or
-> > core can properly call virtio_device_ready() at the right
-> > place. Unfortunately, this seems to be not true and uncover various
-> > bugs of the existing drivers, mainly the issue of using
-> > virtio_device_ready() incorrectly.
-> >
-> > So let's having a Kconfig option and disable it by default. It gives
-> > us a breath to fix the drivers and then we can consider to enable it
-> > by default.
-> >
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
->
->
-> OK I will queue, but I think the problem is fundamental.
+--Sig_/lvTGmMDyENx41tvhX22XQf4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If I understand correctly, you want some core IRQ work? As discussed
-before, it doesn't solve all the problems, we still need to do per
-driver audit.
+Hi all,
 
-Thanks
+On Wed, 22 Jun 2022 15:54:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> After merging the mm tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+>=20
+> mm/hugetlb.c: In function 'hugetlb_mask_last_page':
+> mm/hugetlb.c:6908:23: warning: unused variable 'hp_size' [-Wunused-variab=
+le]
+>  6908 |         unsigned long hp_size =3D huge_page_size(h);
+>       |                       ^~~~~~~
+>=20
+> Introduced by commit
+>=20
+>   76005bedbc32 ("hugetlb: do not update address in huge_pmd_unshare")
 
->
->
-> > ---
-> > Changes since V2:
-> > - Tweak the Kconfig help
-> > - Add comment for the read_lock() pairing in virtio_ccw
-> > ---
-> >  drivers/s390/virtio/virtio_ccw.c |  9 ++++++++-
-> >  drivers/virtio/Kconfig           | 13 +++++++++++++
-> >  drivers/virtio/virtio.c          |  2 ++
-> >  drivers/virtio/virtio_ring.c     | 12 ++++++++++++
-> >  include/linux/virtio_config.h    |  2 ++
-> >  5 files changed, 37 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
-> > index 97e51c34e6cf..1f6a358f65f0 100644
-> > --- a/drivers/s390/virtio/virtio_ccw.c
-> > +++ b/drivers/s390/virtio/virtio_ccw.c
-> > @@ -1136,8 +1136,13 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
-> >                       vcdev->err = -EIO;
-> >       }
-> >       virtio_ccw_check_activity(vcdev, activity);
-> > -     /* Interrupts are disabled here */
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> > +     /*
-> > +      * Paried with virtio_ccw_synchronize_cbs() and interrupts are
-> > +      * disabled here.
-> > +      */
-> >       read_lock(&vcdev->irq_lock);
-> > +#endif
-> >       for_each_set_bit(i, indicators(vcdev),
-> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
-> >               /* The bit clear must happen before the vring kick. */
-> > @@ -1146,7 +1151,9 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
-> >               vq = virtio_ccw_vq_by_ind(vcdev, i);
-> >               vring_interrupt(0, vq);
-> >       }
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >       read_unlock(&vcdev->irq_lock);
-> > +#endif
-> >       if (test_bit(0, indicators2(vcdev))) {
-> >               virtio_config_changed(&vcdev->vdev);
-> >               clear_bit(0, indicators2(vcdev));
-> > diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-> > index b5adf6abd241..c04f370a1e5c 100644
-> > --- a/drivers/virtio/Kconfig
-> > +++ b/drivers/virtio/Kconfig
-> > @@ -35,6 +35,19 @@ menuconfig VIRTIO_MENU
-> >
-> >  if VIRTIO_MENU
-> >
-> > +config VIRTIO_HARDEN_NOTIFICATION
-> > +        bool "Harden virtio notification"
-> > +        help
-> > +          Enable this to harden the device notifications and suppress
-> > +          those that happen at a time where notifications are illegal.
-> > +
-> > +          Experimental: Note that several drivers still have bugs that
-> > +          may cause crashes or hangs when correct handling of
-> > +          notifications is enforced; depending on the subset of
-> > +          drivers and devices you use, this may or may not work.
-> > +
-> > +          If unsure, say N.
-> > +
-> >  config VIRTIO_PCI
-> >       tristate "PCI driver for virtio devices"
-> >       depends on PCI
-> > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> > index ef04a96942bf..21dc08d2f32d 100644
-> > --- a/drivers/virtio/virtio.c
-> > +++ b/drivers/virtio/virtio.c
-> > @@ -220,6 +220,7 @@ static int virtio_features_ok(struct virtio_device *dev)
-> >   * */
-> >  void virtio_reset_device(struct virtio_device *dev)
-> >  {
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >       /*
-> >        * The below virtio_synchronize_cbs() guarantees that any
-> >        * interrupt for this line arriving after
-> > @@ -228,6 +229,7 @@ void virtio_reset_device(struct virtio_device *dev)
-> >        */
-> >       virtio_break_device(dev);
-> >       virtio_synchronize_cbs(dev);
-> > +#endif
-> >
-> >       dev->config->reset(dev);
-> >  }
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > index 13a7348cedff..d9d3b6e201fb 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -1688,7 +1688,11 @@ static struct virtqueue *vring_create_virtqueue_packed(
-> >       vq->we_own_ring = true;
-> >       vq->notify = notify;
-> >       vq->weak_barriers = weak_barriers;
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >       vq->broken = true;
-> > +#else
-> > +     vq->broken = false;
-> > +#endif
-> >       vq->last_used_idx = 0;
-> >       vq->event_triggered = false;
-> >       vq->num_added = 0;
-> > @@ -2135,9 +2139,13 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
-> >       }
-> >
-> >       if (unlikely(vq->broken)) {
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >               dev_warn_once(&vq->vq.vdev->dev,
-> >                             "virtio vring IRQ raised before DRIVER_OK");
-> >               return IRQ_NONE;
-> > +#else
-> > +             return IRQ_HANDLED;
-> > +#endif
-> >       }
-> >
-> >       /* Just a hint for performance: so it's ok that this can be racy! */
-> > @@ -2180,7 +2188,11 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
-> >       vq->we_own_ring = false;
-> >       vq->notify = notify;
-> >       vq->weak_barriers = weak_barriers;
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >       vq->broken = true;
-> > +#else
-> > +     vq->broken = false;
-> > +#endif
-> >       vq->last_used_idx = 0;
-> >       vq->event_triggered = false;
-> >       vq->num_added = 0;
-> > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-> > index 9a36051ceb76..d15c3cdda2d2 100644
-> > --- a/include/linux/virtio_config.h
-> > +++ b/include/linux/virtio_config.h
-> > @@ -257,6 +257,7 @@ void virtio_device_ready(struct virtio_device *dev)
-> >
-> >       WARN_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
-> >
-> > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
-> >       /*
-> >        * The virtio_synchronize_cbs() makes sure vring_interrupt()
-> >        * will see the driver specific setup if it sees vq->broken
-> > @@ -264,6 +265,7 @@ void virtio_device_ready(struct virtio_device *dev)
-> >        */
-> >       virtio_synchronize_cbs(dev);
-> >       __virtio_unbreak_device(dev);
-> > +#endif
-> >       /*
-> >        * The transport should ensure the visibility of vq->broken
-> >        * before setting DRIVER_OK. See the comments for the transport
-> > --
-> > 2.25.1
->
+This became a build failure in my powerpc allyesconfig build, so I
+applied this patch:
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 22 Jun 2022 17:04:46 +1000
+Subject: [PATCH] hugetlb: fix an unused variable warning/error
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/hugetlb.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 2e4a92cebd9c..f338640fbe4a 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6905,10 +6905,8 @@ unsigned long hugetlb_mask_last_page(struct hstate *=
+h)
+ /* See description above.  Architectures can provide their own version. */
+ __weak unsigned long hugetlb_mask_last_page(struct hstate *h)
+ {
+-	unsigned long hp_size =3D huge_page_size(h);
+-
+ #ifdef CONFIG_ARCH_WANT_HUGE_PMD_SHARE
+-	if (hp_size =3D=3D PMD_SIZE)
++	if (huge_page_size(h) =3D=3D PMD_SIZE)
+ 		return PUD_SIZE - PMD_SIZE;
+ #endif
+ 	return 0UL;
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lvTGmMDyENx41tvhX22XQf4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKywJUACgkQAVBC80lX
+0GwS1Qf/esEO3TgNLz3D51kpLVpgRbNTNjXwu5Wl3eRcHDvTrAIs16PIwlARQVy0
+USr1r3F37po9ttEGQq/5YSZztE91m7fK1E+07cYTEg3NQc1tKJcuv8UnzZSNqM0d
+/ALTzfiFDHX9Xk3e2CsomsrWOAxrfiDWBcRKEoigScT/psQQ2UZlx3PZmYHmljBx
+dKd5UJHJztyW/1s7WlOFLND0eDDQJuGR9RUjgO8xKSWgYU8t1vq8InAdWtGd7+OP
+kXyG6aCOCYTq7jh90eaEJoxCQvwHlmgEUBBXBgJDvTkobcR4qxPyfc9+bIrMSjoH
+BcociPWjNFZwUJgB+vD+9d0gu/tUdA==
+=ykRD
+-----END PGP SIGNATURE-----
+
+--Sig_/lvTGmMDyENx41tvhX22XQf4--

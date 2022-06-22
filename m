@@ -2,58 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E84554705
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D47555488D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242705AbiFVJhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        id S1351170AbiFVJjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235328AbiFVJho (ORCPT
+        with ESMTP id S1347856AbiFVJjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:37:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99A03526C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655890663; x=1687426663;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lNOiUYFMSmBTQPC4ZUYGORLMEPsA3fg4/q5UVd8n91g=;
-  b=S1bh9MhCC3pejsEyRvUZY2JHfTo1SDLP1D2OBg1eoxLXwcuhfqKOXteK
-   Qkj1R5iBE3wDzIMiGnVevoRN6i9c8gIhy7K/XYAAxylbyMbMCzX3HIrCt
-   0iH6t6w6BS2Y9aIWOr4RtOrLQvE2NlOYhW7I8kuGeQAexmrkHm+qHt0K7
-   Hn3qvLljpHEyxbA3P12wGJcMHlKtK4S5zhMDYJNEmjJCpBEWVOw8nyXd/
-   IfxKCfIo2ufUeMRvuArIJBnKyUZlWIMxJbFr4OIL7feY5LtJRAvPwxSPX
-   AtaCwbrYEYB09TG0oHoIwHGOXLUGOnbq+KF+A6tjT6N6uOTEme6umqgGc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="263404206"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="263404206"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 02:37:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="834024140"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2022 02:37:41 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3wnt-000165-33;
-        Wed, 22 Jun 2022 09:37:41 +0000
-Date:   Wed, 22 Jun 2022 17:36:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>
-Subject: vmlinux.o: warning: objtool: pv_ops[23]: xen_read_msr
-Message-ID: <202206221714.98EtuqRm-lkp@intel.com>
+        Wed, 22 Jun 2022 05:39:00 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B5739822
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=GM3qPiNw6bss3JgeWzvrXSm0lamQjaygnBKjic/k7cs=;
+  b=YXDgJ29Zl4n/PQJKwPgUA+m5Jy08wqd4U86ipoY05Mcmq29ZIzQNgo7j
+   FrvTKGYvzWyqcaew4qbWJE4zGYoQSXqhoQVGLQHlU7BYT/mfvjwp0ZaPW
+   W/jC1/2Z4X5vltnYt5k77TJZ9MjWBt7QxiGbsUT+ExkLP2qz1AdJqebsV
+   Q=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.92,212,1650924000"; 
+   d="scan'208";a="42344526"
+Received: from 71-51-165-43.chvl.centurylink.net (HELO hadrien) ([71.51.165.43])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:38:55 +0200
+Date:   Wed, 22 Jun 2022 05:38:52 -0400 (EDT)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: julia@hadrien
+To:     Shahab Vahedi <Shahab.Vahedi@synopsys.com>
+cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        "vgupta@kernel.org" <vgupta@kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ARC:mm:Fix syntax errors in comments
+In-Reply-To: <46e4b588-d35b-ec50-ad1a-8502c2903677@synopsys.com>
+Message-ID: <alpine.DEB.2.22.394.2206220535300.2646@hadrien>
+References: <20220622080423.41570-1-yuanjilin@cdjrlc.com> <YrLTCXLrr3HB39lv@debian.me> <4cef89c9-3b27-11e8-2971-66b93b847ede@synopsys.com> <alpine.DEB.2.22.394.2206220513590.2646@hadrien> <46e4b588-d35b-ec50-ad1a-8502c2903677@synopsys.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca1fdab7fd27eb069df1384b2850dcd0c2bebe8d
-commit: 027bbb884be006b05d9c577d6401686053aa789e KVM: x86/speculation: Disable Fill buffer clear within guests
-date:   5 weeks ago
-config: x86_64-randconfig-a011-20211126 (https://download.01.org/0day-ci/archive/20220622/202206221714.98EtuqRm-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=027bbb884be006b05d9c577d6401686053aa789e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 027bbb884be006b05d9c577d6401686053aa789e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+On Wed, 22 Jun 2022, Shahab Vahedi wrote:
 
->> vmlinux.o: warning: objtool: pv_ops[23]: xen_read_msr
->> vmlinux.o: warning: objtool: pv_ops[23]: native_read_msr
-   vmlinux.o: warning: objtool: vmx_vcpu_enter_exit()+0x5c: call to pv_ops[22]() leaves .noinstr.text section
+> On 6/22/22 11:16, Julia Lawall wrote:
+> >
+> >
+> > On Wed, 22 Jun 2022, Shahab Vahedi wrote:
+> >
+> >> On 6/22/22 10:30, Bagas Sanjaya wrote:
+> >>
+> >>> I think that this kind of cleanup patches (typofixes) are best done
+> >>> as part of **actual** work on the code in question (for example
+> >>> refactoring or fixing build errors).
+> >>
+> >> Amen!
+> >
+> > So code that is fine will have typos forever?  Fixing typos in comments
+> > doesn't break git blame for the following code.  And typos in comments
+> > give a bad impression about the state of the code in general.
+>
+> Of course not! Documentation is as important as the code, if not even more.
+> However, fixing typos to increase your commit counts to a reputable project
+> is not fine either. For instance, many of these proposed fixes are targeting
+> one single typo at a time. Couldn't they just be sent altogether!?!
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I have the impression that the person is just trying to figure out the
+patch submission process.  For example, the subject lines are not
+formatter in the standard way (I sent the person a private email about
+that).  Perhaps just let him know about how you would rather have received
+the patches.
+
+julia

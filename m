@@ -2,186 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113F35553F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A8D5553FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377599AbiFVTEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S1356636AbiFVTJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351124AbiFVTEW (ORCPT
+        with ESMTP id S232911AbiFVTJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:04:22 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB42835AAB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:04:21 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id i7so14120997ybe.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tGYC0JfVcEOklfcd5CHjY9rwrFmfl6TemJvfZU8qJxE=;
-        b=JT+oe4uvxIqOfCEFWYz+8dmrf0ZlHKNGnw5N0DgM0ILmXnX87BVQPrcf5VGc71Q2zt
-         Jn/KtlOsZPN/34WTySuutgwZgN78oklxy6ySoNm9XEimT50SmD3j5xqqxBouCCsEi1Sb
-         WpSMFjdj/PPyHWvBPfMk4Gwt2J6EEdPUJVsm+Aw2z4pH4YFPacKVMvMtiU0sXS6Pmtkw
-         3HNRiWuyrPqWdW0CeYVzQI3YGiZX+Hq9yRntregBkx+e/OonyNF0kee0rwAKob4mT5Pm
-         ENxQFVVnnj3X0Om0jWeb53E381Uq8d/CtmbLtPyp5bIBwJnpBdtqEqnzmv6lPHXEwdvB
-         bzTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tGYC0JfVcEOklfcd5CHjY9rwrFmfl6TemJvfZU8qJxE=;
-        b=5zt09xhPCm+65dIXUKejqHtYCaIq9lQ+YxzikD1u++EcHmzGmctjwQkTaON/f+8ThX
-         Qh+l7XXMcu0RqMwUxdQzb4oWiMXfSOiFLkNEQu3nmByMSddWi6ta12+RwNvhlERsrk5L
-         ucY6NuTRk9BI6OfX5WPFMHLjcSnrJrl65AqvQgmuuTaGxvzptHlznPve3z2CqLzP1xtg
-         0RVW7vfpHL5puk6dhNiF6O35Jxfky99gify3qL3EI3bYXBKRfgXJmzB6ePU7lF5PmT2l
-         S38tRspWFtPZymmPjyqNLm+09kV68i4qtCqlMJ9e7aP1EghPWb/fxv+Sx3mtWAyJ/y2Z
-         jQAQ==
-X-Gm-Message-State: AJIora9zLRI2ZoETaXvyfqdmTSR0Zh8DBovUKMlh+nNxJaXp/QsyrUmE
-        G2bDEnB5zRIi2cJPASC37IKwnkbIcezlHoTvsU7tJg==
-X-Google-Smtp-Source: AGRyM1ueTZj8HsDBAP0D9sQrfkgWTf9Kr6hlLMz7YSl6oI99BGIwNcqB85NOH9KuK4HD5uEdGFBxh5TkD/SkNxtpcSQ=
-X-Received: by 2002:a25:e211:0:b0:669:9cf9:bac7 with SMTP id
- h17-20020a25e211000000b006699cf9bac7mr2831225ybe.407.1655924660420; Wed, 22
- Jun 2022 12:04:20 -0700 (PDT)
+        Wed, 22 Jun 2022 15:09:38 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788C915806
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Oj8H7zsJ4ndt3MK4sIJED6AFUWOF
+        E1yzy5hFgKjZV28=; b=jRgDKwJGfrTY38pfQNNKvIQfPb8DTrus3E0WJk5md+Le
+        c9TarJXe/2O4u79AhQMGXsoXfWFIIJhV02eq6zC2LcTmf2vHgw5LmdFT5LGcZgLe
+        2Pohd2kPsx5L5NpCEuiLaBcLTYqR9uTj1dpHi3WwufCBslOzIW8Psv2XAMPmsHU=
+Received: (qmail 730482 invoked from network); 22 Jun 2022 21:09:31 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Jun 2022 21:09:31 +0200
+X-UD-Smtp-Session: l3s3148p1@xLOEEw7i1JcgAwDtxwdRADDX0JnqoDnA
+Date:   Wed, 22 Jun 2022 21:09:28 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Pavel Machek <pavel@denx.de>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2 2/2] mmc: renesas_sdhi: Fix typo's
+Message-ID: <YrNo6LLDixpZ16k/@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Pavel Machek <pavel@denx.de>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220622173614.12778-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220622173614.12778-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdWbQ1VHH4ugQs2mamS2KGEj5AdWmNtmg=6eUJmyGRDTVw@mail.gmail.com>
+ <CA+V-a8vDem8=QaSdJr5mjHC+qbGmUtTBWEsf9T8njMZMT3BGJw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220619003919.394622-1-i.maximets@ovn.org> <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
- <20220622102813.GA24844@breakpoint.cc> <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
- <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org> <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
- <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org> <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
- <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
- <CANn89iLVHAE5aMwo0dow14mdFK0JjokE9y5KV+67AxKJdSjx=w@mail.gmail.com>
- <CANn89i+5pWbXyFBnMqdfz6SqRV9enFNHbcd_2irJub1Ag7vxNw@mail.gmail.com> <673a6f2b-dab2-e00f-b37c-15f8775b2121@ovn.org>
-In-Reply-To: <673a6f2b-dab2-e00f-b37c-15f8775b2121@ovn.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 22 Jun 2022 21:04:08 +0200
-Message-ID: <CANn89i+a6nd=80X-7p+GLq9Tvx7QjRYHkHVJgrjJu_UO30+SDQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: ensure all external references are released in
- deferred skbuffs
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Florian Westphal <fw@strlen.de>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RQzW6Ax7wtYuMWw+"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8vDem8=QaSdJr5mjHC+qbGmUtTBWEsf9T8njMZMT3BGJw@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 8:19 PM Ilya Maximets <i.maximets@ovn.org> wrote:
->
-> On 6/22/22 19:03, Eric Dumazet wrote:
-> > On Wed, Jun 22, 2022 at 6:47 PM Eric Dumazet <edumazet@google.com> wrote:
-> >>
-> >> On Wed, Jun 22, 2022 at 6:39 PM Eric Dumazet <edumazet@google.com> wrote:
-> >>>
-> >>> On Wed, Jun 22, 2022 at 6:29 PM Eric Dumazet <edumazet@google.com> wrote:
-> >>>>
-> >>>> On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
-> >>>>>
-> >>>>> On 6/22/22 13:43, Eric Dumazet wrote:
-> >>>>
-> >>>>>
-> >>>>> I tested the patch below and it seems to fix the issue seen
-> >>>>> with OVS testsuite.  Though it's not obvious for me why this
-> >>>>> happens.  Can you explain a bit more?
-> >>>>
-> >>>> Anyway, I am not sure we can call nf_reset_ct(skb) that early.
-> >>>>
-> >>>> git log seems to say that xfrm check needs to be done before
-> >>>> nf_reset_ct(skb), I have no idea why.
-> >>>
-> >>> Additional remark: In IPv6 side, xfrm6_policy_check() _is_ called
-> >>> after nf_reset_ct(skb)
-> >>>
-> >>> Steffen, do you have some comments ?
-> >>>
-> >>> Some context:
-> >>> commit b59c270104f03960069596722fea70340579244d
-> >>> Author: Patrick McHardy <kaber@trash.net>
-> >>> Date:   Fri Jan 6 23:06:10 2006 -0800
-> >>>
-> >>>     [NETFILTER]: Keep conntrack reference until IPsec policy checks are done
-> >>>
-> >>>     Keep the conntrack reference until policy checks have been performed for
-> >>>     IPsec NAT support. The reference needs to be dropped before a packet is
-> >>>     queued to avoid having the conntrack module unloadable.
-> >>>
-> >>>     Signed-off-by: Patrick McHardy <kaber@trash.net>
-> >>>     Signed-off-by: David S. Miller <davem@davemloft.net>
-> >>>
-> >>
-> >> Oh well... __xfrm_policy_check() has :
-> >>
-> >> nf_nat_decode_session(skb, &fl, family);
-> >>
-> >> This  answers my questions.
-> >>
-> >> This means we are probably missing at least one XFRM check in TCP
-> >> stack in some cases.
-> >> (Only after adding this XFRM check we can call nf_reset_ct(skb))
-> >>
+
+--RQzW6Ax7wtYuMWw+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> > > -       /* This DMAC cannot handle if buffer is not 128-bytes alignment */
+> > > +       /* This DMAC cannot handle if buffer is not 128 byte aligned */
 > >
-> > Maybe this will help ?
->
-> I tested this patch and it seems to fix the OVS problem.
-> I did not test the xfrm part of it.
->
-> Will you post an official patch?
-
-Yes I will. I need to double check we do not leak either the req, or the child.
-
-Maybe the XFRM check should be done even earlier, on the listening socket ?
-
-Or if we assume the SYNACK packet has been sent after the XFRM test
-has been applied to the SYN,
-maybe we could just call nf_reset_ct(skb) to lower risk of regressions.
-
-With the last patch, it would be strange that we accept the 3WHS and
-establish a socket,
-but drop the payload in the 3rd packet...
-
->
+> > 128-byte? ;-)
 > >
-> > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> > index fe8f23b95d32ca4a35d05166d471327bc608fa91..49c1348e40b6c7b6a98b54d716f29c948e00ba33
-> > 100644
-> > --- a/net/ipv4/tcp_ipv4.c
-> > +++ b/net/ipv4/tcp_ipv4.c
-> > @@ -2019,12 +2019,19 @@ int tcp_v4_rcv(struct sk_buff *skb)
-> >                 if (nsk == sk) {
-> >                         reqsk_put(req);
-> >                         tcp_v4_restore_cb(skb);
-> > -               } else if (tcp_child_process(sk, nsk, skb)) {
-> > -                       tcp_v4_send_reset(nsk, skb);
-> > -                       goto discard_and_relse;
-> >                 } else {
-> > -                       sock_put(sk);
-> > -                       return 0;
-> > +                       if (!xfrm4_policy_check(nsk, XFRM_POLICY_IN, skb)) {
-> > +                               drop_reason = SKB_DROP_REASON_XFRM_POLICY;
-> > +                               goto discard_and_relse;
-> > +                       }
-> > +                       nf_reset_ct(skb);
-> > +                       if (tcp_child_process(sk, nsk, skb)) {
-> > +                               tcp_v4_send_reset(nsk, skb);
-> > +                               goto discard_and_relse;
-> > +                       } else {
-> > +                               sock_put(sk);
-> > +                               return 0;
-> > +                       }
-> >                 }
-> >         }
->
+> In the previous version of the patch Wolfram never came back on your
+> reply, so I went with 128 byte instead.
+
+I hoped for a native speaker to chime in. I don't care about the '-' but
+maybe we should rephrase it to:
+
+/* This DMAC needs buffers to be 128-byte aligned */
+
+?
+
+
+--RQzW6Ax7wtYuMWw+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKzaOQACgkQFA3kzBSg
+Kbbpew/+MQbQyIXLYfz6qKuhS5xIaU2T6054B+58JVY835yCxrowf0om5JfPQKpq
+6rM61/AMQzJWLgfNRJIvAKgYvdJiVppd/t7HPCV/yD7tpAygWfciepusnF2P7fXf
+IlfOeRwTzLSR4PwQcnq/FrWsoGvM4IrcPnyXLgPVIwBOmd9qJBYoGKwTYcoPUYVZ
+cU3WtgXo9cgiszZIj1cgaBtr8Xg7u60BbgG2T1GYs+LlD9/pO/vK8H3vHJflnYE5
+0lD5fOlnkJbqtMu9uSTPCHKEfoDUMb8bFPwhXPS6Uos+j8uG+A1sj0y4tlEcWuZw
+7hLbXyn+vRMEdRTfb16XjplyXzOSOZcYiP+jOiczSMfkxI7obzsLpA5YyBbTrMYG
+AW/Tdcq1jvL1mKWdyKO7bRRNgETalDjHex1YyEpWBohkhY/BjQjFAx0M4uzkpbu8
+T/qRYyOh/KR4JDNtNnxWm2BRAbO+VIOh8IP+0g8M2AnHMHdElhFMu/mJsf0BCwDh
+WgpZMBOqArDQ1UfFIupLkYdk6NW0iH+La1UK+mXBTGYWwoyA7hKhGfSCaPf6oEa5
+lAqoDlhxtvIZJPM3YHl4VRvNwY5iLxY9jsziWknGg0vgSLTzMz1mj1sy4LqBbeW3
+GRndizepa2B/eG+8gdaJHpHIKeC2P4lwx0z9IIhIYdadWmQrQDQ=
+=Ryfs
+-----END PGP SIGNATURE-----
+
+--RQzW6Ax7wtYuMWw+--

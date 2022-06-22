@@ -2,158 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B67755441B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE165543D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353343AbiFVHap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S1350917AbiFVHqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352669AbiFVHam (ORCPT
+        with ESMTP id S229559AbiFVHqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:30:42 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D49737024
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:30:40 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSZk60kGMzhXZ7;
-        Wed, 22 Jun 2022 15:28:30 +0800 (CST)
-Received: from localhost.localdomain (10.175.127.227) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 15:30:36 +0800
-From:   Zhang Wensheng <zhangwensheng5@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <zhangwensheng5@huawei.com>
-Subject: [PATCH -next v2] driver core: fix deadlock in __driver_attach
-Date:   Wed, 22 Jun 2022 15:43:27 +0800
-Message-ID: <20220622074327.497102-1-zhangwensheng5@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 22 Jun 2022 03:46:04 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FF41EEC3;
+        Wed, 22 Jun 2022 00:46:02 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id 89so24043138qvc.0;
+        Wed, 22 Jun 2022 00:46:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6NqzMVPYor30cDFAk/KEthpekJP7tc0FOSV0dYJSBIg=;
+        b=2p78/HvsDyERGscXkkDLFEWSXjTHDm1mOm2WrUyHsjmFur5l++hu15U6gw/jNQR3A1
+         oVoX9nM6wRXUFZVDuWfrYMHkv2SdlErDrueSD9hiqpWcyfkAOZVuUNnXIHpHlz+bilWN
+         k6txD5Fp0sMgLBiZ4Dx1bwXgT2ONnFVgN0eYA91ixp8UwD6EWKny6o673OXpfpfi5nXD
+         lUtXe0XNXefuxkwYj4MgH0JfWiQjSj10956uBJqufqwWyssMkGsidgb//LdfgGvj1f3o
+         xKkd7NRLgJT/zKXWFLkaUcI+5qHfx0c5nhVhuSfK+BAJyeRo2Ooj2FEcQLf8rciPzGhA
+         MzgA==
+X-Gm-Message-State: AJIora96B8OQ4QVj6mCWJ5nomWrmAasFWXk+pcbh+thEscozpNNnnCh6
+        w6X1zkpp4Ije/qvFnNYwnkpVPmWBUOBcSw==
+X-Google-Smtp-Source: AGRyM1ulqpmxj+qEYL0sIiF/lFV4D3kBxb8Z/CSqDxIoDABXopohsN+RJw94iKblFAKohAMPGi+q8g==
+X-Received: by 2002:a05:622a:547:b0:305:2dc3:6ecf with SMTP id m7-20020a05622a054700b003052dc36ecfmr1794625qtx.466.1655883961170;
+        Wed, 22 Jun 2022 00:46:01 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id b22-20020ac85bd6000000b00304e33f21f7sm15038124qtb.68.2022.06.22.00.46.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 00:46:00 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id u9so18601206ybq.3;
+        Wed, 22 Jun 2022 00:46:00 -0700 (PDT)
+X-Received: by 2002:a25:2b48:0:b0:668:3b7d:326c with SMTP id
+ r69-20020a252b48000000b006683b7d326cmr2251276ybr.380.1655883960430; Wed, 22
+ Jun 2022 00:46:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220622025732.1359389-1-helgaas@kernel.org> <20220622025732.1359389-3-helgaas@kernel.org>
+In-Reply-To: <20220622025732.1359389-3-helgaas@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 22 Jun 2022 09:45:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUwGLDzOQo_wwSLmzBnJXe-cOw=nqsPbFLsj-c+nHfy_w@mail.gmail.com>
+Message-ID: <CAMuHMdUwGLDzOQo_wwSLmzBnJXe-cOw=nqsPbFLsj-c+nHfy_w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PCI: rcar: Resolve of_find_matching_node() reference leak
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Liang He <windhl@126.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __driver_attach function, There are also AA deadlock problem,
-like the commit b232b02bf3c2 ("driver core: fix deadlock in
-__device_attach").
+Hi Bjorn,
 
-stack like commit b232b02bf3c2 ("driver core: fix deadlock in
-__device_attach").
-list below:
-    In __driver_attach function, The lock holding logic is as follows:
-    ...
-    __driver_attach
-    if (driver_allows_async_probing(drv))
-      device_lock(dev)      // get lock dev
-        async_schedule_dev(__driver_attach_async_helper, dev); // func
-          async_schedule_node
-            async_schedule_node_domain(func)
-              entry = kzalloc(sizeof(struct async_entry), GFP_ATOMIC);
-              /* when fail or work limit, sync to execute func, but
-                 __driver_attach_async_helper will get lock dev as
-                 will, which will lead to A-A deadlock.  */
-              if (!entry || atomic_read(&entry_count) > MAX_WORK) {
-                func;
-              else
-                queue_work_node(node, system_unbound_wq, &entry->work)
-      device_unlock(dev)
+On Wed, Jun 22, 2022 at 4:57 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Previously, rcar_pcie_init() used of_find_matching_node() to search the
+> entire device tree for compatible strings for which we need to install an
+> abort handler.  If we found one, we got a device_node with refcount
+> incremented, but we discarded the pointer and never released that
+> reference.
+>
+> Extend the struct rcar_variant to indicate whether each variant requires an
+> abort handler.  Install the handler in rcar_pcie_probe() when needed.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Liang He <windhl@126.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
 
-    As above show, when it is allowed to do async probes, because of
-    out of memory or work limit, async work is not be allowed, to do
-    sync execute instead. it will lead to A-A deadlock because of
-    __driver_attach_async_helper getting lock dev.
+Thanks for your patch!
 
-Reproduce:
-and it can be reproduce by make the condition
-(if (!entry || atomic_read(&entry_count) > MAX_WORK)) untenable, like
-below:
+> --- a/drivers/pci/controller/pcie-rcar-host.c
+> +++ b/drivers/pci/controller/pcie-rcar-host.c
 
-[  370.785650] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-this message.
-[  370.787154] task:swapper/0       state:D stack:    0 pid:    1 ppid:
-0 flags:0x00004000
-[  370.788865] Call Trace:
-[  370.789374]  <TASK>
-[  370.789841]  __schedule+0x482/0x1050
-[  370.790613]  schedule+0x92/0x1a0
-[  370.791290]  schedule_preempt_disabled+0x2c/0x50
-[  370.792256]  __mutex_lock.isra.0+0x757/0xec0
-[  370.793158]  __mutex_lock_slowpath+0x1f/0x30
-[  370.794079]  mutex_lock+0x50/0x60
-[  370.794795]  __device_driver_lock+0x2f/0x70
-[  370.795677]  ? driver_probe_device+0xd0/0xd0
-[  370.796576]  __driver_attach_async_helper+0x1d/0xd0
-[  370.797318]  ? driver_probe_device+0xd0/0xd0
-[  370.797957]  async_schedule_node_domain+0xa5/0xc0
-[  370.798652]  async_schedule_node+0x19/0x30
-[  370.799243]  __driver_attach+0x246/0x290
-[  370.799828]  ? driver_allows_async_probing+0xa0/0xa0
-[  370.800548]  bus_for_each_dev+0x9d/0x130
-[  370.801132]  driver_attach+0x22/0x30
-[  370.801666]  bus_add_driver+0x290/0x340
-[  370.802246]  driver_register+0x88/0x140
-[  370.802817]  ? virtio_scsi_init+0x116/0x116
-[  370.803425]  scsi_register_driver+0x1a/0x30
-[  370.804057]  init_sd+0x184/0x226
-[  370.804533]  do_one_initcall+0x71/0x3a0
-[  370.805107]  kernel_init_freeable+0x39a/0x43a
-[  370.805759]  ? rest_init+0x150/0x150
-[  370.806283]  kernel_init+0x26/0x230
-[  370.806799]  ret_from_fork+0x1f/0x30
+> @@ -964,12 +965,35 @@ static int rcar_pcie_parse_map_dma_ranges(struct rcar_pcie_host *host)
+>         return err;
+>  }
+>
+> +#ifdef CONFIG_ARM
+> +static int rcar_pcie_aarch32_abort_handler(unsigned long addr,
+> +               unsigned int fsr, struct pt_regs *regs)
+> +{
+> +       return !fixup_exception(regs);
+> +}
+> +#endif
+> +
+> +static void rcar_pcie_hook_aborts(void)
+> +{
+> +#ifdef CONFIG_ARM
+> +#ifdef CONFIG_ARM_LPAE
+> +       hook_fault_code(17, rcar_pcie_aarch32_abort_handler, SIGBUS, 0,
+> +                       "asynchronous external abort");
+> +#else
+> +       hook_fault_code(22, rcar_pcie_aarch32_abort_handler, SIGBUS, 0,
+> +                       "imprecise external abort");
+> +#endif
+> +#endif
+> +}
+> +
+>  static const struct rcar_variant rcar_h1_data = {
+>         .phy_init_fn = rcar_pcie_phy_init_h1,
+> +       .hook_aborts = true,
+>  };
+>
+>  static const struct rcar_variant rcar_gen2_data = {
+>         .phy_init_fn = rcar_pcie_phy_init_gen2,
+> +       .hook_aborts = true,
+>  };
+>
+>  static const struct rcar_variant rcar_gen3_data = {
+> @@ -1035,6 +1059,9 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+>                 goto err_clk_disable;
+>         }
+>
+> +       if (host->variant->hook_aborts)
+> +               rcar_pcie_hook_aborts();
 
-To fix the deadlock, move the async_schedule_dev outside device_lock,
-as we can see, in async_schedule_node_domain, the parameter of
-queue_work_node is system_unbound_wq, so it can accept concurrent
-operations. which will also not change the code logic, and will
-not lead to deadlock.
+I was quite sure there was a good reason why this was not done in
+.probe() before...
 
-Fixes: ef0ff68351be ("driver core: Probe devices asynchronously instead of the driver")
-Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
----
-v2: add patch description
-v1: https://lore.kernel.org/lkml/YqNL6NPgP+cLOy%2FI@kroah.com/t/
----
- drivers/base/dd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+And indeed, the original submission[1] did have a comment explaining
+that:
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 11b0fb6414d3..b766968a873c 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -1115,6 +1115,7 @@ static void __driver_attach_async_helper(void *_dev, async_cookie_t cookie)
- static int __driver_attach(struct device *dev, void *data)
- {
- 	struct device_driver *drv = data;
-+	bool async = false;
- 	int ret;
- 
- 	/*
-@@ -1153,9 +1154,11 @@ static int __driver_attach(struct device *dev, void *data)
- 		if (!dev->driver && !dev->p->async_driver) {
- 			get_device(dev);
- 			dev->p->async_driver = drv;
--			async_schedule_dev(__driver_attach_async_helper, dev);
-+			async = true;
- 		}
- 		device_unlock(dev);
-+		if (async)
-+			async_schedule_dev(__driver_attach_async_helper, dev);
- 		return 0;
- 	}
- 
--- 
-2.31.1
+    + /*
+    + * Since probe() can be deferred we need to make sure that
+    + * hook_fault_code is not called after __init memory is freed
+    + * by kernel and since rcar_pcie_abort_handler() is a no-op,
+    + * we can install the handler here without risking it
+    + * accessing some uninitialized driver state.
+    + */
 
+No idea why it was removed in v2 and later, but the point is:
+hook_fault_code() is __init, so you cannot call it from a deferred
+probe.
+And you should have got a section mismatch warning ;-)
+
+[1] https://lore.kernel.org/all/20200912211853.15321-1-marek.vasut@gmail.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

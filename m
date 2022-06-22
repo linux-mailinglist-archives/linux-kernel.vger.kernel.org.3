@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C841554DCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E21D554DD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357706AbiFVOs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S1358587AbiFVOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357373AbiFVOsu (ORCPT
+        with ESMTP id S1357542AbiFVOtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:48:50 -0400
+        Wed, 22 Jun 2022 10:49:04 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 386453CA7E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:48:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55BC33DDE5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:49:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655909329;
+        s=mimecast20190719; t=1655909340;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BfzGA2BfgEmm4tcaB5rbMih4mJIyv5Ggi+5ejPnvGzs=;
-        b=dce/0J5FNyVc+yIPOMNPhr7hriBEP8Py+Z4ktIbsJLZV6oGXn1VsZEt2hNXqr2lbsP6UCg
-        3CVlfTMmn3nMAzLLlBHr+BFIVpK69l59dhrcvmlyGHkdXugGOTceXJHSpO+UGzcSIZ16Hl
-        eRXx2/5IlcnLO6abspZ1P96VU1026QU=
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JV9YRdtqoo7wzkDPDGDuYdQDwku8zHdZp+0Mbg9ps38=;
+        b=TXG4vReBYOMzc1hkChshMUa1UVTIknR1hJMlRkYvJyHjIgrOszBIDnFLTLFuMpoljJriLW
+        wb3ssKEFmvA7nYxSHidX/rxdML4olztTWoJ2uwRzYgFZ9bUY75GiKY9ivdM4F+n9P01RWR
+        xNLumW1QvLG/ayrLH5CVElXI3XeUffI=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-474-N2RvB7y5NLeqzs-ommWDCA-1; Wed, 22 Jun 2022 10:48:46 -0400
-X-MC-Unique: N2RvB7y5NLeqzs-ommWDCA-1
+ us-mta-64-GvR57FqhPSOhQOOsE3g4wg-1; Wed, 22 Jun 2022 10:48:53 -0400
+X-MC-Unique: GvR57FqhPSOhQOOsE3g4wg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6AE6418A6534;
-        Wed, 22 Jun 2022 14:48:28 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C9E71DC245B;
+        Wed, 22 Jun 2022 14:48:34 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.40.194.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1365A40E80E1;
-        Wed, 22 Jun 2022 14:48:21 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C3A2F404E4DF;
+        Wed, 22 Jun 2022 14:48:28 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
@@ -62,12 +63,13 @@ Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-crypto@vger.kernel.org (open list:CRYPTO API),
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 0/4] x86: cpuid: improve support for broken CPUID configurations
-Date:   Wed, 22 Jun 2022 17:48:16 +0300
-Message-Id: <20220622144820.751402-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+Subject: [PATCH 1/4] perf/x86/intel/lbr: use setup_clear_cpu_cap instead of clear_cpu_cap
+Date:   Wed, 22 Jun 2022 17:48:17 +0300
+Message-Id: <20220622144820.751402-2-mlevitsk@redhat.com>
+In-Reply-To: <20220622144820.751402-1-mlevitsk@redhat.com>
+References: <20220622144820.751402-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -79,38 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series aims to harden the cpuid code against the case when=0D
-the hypervisor exposes a broken CPUID configuration to the guest,=0D
-in the form of having a feature disabled but not features that depend on it=
-.=0D
-=0D
-This is the more generic way to fix kernel panic in aes-ni kernel driver,=0D
-which was triggered by CPUID configuration in which AVX is disabled but=0D
-not AVX2.=0D
-=0D
-https://lore.kernel.org/all/20211103145231.GA4485@gondor.apana.org.au/T/=0D
-=0D
-This was tested by booting a guest with AVX disabled and not AVX2,=0D
-and observing that both a warning is now printed in dmesg, and=0D
-that avx2 is gone from /proc/cpuinfo.=0D
-=0D
-Best regards,=0D
-	Maxim Levitsky=0D
-=0D
-Maxim Levitsky (4):=0D
-  perf/x86/intel/lbr: use setup_clear_cpu_cap instead of clear_cpu_cap=0D
-  x86/cpuid: refactor setup_clear_cpu_cap/clear_feature=0D
-  x86/cpuid: move filter_cpuid_features to cpuid-deps.c=0D
-  x86/cpuid: check for dependencies violations in CPUID and attempt to=0D
-    fix them=0D
-=0D
- arch/x86/events/intel/lbr.c       |  2 +-=0D
- arch/x86/include/asm/cpufeature.h |  1 +=0D
- arch/x86/kernel/cpu/common.c      | 50 +-----------------=0D
- arch/x86/kernel/cpu/cpuid-deps.c  | 84 +++++++++++++++++++++++++++----=0D
- 4 files changed, 78 insertions(+), 59 deletions(-)=0D
-=0D
--- =0D
-2.26.3=0D
-=0D
+clear_cpu_cap(&boot_cpu_data) is very similar to setup_clear_cpu_cap
+except that the latter also sets a bit in 'cpu_caps_cleared' which
+later clears the same cap in secondary cpus, which is likely
+what is meant here.
+
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+---
+ arch/x86/events/intel/lbr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 13179f31fe10fa..b08715172309a7 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1860,7 +1860,7 @@ void __init intel_pmu_arch_lbr_init(void)
+ 	return;
+ 
+ clear_arch_lbr:
+-	clear_cpu_cap(&boot_cpu_data, X86_FEATURE_ARCH_LBR);
++	setup_clear_cpu_cap(X86_FEATURE_ARCH_LBR);
+ }
+ 
+ /**
+-- 
+2.26.3
 

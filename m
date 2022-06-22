@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C909554465
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDF555440A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347951AbiFVHMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S1352351AbiFVHMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352317AbiFVHMm (ORCPT
+        with ESMTP id S1352309AbiFVHMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:12:42 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B7C36B7B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:12:40 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id o8so22038098wro.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:12:39 -0700 (PDT)
+        Wed, 22 Jun 2022 03:12:43 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D494636B7D;
+        Wed, 22 Jun 2022 00:12:41 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id h23so32158759ejj.12;
+        Wed, 22 Jun 2022 00:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=reRIs8RotYYv9G+60zUgiS3Ngae2CafPedGbBgfox1s=;
-        b=TqR0ioHbg8kVTYHgTWbt7hdi+CxCcDiBcpwEEKIcN+cjJ5TaWJiEir9YAIHKA4cLLF
-         JeRKyQrgVJCb6BpYG0KXSus2KrhYqRY0URC1rQVVqcQMalleO661fG8/Sg/YcX5+yTg3
-         ivQAjnZOD17qsa+1Tzy0lSpVfCFj3kc4uv9ogz/J9y+cvYTqFYVuOpLgZMnu+6jITbaE
-         /Lf7y6LzXYhiVICS3iEpvn2crETWWNbbZKrWfcwMD96FtA8QZGD19iAo3asEt4JII5nd
-         GmHl3tz5bjct4Lyhih4BkaXan4kYZwNOElFjUDQX9wZejZoyAa3r5BM8W8LkIzSHzRWo
-         WrhA==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=T/oBWtZlAaa1zy8Ki8EAbozaehzugDrI6LzbJis+ljU=;
+        b=WbdTJTyLptfjK2P4wNF8nuDSCHfPSAn5xPfiwzVz+aYbK6GIkuhmaOR7k5ZUyMoROP
+         BXXjgFhAm/o5/4vi6Dv9MfXEWh1FWwzd3QIVPJAerDKwDPjMJizSBldCrMGGeE4wQ6Ux
+         mk8KKmilSFamEj4hjABc1CbAizZBdMvQCbgkkgveqPeqdLWsVt2pysWfMvQLKDQ4v1KU
+         I8AIiaFBDPNMh8QLvMLR2kNxvdfw0d+3ZBt2amAZYE+Jv0xPZ2LX5Oon9qSAry4rBRSt
+         dOwtH0W1XPWqBLnyKhS1u5jJGDfjJOrmOg2hLrDC9Fri/vy+yFzqI9tW8gyvj0+nQ4D1
+         dlVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=reRIs8RotYYv9G+60zUgiS3Ngae2CafPedGbBgfox1s=;
-        b=2dj4vvmpXWiG0/fwYMB+qepug2fJDXPvyplgud8gk5YGfBx/qa/Oo0zN2Ig+FFFX1a
-         5EeL+N9m1HQ74+HE4Z/Req/3OiICcOgBHhJJS9Hlxoc6YTKOQMePbWaCMrx6T8gRMA/I
-         MtjGbSWjNNdnls4yX4U/uurpQrp88uLl3DQXKo/baN4W0+bIXBGzdJUOQ+eILK5o2Qgw
-         vhAR/RdRl61FEYukxTgMJHIOMbdY80NJrHD5ACjZkZefVdQgt+4wKwromNrvHl8/haU2
-         dTxvzyuTh9y5GLbiUmmYIc4dOY1tiCjkOuIkho/xi+rI3XX+OPSzGQPUb+KgcztmAi7F
-         Ac2A==
-X-Gm-Message-State: AJIora+UIKPmvC/zHx6SIrmUMhdcSGltqSF5FseHo+BE50AvEY8x7i9i
-        CaKYCDMWSAM2UqIBUSI0vfSQ9DSNenESeS1YWBYQKQ==
-X-Google-Smtp-Source: AGRyM1thVkSwFHSrbqy+ZI6m35qN0uPuxiviR5i8XLANMs5sMO9TNlgwVQzKRsEodNba6+FEL+5YqW7+gQBHOxB42Kw=
-X-Received: by 2002:a05:6000:1f98:b0:21b:9cf4:c681 with SMTP id
- bw24-20020a0560001f9800b0021b9cf4c681mr1720643wrb.89.1655881957748; Wed, 22
- Jun 2022 00:12:37 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T/oBWtZlAaa1zy8Ki8EAbozaehzugDrI6LzbJis+ljU=;
+        b=ud4FWUElviit7sxZ4WyiK/T7EpqphMrBc7sUHDi3mCQomLhWuJzmcpzoVMuZpUCXzZ
+         ZTZ+5YWpcDEKYsRj7iX9jXHaRjrM7zJVCeMMd6W7XxIqbpMPxuDVMN+4YxI+zSC9VO8V
+         7Y+xpz+h12nBULis+yd5ayblKcYJ4zInRcagExdbrzg+WqPoBAL6E+tQ8WBjPO/GxYnO
+         jjWw7bWQOrO/3ifqNbQjh4dLPsCcDxGUiP/zqD5dtj0GAh6sV1lISAFvS8vM8xgyn6zU
+         wYsdneslIWL89ONI+jsn7G++H1n/pYC/6hC7al8ixwFtvVdhkp4SOB5/zHsRmh9CSobw
+         ciKA==
+X-Gm-Message-State: AJIora/rHrlh8sw0b/eLbwFudwHmIU1UzGfDtli89IUV/EeALoLYYC2m
+        N8t46IaUnZxQdv3kfCWQ0/I=
+X-Google-Smtp-Source: AGRyM1sPFgb0jyBERMTQll2ATCZxaJopXzPAq3FNkBSe+pRdvC4nFWeW4CCS7sMYM5uPSbyGVeQDhQ==
+X-Received: by 2002:a17:906:180c:b0:6fe:9a3e:3d5b with SMTP id v12-20020a170906180c00b006fe9a3e3d5bmr1744547eje.202.1655881960197;
+        Wed, 22 Jun 2022 00:12:40 -0700 (PDT)
+Received: from krava ([83.240.60.54])
+        by smtp.gmail.com with ESMTPSA id g18-20020a17090604d200b006fec8e8eff6sm650532eja.176.2022.06.22.00.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 00:12:39 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 22 Jun 2022 09:12:36 +0200
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, sandipan.das@amd.com,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v6 0/4] Rewrite jevents program in python
+Message-ID: <YrLA5NMBv1uIx7UD@krava>
+References: <20220618000907.433350-1-irogers@google.com>
 MIME-Version: 1.0
-References: <20220620160640.3790-1-jose.exposito89@gmail.com>
- <20220620160640.3790-2-jose.exposito89@gmail.com> <CABVgOSmPfxdcxuU6xtuT2sN75ivs+Atgmt=2PNcdWqnMcrnbEQ@mail.gmail.com>
- <045f480b-9f47-6f10-9e5d-4436335b272e@suse.de>
-In-Reply-To: <045f480b-9f47-6f10-9e5d-4436335b272e@suse.de>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 22 Jun 2022 15:12:26 +0800
-Message-ID: <CABVgOSnFXqEsnZOeXbu1z8S1nxWcpjWF1SWd7TY3zXCDr5WvcQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] drm/rect: Add DRM_RECT_INIT() macro
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        dri-devel@lists.freedesktop.org, magalilemes00@gmail.com,
-        David Airlie <airlied@linux.ie>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Daniel Latypov <dlatypov@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@intel.com>, tales.aparecida@gmail.com,
-        Isabella Basso <isabbasso@riseup.net>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e6df2905e2040fd3"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618000907.433350-1-irogers@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,126 +94,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000e6df2905e2040fd3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jun 17, 2022 at 05:09:03PM -0700, Ian Rogers wrote:
+> New architectures bring new complexity, such as Intel's hybrid
+> models. jevents provides an alternative to specifying events in the
+> kernel and exposing them through sysfs, however, it is difficult to
+> work with. For example, an error in the json input would yield an
+> error message but no json file or location. It is also a challenge to
+> update jsmn.c given its forked nature.
+> 
+> The changes here switch from jevents.c to a rewrite in python called
+> jevents.py. This means there is a build time dependency on python, but
+> such a dependency already exists for asciidoc (used to generate perf's
+> man pages). If the build detects that python isn't present or is older
+> than version 3.6 (released Dec. 2016) then an empty file is
+> substituted for the generated one.
+> 
+> A challenge with this code is in avoiding regressions. For this reason
+> the jevents.py produces identical output to jevents.c, validated with a
+> test script and build target.
+> 
+> v6. Fixes an annotation and use of removesuffix that aren't present in
+>     Python 3.6. Linter issues are also fixed.The code was tested on
+>     Python 3.6 and 3.8 with docker.
 
-On Tue, Jun 21, 2022 at 6:02 PM Thomas Zimmermann <tzimmermann@suse.de> wro=
-te:
->
-> Hi
->
-> Am 21.06.22 um 11:38 schrieb David Gow:
-> > On Tue, Jun 21, 2022 at 12:06 AM Jos=C3=A9 Exp=C3=B3sito
- [ ... ]
-> >> +/**
-> >> + * DRM_RECT_INIT - initialize a rectangle from x/y/w/h
-> >> + * @x: x coordinate
-> >> + * @y: y coordinate
-> >> + * @w: width
-> >> + * @h: height
-> >> + *
-> >> + * RETURNS:
-> >> + * A new rectangle of the specified size.
-> >> + */
-> >> +#define DRM_RECT_INIT(x, y, w, h) ((struct drm_rect){ \
-> >> +               .x1 =3D (x), \
-> >> +               .y1 =3D (y), \
-> >> +               .x2 =3D (x) + (w), \
-> >> +               .y2 =3D (y) + (h) })
-> >> +
-> >
-> > My only slight concern here is that it might be a little bit confusing
-> > that a macro called DRM_RECT_INIT() accepts x/y/w/h, whereas the
-> > actual struct drm_rect is x1/y1/x2/y2. If the macro were called
-> > something like DRM_RECT_INIT_FROM_XYWH() or similar.
->
-> The existing drm_rect_init() function uses xywh arguments. So the
-> current name is consistent with existing practice. I don't think we
-> refer to x2,y2 much, if ever.
->
+hi,
+I'm getting test failures with this:
 
-Ah, fair enough. I wasn't aware of the existing drm_rect_init()
-function, so this makes sense as-is.
+ 10: PMU events                                                      :
+ 10.1: PMU event table sanity                                        : FAILED!
+ 10.2: PMU event map aliases                                         : FAILED!
+ 10.3: Parsing of PMU event table metrics                            : Ok
+ 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
 
-Cheers,
--- David
+I can see that pass without the patchset, verbose run shows:
 
---000000000000e6df2905e2040fd3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+	[jolsa@krava perf]$ sudo ./perf test -vv 'PMU event map aliases'
+	 10: PMU events                                                      :
+	 10.2: PMU event map aliases                                         :
+	--- start ---
+	test child forked, pid 272763
+	Using CPUID GenuineIntel-6-8C-1
+	intel_pt default config: tsc,mtc,mtc_period=3,psb_period=3,pt,branch
+	could not find test events map
+	testing core PMU cpu aliases: failed
+	test child finished with -1
+	---- end ----
+	PMU events subtest 2: FAILED!
+	[jolsa@krava perf]$ sudo ./perf test -vv 'PMU event table sanity'
+	 10: PMU events                                                      :
+	 10.1: PMU event table sanity                                        :
+	--- start ---
+	test child forked, pid 272771
+	could not find test events map
+	test child finished with -1
+	---- end ----
+	PMU events subtest 1: FAILED!
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
-yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
-MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
-JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
-SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
-hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
-RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
-kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCK
-zcW2Z1uaXYMzJtnISri3rG2gDp5+7FseI92N/ugVHzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA2MjIwNzEyMzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAjz7g9C/UX39UCPuovgSd
-3HF9i/V5oEr9fHSHH4s7Fpoyhjd3qRMtdOnfqE3SsglemHE0sxUB6dbh2bMnJSlPr2El+DcV/A8v
-Xu3n2pjG2i4+Hvc/NAhA/b27cXCfYo45a7LACpspcD3+hH7l4O7Yw6IegG7xhCqyLocmE9ffJdoX
-RM5UxvfWOpVMUX9BI2w/C8JtK/+QcmRT5kU1wlwOBAnfgWijTXDWJuFCmkcNJDrZAwGR5EiSSwUf
-k7rwsLSXs2tv2hpcE/Sb2xBDpJckhskgtEYoZoWUcRexNkCqmyBP1dIWStST7JCCfabNyMxzXNt9
-NA1K7MocUp/m3ziJ6Q==
---000000000000e6df2905e2040fd3--
+jirka
+
+
+> v5. Adds a 2>/dev/null as suggested by David Laight
+>     <David.Laight@aculab.com>.
+> v4. Fixes the build for systems with python2 installed by adding a
+>     patch that makes python3 the preferred python (Reported-by: John
+>     Garry <john.garry@huawei.com>). It also fixes a bash-ism in the
+>     jevents-test.sh and fixes the handling of an empty string for a
+>     metric BriefDescription as one was added for sapphirerapids in the
+>     metric Execute.
+> v3. Updates the patches for merged changes (on
+>     acme/tmp.perf/core). Re-runs all comparisons to make sure the
+>     generated pmu-events.c isn't altered at all by this change. Adds
+>     the jevents.c ExtSel fix in:
+>     https://lore.kernel.org/lkml/20220525140410.1706851-1-zhengjun.xing@linux.intel.com/
+>     Bumps the python version from 3.5 to 3.6, as f-strings weren't
+>     introduced until 3.6.
+> 
+> v2. Fixes the build for architectures that don't have pmu-events json
+>     (Suggested-by: John Garry <john.garry@huawei.com>) and fixes the
+>     build for python not being present or too old (Suggested-by: Peter
+>     Zijlstra <peterz@infradead.org>/John Garry <john.garry@huawei.com>).
+> 
+> Ian Rogers (4):
+>   perf python: Prefer python3
+>   perf jevents: Add python converter script
+>   perf jevents: Switch build to use jevents.py
+>   perf jevents: Remove jevents.c
+> 
+>  tools/perf/Makefile.config               |   27 +-
+>  tools/perf/Makefile.perf                 |   16 +-
+>  tools/perf/pmu-events/Build              |   15 +-
+>  tools/perf/pmu-events/empty-pmu-events.c |   21 +
+>  tools/perf/pmu-events/jevents.c          | 1342 ----------------------
+>  tools/perf/pmu-events/jevents.py         |  409 +++++++
+>  tools/perf/pmu-events/jsmn.h             |   68 --
+>  tools/perf/pmu-events/json.c             |  162 ---
+>  tools/perf/pmu-events/json.h             |   39 -
+>  9 files changed, 465 insertions(+), 1634 deletions(-)
+>  create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
+>  delete mode 100644 tools/perf/pmu-events/jevents.c
+>  create mode 100755 tools/perf/pmu-events/jevents.py
+>  delete mode 100644 tools/perf/pmu-events/jsmn.h
+>  delete mode 100644 tools/perf/pmu-events/json.c
+>  delete mode 100644 tools/perf/pmu-events/json.h
+> 
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
+> 

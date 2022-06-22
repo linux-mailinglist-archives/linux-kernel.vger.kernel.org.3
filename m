@@ -2,133 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E4C556EB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA389556EB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359741AbiFVWyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 18:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
+        id S1359510AbiFVW4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 18:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238725AbiFVWyL (ORCPT
+        with ESMTP id S238725AbiFVW4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 18:54:11 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DF8CD3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:54:10 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id y14so22120302qvs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xOI/GkrveqegLV0ZiA89XQMlzXKK1gnmlyXBoe5Frn8=;
-        b=CKwerhgwYtfg0OfQjTnGN6F7BITz4u9urXefas1N1EGHv2kdE8KJoAbyDvInaTs7nF
-         sT3zxw/yawuZHzqCLuezSDHOaXWqxX8kT35jqywKpWSyTZAMwxTAxDDLUh/pfeG3H+Yq
-         Rxsuvj/K63F30Tm3mlmjTN4XWm2R8JznQfotEfWVIjZxhmURwvAsB5kXHvYYTMSo1mKA
-         iZpDrnwmeoVvfaiFifIYXwiO7Nnmn50+j5Pf9N4CzUqpN3ZBUPkCL617mNo60uwjcE4Q
-         g2vNZJ9VpKe0CurrhSQlHxCQNLx8lDPn5TbA5mywMZqDlGlRxgfLII5nPfQTMH9H0vYE
-         VPjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xOI/GkrveqegLV0ZiA89XQMlzXKK1gnmlyXBoe5Frn8=;
-        b=50lHQ0xu3/TZPNSluqV+wdpI2lSunMUQpAH0ay44KQ7p/oTgnFsVkAPUJePn+HyXFR
-         naqr6UmytNQzbLNtf/qOfr1bCRQxW3y8qEm6iGm5X5l3ALtd7Uw7uRzLwKlasqig5H89
-         rKx5qo/9GpHhEOChRe16zymk7OFHEROHiRxxMfgIsYe7dEhGoyDwM7FNFIifbNB4kK67
-         IuZJVMdqMs39Aolr03Ql1VK9G335epcDREO0FovxhpU8xx8It9CwvfXXt3m86B6RqGjS
-         8Vg4T3wPJWU7RAvnJRJS/Zqlc9gDsWKzoBglmVcvPG04KDNTznVbADWM666h+rK0ZXgI
-         HZAQ==
-X-Gm-Message-State: AJIora8vxbH9A72iVfUZqLRJ5JZP5Uo411UQV0glshHO4XGkDu28iwfb
-        QBsODPWzKcyhK7U5PHqvX9mrWO1OGUw8K3ANEYAymA==
-X-Google-Smtp-Source: AGRyM1uSjSYpOgE2K/ytbyyVG+gEi/qF/kFpxCg3I8VsfWQzv604ar9L2U7WDWZGBdknA1o3FhGywNy9FJlvIpavhqI=
-X-Received: by 2002:a05:6214:1851:b0:470:2a5f:d68e with SMTP id
- d17-20020a056214185100b004702a5fd68emr22802267qvy.68.1655938449301; Wed, 22
- Jun 2022 15:54:09 -0700 (PDT)
+        Wed, 22 Jun 2022 18:56:02 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E144CD3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:56:00 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:60862)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o49GR-00BAi3-O6; Wed, 22 Jun 2022 16:55:59 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57402 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o49GP-002YCq-FP; Wed, 22 Jun 2022 16:55:59 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        syzkaller-bugs@googlegroups.com,
+        syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com
+References: <8735fyhyvy.fsf@email.froward.int.ebiederm.org>
+        <20220622200729.2639663-1-legion@kernel.org>
+Date:   Wed, 22 Jun 2022 17:55:22 -0500
+In-Reply-To: <20220622200729.2639663-1-legion@kernel.org> (Alexey Gladkov's
+        message of "Wed, 22 Jun 2022 22:07:29 +0200")
+Message-ID: <87y1xob95x.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de>
-In-Reply-To: <20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Wed, 22 Jun 2022 23:53:58 +0100
-Message-ID: <CACdoK4LeRPkACejq87VLFgP-b=y1ZoRX3196f7xEVo-UWm8jWA@mail.gmail.com>
-Subject: Re: init_disassemble_info() signature changes causes compile failures
-To:     Andres Freund <andres@anarazel.de>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1o49GP-002YCq-FP;;;mid=<87y1xob95x.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/26elwTItBzsE3kqrhYEqvZh6qW4CuuxM=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 
+X-Spam-Combo: ****;Alexey Gladkov <legion@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1733 ms - load_scoreonly_sql: 0.12 (0.0%),
+        signal_user_changed: 13 (0.7%), b_tie_ro: 11 (0.6%), parse: 1.67
+        (0.1%), extract_message_metadata: 17 (1.0%), get_uri_detail_list: 5
+        (0.3%), tests_pri_-1000: 17 (1.0%), tests_pri_-950: 1.35 (0.1%),
+        tests_pri_-900: 1.07 (0.1%), tests_pri_-90: 143 (8.3%), check_bayes:
+        141 (8.1%), b_tokenize: 18 (1.0%), b_tok_get_all: 9 (0.5%),
+        b_comp_prob: 2.8 (0.2%), b_tok_touch_all: 108 (6.2%), b_finish: 0.96
+        (0.1%), tests_pri_0: 1521 (87.8%), check_dkim_signature: 0.76 (0.0%),
+        check_dkim_adsp: 2.7 (0.2%), poll_dns_idle: 0.86 (0.0%), tests_pri_10:
+        2.3 (0.1%), tests_pri_500: 11 (0.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] ipc: Free mq_sysctls if ipc namespace creation failed
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 at 19:19, Andres Freund <andres@anarazel.de> wrote:
+Alexey Gladkov <legion@kernel.org> writes:
+
+> The problem that Dmitry Vyukov pointed out is that if setup_ipc_sysctls fails,
+> mq_sysctls must be freed before return.
+
+Can we get a tested-by from syzbot?
+
+It would be nice to confirm that this bug is the one syzbot was seeing.
+
+Thank you,
+Eric
+
+
+
+> executing program
+> BUG: memory leak
+> unreferenced object 0xffff888112fc9200 (size 512):
+>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+>   hex dump (first 32 bytes):
+>     ef d3 60 85 ff ff ff ff 0c 9b d2 12 81 88 ff ff  ..`.............
+>     04 00 00 00 a4 01 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814b6eb3>] kmemdup+0x23/0x50 mm/util.c:129
+>     [<ffffffff82219a9b>] kmemdup include/linux/fortify-string.h:456 [inline]
+>     [<ffffffff82219a9b>] setup_mq_sysctls+0x4b/0x1c0 ipc/mq_sysctl.c:89
+>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 >
-> Hi,
+> BUG: memory leak
+> unreferenced object 0xffff888112fd5f00 (size 256):
+>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+>   hex dump (first 32 bytes):
+>     00 92 fc 12 81 88 ff ff 00 00 00 00 01 00 00 00  ................
+>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff816fea1b>] kmalloc include/linux/slab.h:605 [inline]
+>     [<ffffffff816fea1b>] kzalloc include/linux/slab.h:733 [inline]
+>     [<ffffffff816fea1b>] __register_sysctl_table+0x7b/0x7f0 fs/proc/proc_sysctl.c:1344
+>     [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 >
-> binutils changed the signature of init_disassemble_info(), which now caus=
-es
-> perf and bpftool to fail to compile (e.g. on debian unstable).
+> BUG: memory leak
+> unreferenced object 0xffff888112fbba00 (size 256):
+>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+>   hex dump (first 32 bytes):
+>     78 ba fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
+>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
+>     [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
+>     [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
+>     [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+>     [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
+>     [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 >
-> Relevant binutils commit: https://sourceware.org/git/?p=3Dbinutils-gdb.gi=
-t;a=3Dcommitdiff;h=3D60a3da00bd5407f07d64dff82a4dae98230dfaac
+> BUG: memory leak
+> unreferenced object 0xffff888112fbb900 (size 256):
+>   comm "syz-executor237", pid 3648, jiffies 4294970469 (age 12.270s)
+>   hex dump (first 32 bytes):
+>     78 b9 fb 12 81 88 ff ff 00 00 00 00 01 00 00 00  x...............
+>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff816fef49>] kmalloc include/linux/slab.h:605 [inline]
+>     [<ffffffff816fef49>] kzalloc include/linux/slab.h:733 [inline]
+>     [<ffffffff816fef49>] new_dir fs/proc/proc_sysctl.c:978 [inline]
+>     [<ffffffff816fef49>] get_subdir fs/proc/proc_sysctl.c:1022 [inline]
+>     [<ffffffff816fef49>] __register_sysctl_table+0x5a9/0x7f0 fs/proc/proc_sysctl.c:1373
+>     [<ffffffff82219b7a>] setup_mq_sysctls+0x12a/0x1c0 ipc/mq_sysctl.c:112
+>     [<ffffffff822197f2>] create_ipc_ns ipc/namespace.c:63 [inline]
+>     [<ffffffff822197f2>] copy_ipcs+0x292/0x390 ipc/namespace.c:91
+>     [<ffffffff8127de7c>] create_new_namespaces+0xdc/0x4f0 kernel/nsproxy.c:90
+>     [<ffffffff8127e89b>] unshare_nsproxy_namespaces+0x9b/0x120 kernel/nsproxy.c:226
+>     [<ffffffff8123f92e>] ksys_unshare+0x2fe/0x600 kernel/fork.c:3165
+>     [<ffffffff8123fc42>] __do_sys_unshare kernel/fork.c:3236 [inline]
+>     [<ffffffff8123fc42>] __se_sys_unshare kernel/fork.c:3234 [inline]
+>     [<ffffffff8123fc42>] __x64_sys_unshare+0x12/0x20 kernel/fork.c:3234
+>     [<ffffffff845aab45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845aab45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 >
-> util/annotate.c: In function =E2=80=98symbol__disassemble_bpf=E2=80=99:
-> util/annotate.c:1765:9: error: too few arguments to function =E2=80=98ini=
-t_disassemble_info=E2=80=99
->  1765 |         init_disassemble_info(&info, s,
->       |         ^~~~~~~~~~~~~~~~~~~~~
-> In file included from util/annotate.c:1718:
-> /usr/include/dis-asm.h:472:13: note: declared here
->   472 | extern void init_disassemble_info (struct disassemble_info *dinfo=
-, void *stream,
->       |             ^~~~~~~~~~~~~~~~~~~~~
+> Reported-by: syzbot+b4b0d1b35442afbf6fd2@syzkaller.appspotmail.com
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> ---
+>  ipc/namespace.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 >
-> with equivalent failures in
->
-> tools/bpf/bpf_jit_disasm.c
-> tools/bpf/bpftool/jit_disasm.c
-
-Hi Andres,
-
-Too bad the libbfd API is changing again :/ But many thanks for
-pinning down the relevant commit, and for the report!
-
-> The fix is easy enough, add a wrapper around fprintf() that conforms to t=
-he
-> new signature.
->
-> However I assume the necessary feature test and wrapper should only be ad=
-ded
-> once? I don't know the kernel stuff well enough to choose the right struc=
-ture
-> here.
-
-We can probably find a common header for the wrapper under
-tools/include/. One possibility could be a new header under
-tools/include/tools/, like for libc_compat.h. Although personally I
-don't mind too much about redefining the wrapper several times given
-how short it is, and because maybe some tools could redefine it anyway
-to use colour output in the future.
-
-The feature test would better be shared, it would probably be similar
-to what was done in the following commit to accommodate for a previous
-change in libbfd:
-
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3Dfb982666e380c1632a74495b68b3c33a66e76430
-
-> Attached is my local fix for perf. Obviously would need work to be a real
-> solution.
-
-Thanks a lot! Would you be willing to submit a patch for the feature
-detection and wrapper?
-
-Best regards,
-Quentin
+> diff --git a/ipc/namespace.c b/ipc/namespace.c
+> index 754f3237194a..e1fcaedba4fa 100644
+> --- a/ipc/namespace.c
+> +++ b/ipc/namespace.c
+> @@ -64,7 +64,7 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
+>  		goto fail_put;
+>  
+>  	if (!setup_ipc_sysctls(ns))
+> -		goto fail_put;
+> +		goto fail_mq;
+>  
+>  	sem_init_ns(ns);
+>  	msg_init_ns(ns);
+> @@ -72,6 +72,9 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
+>  
+>  	return ns;
+>  
+> +fail_mq:
+> +	retire_mq_sysctls(ns);
+> +
+>  fail_put:
+>  	put_user_ns(ns->user_ns);
+>  	ns_free_inum(&ns->ns);

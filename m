@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7459D5552B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7925552BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377426AbiFVRoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S1377416AbiFVRqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377389AbiFVRn6 (ORCPT
+        with ESMTP id S1358743AbiFVRqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:43:58 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C02664
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:43:57 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q140so16720123pgq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:43:57 -0700 (PDT)
+        Wed, 22 Jun 2022 13:46:21 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A754E3467E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:46:19 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id f65so16730026pgc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bUXnsJdEFiCG+SMWEsd2jUVr6VH+u5NdRqQetyt+5jU=;
-        b=aN6cVYuVa2RBa6c0SK9DmWxymPrXYFhusiNe2XjgzwcSz3tFcnwgegQGnVn8Rk0G3E
-         no/B9vS8HejD4uV/kTwhBryE8MQqA/mKcM8jcYpwuN/DLI/ojwXxm+1Zj+WXiRhM6Wg5
-         Sek+ZSoMOhzJu9YYMxDVdFTUh7ea94tuidVaTJKWNcW/RbEBv2vpG92zlXVqviRUBnlT
-         b2GGoPNqlsPGG2lO/yN198G3z7+TLGKLeL/fm+d6mUVJ3iX2EhQt9MtUjj1MjVO/C+R8
-         GPKx97BL/HW+CXxCNfhLaSCU7n+8vNktRPyt5xKylDD/7+NZAH2sDsV1KM6Yh7oMVbrA
-         Anjg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EpgE2jvIQSFQgAN8WwXX/5vPgLEXVBbuCYjMWpqhCMs=;
+        b=QBt8d0UvvlahctWqyz9WVkxT0d4SOTK0NzVBYWVTJPxbLp5UNpIslqwUBSx8/KBBsq
+         A+Zw0xj6Cb/ehzhESIgmA9cwUHsw3Lf8BxRs09qsgbPtGdNYaUcbLW8l5EWPwkZ0AQ5g
+         iGESoRZXgqDD1vdCkXNbLWk/HCn9nRHSub86qFFPaZYSu/vy+4VR5E0vXlQHak7s1i8O
+         a5FQABvTZhyh9Uyq1WBQj3JvkensqX0mcupgMm8ueALkWiZdB97G75hdreUpxIhT5uA0
+         TA6dzh2C6/mSYctThb5VLyOmgIq2lFVNGbkMhROrYhHZTzQbRWLNXQ1rFhthz1aNZEQ+
+         Lsnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=bUXnsJdEFiCG+SMWEsd2jUVr6VH+u5NdRqQetyt+5jU=;
-        b=XsSgeEVIB66ww4wHjH3ZxOD4s2LDRiJ4y8wrGojl+GIE55NsPFsaS9Ly1rfWTWQkVX
-         ShIvdnWz3QH8iJVEw6G8pcqS999quGfAv4c8cfDtYTZlDuB9jQn/KCdICfPP5k8tFFYn
-         BXkZnFjhd8A/v9PQZNj1zHTvRd2LdEEjVhmN7OuFoTIMZP9LUmfr+3nwiJJ3KRByc/Oo
-         cnwjeU5yWS9Ou/SwwbwOMiLqCjo8N40P7/ZoFd2fIOA50py4dKl1gk7xZptDY9DvcDnG
-         uP6nGEGnOpJK7GHeYrr1mrRK01pF0EhU27iHbZBnRfHCdZaMrN9o6x+nPP+hwqeAcKLt
-         bWXw==
-X-Gm-Message-State: AJIora9LVzVpGa9oasLUa05Ycx9p/74sQDz0jZe+vYPxHj2lkE6ytcEW
-        J3VmTy5yrPxODj+2JTrbVxXm+5zNO/d9Wg==
-X-Google-Smtp-Source: AGRyM1uhuLVklzd1mZvWuHmjdudBMSsPGdfyvcUOZW4m0ZDtiPRFEmT62FqhS2XMIWcf8orqboT4kQ==
-X-Received: by 2002:a05:6a00:170b:b0:525:4e88:f7ec with SMTP id h11-20020a056a00170b00b005254e88f7ecmr1938154pfc.2.1655919837319;
-        Wed, 22 Jun 2022 10:43:57 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170902e14400b001637997d0d4sm12932432pla.206.2022.06.22.10.43.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EpgE2jvIQSFQgAN8WwXX/5vPgLEXVBbuCYjMWpqhCMs=;
+        b=sb+v50jpqQ+M7Q2WeKN/KZpyp5AWArd5ne7Pg5SFbfCi9GUxPMsACDXPbNWxMYGFQY
+         X9vOarqGeCOL9nFoTz202C+EE9vSkXek5a7yfmDVLIJfdBlaCMQ42ECQRHEH9QP4Eubl
+         bjTLsDnUcCc1aGQuu9kwNcWhi397SUQWv5SdjIdLXdtnodDI3zbuk1DteZ2e9uEaO7rX
+         oai8+T/VmJcglo4XMFo0K1l8QOP66F2WYMnY1sv84jBYScfckGB/dacQQhIPRIp2D0AR
+         9IZr4gkh6iCcLWAszrWd8A0QwO+oevVdhyLquXcxrpYSuPJoIo5/bJC/ss4gm/Hlrwtu
+         /EIw==
+X-Gm-Message-State: AJIora/kSKEsyiOi4jXGPAB5CogcDcPbjrGMYwY89oEQE7JzJHp238+S
+        St0vuaU1422vNlBc6IklTMneIg==
+X-Google-Smtp-Source: AGRyM1vvmEv/0t0GsVemfxrvCV9s3hxYmKfiYakDddtSica5aCNDyttDzA/GvdXDpYo1Yp0jqBBf6w==
+X-Received: by 2002:a05:6a00:15c1:b0:525:2db4:2a2c with SMTP id o1-20020a056a0015c100b005252db42a2cmr13485017pfu.30.1655919979228;
+        Wed, 22 Jun 2022 10:46:19 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id j7-20020a17090a7e8700b001ec4f258028sm29034pjl.55.2022.06.22.10.46.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 10:43:55 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 10:43:55 -0700 (PDT)
-X-Google-Original-Date: Wed, 22 Jun 2022 10:43:52 PDT (-0700)
-Subject:     Re: [PING^2][PATCH] RISC-V: PCI: Avoid handing out address 0 to devices
-In-Reply-To: <alpine.DEB.2.21.2206221202590.57474@angie.orcam.me.uk>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        bhelgaas@google.com, linux-riscv@lists.infradead.org,
+        Wed, 22 Jun 2022 10:46:18 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 11:46:16 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Saud Farooqui <farooqui_saud@hotmail.com>
+Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     macro@orcam.me.uk
-Message-ID: <mhng-a0733eea-8220-4bf6-b1da-9de3139dbae3@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] rpmsg: strcpy is not safe, use strncpy
+Message-ID: <20220622174616.GD1606016@p14s>
+References: <PA4P189MB1421005C22E46EBD708EBA798BA49@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4P189MB1421005C22E46EBD708EBA798BA49@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 04:04:09 PDT (-0700), macro@orcam.me.uk wrote:
-> On Wed, 27 Apr 2022, Maciej W. Rozycki wrote:
->
->> Therefore avoid handing out address 0, by bumping the lowest address
->> available to PCI via PCIBIOS_MIN_IO and PCIBIOS_MIN_MEM up by 4 and 16
->> respectively, which is the minimum allocation size for I/O and memory
->> BARs.
->
->  Ping for:
-> <https://lore.kernel.org/lkml/alpine.DEB.2.21.2204271207590.9383@angie.orcam.me.uk/>
+Hi Saud,
 
-Sorry, I got this mixed up with the non-RISC-V patch.  David poked me 
-about it, this is on for-next.  It's passing my tests, but they're just 
-QEMU so probably not all that exciting here.
+On Wed, Jun 08, 2022 at 11:43:30PM +0500, Saud Farooqui wrote:
+> Replace strcpy with strncpy for copying the rpmsg
+> device name in rpmsg_register_device_override
+> 
+> Signed-off-by: Saud Farooqui <farooqui_saud@hotmail.com>
+> ---
+>  drivers/rpmsg/rpmsg_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index 290c1f02da10..d3b29c19715d 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -604,7 +604,7 @@ int rpmsg_register_device_override(struct rpmsg_device *rpdev,
+>  	int ret;
+>  
+>  	if (driver_override)
+> -		strcpy(rpdev->id.name, driver_override);
+> +		strncpy(rpdev->id.name, driver_override, sizeof(rpdev->id.name));
+
+Please use strscpy_pad() instead of strncpy().
+
+Thanks,
+Mathieu
+
+>  
+>  	dev_set_name(dev, "%s.%s.%d.%d", dev_name(dev->parent),
+>  		     rpdev->id.name, rpdev->src, rpdev->dst);
+> -- 
+> 2.25.1
+> 

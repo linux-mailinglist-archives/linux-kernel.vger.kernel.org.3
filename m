@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7E5555525
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7A355552B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359167AbiFVT7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
+        id S1376952AbiFVUAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 16:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359297AbiFVT7B (ORCPT
+        with ESMTP id S1347203AbiFVUAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:59:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5725828705
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:58:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72D0E617C6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:58:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D48DAC34114;
-        Wed, 22 Jun 2022 19:58:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655927936;
-        bh=Mk8UkH00Iv4tnQ/lJDTlwij5t8KUPHSNP3z/g8AMvlI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=TtDCC8odkXYCZ2mEBK/Y70Pzc2ZcDqogYtUbxUwL585GkndJpzGFj3AEqR7Zc+5sQ
-         pIoVi84+CwjC1Ui8EwLNwYx3/M7aleNuYX1Tvlb6gfxM2Qdp0pQXL3Dyq3OwqQFULw
-         2mrWukGpqco3ZGAuojl7QfC/PsZxrqKg2Cz6aEgdEyhKrKuB2ir7eegYuuCF9JUEfE
-         8Bv1NZ603T+c1nmPpS7bCLBLqpsjPebgD0aFQ/phzE5OBwMgVsiVqZYMCg0mFnzv01
-         6MJeFyevJuKmSnaf6D88HgoLfUdLIw1CnhQdMnyrVoTcsTdr0KMkCEjl/t7WA4AebW
-         ZDOmetTsB0WeQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 744F95C0169; Wed, 22 Jun 2022 12:58:56 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 12:58:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Subject: Re: "Dying CPU not properly vacated" splat
-Message-ID: <20220622195856.GA1694215@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220421193821.GA173010@paulmck-ThinkPad-P17-Gen-1>
- <xhsmh4k2h9m26.mognet@vschneid.remote.csb>
- <20220425173320.GX4285@paulmck-ThinkPad-P17-Gen-1>
- <xhsmh1qxkakof.mognet@vschneid.remote.csb>
- <20220426000328.GY4285@paulmck-ThinkPad-P17-Gen-1>
- <xhsmhy1zr99zt.mognet@vschneid.remote.csb>
- <20220426162445.GG4285@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 22 Jun 2022 16:00:35 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25872340D9;
+        Wed, 22 Jun 2022 13:00:35 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id d14so13374263pjs.3;
+        Wed, 22 Jun 2022 13:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=H32edbNKPR2s6aSUbVdqXXgAauRhWuXF6JcIlX7te90=;
+        b=feubf9Ye8kXOE8iOKkdpqX0KE9jZIUPok3HnneyYIupwOdXmBMFRQ6MCrct/bk08zf
+         V1vCgwzR7VcDYC6/4S4iHZ1ADNQHYfNxsbo/mpNn5FWPN+OdcSumEHdrdrvgHeoQxb4v
+         F+oPTXO/G6jdnNBoLlkBMD6xMr9oCIx5wq4FVX8UNKEPylPOfZ4jkEVdVeeHzSSbD1js
+         Dny/3dyttzI2BJcLvx3w/hgn0sZFbTHG9Vjl7830viBY5BponYLOHTLDiUyjm83grEmg
+         nr3PWegsASmKLBWybAvzu4kKQsoYKsYnn4AhiZfRpTf/nly6ozUOMPq1s/AyMjOTpLoc
+         Pknw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H32edbNKPR2s6aSUbVdqXXgAauRhWuXF6JcIlX7te90=;
+        b=CrxUrRMHOBm2vwl2k28aLdz8pu7vtFvcyFg5YzGXUglGImPE9Zlpug0ue0neGuYkSM
+         TNlgqnmMlWFO1+eHNjayFgOIvwFqOMA2m+BS9mo5EvdtDTFCu4DN0ILlJ9j/ShyhqZeV
+         ossrlVKry/PbhlNqLSmDMKslidxzrO+SwrpomgXhQsEgR+MKJxB0ixLmvvSSOS2V+BKV
+         gllltMTG1LxcvVLDWVymjO3LMrbp1znjN5gsLOFB0BxLcfI+n1T3PJJHL9nesiY7/EEq
+         p7/Rl1csg/hG+nCLZUK9Hx0oB7B8ZTyuxLxBCHnK/0pb8F9PrsWBcQDodK+jUIWTWA4c
+         Zeyg==
+X-Gm-Message-State: AJIora8j9iAI1sUyKfBhs0YKCAWolkw2uw0+LgZUCQY1r/CCMkqtneS/
+        p8HwMLlwiOX/u6/oLGS1L7k=
+X-Google-Smtp-Source: AGRyM1sKIvsd40oVsibGqLjkBwUaNFT9Ujo0yPK1ns7KcYb9oiQWsNq3WJQOoXR9ZfC0XJcbdj32ow==
+X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id h16-20020a170902f71000b0015f165fb50bmr36578095plo.158.1655928034505;
+        Wed, 22 Jun 2022 13:00:34 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id u12-20020a170902714c00b001675991fb7fsm13125784plm.55.2022.06.22.13.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 13:00:33 -0700 (PDT)
+Message-ID: <45abff3f-201b-ba6e-fe9a-634fd4413229@gmail.com>
+Date:   Thu, 23 Jun 2022 05:00:30 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426162445.GG4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] extconn: remove extraneous space before a debug message
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220619084248.21395-1-colin.i.king@gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220619084248.21395-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 09:24:45AM -0700, Paul E. McKenney wrote:
-> On Tue, Apr 26, 2022 at 03:48:06PM +0100, Valentin Schneider wrote:
-> > On 25/04/22 17:03, Paul E. McKenney wrote:
-> > > On Mon, Apr 25, 2022 at 10:59:44PM +0100, Valentin Schneider wrote:
-> > >> On 25/04/22 10:33, Paul E. McKenney wrote:
-> > >> >
-> > >> > So what did rcu_torture_reader() do wrong here?  ;-)
-> > >> >
-> > >>
-> > >> So on teardown, CPUHP_AP_SCHED_WAIT_EMPTY->sched_cpu_wait_empty() waits for
-> > >> the rq to be empty. Tasks must *not* be enqueued onto that CPU after that
-> > >> step has been run - if there are per-CPU tasks bound to that CPU, they must
-> > >> be unbound in their respective hotplug callback.
-> > >>
-> > >> For instance for workqueue.c, we have workqueue_offline_cpu() as a hotplug
-> > >> callback which invokes unbind_workers(cpu), the interesting bit being:
-> > >>
-> > >>                 for_each_pool_worker(worker, pool) {
-> > >>                         kthread_set_per_cpu(worker->task, -1);
-> > >>                         WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, cpu_possible_mask) < 0);
-> > >>                 }
-> > >>
-> > >> The rcu_torture_reader() kthreads aren't bound to any particular CPU are
-> > >> they? I can't find any code that would indicate they are - and in that case
-> > >> it means we have a problem with is_cpu_allowed() or related.
-> > >
-> > > I did not intend that the rcu_torture_reader() kthreads be bound, and
-> > > I am not seeing anything that binds them.
-> > >
-> > > Thoughts?  (Other than that validating any alleged fix will be quite
-> > > "interesting".)
-> > 
-> > IIUC the bogus scenario is is_cpu_allowed() lets one of those kthreads be
-> > enqueued on the outgoing CPU *after* CPUHP_AP_SCHED_WAIT_EMPTY.teardown() has
-> > been run, and hilarity ensues.
-> > 
-> > The cpu_dying() condition should prevent a regular kthread from getting
-> > enqueued there, most of the details have been evinced from my brain but I
-> > recall we got the ordering conditions right...
-> > 
-> > The only other "obvious" thing here is migrate_disable() which lets the
-> > enqueue happen, but then balance_push()->select_fallback_rq() should punt
-> > it away on context switch.
-> > 
-> > I need to rediscover those paths, I don't see any obvious clue right now.
+On 22. 6. 19. 17:42, Colin Ian King wrote:
+> There is an extreneous space before a dev_dbg message, remove it.
 > 
-> Thank you for looking into this!
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/extcon/extcon-palmas.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> The only thought that came to me was to record that is_cpu_allowed()
-> returned true do to migration being disabled, and then use that in later
-> traces, printk()s or whatever.
-> 
-> My own favorite root-cause hypothesis was invalidated by the fact that
-> is_cpu_allowed() returns cpu_online(cpu) rather than just true.  ;-)
+> diff --git a/drivers/extcon/extcon-palmas.c b/drivers/extcon/extcon-palmas.c
+> index d2c1a8b89c08..32f8b541770b 100644
+> --- a/drivers/extcon/extcon-palmas.c
+> +++ b/drivers/extcon/extcon-palmas.c
+> @@ -107,7 +107,7 @@ static irqreturn_t palmas_id_irq_handler(int irq, void *_palmas_usb)
+>  				(id_src & PALMAS_USB_ID_INT_SRC_ID_GND)) {
+>  		palmas_usb->linkstat = PALMAS_USB_STATE_ID;
+>  		extcon_set_state_sync(edev, EXTCON_USB_HOST, true);
+> -		dev_dbg(palmas_usb->dev, " USB-HOST cable is attached\n");
+> +		dev_dbg(palmas_usb->dev, "USB-HOST cable is attached\n");
+>  	}
+>  
+>  	return IRQ_HANDLED;
 
-And I hit this on two of fifteen TREE03 runs on a merge of -rcu with
-yesterday's linus/master.  Might be a fluke, but I thought I should
-at least report it.  This is the first time since my last email in
-this thread.
+Fix the wrong word on patch title and use captital letter of first char as following:
+- extconn: remove extraneous space before a debug message
+-> extcon: Remove extraneous space before a debug message
 
-							Thanx, Paul
+Applied it.
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

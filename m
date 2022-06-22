@@ -2,90 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C09D554817
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A86E554954
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234460AbiFVKSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S234190AbiFVKUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiFVKSC (ORCPT
+        with ESMTP id S230023AbiFVKUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:18:02 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CC83B560
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:17:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id e40so10650090eda.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:17:46 -0700 (PDT)
+        Wed, 22 Jun 2022 06:20:39 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0814A338B7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:20:34 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id k18so5751729ilr.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sw2lC+m2hGDUwBL9IFA6pBssodKXCe1mWf619i6f5BQ=;
-        b=hgLMdhIMgiUy+MoiXvHJ2RJ9Wa0i1ZtMh73G1txuIKpg2AaqgMOwrM9CZPZ/sxDHYZ
-         IMgph9yXYODnsgCQbf4TNClb8Ig7RHB8cabwDRw4cDlk7Q3tjgmmj0W0xB/iLnHX9n9+
-         Z8bXF7T8T9B2ZVaGBQh8R7pePDlE1Jsyt6uy3Cg43YaZMkrg22A4aqupR6A21O0xhUxe
-         NfLmARQNCl5rZsME4DXIfs4bmbmy00RiWWWZa0lQ95N05AvVsE3cb9WiA8niad8+VBzU
-         ZZYwXKW3uEtEr4BOYecqDjltS0jA1vLMCuh4PfAP28A+VWI6iJ3iH/8hwi7X/rmrneR6
-         dZ8g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Hbo3bnQKBNV6Tqr0l1RInVBr0FV0QXzKbFlMjhPdNYc=;
+        b=bFeZ6HHtsVE5eIf2XgCYMp1WD7dwSCvnA+mdiyg55GOgz25oSnkTcY+xtLCmgr/gjy
+         4PaxThwJfy8RV0iS7SqD8rQCzQ46KfgEbPr2ctANBmC8VtQ6FYs8XOZMtwjmktso0kGH
+         Pn04gKBix6xHCo9bqV5T+6GWvOVLNBVPGO8jU8vPDkhcAr+RnbLCR1kVG8dD3G/2E9We
+         aR2NcUgqZqi7gigz7d3Zfbur9iZ3AZKoeTCdADa6O9xuiEBGIlz4oBeNb2TLQCdKiKE5
+         STHd3sHbfTNVudPO2c3vHafJZvhvfGRoZgV3OPcMNiFv374lg3oEykOPPpmhoyWXzAkR
+         rMCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sw2lC+m2hGDUwBL9IFA6pBssodKXCe1mWf619i6f5BQ=;
-        b=XqsP22moD4yKveiGLItZJlxEKTbHDVZkYNphIZQVNtKQbFQMzISq9LjB2zH+T1MDxJ
-         OYeYYL+h9lQGkxdOxOpLffOM5eRe+w0YfuKkocYxqwuhdKuPgb/P18b45/jSo9DAhNnY
-         g3qpkB8CYnXZPJ1FuIqPL3SCCG2eARNWmKB6HVUsVhL67Ki7Fvo7WmsdwHbe7AN+QENR
-         Ww+LlLUPsvARpTaMf7++6jmXCsl/YCh0NG0j+DakOTKxBaZcpv7crN/yZgTzOPMcVLIX
-         uopsRkjpxdVaDzWHjLUf/LyvR29cjZAGeysPK6GLl9upJYJJ7xFIMex4F1PrCEylHPbU
-         N4ew==
-X-Gm-Message-State: AJIora+LK9GxYmsmR1mWGhuNBL5+2G6xkO1ZRa02XaJABQZbtsQfI1VW
-        SekwQUobU/bZLB7WL4Ymjmfq2g==
-X-Google-Smtp-Source: AGRyM1vibWYX9QDeWYNt9B5sInQlF+vF5g0R5kz55sooOwbcMXMh2vUXX0FF1o1QUF932CUm0pAP5g==
-X-Received: by 2002:a05:6402:28a2:b0:435:798e:2988 with SMTP id eg34-20020a05640228a200b00435798e2988mr3220145edb.217.1655893065351;
-        Wed, 22 Jun 2022 03:17:45 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ky4-20020a170907778400b006fe921fcb2dsm9028707ejc.49.2022.06.22.03.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 03:17:44 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     steven_lee@aspeedtech.com, linux-kernel@vger.kernel.org,
-        andrew@aj.id.au, joel@jms.id.au, krzysztof.kozlowski@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        chen.kenyy@inventec.com, linux-aspeed@lists.ozlabs.org,
-        robh+dt@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     David_Wang6097@jabil.com
-Subject: Re: (subset) [PATCH 7/7] ARM: dts: aspeed: centriq2400: use qcom compatible
-Date:   Wed, 22 Jun 2022 12:17:39 +0200
-Message-Id: <165589305701.29629.10216921074802952879.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220529104928.79636-7-krzysztof.kozlowski@linaro.org>
-References: <20220529104928.79636-1-krzysztof.kozlowski@linaro.org> <20220529104928.79636-7-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Hbo3bnQKBNV6Tqr0l1RInVBr0FV0QXzKbFlMjhPdNYc=;
+        b=ddOQWcPuogfYL/dTxi53qqnfp+CadAb7wH4u47gYesV7i8p90pWw0hAOwI5aOfuZ6L
+         iIzGjBaCmkkvTmNwwMiw6DisaN8CdEJt2Fs379bva/p5YzUBTMKWtO7RYZQ7R/t4KG05
+         Y5QyMlAOjYKVxMrkqiw7YcGW0ehI4gM+63XYFfoO8jTxo8h9AAYPZTgzKGMZpyoxTUUG
+         YkcIM5ccrr2287D1Vp2QVrovYrhVngVyWcPxH/2XKMGXa831/6IMjD/t8ZGLtHmBlB8p
+         crgJ9fsYIxV9H7mectuz8SYfoCX6BkXvCA4pvrdt7fLNBV1VAGvqkTmFJwKjliiLFgYr
+         iZUw==
+X-Gm-Message-State: AJIora9vAbFSPEccfJKLTAvx+gpyoNacA4FBdg6YwHBronZqZYPlfBLi
+        hofkzg/jZ67qMuO79SMYjRhMzUAF+KDQcAKoNi1u1A==
+X-Google-Smtp-Source: AGRyM1sXeSQw6KYHS4znHE4W3JRadaDk+4aVoboZXFZJ+Q/TGW2Sm/R4VoeOXijwAbllyRaJf0iqqkRU7RpD/8evvBk=
+X-Received: by 2002:a92:90d:0:b0:2d9:3458:7f79 with SMTP id
+ y13-20020a92090d000000b002d934587f79mr1658534ilg.123.1655893233347; Wed, 22
+ Jun 2022 03:20:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220607104015.2126118-1-poprdi@google.com> <CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com>
+ <CAPUC6b+xMnk8VDGv_7p9j4GHD75FrxG3hWKpTSF2zHj508=x9A@mail.gmail.com>
+In-Reply-To: <CAPUC6b+xMnk8VDGv_7p9j4GHD75FrxG3hWKpTSF2zHj508=x9A@mail.gmail.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Wed, 22 Jun 2022 12:20:22 +0200
+Message-ID: <CANp29Y7gb7cop8p8k-LqR1WoLwOLxi+QGRGLEZrbYW8Tw6_i2w@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
+To:     =?UTF-8?Q?Tam=C3=A1s_Koczka?= <poprdi@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Nguyen <theflow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 May 2022 12:49:28 +0200, Krzysztof Kozlowski wrote:
-> "qualcomm" is not a documented compatible and instead "qcom" should be
-> used.
-> 
-> 
+(Resending the reply I sent to the v1 of the patch. I sent it by
+mistake with HTML content, so it did not reach lore.)
 
-Applied, thanks!
+I checked out v5.18.1, applied this patch and fuzzed it with syzkaller
+for a day. The fuzzer was indeed able to find and report more coverage
+of the BT subsystem than without the patch.
 
-[7/7] ARM: dts: aspeed: centriq2400: use qcom compatible
-      https://git.kernel.org/krzk/linux/c/6202c6063145cf9ec22b40aac219122dd702a10f
+Tested-by: Aleksandr Nogikh <nogikh@google.com>
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+On Tue, Jun 14, 2022 at 3:34 PM Tam=C3=A1s Koczka <poprdi@google.com> wrote=
+:
+>
+> Hello Marcel,
+>
+> I hope this was the change you originally requested, and I did not
+> misunderstand anything, but if you need any additional modification to
+> the code or the commit, please feel free to let me know!
+>
+> Thank you,
+> Tamas
+>
+> On Tue, Jun 7, 2022 at 1:44 PM Tam=C3=A1s Koczka <poprdi@google.com> wrot=
+e:
+> >
+> > Hello Marcel,
+> >
+> > I added some comments into the code about what the kcov_remote calls do=
+ and
+> > why they were implemented and I also added some reasoning to the commit
+> > message.
+> >
+> > I did not mention in the commit but these functions only run if the ker=
+nel
+> > is compiled with CONFIG_KCOV.
+> >
+> > Thank you again for reviewing the patch!
+> >
+> > --
+> > Tamas
+> >
+> > On Tue, Jun 7, 2022 at 12:40 PM Tamas Koczka <poprdi@google.com> wrote:
+> > >
+> > > Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop(=
+)
+> > > calls, so remote KCOV coverage is collected while processing the rx_q
+> > > queue which is the main incoming Bluetooth packet queue.
+> > >
+> > > Coverage is associated with the thread which created the packet skb.
+> > >
+> > > The collected extra coverage helps kernel fuzzing efforts in finding
+> > > vulnerabilities.
+> > >
+> > > Signed-off-by: Tamas Koczka <poprdi@google.com>
+> > > ---
+> > > Changelog since v1:
+> > >  - add comment about why kcov_remote functions are called
+> > >
+> > > v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@googl=
+e.com/
+> > >
+> > >  net/bluetooth/hci_core.c | 10 +++++++++-
+> > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> > > index 45c2dd2e1590..0af43844c55a 100644
+> > > --- a/net/bluetooth/hci_core.c
+> > > +++ b/net/bluetooth/hci_core.c
+> > > @@ -29,6 +29,7 @@
+> > >  #include <linux/rfkill.h>
+> > >  #include <linux/debugfs.h>
+> > >  #include <linux/crypto.h>
+> > > +#include <linux/kcov.h>
+> > >  #include <linux/property.h>
+> > >  #include <linux/suspend.h>
+> > >  #include <linux/wait.h>
+> > > @@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct *wo=
+rk)
+> > >
+> > >         BT_DBG("%s", hdev->name);
+> > >
+> > > -       while ((skb =3D skb_dequeue(&hdev->rx_q))) {
+> > > +       /* The kcov_remote functions used for collecting packet parsi=
+ng
+> > > +        * coverage information from this background thread and assoc=
+iate
+> > > +        * the coverage with the syscall's thread which originally in=
+jected
+> > > +        * the packet. This helps fuzzing the kernel.
+> > > +        */
+> > > +       for (; (skb =3D skb_dequeue(&hdev->rx_q)); kcov_remote_stop()=
+) {
+> > > +               kcov_remote_start_common(skb_get_kcov_handle(skb));
+> > > +
+> > >                 /* Send copy to monitor */
+> > >                 hci_send_to_monitor(hdev, skb);
+> > >
+> > > --
+> > > 2.36.1.255.ge46751e96f-goog
+> > >

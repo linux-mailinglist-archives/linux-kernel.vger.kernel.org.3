@@ -2,141 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFD055447B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0B555442A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354167AbiFVH5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S1354196AbiFVIAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242785AbiFVH53 (ORCPT
+        with ESMTP id S234751AbiFVIAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:57:29 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C5637A13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:57:28 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 33A935C00D8;
-        Wed, 22 Jun 2022 03:57:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 22 Jun 2022 03:57:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1655884648; x=1655971048; bh=x1drCMu5dq
-        EeEn5rlOqr732uAMnNtHSW/+Yw52DBQHM=; b=pbyDL2YJVwqma+q5ZDQLE+Cw4h
-        8zD5iAzAXCo402V0ukFU1qb9Ad+Mq6U1NBQ8QBQG8T0xBVhdSjE/SLm11/pFzedW
-        tdQjkxxpaiqX6J5s7Xp5nw3l7e/Ln6StT0zo5GCV8V/Y5WY83wMeXNB/+B/JnQ8j
-        kus9OCi7biIq7o/dfMizKS9zAl05EfvrYXEWzT5v4UHo6Qkiy9JdbW/FuwO47rFV
-        wltuOvTmUG6PIfbMNgZ4VmbaaTq6ZfJBd/mlS9D2m8ZV17kQ/LqfN4065LSTRD4g
-        r7q18oGc4qzphbpNoiegbT3WfclFkOvvOPQ0byd2qt/ilExPOvGNJU22hPbw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1655884648; x=1655971048; bh=x1drCMu5dqEeEn5rlOqr732uAMnN
-        tHSW/+Yw52DBQHM=; b=o3k5NlJchNCwnv8bCsQZx2/IWFPd3VUiOaFHm4rkuDzW
-        lipDdqr9jRUHzC/nBEM23CZ5SpS36QD2d19H/HlI8Nm3Oj4pNzNTs+ngj1j3R7a8
-        SNxLCyfueW3ccnrqRAlsZbwuc2ezuArdl46u6HsrTfLNESWXdkKUtpLQXJkOToev
-        KSRUh3eI1Ji+z1wCUn8ahheo6qMusFP2uh7hq2UGOdlxqvfruI7cEWd0MvhrCBAq
-        emGDaBecGN7jv8f89FGDQ3bnf7Eq+pp9uaHl1OkVMmh0nVloX1HdTIbW4xdwbnW9
-        wmny/fPZcaGGEk4utiITTKpAyJwSZqgj0xLPPdGOWA==
-X-ME-Sender: <xms:Z8uyYgZ2ReBdYtNKL3VJ2PgyMc6fHTTdaCrXBU034dhqX9tH7U7oEQ>
-    <xme:Z8uyYrbAGi_QegF8Am4XP-AonTO1ITYIWoYrils9wu9IgUA-ajjrY2QngeR07skJU
-    3c1Iu70WvZCw4V2tL4>
-X-ME-Received: <xmr:Z8uyYq_pr4oP7nXUWDgldaTfrX_gqanKAUXcstbh7_QWoCkoC1Z64z0huxFems1I0jJ_Wv2tSKfNwGvONkTSfx4IjSArhik7xEI5aOo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
-    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:aMuyYqolEY3y7cFboHCxtfkOyPUg118vLv8onNCDOttgVZcmQSAqJQ>
-    <xmx:aMuyYrqJH9kravIH9cgZwhgZpbfNib3_jvdyPDWLUjtG2mS30vVqJA>
-    <xmx:aMuyYoRciYyMCcVtFxBVWj734PGQyZv6hOUy1FTwe00mj3fHzeBGpg>
-    <xmx:aMuyYsdotOKfnHfIX-jp_BpPP59zZ8mv7kZkmdZaYJDs9aNSK-lU2A>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Jun 2022 03:57:27 -0400 (EDT)
-Date:   Wed, 22 Jun 2022 09:57:25 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Saud Farooqui <farooqui_saud@hotmail.com>
-Cc:     jernej.skrabec@gmail.com, samuel@sholland.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, wens@csie.org, daniel@ffwll.ch
-Subject: Re: [PATCH v1] drm/sun4i: Return from the function in error condition
-Message-ID: <20220622075725.y6ws22ielpc4pmxw@houat>
-References: <20220609142253.7aad4jlaoahqkmy7@houat>
- <PA4P189MB14215D2A66A54FFA3F7DD9348BB39@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
+        Wed, 22 Jun 2022 04:00:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1B0937A3C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655884834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p1O7sFFlmBgOcKNYL09qPTXcCanshyqj/I9EvbrMxCk=;
+        b=Cqgp3tKL9gpHFOHDyeLWGrVvPKbukUOp2+MqmUGhsiAvac44hu7/a+mG3nMSyGTWDLFPY3
+        AGicdNq5gDdkTcnbWPFuE0tweryObxgO557RbTlJFtQC+L9x76nLrm8kMJ+3dlK5QebmHt
+        1FsoZMEablY/LKEspjlTb4gMW2jf3rg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-451-K_i1k_mONF6gE_1lB696oQ-1; Wed, 22 Jun 2022 04:00:33 -0400
+X-MC-Unique: K_i1k_mONF6gE_1lB696oQ-1
+Received: by mail-wm1-f70.google.com with SMTP id n15-20020a05600c4f8f00b0039c3e76d646so7447177wmq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:00:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=p1O7sFFlmBgOcKNYL09qPTXcCanshyqj/I9EvbrMxCk=;
+        b=IfUIGnUpoIW1udaVUOIIg2AF/glWYJeqYmzCy6xYwXT1zdYnCnh+0CR9F0ojc7bAQF
+         /ygNZS96US5WrFnJTYLvnM2P6MI1H3Ilr0uMKJtAd0jzI/ovtetCStLMYCOuG/6s7fuN
+         msLV4FTMO7vT/ahlFhKWGnLLC019EGY0gVj+e6WG2C87amqCQVnc1mKKQuOVwlEoPzzH
+         sYh6icaZbNNXx3bKYY47so7wuFScbE8qOCeBgTBxE3476xF2SNQWu95jqEik91g1IFPM
+         dD5VC4sM2bgACDLa/Ghd1z7GlofChQEY0tRs9zNaVwh6JqZOFPpwHsZ0Ojnb0jvIjs/5
+         /2zA==
+X-Gm-Message-State: AOAM530/U6SMkSzA29b0FB8I79onceksK1wui9akq3lORi7BuUM++yn0
+        oml7YUfFHJ3xn1IevtVRMpnd/O2TGbxAbkxeJnb4qLt3mtBSJmRoXNXK5cF01PhWJ5BCb/tqK2o
+        MZnN0Xruxn/LF5DUCuetKoA6hsLyR0/PtW/qXHMfjpBpDIXlfmpXwVREDYhuoH7y44DcTmtEVhL
+        JU
+X-Received: by 2002:a05:600c:128c:b0:39c:85a4:d334 with SMTP id t12-20020a05600c128c00b0039c85a4d334mr44541253wmd.159.1655884831755;
+        Wed, 22 Jun 2022 01:00:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyWZgf9RVSF+aIRirRYltfNsKueQoUWUM/G2tiYpbbYlVSqaru9w78PwKw0eRYh5iGAaI861w==
+X-Received: by 2002:a05:600c:128c:b0:39c:85a4:d334 with SMTP id t12-20020a05600c128c00b0039c85a4d334mr44541196wmd.159.1655884831411;
+        Wed, 22 Jun 2022 01:00:31 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id h4-20020a5d6e04000000b0020d02262664sm18307926wrz.25.2022.06.22.01.00.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 01:00:30 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, mail@anirudhrb.com,
+        kumarpraveen@linux.microsoft.com, wei.liu@kernel.org,
+        robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
+In-Reply-To: <YqiwoOP4HX2LniI4@google.com>
+References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
+ <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
+ <YqdsjW4/zsYaJahf@google.com> <YqipLpHI24NdhgJO@anrayabh-desk>
+ <YqiwoOP4HX2LniI4@google.com>
+Date:   Wed, 22 Jun 2022 10:00:29 +0200
+Message-ID: <87zgi5xh42.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dpuceqjgfufrqrxt"
-Content-Disposition: inline
-In-Reply-To: <PA4P189MB14215D2A66A54FFA3F7DD9348BB39@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sean Christopherson <seanjc@google.com> writes:
 
---dpuceqjgfufrqrxt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Tue, Jun 14, 2022, Anirudh Rayabharam wrote:
+>> On Mon, Jun 13, 2022 at 04:57:49PM +0000, Sean Christopherson wrote:
 
-Hi,
+...
 
-On Tue, Jun 21, 2022 at 09:44:27PM +0500, Saud Farooqui wrote:
-> Added return statement in sun4i_layer_format_mod_supported()
-> in case of error.
->=20
-> Signed-off-by: Saud Farooqui <farooqui_saud@hotmail.com>
-> ---
->  drivers/gpu/drm/sun4i/sun4i_layer.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/sun4i/sun4i_layer.c b/drivers/gpu/drm/sun4i/=
-sun4i_layer.c
-> index 6d43080791a0..85fb9e800ddf 100644
-> --- a/drivers/gpu/drm/sun4i/sun4i_layer.c
-> +++ b/drivers/gpu/drm/sun4i/sun4i_layer.c
-> @@ -117,7 +117,7 @@ static bool sun4i_layer_format_mod_supported(struct d=
-rm_plane *plane,
->  	struct sun4i_layer *layer =3D plane_to_sun4i_layer(plane);
-> =20
->  	if (IS_ERR_OR_NULL(layer->backend->frontend))
-> -		sun4i_backend_format_is_supported(format, modifier);
-> +		return sun4i_backend_format_is_supported(format, modifier);
+>> > 
+>> > Any reason not to use the already sanitized vmcs_config?  I can't think of any
+>> > reason why the nested path should blindly use the raw MSR values from hardware.
+>> 
+>> vmcs_config has the sanitized exec controls. But how do we construct MSR
+>> values using them?
+>
+> I was thinking we could use the sanitized controls for the allowed-1 bits, and then
+> take the required-1 bits from the CPU.  And then if we wanted to avoid the redundant
+> RDMSRs in a follow-up patch we could add required-1 fields to vmcs_config.
+>
+> Hastily constructed and compile-tested only, proceed with caution :-)
 
-While there's a bug, it definitely isn't what your commit message
-describe.
+Independently from "[PATCH 00/11] KVM: VMX: Support TscScaling and
+EnclsExitingBitmap whith eVMCS" which is supposed to fix the particular
+TSC scaling issue, I like the idea to make nested_vmx_setup_ctls_msrs()
+use both allowed-1 and required-1 bits from vmcs_config. I'll pick up
+the suggested patch and try to construct something for required-1 bits.
 
-Frontends only available on some SoCs and are thus optional in the
-driver.
+Thanks!
 
-If the frontend pointer isn't set, it means that it isn't there and thus
-we try to figure out the format through the backend that is always
-there.
+-- 
+Vitaly
 
-Maxime
-
---dpuceqjgfufrqrxt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYrLLZQAKCRDj7w1vZxhR
-xawwAP4u3twxDl6X0vHRjMf8txv6dArTqceH0FbDHlbmVRr+UgEAw7KvX806M1k8
-y9t+0imQJJiEN4hGTzwC4nriK80T/AA=
-=om1g
------END PGP SIGNATURE-----
-
---dpuceqjgfufrqrxt--

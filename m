@@ -2,109 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8E3554EE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB36C554EEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359204AbiFVPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        id S1359364AbiFVPSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359220AbiFVPQs (ORCPT
+        with ESMTP id S1359225AbiFVPSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:16:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6683ED0A;
-        Wed, 22 Jun 2022 08:16:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A4FE61542;
-        Wed, 22 Jun 2022 15:16:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821F2C34114;
-        Wed, 22 Jun 2022 15:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655911005;
-        bh=74OTJmsDUnJ8Yy67wCt0W4gdTWxoxbdt0Ekwa+iJXlw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Wd3MRhoZEa6qShbmTQ//LXyurzxGZedShHyF58V4d/EgvL0X0NAU6WbQjTyrsDCFy
-         9o6DzQBjeTAVrFaODUGwNzjWaoCZaomicw4Yz0hU37Q4HtmjEPKP5QpbzZxh61TIle
-         VNaUfM6ZI3D7gX/pX/Dt07tQc3sTOG1abvL6llR/iSnNhsy6lnNJoXQH0yB1zO8Rs4
-         ryl2ehKgtUYQJ99Okc2O5QWFF377RFC9m7TA/ATUZN8TQEPq/lcfeBPoMAeCCHwYHX
-         frMeOdV7fGBnNCxVvKViwd/uGsp9eLgSEEcYIEfWvDGpUE8Lpe6VfYddUCmnYj/OMD
-         bT9FlVvImCbeg==
-From:   Mark Brown <broonie@kernel.org>
-To:     aidanmacdonald.0x0@gmail.com
-Cc:     bjorn.andersson@linaro.org, rafael@kernel.org, orsonzhai@gmail.com,
-        krzysztof.kozlowski@linaro.org, jernej.skrabec@gmail.com,
-        zhang.lyra@gmail.com, b.zolnierkie@samsung.com,
-        linux-actions@lists.infradead.org, myungjoo.ham@samsung.com,
-        linux-arm-kernel@lists.infradead.org, tglx@linutronix.de,
-        tiwai@suse.com, cristian.ciocaltea@gmail.com, michael@walle.cc,
-        lgirdwood@gmail.com, maz@kernel.org, rjones@gateworks.com,
-        linux-sunxi@lists.linux.dev, cw00.choi@samsung.com,
-        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        tharvey@gateworks.com, samuel@sholland.org, brgl@bgdev.pl,
-        alsa-devel@alsa-project.org, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, mazziesaccount@gmail.com,
-        wens@csie.org, mani@kernel.org, perex@perex.cz,
-        baolin.wang7@gmail.com, linux-kernel@vger.kernel.org,
-        srinivas.kandagatla@linaro.org
-In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
-References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
-Subject: Re: (subset) [PATCH 00/49] regmap-irq cleanups and refactoring
-Message-Id: <165591099823.672192.3312043171342090457.b4-ty@kernel.org>
-Date:   Wed, 22 Jun 2022 16:16:38 +0100
+        Wed, 22 Jun 2022 11:18:17 -0400
+Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61902EA27;
+        Wed, 22 Jun 2022 08:18:15 -0700 (PDT)
+Received: from xenbits.xenproject.org ([104.239.192.120])
+        by mail.xenproject.org with esmtp (Exim 4.92)
+        (envelope-from <pdurrant@amazon.com>)
+        id 1o4275-00079R-O5; Wed, 22 Jun 2022 15:17:51 +0000
+Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=debian.cbg12.amazon.com)
+        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pdurrant@amazon.com>)
+        id 1o4275-0003bJ-DQ; Wed, 22 Jun 2022 15:17:51 +0000
+From:   Paul Durrant <pdurrant@amazon.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Paul Durrant <pdurrant@amazon.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v4] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves, if present
+Date:   Wed, 22 Jun 2022 16:17:28 +0100
+Message-Id: <20220622151728.13622-1-pdurrant@amazon.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_MED,SPF_FAIL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 21:05:55 +0100, Aidan MacDonald wrote:
-> Here's a bunch of cleanups for regmap-irq focused on simplifying the API
-> and generalizing it a bit. It's broken up into three refactors, focusing
-> on one area at a time.
-> 
-> * Patches 01 and 02 are straightforward bugfixes, independent of the
->   rest of the series. Neither of the bugs are triggered by in-tree
->   drivers but they might be worth picking up early anyhow.
-> 
-> [...]
+The scaling information in subleaf 1 should match the values set by KVM in
+the 'vcpu_info' sub-structure 'time_info' (a.k.a. pvclock_vcpu_time_info)
+which is shared with the guest, but is not directly available to the VMM.
+The offset values are not set since a TSC offset is already applied.
+The TSC frequency should also be set in sub-leaf 2.
 
-Applied to
+Cache pointers to the sub-leaves when CPUID is updated by the VMM and
+populate the relevant information prior to entering the guest.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+---
+Cc: David Woodhouse <dwmw2@infradead.org>
 
-Thanks!
+v2:
+ - Make sure sub-leaf pointers are NULLed if the time leaf is removed
 
-[01/49] regmap-irq: Fix a bug in regmap_irq_enable() for type_in_mask chips
-        commit: 485037ae9a095491beb7f893c909a76cc4f9d1e7
-[02/49] regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
-        commit: 3f05010f243be06478a9b11cfce0ce994f5a0890
+v3:
+ - Add leaf limit check in kvm_xen_set_cpuid()
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+v4:
+ - Update commit comment
+---
+ arch/x86/include/asm/kvm_host.h |  2 ++
+ arch/x86/kvm/cpuid.c            |  2 ++
+ arch/x86/kvm/x86.c              |  1 +
+ arch/x86/kvm/xen.c              | 49 +++++++++++++++++++++++++++++++++
+ arch/x86/kvm/xen.h              | 10 +++++++
+ 5 files changed, 64 insertions(+)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 1038ccb7056a..f77a4940542f 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -638,6 +638,8 @@ struct kvm_vcpu_xen {
+ 	struct hrtimer timer;
+ 	int poll_evtchn;
+ 	struct timer_list poll_timer;
++	struct kvm_cpuid_entry2 *tsc_info_1;
++	struct kvm_cpuid_entry2 *tsc_info_2;
+ };
+ 
+ struct kvm_vcpu_arch {
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index d47222ab8e6e..eb6cd88c974a 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -25,6 +25,7 @@
+ #include "mmu.h"
+ #include "trace.h"
+ #include "pmu.h"
++#include "xen.h"
+ 
+ /*
+  * Unlike "struct cpuinfo_x86.x86_capability", kvm_cpu_caps doesn't need to be
+@@ -310,6 +311,7 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	    __cr4_reserved_bits(guest_cpuid_has, vcpu);
+ 
+ 	kvm_hv_set_cpuid(vcpu);
++	kvm_xen_set_cpuid(vcpu);
+ 
+ 	/* Invoke the vendor callback only after the above state is updated. */
+ 	static_call(kvm_x86_vcpu_after_set_cpuid)(vcpu);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 00e23dc518e0..8b45f9975e45 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3123,6 +3123,7 @@ static int kvm_guest_time_update(struct kvm_vcpu *v)
+ 	if (vcpu->xen.vcpu_time_info_cache.active)
+ 		kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_time_info_cache, 0);
+ 	kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
++	kvm_xen_setup_tsc_info(v);
+ 	return 0;
+ }
+ 
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 610beba35907..08e65ec6c793 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -10,6 +10,9 @@
+ #include "xen.h"
+ #include "hyperv.h"
+ #include "lapic.h"
++#include "cpuid.h"
++
++#include <asm/xen/cpuid.h>
+ 
+ #include <linux/eventfd.h>
+ #include <linux/kvm_host.h>
+@@ -1855,3 +1858,49 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
+ 	if (kvm->arch.xen_hvm_config.msr)
+ 		static_branch_slow_dec_deferred(&kvm_xen_enabled);
+ }
++
++void kvm_xen_set_cpuid(struct kvm_vcpu *vcpu)
++{
++	u32 base = 0;
++	u32 limit;
++	u32 function;
++
++	vcpu->arch.xen.tsc_info_1 = NULL;
++	vcpu->arch.xen.tsc_info_2 = NULL;
++
++	for_each_possible_hypervisor_cpuid_base(function) {
++		struct kvm_cpuid_entry2 *entry = kvm_find_cpuid_entry(vcpu, function, 0);
++
++		if (entry &&
++		    entry->ebx == XEN_CPUID_SIGNATURE_EBX &&
++		    entry->ecx == XEN_CPUID_SIGNATURE_ECX &&
++		    entry->edx == XEN_CPUID_SIGNATURE_EDX) {
++			base = function;
++			limit = entry->eax;
++			break;
++		}
++	}
++	if (!base)
++		return;
++
++	function = base | XEN_CPUID_LEAF(3);
++	if (function > limit)
++		return;
++
++	vcpu->arch.xen.tsc_info_1 = kvm_find_cpuid_entry(vcpu, function, 1);
++	vcpu->arch.xen.tsc_info_2 = kvm_find_cpuid_entry(vcpu, function, 2);
++}
++
++void kvm_xen_setup_tsc_info(struct kvm_vcpu *vcpu)
++{
++	struct kvm_cpuid_entry2 *entry = vcpu->arch.xen.tsc_info_1;
++
++	if (entry) {
++		entry->ecx = vcpu->arch.hv_clock.tsc_to_system_mul;
++		entry->edx = vcpu->arch.hv_clock.tsc_shift;
++	}
++
++	entry = vcpu->arch.xen.tsc_info_2;
++	if (entry)
++		entry->eax = vcpu->arch.hw_tsc_khz;
++}
+diff --git a/arch/x86/kvm/xen.h b/arch/x86/kvm/xen.h
+index 532a535a9e99..1afb663318a9 100644
+--- a/arch/x86/kvm/xen.h
++++ b/arch/x86/kvm/xen.h
+@@ -32,6 +32,8 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe,
+ int kvm_xen_setup_evtchn(struct kvm *kvm,
+ 			 struct kvm_kernel_irq_routing_entry *e,
+ 			 const struct kvm_irq_routing_entry *ue);
++void kvm_xen_set_cpuid(struct kvm_vcpu *vcpu);
++void kvm_xen_setup_tsc_info(struct kvm_vcpu *vcpu);
+ 
+ static inline bool kvm_xen_msr_enabled(struct kvm *kvm)
+ {
+@@ -135,6 +137,14 @@ static inline bool kvm_xen_timer_enabled(struct kvm_vcpu *vcpu)
+ {
+ 	return false;
+ }
++
++static inline void kvm_xen_set_cpuid(struct kvm_vcpu *vcpu)
++{
++}
++
++static inline void kvm_xen_setup_tsc_info(struct kvm_vcpu *vcpu)
++{
++}
+ #endif
+ 
+ int kvm_xen_hypercall(struct kvm_vcpu *vcpu);
+-- 
+2.20.1
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

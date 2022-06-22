@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C0C5552EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22C65552E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359479AbiFVR7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
+        id S1376712AbiFVR7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359209AbiFVR60 (ORCPT
+        with ESMTP id S1376786AbiFVR6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:58:26 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1954718B26
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:58:24 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id a11so11531620ljb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:58:23 -0700 (PDT)
+        Wed, 22 Jun 2022 13:58:32 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F9F2656D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:58:30 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-101d2e81bceso14611116fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RijPorxrzLa0urbw6f5tLG+MBIywxSnLbJeg+24hYzA=;
-        b=H0VPSCsehGXRYxTHzMXRWxGfbmO+IP0LFhFmRmwcDgdae3jk2wjq7FiRgKRv1gUPQM
-         7mR0hRGMvUOpdgF3Z4XpJoVP9nrtlr+QfMN3sLbcE8uKbscpuY+aTwN/u3FB0RmNDa3J
-         U3el3BPUyFaeOvneYMa/UOcnN4lalmBdXVyyLtnsR6vwkdsuwuO2/AZ1btm/Kwg/G0hW
-         I7KmOaggNgtnvDPNQKsh9kgOYs2u57711q3X9A5MJeK+aS1aiSPvDzTOtkXDKgtzfWfu
-         XxT2/WGyoT/94NmWdS0LaUsUWNuG0UzfNiYVn5obq8o8yTnClnT1iYT91S2JZsfyRihQ
-         fDiw==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=zUajASBiQjHAZhnPOiOhijZT69w/khebQsFCRqwrBWg=;
+        b=dyCCzi1meBRMQu6ugcIRNgKFAUqiyWIwMRcVvFBCJ8C9U0Ih1bjpQz1f8setXQieRN
+         DI6LZYshkQ6PKYaavyfMtwa1rUjXyXyPOHuUDKDic/F/B07IE+juuttK4eXNefNbPSna
+         Ojpy5EBs87pUa/uKWlrwQV5036etVMQlBON6w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RijPorxrzLa0urbw6f5tLG+MBIywxSnLbJeg+24hYzA=;
-        b=jdd5swsVJWEUECLTBCHuKyAXUdoQDGTv2AtpQ9irfO2r6WGIdCVvUVjUsrMLaWVCWM
-         1K+KfKmECr1CvDg/3gm9X6O4cwCA3oLOkl9qo5iLzxC34Wm1/HnBBx+s0oTr4FuDFiC8
-         GPdUqh4/3EcPUu3ROEMEg9H3UhE0GOy5SrD2nNGQIUUO+ZSGpXu5IFnDQoJrWu2I5kaL
-         Iw8PRohPpzgAhUcMXjDyrhuOt8IqENzVBGXWxBjMRzshhWjsTi7USFkhH8GTMawoMB2y
-         M5fBVFH5FQDrqmIYyyO1qtxX8bOoU2/26nWdlRv3yAUe/ydxTN6lW4nDZO3LiT8XMkG6
-         zcag==
-X-Gm-Message-State: AJIora9jcLYtMwnarOy8UIcD6KgRZ03QBNZeDukZZA9/8FondCOL6Szl
-        Ll6SNa01SOo2GlWLyTGIgTj+zA==
-X-Google-Smtp-Source: AGRyM1sDD/L+lVpsF7kORweCZVDNiYMB+PqxH/Cw0lFPdDBWV98bhtSFtWCX+n4AQJXc48Ve+fm6TA==
-X-Received: by 2002:a05:651c:54c:b0:25a:621e:5cf2 with SMTP id q12-20020a05651c054c00b0025a621e5cf2mr2560846ljp.87.1655920702407;
-        Wed, 22 Jun 2022 10:58:22 -0700 (PDT)
-Received: from [192.168.1.212] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05651203ab00b0047f9fa2925csm99202lfp.234.2022.06.22.10.58.21
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=zUajASBiQjHAZhnPOiOhijZT69w/khebQsFCRqwrBWg=;
+        b=iiPMKs9iqWmCDLbisxnbzmWu9AQj5PaINmaASAWbynPZ/7+oRRir5q0+Zn9TdLqVKU
+         CfcE2nI1L6vMsDvdcY1vGeqVrLd5h1YxKjF2eJnkhhJJU/zPdZPzylxPHKzdO+B1mCL0
+         tQBSniQXwrYS0E9D+xpmwsBPUe0ERn5f2M6XZslgxaMqs/1TaxIF0gLgvdGXIk4rB2eC
+         5947QfjyCsvePKpSTHSEsBuFWoVO1SijixZH5iamKk+TCeXcxWQt4YOUAzKFKaDH1Z4V
+         1DQnYAYjn+89NxgxJGQxOwZMw9sgOLSWfO6sFtx54wK13OLTEdLhhkuByD7d+X/3VMHi
+         R9JA==
+X-Gm-Message-State: AJIora8a665Y4EnlXQd7FBgTKEoUyteAYjKRIZfNt6Z6/EgKv/ba9Hwo
+        2YbP8IecnzoY/Fe+Q+UssYmIwyY3oTH8Sw==
+X-Google-Smtp-Source: AGRyM1vUbtfCh50xzZtbEhJ6b0A3Z5MVSz7r1DkRc0PxGTKuuQq2qtOzJiN98nJqsdqgISApqkm9AQ==
+X-Received: by 2002:a05:6870:78f:b0:f2:c91f:1b0a with SMTP id en15-20020a056870078f00b000f2c91f1b0amr25471335oab.299.1655920709264;
+        Wed, 22 Jun 2022 10:58:29 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id bi6-20020a056808188600b0032e442f6a72sm11631440oib.40.2022.06.22.10.58.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 10:58:21 -0700 (PDT)
-Message-ID: <6cc5767f-7961-3410-8693-40dde2348c12@linaro.org>
-Date:   Wed, 22 Jun 2022 20:58:21 +0300
+        Wed, 22 Jun 2022 10:58:28 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 5.19-rc4
+Message-ID: <477c2f03-a733-cd05-2551-759de9273cff@linuxfoundation.org>
+Date:   Wed, 22 Jun 2022 11:58:27 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/3] drm/msm/dp: Remove pixel_rate from struct dp_ctrl
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-References: <20220617204750.2347797-1-swboyd@chromium.org>
- <20220617204750.2347797-3-swboyd@chromium.org>
- <bb98ca29-8752-6864-ddbd-19547fb6f73b@linaro.org>
- <CAE-0n51_zysbkktVEfhvXtGqpADTWcaPBAX7A7rD1FV+vcK3Uw@mail.gmail.com>
- <48d83380-edb1-ad61-3878-5fa3ac3e5169@linaro.org>
- <d77d2989-7270-d1ec-fda6-7001ea337f5b@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <d77d2989-7270-d1ec-fda6-7001ea337f5b@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/mixed;
+ boundary="------------2F3D1A702E73BF4F538B8002"
+Content-Language: en-US
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,76 +69,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 18:22, Kuogee Hsieh wrote:
-> 
-> On 6/22/2022 12:24 AM, Dmitry Baryshkov wrote:
->> On 22/06/2022 05:59, Stephen Boyd wrote:
->>> Quoting Dmitry Baryshkov (2022-06-17 16:07:58)
->>>> On 17/06/2022 23:47, Stephen Boyd wrote:
->>>>> This struct member is stored to in the function that calls the 
->>>>> function
->>>>> which uses it. That's possible with a function argument instead of
->>>>> storing to a struct member. Pass the pixel_rate as an argument instead
->>>>> to simplify the code. Note that dp_ctrl_link_maintenance() was storing
->>>>> the pixel_rate but never using it so we just remove the assignment 
->>>>> from
->>>>> there.
->>>>>
->>>>> Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->>>>> ---
->>>>>    drivers/gpu/drm/msm/dp/dp_ctrl.c | 57 
->>>>> ++++++++++++++++----------------
->>>>>    drivers/gpu/drm/msm/dp/dp_ctrl.h |  1 -
->>>>>    2 files changed, 28 insertions(+), 30 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c 
->>>>> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>>>> index bd445e683cfc..e114521af2e9 100644
->>>>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>>>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>>>> @@ -1336,7 +1336,7 @@ static void dp_ctrl_set_clock_rate(struct 
->>>>> dp_ctrl_private *ctrl,
->>>>>                                name, rate);
->>>>>    }
->>>>>
->>>>> -static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private 
->>>>> *ctrl)
->>>>> +static int dp_ctrl_enable_mainlink_clocks(struct dp_ctrl_private 
->>>>> *ctrl, unsigned long pixel_rate)
->>>>
->>>>
->>>> I think we can read pixel_rate here rather than getting it as an
->>>> argument. We'd need to move handling (DP_TEST_LINK_PHY_TEST_PATTERN &&
->>>> !ctrl->panel->dp_mode.drm_mode.clock) case here from dp_ctrl_on_link().
->>>
->>> This is also called from dp_ctrl_on_stream() and
->>> dp_ctrl_reinitialize_mainlink(). In the dp_ctrl_on_stream() case we may
->>> divide the pixel_rate by 2 with widebus. We could move the
->>> dp_ctrl_on_link() code here, but then we also need to move widebus, and
->>> then I'm not sure which pixel rate to use.
->>>
->>> It looks like the test code doesn't care about widebus? And similarly,
->>> we may run the pixel clk faster until we get a modeset and then divide
->>> it for widebus.
->>
->> Good question. I'll let Kuogee or somebody else from Qualcomm to 
->> comment on test code vs widebus vs pixel rate, as I don't know these 
->> details.
->>
->> I'm not sure if we should halve the pixel clock in 
->> dp_ctrl_on_stream_phy_test_report() or not if the widebus is supported.
->> From the current code I'd assume that we have to do this. Let's raise 
->> this question in the corresponding patch discussion.
->>
-> yes, phy test does not care pixel clock rate.
+This is a multi-part message in MIME format.
+--------------2F3D1A702E73BF4F538B8002
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-So, is it 'does not care' or 'set to mode clock'?
+Hi Linus,
 
-In other words, can we unify both functions by always accounting for the 
-wide_bus_en value?
+Please pull the following Kselftest fixes update for Linux 5.19-rc4
 
+This Kselftest fixes update for Linux 5.19-rc4 consists of compile
+time fixes and run-time resources leaks.
 
--- 
-With best wishes
-Dmitry
+-- Fix clang cross compilation
+-- Fix resource leak when return error
+-- fix compile error for dma_map_benchmark
+-- Fix regression - make use of GUP_TEST_FILE macro
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.19-rc4
+
+for you to fetch changes up to 9b4d5c01eb234f66a15a746b1c73e10209edb199:
+
+   selftests: make use of GUP_TEST_FILE macro (2022-06-16 17:05:50 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-5.19-rc4
+
+This Kselftest fixes update for Linux 5.19-rc4 consists of compile
+time fixes and run-time resources leaks.
+
+-- Fix clang cross compilation
+-- Fix resource leak when return error
+-- fix compile error for dma_map_benchmark
+-- Fix regression - make use of GUP_TEST_FILE macro
+
+----------------------------------------------------------------
+Ding Xiang (1):
+       selftests: vm: Fix resource leak when return error
+
+Joel Savitz (1):
+       selftests: make use of GUP_TEST_FILE macro
+
+Mark Brown (1):
+       selftests: Fix clang cross compilation
+
+Yu Liao (1):
+       selftests dma: fix compile error for dma_map_benchmark
+
+  tools/testing/selftests/dma/Makefile            |  1 +
+  tools/testing/selftests/dma/dma_map_benchmark.c |  2 +-
+  tools/testing/selftests/lib.mk                  | 25 +++++++++++++++++++++++--
+  tools/testing/selftests/vm/gup_test.c           |  4 ++--
+  tools/testing/selftests/vm/ksm_tests.c          |  2 ++
+  5 files changed, 29 insertions(+), 5 deletions(-)
+
+----------------------------------------------------------------
+
+--------------2F3D1A702E73BF4F538B8002
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-5.19-rc4.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-fixes-5.19-rc4.diff"
+
+diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
+index aa8e8b5b3864..cd8c5ece1cba 100644
+--- a/tools/testing/selftests/dma/Makefile
++++ b/tools/testing/selftests/dma/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -I../../../../usr/include/
++CFLAGS += -I../../../../include/
+ 
+ TEST_GEN_PROGS := dma_map_benchmark
+ 
+diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
+index c3b3c09e995e..5c997f17fcbd 100644
+--- a/tools/testing/selftests/dma/dma_map_benchmark.c
++++ b/tools/testing/selftests/dma/dma_map_benchmark.c
+@@ -10,8 +10,8 @@
+ #include <unistd.h>
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+-#include <linux/map_benchmark.h>
+ #include <linux/types.h>
++#include <linux/map_benchmark.h>
+ 
+ #define NSEC_PER_MSEC	1000000L
+ 
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 2a2d240cdc1b..1a5cc3cd97ec 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -7,10 +7,31 @@ else ifneq ($(filter -%,$(LLVM)),)
+ LLVM_SUFFIX := $(LLVM)
+ endif
+ 
+-CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
++CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
++CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
++CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
++CLANG_TARGET_FLAGS_m68k         := m68k-linux-gnu
++CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
++CLANG_TARGET_FLAGS_powerpc      := powerpc64le-linux-gnu
++CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
++CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
++CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
++CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
++
++ifeq ($(CROSS_COMPILE),)
++ifeq ($(CLANG_TARGET_FLAGS),)
++$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk
++else
++CLANG_FLAGS     += --target=$(CLANG_TARGET_FLAGS)
++endif # CLANG_TARGET_FLAGS
++else
++CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
++endif # CROSS_COMPILE
++
++CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
+ else
+ CC := $(CROSS_COMPILE)gcc
+-endif
++endif # LLVM
+ 
+ ifeq (0,$(MAKELEVEL))
+     ifeq ($(OUTPUT),)
+diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
+index 6bb36ca71cb5..a309876d832f 100644
+--- a/tools/testing/selftests/vm/gup_test.c
++++ b/tools/testing/selftests/vm/gup_test.c
+@@ -209,7 +209,7 @@ int main(int argc, char **argv)
+ 	if (write)
+ 		gup.gup_flags |= FOLL_WRITE;
+ 
+-	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
++	gup_fd = open(GUP_TEST_FILE, O_RDWR);
+ 	if (gup_fd == -1) {
+ 		switch (errno) {
+ 		case EACCES:
+@@ -224,7 +224,7 @@ int main(int argc, char **argv)
+ 			printf("check if CONFIG_GUP_TEST is enabled in kernel config\n");
+ 			break;
+ 		default:
+-			perror("failed to open /sys/kernel/debug/gup_test");
++			perror("failed to open " GUP_TEST_FILE);
+ 			break;
+ 		}
+ 		exit(KSFT_SKIP);
+diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
+index 2fcf24312da8..f5e4e0bbd081 100644
+--- a/tools/testing/selftests/vm/ksm_tests.c
++++ b/tools/testing/selftests/vm/ksm_tests.c
+@@ -54,6 +54,7 @@ static int ksm_write_sysfs(const char *file_path, unsigned long val)
+ 	}
+ 	if (fprintf(f, "%lu", val) < 0) {
+ 		perror("fprintf");
++		fclose(f);
+ 		return 1;
+ 	}
+ 	fclose(f);
+@@ -72,6 +73,7 @@ static int ksm_read_sysfs(const char *file_path, unsigned long *val)
+ 	}
+ 	if (fscanf(f, "%lu", val) != 1) {
+ 		perror("fscanf");
++		fclose(f);
+ 		return 1;
+ 	}
+ 	fclose(f);
+
+--------------2F3D1A702E73BF4F538B8002--

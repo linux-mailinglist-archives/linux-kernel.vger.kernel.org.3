@@ -2,79 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001C755521B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4911555220
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 19:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377246AbiFVROg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 13:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        id S1377242AbiFVRQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 13:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376884AbiFVROa (ORCPT
+        with ESMTP id S1358257AbiFVRP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 13:14:30 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D450F181;
-        Wed, 22 Jun 2022 10:14:22 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1655918057thu6uhkw
-Received: from ubuntu.localdomain ( [106.117.78.84])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 23 Jun 2022 01:14:12 +0800 (CST)
-X-QQ-SSF: 01000000008000B0C000B00A0000000
-X-QQ-FEAT: Mx1dxJbW4IXP7rlgheUkzUkLNtOUD44MqeChcj6eQrJrKN5C/vCDW5O5zzKa8
-        IkJ9lzekdTPreXpN5Hrc+ImgAyGXTyUSW6Z8VmY3afiJpzxyC0Ycmvrrs+I76lKAXFZ6x0N
-        2p+XklaYYojNrEEdREOdaeqS6ViMY+p3Ll6s5Zh0DI6AjNELLW3NnvMMbEKQh/Yld2Q/Afe
-        rt2Q5iMO+FlqvF6myLATFkB7DKK+nxLhO32lkSTJLEEWNsO+2+vse8qaBIgldC9EA0HE8a+
-        yIw7K2e0koug1UM94m5pL+qy+yV1Bgu7KPegYsjabuqGH6ws6BVU8e3OgPXdA0yhQc8pWh8
-        NDVd1zf41ICLwQd+34=
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     sre@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] power: supply: ab8500_fg: drop unexpected word 'is' in the comments
-Date:   Thu, 23 Jun 2022 01:14:10 +0800
-Message-Id: <20220622171410.5467-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 13:15:58 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490A5E19
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:15:57 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id z191so872717iof.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 10:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=U991fSAn0e5OZS8n2s3T8TVs+b1TUclU+3UhI11zgD8=;
+        b=BLyBaiszrCrs1vOtd+028zjudoDFopra4uBSPF/4NSvS/7/1P0OqEJNhi6TdAFfFFf
+         cxaifim4gniuyKxI4LmozvFGz+Fe+IkzstYW2hZP0/yrMFffhXnLeDZL/vQvmsTOia2T
+         zUIszU7rZWknL4EUAKsGNQqbRBJOj6cFiwNbQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=U991fSAn0e5OZS8n2s3T8TVs+b1TUclU+3UhI11zgD8=;
+        b=Qv+LXHv4hnk1xQNR1SIGgwv4OIThGLWZsJ/qx7CXcj78CMHLPLlmFcmp5ARWueEDVQ
+         L3YZmY9Uk4i/Zrw2bEv/aG36IS/YRGEG50sYgR5WbhfZSoaqnul7THMBpZ3LlPcXJ+Pl
+         iQE7dQ5UQU30cQtu9H7imy2oMNiAOtXxfb0r5PzgeibByW69S5cUsEyT5ye/s0tjTPw4
+         k1NyuD1ayiJbJ70Y+EKA2t2QfHxJR6xrCiFHVftfC7COyia1Fv3H2vreUgkmDvnU44B+
+         YfCJ+KPTFxvdMKwUf7mFofiRgtVBB6YiWh7JeaNyTEv68PRBQHvjGkh0YYlv2BQ0mA3A
+         5ZiQ==
+X-Gm-Message-State: AJIora/7DEAuNuy+2Rjlawed1B46f5IdazZjHlaWVbgOudx4NYNIFIiO
+        enM8mJN6EmGi0iCxQyOWcKo5+g==
+X-Google-Smtp-Source: AGRyM1vMWbFbwbHk5Y8rFat/zxwyxlAxYc0W9Kg5pR33va+8Y3w2hjduUHVzjF5gp+dHUpfihWXXFA==
+X-Received: by 2002:a05:6602:3d3:b0:65d:f99a:2ed1 with SMTP id g19-20020a05660203d300b0065df99a2ed1mr2306309iov.109.1655918156612;
+        Wed, 22 Jun 2022 10:15:56 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c9-20020a029609000000b00331d411da60sm8693375jai.75.2022.06.22.10.15.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 10:15:56 -0700 (PDT)
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Dylan Hatch <dylanbhatch@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
+ <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+ <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
+ <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
+ <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com>
+ <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
+ <CADBMgpzyOKVO1ju_WkxYLhXGvwJjHoL6V-+Nw49UdTFoPY7NvQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b48cc574-302c-e74f-0720-9912f4663cbe@linuxfoundation.org>
+Date:   Wed, 22 Jun 2022 11:15:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <CADBMgpzyOKVO1ju_WkxYLhXGvwJjHoL6V-+Nw49UdTFoPY7NvQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word 'is' in the comments that need to be dropped
+On 6/21/22 6:18 PM, Dylan Hatch wrote:
+> On Fri, Jun 17, 2022 at 3:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 6/17/22 4:05 PM, Dylan Hatch wrote:
+>>> On Fri, Jun 17, 2022 at 12:38 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>>
+>>>> On 6/17/22 12:45 PM, Dylan Hatch wrote:
+>>>>> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>>>>
+>>>
+>>>>
+>>>> It depends on the goal of the test. Is the test looking to see if the
+>>>> probe fails with insufficient permissions, then you are changing the
+>>>> test to not check for that condition.
+>>>
+>>> The goal of the test is to validate the output of /proc/$PID/maps, and
+>>> the memory probe is only needed as setup to determine what the
+>>> expected output should be. This used to be sufficient, but now it can
+>>> no longer fully disambiguate it with the introduction of
+>>> vsyscall=xonly. The solution proposed here is to disambiguate it by
+>>> also checking the length read from /proc/$PID/maps.
+>>>
+>>>>
+>>
+>> Makes sense. However the question is does this test need to be enhanced
+>> with the addition of vsyscall=xonly?
+>>
+>>>> I would say in this case, the right approach would be to leave the test
+>>>> as is and report expected fail and add other cases.
+>>>>
+>>>> The goal being adding more coverage and not necessarily opt for a simple
+>>>> solution.
+>>>
+>>> What does it mean to report a test as expected fail? Is this a
+>>> mechanism unique to kselftest? I agree adding another test case would
+>>> work, but I'm unsure how to do it within the framework of kselftest.
+>>> Ideally, there would be separate test cases for vsyscall=none,
+>>> vsyscall=emulate, and vsyscall=xonly, but these options can be toggled
+>>> both in the kernel config and on the kernel command line, meaning (to
+>>> the best of my knowledge) these test cases would have to be built
+>>> conditionally against the conflig options and also parse the command
+>>> line for the 'vsyscall' option.
+>>>
+>>
+>> Expected fail isn't unique kselftest. It is a testing criteria where
+>> a test is expected to fail. For example if a file can only be opened
+>> with privileged user a test that runs and looks for failure is an
+>> expected to fail case - we are looking for a failure.
+>>
+>> A complete battery of tests for vsyscall=none, vsyscall=emulate,
+>> vsyscall=xonly would test for conditions that are expected to pass
+>> and fail based on the config.
+>>
+>> tools/testing/selftests/proc/config doesn't have any config options
+>> that are relevant to VSYSCALL
+>>
+>> Can you please send me the how you are running the test and what the
+>> failure output looks like?
+> 
+> I'm building a kernel with the following relevant configurations:
+> 
+> $ cat .config | grep VSYSCALL
+> CONFIG_GENERIC_TIME_VSYSCALL=y
+> CONFIG_X86_VSYSCALL_EMULATION=y
+> CONFIG_LEGACY_VSYSCALL_XONLY=y
+> # CONFIG_LEGACY_VSYSCALL_NONE is not set
+> 
+> Running the test without this change both in virtme and on real
+> hardware gives the following error:
+> 
+> # ./tools/testing/selftests/proc/proc-pid-vm
+> proc-pid-vm: proc-pid-vm.c:328: int main(void): Assertion `rv == len' failed.
+> Aborted
+> 
+> This is because when CONFIG_LEGACY_VSYSCALL_XONLY=y a probe of the
+> vsyscall page results in a segfault. This test was originally written
+> before this option existed so it incorrectly assumes the vsyscall page
+> isn't mapped at all, and the expected buffer length doesn't match the
+> result.
+> 
+> An alternate method of fixing this test could involve setting the
+> expected result based on the config with #ifdef blocks, but I wasn't
+> sure if that could be done for kernel config options in kselftest
+> code. There's also the matter of checking the kernel command line for
+> a `vsyscall=` arg, is parsing /proc/cmdline the best way to do this?
+> 
 
-file - drivers/power/supply/ab8500_fg.c
-line - 415
+We have a few tests do ifdef to be able to test the code as well as deal
+with config specific tests. Not an issue.
 
-* The capacity filter is is reset to zero.
+Parsing /proc/cmdline line is flexible for sure, if you want to use that
+route.
 
-changed to:
+Thank you for finding the problem and identifying missing coverage. Look
+forward to any patches fixing the problem.
 
-* The capacity filter is reset to zero.
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/power/supply/ab8500_fg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 4339fa9ff009..12eafeca83e1 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -412,7 +412,7 @@ static int ab8500_fg_add_cap_sample(struct ab8500_fg *di, int sample)
-  * ab8500_fg_clear_cap_samples() - Clear average filter
-  * @di:		pointer to the ab8500_fg structure
-  *
-- * The capacity filter is is reset to zero.
-+ * The capacity filter is reset to zero.
-  */
- static void ab8500_fg_clear_cap_samples(struct ab8500_fg *di)
- {
--- 
-2.17.1
-
+thanks,
+-- Shuah

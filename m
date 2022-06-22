@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FD3554EB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211E3554EBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359079AbiFVPIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S1359094AbiFVPJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359014AbiFVPIJ (ORCPT
+        with ESMTP id S1359071AbiFVPIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:08:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB11186F2;
-        Wed, 22 Jun 2022 08:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655910487; x=1687446487;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zh0phUUpaFOeqqrnhE09SGS410LKWAC5CpTN1a7yln4=;
-  b=ZWzzLnDuJyPkknFF+qVqyaJeA4B2VrnVbKgaiVnTY6zXWoujWtMkhbOh
-   OAdOix7ALM8YrypojxkOXBBy8PRq0vy7CnLhPxR7UyDNJVs592T76Bt5H
-   LfcDT1Rgar3h1npuWjGGYNbgJS0g4dFgV/N1pjzaQveGLKBLdgbXbLejH
-   IgTr4s8tEWrsNANSmDJHVm8s09FlMEry/HhuVV5EK4r4n+AbtomAy3BEB
-   kPCSodI2+hLKRv5g81UvXeMeWk+wpI4IHUhID7MjGEZ+/NiPcvar/22zF
-   qkraGbKNJo1/gJzS+ZUdM5yK/Q5QTfSekQTxxwvpE+7CiIiMVwoRBNzWC
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342128826"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="342128826"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 08:08:05 -0700
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="677596572"
-Received: from bshakya-mobl.amr.corp.intel.com (HELO [10.212.188.76]) ([10.212.188.76])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 08:08:04 -0700
-Message-ID: <6f83722d-d402-ca68-7d3e-77dca14a794b@intel.com>
-Date:   Wed, 22 Jun 2022 08:07:46 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/4] x86/cpuid: move filter_cpuid_features to cpuid-deps.c
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Borislav Petkov <bp@alien8.de>,
+        Wed, 22 Jun 2022 11:08:17 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC9E2BF3;
+        Wed, 22 Jun 2022 08:08:16 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id q15so9416867wmj.2;
+        Wed, 22 Jun 2022 08:08:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mZxOn+wGDgrlZgu5R6pd78yHgsnhABm1ikEzbHnNwlo=;
+        b=pFG8rg6wtIF2HSc9z1qNlvDHz/ACH/3SyFxQgQQzpyq2IppbKs1km6zRfUFrkbDEHO
+         prqzoc2DhUyKHOCzomwpY/4tUzsf4dqdiAeRte6uZ5ieGtajl1E5tguHaywtw92tmffi
+         G1lyumoqRbHpBViIAe3gnjR1r2LFunCPi/cjrZ03XhTBo+EBF6txePEXGqGGWfUUopv/
+         rdanewfvKqghuZUptbB4pmhyfZgYj7I9wa/hAP/Y1acF0foZU0gQqMrn7NN68l5+nZyh
+         GjRBsLfaoMia3vavF9Um8JWjsPJMiw+F+vmcSpJ0827rwBluglAJ8mdAFr1oVEgVjJ2T
+         BSvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mZxOn+wGDgrlZgu5R6pd78yHgsnhABm1ikEzbHnNwlo=;
+        b=1rDrzG5DMfdh9NYk+Od4To5peziPcGckAiSnOQy8+HwC4LNa65pIoRfD4pFQ8WhNi0
+         jDO2sFclZ7iTwvnxBbB3H4XkbA4OvBoc4LeCWEuoCmUPsHC++5LFqoToFA198evNXmxM
+         nRllv+Jf7xYp4jD6cxxryGSRaNN+cFpK4mLAipHZNM7fHzCEdEr2eGijZVH1lm48K7B/
+         N29K5sPWJOoWdfS1pAtNwmb286rm6WNcWcnCoKxoTosrmWDaWAHgfGwBy120P0MMrxF9
+         8RNNFBZkIKoFUHl6BvrGrsS3H3ja9qhUPRH7UnTmEfGM7tn1+uCOkNXn3/JnlhILCG0S
+         DNNw==
+X-Gm-Message-State: AOAM532tZb515pAnNPfLs3es7Skyih7kaMKPoCoYeDi10Kwe5ypS8flK
+        4Q25rNLKZgfOo4PVqS9s4dw=
+X-Google-Smtp-Source: ABdhPJyd68QRgFKL+CdJnQAxkQam33gqs5XxSyfigGKd7vlUvoEFMwo+8O33Sd8xbB7c6UcR4TWKdg==
+X-Received: by 2002:a05:600c:3847:b0:39c:6a85:d20c with SMTP id s7-20020a05600c384700b0039c6a85d20cmr47854662wmr.129.1655910494691;
+        Wed, 22 Jun 2022 08:08:14 -0700 (PDT)
+Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05600c4fcf00b0039c811077d3sm22954101wmq.22.2022.06.22.08.08.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 08:08:14 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 16:08:12 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220622144820.751402-1-mlevitsk@redhat.com>
- <20220622144820.751402-4-mlevitsk@redhat.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220622144820.751402-4-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang
+ support")
+Message-ID: <YrMwXAs9apFRdkVo@debian>
+References: <YrLtpixBqWDmZT/V@debian>
+ <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,56 +78,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/22 07:48, Maxim Levitsky wrote:
-> No functional change intended.
+Hi Linus,
 
-It would be really nice to at least write a "why" sentence.  You wrote
-the "what" (move code), but I have no idea why you are moving it.
+On Wed, Jun 22, 2022 at 08:47:22AM -0500, Linus Torvalds wrote:
+> On Wed, Jun 22, 2022 at 5:23 AM Sudip Mukherjee
+> <sudipm.mukherjee@gmail.com> wrote:
+> >
+> > I have recently (since yesterday) started building the mainline kernel
+> > with clang-14 and I am seeing a build failure with allmodconfig.
+> 
+> Yeah, the clang build has never been allmodconfig-clean, although I
+> think it's starting to get pretty close.
+> 
+> I build the kernel I actually _use_ with clang, and make sure it's
+> clean in sane configurations, but my full allmodconfig build I do with
+> gcc.
 
->  arch/x86/kernel/cpu/common.c      | 46 -----------------------------
->  arch/x86/kernel/cpu/cpuid-deps.c  | 48 +++++++++++++++++++++++++++++++
+After yesterday's stable report about clang build, I have now added clang
+to my nightly builds apart from running gcc also. Both x86_64 and arm64
+gave this error. Trying to add arm, mips, powerpc and riscv with clang
+also, which all failed due to some configuration issue and I might ask
+for help from Nick, Nathan if I can't figure that out.
 
-That looks a wee bit odd for a code move.  Where did the 2 lines go?
+> 
+> Partly because of that "the clang build hasn't quite gotten there yet"
+> and partly because last I tried it was even slower to build (not a big
+> issue for my default config, but does matter for the allmodconfig
+> build, even on my beefy home machine)
 
-> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-> index ea34cc31b0474f..3eb5fe0d654e63 100644
-> --- a/arch/x86/include/asm/cpufeature.h
-> +++ b/arch/x86/include/asm/cpufeature.h
-> @@ -147,6 +147,7 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
->  
->  extern void setup_clear_cpu_cap(unsigned int bit);
->  extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
-> +extern void filter_cpuid_features(struct cpuinfo_x86 *c, bool warn);
->  
->  #define setup_force_cpu_cap(bit) do { \
->  	set_cpu_cap(&boot_cpu_data, bit);	\
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 4730b0a58f24a5..4cc79971d2d847 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -620,52 +620,6 @@ __noendbr void cet_disable(void)
->  		wrmsrl(MSR_IA32_S_CET, 0);
->  }
->  
-> -/*
-...
-> -}
->  
->  /*
->   * Naming convention should be: <Name> [(<Codename>)]
+I am going to run them every night and will report back problems.
 
-One, by leaving extra whitespace.
+> 
+> I would love for people to start doing allmodconfig builds with clang
+> too, but it would require some initial work to fix it... Hint, hint.
+> 
+> And in the case of this warning attribute case, the clang error messages are
+> 
+>  (a) verbose
+> 
+>  (b) useless
+> 
+> because they point to where the warning attribute is (I know where it
+> is), but don't point to where it's actually triggering (ie where it
+> was actually inlined and called from).
 
-> diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-> index d6777d07ba3302..bcb091d02a754b 100644
-> --- a/arch/x86/kernel/cpu/cpuid-deps.c
-> +++ b/arch/x86/kernel/cpu/cpuid-deps.c
-> @@ -131,3 +131,51 @@ void setup_clear_cpu_cap(unsigned int feature)
->  {
->  	clear_cpu_cap(&boot_cpu_data, feature);
->  }
-> +
-> +
-> +/*
+Yeah, true. I had to check to find out its from the memcpy() in check_image_valid().
 
-Two, by adding extra whitespace.
+
+--
+Regards
+Sudip

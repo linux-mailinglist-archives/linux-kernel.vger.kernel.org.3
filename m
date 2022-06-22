@@ -2,81 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D702C554C20
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B93F554C0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357673AbiFVOEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S1357771AbiFVOBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbiFVOEs (ORCPT
+        with ESMTP id S234575AbiFVOBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:04:48 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B132F66B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:04:44 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1655906315t7m9cd90
-Received: from ubuntu.localdomain ( [106.117.78.84])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 21:58:31 +0800 (CST)
-X-QQ-SSF: 01000000008000B0B000B00A0000000
-X-QQ-FEAT: eTtJes0duVtiagenvj6h5EHoH3+bpCWSfJ+9c57vDG73WyQb93c0oVI0STkaS
-        ubkPgSL+uJw/jZ+9rrbBqEUT0QFBkZoAS/VKZ8XLYDo04KJmEOpA3tDQW3GR5d3YizHbyId
-        WMAmZsGBWN0Ow/r2yAAaZEzd8wTXy3Z/++xxPMVSiEp/YiV/jueKA1tCanj/oHX/38RGaY2
-        X8KlJk2I/ckg30gaUoqq5lAOXTfhSKTKUO/62b8YTZDHELwjv0gPaGGsL6wBKeR6BAgv7QY
-        2aTWUCRuhjtHGOzX++Ywq1+Eeg4jUQLPcATJHljGcXVfCZCg6lxYWDya2oM1L+b8dHWNFDx
-        VQi0bavIl4u6dEgjkhyvyWRpM39lz2h603FkzCS
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     mpe@ellerman.id.au
-Cc:     benh@kernel.crashing.org, paulus@samba.org, npiggin@gmail.com,
-        aik@ozlabs.ru, christophe.leroy@csgroup.eu, farosas@linux.ibm.com,
-        jiangjian@cdjrlc.com, dja@axtens.net,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc/64s: drop unexpected word 'and' in the comments
-Date:   Wed, 22 Jun 2022 21:58:28 +0800
-Message-Id: <20220622135828.4568-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 10:01:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DC6369E2;
+        Wed, 22 Jun 2022 07:01:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 83EF221C18;
+        Wed, 22 Jun 2022 14:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655906496; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=YUedw22uTonupl5S/QuQDfVjYG8TUjcgcNCTZyOGnGE=;
+        b=ZJpLVCcp3pQ+pNJiwsh0FsMhcXDcJWNOu73JOqO+um4z3crgtaMcEtIAETajwojd6MS48H
+        DqWAILnUWNje2m+SZqpwueDpfbR0JpKrzoETnksDa3zcGXWnvuCHEZC93NJkDUjJ5NbunZ
+        FT9lCISK233TJHx2C9L4aSvv2Gqn/YM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655906496;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=YUedw22uTonupl5S/QuQDfVjYG8TUjcgcNCTZyOGnGE=;
+        b=esfq23hcixQZ1wWVeJjTN87GXtpefgt1iutwZJocxJ22QJRRUWVHEaxVFoqKHRbTmi7vex
+        8e3F+6Sw5P0EpgAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 34A2B134A9;
+        Wed, 22 Jun 2022 14:01:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eezhC8Ags2IVRwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 22 Jun 2022 14:01:36 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     alex.williamson@redhat.com, corbet@lwn.net,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, deller@gmx.de,
+        gregkh@linuxfoundation.org, javierm@redhat.com, lersek@redhat.com,
+        kraxel@redhat.com
+Cc:     linux-doc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 0/3] Improve vfio-pci primary GPU assignment behavior
+Date:   Wed, 22 Jun 2022 16:01:31 +0200
+Message-Id: <20220622140134.12763-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word 'and' in the comments that need to be dropped
+(I'm taking over this patchset from Alex, [1] as we agreed that it should
+go through the drm-misc tree.)
 
-file: arch/powerpc/kernel/exceptions-64s.S
-line: 2782
+When assigning a primary graphics device to VM through vfio-pci device
+assignment, users often prevent binding of the native PCI graphics
+driver to avoid device initialization conflicts, however firmware
+console drivers may still be attached to the device which can often be
+cumbersome to manually unbind or exclude via cmdline options.
 
-* - If it was a decrementer interrupt, we bump the dec to max and and return.
+This series proposes to move the DRM aperture helpers out to
+drivers/video/ to make it more accessible to drivers like vfio-pci,
+which have neither dependencies on DRM code nor a struct drm_driver
+to present to existing interfaces.  vfio-pci can then trivially call
+into the aperture helpers to remove conflicting drivers, rather than
+open coding it ourselves as was proposed with a new symbol export in
+v1 of this series. [2]
 
-changed to:
+v3:
+	* add aperture_ prefix to all interfaces (Javier)
+	* improved documentation (Javier)
+	* update MAINTAINERS [3] and add aperture helpers
 
-* - If it was a decrementer interrupt, we bump the dec to max and return.
+[1] https://lore.kernel.org/all/165541020563.1955826.16350888595945658159.stgit@omen/
+[2] https://lore.kernel.org/all/165453797543.3592816.6381793341352595461.stgit@omen/
+[3] https://lore.kernel.org/all/20220518183006.14548-2-tzimmermann@suse.de/
 
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- arch/powerpc/kernel/exceptions-64s.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Alex Williamson (1):
+  vfio/pci: Remove console drivers
 
-diff --git a/arch/powerpc/kernel/exceptions-64s.S b/arch/powerpc/kernel/exceptions-64s.S
-index b66dd6f775a4..3d0dc133a9ae 100644
---- a/arch/powerpc/kernel/exceptions-64s.S
-+++ b/arch/powerpc/kernel/exceptions-64s.S
-@@ -2779,7 +2779,7 @@ EXC_COMMON_BEGIN(soft_nmi_common)
- 
- /*
-  * An interrupt came in while soft-disabled. We set paca->irq_happened, then:
-- * - If it was a decrementer interrupt, we bump the dec to max and and return.
-+ * - If it was a decrementer interrupt, we bump the dec to max and return.
-  * - If it was a doorbell we return immediately since doorbells are edge
-  *   triggered and won't automatically refire.
-  * - If it was a HMI we return immediately since we handled it in realmode
+Thomas Zimmermann (2):
+  MAINTAINERS: Broaden scope of simpledrm entry
+  drm: Implement DRM aperture helpers under video/
+
+ Documentation/driver-api/aperture.rst |  13 +
+ Documentation/driver-api/index.rst    |   1 +
+ MAINTAINERS                           |   6 +-
+ drivers/gpu/drm/drm_aperture.c        | 178 +------------
+ drivers/gpu/drm/tiny/Kconfig          |   1 +
+ drivers/vfio/pci/vfio_pci_core.c      |   5 +
+ drivers/video/Kconfig                 |   6 +
+ drivers/video/Makefile                |   2 +
+ drivers/video/aperture.c              | 351 ++++++++++++++++++++++++++
+ drivers/video/console/Kconfig         |   1 +
+ drivers/video/fbdev/Kconfig           |   7 +-
+ include/linux/aperture.h              |  56 ++++
+ 12 files changed, 456 insertions(+), 171 deletions(-)
+ create mode 100644 Documentation/driver-api/aperture.rst
+ create mode 100644 drivers/video/aperture.c
+ create mode 100644 include/linux/aperture.h
+
+
+base-commit: 7025c1f111b7a057243de45bd56c14b906242a53
 -- 
-2.17.1
+2.36.1
 

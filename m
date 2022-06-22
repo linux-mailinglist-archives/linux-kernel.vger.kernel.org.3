@@ -2,139 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72681553F6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28723553F68
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354570AbiFVATd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 20:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
+        id S1354228AbiFVATa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 20:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353519AbiFVATY (ORCPT
+        with ESMTP id S232356AbiFVATX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 20:19:24 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557E626557
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 17:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655857162; x=1687393162;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ky6m3gM8BOJn8dc2TEMVajpayNchN1A8FfFsM/dG0LU=;
-  b=geTyyN/CiWs4AzVdwRmp1vhJBB8fKjLSaCsPj9IQpwxixA8ojE77TQTr
-   nbwWAHZqrVaZIKiMUIA1CkdAwEd3dVQNNe8scRZuy6ciHMpP8j/XdsZz0
-   2nTJHm+jDuvvRCf94g1pFzILW+lgSkZOhu94Xtw50PUVnmxuBMSJD7V41
-   eogHEuMHYlONhRrXY4qc2p2aSD9yOjQHC2KcyVXQKsmGUPx4t1u9RE2lS
-   a08fykddjwxCozOYpmniTOeKIu1Yq4/2/cLw3F48bYdOzwRWoaY8X9SR8
-   pGEFAb706HVHeZrJe3PoOuoAFMwjYGklKWz2geG/h48sx++N6ko0PXkAQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="344264150"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="344264150"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 17:19:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="833826160"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Jun 2022 17:19:20 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3o5X-0000bN-GQ;
-        Wed, 22 Jun 2022 00:19:19 +0000
-Date:   Wed, 22 Jun 2022 08:19:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [mgr:v5.19/topic/rk3568-vepu-h264-stateless-bootlin 3/4]
- drivers/staging/media/hantro/hantro_h264.c:1254:27: sparse: sparse:
- incorrect type in assignment (different base types)
-Message-ID: <202206220835.2xwbmnW9-lkp@intel.com>
+        Tue, 21 Jun 2022 20:19:23 -0400
+Received: from sonic308-16.consmr.mail.ne1.yahoo.com (sonic308-16.consmr.mail.ne1.yahoo.com [66.163.187.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC35825C76
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 17:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655857161; bh=LduUrw3eVyp6mK0CVKmYw4M59cd6hwNqy8Oc641QJFE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ga1vDngwiwM55nMY03lGZvtii8Fm1eWiG/k66DEH4EXprwPWRsKfEucaq2MabOP5YL7GTW2rcVgSdjbqTI6dD0tl73j1vJJs53Qj3ffhvDbIDrqfPHo5UbP/Q7PMzDnlilXIEhhI4VCvKm+saTnT5xlBbJH9hXfhyZfIwJ75BC6UqYFfcDkGlfxadVK2XWJl4ZISomM2+5pyBoBpshDOL0ijN8eK7tCYZndKM3c/GZvQEW4io7YDf1rfBVQ2Z0alYjBFaaseYj0/o7nfwnplJCVMCqPmRn9XcjRtm/HcTkNPGEm98lqMiad7GmEcxCnnjF3rq5LkQKjtMJ0592uj6Q==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655857161; bh=Damb/FchBMGqo36QVmZilqPN1InpZOwIXasJWXsBfIC=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=HM3rHxxAduejaYdLVdLUx0+EYZl9v32YVS53OF38jaQTHFH2Rv8iHdL5PRsGN0SbtGnoYL+P7jPkzyUccqKHJpSUz9G3s14kcBOrlvzbEIPY5DGC+O721X3v7otbjQ06lMK/21PWFJymUTL68MwM8Ymt+9OPKktLA1yZc0HbReQwd5jFur4bRROl1J94BYxg9FOy2g2i9iAaXqRFyOhqe+yqsiNLeWw6pfo8WKAOwSXpDCVkYz/qOzWK8D+yof81dh7nn1zbGZtXS7yRvdQpdqeUD6No7avSOOxACBW+EaI23OXB1j3s8TJHSttTd1JrGNx/wTSVoJa4innJRA6djw==
+X-YMail-OSG: kTbEmRgVM1lycM4fN4Fo0k5USdwJrrQonPUOb9bDgKcBdzB.B1dR4UrLmmh4LNZ
+ FHC1kjd2FCK_si76YkFdeNQDgCsUG1zYndHE.krl.4KOlp5P4Inkcs8haXpNeLoYSUB0Zj7Ok4.h
+ 0_bdRSaacplsY3sgOphvlxvlN_whPBQYbwNLRBe3Vr3405fuayHKp44Zdm8ATQ9jZxrAj2JNiumV
+ npWlMRwWlFiN22DzHMUDTYXfJkxXchCbq5MVPlhp5Jf2dWJL9BCp8T_oZxlWK6emb4SQCFrOyIAx
+ lzBncDVnZaOoOf46d2OtQgfbgpZbo8X788o0Qm3GgnDWFgsOfaz2oy4HmnfB5g2eBkVGMZnHHpma
+ Zhb1nQsM9dctR3vd4fcJWtcmw241XXvwbL6Y32cMNybssfsrCE_kB_hyKAeWp8UwRPg6nZgqTPTh
+ ETonSXR2NamGGnN2eDluWyyPa3xXHdUAOJt2BzMTR3u8ukTnZdtg1LDTuPZ2aQgUON653.3Xik_r
+ 9t_jY32JPfHKlOa5oPGQn2CyxXYX9sO09E4zc6yeelv6QZFk0.hwYANtPYnt8O1FF1MntLflrnN0
+ yVmSWENGMaRagyI.Cs5wAG6Nt_f7R_z4a2xDU7o6Cwkt_CmHd131DZ53OUajshoSaf84X3ErqRhq
+ 5eDzAQDKXpoFfLnQPSVvhIZcZllxdUm6jPMD9cYWZGZISQvliX3bjAZZOL2aQtiUgLcCdVrEcFpc
+ HDVnWMGH6i3X4rwb_OF6UQ0P0gCVON9mxUGD_41cSFFIYBC5r1DOvTAN6LlGCo04jwdPHwxu9TM6
+ PO0AK4nckvxcZGZgLt701vOO_Ycuq1N7tGOu57D6nAm6DcfiGvAfPEB9CXZIE3K892rD5wM7KEpM
+ bOosOIlIKcuhYsPjYG_9slhBuXwAzESat2TNqsXggjkV_H0n6r.cVtITZsPoT01JsaiPRV24vhkd
+ yBo0_XOMfu89Zw_BEuwfJ23jB7Yh0xXoUymOEAAKe1xxGT4TANA1CL3z9I6fyI12iHJ5iwCo1Y.f
+ .VWHHi2R2na0ZSXG_RFp42AttcMjRPqLqfraaUd.z89BCFNrn7NBk6D7FwX0LvjEfRKKJFbLO_0n
+ XWOk55wmVrhNZTbr7EZaWF7pxQH5sRivoslQWdSIO4yNKyNzVy75SJskii7qIT0ZP8Dt.sCyLCNN
+ ZmuQVZfskm8NiWznmAEDC_vRsbtsKux7.S1TZizyhuZVaRwWC4QWLy34CplRQno9_n96iWw6pCcE
+ MtgbR34Otba5JiTL6kW4jG2amGCeHBtCjV3rrmZct1cMCg9ZKLNJKu_UD4ulFbc8j7gBpP3c9XUj
+ CRkI1xSrW7SfelzTG.Y4BTSZjxHP2UxWWLyamAux4mEgnETm3Xd7FA.bw7451.Ptn6Gnck1SBn30
+ vATtV1OyQ4ftbrfCc1FVh170v6xTcrJ7rITQ6ybLoOSuYb2HQsJ6KUAciCmjhGoRkbAfw.ABSMHS
+ qsOAoZ0WMm54hEqq9XZDSdJifHUjMnx5qB9hzJp.11JkGY_nUdVeFKQr2lEFUOGZPvHXc9.1OXuV
+ chitkUqWHTambDZMLkDDv4NGqAFNvAzhdPaEao8hE3eSS95pYA_hkD4CPmOAZQ3jjClZccu0xg0i
+ lOcZLwaJEBVwUkPIWixfrMMU1Vkk0prmbyWXuWClAp5.upWmvQoE_2UBV3w6nooKuQC.N0UAFKHM
+ pygv_D_MNOUSGRC6ZdnIlX0AedQ7ZePAoR4AOkDl2WPZxLUXCm2ZBykBtdtmnX06uq9836hXW.Fo
+ TXUtkPHWewUXts9V5TPEEbmcIvlwPFLD2frYYDcwau3TydYXioaJibz6kv.0in5qjsdk2jdkSzNE
+ Rmez0IZyxRR.iAL0je9GlPU8fI.bIYBpEfoWEZuHQ1uhaIwoCvMD0hP6AbKDc2Nk_.BA.P712Ekw
+ VWO0zaWAazBDeedF5f2pH_n3yMI5wZnllUoJdtFsRGT9Vhii7nidn8EkxWGahXqQOahVOMvKkcXD
+ a4lbu8Kvpcd_rp9d_.AnYhC1a.ICdvP6ZLqq96n3RPuLV0atC28qoRwEWfp1fdntKURaYXMB_lJe
+ K.nYkp_zK4AUuy7hhgzo6YFMfcU3o0DPICJTijBHc.au9ADC_o4xl9Ny1Lwd11xag1_zqSoSHCsH
+ QAYLxDBaVczxZQ1ZS12woM5wc9txPgaTF4ywnRg0ViSpHjSYb1rCAt5fVKd2fniRoGaoKXpjo9G8
+ vo8ilkcltbfKMHuZKsBMs6pOPfr3rLi0XiBpZtSRiC_bCKMOgDprLfdkSa434FXtfCO.sxkwx4BM
+ -
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Wed, 22 Jun 2022 00:19:21 +0000
+Received: by hermes--canary-production-bf1-8bb76d6cf-xkxwt (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID caa03a9c3f5621a0acb91f535e7b9383;
+          Wed, 22 Jun 2022 00:19:18 +0000 (UTC)
+Message-ID: <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
+Date:   Tue, 21 Jun 2022 17:19:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     brauner@kernel.org, paul@paul-moore.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20220621233939.993579-1-fred@cloudflare.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220621233939.993579-1-fred@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20280 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.pengutronix.de/git/mgr/linux v5.19/topic/rk3568-vepu-h264-stateless-bootlin
-head:   11fcd09bf7cbe84c3e2e322142e3aff59c5c8402
-commit: a373f546c23855d80f8a6be85fc11748ed54413d [3/4] media: hantro: Add H.264 encoding support
-config: riscv-randconfig-s031-20220619 (https://download.01.org/0day-ci/archive/20220622/202206220835.2xwbmnW9-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-31-g4880bd19-dirty
-        git remote add mgr https://git.pengutronix.de/git/mgr/linux
-        git fetch --no-tags mgr v5.19/topic/rk3568-vepu-h264-stateless-bootlin
-        git checkout a373f546c23855d80f8a6be85fc11748ed54413d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash
+On 6/21/2022 4:39 PM, Frederick Lawler wrote:
+> While creating a LSM BPF MAC policy to block user namespace creation, we
+> used the LSM cred_prepare hook because that is the closest hook to prevent
+> a call to create_user_ns().
+>
+> The calls look something like this:
+>
+>      cred = prepare_creds()
+>          security_prepare_creds()
+>              call_int_hook(cred_prepare, ...
+>      if (cred)
+>          create_user_ns(cred)
+>
+> We noticed that error codes were not propagated from this hook and
+> introduced a patch [1] to propagate those errors.
+>
+> The discussion notes that security_prepare_creds()
+> is not appropriate for MAC policies, and instead the hook is
+> meant for LSM authors to prepare credentials for mutation. [2]
+>
+> Ultimately, we concluded that a better course of action is to introduce
+> a new security hook for LSM authors. [3]
+>
+> This patch set first introduces a new security_create_user_ns() function
+> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Why restrict this hook to user namespaces? It seems that an LSM that
+chooses to preform controls on user namespaces may want to do so for
+network namespaces as well. Also, the hook seems backwards. You should
+decide if the creation of the namespace is allowed before you create it.
+Passing the new namespace to a function that checks to see creating a
+namespace is allowed doesn't make a lot off sense.
 
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/staging/media/hantro/hantro_h264.c:1254:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __be64 [usertype] @@
-   drivers/staging/media/hantro/hantro_h264.c:1254:27: sparse:     expected unsigned long long [usertype]
-   drivers/staging/media/hantro/hantro_h264.c:1254:27: sparse:     got restricted __be64 [usertype]
-
-vim +1254 drivers/staging/media/hantro/hantro_h264.c
-
-  1214	
-  1215	static void cabac_table_init(struct hantro_aux_buf *cabac_table,
-  1216				     u32 cabac_init_idc)
-  1217	{
-  1218		u8 *table = cabac_table->cpu;
-  1219		u64 *buffer = cabac_table->cpu;
-  1220		unsigned int i, j;
-  1221		unsigned int size;
-  1222		s32 qp;
-  1223	
-  1224		/* Iterate possible QP values. */
-  1225		for (qp = 0; qp < 52; qp++) {
-  1226			/* Iterate intra/inter modes. */
-  1227			for (j = 0; j < 2; j++) {
-  1228				const s32 (*context)[460][2];
-  1229	
-  1230				if (j == 0)
-  1231					context = &h264_context_init_intra;
-  1232				else
-  1233					context = &h264_context_init[cabac_init_idc];
-  1234	
-  1235				for (i = 0; i < 460; i++) {
-  1236					s32 m = (s32)(*context)[i][0];
-  1237					s32 n = (s32)(*context)[i][1];
-  1238	
-  1239					s32 pre_ctx_st = CLIP3(((m * qp) >> 4) + n,
-  1240							       1, 126);
-  1241					u32 idx = qp * 464 * 2 + j * 464 + i;
-  1242	
-  1243					if (pre_ctx_st <= 63)
-  1244						table[idx] = (u8)((63 - pre_ctx_st) << 1);
-  1245					else
-  1246						table[idx] = (u8)(((pre_ctx_st - 64) << 1) | 1);
-  1247				}
-  1248			}
-  1249		}
-  1250	
-  1251		size = HANTRO_H264_ENC_CABAC_TABLE_SIZE / sizeof(*buffer);
-  1252	
-  1253		for (i = 0; i < size; i++)
-> 1254			buffer[i] = cpu_to_be64(buffer[i]);
-  1255	}
-  1256	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Links:
+> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+>
+> Frederick Lawler (2):
+>    security, lsm: Introduce security_create_user_ns()
+>    bpf-lsm: Make bpf_lsm_create_user_ns() sleepable
+>
+>   include/linux/lsm_hook_defs.h | 2 ++
+>   include/linux/lsm_hooks.h     | 5 +++++
+>   include/linux/security.h      | 8 ++++++++
+>   kernel/bpf/bpf_lsm.c          | 1 +
+>   kernel/user_namespace.c       | 5 +++++
+>   security/security.c           | 6 ++++++
+>   6 files changed, 27 insertions(+)
+>
+> --
+> 2.30.2
+>

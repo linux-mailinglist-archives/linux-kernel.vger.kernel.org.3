@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1218554913
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AC055467F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357748AbiFVLiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        id S1357829AbiFVLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355718AbiFVLhx (ORCPT
+        with ESMTP id S1356743AbiFVLhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Jun 2022 07:37:53 -0400
 Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FBD3B3FB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F143CA49;
         Wed, 22 Jun 2022 04:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
         s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
@@ -21,26 +21,26 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=jqNVkhlKQgqXtLeAWprMxZosE+nkqym2SEmCMhLQNlc=; b=mn3CrmN0z0NwQ0iOxoQ+6IgzlH
-        QJYgFjCaU6qmHjIav62mRC2tIuUvguRVCr74FNAcMghvD2dY54jQWA6kzkQaP4/VI3DcHgYmv793n
-        W73D8Sji2BG29TDWlHCO3cM/VYvPmktocY3zb++HZsbMwOBTbt8qkC2L+eTJGBlruDwvs3wLChyTg
-        1uLLxIFhm+utzzbfNyoSeu5IjXJNeFkaYbEQ8Tn9Zg0bw4MOKQg0ZPwZk2twxB68dSR/CyKKD0vC/
-        AlyB3/RSYqoXvGp5/lH3YIul6YKxitUGaIfzlf5egITzbuTkg1O+ek31kvYDc1BbJtLVSHOrcJB0y
-        dt3YZ58g==;
+        bh=mTP9JKWbQi5X9Aiy3D3CFclT8K0qf8xcDbui6f15aq4=; b=O2M0edkyHqC+BmtNSq3DfOQ36i
+        j0B81ix/HR4IWy+8Lzd35/Q/FM9Bv/KoRub5KDXR38WHcZuiIPUgCK/04dohbeL00RwVcYtKnLiU8
+        nKsxNZRE5jSNUgT+1f/r7LX8Yj03OYofzQYWBmBSDoNzwy0XLL1DNlFLiF6NWx3J8f4vQKjghmXly
+        V0LswcXy4iLJ8nRxJfzrdTTdtfHjK33QH7AeE4WtmcRbZBPHDFUf1yCzfVlh6VSvpWoyDDW9VqJBH
+        YPeog6d+/gDIKU2aRO+Ls63sQ7aIScwxzKSWR6ridL4SfgxVimBUvc4kTP+pkxCCtP1Ut6rHJT7na
+        Li+OQ0tQ==;
 Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
         by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <cyndis@kapsi.fi>)
-        id 1o3yg3-0001Xl-Pu; Wed, 22 Jun 2022 14:37:42 +0300
+        id 1o3yg3-0001Xl-SU; Wed, 22 Jun 2022 14:37:42 +0300
 From:   Mikko Perttunen <cyndis@kapsi.fi>
 To:     thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, digetx@gmail.com
 Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mikko Perttunen <mperttunen@nvidia.com>
-Subject: [PATCH v2 06/13] gpu: host1x: Program virtualization tables
-Date:   Wed, 22 Jun 2022 14:37:26 +0300
-Message-Id: <20220622113733.1710471-7-cyndis@kapsi.fi>
+Subject: [PATCH v2 07/13] gpu: host1x: Allow reset to be missing
+Date:   Wed, 22 Jun 2022 14:37:27 +0300
+Message-Id: <20220622113733.1710471-8-cyndis@kapsi.fi>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220622113733.1710471-1-cyndis@kapsi.fi>
 References: <20220622113733.1710471-1-cyndis@kapsi.fi>
@@ -60,98 +60,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mikko Perttunen <mperttunen@nvidia.com>
 
-Program virtualization tables specifying which VMs have access to which
-Host1x hardware resources. Programming these has become mandatory in
-Tegra234.
-
-For now, since the driver does not operate as a Host1x hypervisor, we
-basically allow access to everything to everyone.
+Host1x on Tegra234 does not have a software-controllable reset line.
+As such, don't bail out if we don't find one in the device tree.
 
 Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
 ---
- drivers/gpu/host1x/dev.c | 21 ++++++++++++++++++---
- drivers/gpu/host1x/dev.h |  8 ++++++++
- 2 files changed, 26 insertions(+), 3 deletions(-)
+ drivers/gpu/host1x/dev.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-index 8c6ce8014c09..5a57165ab0f6 100644
+index 5a57165ab0f6..c28939850bf6 100644
 --- a/drivers/gpu/host1x/dev.c
 +++ b/drivers/gpu/host1x/dev.c
-@@ -217,7 +217,7 @@ static const struct of_device_id host1x_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, host1x_of_match);
- 
--static void host1x_setup_sid_table(struct host1x *host)
-+static void host1x_setup_virtualization_tables(struct host1x *host)
- {
- 	const struct host1x_info *info = host->info;
- 	unsigned int i;
-@@ -231,6 +231,21 @@ static void host1x_setup_sid_table(struct host1x *host)
- 		host1x_hypervisor_writel(host, entry->offset, entry->base);
- 		host1x_hypervisor_writel(host, entry->limit, entry->base + 4);
+@@ -423,9 +423,6 @@ static int host1x_get_resets(struct host1x *host)
+ 		return err;
  	}
-+
-+	for (i = 0; i < info->streamid_vm_table.count; i++) {
-+		/* Allow access to all stream IDs to all VMs. */
-+		host1x_hypervisor_writel(host, 0xff, info->streamid_vm_table.base + 4 * i);
-+	}
-+
-+	for (i = 0; i < info->classid_vm_table.count; i++) {
-+		/* Allow access to all classes to all VMs. */
-+		host1x_hypervisor_writel(host, 0xff, info->classid_vm_table.base + 4 * i);
-+	}
-+
-+	for (i = 0; i < info->mmio_vm_table.count; i++) {
-+		/* Use VM1 (that's us) as originator VMID for engine MMIO accesses. */
-+		host1x_hypervisor_writel(host, 0x1, info->mmio_vm_table.base + 4 * i);
-+	}
+ 
+-	if (WARN_ON(!host->resets[1].rstc))
+-		return -ENOENT;
+-
+ 	return 0;
  }
  
- static bool host1x_wants_iommu(struct host1x *host1x)
-@@ -602,7 +617,7 @@ static int __maybe_unused host1x_runtime_suspend(struct device *dev)
- 	return 0;
- 
- resume_host1x:
--	host1x_setup_sid_table(host);
-+	host1x_setup_virtualization_tables(host);
- 	host1x_syncpt_restore(host);
- 	host1x_intr_start(host);
- 
-@@ -632,7 +647,7 @@ static int __maybe_unused host1x_runtime_resume(struct device *dev)
- 		goto disable_clk;
- 	}
- 
--	host1x_setup_sid_table(host);
-+	host1x_setup_virtualization_tables(host);
- 	host1x_syncpt_restore(host);
- 	host1x_intr_start(host);
- 
-diff --git a/drivers/gpu/host1x/dev.h b/drivers/gpu/host1x/dev.h
-index 85edcc6e0fc7..920e5548cfbc 100644
---- a/drivers/gpu/host1x/dev.h
-+++ b/drivers/gpu/host1x/dev.h
-@@ -90,6 +90,11 @@ struct host1x_sid_entry {
- 	unsigned int limit;
- };
- 
-+struct host1x_table_desc {
-+	unsigned int base;
-+	unsigned int count;
-+};
-+
- struct host1x_info {
- 	unsigned int nb_channels; /* host1x: number of channels supported */
- 	unsigned int nb_pts; /* host1x: number of syncpoints supported */
-@@ -103,6 +108,9 @@ struct host1x_info {
- 	bool has_common; /* has common registers separate from hypervisor */
- 	unsigned int num_sid_entries;
- 	const struct host1x_sid_entry *sid_table;
-+	struct host1x_table_desc streamid_vm_table;
-+	struct host1x_table_desc classid_vm_table;
-+	struct host1x_table_desc mmio_vm_table;
- 	/*
- 	 * On T20-T148, the boot chain may setup DC to increment syncpoints
- 	 * 26/27 on VBLANK. As such we cannot use these syncpoints until
 -- 
 2.36.1
 

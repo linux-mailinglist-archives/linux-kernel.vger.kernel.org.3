@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9658553FB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CFF553FB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355227AbiFVAwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 20:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S1355351AbiFVAyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 20:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiFVAwm (ORCPT
+        with ESMTP id S232486AbiFVAya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 20:52:42 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190372F65A;
-        Tue, 21 Jun 2022 17:52:42 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id p14so8947539pfh.6;
-        Tue, 21 Jun 2022 17:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R51V46L5H474iQWOx55vyXgPirIa+jsNedihdZg+XOY=;
-        b=OJmlsdjqYbfvCdREgJsIEucxQfDkXAFRpW2mF/g8caOlahtmM/T3mxdl8wdJghMKwk
-         Nrs/O5mx/AtyHq3HdwPxJZIfZ51iX7AA3oGrBns4O5G+MiYAaMASQlLJXeMzPWHV+HId
-         oUnVcOblyTii6o/mVIC1jJivqRVEecj/6vW7AlyoNhL3R3Q4ZYlvon38GYU1ZV8ipGsL
-         E4lQe6togFkBTyX4NW5Ha/boAACuyVyQRoj8ta1JlYY5K9IywG3+MYNh6w7Y1c0ElT3c
-         IjGL3BxYcE+unIXDh65Wsxlmr0fnh4NIPEItIxnmUDRDPd0vz04Y2QOi9iq1Z03xYxWe
-         zByQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R51V46L5H474iQWOx55vyXgPirIa+jsNedihdZg+XOY=;
-        b=C0WU/x5Y+hzzmnmf9wkDsYj93U+SC0lt1QyaVTtIRxjqJJhBm0dwgnLy7eKy6D7L8r
-         tU+T3sWY6r5IbZzxuJV5xH4vhEOolpi0fl9QwQCYDxhIZ2fO0l5kmhzEPQMUN4dxzlb3
-         1Wi4iJORyOeicCSolASqGthFdzpuZ84LHRYBN4OlMzXP/VbUFULbTU7AJUS0AXRxY3WL
-         PYX1nwFef2OFj3RX3mhqFTFt9wneb4zUk6yDnR7fi9J4lsD0j2OhsFJdzydAOXkAF/ik
-         nJYgcVZwZ0H6W086EtE+5f3TjpWuNQOWHwkeKcA6L2nqD3r1S6qlxcE2YMqFbK3o8mXO
-         QcHQ==
-X-Gm-Message-State: AJIora+yMW/UJIbWtDh3nrwUQcvdpuxbJcTbn4vc5eXP2CEKu89j4gjd
-        71P4U13yeOugWi4+HcDy8mWIz6x69CYB4/aDAIM=
-X-Google-Smtp-Source: AGRyM1uOKezLX8HGvp/NWDvOuCJk/zWag7uuR+HptNSwxoC+asFKPhBbfBJYfiyhjJPcUMSITSGW3G5PQDo5ARrsdAI=
-X-Received: by 2002:a62:388d:0:b0:525:138d:74ea with SMTP id
- f135-20020a62388d000000b00525138d74eamr19118362pfa.19.1655859161552; Tue, 21
- Jun 2022 17:52:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620124729.509745706@linuxfoundation.org>
-In-Reply-To: <20220620124729.509745706@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Tue, 21 Jun 2022 18:52:30 -0600
-Message-ID: <CAFU3qoYJspD4xUVPU5Q2qNebXfQpw1=7uTc0fVg3SNEvMB_ewQ@mail.gmail.com>
-Subject: Re: [PATCH 5.18 000/141] 5.18.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 20:54:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE5130555
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 17:54:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A911361779
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:54:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75AF1C3411C;
+        Wed, 22 Jun 2022 00:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1655859268;
+        bh=zLsY+cejV+MgclUFmOF+mIQDLT4L2Ve05RVVgccPDrA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XNrLpe2+ivTPocj4W6ZZu2HHIhSZO6AnpOUGLFm51EjN735JLsBaPIJRohI7IJMBw
+         i+U2Hkp7Pch29MsPOaiW6Lll4BwC1xAv2fL2qILdtQKqUnVzIz6ZUqDfu4RUPuaby8
+         3XfL5ZLlvtNlmzVCUP4YRCupF++kOQ2a07ZGN/wI=
+Date:   Tue, 21 Jun 2022 17:54:12 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Yang Shi <shy828301@gmail.com>, vbabka@suse.cz,
+        kirill.shutemov@linux.intel.com, willy@infradead.org,
+        linmiaohe@huawei.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v5 PATCH 4/7] mm: thp: kill transparent_hugepage_active()
+Message-Id: <20220621175412.02d90df5f381de0cd676adf8@linux-foundation.org>
+In-Reply-To: <YrIU2iP0H5LQbV7R@google.com>
+References: <20220616174840.1202070-1-shy828301@gmail.com>
+        <20220616174840.1202070-5-shy828301@gmail.com>
+        <YrIU2iP0H5LQbV7R@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 8:47 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.18.6 release.
-> There are 141 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Jun 2022 12:47:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.6-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, 21 Jun 2022 11:58:34 -0700 "Zach O'Keefe" <zokeefe@google.com> wrote:
 
-Hi Greg,
+> > -bool transparent_hugepage_active(struct vm_area_struct *vma)
+> > +bool hugepage_vma_check(struct vm_area_struct *vma,
+> > +			unsigned long vm_flags,
+> > +			bool smaps)
+> >  {
+> > -	/* The addr is used to check if the vma size fits */
+> > -	unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
+> > +	if (!transhuge_vma_enabled(vma, vm_flags))
+> > +		return false;
+> > +
+> 
+> During testing my work on top this patch, I found a small bug here.
+> 
+> Namely, transhuge_vma_enabled() will check vma->vm_mm->flags (to see if
+> MMF_DISABLE_THP is set); however, for vDSO vmas, vma->vm_mm is NULL.
+> 
+> Previously, transparent_hugepage_active() in smaps path would check
+> transhuge_vma_suitable() before checking these flags, which would fail for vDSO
+> vma since we'd take the !vma_is_anonymous() branch and find the vma (most
+> likely) wasn't suitably aligned (by chance ?).
+> 
+> Anyways, I think we need to check vma->vm_mm.
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+Like this?
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+--- a/mm/huge_memory.c~mm-thp-kill-transparent_hugepage_active-fix
++++ a/mm/huge_memory.c
+@@ -73,6 +73,9 @@ bool hugepage_vma_check(struct vm_area_s
+ 			unsigned long vm_flags,
+ 			bool smaps)
+ {
++	if (!vma->vm_mm)
++		return false;
++
+ 	if (!transhuge_vma_enabled(vma, vm_flags))
+ 		return false;
+ 
+_
 
-     Total time: 0.449 [sec]
-
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 10.870 [sec]
-
-      10.870600 usecs/op
-          91991 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan

@@ -2,198 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B115548DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A2355475A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353443AbiFVIaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S1352463AbiFVIaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353035AbiFVIaC (ORCPT
+        with ESMTP id S1351964AbiFVIaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:30:02 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1FCF0F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:30:00 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id n15so6811879ljg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:30:00 -0700 (PDT)
+        Wed, 22 Jun 2022 04:30:07 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69178D8E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:30:06 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id h34-20020a17090a29a500b001eb01527d9eso15225527pjd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eDo1oVSdKF5uO1cuGKW7ZAbpzKDD+Gib9NolbbnayOw=;
-        b=v/Ut1O/ASxefCDtWLWd24WHMnmlssEQgnVvbGJ2FOqGGzhrGNooaG3D2PAy2RnuW8U
-         qJk4vyqVy4Pnn0464UvdSPrHheU2RxYIkeArxtcWJq7OMuLCXPVxZd2tBOZB+DI2ns1h
-         MkjsXTrHZoUe3lyDmriZ0vWDi2WN3M8A4Yco552/xLCOPLZxMMOfX8lkyO+zuL4wTrCV
-         FexCm6QUDTCiX57+yXKMvo8388PHH6AriVDt448aASfi46U34Zjk9dTZjw0MpLxFf0u3
-         dfUoVTg9bDR5LpBsgDmAPmoISMofItmvr5pbMGDTtYbPpHqN3zJQ0srUnP9F63WPXi9w
-         BLCg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/QV1xhNLkkz0h8IzzTPXNrpcn+Xxag8bjiRs3XQqgwI=;
+        b=LATwNoj2b+xZ/ysjmjybgebbtztcKbrBVf6pDs9mO4SYnm0mM72zHAlgMY8aNuCg2M
+         JW7W4tOFgWUElxDKKtswpsV4paSDeKNuARi98OwA44sIydlKhr0f248X6M02bnFzhGMx
+         hDKunLaRjfQ06XXPfXhkrzGDUX5koG7H+9uAdb/jF9f7mllS1yPWzgemxzoI6XmpfSkG
+         VeBszr33/AZgEK8/Jofo77cIxXuGMV0qB2g9zR/bXpnQKAUI2RUdh8G6QXuBA4w9tuOj
+         Pl+AwCXv6ADlJ8vc3CleZ0BhlCMx7H8QiKNJTdrSLKKpUDbcrg5k93ku82KsO6+1+Rp2
+         1ruQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eDo1oVSdKF5uO1cuGKW7ZAbpzKDD+Gib9NolbbnayOw=;
-        b=XldcuhWifxHNqRlrvLP2b7QJuRRXjSrUQcGFw4VlF9joGy90W5EhBlnE8xlojAdjV1
-         /RIqW4A7oXiAO590Gw6P0xbAJcf0FCc0+ZDvkfcnrudrhHSzj0Sjhc1pfZVFKmJs3Y91
-         IgIM2GhIOBIrSNMAI9DtPwhfJUX6bL4pDtb6vwgw+te8F8RB8v84rxiYPJ+SzBtCQtKR
-         jea8yYs+H/F8XeDe0nXkFnr0XUfRpoZdA0i1bOef0SdZuW9/cFaj3VHSHpPzGKe3N5uR
-         Vcrmd1KaMtiPC8QUMEqqhYtsIxM9vtMkflnLDp00lAVe7EH/gXDv2M/PocVVz+MC+Dw5
-         22Ig==
-X-Gm-Message-State: AJIora+9XitKBWWABMUTAVWmZOslH7dB02E1ENNg7g8QSeEegamAJV9M
-        lYC1xhiPbnm8z+BEGsTyCsVHXw==
-X-Google-Smtp-Source: AGRyM1uKAWxAN3bqc+ijQRjTXI0nOOH8kl9G2j5cOHDqBwksuSlrAfSy+86sMAFEyc7Z3VsOlEGrnA==
-X-Received: by 2002:a2e:97d0:0:b0:255:7c1c:f3ba with SMTP id m16-20020a2e97d0000000b002557c1cf3bamr1204652ljj.49.1655886598914;
-        Wed, 22 Jun 2022 01:29:58 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id i18-20020a196d12000000b0047f8e9826a1sm339166lfc.31.2022.06.22.01.29.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 01:29:58 -0700 (PDT)
-Message-ID: <dd63b876-54ad-65ac-02fc-e75464071232@linaro.org>
-Date:   Wed, 22 Jun 2022 11:29:57 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/QV1xhNLkkz0h8IzzTPXNrpcn+Xxag8bjiRs3XQqgwI=;
+        b=43EqTjEdwQuQFduuLBZQSF4DxmPVpRKK5sGUk1YATv2zK/BfLn5uxYQf7amDKC6xqq
+         KH4TC/ZLviFaFup1zVoxvROOygce0UtrV6SYedB5zPiedyrIiqdPjAR1FUnEFeL4RRDf
+         vfweQr3mEEpM8GrUM3TQ1B0NkXhGdMQl+xClaegEuwRHtT3s6dQ261kcogJol5dOGT+g
+         8nK/lGUBIbFoDwD5Z/j2TyDAIX24u/5A0qCHvEKG84J8J8vEXuU1TJF+JAQp58O9VfCD
+         uzyFmhgJOqGuC0dIiX8zlzojaQoDmAPp36llvhJHJJEQpo6Vh3OoWXuolWxv8MoXqFSP
+         bxrw==
+X-Gm-Message-State: AJIora/ZCVocf0jIz5aGecOM4X92rba2NaWWckbyE0Rb23XVbgnDwQuR
+        /Do6Q/EmK+4MzEclELmWsWE=
+X-Google-Smtp-Source: AGRyM1ufYrno8gPJAyvKy8yX3pcx3oUU8loKpmmQcjf9tglwtJa+BIqirdHI16g3mh6x/A5HjIPhGw==
+X-Received: by 2002:a17:90a:eb0c:b0:1ec:c985:bc06 with SMTP id j12-20020a17090aeb0c00b001ecc985bc06mr8666617pjz.30.1655886605864;
+        Wed, 22 Jun 2022 01:30:05 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-12.three.co.id. [180.214.233.12])
+        by smtp.gmail.com with ESMTPSA id i185-20020a626dc2000000b0051bf9159d2dsm12841354pfc.208.2022.06.22.01.30.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 01:30:05 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 60590103801; Wed, 22 Jun 2022 15:30:01 +0700 (WIB)
+Date:   Wed, 22 Jun 2022 15:30:01 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     vgupta@kernel.org, Julia.Lawall@inria.fr, rdunlap@infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARC:mm:Fix syntax errors in comments
+Message-ID: <YrLTCXLrr3HB39lv@debian.me>
+References: <20220622080423.41570-1-yuanjilin@cdjrlc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/4] dt-bindings: arm: qcom: document qcom,msm-id and
- qcom,board-id
-Content-Language: en-GB
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Kumar Gala <galak@codeaurora.org>
-References: <20220529202629.47588-1-krzysztof.kozlowski@linaro.org>
- <20220529202629.47588-2-krzysztof.kozlowski@linaro.org>
- <20220605150747.GA3465286-robh@kernel.org>
- <54015d41-d4eb-12ae-5bd1-00d2c3cf7814@linaro.org>
- <20220610163343.GA1787330-robh@kernel.org>
- <89d6735a-61eb-08cf-8d4a-6fb1b2d457ad@linaro.org>
- <CAL_JsqKL-mtAQ8Q9H4vLGM8izVVzDPbUAVWSdS8AmGjN6X6kcA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAL_JsqKL-mtAQ8Q9H4vLGM8izVVzDPbUAVWSdS8AmGjN6X6kcA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220622080423.41570-1-yuanjilin@cdjrlc.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 18:30, Rob Herring wrote:
-> On Sat, Jun 11, 2022 at 7:07 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 10/06/2022 18:33, Rob Herring wrote:
->>> On Tue, Jun 07, 2022 at 01:15:51PM +0200, Krzysztof Kozlowski wrote:
->>>> On 05/06/2022 17:07, Rob Herring wrote:
->>>>> On Sun, May 29, 2022 at 10:26:26PM +0200, Krzysztof Kozlowski wrote:
->>>>>> The top level qcom,msm-id and qcom,board-id properties are utilized by
->>>>>> bootloaders on Qualcomm MSM platforms to determine which device tree
->>>>>> should be used and passed to the kernel.
->>>>>>
->>>>>> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
->>>>>> compatible format") from 2015 was a consensus during discussion about
->>>>>> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
->>>>>> problems with that consensus:
->>>>>> 1. It was reached 7 years ago but it turned out its implementation did
->>>>>>     not reach all possible products.
->>>>>>
->>>>>> 2. Initially additional tool (dtbTool) was needed for parsing these
->>>>>>     fields to create a QCDT image consisting of multiple DTBs, later the
->>>>>>     bootloaders were improved and they use these qcom,msm-id and
->>>>>>     qcom,board-id properties directly.
->>>>>>
->>>>>> 3. Extracting relevant information from the board compatible requires
->>>>>>     this additional tool (dtbTool), which makes the build process more
->>>>>>     complicated and not easily reproducible (DTBs are modified after the
->>>>>>     kernel build).
->>>>>>
->>>>>> 4. Some versions of Qualcomm bootloaders expect these properties even
->>>>>>     when booting with a single DTB.  The community is stuck with these
->>>>>>     bootloaders thus they require properties in the DTBs.
->>>>>>
->>>>>> Since several upstreamed Qualcomm SoC-based boards require these
->>>>>> properties to properly boot and the properties are reportedly used by
->>>>>> bootloaders, document them.
->>>>>
->>>>> My primary issue here is accepting this will be an endorsement for
->>>>> other vendors doing something similar. I'm not against an ID
->>>>> property(ies) in the root node, but would rather see something common
->>>>> if we do anything.
->>>>
->>>> Hi Rob,
->>>>
->>>> A more common approach was merged back in 2015 - encoding this ID
->>>> information in the board compatibles. If I understood previous
->>>> discussion correctly, this common method was later used by Qualcomm DTB
->>>> post-processing tool. At least for some of the cases.
->>>>
->>>> Other cases (several Qualcomm boards from different vendors) still use
->>>> these ID properties. It even turns out they use it differently between
->>>> vendors (e.g. Xiaomi vs OnePlus).
->>>>
->>>> Important arguments for documenting these properties:
->>>> 1. These ID properties are already on released boards where changing
->>>> bootloader is non-trivial or even not possible. It will not be possible
->>>> to remove these properties, without seriously affecting the community
->>>> working with them.
->>>
->>> Accepting things because they are already in use is also not a path we
->>> want to go down. If it's the color of the bike shed, then fine.
->>>
->>>> 2. According to Konrad [1] (second paragraph), newer chipsets (starting
->>>> with sm8350 released in 2021) do not use these properties. These newer
->>>> DTS do not have them.
->>>>
->>>> Considering 1+2 above, maybe let's document these properties as
->>>> compatible? Would that solve your point of "endorsement for other vendors"?
->>>
->>> What do you mean? Only allow them for certain root compatible strings? I
->>> suppose that would be okay by me. It would also be useful documentation
->>> of where they are needed.
->>
->> Bah, I wrote something else than I had in mind. So one more try:
->>
->> Considering 1+2 above, maybe let's document these properties as
->> *deprecated*? Would that solve your point of "endorsement for other
->> vendors"?
+On Wed, Jun 22, 2022 at 04:04:23PM +0800, Jilin Yuan wrote:
+> Delete the redundant word 'to'.
 > 
-> Yes.
-
-It seems point 2 is not 100% correct. Qualcomm has been using these 
-properties in the sm8350 and sm8450 dts files.
-
-However to I'd suggest to continue with the agreement to mark these 
-properties as deprecated (and compat-bound to Qualcomm devices/root 
-compatible strings). Which means that adding them to the new DT file 
-would require some justification. For example 'the board fails to boot 
-without these properties' or 'we are demanded to provide a single boot 
-image and using these properties allows bootloader to select the correct 
-DTs.
-
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  arch/arc/mm/cache.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->> However the idea to restrict them per-compatible, is also nice. Although
->> I cannot guarantee the list will not grow for older SoCs.
-> 
-> No issue with that.
-> 
-> Rob
+> diff --git a/arch/arc/mm/cache.c b/arch/arc/mm/cache.c
+> index 5446967ea98d..84fe78c41c37 100644
+> --- a/arch/arc/mm/cache.c
+> +++ b/arch/arc/mm/cache.c
+> @@ -750,7 +750,7 @@ static inline void arc_slc_enable(void)
+>   *  -In SMP, if hardware caches are coherent
+>   *
+>   * There's a corollary case, where kernel READs from a userspace mapped page.
+> - * If the U-mapping is not congruent to to K-mapping, former needs flushing.
+> + * If the U-mapping is not congruent to K-mapping, former needs flushing.
+>   */
+>  void flush_dcache_page(struct page *page)
+>  {
 
+The patch is OK, but its subject is wrong.
+
+The patch above isn't fixing any syntax errors, but rather minor cleanup.
+The subject should have been "Remove duplicate 'to' in the
+flush_dcache_page() comment".
+
+I think that this kind of cleanup patches (typofixes) are best done
+as part of **actual** work on the code in question (for example
+refactoring or fixing build errors).
+
+Thanks.
 
 -- 
-With best wishes
-Dmitry
+An old man doll... just what I always wanted! - Clara

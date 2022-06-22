@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1092D555105
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9933355510C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357891AbiFVQOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S1376596AbiFVQOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiFVQN4 (ORCPT
+        with ESMTP id S1358374AbiFVQOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:13:56 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C029BC2B;
-        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c13so20139110eds.10;
-        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
+        Wed, 22 Jun 2022 12:14:02 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FE425E9F;
+        Wed, 22 Jun 2022 09:14:01 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id z11so18444322edp.9;
+        Wed, 22 Jun 2022 09:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zAlPejfAQCxvtnqb2e7esLuuwfx9+dbQueVecsqGTnM=;
-        b=AdqVL1fn2Nch6BaslzUJtV1cx1jD3oDKzhYBdgH8XXPW7Xs/yUzclctxexMRz0ye4m
-         T4+zMvA3dqhGFEjOGUt9HGdpRfluYH924o4KUB1E2cWq+dT54Ne3JHFOTX6SO6w+CZON
-         AFuUf90TWAAUW8S5ikQSQGJOLKHpqK33JV3nGHGYQ6L99vxL1sm1tvNwI5C4SZH8hDoK
-         Db+DsfftmTHV892LT4/7ELlpP81nPbF8nswVSGRlA+CYsHX2gLoNierd43ChQUymGQjU
-         8TTSXbYUMUmsfdb9oPormsYfVOavoi+HSqm6J2YvwZhjY/dCf44ObHmrTFNQXSpNTp4u
-         /Gjw==
+        bh=BPDXlvqV0AxMWt136en9f/MZtZ2FaK26EatF9Qx87KM=;
+        b=hf8j8FP8sSZV8bbnqKdDoJXLx/IEZmAA8Jaa7wqvMhUaHYLq7K36mR7xDrLaIUE+BJ
+         adS6FpovfS8Ut0BA2qx0T0HI3g1rm6mib96GmJhyBkC2DgWLEOzzM3GDt2xI7Xo68lcp
+         hMDIQ2wFarYLSsxe6KPVqoYxSUfP3HiTrfUAissQ1JRwIgKnWtIJfGklxJcmY9mYujWI
+         ruGjt7mQKz7apoj5WXYGzb37tWtqr6bwdQW0GYFk3OL2RAoIYXxbJvXZZwxTL1Q3G/Qu
+         bvfVvlQrmh2Aj0mwLQTyP07oDZtWDyZuZpyxVM77ODlI6xx8IIeCDbgMGh/7FsxeZOKn
+         wB1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zAlPejfAQCxvtnqb2e7esLuuwfx9+dbQueVecsqGTnM=;
-        b=h5FeQ9dyR8lopkLbEDyoXUVw96u6d3hTTbZW5O5SjX9XrxgNoGuLG/jK599pypY1gM
-         d3IUXimy5XgFtIonXoF9ZwrqruGwWbYBEiqfMr2ACnHwGqZE9cz2MuWd8uGVtEaHHfQ4
-         sk8+rv2AGd7ZvJ1+6pFRqIOTlWDunCwpi6cbgcium2A4GETs9YP49UWGDuZdi4y36PHp
-         ky6IRzIhUZ4Pt3rYTCvyfle8zXl0KaUCLu2aQk+UCXYrlJli64Kqk3jL7XBtj50Z2grM
-         4AgHMmQJqqzHbQY9B9BjZbSkqj8Ykx/xw8zhrzWZl9aGqKs2w6GaFw6xTzDjl4sTHjZr
-         SCTA==
-X-Gm-Message-State: AJIora+siqiFyVrIxBN4Lztx8kc0mZy2OEFAUFVb3WbC3Wgq24zjdEBp
-        MxOaUbrYkYXylcpRt7OXRlw=
-X-Google-Smtp-Source: AGRyM1tUeZKhkR6l8vLpmW0F9+thSOWMhMCzrTst6cJhHntejTBuoEAhk0TNhif3zETWLXT4QGdt1A==
-X-Received: by 2002:a05:6402:2750:b0:435:ab9f:1235 with SMTP id z16-20020a056402275000b00435ab9f1235mr4972683edd.188.1655914435429;
-        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
+        bh=BPDXlvqV0AxMWt136en9f/MZtZ2FaK26EatF9Qx87KM=;
+        b=tWQtanii852WWSfKDaobKhsuVLXk9xn8nrUEhrAspxPbeOVjU0IRJWQ2qt/kao+MXS
+         Y6ER1zIuQ2jxT2eaw5JgfT4DalYSVoY43PQsveGR7Dk5+w1q7LR1A+eH04AEoCLVRcoA
+         /kpr0lT4f1FjGN9n+D95JKHEuLL/Qf8EVLrCp1weBHZLkGOtrTZHM4mns94XT5fS0DIg
+         K6UZ60Vw6+h4G/0Xd2QDw/iBZojc0rciwdoYugVN3/mATpN30Uae1wKk+0WMsdrjL1x1
+         aZt4NS+oqrUHOusluAQ8xSF79tMQkUCCh1bdUIGKjTYlg7bRn6gNADFbHefdleDEyBF2
+         u3aA==
+X-Gm-Message-State: AJIora+hQRfvMJu1KCKycxvECeYBFO18cQDJ9nL+q5OBmci7D0J3XbPu
+        yAqWInDSUCjpOl/6/K2xVCWEZFC5tIDC7g==
+X-Google-Smtp-Source: AGRyM1s0xvuP9BhHEnaO03VpmTSeJV1TWPz57NVjo6q1R+NUICF3HXpZKVue8kGa+VHd1zFMVrmrhw==
+X-Received: by 2002:a05:6402:28a2:b0:435:798e:2988 with SMTP id eg34-20020a05640228a200b00435798e2988mr4965039edb.217.1655914439781;
+        Wed, 22 Jun 2022 09:13:59 -0700 (PDT)
 Received: from localhost.localdomain ([185.107.95.225])
-        by smtp.gmail.com with ESMTPSA id sd14-20020a1709076e0e00b007072dc80e06sm9576036ejc.190.2022.06.22.09.13.49
+        by smtp.gmail.com with ESMTPSA id sd14-20020a1709076e0e00b007072dc80e06sm9576036ejc.190.2022.06.22.09.13.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
+        Wed, 22 Jun 2022 09:13:59 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Andy Gross <agross@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/3] ASoC: dt-bindings: Add bindings for WCD9335 DAIs
-Date:   Wed, 22 Jun 2022 20:13:20 +0400
-Message-Id: <20220622161322.168017-2-y.oudjana@protonmail.com>
+Subject: [PATCH v2 2/3] ASoC: wcd9335: Use DT bindings instead of local DAI definitions
+Date:   Wed, 22 Jun 2022 20:13:21 +0400
+Message-Id: <20220622161322.168017-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220622161322.168017-1-y.oudjana@protonmail.com>
 References: <20220622161322.168017-1-y.oudjana@protonmail.com>
@@ -85,53 +85,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add bindings for the DAIs available in WCD9335 to avoid
-having to use unclear number indices in device trees.
+Get DAI indices from DT bindings and remove the currently used
+local definitions.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-Changes since v1:
- - Make header guard match path
+ sound/soc/codecs/wcd9335.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
- MAINTAINERS                              |  1 +
- include/dt-bindings/sound/qcom,wcd9335.h | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
- create mode 100644 include/dt-bindings/sound/qcom,wcd9335.h
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b774f21828f7..2bcc3cc129c5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16366,6 +16366,7 @@ M:	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
- M:	Banajit Goswami <bgoswami@quicinc.com>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Supported
-+F:	include/dt-bindings/sound/qcom,wcd9335.h
- F:	sound/soc/codecs/lpass-va-macro.c
- F:	sound/soc/codecs/lpass-wsa-macro.*
- F:	sound/soc/codecs/msm8916-wcd-analog.c
-diff --git a/include/dt-bindings/sound/qcom,wcd9335.h b/include/dt-bindings/sound/qcom,wcd9335.h
-new file mode 100644
-index 000000000000..f5e9f1db091e
---- /dev/null
-+++ b/include/dt-bindings/sound/qcom,wcd9335.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
+index 7d40a61b03b0..3554b95462e8 100644
+--- a/sound/soc/codecs/wcd9335.c
++++ b/sound/soc/codecs/wcd9335.c
+@@ -24,6 +24,8 @@
+ #include "wcd9335.h"
+ #include "wcd-clsh-v2.h"
+ 
++#include <dt-bindings/sound/qcom,wcd9335.h>
 +
-+#ifndef __DT_SOUND_QCOM_WCD9335_H
-+#define __DT_SOUND_QCOM_WCD9335_H
-+
-+#define AIF1_PB                 0
-+#define AIF1_CAP                1
-+#define AIF2_PB                 2
-+#define AIF2_CAP                3
-+#define AIF3_PB                 4
-+#define AIF3_CAP                5
-+#define AIF4_PB                 6
-+#define NUM_CODEC_DAIS          7
-+
-+#endif
+ #define WCD9335_RATES_MASK (SNDRV_PCM_RATE_8000 | SNDRV_PCM_RATE_16000 |\
+ 			    SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_48000 |\
+ 			    SNDRV_PCM_RATE_96000 | SNDRV_PCM_RATE_192000)
+@@ -203,17 +205,6 @@ enum wcd9335_sido_voltage {
+ 	SIDO_VOLTAGE_NOMINAL_MV = 1100,
+ };
+ 
+-enum {
+-	AIF1_PB = 0,
+-	AIF1_CAP,
+-	AIF2_PB,
+-	AIF2_CAP,
+-	AIF3_PB,
+-	AIF3_CAP,
+-	AIF4_PB,
+-	NUM_CODEC_DAIS,
+-};
+-
+ enum {
+ 	COMPANDER_1, /* HPH_L */
+ 	COMPANDER_2, /* HPH_R */
 -- 
 2.36.1
 

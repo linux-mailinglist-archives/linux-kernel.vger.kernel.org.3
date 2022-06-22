@@ -2,150 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E2B554C71
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F9C554C57
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358331AbiFVOOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S1358068AbiFVOND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357877AbiFVONx (ORCPT
+        with ESMTP id S1358035AbiFVOM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:13:53 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49060B24
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655907230; x=1687443230;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zqFyLGLJ7DhoKiHZkVAFdtt7y+4WWO3jOSFhksvrO+0=;
-  b=MdjgCwnnsTDw8inYIJp4fGadiqxNY5yu+c+Zy9Vyh6hqNvT+rwUxuCmL
-   MXHpO4LAHXPmRVYNNSAPnLYCHD8cNiRxTLKYfnGbYk6bPcgDWpFI1C3j5
-   23MwzO8nFQ+8Tq74qHfmySafykLSDA2YkiWum9vfJTSZgVy8lnl7W6fSC
-   gRJlVViU0gmRuXIosb28KZyzUC/pVFFMNmxdmqb0JLYnsTf2GJEyrG/RS
-   z8W17yQvPPFdiM6BViA/iCM42CWViCc6WIkNJVwoLEq81Qj5YMUz/CEW0
-   D3tMNAHU/kdEQcBn8e3kKVfysw7ZQkQ2kuMxsh1NJvVA8YvKg6S+DAeAH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="305879038"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="305879038"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:13:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="690519422"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Jun 2022 07:13:49 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4176-0001LX-Hw;
-        Wed, 22 Jun 2022 14:13:48 +0000
-Date:   Wed, 22 Jun 2022 22:12:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/xtensa/lib/kcsan-stubs.c:6:6: sparse: sparse: symbol
- '__atomic_store_8' was not declared. Should it be static?
-Message-ID: <202206222246.W1MwwJo2-lkp@intel.com>
+        Wed, 22 Jun 2022 10:12:56 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42FB210;
+        Wed, 22 Jun 2022 07:12:53 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id g25so34505628ejh.9;
+        Wed, 22 Jun 2022 07:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ren2+uJhEOKFuly4Y7r0RVT/r2/Z143SWwTToasxhOA=;
+        b=CQTnUj+3r1Tmk+T0IjuiHB1Hr4poYEqyzqY7e1KiKmdVMECfrXc4U5GEg0+HGYFtGK
+         /63ZwSp/BIYc8pDjJQdAhJjVDxcvfs6MUrDxMOe3vyLpx3UjbS6NpkQTLniUIVmX4u9k
+         la5+rQMbRD/KXjJML7sUQ573tQDMVpUt7frQWfL6v426debfnOw1gfnGXdzDh0wyC8QP
+         bfGGXiL6G5Udv3dYc36Rgf7BiPgTaTD4g1UvxWwtPv+9vzPLSUSF4T8vIVvVTogpBJd6
+         wOhbWPDWKTxaYUcyRxH8AXk1DGtjFpgk5+fcwKfl89uNIaiCFB7sR0oPLENO7/FMMx5C
+         m3fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ren2+uJhEOKFuly4Y7r0RVT/r2/Z143SWwTToasxhOA=;
+        b=tZzXohYEpi10NrajFxobRXEoHyPxwPu49oucdjMtk4iwm3jMuTHn7ad5zs01LnPK52
+         D81cz77/KYX/ZQ2yEsWo6YX2++lj9Uhsnvhtv/iFeRgcSEgvyoRU2TGT9gD8JuuEYs7i
+         nFLwzYZTMBxRY5EfZ/nPaXl/8qQfyFY15WOBFwcvttaeZdcF2zHTCM9zUUT0kTLHNXia
+         bDCsOUGN63uyxgZRd0DyhO38aXJhNZkcAbrJnNk/57HhvVFQ8dPOeYPh9G+5hkhZNWVY
+         A5Wcpu1yi3rLJ07Q8f5BMw9UZkbW4GuZVKgHisDNvlO/GOlJUJXLiu6h0A1Gwz2NiYQh
+         KrhA==
+X-Gm-Message-State: AJIora/aiNgXVpCsSomgemE0tfq+C6OqlvyyGFEiuqlRcspD1vHexf7s
+        i11VnAFVfKJnM4VcIprSg70=
+X-Google-Smtp-Source: AGRyM1tjj8BA36t5S7r9EYwBFt3Kn2rjeOb1UXCuXZaNTZE7evzeCkF4MwXZS/VBuSfPIwoVJ7nfIg==
+X-Received: by 2002:a17:907:86aa:b0:722:d5b2:fca2 with SMTP id qa42-20020a17090786aa00b00722d5b2fca2mr3277139ejc.264.1655907171611;
+        Wed, 22 Jun 2022 07:12:51 -0700 (PDT)
+Received: from [192.168.0.16] ([37.223.148.38])
+        by smtp.gmail.com with ESMTPSA id k10-20020a17090632ca00b00722e7919835sm2332703ejk.111.2022.06.22.07.12.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:12:49 -0700 (PDT)
+Message-ID: <45a6ab4b-bc43-2c98-4f94-be6e4e9fc445@gmail.com>
+Date:   Wed, 22 Jun 2022 16:12:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 0/5] mtk_iommu: Specify phandles to infracfg and
+ pericfg
+Content-Language: en-US
+To:     Joerg Roedel <joro@8bytes.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     yong.wu@mediatek.com, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski@linaro.org, miles.chen@mediatek.com
+References: <20220616110830.26037-1-angelogioacchino.delregno@collabora.com>
+ <YrMc2EUBDIxnoWiB@8bytes.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <YrMc2EUBDIxnoWiB@8bytes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca1fdab7fd27eb069df1384b2850dcd0c2bebe8d
-commit: 725aea873261e8d986e527838fde2a721f0962d8 xtensa: enable KCSAN
-date:   7 weeks ago
-config: xtensa-randconfig-s032-20220622 (https://download.01.org/0day-ci/archive/20220622/202206222246.W1MwwJo2-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-31-g4880bd19-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=725aea873261e8d986e527838fde2a721f0962d8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 725aea873261e8d986e527838fde2a721f0962d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=xtensa SHELL=/bin/bash
+Hi Joerg,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 22/06/2022 15:44, Joerg Roedel wrote:
+> On Thu, Jun 16, 2022 at 01:08:25PM +0200, AngeloGioacchino Del Regno wrote:
+>> AngeloGioacchino Del Regno (5):
+>>    dt-bindings: iommu: mediatek: Add mediatek,infracfg phandle
+>>    iommu/mediatek: Lookup phandle to retrieve syscon to infracfg
+>>    arm64: dts: mediatek: mt8173: Add mediatek,infracfg phandle for IOMMU
+>>    arm64: dts: mediatek: mt2712e: Add mediatek,infracfg phandle for IOMMU
+>>    iommu/mediatek: Cleanup pericfg lookup flow
+>>
+>>   .../bindings/iommu/mediatek,iommu.yaml        | 17 +++++++
+>>   arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |  2 +
+>>   arch/arm64/boot/dts/mediatek/mt8173.dtsi      |  1 +
+>>   drivers/iommu/mtk_iommu.c                     | 50 +++++++++++--------
+>>   4 files changed, 49 insertions(+), 21 deletions(-)
+> 
+> Applied, thanks.
 
+I wanted to check if you took also 3 and 4, as these should go through my tree. 
+Unfortunately you haven't pushed your tree (yet). In case you took the whole 
+series, can you please drop the dts patches. I'll apply them now on my 
+v5.19-next/dts64 branch.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/xtensa/lib/kcsan-stubs.c:6:6: sparse: sparse: symbol '__atomic_store_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:11:5: sparse: sparse: symbol '__atomic_load_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:16:5: sparse: sparse: symbol '__atomic_exchange_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:21:6: sparse: sparse: symbol '__atomic_compare_exchange_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:26:5: sparse: sparse: symbol '__atomic_fetch_add_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:31:5: sparse: sparse: symbol '__atomic_fetch_sub_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:36:5: sparse: sparse: symbol '__atomic_fetch_and_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:41:5: sparse: sparse: symbol '__atomic_fetch_or_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:46:5: sparse: sparse: symbol '__atomic_fetch_xor_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:51:5: sparse: sparse: symbol '__atomic_fetch_nand_8' was not declared. Should it be static?
-
-vim +/__atomic_store_8 +6 arch/xtensa/lib/kcsan-stubs.c
-
-     5	
-   > 6	void __atomic_store_8(volatile void *p, u64 v, int i)
-     7	{
-     8		BUG();
-     9	}
-    10	
-  > 11	u64 __atomic_load_8(const volatile void *p, int i)
-    12	{
-    13		BUG();
-    14	}
-    15	
-  > 16	u64 __atomic_exchange_8(volatile void *p, u64 v, int i)
-    17	{
-    18		BUG();
-    19	}
-    20	
-  > 21	bool __atomic_compare_exchange_8(volatile void *p1, void *p2, u64 v, bool b, int i1, int i2)
-    22	{
-    23		BUG();
-    24	}
-    25	
-  > 26	u64 __atomic_fetch_add_8(volatile void *p, u64 v, int i)
-    27	{
-    28		BUG();
-    29	}
-    30	
-  > 31	u64 __atomic_fetch_sub_8(volatile void *p, u64 v, int i)
-    32	{
-    33		BUG();
-    34	}
-    35	
-  > 36	u64 __atomic_fetch_and_8(volatile void *p, u64 v, int i)
-    37	{
-    38		BUG();
-    39	}
-    40	
-  > 41	u64 __atomic_fetch_or_8(volatile void *p, u64 v, int i)
-    42	{
-    43		BUG();
-    44	}
-    45	
-  > 46	u64 __atomic_fetch_xor_8(volatile void *p, u64 v, int i)
-    47	{
-    48		BUG();
-    49	}
-    50	
-  > 51	u64 __atomic_fetch_nand_8(volatile void *p, u64 v, int i)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards.
+Matthias

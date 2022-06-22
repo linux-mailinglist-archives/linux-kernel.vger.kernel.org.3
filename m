@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4CB554439
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44A4554467
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352410AbiFVHN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S1352552AbiFVHOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352835AbiFVHNo (ORCPT
+        with ESMTP id S1352415AbiFVHOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:13:44 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA244140C3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655882023; x=1687418023;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oJke41zwp9mN+pI4uVgRv29B+X1P/kRA/qSnAvd3Pc4=;
-  b=HszfLoWP/ctxhUoGQqcKyGAj4tJWVlGWAvq3sbqTOO8+3/0P4eGs6hMl
-   o05dY7CRT26wbM1FFch/fx/544wJJeierZrh6tL/qc40bVncVEIA/khIh
-   xotX+KWYe/CCgirYcf5ZYfgnbFOSdrS8ti6I1pMjoySjzMPUVoTNqspf4
-   mnbwcwPYAacsvSSAI1oOsSu3ucdccSvU4Y8C6R/2BUk2hwxsYdbPxK/to
-   AK0UP/3M46ZwC6sT0vjpKPgISuXv82eJQDXs7itgaI5alcmV6J/vqYWFj
-   nusbza+AiRiALX/7zGNK6zUD0mLLM7XNnaK4auQUoSvzaiSocKlr4I+nE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="269057709"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="269057709"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 00:13:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="833963253"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2022 00:13:37 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3uYS-0000yf-I8;
-        Wed, 22 Jun 2022 07:13:36 +0000
-Date:   Wed, 22 Jun 2022 15:13:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Simo Sorce <simo@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: arceb-elf-ld: system_keyring.c:undefined reference to
- `x509_load_certificate_list'
-Message-ID: <202206221515.DqpUuvbQ-lkp@intel.com>
+        Wed, 22 Jun 2022 03:14:20 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA44175B4;
+        Wed, 22 Jun 2022 00:14:19 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id 88so20384894qva.9;
+        Wed, 22 Jun 2022 00:14:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tuu+Yntf4skl/ZbQbx9nr+7W+bdBdIu+BOyv/WQzLoA=;
+        b=uzQEeuW0JRifzwA0FHkjo13l363M0MKTde+apfkNUO5dH89vN0Rt8zje2eWjkJodbf
+         N4Ta6crdDvwfcMbBHptkaQywWRet3uLw/T67SQ0uWyCSGvwuJk04jRaewhP9Nk6x41Ti
+         9Vzu7a6TIYHawBk70dyTROiOIoFiP5sju6ZAlMn1dZCFLZ0WLQGhH14PuBIV8ICnDh9X
+         3PNqkvlSMUfgUhhp2lMS3YwaNVKquO+tvWx4yX2kOnHni+xmfNe4v+lxS0IFZC6t9+7O
+         p14Gx0T/WhKM3HyFgphuOaPLKXTtM6h8KUhtR+Xf1SjQUxJXCOXTlfVokI/gzlpJDyYy
+         hfVQ==
+X-Gm-Message-State: AJIora/N2Lwvfwai+jwHJwQV4vgCbWal+VophoBmUx7pqhpm5VoyWJzU
+        ejIpnM/micEMHmjOZhWWNZxuGLQWkDyKKQ==
+X-Google-Smtp-Source: AGRyM1tCuf7rEPEbGw7r6xrtNfYmPQiPbK5UVfyjn1vv2pCX1SLu49J4COh1dwmq2hDneVsC7ekj5g==
+X-Received: by 2002:a05:6214:29ec:b0:470:5aec:e15e with SMTP id jv12-20020a05621429ec00b004705aece15emr4087996qvb.102.1655882058448;
+        Wed, 22 Jun 2022 00:14:18 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05620a440b00b006a6a7b4e7besm17266328qkp.109.2022.06.22.00.14.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 00:14:17 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id t1so28631857ybd.2;
+        Wed, 22 Jun 2022 00:14:16 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr2215179ybu.604.1655882056767; Wed, 22
+ Jun 2022 00:14:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220621205010.250185-1-sashal@kernel.org> <20220621205010.250185-5-sashal@kernel.org>
+In-Reply-To: <20220621205010.250185-5-sashal@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 22 Jun 2022 09:14:05 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXe5PZ-XeU678VxWgWbT8CRcUJgPRQk0pEO49_nnPhFew@mail.gmail.com>
+Message-ID: <CAMuHMdXe5PZ-XeU678VxWgWbT8CRcUJgPRQk0pEO49_nnPhFew@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.17 05/20] eeprom: at25: Split reads into chunks
+ and cap write size
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Brad Bishop <bradleyb@fuzziesquirrel.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca1fdab7fd27eb069df1384b2850dcd0c2bebe8d
-commit: 60050ffe3d770dd1df5b641aa48f49d07a54bd84 certs: Move load_certificate_list() to be with the asymmetric keys code
-date:   16 hours ago
-config: arc-randconfig-r022-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221515.DqpUuvbQ-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=60050ffe3d770dd1df5b641aa48f49d07a54bd84
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 60050ffe3d770dd1df5b641aa48f49d07a54bd84
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+Hi Sasha,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, Jun 21, 2022 at 11:02 PM Sasha Levin <sashal@kernel.org> wrote:
+> From: Brad Bishop <bradleyb@fuzziesquirrel.com>
+>
+> [ Upstream commit 0a35780c755ccec097d15c6b4ff8b246a89f1689 ]
+>
+> Make use of spi_max_transfer_size to avoid requesting transfers that are
+> too large for some spi controllers.
+>
+> Signed-off-by: Brad Bishop <bradleyb@fuzziesquirrel.com>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Link: https://lore.kernel.org/r/20220524215142.60047-1-eajames@linux.ibm.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-All errors (new ones prefixed by >>):
+Please drop this, as it breaks operation on devices that don't need
+the split, and may cause a buffer overflow on those that do.
 
-   arceb-elf-ld: certs/system_keyring.o: in function `load_system_certificate_list':
-   system_keyring.c:(.init.text+0x142): undefined reference to `x509_load_certificate_list'
->> arceb-elf-ld: system_keyring.c:(.init.text+0x142): undefined reference to `x509_load_certificate_list'
+https://lore.kernel.org/r/7ae260778d2c08986348ea48ce02ef148100e088.1655817534.git.geert+renesas@glider.be/
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

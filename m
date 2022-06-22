@@ -2,123 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAEE554726
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D9A55493B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355259AbiFVJDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S1355851AbiFVJDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354748AbiFVJDS (ORCPT
+        with ESMTP id S1354955AbiFVJDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:03:18 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661BC1EC6A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:03:17 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id n15so20174965qvh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:03:17 -0700 (PDT)
+        Wed, 22 Jun 2022 05:03:32 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5692F13CE7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:03:30 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id t25so26636239lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=4UKmOtPuqR9ZV79ZF3RUEUPJlPzQswRYnZS88Bovo1w=;
+        b=nTUI5zRn9XS6bFDBR+nn0BgevUpzBla/1rPpk2D8wbRjchNnEZ4dQCt+Ds9Qr53GdN
+         aEtiOHS0r65exrhiuv5b2y8mPrUXKMFgPwGujno39obnVBN9gt+8aIyrnztYaRq3Fbui
+         JzzEUZwXoq4VsEp6JMDLpt+udclYKzaUjh/v+7ocMGsGRKGfxQuC4Fdu3Ls0KDfOmVmk
+         +QVTKT/p5bKbotHeUqjvhGo0ISegQdJeKSK25gt4IaFFQg2ZEqBN9pqu+m/5h8sK6LQ2
+         6N/qDT6zFeg/hN3960avfIIQiZrarFaQ9vZCrw+Yb1Iq3o6SygQNayDuyUdLwUUxww1U
+         1N+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=65BoBdNEPD+hhMSIaXkfwRdYUnoeWO1j5CRjqrWAPjs=;
-        b=aTunQcWOYBohEMk2rfcWAVqA8svysFpCKsGyXd3adruV8ENKcNW3lpP/4ZL3L/RWwI
-         V60msb5f+wkQ6E2CwwXOnSyDtWCZzt8Y81ef7Edi5Ygb2TCk6j99Brfv/yrsQaqD8q5d
-         P3ynw2tkhNnPrhvQezxnJ9QuIzjJZq0+XzfdI7J/S9+9X8oR85dISZNZWm7pjJHhwbNg
-         ui+pcAxW96dFoRiRqmsPmkY8xvrU4RA+8tPVxdcbFnKIDPTcrQbFvAuR5MyxHFgz5aLf
-         F3Mm/BQNs8VQOOy/QH8GyjBVOIDYNK/y4FZo5KA02a1EaBhfmFMkUXcSCKqAunfcTGM9
-         oa8Q==
-X-Gm-Message-State: AJIora9AkTvshuRh0weUFT/QR3vNK4zf11QHVcE5BcUcy4bVyOSP3T5X
-        hw1Mhs9CF1HvHKfdfEUNXxDhyD7wIyWk9w==
-X-Google-Smtp-Source: AGRyM1ulQWNa4yJCruqI5dgF0U1dV7MjHErqLZ9Gc0Hm/Dbq9XBa+gVDm2/9FZ4tDzBivQV8cZD2Xg==
-X-Received: by 2002:a05:622a:14c8:b0:306:69cb:edbc with SMTP id u8-20020a05622a14c800b0030669cbedbcmr1882279qtx.376.1655888596151;
-        Wed, 22 Jun 2022 02:03:16 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id bs26-20020ac86f1a000000b00304fd1f6b4csm13773519qtb.77.2022.06.22.02.03.15
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=4UKmOtPuqR9ZV79ZF3RUEUPJlPzQswRYnZS88Bovo1w=;
+        b=x/SUEi53P0vrH/kWuXJHPVIw6jXjZ7zqQWbY3ioSVwXZlHBKebyuLTDfF81uUxPFen
+         vCkPof4IdS3tmhf/S+EknwPJQyXliobk6yGRzz4sGXd0fj6bFyWZuxSEMiX3qfW1udlx
+         nxiMditrZbVkCbslJNmgWUeeWPqeEPgOS//bH2H4eFSGLTccKUIuFLmxY7ykGLfrHt4w
+         q11Tr4KZkP8TkcJhPoV+2EcrnAkIF57F++Ij5C7aPwUis4unMAO22YbwdAhs+5fQKqf2
+         pEIP90TuyG/fb95dJ9JA3n0G6XIfI6RsfvZQa9TzV51NTvD4Xej66GcbeiIAsDbAVgLm
+         ajVA==
+X-Gm-Message-State: AJIora9ZQU3304LQ50lDp8hJszK+MeRxyTBwWFfPy3cSDjcs9SUFxGPi
+        KPH12LhgkJEvAgZdD5bzykc=
+X-Google-Smtp-Source: AGRyM1sukuX1vlem6ZPvfyVXPKMVb8vOqm4ADCvt+D12LzgOZZdGRu1UVCFtQUeaa8AXFbgvr2AMNg==
+X-Received: by 2002:a05:6512:3f6:b0:47f:6dff:dab9 with SMTP id n22-20020a05651203f600b0047f6dffdab9mr1563227lfq.645.1655888607690;
+        Wed, 22 Jun 2022 02:03:27 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id j5-20020a056512344500b0047f81438160sm547727lfr.112.2022.06.22.02.03.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 02:03:15 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-317710edb9dso156280987b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:03:15 -0700 (PDT)
-X-Received: by 2002:a81:7c1:0:b0:317:897d:ea90 with SMTP id
- 184-20020a8107c1000000b00317897dea90mr2828900ywh.283.1655888595308; Wed, 22
- Jun 2022 02:03:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421212250.565456-1-john.ogness@linutronix.de>
- <20220421212250.565456-15-john.ogness@linutronix.de> <878rrs6ft7.fsf@jogness.linutronix.de>
-In-Reply-To: <878rrs6ft7.fsf@jogness.linutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Jun 2022 11:03:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWjzH6GGkaZ_5cjeC6stc80u9Ly+5rrBuk8rKMvM7==8w@mail.gmail.com>
-Message-ID: <CAMuHMdWjzH6GGkaZ_5cjeC6stc80u9Ly+5rrBuk8rKMvM7==8w@mail.gmail.com>
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for per-console locking
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Wed, 22 Jun 2022 02:03:26 -0700 (PDT)
+Subject: Re: [PATCH v3 3/3] xen: don't require virtio with grants for non-PV
+ guests
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <20220622063838.8854-1-jgross@suse.com>
+ <20220622063838.8854-4-jgross@suse.com>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <a8ce8ad3-aa3b-ea87-34cf-6532a272e9d8@gmail.com>
+Date:   Wed, 22 Jun 2022 12:03:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20220622063838.8854-4-jgross@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
 
-On Tue, Apr 26, 2022 at 10:50 AM John Ogness <john.ogness@linutronix.de> wrote:
-> Currently threaded console printers synchronize against each
-> other using console_lock(). However, different console drivers
-> are unrelated and do not require any synchronization between
-> each other. Removing the synchronization between the threaded
-> console printers will allow each console to print at its own
-> speed.
+On 22.06.22 09:38, Juergen Gross wrote:
 
-[...]
+Hello Juergen
 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Commit fa1f57421e0b ("xen/virtio: Enable restricted memory access using
+> Xen grant mappings") introduced a new requirement for using virtio
+> devices: the backend now needs to support the VIRTIO_F_ACCESS_PLATFORM
+> feature.
+>
+> This is an undue requirement for non-PV guests, as those can be operated
+> with existing backends without any problem, as long as those backends
+> are running in dom0.
+>
+> Per default allow virtio devices without grant support for non-PV
+> guests.
+>
+> On Arm require VIRTIO_F_ACCESS_PLATFORM for devices having been listed
+> in the device tree to use grants.
+>
+> Add a new config item to always force use of grants for virtio.
+>
+> Fixes: fa1f57421e0b ("xen/virtio: Enable restricted memory access using Xen grant mappings")
+> Reported-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+> V2:
+> - remove command line parameter (Christoph Hellwig)
+> V3:
+> - rebase to callback method
 
-Thanks for your patch, which is now commit 8e274732115f63c1
-("printk: extend console_lock for per-console locking") in
-v5.19-rc1.
 
-I have bisected another intriguing issue to this commit: on SiPEED
-MAiX BiT (Canaan K210 riscv), it no longer prints the line detecting
-ttySIF0, i.e. the console output changes like:
+Patch looks good, just one NIT ...
 
-     spi-nor spi1.0: gd25lq128d (16384 Kbytes)
-     i2c_dev: i2c /dev entries driver
-     k210-fpioa 502b0000.pinmux: K210 FPIOA pin controller
-    -38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud =
-115200) is a SiFive UART v0
-     printk: console [ttySIF0] enabled
-     printk: bootconsole [sifive0] disabled
-     printk: console [ttySIF0] printing thread started
 
-As this patch does not make any changes to drivers/tty/, and ttySIF0
-does work (it's the console), I looked in /proc/kmsg, and bingo,
-the missing line is there, so it is generated, but never printed.
+> ---
+>   arch/arm/xen/enlighten.c     |  4 +++-
+>   arch/x86/xen/enlighten_hvm.c |  4 +++-
+>   arch/x86/xen/enlighten_pv.c  |  5 ++++-
+>   drivers/xen/Kconfig          |  9 +++++++++
+>   drivers/xen/grant-dma-ops.c  | 10 ++++++++++
+>   include/xen/xen-ops.h        |  6 ++++++
+>   include/xen/xen.h            |  8 --------
+>   7 files changed, 35 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
+> index 1f9c3ba32833..93c8ccbf2982 100644
+> --- a/arch/arm/xen/enlighten.c
+> +++ b/arch/arm/xen/enlighten.c
+> @@ -34,6 +34,7 @@
+>   #include <linux/timekeeping.h>
+>   #include <linux/timekeeper_internal.h>
+>   #include <linux/acpi.h>
+> +#include <linux/virtio_anchor.h>
+>   
+>   #include <linux/mm.h>
+>   
+> @@ -443,7 +444,8 @@ static int __init xen_guest_init(void)
+>   	if (!xen_domain())
+>   		return 0;
+>   
+> -	xen_set_restricted_virtio_memory_access();
+> +	if (IS_ENABLED(CONFIG_XEN_VIRTIO))
+> +		virtio_set_mem_acc_cb(xen_virtio_mem_acc);
+>   
+>   	if (!acpi_disabled)
+>   		xen_acpi_guest_init();
+> diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
+> index 8b71b1dd7639..28762f800596 100644
+> --- a/arch/x86/xen/enlighten_hvm.c
+> +++ b/arch/x86/xen/enlighten_hvm.c
+> @@ -4,6 +4,7 @@
+>   #include <linux/cpu.h>
+>   #include <linux/kexec.h>
+>   #include <linux/memblock.h>
+> +#include <linux/virtio_anchor.h>
+>   
+>   #include <xen/features.h>
+>   #include <xen/events.h>
+> @@ -195,7 +196,8 @@ static void __init xen_hvm_guest_init(void)
+>   	if (xen_pv_domain())
+>   		return;
+>   
+> -	xen_set_restricted_virtio_memory_access();
+> +	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
+> +		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
+>   
+>   	init_hvm_pv_info();
+>   
+> diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+> index e3297b15701c..5aaae8a77f55 100644
+> --- a/arch/x86/xen/enlighten_pv.c
+> +++ b/arch/x86/xen/enlighten_pv.c
+> @@ -31,6 +31,7 @@
+>   #include <linux/gfp.h>
+>   #include <linux/edd.h>
+>   #include <linux/reboot.h>
+> +#include <linux/virtio_anchor.h>
+>   
+>   #include <xen/xen.h>
+>   #include <xen/events.h>
+> @@ -109,7 +110,9 @@ static DEFINE_PER_CPU(struct tls_descs, shadow_tls_desc);
+>   
+>   static void __init xen_pv_init_platform(void)
+>   {
+> -	xen_set_restricted_virtio_memory_access();
+> +	/* PV guests can't operate virtio devices without grants. */
+> +	if (IS_ENABLED(CONFIG_XEN_VIRTIO))
+> +		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
+>   
+>   	populate_extra_pte(fix_to_virt(FIX_PARAVIRT_BOOTMAP));
+>   
+> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
+> index bfd5f4f706bc..a65bd92121a5 100644
+> --- a/drivers/xen/Kconfig
+> +++ b/drivers/xen/Kconfig
+> @@ -355,4 +355,13 @@ config XEN_VIRTIO
+>   
+>   	  If in doubt, say n.
+>   
+> +config XEN_VIRTIO_FORCE_GRANT
+> +	bool "Require Xen virtio support to use grants"
+> +	depends on XEN_VIRTIO
+> +	help
+> +	  Require virtio for Xen guests to use grant mappings.
+> +	  This will avoid the need to give the backend the right to map all
+> +	  of the guest memory. This will need support on the backend side
+> +	  (e.g. qemu or kernel, depending on the virtio device types used).
+> +
+>   endmenu
+> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> index fc0142484001..8973fc1e9ccc 100644
+> --- a/drivers/xen/grant-dma-ops.c
+> +++ b/drivers/xen/grant-dma-ops.c
+> @@ -12,6 +12,8 @@
+>   #include <linux/of.h>
+>   #include <linux/pfn.h>
+>   #include <linux/xarray.h>
+> +#include <linux/virtio_anchor.h>
+> +#include <linux/virtio.h>
+>   #include <xen/xen.h>
+>   #include <xen/xen-ops.h>
+>   #include <xen/grant_table.h>
+> @@ -287,6 +289,14 @@ bool xen_is_grant_dma_device(struct device *dev)
+>   	return has_iommu;
+>   }
+>   
+> +bool xen_virtio_mem_acc(struct virtio_device *dev)
+> +{
+> +	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
+> +		return true;
+> +
+> +	return xen_is_grant_dma_device(dev->dev.parent);
+> +}
 
-I tried taking the port spinlock in sifive_serial_startup(), as
-suggested for the meson driver, but that doesn't make a difference.
 
-Do you have a clue?
-Thanks!
+    ... I am thinking would it be better to move this to xen/xen-ops.h 
+as grant-dma-ops.c is generic (not only for virtio, although the virtio 
+is the first use-case)
 
-Gr{oetje,eeting}s,
 
-                        Geert
+diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+index 8973fc1..fc01424 100644
+--- a/drivers/xen/grant-dma-ops.c
++++ b/drivers/xen/grant-dma-ops.c
+@@ -12,8 +12,6 @@
+  #include <linux/of.h>
+  #include <linux/pfn.h>
+  #include <linux/xarray.h>
+-#include <linux/virtio_anchor.h>
+-#include <linux/virtio.h>
+  #include <xen/xen.h>
+  #include <xen/xen-ops.h>
+  #include <xen/grant_table.h>
+@@ -289,14 +287,6 @@ bool xen_is_grant_dma_device(struct device *dev)
+         return has_iommu;
+  }
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-bool xen_virtio_mem_acc(struct virtio_device *dev)
+-{
+-       if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
+-               return true;
+-
+-       return xen_is_grant_dma_device(dev->dev.parent);
+-}
+-
+  void xen_grant_setup_dma_ops(struct device *dev)
+  {
+         struct xen_grant_dma_data *data;
+diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+index 98c399a..a9ae51b 100644
+--- a/include/xen/xen-ops.h
++++ b/include/xen/xen-ops.h
+@@ -6,6 +6,7 @@
+  #include <linux/notifier.h>
+  #include <linux/efi.h>
+  #include <linux/virtio_anchor.h>
++#include <linux/virtio.h>
+  #include <xen/features.h>
+  #include <asm/xen/interface.h>
+  #include <xen/interface/vcpu.h>
+@@ -218,7 +219,13 @@ static inline void xen_preemptible_hcall_end(void) { }
+  #ifdef CONFIG_XEN_GRANT_DMA_OPS
+  void xen_grant_setup_dma_ops(struct device *dev);
+  bool xen_is_grant_dma_device(struct device *dev);
+-bool xen_virtio_mem_acc(struct virtio_device *dev);
++static inline bool xen_virtio_mem_acc(struct virtio_device *dev)
++{
++       if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
++               return true;
++
++       return xen_is_grant_dma_device(dev->dev.parent);
++}
+  #else
+  static inline void xen_grant_setup_dma_ops(struct device *dev)
+  {
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+> +
+>   void xen_grant_setup_dma_ops(struct device *dev)
+>   {
+>   	struct xen_grant_dma_data *data;
+> diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+> index 80546960f8b7..98c399a960a3 100644
+> --- a/include/xen/xen-ops.h
+> +++ b/include/xen/xen-ops.h
+> @@ -5,6 +5,7 @@
+>   #include <linux/percpu.h>
+>   #include <linux/notifier.h>
+>   #include <linux/efi.h>
+> +#include <linux/virtio_anchor.h>
+>   #include <xen/features.h>
+>   #include <asm/xen/interface.h>
+>   #include <xen/interface/vcpu.h>
+> @@ -217,6 +218,7 @@ static inline void xen_preemptible_hcall_end(void) { }
+>   #ifdef CONFIG_XEN_GRANT_DMA_OPS
+>   void xen_grant_setup_dma_ops(struct device *dev);
+>   bool xen_is_grant_dma_device(struct device *dev);
+> +bool xen_virtio_mem_acc(struct virtio_device *dev);
+>   #else
+>   static inline void xen_grant_setup_dma_ops(struct device *dev)
+>   {
+> @@ -225,6 +227,10 @@ static inline bool xen_is_grant_dma_device(struct device *dev)
+>   {
+>   	return false;
+>   }
+> +static inline bool xen_virtio_mem_acc(struct virtio_device *dev)
+> +{
+> +	return false;
+> +}
+>   #endif /* CONFIG_XEN_GRANT_DMA_OPS */
+>   
+>   #endif /* INCLUDE_XEN_OPS_H */
+> diff --git a/include/xen/xen.h b/include/xen/xen.h
+> index ac5a144c6a65..a99bab817523 100644
+> --- a/include/xen/xen.h
+> +++ b/include/xen/xen.h
+> @@ -52,14 +52,6 @@ bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
+>   extern u64 xen_saved_max_mem_size;
+>   #endif
+>   
+> -#include <linux/virtio_anchor.h>
+> -
+> -static inline void xen_set_restricted_virtio_memory_access(void)
+> -{
+> -	if (IS_ENABLED(CONFIG_XEN_VIRTIO) && xen_domain())
+> -		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
+> -}
+> -
+>   #ifdef CONFIG_XEN_UNPOPULATED_ALLOC
+>   int xen_alloc_unpopulated_pages(unsigned int nr_pages, struct page **pages);
+>   void xen_free_unpopulated_pages(unsigned int nr_pages, struct page **pages);
+
+-- 
+Regards,
+
+Oleksandr Tyshchenko
+

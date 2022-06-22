@@ -2,127 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C04554EF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00DE554EF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359234AbiFVPTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S1359238AbiFVPUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358543AbiFVPTv (ORCPT
+        with ESMTP id S1359237AbiFVPUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:19:51 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F204037A18
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:19:50 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id g25so34931583ejh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:19:50 -0700 (PDT)
+        Wed, 22 Jun 2022 11:20:11 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDB238792
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:20:10 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id i15so15674630plr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:20:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fL0cpK7LWs+wtjTpXEysTDKhA1+C2iKr938rtJlnymk=;
-        b=GvfsdTBmWyUjk9gg9yIDNOY9pWXwZpSazxMnvIHYUTAT4sO4mm4iC+WrG83ULgLwBi
-         QtBCMGf25OQ+7Ho+NdkvZzvhBdy0akfEaA68slA7C5N5ZDC46Rfqh50C/YZ9XO/vmVqA
-         3eV5iTj/g8q0Qp6DxxUqZdHPySmTSs8jND17Y=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EwS/tK0Wy8erZTHFk7/rY1qOvDCv9NKxynpv49gC4Fg=;
+        b=h5QQSY5FM1k34pMrtVHeDpCWCD3fnChhPtZ9D9j+Y8g38Kldqqat9sXeuHEfLMzhDP
+         Sd2yj/BKtawDQSxcwFhxdSmqCrMRLjQR8Fi42r41TlbgAjY0Yv8/RP6WydX4AfxoGmKK
+         wX4cQA+FkFiBBkhShO0XU99dG9OV0Dm6/EX+E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fL0cpK7LWs+wtjTpXEysTDKhA1+C2iKr938rtJlnymk=;
-        b=URf6pwXbq43B2B7kc25N4oabjAEv6Ja03gJHqt6czAO98DTmAhBg90hXYyHU4/Oak7
-         JF/5ry7Rl2H9oQJNewTi5iLgWoMQi4lWA1FxPWS9wo/b5yDuji+k1jQBu86zb9k8iQXO
-         KxQSIlkBD6nBj43EdH4UaLS0Qeekd5Lh5iLMHQiDDl7LoruTn0tJ+Y4s0k1xiRgACCcu
-         IHrU2sdv7WUg01FpErsLFIzp6ngAVBcOYJYeFwVMHFrjCAKv5U+wPEA1MZ5jAUEoa4h6
-         Kk/UWORzKV34gTfaoP2Q3gkLxz3TzcG6iqe6QdX+dr4yc/NDGiVueh/xzeJ3DvoNm1qu
-         Hffw==
-X-Gm-Message-State: AJIora8AMumWmeofvS37PoHZUe3KH7waezBFju55X7Weit8oL9DWx/Xo
-        tDggLiMCgv4x62pP2E2uXnvYGx3xTNH/V96O
-X-Google-Smtp-Source: AGRyM1sdEDek1xkPLf2oSmzkwx8IWUa1up5g1iWsOhl6vTgUAO7G1wfcwjyg6OplG3LVLY/fnKqOCQ==
-X-Received: by 2002:a17:906:ce:b0:715:705e:52fb with SMTP id 14-20020a17090600ce00b00715705e52fbmr3562711eji.303.1655911189246;
-        Wed, 22 Jun 2022 08:19:49 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id h7-20020a0564020e8700b004355dc75066sm12916446eda.86.2022.06.22.08.19.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 08:19:48 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id v14so23906429wra.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:19:48 -0700 (PDT)
-X-Received: by 2002:a5d:48c1:0:b0:21a:3574:e70c with SMTP id
- p1-20020a5d48c1000000b0021a3574e70cmr3769039wrs.97.1655911187876; Wed, 22 Jun
- 2022 08:19:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EwS/tK0Wy8erZTHFk7/rY1qOvDCv9NKxynpv49gC4Fg=;
+        b=lcTxNPHCGPqLS21gvJLiPndX0FiyIAyMxSsPky6aZFVla2nuSFFEfykn/CDFMF3QHi
+         C/YowXPsjdTbhOsVNGkAukIHiZCdDim7AQf8m5qdmms8gLpp0vHY3vwuyUmzZTBbZAX4
+         jKDVX84v4JYMANyvUXfe3Ic2CjG1EUBS02+g0oo0oFi78NDy7Fm0VUocDKuH4sKF2n5x
+         9Lf0HVO6x4tIsDP2iPatNGJRcI2e25mpD4rIATurQJUPm1+o/N5Jo1p6KB/bhIpa0ks3
+         EbTmk5eXCeY7cnco4hp3ku6ToLfp9ClsnM6voikmlxCPYR2hsPE19FpY/wcCQxyuoMf3
+         yxFQ==
+X-Gm-Message-State: AJIora9ZYtrGL5U9CSsvNYxUctWzk1ic2ZS9fhCngZZMzeZ1UpNVguw2
+        1UU/csaS3Ve2brmxdMrcoqHXYg==
+X-Google-Smtp-Source: AGRyM1sG9n0CEU9lxzoX0n31I6e5aLUscw6tw8AvURiwXSK6E0c4SxWjAFV1o8Z/Sricdv3zDfkcwA==
+X-Received: by 2002:a17:90b:33c4:b0:1e8:6e2f:97a2 with SMTP id lk4-20020a17090b33c400b001e86e2f97a2mr4247470pjb.165.1655911209767;
+        Wed, 22 Jun 2022 08:20:09 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:e2f3:d85c:2a24:ec47])
+        by smtp.gmail.com with ESMTPSA id bb10-20020a170902bc8a00b0016a4a2ea92asm1730412plb.255.2022.06.22.08.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 08:20:09 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 00:20:05 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Nitin Gupta <ngupta@vflare.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH] zram: do not lookup algorithm in backends table
+Message-ID: <YrMzJSNb4b+tODqR@google.com>
+References: <20220622023501.517125-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
-References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
- <YrMwXAs9apFRdkVo@debian>
-In-Reply-To: <YrMwXAs9apFRdkVo@debian>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 22 Jun 2022 10:19:31 -0500
-X-Gmail-Original-Message-ID: <CAHk-=wjmREcirYi4k_CBT+2U8X5VOAjQn0tVD28OdcKJKpA0zg@mail.gmail.com>
-Message-ID: <CAHk-=wjmREcirYi4k_CBT+2U8X5VOAjQn0tVD28OdcKJKpA0zg@mail.gmail.com>
-Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000224f9505e20ade6b"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_RED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622023501.517125-1-senozhatsky@chromium.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000224f9505e20ade6b
-Content-Type: text/plain; charset="UTF-8"
+On (22/06/22 11:35), Sergey Senozhatsky wrote:
+> Always use crypto_has_comp() so that crypto can lookup module,
+> call usermodhelper to load the modules, wait for usermodhelper
+> to finish and so on. Otherwise crypto will do all of these steps
+> under CPU hot-plug lock and this looks like too much stuff to
+> handle under the CPU hot-plug lock. Besides this can end up in
+> a deadlock when usermodhelper triggers a code path that attempts
+> to lock the CPU hot-plug lock, that zram already holds.
 
-On Wed, Jun 22, 2022 at 10:08 AM Sudip Mukherjee
-<sudipm.mukherjee@gmail.com> wrote:
->
-> Yeah, true. I had to check to find out its from the memcpy() in check_image_valid().
+And we think that we (not exactly "we", our partners) actually
+see a deadlock. It goes something like this:
 
-Funky but true - I can reproduce it, and just commenting out that
-memcpy fixes the warning.
+- path A. zram grabs CPU hot-plug lock, execs /sbin/modprobe from crypto
+  and waits for modprobe to finish
 
-And I see nothing wrong with that code - it's copying a 'struct
-fw_section_info_st' between two other structs that seem to have arrays
-that are appropriately sized.
+disksize_store
+ zcomp_create
+  __cpuhp_state_add_instance
+   __cpuhp_state_add_instance_cpuslocked
+    zcomp_cpu_up_prepare
+     crypto_alloc_base
+      crypto_alg_mod_lookup
+       call_usermodehelper_exec
+        wait_for_completion_killable
+         do_wait_for_common
+          schedule
 
-Replacing the memcpy() with just a structure assignment seems to get
-rid of the warning, and seems to be a simple fix (patch attached), but
-I don't understand why that memcpy() would warn.
+- path B. async work kthread that brings in scsi device. It wants to
+  register CPUHP states at some point, and it needs the CPU hot-plug
+  lock for that, which is owned by zram.
 
-This looks like a clang bug to me, but maybe I'm missing something.
+async_run_entry_fn
+ scsi_probe_and_add_lun
+  scsi_mq_alloc_queue
+   blk_mq_init_queue
+    blk_mq_init_allocated_queue
+     blk_mq_realloc_hw_ctxs
+      __cpuhp_state_add_instance
+       __cpuhp_state_add_instance_cpuslocked
+        mutex_lock
+         schedule
 
-                  Linus
+- path C. modprobe sleeps, waiting for all aync works to finish.
 
---000000000000224f9505e20ade6b
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l4pqr5ry0>
-X-Attachment-Id: f_l4pqr5ry0
+load_module
+ do_init_module
+  async_synchronize_full
+   async_synchronize_cookie_domain
+    schedule
 
-IGRyaXZlcnMvbmV0L2V0aGVybmV0L2h1YXdlaS9oaW5pYy9oaW5pY19kZXZsaW5rLmMgfCA0ICst
-LS0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYg
-LS1naXQgYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9odWF3ZWkvaGluaWMvaGluaWNfZGV2bGluay5j
-IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaHVhd2VpL2hpbmljL2hpbmljX2RldmxpbmsuYwppbmRl
-eCA2MGFlOGJmYzVmNjkuLjE3NDlkMjZmNGJlZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvZXRo
-ZXJuZXQvaHVhd2VpL2hpbmljL2hpbmljX2RldmxpbmsuYworKysgYi9kcml2ZXJzL25ldC9ldGhl
-cm5ldC9odWF3ZWkvaGluaWMvaGluaWNfZGV2bGluay5jCkBAIC00Myw5ICs0Myw3IEBAIHN0YXRp
-YyBib29sIGNoZWNrX2ltYWdlX3ZhbGlkKHN0cnVjdCBoaW5pY19kZXZsaW5rX3ByaXYgKnByaXYs
-IGNvbnN0IHU4ICpidWYsCiAKIAlmb3IgKGkgPSAwOyBpIDwgZndfaW1hZ2UtPmZ3X2luZm8uZndf
-c2VjdGlvbl9jbnQ7IGkrKykgewogCQlsZW4gKz0gZndfaW1hZ2UtPmZ3X3NlY3Rpb25faW5mb1tp
-XS5md19zZWN0aW9uX2xlbjsKLQkJbWVtY3B5KCZob3N0X2ltYWdlLT5pbWFnZV9zZWN0aW9uX2lu
-Zm9baV0sCi0JCSAgICAgICAmZndfaW1hZ2UtPmZ3X3NlY3Rpb25faW5mb1tpXSwKLQkJICAgICAg
-IHNpemVvZihzdHJ1Y3QgZndfc2VjdGlvbl9pbmZvX3N0KSk7CisJCWhvc3RfaW1hZ2UtPmltYWdl
-X3NlY3Rpb25faW5mb1tpXSA9IGZ3X2ltYWdlLT5md19zZWN0aW9uX2luZm9baV07CiAJfQogCiAJ
-aWYgKGxlbiAhPSBmd19pbWFnZS0+ZndfbGVuIHx8Cg==
---000000000000224f9505e20ade6b--
+And none can make any progress.
+
+So I think we need to move crypto_alg_mod_lookup()->call_usermodehelper_exec()
+out of CPU hot-plug lock and pre-load modules in advance, before we grab the
+hot-plug lock.

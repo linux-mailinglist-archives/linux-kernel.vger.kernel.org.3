@@ -2,121 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9D05554AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19D45554CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376299AbiFVTkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S1358028AbiFVTmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357491AbiFVTkP (ORCPT
+        with ESMTP id S1377319AbiFVTlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:40:15 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8201D3FBF2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:39:39 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id g18so19193928qvn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:39:38 -0700 (PDT)
+        Wed, 22 Jun 2022 15:41:24 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E6241FBE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:40:58 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id n144so27875491ybf.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=o69t0ilR7Hk+fBWUIkW0byFF7csFuoYUt8x0EJzEGT0=;
-        b=zDwj7Z7XJsqKoyOUeeRZPzgUJAK7nqOO//vwa87996d/w2rMccrCEIAd4XiRHF4jv1
-         M83CN02Ox+LGfiTQ/XnTX8sy8YqoxO/JrfceWUj8TR/A0WQwkxsHArGPUv0xlkynIMUs
-         b2CTm7xWBa3Vt5BxAZhaVtlwN4XyVTTwU+5kV5lpfCaXzOMR2M37RA+CIYOK08SvH/e3
-         5+VHzpcPVBkvKlQDqeS4gO+iH0OhKxzzw/wkm6RkwWmaTYfeT26+pgz9CI75e45VbkDx
-         xskF6MIoPzqVZRKI8xdDLED3re7VDozsmHdplmPbev3ZKGYfVqL4mD/1ahLeAi5ObmMh
-         qymg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=639SSWBKWeFVnHTVsnIzN/TZ7k1h9fmNPATWBIChIyw=;
+        b=G8X3vA4e0jP9t9yyHPeLuRESdA24DMIkCfPu5Bfly53+tjcz8sJhQ87fS6AXPhrj4D
+         Un0+CsiNBNRkm4IMgtVYtfnz51k0ntH+Z/3iFO1RMOODYIqV/UBhtGLiE6uMxkRDcJnF
+         nBzwU3BLS98dR46DcTYYm16g7QD+8x51mtncSUWBF2CT0gxsflBQY1tA+debjqlmAe/q
+         QlIdhuNK1QLuPaAil54LAi0aU9ZBoGbjoKHY+saslronaFmEGNRD4FcpKtnLjn9L/jCM
+         gkuC3dDE+vRq/hUVUcyd3LzadOyq92dTU7kKgQlsx31ixW959JxLJACf7pjhr7yqWvBy
+         3Y4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=o69t0ilR7Hk+fBWUIkW0byFF7csFuoYUt8x0EJzEGT0=;
-        b=ZQGd80yhaBYbGRFvdiIGNnjyg7tSg1wwfeyrFSQGt9EXZkfGQ2AP8uh4jXaFauwNHY
-         vFUixL35/kCMV9fab3ttPlQihogIGbXFyCQJ8ejVBYhACg3HgHD3wM8EAOocpzufM6CG
-         ikJNhe5X9ICkzN09TgQinV+H5U1cxMQOp1yB4O4WWEsLUc9DvYhm4s2UAmwGv/CNemlW
-         pHKmfgi2vOfEciQPOZDsL0KRs9TpgyK22jsrFargjLgIsGJ0NMIPQmHy75hpE2K4kKPJ
-         dnZIt9RTfH8ZK+CrgZNawDPMVYAG1/Xmwmd2kO494kqLV+gcoqxQVwr5N0NECjwRKpWw
-         ZKgQ==
-X-Gm-Message-State: AJIora9vyZY+zoXVvwm+7ApshFsBqcJSPdEHPvj8ix2DCvEbXBm5f9Ur
-        XLqnoiV9Kho9rHQAYII3FCiZc3q/xmfyjQ==
-X-Google-Smtp-Source: AGRyM1uBNURSl9Hk7+t9B98Zy80s9b7OW6cZ2Z/yFvCb5MY0v2TudFXnIjFB6e3Ii3PTZHJaY+JeLg==
-X-Received: by 2002:a05:622a:292:b0:305:e2b7:bfa8 with SMTP id z18-20020a05622a029200b00305e2b7bfa8mr4668617qtw.243.1655926777927;
-        Wed, 22 Jun 2022 12:39:37 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05620a291600b006a370031c3esm17833638qkp.106.2022.06.22.12.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 12:39:37 -0700 (PDT)
-Message-ID: <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
-Subject: Re: DMA-buf and uncached system memory
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Sharma, Shashank" <Shashank.Sharma@amd.com>
-Date:   Wed, 22 Jun 2022 15:39:36 -0400
-In-Reply-To: <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=639SSWBKWeFVnHTVsnIzN/TZ7k1h9fmNPATWBIChIyw=;
+        b=oha38c//tTVxpf3uwC+mlc9qvajaR7hgrLB0BrMDccjpdDfPlDkrbEDSEyK04RRlaE
+         5YB+T/BO+CPc4z/GrCWPY9oHYyGYi6OuntzVb60d4Ai0jKmW0Z2mHBT0dnZ2K1M+KSxF
+         DWGflFyhSf4mgjf2Ge5UEZg9jqdA3ouDoz3XBCEtTo8jVrjsivm7EcrKWjz33eXlVQaV
+         O5gNgNvJwXdztRpuejOgoC8bLNtAG7pw7hvX2gaGWWpvjztyjodX7TZaE7jsVe0y6dj7
+         osOdBLb6BFKfGFXhrDJII9OMjiwH7ImnZ43nIU6FHqPCKSFR80finpgBwPhCtiPsX0N1
+         SeFQ==
+X-Gm-Message-State: AJIora+SsN/BNwaTSiJ2qBye2KyQdEAGfizI2MUXzm7p91g5S7BcQM74
+        UGDgFM84n5h0SwnSTcLx9tq03ETfxhBopVEkw2HBnw==
+X-Google-Smtp-Source: AGRyM1uGAbZ+vgElx+1b7AwZLGy2A0tJFHcsPRwmnxA3B57ZLQRr7LNkm5trT+iojrHOETV01ceBq2pLIkgfpdHeMcA=
+X-Received: by 2002:a25:cad1:0:b0:668:69b5:bbba with SMTP id
+ a200-20020a25cad1000000b0066869b5bbbamr5789800ybg.352.1655926857785; Wed, 22
+ Jun 2022 12:40:57 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <20220601070707.3946847-8-saravanak@google.com> <20220622074756.GA1647@pengutronix.de>
+ <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
+In-Reply-To: <CACRpkdYe=u9Ozj_dtLVr6GSau8yS5H7LnBNNrQHki1CJ1zST0A@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 22 Jun 2022 12:40:21 -0700
+Message-ID: <CAGETcx_qm7DWbNVTLfF9jTgGA8uH8oAQzbPcMDh4L6+5mdRFog@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] driver core: Set fw_devlink.strict=1 by default
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sascha Hauer <sha@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 16 f=C3=A9vrier 2021 =C3=A0 10:25 +0100, Daniel Vetter a =C3=A9cri=
-t=C2=A0:
-> So I think if AMD also guarantees to drop clean cachelines just do the
-> same thing we do right now for intel integrated + discrete amd, but in
-> reserve. It's fragile, but it does work.
+On Wed, Jun 22, 2022 at 1:44 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Wed, Jun 22, 2022 at 9:48 AM Sascha Hauer <sha@pengutronix.de> wrote:
+>
+> > This patch has the effect that console UART devices which have "dmas"
+> > properties specified in the device tree get deferred for 10 to 20
+> > seconds. This happens on i.MX and likely on other SoCs as well. On i.MX
+> > the dma channel is only requested at UART startup time and not at probe
+> > time. dma is not used for the console. Nevertheless with this driver probe
+> > defers until the dma engine driver is available.
 
-Sorry to disrupt, but if you pass V4L2 vmalloc data to Intel display driver=
-, you
-also get nice dirt on the screen. If you have a UVC webcam that produces a =
-pixel
-format compatible with your display, you can reproduce the issue quite easi=
-ly
-with:
+FYI, if most of the drivers are built in, you could set
+deferred_probe_timeout=1 to reduce the impact of this (should drop
+down to 1 to 2 seconds). Is that an option until we figure out
+something better?
 
-  gst-launch-1.0 v4l2src device=3D/dev/video0 ! kmssink
+Actually, why isn't earlyconsole being used? That doesn't get blocked
+on anything and the main point of that is to have console working from
+really early on.
 
-p.s. some frame-rate are less likely to exhibit the issue, make sure you cr=
-eate
-movement to see it.
+> >
+> > It shouldn't go in as-is.
+>
+> This affects all machines with the PL011 UART and DMAs specified as
+> well.
+>
+> It would be best if the console subsystem could be treated special and
+> not require DMA devlink to be satisfied before probing.
 
-The only solution I could think of (not implemented) was to detect in the
-attach() call what the importers can do (with dev->coherent_dma_mask if I
-recall), and otherwise flush the cache immediately and start flushing the c=
-ache
-from now on signalling it for DQBUF (in vb2 workqueue or dqbuf ioctl, I don=
-'t
-have an idea yet). I bet this idea is inapplicable to were you have fences,=
- we
-don't have that in v4l2.
+If we can mark the console devices somehow before their drivers probe
+them, I can make fw_devlink give them special treatment. Is there any
+way I could identify them before their drivers probe?
 
-This idea was hinted by Robert Becket (now in CC), but perhaps I picked it =
-up
-wrong, explaining it wrong, etc. I'm no expert, just noticed there wasn't r=
-eally
-a good plan for that, so one needs to make one up. I'm not aware oh an impo=
-rter
-could know how the memory was allocated by the exporter, and worst, how an
-importer could figure-out that the export is going to produce buffer with h=
-ot
-CPU cache (UVC driver does memcpy from USB chunks of variable size to produ=
-ce a
-fixed size image).
+> It seems devlink is not quite aware of the concept of resources that are
+> necessary to probe vs resources that are nice to have and might be
+> added after probe.
 
-Nicolas
+Correct, it can't tell them apart. Which is why it tries its best to
+enforce them, get most of them ordered properly and then gives up
+enforcing the rest after deferred_probe_timeout= expires. There's a
+bit more nuance than what I explained here (explained in earlier
+commit texts, LPC talks), but that's the gist of it. That's what's
+going on in this case Sascha is pointing out.z
+
+> We need a strong devlink for the first category
+> and maybe a weak devlink for the latter category.
+>
+> I don't know if this is a generic hardware property for all operating
+> systems so it could be a DT property such as dma-weak-dependency?
+>
+> Or maybe compromize and add a linux,dma-weak-dependency;
+> property?
+
+The linux,dma-weak-dependency might be an option, but then if the
+kernel version changes and we want to enforce it because we now have a
+dma driver (not related to Shasha's example) support, then the
+fw_devlink still can't enforce it because of that property. But maybe
+that's okay? The consumer can try to use dma and defer probe if it
+fails?
+
+Another option is to mark console devices in DT with some property and
+we can give special treatment for those without waiting for
+deferred_probe_timeout= to expire.
+
+-Saravana

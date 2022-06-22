@@ -2,140 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA29B554EE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8E3554EE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359190AbiFVPQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S1359204AbiFVPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359187AbiFVPQ0 (ORCPT
+        with ESMTP id S1359220AbiFVPQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:16:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBD5637A18
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:16:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9EB2513D5;
-        Wed, 22 Jun 2022 08:16:24 -0700 (PDT)
-Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F1273F792;
-        Wed, 22 Jun 2022 08:16:19 -0700 (PDT)
-Subject: Re: [PATCH v4 16/21] x86/resctrl: Pass the required parameters into
- resctrl_arch_rmid_read()
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
-        baolin.wang@linux.alibaba.com
-References: <20220412124419.30689-1-james.morse@arm.com>
- <20220412124419.30689-17-james.morse@arm.com>
- <Yp++A0tuEqAN7eHo@fyu1.sc.intel.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <36032ca3-b0dc-4bf3-7e6c-e45deda41511@arm.com>
-Date:   Wed, 22 Jun 2022 16:16:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Wed, 22 Jun 2022 11:16:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6683ED0A;
+        Wed, 22 Jun 2022 08:16:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A4FE61542;
+        Wed, 22 Jun 2022 15:16:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821F2C34114;
+        Wed, 22 Jun 2022 15:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655911005;
+        bh=74OTJmsDUnJ8Yy67wCt0W4gdTWxoxbdt0Ekwa+iJXlw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Wd3MRhoZEa6qShbmTQ//LXyurzxGZedShHyF58V4d/EgvL0X0NAU6WbQjTyrsDCFy
+         9o6DzQBjeTAVrFaODUGwNzjWaoCZaomicw4Yz0hU37Q4HtmjEPKP5QpbzZxh61TIle
+         VNaUfM6ZI3D7gX/pX/Dt07tQc3sTOG1abvL6llR/iSnNhsy6lnNJoXQH0yB1zO8Rs4
+         ryl2ehKgtUYQJ99Okc2O5QWFF377RFC9m7TA/ATUZN8TQEPq/lcfeBPoMAeCCHwYHX
+         frMeOdV7fGBnNCxVvKViwd/uGsp9eLgSEEcYIEfWvDGpUE8Lpe6VfYddUCmnYj/OMD
+         bT9FlVvImCbeg==
+From:   Mark Brown <broonie@kernel.org>
+To:     aidanmacdonald.0x0@gmail.com
+Cc:     bjorn.andersson@linaro.org, rafael@kernel.org, orsonzhai@gmail.com,
+        krzysztof.kozlowski@linaro.org, jernej.skrabec@gmail.com,
+        zhang.lyra@gmail.com, b.zolnierkie@samsung.com,
+        linux-actions@lists.infradead.org, myungjoo.ham@samsung.com,
+        linux-arm-kernel@lists.infradead.org, tglx@linutronix.de,
+        tiwai@suse.com, cristian.ciocaltea@gmail.com, michael@walle.cc,
+        lgirdwood@gmail.com, maz@kernel.org, rjones@gateworks.com,
+        linux-sunxi@lists.linux.dev, cw00.choi@samsung.com,
+        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        tharvey@gateworks.com, samuel@sholland.org, brgl@bgdev.pl,
+        alsa-devel@alsa-project.org, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, mazziesaccount@gmail.com,
+        wens@csie.org, mani@kernel.org, perex@perex.cz,
+        baolin.wang7@gmail.com, linux-kernel@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+In-Reply-To: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+Subject: Re: (subset) [PATCH 00/49] regmap-irq cleanups and refactoring
+Message-Id: <165591099823.672192.3312043171342090457.b4-ty@kernel.org>
+Date:   Wed, 22 Jun 2022 16:16:38 +0100
 MIME-Version: 1.0
-In-Reply-To: <Yp++A0tuEqAN7eHo@fyu1.sc.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fenghua,
-
-On 07/06/2022 22:07, Fenghua Yu wrote:
-> On Tue, Apr 12, 2022 at 12:44:14PM +0000, James Morse wrote:
->> resctrl_arch_rmid_read() is intended as the function that an
->> architecture agnostic resctrl filesystem driver can use to
->> read a value in bytes from a hardware register. Currently the function
->> returns the MBM values in chunks directly from hardware.
->>
->> To convert this to bytes, some correction and overflow calculations
->> are needed. These depend on the resource and domain structures.
->> Overflow detection requires the old chunks value. None of this
->> is available to resctrl_arch_rmid_read(). MPAM requires the
->> resource and domain structures to find the MMIO device that holds
->> the registers.
->>
->> Pass the resource and domain to resctrl_arch_rmid_read(). This makes
->> rmid_dirty() too big.
-
-> rmid_dirty() is not called by resctrl_arch_rmid_read(). Why does parring r and d
-> make rmid_dirty() too big?
-
-But rmid_dirty() does call resctrl_arch_rmid_read(). To add the resource and the domain,
-which the arch-specific side of this needs to get its work done, changes the prototype from:
-| static bool rmid_dirty(struct rmid_entry *entry)
-to:
-| static bool rmid_dirty(struct rdt_resource *r, struct rdt_domain *d,
-| 			 enum resctrl_event_id eventid, struct rmid_entry *entry)
-
-Not to mention the closid, which MPAM will need in here too.
-
-rmid_dirty() only has one caller, and other than this function call - its only doing a
-single comparison.
-
-Instead of bloating it - I merged it with its sole caller.
-
-
->> Instead merge it with its only caller, and the
->> name is kept as a local variable.
-
->> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
->> index 20c54cbadc0c..81cc7587b598 100644
->> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
->> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
->> @@ -167,10 +167,14 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
->>  		memset(am, 0, sizeof(*am));
->>  }
->>  
->> -int resctrl_arch_rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
->> +int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
->> +			   u32 rmid, enum resctrl_event_id eventid, u64 *val)
+On Mon, 20 Jun 2022 21:05:55 +0100, Aidan MacDonald wrote:
+> Here's a bunch of cleanups for regmap-irq focused on simplifying the API
+> and generalizing it a bit. It's broken up into three refactors, focusing
+> on one area at a time.
 > 
-> Can this be a concise interface by just adding one more parameter "rr"?
+> * Patches 01 and 02 are straightforward bugfixes, independent of the
+>   rest of the series. Neither of the bugs are triggered by in-tree
+>   drivers but they might be worth picking up early anyhow.
 > 
-> int resctrl_arch_rmid_read(struct rmid_read *rr, u32 rmid, u64 *val);
->>  {
->>  	u64 msr_val;
-> 
-> Then inside the API, add:
-> 	struct rdt_resource *r = rr->r;
-> 	struct rdt_domain *d = rr->d;
-> 	struct rdt_resource r = rr->r;
-> 	enum resctrl_event_id evtid = rr->evtid;
+> [...]
 
-Isn't this less concise for all the callers? A subsequent patch has to add the CLOSID too
-as MPAM needs CLOSID/RMID as a pair.
+Applied to
 
-I really don't like APIs that do this, it allows an uninitialised value to be passed by
-accident. Putting this in the prototype lets the compiler check all the arguments are
-supplied.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
-(It does make sense if there are unions, or not all the arguments are required. That
-doesn't apply here)
+Thanks!
 
-I don't think 5 or 6 arguments to a function are a problem.
+[01/49] regmap-irq: Fix a bug in regmap_irq_enable() for type_in_mask chips
+        commit: 485037ae9a095491beb7f893c909a76cc4f9d1e7
+[02/49] regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
+        commit: 3f05010f243be06478a9b11cfce0ce994f5a0890
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-
-James
+Mark

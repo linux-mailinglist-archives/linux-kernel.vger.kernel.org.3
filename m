@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E778B5550F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFB15550FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358938AbiFVQMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
+        id S1359322AbiFVQMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235461AbiFVQMK (ORCPT
+        with ESMTP id S235461AbiFVQMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:12:10 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286693EF15;
-        Wed, 22 Jun 2022 09:12:07 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id o18so8738151plg.2;
-        Wed, 22 Jun 2022 09:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=j8r/O9ShKbOvcKjQlw/RjMna9fPcG+3RY5Q5cZe/Kro=;
-        b=gYbs9y+xf51ucpxCOn+2QP0ygTyl1IwBma21U9X8bNbdTUQKv8Pado8sn5dXUqwfLX
-         OOAUWBb+nc+7imt5rsGSilrDUPHm6W+FQQt2oyoHnjInzvpHo0lwUMsLxMoPfCu1k8Vh
-         Lps105sJGJzcSTgapuEewSuSghMGArt5YjnhsKhi4tZUwYJFDSrafqMnQ6qGW7eXDoTk
-         wqQBCfUYgyUlT6nzijiqUbfYv+D87WpN1HrsQpEI/koMoSa5rj1g0ZqcyI0gbInreNGH
-         QAHASNlQd4X/vjpt4Sftef1QsZTRTYRqTOfjOcMp1BlgnHZuxBRU1ZMMdypOYe6xjmNn
-         s5+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j8r/O9ShKbOvcKjQlw/RjMna9fPcG+3RY5Q5cZe/Kro=;
-        b=4YQJmWHsQlZ3w2XPtTGdR91JXlUbhJ5tQRo6o89m5jp0Lb1fzQZGE3mrhtgcwzHC93
-         2K6lxPbHEHt5Ab4zdxG297tTbjoxQEbUNR3A83r5bVbjqlW60CvernKq0bQdUJSrfrav
-         8mnx8vGRg+FRXAdD9RLPEUS19fATU0oMRXocH3Fyn5LXpbWXPTDkBlPp9/+NVS1y8erf
-         WAJibQh/NuCgO9cJyNFDweEyLfhIWUqM0IDa2fU7Hf2cot/NhHd+C8q4ARo/tt9n5wp8
-         +iIoZ40FrhAaxOhIOG7WP2BmVegyNt2SShLd5vRofp/tz7s3wL8ew6AkFPhh3FKhjdZa
-         LgEg==
-X-Gm-Message-State: AJIora86ll1f82qCQQ8rLvEeo1NOVqDTdy1jIsHhLwiXN9gBMJ47hSsk
-        5WctzM9bdyQKr1W6Fe7RAa4=
-X-Google-Smtp-Source: AGRyM1vie+oHJG2VipZTETlxnk4+fQelsWgavxhXjpIh/x5DAtjX0+xysq2xMqP34Ci+EMy1NZQU5g==
-X-Received: by 2002:a17:902:e746:b0:16a:4515:b2d9 with SMTP id p6-20020a170902e74600b0016a4515b2d9mr5204011plf.116.1655914326564;
-        Wed, 22 Jun 2022 09:12:06 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b9-20020a17090a550900b001eaec814132sm3088109pji.3.2022.06.22.09.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 09:12:05 -0700 (PDT)
-Message-ID: <54618c2a-e1f3-bbd0-8fb2-1669366a3b59@gmail.com>
-Date:   Wed, 22 Jun 2022 09:12:03 -0700
+        Wed, 22 Jun 2022 12:12:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083923C71A;
+        Wed, 22 Jun 2022 09:12:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 986BB61A0D;
+        Wed, 22 Jun 2022 16:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C743BC34114;
+        Wed, 22 Jun 2022 16:12:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655914367;
+        bh=PCgP866NI3UvwGJGkteVd/VryH9Qe+1ogwHzwOkGjbo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YntJBVHOMYYGl74h02wD97NMioNXX2hQ/LMrwHYkMezUw9ODnOqtVm+NeCVCdWJNs
+         j1JXiALO8TWn/L4DgYz0EzTcUBW2d0WHtWWRrSD6y3m8rJfLH0YosJ//kRtKyvGdPA
+         0h1qiW6iUm8LjK6ZIbsv9qdQx/j8lcq+SOQfoOTN942ePvU3NDZqkmM7QI3vBYoZhA
+         NVguUeIBxhvwhogFE48r/sQ8fL1SVzo8Mm0tu3Lz8Q8KUmZUpdMIwZodKIV2p5xNw6
+         HHpJ3CWOFrWJEt7MLv88xC7WxKSBayU0AMBF0LRcUbxXi0gRoI2UAS/gbEYwFNkcGv
+         +j/XmFAHCcACg==
+Date:   Wed, 22 Jun 2022 12:12:45 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Julian Haller <julian.haller@philips.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 5.4 1/2] hwmon: Introduce
+ hwmon_device_register_for_thermal
+Message-ID: <YrM/fbnU71g4Jn4o@sashalap>
+References: <20220622150234.GC1861763@roeck-us.net>
+ <20220622153950.3001449-1-jhaller@bbl.ms.philips.com>
+ <20220622154454.GA1864037@roeck-us.net>
+ <YrM+wxRWV+RFTfjY@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [net-next: PATCH 08/12] ACPI: scan: prevent double enumeration of
- MDIO bus children
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-References: <20220620150225.1307946-1-mw@semihalf.com>
- <20220620150225.1307946-9-mw@semihalf.com> <YrDFmw4rziGQJCAu@lunn.ch>
- <CAJZ5v0g4q8N5wMgk7pRYpYoCLPQoH==Z+nrM0JLyFXSgF9y0+Q@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAJZ5v0g4q8N5wMgk7pRYpYoCLPQoH==Z+nrM0JLyFXSgF9y0+Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YrM+wxRWV+RFTfjY@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/22 05:05, Rafael J. Wysocki wrote:
-> On Mon, Jun 20, 2022 at 9:08 PM Andrew Lunn <andrew@lunn.ch> wrote:
+On Wed, Jun 22, 2022 at 06:09:39PM +0200, Greg KH wrote:
+>On Wed, Jun 22, 2022 at 08:44:54AM -0700, Guenter Roeck wrote:
+>> On Wed, Jun 22, 2022 at 05:39:50PM +0200, Julian Haller wrote:
+>> > > On Wed, Jun 22, 2022 at 04:49:01PM +0200, Julian Haller wrote:
+>> > > > From: Guenter Roeck <linux@roeck-us.net>
+>> > > >
+>> > > > [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
+>> > > >
+>> > > > The thermal subsystem registers a hwmon driver without providing
+>> > > > chip or sysfs group information. This is for legacy reasons and
+>> > > > would be difficult to change. At the same time, we want to enforce
+>> > > > that chip information is provided when registering a hwmon device
+>> > > > using hwmon_device_register_with_info(). To enable this, introduce
+>> > > > a special API for use only by the thermal subsystem.
+>> > > >
+>> > > > Acked-by: Rafael J . Wysocki <rafael@kernel.org>
+>> > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> > >
+>> > > What is the point of applying those patches to the 5.4 kernel ?
+>> > > This was intended for use with new code, not for stable releases.
+>> > >
+>> > > Guenter
+>> >
+>> > The upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ("hwmon: Make chip
+>> > parameter for with_info API mandatory") was backported to the 5.4 kernel as
+>> > part of v5.4.198, see commit 1ec0bc72f5dab3ab367ae5230cf6f212d805a225. This
+>> > breaks the hwmon device registration in the thermal drivers as these two
+>> > patches here have been left out. We either need to include them as well or
+>> > revert the original commit.
+>> >
+>> > I'm also not sure why the original commit found its way into the 5.4 stable
+>> > branch.
+>> >
 >>
->> On Mon, Jun 20, 2022 at 05:02:21PM +0200, Marcin Wojtas wrote:
->>> The MDIO bus is responsible for probing and registering its respective
->>> children, such as PHYs or other kind of devices.
->>>
->>> It is required that ACPI scan code should not enumerate such
->>> devices, leaving this task for the generic MDIO bus routines,
->>> which are initiated by the controller driver.
->>
->> I suppose the question is, should you ignore the ACPI way of doing
->> things, or embrace the ACPI way?
-> 
-> What do you mean by "the ACPI way"?
-> 
->> At least please add a comment why the ACPI way is wrong, despite this
->> being an ACPI binding.
-> 
-> The question really is whether or not it is desirable to create
-> platform devices for all of the objects found in the ACPI tables that
-> correspond to the devices on the MDIO bus.
+>> I had complained about this backport to other branches before. That patch
+>> was not a bug fix, it was neither intended nor marked for stable releases,
+>> and it should be reverted from all stable branches.
+>
+>Yes, that's not right, let me go revert that.  Odd that it only went
+>into 4.19 and 5.4, I think Sasha's scripts went wonky there...
 
-If we have devices hanging off a MDIO bus then they are mdio_device (and 
-possibly a more specialized object with the phy_device which does embedd 
-a mdio_device object), not platform devices, since MDIO is a bus in itself.
+Yes, I definitely remember dropping it - not sure how it ended up on
+those two kernels. I'll dig into what happened here. sorry :(
+
 -- 
-Florian
+Thanks,
+Sasha

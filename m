@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1FF554963
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD66855488F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357821AbiFVLuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S1357838AbiFVLvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357760AbiFVLuo (ORCPT
+        with ESMTP id S1357760AbiFVLvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:50:44 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A203E3CFCF;
-        Wed, 22 Jun 2022 04:50:41 -0700 (PDT)
+        Wed, 22 Jun 2022 07:51:16 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0AC3CFE1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:51:15 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so10910641wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655898641; x=1687434641;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8L/XU1bQgX9TQEq8Ku192gb4pKHkky0jwKLRxyq6r0c=;
-  b=vWi7nQld7ypsS+Fn317sTOz2RCbkA0PhPvbJhgUvpCuZxAvhMel+kzZM
-   EpxKG6J7+3hkB1mX8dT+VWlB4HEfh2ED5Wz/sNbwHefl+DR3kknRZpjR/
-   Yv3rbxM7Bm3kq/jQNQxEJJvUShp0JURCSaprU0paje+WsGREs6qLCgpap
-   Q=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Jun 2022 04:50:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:50:41 -0700
-Received: from [10.50.44.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 22 Jun
- 2022 04:50:38 -0700
-Message-ID: <95e12a75-72c6-76c7-26cc-a24af1e8cce0@quicinc.com>
-Date:   Wed, 22 Jun 2022 17:20:35 +0530
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c9w4bwtREX8nNxnCJ4ROlU+z/YylZHWW3hvnhHQQpAA=;
+        b=cqklHNnyjnfFcAar8iI4gHILb+4hfpNLGaFoodo64C4mQFXNjY2I+TWl1JFayff/oM
+         Rx4ws/x7NOqdb61bvQSaHhH149osNhcZoI3WgYQyQY0xZ7cZ1dnaBNFV+yB9I0W8UQjv
+         uEI0zu8ctl3YTpCu8XN0bBpkiBnVM9zCdNk4lTe30iW+P/Bd0OutlqDUlWhwKpTVyRSp
+         7gXzRYDmEbL9KcYFcP+V/Uq9m7N/ut4BT5FcX72rPLGHr5Bn+VAODiKKpmr2hnVLaYTz
+         G6Ow9Ll/7NpDew9nAsQtrPDiMgZAd0HUreYO8iDEeszErhMIlD7GofSVxypU84qHA8KZ
+         gNXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c9w4bwtREX8nNxnCJ4ROlU+z/YylZHWW3hvnhHQQpAA=;
+        b=up+nj7l8/sxcWMjYjvwKEtvqHl0T7xvl/UeXNm8j8HFc5mTn295qy/vpq6/g0q0KKr
+         ZoaWA3zB9faAxkZNbfo0M4qYxPTZOK5J+UjnkF/Pw/ko08U2ZBUEMVuWFXPcDE9T/RSq
+         Mp9HrKEPOaPqkj+G3pGjPopp5cVQ5qNyHrAic7u33dXxmN3puS/MfZ7tDruy704Bz+0D
+         rnznEFw9yQAXI8Ts7HE0G3B5paShQp5/8703FUGJHHxYJmHTYWFoanrd3af5MuTNgPz6
+         RUEjhNGxt9yZt8XLQ4pW1D0Pa5s1n6OKDGc+AqerOXxm07RQNKveBF/OBFWkJfEXuk9I
+         dwHw==
+X-Gm-Message-State: AJIora+kpq7vBTEf/N9OxvANDnslxM4j5viD48sMTp9hReRHjb7RMnQy
+        vBUTGKKHWGUijYaeIcgL1p1q3A==
+X-Google-Smtp-Source: AGRyM1vY6dzQFX/lLmpc9uzsCLpzlXMkcyPEqJytcNNSoD0/6BeNPcZqMr7yK3Sgg13mxF4Ys5C8iA==
+X-Received: by 2002:a1c:7408:0:b0:3a0:2481:c81d with SMTP id p8-20020a1c7408000000b003a02481c81dmr3628918wmc.55.1655898673974;
+        Wed, 22 Jun 2022 04:51:13 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h15-20020a5d504f000000b0021b8a78fba3sm10775543wrt.95.2022.06.22.04.51.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 04:51:13 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2] dt-bindings: firmware: document Qualcomm QCS404 and SM6125 SCM
+Date:   Wed, 22 Jun 2022 13:51:09 +0200
+Message-Id: <20220622115109.6724-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH rcu 02/12] rcu: Avoid tracing a few functions executed in
- stop machine
-Content-Language: en-US
-To:     <paulmck@kernel.org>
-CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>, <rostedt@goodmis.org>,
-        Patrick Wang <patrick.wang.shcn@gmail.com>
-References: <20220620222022.GA3839466@paulmck-ThinkPad-P17-Gen-1>
- <20220620222032.3839547-2-paulmck@kernel.org>
- <9de7f497-a4cd-ebdb-e912-d4cd73b4a982@quicinc.com>
- <20220621222147.GR1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <20220621222147.GR1790663@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,208 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Document the compatible for Qualcomm QCS404 and SM6125 SCM.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 
-On 6/22/2022 3:51 AM, Paul E. McKenney wrote:
-> On Tue, Jun 21, 2022 at 11:17:10AM +0530, Neeraj Upadhyay wrote:
->>
->>
->> On 6/21/2022 3:50 AM, Paul E. McKenney wrote:
->>> From: Patrick Wang <patrick.wang.shcn@gmail.com>
->>>
->>> Stop-machine recently started calling additional functions while waiting:
->>>
->>> ----------------------------------------------------------------
->>> Former stop machine wait loop:
->>> do {
->>>       cpu_relax(); => macro
->>>       ...
->>> } while (curstate != STOPMACHINE_EXIT);
->>> -----------------------------------------------------------------
->>> Current stop machine wait loop:
->>> do {
->>>       stop_machine_yield(cpumask); => function (notraced)
->>>       ...
->>>       touch_nmi_watchdog(); => function (notraced, inside calls also notraced)
->>>       ...
->>>       rcu_momentary_dyntick_idle(); => function (notraced, inside calls traced)
->>> } while (curstate != MULTI_STOP_EXIT);
->>> ------------------------------------------------------------------
->>>
->>> These functions (and the functions that they call) must be marked
->>> notrace to prevent them from being updated while they are executing.
->>> The consequences of failing to mark these functions can be severe:
->>>
->>>     rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
->>>     rcu: 	1-...!: (0 ticks this GP) idle=14f/1/0x4000000000000000 softirq=3397/3397 fqs=0
->>>     rcu: 	3-...!: (0 ticks this GP) idle=ee9/1/0x4000000000000000 softirq=5168/5168 fqs=0
->>>     	(detected by 0, t=8137 jiffies, g=5889, q=2 ncpus=4)
->>>     Task dump for CPU 1:
->>>     task:migration/1     state:R  running task     stack:    0 pid:   19 ppid:     2 flags:0x00000000
->>>     Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->>>     Call Trace:
->>>     Task dump for CPU 3:
->>>     task:migration/3     state:R  running task     stack:    0 pid:   29 ppid:     2 flags:0x00000000
->>>     Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->>>     Call Trace:
->>>     rcu: rcu_preempt kthread timer wakeup didn't happen for 8136 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
->>>     rcu: 	Possible timer handling issue on cpu=2 timer-softirq=594
->>>     rcu: rcu_preempt kthread starved for 8137 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=2
->>>     rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
->>>     rcu: RCU grace-period kthread stack dump:
->>>     task:rcu_preempt     state:I stack:    0 pid:   14 ppid:     2 flags:0x00000000
->>>     Call Trace:
->>>       schedule+0x56/0xc2
->>>       schedule_timeout+0x82/0x184
->>>       rcu_gp_fqs_loop+0x19a/0x318
->>>       rcu_gp_kthread+0x11a/0x140
->>>       kthread+0xee/0x118
->>>       ret_from_exception+0x0/0x14
->>>     rcu: Stack dump where RCU GP kthread last ran:
->>>     Task dump for CPU 2:
->>>     task:migration/2     state:R  running task     stack:    0 pid:   24 ppid:     2 flags:0x00000000
->>>     Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->>>     Call Trace:
->>>
->>> This commit therefore marks these functions notrace:
->>>    rcu_preempt_deferred_qs()
->>>    rcu_preempt_need_deferred_qs()
->>>    rcu_preempt_deferred_qs_irqrestore()
->>>
->>
->> Only the preemptible RCU definitions are updated; so, this change is not
->> required for non-preemptible RCU case?
-> 
-> It appears to me to be required.  How about as shown below?
-> 
+---
 
-Looks good to me.
+Changes since v1:
+1. Mention also SM6125 in commit msg (it was already in the patch
+   itself).
+2. Add Rob's ack.
+---
+ Documentation/devicetree/bindings/firmware/qcom,scm.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.txt b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+index 0f4e5ab26477..0eb9759d8d8d 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.txt
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+@@ -23,8 +23,10 @@ Required properties:
+  * "qcom,scm-msm8994"
+  * "qcom,scm-msm8996"
+  * "qcom,scm-msm8998"
++ * "qcom,scm-qcs404"
+  * "qcom,scm-sc7180"
+  * "qcom,scm-sc7280"
++ * "qcom,scm-sm6125"
+  * "qcom,scm-sdm845"
+  * "qcom,scm-sdx55"
+  * "qcom,scm-sm6350"
+-- 
+2.34.1
 
-Thanks
-Neeraj
-
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> commit 06cfe0c675c93884c3ffc75ec24ece7d0acd7a32
-> Author: Patrick Wang <patrick.wang.shcn@gmail.com>
-> Date:   Tue Apr 26 18:45:02 2022 +0800
-> 
->      rcu: Avoid tracing a few functions executed in stop machine
->      
->      Stop-machine recently started calling additional functions while waiting:
->      
->      ----------------------------------------------------------------
->      Former stop machine wait loop:
->      do {
->          cpu_relax(); => macro
->          ...
->      } while (curstate != STOPMACHINE_EXIT);
->      -----------------------------------------------------------------
->      Current stop machine wait loop:
->      do {
->          stop_machine_yield(cpumask); => function (notraced)
->          ...
->          touch_nmi_watchdog(); => function (notraced, inside calls also notraced)
->          ...
->          rcu_momentary_dyntick_idle(); => function (notraced, inside calls traced)
->      } while (curstate != MULTI_STOP_EXIT);
->      ------------------------------------------------------------------
->      
->      These functions (and the functions that they call) must be marked
->      notrace to prevent them from being updated while they are executing.
->      The consequences of failing to mark these functions can be severe:
->      
->        rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
->        rcu:  1-...!: (0 ticks this GP) idle=14f/1/0x4000000000000000 softirq=3397/3397 fqs=0
->        rcu:  3-...!: (0 ticks this GP) idle=ee9/1/0x4000000000000000 softirq=5168/5168 fqs=0
->              (detected by 0, t=8137 jiffies, g=5889, q=2 ncpus=4)
->        Task dump for CPU 1:
->        task:migration/1     state:R  running task     stack:    0 pid:   19 ppid:     2 flags:0x00000000
->        Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->        Call Trace:
->        Task dump for CPU 3:
->        task:migration/3     state:R  running task     stack:    0 pid:   29 ppid:     2 flags:0x00000000
->        Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->        Call Trace:
->        rcu: rcu_preempt kthread timer wakeup didn't happen for 8136 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
->        rcu:  Possible timer handling issue on cpu=2 timer-softirq=594
->        rcu: rcu_preempt kthread starved for 8137 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=2
->        rcu:  Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
->        rcu: RCU grace-period kthread stack dump:
->        task:rcu_preempt     state:I stack:    0 pid:   14 ppid:     2 flags:0x00000000
->        Call Trace:
->          schedule+0x56/0xc2
->          schedule_timeout+0x82/0x184
->          rcu_gp_fqs_loop+0x19a/0x318
->          rcu_gp_kthread+0x11a/0x140
->          kthread+0xee/0x118
->          ret_from_exception+0x0/0x14
->        rcu: Stack dump where RCU GP kthread last ran:
->        Task dump for CPU 2:
->        task:migration/2     state:R  running task     stack:    0 pid:   24 ppid:     2 flags:0x00000000
->        Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
->        Call Trace:
->      
->      This commit therefore marks these functions notrace:
->       rcu_preempt_deferred_qs()
->       rcu_preempt_need_deferred_qs()
->       rcu_preempt_deferred_qs_irqrestore()
->      
->      [ paulmck: Apply feedback from Neeraj Upadhyay. ]
->      
->      Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
->      Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->      Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> index c8ba0fe17267c..7a07f2ca153e2 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -460,7 +460,7 @@ static bool rcu_preempt_has_tasks(struct rcu_node *rnp)
->    * be quite short, for example, in the case of the call from
->    * rcu_read_unlock_special().
->    */
-> -static void
-> +static notrace void
->   rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
->   {
->   	bool empty_exp;
-> @@ -581,7 +581,7 @@ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
->    * is disabled.  This function cannot be expected to understand these
->    * nuances, so the caller must handle them.
->    */
-> -static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
-> +static notrace bool rcu_preempt_need_deferred_qs(struct task_struct *t)
->   {
->   	return (__this_cpu_read(rcu_data.cpu_no_qs.b.exp) ||
->   		READ_ONCE(t->rcu_read_unlock_special.s)) &&
-> @@ -595,7 +595,7 @@ static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
->    * evaluate safety in terms of interrupt, softirq, and preemption
->    * disabling.
->    */
-> -static void rcu_preempt_deferred_qs(struct task_struct *t)
-> +static notrace void rcu_preempt_deferred_qs(struct task_struct *t)
->   {
->   	unsigned long flags;
->   
-> @@ -926,7 +926,7 @@ static bool rcu_preempt_has_tasks(struct rcu_node *rnp)
->    * Because there is no preemptible RCU, there can be no deferred quiescent
->    * states.
->    */
-> -static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
-> +static notrace bool rcu_preempt_need_deferred_qs(struct task_struct *t)
->   {
->   	return false;
->   }
-> @@ -935,7 +935,7 @@ static bool rcu_preempt_need_deferred_qs(struct task_struct *t)
->   // period for a quiescent state from this CPU.  Note that requests from
->   // tasks are handled when removing the task from the blocked-tasks list
->   // below.
-> -static void rcu_preempt_deferred_qs(struct task_struct *t)
-> +static notrace void rcu_preempt_deferred_qs(struct task_struct *t)
->   {
->   	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
->   

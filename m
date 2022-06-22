@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34D255540F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120E1555423
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377702AbiFVTM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S235959AbiFVTWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiFVTMz (ORCPT
+        with ESMTP id S229824AbiFVTWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:12:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9600F2BE3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655925173;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zhjwqkPhJ9xw/9qovQS6fJqX4XywzD52eVaz4HaaZtQ=;
-        b=IyDlSK5caWluxhX1Iqmer4g3X3vPDBm3bZx0FHfdj7D96LKJAhQx7fX+hbBx4OEIrwnBst
-        ky3BkMB2qf8XO+rgt6AdFxJyw0Yz9+/XNHP+tsBUB5YaDj1SM+b9S5gU0D7Cp3MCrlD2Nj
-        cltJPHPW2D/RSsl8mUkIrTuvP+0lv5I=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-527-ObPU_-5HOVCXrIW5SrZAtw-1; Wed, 22 Jun 2022 15:12:52 -0400
-X-MC-Unique: ObPU_-5HOVCXrIW5SrZAtw-1
-Received: by mail-qv1-f69.google.com with SMTP id g29-20020a0caadd000000b004702ed3c3f5so12437460qvb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:12:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=zhjwqkPhJ9xw/9qovQS6fJqX4XywzD52eVaz4HaaZtQ=;
-        b=nLrzTYVdl1N6P4iRTqoSZSeYVa1zTLDhzZSCNiVgb2ZxkrbPr84GqJlcgBNBoSimcx
-         uJdz2Lfc88z9Eaecb9H4H49EHZJ0tTg2Ay/YBl2DmsPIG2kyu9OdjOaTn5nlbBoUXF2+
-         BE6/PuD1Hfvv09/UUD3yFIdr2sAp0JtDGKN1NHtdoyJ7juHnkidkvpbpWkTIWBe67SUR
-         fV4bQO2sU3qyLtkeX1n0ez2aTB7/vK3ejVjuNups02YQ/ivHw/hS3it116q+g9jiA4M6
-         LnFDc0FvEaK3HD/LqGuou0KS6MeXsyzJvg4G/Rnw1EyWaWBi5c1DTTynf5VdjGkc99VN
-         8vxg==
-X-Gm-Message-State: AJIora8Aj5PHEoSsHppK6OrZz4lpHxM6MPj1VVwlc+GR3mE2knylRYKO
-        vFV2bbPux8QnwU4NyAaA9f0RhzTLtLQfDydUlzCsvmWmSv29N+/7cpel0+dw1RJx3BXDHI5C2mj
-        s7QTTu//GvP/aEHBTFn/KqeO7
-X-Received: by 2002:ac8:570b:0:b0:305:e83:af43 with SMTP id 11-20020ac8570b000000b003050e83af43mr4620304qtw.416.1655925171815;
-        Wed, 22 Jun 2022 12:12:51 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u2yK6CJukE0PWUjhgIUO/v1rQGRwOO/j+saV7GVNjDPEvsJ8FGIj5m8+xhCHJwjmfYxEXiRg==
-X-Received: by 2002:ac8:570b:0:b0:305:e83:af43 with SMTP id 11-20020ac8570b000000b003050e83af43mr4620282qtw.416.1655925171532;
-        Wed, 22 Jun 2022 12:12:51 -0700 (PDT)
-Received: from t14s.localdomain (c-73-69-212-193.hsd1.ma.comcast.net. [73.69.212.193])
-        by smtp.gmail.com with ESMTPSA id bb33-20020a05622a1b2100b00304ea0a86cesm14906820qtb.81.2022.06.22.12.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 12:12:50 -0700 (PDT)
-Message-ID: <4a9629d0e8f14afbbb3c342c17c1633c9e882e9a.camel@redhat.com>
-Subject: Re: Plumbers conf presentation on -fanalyze?
-From:   David Malcolm <dmalcolm@redhat.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Wed, 22 Jun 2022 15:12:49 -0400
-In-Reply-To: <CAKwvOdmJgU_MZjwuVXz5QvFdA4+eTHKqxT06HMAq=Hau03ar9Q@mail.gmail.com>
-References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
-         <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
-         <CAKwvOdmJgU_MZjwuVXz5QvFdA4+eTHKqxT06HMAq=Hau03ar9Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Wed, 22 Jun 2022 15:22:03 -0400
+X-Greylist: delayed 529 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Jun 2022 12:21:59 PDT
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12BF738D8A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:21:59 -0700 (PDT)
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 4C2D972C8B1;
+        Wed, 22 Jun 2022 22:13:09 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+        id 3796D7CF60C; Wed, 22 Jun 2022 22:13:09 +0300 (MSK)
+Date:   Wed, 22 Jun 2022 22:13:09 +0300
+From:   "Dmitry V. Levin" <ldv@altlinux.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Mikhail Gordeev <obirvalger@altlinux.org>,
+        Hendrik Brueckner <brueckner@linux.vnet.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1 FYI] perf trace beauty: Fix generation of errno
+ id->str table on ALT Linux
+Message-ID: <20220622191308.GA2045@altlinux.org>
+References: <YrNCLzNGsvizMhdW@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrNCLzNGsvizMhdW@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 15:06 -0700, Nick Desaulniers wrote:
-> On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com>
-> wrote:
-> > 
-> > On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
-> > > Hi David,
-> > > Jose and I are currently in the planning process to put together
-> > > a
-> > > Kernel+Toolchain microconference track at Linux Plumbers
-> > > Conference
-> > > this year (Sept 12-14) in Dublin, Ireland.
-> > > 
-> > > We had seen
-> > >  
-> > > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
-> > > particularly the section on The Linux kernel and were wondering
-> > > if
-> > > you'd be interested in presenting more information about -
-> > > fanalyze to
-> > > kernel and toolchain developers there?
-> > 
-> > Thanks!  I'm very much interested, but am not yet sure about travel
-> > (both in terms of (a) budget and (b) possible new virus strains). 
-> > Is
-> > this conference going to be purely in-person, or hybrid virtual/in-
-> > person?
+Hi,
+
+On Wed, Jun 22, 2022 at 01:24:15PM -0300, Arnaldo Carvalho de Melo wrote:
+> Fyi, I'm carrying this on my perf tools tree to keep building on:
 > 
-> Hi David,
-> If you're still considering attending Linux Plumbers conf, please
-> submit a proposal:
-> https://lpc.events/event/16/abstracts/
-> Please make sure to select "Toolchains Track" as the "Track" after
-> clicking on "Submit new abstract."
+> [perfbuilder@five sisyphus]$ podman pull alt:sisyphus
+> Trying to pull docker.io/library/alt:sisyphus...
+> Getting image source signatures
+> Copying blob 2b39ef1520dd skipped: already exists
+> Copying blob 12717fd4baa0 skipped: already exists
+> Copying config 6d48f46445 done
+> Writing manifest to image destination
+> Storing signatures
+> 6d48f4644518cd96ffe1de6cd0333d2abc8312c0e4449e03b58b1d480f0f5905
+> [perfbuilder@five sisyphus]$ dsh .
+> sh-4.4# bash
+> [root@b8318c77142b /]# cat /etc/os-release
+> NAME="starter kit"
+> VERSION="p10 (Hypericum)"
+> ID=altlinux
+> VERSION_ID=p10
+> PRETTY_NAME="ALT Starterkit (Hypericum)"
+> ANSI_COLOR="1;33"
+> CPE_NAME="cpe:/o:alt:starterkit:p10"
+> HOME_URL="http://en.altlinux.org/starterkits"
+> BUG_REPORT_URL="https://bugs.altlinux.org/"
+> [root@b8318c77142b /]# rpm -qi bash
+> Name        : bash
+> Version     : 4.4.23
+> Release     : alt1
+> DistTag     : sisyphus+221902.500.4.1
+> Architecture: noarch
+> Install Date: Fri Jun  3 23:03:32 2022
+> Group       : Shells
+> Size        : 0
+> License     : None
+> Signature   : DSA/SHA1, Tue Feb 19 14:40:44 2019, Key ID 95c584d5ae4ae412
+> Source RPM  : bash-defaults-4.4.23-alt1.src.rpm
+> Build Date  : Tue Feb 19 14:40:42 2019
+> Build Host  : ldv-sisyphus.hasher.altlinux.org
+> Relocations : (not relocatable)
+> Packager    : Dmitry V. Levin <ldv@altlinux.org>
+> Vendor      : ALT Linux Team
+> Summary     : The GNU Bourne Again SHell (/bin/bash)
+> Description :
+> This package provides default setup for the GNU Bourne Again SHell (/bin/bash).
+> [root@b8318c77142b /]#
 > 
+> Perf uses that script to generate an id->str errno table for all arches,
+> implemented in:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0337cf74ccf2a43437bff2e23b278e4f2dc4c6e2
+> 
+> But it is failing on:
+> 
+>   10    62.99 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
+>   11    91.50 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
+>   12    89.80 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+>   13     8.99 alt:sisyphus                  : FAIL gcc version 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) (GCC)
+>         |         ^~~~
+>     442 |         case 47: return "EL3RST";
+>         |         ^~~~
+>     443 |         case 48: return "ELNRNG";
+> 
+> The generated file lacks the function start/end due to some strange
+> glitch:
+> 
+> http://vger.kernel.org/~acme/perf/generated-altlinux-sisyphus-arch_errno_name_array.c
+> 
+> So I'm adding this workaround, can you please check why this is
+> happening?
 
-Hi Nick
+arch_errno_names.sh uses here-documents which are implemented in bash
+using temporary files.  Looks like it couldn't create a temporary file,
+e.g. because $TMPDIR points to a directory that doesn't exist or not
+writable.  If there was some "cannot create temp file for here-document"
+diagnostics in stderr, that's it.  If that's the case, it's not a problem
+in the script but in the environment.
 
-Thanks, I've registered to attend, and have submitted this abstract:
-
-  https://lpc.events/event/16/abstracts/1293/
-
-("GCC's -fanalyzer and the Linux kernel" #177)
-
-Hope the above looks good.
-
-Dave
+I've Cc'ed more people, maybe they could have a look.
 
 
+-- 
+ldv

@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E997F554D95
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE29554D8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358408AbiFVOiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S1358405AbiFVOhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbiFVOiO (ORCPT
+        with ESMTP id S1358342AbiFVOhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:38:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59CF39B99;
-        Wed, 22 Jun 2022 07:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655908694; x=1687444694;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xA+AX77vbPPnWCLAuym9yD93ebv8XWnin6EN1d9z6Y0=;
-  b=SRYV1O6FgKmrZVxAA9Ie5YiCPMZke+LSNPyzzAFO7N9ihKhR1ptp9URy
-   M1TR3H17I9/gfvRNtANpwtpXNyTMqsYpJxZBzOozo5mOFkn7oQoyxWWgT
-   tjA6FuSp+hiKXKqfLhBKcYLv5OB6AvKPLrjJmPAb19Ez0rY6IOwlGGIvv
-   8oxKazXVTb79K1oouthU5xnFBOFZyfAr1jbUJrqZgE1mZdD7/EVRWZStE
-   BpnlKcyAL8aH+nIOLtthh6dvOzSPA7KB1WtW/0ujhKBfrRIn+foiziy9u
-   OXYXaebN/HhoZELeCzgKijQzDcWQD0+GzX4kvlk05jKenENw1fOpOQUfu
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="280478914"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="280478914"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:37:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="715428449"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2022 07:37:43 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25MEbfrW014711;
-        Wed, 22 Jun 2022 15:37:41 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/8] bitops: let optimize out non-atomic bitops on compile-time constants
-Date:   Wed, 22 Jun 2022 16:37:39 +0200
-Message-Id: <20220622143739.291698-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <YrMlrjbue7twWLk1@smile.fi.intel.com>
-References: <20220621191553.69455-1-alexandr.lobakin@intel.com> <20220622122440.87087-1-alexandr.lobakin@intel.com> <YrMlrjbue7twWLk1@smile.fi.intel.com>
+        Wed, 22 Jun 2022 10:37:45 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31D13CA53
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:37:43 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u12so34685511eja.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q7FWHUTEap0PZjswCQpJN7yAT4damqIiUlPO4JtpvK8=;
+        b=AOmms+lpRy3WoF+seNDdWn3S8SWmvZ9HoIchhnWnpPEIzM+tHSaM8zmKl6LU0i7q9i
+         fUZaXjmeZMeFkY3ccNRvGGU6l2Byap6ODfm5+0ShjqKyPtIKU2+qynYVvu8UxSkbaEFs
+         TpPTIOSmE/oU8ZVw94G0/yXjq1481If+sch9z4/sVoPuYxwpz+AaM4SdzOxmY0ip4uq0
+         rlCNSZfTxO8blnJNIAv5UC9mfc7Mu2Voy/TM1V01geSEYf8Lw1jmCF49TQoOY/FkQerb
+         Fc+KkF/9Hvapk/e+ggpurD9sgkDQREd1Ux42i4QneAgEmumuI9CD5oQPrFztWzpyhgeo
+         65Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q7FWHUTEap0PZjswCQpJN7yAT4damqIiUlPO4JtpvK8=;
+        b=d05T6mXl0uLYkZYpU1vL09uqjPYKo/HYyy2cmTiu8vusB1xcMoNHFmefjbUKf8hYxe
+         JqIikvpXBa/gBAgFvgiOqHaReCftZyFXw2j9JIgsCLNkVTPX2TJiy7wVYYP9BVKnXxtg
+         qkUrEoKrxgrDAkRkT5z+zPHHdm9AJt6VgrWauty6roZPUhmuteyPz7piBWRBA57m4LHS
+         5WRRWSc005FkkWzalHnXKyo7M3spTR3fXhoXkiPrBOP5pfSoaRFWxcqVYncSeQaQPRcV
+         Y8OrhCCJsZWwqZjkn08ymJB8XZRoaFY4v2EuGbAzkJHPvCgjGZ/xo+7P0RPsnwVbKKAg
+         CUbw==
+X-Gm-Message-State: AJIora/nhiiWqq+81Z1FfxwpUPaJQ9oLdUA213LoTUycHNEsx9kNPd3a
+        1E31s/V857ClyMGopnEQdOrTEw==
+X-Google-Smtp-Source: AGRyM1u1RV97xZQnajZzn4UOSzoNgfTAf1p1d8b2E+yNf71kj+KdZvXEAp2Xl75lEO9HhsBsNaAC9w==
+X-Received: by 2002:a17:907:8a17:b0:711:e3fe:7767 with SMTP id sc23-20020a1709078a1700b00711e3fe7767mr3395022ejc.380.1655908662250;
+        Wed, 22 Jun 2022 07:37:42 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id en26-20020a056402529a00b004357f391015sm7935823edb.97.2022.06.22.07.37.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:37:41 -0700 (PDT)
+Message-ID: <c54b9423-10cb-e174-44e6-61468efd333f@linaro.org>
+Date:   Wed, 22 Jun 2022 16:37:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: mfd: qcom-pm8xxx: Update the maintainers
+ section
+Content-Language: en-US
+To:     Satya Priya <quic_c_skakit@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, quic_tsoni@quicinc.com
+References: <1655874639-11273-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1655874639-11273-2-git-send-email-quic_c_skakit@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1655874639-11273-2-git-send-email-quic_c_skakit@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,45 +83,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Wed, 22 Jun 2022 17:22:38 +0300
-
-> On Wed, Jun 22, 2022 at 02:24:40PM +0200, Alexander Lobakin wrote:
-> > From: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > Date: Tue, 21 Jun 2022 21:15:45 +0200
-> > 
-> > > While I was working on converting some structure fields from a fixed
-> > > type to a bitmap, I started observing code size increase not only in
-> > > places where the code works with the converted structure fields, but
-> > > also where the converted vars were on the stack. That said, the
-> > > following code:
-> > 
-> > [...]
-> > 
-> > Oh gosh, now s390 failed and 7/8 revealed one existing code flaw in
-> > the ice driver.
-> > I'll fix those, then will try to test more platforms (to not spam
-> > series again) and send v5 soon (mentioning this as bots CCs only
-> > myself).
+On 22/06/2022 07:10, Satya Priya wrote:
+> Update the maintainers section with latest mail ID.
 > 
-> One mail per person? Because I also got a report.
-
-From the headers:
-
-From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: <llvm@lists.linux.dev>,
- <kbuild-all@lists.01.org>,
- <linux-kernel@vger.kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-I guess it's due to your Reviewed-by in the commit message, no one
-else from the original CCs list is present.
-
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> diff --git a/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml b/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+> index 2568736..61bd0b3 100644
+> --- a/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Qualcomm PM8xxx PMIC multi-function devices
+>  
 
-Thanks,
-Olek
+Both patches can be squashed and then applied by Rob.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

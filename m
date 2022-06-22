@@ -2,172 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF815553CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DC45553D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 20:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377694AbiFVSzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 14:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
+        id S1377441AbiFVSz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 14:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377702AbiFVSy3 (ORCPT
+        with ESMTP id S1377412AbiFVSzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 14:54:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE5640A0D;
-        Wed, 22 Jun 2022 11:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655924055; x=1687460055;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OOQALfgmATaUv4VRkx7rlx6lJnuZeTGNaW9g/kaaH/U=;
-  b=a5FHQ1QV/mRaVuHTw16Xj7O6BvX5aXDnEqB4vd924gkXqaT3H/t8FF9y
-   DoAz8aFaqBxcI8f3lwZyMA84F3KbXYfu+zu4JGrvwhtMRN3adnLXmCjeR
-   kJyENfMDeHSvvwrFxo5HKqeBrtsl5cousPLjb90MRFEdXvfOCL87mubC3
-   MKDuKEOAU/r1D/M2/OVbx0P3OKMJYdhEYeSbiYCwjUs0gmr/OFYi6ACPg
-   cEdgDW/BhqOJpOKoeodLIGGhel7k1gY3++aCy/4JxjcQbjTQZhzk11eju
-   YY9cBuAiDFziSJKwJUA6U3cf6SrzqH6rnePz5P8BgZh0eLY5Gs37IyOx4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="260949351"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="260949351"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 11:54:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="588316308"
-Received: from bwalker-desk.ch.intel.com ([143.182.136.162])
-  by orsmga002.jf.intel.com with ESMTP; 22 Jun 2022 11:54:14 -0700
-From:   Ben Walker <benjamin.walker@intel.com>
-To:     vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 15/15] dmaengine: Revert "cookie bypass for out of order completion"
-Date:   Wed, 22 Jun 2022 11:54:11 -0700
-Message-Id: <20220622185411.3043654-1-benjamin.walker@intel.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 22 Jun 2022 14:55:04 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57E040E5F;
+        Wed, 22 Jun 2022 11:54:34 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t25so29299023lfg.7;
+        Wed, 22 Jun 2022 11:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4iTcaXk/tA+WMboZAw/5+ow8rxvumME0LIzym3Yc6HI=;
+        b=dg3DvxL1zfeqKqkHs2XJQ4/0RziT3Uc/vHw5NiBfdatyveZYIbam9hjLjfn9h+0DTy
+         9u8h9cnINtfuaYjJekp+OImkzFFheCq7brPJmPZ4oeWB+6xwlSQhXwd7IQup6V5IHceg
+         FKOilHtPZ7Nco+n/LVKOnGwn9lNqPu37bPPftND/Rww7U2DlQVNWyK0CvJ7rvK02dU2q
+         ig4ZggOtfgJPwdZYSrfnFQuD08s9DH5EN/82MmKBRqwpMNjoqhlWs65bZ8WTdwckUw1L
+         pGJl6nvjYhUIZfVa/KF436UJ3FsaYc1uu5qNgmjfXD1SSAkbzOVeF/lg0bi+PmdOdx2f
+         LXcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4iTcaXk/tA+WMboZAw/5+ow8rxvumME0LIzym3Yc6HI=;
+        b=To0a3rlrHANbTeVHPxa9B7KX7zAHhGFh7DY27PbRH9yBSIiTeaJytXqnDfRi5BlBf0
+         bCncNe0PmZ4uEMy9A1u/+SNlU3hiXwbghg5fpx+w04map5Jg7gRFz3Olk5H1/hDop8vW
+         UmMlwfSm+U8155wUrWLG6ajuAmsnbpnZtySdkRKcnpy9OLslKu6BdtL2qMvbKc/z0kLl
+         OorrL2TOK1X4Fn58pbp0V0EkTw2fiOlLLAx1r1KnUgjwKBsHhU6k4nRmZUOVZvtgN0RO
+         AAU91d7glNexFwBjWeqAuxwg3NKwpnDvKP90SHm1m1qAsjIi4g1kZ1EcEn9ha2onH1AT
+         kdfQ==
+X-Gm-Message-State: AJIora9bQd4POjEnjl2BW1SeJrAKLcBaJQojrhDf2fw8oJuOwCqE/83w
+        E0QXn968/SZUAKy4BhXOLYo=
+X-Google-Smtp-Source: AGRyM1upUm0OzGmQc3AYVM26yT3dHzDTq51feO4Wd7o3VMKCxmkZO+tbeA1ZnKboqUXSRa8KrrklzQ==
+X-Received: by 2002:a05:6512:40b:b0:47f:8215:8bf9 with SMTP id u11-20020a056512040b00b0047f82158bf9mr2894785lfk.360.1655924072204;
+        Wed, 22 Jun 2022 11:54:32 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id a15-20020a056512200f00b0047f8ec3ca4esm507499lfb.87.2022.06.22.11.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 11:54:25 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Wed, 22 Jun 2022 20:54:22 +0200
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [RFC PATCH] rcu: back off on allocation failure in
+ fill_page_cache_func
+Message-ID: <YrNlXkLfDpd+Ulxf@pc638.lan>
+References: <20220622114711.28154-1-mhocko@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622114711.28154-1-mhocko@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 47ec7f09bc107720905c96bc37771e4ed1ff0aed.
+On Wed, Jun 22, 2022 at 01:47:11PM +0200, Michal Hocko wrote:
+> From: Michal Hocko <mhocko@suse.com>
+> 
+> fill_page_cache_func allocates couple of pages to store
+> kvfree_rcu_bulk_data. This is a lightweight (GFP_NORETRY) allocation
+> which can fail under memory pressure. The function will, however keep
+> retrying even when the previous attempt has failed.
+> 
+> While this is not really incorrect there is one thing to consider. This
+> allocation is invoked from the WQ context and that means that if the
+> memory reclaim gets stuck it can hog the worker for quite some time.
+> WQ concurrency is only triggered when the worker context sleeps and that
+> is not guaranteed for __GFP_NORETRY allocation attempts (see
+> should_reclaim_retry).
+> 
+> We have seen WQ lockups
+> kernel: BUG: workqueue lockup - pool cpus=93 node=1 flags=0x1 nice=0 stuck for 32s!
+> [...]
+> kernel: pool 74: cpus=37 node=0 flags=0x1 nice=0 hung=32s workers=2 manager: 2146
+> kernel:   pwq 498: cpus=249 node=1 flags=0x1 nice=0 active=4/256 refcnt=5
+> kernel:     in-flight: 1917:fill_page_cache_func
+> kernel:     pending: dbs_work_handler, free_work, kfree_rcu_monitor
+> 
+> Originaly, we thought that several retries with direct reclaim being
+> stuck is the underlying reason but we couldn't have confirmed that and
+> have seen a similar lockups detected even without any heavy memory
+> pressure so there is likely something else/more going on. On the other
+> hand failing the allocation shouldn't have a big impact and from the
+> code it is not really obvious why retrying is desirable so back off
+> after the allocation failure.
+> 
+> Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
+> ---
+> 
+> Hi,
+> I am sending this as an RFC because I couldn't prove that the WQ
+> concurency issue as a result from the allocation retry is really a
+> problem. On the other hand I couldn't see a good reason to retry after a
+> previous failure. While the kswapd running in the background could have
+> released some memory this is a not really guaranteed and mostly a
+> wishful thinking.
+> 
+> I do not understand the code well enough so I could be easily missing
+> something. If the patch is a wrong thing to do then it would be really
+> nice to add a comment why the retry is desirable and a good thing to do.
+> 
+> The retry loop should be bound to rcu_min_cached_objs which is quite
+> small but configurable so this can get large in some setups.
+> 
+> Thanks
+> 
+>  kernel/rcu/tree.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index c25ba442044a..54a3a19c4c0b 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3508,15 +3508,16 @@ static void fill_page_cache_func(struct work_struct *work)
+>  		bnode = (struct kvfree_rcu_bulk_data *)
+>  			__get_free_page(GFP_KERNEL | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN);
+>  
+> -		if (bnode) {
+> -			raw_spin_lock_irqsave(&krcp->lock, flags);
+> -			pushed = put_cached_bnode(krcp, bnode);
+> -			raw_spin_unlock_irqrestore(&krcp->lock, flags);
+> +		if (!bnode)
+> +			break;
+>  
+> -			if (!pushed) {
+> -				free_page((unsigned long) bnode);
+> -				break;
+> -			}
+> +		raw_spin_lock_irqsave(&krcp->lock, flags);
+> +		pushed = put_cached_bnode(krcp, bnode);
+> +		raw_spin_unlock_irqrestore(&krcp->lock, flags);
+> +
+> +		if (!pushed) {
+> +			free_page((unsigned long) bnode);
+> +			break;
+>  		}
+>  	}
+>  
+> -- 
+> 2.30.2
+>
+OK. You would like to break the loop once an allocation does not succeed.
+To me it also makes sense, i mean there is no reason to repeat it several
+times that can lead to worqueue hogging.
 
-This is no longer necessary now that all assumptions about the order of
-completions have been removed from the dmaengine client API.
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-Signed-off-by: Ben Walker <benjamin.walker@intel.com>
----
- .../driver-api/dmaengine/provider.rst         | 19 -------------------
- drivers/dma/dmatest.c                         | 11 +----------
- drivers/dma/idxd/dma.c                        |  1 -
- include/linux/dmaengine.h                     |  2 --
- 4 files changed, 1 insertion(+), 32 deletions(-)
+Thanks!
 
-diff --git a/Documentation/driver-api/dmaengine/provider.rst b/Documentation/driver-api/dmaengine/provider.rst
-index db019ec492b58..8565241270a62 100644
---- a/Documentation/driver-api/dmaengine/provider.rst
-+++ b/Documentation/driver-api/dmaengine/provider.rst
-@@ -268,22 +268,6 @@ Currently, the types available are:
-     want to transfer a portion of uncompressed data directly to the
-     display to print it
- 
--- DMA_COMPLETION_NO_ORDER
--
--  - The device does not support in order completion.
--
--  - The driver should return DMA_OUT_OF_ORDER for device_tx_status if
--    the device is setting this capability.
--
--  - All cookie tracking and checking API should be treated as invalid if
--    the device exports this capability.
--
--  - At this point, this is incompatible with polling option for dmatest.
--
--  - If this cap is set, the user is recommended to provide an unique
--    identifier for each descriptor sent to the DMA device in order to
--    properly track the completion.
--
- - DMA_REPEAT
- 
-   - The device supports repeated transfers. A repeated transfer, indicated by
-@@ -467,9 +451,6 @@ supported.
-   - In the case of a cyclic transfer, it should only take into
-     account the total size of the cyclic buffer.
- 
--  - Should return DMA_OUT_OF_ORDER if the device does not support in order
--    completion and is completing the operation out of order.
--
-   - This function can be called in an interrupt context.
- 
- - device_config
-diff --git a/drivers/dma/dmatest.c b/drivers/dma/dmatest.c
-index 3ee47a72bf9d7..d34e7a9b63d89 100644
---- a/drivers/dma/dmatest.c
-+++ b/drivers/dma/dmatest.c
-@@ -845,10 +845,7 @@ static int dmatest_func(void *data)
- 			result("test timed out", total_tests, src->off, dst->off,
- 			       len, 0);
- 			goto error_unmap_continue;
--		} else if (status != DMA_COMPLETE &&
--			   !(dma_has_cap(DMA_COMPLETION_NO_ORDER,
--					 dev->cap_mask) &&
--			     status == DMA_OUT_OF_ORDER)) {
-+		} else if (status != DMA_COMPLETE) {
- 			result(status == DMA_ERROR ?
- 			       "completion error status" :
- 			       "completion busy status", total_tests, src->off,
-@@ -1027,12 +1024,6 @@ static int dmatest_add_channel(struct dmatest_info *info,
- 	dtc->chan = chan;
- 	INIT_LIST_HEAD(&dtc->threads);
- 
--	if (dma_has_cap(DMA_COMPLETION_NO_ORDER, dma_dev->cap_mask) &&
--	    info->params.polled) {
--		info->params.polled = false;
--		pr_warn("DMA_COMPLETION_NO_ORDER, polled disabled\n");
--	}
--
- 	if (dma_has_cap(DMA_MEMCPY, dma_dev->cap_mask)) {
- 		if (dmatest == 0) {
- 			cnt = dmatest_add_threads(info, dtc, DMA_MEMCPY);
-diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
-index dda5342d273f4..49e863abd50cd 100644
---- a/drivers/dma/idxd/dma.c
-+++ b/drivers/dma/idxd/dma.c
-@@ -297,7 +297,6 @@ int idxd_register_dma_device(struct idxd_device *idxd)
- 
- 	dma_cap_set(DMA_INTERRUPT, dma->cap_mask);
- 	dma_cap_set(DMA_PRIVATE, dma->cap_mask);
--	dma_cap_set(DMA_COMPLETION_NO_ORDER, dma->cap_mask);
- 	dma->device_release = idxd_dma_release;
- 
- 	dma->device_prep_dma_interrupt = idxd_dma_prep_interrupt;
-diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-index e3e5311b6bb64..136c7afbcc385 100644
---- a/include/linux/dmaengine.h
-+++ b/include/linux/dmaengine.h
-@@ -39,7 +39,6 @@ enum dma_status {
- 	DMA_IN_PROGRESS,
- 	DMA_PAUSED,
- 	DMA_ERROR,
--	DMA_OUT_OF_ORDER,
- };
- 
- /**
-@@ -63,7 +62,6 @@ enum dma_transaction_type {
- 	DMA_SLAVE,
- 	DMA_CYCLIC,
- 	DMA_INTERLEAVE,
--	DMA_COMPLETION_NO_ORDER,
- 	DMA_REPEAT,
- 	DMA_LOAD_EOT,
- /* last transaction type for creation of the capabilities mask */
--- 
-2.35.1
-
+--
+Uladzislau Rezki

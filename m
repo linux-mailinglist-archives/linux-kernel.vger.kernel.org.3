@@ -2,107 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930F6554420
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3392B55442E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352488AbiFVHPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S1352439AbiFVHPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350659AbiFVHPT (ORCPT
+        with ESMTP id S1352424AbiFVHP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:15:19 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE2F36E1D;
-        Wed, 22 Jun 2022 00:15:18 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id n15so19900375qvh.12;
-        Wed, 22 Jun 2022 00:15:18 -0700 (PDT)
+        Wed, 22 Jun 2022 03:15:27 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6897B36E16
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:15:27 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id d12-20020a4aeb8c000000b004214e709b72so2145819ooj.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=0imvHQCskduM2m6Jx13DhDeQy2lidkiegSkYCHGTbHA=;
+        b=eIJwkxEhH4C/FubWibl4laKFclnMx8jo7kVWyWjWhINfRLEUmqQToG7tWEJDz4R9Qd
+         yG70BewfOd5UaGph6RW5BpqIqHfebtuN0W0W30V9d9+CrrYRq80ySln4xgcBl/fjP82g
+         7hNe3E+cbXiOJrs4YGE8Agt2qipqRzaa8jF1T1gAOs4oCp2JxBIqPEsE71XhcbFIketC
+         AmulP/u/EyN/hjCYMHvlrRawKkygtROhHxmX4ZFS1BS8w453inf7nZfibUqTBS+7iprD
+         VO0Iz/dkBnWIEhBAapDVxrtuU18QkT/Gc2fCmfS0I41a+UV5I5x7gp3wmvZZYOJts1Xa
+         dNBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lHEhufuR0BCwdgBJ9UiDykLCzo+7fjj1KMdN8Y47avc=;
-        b=osZL6e19UyN+wUDEWFphga5cbgcSKq902CLx+IBBOgQH2ryjjvsrsV4gHRg0+jCvdM
-         l7+9VPhaDlDy/zOnPdxwiX39Tdpd3RloXlpAQZ1biUT6y/zwBSsR8ZqPERrcuYJNNUO1
-         yKJkh1Ek+AWj+CYKERuKtaZx866REk4LS+uRwkqC6eP1+TkUzLzQc5g/AVtN+WNAu64X
-         +Gb/52jCszcKvRO4gTLw/T+CSeFasnRwOMfghvVGHWfuWb+I0hOvBeWTsr8tol41haUv
-         7gv+mQdnlTMU9IIa5imCN+zyIo0WsljlQaIep6aUxfPKLruxR1Dq6wJBUpnDxFzahFdm
-         8ykA==
-X-Gm-Message-State: AJIora8pTZB0yxE7PjkuNhge68t5IfSVfBROPfCUfBfI7J2iKrJ5FdWZ
-        Dpe/nBLTJfYmhjGsEGexHYtL2PxEIudn0g==
-X-Google-Smtp-Source: AGRyM1vLlVlUEYkp6KfhJmCWmyg6tRO82+0hpeHTNPYk9pbj49uvmhJFD3QGvb+9g2InOcnCWzg2bQ==
-X-Received: by 2002:ac8:7dc2:0:b0:306:6881:2693 with SMTP id c2-20020ac87dc2000000b0030668812693mr1803460qte.16.1655882117867;
-        Wed, 22 Jun 2022 00:15:17 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id bp15-20020a05620a458f00b006a72b38e2ecsm15450053qkb.51.2022.06.22.00.15.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 00:15:17 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3176b6ed923so153599027b3.11;
-        Wed, 22 Jun 2022 00:15:17 -0700 (PDT)
-X-Received: by 2002:a81:574c:0:b0:317:7c3a:45be with SMTP id
- l73-20020a81574c000000b003177c3a45bemr2586631ywb.316.1655882117218; Wed, 22
- Jun 2022 00:15:17 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=0imvHQCskduM2m6Jx13DhDeQy2lidkiegSkYCHGTbHA=;
+        b=qBmdU89DCfnCfM+1PiTIK9H8M4CVsZMiRk/yNvP/Ad1sVFv4RQOiG/cFylTwwlP5B7
+         4FZ2NBrYC86FnSuiIT/iemAupFFKzBs4DamckcPZiHHoRmfE2aAHfhnuwAQPVARyvc8D
+         DoW+na3Kbh7cnbMiZ/tQA56xdj97FS56DFCTdO6A+l4EyWaJgiyq1gVGbUdUpskfeNHG
+         M3AfPH8WvHmGoujrSB7WBrn8FLGyVCuEQb/mpg5xks8e+1x7QmgOJysGV3OHg2MGAIov
+         Vj432tG+yT8veeTB3dkhWp+zhhXL5YGI6nhx1mCTZ/miLsLhjTtRuvxHGa6thRnJH4eQ
+         Hd9w==
+X-Gm-Message-State: AJIora+KhFUFYFPE6HrKS8D45BdmOC7s+i8CAQebGkJClGNGUQkgndOL
+        w8mHFE8Ax0jn8nI+RvkDRwADVYLPwemF/zpd6TU=
+X-Google-Smtp-Source: AGRyM1u/iivms+tthm8+xrWydwUJJX6BRm7pwFzeOqUiVRUsRNP1IidwSuDXB2MkIoPa4B4zOjjA86x94FzXnRArRN8=
+X-Received: by 2002:a05:6820:169f:b0:41b:dba1:4f5f with SMTP id
+ bc31-20020a056820169f00b0041bdba14f5fmr781504oob.69.1655882126047; Wed, 22
+ Jun 2022 00:15:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621204928.249907-1-sashal@kernel.org> <20220621204928.249907-5-sashal@kernel.org>
-In-Reply-To: <20220621204928.249907-5-sashal@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Jun 2022 09:15:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVmkr2sQ6-1pu=B7EscXWY-ZwONo=WGGwDOK_D6VxKc=A@mail.gmail.com>
-Message-ID: <CAMuHMdVmkr2sQ6-1pu=B7EscXWY-ZwONo=WGGwDOK_D6VxKc=A@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.18 05/22] eeprom: at25: Split reads into chunks
- and cap write size
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Brad Bishop <bradleyb@fuzziesquirrel.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ralph Siemsen <ralph.siemsen@linaro.org>,
-        Mark Brown <broonie@kernel.org>
+Received: by 2002:a05:6358:99a4:b0:a2:f157:f61d with HTTP; Wed, 22 Jun 2022
+ 00:15:25 -0700 (PDT)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <tw44015@gmail.com>
+Date:   Tue, 21 Jun 2022 23:15:25 -0800
+Message-ID: <CABtpmn1QX9zHHiQROqnXSCnFbKG4aTmD37XorHKPAp-5EkssbQ@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sasha,
+Hello Dear,
 
-On Tue, Jun 21, 2022 at 10:57 PM Sasha Levin <sashal@kernel.org> wrote:
-> From: Brad Bishop <bradleyb@fuzziesquirrel.com>
->
-> [ Upstream commit 0a35780c755ccec097d15c6b4ff8b246a89f1689 ]
->
-> Make use of spi_max_transfer_size to avoid requesting transfers that are
-> too large for some spi controllers.
->
-> Signed-off-by: Brad Bishop <bradleyb@fuzziesquirrel.com>
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> Link: https://lore.kernel.org/r/20220524215142.60047-1-eajames@linux.ibm.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+My name is Dr Lily William from the United States.I am a French and
+American nationality
+(dual) living in the U.S and sometimes in France for Work Purpose.
 
-Please drop this, as it breaks operation on devices that don't need
-the split, and may cause a buffer overflow on those that do.
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
-https://lore.kernel.org/r/7ae260778d2c08986348ea48ce02ef148100e088.1655817534.git.geert+renesas@glider.be/
+Thanks
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+With love
+Lily

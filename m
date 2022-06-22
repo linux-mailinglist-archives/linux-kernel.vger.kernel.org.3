@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F40F555101
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1092D555105
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376372AbiFVQN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S1357891AbiFVQOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376571AbiFVQNw (ORCPT
+        with ESMTP id S232464AbiFVQN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:13:52 -0400
+        Wed, 22 Jun 2022 12:13:56 -0400
 Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A71E25E9F;
-        Wed, 22 Jun 2022 09:13:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C029BC2B;
+        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
 Received: by mail-ed1-x52c.google.com with SMTP id c13so20139110eds.10;
-        Wed, 22 Jun 2022 09:13:50 -0700 (PDT)
+        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cE/2OYYz5mN+xKGqyzZkM7i8jyDkRjpQ6WY0c9nnpkI=;
-        b=nUQ08BYK5oFMjhuwIdhfb68k27dg61OmpVwaXYMS2hbVZ9fdyf4oALt66tdaAUL1B3
-         rWBbo4MtyGKruasxn6e7dLhgHxT7LvmG0Pv//40q50rgMdT2GxH75jMdCs2hmJWfoBAA
-         b0rday1T6F/TkSeyE2Q/HBQBDt5gmvhgDjldLPtLkUD1T2+gjpW9bvme1SJnwqbMN4Pg
-         m2ToIWwJfj8bYsPP2DD4hddV+T6+336irst/x0Qkk+OmjsdYvg5Cn72N7wSYlVDKsKAv
-         t/xheAfXiJoPoZL/hy7MrwiCT23C/OylmEHjICTSiQq0MSMLxXIvM87lGKoLoy7Ag+0e
-         aYdQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zAlPejfAQCxvtnqb2e7esLuuwfx9+dbQueVecsqGTnM=;
+        b=AdqVL1fn2Nch6BaslzUJtV1cx1jD3oDKzhYBdgH8XXPW7Xs/yUzclctxexMRz0ye4m
+         T4+zMvA3dqhGFEjOGUt9HGdpRfluYH924o4KUB1E2cWq+dT54Ne3JHFOTX6SO6w+CZON
+         AFuUf90TWAAUW8S5ikQSQGJOLKHpqK33JV3nGHGYQ6L99vxL1sm1tvNwI5C4SZH8hDoK
+         Db+DsfftmTHV892LT4/7ELlpP81nPbF8nswVSGRlA+CYsHX2gLoNierd43ChQUymGQjU
+         8TTSXbYUMUmsfdb9oPormsYfVOavoi+HSqm6J2YvwZhjY/dCf44ObHmrTFNQXSpNTp4u
+         /Gjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cE/2OYYz5mN+xKGqyzZkM7i8jyDkRjpQ6WY0c9nnpkI=;
-        b=rG46YWwaT1ZlnUHJNnYLBqCAUBAFOrl0Bo4tqoiIA6nfJEBFaAH0oO+IX24llsGIZ5
-         7PxtQKcjjiUUxsfj1CIeVKnXb/XjceUonDllX9UDFBRi4qjLiWrdp26BW4hHhZxZGDOD
-         Byc17Iy9d25cPo08+uTExJUPLJC5i0R79N+vPjAAqMuRI6oGX0reEkQs+fqfGOQxe/un
-         2X7YMOhFupeFHiM2vjFVSxS+xNKLD0F5e3vpLQQFlxJxf6ENJSZ4zsXsqdZCieRjj0/r
-         YaKQdNbeqtWsdH75fe1oEX8LpFqU8/a29XkoOFJg73HxsEg+g7Fr9Sybe8kzaVqNjqU0
-         al+w==
-X-Gm-Message-State: AJIora88chQXhsgato30gS/5kiZ2wq3b150Bgf6g9wBkUZdij4pbv2U9
-        zm//uvMfSB3Q319w9PyFZCs=
-X-Google-Smtp-Source: AGRyM1tWD6g6LO0qhLnaY9KN6b/00f7QxioRtjLEKur7v1cPD63I0UcdtnaoF4NQCs9CgxoC6rjd9w==
-X-Received: by 2002:a05:6402:348e:b0:435:a912:355f with SMTP id v14-20020a056402348e00b00435a912355fmr4947487edc.326.1655914429451;
-        Wed, 22 Jun 2022 09:13:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zAlPejfAQCxvtnqb2e7esLuuwfx9+dbQueVecsqGTnM=;
+        b=h5FeQ9dyR8lopkLbEDyoXUVw96u6d3hTTbZW5O5SjX9XrxgNoGuLG/jK599pypY1gM
+         d3IUXimy5XgFtIonXoF9ZwrqruGwWbYBEiqfMr2ACnHwGqZE9cz2MuWd8uGVtEaHHfQ4
+         sk8+rv2AGd7ZvJ1+6pFRqIOTlWDunCwpi6cbgcium2A4GETs9YP49UWGDuZdi4y36PHp
+         ky6IRzIhUZ4Pt3rYTCvyfle8zXl0KaUCLu2aQk+UCXYrlJli64Kqk3jL7XBtj50Z2grM
+         4AgHMmQJqqzHbQY9B9BjZbSkqj8Ykx/xw8zhrzWZl9aGqKs2w6GaFw6xTzDjl4sTHjZr
+         SCTA==
+X-Gm-Message-State: AJIora+siqiFyVrIxBN4Lztx8kc0mZy2OEFAUFVb3WbC3Wgq24zjdEBp
+        MxOaUbrYkYXylcpRt7OXRlw=
+X-Google-Smtp-Source: AGRyM1tUeZKhkR6l8vLpmW0F9+thSOWMhMCzrTst6cJhHntejTBuoEAhk0TNhif3zETWLXT4QGdt1A==
+X-Received: by 2002:a05:6402:2750:b0:435:ab9f:1235 with SMTP id z16-20020a056402275000b00435ab9f1235mr4972683edd.188.1655914435429;
+        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
 Received: from localhost.localdomain ([185.107.95.225])
-        by smtp.gmail.com with ESMTPSA id sd14-20020a1709076e0e00b007072dc80e06sm9576036ejc.190.2022.06.22.09.13.43
+        by smtp.gmail.com with ESMTPSA id sd14-20020a1709076e0e00b007072dc80e06sm9576036ejc.190.2022.06.22.09.13.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 09:13:48 -0700 (PDT)
+        Wed, 22 Jun 2022 09:13:55 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Andy Gross <agross@kernel.org>,
@@ -63,11 +63,14 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Yassine Oudjana <yassine.oudjana@gmail.com>,
         devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/3] ASoC: dt-bindings: Add bindings for WCD9335 DAIs
-Date:   Wed, 22 Jun 2022 20:13:19 +0400
-Message-Id: <20220622161322.168017-1-y.oudjana@protonmail.com>
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] ASoC: dt-bindings: Add bindings for WCD9335 DAIs
+Date:   Wed, 22 Jun 2022 20:13:20 +0400
+Message-Id: <20220622161322.168017-2-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220622161322.168017-1-y.oudjana@protonmail.com>
+References: <20220622161322.168017-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,27 +83,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT bindings for WCD9335 DAIs and use them in the driver as well
-as all device trees currently using WCD9335.
+From: Yassine Oudjana <y.oudjana@protonmail.com>
 
+Add bindings for the DAIs available in WCD9335 to avoid
+having to use unclear number indices in device trees.
+
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 Changes since v1:
  - Make header guard match path
- - Maintain the alphabetical order in msm8996-xiaomi-gemini includes
 
-Yassine Oudjana (3):
-  ASoC: dt-bindings: Add bindings for WCD9335 DAIs
-  ASoC: wcd9335: Use DT bindings instead of local DAI definitions
-  arm64: dts: qcom: Use WCD9335 DT bindings
-
- MAINTAINERS                                       |  1 +
- arch/arm64/boot/dts/qcom/apq8096-db820c.dts       |  5 +++--
- .../arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts |  5 +++--
- .../boot/dts/qcom/msm8996-xiaomi-scorpio.dts      |  5 +++--
- include/dt-bindings/sound/qcom,wcd9335.h          | 15 +++++++++++++++
- sound/soc/codecs/wcd9335.c                        | 13 ++-----------
- 6 files changed, 27 insertions(+), 17 deletions(-)
+ MAINTAINERS                              |  1 +
+ include/dt-bindings/sound/qcom,wcd9335.h | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+)
  create mode 100644 include/dt-bindings/sound/qcom,wcd9335.h
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b774f21828f7..2bcc3cc129c5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16366,6 +16366,7 @@ M:	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+ M:	Banajit Goswami <bgoswami@quicinc.com>
+ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Supported
++F:	include/dt-bindings/sound/qcom,wcd9335.h
+ F:	sound/soc/codecs/lpass-va-macro.c
+ F:	sound/soc/codecs/lpass-wsa-macro.*
+ F:	sound/soc/codecs/msm8916-wcd-analog.c
+diff --git a/include/dt-bindings/sound/qcom,wcd9335.h b/include/dt-bindings/sound/qcom,wcd9335.h
+new file mode 100644
+index 000000000000..f5e9f1db091e
+--- /dev/null
++++ b/include/dt-bindings/sound/qcom,wcd9335.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++
++#ifndef __DT_SOUND_QCOM_WCD9335_H
++#define __DT_SOUND_QCOM_WCD9335_H
++
++#define AIF1_PB                 0
++#define AIF1_CAP                1
++#define AIF2_PB                 2
++#define AIF2_CAP                3
++#define AIF3_PB                 4
++#define AIF3_CAP                5
++#define AIF4_PB                 6
++#define NUM_CODEC_DAIS          7
++
++#endif
 -- 
 2.36.1
 

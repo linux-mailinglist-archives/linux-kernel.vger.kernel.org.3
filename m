@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6304554DD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8882554DCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358606AbiFVOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S234468AbiFVOst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357373AbiFVOtF (ORCPT
+        with ESMTP id S230349AbiFVOsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:49:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D37A23BFBD
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655909342;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4hYutT6A0gBfkQr0X8J4zcR1vTCradKixIqqKEZ5f2E=;
-        b=eXH410oNN3Q6SkW/lct7Ov3WSxDQU5o4IRYaIUflUrmUi7olPSDv9u/5yWqaVN+DVms/W7
-        tDfbZjaHoEyKOgR0DhdYy1WmmTV2hNB8ZXM9Q9KI66/cvz6rjujyz9c6yYxhsIrBBCvoj3
-        zYbjJ8eba7yZj+8mLVTvizRjshoeoCk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-iwwwGXe1MYCm2IvYuoTHzg-1; Wed, 22 Jun 2022 10:48:58 -0400
-X-MC-Unique: iwwwGXe1MYCm2IvYuoTHzg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B87E328049E5;
-        Wed, 22 Jun 2022 14:48:50 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.194.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 99A0E40C1421;
-        Wed, 22 Jun 2022 14:48:45 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        Jane Malalane <jane.malalane@citrix.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-crypto@vger.kernel.org (open list:CRYPTO API),
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 4/4] x86/cpuid: check for dependencies violations in CPUID and attempt to fix them
-Date:   Wed, 22 Jun 2022 17:48:20 +0300
-Message-Id: <20220622144820.751402-5-mlevitsk@redhat.com>
-In-Reply-To: <20220622144820.751402-1-mlevitsk@redhat.com>
-References: <20220622144820.751402-1-mlevitsk@redhat.com>
+        Wed, 22 Jun 2022 10:48:45 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F2338BE3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:48:44 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id mf9so14447452ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HH079LRyJTHmM+5gTDBKSJiZpHcFCkFjE8Gfy06llCc=;
+        b=H9tP4SI9QupeqEThyhbGj6fshmasD8PmJFGVHL7k7YByj2aMUy03B5eYGHNd2eMY74
+         XR6LRJmw/8PPwjk6xlbKZhXYFTke5A70dFaOHoRFyi0lz2OaJ7M18rhdJCLCZ0/wxbGk
+         2nmdaSa2GBf+qpEuUSSz22bLq6H++ga00KwHWt6bSRuUt+Uza96Cg/wz38LJt466nUXu
+         1WZtDG0wVI91nnt2oYicf3RRPGWW6/XnAQr/KP0pwHh9GHJjMdsk1dztKssfodFT/Mmk
+         N+y7mt5XpoPQirdnyo6H5Wf8MZCeuhId3dHCXz6A3f2jGvvj4/MzDkYCRFZR8WXm30GN
+         SPuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HH079LRyJTHmM+5gTDBKSJiZpHcFCkFjE8Gfy06llCc=;
+        b=O7zmG7yNqY4ohZpRvgI1o18vcJoN0BilmXuj+l+UotaPbNf8a4zMNxGsdVlITgeWuz
+         jwoX8lChzHHDHGFsWd68r+8O+QYqFvtsFyK/76hd+VBaHLuc7oTC0RJh95Qt9UL9qndu
+         zRIxBoILuW1OIKzY3mx34YnMwgfN9C66AYAbeHFJ0ia+VYQmh30296/UhMWKewpFk9Bo
+         Bg7VyX9FyX44ZtNVi0hqYIF5Tulr3kXHejXbshivtB9nUUDPROVZPR0YNOHSYl3P6x0i
+         EV6+VKU3ekCw5ttPkl5vTRnO7Z9edexSzQJzC6++dudJJyw9JPEUhm8gn5JJuNJk2CKi
+         qq+A==
+X-Gm-Message-State: AJIora+/F5rq1HDfw5cgwNClZQnrVyOcuhpxralJaNy2l/1ri9DzO94E
+        g57TbTztGQI9UqnwFUJLFAoKUg==
+X-Google-Smtp-Source: AGRyM1tTU8sGWhE5uoJlmgoqQlCvu0Bo0iKSowkNVd8F9534/qg8dpEzj0RucSD0a2PdldIeeIU+3g==
+X-Received: by 2002:a17:907:a427:b0:71b:6f0b:8beb with SMTP id sg39-20020a170907a42700b0071b6f0b8bebmr3434300ejc.496.1655909323287;
+        Wed, 22 Jun 2022 07:48:43 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gg19-20020a170906899300b00715705dd23asm9286292ejc.89.2022.06.22.07.48.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:48:42 -0700 (PDT)
+Message-ID: <fbf2251a-8df7-7bb3-bfda-8359b6d151be@linaro.org>
+Date:   Wed, 22 Jun 2022 16:48:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/4] dt-binding: mfd: Add Richtek RT5120 PMIC support
+Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, dmitry.torokhov@gmail.com
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+References: <1655892104-10874-1-git-send-email-u0084500@gmail.com>
+ <1655892104-10874-2-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1655892104-10874-2-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,111 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to configuration bugs, sometimes a CPU feature is disabled in CPUID,
-but not features that depend on it.
+On 22/06/2022 12:01, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add Richtek RT5120 PMIC devicetree document.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 
-While the above is not supported, the kernel should try to not crash,
-and clearing the dependent cpu caps is the best way to do it.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kernel/cpu/common.c     |  4 ++--
- arch/x86/kernel/cpu/cpuid-deps.c | 27 +++++++++++++++++++++++++--
- 2 files changed, 27 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 4cc79971d2d847..c83a8f447d6aed 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1469,7 +1469,7 @@ static void __init early_identify_cpu(struct cpuinfo_x86 *c)
- 			this_cpu->c_early_init(c);
- 
- 		c->cpu_index = 0;
--		filter_cpuid_features(c, false);
-+		filter_cpuid_features(c, true);
- 
- 		if (this_cpu->c_bsp_init)
- 			this_cpu->c_bsp_init(c);
-@@ -1757,7 +1757,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
- 	 */
- 
- 	/* Filter out anything that depends on CPUID levels we don't have */
--	filter_cpuid_features(c, true);
-+	filter_cpuid_features(c, false);
- 
- 	/* If the model name is still unset, do table lookup. */
- 	if (!c->x86_model_id[0]) {
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index bcb091d02a754b..6d9c0e39851805 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -94,6 +94,11 @@ static inline void clear_feature(struct cpuinfo_x86 *c, unsigned int feature)
- 		set_bit(feature, (unsigned long *)cpu_caps_cleared);
- }
- 
-+static inline bool test_feature(struct cpuinfo_x86 *c, unsigned int feature)
-+{
-+	return test_bit(feature, (unsigned long *)c->x86_capability);
-+}
-+
- /* Take the capabilities and the BUG bits into account */
- #define MAX_FEATURE_BITS ((NCAPINTS + NBUGINTS) * sizeof(u32) * 8)
- 
-@@ -127,6 +132,7 @@ void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int feature)
- 	} while (changed);
- }
- 
-+
- void setup_clear_cpu_cap(unsigned int feature)
- {
- 	clear_cpu_cap(&boot_cpu_data, feature);
-@@ -137,6 +143,10 @@ void setup_clear_cpu_cap(unsigned int feature)
-  * Some CPU features depend on higher CPUID levels, which may not always
-  * be available due to CPUID level capping or broken virtualization
-  * software.  Add those features to this table to auto-disable them.
-+ *
-+ * Also due to configuration bugs, some CPUID features might be present
-+ * while CPUID features that they depend on are not present,
-+ * e.g a AVX2 present but AVX is not present.
-  */
- struct cpuid_dependent_feature {
- 	u32 feature;
-@@ -151,9 +161,10 @@ cpuid_dependent_features[] = {
- 	{ 0, 0 }
- };
- 
--void filter_cpuid_features(struct cpuinfo_x86 *c, bool warn)
-+void filter_cpuid_features(struct cpuinfo_x86 *c, bool early)
- {
- 	const struct cpuid_dependent_feature *df;
-+	const struct cpuid_dep *d;
- 
- 	for (df = cpuid_dependent_features; df->feature; df++) {
- 
-@@ -172,10 +183,22 @@ void filter_cpuid_features(struct cpuinfo_x86 *c, bool warn)
- 			continue;
- 
- 		clear_cpu_cap(c, df->feature);
--		if (!warn)
-+		if (early)
- 			continue;
- 
- 		pr_warn("CPU: CPU feature " X86_CAP_FMT " disabled, no CPUID level 0x%x\n",
- 			x86_cap_flag(df->feature), df->level);
- 	}
-+
-+	for (d = cpuid_deps; d->feature; d++) {
-+
-+		if (!test_feature(c, d->feature) || test_feature(c, d->depends))
-+			continue;
-+
-+		clear_feature(c, d->feature);
-+
-+		pr_warn("CPU: CPU feature " X86_CAP_FMT " disabled, because it depends on "
-+			X86_CAP_FMT " which is not supported in CPUID\n",
-+			x86_cap_flag(d->feature), x86_cap_flag(d->depends));
-+	}
- }
--- 
-2.26.3
-
+Best regards,
+Krzysztof

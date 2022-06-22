@@ -2,66 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3F855460B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1D5554647
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354593AbiFVKfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
+        id S1354781AbiFVKgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239763AbiFVKfI (ORCPT
+        with ESMTP id S1346319AbiFVKgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:35:08 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11163B561;
-        Wed, 22 Jun 2022 03:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eBAMnDo2A2dyiL8GImJYSvjocj5z0gmHhJC/cQDizRc=; b=uNxTxCK9boI3FpAQY3vXXazKK9
-        z7Jk3/i6calEzMlh8bsDkdIe12D98ixDCjL04eHemGCLut+piHi5NAUm73LLHTynYB1kn3vWqE2la
-        QZOsKygKbOofTXUETehcn6JlIqHzalQAaRAjydAJ0QMk6Ms8Nx5tCtOFS4zkqnYdc89zZVrSAs3+J
-        hdOqCNnCRUm4MGHpyaiAfvcWiUpNLdZjTWT82jW5L3TOPpkRmQUgo/LvJ1q/Tnyo6/IGLuqKrj4ss
-        KIuFIYocRURF3keX6Gc/vXtBSxva7vbhdrDo1LkGrPoQhHbzYqMfP+48auWU6YyvEbINm3uwHuMlb
-        LYqyI+wA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o3xhL-003BUA-Gw;
-        Wed, 22 Jun 2022 10:34:59 +0000
-Date:   Wed, 22 Jun 2022 11:34:59 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sunliming@kylino.cn, kelulanainsley@gmail.com
-Subject: Re: [PATCH] walk_component(): get inode in lookup_slow branch
- statement block
-Message-ID: <YrLwU27DNm0YWOvB@ZenIV>
-References: <20220622085146.444516-1-sunliming@kylinos.cn>
+        Wed, 22 Jun 2022 06:36:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A1B3B571;
+        Wed, 22 Jun 2022 03:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655894172; x=1687430172;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ab1KhP6RlfLDUpqQx5KxRjWRdxnAQ1ojvkbHJLNruCA=;
+  b=GcM9hHVzjAthPztuxRujmN3z1Eqp2ZNzz2qZeUy3QsharapGACJV9cQT
+   KgHs0F2EuW4JvIhDxmDod9WhWiH+AQ5KJRYS9J2ZHAEDgDCBrzdXGCrCu
+   98iEYj9gwqCh5xfeiloak5UaIqcvBiDFJi7cUJVKyAZLM9LwE3WeTLNVA
+   LSJWSdXlYQrUw0lwwIZKa6Kb63AcVaSCpfVql0bz3hxCVF21/TCRgpMfk
+   yZZ/I1xvh6N2zMDZGFsA5o7gWEpZ5/n82UqlMJceMVB9wryD1WdS4pJdT
+   hgxMpkAe4AjCHklUWH5uk1V786ebMmTEpuLNwuYnJVtnlgORboK0H1/wW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281456222"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="281456222"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:36:12 -0700
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="644131142"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:36:10 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu: Add exp QS check in rcu_exp_handler() for no-preemptible expedited RCU
+Date:   Wed, 22 Jun 2022 18:35:49 +0800
+Message-Id: <20220622103549.2840087-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622085146.444516-1-sunliming@kylinos.cn>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 04:51:46PM +0800, sunliming wrote:
-> The inode variable is used as a parameter by the step_into function,
-> but is not assigned a value in the sub-lookup_slow branch path. So
-> get the inode in the sub-lookup_slow branch path.
+In CONFIG_PREEMPT=n and CONFIG_PREEMPT_COUNT=y kernel, after a exp
+grace period begins, if detected current CPU enters idle in
+rcu_exp_handler() IPI handler, will immediately report the exp QS of the
+current cpu, at this time, maybe not being in an RCU read-side critical
+section, but need wait until rcu-softirq or sched-clock irq or sched-switch
+occurs on current CPU to check and report exp QS.
 
-Take a good look at handle_mounts() and the things it does when
-*not* in RCU mode (i.e. LOOKUP_RCU is not set).  Specifically,
-                *inode = d_backing_inode(path->dentry);
-		*seqp = 0; /* out of RCU mode, so the value doesn't matter */
-this part.
+This commit add a exp QS check in rcu_exp_handler(), when not being
+in an RCU read-side critical section, report exp QS earlier.
 
-IOW, the values passed to step_into() in inode/seq are overridden unless
-we stay in RCU mode.  And if we'd been through lookup_slow(), we'd been
-out of RCU mode since before we called step_into().
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree_exp.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index be667583a554..34f08267410f 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -828,11 +828,14 @@ static void rcu_exp_handler(void *unused)
+ {
+ 	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+ 	struct rcu_node *rnp = rdp->mynode;
++	bool preempt_bh_disabled =
++				!!(preempt_count() & (PREEMPT_MASK | SOFTIRQ_MASK));
+ 
+ 	if (!(READ_ONCE(rnp->expmask) & rdp->grpmask) ||
+ 	    __this_cpu_read(rcu_data.cpu_no_qs.b.exp))
+ 		return;
+-	if (rcu_is_cpu_rrupt_from_idle()) {
++	if (rcu_is_cpu_rrupt_from_idle() ||
++			(IS_ENABLED(CONFIG_PREEMPT_COUNT) && !preempt_bh_disabled)) {
+ 		rcu_report_exp_rdp(this_cpu_ptr(&rcu_data));
+ 		return;
+ 	}
+-- 
+2.25.1
+

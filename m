@@ -2,67 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263845546FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6B255478B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357365AbiFVLbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        id S1357432AbiFVLcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiFVLbH (ORCPT
+        with ESMTP id S229578AbiFVLco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:31:07 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165DE3C4A6;
-        Wed, 22 Jun 2022 04:31:07 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id t5so1042693eje.1;
-        Wed, 22 Jun 2022 04:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eh4HkVDsNUcCjrVrz6IL8I6Ukne0dRUkr7TQ/GhLVBU=;
-        b=AZ9iej0XvpRnAhLD0JjZROv9wQKxswkBKvySPNAOlAVr4hLjq6S0zLYbT20iYjL2RT
-         LtcXWf6faKwiu8Vm3IRB/m7SgiMBgc27JaqNRB0Ecd7CQNM0oriSgmqQfbXqNsvigxOy
-         Z2IcJK3BUajzLfaGACW3JJrVYZbG5FXbzE4vfRcfI/UKVvBgy7YDajzRG+W+ohzOcPXt
-         G8+n3ZDIEH69dqmD59bZo9XhziSFnZ3m7cZ3zwXAAo+fXzPFn1pBH/0CHvb0k28p5UEL
-         q1O/5IaDBVcqXvbvztxEy0puq3RSiRPFbYsuY88sI+ynuVtauiPw/PTFYRA6Ane8o78K
-         4A5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eh4HkVDsNUcCjrVrz6IL8I6Ukne0dRUkr7TQ/GhLVBU=;
-        b=co2UcAeLV1ZKPF9QPqw28/NYl1uCq2TjDhFFn7rYudMwCKr45vSBkDdV7b5fXElg1H
-         Rd7ZjTJRB4hhNoQ2LFF6TsuIG3rE2vcqKYWeqMy9tkuusPUqLaPZ7S3+SgfPu1GCHYJj
-         0P1zaq5VIXRR0ZONtrIDOlPvVWRZf/5hXcDHplyMY+6UD5ceMOkgZe+lySZtlmvIqNyq
-         jNGBWlinkiwYg+rd2IHjshv2FEzKJgQs0LL7pWT7PLtCpNdqneWqZAm5+LARP07pI2r2
-         0f8ELuh2Q/2vu12bvsKLY00WhuoLuHaWk+xqPgYLSk8MQ2EwGcN4KHrZnnZAejyDPQ/J
-         4QhQ==
-X-Gm-Message-State: AJIora/11Rq5NYZAKKHnOISrckRgPpozctRJd2STvSrw/cqJdp/+gfPa
-        bosMR/uQsD/4cMTNNCGPF/10tykps6kY0YhUMz13N5B25ZEqow==
-X-Google-Smtp-Source: AGRyM1uB3jIgZPVv/WFvInCqvONtcIcqxiGZf8z2oaOvwVU053ZyMI96nxq9avUKA7dxjIo9PYTLDDP1bUMfNBKUTMw=
-X-Received: by 2002:a17:907:e92:b0:722:efe6:90fc with SMTP id
- ho18-20020a1709070e9200b00722efe690fcmr2759893ejc.44.1655897465576; Wed, 22
- Jun 2022 04:31:05 -0700 (PDT)
+        Wed, 22 Jun 2022 07:32:44 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8524D3C4B6;
+        Wed, 22 Jun 2022 04:32:42 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 98207C0006;
+        Wed, 22 Jun 2022 11:32:38 +0000 (UTC)
+Message-ID: <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org>
+Date:   Wed, 22 Jun 2022 13:32:37 +0200
 MIME-Version: 1.0
-References: <20220621150436.3303431-1-sudeep.holla@arm.com>
-In-Reply-To: <20220621150436.3303431-1-sudeep.holla@arm.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 22 Jun 2022 13:30:28 +0200
-Message-ID: <CAHp75VdFNir18Q-mLVd_87Sxd1Dz0Hg2B4XQfm5XzagO8sZQrg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: ACPI: Update links and references to DSD
- related docs
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     i.maximets@ovn.org, netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>, Florian Westphal <fw@strlen.de>
+References: <20220619003919.394622-1-i.maximets@ovn.org>
+ <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
+ <20220622102813.GA24844@breakpoint.cc>
+ <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [PATCH net] net: ensure all external references are released in
+ deferred skbuffs
+In-Reply-To: <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,60 +49,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 5:12 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> The existing references to DSD are stale and outdated. The new process
-> and guidance is maintained @https://github.com/UEFI/DSD-Guide
->
-> Update the existing documents to reflect the same.
+On 6/22/22 12:36, Eric Dumazet wrote:
+> On Wed, Jun 22, 2022 at 12:28 PM Florian Westphal <fw@strlen.de> wrote:
+>>
+>> Eric Dumazet <edumazet@google.com> wrote:
+>>> On Sun, Jun 19, 2022 at 2:39 AM Ilya Maximets <i.maximets@ovn.org> wrote:
+>>>>
+>>>> Open vSwitch system test suite is broken due to inability to
+>>>> load/unload netfilter modules.  kworker thread is getting trapped
+>>>> in the infinite loop while running a net cleanup inside the
+>>>> nf_conntrack_cleanup_net_list, because deferred skbuffs are still
+>>>> holding nfct references and not being freed by their CPU cores.
+>>>>
+>>>> In general, the idea that we will have an rx interrupt on every
+>>>> CPU core at some point in a near future doesn't seem correct.
+>>>> Devices are getting created and destroyed, interrupts are getting
+>>>> re-scheduled, CPUs are going online and offline dynamically.
+>>>> Any of these events may leave packets stuck in defer list for a
+>>>> long time.  It might be OK, if they are just a piece of memory,
+>>>> but we can't afford them holding references to any other resources.
+>>>>
+>>>> In case of OVS, nfct reference keeps the kernel thread in busy loop
+>>>> while holding a 'pernet_ops_rwsem' semaphore.  That blocks the
+>>>> later modprobe request from user space:
+>>>>
+>>>>   # ps
+>>>>    299 root  R  99.3  200:25.89 kworker/u96:4+
+>>>>
+>>>>   # journalctl
+>>>>   INFO: task modprobe:11787 blocked for more than 1228 seconds.
+>>>>         Not tainted 5.19.0-rc2 #8
+>>>>   task:modprobe     state:D
+>>>>   Call Trace:
+>>>>    <TASK>
+>>>>    __schedule+0x8aa/0x21d0
+>>>>    schedule+0xcc/0x200
+>>>>    rwsem_down_write_slowpath+0x8e4/0x1580
+>>>>    down_write+0xfc/0x140
+>>>>    register_pernet_subsys+0x15/0x40
+>>>>    nf_nat_init+0xb6/0x1000 [nf_nat]
+>>>>    do_one_initcall+0xbb/0x410
+>>>>    do_init_module+0x1b4/0x640
+>>>>    load_module+0x4c1b/0x58d0
+>>>>    __do_sys_init_module+0x1d7/0x220
+>>>>    do_syscall_64+0x3a/0x80
+>>>>    entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>>>>
+>>>> At this point OVS testsuite is unresponsive and never recover,
+>>>> because these skbuffs are never freed.
+>>>>
+>>>> Solution is to make sure no external references attached to skb
+>>>> before pushing it to the defer list.  Using skb_release_head_state()
+>>>> for that purpose.  The function modified to be re-enterable, as it
+>>>> will be called again during the defer list flush.
+>>>>
+>>>> Another approach that can fix the OVS use-case, is to kick all
+>>>> cores while waiting for references to be released during the net
+>>>> cleanup.  But that sounds more like a workaround for a current
+>>>> issue rather than a proper solution and will not cover possible
+>>>> issues in other parts of the code.
+>>>>
+>>>> Additionally checking for skb_zcopy() while deferring.  This might
+>>>> not be necessary, as I'm not sure if we can actually have zero copy
+>>>> packets on this path, but seems worth having for completeness as we
+>>>> should never defer such packets regardless.
+>>>>
+>>>> CC: Eric Dumazet <edumazet@google.com>
+>>>> Fixes: 68822bdf76f1 ("net: generalize skb freeing deferral to per-cpu lists")
+>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>>>> ---
+>>>>  net/core/skbuff.c | 16 +++++++++++-----
+>>>>  1 file changed, 11 insertions(+), 5 deletions(-)
+>>>
+>>> I do not think this patch is doing the right thing.
+>>>
+>>> Packets sitting in TCP receive queues should not hold state that is
+>>> not relevant for TCP recvmsg().
+>>
+>> Agree, but tcp_v4/6_rcv() already call nf_reset_ct(), else it would
+>> not be possible to remove nf_conntrack module in practice.
+> 
+> Well, existing nf_reset_ct() does not catch all cases, like TCP fastopen ?
 
-Taking Rafael's comment into account,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Thanks!
+Yeah, that is kind of the main problem I have with the current
+code.  It's very hard to find all the cases where skb has to be
+cleaned up and almost impossible for someone who doesn't know
+every aspect of every network subsystem in the kernel.  That's
+why I went with the more or less bulletproof approach of cleaning
+up while actually deferring.  I can try and test the code you
+proposed in the other reply, but at least, I think, we need a
+bunch of debug warnings in the skb_attempt_defer_free() to catch
+possible issues.
 
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  .../firmware-guide/acpi/DSD-properties-rules.rst      | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/Documentation/firmware-guide/acpi/DSD-properties-rules.rst b/Documentation/firmware-guide/acpi/DSD-properties-rules.rst
-> index 8b2d8d0864c2..70442bc2521e 100644
-> --- a/Documentation/firmware-guide/acpi/DSD-properties-rules.rst
-> +++ b/Documentation/firmware-guide/acpi/DSD-properties-rules.rst
-> @@ -21,7 +21,9 @@ specific type) associated with it.
->
->  In the ACPI _DSD context it is an element of the sub-package following the
->  generic Device Properties UUID in the _DSD return package as specified in the
-> -Device Properties UUID definition document [1]_.
-> +section titled "Well-Known _DSD UUIDs and Data Structure Formats" sub-section
-> +"Device Properties UUID" in _DSD (Device Specific Data) Implementation Guide
-> +document [1]_.
->
->  It also may be regarded as the definition of a key and the associated data type
->  that can be returned by _DSD in the Device Properties UUID sub-package for a
-> @@ -36,7 +38,9 @@ Property subsets are nested collections of properties.  Each of them is
->  associated with an additional key (name) allowing the subset to be referred
->  to as a whole (and to be treated as a separate entity).  The canonical
->  representation of property subsets is via the mechanism specified in the
-> -Hierarchical Properties Extension UUID definition document [2]_.
-> +section titled "Well-Known _DSD UUIDs and Data Structure Formats" sub-section
-> +"Hierarchical Data Extension UUID" in _DSD (Device Specific Data)
-> +Implementation Guide document [1]_.
->
->  Property sets may be hierarchical.  That is, a property set may contain
->  multiple property subsets that each may contain property subsets of its
-> @@ -96,5 +100,4 @@ contents.
->  References
->  ==========
->
-> -.. [1] https://www.uefi.org/sites/default/files/resources/_DSD-device-properties-UUID.pdf
-> -.. [2] https://www.uefi.org/sites/default/files/resources/_DSD-hierarchical-data-extension-UUID-v1.1.pdf
-> +.. [1] https://github.com/UEFI/DSD-Guide
-> --
-> 2.36.1
->
+Also, what about cleaning up extensions?  IIUC, at least one
+of them can hold external references.  SKB_EXT_SEC_PATH holds
+xfrm_state.  We should, probably, free them as well?
 
+And what about zerocopy skb?  I think, we should still not
+allow them to be deferred as they seem to hold HW resources.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> 
+> Maybe 68822bdf76f1 ("net: generalize skb freeing deferral to per-cpu lists")
+> only widened the problem.
+> 
+>>
+>> I wonder where the deferred skbs are coming from, any and all
+>> queued skbs need the conntrack state dropped.
+>>
+>> I don't mind a new helper that does a combined dst+ct release though.
+

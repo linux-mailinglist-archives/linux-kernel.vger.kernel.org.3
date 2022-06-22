@@ -2,56 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95123554753
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF335547B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356536AbiFVI7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        id S1356624AbiFVI7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356021AbiFVI66 (ORCPT
+        with ESMTP id S1356378AbiFVI7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:58:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982902AA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:58:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52129B81CF0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E80C34114;
-        Wed, 22 Jun 2022 08:58:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655888335;
-        bh=zEDBJcc/hdKUEzKTw+o0NSo3+GElIveIOWIAX5Umga4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RrOb+Oxnpuv9oTXXSKoSc2qCWY6eMt1SluoCJ0PZeE7QYfgEU2rEa7S4qR/bcrj/F
-         DEC9M71KfVDqPI5SdJz5XYYofnAdYzTYv6hdqfoZhFDwWYDTx7pQFc0K2x25CQQTUc
-         Cwj2+DuZs5SQ+MwhHnvw4heHFkRQmwLt/W/g0oNXnfrd8qrnR5sUi/ZAdlseeuc7X4
-         ZhYrJeoAFUchAe21OHc0+X550LALA7nHwnfWZeZ73pqMAatUueVAs/Qc+5uG5bqkgY
-         PFQtLHW/m2+E0EOap+NJAFfrWVIVtIIjQjAZ5gosTA1WJBQvtwmvFXiFRCTmCQ7+4E
-         3Txko6QX5gOoA==
-Message-ID: <87dd706a-6777-374f-1d41-7d791727697f@kernel.org>
-Date:   Wed, 22 Jun 2022 10:58:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3] arm/mm: Fix refcount leak bugs in cache
-Content-Language: en-US
-To:     Liang He <windhl@126.com>, linux@armlinux.org.uk,
-        rmk+kernel@armlinux.org.uk, wangkefeng.wang@huawei.com,
-        ardb@kernel.org, arnd@arndb.de, akpm@linux-foundation.org,
-        rppt@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220619013941.4061894-1-windhl@126.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220619013941.4061894-1-windhl@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 22 Jun 2022 04:59:08 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF5D10AB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:59:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VH5CzRp_1655888343;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VH5CzRp_1655888343)
+          by smtp.aliyun-inc.com;
+          Wed, 22 Jun 2022 16:59:03 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     rppt@linux.ibm.com, willy@infradead.org,
+        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 0/3] Add PUD and kernel PTE level pagetable account
+Date:   Wed, 22 Jun 2022 16:58:51 +0800
+Message-Id: <cover.1655887440.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,30 +38,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2022 03:39, Liang He wrote:
-> In feroceon_of_init() and tauros2_init(), of_find_matching_node()
-> will return a node pointer with refcount incremented. We should
-> use of_node_put() in fail path or when it is not used anymore.
-> 
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->  changelog:
-> 
->  v3: (1) merge arm/mm leak bugs (2) fix bugs intro-ed by v2
->  v2: (1) use real name (2) normalize coding style
->  v1: (1) fix leak bug
-> 
+Hi,
 
-Before applying the patch please check it carefully. Previous evidence
-[1][2] suggests that not it was not even compiled.
+Now we will miss to account the PUD level pagetable and kernel PTE level
+pagetable, as well as missing to set the PG_table flags for these pagetable
+pages, which will get an inaccurate pagetable accounting, and miss
+PageTable() validation in some cases. So this patch set introduces 2 new
+helpers to help to account PUD and kernel PTE pagetable pages.
 
+Note there are still some architectures specific pagetable allocation
+that need to account the pagetable pages, which need more investigation
+and cleanup in future. Now I only send patches to mm mailist, and if no
+objections from mm people, then I will send to the related arch's maillist
+to get more review. Thanks.
 
+Changes from RFC v1:
+ - Update some commit message.
+ - Add missing pgtable_clear_and_dec() on X86 arch.
+ - Use __free_page() to free pagetable which can avoid duplicated virt_to_page().
 
-[1] https://lore.kernel.org/all/202206221602.odN70SHs-lkp@intel.com/
+Baolin Wang (3):
+  mm: Factor out the pagetable pages account into new helper function
+  mm: Add PUD level pagetable account
+  mm: Add kernel PTE level pagetable pages account
 
-[2]
-https://lore.kernel.org/all/16f9a971.44e5.1817068ee3c.Coremail.windhl@126.com/
+ arch/arm64/include/asm/tlb.h         |  5 ++++-
+ arch/csky/include/asm/pgalloc.h      |  2 +-
+ arch/loongarch/include/asm/pgalloc.h | 11 ++++++++---
+ arch/microblaze/mm/pgtable.c         |  2 +-
+ arch/mips/include/asm/pgalloc.h      | 11 ++++++++---
+ arch/openrisc/mm/ioremap.c           |  2 +-
+ arch/s390/include/asm/tlb.h          |  1 +
+ arch/x86/mm/pgtable.c                | 10 ++++++++--
+ include/asm-generic/pgalloc.h        | 26 ++++++++++++++++++++++----
+ include/linux/mm.h                   | 24 ++++++++++++++++--------
+ 10 files changed, 70 insertions(+), 24 deletions(-)
 
+-- 
+1.8.3.1
 
-Best regards,
-Krzysztof

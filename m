@@ -2,116 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8122554DFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2855554DFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358111AbiFVOxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S1358513AbiFVOyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358885AbiFVOxo (ORCPT
+        with ESMTP id S1357566AbiFVOyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:53:44 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677A9186CF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:53:43 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id mf9so14478700ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HksIOYQ04JYg2f0eKNPT7IHZR7tMMF0Xa3OeTT746VA=;
-        b=mqARrPAKxR8z0ETRJaLvggdZ3s8/6oH8pOtcLK9EdQ//wTAN9usE69XpKc36A4DGCj
-         KXP1LUdMWuA7uY3EXWy3Ax0bndxwsEfh4x54N6zuYD54JzzSZJzwaSw6Zh7QCX8xO2zt
-         IXCZhg2PcrezimwVFqLzo5Ify3K8cbljOnS9ygVFx0TBXMH9iserpKW0ArD3uZyfXcwu
-         wWsUuSJ2HnnMkIkozcHGcalwpQYi/w+0yGZ2LSRWeIRXYv+ulbucy72N+UU1PgQRbbG+
-         eGtfsDJIECXsQNbilsyqaLxFMDKbc4Dct24TG3VuHWkoGv0zqmjrK0PBeDb/5TrrbYJ9
-         HY+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HksIOYQ04JYg2f0eKNPT7IHZR7tMMF0Xa3OeTT746VA=;
-        b=3BRVUypmofvubJDVQJyurF4ijOHqATDhAWWcOEQpz7B+v6nHDB8UUZW4e/NDQLoeTY
-         vOxBzGG2tdLBHqjGv3xlSBxPNbAnJ8q4a7vfq4ZJnClIjzuWzIDv021thPNk6BNF2dol
-         qid4uZ3ZGqh8STG3L9eAwAickTqffhi9676AX+u37pzdZBM+G7rKabsMuqJT/GdkqEPw
-         7+nI/exq/+un3SzmrOtH/2CQnPrS3w4SOe2Dqr59OltZKwlIGwSKmtqR6FOoTrW0mypD
-         kKwfdggB1mFAdGt3NM0ONjD02L8QOFGH6UPxsisMb4YZfb7ektpbw6SmN1fVkOiMLnC+
-         ySWA==
-X-Gm-Message-State: AJIora+nj7FJt7wizkY3DXSUwEUTY/NRPM+WU01kZg4nSeimhuPhZJrU
-        VN1z0lf2Oe0D9Xu3mTM8MGoohA==
-X-Google-Smtp-Source: AGRyM1u+K1u+xwGtx13m+HGTMXIlqo/MNWEzkQKKWF4vAOgxf/oC3jSGonkXzyloIphNK0YGE1ME8w==
-X-Received: by 2002:a17:906:ca91:b0:70d:52ca:7e7d with SMTP id js17-20020a170906ca9100b0070d52ca7e7dmr3505720ejb.552.1655909621956;
-        Wed, 22 Jun 2022 07:53:41 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u22-20020a17090617d600b006f3ef214dc0sm9423261eje.38.2022.06.22.07.53.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 07:53:41 -0700 (PDT)
-Message-ID: <8f0501c5-84f2-10f1-ae06-4b3936c50b12@linaro.org>
-Date:   Wed, 22 Jun 2022 16:53:40 +0200
+        Wed, 22 Jun 2022 10:54:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CCA26ACF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:54:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7418B61CD2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B39B2C34114;
+        Wed, 22 Jun 2022 14:54:37 +0000 (UTC)
+Date:   Wed, 22 Jun 2022 10:54:36 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        christophe.leroy@csgroup.eu, naveen.n.rao@linux.vnet.ibm.com,
+        mbenes@suse.cz, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [RFC][PATCH] ftrace,objtool: PC32 based __mcount_loc
+Message-ID: <20220622105436.775ccf7f@rorschach.local.home>
+In-Reply-To: <YqxoEJG6jGDWitg3@FVFF77S0Q05N>
+References: <YqxkhV1YcI6e+xXp@worktop.programming.kicks-ass.net>
+        <YqxoEJG6jGDWitg3@FVFF77S0Q05N>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 0/7] usb: typec: Introduce typec-switch binding
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-References: <20220615172129.1314056-1-pmalani@chromium.org>
- <CACeCKaetgayTS+yX0cuNiK7j6Yqd4o2ziX6nCoGTt64A3jFT=g@mail.gmail.com>
- <YrHE9KrF0HG9rVi/@kroah.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YrHE9KrF0HG9rVi/@kroah.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 15:17, Greg Kroah-Hartman wrote:
-> On Wed, Jun 15, 2022 at 11:13:33AM -0700, Prashant Malani wrote:
->> I should add:
->>
->> Series submission suggestions (of course, open to better suggestions too):
->> - Patches 1-3 can go through the USB repo.
-> 
-> I will take patches 1 and 2 now.
-> 
-> seems the others need reworks or acks from the DT people.
+On Fri, 17 Jun 2022 12:40:00 +0100
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-I just gave for patch 3 and before for 4, so you can grab these as well.
-Thanks!
+> We have a similar issue on arm64, which is exacerbated by needing ABS64
+> relocations (24 bytes per entry!) adding significant bloat when FTRACE is
+> enabled.
 
-Best regards,
-Krzysztof
+I have patches that bring down the size quite a bit. The mcount loc is
+read into the dyn_rec, which has two longs (the second long is the
+flags that only use 32 bits, but is a long to make it aligned, as a 64
+bit word followed by a 32bit word just added 32 bits of padding to make
+it an array).
+
+The patches make it into two ints (which bring down the size for 64 bit
+machines). The lists are broken up into blocks, and what I do is put
+the top 32 bits of a word into the top of the block, and make sure that
+they are the same among all the entries in the block.
+
+I guess its time to bring this back alive.
+
+-- Steve
+
+> 
+> It'd be really nice if going forwards compilers could expose an option to
+> generate PC32/PREL32 entries directly for this.
+

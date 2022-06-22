@@ -2,79 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A00554E91
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F9D554E98
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358489AbiFVPFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S1358967AbiFVPFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359091AbiFVPEn (ORCPT
+        with ESMTP id S1358467AbiFVPF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:04:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5C53ED22
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:04:39 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id ej4so20369813edb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=hUmddCRokEISZZHvdjhlOVHQhtjcQBw9pEt6a/TqMAE=;
-        b=ZMiII6ugqYDU28uSgOiFq+nWtlBKqMbEIqaJtZ740xvG0bz4pzL2+xxS6mO7VMIFh6
-         gA2jmjsfoUJoqCIRcxysNBkQKMdoCKL+g2qexOXDDECyMoVHD53IYRhQk/aU/+RaUFm8
-         q7fwPu8PCmGepzNXuJhsDmIRhlYFju4lQiuzAMlM790uHII3G3m4Aq1DLgYEHAyhcYWy
-         FkLPkk1nAZt/Dzk/StJDjbPv05jj4RXJ7w+4MRrbBSwgS5VyDxQF1SIDqzoLuCYhn9cr
-         jHA85aXakbGYsL3Ots1C6chWRLkbZZrojRL7m3cfl+v81ffyugnB1cF0tn0hdnemyOnH
-         /DwQ==
+        Wed, 22 Jun 2022 11:05:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D31832069
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655910325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/2IQy+E40urhXFacB8Vj36ycB9yteHAjL3Hd6nT3fLI=;
+        b=Vokv8DTIhrQmfSx6OwfyQua+cd1PXOhnU4LCW9Bvhbjud8gpV556PwzrAetBNSJ7LpKAgK
+        2REaD32yjarYF6sfX1y0DODUWTI4EpHZb4WG57a3DFRwmpk4hyFOPZu/SMbYNGH4a8fn5c
+        fmuHsA+ehEskpVDaWIt0762dfj/8I9A=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-43-BEKo-trQPKym2Bj7SMQhyg-1; Wed, 22 Jun 2022 11:05:23 -0400
+X-MC-Unique: BEKo-trQPKym2Bj7SMQhyg-1
+Received: by mail-qk1-f197.google.com with SMTP id bi36-20020a05620a31a400b006a79f0706e5so20270529qkb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:05:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hUmddCRokEISZZHvdjhlOVHQhtjcQBw9pEt6a/TqMAE=;
-        b=KOumZGZMZNqVVS8QDTagPK7sI/Gpxufw/RCXD1lN8jM3lJuCQZub6WugolBe/VZyIS
-         bZwf0Z5oBagjqGRaDcwwnnfFzl6x7NHL6f48MtnhQ5nYbAY5lciwCuPwBnkVg3BNNCH8
-         YkhQE/Gb4boUAGM7QKHQ9RXFwkUZmqkFAiDciGX8PykQ8scBDaMqotVAfqeWKLq2WkdU
-         Pf9M+13i4UgV04wYHBNMxK3Va/vi0XIvXh66wPALE+apsZUCd4p+AfSMgOjeXOnbmziw
-         gF8TjOQihe98ZP7PNiod9rP8rauf8STacsBI+YpIEQ5BpacQxm7T6Hn5Wad3OSJf57Bb
-         aTnA==
-X-Gm-Message-State: AJIora/E3F9Xy6RcUQkdEGPJjRdCbnDhYHGb4AKtBO3YiHI2HjwCYpAK
-        OwKnYT1uyNmTRDTAmkjFqSw5AQ==
-X-Google-Smtp-Source: AGRyM1tTxwfJZ3KOBDu/fchz7gVRdk0NDDW/XdTbNSuXdGFuiNER1u9yD66VaKHrXzZ9runkPk1cgg==
-X-Received: by 2002:a05:6402:4387:b0:435:94c6:716d with SMTP id o7-20020a056402438700b0043594c6716dmr4643357edc.298.1655910277693;
-        Wed, 22 Jun 2022 08:04:37 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n10-20020aa7db4a000000b00435726bd375sm10196491edt.57.2022.06.22.08.04.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 08:04:37 -0700 (PDT)
-Message-ID: <534c4112-f965-c32b-0c24-e2e6be1a663f@linaro.org>
-Date:   Wed, 22 Jun 2022 17:04:36 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/2IQy+E40urhXFacB8Vj36ycB9yteHAjL3Hd6nT3fLI=;
+        b=dO/fdvm1vi8bTXc79SbMPlwTiKli+kUAe/915SQgq/E/0xa933CYHl+mYg+MToN41l
+         eemIQBIGqjjj4X9n5LA6YUCtp5prsdGJXfPD02+E3Fan4roTJlh92bo32YpL4yz+ojHC
+         VgAJaIfrTvJrl+qwkBS55jV4WU01PItrbdqWnWTGMl1rqWUSq4ILHrv4qWPZHITCD/0b
+         4U55pSf0ijLngNiTbUfkdQA6mClWMwuF4S9lZf2Z8j1+g67VkXk4TIFuVEeFoMJsmlNF
+         4xNrJ05ePqKHgp2hwAtVodjglQe0yUupZqHilIfSj8qIpGqtPNUJzh/84ZqQIWvkXZXn
+         m79w==
+X-Gm-Message-State: AJIora95VL8wOb4qAunVQ2U2UNtzemXslZ8iXVvK2S4pdEYQRF5XFZvf
+        9UNRitfoNeiGZLENn7hW83rcyIo4bhc/jpzojR/WyyqqWX7JzAm6S+uFRcad2r3qZY4JhsVj9sR
+        gjqyY449BBjynNW/MTyqx81B3AhnituA0kz/UcKny
+X-Received: by 2002:a37:9e8d:0:b0:6ae:e97f:0 with SMTP id h135-20020a379e8d000000b006aee97f0000mr771683qke.255.1655910321124;
+        Wed, 22 Jun 2022 08:05:21 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sQQ1h9P/HHEVYnAo2mvHU2BBI6pfbGjZhVCLCVPT5jR/q5Yw/ghpcZqC3xUNOJBIwMqEbn/hBb7fQQn1SmrVE=
+X-Received: by 2002:a37:9e8d:0:b0:6ae:e97f:0 with SMTP id h135-20020a379e8d000000b006aee97f0000mr771619qke.255.1655910320506;
+ Wed, 22 Jun 2022 08:05:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2 2/8] dt-bindings: arm64: ipq5018: Add binding
- descriptions for clock and reset
-Content-Language: en-US
-To:     Sricharan R <quic_srichara@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, p.zabel@pengutronix.de,
-        quic_varada@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220621161126.15883-1-quic_srichara@quicinc.com>
- <20220621161126.15883-3-quic_srichara@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220621161126.15883-3-quic_srichara@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220330180436.24644-1-gdawar@xilinx.com> <20220330180436.24644-20-gdawar@xilinx.com>
+ <CAGxU2F6OO108oHsrLBWJnYRG2yRU8QnRxAdjJhUUcp8AqaAP-g@mail.gmail.com> <CAJaqyWd8MR9vTRcCTktzC3VL054x5H5_sXy+MLVNewFDkjQUSw@mail.gmail.com>
+In-Reply-To: <CAJaqyWd8MR9vTRcCTktzC3VL054x5H5_sXy+MLVNewFDkjQUSw@mail.gmail.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Wed, 22 Jun 2022 17:04:44 +0200
+Message-ID: <CAJaqyWc36adK-gUzc8tMgDDe5SoBPy7xN-UtcFA4=aDezdJ5LA@mail.gmail.com>
+Subject: Re: [PATCH v2 19/19] vdpasim: control virtqueue support
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Gautam Dawar <gautam.dawar@xilinx.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Gautam Dawar <gdawar@xilinx.com>,
+        Longpeng <longpeng2@huawei.com>, Eli Cohen <elic@nvidia.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>, habetsm.xilinx@gmail.com,
+        ecree.xilinx@gmail.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,288 +92,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2022 18:11, Sricharan R wrote:
-> From: Varadarajan Narayanan <quic_varada@quicinc.com>
-> 
-> This patch adds support for the global clock controller found on
-> the IPQ5018 based devices.
-> 
-> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  .../bindings/clock/qcom,gcc-other.yaml        |   3 +
->  include/dt-bindings/clock/qcom,gcc-ipq5018.h  | 188 ++++++++++++++++++
->  include/dt-bindings/reset/qcom,gcc-ipq5018.h  | 122 ++++++++++++
->  3 files changed, 313 insertions(+)
->  create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq5018.h
->  create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq5018.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> index 6c45e0f85494..3852346dbcad 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> @@ -29,6 +29,8 @@ description: |
->    - dt-bindings/clock/qcom,gcc-mdm9615.h
->    - dt-bindings/reset/qcom,gcc-mdm9615.h
->    - dt-bindings/clock/qcom,gcc-sdm660.h  (qcom,gcc-sdm630 and qcom,gcc-sdm660)
-> +  - dt-bindings/clock/qcom,gcc-ipq5018.h
-> +  - dt-bindings/reset/qcom,gcc-ipq5018.h
->  
->  allOf:
->    - $ref: "qcom,gcc.yaml#"
-> @@ -51,6 +53,7 @@ properties:
->        - qcom,gcc-mdm9615
->        - qcom,gcc-sdm630
->        - qcom,gcc-sdm660
-> +      - qcom,gcc-ipq5018
->  
->  required:
->    - compatible
-> diff --git a/include/dt-bindings/clock/qcom,gcc-ipq5018.h b/include/dt-bindings/clock/qcom,gcc-ipq5018.h
-> new file mode 100644
-> index 000000000000..14916600e2a7
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/qcom,gcc-ipq5018.h
-> @@ -0,0 +1,188 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+On Wed, Jun 22, 2022 at 12:21 PM Eugenio Perez Martin
+<eperezma@redhat.com> wrote:
+>
+> On Tue, Jun 21, 2022 at 5:20 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> >
+> > Hi Gautam,
+> >
+> > On Wed, Mar 30, 2022 at 8:21 PM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
+> > >
+> > > This patch introduces the control virtqueue support for vDPA
+> > > simulator. This is a requirement for supporting advanced features like
+> > > multiqueue.
+> > >
+> > > A requirement for control virtqueue is to isolate its memory access
+> > > from the rx/tx virtqueues. This is because when using vDPA device
+> > > for VM, the control virqueue is not directly assigned to VM. Userspace
+> > > (Qemu) will present a shadow control virtqueue to control for
+> > > recording the device states.
+> > >
+> > > The isolation is done via the virtqueue groups and ASID support in
+> > > vDPA through vhost-vdpa. The simulator is extended to have:
+> > >
+> > > 1) three virtqueues: RXVQ, TXVQ and CVQ (control virtqueue)
+> > > 2) two virtqueue groups: group 0 contains RXVQ and TXVQ; group 1
+> > >    contains CVQ
+> > > 3) two address spaces and the simulator simply implements the address
+> > >    spaces by mapping it 1:1 to IOTLB.
+> > >
+> > > For the VM use cases, userspace(Qemu) may set AS 0 to group 0 and AS 1
+> > > to group 1. So we have:
+> > >
+> > > 1) The IOTLB for virtqueue group 0 contains the mappings of guest, so
+> > >    RX and TX can be assigned to guest directly.
+> > > 2) The IOTLB for virtqueue group 1 contains the mappings of CVQ which
+> > >    is the buffers that allocated and managed by VMM only. So CVQ of
+> > >    vhost-vdpa is visible to VMM only. And Guest can not access the CVQ
+> > >    of vhost-vdpa.
+> > >
+> > > For the other use cases, since AS 0 is associated to all virtqueue
+> > > groups by default. All virtqueues share the same mapping by default.
+> > >
+> > > To demonstrate the function, VIRITO_NET_F_CTRL_MACADDR is
+> > > implemented in the simulator for the driver to set mac address.
+> > >
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
+> > > ---
+> > >  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 91 ++++++++++++++++++++++------
+> > >  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  2 +
+> > >  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 88 ++++++++++++++++++++++++++-
+> > >  3 files changed, 161 insertions(+), 20 deletions(-)
+> > >
+> > > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > > index 659e2e2e4b0c..51bd0bafce06 100644
+> > > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > > @@ -96,11 +96,17 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
+> > >  {
+> > >         int i;
+> > >
+> > > -       for (i = 0; i < vdpasim->dev_attr.nvqs; i++)
+> > > +       spin_lock(&vdpasim->iommu_lock);
+> > > +
+> > > +       for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+> > >                 vdpasim_vq_reset(vdpasim, &vdpasim->vqs[i]);
+> > > +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
+> > > +                                &vdpasim->iommu_lock);
+> > > +       }
+> > > +
+> > > +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
+> > > +               vhost_iotlb_reset(&vdpasim->iommu[i]);
+> > >
+> > > -       spin_lock(&vdpasim->iommu_lock);
+> > > -       vhost_iotlb_reset(vdpasim->iommu);
+> > >         spin_unlock(&vdpasim->iommu_lock);
+> > >
+> > >         vdpasim->features = 0;
+> > > @@ -145,7 +151,7 @@ static dma_addr_t vdpasim_map_range(struct vdpasim *vdpasim, phys_addr_t paddr,
+> > >         dma_addr = iova_dma_addr(&vdpasim->iova, iova);
+> > >
+> > >         spin_lock(&vdpasim->iommu_lock);
+> > > -       ret = vhost_iotlb_add_range(vdpasim->iommu, (u64)dma_addr,
+> > > +       ret = vhost_iotlb_add_range(&vdpasim->iommu[0], (u64)dma_addr,
+> > >                                     (u64)dma_addr + size - 1, (u64)paddr, perm);
+> > >         spin_unlock(&vdpasim->iommu_lock);
+> > >
+> > > @@ -161,7 +167,7 @@ static void vdpasim_unmap_range(struct vdpasim *vdpasim, dma_addr_t dma_addr,
+> > >                                 size_t size)
+> > >  {
+> > >         spin_lock(&vdpasim->iommu_lock);
+> > > -       vhost_iotlb_del_range(vdpasim->iommu, (u64)dma_addr,
+> > > +       vhost_iotlb_del_range(&vdpasim->iommu[0], (u64)dma_addr,
+> > >                               (u64)dma_addr + size - 1);
+> > >         spin_unlock(&vdpasim->iommu_lock);
+> > >
+> > > @@ -250,8 +256,9 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
+> > >         else
+> > >                 ops = &vdpasim_config_ops;
+> > >
+> > > -       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops, 1,
+> > > -                                   1, dev_attr->name, false);
+> > > +       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops,
+> > > +                                   dev_attr->ngroups, dev_attr->nas,
+> > > +                                   dev_attr->name, false);
+> > >         if (IS_ERR(vdpasim)) {
+> > >                 ret = PTR_ERR(vdpasim);
+> > >                 goto err_alloc;
+> > > @@ -278,16 +285,20 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
+> > >         if (!vdpasim->vqs)
+> > >                 goto err_iommu;
+> > >
+> > > -       vdpasim->iommu = vhost_iotlb_alloc(max_iotlb_entries, 0);
+> > > +       vdpasim->iommu = kmalloc_array(vdpasim->dev_attr.nas,
+> > > +                                      sizeof(*vdpasim->iommu), GFP_KERNEL);
+> > >         if (!vdpasim->iommu)
+> > >                 goto err_iommu;
+> > >
+> > > +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
+> > > +               vhost_iotlb_init(&vdpasim->iommu[i], 0, 0);
+> > > +
+> > >         vdpasim->buffer = kvmalloc(dev_attr->buffer_size, GFP_KERNEL);
+> > >         if (!vdpasim->buffer)
+> > >                 goto err_iommu;
+> > >
+> > >         for (i = 0; i < dev_attr->nvqs; i++)
+> > > -               vringh_set_iotlb(&vdpasim->vqs[i].vring, vdpasim->iommu,
+> > > +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
+> > >                                  &vdpasim->iommu_lock);
+> > >
+> > >         ret = iova_cache_get();
+> > > @@ -401,7 +412,11 @@ static u32 vdpasim_get_vq_align(struct vdpa_device *vdpa)
+> > >
+> > >  static u32 vdpasim_get_vq_group(struct vdpa_device *vdpa, u16 idx)
+> > >  {
+> > > -       return 0;
+> > > +       /* RX and TX belongs to group 0, CVQ belongs to group 1 */
+> > > +       if (idx == 2)
+> > > +               return 1;
+> > > +       else
+> > > +               return 0;
+> >
+> > This code only works for the vDPA-net simulator, since
+> > vdpasim_get_vq_group() is also shared with other simulators (e.g.
+> > vdpa_sim_blk),
+>
+> That's totally right.
+>
+> > should we move this net-specific code into
+> > vdpa_sim_net.c, maybe adding a callback implemented by the different
+> > simulators?
+> >
+>
+> At this moment, VDPASIM_BLK_VQ_NUM is fixed to 1, so maybe the right
+> thing to do for the -rc phase is to check if idx > vdpasim.attr.nvqs?
+> It's a more general fix.
+>
 
-This should be dual-license, as Rob asked last time. It's also favorable
-for Qualcomm, so there is no problem in that.
+Actually, that is already checked by vhost/vdpa.c.
 
-GPL-2.0-only OR BSD-2-Clause
+Taking that into account, is it worth introducing the change for 5.19?
+I'm totally ok with the change for 5.20.
 
-> +/*
-> + * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLOCK_IPQ_GCC_5018_H
-> +#define _DT_BINDINGS_CLOCK_IPQ_GCC_5018_H
-> +
-> +#define GPLL0_MAIN					0
-> +#define GPLL0						1
-> +#define GPLL2_MAIN					2
-> +#define GPLL2						3
-> +#define GPLL4_MAIN					4
-> +#define GPLL4						5
-> +#define UBI32_PLL_MAIN					6
-> +#define UBI32_PLL					7
-> +#define APSS_AHB_CLK_SRC				9
-> +#define APSS_AHB_POSTDIV_CLK_SRC			10
-> +#define APSS_AXI_CLK_SRC				11
-> +#define BLSP1_QUP1_I2C_APPS_CLK_SRC			12
-> +#define BLSP1_QUP1_SPI_APPS_CLK_SRC			13
-> +#define BLSP1_QUP2_I2C_APPS_CLK_SRC			14
-> +#define BLSP1_QUP2_SPI_APPS_CLK_SRC			15
-> +#define BLSP1_QUP3_I2C_APPS_CLK_SRC			16
-> +#define BLSP1_QUP3_SPI_APPS_CLK_SRC			17
-> +#define BLSP1_UART1_APPS_CLK_SRC			18
-> +#define BLSP1_UART2_APPS_CLK_SRC			19
-> +#define CRYPTO_CLK_SRC					20
-> +#define GCC_APSS_AHB_CLK				23
+Thanks!
 
-No holes in IDs. The IDs are integers incremented by one, serving as an
-abstract number, not some register offset or register value.
+> For the general case, yes, a callback should be issued to the actual
+> simulator so it's not a surprise when VDPASIM_BLK_VQ_NUM increases,
+> either dynamically or by anyone testing it.
+>
+> Thoughts?
+>
+> Thanks!
 
-> +#define GCC_APSS_AXI_CLK				24
-> +#define GCC_BLSP1_AHB_CLK				25
-> +#define GCC_BLSP1_QUP1_I2C_APPS_CLK			26
-> +#define GCC_BLSP1_QUP1_SPI_APPS_CLK			27
-> +#define GCC_BLSP1_QUP2_I2C_APPS_CLK			28
-> +#define GCC_BLSP1_QUP2_SPI_APPS_CLK			29
-> +#define GCC_BLSP1_QUP3_I2C_APPS_CLK			30
-> +#define GCC_BLSP1_QUP3_SPI_APPS_CLK			31
-> +#define GCC_BLSP1_UART1_APPS_CLK			33
-> +#define GCC_BLSP1_UART2_APPS_CLK			34
-> +#define GCC_BTSS_LPO_CLK				36
-> +#define GCC_CMN_BLK_AHB_CLK				40
-> +#define GCC_CMN_BLK_SYS_CLK				41
-> +#define GCC_CRYPTO_AHB_CLK				44
-> +#define GCC_CRYPTO_AXI_CLK				45
-> +#define GCC_CRYPTO_CLK					46
-> +#define GCC_CRYPTO_PPE_CLK				47
-> +#define GCC_DCC_CLK					48
-> +#define GCC_GEPHY_RX_CLK				53
-
-No holes.
-
-> +#define GCC_GEPHY_TX_CLK				54
-> +#define GCC_GMAC0_CFG_CLK				55
-> +#define GCC_GMAC0_PTP_CLK				56
-> +#define GCC_GMAC0_RX_CLK				57
-> +#define GCC_GMAC0_SYS_CLK				58
-> +#define GCC_GMAC0_TX_CLK				59
-> +#define GCC_GMAC1_CFG_CLK				60
-> +#define GCC_GMAC1_PTP_CLK				61
-> +#define GCC_GMAC1_RX_CLK				62
-> +#define GCC_GMAC1_SYS_CLK				63
-> +#define GCC_GMAC1_TX_CLK				64
-> +#define GCC_GP1_CLK					65
-> +#define GCC_GP2_CLK					66
-> +#define GCC_GP3_CLK					67
-> +#define GCC_LPASS_CORE_AXIM_CLK				69
-
-Ditto.
-
-> +#define GCC_LPASS_SWAY_CLK				70
-> +#define GCC_MDIO0_AHB_CLK				71
-> +#define GCC_MDIO1_AHB_CLK				72
-> +#define GCC_PCIE0_AHB_CLK				74
-> +#define GCC_PCIE0_AUX_CLK				75
-> +#define GCC_PCIE0_AXI_M_CLK				76
-> +#define GCC_PCIE0_AXI_S_BRIDGE_CLK			77
-> +#define GCC_PCIE0_AXI_S_CLK				78
-> +#define GCC_PCIE1_AHB_CLK				79
-> +#define GCC_PCIE1_AUX_CLK				80
-> +#define GCC_PCIE1_AXI_M_CLK				81
-> +#define GCC_PCIE1_AXI_S_BRIDGE_CLK			82
-> +#define GCC_PCIE1_AXI_S_CLK				83
-> +#define GCC_PRNG_AHB_CLK				84
-> +#define GCC_Q6_AXIM_CLK					85
-> +#define GCC_Q6_AXIM2_CLK				86
-> +#define GCC_Q6_AXIS_CLK					87
-> +#define GCC_Q6_AHB_CLK					88
-> +#define GCC_Q6_AHB_S_CLK				89
-> +#define GCC_Q6_TSCTR_1TO2_CLK				90
-> +#define GCC_Q6SS_ATBM_CLK				91
-> +#define GCC_Q6SS_PCLKDBG_CLK				92
-> +#define GCC_Q6SS_TRIG_CLK				93
-> +#define GCC_QDSS_AT_CLK					94
-> +#define GCC_QDSS_CFG_AHB_CLK				95
-> +#define GCC_QDSS_DAP_AHB_CLK				96
-> +#define GCC_QDSS_DAP_CLK				97
-> +#define GCC_QDSS_ETR_USB_CLK				98
-> +#define GCC_QDSS_EUD_AT_CLK				99
-> +#define GCC_QDSS_STM_CLK				100
-> +#define GCC_QDSS_TRACECLKIN_CLK				101
-> +#define GCC_QDSS_TSCTR_DIV8_CLK				102
-> +#define GCC_QPIC_AHB_CLK				103
-> +#define GCC_QPIC_CLK					104
-> +#define GCC_QPIC_IO_MACRO_CLK				105
-> +#define GCC_SDCC1_AHB_CLK				107
-> +#define GCC_SDCC1_APPS_CLK				108
-> +#define GCC_SLEEP_CLK_SRC				109
-> +#define GCC_SNOC_GMAC0_AHB_CLK				110
-> +#define GCC_SNOC_GMAC0_AXI_CLK				111
-> +#define GCC_SNOC_GMAC1_AHB_CLK				112
-> +#define GCC_SNOC_GMAC1_AXI_CLK				113
-> +#define GCC_SNOC_LPASS_AXIM_CLK				114
-> +#define GCC_SNOC_LPASS_SWAY_CLK				115
-> +#define GCC_SNOC_UBI0_AXI_CLK				118
-
-Ditto... and in all other places.
-
-> +#define GCC_SYS_NOC_PCIE0_AXI_CLK			119
-> +#define GCC_SYS_NOC_PCIE1_AXI_CLK			120
-> +#define GCC_SYS_NOC_QDSS_STM_AXI_CLK			121
-> +#define GCC_SYS_NOC_USB0_AXI_CLK			123
-> +#define GCC_SYS_NOC_WCSS_AHB_CLK			124
-> +#define GCC_UBI0_AXI_CLK				128
-> +#define GCC_UBI0_CFG_CLK				129
-> +#define GCC_UBI0_CORE_CLK				130
-> +#define GCC_UBI0_DBG_CLK				131
-> +#define GCC_UBI0_NC_AXI_CLK				132
-> +#define GCC_UBI0_UTCM_CLK				133
-> +#define GCC_UNIPHY_AHB_CLK				134
-> +#define GCC_UNIPHY_RX_CLK				135
-> +#define GCC_UNIPHY_SYS_CLK				136
-> +#define GCC_UNIPHY_TX_CLK				137
-> +#define GCC_USB0_AUX_CLK				138
-> +#define GCC_USB0_EUD_AT_CLK				139
-> +#define GCC_USB0_LFPS_CLK				140
-> +#define GCC_USB0_MASTER_CLK				141
-> +#define GCC_USB0_MOCK_UTMI_CLK				142
-> +#define GCC_USB0_PHY_CFG_AHB_CLK			143
-> +#define GCC_USB0_SLEEP_CLK				144
-> +#define GCC_WCSS_ACMT_CLK				145
-> +#define GCC_WCSS_AHB_S_CLK				146
-> +#define GCC_WCSS_AXI_M_CLK				147
-> +#define GCC_WCSS_AXI_S_CLK				148
-> +#define GCC_WCSS_DBG_IFC_APB_BDG_CLK			149
-> +#define GCC_WCSS_DBG_IFC_APB_CLK			150
-> +#define GCC_WCSS_DBG_IFC_ATB_BDG_CLK			151
-> +#define GCC_WCSS_DBG_IFC_ATB_CLK			152
-> +#define GCC_WCSS_DBG_IFC_DAPBUS_BDG_CLK			153
-> +#define GCC_WCSS_DBG_IFC_DAPBUS_CLK			154
-> +#define GCC_WCSS_DBG_IFC_NTS_BDG_CLK			155
-> +#define GCC_WCSS_DBG_IFC_NTS_CLK			156
-> +#define GCC_WCSS_ECAHB_CLK				157
-> +#define GCC_XO_CLK					158
-> +#define GCC_XO_CLK_SRC					159
-> +#define GMAC0_RX_CLK_SRC				161
-> +#define GMAC0_TX_CLK_SRC				162
-> +#define GMAC1_RX_CLK_SRC				163
-> +#define GMAC1_TX_CLK_SRC				164
-> +#define GMAC_CLK_SRC					165
-> +#define GP1_CLK_SRC					166
-> +#define GP2_CLK_SRC					167
-> +#define GP3_CLK_SRC					168
-> +#define LPASS_AXIM_CLK_SRC				169
-> +#define LPASS_SWAY_CLK_SRC				170
-> +#define PCIE0_AUX_CLK_SRC				171
-> +#define PCIE0_AXI_CLK_SRC				172
-> +#define PCIE1_AUX_CLK_SRC				173
-> +#define PCIE1_AXI_CLK_SRC				174
-> +#define PCNOC_BFDCD_CLK_SRC				175
-> +#define Q6_AXI_CLK_SRC					176
-> +#define QDSS_AT_CLK_SRC					177
-> +#define QDSS_STM_CLK_SRC				178
-> +#define QDSS_TSCTR_CLK_SRC				179
-> +#define QDSS_TRACECLKIN_CLK_SRC				180
-> +#define QPIC_IO_MACRO_CLK_SRC				181
-> +#define SDCC1_APPS_CLK_SRC				182
-> +#define SYSTEM_NOC_BFDCD_CLK_SRC			184
-> +#define UBI0_AXI_CLK_SRC				185
-> +#define UBI0_CORE_CLK_SRC				186
-> +#define USB0_AUX_CLK_SRC				187
-> +#define USB0_LFPS_CLK_SRC				188
-> +#define USB0_MASTER_CLK_SRC				189
-> +#define USB0_MOCK_UTMI_CLK_SRC				190
-> +#define WCSS_AHB_CLK_SRC				191
-> +#define PCIE0_PIPE_CLK_SRC				192
-> +#define PCIE1_PIPE_CLK_SRC				193
-> +#define GCC_PCIE0_PIPE_CLK				194
-> +#define GCC_PCIE1_PIPE_CLK				195
-> +#define USB0_PIPE_CLK_SRC				196
-> +#define GCC_USB0_PIPE_CLK				197
-> +#define GMAC0_RX_DIV_CLK_SRC				198
-> +#define GMAC0_TX_DIV_CLK_SRC				199
-> +#define GMAC1_RX_DIV_CLK_SRC				200
-> +#define GMAC1_TX_DIV_CLK_SRC				201
-> +#define ADSS_PWM_CLK_SRC				202
-> +#define GCC_ADSS_PWM_CLK				203
-> +#endif
-> diff --git a/include/dt-bindings/reset/qcom,gcc-ipq5018.h b/include/dt-bindings/reset/qcom,gcc-ipq5018.h
-> new file mode 100644
-> index 000000000000..bdbc974cb6ea
-> --- /dev/null
-> +++ b/include/dt-bindings/reset/qcom,gcc-ipq5018.h
-> @@ -0,0 +1,122 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-Dual license
-
-
-> +/*
-> + * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_RESET_IPQ_GCC_5018_H
-> +#define _DT_BINDINGS_RESET_IPQ_GCC_5018_H
-> +
-> +#define GCC_APC0_VOLTAGE_DROOP_DETECTOR_BCR	0
-> +#define	GCC_BLSP1_BCR				1
-> +#define GCC_BLSP1_QUP1_BCR			2
-> +#define	GCC_BLSP1_QUP2_BCR			3
-
-Such indentation is not Linux coding style. Please drop it.
-
-> +#define	GCC_BLSP1_QUP3_BCR			4
-> +#define	GCC_BLSP1_UART1_BCR			5
-> +#define	GCC_BLSP1_UART2_BCR			6
-> +#define	GCC_BOOT_ROM_BCR			7
-> +#define	GCC_BTSS_BCR				8
-
-
-Best regards,
-Krzysztof

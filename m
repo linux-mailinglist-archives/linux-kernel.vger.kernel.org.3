@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DA4556EA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02055556EA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359235AbiFVWmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 18:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S1358227AbiFVWmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 18:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238058AbiFVWmk (ORCPT
+        with ESMTP id S232384AbiFVWmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Jun 2022 18:42:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66741302;
-        Wed, 22 Jun 2022 15:42:39 -0700 (PDT)
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3321341301
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1655937759; x=1687473759;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wAI3HgZDn19wBnHx36VJXsDEl9XOn1bfnAvHgA6urTI=;
-  b=Mu1OmF40FAZyt0U6ov6IlAe/QtHfW9bGWr50kFKGzeoipujsIY4k936B
-   Rkq4nTPBis64RyAtx5a8+msmlikrOeQFColmH/xtmo8T36t943EcUeUXU
-   baa7dgVtuzimJWAGAWfcVp4EI2fORIXAYbXuet9E4H7ZVPCHpJzMEzNM1
-   PzlmRGCkQLMHm8lQRTDKtDPIEhc0OT0/LFkimHUowYA8Dl3fwWAqogBM5
-   IG30efou8TdmbytVuo05SI06f6lIAt0tSPQS1mqq90/0eRj2Nod17ZwN0
-   lKWtaiIsq/ofsH1ydQWnISWFqdwlVzdHgPvZItgaqUzTdMcALscLv6q6X
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="344554134"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/Aaew8nRjRBHQPVL+GtCxzvJIjfYGF2f4VfBi1VtCUU=;
+  b=Wdv86hveQCQYoXOJkSNEaZ/fQG34jS9QX231JhUqpG4G+QuhhvSpsTlp
+   lgg1e1qcIRCIrjuSvoThXtsrhljyltvts9aqXLsMtu12Y3xPvKMu57zgT
+   i9pifd6U9fVQkYdqpkcmAY7pBgYpX2Z6bFje9R9WKdMaD8VmCr3kMWZyc
+   sTlfQpug12auzdOOOCmdiNNVk6QZe0cjY2zjooCfb/gBXTMgGW2i4gq2r
+   kOSXJLGKmwfANMqv0jzVZ54zK3C+LxSEwPS2QbOb9kGbWxNapQJm6K0cM
+   YVlx5A/56b1foghoQQePkcjXGd+/uJZHWF13Dl+LwcE4I18XVgZJdtvCO
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="342248972"
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="344554134"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 15:42:38 -0700
+   d="scan'208";a="342248972"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 15:42:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="538662076"
+   d="scan'208";a="585918516"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 22 Jun 2022 15:42:37 -0700
+  by orsmga007.jf.intel.com with ESMTP; 22 Jun 2022 15:42:37 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o493U-0001lp-Af;
+        id 1o493U-0001ls-Co;
         Wed, 22 Jun 2022 22:42:36 +0000
-Date:   Thu, 23 Jun 2022 06:42:23 +0800
+Date:   Thu, 23 Jun 2022 06:42:25 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>, bp@alien8.de,
-        linux-edac@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH] EDAC/amd64: Include MCA error codes in EDAC message
-Message-ID: <202206230649.5mB3KFtF-lkp@intel.com>
-References: <20220622160800.1293328-1-yazen.ghannam@amd.com>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:kvalo/ath/ath12k-bringup-extras 2/3]
+ drivers/net/wireless/ath/ath12k/pci.c:678:7: error: call to undeclared
+ function 'of_property_read_u32'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202206230637.ojZSI1do-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622160800.1293328-1-yazen.ghannam@amd.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,93 +65,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yazen,
+Hi Kalle,
 
-I love your patch! Perhaps something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test WARNING on ras/edac-for-next]
-[also build test WARNING on linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yazen-Ghannam/EDAC-amd64-Include-MCA-error-codes-in-EDAC-message/20220623-001158
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220623/202206230649.5mB3KFtF-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/ath12k-bringup-extras
+head:   cc108fac9c287f5624daedca923743587adcafd1
+commit: f6fc8dfbdd4f8aa245e4d22691f7ae3057a01dbf [2/3] Merge ath-next into ath12k-bringup
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220623/202206230637.ojZSI1do-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/f791cdde2f3ca52076ed5d1185138b80d4d783bf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yazen-Ghannam/EDAC-amd64-Include-MCA-error-codes-in-EDAC-message/20220623-001158
-        git checkout f791cdde2f3ca52076ed5d1185138b80d4d783bf
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/f6fc8dfbdd4f8aa245e4d22691f7ae3057a01dbf
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/ath12k-bringup-extras
+        git checkout f6fc8dfbdd4f8aa245e4d22691f7ae3057a01dbf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/edac/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/edac/amd64_edac.c: In function '__log_ecc_error':
->> drivers/edac/amd64_edac.c:3179:13: warning: variable 'len' set but not used [-Wunused-but-set-variable]
-    3179 |         int len;
-         |             ^~~
+>> drivers/net/wireless/ath/ath12k/pci.c:678:7: error: call to undeclared function 'of_property_read_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!of_property_read_u32(ab->dev->of_node, "qrtr_instance_id", &instance_id))
+                ^
+   1 error generated.
 
 
-vim +/len +3179 drivers/edac/amd64_edac.c
+vim +/of_property_read_u32 +678 drivers/net/wireless/ath/ath12k/pci.c
 
-  3173	
-  3174	static void __log_ecc_error(struct mem_ctl_info *mci, struct err_info *err,
-  3175				    u8 ecc_type)
-  3176	{
-  3177		enum hw_event_mc_err_type err_type;
-  3178		const char *string;
-> 3179		int len;
-  3180	
-  3181		if (ecc_type == 2)
-  3182			err_type = HW_EVENT_ERR_CORRECTED;
-  3183		else if (ecc_type == 1)
-  3184			err_type = HW_EVENT_ERR_UNCORRECTED;
-  3185		else if (ecc_type == 3)
-  3186			err_type = HW_EVENT_ERR_DEFERRED;
-  3187		else {
-  3188			WARN(1, "Something is rotten in the state of Denmark.\n");
-  3189			return;
-  3190		}
-  3191	
-  3192		switch (err->err_code) {
-  3193		case DECODE_OK:
-  3194			string = "";
-  3195			break;
-  3196		case ERR_NODE:
-  3197			string = "Failed to map error addr to a node";
-  3198			break;
-  3199		case ERR_CSROW:
-  3200			string = "Failed to map error addr to a csrow";
-  3201			break;
-  3202		case ERR_CHANNEL:
-  3203			string = "Unknown syndrome - possible error reporting race";
-  3204			break;
-  3205		case ERR_SYND:
-  3206			string = "MCA_SYND not valid - unknown syndrome and csrow";
-  3207			break;
-  3208		case ERR_NORM_ADDR:
-  3209			string = "Cannot decode normalized address";
-  3210			break;
-  3211		default:
-  3212			string = "WTF error";
-  3213			break;
-  3214		}
-  3215	
-  3216		len = snprintf(msg, MSG_SIZE, "err_code:0x%04x:0x%04x", err->xec, err->ec);
-  3217	
-  3218		edac_mc_handle_error(err_type, mci, 1,
-  3219				     err->page, err->offset, err->syndrome,
-  3220				     err->csrow, err->channel, -1,
-  3221				     string, msg);
-  3222	}
-  3223	
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  666  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  667  static void ath12k_pci_init_qmi_ce_config(struct ath12k_base *ab)
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  668  {
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  669  	struct ath12k_qmi_ce_cfg *cfg = &ab->qmi.ce_cfg;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  670  	u32 instance_id = 0;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  671  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  672  	cfg->tgt_ce = ab->hw_params.target_ce_config;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  673  	cfg->tgt_ce_len = ab->hw_params.target_ce_count;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  674  
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  675  	cfg->svc_to_ce_map = ab->hw_params.svc_to_ce_map;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  676  	cfg->svc_to_ce_map_len = ab->hw_params.svc_to_ce_map_len;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  677  	ab->qmi.service_ins_id = ab->hw_params.qmi_service_ins_id;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01 @678  	if (!of_property_read_u32(ab->dev->of_node, "qrtr_instance_id", &instance_id))
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  679  		ab->qmi.service_ins_id = instance_id + ATH12K_QMI_WLFW_NODE_ID_BASE;
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  680  }
+f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  681  
+
+:::::: The code at line 678 was first introduced by commit
+:::::: f40abb4788a2a3868606a29d99583421e0874350 ath12k: New driver for Qualcomm 11be hw family
+
+:::::: TO: Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
+:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
 
 -- 
 0-DAY CI Kernel Test Service

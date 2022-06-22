@@ -2,44 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B8C55467D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB555546DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348306AbiFVKl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S1355008AbiFVK3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353850AbiFVK2Z (ORCPT
+        with ESMTP id S233390AbiFVK3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:28:25 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456CEE4B;
-        Wed, 22 Jun 2022 03:28:23 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1o3xan-0002Cj-GJ; Wed, 22 Jun 2022 12:28:13 +0200
-Date:   Wed, 22 Jun 2022 12:28:13 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Ilya Maximets <i.maximets@ovn.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: [PATCH net] net: ensure all external references are released in
- deferred skbuffs
-Message-ID: <20220622102813.GA24844@breakpoint.cc>
-References: <20220619003919.394622-1-i.maximets@ovn.org>
- <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
+        Wed, 22 Jun 2022 06:29:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D222739BB1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655893786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dPImrDmzKVBbb0HXU+86u9rvHqc6doxrZkENPaWv+QY=;
+        b=CWAEH04ER8lmTxxDc7bjPRjUufNiTbBN9oC/6X8pWh1/DqObuZjKCnHznxA9TYLEY2qHua
+        M3S7CHONHR4Kd1FuA0+Nf+wx+gNAj+KtnkoloRMZLRNrqyeyUAz+3AVStlbFLEK3uql2Qt
+        otWnudY8mwgdA0MdhQKV8rY3sMDwykY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-o0_2WJcVMYe6AJdMp6GKiw-1; Wed, 22 Jun 2022 06:29:45 -0400
+X-MC-Unique: o0_2WJcVMYe6AJdMp6GKiw-1
+Received: by mail-wm1-f71.google.com with SMTP id l17-20020a05600c4f1100b0039c860db521so7627639wmq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:29:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dPImrDmzKVBbb0HXU+86u9rvHqc6doxrZkENPaWv+QY=;
+        b=KcSp02Fyt9JuvZRfrhrF4F/ZOBok0F/Ji97oAtACg8OWFHVcbANxm6lFrn/Qzec6YX
+         Rzv6JhT01ssZ70qrNUrQzjO0wwWCyOzNoza4Q2GSUXB6ak4wCUblbYJooCyVREN8wNN5
+         WxdR2HD1iFa16bcQwdC03vAH+iWE7rZ/yZpfS4Ct/iLMqn7s0yQ+MVoBmWs4pL+AJb1C
+         Qpxinu1QRmy3vD6XQLrt8h05Q9JKkmSUPoDotUklqSzrwW4FJJwYycnUTLS/ytmbzMQe
+         LXkpy+CSvHmvK0H7L8dU8gz/uVUDH2pX0r1yY6KncFqZU7y5ySRHH6qs2ujLMdA+ElxU
+         /UOQ==
+X-Gm-Message-State: AJIora9EI9l/q6Qodviw3tLzP85CoBsGos2lpBtQdNmmAKTA+GpThDI2
+        KAS8l7en9whhUNLftmtzxcfPj1SGUnejUTw/Tu7/Tv+J4iI9uOsjaHXdyC7crg7QlvoEEIAmcWd
+        Ja6prfUzptD4cMQMydRs0ktu/
+X-Received: by 2002:a1c:4409:0:b0:39e:f584:e2ad with SMTP id r9-20020a1c4409000000b0039ef584e2admr24330410wma.84.1655893784572;
+        Wed, 22 Jun 2022 03:29:44 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u1XHiUDfVPnZUYfKY/mgems8JmFfwFlb/wgGrZRelp3hn61XNeDuU8hnDLBQxhmGsrnR5hBg==
+X-Received: by 2002:a1c:4409:0:b0:39e:f584:e2ad with SMTP id r9-20020a1c4409000000b0039ef584e2admr24330379wma.84.1655893784355;
+        Wed, 22 Jun 2022 03:29:44 -0700 (PDT)
+Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
+        by smtp.gmail.com with ESMTPSA id e5-20020adfef05000000b0021b99efceb6sm4112539wro.22.2022.06.22.03.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 03:29:43 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 11:29:40 +0100
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 27/49] KVM: SVM: Mark the private vma unmerable
+ for SEV-SNP guests
+Message-ID: <YrLvFB+cyBbXMbrB@work-vm>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <bb10f0a4c5eb13a5338f77ef34f08f1190d4ae30.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <bb10f0a4c5eb13a5338f77ef34f08f1190d4ae30.1655761627.git.ashish.kalra@amd.com>
+User-Agent: Mutt/2.2.5 (2022-05-16)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,84 +90,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Dumazet <edumazet@google.com> wrote:
-> On Sun, Jun 19, 2022 at 2:39 AM Ilya Maximets <i.maximets@ovn.org> wrote:
-> >
-> > Open vSwitch system test suite is broken due to inability to
-> > load/unload netfilter modules.  kworker thread is getting trapped
-> > in the infinite loop while running a net cleanup inside the
-> > nf_conntrack_cleanup_net_list, because deferred skbuffs are still
-> > holding nfct references and not being freed by their CPU cores.
-> >
-> > In general, the idea that we will have an rx interrupt on every
-> > CPU core at some point in a near future doesn't seem correct.
-> > Devices are getting created and destroyed, interrupts are getting
-> > re-scheduled, CPUs are going online and offline dynamically.
-> > Any of these events may leave packets stuck in defer list for a
-> > long time.  It might be OK, if they are just a piece of memory,
-> > but we can't afford them holding references to any other resources.
-> >
-> > In case of OVS, nfct reference keeps the kernel thread in busy loop
-> > while holding a 'pernet_ops_rwsem' semaphore.  That blocks the
-> > later modprobe request from user space:
-> >
-> >   # ps
-> >    299 root  R  99.3  200:25.89 kworker/u96:4+
-> >
-> >   # journalctl
-> >   INFO: task modprobe:11787 blocked for more than 1228 seconds.
-> >         Not tainted 5.19.0-rc2 #8
-> >   task:modprobe     state:D
-> >   Call Trace:
-> >    <TASK>
-> >    __schedule+0x8aa/0x21d0
-> >    schedule+0xcc/0x200
-> >    rwsem_down_write_slowpath+0x8e4/0x1580
-> >    down_write+0xfc/0x140
-> >    register_pernet_subsys+0x15/0x40
-> >    nf_nat_init+0xb6/0x1000 [nf_nat]
-> >    do_one_initcall+0xbb/0x410
-> >    do_init_module+0x1b4/0x640
-> >    load_module+0x4c1b/0x58d0
-> >    __do_sys_init_module+0x1d7/0x220
-> >    do_syscall_64+0x3a/0x80
-> >    entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> >
-> > At this point OVS testsuite is unresponsive and never recover,
-> > because these skbuffs are never freed.
-> >
-> > Solution is to make sure no external references attached to skb
-> > before pushing it to the defer list.  Using skb_release_head_state()
-> > for that purpose.  The function modified to be re-enterable, as it
-> > will be called again during the defer list flush.
-> >
-> > Another approach that can fix the OVS use-case, is to kick all
-> > cores while waiting for references to be released during the net
-> > cleanup.  But that sounds more like a workaround for a current
-> > issue rather than a proper solution and will not cover possible
-> > issues in other parts of the code.
-> >
-> > Additionally checking for skb_zcopy() while deferring.  This might
-> > not be necessary, as I'm not sure if we can actually have zero copy
-> > packets on this path, but seems worth having for completeness as we
-> > should never defer such packets regardless.
-> >
-> > CC: Eric Dumazet <edumazet@google.com>
-> > Fixes: 68822bdf76f1 ("net: generalize skb freeing deferral to per-cpu lists")
-> > Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-> > ---
-> >  net/core/skbuff.c | 16 +++++++++++-----
-> >  1 file changed, 11 insertions(+), 5 deletions(-)
+* Ashish Kalra (Ashish.Kalra@amd.com) wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
 > 
-> I do not think this patch is doing the right thing.
+> When SEV-SNP is enabled, the guest private pages are added in the RMP
+> table; while adding the pages, the rmp_make_private() unmaps the pages
+> from the direct map. If KSM attempts to access those unmapped pages then
+> it will trigger #PF (page-not-present).
 > 
-> Packets sitting in TCP receive queues should not hold state that is
-> not relevant for TCP recvmsg().
+> Encrypted guest pages cannot be shared between the process, so an
+> userspace should not mark the region mergeable but to be safe, mark the
+> process vma unmerable before adding the pages in the RMP table.
+                   ^
+                   Typo 'unmergable' (also in title)
 
-Agree, but tcp_v4/6_rcv() already call nf_reset_ct(), else it would
-not be possible to remove nf_conntrack module in practice.
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index b5f0707d7ed6..a9461d352eda 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -19,11 +19,13 @@
+>  #include <linux/trace_events.h>
+>  #include <linux/hugetlb.h>
+>  #include <linux/sev.h>
+> +#include <linux/ksm.h>
+>  
+>  #include <asm/pkru.h>
+>  #include <asm/trapnr.h>
+>  #include <asm/fpu/xcr.h>
+>  #include <asm/sev.h>
+> +#include <asm/mman.h>
+>  
+>  #include "x86.h"
+>  #include "svm.h"
+> @@ -1965,6 +1967,30 @@ static bool is_hva_registered(struct kvm *kvm, hva_t hva, size_t len)
+>  	return false;
+>  }
+>  
+> +static int snp_mark_unmergable(struct kvm *kvm, u64 start, u64 size)
+> +{
+> +	struct vm_area_struct *vma;
+> +	u64 end = start + size;
+> +	int ret;
+> +
+> +	do {
+> +		vma = find_vma_intersection(kvm->mm, start, end);
+> +		if (!vma) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
+> +				  MADV_UNMERGEABLE, &vma->vm_flags);
+> +		if (ret)
+> +			break;
+> +
+> +		start = vma->vm_end;
+> +	} while (end > vma->vm_end);
+> +
+> +	return ret;
+> +}
+> +
+>  static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  {
+>  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> @@ -1989,6 +2015,12 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  	if (!is_hva_registered(kvm, params.uaddr, params.len))
+>  		return -EINVAL;
+>  
+> +	mmap_write_lock(kvm->mm);
+> +	ret = snp_mark_unmergable(kvm, params.uaddr, params.len);
+> +	mmap_write_unlock(kvm->mm);
+> +	if (ret)
+> +		return -EFAULT;
+> +
+>  	/*
+>  	 * The userspace memory is already locked so technically we don't
+>  	 * need to lock it again. Later part of the function needs to know
+> -- 
+> 2.25.1
+> 
+-- 
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
 
-I wonder where the deferred skbs are coming from, any and all
-queued skbs need the conntrack state dropped.
-
-I don't mind a new helper that does a combined dst+ct release though.

@@ -2,119 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2B455436C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6318D554349
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349938AbiFVHCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
+        id S1350948AbiFVHDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiFVHCT (ORCPT
+        with ESMTP id S1349264AbiFVHDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:02:19 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA06369FC
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:02:16 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 07:02:04 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail2; t=1655881334; x=1656140534;
-        bh=hW6aQpyvrQi+nVh0DL4cohSiWMLpTMwE3tnnUD5pEHc=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=zPgSvVxQLJVZ8kUbeSjT6fZZhN8tgkMspF9xTC+0xN8i36hhESoEA4bqRfwNOX28+
-         BGxiOXxyum7Bdjlwev8aNvA4rE/AGCQzzddCaEEhJedkeWqKTlfgcjyD+xjALkcFKE
-         MxDXPq2hnLQwUXwtbZCO6kwciR+3jKj/zoTVH9Z26oR4id73wnnfwoZvMfAVqgjgqp
-         qsQFRr7W5uBSjNtrHu9ci/BxZejVKXgQKrLUESfGoTE6fs0kZ1WhP8130XcYr6jtg9
-         v6nUPedlQ9mlsFk37PbD42VtAp4/rtRrhCq1EksZ3+J6bJ5zU1l2IHguHXP4PcBXFE
-         h/3P+Wl7zBi/A==
-To:     Carlos Llamas <cmllamas@google.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     amd-gfx@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [PATCH] drm/fourcc: fix integer type usage in uapi header
-Message-ID: <uvR86emMYmXwy4OxDiY5OlpRs9UIoEce59p_VukwHwNa368FpqXYVtN7tqccW6WzG5Vz08ycVdxXonbMczsohHw8O8Dx7WdJv8pnrYb9V34=@emersion.fr>
-In-Reply-To: <20220621203921.3594920-1-cmllamas@google.com>
-References: <20220621203921.3594920-1-cmllamas@google.com>
-Feedback-ID: 1358184:user:proton
+        Wed, 22 Jun 2022 03:03:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41CF262D0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655881383;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GCD3psuHX6jJIpbPfzjKGeJSzZy7gODh0AJkTB5GqSc=;
+        b=icmrmA60y5uat5YG+qsAIAO+z1z3duy1YU/OAz2HELnhsf/lsTEm4Y0Jr0sF3KAIamv/hG
+        8PmtaBp1adQQwSyYUqovsi5ja+aOj9DvYWDvhIFGi7DfIRbpL3Aq1tZMuHqNtq6fuTJqiL
+        4kT5RF4ICmgynnABNF7b0nH4B6IhGDc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-S5e4INgpPbi1VRQGk_OspQ-1; Wed, 22 Jun 2022 03:03:00 -0400
+X-MC-Unique: S5e4INgpPbi1VRQGk_OspQ-1
+Received: by mail-wm1-f72.google.com with SMTP id r127-20020a1c4485000000b003a02a3f0beeso238579wma.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:03:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GCD3psuHX6jJIpbPfzjKGeJSzZy7gODh0AJkTB5GqSc=;
+        b=o+BEy/2af2WK3/i6c6JtVSwDN90n1hetwN8V1P+WQnzYbCvTrCB0KUbAEtCZAi9LJC
+         Q+jFNNYOrbXfCBGbFSRMh1kXlrUvBtNNjXTrVaKzV4Qi/HD3ga4IZjSQ0l565OYCNA3T
+         +axQtDEZhURhkhUO67+X060lCpAtACYw8tbsnSjpJs9Nil/I9+8r+68XQ2zdaYeN4qSh
+         FFusilbx4yD91XgNHU7ZR+NF7vTFd/BcIO05jVy5oYKZripTu6srzFa8zon10gR1ugkW
+         JudIC2SaK/NvqqSN8v/I9nFOyIPgClnNOS3YaooaCnVwdJhGHjRXtRBwIDVUNrtQV4Vk
+         WTWA==
+X-Gm-Message-State: AJIora+Azh149UiRyCeu/9TLWdxjl3r+4jh2UIZJxxzL0Qh20LlillI/
+        S9vpsijM2k1/T+lD7RWc8xMPe4t+fBLQbUHPjkNtLCRBzf3wPx6XapSR8RJj9Eaz+P/GmslWt+W
+        OFeg4qbpGsdejCYtdf4SigIRn
+X-Received: by 2002:adf:ed8f:0:b0:21b:8971:9304 with SMTP id c15-20020adfed8f000000b0021b89719304mr1649856wro.536.1655881379439;
+        Wed, 22 Jun 2022 00:02:59 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uryMOcT1NY6x+FLBk6Nz8z1y2JB+/0KSGhZjK/7vhZfJJj5KkS7UpQ/PUN9+a61CmnIh/qIw==
+X-Received: by 2002:adf:ed8f:0:b0:21b:8971:9304 with SMTP id c15-20020adfed8f000000b0021b89719304mr1649822wro.536.1655881379115;
+        Wed, 22 Jun 2022 00:02:59 -0700 (PDT)
+Received: from redhat.com ([147.235.217.93])
+        by smtp.gmail.com with ESMTPSA id bg26-20020a05600c3c9a00b0039c45fc58c4sm21098184wmb.21.2022.06.22.00.02.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 00:02:58 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 03:02:55 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     cohuck@redhat.com, pasic@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, borntraeger@de.ibm.com, agordeev@linux.ibm.com,
+        linux-s390@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ben@decadent.org.uk, david@redhat.com
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+Message-ID: <20220622025047-mutt-send-email-mst@kernel.org>
+References: <20220622012940.21441-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622012940.21441-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, June 21st, 2022 at 22:39, Carlos Llamas <cmllamas@google.com> w=
-rote:
+On Wed, Jun 22, 2022 at 09:29:40AM +0800, Jason Wang wrote:
+> We try to harden virtio device notifications in 8b4ec69d7e09 ("virtio:
+> harden vring IRQ"). It works with the assumption that the driver or
+> core can properly call virtio_device_ready() at the right
+> place. Unfortunately, this seems to be not true and uncover various
+> bugs of the existing drivers, mainly the issue of using
+> virtio_device_ready() incorrectly.
+> 
+> So let's having a Kconfig option and disable it by default. It gives
+> us a breath to fix the drivers and then we can consider to enable it
+> by default.
+> 
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
-> Kernel uapi headers are supposed to use __[us]{8,16,32,64} types defined
-> by <linux/types.h> as opposed to 'uint32_t' and similar. See [1] for the
-> relevant discussion about this topic. In this particular case, the usage
-> of 'uint64_t' escaped headers_check as these macros are not being called
-> here. However, the following program triggers a compilation error:
->
->   #include <drm/drm_fourcc.h>
->
->   int main()
->   {
->   =09unsigned long x =3D AMD_FMT_MOD_CLEAR(RB);
->   =09return 0;
->   }
->
-> gcc error:
->   drm.c:5:27: error: =E2=80=98uint64_t=E2=80=99 undeclared (first use in =
-this function)
->       5 |         unsigned long x =3D AMD_FMT_MOD_CLEAR(RB);
->         |                           ^~~~~~~~~~~~~~~~~
->
-> This patch changes AMD_FMT_MOD_{SET,CLEAR} macros to use the correct
-> integer types, which fixes the above issue.
->
->   [1] https://lkml.org/lkml/2019/6/5/18
->
-> Fixes: 8ba16d599374 ("drm/fourcc: Add AMD DRM modifiers.")
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
 
-Reviewed-by: Simon Ser <contact@emersion.fr>
+OK I will queue, but I think the problem is fundamental.
 
-Cc'ing Bas as well
 
 > ---
->  include/uapi/drm/drm_fourcc.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.=
-h
-> index f1972154a594..0980678d502d 100644
-> --- a/include/uapi/drm/drm_fourcc.h
-> +++ b/include/uapi/drm/drm_fourcc.h
-> @@ -1444,11 +1444,11 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 m=
-odifier)
->  #define AMD_FMT_MOD_PIPE_MASK 0x7
->
->  #define AMD_FMT_MOD_SET(field, value) \
-> -=09((uint64_t)(value) << AMD_FMT_MOD_##field##_SHIFT)
-> +=09((__u64)(value) << AMD_FMT_MOD_##field##_SHIFT)
->  #define AMD_FMT_MOD_GET(field, value) \
->  =09(((value) >> AMD_FMT_MOD_##field##_SHIFT) & AMD_FMT_MOD_##field##_MAS=
-K)
->  #define AMD_FMT_MOD_CLEAR(field) \
-> -=09(~((uint64_t)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIF=
-T))
-> +=09(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
->
->  #if defined(__cplusplus)
+> Changes since V2:
+> - Tweak the Kconfig help
+> - Add comment for the read_lock() pairing in virtio_ccw
+> ---
+>  drivers/s390/virtio/virtio_ccw.c |  9 ++++++++-
+>  drivers/virtio/Kconfig           | 13 +++++++++++++
+>  drivers/virtio/virtio.c          |  2 ++
+>  drivers/virtio/virtio_ring.c     | 12 ++++++++++++
+>  include/linux/virtio_config.h    |  2 ++
+>  5 files changed, 37 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> index 97e51c34e6cf..1f6a358f65f0 100644
+> --- a/drivers/s390/virtio/virtio_ccw.c
+> +++ b/drivers/s390/virtio/virtio_ccw.c
+> @@ -1136,8 +1136,13 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+>  			vcdev->err = -EIO;
+>  	}
+>  	virtio_ccw_check_activity(vcdev, activity);
+> -	/* Interrupts are disabled here */
+> +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> +	/*
+> +	 * Paried with virtio_ccw_synchronize_cbs() and interrupts are
+> +	 * disabled here.
+> +	 */
+>  	read_lock(&vcdev->irq_lock);
+> +#endif
+>  	for_each_set_bit(i, indicators(vcdev),
+>  			 sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
+>  		/* The bit clear must happen before the vring kick. */
+> @@ -1146,7 +1151,9 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+>  		vq = virtio_ccw_vq_by_ind(vcdev, i);
+>  		vring_interrupt(0, vq);
+>  	}
+> +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+>  	read_unlock(&vcdev->irq_lock);
+> +#endif
+>  	if (test_bit(0, indicators2(vcdev))) {
+>  		virtio_config_changed(&vcdev->vdev);
+>  		clear_bit(0, indicators2(vcdev));
+> diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+> index b5adf6abd241..c04f370a1e5c 100644
+> --- a/drivers/virtio/Kconfig
+> +++ b/drivers/virtio/Kconfig
+> @@ -35,6 +35,19 @@ menuconfig VIRTIO_MENU
+>  
+>  if VIRTIO_MENU
+>  
+> +config VIRTIO_HARDEN_NOTIFICATION
+> +        bool "Harden virtio notification"
+> +        help
+> +          Enable this to harden the device notifications and suppress
+> +          those that happen at a time where notifications are illegal.
+> +
+> +          Experimental: Note that several drivers still have bugs that
+> +          may cause crashes or hangs when correct handling of
+> +          notifications is enforced; depending on the subset of
+> +          drivers and devices you use, this may or may not work.
+> +
+> +          If unsure, say N.
+> +
+>  config VIRTIO_PCI
+>  	tristate "PCI driver for virtio devices"
+>  	depends on PCI
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index ef04a96942bf..21dc08d2f32d 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -220,6 +220,7 @@ static int virtio_features_ok(struct virtio_device *dev)
+>   * */
+>  void virtio_reset_device(struct virtio_device *dev)
+>  {
+> +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+>  	/*
+>  	 * The below virtio_synchronize_cbs() guarantees that any
+>  	 * interrupt for this line arriving after
+> @@ -228,6 +229,7 @@ void virtio_reset_device(struct virtio_device *dev)
+>  	 */
+>  	virtio_break_device(dev);
+>  	virtio_synchronize_cbs(dev);
+> +#endif
+>  
+>  	dev->config->reset(dev);
 >  }
-> --
-> 2.37.0.rc0.104.g0611611a94-goog
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 13a7348cedff..d9d3b6e201fb 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -1688,7 +1688,11 @@ static struct virtqueue *vring_create_virtqueue_packed(
+>  	vq->we_own_ring = true;
+>  	vq->notify = notify;
+>  	vq->weak_barriers = weak_barriers;
+> +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+>  	vq->broken = true;
+> +#else
+> +	vq->broken = false;
+> +#endif
+>  	vq->last_used_idx = 0;
+>  	vq->event_triggered = false;
+>  	vq->num_added = 0;
+> @@ -2135,9 +2139,13 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+>  	}
+>  
+>  	if (unlikely(vq->broken)) {
+> +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+>  		dev_warn_once(&vq->vq.vdev->dev,
+>  			      "virtio vring IRQ raised before DRIVER_OK");
+>  		return IRQ_NONE;
+> +#else
+> +		return IRQ_HANDLED;
+> +#endif
+>  	}
+>  
+>  	/* Just a hint for performance: so it's ok that this can be racy! */
+> @@ -2180,7 +2188,11 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+>  	vq->we_own_ring = false;
+>  	vq->notify = notify;
+>  	vq->weak_barriers = weak_barriers;
+> +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+>  	vq->broken = true;
+> +#else
+> +	vq->broken = false;
+> +#endif
+>  	vq->last_used_idx = 0;
+>  	vq->event_triggered = false;
+>  	vq->num_added = 0;
+> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> index 9a36051ceb76..d15c3cdda2d2 100644
+> --- a/include/linux/virtio_config.h
+> +++ b/include/linux/virtio_config.h
+> @@ -257,6 +257,7 @@ void virtio_device_ready(struct virtio_device *dev)
+>  
+>  	WARN_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+>  
+> +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+>  	/*
+>  	 * The virtio_synchronize_cbs() makes sure vring_interrupt()
+>  	 * will see the driver specific setup if it sees vq->broken
+> @@ -264,6 +265,7 @@ void virtio_device_ready(struct virtio_device *dev)
+>  	 */
+>  	virtio_synchronize_cbs(dev);
+>  	__virtio_unbreak_device(dev);
+> +#endif
+>  	/*
+>  	 * The transport should ensure the visibility of vq->broken
+>  	 * before setting DRIVER_OK. See the comments for the transport
+> -- 
+> 2.25.1
+

@@ -2,85 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C519B5542BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 08:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B8F5542A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 08:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347789AbiFVGWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S1349552AbiFVGW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235967AbiFVGWO (ORCPT
+        with ESMTP id S1348993AbiFVGWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:22:14 -0400
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 238E62F02F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KNm6r
-        djgI3fZb458Vh2B3XGihON4TOae3lbBQT12LPA=; b=GihQyMCj7YH0xlL/cIptn
-        4at0fGwV485O97ItxX/Jh9s//WrsQFurBvfAoReP8kYTkb8ynNpvqBFauiO3nbn6
-        9gQtFoEbAs8qAncGijF5A6zRpx5/jQop0mz3rLbicwKxphTG2X5Fw595vaEAS33e
-        VKt92U23z7/ZitrCWBY5g0=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp3 (Coremail) with SMTP id DcmowADH953ztLJi_i9QDw--.64468S2;
-        Wed, 22 Jun 2022 14:21:40 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     tglx@linutronix.de, maz@kernel.org, linux-kernel@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH] irqchip: Add missing of_ndoe_get() in its_of_probe()
-Date:   Wed, 22 Jun 2022 14:21:38 +0800
-Message-Id: <20220622062138.4095598-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 22 Jun 2022 02:22:25 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A802F384
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:22:24 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id b4so4326148vkh.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3XkLitP86rtDsNGNbm0pYZThHpLJXqkixx7LWXPpMas=;
+        b=lV/C6bX6AorIyXEwUKhCPN4hfwYvOVc72nXEWyA16PukyWkFG0DvFmv6UUjVbQa/n/
+         dBlQDAmwYcrP/bm5/Wyv7Vc9yoWw7v9Jm8SmGzSZOxcvCsDQEsxZlgnA1KhvecIkHvfv
+         eoumq5reiZ6xTrsecj3D52UwphTC1hXbBTZt59ANbHd4hM0Et/l4TSagGnh2Hlm/TLT9
+         sfZMYu0v1Kg/89RnQMWTNQYbk0Fk/GyUkSkoBEHLUFrMTWuM8dTFyhbbzKumcNAhg0po
+         yH2nrG2A3dViKLmvyjsyNWXYWYSnOZ7y8VnP9qV0zyM8vGffeqVrbN7/D1bybfeAzNYa
+         OtYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3XkLitP86rtDsNGNbm0pYZThHpLJXqkixx7LWXPpMas=;
+        b=fj77FdIjo3tlJ8nJfyYFTJ6U/1JBCb1adX8eV5LtSubw76fBAYIhYCJRDpco4+Xo4O
+         OeCDwYFgFu1dVQL6ubqIo6pLA9JcEgL18+whjixgW7owZIjO+LTXrnnTukqQXCOpgH8k
+         iwk+r0456/on4qQLiPzhx6yR0KbqGdYANamwissyldXRbSMRtmAb7NgKiJbF7kOpFWNd
+         ZpWy1kqcb3d08kY5XNdcOw3rrdf/RMETqxPQ263Jqz7xJE4XwAq8Bt31jUb6S8Fr4Y68
+         Yj3xNQMljeLwol91ec7PHeSbKmMIyjyhAyu/epK3krqPUwJt47cnLOsoDfyjms0dI0yL
+         VU/A==
+X-Gm-Message-State: AJIora/Zcn8kb1S6tDBJqn8EpdrDOLa/EOxoJT3F/brAoJ4lORR6Zn94
+        jG/CSsJQNq4kK4V1/Uif2s7WWCLzSo9tq2SCR+qfFw==
+X-Google-Smtp-Source: AGRyM1uGOkTBGY7ctKwH9tj7aqZUuj0ObZQ8AcIdtefS/K84QQ9iakI+N0KjfrqW0Z/yfLxJn1WX37eYGSmcYBCl/qs=
+X-Received: by 2002:a05:6122:1479:b0:36c:502b:fdda with SMTP id
+ r25-20020a056122147900b0036c502bfddamr4569701vkp.14.1655878943347; Tue, 21
+ Jun 2022 23:22:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowADH953ztLJi_i9QDw--.64468S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtF4UtryDuw4fGr17Zr18Zrb_yoWkWFc_Cr
-        18WF9rXr40kF4rt393ZF43ZFn8Jw4vgrWrur4Iyas3Xa42v3W7GFZrJr97XayrWF42vryf
-        Grs0vr4Ykr17ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_hL03UUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7RQoF1pEAQOF6gAAs1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220614071650.206064-1-yuzhao@google.com>
+In-Reply-To: <20220614071650.206064-1-yuzhao@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 22 Jun 2022 00:21:47 -0600
+Message-ID: <CAOUHufbuqGJJ1pUJuYW8h6uB5+KpNSJotEd_WSzF5AK-S_6PoA@mail.gmail.com>
+Subject: Re: [PATCH v12 00/14] Multi-Gen LRU Framework
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to add missing of_node_get() for of_find_matching_node() to
-keep refcount balance.
+On Tue, Jun 14, 2022 at 1:17 AM Yu Zhao <yuzhao@google.com> wrote:
+>
+> What's new
+> ==========
+> 1. Fixed a bug (using pmd_addr_end() when __PAGETABLE_PMD_FOLDED)
+>    reported by:
+>    Thomas Graichen <thomas.graichen@googlemail.com>
+>    https://forum.armbian.com/topic/20018-mglru-patches-to-bring-down-kswapd-cpu-usage/
+> 2. Retested on v5.19-rc1 and rebased to v5.19-rc2.
+> 3. Nits.
+>
+> TLDR
+> ====
+> The current page reclaim is too expensive in terms of CPU usage and it
+> often makes poor choices about what to evict. This patchset offers an
+> alternative solution that is performant, versatile and
+> straightforward.
 
-Note: of_find_matching_node() will decrease the refcount of its first
-arg.
-
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/irqchip/irq-gic-v3-its.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 5ff09de6c48f..829893cc5e10 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -5309,6 +5309,7 @@ static int __init its_of_probe(struct device_node *node)
- 	 * reset, don't even try to go any further, as this could
- 	 * result in something even worse.
- 	 */
-+	of_node_get(node);
- 	for (np = of_find_matching_node(node, its_device_id); np;
- 	     np = of_find_matching_node(np, its_device_id)) {
- 		int err;
-@@ -5323,6 +5324,7 @@ static int __init its_of_probe(struct device_node *node)
- 			return err;
- 	}
- 
-+	of_node_get(node);
- 	for (np = of_find_matching_node(node, its_device_id); np;
- 	     np = of_find_matching_node(np, its_device_id)) {
- 		if (!of_device_is_available(np))
--- 
-2.25.1
-
+I don't see any action items left for me. Are we good for the next merge window?

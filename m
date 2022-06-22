@@ -2,45 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20ED554C3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB48D554C37
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357384AbiFVOJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S1357942AbiFVOID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357971AbiFVOJE (ORCPT
+        with ESMTP id S1357924AbiFVOH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:09:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE30938BFD;
-        Wed, 22 Jun 2022 07:09:01 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF3E41042;
-        Wed, 22 Jun 2022 07:09:01 -0700 (PDT)
-Received: from bogus (unknown [10.57.36.82])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8D783F792;
-        Wed, 22 Jun 2022 07:08:59 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 15:07:48 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/2] arm64: remove generic ARM cpuidle support
-Message-ID: <20220622140748.laklytigxtfdbbg2@bogus>
-References: <20220529181329.2345722-1-michael@walle.cc>
- <09f392794c815cbfb38e5103d92310da@walle.cc>
+        Wed, 22 Jun 2022 10:07:59 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3B3E73
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:07:57 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id c65so1054258edf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:07:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tfUwLbFH30zmp/z35DalxVO24hi1rhwfx7b55xzocKU=;
+        b=rlCwhnKPtzSVZZuVC1UbT0IPVt64X1EOy+slNVxeAmucc5roLa5rpVOtMonNyOqsTV
+         RnZK5Q2j7df/zqRTIMIik5jb4JunCx+qLCTgdTposl/bbzob/5DKDqvUQQvOwtI8Vwt7
+         u/MhbsJapoBvZI23SZsMxmfmzSzlrnV3bdEKU9ByPnn48kJykdYimVoj0wwnXRDlnrC7
+         vHO8zq8mdP6cd9CLs0m/5gc/qFzThlVoiEWvfSWxDN+mU3vrvd3hRdszv7J4mLlpzoxf
+         BdGPRuAQ438EVImmScyf85fpdNXdQNHaA3rsT8Oe7k3wHmD+Emhtb54cQk0MTddQcNk7
+         Qwwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tfUwLbFH30zmp/z35DalxVO24hi1rhwfx7b55xzocKU=;
+        b=MTh7ruBiJW8QLwq2vNPbhML7LHcpZTmRr/ksckERZbXrlVmZaJaDGKbulcqpPcEoaU
+         Ia8U6xcGRAyFsM+Pznz7EIJh+22KUyntogAuZX9Bwc3o1ORPbk3S7AvAykxKbPFWkHAr
+         x3bx05KjTWYzS088nA4dl2/Mtj9p6FAwV+rnZCsIws7fc6YN1GGgsU3P2KPisnatYsmZ
+         mZyXR6tmSBGqk+oWymg6gKkNGlxha1t1Xjw1+EBXK2minISfO2SRa3q2KhMm+zvnIayP
+         wpnRGqwRLbrNWscbpXrAF+lkx8mNAlSZRjrY3XKqWWJqVGoDCHK9YyaJ1gFelUGPLCRW
+         yhTA==
+X-Gm-Message-State: AJIora8vzTpzpfACiglCUVnt7G0mUZUzUo6AWRTeORjPCHppTnjfvSlP
+        l0wYttJZHkuT2c+XSeQnU82ycg==
+X-Google-Smtp-Source: AGRyM1tUvKsUxzsrufF8tQYt5LOqzpwycvAUZRsjtsjXAq10wM9KnyyC0XG1vg9ClhI5dS1Qd4fp9Q==
+X-Received: by 2002:a05:6402:4248:b0:435:9150:ccfb with SMTP id g8-20020a056402424800b004359150ccfbmr4370512edb.374.1655906876377;
+        Wed, 22 Jun 2022 07:07:56 -0700 (PDT)
+Received: from [192.168.0.224] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p26-20020a170906b21a00b00722f48d1f19sm943361ejz.67.2022.06.22.07.07.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:07:55 -0700 (PDT)
+Message-ID: <dbe4cf98-da75-8f31-d76a-3c77f3448179@linaro.org>
+Date:   Wed, 22 Jun 2022 16:07:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09f392794c815cbfb38e5103d92310da@walle.cc>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 3/6] arm64: dts: qcom: add SC8280XP platform
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
+ <20220622041224.627803-4-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220622041224.627803-4-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,47 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 01:59:07PM +0200, Michael Walle wrote:
-> Am 2022-05-29 20:13, schrieb Michael Walle:
-> > Playing with an own PSCI implementation, I've noticed that the
-> > cpuidle-arm
-> > driver doesn't work on arm64. It doesn't probe because since commit
-> > 788961462f34 ("ARM: psci: cpuidle: Enable PSCI CPUidle driver") the
-> > arm_cpuidle_init() can only return -EOPNOTSUPP, because the commit
-> > removed
-> > the cpu_idle_init and cpu_suspend ops.
-> > 
-> > It left me puzzled for quite some time. It seems that the cpuidle-psci
-> > is
-> > the preferred one and this has been the case for quite some time. The
-> > mentioned commit first appeared in v5.4.
-> > 
-> > Remove the ARM64 support for the cpuidle-arm driver, which then let us
-> > remove all the supporting arch code.
-> > 
-> > Michael Walle (2):
-> >   cpuidle: cpuidle-arm: remove arm64 support
-> >   arm64: cpuidle: remove generic cpuidle support
-> > 
-> >  arch/arm64/include/asm/cpu_ops.h |  9 ---------
-> >  arch/arm64/include/asm/cpuidle.h | 15 ---------------
-> >  arch/arm64/kernel/cpuidle.c      | 29 -----------------------------
-> >  drivers/cpuidle/Kconfig.arm      |  3 ++-
-> >  4 files changed, 2 insertions(+), 54 deletions(-)
+On 22/06/2022 06:12, Bjorn Andersson wrote:
+> Introduce initial support for the Qualcomm SC8280XP platform, aka 8cx
+> Gen 3. This initial contribution supports SMP, CPUfreq, CPU cluster
+> idling, GCC, TLMM, SMMU, RPMh regulators, power-domains and clocks,
+> interconnects, some QUPs, UFS, remoteprocs, USB, watchdog, LLCC and
+> tsens.
 > 
-> Through which tree should this patchset go? I've seen it is marked as
-> "Handled Elsewere" in the linux pm patchwork [1].
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> 
+> Changes since v1:
+> - Reordered "status" last
+> - Fixed invalid unit addresses on USB phys
+> - Dropped multiport USB controller for now
+> - Fixed system-cache-controller sort ordering
+> - Moved &xo_board_clk frequency to board dts
 > 
 
-Generally based on the changes, it is decided. I can see why Rafael would
-have marked so in PM patchwork. Daniel has already acked small change in
-CPUidle config file while the bulk is removal of arm64 code. So, it is
-better to route it via arm64 tree.
 
-Will,
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Assuming you will handle v5.20, can you pick this up ?
 
--- 
-Regards,
-Sudeep
+Best regards,
+Krzysztof

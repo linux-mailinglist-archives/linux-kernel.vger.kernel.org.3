@@ -2,143 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4BB554763
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B4D554969
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351709AbiFVIsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S1345696AbiFVIrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiFVIsC (ORCPT
+        with ESMTP id S236729AbiFVIrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:48:02 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5677125E1;
-        Wed, 22 Jun 2022 01:48:00 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id h34-20020a17090a29a500b001eb01527d9eso15263123pjd.3;
-        Wed, 22 Jun 2022 01:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Hs9pVTpUBi42eMdaATCBVLHpAcP7Nw426zvueY8ZwZI=;
-        b=Lw0reKp119fQgW191FyyK0jxb52gIGmRolrrEJan5fK67WbHe6KIeUNsg7pgDoqjtT
-         RzO3qPtfgxrYlG/fRm0u8QBkiO/igrt4hSQwVNHETFmkLoMkwJwaTT7mpeooVbsiN9fL
-         8I2KrBsqduyUa+VSUxarzQxWslOLClxg5whYaXKY5ZXnOuK8gMQsLEa1DKU8/SxqlH8n
-         JDIBbuDtZGUR1qz4pUDcY0uXn6Pnfk+jzwUo8vRF+Ni0gZrppyu5+G7IElQJbAJFbwn0
-         NqXSmHspY8OWIBFYtfgkweYjzXgs0aK/59uJPuDKoM/hHkfGSay0c1bnYIx4JIInMCOP
-         4hDQ==
+        Wed, 22 Jun 2022 04:47:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43149393DA
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:47:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655887622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eS3Mbme1/2pPmMpDc+wuDpVAj8lgyhu3EEjJBQhRSPI=;
+        b=Wr7BhTSE1dFW1bPIoojhUCCWy3bJZR6nh8ezz4AzZlCf8903mS7OyPfqza3VS9xL2EcI0o
+        qMTO3GHymb6tOprTzwrJddQ+IPOn5VQrGq+eZwZX4MPLDWvkUiK2yGtf2CxsLc43tIIxew
+        YCAnxbC9laGD6rPfUEinu9pUwGoGtYc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-240-YODQEtXKO_-c7IP-rPlMfA-1; Wed, 22 Jun 2022 04:47:01 -0400
+X-MC-Unique: YODQEtXKO_-c7IP-rPlMfA-1
+Received: by mail-wm1-f72.google.com with SMTP id l3-20020a05600c1d0300b0039c7efa2526so7513243wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:47:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=Hs9pVTpUBi42eMdaATCBVLHpAcP7Nw426zvueY8ZwZI=;
-        b=LpslrHezcQCyHm+VEVOTMSRLxERozF5drOOxNliCDm+PvFI48R5ewUZFZDvUfOlHXB
-         CiS42FKzNGekZu4/SFcMTCZ8t6nV6h8VsPZIN1MmiyDZrS62RhnuhLnzfVftanH/w7Xb
-         fD1/ELS69tDMN38UysZJc2BcHHv/TJLbdRvrN57nXuPka5xn6WTrgy0yD3yNvzea5bRH
-         OYk+IQU5rn9TYIblw1yzOTq/mRXy9dlxW1kAASrx0egwfY3/IM14eIKIdq42sMUZcMce
-         w0pw3vxeIHNbJ3DwglR1aticwaxd3dmd+OBEKZMQySuUm0/fLKuVounTlz1N4/esGpEy
-         ALoA==
-X-Gm-Message-State: AJIora8D/KuQauig3+F3RJvHYeFYHw6u13wM0xxeVyn/WxwdhrC5/1Dx
-        vLjTykhbpAh4TUfxsWKhek9+7vNE31s=
-X-Google-Smtp-Source: AGRyM1shJvjitaGBPWgz/pdx6BV2OQUPOBwCHk3mBN4tYOSIhFIxvffRnNlgoVtOp/xm7tZgDMdKLQ==
-X-Received: by 2002:a17:902:d509:b0:167:6ed8:afb5 with SMTP id b9-20020a170902d50900b001676ed8afb5mr33549819plg.137.1655887679517;
-        Wed, 22 Jun 2022 01:47:59 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-91.three.co.id. [180.214.232.91])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b001677fa34a4fsm8199930plh.72.2022.06.22.01.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 01:47:58 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] Documentation: highmem: Use literal block for code example in highmem.h comment
-Date:   Wed, 22 Jun 2022 15:45:46 +0700
-Message-Id: <20220622084546.17745-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        bh=eS3Mbme1/2pPmMpDc+wuDpVAj8lgyhu3EEjJBQhRSPI=;
+        b=Ky2sRMjlPA713w2VlD0pSGwOnBKenK9O80eJen4Lqc5Gs1FxOVSbiCtv0UXxoqddDj
+         zZqbwgXlOjJa1/8iyG67Ra4TTs476oH4HMtYG2BviOe32A7u7ccQAau4TcbNt1D/tMoF
+         erXGrRlMiUSyFGc1LUtts4o+oK1Gu9nYUf0f0jd+WjKzT6vGlzT+QkkSw6uy7/EabtpU
+         9fSdMxmsqmoapIIcNdLo1M0u/QNSt3RwWMJ7rCb2ZphGasMuHd77GajCnM3nEZ1tI3sG
+         iTPFSRbmJDe77zqMopRm+19vR6OmubJjdASwXMDvHAQrM2a8u/s8MwYy8OJG4K+gK9Kq
+         8i7Q==
+X-Gm-Message-State: AJIora+n8kRoa33Rc9mJc5aZuqnCph1ncGY5ri3CSb8Munlb/l7oOu0L
+        1Rrb+WHuvZQYaAvCrpvVfTWQsxnrc/kUWk+2S5a+pUMDQQIweIdC2+gBEfRxOvBob2s4865FqPH
+        AIY+UEyXpg840MioRuvbFZKQC
+X-Received: by 2002:a05:600c:ac4:b0:39c:4f54:9c5f with SMTP id c4-20020a05600c0ac400b0039c4f549c5fmr2585446wmr.135.1655887619734;
+        Wed, 22 Jun 2022 01:46:59 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tRQuXS//dOmPMDP+OZGfs4QHv0XCl/njtBkEyzuMoLomceZAmL/OPVAmRfgr38xw4B+dmZow==
+X-Received: by 2002:a05:600c:ac4:b0:39c:4f54:9c5f with SMTP id c4-20020a05600c0ac400b0039c4f549c5fmr2585430wmr.135.1655887619490;
+        Wed, 22 Jun 2022 01:46:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:5100:9c77:ce13:2aeb:8748? (p200300cbc70351009c77ce132aeb8748.dip0.t-ipconnect.de. [2003:cb:c703:5100:9c77:ce13:2aeb:8748])
+        by smtp.gmail.com with ESMTPSA id z7-20020a1c4c07000000b0039c4b518df4sm25678747wmf.5.2022.06.22.01.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 01:46:58 -0700 (PDT)
+Message-ID: <01e9846d-1b52-0b7f-056c-e31994df3d22@redhat.com>
+Date:   Wed, 22 Jun 2022 10:46:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/4] memblock tests: add user-provided arguments to
+ Makefile
+Content-Language: en-US
+To:     Rebecca Mckeever <remckee0@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1655878337.git.remckee0@gmail.com>
+ <7deb3d3d4c05c884d3830325c816862ce927133f.1655878337.git.remckee0@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <7deb3d3d4c05c884d3830325c816862ce927133f.1655878337.git.remckee0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building htmldocs on Linus' tree, there are inline emphasis warnings
-on include/linux/highmem.h:
+On 22.06.22 08:19, Rebecca Mckeever wrote:
+> Add VERBOSE and MEMBLOCK_DEBUG user-provided arguments. VERBOSE will
+> enable verbose output from Memblock simulator. MEMBLOCK_DEBUG will enable
+> memblock_dbg() messages.
+> 
+> Update the help message to include VERBOSE and MEMBLOCK_DEBUG. Update
+> the README to include VERBOSE. The README does not include all available
+> options and refers to the help message for the remaining options.
+> Therefore, omit MEMBLOCK_DEBUG from README.
+> 
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 
-Documentation/vm/highmem:166: ./include/linux/highmem.h:154: WARNING: Inline emphasis start-string without end-string.
-Documentation/vm/highmem:166: ./include/linux/highmem.h:157: WARNING: Inline emphasis start-string without end-string.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-These warnings above are due to comments in code example at the
-mentioned lines above are enclosed by double dash (--), which confuses
-Sphinx as inline markup delimiters instead.
 
-Fix these warnings by indenting the code example with literal block
-indentation and making the comments C comments.
-
-Fixes: 85a85e7601263f ("Documentation/vm: move "Using kmap-atomic" to highmem.h")
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Changes since v3 [1]:
-   - Say "C comments" rephrase (suggested by Ira)
-
- [1]: https://lore.kernel.org/linux-doc/20220620083649.18172-1-bagasdotme@gmail.com/
-
- include/linux/highmem.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 3af34de54330cb..56d6a019653489 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -149,19 +149,19 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
-  * It is used in atomic context when code wants to access the contents of a
-  * page that might be allocated from high memory (see __GFP_HIGHMEM), for
-  * example a page in the pagecache.  The API has two functions, and they
-- * can be used in a manner similar to the following:
-+ * can be used in a manner similar to the following::
-  *
-- * -- Find the page of interest. --
-- * struct page *page = find_get_page(mapping, offset);
-+ *   // Find the page of interest.
-+ *   struct page *page = find_get_page(mapping, offset);
-  *
-- * -- Gain access to the contents of that page. --
-- * void *vaddr = kmap_atomic(page);
-+ *   // Gain access to the contents of that page.
-+ *   void *vaddr = kmap_atomic(page);
-  *
-- * -- Do something to the contents of that page. --
-- * memset(vaddr, 0, PAGE_SIZE);
-+ *   // Do something to the contents of that page.
-+ *   memset(vaddr, 0, PAGE_SIZE);
-  *
-- * -- Unmap that page. --
-- * kunmap_atomic(vaddr);
-+ *   // Unmap that page.
-+ *   kunmap_atomic(vaddr);
-  *
-  * Note that the kunmap_atomic() call takes the result of the kmap_atomic()
-  * call, not the argument.
-
-base-commit: a111daf0c53ae91e71fd2bfe7497862d14132e3e
 -- 
-An old man doll... just what I always wanted! - Clara
+Thanks,
+
+David / dhildenb
 

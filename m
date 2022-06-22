@@ -2,151 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9313A554ED1
+	by mail.lfdr.de (Postfix) with ESMTP id 46A82554ED0
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359150AbiFVPNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S1359178AbiFVPNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359127AbiFVPM5 (ORCPT
+        with ESMTP id S1359138AbiFVPNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:12:57 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-oln040092065104.outbound.protection.outlook.com [40.92.65.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1F4624B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:12:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XuN6fkL2nFlXL2HA1lyb0fe3FTp2g/4zbFkq6EapEK/UuwHk59jOOZvV7k97TJCnxzJeYO7EXKQbAJEkg5dm791RF6JtBLJuiUQqUS4VpI3Vf2bw6BZAslo1l3FTMkzVn4so2Ira6rpHYj4J/9v/k+cMnvuEFAGVowjcHoUwIn8/eCCahFla+0NLvzo3bm9vVCRTuxVTgv464h6MsfS+PGI+TEo5XwE34jWmKvB2GlwWlHgwFjDOMZRLy7Zw4dqza0t8cP73iAnr6/8mb/m928rHaMGaVCVpv/9qBGBUwZ3hqb3UW/2oXoVDJX25jWJ4t3vBh/BoZneiYfqAqaWLsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z/wicY753Hhz2QvvQmOXGJ1ASpyW6qXHnf+vKds1o+4=;
- b=ayNx64B5N4uC790UtrmH26tg53rrEQLu7McB63jlyB4Gd4Ekvtnsw56WhXs6R6XmLTdcWKHW1zIncQlqUXJxpbLvMfKZFdsG+hudzdjhZBZ3ncYsHP1XbLAaUD8XMmbbaUvUIwu/rS/YdvvtEE7099YUxwtevRUQ9w8MQqwShOlsn1fQK2eMMN+i4F8/qfL6hArERXgwct3FvxMvoOuKqU72u3kiG15TcNgebeI1JI/j078N53PUjhlwv79sv7TL9gsjttHsJ96RUkCH6FLJZmjGk+uZ0TgiOY/+MmikWIwYNBQTaZGInrjxcynIY3qArNMWlX68c+zywp2vaCmALw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z/wicY753Hhz2QvvQmOXGJ1ASpyW6qXHnf+vKds1o+4=;
- b=oLJE/vCqOvApgataibW3kLX5rvbBJPclTuexGYysJQrykiLqQhw9vBiUSYzMhF4zbiIjnKHKFAiRnUNmD035lMXO7tcP28ojunKEfqDad6zACefVXV07gf6uDcy8CKKOBjxjTFNQ2x2ZOhuCI3GTu+ptDeV/j5ZG0RZZsVph3E4M+bNpvylqXe4OEvML7ZQ8cHKWYb1U0tf2ld0SW1qodibDek0QQnjMi0dVT/5NqQxPIwTzzcnLAyoClZMkYtuM24XgxtkrfD82SWVf9T3CzqOF/dak+bZFl+tmbM1Bo3KZO10BtaltjxdvGSWpenzPIME1Sgx8WHFId+OWVOfs5Q==
-Received: from AM9P190MB1299.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:267::9)
- by AM9P190MB1041.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:261::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Wed, 22 Jun
- 2022 15:12:52 +0000
-Received: from AM9P190MB1299.EURP190.PROD.OUTLOOK.COM
- ([fe80::c0f4:a98e:332a:2397]) by AM9P190MB1299.EURP190.PROD.OUTLOOK.COM
- ([fe80::c0f4:a98e:332a:2397%5]) with mapi id 15.20.5353.022; Wed, 22 Jun 2022
- 15:12:52 +0000
-From:   Felix Schlepper <f3sch.git@outlook.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] Staging: rtl8192e: Cleaning up error handling
-Date:   Wed, 22 Jun 2022 17:12:46 +0200
-Message-ID: <AM9P190MB1299C167B21A1FAA157AF1C7A5B29@AM9P190MB1299.EURP190.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1655909205.git.f3sch.git@outlook.com>
-References: <cover.1655909205.git.f3sch.git@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [GSw7RXvoOScbjFOl1Tyf+cmfkcmaKUYl]
-X-ClientProxiedBy: AS8P189CA0009.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:31f::19) To AM9P190MB1299.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:267::9)
-X-Microsoft-Original-Message-ID: <d4419f7ee0f90c11ecf2dc1ed58e75fba1a5f062.1655909205.git.f3sch.git@outlook.com>
+        Wed, 22 Jun 2022 11:13:08 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7974037A14
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:13:05 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z19so7517919edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=Dd9o2JrmgxuX9CbeMpsJCVutDNWP2KQDZreRpDw1RAo=;
+        b=FjYAv8ZhVHzMNIOB5DLrHWhMDOoSii6hdAQpHJrCHbHno4nufxXe4yNmaxmt/bsI1m
+         OSRdXLUsBWItZ+eT+B/iZ5BXMdKBMAd1VSnU/vWVn4Jm/NoPxQuoy9P47Q0PASAjxLiK
+         zTUOfOb5tKteyL6Jf3vgQL5R4WGs84yPMSSJgbi/4DItldcaB3xYFfwlyMFkXR1zGBvk
+         K0HOOZODtUTEYzowO6w7u/8HhJoAzr2FU43ojVEJOcEFI7oF+iftTkT1+W6lCoTe/4CZ
+         ADtUrzgwAGWfkwlgjBWoN45mrag+3qgM9GXSDJoUFK+ePMSJJ3SceHTGy3ID0Xb3Etp9
+         ErFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Dd9o2JrmgxuX9CbeMpsJCVutDNWP2KQDZreRpDw1RAo=;
+        b=WXDpFhTH7OtH6nE5tc70jHJk0wGDDDaUqTsmJtA1FJk10pJDB23jYjdje9aYH2DADs
+         NeJFkNdEHVQ/fdC2lLddRFp6Tga2HilIewDhCg0Qlie8nNR8eFlLScJfU7WE2yjR+487
+         KaL3UUC9Ga5Upo29zw8IayUS8ldlur3dayth+Fbn3cAzSnoz4fSiamRkw/pcfnVuEXr7
+         F7hu33/KekuzH6fQ4TdWBdJYbGZZoZvslKl6z+/u4QtzJ8d3tzXCaFMHqnJSS+100HBG
+         eUfBu4/VnMTLUsLycxRn9BZHHlob7GPOLJXBSvGaQ4DjNZQBCQxah/LTe1vvLVnukFCD
+         rqBA==
+X-Gm-Message-State: AJIora+5V3RI4QS8Qm5c+3lslTixsOUyetpwqsA42fy1LVXKUwBOH16c
+        p+bwR/Hxk3AJUQzJvaxhgXzwJw==
+X-Google-Smtp-Source: AGRyM1toMruHcn/GPFWYSw4dsfrauoOf2Q4fnnKbo/geN2QJFcJBjyRmHxtlFDczm6DzN0aV53vLHg==
+X-Received: by 2002:a05:6402:195:b0:431:5499:35eb with SMTP id r21-20020a056402019500b00431549935ebmr4713416edv.346.1655910783959;
+        Wed, 22 Jun 2022 08:13:03 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170906315300b00704cf66d415sm9632020eje.13.2022.06.22.08.13.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 08:13:03 -0700 (PDT)
+Message-ID: <11697f16-67b1-d32a-eea4-18f56631c72f@linaro.org>
+Date:   Wed, 22 Jun 2022 17:13:01 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 651dfbb6-830b-4262-4528-08da5461ad5a
-X-MS-TrafficTypeDiagnostic: AM9P190MB1041:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SWE2di/wUSDifWptz1wfPb158TRf6S8gH/OSolLgPdUhJe3g8sSz9O+oTwmLKDVb6xVzEk2z5dF0LX/aFdthrhSH/qS9tPxWRovYcx2zzxImAFeIISe6Owx4YecwYs3XuL3kjQ6NjPpTm64aV7QOgHG6xVG6RON54GBw6ECqIFcZOXQjheyfBfML2a7i8vDxBa+6R9nvH5FziMXqoRGB3AfKKIdSx5iHoz/iMOcFHAYs45kn93hAHfHMoauoN8BiwlJiekhhEX8rzc+NpxiaZpE7jV87pe+Xm0Mlh7sJUbr+8Un0neRNKRV68Ie0Lj3RgDYANpB8MP0XgiXgBumdAi/REi8apzNXZMby4il1ZO5U7yzJK18yrFRwUFow5rDZfF58J9+/WOaXmKDLE3+eM8LCh7le86eMBBWXC5WeWEcSMzAhIWngeey2XIK6UeG6GJBanpFKzNs3Alc4ZcoOd/EP6Zu6bUcZrvjMPu8TsC0UxaXfyp46NQ00Fo+bS7PZvaEsYz0oFovkVHHEhCb+NynZv+tjydee1GVqgvn3VdiGjyRPfDJxMmRsMiAK3PkLyhxuyxQ3TmIglXpVQBH0vAN90PuQbpN6MtRklKjCjvF5dsWTi+wMWSJjau5aikQICiVngJCZLUBgcvVtZBH3GA==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nVw6A/GudvU0uElzrV73ZQ7qWhlBVwxKll8olNyG5aNBxr9qDok2bqJIXLtO?=
- =?us-ascii?Q?1hAsj461Sj+RuD+iqkhTYMfu4Jp/RbJd/+DESrrVIrMB62tCh0qqoBHAvM9D?=
- =?us-ascii?Q?xQ3F56tRJnVAbhRej59WF1KD6aofJDJds17VS5UotuS6vIzumB1V6Mgookxh?=
- =?us-ascii?Q?mr+TZflBhvirbA5aIKyw9GOPwqWAU05MwBIDCsn75QO+PuyLopNqjb5yWqmz?=
- =?us-ascii?Q?QwzQ2AKtkYvBd0NYvYOJsDsFdd3p9MiF/b3OtW9p0mDpQd0xm6xmxtPJRCuU?=
- =?us-ascii?Q?b4eCMRfUKeoNyO8sUph60JDB+zIS+zBiN/zJr25az/y8itbZv5czaZ/Zzt5/?=
- =?us-ascii?Q?OZsQZMoUbpE/YlFsFPX27eoBzcsToikmer/skGVtBf9cI1rSdQuLXdCL4+04?=
- =?us-ascii?Q?Kxx1sMMC7wmeE0ZHXXZDtGttwHryEKjb3Hic/bF4WuDyqz3znhEfAoSUL0uw?=
- =?us-ascii?Q?wLnGxSM3Ao1Sab+88TJevEDAJmFvlQttGxww7ZduCdGJr1Oa33rhv9At7pET?=
- =?us-ascii?Q?r0yNTb3s9sidbWoebO35dCjE0QadzWlT6l9MrSiIsWx5+W3gmrtgTtsls98t?=
- =?us-ascii?Q?lxjMZ5AY7nwxBkWhnvG44gxHLMqgf/9fbWgZ5DklUuXzAzxtJSQarZ8GpQz6?=
- =?us-ascii?Q?Z2i+Ygkru6rafvLniptS+QQKFDPTt4Yw0LKRkhym3SPi2A7zgh23mgGQtvjW?=
- =?us-ascii?Q?70OIhmCSuqixqilQoyYqXiyU3XPWsA31y9EVYheqLpNOBabPnxm68tYzw+Lt?=
- =?us-ascii?Q?Ta/XS7K1tWHHoBMPZb56UTVDPPcLNQfdUpCg7gQZxjmzxz7uez7wD5WWR4bG?=
- =?us-ascii?Q?n3cXtNWbG5vLAL+2i1KqHB2KKs9Ido3pFrNfwj4fOuk5GRdc2ws8XKkziasK?=
- =?us-ascii?Q?nc8ciUAgxXQ++HjdO6dFMgWXVBqUVqR4BWkQAP0RVcWtdcBVqjEPtbkxmpiB?=
- =?us-ascii?Q?sqQfH5Hr77EK4xggBHGFgvqecPr8152yabQdIkLxePLIXpLhUz54UgRslKP7?=
- =?us-ascii?Q?SNeP9ODOR82oVI0PKGqhoMRnA6dgqqt6iXvVdSQwAMYwP136Q0U5DCY65FJz?=
- =?us-ascii?Q?1K8HmAJXDmxuvviF0JO4drrm4ZFR6V4nTim5noIg0v/HbFiU7farBVZn7HV+?=
- =?us-ascii?Q?EI/f8OQww1kipApabPq8I52OnddqAycQB4woq65QBfBkpEl6z5B3jmjVnRu6?=
- =?us-ascii?Q?+19/lKUZiEoE5HMnMSVXF3QpkuZe0oYZ4c5WQ2Nmj28NepA5Y2/mkhNOlA/G?=
- =?us-ascii?Q?jwoQn7aPT6/1t2Izh/lfDyTHO5VRYY5Wo2B3b1hbMGvDll/ayFnoC1ZfQxCK?=
- =?us-ascii?Q?weO2BQbJZ4MRcVsSBH8U1e3VbgF6ZounRLJW3Yk+5VCLYCRpjeZXD9mAztAH?=
- =?us-ascii?Q?qc31FHPwb0Y5atCiHdq58wpGaxZNUPQpHFA/hY1S1sCBny+jd6MKa+Oi3VBp?=
- =?us-ascii?Q?3GPoBF5tGwo=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 651dfbb6-830b-4262-4528-08da5461ad5a
-X-MS-Exchange-CrossTenant-AuthSource: AM9P190MB1299.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2022 15:12:52.4374
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9P190MB1041
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V2 4/8] dt-bindings: pinctrl: qcom: Add ipq5018 pinctrl
+ bindings
+Content-Language: en-US
+To:     Sricharan R <quic_srichara@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, p.zabel@pengutronix.de,
+        quic_varada@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220621161126.15883-1-quic_srichara@quicinc.com>
+ <20220621161126.15883-5-quic_srichara@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220621161126.15883-5-quic_srichara@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This error handling is more readable and reduces code size.
+On 21/06/2022 18:11, Sricharan R wrote:
+> From: Varadarajan Narayanan <quic_varada@quicinc.com>
+> 
+> Add device tree binding Documentation details for ipq5018
+> pinctrl driver.
+> 
+> Co-developed-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
+> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
+> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 
-Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
----
- drivers/staging/rtl8192e/rtllib_tx.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+SoB should go after Co-developed.
 
-diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-index 1307cf55741a..b246f5e0cad7 100644
---- a/drivers/staging/rtl8192e/rtllib_tx.c
-+++ b/drivers/staging/rtl8192e/rtllib_tx.c
-@@ -214,19 +214,18 @@ static struct rtllib_txb *rtllib_alloc_txb(int nr_frags, int txb_size,
- 
- 	for (i = 0; i < nr_frags; i++) {
- 		txb->fragments[i] = dev_alloc_skb(txb_size);
--		if (unlikely(!txb->fragments[i])) {
--			i--;
--			break;
--		}
-+		if (unlikely(!txb->fragments[i]))
-+			goto err_free;
- 		memset(txb->fragments[i]->cb, 0, sizeof(txb->fragments[i]->cb));
- 	}
--	if (unlikely(i != nr_frags)) {
--		while (i >= 0)
--			dev_kfree_skb_any(txb->fragments[i--]);
--		kfree(txb);
--		return NULL;
--	}
-+
- 	return txb;
-+
-+err_free:
-+	while (--i >= 0)
-+		dev_kfree_skb_any(txb->fragments[i]);
-+
-+	return NULL;
- }
- 
- static int rtllib_classify(struct sk_buff *skb, u8 bIsAmsdu)
--- 
-2.36.1
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L473
 
+> ---
+>  .../pinctrl/qcom,ipq5018-pinctrl.yaml         | 145 ++++++++++++++++++
+>  1 file changed, 145 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..9b16c08bd127
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml
+> @@ -0,0 +1,145 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/qcom,ipq5018-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. IPQ5018 TLMM block
+> +
+> +maintainers:
+> +  - Varadarajan Narayanan <quic_varada@quicinc.com>
+> +  - Sricharan R <quic_srichara@quicinc.com>
+> +  - Nitheesh Sekar <quic_nsekar@quicinc.com>
+> +
+> +description: |
+> +  This binding describes the Top Level Mode Multiplexer block found in the
+> +  IPQ5018 platform.
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,ipq5018-pinctrl
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description: Specifies the TLMM summary IRQ
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  '#interrupt-cells':
+> +    description:
+> +      Specifies the PIN numbers and Flags, as defined in defined in
+> +      include/dt-bindings/interrupt-controller/irq.h
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    description: Specifying the pin number and flags, as defined in
+> +      include/dt-bindings/gpio/gpio.h
+> +    const: 2
+> +
+> +  gpio-ranges:
+> +    maxItems: 1
+> +
+> +#PIN CONFIGURATION NODES
+> +patternProperties:
+> +  '-pinmux$':
+> +    type: object
+> +    description:
+> +      Pinctrl node's client devices use subnodes for desired pin configuration.
+> +      Client device subnodes use below standard properties.
+> +    $ref: "/schemas/pinctrl/pincfg-node.yaml"
+
+No need for quotes
+
+> +
+> +    properties:
+> +      pins:
+> +        description:
+> +          List of gpio pins affected by the properties specified in this
+> +          subnode.
+> +        items:
+> +          oneOf:
+> +            - pattern: "^gpio([1-9]|[1-7][0-9]|80)$"
+
+Use consistent quotes in the patch: either ' or ". Don't mix.
+
+> +        minItems: 1
+> +        maxItems: 4
+> +
+> +      function:
+> +        description:
+> +          Specify the alternative function to be configured for the specified
+> +          pins.
+> +        enum: [ atest_char, atest_char0, atest_char1, atest_char2, atest_char3,
+> +          audio_pdm0, audio_pdm1, audio_rxbclk, audio_rxd, audio_rxfsync,
+> +          audio_rxmclk, audio_txbclk, audio_txd, audio_txfsync, audio_txmclk,
+> +          blsp0_i2c, blsp0_spi, blsp0_uart0, blsp0_uart1, blsp1_i2c0,
+> +          blsp1_i2c1, blsp1_spi0, blsp1_spi1, blsp1_uart0, blsp1_uart1,
+> +          blsp1_uart2, blsp2_i2c0, blsp2_i2c1, blsp2_spi, blsp2_spi0,
+> +          blsp2_spi1, btss0, btss1, btss10, btss11, btss12, btss13, btss2,
+> +          btss3, btss4, btss5, btss6, btss7, btss8, btss9, burn0, burn1,
+> +          cri_trng, cri_trng0, cri_trng1, cxc_clk, cxc_data, dbg_out, eud_gpio,
+> +          gcc_plltest, gcc_tlmm, gpio, mac0, mac1, mdc, mdio, pcie0_clk,
+> +          pcie0_wake, pcie1_clk, pcie1_wake, pll_test, prng_rosc, pwm0, pwm1,
+> +          pwm2, pwm3, qdss_cti_trig_in_a0, qdss_cti_trig_in_a1,
+> +          qdss_cti_trig_in_b0, qdss_cti_trig_in_b1, qdss_cti_trig_out_a0,
+> +          qdss_cti_trig_out_a1, qdss_cti_trig_out_b0, qdss_cti_trig_out_b1,
+> +          qdss_traceclk_a, qdss_traceclk_b, qdss_tracectl_a, qdss_tracectl_b,
+> +          qdss_tracedata_a, qdss_tracedata_b, qspi_clk, qspi_cs, qspi0, qspi1,
+> +          qspi2, qspi3, reset_out, sdc1_clk, sdc1_cmd, sdc10, sdc11, sdc12,
+> +          sdc13, wci0, wci1, wci2, wci3, wci4, wci5, wci6, wci7, wsa_swrm,
+> +          wsi_clk3, wsi_data3, wsis_reset, xfem0, xfem1, xfem2, xfem3, xfem4,
+> +          xfem5, xfem6, xfem7 ]
+> +
+> +      drive-strength:
+> +        enum: [2, 4, 6, 8, 10, 12, 14, 16]
+> +        default: 2
+> +        description:
+> +          Selects the drive strength for the specified pins, in mA.
+> +
+> +      bias-pull-down: true
+> +
+> +      bias-pull-up: true
+> +
+> +      bias-disable: true
+> +
+> +      output-high: true
+> +
+> +      output-low: true
+> +
+> +    required:
+> +      - pins
+> +      - function
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - '#interrupt-cells'
+> +  - gpio-controller
+> +  - '#gpio-cells'
+> +  - gpio-ranges
+
+Missing allOf with reference to pinctrl schema.
+
+> +
+> +additionalProperties: false
+> +
+
+
+Best regards,
+Krzysztof

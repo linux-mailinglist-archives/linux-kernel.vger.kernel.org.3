@@ -2,293 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4953555143
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7EE555145
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376581AbiFVQX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S1359433AbiFVQYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376876AbiFVQXj (ORCPT
+        with ESMTP id S1376574AbiFVQYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:23:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E595F3EB85
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655915010; x=1687451010;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yRNlPWhK9I1dqUB7O0MzIC9CtMdw4d1MpixDFiwcUDU=;
-  b=KT6p31S0HfAmS1/ReTNuSqJKCTnUcezmDZykCkzqntE9oAWDCaxDdVoq
-   yPaY9NKuYrPjn0kCiKWpfb2bByjaLBz4sPo0dfpuYRdsDBUuz0d9aDbWE
-   vJNp5UZKA+e2HBB5SSmcPAaRdr2jU/Ua73G788PS/uszTTLhHK/Qhph7m
-   wu889a4v/ENDPOzgXIberOLR8K7BF28nDZbN1xAY5WaIqGRe4csy7BS6Q
-   UXv7ob7wJrq5xtUFzaSjt9YlKDzNona2XyTuwBeS8NI+1Wqdmndf/mDSX
-   tR8RXKJuYOh8edSwFXZzyQCq/1y91ajmJIqpZV/QG8XoJgm2pqgAqHt+H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="260898821"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="260898821"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 09:22:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="715471098"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 22 Jun 2022 09:22:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 7A5B681E; Wed, 22 Jun 2022 19:22:43 +0300 (EEST)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv4 OPTIONAL 8/8] x86/mm: Extend LAM to support to LAM_U48
-Date:   Wed, 22 Jun 2022 19:22:30 +0300
-Message-Id: <20220622162230.83474-9-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
-References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
+        Wed, 22 Jun 2022 12:24:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CB0F5A4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:24:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE44061A53
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 16:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E04C34114;
+        Wed, 22 Jun 2022 16:24:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655915058;
+        bh=wBXOy6rLkI4srMgL1RTEKHuG4ToxdOlMrxGQy9/s+EI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JFPHEJKGa1nD/NWHoeg7lzBhttJc+2CpEDswF6eMUBNCz0afYle4AAfdj5BKZ1z6J
+         GQk7equq9Nu88zOPISpFp4200lDTUlAuMXiMfvKWWjHMSYtcSxX6ZCfwAVxStQs0T+
+         h+RZO0VOr0+zlGGuJ6Uu+GNXCV7Ap2Ne08W3wpDYl7msP72izxs5jIoz4s2BSK95P5
+         88IZvhTtK5hFHMRiQHUI11dvJSQpzJmbjiCPH9waQLw/PnVS4USHrorVk58lTCWwCp
+         1ifCz2of++P/wOCP/nxujyT5c+dN0LaWezmHob4uDPo5Uvv8wcI+wxbeasvcRtHwF2
+         xbtKa4VdyMrGQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3618F4096F; Wed, 22 Jun 2022 13:24:15 -0300 (-03)
+Date:   Wed, 22 Jun 2022 13:24:15 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Hendrik Brueckner <brueckner@linux.vnet.ibm.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/1 FYI] perf trace beauty: Fix generation of errno id->str
+ table on ALT Linux
+Message-ID: <YrNCLzNGsvizMhdW@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LAM_U48 allows to encode 15 bits of tags into address.
+Fyi, I'm carrying this on my perf tools tree to keep building on:
 
-LAM_U48 steals bits above 47-bit for tags and makes it impossible for
-userspace to use full address space on 5-level paging machine.
+[perfbuilder@five sisyphus]$ podman pull alt:sisyphus
+Trying to pull docker.io/library/alt:sisyphus...
+Getting image source signatures
+Copying blob 2b39ef1520dd skipped: already exists
+Copying blob 12717fd4baa0 skipped: already exists
+Copying config 6d48f46445 done
+Writing manifest to image destination
+Storing signatures
+6d48f4644518cd96ffe1de6cd0333d2abc8312c0e4449e03b58b1d480f0f5905
+[perfbuilder@five sisyphus]$ dsh .
+sh-4.4# bash
+[root@b8318c77142b /]# cat /etc/os-release
+NAME="starter kit"
+VERSION="p10 (Hypericum)"
+ID=altlinux
+VERSION_ID=p10
+PRETTY_NAME="ALT Starterkit (Hypericum)"
+ANSI_COLOR="1;33"
+CPE_NAME="cpe:/o:alt:starterkit:p10"
+HOME_URL="http://en.altlinux.org/starterkits"
+BUG_REPORT_URL="https://bugs.altlinux.org/"
+[root@b8318c77142b /]# rpm -qi bash
+Name        : bash
+Version     : 4.4.23
+Release     : alt1
+DistTag     : sisyphus+221902.500.4.1
+Architecture: noarch
+Install Date: Fri Jun  3 23:03:32 2022
+Group       : Shells
+Size        : 0
+License     : None
+Signature   : DSA/SHA1, Tue Feb 19 14:40:44 2019, Key ID 95c584d5ae4ae412
+Source RPM  : bash-defaults-4.4.23-alt1.src.rpm
+Build Date  : Tue Feb 19 14:40:42 2019
+Build Host  : ldv-sisyphus.hasher.altlinux.org
+Relocations : (not relocatable)
+Packager    : Dmitry V. Levin <ldv@altlinux.org>
+Vendor      : ALT Linux Team
+Summary     : The GNU Bourne Again SHell (/bin/bash)
+Description :
+This package provides default setup for the GNU Bourne Again SHell (/bin/bash).
+[root@b8318c77142b /]#
 
-Make these features mutually exclusive: whichever gets enabled first
-blocks the other one.
+Perf uses that script to generate an id->str errno table for all arches,
+implemented in:
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0337cf74ccf2a43437bff2e23b278e4f2dc4c6e2
+
+But it is failing on:
+
+  10    62.99 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
+  11    91.50 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
+  12    89.80 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+  13     8.99 alt:sisyphus                  : FAIL gcc version 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) (GCC)
+        |         ^~~~
+    442 |         case 47: return "EL3RST";
+        |         ^~~~
+    443 |         case 48: return "ELNRNG";
+
+The generated file lacks the function start/end due to some strange
+glitch:
+
+http://vger.kernel.org/~acme/perf/generated-altlinux-sisyphus-arch_errno_name_array.c
+
+So I'm adding this workaround, can you please check why this is
+happening?
+
+- Arnaldo
+
 ---
- arch/x86/include/asm/elf.h         |  3 ++-
- arch/x86/include/asm/mmu_context.h | 13 +++++++++++++
- arch/x86/kernel/process_64.c       | 23 +++++++++++++++++++++++
- arch/x86/kernel/sys_x86_64.c       |  5 +++--
- arch/x86/mm/hugetlbpage.c          |  6 ++++--
- arch/x86/mm/mmap.c                 |  9 ++++++++-
- 6 files changed, 53 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index cb0ff1055ab1..4df13497a770 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -317,7 +317,8 @@ static inline int mmap_is_ia32(void)
- extern unsigned long task_size_32bit(void);
- extern unsigned long task_size_64bit(int full_addr_space);
- extern unsigned long get_mmap_base(int is_legacy);
--extern bool mmap_address_hint_valid(unsigned long addr, unsigned long len);
-+extern bool mmap_address_hint_valid(struct mm_struct *mm,
-+				    unsigned long addr, unsigned long len);
- extern unsigned long get_sigframe_size(void);
+For some reason using:
+
+         cat <<EoFuncBegin
+  static const char *errno_to_name__$arch(int err)
+  {
+         switch (err) {
+  EoFuncBegin
+
+In tools/perf/trace/beauty/arch_errno_names.sh isn't working on ALT
+Linux sisyphus (development version), which could be some distro
+specific glitch, so just get this done in an alternative way that works
+everywhere while giving notice to the people working on that distro to
+try and figure our what really took place.
+
+Cc: Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+Cc: Dmitry V. Levin <ldv@altlinux.org>
+Cc: Hendrik Brueckner <brueckner@linux.vnet.ibm.com>,
+Cc: Ian Rogers <irogers@google.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/trace/beauty/arch_errno_names.sh | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/tools/perf/trace/beauty/arch_errno_names.sh b/tools/perf/trace/beauty/arch_errno_names.sh
+index 2c5f72fa81087956..37c53bac5f56ef7b 100755
+--- a/tools/perf/trace/beauty/arch_errno_names.sh
++++ b/tools/perf/trace/beauty/arch_errno_names.sh
+@@ -33,23 +33,13 @@ create_errno_lookup_func()
+ 	local arch=$(arch_string "$1")
+ 	local nr name
  
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index a6cded0f5e64..17d31988edd6 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -263,6 +263,19 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
+-	cat <<EoFuncBegin
+-static const char *errno_to_name__$arch(int err)
+-{
+-	switch (err) {
+-EoFuncBegin
++	printf "static const char *errno_to_name__%s(int err)\n{\n\tswitch (err) {\n" $arch
  
- unsigned long __get_current_cr3_fast(void);
+ 	while read name nr; do
+ 		printf '\tcase %d: return "%s";\n' $nr $name
+ 	done
  
-+#ifdef CONFIG_X86_5LEVEL
-+static inline bool full_va_allowed(struct mm_struct *mm)
-+{
-+	/* LAM_U48 steals VA bits above 47-bit for tags */
-+	return mm->context.lam_cr3_mask != X86_CR3_LAM_U48;
-+}
-+#else
-+static inline bool full_va_allowed(struct mm_struct *mm)
-+{
-+	return false;
-+}
-+#endif
-+
- #include <asm-generic/mmu_context.h>
- 
- #endif /* _ASM_X86_MMU_CONTEXT_H */
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index e328b91d1492..427ebef3f64b 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -756,6 +756,16 @@ static void enable_lam_func(void *mm)
- 	switch_mm(loaded_mm, loaded_mm, current);
+-	cat <<EoFuncEnd
+-	default:
+-		return "(unknown)";
+-	}
+-}
+-
+-EoFuncEnd
++	printf '\tdefault: return "(unknown)";\n\t}\n}\n'
  }
  
-+static bool lam_u48_allowed(void)
-+{
-+	struct mm_struct *mm = current->mm;
-+
-+	if (!full_va_allowed(mm))
-+		return true;
-+
-+	return find_vma(mm, DEFAULT_MAP_WINDOW) == NULL;
-+}
-+
- static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- {
- 	int ret = 0;
-@@ -763,6 +773,10 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- 	if (!cpu_feature_enabled(X86_FEATURE_LAM))
- 		return -ENODEV;
- 
-+	/* lam_u48_allowed() requires mmap_lock */
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
-+
- 	mutex_lock(&mm->context.lock);
- 
- 	/* Already enabled? */
-@@ -777,6 +791,14 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- 	} else if (nr_bits <= 6) {
- 		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
- 		mm->context.untag_mask =  ~GENMASK(62, 57);
-+	} else if (nr_bits <= 15) {
-+		if (!lam_u48_allowed()) {
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+
-+		mm->context.lam_cr3_mask = X86_CR3_LAM_U48;
-+		mm->context.untag_mask =  ~GENMASK(62, 48);
- 	} else {
- 		ret = -EINVAL;
- 		goto out;
-@@ -788,6 +810,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- 	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
- out:
- 	mutex_unlock(&mm->context.lock);
-+	mmap_write_unlock(mm);
- 	return ret;
- }
- 
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index 8cc653ffdccd..5ea6aaed89ba 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -21,6 +21,7 @@
- 
- #include <asm/elf.h>
- #include <asm/ia32.h>
-+#include <asm/mmu_context.h>
- 
- /*
-  * Align a virtual address to avoid aliasing in the I$ on AMD F15h.
-@@ -182,7 +183,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	/* requesting a specific address */
- 	if (addr) {
- 		addr &= PAGE_MASK;
--		if (!mmap_address_hint_valid(addr, len))
-+		if (!mmap_address_hint_valid(mm, addr, len))
- 			goto get_unmapped_area;
- 
- 		vma = find_vma(mm, addr);
-@@ -203,7 +204,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	 * !in_32bit_syscall() check to avoid high addresses for x32
- 	 * (and make it no op on native i386).
- 	 */
--	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
-+	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
- 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
- 
- 	info.align_mask = 0;
-diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-index a0d023cb4292..9fdc8db42365 100644
---- a/arch/x86/mm/hugetlbpage.c
-+++ b/arch/x86/mm/hugetlbpage.c
-@@ -18,6 +18,7 @@
- #include <asm/tlb.h>
- #include <asm/tlbflush.h>
- #include <asm/elf.h>
-+#include <asm/mmu_context.h>
- 
- #if 0	/* This is just for testing */
- struct page *
-@@ -103,6 +104,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 		unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
-+	struct mm_struct *mm = current->mm;
- 	struct vm_unmapped_area_info info;
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
-@@ -114,7 +116,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 	 * If hint address is above DEFAULT_MAP_WINDOW, look for unmapped area
- 	 * in the full address space.
- 	 */
--	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
-+	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
- 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
- 
- 	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
-@@ -161,7 +163,7 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
- 
- 	if (addr) {
- 		addr &= huge_page_mask(h);
--		if (!mmap_address_hint_valid(addr, len))
-+		if (!mmap_address_hint_valid(mm, addr, len))
- 			goto get_unmapped_area;
- 
- 		vma = find_vma(mm, addr);
-diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
-index c90c20904a60..f9ca824729de 100644
---- a/arch/x86/mm/mmap.c
-+++ b/arch/x86/mm/mmap.c
-@@ -21,6 +21,7 @@
- #include <linux/elf-randomize.h>
- #include <asm/elf.h>
- #include <asm/io.h>
-+#include <asm/mmu_context.h>
- 
- #include "physaddr.h"
- 
-@@ -35,6 +36,8 @@ unsigned long task_size_32bit(void)
- 
- unsigned long task_size_64bit(int full_addr_space)
- {
-+	if (!full_va_allowed(current->mm))
-+		return DEFAULT_MAP_WINDOW;
- 	return full_addr_space ? TASK_SIZE_MAX : DEFAULT_MAP_WINDOW;
- }
- 
-@@ -206,11 +209,15 @@ const char *arch_vma_name(struct vm_area_struct *vma)
-  * the failure of such a fixed mapping request, so the restriction is not
-  * applied.
-  */
--bool mmap_address_hint_valid(unsigned long addr, unsigned long len)
-+bool mmap_address_hint_valid(struct mm_struct *mm,
-+			     unsigned long addr, unsigned long len)
- {
- 	if (TASK_SIZE - len < addr)
- 		return false;
- 
-+	if (addr + len > DEFAULT_MAP_WINDOW && !full_va_allowed(mm))
-+		return false;
-+
- 	return (addr > DEFAULT_MAP_WINDOW) == (addr + len > DEFAULT_MAP_WINDOW);
- }
- 
+ process_arch()
 -- 
-2.35.1
+2.36.1
 

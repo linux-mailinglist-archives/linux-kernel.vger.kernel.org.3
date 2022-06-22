@@ -2,113 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117EE554BA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D198D554BAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357475AbiFVNqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S1356882AbiFVNrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236962AbiFVNqm (ORCPT
+        with ESMTP id S1355133AbiFVNrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:46:42 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B582027B27
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:46:40 -0700 (PDT)
+        Wed, 22 Jun 2022 09:47:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD652AE11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:47:42 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u15so6716309ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=bdqRyaN94a2F/toYtRRwW4KgpaJhL3mLLBaZfLKAwvc=;
-  b=IKyah0mNYTKZwqc7WA5l/lL6mD4r4+fRGjigyU7UmU6DawOTvXDMvN7S
-   nOM9+dB1v2ARmmirSy9yo/oJZNjK2XiI/HJTe39qeJ7V8aoRlCPd8RjQa
-   8/TATm2oxShA3vATMc9msSh8NKBEBu/yEcmJrvBNHD7Vu1yEerSKtgKyV
-   0=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.92,212,1650924000"; 
-   d="scan'208";a="17503033"
-Received: from 71-51-165-43.chvl.centurylink.net (HELO hadrien.PK5001Z) ([71.51.165.43])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 15:46:37 +0200
-Date:   Wed, 22 Jun 2022 09:46:13 -0400 (EDT)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: julia@hadrien
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-cc:     Julia Lawall <julia.lawall@inria.fr>,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        "vgupta@kernel.org" <vgupta@kernel.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ARC:mm:Fix syntax errors in comments
-In-Reply-To: <1b34e0e5-23aa-96cd-c37f-1434884ff061@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2206220943200.6198@hadrien>
-References: <20220622080423.41570-1-yuanjilin@cdjrlc.com> <YrLTCXLrr3HB39lv@debian.me> <4cef89c9-3b27-11e8-2971-66b93b847ede@synopsys.com> <alpine.DEB.2.22.394.2206220513590.2646@hadrien> <46e4b588-d35b-ec50-ad1a-8502c2903677@synopsys.com>
- <alpine.DEB.2.22.394.2206220535300.2646@hadrien> <1b34e0e5-23aa-96cd-c37f-1434884ff061@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2QZHrrIBVW3T6cCzOrquv5g3s3bcHIbuUCuv4UP/4ic=;
+        b=FmNIAbKhrN0tr6L1fI9HtdVfR7DjgkD7iykGsVbbqVbYqmGPYkuYj88aNATFf7XmjN
+         Nk65pyBmSuDZEEGv2RAHOm/IqWDB0Fp0VdstYlyMr6ivizNYuBuT5BlBI0kL5DDBrK1P
+         HeY63qQi5LEvLajcHynt3VDm2pUUK7Ml7VBG8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2QZHrrIBVW3T6cCzOrquv5g3s3bcHIbuUCuv4UP/4ic=;
+        b=6GoEfiNSXMfvmAidg1tsXBBAO7GvHLIWMDtuFIA1ZOzTlqPDWZYrKm4LsRt5ZVihaZ
+         U+ZEmCBOPgkYlslsur18GXHBXWEdSAApKz4t3UFOnRP+MQwd62BWWVQeAcAgpDeYsGqI
+         MRns6RHVTc1Z69nsXJl9x0r47w2hT8ro6yPeWUAnYNSbu1tmEMeTGc0rcCOx73zTRXqZ
+         hT73Kux5NP1H/BqqC8JyvhRDVrN+t0n/NpHGH5wnrTxqtizbK6ysFLdlm50zUN4ut+79
+         NFwB30USNq70U+PCCn3lp4TQCA0MlBo/siVS3LoV7OH+VzlC1djFF8CZoW1l92Uxpv2v
+         FlZA==
+X-Gm-Message-State: AJIora/bEUPgLIJBycjL9BxKwZBgpvamHI1l8UB0Vs8BFcDndeHh1kJ7
+        apxHw0liurmikqVSBTXE6QV60HvBR3lC0nCT
+X-Google-Smtp-Source: AGRyM1uPrbNHbCJ1aAVJ10WR1Fgoy97eBi4zzF+4gTkdG4tGLD+RiwhP8QgZ/+FBgy7VBoHudUZ0Kg==
+X-Received: by 2002:a17:906:265b:b0:722:e88b:1b31 with SMTP id i27-20020a170906265b00b00722e88b1b31mr1082128ejc.350.1655905660341;
+        Wed, 22 Jun 2022 06:47:40 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id q12-20020a5085cc000000b0042ab87ea713sm15122986edh.22.2022.06.22.06.47.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 06:47:39 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso8966663wml.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:47:38 -0700 (PDT)
+X-Received: by 2002:a05:600c:3485:b0:39c:7db5:f0f7 with SMTP id
+ a5-20020a05600c348500b0039c7db5f0f7mr4093835wmq.8.1655905658386; Wed, 22 Jun
+ 2022 06:47:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YrLtpixBqWDmZT/V@debian>
+In-Reply-To: <YrLtpixBqWDmZT/V@debian>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 22 Jun 2022 08:47:22 -0500
+X-Gmail-Original-Message-ID: <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+Message-ID: <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_RED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Wed, 22 Jun 2022, Bagas Sanjaya wrote:
-
-> On 6/22/22 16:38, Julia Lawall wrote:
-> >>> So code that is fine will have typos forever?  Fixing typos in comments
-> >>> doesn't break git blame for the following code.  And typos in comments
-> >>> give a bad impression about the state of the code in general.
-> >>
-> >> Of course not! Documentation is as important as the code, if not even more.
-> >> However, fixing typos to increase your commit counts to a reputable project
-> >> is not fine either. For instance, many of these proposed fixes are targeting
-> >> one single typo at a time. Couldn't they just be sent altogether!?!
-> >
-> > I have the impression that the person is just trying to figure out the
-> > patch submission process.  For example, the subject lines are not
-> > formatter in the standard way (I sent the person a private email about
-> > that).  Perhaps just let him know about how you would rather have received
-> > the patches.
+On Wed, Jun 22, 2022 at 5:23 AM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
 >
-> In recent times I had seen many typofix patches sent to LKML. You can see most
-> of them by querying `s:"fix typo"` on lore.kernel.org. Some of these patches
-> have been merged, though.
->
-> What I say as starter thread is "ideal" scenario as described in
-> Documentation/process/2.Process.rst; that is we prefer to see these minor
-> fixes as part of real patches work (say refactoring), rather than just being
-> trivial patches.
->
-> But what most reviewers here missed is how these typos are found? I guess
-> these can be from codespell or some other tools, or even manual review,
-> then send the fixes en mass.
->
-> Take a look at "fix typo in a comment" aka "delete redundant word" patches
-> at [1], [2], [3]. and [4].
->
-> [1]: https://lore.kernel.org/lkml/20220618132659.17100-1-wangxiang@cdjrlc.com/
-> [2]: https://lore.kernel.org/lkml/20220618130349.11507-1-wangxiang@cdjrlc.com/
-> [3]: https://lore.kernel.org/lkml/20220616163830.11366-1-wangxiang@cdjrlc.com/
-> [4]: https://lore.kernel.org/lkml/20220606123419.29109-1-wangxiang@cdjrlc.com/
->
-> IMHO, these patches should have been in a single, consolidated patch, since
-> these strip duplicate (hence redundant) word (single logical change).
+> I have recently (since yesterday) started building the mainline kernel
+> with clang-14 and I am seeing a build failure with allmodconfig.
 
-They go to different maintainers, so perhaps each one would prefer to get
-their own patches?  There was a trivial tree, but it is apparently not
-very active.
+Yeah, the clang build has never been allmodconfig-clean, although I
+think it's starting to get pretty close.
 
-It would indeed be good to indicate how the problems were found.  That
-could suggest whether the problem has been addressed comprehensively, or
-whether just some random issues have been detected.
+I build the kernel I actually _use_ with clang, and make sure it's
+clean in sane configurations, but my full allmodconfig build I do with
+gcc.
 
-julia
+Partly because of that "the clang build hasn't quite gotten there yet"
+and partly because last I tried it was even slower to build (not a big
+issue for my default config, but does matter for the allmodconfig
+build, even on my beefy home machine)
+
+I would love for people to start doing allmodconfig builds with clang
+too, but it would require some initial work to fix it... Hint, hint.
+
+And in the case of this warning attribute case, the clang error messages are
+
+ (a) verbose
+
+ (b) useless
+
+because they point to where the warning attribute is (I know where it
+is), but don't point to where it's actually triggering (ie where it
+was actually inlined and called from).
+
+The gcc equivalent of that warning actually says exactly where the
+problem is. The clang one is useless, which is probably part of why
+people aren't fixing them, because even if they would want to, they
+just give up.
+
+Nick, Nathan, any chance of getting better error messages out of
+clang? In some cases, they are very good, so it's not like clang does
+bad error messages by default. But in this case, the error message
+really is *entirely* useless.
+
+             Linus

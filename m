@@ -2,47 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80372556DB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB11556DBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355987AbiFVVH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 17:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        id S233302AbiFVVLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 17:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiFVVHS (ORCPT
+        with ESMTP id S229693AbiFVVLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 17:07:18 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4042FD8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:07:17 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7557BDD;
-        Wed, 22 Jun 2022 23:07:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655932035;
-        bh=hlTDQWFzV4JSxpRbykgQQwJUvt43T8XrutUdxr4Yt1g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hot08ZXuPwC6POLdDYIB93/0Tm8W/KjlW6qwXGl1lhCuYJ/Q3j4upD9yxYThyLK6i
-         DSlOsrlB9ACOdG6qEgQG8NsHR/gBnc3GQ5MwbCxqIfN0VGUhTnKWzHdvgtvHXDiBW8
-         k01ia0ztHuHiIdkUCh0WhnG6zFsqPwINuZZgIctQ=
-Date:   Thu, 23 Jun 2022 00:06:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Venkateshwar Rao Gannavarapu 
-        <venkateshwar.rao.gannavarapu@xilinx.com>
-Cc:     sam@ravnborg.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        vgannava@xilinx.com
-Subject: Re: [PATCH V2 1/2] dt-bindings: display: xlnx: Add DSI 2.0 Tx
- subsystem documentation
-Message-ID: <YrOEc/K3BqT9F8Ye@pendragon.ideasonboard.com>
-References: <1655389056-37044-1-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
- <1655389056-37044-2-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
+        Wed, 22 Jun 2022 17:11:05 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11E42FFDC;
+        Wed, 22 Jun 2022 14:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655932264; x=1687468264;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qETdEtCS92Y/0CHpomE0Y/TnCnDaHjp9IhR6dEaORYM=;
+  b=gRKtRdCYwwTEcHM2ifdvrWGbnFiayMknSJ1VGr46aMYyT53Ots/svur0
+   p1FJLsFWtJ3g7y1hhg8cbgw1r+x3VG3fpqMlP3Z3pw28dzdDtOq0bdE5i
+   WN1MOyiEWyw4zrKvxlIkBAW9wtlyhSorszyM1ApSuyry7aOkERSbKON/K
+   BNAW5io1QqRop9dWMlNkYWsM76HxMgXzBTNwlF0f5K81Po0BaeCKXnmys
+   6DGIdTzzIxk4Nlz7jpUUqqvqI+ZQJHm6sPU1aZpkkU295SU7NZ4qdpx6X
+   ObY08yT6TdHVvFoaE8Vs6DEzki4qz0bcpqhmphoI6QH/nKtnpsWT+HeO9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281276623"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="281276623"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 14:11:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="644395860"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2022 14:11:02 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o47cr-0001gv-Go;
+        Wed, 22 Jun 2022 21:11:01 +0000
+Date:   Thu, 23 Jun 2022 05:10:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v1 1/2] ACPI: utils: Add api to read _SUB from ACPI
+Message-ID: <202206230402.9xK6YlsY-lkp@intel.com>
+References: <20220622130730.1573747-2-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1655389056-37044-2-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+In-Reply-To: <20220622130730.1573747-2-sbinding@opensource.cirrus.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,148 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi GVRao,
+Hi Stefan,
 
-Thank you for the patch.
+Thank you for the patch! Yet something to improve:
 
-On Thu, Jun 16, 2022 at 07:47:35PM +0530, Venkateshwar Rao Gannavarapu wrote:
-> This patch adds dt binding for Xilinx DSI-TX subsystem.
-> 
-> The Xilinx MIPI DSI (Display serial interface) Transmitter Subsystem
-> implements the Mobile Industry Processor Interface (MIPI) based display
-> interface. It supports the interface with the programmable logic (FPGA).
-> 
-> Signed-off-by: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
-> ---
->  .../bindings/display/xlnx/xlnx,dsi-tx.yaml         | 101 +++++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml b/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
-> new file mode 100644
-> index 0000000..644934d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml
-> @@ -0,0 +1,101 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/xlnx/xlnx,dsi-tx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx DSI Transmitter subsystem Device Tree Bindings
-> +
-> +maintainers:
-> +  - Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
-> +
-> +description: |
-> +  The Xilinx DSI Transmitter Subsystem implements the Mobile Industry
-> +  Processor Interface based display interface. It supports the interface
-> +  with the programmable logic (FPGA).
-> +
-> +  For more details refer to PG238 Xilinx MIPI DSI-V2.0 Tx Subsystem.
-> +
-> +properties:
-> +  compatible:
-> +    const: xlnx,dsi-tx-v2.0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: AXI Lite CPU clock
-> +      - description: D-PHY clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: s_axis_aclk
-> +      - const: dphy_clk_200M
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          This port should be the input endpoint.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on broonie-sound/for-next linus/master v5.19-rc3 next-20220622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Port and endpoint are two different things. You can just write "Input
-port of the DSI encoder".
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Binding/Read-_SUB-from-ACPI-to-be-able-to-identify-firmware/20220622-211004
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: powerpc-pasemi_defconfig (https://download.01.org/0day-ci/archive/20220623/202206230402.9xK6YlsY-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/97b928a895ce3105296f0036393bb9ee04f11ae4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stefan-Binding/Read-_SUB-from-ACPI-to-be-able-to-identify-firmware/20220622-211004
+        git checkout 97b928a895ce3105296f0036393bb9ee04f11ae4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          This port should be the output endpoint.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-And here, "Output port of the DSI encoder".
+All errors (new ones prefixed by >>):
 
-> +
-> +required:
-> +  - "#address-cells"
-> +  - "#size-cells"
+   In file included from include/linux/i2c.h:13,
+                    from include/uapi/linux/fb.h:6,
+                    from include/linux/fb.h:7,
+                    from include/linux/backlight.h:13,
+                    from arch/powerpc/kernel/traps.c:32:
+>> include/linux/acpi.h:1029:12: error: 'acpi_get_sub' defined but not used [-Werror=unused-function]
+    1029 | static int acpi_get_sub(acpi_handle handle, char *sub, size_t size)
+         |            ^~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
-I think those should be listed in the properties above, with fixed
-values.
 
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    dsi0: dsi_tx@80020000 {
-> +        compatible = "xlnx,dsi-tx-v2.0";
-> +        reg = <0x80020000 0x20000>;
-> +        clocks = <&misc_clk_0>, <&misc_clk_1>;
-> +        clock-names = "s_axis_aclk", "dphy_clk_200M";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ports {
-> +              #address-cells = <1>;
-> +              #size-cells = <0>;
-> +
-> +              port@0 {
-> +                    reg = <0>;
-> +                    mipi_dsi_in: endpoint {
-> +                        remote-endpoint = <&pl_disp>;
-> +                    };
-> +              };
-> +
-> +              port@1 {
-> +                    reg = <1>;
-> +                    mipi_dsi_out: endpoint {
-> +                        remote-endpoint = <&panel_in>;
-> +                    };
-> +              };
-> +        };
-> +
-> +        panel@0 {
-> +              compatible = "auo,b101uan01";
-> +              reg = <0>;
-> +              port {
-> +                    panel_in: endpoint {
-> +                        remote-endpoint = <&mipi_dsi_out>;
-> +                    };
-> +              };
-> +        };
+vim +/acpi_get_sub +1029 include/linux/acpi.h
 
-Does this example validate (with `make dt_binding_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/xlnx/xlnx,dsi-tx.yaml`)
-without listing the panel node in the properties ?
-
-> +    };
-> +
-> +...
+  1028	
+> 1029	static int acpi_get_sub(acpi_handle handle, char *sub, size_t size)
+  1030	{
+  1031		return -ENODEV;
+  1032	}
+  1033	
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://01.org/lkp

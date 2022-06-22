@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5A75551CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A762E555174
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359540AbiFVQzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S1358972AbiFVQoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377351AbiFVQxp (ORCPT
+        with ESMTP id S236563AbiFVQok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:53:45 -0400
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD134161B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:52:06 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LSq3L32bczMqwg4;
-        Wed, 22 Jun 2022 18:44:14 +0200 (CEST)
-Received: from philippe-pc.toradex.int (unknown [31.10.206.125])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4LSq3J1hSjzlqV0V;
-        Wed, 22 Jun 2022 18:44:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
-        s=20220412; t=1655916254;
-        bh=16ktisfcvBgIYLREi0tcTzW4w4C5ndQSyEJGx6PC66Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=vLCYOSQp/JhOUYEuL2eekc5smKl3lsAvjtBe8HdlSycjBnvJI0SvWlE4KLQ/6Chum
-         B9jAJMyb9WO04DPm1g/yk/i3Dxuv6mAkzRRLSC6Hgd0KE8FsuNo+5+uQqQ6hFeMpPi
-         qVwwL5zo3byiZpNN5/1tlB/pjHA3HWmNI0+ZNnoY=
-From:   Philippe Schenker <dev@pschenker.ch>
-To:     shawnguo@kernel.org, devicetree@vger.kernel.org
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: imx8m{m,p}-verdin: use IT temperatures
-Date:   Wed, 22 Jun 2022 18:44:10 +0200
-Message-Id: <20220622164410.457249-1-dev@pschenker.ch>
-X-Mailer: git-send-email 2.36.1
+        Wed, 22 Jun 2022 12:44:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC0823617F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 09:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655916278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nXInkxXdvpzKoIOUQRdrxKmFesJ62JJWfaKiG5PimjI=;
+        b=gf3AVFszlHZP0xbUee0yagUqbxJo3v41eNpihEgHiKW8G/rd7A8ZBEOWfNhRZlGirT4itf
+        +bmJ1ZdnKPYxgi6dMaxuajyLCey9GS5binEdjzoYQaHqLTfedy+Ttb4CetBzWkHPpRcC93
+        LrnF+7YQSPNOkPjEDpra5tCfbhE+TNI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-QYI5K5ENM2KDmJd9UP0YeQ-1; Wed, 22 Jun 2022 12:44:35 -0400
+X-MC-Unique: QYI5K5ENM2KDmJd9UP0YeQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D8C61384F807;
+        Wed, 22 Jun 2022 16:44:34 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.134])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F96140CFD0A;
+        Wed, 22 Jun 2022 16:44:32 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RFC v1 00/10] KVM: nVMX: Use vmcs_config for setting up nested VMX MSRs
+Date:   Wed, 22 Jun 2022 18:44:22 +0200
+Message-Id: <20220622164432.194640-1-vkuznets@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+vmcs_config is a sanitized version of host VMX MSRs where some controls are
+filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are 
+discovered, some inconsistencies in controls are detected,...) but
+nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
+in exposing undesired controls to L1. Switch to using vmcs_config instead.
 
-Use IT temperature threshold for critical/passive trip point
-on Verdin iMX8M Plus and Mini.
+RFC part: vmcs_config's sanitization now is a mix of "what can't be enabled"
+and "what KVM doesn't want" and we need to separate these as for nested VMX
+MSRs only the first category makes sense. This gives vmcs_config a slightly
+different meaning "controls which can be (theoretically) used". An alternative
+approach would be to store sanitized host MSRs values separately, sanitize
+them and and use in nested_vmx_setup_ctls_msrs() but currently I don't see
+any benefits. Comments welcome!
 
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-Reviewed-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Very lightly tested with KVM selftests / kvm-unit-tests.
 
----
+Vitaly Kuznetsov (10):
+  KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+    setup_vmcs_config()
+  KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+  KVM: VMX: Move CPU_BASED_{CR3_LOAD,CR3_STORE,INVLPG}_EXITING filtering
+    out of setup_vmcs_config()
+  KVM: VMX: Add missing VMEXIT controls to vmcs_config
+  KVM: VMX: Add missing VMENTRY controls to vmcs_config
+  KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+  KVM: VMX: Store required-1 VMX controls in vmcs_config
+  KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
+  KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+  KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+    nested MSR
 
- arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 8 ++++++++
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 8 ++++++++
- 2 files changed, 16 insertions(+)
+ arch/x86/kvm/vmx/capabilities.h | 16 +++---
+ arch/x86/kvm/vmx/nested.c       | 37 +++++---------
+ arch/x86/kvm/vmx/nested.h       |  2 +-
+ arch/x86/kvm/vmx/vmx.c          | 91 +++++++++++++++++++++++++--------
+ 4 files changed, 94 insertions(+), 52 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-index eafa88d980b3..a819ed43e727 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-@@ -154,6 +154,14 @@ &A53_3 {
- 	cpu-supply = <&reg_vdd_arm>;
- };
- 
-+&cpu_alert0 {
-+	temperature = <95000>;
-+};
-+
-+&cpu_crit0 {
-+	temperature = <105000>;
-+};
-+
- &ddrc {
- 	operating-points-v2 = <&ddrc_opp_table>;
- 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index fb17e329cd37..7d8d8df569c5 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -146,6 +146,14 @@ reserved-memory {
- 	};
- };
- 
-+&cpu_alert0 {
-+	temperature = <95000>;
-+};
-+
-+&cpu_crit0 {
-+	temperature = <105000>;
-+};
-+
- /* Verdin SPI_1 */
- &ecspi1 {
- 	#address-cells = <1>;
 -- 
-2.36.1
+2.35.3
 

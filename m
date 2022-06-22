@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38270554BC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50534554BCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357543AbiFVNuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S1357602AbiFVNvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357456AbiFVNuV (ORCPT
+        with ESMTP id S1357560AbiFVNvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:50:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D591F623
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0FB8B81EF0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6588CC34114;
-        Wed, 22 Jun 2022 13:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655905818;
-        bh=ya9bqHBDJvc1AcWbARdp9qu/ISmbWxRfpR+xvLAIZLs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zk0iqeknSgIo6vL+FZoYBf3foeVOgFqPWHcUK+jo8KELqfsFT/V1RYIDYaVjMUILe
-         QCXkdx5C49M8TRxA+EFJu9Xf3upzGlYRuI07ibHd9nSuP5Q2+vjBHWCOxQ61Pr1x2M
-         CohAIgEHJTCz5xKzkoJwacpMOPdvyDPmC6+8GMpVB80c2iqzlDXfk5UV94QVH9l2y0
-         muFQrqcC6rIepNuGy3KANVqGdjQ9DEcg9mNovUcytRdKk8GFWonqN4qWdiMfsOXlok
-         Cat6tUdy1exaqz7NuJyIx9o35xS87HEV1A6I7HZHxhJ2uRdETmswPv3Xx2ajuBMt9A
-         bF8dq8xRVln5A==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o40kK-002Jtk-4F;
-        Wed, 22 Jun 2022 14:50:16 +0100
+        Wed, 22 Jun 2022 09:51:25 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFAE2F01C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:51:24 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ay16so15037082ejb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1tMe+AiU8DKRx6/oa1fADyFtfsdt5zf5zus2rlM628Y=;
+        b=WLrqEPTDWCxELbbCYBkNzQrlci4iuDiO0DU2ioBN9DwcW7jQ7pOE+5VP1zoWQnflXZ
+         dTaN6XDGRWpJSvQIkolJpH6dMOgXlqqiGej5wPGxL+YAggm3OuMAv0cl4q4wDs6QtzrH
+         M5G/FfnuufzkHuYqhYgUb2JRvxkQexCB3PTug=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1tMe+AiU8DKRx6/oa1fADyFtfsdt5zf5zus2rlM628Y=;
+        b=yPRh3shlCKogJU881iE8swgIGKmRs/hv/HG5CnmGlriB5k8szrjpm1czm/kzn+PROJ
+         cBPSs3KESWbVw+Iech0Md5qsSAEtrErz6E+Acwbao1925QTxJuXJ1bJMo3YARRyZykHa
+         nl8GxZw0zJ8BrHRpG2Mmm7hv2SruYui9XQ4LsxB5JoGERHwL5WRfzeuzPX0JMM0zqOzq
+         4feGoe4//u2r1IRkrq1bqgn38WAgfVoSlTzhR0V4UHoAQ2OHwJEfC+v3DQ+0Y9mxGEaj
+         o/PmYwmdpvX95HhxfJ4XJp1nq7gTs6UTRyaILcdIJVtyeiODjVPqr0L87dWgwAdfag12
+         b3uw==
+X-Gm-Message-State: AJIora+0VZszIiBa+QXl4fTRj5vlhC3tbgUIpD+W/f8KhX+s2d7ukm47
+        X/NZ9EpBM1BFBz+nc9h2Qj0rYD7VAlgONw==
+X-Google-Smtp-Source: AGRyM1tbWP8+BUX39jZglKhLzBpfZLdq4T/1jJmGrz5fRM23lMhsYeFo5nX68+cU58cSidAqMj98aw==
+X-Received: by 2002:a17:907:72d2:b0:722:f9c8:c3fa with SMTP id du18-20020a17090772d200b00722f9c8c3famr1111895ejc.608.1655905882767;
+        Wed, 22 Jun 2022 06:51:22 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id c4-20020a056402120400b004356112a8a2sm12349815edw.15.2022.06.22.06.51.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 06:51:20 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id o16so23524701wra.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:51:20 -0700 (PDT)
+X-Received: by 2002:a05:6000:1c0d:b0:216:c9f4:2b83 with SMTP id
+ ba13-20020a0560001c0d00b00216c9f42b83mr3489538wrb.405.1655905879653; Wed, 22
+ Jun 2022 06:51:19 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Wed, 22 Jun 2022 14:50:15 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Tony Lindgren <tony@atomide.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] ARM: spectre-v2: fix smp_processor_id() warning
-In-Reply-To: <795c9463-452e-bf64-1cc0-c318ccecb1da@I-love.SAKURA.ne.jp>
-References: <795c9463-452e-bf64-1cc0-c318ccecb1da@I-love.SAKURA.ne.jp>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e5bdea6c767d3a8260360afaddab5f7c@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: penguin-kernel@i-love.sakura.ne.jp, linux@armlinux.org.uk, tony@atomide.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220520143502.v4.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+ <20220520143502.v4.4.I1318c1ae2ce55ade1d092fc21df846360b15c560@changeid> <e5a7367b-af35-b382-0f2a-e68fe07a4123@linaro.org>
+In-Reply-To: <e5a7367b-af35-b382-0f2a-e68fe07a4123@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 22 Jun 2022 06:51:07 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V9nfJq0_Xvfwid8ev1m9zW2n0zRPSo6fPepHOks8E=PA@mail.gmail.com>
+Message-ID: <CAD=FV=V9nfJq0_Xvfwid8ev1m9zW2n0zRPSo6fPepHOks8E=PA@mail.gmail.com>
+Subject: Re: [PATCH v4 4/5] dt-bindings: arm: qcom: Add / fix sc7280 board bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <sboyd@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,55 +87,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-22 07:49, Tetsuo Handa wrote:
-> syzbot complains smp_processor_id() from harden_branch_predictor()
->  from page fault path [1]. Explicitly disable preemption and use
-> raw_smp_processor_id().
-> 
-> Link: https://syzkaller.appspot.com/bug?extid=a7ee43e564223f195c84 [1]
-> Reported-by: syzbot 
-> <syzbot+a7ee43e564223f195c84@syzkaller.appspotmail.com>
-> Fixes: f5fe12b1eaee220c ("ARM: spectre-v2: harden user aborts in kernel 
-> space")
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> ---
-> This patch is completely untested.
-> 
->  arch/arm/include/asm/system_misc.h | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/system_misc.h
-> b/arch/arm/include/asm/system_misc.h
-> index 98b37340376b..a92446769acd 100644
-> --- a/arch/arm/include/asm/system_misc.h
-> +++ b/arch/arm/include/asm/system_misc.h
-> @@ -20,8 +20,11 @@ typedef void (*harden_branch_predictor_fn_t)(void);
->  DECLARE_PER_CPU(harden_branch_predictor_fn_t, 
-> harden_branch_predictor_fn);
->  static inline void harden_branch_predictor(void)
->  {
-> -	harden_branch_predictor_fn_t fn = per_cpu(harden_branch_predictor_fn,
-> -						  smp_processor_id());
-> +	harden_branch_predictor_fn_t fn;
-> +
-> +	preempt_disable_notrace();
-> +	fn = per_cpu(harden_branch_predictor_fn, raw_smp_processor_id());
-> +	preempt_enable_no_resched_notrace();
->  	if (fn)
->  		fn();
->  }
+Hi,
 
-I don't think that's required.
+On Wed, Jun 22, 2022 at 1:27 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 20/05/2022 23:38, Douglas Anderson wrote:
+> > This copy-pastes compatibles from sc7280-based boards from the device
+> > trees to the yaml file. It also fixes the CRD/IDP bindings which had
+> > gotten stale.
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> > It should be noted that these match the sc7280 boards as of the top of
+> > the "for-next" branch of the tree
+> > git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
+> >
+> > (no changes since v2)
+> >
+> > Changes in v2:
+> > - Use a "description" instead of a comment for each item.
+>
+> What's the plan for these patches? This is one was reviewed, the 5/5 had
+> comments. Is there going to be resend or pick up?
+>
+> Some other folks work depends on this.
 
-harden_branch_predictor() is always called on the fault path,
-from __do_user_fault(), and that's always non-preemptible.
+I thought patch 5/5 was waiting on Bjorn to say whether he wanted a
+change or was happy the way it was.
 
-My hunch is that we're missing some tracking that indicates
-to the kernel that we're already non-preemptible by virtue
-of being in an exception handler.
+In general this series, like all of the Qualcomm dts patches at the
+moment, is blocked waiting for Bjorn to have time to land things. I'm
+assuming that if Bjorn wants the 5th patch changed then he will still
+land the first 4 patches and then I can make changes to 5/5 and send
+it as a standalone patch.
 
-Russell, what do you think?
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+-Doug

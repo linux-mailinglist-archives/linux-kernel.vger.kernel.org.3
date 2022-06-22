@@ -2,79 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7578554C1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4009B554C19
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357849AbiFVOCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S1357856AbiFVOCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357735AbiFVOCp (ORCPT
+        with ESMTP id S1357879AbiFVOCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:02:45 -0400
-Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE63D36E0C;
-        Wed, 22 Jun 2022 07:02:35 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1655906526tzcri551
-Received: from ubuntu.localdomain ( [106.117.78.84])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 22:02:02 +0800 (CST)
-X-QQ-SSF: 01000000008000B0B000B00A0000000
-X-QQ-FEAT: c2aLWwQTF5igxUUED4g1cAq0SdDidm8CRr68pIbYernnYftDCXnJ007BfYZyW
-        0KKhWHfNNmUSswnaNid2i+8vc3YeOzHoFjV7raXX18OoXiXCzrciyEPdKxBq4ujbvpfinBS
-        ctTbacficMFTVvamufbt18iNFot5LUEjSd/9w/iJFqrXprYTtPE0SEptD9p5pcKRkCs7ZYc
-        kdmA9TJaZAmd8DH+wEIBZ99YRg5w0XDYEzuugP/tkIl1UDVTWyIc/txfTmY+EOPS9zBp2qp
-        JV4oZcaJlhkCP0fEXR/yCflovrYwIXbJ7lb3qhXMPP4+7ia55bEni1NMPggKG7YGDQi7JiN
-        ZJYMZlAKi7sLs/NQ2wM18IwVwtsfo4d51OBskB/FFc4zdJRp0M=
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] alpha: irq_i8259: drop unexpected word 'and' in the comments
-Date:   Wed, 22 Jun 2022 22:02:01 +0800
-Message-Id: <20220622140201.5458-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 10:02:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FED37BD1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:02:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87412B81F30
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 14:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC39C34114;
+        Wed, 22 Jun 2022 14:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655906552;
+        bh=KEOm3rqgaJaCmSIo+v3zlFCOBXMloNPUc4mYcPiUjvs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YsKY7PMMvAMkQcB6CXNeZ7Dxe7ZU63lsuH14tVjVBSMHEoe4IkDbDAaxcAmuguGMN
+         XMdnBBWgBAGYVfSduxSeMx+zkEjLBZcRNvkpTgQRVRV/oJ9pe3OXTqeCJ+n4wb4VBl
+         ovSsGH076r3gb8iriy1hGUl4aeYFYOMRR/5MuI28gbkXEDvCYMlP3DSPGz+UF4X7VM
+         R0hmn+xGyV1GIeRaljyF/yFrlexeO3/YhffbJVkuqnfvEohQEvCZtgfrQp8dE36GwW
+         Bsy69qhxnpyhaHkDU13KLPMdWVRgTE87ArWEP6xgh3VOaYjVlPN2eQViDix1NTYab2
+         c3wd6fgimRg7w==
+Message-ID: <27138a10-a6b2-edad-1985-687a95b9039b@kernel.org>
+Date:   Wed, 22 Jun 2022 22:02:29 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [f2fs-dev] [PATCH 2/3] f2fs: run GCs synchronously given user
+ requests
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220617223106.3517374-1-jaegeuk@kernel.org>
+ <20220617223106.3517374-2-jaegeuk@kernel.org>
+ <c45a9c8b-c73a-76bc-6725-5d7e48e7a3f2@kernel.org>
+ <Yq+kiXPyBsXgdYb2@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yq+kiXPyBsXgdYb2@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word 'and' in the comments that need to be dropped
+On 2022/6/20 6:34, Jaegeuk Kim wrote:
+> On 06/19, Chao Yu wrote:
+>> On 2022/6/18 6:31, Jaegeuk Kim wrote:
+>>> When users set GC_URGENT or GC_MID, they expected to do GCs right away.
+>>> But, there's a condition to bypass it. Let's indicate we need to do now
+>>> in the thread.
+>>
+>> .should_migrate_blocks is used to force migrating blocks in full
+>> section, so what is the condition here? GC should not never select
+>> a full section, right?
+> 
+> I think it'll move a full section given .victim_segno is not NULL_SEGNO,
+> as __get_victim will give a dirty segment all the time. wdyt?
 
-file: arch/alpha/kernel/irq_i8259.c
-line: 150
+However, in gc_thread_fun() victim_segno is NULL_SEGNO all the time.
 
-*  Therefore, read the mask register and and out those lines
+I guess .should_migrate_blocks should only be set to true for
+F2FS_IOC_FLUSH_DEVICE/F2FS_IOC_RESIZE_FS case? rather than GC_URGENT or GC_MID
+case? See commit 7dede88659df ("f2fs: fix to allow migrating fully valid segment").
 
-changed to:
+Thanks,
 
-*  Therefore, read the mask register and and out those lines
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- arch/alpha/kernel/irq_i8259.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/alpha/kernel/irq_i8259.c b/arch/alpha/kernel/irq_i8259.c
-index 1dcf0d9038fd..db574dcd6675 100644
---- a/arch/alpha/kernel/irq_i8259.c
-+++ b/arch/alpha/kernel/irq_i8259.c
-@@ -147,7 +147,7 @@ isa_no_iack_sc_device_interrupt(unsigned long vector)
- 	 */
- 	/* 
- 	 *  The first read of gives you *all* interrupting lines.
--	 *  Therefore, read the mask register and and out those lines
-+	 *  Therefore, read the mask register and out those lines
- 	 *  not enabled.  Note that some documentation has 21 and a1 
- 	 *  write only.  This is not true.
- 	 */
--- 
-2.17.1
-
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>> ---
+>>>    fs/f2fs/gc.c | 8 ++++++--
+>>>    1 file changed, 6 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+>>> index d5fb426e0747..f4aa3c88118b 100644
+>>> --- a/fs/f2fs/gc.c
+>>> +++ b/fs/f2fs/gc.c
+>>> @@ -37,7 +37,6 @@ static int gc_thread_func(void *data)
+>>>    	unsigned int wait_ms;
+>>>    	struct f2fs_gc_control gc_control = {
+>>>    		.victim_segno = NULL_SEGNO,
+>>> -		.should_migrate_blocks = false,
+>>>    		.err_gc_skipped = false };
+>>>    	wait_ms = gc_th->min_sleep_time;
+>>> @@ -113,7 +112,10 @@ static int gc_thread_func(void *data)
+>>>    				sbi->gc_mode == GC_URGENT_MID) {
+>>>    			wait_ms = gc_th->urgent_sleep_time;
+>>>    			f2fs_down_write(&sbi->gc_lock);
+>>> +			gc_control.should_migrate_blocks = true;
+>>>    			goto do_gc;
+>>> +		} else {
+>>> +			gc_control.should_migrate_blocks = false;
+>>>    		}
+>>>    		if (foreground) {
+>>> @@ -139,7 +141,9 @@ static int gc_thread_func(void *data)
+>>>    		if (!foreground)
+>>>    			stat_inc_bggc_count(sbi->stat_info);
+>>> -		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC;
+>>> +		sync_mode = F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_SYNC ||
+>>> +				sbi->gc_mode == GC_URGENT_HIGH ||
+>>> +				sbi->gc_mode == GC_URGENT_MID;
+>>>    		/* foreground GC was been triggered via f2fs_balance_fs() */
+>>>    		if (foreground)

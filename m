@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEA6554DD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB12554DE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 16:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358693AbiFVOti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 10:49:38 -0400
+        id S1358786AbiFVOut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 10:50:49 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358184AbiFVOtL (ORCPT
+        with ESMTP id S1358577AbiFVOug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:49:11 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1323DDE5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:49:08 -0700 (PDT)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LSmV00NqVz689nQ;
-        Wed, 22 Jun 2022 22:48:40 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 16:49:06 +0200
-Received: from [10.202.227.197] (10.202.227.197) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 15:49:05 +0100
-Message-ID: <fbfbb793-78ce-2b5a-307f-c6e78a926db3@huawei.com>
-Date:   Wed, 22 Jun 2022 15:49:02 +0100
+        Wed, 22 Jun 2022 10:50:36 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9BD3ED1F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:50:06 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id cw10so11048393ejb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 07:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=4ruOCvOAEmoUdLQh3ey+6bqLOiu0xvMxMCbpqmFwoUs=;
+        b=OeRxIzd9nZ8EWPSu2aJ+6lZbW+Xi4a9NtmKfcgCKy5B6154b1lDVK2X5LPN5OeHUmw
+         tziY4sYx0rxsyzjYxrVVQGbqA9vvTXX+BuOm9rfpQ9IEC6o/SxhSMHIoYJ5zmBDDuUlt
+         EIpobCAJzDoHRl3NFi3ruf2oBMBdE7Hcy0WMmCzem1tA8mQEoLQou/qNMoGJ2aSW9tZO
+         Hu/Y5hDY52yHVscaQ11xjQBky2kKgJ+YNNhIEGnVJhdm/fA+rKHc/DY4Q8/SWJ1b27zp
+         Ds9XgtQAa+fG9EqmkBiAI1QYJNfTB5Fv/XbTsMd6ftjpLGILbYFBukc33k+aN2NyrrJY
+         4FTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4ruOCvOAEmoUdLQh3ey+6bqLOiu0xvMxMCbpqmFwoUs=;
+        b=vFecpzkdjkNIkdGcKBAGHFvzTn7McwvkwzGqX+nqlk3rYVROmC5VrIXJBKzv9LITCE
+         hC3Cpzzjk0ptENVejvh9PI4Ke5EIzMGql9iGu0pmoGRW+f5V5MfebFVqdShkoHXIb8A3
+         upRK6rxYXEX7C7sZcK7KbGIazM79wQ4F2nmDc9Ffr7IE/hZMhO1ugltaAjag0bPmQqA5
+         i1/KSecGvUdVyUaGlug4NB1IrQAEohDkzBC4yFZSWRusVeIbBLayxdPjnc17HU26D6HA
+         qNX0kT2CB/ybHJYdoHX8Vq5KqGl/+4/rDRdtdNcA0HsXrB8LboxABHDB/wOBFmJPh2u6
+         Wbsg==
+X-Gm-Message-State: AJIora/EvediXMdGLSEfwrfFTI93ze17PpaG9/RFy7EOnBTeymmrYVwD
+        tDr9fMOsmB132Ax0hIShp3NxbA==
+X-Google-Smtp-Source: AGRyM1vteyKfwtr5E534VzKDwjdk2afkiq/TExdKehpSTsXQorJLF3v9ubUmlBNqNQXVQB2pHcH3SQ==
+X-Received: by 2002:a17:906:3f09:b0:712:466:e04a with SMTP id c9-20020a1709063f0900b007120466e04amr3388409ejj.719.1655909405491;
+        Wed, 22 Jun 2022 07:50:05 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b0070abf371274sm9396702ejg.136.2022.06.22.07.50.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 07:50:05 -0700 (PDT)
+Message-ID: <349ba57a-87c4-b49f-aca5-7d62d55068d5@linaro.org>
+Date:   Wed, 22 Jun 2022 16:50:03 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [aarch64] INFO: rcu_sched detected expedited stalls on CPUs/tasks
-To:     Bruno Goncalves <bgoncalv@redhat.com>
-CC:     Pierre Gondois <pierre.gondois@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CKI Project <cki-project@redhat.com>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <CA+QYu4qTWaDzep2GGxm-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com>
- <99a207dc-93cd-1bea-2ffc-404a9f6587bf@arm.com>
- <CA+QYu4o0OqdwZYFCgCzm2CMHA7pM3nQ+j0_VbHtpFcdJmkMbhw@mail.gmail.com>
- <fe20591a-96bf-2ac5-c97f-442c2b36c455@arm.com>
- <CA+QYu4rFB0-no98R0jfzDi2z1Q-aXsEyj1+j-G7RNBi1=3SLkQ@mail.gmail.com>
- <90175f7e-0a2f-c83d-6fb5-916f885bbe81@huawei.com>
- <CA+QYu4r9Z1X3b-PxqcQx3OkdASkon9OvPAVWJcqHLtc2uPkFtA@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <CA+QYu4r9Z1X3b-PxqcQx3OkdASkon9OvPAVWJcqHLtc2uPkFtA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/3] scsi: ufs: minor cleanups
+Content-Language: en-US
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org
+References: <20220613100655.105301-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613100655.105301-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.197]
-X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 15:40, Bruno Goncalves wrote:
-
-Hi Bruno,
-
-> With the config change that does not set
-> CONFIG_RCU_EXP_CPU_STALL_TIMEOUT the problem seems to be fixed for us.
-> The newer Fedora kernels already have the config fixed.
+On 13/06/2022 12:06, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Changes since v2
+> ================
+> 1. More whitespace cleanups.
+> 
+> Changes since v1
+> ================
+> 1. Drop patch 1 (needs further work).
+> 2. Rebase on current linux-next (including Bart Van Assche's work).
+> 
+> v1: https://lore.kernel.org/all/20220408103027.311624-1-krzysztof.kozlowski@linaro.org/
 > 
 
-OK, thanks for the info. Well those debug options I enabled didn't cause 
-problems previously. I'll see if it is one in particular and go from there.
+Hi folks,
 
-> 
->> On v5.19-rc3 I just enabled some debug configs on a vanilla kernel and
->> can easily reproduce a RCU stall on boot, as below.
->>
->> CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=0 for me, that being the default.
->>
->>    Table To iBMC Success.
->> GetVariable Status : Not Found.
->> [    0.000000] Booting Linux on physical CPU 0x0000010000 [0x410fd082]
->> [    0.000000] Linux version 5.19.0-rc3-00001-gd8610c1c16e8
->> (john@debian) (gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
->> Binutils for Debian) 2.37) #187 SMP PREEMPT Wed Jun 22 14:08:56 BST 2022
->> [    0.000000] Machine model: Hisilicon PhosphorV660 Development Board
->> [    0.000000] efi: EFI v2.60 by EDK II
->> [    0.000000] efi: SMBIOS=0x3eff0000 SMBIOS 3.0=0x39aa0000
->> ACPI=0x39b70000 ACPI 2.0=0x39b70014 MEMATTR=0x3b8d0018
->> MEMRESERVE=0x3a002d18
+Any comments? Patches are BTW independent, so the UFS one can be applied
+separately.
 
-Thanks!
+Best regards,
+Krzysztof

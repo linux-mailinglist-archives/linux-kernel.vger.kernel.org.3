@@ -2,96 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EEC556EFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 01:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3686D556EFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 01:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377229AbiFVXWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 19:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
+        id S1376572AbiFVXYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 19:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346517AbiFVXWM (ORCPT
+        with ESMTP id S1358502AbiFVXYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 19:22:12 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D84641F87;
-        Wed, 22 Jun 2022 16:22:12 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id p14so11753104pfh.6;
-        Wed, 22 Jun 2022 16:22:12 -0700 (PDT)
+        Wed, 22 Jun 2022 19:24:53 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D37E42486
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 16:24:52 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id d14so13748072pjs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 16:24:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RhdPk8LTYym77hcacrBh62mFWOXLPvdMJrHyB1VYTWE=;
-        b=Kkg1xVTJn3A6ODjjhox0jw96wt8Nir+xL4V8oyctP37fCoFIMXqaoLanauvFgXdQi/
-         a2H33sB5auls4+vL9CBLgx8CcgGxIb/AeZoI0ub13hBEZwXviINlDDKguBrVW8KgQI68
-         MWWYh4z2c8akTmBPUNw/W5OOnW2lp8ESCeT6QhZTGIRBV+cISe01altAyf5KNUnGjQvY
-         +IwKGFeSwNd3eeaYYxIOnJks8cNnAD0FEuOMqpE0i8LWwqm8HI/1nXhfBzg8WoeDbjRB
-         9mPZGtILDbmSWOW3dodZTq3lY0o2AQjgn1w8KRpuYpiP2E8rK5wD/cNCeKm9ms7ufLSZ
-         5xIA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ffIU4qD5x85d6iCQtZLq6rD/cyWC5Mkjs1IUQLDVtmU=;
+        b=SZiUakEUp/fRPbuLjnYU5tXFDGpBGsc7+ny5WQn9Dp9G2PJCoM5kFvXUzrMlLlDF4g
+         7teOPb905PvRwc/KPgtD+I73FGzZWvYETlPe4rDk5JWVkpGtdBMpI+TBUstC6yyTGvuB
+         BjT8+o4LtU86uDsWnaAAcI7NsVLUt3M0mIIcucXdLLfFNMEVhNmv42ontJ/1GzqiiKJF
+         zTIxkH1mALm3Zy/ScTw+M6+CJNbTaz38LNw3fY1y8oGohl/Pd39TIoSpNnZnB4FOxdbd
+         I5WyQwyN4Q0UshroRddJJocrgQANQeeem6oURxyfwEiVny8ETNlc6ELt/01TvRXEvQvg
+         A+Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RhdPk8LTYym77hcacrBh62mFWOXLPvdMJrHyB1VYTWE=;
-        b=FkY9/BCR6OrRQ0n4UH5vzF3WNm5boFgF2l5v8UDWrpz7rJhXt5u93E5rZUPksfaU2s
-         d8k02lb6tKDG/iKsG+racfD1XV8WJsrEaba4wy+x9rRO9b22Q3VxBwZhbtSzR4vNsLkL
-         A54p8c/uZ/Boa16IHlhUifUy5+zZgkKhIoPUsBlW08lWfx52U+7bolJw5Tz4YTIYXXeY
-         TqT2FQA86Ev4zv4H1sCp7txow74x2n5Op2Wp5ItN6N5QQoEiigI+MsTkZ2aiMqy0+jCK
-         SP7VvLwWXI2RTdXkYyMgge36Xg8QKSyTR5td13PbZPWFSLwCbMhPHgyU0hKcBtB5ppHi
-         1kmg==
-X-Gm-Message-State: AJIora9vksSUz1QTwlRWSCDnePatgwrsWvLOxNApLxYVh688qcDySn88
-        xAt3pl42REgmPrHtQ1LraKo=
-X-Google-Smtp-Source: AGRyM1tPlK75Uip0r4AyWz6QcOUYzT6R0eKUYdL1vKkpDutT1V+u7HwzHD1iH/RGbvASNX+A36yauw==
-X-Received: by 2002:a05:6a00:198e:b0:51c:3511:4aff with SMTP id d14-20020a056a00198e00b0051c35114affmr37628508pfl.20.1655940131463;
-        Wed, 22 Jun 2022 16:22:11 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:fe7d:3981:3b3c:19b5])
-        by smtp.gmail.com with ESMTPSA id t12-20020a170902d14c00b0016a4f3ca2b5sm1567482plt.277.2022.06.22.16.22.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 16:22:10 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 16:22:08 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] Input: usbtouchscreen - suppress empty array warnings
-Message-ID: <YrOkIMJK3G3VkhLk@google.com>
-References: <20220620084628.20894-1-johan@kernel.org>
- <20220620084628.20894-2-johan@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ffIU4qD5x85d6iCQtZLq6rD/cyWC5Mkjs1IUQLDVtmU=;
+        b=ZoFTibEqAe7Y4tQ+q6cRvbc/3bm36Rx2VozhvGM3hskhs1LN7NaksyVUOOOEwUsZWe
+         xubzKuCEzzKLONpNWznu8l4RvRJK1OUD6bqqKRNALRn519XXA6L3brgsv/fLFmWE08tY
+         4IK1peET3ZkOlvUolGCozjPz7ROlINaaFy74Z47XtYjPAlrp6s+0KvbpQQzfMpiLrSyj
+         snWXHjHVG8q1f5amyrc44kpbGFg/GzE9c4sXVjXpElAewOeeOzOUrII32O755iSkZEy7
+         fp0RCWXC6LJX04+Q+LudYfG+5KKWrhL7SPhW/Y/EizmxyL/aIZGn9yMaV55XA14CNVaC
+         sGKA==
+X-Gm-Message-State: AJIora8M78JYEpfDygwu9Bnjf2SQUCoOf0nMbPPTNNDJoGdaE+LYyfu/
+        4WDc9rqpj/zGanvOXU0r07ZXgiDR0bSIsamVpvFwkQ==
+X-Google-Smtp-Source: AGRyM1vsB3XLvGTtSV+Qux0xWs8h5I+urr5qnu42v7p9Q5nB2HjwBLTOZs7N+aSdaVrJTMMCj8gnStu06k/O2W5vPpw=
+X-Received: by 2002:a17:90a:cc7:b0:1ea:3993:78f9 with SMTP id
+ 7-20020a17090a0cc700b001ea399378f9mr812825pjt.179.1655940291540; Wed, 22 Jun
+ 2022 16:24:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620084628.20894-2-johan@kernel.org>
+References: <20220621233412.506768-1-robert.foss@linaro.org>
+ <20220621233412.506768-5-robert.foss@linaro.org> <adf27e62-246a-9c5f-e517-f225d17fe1cd@somainline.org>
+In-Reply-To: <adf27e62-246a-9c5f-e517-f225d17fe1cd@somainline.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 23 Jun 2022 01:24:40 +0200
+Message-ID: <CAG3jFytsDpoeuQ9GPYp+YJmORdi89SC5Ps6JQFPJOD8Sx6XYdA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] clk: qcom: add support for SM8350 DISPCC
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, jonathan@marek.ca,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+On Wed, 22 Jun 2022 at 12:22, Konrad Dybcio
+<konrad.dybcio@somainline.org> wrote:
+>
+>
+>
+> On 22.06.2022 01:34, Robert Foss wrote:
+> > From: Jonathan Marek <jonathan@marek.ca>
+> >
+> > Add support to the SM8350 display clock controller by extending the SM8250
+> > display clock controller, which is almost identical but has some minor
+> > differences.
+> >
+> > Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >
+> > Changes since v1
+> >  - Remove comment - Dmitry
+> >
+> > Changes since v2
+> >  - Add my SoB - Bjorn
+> >  - Remove CLK_ASSUME_ENABLED_WHEN_UNUSED flag
+> >
+> > Changes since v3
+> >  - Add kconfig dependency on SM_GCC_8350 - Konrad
+> >  - Change hex to lowercase - Konrad
+> >  - Split from dispcc-sm8250.c implementation
+> >  - Switch from .fw_name to .index
+> >
+> > Changes since v4
+> >  - Hex to lowercase - Konrad
+> >  - Remove bad match table entries - Konrad
+> >
+> > Changes since v5
+> >  - Reverted split from dispcc-sm8250
+> >  - Re-added tags from v3
+> >
+> >
+> >  drivers/clk/qcom/Kconfig         |  4 +--
+> >  drivers/clk/qcom/dispcc-sm8250.c | 60 +++++++++++++++++++++++++++++++-
+> >  2 files changed, 61 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> > index b11235c21952..4c3d1a548b7a 100644
+> > --- a/drivers/clk/qcom/Kconfig
+> > +++ b/drivers/clk/qcom/Kconfig
+> > @@ -618,11 +618,11 @@ config SM_DISPCC_6125
+> >         splash screen
+> >
+> >  config SM_DISPCC_8250
+> > -     tristate "SM8150 and SM8250 Display Clock Controller"
+> > +     tristate "SM8150/SM8250/SM8350 Display Clock Controller"
+> >       depends on SM_GCC_8150 || SM_GCC_8250
+> || SM_GCC_8350
 
-On Mon, Jun 20, 2022 at 10:46:27AM +0200, Johan Hovold wrote:
-> When compile-testing the USB touchscreen driver without enabling any of
-> the device type options the usbtouch_dev_info array ends up being empty,
-> something which triggers compiler warning with -Warray-bounds
-> (gcc-11.3.0).
-> 
-> drivers/input/touchscreen/usbtouchscreen.c: In function 'usbtouch_probe':
-> drivers/input/touchscreen/usbtouchscreen.c:1668:16:warning: array subscript <unknown> is outside array bounds of 'struct usbtouch_device_info[0]' [-Warray-bounds]
->  1668 |         type = &usbtouch_dev_info[id->driver_info];
-> 
-> Suppress the warnings by making sure that the array is always non-empty.
+Ack
 
-Does it still warn if you add a check for type, something like
+>
+> >       help
+> >         Support for the display clock controller on Qualcomm Technologies, Inc
+> > -       SM8150 and SM8250 devices.
+> > +       SM8150/SM8250/SM8350 devices.
+> >         Say Y if you want to support display devices and functionality such as
+> >         splash screen.
+> >
+> > diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
+> > index db9379634fb2..4e101d584115 100644
+> > --- a/drivers/clk/qcom/dispcc-sm8250.c
+> > +++ b/drivers/clk/qcom/dispcc-sm8250.c
+> > @@ -43,6 +43,10 @@ static struct pll_vco vco_table[] = {
+> >       { 249600000, 2000000000, 0 },
+> >  };
+> >
+> > +static struct pll_vco lucid_5lpe_vco[] = {
+> > +     { 249600000, 1750000000, 0 },
+> > +};
+> > +
+> >  static struct alpha_pll_config disp_cc_pll0_config = {
+> >       .l = 0x47,
+> >       .alpha = 0xE000,
+> > @@ -1228,6 +1232,7 @@ static const struct of_device_id disp_cc_sm8250_match_table[] = {
+> >       { .compatible = "qcom,sc8180x-dispcc" },
+> >       { .compatible = "qcom,sm8150-dispcc" },
+> >       { .compatible = "qcom,sm8250-dispcc" },
+> > +     { .compatible = "qcom,sm8350-dispcc" },
+> >       { }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, disp_cc_sm8250_match_table);
+> > @@ -1258,7 +1263,7 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+> >               return PTR_ERR(regmap);
+> >       }
+> >
+> > -     /* note: trion == lucid, except for the prepare() op */
+> > +     /* Apply differences for SM8150 and SM8350 */
+> I think both comments should stay, as the one you're adding doesn't explain the BUILD_BUG_ON()
 
-	if (type >= ARRAY_SIZE(usbtouch_device_info))
-		return -ENODEV;
+Ack
 
-?
-
-Thanks.
-
--- 
-Dmitry
+>
+>
+> Konrad
+> >       BUILD_BUG_ON(CLK_ALPHA_PLL_TYPE_TRION != CLK_ALPHA_PLL_TYPE_LUCID);
+> >       if (of_device_is_compatible(pdev->dev.of_node, "qcom,sc8180x-dispcc") ||
+> >           of_device_is_compatible(pdev->dev.of_node, "qcom,sm8150-dispcc")) {
+> > @@ -1270,6 +1275,59 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+> >               disp_cc_pll1_config.config_ctl_hi1_val = 0x00000024;
+> >               disp_cc_pll1_config.user_ctl_hi1_val = 0x000000D0;
+> >               disp_cc_pll1_init.ops = &clk_alpha_pll_trion_ops;
+> > +     } else if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8350-dispcc")) {
+> > +             static struct clk_rcg2 * const rcgs[] = {
+> > +                     &disp_cc_mdss_byte0_clk_src,
+> > +                     &disp_cc_mdss_byte1_clk_src,
+> > +                     &disp_cc_mdss_dp_aux1_clk_src,
+> > +                     &disp_cc_mdss_dp_aux_clk_src,
+> > +                     &disp_cc_mdss_dp_link1_clk_src,
+> > +                     &disp_cc_mdss_dp_link_clk_src,
+> > +                     &disp_cc_mdss_dp_pixel1_clk_src,
+> > +                     &disp_cc_mdss_dp_pixel2_clk_src,
+> > +                     &disp_cc_mdss_dp_pixel_clk_src,
+> > +                     &disp_cc_mdss_esc0_clk_src,
+> > +                     &disp_cc_mdss_mdp_clk_src,
+> > +                     &disp_cc_mdss_pclk0_clk_src,
+> > +                     &disp_cc_mdss_pclk1_clk_src,
+> > +                     &disp_cc_mdss_rot_clk_src,
+> > +                     &disp_cc_mdss_vsync_clk_src,
+> > +             };
+> > +             static struct clk_regmap_div * const divs[] = {
+> > +                     &disp_cc_mdss_byte0_div_clk_src,
+> > +                     &disp_cc_mdss_byte1_div_clk_src,
+> > +                     &disp_cc_mdss_dp_link1_div_clk_src,
+> > +                     &disp_cc_mdss_dp_link_div_clk_src,
+> > +             };
+> > +             unsigned int i;
+> > +             static bool offset_applied;
+> > +
+> > +             /* only apply the offsets once (in case of deferred probe) */
+> > +             if (!offset_applied) {
+> > +                     for (i = 0; i < ARRAY_SIZE(rcgs); i++)
+> > +                             rcgs[i]->cmd_rcgr -= 4;
+> > +
+> > +                     for (i = 0; i < ARRAY_SIZE(divs); i++) {
+> > +                             divs[i]->reg -= 4;
+> > +                             divs[i]->width = 4;
+> > +                     }
+> > +
+> > +                     disp_cc_mdss_ahb_clk.halt_reg -= 4;
+> > +                     disp_cc_mdss_ahb_clk.clkr.enable_reg -= 4;
+> > +
+> > +                     offset_applied = true;
+> > +             }
+> > +
+> > +             disp_cc_mdss_ahb_clk_src.cmd_rcgr = 0x22a0;
+> > +
+> > +             disp_cc_pll0_config.config_ctl_hi1_val = 0x2a9a699c;
+> > +             disp_cc_pll0_config.test_ctl_hi1_val = 0x01800000;
+> > +             disp_cc_pll0_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
+> > +             disp_cc_pll0.vco_table = lucid_5lpe_vco;
+> > +             disp_cc_pll1_config.config_ctl_hi1_val = 0x2a9a699c;
+> > +             disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
+> > +             disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
+> > +             disp_cc_pll1.vco_table = lucid_5lpe_vco;
+> >       }
+> >
+> >       clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);

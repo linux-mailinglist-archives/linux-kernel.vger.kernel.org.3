@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998945541E3
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9115541E2
 	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356944AbiFVExK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 00:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        id S1356977AbiFVExN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 00:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354927AbiFVExI (ORCPT
+        with ESMTP id S1356941AbiFVExJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 00:53:08 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DDC5FFE
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:53:06 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id x4so8694324pfq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:53:06 -0700 (PDT)
+        Wed, 22 Jun 2022 00:53:09 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74F16244
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:53:08 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id c205so8297767pfc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:53:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w9EQSFAmGXcDrJ+8KvwBniXihEiKbTD4fg4mnulBGQI=;
-        b=Xyw17Y3qjDWE4vSIypgVuX9bQ9sZi6CPLD/Eza5LjkapM9acZyPli1ynaA+DQqjY3W
-         gCaa3x5cCo72VpFySOF11t2rmt3ZC0vdlEC0R19XbxF+K6WjE0ACpW02nrk2sh2PXXoj
-         4IvRXROrmPT2QrRjP9nwE4UBcs9YPpeIBr1Jr81P4JtcyLF08eabIKBGV/rvGEymEJIw
-         YvZZ1CWDLKePA9yF7s6q16jZXogr/d822xmifGs+BYmgGVvFvP+LEU4RzcG8U4QxkpFD
-         eop6OC732YnW9bEvcGPf4KjThJGn8vGEUtpFPn3iFJILwhYl249Ir01uFanQ8bvyLCpJ
-         YAYw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=siwRRlWSHlqBGRmLfqz7WxH0j7k4YZlDP6vTKzeSc6c=;
+        b=CoRfui3AvkifJVNvTBqxSBEUD1RYlSXklq1JdozIQVHQLvRrzsjtovZ6Isp0zGwCMx
+         DlGkQdi7McDlD7RLEBXitXtLnQiHq99dxMG1x0Cph1euVOhRRelQlHa/6Q9a/Kn2m64R
+         /bFjlHnkKZaz519snylg4U/yjnub5c9OFZNIHCtDGAxxsGD7w/dR0xN7DS0o9ClkrIVy
+         yISryMCuR61H52bL+z5G/JvXswHwHkIMFh42GU24bCdBSVnwMndMfE02R87i3RHy/ufV
+         qCfoNusCj/ZOTQzYFhqs8epqOED/FrCxnben1Wbe4fKCU1bQRQPHZzwFzdDvCoZ4wgqU
+         P7bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w9EQSFAmGXcDrJ+8KvwBniXihEiKbTD4fg4mnulBGQI=;
-        b=xilbK13oGG1eple+Eanoi6hB5f+xUR/ktoym5JxSo3kAjL/8qInl779ikESFqZl1oP
-         X/ba+2Iq2fH7Rv5br+LkYReKxXFw7aTV6C57QNafNmbauIWRDc0Z/UWWA7hbRFiAC9uv
-         8EkgKGdD3loCtatDdkkK1yxETGRIXj+UAvmFlMjYrd14aQ/HQ9v745Kf4/9xl98tBchJ
-         x3aIjgp8KXu/5KsE7Wgow79wThBCfRf9eMdFrz8zbdrtVuyGYDRhZjbviFDNsqtXeDq0
-         QXhILpth41L3P35fK8z1oSZ/z+seIAr+oeO5UZz3ZQmMycVDunYP1FDVM9F1KiJepxSW
-         YxhA==
-X-Gm-Message-State: AJIora/82rKGGdUOhAL9v9mBl9bEQ+s6/97quSvRAEoFBPUl+OxeLk0+
-        w6V3/k/tJmSBMQa09g3xEJQ=
-X-Google-Smtp-Source: AGRyM1syBzoM+gI6UQ4DBoZL4CiYhlBCCwEeMwNtoGMrlP28Ob7tqNkCvtNhsP1WfsODlFIOVOdNig==
-X-Received: by 2002:a63:e114:0:b0:3fd:97a1:7a5 with SMTP id z20-20020a63e114000000b003fd97a107a5mr1336117pgh.178.1655873586539;
-        Tue, 21 Jun 2022 21:53:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=siwRRlWSHlqBGRmLfqz7WxH0j7k4YZlDP6vTKzeSc6c=;
+        b=b+E7PJco91epqSBcM3ArD2QoUOYKYarh5lj0n4R5AafS/2dgK/ihBM4F8NR15gsifG
+         l2irFIHvLsIYRKoecMFRea9kMAjnXTxtQlEE9uCyilr7V6gTIeSfwGiU/facYjpVf0+1
+         gZBsk0UQoQ1igHk3qRX06PR7RENYqIRtrO5N3PsVr0IFqxkr12NKqrh6A+dn2K2pco1/
+         rrQ1W7YSPIkVa/iNaukMLBuxtYqzqpI8DaRfy2tv8WG/+Di8jbnB0EARPK6nl22jmpDS
+         tyzCQlXSoTKm17inF6/rtXJ8v3CUlvbyDxKcfrotwzs3a8vlo59Q3+lhC6vf++SekcvO
+         nsRg==
+X-Gm-Message-State: AJIora85c6gHtpq9mQgcwS1M+ykGLuiOmN6kzYpWfgrdyzE2Zq1qPrgL
+        e2oskKtMjnbPWqjBQ6vKTsY=
+X-Google-Smtp-Source: AGRyM1sdcPcXr3djCCbq3GGXESutAPLO30Bkk1Op95VLl9vFeB8PwZCYQFGaNzHT7jnyDX0WLathSg==
+X-Received: by 2002:a63:78cb:0:b0:40c:e4e0:dfde with SMTP id t194-20020a6378cb000000b0040ce4e0dfdemr1381517pgc.87.1655873588301;
+        Tue, 21 Jun 2022 21:53:08 -0700 (PDT)
 Received: from localhost (c-67-180-87-133.hsd1.ca.comcast.net. [67.180.87.133])
-        by smtp.gmail.com with ESMTPSA id b193-20020a6334ca000000b0040c95aeae26sm6791013pga.12.2022.06.21.21.53.05
+        by smtp.gmail.com with ESMTPSA id gf23-20020a17090ac7d700b001ec9f9fe028sm5564482pjb.46.2022.06.21.21.53.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 21:53:06 -0700 (PDT)
+        Tue, 21 Jun 2022 21:53:07 -0700 (PDT)
 From:   Chang Yu <marcus.yu.56@gmail.com>
 To:     Larry.Finger@lwfinger.net
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Chang Yu <marcus.yu.56@gmail.com>
-Subject: [PATCH 0/5] staging: r8188eu: Fixed some coding style issues
-Date:   Tue, 21 Jun 2022 21:52:29 -0700
-Message-Id: <cover.1655872968.git.marcus.yu.56@gmail.com>
+Subject: [PATCH 1/5] staging: r8188eu: Fixed a function declaration coding style issue
+Date:   Tue, 21 Jun 2022 21:52:30 -0700
+Message-Id: <778c21724752f2de136d82b31c9ffc2bf35ced55.1655872968.git.marcus.yu.56@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1655872968.git.marcus.yu.56@gmail.com>
+References: <cover.1655872968.git.marcus.yu.56@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,19 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed a few coding style issues as per checkpatch.pl and kernel coding
-style guidelines.
+Added an identifier name for function definition argument
+'struct timer_list *' as per checkpatch.pl
 
-Chang Yu (5):
-  staging: r8188eu: Fixed a function declaration coding style issue
-  staging: r8188eu: Fixed two brace coding style issues
-  staging: r8188eu: Fixed two whitespace coding style issues
-  staging: r8188eu: Fixed comment style
-  staging: r8188eu: Fixed some blank line coding style issues
+Note that for the same line checkpatch.pl will also complain "extern
+should be avoided in .c". I am not very familiar with the codebase
+so I decided not to move the declaration to a header file.
 
- drivers/staging/r8188eu/core/rtw_recv.c | 38 +++++++++++++++----------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index 36ea79586992..7e2f5c2f9111 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -24,7 +24,7 @@ static u8 rtw_rfc1042_header[] = {
+        0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00
+ };
+ 
+-void rtw_signal_stat_timer_hdl(struct timer_list *);
++void rtw_signal_stat_timer_hdl(struct timer_list *t);
+ 
+ void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
+ {
 -- 
 2.36.1
 

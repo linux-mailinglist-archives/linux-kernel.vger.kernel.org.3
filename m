@@ -2,53 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1D5554647
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BC655485B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354781AbiFVKgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S1354898AbiFVKgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346319AbiFVKgN (ORCPT
+        with ESMTP id S1354925AbiFVKge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:36:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A1B3B571;
-        Wed, 22 Jun 2022 03:36:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655894172; x=1687430172;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ab1KhP6RlfLDUpqQx5KxRjWRdxnAQ1ojvkbHJLNruCA=;
-  b=GcM9hHVzjAthPztuxRujmN3z1Eqp2ZNzz2qZeUy3QsharapGACJV9cQT
-   KgHs0F2EuW4JvIhDxmDod9WhWiH+AQ5KJRYS9J2ZHAEDgDCBrzdXGCrCu
-   98iEYj9gwqCh5xfeiloak5UaIqcvBiDFJi7cUJVKyAZLM9LwE3WeTLNVA
-   LSJWSdXlYQrUw0lwwIZKa6Kb63AcVaSCpfVql0bz3hxCVF21/TCRgpMfk
-   yZZ/I1xvh6N2zMDZGFsA5o7gWEpZ5/n82UqlMJceMVB9wryD1WdS4pJdT
-   hgxMpkAe4AjCHklUWH5uk1V786ebMmTEpuLNwuYnJVtnlgORboK0H1/wW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281456222"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="281456222"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:36:12 -0700
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="644131142"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:36:10 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Add exp QS check in rcu_exp_handler() for no-preemptible expedited RCU
-Date:   Wed, 22 Jun 2022 18:35:49 +0800
-Message-Id: <20220622103549.2840087-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 22 Jun 2022 06:36:34 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE2C3B57F;
+        Wed, 22 Jun 2022 03:36:28 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1655894169tb1eaix1
+Received: from ubuntu.localdomain ( [223.104.103.173])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 18:36:00 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000D00A0000000
+X-QQ-FEAT: qpGeUh0uYB/+woD7CHQyPyus3Pdy3PGCWbuF6JTaBFoifIBXGJ/V4AWJ+XUmC
+        9keCpXfeaeYq67T6MonpGVIYBLZ4dHcDZZAYKAvXUHecJ0gcNMYVsxLojC0+BWIHrhXHhQF
+        enOYh/Va8Hy3/xo2CTX8kur+d1u2h3oqcnruRHOzHps2L1J7tlid0yLmjQImX2HcxYghsHM
+        F1GX18RenL3MYKq3FcwbJvz2m7YtgWcBb/yYxNdeIZuP6mEKECe9y13FVy7vYqj+LSWgG6W
+        uadqHq/k3qEYQ87dBG6Bb9j/UXZFmvH4ytYNBfpB18dJn23WEPc8eyBZrj0tuoYAqM5+0yz
+        bxSq7id9leV4YUIBMadg4yAm3Q5W0Fhzh2bP2ge
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     hminas@synopsys.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] usb: dwc2: drop unexpected word "the" in the comments
+Date:   Wed, 22 Jun 2022 18:35:58 +0800
+Message-Id: <20220622103558.6647-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,41 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In CONFIG_PREEMPT=n and CONFIG_PREEMPT_COUNT=y kernel, after a exp
-grace period begins, if detected current CPU enters idle in
-rcu_exp_handler() IPI handler, will immediately report the exp QS of the
-current cpu, at this time, maybe not being in an RCU read-side critical
-section, but need wait until rcu-softirq or sched-clock irq or sched-switch
-occurs on current CPU to check and report exp QS.
+there is an unexpected word "the" in the comments that need to be dropped
 
-This commit add a exp QS check in rcu_exp_handler(), when not being
-in an RCU read-side critical section, report exp QS earlier.
+file: ./drivers/usb/dwc2/hcd.c
+line: 1002
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+          * even and the current frame number is even the the transfer
+changed to:
+          * even and the current frame number is even the transfer
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 ---
- kernel/rcu/tree_exp.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/dwc2/hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index be667583a554..34f08267410f 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -828,11 +828,14 @@ static void rcu_exp_handler(void *unused)
- {
- 	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
- 	struct rcu_node *rnp = rdp->mynode;
-+	bool preempt_bh_disabled =
-+				!!(preempt_count() & (PREEMPT_MASK | SOFTIRQ_MASK));
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 3f107a06817d..d8d20aa638c9 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -999,7 +999,7 @@ static void dwc2_hc_set_even_odd_frame(struct dwc2_hsotg *hsotg,
  
- 	if (!(READ_ONCE(rnp->expmask) & rdp->grpmask) ||
- 	    __this_cpu_read(rcu_data.cpu_no_qs.b.exp))
- 		return;
--	if (rcu_is_cpu_rrupt_from_idle()) {
-+	if (rcu_is_cpu_rrupt_from_idle() ||
-+			(IS_ENABLED(CONFIG_PREEMPT_COUNT) && !preempt_bh_disabled)) {
- 		rcu_report_exp_rdp(this_cpu_ptr(&rcu_data));
- 		return;
- 	}
+ 		/*
+ 		 * Try to figure out if we're an even or odd frame. If we set
+-		 * even and the current frame number is even the the transfer
++		 * even and the current frame number is even the transfer
+ 		 * will happen immediately.  Similar if both are odd. If one is
+ 		 * even and the other is odd then the transfer will happen when
+ 		 * the frame number ticks.
 -- 
-2.25.1
+2.17.1
 

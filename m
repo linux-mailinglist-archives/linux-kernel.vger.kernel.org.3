@@ -2,133 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35575554BB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093F8554BB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356359AbiFVNrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S229728AbiFVNsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353254AbiFVNrr (ORCPT
+        with ESMTP id S1357628AbiFVNs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:47:47 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2073.outbound.protection.outlook.com [40.107.244.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478AC338A7;
-        Wed, 22 Jun 2022 06:47:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R4374f2ranSoIn8NdkedUzg+56YX+/XVJsfXbZ1q1+WeeRYBqV0UT2irMQkAcqMdzlQnOhHuLavN52+VWBcZSlzFKHK84tGc37yScxKIQodASa8qHdHJtVdolUSBozO19+bsWNlbrtPa/eZYrCWr9fxLYHv4cNEFrdx+DWHpRGZq8evMmPjI1Ww1OCV0uNQm0DUb8fgCXycAM/A77WoW0sUsRhwfUYBlGPaVTlRVzHOm6kY2OUgv2uCvAcfUAMAfIx9mnSGWCy2ezeC4H2n5s+uU+Y2N49Na8o/eFAw30bTY022noEQ7urHXGw+nAItNG6G56XGMxFAW2PvFcXhR+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=73C/pHcBUMK2H40ACJ1VSbE5HSn5QQ6H0/KyJfeZtp8=;
- b=oVkgvnwRm8ebLQSYJJ1Wg5YXz+zdZoqVpXAihfhnQ/20V+AG55OCaDUW7OzYwoAojem7K5K/oolKUeNvAOifLPZbSXRvD55w7lZPpdhvoQC3PZx84Wd9RSHzsfkieBhpwBDLPGVYFIXMQn0VC/vUch3MIRscqTKzJhItnJym1tvg6ZypIQe07QsplImLpAq9/2g5NWlp+JfmjyWnKH36QebT0xqFnz3lfIYfm+FrX2s5mDqmWZ+qwdZnvMrT9s82ziHkMYKEygna15u5MyWzFjCpxgjWjJF8peY1skgIl2By+KyA1CD4+/45c75NpPoP5F2BDcUiF1292euRoG0I4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=73C/pHcBUMK2H40ACJ1VSbE5HSn5QQ6H0/KyJfeZtp8=;
- b=jUWvBeyaZhnDWCdFNxHJQp0lcikZD1bh9uPtpDydmRXhYRgoMIhzrFGP3iwmZHtSHxflxWk3BSwYJTAnZKIZ0ErUaPYb9+1ifRXxVDXt27Bjc0e5uhGCpgpwJ4O2dQHpSsWEKak2r7Jq/n1Jb5rA2hpNzV0vcy/EJvK5BUCMM+73HhE19ne0kZ0IE3di57AXUTry+v7uFTrSgiC/8GO3eEc4Vc+/mTv5IjMBSQ1vzBobL93zntzZ1MPlsvBviYJ7rgF6Ex49F1T9LWOQHG1NfHN/bnRPxWzfp8kQMT/2gd6JuU7VWVyOOIsfYZhvT0R1uEb2pf6jmRkxu/u5UANc1g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- DM6PR12MB2939.namprd12.prod.outlook.com (2603:10b6:5:18b::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5353.18; Wed, 22 Jun 2022 13:47:42 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::190c:967c:2b86:24a8]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::190c:967c:2b86:24a8%4]) with mapi id 15.20.5373.015; Wed, 22 Jun 2022
- 13:47:42 +0000
-Message-ID: <55623c12-dda3-613f-5bc9-80b3b6fec5f9@nvidia.com>
-Date:   Wed, 22 Jun 2022 14:47:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5/8] OPP: Allow multiple clocks for a device
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <cover.1654849214.git.viresh.kumar@linaro.org>
- <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <8b29fa207024dc295639f9ba52c28e45782e3baa.1654849214.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0097.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:c::13) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Wed, 22 Jun 2022 09:48:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2AD65B2;
+        Wed, 22 Jun 2022 06:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=K1GsBC4MHb+qo9V9c++f14XYeTYJOdtBiD8HFBQxxZU=; b=Wel80qM9yaHelWldTw94oHpGxY
+        3XvcKLUa0XInlj+xpiPOtqifcd61iW/JjCIt1RDX5OSpvfoELJK9BSh7jtAg4UsSbmBdVi178V9bb
+        jItuoi0d8fgI6YxbMagJ31iZ7sGxNm6MEeD4nqSCSHWnLxiMK0FrkAM12Rlgcc2rgImEtdL5bija+
+        8RwZO6p6mt06B8iz+w6be7JZf9t95nH469tUVjn1sdRICGc6XfYLZW9megn7UjKBq7xhUK7QXrQlb
+        MfQI36twD6WOQksW6N70tj5MdX/9vjwsPX6TJlWXWNPBZnXeDIkjwy6RcKWlI36v3Gd+EWkvLfx/d
+        hM/p+grg==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o40i7-0072dU-BY; Wed, 22 Jun 2022 13:47:59 +0000
+Message-ID: <0b4c451c6967ffb7bd20b6e5bf7812628aa173c5.camel@infradead.org>
+Subject: Re: [PATCH v2] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info)
+ sub-leaves, if present
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Paul Durrant <pdurrant@amazon.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Date:   Wed, 22 Jun 2022 14:47:56 +0100
+In-Reply-To: <20220622095750.30563-1-pdurrant@amazon.com>
+References: <20220622095750.30563-1-pdurrant@amazon.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-6dfZa0bRKF2CMmfFEAmn"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9b64ed3d-8bbc-4c3a-446d-08da5455c752
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2939:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB2939B5BA5D32AC484BBE03F4D9B29@DM6PR12MB2939.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p9we7HHXFmHaDlKXVdQZIQHtrPnC7A/Q8d/DNALsck7Fo0+fht7I37PiaaCyVWfAdm0nDu0fW+NMRE6W5yFsImP2q4HVotc56tML2dbuZIKTKFsJiZgqzA33IPXg92UXbJcoCOi5xpqHy0S5+ByPPAWH1WfBPOGOAddkcF3EzliK8zYJWUts8K5E7fYY1Ukdc2moyLSkzNp4AqBfmAGAS0HebelTNVZckupUj/Vo4aHE0AGliYEWpUrqS2yoKuHpIWm+7xfiue7BL5ib3K1HgF+3XoWMDAwPuUJ9ZW0YBxcjOmXGFFgZMmsBUxrIycl6pGyw6Msl7sC7PMBSJnAsJA5n77p2XGxXWam0Iu2lG4nnpSVPtq4R5j3zo10Z5FpSlEbR3Q48mHxnZCpGjefSOE4yWfx9NrpSvZ2uerpBwiZo22PrLBzeGRnCqXHLsHd34IrjyEQ8xCedqASPu2tj4Uv42HyZIk8SPJDQ4AhxmIbN9qokPRTZv9ZkB6i35MWYzO9lPT+Ln8L56cUS3fFEIXmEwlF4910UVE2TNcQ0e7gTCwPLd8X5DLcHHOMlgAB2K91lHr9LC/r4JI51fdgYW9sRs3bYNF+JQtNlGa02IDjVOc7UcFKLGzq+iqpRrCmUH/KF9K3CjJdlDNc4Jp8Dm8aFrdP9fSNWpvd/sLfTU7lP1I8SMvR885lDUqhVwKMLa1jcL1B/yTvO3w0ixlkxnH9kHg3iCRYX5tRsSXGYff2OfBACIc3yKI7Mmto3+A1UsmUdpK1L1mKo1v17JUNhE38m9KrXPSTrBcapnnpn6Fc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(396003)(366004)(136003)(54906003)(110136005)(2906002)(66946007)(186003)(8936002)(6506007)(26005)(36756003)(83380400001)(66476007)(7416002)(66556008)(38100700002)(4326008)(6486002)(2616005)(316002)(45080400002)(8676002)(6512007)(55236004)(5660300002)(31696002)(6666004)(86362001)(53546011)(41300700001)(478600001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zitkb3lqSkxYWUVvWlBWNnpvMkJDTUFFdlZxMFl4MGptY3NhY3pVRWlwelEy?=
- =?utf-8?B?cUNXMUwycG9yMVFnWmM5QkQxejZwV1FVUnE5TFFPN3VXeldEOWllVFBubjlw?=
- =?utf-8?B?VnpuVVkyRUxvMEdxUFhKZmlncldtNUN2UVdvdExIWjJWdFdPS1k4d3p1V2tP?=
- =?utf-8?B?M3NjTFN0TjQ0M3JlYk1VREwzUTZrdld2TksxUDZ5dUo0L3N5NE9BNXZsQmx0?=
- =?utf-8?B?RSsxcWt2eVhRZlRUNEtWcGNpaHNmcXNscG5LNUtCQ2dwTCtnNWtrS3FQT3Z2?=
- =?utf-8?B?Qkszd0E4UzEzZG9PTE5MZjBkZjNBWVAyaVMxN0txU0lUazczd0xPbVpGaDVj?=
- =?utf-8?B?ckk0RWZXZ0JuQm05bGxLM3V0TlJtUVJqUkV5QkhwZ1hUMVkzdElPWXBIbWxQ?=
- =?utf-8?B?b1JjV1pOTDRJVlB6WEtTVjl2WHRWdTVrMUdBME43UWM1L1VWN3picXB6akZa?=
- =?utf-8?B?SUs1UHJLV1RKRzMyWjRTN1hhdzlqczhSRkFGYmhPOGJXeThKYlJaTDRxcWt5?=
- =?utf-8?B?MWNDekZXREN3SlY1eVhCeXJ0T0xrRHp4Z1V2dVNGeEY3SVBnZHdtTDBnazRU?=
- =?utf-8?B?UU1ra0Z2UFRPclpnRHlESWVoVEV5WFFBci9tenlJcTNyOS9pNVhxUVRkUUl1?=
- =?utf-8?B?M2p6ZnBHRmpwZHRldEhCckx4OHBWZ3VJSXFMbkwvbXpiek5oamFBUXZzT1hi?=
- =?utf-8?B?QUpvRlNISUorL0t1cWdvRWtvY0NRaUY3dS82MjEwNXFPeE5taG0zY0JvVW5Y?=
- =?utf-8?B?aGo3WVBhdjV3Q2xYbTBuZlVQaENmL2tkbldFV040VjJXN2NwSnNCTnVkNUdz?=
- =?utf-8?B?bVhsVzVWbGl1QU5mTUMxQ21VV2hoZlpaRU13RzVSc0hxVFFuSS9WYUhzK3px?=
- =?utf-8?B?ai8xajVRS3hNNlREcVc4elpHVnpXSDB2eUh3M0J1OHlCVld6VVpDdEtZV0lU?=
- =?utf-8?B?UURIQktqNDNQeXRZNkU2dWFrcWd5UUdnSStEelNvTDAwQ1RvZFA4K0hzWXow?=
- =?utf-8?B?TCtaMXB6dDhCSFY1NjMzN0daVmRQUFlwb2ZzdWdQNEFyVmFtZnpkZlpYS3lk?=
- =?utf-8?B?MDZUSW5TRStwdWxpVUVMbEFVZTlURHN1MnMzWDRwemZpNmd3NEpzSXE3Rjg1?=
- =?utf-8?B?UnVVc010andvelZRaUhjT0toellTWW42aGZnaUY4S01XSTEwdXppcW5NNVdT?=
- =?utf-8?B?alpsMjZXUHVqZmkvVlRIbVZsVi9YUDVyZytTcXY3TngrQy80TnRhSys4eHIy?=
- =?utf-8?B?OXQ3OW9IdDhhOXRnY2gyVUxnTDhjZy9UNzVLMjJnWGZ4KzVRNTI3MnIwWEVz?=
- =?utf-8?B?RHhVRWcxdDZVbnRGSkh1YVFKczRlSW8vemYvTGRrQlB0NUdCY1dvTHViMEY3?=
- =?utf-8?B?dmkxTHA0MjhuQldxQm5Kc0R0enNnMk1nRkJ6WlVSZittSmlrR2Q2MWdCUGUx?=
- =?utf-8?B?blVVdEdWeFV2UzQ0RE1qM1JodVN1N2tibkxpbkF5RStpYjQ0U1pjTkhUSEdu?=
- =?utf-8?B?UFBPRVJYTjdUZW9KamZGVDRDRXc3amtNd1ByYnNiTG11Q251NmpSelNsUHBK?=
- =?utf-8?B?OWpUVXRZcTBHTXNDeHg1SGJpR1RZeUZESUdBSDFURExnNlVSQ0x5ZFM0NVQy?=
- =?utf-8?B?cWxyL3RDNGk5cDhEazZ5ZlNYSWNSUmxjcFY1VXlDL29TaVp3eGJNaG15UVhv?=
- =?utf-8?B?aHlKczRKWWoxY3BreUtmS2NHajBIZVZuWGlRK0NDVG9hT2RMNDMvVDBaUy9j?=
- =?utf-8?B?Nk9Oa3kwVUNGeVl1Umh4dmRNVWk1MFdiWDhSWGhuSjBtcUxMcWk2eElCS3FZ?=
- =?utf-8?B?Z2N1ZGZ6dWh5bVJQWDk2aUtOSEFiWGZIWDlMS09iaXZSdGZhNGUrbmtXekQ0?=
- =?utf-8?B?S2FTR2RKS2JaY2g2eTA1R3ZNbmxhdzZEaGI0Ym85Z1ZKTDhtaFVOYlpzd3dE?=
- =?utf-8?B?ZXZhdVR4bEVjSkVHQU8xTUo0elFRZHVMQWpzSE1nMGhteUp6YXpsR0REYTNL?=
- =?utf-8?B?ZVNPSUpaTXBZaUQya1lVNVVRaDFnWlJrOHF0N2c4TTJ2cUEvNnhISmhDdkFq?=
- =?utf-8?B?UjJ2NzVRNzRnbnFReFhlakRDZzdGWEZycDg2Nm1SS0dUNHRtV1JsaFlqT21U?=
- =?utf-8?B?MHhkeFVibGYyeXV2cFd2cE1VWnhmQlB2YTVzbkNiS0d2cERrejE3R01scWhv?=
- =?utf-8?B?dXVGZEMzd1BzY3F2RkhEa1pXYXg4SHNrKzZpVGFHMmpYZDVjM2E3VlB0MWln?=
- =?utf-8?B?bEpUK1I1dCtvdjZIbFhxMjl4NDRad1F5U2VoUmxVcXMxUDdTaEQzNkExSXl4?=
- =?utf-8?B?RFc3RmhwZ0s4akJyNTVTRU53TkErdUJBUDQwMVlTa20wSFFlZ01WZz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b64ed3d-8bbc-4c3a-446d-08da5455c752
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2022 13:47:42.3275
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: g8BzibnDo6GwS+fkFa6COq7GgByl39A/KN3YlHddTCLWOcPaQFbo4PrvRzxg7Mjtrxfd0HyGQux0trJaM2Px5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2939
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,131 +63,161 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--=-6dfZa0bRKF2CMmfFEAmn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/06/2022 09:20, Viresh Kumar wrote:
-> This patch adds support to allow multiple clocks for a device.
-> 
-> The design is pretty much similar to how this is done for regulators,
-> and platforms can supply their own version of the config_clks() callback
-> if they have multiple clocks for their device. The core manages the
-> calls via opp_table->config_clks() eventually.
-> 
-> We have kept both "clk" and "clks" fields in the OPP table structure and
-> the reason is provided as a comment in _opp_set_clknames(). The same
-> isn't done for "rates" though and we use rates[0] at most of the places
-> now.
-> 
-> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/opp/core.c     | 165 ++++++++++++++++++++++++++++-------------
->   drivers/opp/debugfs.c  |  27 ++++++-
->   drivers/opp/of.c       |  67 +++++++++++++----
->   drivers/opp/opp.h      |  16 ++--
->   include/linux/pm_opp.h |   7 +-
->   5 files changed, 208 insertions(+), 74 deletions(-)
+On Wed, 2022-06-22 at 10:57 +0100, Paul Durrant wrote:
+> +void kvm_xen_set_cpuid(struct kvm_vcpu *vcpu)
+> +{
+> +	u32 base =3D 0;
+> +	u32 function;
+> +
+> +	vcpu->arch.xen.tsc_info_1 =3D NULL;
+> +	vcpu->arch.xen.tsc_info_2 =3D NULL;
+> +
+> +	for_each_possible_hypervisor_cpuid_base(function) {
+> +		struct kvm_cpuid_entry2 *entry =3D kvm_find_cpuid_entry(vcpu, function=
+, 0);
+> +
+> +		if (entry &&
+> +		    entry->ebx =3D=3D XEN_CPUID_SIGNATURE_EBX &&
+> +		    entry->ecx =3D=3D XEN_CPUID_SIGNATURE_ECX &&
+> +		    entry->edx =3D=3D XEN_CPUID_SIGNATURE_EDX) {
+> +			base =3D function;
+> +			break;
+> +		}
+> +	}
+
+Please make it return if entry->eax < 3 here. There probably aren't any
+*good* reasons why a leaf at 0x40000x03 would exist and belong to some
+other entity (Hyper-V, etc.). Those other extra ranges of CPUID are
+generally aligned at multiples of 0x100, not just the *next* available
+leaf.
+
+But I don't care. Unless eax on the main Xen leaf is 3 or more, the
+leaf at N+3 isn't yours to reason about :)
+
+> +	if (!base)
+> +		return;
+> +
+> +	function =3D base | XEN_CPUID_LEAF(3);
+> +	vcpu->arch.xen.tsc_info_1 =3D kvm_find_cpuid_entry(vcpu, function, 1);
+> +	vcpu->arch.xen.tsc_info_2 =3D kvm_find_cpuid_entry(vcpu, function, 2);
+> +}
+> +
+
+--=-6dfZa0bRKF2CMmfFEAmn
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwNjIyMTM0NzU2WjAvBgkqhkiG9w0BCQQxIgQgaOhBD21S
+S3fAi5VUmRIwAuVKVpbTx+AwdcR5oz4w8j4wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBAMGaTM8THLF4gEB6Hmpjl2t2ihb6ZFRJY
+pR8WAT1P2gkyS5rfpXsTGvI34DxPJLFlDnyLtb/lKPM1neHrHp9gRLyDN0AvYvJiuHJzMCaOOgrl
+c/GOrL13OM+4ykYprcy1c1847Wb73U3R/2XOhjomOaZVIH7cNro1lnn5AUVCIekw7K4D8DxszhaK
+Z7M4TOQvOsGlcInMvKR+DuPmbOSC4NavGoXfoch7IcVv5Z69UgbO3WMcN4Kp330f4kwG8GeNSKvK
+LPipfThVJru4SmK1OHnCIjvi0NMEm4pSldFctHp1Zl+MSiIcDKticJ26fhmdHUkvdByAEP7pJXwR
+ZC2Xoy2nY9RyrtHRcM8LYHMDaLYPO52bqoXppU/jKje271fF1CXm0W9tzL3eQNLO2To+E+J365JK
+WqF+TE61PDm+A4rOZVUrep930vqYb5RhO5MR1WGe2GlUpOqfAFTb/Dhqa4b8rML6VtV8zp9y53AO
+vJfxNxs2j1Wg08ecpInvWQCv5H/SfN4SiyeCnc9Bb1EecOfvLg90mQ5bOwXtYttFqeZJWJF2NMLs
+IhLiiOupkbg6VTOOAFiSbnAM9OUNZdbohI2BKfuZLBLZUPfuvy4TSkzZ22fynk6B2XadIXhQIYoa
+Nm52XM1cp1QzuztMy0AHR3by9FnWrFMUARED2y3orQAAAAAAAA==
 
 
-I am seeing the following panic on -next and bisect is point to
-this commit ...
+--=-6dfZa0bRKF2CMmfFEAmn--
 
-[    2.145604] 8<--- cut here ---
-[    2.145615] Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[    2.145625] [00000000] *pgd=00000000
-[    2.145647] Internal error: Oops: 80000005 [#1] PREEMPT SMP ARM
-[    2.145660] Modules linked in:
-[    2.145671] CPU: 1 PID: 35 Comm: kworker/u8:1 Not tainted 5.19.0-rc3-next-20220622-gf739bc2a47f6 #1
-[    2.145688] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
-[    2.145697] Workqueue: events_unbound deferred_probe_work_func
-[    2.145740] PC is at 0x0
-[    2.145750] LR is at _set_opp+0x194/0x380
-[    2.145779] pc : [<00000000>]    lr : [<c086b578>]    psr: 20000013
-[    2.145789] sp : f08f1c80  ip : c152cb40  fp : c264c040
-[    2.145798] r10: 00000000  r9 : c152cb40  r8 : c16f3010
-[    2.145806] r7 : c264c034  r6 : 00000000  r5 : c265d800  r4 : c264c000
-[    2.145815] r3 : 00000000  r2 : c265d800  r1 : c264c000  r0 : c16f3010
-[    2.145825] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-[    2.145840] Control: 10c5387d  Table: 8000404a  DAC: 00000051
-[    2.145847] Register r0 information: slab kmalloc-1k start c16f3000 pointer offset 16 size 1024
-[    2.145883] Register r1 information: slab kmalloc-256 start c264c000 pointer offset 0 size 256
-[    2.145914] Register r2 information: slab kmalloc-128 start c265d800 pointer offset 0 size 128
-[    2.145942] Register r3 information: NULL pointer
-[    2.145955] Register r4 information: slab kmalloc-256 start c264c000 pointer offset 0 size 256
-[    2.145983] Register r5 information: slab kmalloc-128 start c265d800 pointer offset 0 size 128
-[    2.146012] Register r6 information: NULL pointer
-[    2.146023] Register r7 information: slab kmalloc-256 start c264c000 pointer offset 52 size 256
-[    2.146052] Register r8 information: slab kmalloc-1k start c16f3000 pointer offset 16 size 1024
-[    2.146081] Register r9 information: slab task_struct start c152cb40 pointer offset 0
-[    2.146105] Register r10 information: NULL pointer
-[    2.146116] Register r11 information: slab kmalloc-256 start c264c000 pointer offset 64 size 256
-[    2.146146] Register r12 information: slab task_struct start c152cb40 pointer offset 0
-[    2.348527] Process kworker/u8:1 (pid: 35, stack limit = 0x(ptrval))
-[    2.354896] Stack: (0xf08f1c80 to 0xf08f2000)
-[    2.359273] 1c80: 00000001 c0868db0 00000000 7a13d783 c152cb40 c264c000 c16f3010 c265d800
-[    2.367471] 1ca0: c2661c40 00000001 c2661c40 00000001 c2661c40 c086b8e8 00000000 7a13d783
-[    2.375666] 1cc0: c12ea5a0 c265d800 000f4240 c058cfcc ef7dddec 000f4240 00000000 c2661e88
-[    2.383861] 1ce0: 000f4240 000f4240 c2661e98 c068d238 00000000 c2665e00 000f4240 000f4240
-[    2.392056] 1d00: c2666258 00000000 c2666000 00000001 c2661c40 c068d15c 00000000 c2666000
-[    2.400253] 1d20: c16fd140 00000000 c16fd140 00000000 00000000 c16b78b8 c16b5e00 c068d2d8
-[    2.408450] 1d40: c16b7810 c26661d8 c2666000 c068ed98 c2663d00 c2663d00 00000000 c086914c
-[    2.416647] 1d60: c2663d00 c16b7810 c068ebec c16b7894 00000004 c0174868 00000000 c16b78b8
-[    2.424843] 1d80: c16b5e00 c0684630 c16b7810 c068ebec 00000000 00000004 c0174868 c152cb40
-[    2.433041] 1da0: c16b78b8 c0684794 c16b7810 c068ebec 00000000 c068506c 00000a00 c265e040
-[    2.441237] 1dc0: c0f5bdd4 00000004 00000000 7a13d783 00000000 c16b7810 c16b7894 00000004
-[    2.449434] 1de0: 60000013 00000000 c265e10c c265e154 00000000 c06854c4 c265e040 c16b7800
-[    2.457629] 1e00: c16b7810 c152cb40 00000000 c05e42b0 00000001 00000000 ffffffff 00000000
-[    2.465824] 1e20: c16b7810 ff8067a4 01000000 7a13d783 c16b7810 c16b7810 00000000 c12f7700
-[    2.474020] 1e40: 00000000 00000001 c1367c20 c140f00d c1405800 c067a668 c16b7810 00000000
-[    2.482214] 1e60: c12f7700 c0678280 c16b7810 c12f7700 c16b7810 00000017 00000001 c06784e4
-[    2.490411] 1e80: c13b6754 f08f1ee4 c16b7810 c0678574 c12f7700 f08f1ee4 c16b7810 c152cb40
-[    2.498609] 1ea0: 00000001 c06788bc 00000000 f08f1ee4 c0678834 c067675c c1367c20 c14b4e70
-[    2.506804] 1ec0: c1ea60b8 7a13d783 c16b7810 c16b7810 c152cb40 c16b7854 c12fa050 c067810c
-[    2.515001] 1ee0: c1400000 c16b7810 00000001 7a13d783 c16b7810 c16b7810 c12fa2f0 c12fa050
-[    2.523197] 1f00: 00000000 c0677410 c16b7810 c12fa038 c12fa038 c06778d0 c12fa06c c176a180
-[    2.531394] 1f20: c1405800 c140f000 00000000 c013dd2c c152cb40 c1405800 c1203d40 c176a180
-[    2.539592] 1f40: c1405800 c140581c c1203d40 c176a198 00000088 c1367177 c1405800 c013e2a4
-[    2.547790] 1f60: c0f07434 00000000 f08f1f7c c176f7c0 c152cb40 c013e064 c176a180 c176f640
-[    2.555984] 1f80: f0831eb4 00000000 00000000 c01459b4 c176f7c0 c01458ac 00000000 00000000
-[    2.564180] 1fa0: 00000000 00000000 00000000 c01001a8 00000000 00000000 00000000 00000000
-[    2.572373] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    2.580569] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-[    2.588768]  _set_opp from dev_pm_opp_set_opp+0x38/0x78
-[    2.594038]  dev_pm_opp_set_opp from tegra_pmc_core_pd_set_performance_state+0x44/0xb0
-[    2.602010]  tegra_pmc_core_pd_set_performance_state from _genpd_set_performance_state+0x180/0x1d0
-[    2.611018]  _genpd_set_performance_state from _genpd_set_performance_state+0xa4/0x1d0
-[    2.618972]  _genpd_set_performance_state from genpd_set_performance_state+0x50/0x7c
-[    2.626752]  genpd_set_performance_state from genpd_runtime_resume+0x1ac/0x25c
-[    2.634016]  genpd_runtime_resume from __rpm_callback+0x38/0x14c
-[    2.640073]  __rpm_callback from rpm_callback+0x50/0x54
-[    2.645335]  rpm_callback from rpm_resume+0x394/0x7a0
-[    2.650424]  rpm_resume from __pm_runtime_resume+0x4c/0x64
-[    2.655947]  __pm_runtime_resume from host1x_probe+0x29c/0x654
-[    2.661824]  host1x_probe from platform_probe+0x5c/0xb8
-[    2.667080]  platform_probe from really_probe+0xc8/0x2a8
-[    2.672433]  really_probe from __driver_probe_device+0x84/0xe4
-[    2.678308]  __driver_probe_device from driver_probe_device+0x30/0xd0
-[    2.684789]  driver_probe_device from __device_attach_driver+0x88/0xb4
-[    2.691350]  __device_attach_driver from bus_for_each_drv+0x54/0xb4
-[    2.697647]  bus_for_each_drv from __device_attach+0xf0/0x194
-[    2.703430]  __device_attach from bus_probe_device+0x84/0x8c
-[    2.709129]  bus_probe_device from deferred_probe_work_func+0x7c/0xa8
-[    2.715608]  deferred_probe_work_func from process_one_work+0x214/0x54c
-[    2.722269]  process_one_work from worker_thread+0x240/0x508
-[    2.727960]  worker_thread from kthread+0x108/0x124
-[    2.732872]  kthread from ret_from_fork+0x14/0x2c
-[    2.737602] Exception stack(0xf08f1fb0 to 0xf08f1ff8)
-[    2.742669] 1fa0:                                     00000000 00000000 00000000 00000000
-[    2.750865] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    2.759061] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    2.765690] Code: bad PC value
-[    2.768990] ---[ end trace 0000000000000000 ]---
-
-
-Let me know if you have any thoughts.
-
-Cheers
-Jon
-
--- 
-nvpublic

@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA3455468D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646DF55463D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345463AbiFVJyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
+        id S1353489AbiFVJye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiFVJyC (ORCPT
+        with ESMTP id S1352645AbiFVJyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:54:02 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6507E22B1C;
-        Wed, 22 Jun 2022 02:54:02 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id o18so7885330plg.2;
-        Wed, 22 Jun 2022 02:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V3OJUOfLg2fp6Yw9slvyibMLkh1KMdKNRcGBNNwwEN0=;
-        b=aWJrZZ+M2w9hzuBrUEi74QTz/Nca41Mgo0VBFDVPrxxtChz9X4xQ+oSNBAYzcOFGiX
-         zqhsKq6NCt0/3WRYfh7twNIFnlOW1paAbZMYKZSOMMHPFXh0vRbt65LJswEqYJwM1HH8
-         wvvsfnxJGIH7irWLR7Qqh6V4IMKubJke91uMv6VKn/WoSPEE+LT5n5S70OoRfXQ7KLXN
-         ubYJY8R2kIGThzm5jYnc4CwUc/5sCJaG3gRM46xlAAmR0oEYDzF7L8LNd7N9M0bp5+qU
-         50Jn8B0tsyragIhwsPTTV8G6FvZte0yiOKkEzEmaI1ViFFsCuXSHJRbekwZh4A22xHzB
-         Rk7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V3OJUOfLg2fp6Yw9slvyibMLkh1KMdKNRcGBNNwwEN0=;
-        b=VNk+7pXpQMHoPP9HhEWEjuyEiLvtz2E2Nd3kJWd0ugQBKxH6x7UTdQQrQLc2vn62yg
-         +JXgq+sVfB3gr+uaTnb4WiKr4w/1SePfHPokqrWYBjbCjO7f95JjAoLx5Zmg7sBtF58S
-         J/O/hhG1ycQef+AUVnlP907xrUm4fqrYKlcn4Eu5bGzMZJqdaxCKk7PakQ3CuA0cVlxK
-         +N2o55kD9eqXq3ikGzaqQsao4lrQfH/gtEPNx2Too7VN/VMBJ+aQxNfLAtRuLsoDjdXp
-         70lvMT04ZFhkAZwLz8wuzX0fVin095Q69eXLpzu850DFfQC7Qges1ZfPOx0ZDfqa6Y+l
-         M9PA==
-X-Gm-Message-State: AJIora8hrhXLWttfP15HeEKzlzoMRTzss0HDnhTSiAdRyIIRwfByx4Bz
-        rDtga+ZoKmrjO4UOQRkak4c1TO7J+Io=
-X-Google-Smtp-Source: AGRyM1uOLIWxdusDf2pPM02W2RekyFBvS2fgYtoG0H0WN6AmcHuY4bVqjkR1k5JRlqty32zji3LVXg==
-X-Received: by 2002:a17:902:f64c:b0:156:4349:7e9b with SMTP id m12-20020a170902f64c00b0015643497e9bmr33831832plg.139.1655891641399;
-        Wed, 22 Jun 2022 02:54:01 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-91.three.co.id. [180.214.232.91])
-        by smtp.gmail.com with ESMTPSA id d26-20020aa7869a000000b0051c4f6d2d95sm7064420pfo.106.2022.06.22.02.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 02:54:00 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, Frank Li <Frank.Li@nxp.com>,
-        Jon Mason <jdmason@kudzu.us>, linux-pci@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Documentation: PCI: extend subheading underline for "lspci output" section
-Date:   Wed, 22 Jun 2022 16:53:45 +0700
-Message-Id: <20220622095345.27121-3-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220622095345.27121-1-bagasdotme@gmail.com>
-References: <20220621200235.211b2e32@canb.auug.org.au>
- <20220622095345.27121-1-bagasdotme@gmail.com>
+        Wed, 22 Jun 2022 05:54:23 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BDB3A5DD;
+        Wed, 22 Jun 2022 02:54:21 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LSdxs0C8dz689t8;
+        Wed, 22 Jun 2022 17:53:53 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 11:54:18 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 22 Jun 2022 11:54:18 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>
+CC:     "dhowells@redhat.com" <dhowells@redhat.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel test robot" <lkp@intel.com>
+Subject: RE: [PATCH v5 3/5] bpf: Add bpf_verify_pkcs7_signature() helper
+Thread-Topic: [PATCH v5 3/5] bpf: Add bpf_verify_pkcs7_signature() helper
+Thread-Index: AQHYhY1kCHhKSR2HMUKh5v3j7X869a1aT6EAgADgkDA=
+Date:   Wed, 22 Jun 2022 09:54:18 +0000
+Message-ID: <03b67c7a6161428c9ff8a5dde0450402@huawei.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-4-roberto.sassu@huawei.com>
+ <62b245e22effa_1627420871@john.notmuch>
+In-Reply-To: <62b245e22effa_1627420871@john.notmuch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The underline syntax for "lspci output..." section is off-by-one less
-than the section heading's length, hence triggers the warning:
-
-Documentation/PCI/endpoint/pci-vntb-howto.rst:131: WARNING: Title underline too short.
-
-Extend the underline by one to match the heading length.
-
-Link: https://lore.kernel.org/linux-next/20220621200235.211b2e32@canb.auug.org.au/
-Fixes: 0c4b285d9636cc ("Documentation: PCI: Add specification for the PCI vNTB function device")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: "Krzysztof Wilczyński" <kw@linux.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Frank Li <Frank.Li@nxp.com>
-Cc: Jon Mason <jdmason@kudzu.us>
-Cc: linux-pci@vger.kernel.org
-Cc: linux-next@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/PCI/endpoint/pci-vntb-howto.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/PCI/endpoint/pci-vntb-howto.rst b/Documentation/PCI/endpoint/pci-vntb-howto.rst
-index b4a679144692a8..31a0bae868f996 100644
---- a/Documentation/PCI/endpoint/pci-vntb-howto.rst
-+++ b/Documentation/PCI/endpoint/pci-vntb-howto.rst
-@@ -128,7 +128,7 @@ RootComplex Device
- ==================
- 
- lspci Output at Host side
--------------------------
-+-------------------------
- 
- Note that the devices listed here correspond to the values populated in
- "Creating pci-epf-ntb Device" section above::
--- 
-An old man doll... just what I always wanted! - Clara
-
+PiBGcm9tOiBKb2huIEZhc3RhYmVuZCBbbWFpbHRvOmpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbV0N
+Cj4gU2VudDogV2VkbmVzZGF5LCBKdW5lIDIyLCAyMDIyIDEyOjI4IEFNDQo+IFJvYmVydG8gU2Fz
+c3Ugd3JvdGU6DQo+ID4gQWRkIHRoZSBicGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSgpIGhlbHBl
+ciwgdG8gZ2l2ZSBlQlBGIHNlY3VyaXR5IG1vZHVsZXMNCj4gPiB0aGUgYWJpbGl0eSB0byBjaGVj
+ayB0aGUgdmFsaWRpdHkgb2YgYSBzaWduYXR1cmUgYWdhaW5zdCBzdXBwbGllZCBkYXRhLCBieQ0K
+PiA+IHVzaW5nIHVzZXItcHJvdmlkZWQgb3Igc3lzdGVtLXByb3ZpZGVkIGtleXMgYXMgdHJ1c3Qg
+YW5jaG9yLg0KPiA+DQo+ID4gVGhlIG5ldyBoZWxwZXIgbWFrZXMgaXQgcG9zc2libGUgdG8gZW5m
+b3JjZSBtYW5kYXRvcnkgcG9saWNpZXMsIGFzIGVCUEYNCj4gPiBwcm9ncmFtcyBtaWdodCBiZSBh
+bGxvd2VkIHRvIG1ha2Ugc2VjdXJpdHkgZGVjaXNpb25zIG9ubHkgYmFzZWQgb24gZGF0YQ0KPiA+
+IHNvdXJjZXMgdGhlIHN5c3RlbSBhZG1pbmlzdHJhdG9yIGFwcHJvdmVzLg0KPiA+DQo+ID4gVGhl
+IGNhbGxlciBzaG91bGQgcHJvdmlkZSBib3RoIHRoZSBkYXRhIHRvIGJlIHZlcmlmaWVkIGFuZCB0
+aGUgc2lnbmF0dXJlIGFzDQo+ID4gZUJQRiBkeW5hbWljIHBvaW50ZXJzICh0byBtaW5pbWl6ZSB0
+aGUgbnVtYmVyIG9mIHBhcmFtZXRlcnMpLg0KPiA+DQo+ID4gVGhlIGNhbGxlciBzaG91bGQgYWxz
+byBwcm92aWRlIGEga2V5cmluZyBwb2ludGVyIG9idGFpbmVkIHdpdGgNCj4gPiBicGZfbG9va3Vw
+X3VzZXJfa2V5KCkgb3IsIGFsdGVybmF0aXZlbHksIGEga2V5cmluZyBJRCB3aXRoIHZhbHVlcyBk
+ZWZpbmVkDQo+ID4gaW4gdmVyaWZpY2F0aW9uLmguIFdoaWxlIHRoZSBmaXJzdCBjaG9pY2UgZ2l2
+ZXMgdXNlcnMgbW9yZSBmbGV4aWJpbGl0eSwgdGhlDQo+ID4gc2Vjb25kIG9mZmVycyBiZXR0ZXIg
+c2VjdXJpdHkgZ3VhcmFudGVlcywgYXMgdGhlIGtleXJpbmcgc2VsZWN0aW9uIHdpbGwgbm90DQo+
+ID4gZGVwZW5kIG9uIHBvc3NpYmx5IHVudHJ1c3RlZCB1c2VyIHNwYWNlIGJ1dCBvbiB0aGUga2Vy
+bmVsIGl0c2VsZi4NCj4gPg0KPiA+IERlZmluZWQga2V5cmluZyBJRHMgYXJlOiAwIGZvciB0aGUg
+cHJpbWFyeSBrZXlyaW5nIChpbW11dGFibGUga2V5cmluZyBvZg0KPiA+IHN5c3RlbSBrZXlzKTsg
+MSBmb3IgYm90aCB0aGUgcHJpbWFyeSBhbmQgc2Vjb25kYXJ5IGtleXJpbmcgKHdoZXJlIGtleXMg
+Y2FuDQo+ID4gYmUgYWRkZWQgb25seSBpZiB0aGV5IGFyZSB2b3VjaGVkIGZvciBieSBleGlzdGlu
+ZyBrZXlzIGluIHRob3NlIGtleXJpbmdzKTsNCj4gPiAyIGZvciB0aGUgcGxhdGZvcm0ga2V5cmlu
+ZyAocHJpbWFyaWx5IHVzZWQgYnkgdGhlIGludGVncml0eSBzdWJzeXN0ZW0gdG8NCj4gPiB2ZXJp
+ZnkgYSBrZXhlYydlZCBrZXJuZWQgaW1hZ2UgYW5kLCBwb3NzaWJseSwgdGhlIGluaXRyYW1mcyBz
+aWduYXR1cmUpLg0KPiA+DQo+ID4gTm90ZTogc2luY2UgdGhlIGtleXJpbmcgSUQgYXNzaWdubWVu
+dCBpcyB1bmRlcnN0b29kIG9ubHkgYnkNCj4gPiB2ZXJpZnlfcGtjczdfc2lnbmF0dXJlKCksIGl0
+IG11c3QgYmUgcGFzc2VkIGRpcmVjdGx5IHRvIHRoZSBjb3JyZXNwb25kaW5nDQo+ID4gaGVscGVy
+LCByYXRoZXIgdGhhbiB0byBhIHNlcGFyYXRlIG5ldyBoZWxwZXIgcmV0dXJuaW5nIGEgc3RydWN0
+IGtleSBwb2ludGVyDQo+ID4gd2l0aCB0aGUga2V5cmluZyBJRCBhcyBhIHBvaW50ZXIgdmFsdWUu
+IElmIHN1Y2ggcG9pbnRlciBpcyBwYXNzZWQgdG8gYW55DQo+ID4gb3RoZXIgaGVscGVyIHdoaWNo
+IGRvZXMgbm90IGNoZWNrIGl0cyB2YWxpZGl0eSwgYW4gaWxsZWdhbCBtZW1vcnkgYWNjZXNzDQo+
+ID4gY291bGQgb2NjdXIuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxy
+b2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+ID4gUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJv
+Ym90IDxsa3BAaW50ZWwuY29tPiAoY2FzdCB3YXJuaW5nKQ0KPiA+IC0tLQ0KPiA+ICBpbmNsdWRl
+L3VhcGkvbGludXgvYnBmLmggICAgICAgfCAxNyArKysrKysrKysrKysrKysNCj4gPiAga2VybmVs
+L2JwZi9icGZfbHNtLmMgICAgICAgICAgIHwgMzkgKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKw0KPiA+ICB0b29scy9pbmNsdWRlL3VhcGkvbGludXgvYnBmLmggfCAxNyArKysrKysr
+KysrKysrKysNCj4gPiAgMyBmaWxlcyBjaGFuZ2VkLCA3MyBpbnNlcnRpb25zKCspDQo+ID4NCj4g
+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvaW5jbHVkZS91YXBpL2xp
+bnV4L2JwZi5oDQo+ID4gaW5kZXggN2JiY2YyY2QxMDVkLi41MjRiZWQ0ZDcxNzAgMTAwNjQ0DQo+
+ID4gLS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gKysrIGIvaW5jbHVkZS91YXBp
+L2xpbnV4L2JwZi5oDQo+ID4gQEAgLTUzMzksNiArNTMzOSwyMiBAQCB1bmlvbiBicGZfYXR0ciB7
+DQo+ID4gICAqCQlicGZfbG9va3VwX3VzZXJfa2V5KCkgaGVscGVyLg0KPiA+ICAgKglSZXR1cm4N
+Cj4gPiAgICoJCTANCj4gPiArICoNCj4gPiArICogbG9uZyBicGZfdmVyaWZ5X3BrY3M3X3NpZ25h
+dHVyZShzdHJ1Y3QgYnBmX2R5bnB0ciAqZGF0YV9wdHIsIHN0cnVjdA0KPiBicGZfZHlucHRyICpz
+aWdfcHRyLCBzdHJ1Y3Qga2V5ICp0cnVzdGVkX2tleXMsIHVuc2lnbmVkIGxvbmcga2V5cmluZ19p
+ZCkNCj4gPiArICoJRGVzY3JpcHRpb24NCj4gPiArICoJCVZlcmlmeSB0aGUgUEtDUyM3IHNpZ25h
+dHVyZSAqc2lnKiBhZ2FpbnN0IHRoZSBzdXBwbGllZCAqZGF0YSoNCj4gPiArICoJCXdpdGgga2V5
+cyBpbiAqdHJ1c3RlZF9rZXlzKiBvciBpbiBhIGtleXJpbmcgd2l0aCBJRA0KPiA+ICsgKgkJKmtl
+eXJpbmdfaWQqLg0KPiANCj4gV291bGQgYmUgbmljZSB0byBnaXZlIHByZWNlZGVuY2UgaGVyZSBz
+byB0aGF0IGl0cyBvYnZpb3VzIG9yZGVyIGJldHdlZW4NCj4gdHJ1c3RlZF9rZXlzIGFuZCBrZXly
+aW5nX2lkLg0KDQpEaWQgeW91IG1lYW4gdG8gYWRkIGF0IHRoZSBlbmQgb2YgdGhlIHNlbnRlbmNl
+Og0KDQpvciBpbiBhIGtleXJpbmcgd2l0aCBJRCAqa2V5cmluZ19pZCosIGlmICp0cnVzdGVkX2tl
+eXMqIGlzIE5VTEwuDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMg
+RHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywg
+WWFuZyBYaSwgTGkgSGUNCg0KPiA+ICsgKg0KPiA+ICsgKgkJKmtleXJpbmdfaWQqIGNhbiBoYXZl
+IHRoZSBmb2xsb3dpbmcgdmFsdWVzIGRlZmluZWQgaW4NCj4gPiArICoJCXZlcmlmaWNhdGlvbi5o
+OiAwIGZvciB0aGUgcHJpbWFyeSBrZXlyaW5nIChpbW11dGFibGUga2V5cmluZyBvZg0KPiA+ICsg
+KgkJc3lzdGVtIGtleXMpOyAxIGZvciBib3RoIHRoZSBwcmltYXJ5IGFuZCBzZWNvbmRhcnkga2V5
+cmluZw0KPiA+ICsgKgkJKHdoZXJlIGtleXMgY2FuIGJlIGFkZGVkIG9ubHkgaWYgdGhleSBhcmUg
+dm91Y2hlZCBmb3IgYnkNCj4gPiArICoJCWV4aXN0aW5nIGtleXMgaW4gdGhvc2Uga2V5cmluZ3Mp
+OyAyIGZvciB0aGUgcGxhdGZvcm0ga2V5cmluZw0KPiA+ICsgKgkJKHByaW1hcmlseSB1c2VkIGJ5
+IHRoZSBpbnRlZ3JpdHkgc3Vic3lzdGVtIHRvIHZlcmlmeSBhIGtleGVjJ2VkDQo+ID4gKyAqCQlr
+ZXJuZWQgaW1hZ2UgYW5kLCBwb3NzaWJseSwgdGhlIGluaXRyYW1mcyBzaWduYXR1cmUpLg0KPiA+
+ICsgKglSZXR1cm4NCj4gPiArICoJCTAgb24gc3VjY2VzcywgYSBuZWdhdGl2ZSB2YWx1ZSBvbiBl
+cnJvci4NCj4gPiAgICovDQo=

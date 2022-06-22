@@ -2,57 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A192155489E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A855546EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354683AbiFVLDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S235258AbiFVLEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353850AbiFVLDj (ORCPT
+        with ESMTP id S1355165AbiFVLEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:03:39 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B700B39B81
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:03:37 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7271A22238;
-        Wed, 22 Jun 2022 13:03:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1655895815;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aBtd961AtvmJMz12rN1xdgEhy6lx5FNcxorgMS7aEYk=;
-        b=l5mm9mk8jW1WKydNdLijg4SMlz53lnrVVQOXqiE5Ql70KDKnf+W2Paawv4CAzycYsJTYjh
-        VNT74Hw8oTPepOgBqb05gvIkWxz4aXuwaJy0oJAPnbUeWaDgGpChvwv/nkZ8AqN54LJH8i
-        lf6sleRhgncqfm7/P84gbI9jRneWltI=
+        Wed, 22 Jun 2022 07:04:05 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF15C39831;
+        Wed, 22 Jun 2022 04:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655895842; x=1687431842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zJMEWEjiFSil7/EFxLbQZ8fjyyIDnFeySnwGQSaAETs=;
+  b=GigkjZFeSRazy/sBGPnBBV1FR1te4BicvCwll4fPZU6HHV0gTmjA5/rs
+   TkiPUVpoKJyTr9boVIAtJrOecp0R09tawmgNwsmZFYmBxN69dlNObKi0o
+   5RNtY6niaPx1BzpOlbQhDXcSgZhGmnOfFwm81irAkbUza6xBeKjU0fWQh
+   XHiCeehGB1QIGJ18CVLiuaTlIGYqHPjN/5KuDFwY67YD+0mPGadlVe4yw
+   g5TnIKb6dUXFAGaqOV+IDwb+2qQABBW5YKxjpzj7uguLozmaN4rFecY9i
+   iDA9icNnV3WQ6do589OqE1GdrEWzauFDzlMjCCgmLv5xfxKR/9jviLgeV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="260207794"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="260207794"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:03:50 -0700
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="677484279"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:03:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3y98-000sGU-59;
+        Wed, 22 Jun 2022 14:03:42 +0300
+Date:   Wed, 22 Jun 2022 14:03:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, vivien.didelot@gmail.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH 09/12] Documentation: ACPI: DSD: introduce DSA
+ description
+Message-ID: <YrL3DQD92ijLam2V@smile.fi.intel.com>
+References: <20220620150225.1307946-1-mw@semihalf.com>
+ <20220620150225.1307946-10-mw@semihalf.com>
+ <YrDO05TMK8SVgnBP@lunn.ch>
+ <YrGm2jmR7ijHyQjJ@smile.fi.intel.com>
+ <YrGpDgtm4rPkMwnl@lunn.ch>
+ <YrGukfw4uiQz0NpW@smile.fi.intel.com>
+ <CAPv3WKf_2QYh0F2LEr1DeErvnMeQqT0M5t40ROP2G6HSUwKpQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 22 Jun 2022 13:03:33 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <Sudeep.Holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH RESEND v2 0/7] soc: fsl: guts: cleanups and serial_number
- support
-In-Reply-To: <20220404095609.3932782-1-michael@walle.cc>
-References: <20220404095609.3932782-1-michael@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0bde7550b0bbd1b0a478139d296f92a2@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPv3WKf_2QYh0F2LEr1DeErvnMeQqT0M5t40ROP2G6HSUwKpQQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,39 +88,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-04 11:56, schrieb Michael Walle:
-> [Resend because of new development cycle. Shawn, can this series get
-> through your tree? Sorry you weren't on CC on the former submissions.]
-> 
-> This series converts the guts driver from a platform driver to just an
-> core_initcall. The driver itself cannot (or rather should never) be
-> unloaded because others depends on detecting the current SoC revision
-> to apply chip errata. Other SoC drivers do it the same way. Overall I
-> got rid of all the global static variables.
-> 
-> The last patch finally adds unique id support to the guts driver. DT
-> binding can be found at:
->   Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
-> 
-> changes since v1:
->  - call kfree() in error case, thanks Dan
->  - add missing of_node_put(np), thanks Dan
-> 
-> Michael Walle (7):
->   soc: fsl: guts: machine variable might be unset
->   soc: fsl: guts: remove module_exit() and fsl_guts_remove()
->   soc: fsl: guts: embed fsl_guts_get_svr() in probe()
->   soc: fsl: guts: allocate soc_dev_attr on the heap
->   soc: fsl: guts: use of_root instead of own reference
->   soc: fsl: guts: drop platform driver
->   soc: fsl: guts: add serial_number support
-> 
->  drivers/soc/fsl/guts.c | 219 ++++++++++++++++++++++-------------------
->  1 file changed, 118 insertions(+), 101 deletions(-)
+On Wed, Jun 22, 2022 at 11:08:13AM +0200, Marcin Wojtas wrote:
+> wt., 21 cze 2022 o 13:42 Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> napisał(a):
 
-There goes another kernel release without any comments on this
-series :(
+...
 
-Shawn, can you pick this up and give it some time in linux-next?
+> It's not device on MDIO bus, but the MDIO controller's register itself
+> (this _CSR belongs to the parent, subnodes do not refer to it in any
+> way). The child device requires only _ADR (or whatever else is needed
+> for the case the DSA device is attached to SPI/I2C controllers).
 
--michael
+More and more the idea of standardizing the MDIOSerialBus() resource looks
+plausible. The _ADR() usage is a bit grey area in ACPI specification. Maybe
+someone can also make it descriptive, so Microsoft and others won't utilize
+_ADR() in any level of weirdness.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

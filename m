@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DA455405E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02BA554069
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 04:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355990AbiFVCHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 22:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S1356199AbiFVCKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 22:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbiFVCHH (ORCPT
+        with ESMTP id S232483AbiFVCKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 22:07:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5415830F54
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 19:07:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFBB2B80F63
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:07:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 400FBC3411C;
-        Wed, 22 Jun 2022 02:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655863623;
-        bh=OXkI+Y3ACw9rL792ik2Ukzt4EMax3yvVetAu+tTRfR4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Pq8NPvLimKNdXKMDLmHptp5BwZwiNacaYPqJr3LQ7hrl/I0adOh5STROXBTLJwNrT
-         MfLZaybCui5QzqEbDWIsZWw4MGjh+ZVs4YIWjJQ4a9lb7QgyPBvaT2PssJp6dLog2D
-         0gKlHHN+7BHwr0IMx3GhP2f9V7k/gcjOic02uSe5WHxZY47UoDAaeCE/LNUgl6tlL7
-         qHHVa2G5wzca8mD+jllPuOwqQIXCHg2kb2oADB3jDJ4aZw6T101CO0gUZ+mGoyO/Rs
-         WEgbAobtJFN3bT42iz2UgJ4mM9ogrTKfAPADbCUYb8EdtJ2pOh0menpAv03N3DAZc5
-         kIdKU43kkTR9Q==
-Date:   Wed, 22 Jun 2022 11:06:59 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tue, 21 Jun 2022 22:10:31 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11B9338AD;
+        Tue, 21 Jun 2022 19:10:30 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25M0J8wm011432;
+        Wed, 22 Jun 2022 02:10:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=pd/lIFKzWE4I7Kn7X/ukG84VnGOkmKLwAry+/UOI+8M=;
+ b=r3F77uQb0ilQCCDUO4J7w4dNJ6iPxZ7EVMKlpFgMCyolLQqHLunkzXl6qEhZr+ghDqnT
+ hIVDezfXHVNouRBiaYxst19ZYiybJVQiE1wkcKT8bP3I0VQ9EuUZg3tQlnV3miw7Vozn
+ tCWmGLXDZVlDymgTzDSN3oMV5azQc+RBpLUlL9Y9yhhnhhsmEIoJzJYHzuWibRlI+72K
+ eln4Dds8//hHuMG6W0WHrYFgo1538WA/WUxZj/2q+CTQF/nF3uA3nmkcXo/ZLEq1N0ln
+ bhoy690ex9NUUNeZcMGKrLO/Vylwb7RmYmPPNahBMXJV1uQYtafE6ZXRuoC6yAOh5jqQ yA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs6kf72tv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Jun 2022 02:10:19 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25M26YLW038095;
+        Wed, 22 Jun 2022 02:10:18 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtd9usx3e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Jun 2022 02:10:18 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25M29Bim002724;
+        Wed, 22 Jun 2022 02:10:17 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtd9usx36-1;
+        Wed, 22 Jun 2022 02:10:17 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] samples: Use KSYM_NAME_LEN for kprobes
-Message-Id: <20220622110659.74a269678bc7c37e15cdebaf@kernel.org>
-In-Reply-To: <1654651402-21552-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1654651402-21552-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        bvanassche@acm.org, chanho61.park@samsung.com, beanhuo@micron.com,
+        avri.altman@wdc.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 1/3] ufs: host: ufs-exynos: remove unused defines
+Date:   Tue, 21 Jun 2022 22:10:11 -0400
+Message-Id: <165586371837.21830.10958074240808961453.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220615121204.16642-1-alim.akhtar@samsung.com>
+References: <CGME20220615121508epcas5p3a42f8503bb6c6120cb4c0606109fe9c4@epcas5p3.samsung.com> <20220615121204.16642-1-alim.akhtar@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: CUCMVEMO4qv7lXOpeiMuW5vVaQr5o8nv
+X-Proofpoint-GUID: CUCMVEMO4qv7lXOpeiMuW5vVaQr5o8nv
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,65 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 15 Jun 2022 17:42:02 +0530, Alim Akhtar wrote:
 
-On Wed,  8 Jun 2022 09:23:22 +0800
-Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-
-> It is better and enough to use KSYM_NAME_LEN for kprobes
-> in samples, no need to define and use the other values.
-
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
+> Remove #defines as those are not used anywhere in the driver file
 > 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  samples/kprobes/kprobe_example.c    | 5 ++---
->  samples/kprobes/kretprobe_example.c | 5 ++---
->  2 files changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
-> index f991a66..fd346f5 100644
-> --- a/samples/kprobes/kprobe_example.c
-> +++ b/samples/kprobes/kprobe_example.c
-> @@ -16,9 +16,8 @@
->  #include <linux/module.h>
->  #include <linux/kprobes.h>
->  
-> -#define MAX_SYMBOL_LEN	64
-> -static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
-> -module_param_string(symbol, symbol, sizeof(symbol), 0644);
-> +static char symbol[KSYM_NAME_LEN] = "kernel_clone";
-> +module_param_string(symbol, symbol, KSYM_NAME_LEN, 0644);
->  
->  /* For each probe you need to allocate a kprobe structure */
->  static struct kprobe kp = {
-> diff --git a/samples/kprobes/kretprobe_example.c b/samples/kprobes/kretprobe_example.c
-> index 228321e..cbf1654 100644
-> --- a/samples/kprobes/kretprobe_example.c
-> +++ b/samples/kprobes/kretprobe_example.c
-> @@ -23,11 +23,10 @@
->  #include <linux/module.h>
->  #include <linux/kprobes.h>
->  #include <linux/ktime.h>
-> -#include <linux/limits.h>
->  #include <linux/sched.h>
->  
-> -static char func_name[NAME_MAX] = "kernel_clone";
-> -module_param_string(func, func_name, NAME_MAX, S_IRUGO);
-> +static char func_name[KSYM_NAME_LEN] = "kernel_clone";
-> +module_param_string(func, func_name, KSYM_NAME_LEN, 0644);
->  MODULE_PARM_DESC(func, "Function to kretprobe; this module will report the"
->  			" function's execution time");
->  
-> -- 
-> 2.1.0
 > 
 
+Applied to 5.20/scsi-queue, thanks!
+
+[1/3] ufs: host: ufs-exynos: remove unused defines
+      https://git.kernel.org/mkp/scsi/c/6c6806abd5bb
+[2/3] ufs: host: ufs-exynos: use already existing define
+      https://git.kernel.org/mkp/scsi/c/cb2bf7c6e544
+[3/3] include: ufs: re-arrange addresses in increasing order
+      https://git.kernel.org/mkp/scsi/c/c0d93b12f31c
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Martin K. Petersen	Oracle Linux Engineering

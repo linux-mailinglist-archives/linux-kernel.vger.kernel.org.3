@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A01556EAC
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC12556EAB
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234293AbiFVWwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 18:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S1376657AbiFVWwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 18:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235515AbiFVWvs (ORCPT
+        with ESMTP id S1359771AbiFVWvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 18:51:48 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE9240A3E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:51:47 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id n197so13716696qke.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:51:47 -0700 (PDT)
+        Wed, 22 Jun 2022 18:51:49 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450FE41303
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:51:48 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id o43so27420978qvo.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VLpRj7ISmpLc7bYzOd0iAFFn8wSs/6G7/zuKg/d2BV4=;
-        b=uUovH7zphZj5j44vTCjc6fQKvn5vsTqcZUI+oVj1KSCucV7WrcEJQ8xUffNEA3EpXw
-         GDZIrTbjd/nV4pr6O7V+SKKTEYqB8ykmpL9P4Z5A7FiTLFLHAH9e+1C715gu+U1RgZmp
-         p9M3xiILqZ6xnVI8MP1Vs70BvMK0jUzTgAYIs=
+        bh=oulAy7NlmqgAX/AG2BIWch0UpN6lWOBq/Xx+LqGxyiU=;
+        b=Zd4Acj6vFejlAuM4LGySk0mn5EpwW09kqb0tPrWdZuUSIL1zdVj6CpnngjAG5CU35U
+         9yra0A4qcuU3QelVy9Thq3pL7e37068nnzNVRkCJG9aRq+zBR8VCYjCfHgtlXa90Ue4H
+         IGj41tdwPLrWondJBlm13KXtRnLZJprFieFjI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VLpRj7ISmpLc7bYzOd0iAFFn8wSs/6G7/zuKg/d2BV4=;
-        b=aQoHLfViZY6ZNlZV9A1caPmqaB5nNB7I7UAsVzP/+lOyD1QRfL8yaT+gFcSY6Y9K3Q
-         UiNNc1oH6TA9HU2bL0PwFt0s/L3by4dfWmASOpCwRU9bXOOn8apKi07umeruGpxYYiQj
-         x+jRlcCTgLqdbFtFr8DAzEOCZhgqLwJpg9Mwb/+/FPh3S3gEX9SwefSDswKeZjhZ9u5s
-         9F1u/0kCQzHmcwYqFzz0O2CMboAO3Edgq8VYsfk7DhZnakzogVc0eoHjR3NJ02bLtmc3
-         7vp3Ldk/bSElWirllL3zlvyjq9EIo6P/cD0XmmkpU16crZdDo6Rw4nkyHXp6mbNxAIc9
-         Xksw==
-X-Gm-Message-State: AJIora/o/5pgCrlo6nNb3NyUcUWeN+q2Wxac7FV6tKwxvl8z6kTQsA3S
-        bmYuallLLEdI4VcNh/0McLRZCA==
-X-Google-Smtp-Source: AGRyM1sPh4hJnzcz0VNfhHC4UeQg+s3UcijJzqY655+yVI85xyoOc6cAptRFlkJHV19NUU17LL9gZg==
-X-Received: by 2002:a37:c86:0:b0:6ae:ded5:2002 with SMTP id 128-20020a370c86000000b006aeded52002mr3616328qkm.594.1655938306664;
-        Wed, 22 Jun 2022 15:51:46 -0700 (PDT)
+        bh=oulAy7NlmqgAX/AG2BIWch0UpN6lWOBq/Xx+LqGxyiU=;
+        b=dV1EhxEze450Ji2XM1P0ciQ7PP+9pflsDkGpUnFAHXHer7PC2KLsV/5jMNgVw3j9vc
+         uKzU3sWD0m9cUrfu4gA1b4EjjbKH4Bkdnxqna2MCFriEVHAYQNcPb+IQ3+7WhtfKeprq
+         lrdjT+nKwyq5fiHvB49YE4U6cMZjc5cJIJcA9dwyI+Wauem8A1jolkRuBdKiRaHat0J1
+         +4duOkAM9FTA59SEyjby3pP1r+1iVZrEzej7GmqGmtCQaA8gN90FwYQdi2hqXCL+7fAy
+         t79TCsjq5u766vNxlVurivMhPqI0zWxfkC26hMkWhCyq2QKwxBAqacG3y/JC06mWsPxL
+         u/hw==
+X-Gm-Message-State: AJIora8n79w+44bc67w6DrhfxSXF3/vcQROVWsLXx8DoGo+49l0CO/Rm
+        m0QxeyINGCWEBuSAWHf2yskSXA==
+X-Google-Smtp-Source: AGRyM1uNf6I5+fQ6KcX/9MOZDknEktSDE/Z0l3YRPxDg86JuWUz6QknaienDhYHazulLUj/lBR6DPA==
+X-Received: by 2002:a0c:9066:0:b0:470:2b7a:2078 with SMTP id o93-20020a0c9066000000b004702b7a2078mr22020533qvo.51.1655938307947;
+        Wed, 22 Jun 2022 15:51:47 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
         by smtp.gmail.com with ESMTPSA id k66-20020a37a145000000b006ab91fd03fasm1794022qke.19.2022.06.22.15.51.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 15:51:46 -0700 (PDT)
+        Wed, 22 Jun 2022 15:51:47 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
         urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
         paulmck@kernel.org, rostedt@goodmis.org, vineeth@bitbyteword.org,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v2 6/8] rcuscale: Add test for using call_rcu_lazy() to emulate kfree_rcu()
-Date:   Wed, 22 Jun 2022 22:51:00 +0000
-Message-Id: <20220622225102.2112026-8-joel@joelfernandes.org>
+Subject: [PATCH v2 7/8] rcu/nocb: Rewrite deferred wake up logic to be more clean
+Date:   Wed, 22 Jun 2022 22:51:01 +0000
+Message-Id: <20220622225102.2112026-9-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 In-Reply-To: <20220622225102.2112026-1-joel@joelfernandes.org>
 References: <20220622225102.2112026-1-joel@joelfernandes.org>
@@ -69,191 +69,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reuse the kfree_rcu() test in order to be able to compare the memory reclaiming
-properties of call_rcu_lazy() with kfree_rcu().
+There are 2 things this function does:
+1. modify the gp wake timer.
+2. save the value of the strongest requested wake up so far.
 
-With this test, we find similar memory footprint and time call_rcu_lazy()
-free'ing takes compared to kfree_rcu(). Also we confirm that call_rcu_lazy()
-can survive OOM during extremely frequent calls.
+The strongest is "wake force" and the weakest is "lazy".
 
-If we really push it, i.e. boot system with low memory and compare
-kfree_rcu() with call_rcu_lazy(), I find that call_rcu_lazy() is more
-resilient and is much harder to produce OOM as compared to kfree_rcu().
+The existing logic already does the following:
+1. if the existing deferred wake is stronger than the requested one
+   (requested in waketype), modify the gp timer to be more in the
+   future. For example, if the existing one is WAKE and the new waketype
+   requested is BYPASS, then the timer is made to expire later than
+   earlier.
+
+2. even though the timer is modified in #1, a weaker waketype does not
+   end up changing rdp->nocb_gp_defer to be weaker. In other words,
+   ->nocb_gp_defer records the strongest waketype requested so far,
+   even though the timer may or may not be the soonest expiry possible.
+
+For simplicity, we write this logic using switch statements and
+consolidate some of the timer modification operations.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/rcu.h       |  6 ++++
- kernel/rcu/rcuscale.c  | 64 +++++++++++++++++++++++++++++++++++++++++-
- kernel/rcu/tree_nocb.h | 17 ++++++++++-
- 3 files changed, 85 insertions(+), 2 deletions(-)
+ kernel/rcu/tree_nocb.h | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 71c0f45e70c3..436faf80a66b 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -473,6 +473,12 @@ void do_trace_rcu_torture_read(const char *rcutorturename,
- 			       unsigned long c);
- void rcu_gp_set_torture_wait(int duration);
- void rcu_force_call_rcu_to_lazy(bool force);
-+
-+#if IS_ENABLED(CONFIG_RCU_SCALE_TEST)
-+unsigned long rcu_scale_get_jiffies_till_flush(void);
-+void rcu_scale_set_jiffies_till_flush(unsigned long j);
-+#endif
-+
- #else
- static inline void rcutorture_get_gp_data(enum rcutorture_type test_type,
- 					  int *flags, unsigned long *gp_seq)
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 277a5bfb37d4..58ee5c2cb37b 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -95,6 +95,7 @@ torture_param(int, verbose, 1, "Enable verbose debugging printk()s");
- torture_param(int, writer_holdoff, 0, "Holdoff (us) between GPs, zero to disable");
- torture_param(int, kfree_rcu_test, 0, "Do we run a kfree_rcu() scale test?");
- torture_param(int, kfree_mult, 1, "Multiple of kfree_obj size to allocate.");
-+torture_param(int, kfree_rcu_by_lazy, 0, "Use call_rcu_lazy() to emulate kfree_rcu()?");
- 
- static char *scale_type = "rcu";
- module_param(scale_type, charp, 0444);
-@@ -658,6 +659,13 @@ struct kfree_obj {
- 	struct rcu_head rh;
- };
- 
-+/* Used if doing RCU-kfree'ing via call_rcu_lazy(). */
-+void kfree_rcu_lazy(struct rcu_head *rh)
-+{
-+	struct kfree_obj *obj = container_of(rh, struct kfree_obj, rh);
-+	kfree(obj);
-+}
-+
- static int
- kfree_scale_thread(void *arg)
- {
-@@ -695,6 +703,11 @@ kfree_scale_thread(void *arg)
- 			if (!alloc_ptr)
- 				return -ENOMEM;
- 
-+			if (kfree_rcu_by_lazy) {
-+				call_rcu_lazy(&(alloc_ptr->rh), kfree_rcu_lazy);
-+				continue;
-+			}
-+
- 			// By default kfree_rcu_test_single and kfree_rcu_test_double are
- 			// initialized to false. If both have the same value (false or true)
- 			// both are randomly tested, otherwise only the one with value true
-@@ -737,6 +750,9 @@ kfree_scale_cleanup(void)
- {
- 	int i;
- 
-+	if (kfree_rcu_by_lazy)
-+		rcu_force_call_rcu_to_lazy(false);
-+
- 	if (torture_cleanup_begin())
- 		return;
- 
-@@ -766,11 +782,55 @@ kfree_scale_shutdown(void *arg)
- 	return -EINVAL;
- }
- 
-+// Used if doing RCU-kfree'ing via call_rcu_lazy().
-+unsigned long jiffies_at_lazy_cb;
-+struct rcu_head lazy_test1_rh;
-+int rcu_lazy_test1_cb_called;
-+void call_rcu_lazy_test1(struct rcu_head *rh)
-+{
-+	jiffies_at_lazy_cb = jiffies;
-+	WRITE_ONCE(rcu_lazy_test1_cb_called, 1);
-+}
-+
- static int __init
- kfree_scale_init(void)
- {
- 	long i;
- 	int firsterr = 0;
-+	unsigned long orig_jif, jif_start;
-+
-+	// Force all call_rcu() to call_rcu_lazy() so that non-lazy CBs
-+	// do not remove laziness of the lazy ones (since the test tries
-+	// to stress call_rcu_lazy() for OOM).
-+	//
-+	// Also, do a quick self-test to ensure laziness is as much as
-+	// expected.
-+	if (kfree_rcu_by_lazy) {
-+		/* do a test to check the timeout. */
-+		orig_jif = rcu_scale_get_jiffies_till_flush();
-+
-+		rcu_force_call_rcu_to_lazy(true);
-+		rcu_scale_set_jiffies_till_flush(2 * HZ);
-+		rcu_barrier();
-+
-+		jif_start = jiffies;
-+		jiffies_at_lazy_cb = 0;
-+		call_rcu_lazy(&lazy_test1_rh, call_rcu_lazy_test1);
-+
-+		smp_cond_load_relaxed(&rcu_lazy_test1_cb_called, VAL == 1);
-+
-+		rcu_scale_set_jiffies_till_flush(orig_jif);
-+
-+		if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start < 2 * HZ)) {
-+			pr_alert("Lazy CBs are not being lazy as expected!\n");
-+			return -1;
-+		}
-+
-+		if (WARN_ON_ONCE(jiffies_at_lazy_cb - jif_start > 3 * HZ)) {
-+			pr_alert("Lazy CBs are being too lazy!\n");
-+			return -1;
-+		}
-+	}
- 
- 	kfree_nrealthreads = compute_real(kfree_nthreads);
- 	/* Start up the kthreads. */
-@@ -783,7 +843,9 @@ kfree_scale_init(void)
- 		schedule_timeout_uninterruptible(1);
- 	}
- 
--	pr_alert("kfree object size=%zu\n", kfree_mult * sizeof(struct kfree_obj));
-+	pr_alert("kfree object size=%zu, kfree_rcu_by_lazy=%d\n",
-+			kfree_mult * sizeof(struct kfree_obj),
-+			kfree_rcu_by_lazy);
- 
- 	kfree_reader_tasks = kcalloc(kfree_nrealthreads, sizeof(kfree_reader_tasks[0]),
- 			       GFP_KERNEL);
 diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index b481f1ea57c0..255f2945b0fc 100644
+index 255f2945b0fc..67b0bd5d233a 100644
 --- a/kernel/rcu/tree_nocb.h
 +++ b/kernel/rcu/tree_nocb.h
-@@ -257,6 +257,21 @@ static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
- }
+@@ -282,6 +282,7 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+ {
+ 	unsigned long flags;
+ 	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
++	unsigned long mod_jif = 0;
  
- #define LAZY_FLUSH_JIFFIES (10 * HZ)
-+unsigned long jiffies_till_flush = LAZY_FLUSH_JIFFIES;
-+
-+#ifdef CONFIG_RCU_SCALE_TEST
-+void rcu_scale_set_jiffies_till_flush(unsigned long jif)
-+{
-+	jiffies_till_flush = jif;
-+}
-+EXPORT_SYMBOL(rcu_scale_set_jiffies_till_flush);
-+
-+unsigned long rcu_scale_get_jiffies_till_flush(void)
-+{
-+	return jiffies_till_flush;
-+}
-+EXPORT_SYMBOL(rcu_scale_get_jiffies_till_flush);
-+#endif
+ 	raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
  
- /*
-  * Arrange to wake the GP kthread for this NOCB group at some future
-@@ -275,7 +290,7 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+@@ -289,19 +290,31 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+ 	 * Bypass wakeup overrides previous deferments. In case
  	 * of callback storm, no need to wake up too early.
  	 */
- 	if (waketype == RCU_NOCB_WAKE_LAZY) {
--		mod_timer(&rdp_gp->nocb_timer, jiffies + LAZY_FLUSH_JIFFIES);
-+		mod_timer(&rdp_gp->nocb_timer, jiffies + jiffies_till_flush);
- 		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
- 	} else if (waketype == RCU_NOCB_WAKE_BYPASS) {
- 		mod_timer(&rdp_gp->nocb_timer, jiffies + 2);
+-	if (waketype == RCU_NOCB_WAKE_LAZY) {
+-		mod_timer(&rdp_gp->nocb_timer, jiffies + jiffies_till_flush);
+-		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
+-	} else if (waketype == RCU_NOCB_WAKE_BYPASS) {
+-		mod_timer(&rdp_gp->nocb_timer, jiffies + 2);
+-		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
+-	} else {
+-		if (rdp_gp->nocb_defer_wakeup < RCU_NOCB_WAKE)
+-			mod_timer(&rdp_gp->nocb_timer, jiffies + 1);
+-		if (rdp_gp->nocb_defer_wakeup < waketype)
+-			WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
++	switch (waketype) {
++		case RCU_NOCB_WAKE_LAZY:
++			mod_jif = jiffies_till_flush;
++			break;
++
++		case RCU_NOCB_WAKE_BYPASS:
++			mod_jif = 2;
++			break;
++
++		case RCU_NOCB_WAKE:
++		case RCU_NOCB_WAKE_FORCE:
++			// If the type of deferred wake is "stronger"
++			// than it was before, make it wake up the soonest.
++			if (rdp_gp->nocb_defer_wakeup < RCU_NOCB_WAKE)
++				mod_jif = 1;
++			break;
+ 	}
+ 
++	if (mod_jif)
++		mod_timer(&rdp_gp->nocb_timer, jiffies + mod_jif);
++
++	// If new type of wake up is strong than before, promote.
++	if (rdp_gp->nocb_defer_wakeup < waketype)
++		WRITE_ONCE(rdp_gp->nocb_defer_wakeup, waketype);
++
+ 	raw_spin_unlock_irqrestore(&rdp_gp->nocb_gp_lock, flags);
+ 
+ 	trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, reason);
 -- 
 2.37.0.rc0.104.g0611611a94-goog
 

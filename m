@@ -2,208 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E54554B6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D3D554B70
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbiFVNfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        id S1352309AbiFVNhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243581AbiFVNfn (ORCPT
+        with ESMTP id S234818AbiFVNhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:35:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F032FE43;
-        Wed, 22 Jun 2022 06:35:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6C4F61B0D;
-        Wed, 22 Jun 2022 13:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABC7C34114;
-        Wed, 22 Jun 2022 13:35:38 +0000 (UTC)
-Message-ID: <0455d962-d13e-9d88-c513-282defe07dd2@xs4all.nl>
-Date:   Wed, 22 Jun 2022 15:35:36 +0200
+        Wed, 22 Jun 2022 09:37:42 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077912FE43
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:37:42 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id g27so16815714wrb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SpcFGJ6n0+SK7F+o6tdzT8HyM1K20g6VGm8Wi083pY8=;
+        b=GE7NERFPHGya90Fo2c5HfH5TZdp/m3VdL8I9LBKctooLVvk4hWibY9l39gnm/B6/s9
+         BaQoVzoYRFIwbgHXaGBGkGZ92S8R+XoJfXCL7zDEha0goU/bT47tn+2YNy9n1npfLHYn
+         xtrvC2zzM4rvziWS7HJy0i4Eyra0hZai5beh92ZmgAvXk2BFHF30IRqLb8pD0qI98lI3
+         QF4/yOpc1lMRu5fztaoLa2cRT37IztSjT0hWe7EjZRHic4DxObSFy4j9utAhuTmdNdfP
+         fLrwicDzKqt1uHHX/9scFOI6B8Y925dC+NyS3b+6iRVQeY8kA5TMsEQ+ot4vSD+gQyZk
+         WoFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SpcFGJ6n0+SK7F+o6tdzT8HyM1K20g6VGm8Wi083pY8=;
+        b=WNz3mRyW9QqZJlmaX17orA81e7NpK6Te8Bv/P8cH5xvMtfrhaAHAN1O9uh3aXklIuu
+         rN2v4i6w80OAngEkN+f6mV3dRt2TW8nxvIn5QlFxC9kPZtW6wPKxnmr6YpJvQzmKDLJG
+         2EElQL+pFaDgt1OERU7zkRJVK7qaz8r2rhNOJOH5xb7xqrpM25m17cwZamp49fhn19TR
+         XXcxCHx/fZP46FbgOK0Md4UR4z2ejKtTt9AM0TvOneV4lrIjVi1a4vqdbl8yFzJsEiKE
+         4GxdhETvjsXExCt/nvn9gdqC0xYpzrClKVlBXjaRsCjP++nCn0T6LH9FJi8zJIbwPcsK
+         l9Fw==
+X-Gm-Message-State: AJIora+XxXrFkdibLH5qmI5W36HO0wWR3EInDVaH6UnIjObahurmBnR7
+        FBk/lmDoNY1O4l9LwfPAxsk=
+X-Google-Smtp-Source: AGRyM1s8Wc+wSV56bWU8opXAUT9pn07peusKs6xuDTYBu+MG5ACKUa56p1zZ4q/LzYn0J19u3adbFw==
+X-Received: by 2002:a5d:47a7:0:b0:218:5a5d:6c55 with SMTP id 7-20020a5d47a7000000b002185a5d6c55mr3394871wrb.192.1655905060476;
+        Wed, 22 Jun 2022 06:37:40 -0700 (PDT)
+Received: from [192.168.0.16] ([37.223.148.38])
+        by smtp.gmail.com with ESMTPSA id z6-20020a5d4d06000000b0021a3dd1c5d5sm16631151wrt.96.2022.06.22.06.37.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 06:37:39 -0700 (PDT)
+Message-ID: <e09a4f5e-8fbf-be3b-85af-a6dad347f67f@gmail.com>
+Date:   Wed, 22 Jun 2022 15:37:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v10 0/5] media: atmel: atmel-isc: implement media
- controller
+ Thunderbird/91.8.1
+Subject: Re: soc: mediatek: SVS: introduce MTK SVS engine
 Content-Language: en-US
-To:     Eugen.Hristev@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Claudiu.Beznea@microchip.com, Nicolas.Ferre@microchip.com,
-        jacopo@jmondi.org
-References: <20220503095127.48710-1-eugen.hristev@microchip.com>
- <1da61f9c-0605-dc9d-63a3-21c18fcb74c7@xs4all.nl>
- <a19d9e72-7609-1daa-93eb-fdedcaa672c4@microchip.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <a19d9e72-7609-1daa-93eb-fdedcaa672c4@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
+        Roger Lu <roger.lu@mediatek.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <7f995d57-c40b-6c32-e776-677ae1496769@gmail.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <7f995d57-c40b-6c32-e776-677ae1496769@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eugen,
+Hi Colin,
 
-On 22/06/2022 14:25, Eugen.Hristev@microchip.com wrote:
-> On 6/22/22 2:53 PM, Hans Verkuil wrote:
->> Hi Eugen,
->>
->> On 03/05/2022 11:51, Eugen Hristev wrote:
->>> This series is a split from the series :
->>> [PATCH v9 00/13] media: atmel: atmel-isc: implement media controller
->>> and it includes the media controller part.
->>> previous fixes were sent on a different patch series.
->>>
->>> As discussed on the ML, moving forward with having the media link validate at
->>> start/stop streaming call.
->>> I will test the patch :
->>> [RFC PATCHv2] vb2: add support for (un)prepare_streaming queue ops
->>> afterwards, but that patch requires moving my logic to the new vb2 callbacks.
->>
->> I'm looking at merging this series, but I would like to have the output of
->> 'v4l2-compliance -m /dev/mediaX' to verify that the MC links etc. is all
->> correct.
+On 22/06/2022 14:02, Colin King (gmail) wrote:
+> Hi,
 > 
-> Hello Hans,
+> static analysis on linux-next with clang scan-build has detected a null pointer 
+> dereference in the following commit:
 > 
-> Please have a look at attached file . Unless you want me to add the 
-> whole output to the e-mail ?
-
-No, this is fine, thank you!
-
+> commit 681a02e9500073cd8b9c25a04f06166254b5a879
+> Author: Roger Lu <roger.lu@mediatek.com>
+> Date:   Mon May 16 08:43:07 2022 +0800
 > 
-> I also added output of media-ctl -p for your convenience.
-> the subdev2 is a device and driver that is not upstream and has some 
-> compliance issues, they are reported by the v4l2-compliance tool, but 
-> they should not affect this series, it's a synopsys driver that was 
-> rejected on mainline a few years ago, I took it for internal usage, but 
-> it's not cleaned up nor worked a lot upon.
-
-OK, good to know.
-
-From the compliance output:
-
-	v4l2-compliance 1.22.1, 32 bits, 32-bit time_t
-
-This is an old v4l2-compliance version. Compile it directly from the
-v4l-utils git repo and check the output again.
-
-	Compliance test for atmel_isc_commo device /dev/media0:
-
-As you can see, the driver name is cut off. Isn't 'atmel-isc'
-a better name?
-
+>      soc: mediatek: SVS: introduce MTK SVS engine
 > 
->>
->> And one more question which may have been answered already in the past:
->>
->> Changing to the MC will break existing applications, doesn't it? Or did I
->> miss something?
->>
 > 
-> The existing applications will have to configure the pipeline now. It 
-> will no longer work by configuring just the top video node /dev/video0 .
-> They would have to use media-ctl for it, something similar with this set 
-> of commands:
+> The issue is as follows:
 > 
-> media-ctl -d /dev/media0 --set-v4l2 '"imx219 
-> 1-0010":0[fmt:SRGGB10_1X10/1920x1080]'
-> media-ctl -d /dev/media0 --set-v4l2 
-> '"dw-csi.0":0[fmt:SRGGB10_1X10/1920x1080]'
-> media-ctl -d /dev/media0 --set-v4l2 '"csi2dc":0[fmt:SRGGB10_1X10/1920x1080]'
-> media-ctl -d /dev/media0 --set-v4l2 
-> '"atmel_isc_scaler":0[fmt:SRGGB10_1X10/1920x1080]'
+> static irqreturn_t svs_isr(int irq, void *data)
+> {
+>          struct svs_platform *svsp = data;
+>          struct svs_bank *svsb = NULL;
+>          unsigned long flags;
+>          u32 idx, int_sts, svs_en;
+> 
+>          for (idx = 0; idx < svsp->bank_max; idx++) {
+>                  svsb = &svsp->banks[idx];
+>                  WARN(!svsb, "%s: svsb(%s) is null", __func__, svsb->name);
+>                  spin_lock_irqsave(&svs_lock, flags);
+>                  svsp->pbank = svsb;
+> 
+> 
+> If svsb is null, then the WARN message will dereference it when printing 
+> svsb->name.  Also, subsequent dereferences to sbsv will cause a null pointer 
+> dereference, for example the svsp->pbank assignment.
+> 
+> Colin
 
-I'd like to see this documented in a new
-Documentation/admin-guide/media/atmel-isc.rst file. That can be a new patch.
+The banks and bank_max are defined on a per SoC basis in the platform data [1]. 
+The case that svsb is null would hint to a incorrect platform data. So I think 
+that there is no real issue we need to fix.
 
 Regards,
+Matthias
 
-	Hans
 
-> 
-> Thank you for taking care of this !
-> 
-> Eugen
-> 
->> Regards,
->>
->>          Hans
->>
->>>
->>> Full series history:
->>>
->>> Changes in v10:
->>> -> split the series into this first fixes part.
->>> -> moved IO_MC addition from first patch to the second patch on the driver changes
->>> -> edited commit messages
->>> -> DT nodes now disabled by default.
->>>
->>> Changes in v9:
->>> -> kernel robot reported isc_link_validate is not static, changed to static.
->>>
->>> Changes in v8:
->>> -> scaler: modified crop bounds to have the exact source size
->>>
->>> Changes in v7:
->>> -> scaler: modified crop bounds to have maximum isc size
->>> -> format propagation: did small changes as per Jacopo review
->>>
->>>
->>> Changes in v6:
->>> -> worked a bit on scaler, added try crop and other changes as per Jacopo review
->>> -> worked on isc-base enum_fmt , reworked as per Jacopo review
->>>
->>> Changes in v5:
->>> -> removed patch that removed the 'stop' variable as it was still required
->>> -> added two new trivial patches
->>> -> reworked some parts of the scaler and format propagation after discussions with Jacopo
->>>
->>>
->>> Changes in v4:
->>> -> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
->>> one patch that was using it
->>> -> as reviewed by Jacopo, reworked some parts of the media controller implementation
->>>
->>>
->>> Changes in v3:
->>> - change in bindings, small fixes in csi2dc driver and conversion to mc
->>> for the isc-base.
->>> - removed some MAINTAINERS patches and used patterns in MAINTAINERS
->>>
->>> Changes in v2:
->>> - integrated many changes suggested by Jacopo in the review of the v1 series.
->>> - add a few new patches
->>>
->>> Eugen Hristev (5):
->>>    media: atmel: atmel-isc: prepare for media controller support
->>>    media: atmel: atmel-isc: implement media controller
->>>    ARM: dts: at91: sama7g5: add nodes for video capture
->>>    ARM: configs: at91: sama7: add xisc and csi2dc
->>>    ARM: multi_v7_defconfig: add atmel video pipeline modules
->>>
->>>   arch/arm/boot/dts/sama7g5.dtsi                |  51 ++
->>>   arch/arm/configs/multi_v7_defconfig           |   3 +
->>>   arch/arm/configs/sama7_defconfig              |   2 +
->>>   drivers/media/platform/atmel/Makefile         |   2 +-
->>>   drivers/media/platform/atmel/atmel-isc-base.c | 485 +++++++++---------
->>>   .../media/platform/atmel/atmel-isc-scaler.c   | 267 ++++++++++
->>>   drivers/media/platform/atmel/atmel-isc.h      |  50 +-
->>>   .../media/platform/atmel/atmel-sama5d2-isc.c  |  34 +-
->>>   .../media/platform/atmel/atmel-sama7g5-isc.c  |  32 +-
->>>   9 files changed, 685 insertions(+), 241 deletions(-)
->>>   create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
->>>
->>
-> 
-
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/tree/drivers/soc/mediatek/mtk-svs.c?h=v5.19-next/soc#n2237

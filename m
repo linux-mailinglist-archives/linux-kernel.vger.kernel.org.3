@@ -2,180 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1DB556DBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D10E556DC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 23:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357937AbiFVVNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 17:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S1344588AbiFVVWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 17:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344588AbiFVVMz (ORCPT
+        with ESMTP id S230465AbiFVVWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 17:12:55 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96BAB4;
-        Wed, 22 Jun 2022 14:12:51 -0700 (PDT)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1ABC64000B;
-        Wed, 22 Jun 2022 21:12:47 +0000 (UTC)
-Message-ID: <b89a4d69-9ec8-10f1-363a-523eb451ccf8@ovn.org>
-Date:   Wed, 22 Jun 2022 23:12:47 +0200
+        Wed, 22 Jun 2022 17:22:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD9E1CB2C;
+        Wed, 22 Jun 2022 14:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655932926; x=1687468926;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wbr1pl9iV24n71aLN4ufD61f/bpnnMShwneyl4/fWGA=;
+  b=bwKae3CUuC9IdN2uQOlC6U5CsF9KIRAIYavnleRAqTJl+fhf35ACxi0g
+   KgL99B9BGNlkj9ehOoY+L34ocuu9K+19J6gaTUfqSjV3YQUf6glFrRQLb
+   8c+jaPl+IqD7OXvWsOC0dunKA2pWW/2roY2oZX29Dl7boc2YfvkZazmvi
+   AL54Iy2+ic4XpGP2pzrqmm4cX3dO6OXjHF9OIY06Y4g5PUebXjizw8MUp
+   G10SYYicNcgo7liZDavW8wD/ezXZjzzrIffVwYa5XNvyMSoao+DWTb81T
+   SUUNivuNFUSq+7SANNPiiMxO9UQ/pZfjokn3nJGRHelgMRDeP+lTfw3VJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="366871337"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="366871337"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 14:22:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="677755811"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Jun 2022 14:22:02 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o47nW-0001hj-22;
+        Wed, 22 Jun 2022 21:22:02 +0000
+Date:   Thu, 23 Jun 2022 05:21:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>, y@qualcomm.com,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_sbillaka@quicinc.com
+Subject: Re: [v3 5/5] drm/msm/disp/dpu1: add PSR support for eDP interface in
+ dpu driver
+Message-ID: <202206230551.H0oXeV2E-lkp@intel.com>
+References: <1655808800-3996-6-git-send-email-quic_vpolimer@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     i.maximets@ovn.org,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Florian Westphal <fw@strlen.de>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-References: <20220619003919.394622-1-i.maximets@ovn.org>
- <CANn89iL_EmkEgPAVdhNW4tyzwQbARyji93mUQ9E2MRczWpNm7g@mail.gmail.com>
- <20220622102813.GA24844@breakpoint.cc>
- <CANn89iLGKbeeBNoDQU9C7nPRCxc6FUsrwn0LfrAKrJiJ14PH+w@mail.gmail.com>
- <c7ab4a7b-a987-e74b-dd2d-ee2c8ca84147@ovn.org>
- <CANn89iLxqae9wZ-h5M-whSsmAZ_7hW1e_=krvSyF8x89Y6o76w@mail.gmail.com>
- <068ad894-c60f-c089-fd4a-5deda1c84cdd@ovn.org>
- <CANn89iJ=Xc57pdZ-NaRF7FXZnq2skh5MJ3aDtDCGp8RNG4oowA@mail.gmail.com>
- <CANn89i+yy3mL2BUT=uhhkACVviWXCA9fdE1mrG=ZMuSQKdK8SQ@mail.gmail.com>
- <CANn89iLVHAE5aMwo0dow14mdFK0JjokE9y5KV+67AxKJdSjx=w@mail.gmail.com>
- <CANn89i+5pWbXyFBnMqdfz6SqRV9enFNHbcd_2irJub1Ag7vxNw@mail.gmail.com>
- <673a6f2b-dab2-e00f-b37c-15f8775b2121@ovn.org>
- <CANn89i+a6nd=80X-7p+GLq9Tvx7QjRYHkHVJgrjJu_UO30+SDQ@mail.gmail.com>
- <CANn89i+en=eU3L1kCcn41+-MRuoge0KHwcLHY3ah8TRmLMaMvg@mail.gmail.com>
-From:   Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [PATCH net] net: ensure all external references are released in
- deferred skbuffs
-In-Reply-To: <CANn89i+en=eU3L1kCcn41+-MRuoge0KHwcLHY3ah8TRmLMaMvg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655808800-3996-6-git-send-email-quic_vpolimer@quicinc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/22 21:27, Eric Dumazet wrote:
-> On Wed, Jun 22, 2022 at 9:04 PM Eric Dumazet <edumazet@google.com> wrote:
->>
->> On Wed, Jun 22, 2022 at 8:19 PM Ilya Maximets <i.maximets@ovn.org> wrote:
->>>
->>> On 6/22/22 19:03, Eric Dumazet wrote:
->>>> On Wed, Jun 22, 2022 at 6:47 PM Eric Dumazet <edumazet@google.com> wrote:
->>>>>
->>>>> On Wed, Jun 22, 2022 at 6:39 PM Eric Dumazet <edumazet@google.com> wrote:
->>>>>>
->>>>>> On Wed, Jun 22, 2022 at 6:29 PM Eric Dumazet <edumazet@google.com> wrote:
->>>>>>>
->>>>>>> On Wed, Jun 22, 2022 at 4:26 PM Ilya Maximets <i.maximets@ovn.org> wrote:
->>>>>>>>
->>>>>>>> On 6/22/22 13:43, Eric Dumazet wrote:
->>>>>>>
->>>>>>>>
->>>>>>>> I tested the patch below and it seems to fix the issue seen
->>>>>>>> with OVS testsuite.  Though it's not obvious for me why this
->>>>>>>> happens.  Can you explain a bit more?
->>>>>>>
->>>>>>> Anyway, I am not sure we can call nf_reset_ct(skb) that early.
->>>>>>>
->>>>>>> git log seems to say that xfrm check needs to be done before
->>>>>>> nf_reset_ct(skb), I have no idea why.
->>>>>>
->>>>>> Additional remark: In IPv6 side, xfrm6_policy_check() _is_ called
->>>>>> after nf_reset_ct(skb)
->>>>>>
->>>>>> Steffen, do you have some comments ?
->>>>>>
->>>>>> Some context:
->>>>>> commit b59c270104f03960069596722fea70340579244d
->>>>>> Author: Patrick McHardy <kaber@trash.net>
->>>>>> Date:   Fri Jan 6 23:06:10 2006 -0800
->>>>>>
->>>>>>     [NETFILTER]: Keep conntrack reference until IPsec policy checks are done
->>>>>>
->>>>>>     Keep the conntrack reference until policy checks have been performed for
->>>>>>     IPsec NAT support. The reference needs to be dropped before a packet is
->>>>>>     queued to avoid having the conntrack module unloadable.
->>>>>>
->>>>>>     Signed-off-by: Patrick McHardy <kaber@trash.net>
->>>>>>     Signed-off-by: David S. Miller <davem@davemloft.net>
->>>>>>
->>>>>
->>>>> Oh well... __xfrm_policy_check() has :
->>>>>
->>>>> nf_nat_decode_session(skb, &fl, family);
->>>>>
->>>>> This  answers my questions.
->>>>>
->>>>> This means we are probably missing at least one XFRM check in TCP
->>>>> stack in some cases.
->>>>> (Only after adding this XFRM check we can call nf_reset_ct(skb))
->>>>>
->>>>
->>>> Maybe this will help ?
->>>
->>> I tested this patch and it seems to fix the OVS problem.
->>> I did not test the xfrm part of it.
->>>
->>> Will you post an official patch?
->>
->> Yes I will. I need to double check we do not leak either the req, or the child.
->>
->> Maybe the XFRM check should be done even earlier, on the listening socket ?
->>
->> Or if we assume the SYNACK packet has been sent after the XFRM test
->> has been applied to the SYN,
->> maybe we could just call nf_reset_ct(skb) to lower risk of regressions.
->>
->> With the last patch, it would be strange that we accept the 3WHS and
->> establish a socket,
->> but drop the payload in the 3rd packet...
-> 
-> Ilya, can you test the following patch ?
+Hi Vinod,
 
-Tested with OVS and it works fine, the issue doesn't appear.
-Still didn't test the xfrm part, as I'm not sure how.
+Thank you for the patch! Perhaps something to improve:
 
-> I think it makes more sense to let XFRM reject the packet earlier, and
-> not complete the 3WHS,
-> if for some reason this happens.
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-exynos/exynos-drm-next drm-tip/drm-tip tegra-drm/drm/tegra/for-next linus/master v5.19-rc3 next-20220622]
+[cannot apply to drm-intel/for-linux-next airlied/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-OK.  However, now the patch looks more like two separate fixes.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vinod-Polimera/drm-msm-dp-Add-basic-PSR-support-for-eDP/20220621-195406
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arm64-randconfig-r025-20220622 (https://download.01.org/0day-ci/archive/20220623/202206230551.H0oXeV2E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/2c3c31343481a4faf2402cf513c85fb7d75ce205
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vinod-Polimera/drm-msm-dp-Add-basic-PSR-support-for-eDP/20220621-195406
+        git checkout 2c3c31343481a4faf2402cf513c85fb7d75ce205
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> 
-> Thanks !
-> 
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index fe8f23b95d32ca4a35d05166d471327bc608fa91..da5a3c44c4fb70f1d3ecc596e694a86267f1c44a
-> 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -1964,7 +1964,10 @@ int tcp_v4_rcv(struct sk_buff *skb)
->                 struct sock *nsk;
-> 
->                 sk = req->rsk_listener;
-> -               drop_reason = tcp_inbound_md5_hash(sk, skb,
-> +               if (!xfrm4_policy_check(sk, XFRM_POLICY_IN, skb))
-> +                       drop_reason = SKB_DROP_REASON_XFRM_POLICY;
-> +               else
-> +                       drop_reason = tcp_inbound_md5_hash(sk, skb,
->                                                    &iph->saddr, &iph->daddr,
->                                                    AF_INET, dif, sdif);
->                 if (unlikely(drop_reason)) {
-> @@ -2016,6 +2019,7 @@ int tcp_v4_rcv(struct sk_buff *skb)
->                         }
->                         goto discard_and_relse;
->                 }
-> +               nf_reset_ct(skb);
->                 if (nsk == sk) {
->                         reqsk_put(req);
->                         tcp_v4_restore_cb(skb);
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c:1064:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+                   drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+                   ^
+   include/drm/drm_encoder.h:314:3: note: expanded from macro 'drm_for_each_encoder_mask'
+                   for_each_if ((encoder_mask) & drm_encoder_mask(encoder))
+                   ^
+   include/drm/drm_util.h:63:53: note: expanded from macro 'for_each_if'
+   #define for_each_if(condition) if (!(condition)) {} else
+                                                       ^
+   1 warning generated.
+
+
+vim +1064 drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1032  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1033  static void dpu_crtc_enable(struct drm_crtc *crtc,
+351f950db4ab28 Maxime Ripard     2020-10-08  1034  		struct drm_atomic_state *state)
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1035  {
+e12e5263bf1d8d Rob Clark         2020-09-07  1036  	struct dpu_crtc *dpu_crtc = to_dpu_crtc(crtc);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1037  	struct drm_encoder *encoder;
+35c719da95c0d2 Rob Clark         2020-08-11  1038  	bool request_bandwidth = false;
+2c3c31343481a4 Vinod Polimera    2022-06-21  1039  	struct drm_crtc_state *old_crtc_state;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1040  
+2c3c31343481a4 Vinod Polimera    2022-06-21  1041  	old_crtc_state = drm_atomic_get_old_crtc_state(state, crtc);
+b77d0f0d4ee757 Sean Paul         2018-11-16  1042  	pm_runtime_get_sync(crtc->dev->dev);
+b77d0f0d4ee757 Sean Paul         2018-11-16  1043  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1044  	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1045  
+241b507c166fef Rob Clark         2019-08-20  1046  	drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask) {
+241b507c166fef Rob Clark         2019-08-20  1047  		/* in video mode, we hold an extra bandwidth reference
+241b507c166fef Rob Clark         2019-08-20  1048  		 * as we cannot drop bandwidth at frame-done if any
+241b507c166fef Rob Clark         2019-08-20  1049  		 * crtc is being used in video mode.
+241b507c166fef Rob Clark         2019-08-20  1050  		 */
+241b507c166fef Rob Clark         2019-08-20  1051  		if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
+241b507c166fef Rob Clark         2019-08-20  1052  			request_bandwidth = true;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1053  		dpu_encoder_register_frame_event_callback(encoder,
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1054  				dpu_crtc_frame_event_cb, (void *)crtc);
+241b507c166fef Rob Clark         2019-08-20  1055  	}
+241b507c166fef Rob Clark         2019-08-20  1056  
+241b507c166fef Rob Clark         2019-08-20  1057  	if (request_bandwidth)
+241b507c166fef Rob Clark         2019-08-20  1058  		atomic_inc(&_dpu_crtc_get_kms(crtc)->bandwidth_ref);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1059  
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1060  	trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1061  	dpu_crtc->enabled = true;
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1062  
+2c3c31343481a4 Vinod Polimera    2022-06-21  1063  	if (!old_crtc_state->self_refresh_active)
+a796ba2cb3dde3 Sean Paul         2018-11-16 @1064  		drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+a796ba2cb3dde3 Sean Paul         2018-11-16  1065  			dpu_encoder_assign_crtc(encoder, crtc);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1066  
+2f2eb723b50b4d Rajesh Yadav      2018-07-13  1067  	/* Enable/restore vblank irq handling */
+2f2eb723b50b4d Rajesh Yadav      2018-07-13  1068  	drm_crtc_vblank_on(crtc);
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1069  }
+25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1070  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECE3554928
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372805546FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357428AbiFVLRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S1357535AbiFVLSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357187AbiFVLQ5 (ORCPT
+        with ESMTP id S1357278AbiFVLRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:16:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7CD3BA79;
-        Wed, 22 Jun 2022 04:16:53 -0700 (PDT)
+        Wed, 22 Jun 2022 07:17:32 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F993C4B9;
+        Wed, 22 Jun 2022 04:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655896614; x=1687432614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MLLOeP/ifnd8x8DPdN0jA/knFVmnzPBL5uESewLgq68=;
-  b=PxC13SO71uBEcv6m4uBD4RrUx9kzPQIiL3Y+8M0TtAas1pNwiRbjCbDP
-   FlA7jL1vjbcnj50X2p+YhMEK/3DJ7YT/XKgb9/hOfS3UU4Tf2Piv7mEbj
-   d8xCkfSpnj+yLNonKCpvzTOgdH5VR510OVdJnXSlo8BuPpkyDfNKSfVHZ
-   upfSr6MOxGLpcyBN0uityuDFoPcwUUoq33F2S5/6MHkN6pCKHqQVeggQP
-   eWyB4lAR0F6vZ7cdsDqBTR5ppzVfEFJgF/9BUe7pC7bUz8tJuPlXoAJgZ
-   oUilmYOU1ZeBbkhT+ELOwpqqpRAIUkEn0YCUhVhBaQKpl1Vhg9wWuJqTh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281120406"
+  t=1655896640; x=1687432640;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Fm6WKLtKp2WdA8yKi9Sm82sS1NqYszbzPYmVtNEb02k=;
+  b=Vi7Dkcac7NdvqiE64lkkXvNI8YUa/uWy1MsX9PBNPcx32Y7/W9mL98PX
+   ZEy9dABlMRMLvm+MFNCW2by7a8/gzQo47H9fXcySyl56nwnpDgg+QpdSr
+   yaxHgFm3q1L+tkYP7sEH1Hb21Qh8lcFMSpy4lbQoE1kAAEv1WEKEInqp0
+   OM1Xql84vZptKBJFwwu0uqMCS1vqFQEpP/XRnM1pVXKXAk5bixvMmikVK
+   cJAjade1T6AyY3eHbOWlEdD1b+HOwKqhpRA35crQ8JK9S894KeK7zHwfX
+   AM+UyM5SkugwTMGeO5U/7h4ALjUMah+SbKlqzhdnJY9n+eoVD57NmheOg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281464711"
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="281120406"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:16:53 -0700
+   d="scan'208";a="281464711"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:17:20 -0700
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="677489669"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:16:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o3yLn-000sHA-U0;
-        Wed, 22 Jun 2022 14:16:47 +0300
-Date:   Wed, 22 Jun 2022 14:16:47 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org, djrscally@gmail.com,
-        sakari.ailus@linux.intel.com
-Subject: Re: [PATCH -next v2] media: ov7251: add missing disable functions on
- error in ov7251_set_power_on()
-Message-ID: <YrL6H6Dfp/z3hNhl@smile.fi.intel.com>
-References: <20220622044243.2900783-1-yangyingliang@huawei.com>
+   d="scan'208";a="730302229"
+Received: from jmatsis-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.178.197])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 04:17:16 -0700
+From:   Kai Huang <kai.huang@intel.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com, kai.huang@intel.com
+Subject: [PATCH v5 10/22] x86/virt/tdx: Do logical-cpu scope TDX module initialization
+Date:   Wed, 22 Jun 2022 23:16:59 +1200
+Message-Id: <41c84840443d7ba5fa2d23a5b96784d704a32a05.1655894131.git.kai.huang@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1655894131.git.kai.huang@intel.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622044243.2900783-1-yangyingliang@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 12:42:43PM +0800, Yang Yingliang wrote:
-> Add the missing gpiod_set_value_cansleep() and clk_disable_unprepare()
-> before return from ov7251_set_power_on() in the error handling case.
+After the global module initialization, the next step is logical-cpu
+scope module initialization.  Logical-cpu initialization requires
+calling TDH.SYS.LP.INIT on all BIOS-enabled CPUs.  This SEAMCALL can run
+concurrently on all CPUs.
 
-This makes sense to me from code flow perspective.
+Use the helper introduced for shutting down the module to do logical-cpu
+scope initialization.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Kai Huang <kai.huang@intel.com>
+---
+ arch/x86/virt/vmx/tdx/tdx.c | 15 +++++++++++++++
+ arch/x86/virt/vmx/tdx/tdx.h |  1 +
+ 2 files changed, 16 insertions(+)
 
-> Fixes: 9e1d3012cc10 ("media: i2c: Remove .s_power() from ov7251")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2:
->   - add gpiod_set_value_cansleep()
->   - also change the patch title and commit message
-> ---
->  drivers/media/i2c/ov7251.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
-> index 0e7be15bc20a..ad9689820ecc 100644
-> --- a/drivers/media/i2c/ov7251.c
-> +++ b/drivers/media/i2c/ov7251.c
-> @@ -934,6 +934,8 @@ static int ov7251_set_power_on(struct device *dev)
->  					ARRAY_SIZE(ov7251_global_init_setting));
->  	if (ret < 0) {
->  		dev_err(ov7251->dev, "error during global init\n");
-> +		gpiod_set_value_cansleep(ov7251->enable_gpio, 0);
-> +		clk_disable_unprepare(ov7251->xclk);
->  		ov7251_regulators_disable(ov7251);
->  		return ret;
->  	}
-> -- 
-> 2.25.1
-> 
-
+diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+index de4efc16ed45..f3f6e20aa30e 100644
+--- a/arch/x86/virt/vmx/tdx/tdx.c
++++ b/arch/x86/virt/vmx/tdx/tdx.c
+@@ -195,6 +195,15 @@ static int tdx_module_init_global(void)
+ 	return ret ? -EFAULT : 0;
+ }
+ 
++static int tdx_module_init_cpus(void)
++{
++	struct seamcall_ctx sc = { .fn = TDH_SYS_LP_INIT };
++
++	seamcall_on_each_cpu(&sc);
++
++	return atomic_read(&sc.err);
++}
++
+ /*
+  * Detect and initialize the TDX module.
+  *
+@@ -219,6 +228,12 @@ static int init_tdx_module(void)
+ 	if (ret)
+ 		goto out;
+ 
++	/* Logical-cpu scope initialization */
++	ret = tdx_module_init_cpus();
++	if (ret)
++		goto out;
++
++
+ 	/*
+ 	 * Return -EINVAL until all steps of TDX module initialization
+ 	 * process are done.
+diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+index 9e694789eb91..56164bf27378 100644
+--- a/arch/x86/virt/vmx/tdx/tdx.h
++++ b/arch/x86/virt/vmx/tdx/tdx.h
+@@ -50,6 +50,7 @@
+  * TDX module SEAMCALL leaf functions
+  */
+ #define TDH_SYS_INIT		33
++#define TDH_SYS_LP_INIT		35
+ #define TDH_SYS_LP_SHUTDOWN	44
+ 
+ /*
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.36.1
 

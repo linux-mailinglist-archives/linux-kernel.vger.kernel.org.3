@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9F8554208
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 07:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0C855422C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 07:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356677AbiFVFLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 01:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
+        id S1356859AbiFVFQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 01:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237181AbiFVFK7 (ORCPT
+        with ESMTP id S237181AbiFVFQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 01:10:59 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC8235DC1;
-        Tue, 21 Jun 2022 22:10:58 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25M5AlX3046837;
-        Wed, 22 Jun 2022 00:10:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655874647;
-        bh=DrZQGD4CPguty23X5d/nt0agTy8fsBIfOiO5YBoPvw8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Qd3b+IQ3DoQyt4rNSzOQZJz0ssieZLV9V3l0telKS4KENOkt/SIfLo274MZKi/avO
-         sxVteNJ9EXiZQgVT9DiKTh0e4AksPDOVZav+k9mHjtufASRXBrJTscHE2xbCW06mmP
-         i8k/wYNzi4rwEIADLTzF8maQsUet8u/zvCKRYbA4=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25M5AlEu037496
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 22 Jun 2022 00:10:47 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 22
- Jun 2022 00:10:47 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 22 Jun 2022 00:10:47 -0500
-Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25M5Ah6t022819;
-        Wed, 22 Jun 2022 00:10:44 -0500
-Message-ID: <4bc63a00-a220-e9b8-49ff-8c2d783b55f5@ti.com>
-Date:   Wed, 22 Jun 2022 10:40:42 +0530
+        Wed, 22 Jun 2022 01:16:18 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E2636145
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 22:16:18 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 713ED5C0085;
+        Wed, 22 Jun 2022 01:16:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 22 Jun 2022 01:16:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1655874977; x=
+        1655961377; bh=raNbZ5XrTaJju1j0bn9K1zUDHO3TU92MxD3fSTWP0rs=; b=q
+        vdtq3WjDZiEK5YG9tchH647p/Iw/Y5Zs7hMfLZkyFMvl+ffhtGzPt/ILO9t/J4pY
+        aVh6OCUixEJv78Ux+OHNZvJwyAK5CgKVQxx1AiHax5x5K8xTi8IbgCNWVvn2OOX/
+        4p+2g7+hhbEgfpbb/QUIf/61BGVvunohHXeGWVNq24IKYBn9+QRYAGHG17Tf3jgl
+        CYCvRfQqKUPXN6YBCDs3epBhPSd2GHdO2hpHdWBimj8pV8IC26DcQLR6w0Rb51DO
+        ngUg5fwmsSj9LTy6HcxGB/vnOXMk6E1YC4VvC3Xl2lqbgZd3FcR5lJbJ4JgPly51
+        iSeHDn5HYcj8ghd8WJqXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655874977; x=
+        1655961377; bh=raNbZ5XrTaJju1j0bn9K1zUDHO3TU92MxD3fSTWP0rs=; b=x
+        WhshaypefrwmpT1bwf3HCZBvc4U7xKpYZ/Tgu8AyTFwK74d1VX3NPQNHFDf42WsS
+        tMP4C8joE2oEk6zKYmJOSpa7DCkVyaEX9RtGiUEq26y48T5p+qf3GNmFxR2WHpG/
+        BZeESjon+nMKiXRkikeVNcqnPOFtwJ1G4qH8lktmfFIE3Dhy/0F0hH4Yw9dy0fRT
+        ZIv9LM1+63kg1/pNjNRt89GFHgIoGBTFYkDaFdXZJXKKp5qd1OrzW9u1tB3vg2Qj
+        /MpHOCjqiiUW2qXYwrtZdz1idZIvZgPAYf8sHYcuFvoONwzjPMkvOlytjvSuwjXx
+        OSpuKtY/7vIc1ANK/i/Xw==
+X-ME-Sender: <xms:oaWyYsCjSgg5cbgE8Hrl1-4Uh7lj1ynHoXi-nFiszyd1h9_-QlrhmQ>
+    <xme:oaWyYuhU3FOPWNk33MayY29C3KnW9OXvBZEKrH9XhO__Dkyr6lPOvOvZxBdsWqr-k
+    OxnzEdEgNFEu1ILDw>
+X-ME-Received: <xmr:oaWyYvnuWBbobhQNwfP-tuYSqgx_8NQdUeBKN7k4ziDIL3WtFJApT7Q94T6mrD1-fh4W4fEphn4c8wJ7fajR1VNTFqL42vfQ82oT3BXFrN53d2B4AsOrck9xFA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgedgleegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:oaWyYiziAOsu4ceIlQgNl01DIuw3FK6LeRyciThy9lRTP86LKkjeaw>
+    <xmx:oaWyYhSZZ7-FVHlReemQFpwH92FS8WiyaufgGfeycagsCkDZhlnjPA>
+    <xmx:oaWyYtbB-om1ZEg8Va4NPxaWGMzKH1ygm0ZJWUifimyEkdzRe9DZbg>
+    <xmx:oaWyYgF5qI69K325-oVH_SS3LWoTtbiFl0ol0KrfADdHIjZN49bV0A>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Jun 2022 01:16:16 -0400 (EDT)
+Subject: Re: [PATCH] phy: rockchip-inno-usb2: Sync initial otg state
+To:     Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220622003140.30365-1-pgwipeout@gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <f252c182-e306-174e-dd32-51c9a406d3f7@sholland.org>
+Date:   Wed, 22 Jun 2022 00:16:16 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] PCI: endpoint: Don't stop EP controller by EP function
+In-Reply-To: <20220622003140.30365-1-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Shunsuke Mie <mie@igel.co.jp>
-CC:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Li Chen <lchen@ambarella.com>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220622040924.113279-1-mie@igel.co.jp>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-In-Reply-To: <20220622040924.113279-1-mie@igel.co.jp>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22/06/22 09:39, Shunsuke Mie wrote:
-> For multi-function endpoint device, an ep function shouldn't stop EP
-> controller. Nomally the controller is stopped via configfs.
-
-%s/Nomally/Normally/
+On 6/21/22 7:31 PM, Peter Geis wrote:
+> The initial otg state for the phy defaults to device mode. The actual
+> state isn't detected until an ID IRQ fires. Fix this by syncing the ID
+> state during initialization.
 > 
-> Fixes: 349e7a85b25f ("PCI: endpoint: functions: Add an EP function to test PCI")
-> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+> Fixes: 51a9b2c03dd3 ("phy: rockchip-inno-usb2: Handle ID IRQ")
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 
-Thank you for the fix!
+One comment below. Either way it fixes a bug, so:
 
-Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+
 > ---
->  drivers/pci/endpoint/functions/pci-epf-test.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> index 5b833f00e980..a5ed779b0a51 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> @@ -627,7 +627,6 @@ static void pci_epf_test_unbind(struct pci_epf *epf)
+> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> index 6711659f727c..6e44069617df 100644
+> --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> @@ -1162,6 +1162,12 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
+>  					EXTCON_USB_HOST, &rport->event_nb);
+>  		if (ret)
+>  			dev_err(rphy->dev, "register USB HOST notifier failed\n");
+> +
+> +		if (!of_property_read_bool(rphy->dev->of_node, "extcon")) {
+
+Currently the IRQ handler does not care who created the extcon. We should at
+least be consistent between here and there.
+
+Regards,
+Samuel
+
+> +			/* do initial sync of usb state */
+> +			ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
+> +			extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
+> +		}
+>  	}
 >  
->  	cancel_delayed_work(&epf_test->cmd_handler);
->  	pci_epf_test_clean_dma_chan(epf_test);
-> -	pci_epc_stop(epc);
->  	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
->  		epf_bar = &epf->bar[bar];
->  
+>  out:
+> 
+

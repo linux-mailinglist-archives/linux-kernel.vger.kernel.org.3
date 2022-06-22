@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786BE554881
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24493554984
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354687AbiFVJL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 05:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S1352963AbiFVJMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 05:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357460AbiFVJLa (ORCPT
+        with ESMTP id S1357447AbiFVJLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 05:11:30 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0F5101F1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:09:54 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id k24so20377774oij.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:09:54 -0700 (PDT)
+        Wed, 22 Jun 2022 05:11:48 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0705D3B28B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:09:59 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id l81so20356462oif.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 02:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nUi2WkXJg/BgzH6VJEvkfC77TODZO9BVOsfbGgXl5KM=;
-        b=TaT2XrfrfkbOzaZu/XydxdbzpUsf0f5Kk4Sr8fXKt3NQm2K4V16kRafsg66CGV0VnK
-         bD8+2Beo/6H7r76j1NsB2UR4T2Ooi17iZZXocSS4rKXAXY++eXwGB7WLWfSikvYdPkCc
-         6EwVwFTQ6Eb73eNCN+InqvR187JopCEAzfjSfaTKtpIRs7LjNZt6mjS+68HYEFUmBU1L
-         4AQjQMz+r9tjdabZL+aym7u1fs8JNHSeyE2cO53Ss26Bk+VUrUDHfnB5Fh/+4F9voNfb
-         M4va+klhJzA5C79b71tJ1AO0Z+iIOiAwTXPLkBzkRnuOXqwHM5JJji4YhQVoawe/H7RU
-         DDWQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bAy9ZdzvNSqiyUXWluLmSPaqA8dh70j3sUF3U6zADKk=;
+        b=cOTsT1YVhVh0vkiXD++aRy96KHVOOHRHKXGg7xddPMsOTW6M0doY9svJL16vx3M4Pd
+         AFEdmta071zwCGiJlsizK/Uw2yCswwabxfv6pKk+t6z3FrykswUgayWtbnMoWMorhEl0
+         nuFSGG93wCVON04nYFatRjEznqf9HGBUBE7YFk07im2B1eohqU5CKX2Mn0BoQmAlDlXZ
+         4kczOYwc9637ZzwGLXbXbsdNRp48kNhfMOl4X56Sc65WWInZB5s3R0JExotPwOvdlkLI
+         ednyfGwPl5YjEFq6CItvYCb/rk6Ff2WncMl/86jBoA1EBRHnEq6FYPh1pVs+B/1mbQ68
+         KK2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nUi2WkXJg/BgzH6VJEvkfC77TODZO9BVOsfbGgXl5KM=;
-        b=TU9wkKSbGHX7PrMK3MMGI+G/LwO+COqF44Mft7+5FYbcxtHOaXZCxd3SuybFZRdhiF
-         QbTcenDI9WVrFupTgsqIe6l6L5jli/hVilZWvkTLsQy9GrEkLPZm+IvottLUlH+wtn4T
-         NDaEYLI3ugrqr+aQNoiHUe3h/rINhZ4Qs9zK+pWdwwPFPv1Xj4Gu6CPP5sdlFbJAVs84
-         IafaQQ0U+xCHgScFjMp78nS0g74uvsjHc8yTu/PlZR93sRLDTxbmc/3aDHO/5ro8zsQ9
-         +s+ep62CXPJa62C/zSQb7HVcAbPb1hY6Ve3I8UT5SiJcQhhKYyXdaa6zI4v+L0RJsA06
-         IiFA==
-X-Gm-Message-State: AJIora/yItvNAjGLpJFOqUdVmTGqZMurXrUZVqMkjhMLldfUuqtK2FbI
-        VR+DqVtoASOpzh8N1vo3/No2d9Arl6o=
-X-Google-Smtp-Source: AGRyM1smYypKAf9N9iSdiM8vzr0dJP+CsGveYdPmbr2p6UW+F7I79+FUy4/9oupujvjLVl+PEqBbDA==
-X-Received: by 2002:a05:6808:130d:b0:32f:4d01:c4c9 with SMTP id y13-20020a056808130d00b0032f4d01c4c9mr1304891oiv.52.1655888994268;
-        Wed, 22 Jun 2022 02:09:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bAy9ZdzvNSqiyUXWluLmSPaqA8dh70j3sUF3U6zADKk=;
+        b=utOFc0Ps9u8sNLLgLZY8LoGFRJVcMrje//jYb7UHn+KyFXpRp6byVLXXAZ48HqE515
+         3BKycDUa1uJ+bdcdhLmBx/1mK1tbwXpfdzrbdk1te7Vx7XdpATYgWuze6BO9C1ZsnxeY
+         zA7tIIyjZZQ8Eb7HAHnFD5Xbnho3HhpHlnBybDDFl7BdN8QIc/AB9W5W+63W6eTiRX39
+         ExX9wmbrk0+/AslAodF+Hx/w/a1AaWeI7uXd+oqQNgu69q83uVMIjluluIBJuxBF84Rg
+         8qnhIhC3p2dVDdKVv3Pk5wTdEbiQADcWWPUFO5q52Jc/JvmeMKgLmN1Vp6gjrVC9e7E3
+         OYWA==
+X-Gm-Message-State: AJIora97L0FnNkFyxLi2NvLojlNS51psII12c+kCmQJwn3oqoNaXbtNF
+        iIhQTOr2dCL8AxQvIFkdIq4=
+X-Google-Smtp-Source: AGRyM1sIl8cNamJruw3MajKB4JJPMqWvDvkYDtHyjNNwcg20jYiIEq+C/au8hBaIeoi6za32+BV1zQ==
+X-Received: by 2002:a05:6808:17a4:b0:32f:f5f:be1 with SMTP id bg36-20020a05680817a400b0032f0f5f0be1mr1251982oib.26.1655888998341;
+        Wed, 22 Jun 2022 02:09:58 -0700 (PDT)
 Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id y7-20020a056870e3c700b000f342d078fasm10310216oad.52.2022.06.22.02.09.53
+        by smtp.gmail.com with ESMTPSA id y14-20020a056808130e00b00325cda1ff8dsm11098128oiv.12.2022.06.22.02.09.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 02:09:54 -0700 (PDT)
+        Wed, 22 Jun 2022 02:09:58 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v2 0/4] memblock tests: add VERBOSE and MEMBLOCK_DEBUG Makefile options
-Date:   Wed, 22 Jun 2022 04:09:42 -0500
-Message-Id: <cover.1655887571.git.remckee0@gmail.com>
+Subject: [PATCH v2 1/4] memblock tests: add user-provided arguments to Makefile
+Date:   Wed, 22 Jun 2022 04:09:43 -0500
+Message-Id: <7deb3d3d4c05c884d3830325c816862ce927133f.1655887571.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1655887571.git.remckee0@gmail.com>
+References: <cover.1655887571.git.remckee0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,62 +71,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches add options VERBOSE and MEMBLOCK_DEBUG to Memblock
-simulator, which can be specified when running make. These patches also
-implement the functionality for these options.
+Add VERBOSE and MEMBLOCK_DEBUG user-provided arguments. VERBOSE will
+enable verbose output from Memblock simulator. MEMBLOCK_DEBUG will enable
+memblock_dbg() messages.
 
-VERBOSE
-Usage:
+Update the help message to include VERBOSE and MEMBLOCK_DEBUG. Update
+the README to include VERBOSE. The README does not include all available
+options and refers to the help message for the remaining options.
+Therefore, omit MEMBLOCK_DEBUG from README.
 
-$ make VERBOSE=1
-
-Passing VERBOSE=1 will enable verbose output from Memblock simulator. For
-each test, the verbose output includes the name of the memblock function
-being tested, the name of the test, and whether the test passed or failed.
-Since all the tests in Memblock simulator run as one monolithic test, this
-output is a quick way to get a summary of test results.
-
-MEMBLOCK_DEBUG
-Usage:
-
-$ make MEMBLOCK_DEBUG=1
-
-Passing MEMBLOCK_DEBUG=1 will enable memblock_dbg() messages. These
-are debug messages built into several functions in memblock that include
-information such as the name of the function and the size and start and
-end addresses of the memblock region.
-
-Rebecca Mckeever (4):
-  memblock tests: add user-provided arguments to Makefile
-  memblock tests: add verbose output to memblock tests
-  memblock tests: set memblock_debug to enable memblock_dbg() messages
-  memblock tests: remove completed TODO items
-
- tools/testing/memblock/Makefile               |   4 +
- tools/testing/memblock/README                 |  10 +-
- tools/testing/memblock/TODO                   |  14 +-
- tools/testing/memblock/internal.h             |   7 +
- .../testing/memblock/scripts/Makefile.include |  10 +
- tools/testing/memblock/tests/alloc_api.c      | 241 ++++++++----
- .../memblock/tests/alloc_helpers_api.c        | 135 +++++--
- tools/testing/memblock/tests/alloc_nid_api.c  | 371 ++++++++++++------
- tools/testing/memblock/tests/basic_api.c      | 365 ++++++++++++-----
- tools/testing/memblock/tests/common.c         |  58 +++
- tools/testing/memblock/tests/common.h         |  54 +++
- 11 files changed, 913 insertions(+), 356 deletions(-)
-
+Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
-Changes
+ tools/testing/memblock/Makefile                 |  4 ++++
+ tools/testing/memblock/README                   | 10 +++++++++-
+ tools/testing/memblock/scripts/Makefile.include | 10 ++++++++++
+ 3 files changed, 23 insertions(+), 1 deletion(-)
 
-v1 -> v2
-PATCH 2, in common.c:
-  Remove #ifdef VERBOSE around prefixes and related constants
-  Add __maybe_unused to prefixes
-  Move PREFIXES_LEN_MAX, DELIM, and DELIM_LEN so that they are
-    immediately after the other constants
-  Add #ifdef VERBOSE around definitions for test_*() and prefix_*()
----
-
+diff --git a/tools/testing/memblock/Makefile b/tools/testing/memblock/Makefile
+index a698e24b35e7..9fde49ad73bd 100644
+--- a/tools/testing/memblock/Makefile
++++ b/tools/testing/memblock/Makefile
+@@ -45,6 +45,10 @@ help:
+ 	@echo  '  clean		  - Remove generated files and symlinks in the directory'
+ 	@echo  ''
+ 	@echo  'Configuration:'
++	@echo  '  make VERBOSE=1            - enable verbose output, which includes the'
++	@echo  '                              names of functions being tested and the'
++	@echo  '                              number of test cases passing'
++	@echo  '  make MEMBLOCK_DEBUG=1     - enable memblock_dbg() messages'
+ 	@echo  '  make NUMA=1               - simulate enabled NUMA'
+ 	@echo  '  make MOVABLE_NODE=1       - override `movable_node_is_enabled`'
+ 	@echo  '                              definition to simulate movable NUMA nodes'
+diff --git a/tools/testing/memblock/README b/tools/testing/memblock/README
+index ca6afcff013a..058146b528a5 100644
+--- a/tools/testing/memblock/README
++++ b/tools/testing/memblock/README
+@@ -34,7 +34,15 @@ To run the tests, build the main target and run it:
+ $ make && ./main
+ 
+ A successful run produces no output. It is also possible to override different
+-configuration parameters. For example, to simulate enabled NUMA, use:
++configuration parameters. For example, to include verbose output, specify the
++VERBOSE flag when building the main target:
++
++$ make VERBOSE=1
++
++This will print information about which functions are being tested and the
++number of test cases that passed.
++
++To simulate enabled NUMA, use:
+ 
+ $ make NUMA=1
+ 
+diff --git a/tools/testing/memblock/scripts/Makefile.include b/tools/testing/memblock/scripts/Makefile.include
+index 641569ccb7b0..4401f79bed4c 100644
+--- a/tools/testing/memblock/scripts/Makefile.include
++++ b/tools/testing/memblock/scripts/Makefile.include
+@@ -17,3 +17,13 @@ ifeq ($(32BIT_PHYS_ADDR_T), 1)
+ 	CFLAGS += -m32 -U CONFIG_PHYS_ADDR_T_64BIT
+ 	LDFLAGS += -m32
+ endif
++
++# Enable verbose testing output
++ifeq ($(VERBOSE), 1)
++	CFLAGS += -D VERBOSE
++endif
++
++# Enable memblock_dbg() messages
++ifeq ($(MEMBLOCK_DEBUG), 1)
++	CFLAGS += -D MEMBLOCK_DEBUG
++endif
 -- 
 2.34.1
 

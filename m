@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9415540F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6975540FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 05:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356599AbiFVDmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 23:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
+        id S1356558AbiFVDr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 23:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiFVDmv (ORCPT
+        with ESMTP id S230220AbiFVDr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 23:42:51 -0400
-Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A1502FFD1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=OblDE
-        bI6Vnx4aX5Y3rFJGJS4W15Uyfu6AFvbUOpbMY0=; b=UJVERuCkH6x66NmbsDoNW
-        NR5kWvbcGtaiGMIH0q0IOAvJVXVygYZ0C8uEEArbPCV32M3qXhQTUxlG7LIYNDwb
-        IEL0vL6Nuey2m0bMhBvlu9bz4rYMkWB6bJBB8j9kzMTt502LB3bbEz1SV0WI+R3y
-        uCn+qJ7bnExjfNdpNHGzjc=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp1 (Coremail) with SMTP id C8mowABnbzetj7Ji_HVhFA--.33457S2;
-        Wed, 22 Jun 2022 11:42:39 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     zbr@ioremap.net, windhl@126.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] w1: Add missing of_node_put() and of_node_get()
-Date:   Wed, 22 Jun 2022 11:42:38 +0800
-Message-Id: <20220622034238.4093806-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 21 Jun 2022 23:47:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944DC19C03
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 20:47:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 51DDB1F985;
+        Wed, 22 Jun 2022 03:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655869644; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cE0rQjAA42eU80dv5qRJXXM0yGtnKl5fWjJdWhwMZOs=;
+        b=wyzwtDz8nUgOOSUThBQLx/THMAKUiRlAZDiQFl9VFGiUenMabY0x2WFp1dTCiOc59o0s52
+        8sUvx9LCwIZ5wu2+VwZIG7agReZu4oMZx+oRdk/McQ0NmCTBISGPHOnOf/uyFnIwcUHMQO
+        AxlMCAAT56ew/JQprKMjXPo81/XUHTk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655869644;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cE0rQjAA42eU80dv5qRJXXM0yGtnKl5fWjJdWhwMZOs=;
+        b=26jW/p2hSSQdrcX8rpve2Sq/al99Jctb0vc9NvLsDVipsyzYA6iLcVOllw+6CLRXN4SO9f
+        pnXWkcHl1Qu2yIBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EC955134A9;
+        Wed, 22 Jun 2022 03:47:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id M0jQNsuQsmJSEAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Wed, 22 Jun 2022 03:47:23 +0000
+Date:   Wed, 22 Jun 2022 05:47:22 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/page_alloc: Do not calculate node's total
+ pages and memmap pages when empty
+Message-ID: <YrKQyhwDwMvueOUc@localhost.localdomain>
+References: <20220621041717.6355-1-osalvador@suse.de>
+ <20220621041717.6355-2-osalvador@suse.de>
+ <506203e3-1de0-1187-5234-7afc66d4ddfe@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8mowABnbzetj7Ji_HVhFA--.33457S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtFW7tF18tryxJry7Aw1DKFg_yoWktwc_Cr
-        1ruF9rXr47Gw4kZ3ZagFsxu397WrsFgrsrWF1IqF97u34YqrsFgrs8ZryDJ3yUu3yxJFWa
-        krsxGrZ0yr4IgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRMUDJDUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhAoF18RPWNc6gAAsH
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <506203e3-1de0-1187-5234-7afc66d4ddfe@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __w1_attach_slave_device(), we need to add the of_node_put() for
-the reference returned by of_find_matching_node() in fail path.
+On Tue, Jun 21, 2022 at 09:44:47AM +0200, David Hildenbrand wrote:
+> 
+> 
+> It's worth noting that the check in pgdat_is_empty() is slightly
+> different. I *think* it doesn't matter in practice, yet I wonder if we
+> should simply fixup (currently unused) pgdat_is_empty().
 
-Besides, we will also need a of_node_get() for the first argument of
-of_find_matching_node() which will decrease its refcount.
+I guess we could change it to
 
-Signed-off-by: Liang He <windhl@126.com>
----
- changelog:
+ static inline bool pgdat_is_empty(pg_data_t *pgdat)
+ {
+	 return node_start_pfn(pgdat->node_id) == node_end_pfn(pgdat->node_id)
+ }
 
- v2: add missing put and get
- v1: only add missing put
+? And maybe even rename it to to node_is_empty (not sure why but I tend to like
+that more than pgdat) 
 
- drivers/w1/w1.c | 3 +++
- 1 file changed, 3 insertions(+)
+I could squeeze a "fixup" patch for that before this one. 
 
-diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-index f2ae2e563dc5..378996d947cc 100644
---- a/drivers/w1/w1.c
-+++ b/drivers/w1/w1.c
-@@ -680,6 +680,8 @@ static int __w1_attach_slave_device(struct w1_slave *sl)
- 	sl->dev.bus = &w1_bus_type;
- 	sl->dev.release = &w1_slave_release;
- 	sl->dev.groups = w1_slave_groups;
-+
-+	of_node_get(sl->master->dev.of_node);
- 	sl->dev.of_node = of_find_matching_node(sl->master->dev.of_node,
- 						sl->family->of_match_table);
- 
-@@ -702,6 +704,7 @@ static int __w1_attach_slave_device(struct w1_slave *sl)
- 		dev_err(&sl->dev,
- 			"Device registration [%s] failed. err=%d\n",
- 			dev_name(&sl->dev), err);
-+		of_node_put(sl->dev.of_node);
- 		put_device(&sl->dev);
- 		return err;
- 	}
+> 
+> Anyhow
+> 
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+
+Thanks!
+
+
 -- 
-2.25.1
-
+Oscar Salvador
+SUSE Labs

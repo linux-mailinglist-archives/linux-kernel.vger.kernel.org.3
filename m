@@ -2,311 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FF255557B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312DE55557F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239936AbiFVUry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 16:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S241748AbiFVUuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 16:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238355AbiFVUru (ORCPT
+        with ESMTP id S234221AbiFVUuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 16:47:50 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70403EAB5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:47:48 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id k15so1871963iok.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:47:48 -0700 (PDT)
+        Wed, 22 Jun 2022 16:50:06 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13CF3EF27
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:50:04 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id u15so9116269ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:50:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dDlaRZ4WaSY3e4YrtIu/o6C7/s0Gwe9PTGfFcT4MDvM=;
-        b=FD1G/TGYfO5wB2Xtch6JU1SBWJ7Y8Xug+wKCAOK/fNmVz3eW8z9IYLtXp8YhggpnKb
-         +icTMP5jX477wGTaQoWhKRA4OwZYlPXHrvnGbJkSN3UkWaSiA1CvCn403Pz1FmRcckkC
-         Jb+fOJAr0SV9KmZqCyKg7xwgkRmn/g6vSsaRpf63Z58CcCI2gO0fNn+CgsQVBJQiOauy
-         iG201rw0SJ2zD97qhLn6WPxRTOvPlxioISisENaDsciZJjUpVCl1iEgu8jJoyRhLQAVV
-         XlgGMBXWSoRAZ4jvLKaqv84K3f1j/vfR43SQWcM6/LTa/PLcY96LufamiTIxQA9Djk6G
-         FzAA==
+        d=linbit-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZHXPpmGBZdWvyxJmjdrgfrKKRqzgpyVWDxj3Vo4u3a8=;
+        b=amKj6GxTy79R1fQyEaKL/UbiJB+b7qC0lpa79+GG3RNmYt5sNwRzoWmFKndZ5GtSto
+         25mDi4yacnKCgTp3UlvpdhTAADuUa9T5XQ9SGMKoMNy75ZO6H7mzCBDY5vmqdsJEhGEP
+         9EtbwC3ORKDaZvhefaNNbOP47aMPcroYnTI484BN+egnnZi4XhoMOZWtlP6uVo+RBoqS
+         oZ026JONzAFv9vBGnFiQayoxuBsG7nIytyQhgZ7jv0mystORbsNYReCihNuZLTnGeQ2U
+         Sn5bvNh8WCwYFddXaKRY9Npmjg8fZADdDu+Ds2F9j8M1Ta2X+dGNRAkA1yN3uiEMwUJ8
+         wa7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dDlaRZ4WaSY3e4YrtIu/o6C7/s0Gwe9PTGfFcT4MDvM=;
-        b=usLynRckVhwGHsSHTymjcU+dHHNCfdPw8tLxyz9rSNLCe1JFxwfmI1pFj5p+8AhQgi
-         Mhhmd/CTulV06NFVs+dlJgXxnDdCt7KLb09lfjEYnoN4icuwe3EOfFjDx2boHTdPaYGr
-         p73WRurTOr6kRjzMFbJiI4U8kxYnyxzflXwFRU+ySVzL5Bji0pVzogsRJY6KCyAv8Y1d
-         osh+obrE823JHn/o51HxCff1ryOiYEQ6w/6CwEB7EvyHDzFfReb29cSGxzFQ9RajnjSY
-         z0Nf5eNgRqHhaJgtNSdP8PFWbr1iaHKUP1+1Mz+OvS2dil/qTkrKOr1kYcb4Be8OofXB
-         /d8Q==
-X-Gm-Message-State: AJIora8UUOVFib2GErwu0+jkMrJpiDKstqMiF0nz45rzrjLmNiQJTPEG
-        tPAaWVSpEgNpvedaot+nidZLpfLhKLBkdLaVl9+o2qUGG8IPNg==
-X-Google-Smtp-Source: AGRyM1t9bCJYc3xarJ4F36rsxRDDzLq00WyLw15CphH5oBzUS3cKdrbFQeETqUtiKN6PyVUetT/W3TuuEegTg9vvK3o=
-X-Received: by 2002:a05:6638:12d6:b0:339:d556:efb4 with SMTP id
- v22-20020a05663812d600b00339d556efb4mr3384076jas.215.1655930868052; Wed, 22
- Jun 2022 13:47:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZHXPpmGBZdWvyxJmjdrgfrKKRqzgpyVWDxj3Vo4u3a8=;
+        b=RQAPlqmgGOCgi7ItBUCLRU4rS6qDNcluGqT1tngnsHC74gRbmx4RbYNbUU1LId6LeU
+         VrJ9ZnxwUIq1lFjiBApLYZjwW2Ld3fwwHHHnfEOvvuCKEjmYTvHd5Rn5ai+Rzg8b+nyX
+         J2+CAwv64igDgOtb/+SA0pltKHowvMGA5gstdFCObRo9LgCtdc3LX7P0+edOQcF2ckb9
+         WniiHCdXbqAmkQ4JWFsLiEpDqpwthAwefo7ot9OuydPSJfHrEU+8IEffwuPzw52RZgSj
+         ww3zi2CF6AEAKEEKtRQRYIK864NjnnpPFBCI7RBW8mLoEErgHhMvYnO2tdEGcm7ucd/7
+         jIeQ==
+X-Gm-Message-State: AJIora8SWY82Cgupf/poLAUKeA34vMNZXc8tof4ULRChArbVH7CJVlMR
+        3mUBE6RFfy763B5gV69PRPf/5A==
+X-Google-Smtp-Source: AGRyM1uhNDH7Tmmo2hHrTQe2MuMLk8efymrGKpDNFJyYZlQwkDyFJsjamDPwgxnQFT2jP77skKEDVA==
+X-Received: by 2002:a17:907:7b86:b0:711:d2c8:ab18 with SMTP id ne6-20020a1709077b8600b00711d2c8ab18mr4827993ejc.580.1655931003525;
+        Wed, 22 Jun 2022 13:50:03 -0700 (PDT)
+Received: from localhost (h082218028181.host.wavenet.at. [82.218.28.181])
+        by smtp.gmail.com with ESMTPSA id z19-20020a056402275300b004319b12371asm16539896edd.47.2022.06.22.13.50.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 13:50:02 -0700 (PDT)
+From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Subject: [PATCH] drbd: bm_page_async_io: fix spurious bitmap "IO error" on large volumes
+Date:   Wed, 22 Jun 2022 22:49:32 +0200
+Message-Id: <20220622204932.196830-1-christoph.boehmwalder@linbit.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <CAES_P+_aC4cHMB3Tn0pz13_gKCpXs=efeae2JBvEPOK5zidYnA@mail.gmail.com>
- <f80c7bf2-1d9e-40d7-d3bd-c8bbe548934b@linux.intel.com>
-In-Reply-To: <f80c7bf2-1d9e-40d7-d3bd-c8bbe548934b@linux.intel.com>
-From:   noman pouigt <variksla@gmail.com>
-Date:   Wed, 22 Jun 2022 13:47:37 -0700
-Message-ID: <CAES_P+9eK4cN3ZYvQoq9Ch0U2o4Ds4hnTawZzy50OqPv-MGOhg@mail.gmail.com>
-Subject: Re: [Sound-open-firmware] ASoC: SOF: Race condition in ipc.c
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, liam.r.girdwood@linux.intel.com,
-        alsa-devel@alsa-project.org, peter.ujfalusi@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, linux-kernel@vger.kernel.org,
-        yangyingliang@huawei.com, rander.wang@intel.com,
-        yung-chuan.liao@linux.intel.com,
-        sound-open-firmware@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 6:38 AM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
->
->
->
-> On 6/20/22 21:46, noman pouigt wrote:
-> > Folks,
-> >
-> > I have borrowed part of SOF architecture for my own DSP
-> > framework development as the memory on the DSP is
-> > extremely small and wouldn't be able to support SOF.
->
-> You're providing very little context here. Of course it's open-source
-> and you can do whatever you want with the code, but it's not clear if
-> the 'borrowed' code can deal with your specific case.
+From: Lars Ellenberg <lars.ellenberg@linbit.com>
 
-I have borrowed the entire SOF ipc communication architecture however
-I have tweaked it a bit to suit my needs.
+We usually do all our bitmap IO in units of PAGE_SIZE.
 
->
-> > Currently I am running into a race condition as below:
-> >
-> > CPU                                            DSP
-> > PCM_TRIGGER_START
-> > sof_ipc_send_msg ---->
-> >
-> >                                       <------Immediate ACK
-> > ipc3_wait_tx_done
-> > (wait_event_timeout)
-> >                                       <------ POSITION update
-> >
-> > snd_pcm_period_elapsed
-> >
-> >
-> > As you can see TRIGGER_START didn't even finish
-> > and waiting for it to complete in ipc3_wait_tx_done
-> > function. However, before it could complete the position
-> > interrupt was issued which results in calling period_elapsed
-> > function.
-> >
-> > In order to fix this I assume below is called in SOF framework:
-> > schedule_work(&spcm->stream[substream->stream].period_elapsed_work);
-> >
-> > How is this design working? If the interrupt is coming too fast
-> > from the DSP than the associated function with this schedule_work
-> > will not get called as the scheduler will not get time to schedule the
-> > workqueue and elapsed function will not be called thereby not increasing
-> > the hw_ptr. How is the flow control for data transfer achieved?
->
-> The schedule_work was added by this commit, and the explanations are
-> rather straightforward:
->
-> commit e2803e610aecb36ea4fec5a04861547664580d0c
->
-> Author: Keyon Jie <yang.jie@linux.intel.com>
->
-> Date:   Tue Apr 30 18:09:25 2019 -0500
->
->
->
->
-> ASoC: SOF: PCM: add period_elapsed work to fix race condition in
-> interrupt context
->
-> "
-> The IPC implementation in SOF requires sending IPCs serially: we should
-> not send a new IPC command to the firmware before we get an ACK (or time
-> out) from firmware, and the IRQ processing is complete.
->
-> snd_pcm_period_elapsed() can be called in interrupt context before
-> IRQ_HANDLED is returned. When the PCM is done draining, a STOP
-> IPC will then be sent, which breaks the expectation that IPCs are
-> handled serially and leads to IPC timeouts.
->
-> This patch adds a workqueue to defer the call to snd_pcm_elapsed() after
-> the IRQ is handled.
-> "
->
-> I am not sure what the problem you have really is.
+With very small or oddly sized external meta data, or with
+PAGE_SIZE != 4k, it can happen that our last on-disk bitmap page
+is not fully PAGE_SIZE aligned, so we may need to adjust the size
+of the IO.
 
-I am using QEMU to develop the playback driver and the design( borrowed
-from SOF with some tweaks) as below:
+We used to do that with
+  min_t(unsigned int, PAGE_SIZE,
+	last_allowed_sector - current_offset);
+And for just the right diff, (unsigned int)(diff) will result in 0.
 
-1. In PCM_PARAMS, number of period and period size information is shared
-with DSP.
-2. TRIGGER (in SOF every IPC requires an ack but for this command DSP
-doesn't send ack) is sent by the CPU to DSP to start playback. I am not calling
-wait_event_timeout for this command from the CPU side.
-3. Whenever DSP is done with a period it sends an interrupt.
-4. CPU calls the elapsed function whenever an interrupt is received
-and this repeats.
+A bio of length 0 will correctly be rejected with an IO error
+(and some scary WARN_ON_ONCE()) by the scsi layer.
 
-With the above design things are running smoothly but sometimes I am
-running into
-an UNDERRUN issue. Complete logs copied at the end of the mail.
-Questions:
-a. Do I just need to play with different period sizes to get this right?
-b. What I have noticed is below when the issue happens.
+Do the calculation properly.
 
-[  505.493600][  T123] sdev_dev sdev_dev: ipc tx: 0x60040000:
-GLB_STREAM_MSG: TRIG_START
-[  505.493961][  T100] sdev_dev sdev_dev: ipc rx: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.494228][  T100] event_handler irq_pos 12000
-[  505.494541][  T123] sdev_dev sdev_dev: ipc tx succeeded:
-0x60040000: GLB_STREAM_MSG: TRIG_START
+Signed-off-by: Lars Ellenberg <lars.ellenberg@linbit.com>
+Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+---
+ drivers/block/drbd/drbd_bitmap.c | 49 +++++++++++++++++++++++++++-----
+ 1 file changed, 42 insertions(+), 7 deletions(-)
 
-"event_handler irq_pos" if this line (it calls elapsed function) comes
-before trig_start succeeds
-as shown above then the UNDERRUN issue happens otherwise not.
+diff --git a/drivers/block/drbd/drbd_bitmap.c b/drivers/block/drbd/drbd_bitmap.c
+index 9e060e49b3f8..bd2133ef6e0a 100644
+--- a/drivers/block/drbd/drbd_bitmap.c
++++ b/drivers/block/drbd/drbd_bitmap.c
+@@ -974,25 +974,58 @@ static void drbd_bm_endio(struct bio *bio)
+ 	}
+ }
+ 
++/* For the layout, see comment above drbd_md_set_sector_offsets(). */
++static inline sector_t drbd_md_last_bitmap_sector(struct drbd_backing_dev *bdev)
++{
++	switch (bdev->md.meta_dev_idx) {
++	case DRBD_MD_INDEX_INTERNAL:
++	case DRBD_MD_INDEX_FLEX_INT:
++		return bdev->md.md_offset + bdev->md.al_offset -1;
++	case DRBD_MD_INDEX_FLEX_EXT:
++	default:
++		return bdev->md.md_offset + bdev->md.md_size_sect -1;
++	}
++}
++
+ static void bm_page_io_async(struct drbd_bm_aio_ctx *ctx, int page_nr) __must_hold(local)
+ {
+ 	struct drbd_device *device = ctx->device;
+ 	unsigned int op = (ctx->flags & BM_AIO_READ) ? REQ_OP_READ : REQ_OP_WRITE;
+-	struct bio *bio = bio_alloc_bioset(device->ldev->md_bdev, 1, op,
+-					   GFP_NOIO, &drbd_md_io_bio_set);
+ 	struct drbd_bitmap *b = device->bitmap;
++	struct bio *bio;
+ 	struct page *page;
++	sector_t last_bm_sect;
++	sector_t first_bm_sect;
++	sector_t on_disk_sector;
+ 	unsigned int len;
+ 
+-	sector_t on_disk_sector =
+-		device->ldev->md.md_offset + device->ldev->md.bm_offset;
+-	on_disk_sector += ((sector_t)page_nr) << (PAGE_SHIFT-9);
++	first_bm_sect = device->ldev->md.md_offset + device->ldev->md.bm_offset;
++	on_disk_sector = first_bm_sect + (((sector_t)page_nr) << (PAGE_SHIFT-SECTOR_SHIFT));
+ 
+ 	/* this might happen with very small
+ 	 * flexible external meta data device,
+ 	 * or with PAGE_SIZE > 4k */
+-	len = min_t(unsigned int, PAGE_SIZE,
+-		(drbd_md_last_sector(device->ldev) - on_disk_sector + 1)<<9);
++	last_bm_sect = drbd_md_last_bitmap_sector(device->ldev);
++	if (first_bm_sect <= on_disk_sector && last_bm_sect >= on_disk_sector) {
++		sector_t len_sect = last_bm_sect - on_disk_sector + 1;
++		if (len_sect < PAGE_SIZE/SECTOR_SIZE)
++			len = (unsigned int)len_sect*SECTOR_SIZE;
++		else
++			len = PAGE_SIZE;
++	} else {
++		if (__ratelimit(&drbd_ratelimit_state)) {
++			drbd_err(device, "Invalid offset during on-disk bitmap access: "
++				 "page idx %u, sector %llu\n", page_nr, on_disk_sector);
++		}
++		ctx->error = -EIO;
++		bm_set_page_io_err(b->bm_pages[page_nr]);
++		if (atomic_dec_and_test(&ctx->in_flight)) {
++			ctx->done = 1;
++			wake_up(&device->misc_wait);
++			kref_put(&ctx->kref, &drbd_bm_aio_ctx_destroy);
++		}
++		return;
++	}
+ 
+ 	/* serialize IO on this page */
+ 	bm_page_lock_io(device, page_nr);
+@@ -1007,6 +1040,8 @@ static void bm_page_io_async(struct drbd_bm_aio_ctx *ctx, int page_nr) __must_ho
+ 		bm_store_page_idx(page, page_nr);
+ 	} else
+ 		page = b->bm_pages[page_nr];
++	bio = bio_alloc_bioset(device->ldev->md_bdev, 1, op, GFP_NOIO,
++			&drbd_md_io_bio_set);
+ 	bio->bi_iter.bi_sector = on_disk_sector;
+ 	/* bio_add_page of a single page to an empty bio will always succeed,
+ 	 * according to api.  Do we want to assert that? */
+-- 
+2.36.1
 
-c. Is there any relation to the above sequence of logs to the underrun issue?
-
->
-> It's not really surprising that the first period is consumed
-> immediately, the flow will become more steady-state afterwards.
->
-> The DMAs should be primed to deal with more than one period, and the
-> schedule_work() will only signal that the application can refill the
-> ring buffer. There's all kinds of delays that will happen depending on
-> load and scheduling, and if the POSITION_UPDATE was received immediately
-> then there's should be still plenty of time to provide a new buffer.
->
-> >
-> > I am facing the above problem in my design.
-> >
-> > I am wondering if I can simply add one more IPC command(don't call
-> > wait_event_interruptible for this) after TRIGGER_START to start the
-> > streaming.This way schedule_work for updating period_elapsed function
-> > can be avoided and it can be called in an interrupt context.
->
-> See commit above, this won't work because you'll be sending an IPC while
-> dealing with an IPC.
-Understood but as explained above for the trigger command there is no reply.
-
-
-  stream       : PLAYBACK
-  access       : RW_INTERLEAVED
-  format       : S16_LE
-  subformat    : STD
-  channels     : 1
-  rate         : 48000
-  exact rate   : 48000 (48000/1)
-  msbits       : 16
-  buffer_size  : 24000
-  period_size  : 6000
-  period_time  : 125000
-  tstamp_mode  : NONE
-  tstamp_type  : MONOTONIC
-  period_step  : 1
-  avail_min    : 6000
-  period_event : 0
-  start_threshold  : 24000
-  stop_threshold   : 24000
-  silence_threshold: 0
-  silence_size : 0
-  boundary     : 6755399441055744000
-  appl_ptr     : 0
-  hw_ptr       : 0
-[  505.489005][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 0
-[  505.489361][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 6000
-[  505.489635][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 6000
-[  505.490172][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 6000
-[  505.490592][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 12000
-[  505.490868][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 12000
-[  505.491464][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 12000
-[  505.491777][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 18000
-[  505.492053][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 18000
-[  505.492652][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 18000
-[  505.492965][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 24000
-[  505.493242][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 24000
-[  505.493600][  T123] sdev_dev sdev_dev: ipc tx: 0x60040000:
-GLB_STREAM_MSG: TRIG_START
-[  505.493961][  T100] sdev_dev sdev_dev: ipc rx: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.494228][  T100] event_handler irq_pos 12000
-[  505.494541][  T123] sdev_dev sdev_dev: ipc tx succeeded:
-0x60040000: GLB_STREAM_MSG: TRIG_START
-[  505.494844][  T123] snd_pcm_playback_avail hw_ptr 0 buffer_size
-24000 appl_ptr 24000
-[  505.495173][  T100] sof_pcm_pointer 346 moving by 6000
-[  505.495479][  T100] IRQ: pos=6000, old=0, base=0, period=6000, buf=24000
-[  505.495519][  T100] snd_pcm_playback_avail hw_ptr 6000 buffer_size
-24000 appl_ptr 24000
-[  505.496020][  T100] sdev_dev sdev_dev: ipc rx done: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.496481][  T100] sdev_dev sdev_dev: ipc rx: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.496748][  T100] event_handler irq_pos 24000
-[  505.496934][  T100] sof_pcm_pointer 346 moving by 12000
-[  505.497147][  T100] IRQ: pos=12000, old=6000, base=0, period=6000, buf=24000
-[  505.497188][  T100] snd_pcm_playback_avail hw_ptr 12000 buffer_size
-24000 appl_ptr 24000
-[  505.497754][  T100] sdev_dev sdev_dev: ipc rx done: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.498170][  T100] sdev_dev sdev_dev: ipc rx: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.498522][  T100] event_handler irq_pos 36000
-[  505.498707][  T100] sof_pcm_pointer 346 moving by 18000
-[  505.498921][  T100] IRQ: pos=18000, old=12000, base=0, period=6000, buf=24000
-[  505.498961][  T100] snd_pcm_playback_avail hw_ptr 18000 buffer_size
-24000 appl_ptr 24000
-[  505.499522][  T100] sdev_dev sdev_dev: ipc rx done: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.499937][  T100] sdev_dev sdev_dev: ipc rx: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.500204][  T100] event_handler irq_pos 0
-[  505.500432][  T100] sof_pcm_pointer 346 moving by 0
-[  505.500637][  T100] IRQ: pos=0, old=18000, base=0, period=6000, buf=24000
-[  505.500678][  T100] snd_pcm_playback_avail hw_ptr 24000 buffer_size
-24000 appl_ptr 24000
-[  505.501547][  T100] sdev_dev sdev_dev: ipc tx: 0x60050000:
-GLB_STREAM_MSG: TRIG_STOP
-[  505.501840][  T100] sdev_dev sdev_dev: ipc tx succeeded:
-0x60050000: GLB_STREAM_MSG: TRIG_STOP
-[  505.502161][  T100] sdev_dev sdev_dev: ipc rx done: 0x600a0000:
-GLB_STREAM_MSG: POSITION
-[  505.502822][  T123] snd_pcm_playback_avail hw_ptr 24000 buffer_size
-24000 appl_ptr 24000
-underrun!!! (at least 0.972 ms long)
-Status:
-  state       : XRUN
-  trigger_time: 505.482872
-  tstamp      : 0.000000
-  delay       : 0
-  avail       : 24000
-  avail_max   : 24000

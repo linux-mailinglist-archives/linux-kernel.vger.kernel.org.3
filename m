@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9D7554796
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD68B5546B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356049AbiFVKyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S1355656AbiFVKxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355122AbiFVKxi (ORCPT
+        with ESMTP id S1355072AbiFVKxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Jun 2022 06:53:38 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613123B57B;
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A8739B9A;
         Wed, 22 Jun 2022 03:53:36 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25MArL3l020508;
-        Wed, 22 Jun 2022 05:53:21 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25MArMte027964;
+        Wed, 22 Jun 2022 05:53:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655895201;
-        bh=09m75uj4VJKcv8qDIqXsO3yJrvrISC65hIrs8N9FE4I=;
+        s=ti-com-17Q1; t=1655895202;
+        bh=28XJ9wIA9l8rfkupe3uYGly7sxILC7G1n8Ezz6F22jA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=UdGmC5fmkakApd7lqlK57Rq/M3yjOL6hddo7ojONKa/oiclikRntxdiEBnte9g5rR
-         UxFS6ILTmwJNCm3zG57nVCffL93pAvbxujM61dRD5tIt4Tm+3fSUev6wAAZg8xW55m
-         wxoUTrxwOX27wOqLC0WwDZ/ZFm5+ph32ielFgkNg=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25MArLPh026681
+        b=I+yTT2dw9VtgG60z9c47p3kqWNCykoLbY+HSrIUoqlPhTYlAs3/W9Yoz/OzUHsNBz
+         0A70MJgAMziUmhw4oKP/0lz2PujbqmlnDkYZBRL8XhgFvtXSPw1XLd4t1F1EWvEI2Q
+         I4Dtj+Ch1QkEbDppQ3QCIi9j9PJit0QOYK1pxs3c=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25MArMsd083854
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 22 Jun 2022 05:53:21 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 22 Jun 2022 05:53:22 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 22
- Jun 2022 05:53:20 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2022 05:53:22 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 22 Jun 2022 05:53:20 -0500
+ Frontend Transport; Wed, 22 Jun 2022 05:53:22 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25MArJ2P016904;
-        Wed, 22 Jun 2022 05:53:19 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25MArLqp043750;
+        Wed, 22 Jun 2022 05:53:21 -0500
 From:   Rahul T R <r-ravikumar@ti.com>
 To:     <linux-phy@lists.infradead.org>, <kishon@ti.com>,
         <vkoul@kernel.org>, <robh+dt@kernel.org>,
@@ -50,9 +50,9 @@ CC:     <p.yadav@ti.com>, <tomi.valkeinen@ideasonboard.com>,
         <sjakhade@cadence.com>, <mparab@cadence.com>,
         <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
         <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v3 2/3] phy: cdns-dphy: Add band config for dphy tx
-Date:   Wed, 22 Jun 2022 16:23:10 +0530
-Message-ID: <20220622105311.21415-3-r-ravikumar@ti.com>
+Subject: [PATCH v3 3/3] phy: cdns-dphy: Add support for DPHY TX on J721e
+Date:   Wed, 22 Jun 2022 16:23:11 +0530
+Message-ID: <20220622105311.21415-4-r-ravikumar@ti.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220622105311.21415-1-r-ravikumar@ti.com>
 References: <20220622105311.21415-1-r-ravikumar@ti.com>
@@ -70,99 +70,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for band ctrl config for dphy tx.
+Add support new compatible for dphy-tx on j721e
+and implement dphy ops required.
 
 Signed-off-by: Rahul T R <r-ravikumar@ti.com>
 ---
- drivers/phy/cadence/cdns-dphy.c | 40 ++++++++++++++++++++++++++++++++-
- 1 file changed, 39 insertions(+), 1 deletion(-)
+ drivers/phy/cadence/Kconfig     | 10 ++++++
+ drivers/phy/cadence/cdns-dphy.c | 62 +++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
+diff --git a/drivers/phy/cadence/Kconfig b/drivers/phy/cadence/Kconfig
+index 1adde2d99ae7..18024ac6d511 100644
+--- a/drivers/phy/cadence/Kconfig
++++ b/drivers/phy/cadence/Kconfig
+@@ -22,6 +22,16 @@ config PHY_CADENCE_DPHY
+ 	  system. If M is selected, the module will be called
+ 	  cdns-dphy.
+ 
++if PHY_CADENCE_DPHY
++
++config PHY_CADENCE_DPHY_J721E
++	depends on ARCH_K3 || COMPILE_TEST
++	bool "J721E DPHY TX Wiz support"
++	default y
++	help
++	  Support J721E Cadence DPHY TX Wiz configuration.
++endif
++
+ config PHY_CADENCE_DPHY_RX
+ 	tristate "Cadence D-PHY Rx Support"
+ 	depends on HAS_IOMEM && OF
 diff --git a/drivers/phy/cadence/cdns-dphy.c b/drivers/phy/cadence/cdns-dphy.c
-index ba042e39cfaf..14f951013b4f 100644
+index 14f951013b4f..a6b7d696f77a 100644
 --- a/drivers/phy/cadence/cdns-dphy.c
 +++ b/drivers/phy/cadence/cdns-dphy.c
-@@ -3,6 +3,7 @@
-  * Copyright: 2017-2018 Cadence Design Systems, Inc.
-  */
- 
-+#include <linux/bitfield.h>
+@@ -7,6 +7,7 @@
  #include <linux/bitops.h>
  #include <linux/clk.h>
  #include <linux/io.h>
-@@ -45,6 +46,10 @@
- #define DPHY_CMN_OPDIV_FROM_REG		BIT(6)
- #define DPHY_CMN_OPDIV(x)		((x) << 7)
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
+@@ -18,6 +19,7 @@
  
-+#define DPHY_BAND_CFG			DPHY_PCS(0x0)
-+#define DPHY_BAND_CFG_LEFT_BAND		GENMASK(4, 0)
-+#define DPHY_BAND_CFG_RIGHT_BAND	GENMASK(9, 5)
-+
- #define DPHY_PSM_CFG			DPHY_PCS(0x4)
- #define DPHY_PSM_CFG_FROM_REG		BIT(0)
- #define DPHY_PSM_CLK_DIV(x)		((x) << 1)
-@@ -92,6 +97,12 @@ struct cdns_dphy {
- 	struct phy *phy;
- };
+ #define REG_WAKEUP_TIME_NS		800
+ #define DPHY_PLL_RATE_HZ		108000000
++#define POLL_TIMEOUT_US			1000
  
-+/* Order of bands is important since the index is the band number. */
-+static const unsigned int tx_bands[] = {
-+	80, 100, 120, 160, 200, 240, 320, 390, 450, 510, 560, 640, 690, 770,
-+	870, 950, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500
-+};
+ /* DPHY registers */
+ #define DPHY_PMA_CMN(reg)		(reg)
+@@ -62,6 +64,18 @@
+ #define DSI_NULL_FRAME_OVERHEAD		6
+ #define DSI_EOT_PKT_SIZE		4
+ 
++#define DPHY_TX_J721E_WIZ_PLL_CTRL	0xF04
++#define DPHY_TX_J721E_WIZ_STATUS	0xF08
++#define DPHY_TX_J721E_WIZ_RST_CTRL	0xF0C
++#define DPHY_TX_J721E_WIZ_PSM_FREQ	0xF10
 +
- static int cdns_dsi_get_dphy_pll_cfg(struct cdns_dphy *dphy,
- 				     struct cdns_dphy_cfg *cfg,
- 				     struct phy_configure_opts_mipi_dphy *opts,
-@@ -232,6 +243,24 @@ static int cdns_dphy_config_from_opts(struct phy *phy,
- 	return 0;
++#define DPHY_TX_J721E_WIZ_IPDIV		GENMASK(4, 0)
++#define DPHY_TX_J721E_WIZ_OPDIV		GENMASK(13, 8)
++#define DPHY_TX_J721E_WIZ_FBDIV		GENMASK(25, 16)
++#define DPHY_TX_J721E_WIZ_LANE_RSTB	BIT(31)
++#define DPHY_TX_WIZ_PLL_LOCK		BIT(31)
++#define DPHY_TX_WIZ_O_CMN_READY		BIT(31)
++
+ struct cdns_dphy_cfg {
+ 	u8 pll_ipdiv;
+ 	u8 pll_opdiv;
+@@ -210,6 +224,43 @@ static void cdns_dphy_ref_set_psm_div(struct cdns_dphy *dphy, u8 div)
+ 	       dphy->regs + DPHY_PSM_CFG);
  }
  
-+static int cdns_dphy_tx_get_band_ctrl(unsigned long hs_clk_rate)
++#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
++static unsigned long cdns_dphy_j721e_get_wakeup_time_ns(struct cdns_dphy *dphy)
 +{
-+	unsigned int rate;
-+	int i;
-+
-+	rate = hs_clk_rate / 1000000UL;
-+
-+	if (rate < tx_bands[0])
-+		return -EOPNOTSUPP;
-+
-+	for (i = 0; i < ARRAY_SIZE(tx_bands) - 1; i++) {
-+		if (rate >= tx_bands[i] && rate < tx_bands[i + 1])
-+			return i;
-+	}
-+
-+	return -EOPNOTSUPP;
++	return 1000000;
 +}
 +
- static int cdns_dphy_validate(struct phy *phy, enum phy_mode mode, int submode,
- 			      union phy_configure_opts *opts)
- {
-@@ -247,7 +276,8 @@ static int cdns_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
- {
- 	struct cdns_dphy *dphy = phy_get_drvdata(phy);
- 	struct cdns_dphy_cfg cfg = { 0 };
--	int ret;
-+	int ret, band_ctrl;
-+	unsigned int reg;
- 
- 	ret = cdns_dphy_config_from_opts(phy, &opts->mipi_dphy, &cfg);
- 	if (ret)
-@@ -276,6 +306,14 @@ static int cdns_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
- 	 */
- 	cdns_dphy_set_pll_cfg(dphy, &cfg);
- 
-+	band_ctrl = cdns_dphy_tx_get_band_ctrl(opts->mipi_dphy.hs_clk_rate);
-+	if (band_ctrl < 0)
-+		return band_ctrl;
++static void cdns_dphy_j721e_set_pll_cfg(struct cdns_dphy *dphy,
++					const struct cdns_dphy_cfg *cfg)
++{
++	u32 status;
 +
-+	reg = FIELD_PREP(DPHY_BAND_CFG_LEFT_BAND, band_ctrl) |
-+	      FIELD_PREP(DPHY_BAND_CFG_RIGHT_BAND, band_ctrl);
-+	writel(reg, dphy->regs + DPHY_BAND_CFG);
++	writel(DPHY_CMN_PWM_HIGH(6) | DPHY_CMN_PWM_LOW(0x101) |
++	       DPHY_CMN_PWM_DIV(0x8),
++	       dphy->regs + DPHY_CMN_PWM);
 +
- 	return 0;
- }
++	writel((FIELD_PREP(DPHY_TX_J721E_WIZ_IPDIV, cfg->pll_ipdiv) |
++		FIELD_PREP(DPHY_TX_J721E_WIZ_OPDIV, cfg->pll_opdiv) |
++		FIELD_PREP(DPHY_TX_J721E_WIZ_FBDIV, cfg->pll_fbdiv)),
++		dphy->regs + DPHY_TX_J721E_WIZ_PLL_CTRL);
++
++	writel(DPHY_TX_J721E_WIZ_LANE_RSTB,
++	       dphy->regs + DPHY_TX_J721E_WIZ_RST_CTRL);
++
++	readl_poll_timeout(dphy->regs + DPHY_TX_J721E_WIZ_PLL_CTRL, status,
++			   (status & DPHY_TX_WIZ_PLL_LOCK), 0, POLL_TIMEOUT_US);
++
++	readl_poll_timeout(dphy->regs + DPHY_TX_J721E_WIZ_STATUS, status,
++			   (status & DPHY_TX_WIZ_O_CMN_READY), 0,
++			   POLL_TIMEOUT_US);
++}
++
++static void cdns_dphy_j721e_set_psm_div(struct cdns_dphy *dphy, u8 div)
++{
++	writel(div, dphy->regs + DPHY_TX_J721E_WIZ_PSM_FREQ);
++}
++#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
++
+ /*
+  * This is the reference implementation of DPHY hooks. Specific integration of
+  * this IP may have to re-implement some of them depending on how they decided
+@@ -221,6 +272,14 @@ static const struct cdns_dphy_ops ref_dphy_ops = {
+ 	.set_psm_div = cdns_dphy_ref_set_psm_div,
+ };
  
++#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
++static const struct cdns_dphy_ops j721e_dphy_ops = {
++	.get_wakeup_time_ns = cdns_dphy_j721e_get_wakeup_time_ns,
++	.set_pll_cfg = cdns_dphy_j721e_set_pll_cfg,
++	.set_psm_div = cdns_dphy_j721e_set_psm_div,
++};
++#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
++
+ static int cdns_dphy_config_from_opts(struct phy *phy,
+ 				      struct phy_configure_opts_mipi_dphy *opts,
+ 				      struct cdns_dphy_cfg *cfg)
+@@ -408,6 +467,9 @@ static int cdns_dphy_remove(struct platform_device *pdev)
+ 
+ static const struct of_device_id cdns_dphy_of_match[] = {
+ 	{ .compatible = "cdns,dphy", .data = &ref_dphy_ops },
++#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
++	{ .compatible = "ti,j721e-dphy", .data = &j721e_dphy_ops },
++#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
+ 	{ /* sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, cdns_dphy_of_match);
 -- 
 2.36.1
 

@@ -2,126 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2919455554D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35817555562
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 22:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiFVUSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 16:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S234142AbiFVU1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 16:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiFVUSP (ORCPT
+        with ESMTP id S229473AbiFVU1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 16:18:15 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C208E12A91;
-        Wed, 22 Jun 2022 13:18:14 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 5E13C16C007C;
-        Wed, 22 Jun 2022 23:18:13 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7D_hW6evEOEl; Wed, 22 Jun 2022 23:18:13 +0300 (EEST)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1655929093; bh=xwvGetNLY6Ram85X3IvCg95rBMf6H7m9uiOQq0V+Otg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mdzceMJ+9vLqkHphFpLbUsH/tmEWbC5/9CTIwhGmXZoE8xiA+JzqmIj/cyiD9/jkX
-         mI2KWpNqOoQfQg7sSITw9+QM4S1Z6GgdFAzuYxCgWisbgVLRmg9Pf6aUdSRNYyMCib
-         04IUBNHJbGBVoMy6RdmCDLc52ud0oujI9Vrj4Zvs=
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Marian Postevca <posteuca@mutex.one>,
-        Maximilian Senftleben <kernel@mail.msdigital.de>,
-        stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5.15] usb: gadget: u_ether: fix regression in setting fixed MAC address
-Date:   Wed, 22 Jun 2022 23:18:04 +0300
-Message-Id: <20220622201805.4315-1-posteuca@mutex.one>
+        Wed, 22 Jun 2022 16:27:02 -0400
+X-Greylist: delayed 476 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Jun 2022 13:26:59 PDT
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8595369E6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 13:26:59 -0700 (PDT)
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 981EE72C8B1;
+        Wed, 22 Jun 2022 23:19:02 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 7AB604A474C;
+        Wed, 22 Jun 2022 23:19:02 +0300 (MSK)
+Date:   Wed, 22 Jun 2022 23:19:02 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     "Dmitry V. Levin" <ldv@altlinux.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Mikhail Gordeev <obirvalger@altlinux.org>,
+        Hendrik Brueckner <brueckner@linux.vnet.ibm.com>,
+        Ian Rogers <irogers@google.com>
+Subject: Re: [PATCH 1/1 FYI] perf trace beauty: Fix generation of errno
+ id->str table on ALT Linux
+Message-ID: <20220622201902.j5owuabe4nwpi3jm@altlinux.org>
+References: <YrNCLzNGsvizMhdW@kernel.org>
+ <20220622191308.GA2045@altlinux.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20220622191308.GA2045@altlinux.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit b337af3a4d6147000b7ca6b3438bf5c820849b37 upstream.
+Dmitry, Arnaldo,
 
-In systemd systems setting a fixed MAC address through
-the "dev_addr" module argument fails systematically.
-When checking the MAC address after the interface is created
-it always has the same but different MAC address to the one
-supplied as argument.
+On Wed, Jun 22, 2022 at 10:13:09PM +0300, Dmitry V. Levin wrote:
+> Hi,
+> 
+> On Wed, Jun 22, 2022 at 01:24:15PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Fyi, I'm carrying this on my perf tools tree to keep building on:
+> > 
+> > [perfbuilder@five sisyphus]$ podman pull alt:sisyphus
+> > Trying to pull docker.io/library/alt:sisyphus...
+> > Getting image source signatures
+> > Copying blob 2b39ef1520dd skipped: already exists
+> > Copying blob 12717fd4baa0 skipped: already exists
+> > Copying config 6d48f46445 done
+> > Writing manifest to image destination
+> > Storing signatures
+> > 6d48f4644518cd96ffe1de6cd0333d2abc8312c0e4449e03b58b1d480f0f5905
+> > [perfbuilder@five sisyphus]$ dsh .
+> > sh-4.4# bash
+> > [root@b8318c77142b /]# cat /etc/os-release
+> > NAME="starter kit"
+> > VERSION="p10 (Hypericum)"
+> > ID=altlinux
+> > VERSION_ID=p10
+> > PRETTY_NAME="ALT Starterkit (Hypericum)"
+> > ANSI_COLOR="1;33"
+> > CPE_NAME="cpe:/o:alt:starterkit:p10"
+> > HOME_URL="http://en.altlinux.org/starterkits"
+> > BUG_REPORT_URL="https://bugs.altlinux.org/"
+> > [root@b8318c77142b /]# rpm -qi bash
+> > Name        : bash
+> > Version     : 4.4.23
+> > Release     : alt1
+> > DistTag     : sisyphus+221902.500.4.1
+> > Architecture: noarch
+> > Install Date: Fri Jun  3 23:03:32 2022
+> > Group       : Shells
+> > Size        : 0
+> > License     : None
+> > Signature   : DSA/SHA1, Tue Feb 19 14:40:44 2019, Key ID 95c584d5ae4ae412
+> > Source RPM  : bash-defaults-4.4.23-alt1.src.rpm
+> > Build Date  : Tue Feb 19 14:40:42 2019
+> > Build Host  : ldv-sisyphus.hasher.altlinux.org
+> > Relocations : (not relocatable)
+> > Packager    : Dmitry V. Levin <ldv@altlinux.org>
+> > Vendor      : ALT Linux Team
+> > Summary     : The GNU Bourne Again SHell (/bin/bash)
+> > Description :
+> > This package provides default setup for the GNU Bourne Again SHell (/bin/bash).
+> > [root@b8318c77142b /]#
+> > 
+> > Perf uses that script to generate an id->str errno table for all arches,
+> > implemented in:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0337cf74ccf2a43437bff2e23b278e4f2dc4c6e2
+> > 
+> > But it is failing on:
+> > 
+> >   10    62.99 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
+> >   11    91.50 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
+> >   12    89.80 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+> >   13     8.99 alt:sisyphus                  : FAIL gcc version 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) (GCC)
+> >         |         ^~~~
+> >     442 |         case 47: return "EL3RST";
+> >         |         ^~~~
+> >     443 |         case 48: return "ELNRNG";
+> > 
+> > The generated file lacks the function start/end due to some strange
+> > glitch:
+> > 
+> > http://vger.kernel.org/~acme/perf/generated-altlinux-sisyphus-arch_errno_name_array.c
+> > 
+> > So I'm adding this workaround, can you please check why this is
+> > happening?
+> 
+> arch_errno_names.sh uses here-documents which are implemented in bash
+> using temporary files.  Looks like it couldn't create a temporary file,
+> e.g. because $TMPDIR points to a directory that doesn't exist or not
+> writable.  If there was some "cannot create temp file for here-document"
+> diagnostics in stderr, that's it.  If that's the case, it's not a problem
+> in the script but in the environment.
+> 
+> I've Cc'ed more people, maybe they could have a look.
 
-This is partially caused by systemd which by default will
-set an internally generated permanent MAC address for interfaces
-that are marked as having a randomly generated address.
+I cannot reproduce this, from Fedora 35 (Cloud Edition) virtual machine in QEMU[1],
+then using:
 
-Commit 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in
-setting MAC address in setup phase") didn't take into account
-the fact that the interface must be marked as having a set
-MAC address when it's set as module argument.
+  # podman run --security-opt label=disable -it -v $PWD/linux:/linux alt:sisyphus
 
-Fixed by marking the interface with NET_ADDR_SET when
-the "dev_addr" module argument is supplied.
+Where linux is v5.19-rc3-48-gde5c208d533a, then apt-get update & install gcc, then:
 
-Reported-by: Maximilian Senftleben <kernel@mail.msdigital.de>
-Cc: stable@vger.kernel.org
-Fixes: 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in setting MAC address in setup phase")
-Signed-off-by: Marian Postevca <posteuca@mutex.one>
----
- drivers/usb/gadget/function/u_ether.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+  [root@3b364fe4fc22 linux]# tools/perf/trace/beauty/arch_errno_names.sh gcc tools/ | head
+  /* SPDX-License-Identifier: GPL-2.0 */
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index d15a54f6c24b9..ef253599dcf96 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -774,9 +774,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
- 	dev->qmult = qmult;
- 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
- 
--	if (get_ether_addr(dev_addr, net->dev_addr))
-+	if (get_ether_addr(dev_addr, net->dev_addr)) {
-+		net->addr_assign_type = NET_ADDR_RANDOM;
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "self");
-+	} else {
-+		net->addr_assign_type = NET_ADDR_SET;
-+	}
- 	if (get_ether_addr(host_addr, dev->host_mac))
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "host");
-@@ -833,6 +837,9 @@ struct net_device *gether_setup_name_default(const char *netname)
- 	INIT_LIST_HEAD(&dev->tx_reqs);
- 	INIT_LIST_HEAD(&dev->rx_reqs);
- 
-+	/* by default we always have a random MAC address */
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+
- 	skb_queue_head_init(&dev->rx_frames);
- 
- 	/* network device setup */
-@@ -869,7 +876,6 @@ int gether_register_netdev(struct net_device *net)
- 	dev = netdev_priv(net);
- 	g = dev->gadget;
- 
--	net->addr_assign_type = NET_ADDR_RANDOM;
- 	eth_hw_addr_set(net, dev->dev_mac);
- 
- 	status = register_netdev(net);
-@@ -910,6 +916,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
- 	if (get_ether_addr(dev_addr, new_addr))
- 		return -EINVAL;
- 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
-+	net->addr_assign_type = NET_ADDR_SET;
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(gether_set_dev_addr);
--- 
-2.35.1
+  #include <string.h>
 
+  static const char *errno_to_name__generic(int err)
+  {
+	  switch (err) {
+	  case 1: return "EPERM";
+	  case 2: return "ENOENT";
+	  case 3: return "ESRCH";
+	  case 4: return "EINTR";
+	  case 5: return "EIO";
+
+Thanks,
+
+[1] https://github.com/Obirvalger/vml
+
+> 
+> 
+> -- 
+> ldv

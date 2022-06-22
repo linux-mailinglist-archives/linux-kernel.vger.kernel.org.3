@@ -2,192 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C13F55404A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A11855404D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355852AbiFVB4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 21:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S1355874AbiFVB5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 21:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiFVB4I (ORCPT
+        with ESMTP id S231720AbiFVB5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 21:56:08 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CB32F011
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 18:56:08 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f65so14755813pgc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 18:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8l0sHLsI5nt4bCI9BzXsB64fMhOx0Yd7NKy6ByuMOqg=;
-        b=RhuQIzEeWjGxYVLOfnWJ9uW6hf9PpTO+gr3LP0FQEMCwSoXrD9Ekkz1KtgGCc4K+eg
-         aenMB9VbXhAKOxEAcESN6OoWbGSMHKolLvOYSkv4E+KsMOMhiDFogbpqI2f82mejinFt
-         y/asp8JUIri/lYrodGrAk/6R0fZH+F/O4K+U/pVeFi21qN/8TlA1RpHDrABgY5OYD53T
-         40YG1BebjLQrNHIXvnnLRqAtWxAl/xVb7d3SEBmSTyhJLBIcj6Ili+L9MtIx/nFXEU2J
-         TKUp26kr2M4G2QfCDrlYx7lwoJ1bc2kwISGKrJBvLKEQyp5oMARbRVS+3Vw3nN3zIHig
-         pBHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8l0sHLsI5nt4bCI9BzXsB64fMhOx0Yd7NKy6ByuMOqg=;
-        b=bDJqLmWMsFUGvuxyz7LEPaBqvUFQ2ZvjKblF50c5aG4p5+WbEuH43Xt+sh+585CTtI
-         nx80T9OZuyjy3lEH2jVrUSBP4E1V3bbvpWJEbkduztks/A0tXRyH91qvZ34T7A+3fNIL
-         FSA24RxVCpdMDCG9edfFJcHG61kSlx0+XdYNaUBqkoKylfcrqOZ04mliCQbrfc1JcZVz
-         moPiaKl+j1jOE5K3JcWqcWrXUp3S/67rA3NrePXSGbtEGyvrkEfK8vTf0g77gLEsH6rn
-         tj0oEpAfdhABirMZOkwSKP/APzB9wcW3UmY7eS8jv/Z6oWAOL/iIf7aUoUGZoUwtX673
-         gkzw==
-X-Gm-Message-State: AJIora8fgR8tpEerrjHQ3lLCIGrrFxp2IgF9OU6GoDmke6oWuHMSzoVl
-        DwlvXRzxwpF7q7kjvU2bblOqbA==
-X-Google-Smtp-Source: AGRyM1v3+OZcWzqhC2OKd9TlPEvdYWhsz42Lgd/bJA4Jab5KpsVkDnzWqGAK++a76s+nAkFbYeW/0w==
-X-Received: by 2002:a63:6943:0:b0:40c:3020:d0b with SMTP id e64-20020a636943000000b0040c30200d0bmr854124pgc.34.1655862967459;
-        Tue, 21 Jun 2022 18:56:07 -0700 (PDT)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id 15-20020aa7924f000000b0050dc76281d3sm12250713pfp.173.2022.06.21.18.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 18:56:06 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     rdunlap@infradead.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        corbet@lwn.net
-Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v2] sched: RT bandwidth interface for cgroup unified hierarchy
-Date:   Wed, 22 Jun 2022 09:55:57 +0800
-Message-Id: <20220622015557.7497-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 21 Jun 2022 21:57:23 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32B431201;
+        Tue, 21 Jun 2022 18:57:21 -0700 (PDT)
+X-UUID: a6098956ce0e4987891d618e8fd9e30e-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:660ed2cd-09ad-4643-b901-452f7f5f3b84,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:e65b28ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: a6098956ce0e4987891d618e8fd9e30e-20220622
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1683346429; Wed, 22 Jun 2022 09:57:17 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 09:57:16 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 09:57:13 +0800
+Message-ID: <ba6cccfa05aed087d14f5adc6db06496547a5094.camel@mediatek.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional
+ clocks to be missing
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
+Date:   Wed, 22 Jun 2022 09:57:12 +0800
+In-Reply-To: <afae6179-3681-f5c6-4615-3228f16f1271@linaro.org>
+References: <20220617222916.2435618-1-nfraprado@collabora.com>
+         <20220617222916.2435618-3-nfraprado@collabora.com>
+         <8639e64d-c659-7090-2d0a-078fd96cfbd4@linaro.org>
+         <bb460aa483cc888ffa36709d9e9c1f2e3be0e000.camel@mediatek.com>
+         <bc5458fe-083c-d679-9fcb-95810a290da8@linaro.org>
+         <af50210b95d0cd8b2e3103b3d4a9702aeeba9452.camel@mediatek.com>
+         <a24c24e6-fdee-df79-fd2f-6a71540bd9b3@linaro.org>
+         <20220620155057.a6qilnhm7snzhapa@notapiano>
+         <afae6179-3681-f5c6-4615-3228f16f1271@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to run RT threads in cgroup unified hierarchy, but we can't
-since the default rt_bandwidth.rt_runtime of non-root task_group is 0
-and we haven't interface to update it.
+On Tue, 2022-06-21 at 09:14 +0200, Krzysztof Kozlowski wrote:
+> On 20/06/2022 17:50, Nícolas F. R. A. Prado wrote:
+> > On Mon, Jun 20, 2022 at 10:50:57AM +0200, Krzysztof Kozlowski
+> > wrote:
+> > > On 20/06/2022 08:59, Chunfeng Yun wrote:
+> > > > On Sun, 2022-06-19 at 14:05 +0200, Krzysztof Kozlowski wrote:
+> > > > > On 19/06/2022 09:46, Chunfeng Yun wrote:
+> > > > > > On Fri, 2022-06-17 at 18:25 -0700, Krzysztof Kozlowski
+> > > > > > wrote:
+> > > > > > > On 17/06/2022 15:29, Nícolas F. R. A. Prado wrote:
+> > > > > > > > The current clock list in the binding doesn't allow for
+> > > > > > > > one of
+> > > > > > > > the
+> > > > > > > > optional clocks to be missing and a subsequent clock to
+> > > > > > > > be
+> > > > > > > > present.
+> > > > > > > > An
+> > > > > > > > example where this is an issue is in mt8192.dtsi, which
+> > > > > > > > has
+> > > > > > > > "sys_ck",
+> > > > > > > > "ref_ck", "xhci_ck" and would cause dtbs_check
+> > > > > > > > warnings.
+> > > > > > > > 
+> > > > > > > > Change the clock list in a way that allows the middle
+> > > > > > > > optional
+> > > > > > > > clocks to
+> > > > > > > > be missing, while still guaranteeing a fixed order. The
+> > > > > > > > "ref_ck" is
+> > > > > > > > kept
+> > > > > > > > as a const even though it is optional for simplicity,
+> > > > > > > > since it
+> > > > > > > > is
+> > > > > > > > present in all current dts files.
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Nícolas F. R. A. Prado <
+> > > > > > > > nfraprado@collabora.com>
+> > > > > > > > ---
+> > > > > > > > 
+> > > > > > > >  .../devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml       | 9
+> > > > > > > > +++++++--
+> > > > > > > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > > > > > > > 
+> > > > > > > > diff --git
+> > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > index 63cbc2b62d18..99a1b233ec90 100644
+> > > > > > > > ---
+> > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > +++
+> > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > @@ -80,8 +80,13 @@ properties:
+> > > > > > > >      items:
+> > > > > > > >        - const: sys_ck  # required, the following ones
+> > > > > > > > are
+> > > > > > > > optional
+> > > > > > > >        - const: ref_ck
+> > > > > > > > -      - const: mcu_ck
+> > > > > > > > -      - const: dma_ck
+> > > > > > > > +      - enum:
+> > > > > > > > +          - mcu_ck
+> > > > > > > > +          - dma_ck
+> > > > > > > > +          - xhci_ck
+> > > > > > > > +      - enum:
+> > > > > > > > +          - dma_ck
+> > > > > > > > +          - xhci_ck
+> > > > > > > >        - const: xhci_ck
+> > > > > > > 
+> > > > > > > You allow now almost any order here, including incorrect
+> > > > > > > like
+> > > > > > > sys,ref,xhci,xhci,xhci.
+> > > > > > > 
+> > > > > > > The order of clocks has to be fixed and we cannot allow
+> > > > > > > flexibility.
+> > > > > > > Are
+> > > > > > > you sure that these clocks are actually optional (not
+> > > > > > > wired to
+> > > > > > > the
+> > > > > > > device)?
+> > > > > > 
+> > > > > > In fact, these optional clocks are fixed, due to no gates
+> > > > > > are
+> > > > > > provided,
+> > > > > > SW can't control them by CCF;
+> > > > > > In this case, I usually use a fixed clock, or ignore it.
+> > > > > 
+> > > > > But in some versions these clocks are controllable or not?
+> > > > 
+> > > > Some SoCs are controllable, some ones are not (fixed clock).
+> > > 
+> > > Thanks for confirming. Then I would prefer to make these clocks
+> > > required
+> > > (not optional) and always provide them - via common clock
+> > > framework or
+> > > fixed-clock.
+> > 
+> > Hi Krzysztof and Chunfeng,
+> > 
+> > thank you both for the feedback.
+> > 
+> > Since the solution I proposed in this patch is not acceptable I see
+> > two options:
+> > 1. Split the clocks in several if blocks matched by compatibles
+> > 2. Make the clocks required and use fixed-clock nodes for the
+> > missing clocks in
+> >    the DT
+> > 
+> > My understanding is that 1 is the desirable solution if the clock
+> > is really
+> > missing in some hardware variants, while 2 is desirable if all
+> > hardware variants
+> > really receive all the clocks, only that on some variants they're
+> > fixed and not
+> > controlable by SW.
+> > 
+> > From what I'm reading of this discussion it seems that the latter
+> > is the case
+> > here and thus we should go for 2. Is this correct?
+> 
+> This is how I understood it as well, so correct from my side.
+Also right for me.
 
-This patch add RT bandwidth interface "cpu.max.rt" and update the
-documentation accordingly.
+> 
+> > 
+> > Also Chunfeng, do you have information on whether the same is true
+> > for the MMC
+> > HW block? I recently submitted some changes to that binding [1] but
+> > I followed
+> > approach 1 there instead. However if all the clocks are present in
+> > the HW level
+> > there as well it would make more sense for me to change it to
+> > follow approach 2.
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
-v2:
- - minor fix for documentation per Randy's review. Thanks.
----
- Documentation/admin-guide/cgroup-v2.rst | 13 +++++++++++
- kernel/sched/core.c                     | 31 +++++++++++++++++++++++++
- kernel/sched/rt.c                       |  2 +-
- kernel/sched/sched.h                    |  1 +
- 4 files changed, 46 insertions(+), 1 deletion(-)
+I discussed it with Wenbin, MMC seems a little different with USB,
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 176298f2f4de..3d67366c99e1 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1055,6 +1055,19 @@ All time durations are in microseconds.
- 
- 	The burst in the range [0, $MAX].
- 
-+  cpu.max.rt
-+	A read-write two-value file which exists on all cgroups when
-+	CONFIG_RT_GROUP_SCHED is enabled, to control CPU bandwidth for
-+	RT threads in the task group.
-+
-+	The maximum bandwidth limit.  It's in the following format::
-+
-+	  $MAX $PERIOD
-+
-+	which indicates that RT threads in the group may consume up to
-+	$MAX in each $PERIOD duration.  "max" for $MAX indicates no
-+	limit.  If only one number is written, $MAX is updated.
-+
-   cpu.pressure
- 	A read-write nested-keyed file.
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index daadedc78fd9..c16f8cc5de08 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11047,6 +11047,30 @@ static ssize_t cpu_max_write(struct kernfs_open_file *of,
- }
- #endif
- 
-+#ifdef CONFIG_RT_GROUP_SCHED
-+static int cpu_max_rt_show(struct seq_file *sf, void *v)
-+{
-+	struct task_group *tg = css_tg(seq_css(sf));
-+
-+	cpu_period_quota_print(sf, sched_group_rt_period(tg), sched_group_rt_runtime(tg));
-+	return 0;
-+}
-+
-+static ssize_t cpu_max_rt_write(struct kernfs_open_file *of,
-+				char *buf, size_t nbytes, loff_t off)
-+{
-+	struct task_group *tg = css_tg(of_css(of));
-+	u64 period = sched_group_rt_period(tg);
-+	u64 runtime;
-+	int ret;
-+
-+	ret = cpu_period_quota_parse(buf, &period, &runtime);
-+	if (!ret)
-+		ret = tg_set_rt_bandwidth(tg, period, runtime);
-+	return ret ?: nbytes;
-+}
-+#endif
-+
- static struct cftype cpu_files[] = {
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 	{
-@@ -11082,6 +11106,13 @@ static struct cftype cpu_files[] = {
- 		.write_u64 = cpu_cfs_burst_write_u64,
- 	},
- #endif
-+#ifdef CONFIG_RT_GROUP_SCHED
-+	{
-+		.name = "max.rt",
-+		.seq_show = cpu_max_rt_show,
-+		.write = cpu_max_rt_write,
-+	},
-+#endif
- #ifdef CONFIG_UCLAMP_TASK_GROUP
- 	{
- 		.name = "uclamp.min",
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 8c9ed9664840..319ce586446f 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -2819,7 +2819,7 @@ static int __rt_schedulable(struct task_group *tg, u64 period, u64 runtime)
- 	return ret;
- }
- 
--static int tg_set_rt_bandwidth(struct task_group *tg,
-+int tg_set_rt_bandwidth(struct task_group *tg,
- 		u64 rt_period, u64 rt_runtime)
- {
- 	int i, err = 0;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 7b19a72408b1..317480d535b0 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -486,6 +486,7 @@ extern int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent
- extern void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,
- 		struct sched_rt_entity *rt_se, int cpu,
- 		struct sched_rt_entity *parent);
-+extern int tg_set_rt_bandwidth(struct task_group *tg, u64 rt_period, u64 rt_runtime);
- extern int sched_group_set_rt_runtime(struct task_group *tg, long rt_runtime_us);
- extern int sched_group_set_rt_period(struct task_group *tg, u64 rt_period_us);
- extern long sched_group_rt_runtime(struct task_group *tg);
--- 
-2.36.1
+Hi Wenbin,
+
+   Please give some comments about MMC, thanks
+
+> > 
+> > Thanks,
+> > Nícolas
+> > 
+> > [1] 
+> > https://lore.kernel.org/all/20220617230114.2438875-1-nfraprado@collabora.com
+> 
+> 
+> Best regards,
+> Krzysztof
 

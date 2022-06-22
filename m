@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB2E554876
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D5755492F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354850AbiFVIgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S1354917AbiFVIgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354390AbiFVIf5 (ORCPT
+        with ESMTP id S1354419AbiFVIf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:35:57 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728C138BD5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id mf9so12295155ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:47 -0700 (PDT)
+        Wed, 22 Jun 2022 04:35:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEEF387B4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:48 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g25so32575853ejh.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:35:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=F/hLw10VPO91osuq443lJcyKKYrTvVX/tDBUoayUs+E=;
-        b=koYQmYVk+PfNmCQNz1y1UaJo5p8PBTMTJDB8ka/c5G/oD+wVWcRE4yQysoGGUpSYfn
-         K4llGnIDmSmqPHx6b6nO0m+As+Tqd2LekGS6PXUaA22Q9rfyeTDh7b3LvmRIQ912NI9i
-         2moRx3u3w+v9bwVUuj0n9G0Foz1Jw1p33cVyI2hUXEmZcUorTZ0vD+iExac7WvAc1pso
-         GOeY3MKfTbSLmIWuetrlYvwxuenpEnhnAG7BPJIvUiU/aN/6lZoWJgYgfCoG+4afZCLb
-         ELd2V/Slezj96PihsJv7PPejm8Npc8mK7NcZ+gQogaJkPQ4dHZ9vL557eWiHyjqQS4kl
-         woFQ==
+        bh=G0Hew8NxZ+rzy9l9as3KKPwHdsdjYlzvGwgcXr2LH00=;
+        b=BcIyMAqpTNkDoo1XApOY053yAeXaSUhlI7fzokSMjFeU6AllHlkI7IQ4OlYSwhqyya
+         fJsQL6VPGirPj9al3/TxwtClMi6+XngGSVdhR5evPEHCuCNkQW2wkGNuMSkmxi0t3fzm
+         H8C09MwAJ9UsqZo55e60f774raPl/kKDDbzD77GjVp3AdVZnREaHQhnosOgFIcBxXRGK
+         cOSvS8HpaUjVPv/L9qRYSCajQaGmJ5peMHZerw5NQ89mLXjpBswwloDbZ2X/Kq0dyl6C
+         4JVPq7a1PQsL5xKpA7fmIRKQsNfRXdVUor7pZmQUi+VukpyLJYvpNmJPBy5JrTF/aYyL
+         o7QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=F/hLw10VPO91osuq443lJcyKKYrTvVX/tDBUoayUs+E=;
-        b=rOYMq1NSLAwR5KhTPRx5JN2/qCw7xxycePzNWbFl8mn5FQmlTFS10RQo2B/yfeGsDl
-         SCnWy7uw9oBdxo1ptE5Xp3QavQKTEs2PgIoL5xNKWQRL7nNbRPgLQqfFKBSddJsIHGBq
-         zEC05T+zJi9hzQzbor59JSYJFZz7FcsOA2iHI+WzF7T7JG0slY/zvjL10XSkPsVGvNjD
-         O5i/snXA610WEgIvcoTXyHJ+mvnNjwkgvSs7oTrjzLJ39E3wjeoBZ2fhkeY3eYMzLpW6
-         ySz9dW9QJki6lIWZxmyxfUVF3tIZJw/nAeza3EDoWzNmf5+f90uVaqIsKRUpkO/6on9f
-         go4g==
-X-Gm-Message-State: AJIora+6StVgEoZkhWhAg/jTHaJIhXjQhHzLu+ZIP1abBsvraFGSSBGu
-        m0FMjHl/j7y3LqY8AKdkH0siig==
-X-Google-Smtp-Source: AGRyM1uUImJ/tIjrM0xGIYhl4KAd9nMt3w3I7YWD5FZGM2jymGTlRe9irKxqSkKJFy3t1Rdld6mGJA==
-X-Received: by 2002:a17:906:6a0c:b0:711:d9d9:45ce with SMTP id qw12-20020a1709066a0c00b00711d9d945cemr2030582ejc.184.1655886945901;
-        Wed, 22 Jun 2022 01:35:45 -0700 (PDT)
+        bh=G0Hew8NxZ+rzy9l9as3KKPwHdsdjYlzvGwgcXr2LH00=;
+        b=cVjQFMsfV+cAXHFL0Tjj/ucZKty7EOcdNO6FH3iszMhVZLp+WuxFZMAoJLRSSiyM0x
+         9e202edLMYpgaY42ga8AAUBEHMJn94+oU5FrpW3lSr4h6CXuKdN7xGLpXaROJ+gao2AA
+         SckWKEHxNPPORo4+lWLOsIBPOzgNaqVxsvJt3r/SN/S1bg7HkHzse2PjW153znaV6AEn
+         c3y1Wh7zFr+NFoRjbh/1OXfT9nSYjO+YZD4FwzT8eN+SWrKDmS5bEn4EWaIiyqAS54Im
+         dnDpcYELCsKM5MZqES3T39GagAmNTq23gmWFP8LcZoUz6qmmhFDjA8W+zrSZwl5vbXh/
+         uB8A==
+X-Gm-Message-State: AJIora9rsEKSOIw8FVl3VzCohgUcqcDTYFxSNfS15RJjuZz6LwlGvhhn
+        nikkZ3gKEx+97AOeQmaJpzBMUA==
+X-Google-Smtp-Source: AGRyM1sKRs7A8ZkcEm66QHBH+ciBgyX+iGWt6byWOyH/I1Qi4wshCcN8/ZO+HJgP5jFh9IiEFs51oA==
+X-Received: by 2002:a17:907:3f02:b0:6f3:5c42:321a with SMTP id hq2-20020a1709073f0200b006f35c42321amr2021301ejc.521.1655886946975;
+        Wed, 22 Jun 2022 01:35:46 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ku10-20020a170907788a00b00722e603c39asm1979733ejc.31.2022.06.22.01.35.45
+        by smtp.gmail.com with ESMTPSA id ku10-20020a170907788a00b00722e603c39asm1979733ejc.31.2022.06.22.01.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 01:35:45 -0700 (PDT)
+        Wed, 22 Jun 2022 01:35:46 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
         krzysztof.kozlowski@linaro.org, agross@kernel.org
-Subject: Re: (subset) [PATCH 10/12] ARM: dts: qcom: ipq4019: fix Micron SPI NOR compatible
-Date:   Wed, 22 Jun 2022 10:35:32 +0200
-Message-Id: <165588692598.15720.3558202512187171238.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH 11/12] arm64: dts: qcom: ipq6018-cp01-c1: fix Micron SPI NOR compatible
+Date:   Wed, 22 Jun 2022 10:35:33 +0200
+Message-Id: <165588692598.15720.13159853484796429500.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220521164550.91115-10-krzysztof.kozlowski@linaro.org>
-References: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org> <20220521164550.91115-10-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220521164550.91115-11-krzysztof.kozlowski@linaro.org>
+References: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org> <20220521164550.91115-11-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -72,16 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 18:45:48 +0200, Krzysztof Kozlowski wrote:
+On Sat, 21 May 2022 18:45:49 +0200, Krzysztof Kozlowski wrote:
 > The proper compatible for Micron n25q128a11 SPI NOR flash should include
-> vendor-prefix and use jedec,spi-nor fallback.
+> vendor-prefix.
 > 
 > 
 
 Applied, thanks!
 
-[10/12] ARM: dts: qcom: ipq4019: fix Micron SPI NOR compatible
-        https://git.kernel.org/krzk/linux/c/b67569748cfc9409e01e9ff6243e2064f24d3cf8
+[11/12] arm64: dts: qcom: ipq6018-cp01-c1: fix Micron SPI NOR compatible
+        https://git.kernel.org/krzk/linux/c/a8e40323875c6a2dfe151eba56b2065744536777
 
 Best regards,
 -- 

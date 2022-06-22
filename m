@@ -2,86 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792BD554025
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2D455402C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbiFVBlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 21:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S1355680AbiFVBnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 21:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiFVBlQ (ORCPT
+        with ESMTP id S230152AbiFVBnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 21:41:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7222F39E;
-        Tue, 21 Jun 2022 18:41:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 702B2B81995;
-        Wed, 22 Jun 2022 01:41:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163D4C3411C;
-        Wed, 22 Jun 2022 01:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655862072;
-        bh=hplP8TJkxJ6SMYk8fdGq+m1YJeqgd88J3suV7yMIQOI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q9TP6smK3aUawI7pK8XGkes/9Saq6FMZooxxBsX7wvAkF2BciKH1qRkJ3o0nHh0rN
-         SvWpbILlDbU8p9/9w498cXDR1I5vje5aj6j0oARoMbixjqzSM7Q8Uthf+gYdV7fjPP
-         d72lRw+rJpIv2mxuIAkrfLTGwzUr3mvxPLxShM/k6vUfAW1sgO5PxV91LbwBLj6Zb/
-         f2oEAUZGPUk0bgrJAdm+WbLFZ9tg91aWc5szKFElWnIUW2TvfQgHKr0Rwv57owsy59
-         CeLS8T+toIFA6iIfziwS4itK2gIGYY5nKivahlBS+P5fKvD397/pjp0GgegH/z1LGs
-         w7HHgUtxDMWyg==
-Date:   Wed, 22 Jun 2022 10:41:08 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf v2 1/2] fprobe: samples: Add use_trace option and
- show hit/missed counter
-Message-Id: <20220622104108.3a1cf1ac050eccba0ee2ef6b@kernel.org>
-In-Reply-To: <20220617120651.1e525a02@gandalf.local.home>
-References: <165461825202.280167.12903689442217921817.stgit@devnote2>
-        <165461826247.280167.11939123218334322352.stgit@devnote2>
-        <20220617120651.1e525a02@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 21:43:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD9B1ADB9;
+        Tue, 21 Jun 2022 18:42:55 -0700 (PDT)
+X-UUID: 904bb9f843774432bbf8b5efd98b3e47-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:bfd57a8b-c40b-4042-b20b-bf8940967f12,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:bfd57a8b-c40b-4042-b20b-bf8940967f12,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:2377b02d-1756-4fa3-be7f-474a6e4be921,C
+        OID:05c0f3f8a543,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 904bb9f843774432bbf8b5efd98b3e47-20220622
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 695938187; Wed, 22 Jun 2022 09:42:50 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 09:42:49 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 09:42:47 +0800
+Message-ID: <6ad2fd7b3fc961f7018e189e2f11219bf7216757.camel@mediatek.com>
+Subject: Re: [PATCH v4, 0/3] add h264 decoder driver for mt8186
+From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Tomasz Figa" <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Fritz Koenig" <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 22 Jun 2022 09:42:47 +0800
+In-Reply-To: <5316234cef174e49110f949991ef71c578a3478e.camel@ndufresne.ca>
+References: <20220512034620.30500-1-yunfei.dong@mediatek.com>
+         <edbb4605c9e30329d2f5a4ff738571acb6b91f1f.camel@ndufresne.ca>
+         <5316234cef174e49110f949991ef71c578a3478e.camel@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 12:06:51 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hi Nicolas,
 
-> On Wed,  8 Jun 2022 01:11:02 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Thanks for your comments.
+On Tue, 2022-06-14 at 13:46 -0400, Nicolas Dufresne wrote:
+> Le lundi 13 juin 2022 à 16:10 -0400, Nicolas Dufresne a écrit :
+> > Le jeudi 12 mai 2022 à 11:46 +0800, Yunfei Dong a écrit :
+> > > Firstly, add mt8186 compatible and private data, then add
+> > > document for
+> > > compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single
+> > > core
+> > > architecture, need to add new interface for h264 hardware
+> > > decoder.
+> > 
+> > Would be nice to take the habit of sharing fluster score for this
+> > new HW, I
+> > would expect no less then what the numbers you'd get from running
+> > over MT8195 or
+> > 92, remains nice to demonstrate that this was tested and document
+> > any oops along
+> > the way.
+> > > 
+> > > Patche 1 add mt8186 compatible and private data.
+> > > Patche 2 add mt8186 compatible document.
+> > > Patche 3 add h264 single core driver.
+> > > ---
+> > > This patch depends on "support for MT8192 decoder"[1]
+> > > 
+> > > [1]  
+> > > https://patchwork.kernel.org/project/linux-mediatek/cover/20220512021950.29087-1-yunfei.dong@mediatek.com/
 > 
-> >  
-> >  static void sample_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-> >  {
-> > -	pr_info("Enter <%pS> ip = 0x%p\n", (void *)ip, (void *)ip);
-> > +	if (use_trace)
-> > +		trace_printk("Enter <%pS> ip = 0x%p\n", (void *)ip, (void *)ip);
+> I forgot earlier, but I suppose this will also depends on an scp.img
+> firmware ?
+> If so, any linux-firmware submission to link to ?
 > 
-> Could we add a comment stating something like "this is just an example, no
-> kernel code should call trace_printk() except when actively debugging".
+Yes, need scp.img to test mt8186.
+But not all patches are merged now, we are testing the driver, will
+send scp.img in the middle of july.
 
-Indeed. I also add a description for this option so that user can
-understand this is just a debug option.
+Best Regards,
+Yunfei Dong
+> > > ---
+> > > changed with v3:
+> > > - fix __iomem not reasonable, align share memory to dram.
+> > > changed with v2:
+> > > - fix sparse and smatch check fail for patch 3
+> > > changed with v1:
+> > > - rebase driver to the latest media_stage.
+> > > ---
+> > > Yunfei Dong (3):
+> > >   dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings
+> > > for
+> > >     mt8186
+> > >   media: mediatek: vcodec: Support MT8186
+> > >   media: mediatek: vcodec: add h264 decoder driver for mt8186
+> > > 
+> > >  .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
+> > >  .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
+> > >  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
+> > >  .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
+> > >  .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177
+> > > +++++++++++++++++-
+> > >  5 files changed, 203 insertions(+), 2 deletions(-)
+> > > 
+> 
+> 
 
-Thank you,
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>

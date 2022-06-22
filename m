@@ -2,90 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7E755511E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DF0555122
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376407AbiFVQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 12:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S1376437AbiFVQQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355693AbiFVQQk (ORCPT
+        with ESMTP id S1355693AbiFVQQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:16:40 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A61B38780;
-        Wed, 22 Jun 2022 09:16:39 -0700 (PDT)
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by gandalf.ozlabs.org (Postfix) with ESMTP id 4LSpRV1JNBz4xZp;
-        Thu, 23 Jun 2022 02:16:38 +1000 (AEST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LSpRQ2DLzz4xDK;
-        Thu, 23 Jun 2022 02:16:34 +1000 (AEST)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Ian Woloschin <ian.woloschin@akamai.com>,
-        Ian Woloschin <iwolosch@akamai.com>
-Subject: [PATCH v3 2/2] spi: aspeed: Fix division by zero
-Date:   Wed, 22 Jun 2022 18:16:17 +0200
-Message-Id: <20220622161617.3719096-3-clg@kaod.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220622161617.3719096-1-clg@kaod.org>
-References: <20220622161617.3719096-1-clg@kaod.org>
+        Wed, 22 Jun 2022 12:16:48 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4641E39685;
+        Wed, 22 Jun 2022 09:16:47 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id o16so24129057wra.4;
+        Wed, 22 Jun 2022 09:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=t8fTjKPiEXxcK49dMKmR/PvQlfLitTyw5aVyNr6LTuw=;
+        b=h73cmD/Od55jah8HUzrGD1NefEtgw1Ii7PExR9LdRJURRyiBpTReiYwfEHl+/04ZRz
+         ThgHar8ri3QI0BT9zFcOrSe94IWs2xbMBkkGhLhCcWoCZdIucEYYugA1+rKpkjfvdTY/
+         NqiNg3R28HIqQBXGPLP8/H1EYQ5MH8hWm3XSHcsSAxluzlgjoXLnFrfuyer0dIlAx3Ln
+         grvr1XYIGWABrpxPHY3EY2DA4dvNMFJShKIYFovCSTRpeo7T34/hdOe0/luZhWEeW5Q8
+         g9LGZCmqam/HJLFFe/s273SheTmN8G+Ak1f1FCnUqUeaH1n1s89BF2AEw0mfaT3KvY3k
+         m0eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t8fTjKPiEXxcK49dMKmR/PvQlfLitTyw5aVyNr6LTuw=;
+        b=cY9vP0VMDSicWBBJn8oIPb7wZo4PvsJ2FwVxnRSPtRpNeOB6/nnnPXFu1d7Due6nIy
+         VUHWCQPj5vVStcPf7awM+ikhSzEkOKaHw8NY5n+fIuVNyO5iJagv138RH1FMBixMeVdJ
+         DNrbadoCxxepLe6ka5T4JpHhYGoorQM98QJ6l9Jpli+RwCDhfNm2yIOcSOXN4iHforGp
+         sGfkDWZmSAPiGsf9e46lXLfq35rEr47Xsy88sWcIVQ0tEnoE+C0MRUXfMA8RNjeZT5Dy
+         wOWbv6SJfpjgwEjSZWkB37juOEUyTuK7/ub49O1LuLu3bjjM5SP0jV+yubsHB7OauWm3
+         /I+Q==
+X-Gm-Message-State: AJIora/Fy34oLv4c6hM8MNc17QYKO5JNI11Dro5W6FcRGPgNmEou1udL
+        25IZY4xPWk6BS69MijqtgeBb7N+pYxc=
+X-Google-Smtp-Source: AGRyM1vizB7tgtcwmyIXHwnLNTGWhyYwtCSDtHPFvceoqZaoyGZ7qYyjxj50a8Z4+k/Sg+sFFs0ifw==
+X-Received: by 2002:a05:6000:a13:b0:21a:3d94:c7aa with SMTP id co19-20020a0560000a1300b0021a3d94c7aamr4120237wrb.12.1655914605832;
+        Wed, 22 Jun 2022 09:16:45 -0700 (PDT)
+Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
+        by smtp.gmail.com with ESMTPSA id r64-20020a1c4443000000b003942a244f39sm31775253wma.18.2022.06.22.09.16.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 09:16:45 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 17:16:43 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang
+ support")
+Message-ID: <YrNAazYbqA1sOa7D@debian>
+References: <YrLtpixBqWDmZT/V@debian>
+ <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+ <YrMwXAs9apFRdkVo@debian>
+ <CAHk-=wjmREcirYi4k_CBT+2U8X5VOAjQn0tVD28OdcKJKpA0zg@mail.gmail.com>
+ <YrM8kC5zXzZgL/ca@debian>
+ <CAHk-=wjdjrx_bORk3Th+rk66Rx-U2Zgoz1AOTE_UwVtCpD3N1A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjdjrx_bORk3Th+rk66Rx-U2Zgoz1AOTE_UwVtCpD3N1A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using the normal read operation for data transfers, the dummy bus
-width is zero. In that case, they are no dummy bytes to transfer and
-setting the dummy field in the controller register becomes useless.
+On Wed, Jun 22, 2022 at 11:07:40AM -0500, Linus Torvalds wrote:
+> On Wed, Jun 22, 2022 at 11:00 AM Sudip Mukherjee
+> <sudipm.mukherjee@gmail.com> wrote:
+> >
+> > imho, there is no check for 'i' and it can become more than MAX_FW_TYPE_NUM and
+> > in that case it will overwrite.
+> 
+> No. That's already checked a few lines before, in the
+> 
+>         if (fw_image->fw_info.fw_section_cnt > MAX_FW_TYPE_NUM) {
+>                 .. error out
+> 
+> path. And fw_section_cnt as a value is an unsigned bitfield of 16
+> bits, so there's no chance of some kind of integer signedness
+> confusion.
 
-Issue was found on a custom "Bifrost" board based on the AST2500 SoC
-and using a MX25L51245GMI-08G SPI Flash.
+oops. yeah, sorry missed that.
 
-Reported-by: Ian Woloschin <ian.woloschin@akamai.com>
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-Tested-by: Ian Woloschin <iwolosch@akamai.com>
-Fixes: 54613fc6659b ("spi: aspeed: Add support for direct mapping")
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
----
- drivers/spi/spi-aspeed-smc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> So clang is just wrong here.
+> 
+> The fact that you can apparently silence the error with an extra bogus
+> check does hopefully give clang people a clue about *where* clang is
+> wrong, but it's not an acceptable workaround for the kernel.
+> 
+> We don't write worse source code to make bad compilers happy.
+> 
+> My "use a struct assignment" is more acceptable because at least then
+> the source code doesn't get worse. It arguably should have been done
+> that way the whole time, even if 'memcpy()' is the traditional C way
+> of doing struct assignments (traditional as in "_really_ old
+> traditional C").
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index ac64be289e59..3e891bf22470 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -582,9 +582,11 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
- 	ctl_val = readl(chip->ctl) & ~CTRL_IO_CMD_MASK;
- 	ctl_val |= aspeed_spi_get_io_mode(op) |
- 		op->cmd.opcode << CTRL_COMMAND_SHIFT |
--		CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth) |
- 		CTRL_IO_MODE_READ;
- 
-+	if (op->dummy.nbytes)
-+		ctl_val |= CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth);
-+
- 	/* Tune 4BYTE address mode */
- 	if (op->addr.nbytes) {
- 		u32 addr_mode = readl(aspi->regs + CE_CTRL_REG);
--- 
-2.35.3
+Incidentally, its same as what Kees sent.
 
+2c0ab32b73cf ("hinic: Replace memcpy() with direct assignment") in next-20220622.
+
+
+--
+Regards
+Sudip

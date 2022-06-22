@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3969554417
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66238554402
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348823AbiFVHr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
+        id S1349995AbiFVHrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353834AbiFVHrQ (ORCPT
+        with ESMTP id S1349866AbiFVHrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:47:16 -0400
+        Wed, 22 Jun 2022 03:47:14 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7957837A1C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:47:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6076F37A14
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:47:12 -0700 (PDT)
 Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25M5nidW032367;
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25M5nidX032367;
         Wed, 22 Jun 2022 02:46:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=RNYk4UBGUtNXwVtJjqkoxDLehd0DQef6Q3E9pMtrqrY=;
- b=EXoa0KMMlgw6zfYYJxEv1e12t+PCKDHso+qjtQ5uwHh3cEbiTMdTL4aKgrV36UlXPA+Y
- Z7rht0cWT4QzAA6v25FGcwPuDLP2E9HDf6DtWGKpMlVaOsjVHTy+bLPYQVI/HxnrZEi4
- iW7rA2RVnAcDGhYXuUZjka2Zg86gir7WFYK51ep9/OxJdDfSCRX2yQr0HIEv2qRG+7F+
- tklZkJAS2T2PnjpjRaZMYDgQlXUw9fHYOLujmT3GspKkmmk+3Eskx9Zb3HyEgWrg31SB
- 6tRzu38m4g3WjvvqRZ0DBqlrka/o32qeO/S7439YjTOXXMNBvCanXU2+8Hdbgy4LKN5P XA== 
+ bh=VCfSQqByA7jNBXTSiZFxlNUN/rTeTM0AlDQs0otcWSg=;
+ b=GATqspGdEpi06VV0io8ZvKA76qG5QJj9en6yUY3C3OrVsI1PGrqdvvEsdCeOx1dcoU1W
+ AnQmK1JKuxd5vUc+ZqfgNzaYAksC+5AFb5G2RfkXYMR0eyaCokVDMRFEdEJxMBvUaJ/z
+ ShDY36C9O5A64pzO92YYk0K/z3utgjo/3Tw6A1QJCNAKzu/R+voIcQJSbfLIMJpGEcYa
+ 6uPpr9M++gPABmkvJzwFSMwyN4lRxJRBfM8wsNOQYlTbiz+SNS1a663oJlmf8AcIbW19
+ 1SeX3HvaPqTSLrZVrdBaDOLclfR/OER5PiWjClc5nve+fMwr/mikOY0i2AFQW/AXsSxV qQ== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41cqh2-1
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41cqh2-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 22 Jun 2022 02:46:56 -0500
+        Wed, 22 Jun 2022 02:46:57 -0500
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 22 Jun
- 2022 08:46:54 +0100
+ 2022 08:46:55 +0100
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Wed, 22 Jun 2022 08:46:54 +0100
+ Transport; Wed, 22 Jun 2022 08:46:55 +0100
 Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.175])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 880E6478;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D61D57C;
         Wed, 22 Jun 2022 07:46:54 +0000 (UTC)
 From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
@@ -47,17 +47,17 @@ To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
 CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <linux-kernel@vger.kernel.org>,
         Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v7 02/14] ALSA: hda: hda_cs_dsp_ctl: Add apis to write the controls directly
-Date:   Wed, 22 Jun 2022 08:46:41 +0100
-Message-ID: <20220622074653.179078-3-vitalyr@opensource.cirrus.com>
+Subject: [PATCH v7 03/14] ALSA: hda: cs35l41: Save codec object inside component struct
+Date:   Wed, 22 Jun 2022 08:46:42 +0100
+Message-ID: <20220622074653.179078-4-vitalyr@opensource.cirrus.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220622074653.179078-1-vitalyr@opensource.cirrus.com>
 References: <20220622074653.179078-1-vitalyr@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: esAER2oeOn3cMVmogS318zXP7xBlXlL_
-X-Proofpoint-ORIG-GUID: esAER2oeOn3cMVmogS318zXP7xBlXlL_
+X-Proofpoint-GUID: mhus3BjgP_rz4Qi0NknL8g6wCIYzp619
+X-Proofpoint-ORIG-GUID: mhus3BjgP_rz4Qi0NknL8g6wCIYzp619
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,83 +70,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Stefan Binding <sbinding@opensource.cirrus.com>
 
-DSP controls are exposed as ALSA controls, however,
-some of these controls are required to be accessed by
-the driver. Add apis which allow read/write of these
-controls. The write api will also notify the ALSA control
-on value change.
+This is required for ALSA control support.
 
 Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
 ---
- sound/pci/hda/hda_cs_dsp_ctl.c | 39 ++++++++++++++++++++++++++++++++++
- sound/pci/hda/hda_cs_dsp_ctl.h |  4 ++++
- 2 files changed, 43 insertions(+)
+ sound/pci/hda/cs35l41_hda.c   | 1 +
+ sound/pci/hda/cs35l41_hda.h   | 1 +
+ sound/pci/hda/hda_component.h | 1 +
+ sound/pci/hda/patch_realtek.c | 1 +
+ 4 files changed, 4 insertions(+)
 
-diff --git a/sound/pci/hda/hda_cs_dsp_ctl.c b/sound/pci/hda/hda_cs_dsp_ctl.c
-index 0f4f02e0a538..91e37cb916dd 100644
---- a/sound/pci/hda/hda_cs_dsp_ctl.c
-+++ b/sound/pci/hda/hda_cs_dsp_ctl.c
-@@ -202,6 +202,45 @@ void hda_cs_dsp_control_remove(struct cs_dsp_coeff_ctl *cs_ctl)
- }
- EXPORT_SYMBOL_NS_GPL(hda_cs_dsp_control_remove, SND_HDA_CS_DSP_CONTROLS);
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index cce27a86267f..bbbaafac50c3 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -117,6 +117,7 @@ static int cs35l41_hda_bind(struct device *dev, struct device *master, void *mas
+ 		return -EBUSY;
  
-+int hda_cs_dsp_write_ctl(struct cs_dsp *dsp, const char *name, int type,
-+			 unsigned int alg, const void *buf, size_t len)
-+{
-+	struct cs_dsp_coeff_ctl *cs_ctl;
-+	struct hda_cs_dsp_coeff_ctl *ctl;
-+	int ret;
-+
-+	cs_ctl = cs_dsp_get_ctl(dsp, name, type, alg);
-+	if (!cs_ctl)
-+		return -EINVAL;
-+
-+	ctl = cs_ctl->priv;
-+
-+	ret = cs_dsp_coeff_write_ctrl(cs_ctl, 0, buf, len);
-+	if (ret)
-+		return ret;
-+
-+	if (cs_ctl->flags & WMFW_CTL_FLAG_SYS)
-+		return 0;
-+
-+	snd_ctl_notify(ctl->card, SNDRV_CTL_EVENT_MASK_VALUE, &ctl->kctl->id);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_NS_GPL(hda_cs_dsp_write_ctl, SND_HDA_CS_DSP_CONTROLS);
-+
-+int hda_cs_dsp_read_ctl(struct cs_dsp *dsp, const char *name, int type,
-+			unsigned int alg, void *buf, size_t len)
-+{
-+	struct cs_dsp_coeff_ctl *cs_ctl;
-+
-+	cs_ctl = cs_dsp_get_ctl(dsp, name, type, alg);
-+	if (!cs_ctl)
-+		return -EINVAL;
-+
-+	return cs_dsp_coeff_read_ctrl(cs_ctl, 0, buf, len);
-+}
-+EXPORT_SYMBOL_NS_GPL(hda_cs_dsp_read_ctl, SND_HDA_CS_DSP_CONTROLS);
-+
- MODULE_DESCRIPTION("CS_DSP ALSA Control HDA Library");
- MODULE_AUTHOR("Stefan Binding, <sbinding@opensource.cirrus.com>");
- MODULE_LICENSE("GPL");
-diff --git a/sound/pci/hda/hda_cs_dsp_ctl.h b/sound/pci/hda/hda_cs_dsp_ctl.h
-index 1c6d0fc9a2cc..c65bfd6878fd 100644
---- a/sound/pci/hda/hda_cs_dsp_ctl.h
-+++ b/sound/pci/hda/hda_cs_dsp_ctl.h
-@@ -29,5 +29,9 @@ struct hda_cs_dsp_ctl_info {
+ 	comps->dev = dev;
++	cs35l41->codec = comps->codec;
+ 	strscpy(comps->name, dev_name(dev), sizeof(comps->name));
+ 	comps->playback_hook = cs35l41_hda_playback_hook;
  
- int hda_cs_dsp_control_add(struct cs_dsp_coeff_ctl *cs_ctl, struct hda_cs_dsp_ctl_info *info);
- void hda_cs_dsp_control_remove(struct cs_dsp_coeff_ctl *cs_ctl);
-+int hda_cs_dsp_write_ctl(struct cs_dsp *dsp, const char *name, int type,
-+			 unsigned int alg, const void *buf, size_t len);
-+int hda_cs_dsp_read_ctl(struct cs_dsp *dsp, const char *name, int type,
-+			unsigned int alg, void *buf, size_t len);
+diff --git a/sound/pci/hda/cs35l41_hda.h b/sound/pci/hda/cs35l41_hda.h
+index a52ffd1f7999..aaf9e16684c2 100644
+--- a/sound/pci/hda/cs35l41_hda.h
++++ b/sound/pci/hda/cs35l41_hda.h
+@@ -32,6 +32,7 @@ struct cs35l41_hda {
+ 	struct regmap *regmap;
+ 	struct gpio_desc *reset_gpio;
+ 	struct cs35l41_hw_cfg hw_cfg;
++	struct hda_codec *codec;
  
- #endif /*__HDA_CS_DSP_CTL_H__*/
+ 	int irq;
+ 	int index;
+diff --git a/sound/pci/hda/hda_component.h b/sound/pci/hda/hda_component.h
+index e26c896a13f3..534e845b9cd1 100644
+--- a/sound/pci/hda/hda_component.h
++++ b/sound/pci/hda/hda_component.h
+@@ -14,5 +14,6 @@
+ struct hda_component {
+ 	struct device *dev;
+ 	char name[HDA_MAX_NAME_SIZE];
++	struct hda_codec *codec;
+ 	void (*playback_hook)(struct device *dev, int action);
+ };
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index ff9a09a670ed..923c0d498d54 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6654,6 +6654,7 @@ static void cs35l41_generic_fixup(struct hda_codec *cdc, int action, const char
+ 					      "%s-%s:00-cs35l41-hda.%d", bus, hid, i);
+ 			if (!name)
+ 				return;
++			spec->comps[i].codec = cdc;
+ 			component_match_add(dev, &spec->match, component_compare_dev_name, name);
+ 		}
+ 		ret = component_master_add_with_match(dev, &comp_master_ops, spec->match);
 -- 
 2.34.1
 

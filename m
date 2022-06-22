@@ -2,50 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF1D555421
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE1C55544C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiFVTTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S1358183AbiFVT1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiFVTTq (ORCPT
+        with ESMTP id S230376AbiFVT1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:19:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1EC3587E;
-        Wed, 22 Jun 2022 12:19:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Jun 2022 15:27:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64E50387BE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655926035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Xf2w4YFMBo/KqjwPtBP8STHhW74PSmVHW8ZoSdl5DBs=;
+        b=N8qCoCy55iGa+j8ldeyMNZuBbpm8K1fXMXSgmpbccX/dber4yIRO4GbHvNzzIZvUYyPoCw
+        OSGZZGzNBylzVE2jYDV+66+Zys1NGzGgTcp8uyoy3u1UqBBxSXCimTe2o77Wb0qFJesCyl
+        CqKltdXit4uLFPygvYxmFTVpb9E+EaA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-473-gprVsIPsOwqRQYeDQd_oYA-1; Wed, 22 Jun 2022 15:27:12 -0400
+X-MC-Unique: gprVsIPsOwqRQYeDQd_oYA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A821B820DF;
-        Wed, 22 Jun 2022 19:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F12C34114;
-        Wed, 22 Jun 2022 19:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1655925582;
-        bh=/mqJhZHnFZv4yLcCic7/bc1inkKszgYj0JD8prJIpjk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qjWwYVRfzc+N/uWK1DpW6CQ1YtCEOGV22eBql0f6AWWGbzOZS1IgM/pjtupsLc42h
-         ta0txrydZ00LBL7/oBed2qA17Gp2fr41qccvrNnizD0i9RH0wCeQC//+fWo2G90mHl
-         9zKKVEDbrzi7kVNmY0rEi2WI55V7CHa6d6G4mfM4=
-Date:   Wed, 22 Jun 2022 12:19:30 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: [PATCH] zram: do not lookup algorithm in backends table
-Message-Id: <20220622121930.4f8d3f882bb2b0520fd6917c@linux-foundation.org>
-In-Reply-To: <YrMzJSNb4b+tODqR@google.com>
-References: <20220622023501.517125-1-senozhatsky@chromium.org>
-        <YrMzJSNb4b+tODqR@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E4E18001EA;
+        Wed, 22 Jun 2022 19:27:11 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B71791121315;
+        Wed, 22 Jun 2022 19:27:10 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     maz@kernel.org, anup@brainfault.org, seanjc@google.com,
+        bgardon@google.com, peterx@redhat.com, maciej.szmigiero@oracle.com,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, pfeiner@google.com,
+        jiangshanlai@gmail.com, dmatlack@google.com
+Subject: [PATCH v7 00/23] KVM: Extend Eager Page Splitting to the shadow MMU
+Date:   Wed, 22 Jun 2022 15:26:47 -0400
+Message-Id: <20220622192710.2547152-1-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,68 +61,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 00:20:05 +0900 Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
+For the description of the "why" of this patch, I'll just direct you to
+David's excellent cover letter from v6, which can be found at
+https://lore.kernel.org/r/20220516232138.1783324-1-dmatlack@google.com.
 
-> On (22/06/22 11:35), Sergey Senozhatsky wrote:
-> > Always use crypto_has_comp() so that crypto can lookup module,
-> > call usermodhelper to load the modules, wait for usermodhelper
-> > to finish and so on. Otherwise crypto will do all of these steps
-> > under CPU hot-plug lock and this looks like too much stuff to
-> > handle under the CPU hot-plug lock. Besides this can end up in
-> > a deadlock when usermodhelper triggers a code path that attempts
-> > to lock the CPU hot-plug lock, that zram already holds.
-> 
-> And we think that we (not exactly "we", our partners) actually
-> see a deadlock. It goes something like this:
-> 
-> - path A. zram grabs CPU hot-plug lock, execs /sbin/modprobe from crypto
->   and waits for modprobe to finish
+This version mostly does the following:
 
-Nope, can't do that.
+- apply the feedback from Sean and other reviewers, which is mostly
+  aesthetic
 
-> disksize_store
->  zcomp_create
->   __cpuhp_state_add_instance
->    __cpuhp_state_add_instance_cpuslocked
->     zcomp_cpu_up_prepare
->      crypto_alloc_base
->       crypto_alg_mod_lookup
->        call_usermodehelper_exec
->         wait_for_completion_killable
->          do_wait_for_common
->           schedule
+- replace the refactoring of drop_large_spte()/__drop_large_spte()
+  with my own version.  The insight there is that drop_large_spte()
+  is always followed by {,__}link_shadow_page(), so the call is
+  moved there
 
-The usermode helper is free to do anything it wants, including
-operations that take the CPU hotplug lock.  Or operations which might
-in the future be changed to take that lock.
+- split the TLB flush optimization into a separate patch, mostly
+  to perform the previous refactoring independent of the optional
+  TLB flush
 
-> - path B. async work kthread that brings in scsi device. It wants to
->   register CPUHP states at some point, and it needs the CPU hot-plug
->   lock for that, which is owned by zram.
-> 
-> async_run_entry_fn
->  scsi_probe_and_add_lun
->   scsi_mq_alloc_queue
->    blk_mq_init_queue
->     blk_mq_init_allocated_queue
->      blk_mq_realloc_hw_ctxs
->       __cpuhp_state_add_instance
->        __cpuhp_state_add_instance_cpuslocked
->         mutex_lock
->          schedule
-> 
-> - path C. modprobe sleeps, waiting for all aync works to finish.
-> 
-> load_module
->  do_init_module
->   async_synchronize_full
->    async_synchronize_cookie_domain
->     schedule
-> 
-> And none can make any progress.
-> 
-> So I think we need to move crypto_alg_mod_lookup()->call_usermodehelper_exec()
-> out of CPU hot-plug lock and pre-load modules in advance, before we grab the
-> hot-plug lock.
+- rename a few functions from *nested_mmu* to *shadow_mmu*
 
-If the locking is fixed, why is there still a need to preload modules?
+David Matlack (21):
+  KVM: x86/mmu: Optimize MMU page cache lookup for all direct SPs
+  KVM: x86/mmu: Use a bool for direct
+  KVM: x86/mmu: Stop passing "direct" to mmu_alloc_root()
+  KVM: x86/mmu: Derive shadow MMU page role from parent
+  KVM: x86/mmu: Always pass 0 for @quadrant when gptes are 8 bytes
+  KVM: x86/mmu: Decompose kvm_mmu_get_page() into separate functions
+  KVM: x86/mmu: Consolidate shadow page allocation and initialization
+  KVM: x86/mmu: Rename shadow MMU functions that deal with shadow pages
+  KVM: x86/mmu: Move guest PT write-protection to account_shadowed()
+  KVM: x86/mmu: Pass memory caches to allocate SPs separately
+  KVM: x86/mmu: Replace vcpu with kvm in kvm_mmu_alloc_shadow_page()
+  KVM: x86/mmu: Pass kvm pointer separately from vcpu to
+    kvm_mmu_find_shadow_page()
+  KVM: x86/mmu: Allow NULL @vcpu in kvm_mmu_find_shadow_page()
+  KVM: x86/mmu: Pass const memslot to rmap_add()
+  KVM: x86/mmu: Decouple rmap_add() and link_shadow_page() from kvm_vcpu
+  KVM: x86/mmu: Update page stats in __rmap_add()
+  KVM: x86/mmu: Cache the access bits of shadowed translations
+  KVM: x86/mmu: Extend make_huge_page_split_spte() for the shadow MMU
+  KVM: x86/mmu: Zap collapsible SPTEs in shadow MMU at all possible
+    levels
+  KVM: Allow for different capacities in kvm_mmu_memory_cache structs
+  KVM: x86/mmu: Extend Eager Page Splitting to nested MMUs
+
+Paolo Bonzini (2):
+  KVM: x86/mmu: pull call to drop_large_spte() into __link_shadow_page()
+  KVM: x86/mmu: Avoid unnecessary flush on eager page split
+
+ .../admin-guide/kernel-parameters.txt         |   3 +-
+ arch/arm64/kvm/mmu.c                          |   2 +-
+ arch/riscv/kvm/mmu.c                          |   5 +-
+ arch/x86/include/asm/kvm_host.h               |  24 +-
+ arch/x86/kvm/mmu/mmu.c                        | 719 ++++++++++++++----
+ arch/x86/kvm/mmu/mmu_internal.h               |  17 +-
+ arch/x86/kvm/mmu/paging_tmpl.h                |  43 +-
+ arch/x86/kvm/mmu/spte.c                       |  15 +-
+ arch/x86/kvm/mmu/spte.h                       |   4 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    |   2 +-
+ include/linux/kvm_host.h                      |   1 +
+ include/linux/kvm_types.h                     |   6 +-
+ virt/kvm/kvm_main.c                           |  33 +-
+ 13 files changed, 666 insertions(+), 208 deletions(-)
+
+-- 
+2.31.1
+

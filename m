@@ -2,83 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DC4554401
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9882E554466
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352600AbiFVHQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S1352606AbiFVHRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352481AbiFVHQS (ORCPT
+        with ESMTP id S1349995AbiFVHRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:16:18 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCAA36E2F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:16:14 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id n1so21789512wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CtSNoh45LEKsH5r4uELC6LtRueJ6snrKyNpfTTTNZ1Y=;
-        b=fA2zTCihmRV2WZbU3gqvzED0Fp8YWvXNRYw7aPaV19Ys6QazhFGijpJrid5c5UgJok
-         J4QktUfWvP2OaY6yRc3kFzSzLs9xtxlVDok9cBwPkX8NrcEjziBX6ZPxWCE57ibbMDUz
-         Gdi2j5k30MFYfycNxG9VcjEp2Ei4H1fbjPyVRO8K7pSvn4YCa4kijnvLKu20me83qluz
-         eyOlFHtKb3hnHohBVB1rJEHTed4QDvgHrIZqL4nB3knkrz0LBR545QpE8ftw55RX3Erx
-         7ejW6qZbPyL/th21G1Sw7B5H59xsqFbA0PXGB7znU2uiOe02dmfcCEc2BNRbCux7YwwS
-         IGcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CtSNoh45LEKsH5r4uELC6LtRueJ6snrKyNpfTTTNZ1Y=;
-        b=1N4t1d9RGiGEzO5NRx+NIJIoYk+7BRoLHa8AtCAt9jXLGZVqKQDQsBPu9HiBKnTDJK
-         /9k7PmxNzL4kSbs7M7l+c3agLbnJ7QrpjpRDXgNfHeU9MCHMQxHHdyefpCqwhoS/lkkK
-         v6Cybs889dG9KkXHDy4+5V49AxXDyo9C9wiaUIfzifDEoF+SpzlzxtCRBNWUsZRjt3z3
-         pdOoXzrkSaE6OcbianJeh87V0R3SWenyM4eTsInzNBwEZlYiR4fu/HIKazHy/ttOpirb
-         paVll1uknJYsKmC3Wzq3pGU5sgx9HMYjRTyVibkJnsqvLGPI3klDlJJ0DG53GVoaeE1u
-         uK0g==
-X-Gm-Message-State: AJIora+kgzg6QJLyywVOFJq9y27Dd84OJcIp8amn8x+j7E9eTakO3QYu
-        MDhVMP1oXsFSPGkmxcDCfkZo8YpMFW2tccbz0MKcQg==
-X-Google-Smtp-Source: AGRyM1tCZmF74NPe0ihlmXBCpgdH9Z16UD41QxdqlzJg3ptuyeQtd337BFOBJWJ5yCJ2w6VfBacRyIn19z00N7AB3LY=
-X-Received: by 2002:a5d:570e:0:b0:21b:9610:2dd7 with SMTP id
- a14-20020a5d570e000000b0021b96102dd7mr1682277wrv.337.1655882173160; Wed, 22
- Jun 2022 00:16:13 -0700 (PDT)
+        Wed, 22 Jun 2022 03:17:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1491636E32
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:17:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0413913D5;
+        Wed, 22 Jun 2022 00:17:37 -0700 (PDT)
+Received: from [10.57.85.1] (unknown [10.57.85.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC4353F66F;
+        Wed, 22 Jun 2022 00:17:35 -0700 (PDT)
+Message-ID: <bc4add1b-8b89-7989-5afb-df6b5338eb3d@arm.com>
+Date:   Wed, 22 Jun 2022 08:17:29 +0100
 MIME-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-4-davidgow@google.com>
-In-Reply-To: <20220621085345.603820-4-davidgow@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 22 Jun 2022 15:16:01 +0800
-Message-ID: <CABVgOSm-bgjTzeWjEtDZ+3f-zJLxjywtgVSqWu2-cK_ScRLHwA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] thunderbolt: test: Use kunit_test_suite() macro
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>
-Cc:     Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000bd1f1305e2041c80"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/3] iommu: Clean up release_device checks
+Content-Language: en-GB
+To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <cover.1655822151.git.robin.murphy@arm.com>
+ <02671dbfad7a3343fc25a44222350efcb455fe3c.1655822151.git.robin.murphy@arm.com>
+ <59002dbd-d72a-4f9c-7ad8-808ee8d2ff05@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <59002dbd-d72a-4f9c-7ad8-808ee8d2ff05@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,146 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000bd1f1305e2041c80
-Content-Type: text/plain; charset="UTF-8"
+On 2022-06-22 02:36, Baolu Lu wrote:
+> On 2022/6/21 23:14, Robin Murphy wrote:
+>> Since .release_device is now called through per-device ops, any call
+>> which gets as far as a driver definitely*is*  for that driver, for a
+>> device which has successfully passed .probe_device, so all the checks to
+>> that effect are now redundant and can be removed. In the same vein we
+>> can also skip freeing fwspecs which are now managed by core code.
+> 
+> Does this depend on any other series? I didn't see iommu_fwspec_free()
+> called in the core code. Or I missed anything?
 
-On Tue, Jun 21, 2022 at 4:54 PM David Gow <davidgow@google.com> wrote:
->
-> The new implementation of kunit_test_suite() for modules no longer
-> conflicts with module_init, so can now be used by the thunderbolt tests.
->
-> Also update the Kconfig entry to enable the test when KUNIT_ALL_TESTS is
-> enabled.
->
-> This means that kunit_tool can now successfully run and parse the test
-> results with, for example:
->         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
->         --kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_USB4=y \
->         'thunderbolt'
->
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20220618090310.1174932-4-davidgow@google.com/
-> - Actually include the Kconfig changes, which were mistakenly added to
->   the next patch in the series in v1.
-> - Add Acked-by tag from Mika Westerberg
->
-> ---
->  drivers/thunderbolt/Kconfig  |  5 +++--
->  drivers/thunderbolt/domain.c |  3 ---
->  drivers/thunderbolt/tb.h     |  8 --------
->  drivers/thunderbolt/test.c   | 12 +-----------
->  4 files changed, 4 insertions(+), 24 deletions(-)
->
-> diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
-> index 4bfec8a28064..2a063d344b94 100644
-> --- a/drivers/thunderbolt/Kconfig
-> +++ b/drivers/thunderbolt/Kconfig
-> @@ -28,8 +28,9 @@ config USB4_DEBUGFS_WRITE
->           this for production systems or distro kernels.
->
->  config USB4_KUNIT_TEST
-> -       bool "KUnit tests"
-> -       depends on KUNIT=y
-> +       bool "KUnit tests" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
->
-
-FYI: It turns out we can't just replace the "depends on KUNIT=y" with
-"depends on KUNIT" here, as it's still possible to have CONFIG_USB4=y
-and CONFIG_KUNIT=m, which would lead to missing KUnit symbols during
-link.
-
-What does work is adding, in addition to "depends on KUNIT":
-depends on (USB4=m || KUNIT=y)
-
-Which will prevent the tests from being enabled in this situation.
-
-I'll wait another day or so before sending out a v3 with this fixed,
-in case there are any other issues which arise.
+dev_iommu_free() cleans up param->fwspec directly (see b54240ad4943). 
+FWIW the plan is that iommu_fwspec_free() should eventually go away - of 
+the remaining uses after this, two are in fact similarly redundant 
+already, since there's also a dev_iommu_free() in the probe failure 
+path, and the other two should disappear in part 2 of fixing the bus 
+probing mess (wherein the of_xlate step gets pulled into 
+iommu_probe_device as well, and finally works correctly again).
 
 Cheers,
--- David
+Robin.
 
---000000000000bd1f1305e2041c80
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB1
-Mdw9axuh90nzbVhFE5gRjx4/lShMFfC1KFUOOrHCszAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA2MjIwNzE2MTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAf3I8xG1SnEmHZXnfmfTP
-awx1EH5au/l8uN//Zd4fylWYSxYSgJo/cDHyaiEdxFh4eqZZbMIYSPyk+1mZeBofz1sEkYvpIYhb
-IIoD1CBjrtM3ihfZDjiT7XnH1y/dusUcAmJlVZh9JrpH7zd9ZUqgM3I7KXMHSyjXK1B0yGxZMVIq
-7PTfM0fVQQPfrlndAtyQ3TFAWaYFzcT4eRIvoBMlSR/GpPEuew8n0LOI5I9TfKGvS9xEgCpHJDvr
-2cesuzmSjZaASJusIbCMZq/ZI/GRrqtN8+p2GgDD+8MXqiCnlFZlNuUMF55ZMctJgWghGx9oOCM+
-3OaLc/IGlqK8cowXmg==
---000000000000bd1f1305e2041c80--
+> 
+>>
+>> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+>> ---
+>>   drivers/iommu/apple-dart.c                  |  3 ---
+>>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  8 +-------
+>>   drivers/iommu/arm/arm-smmu/arm-smmu.c       | 14 +++-----------
+>>   drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 11 -----------
+>>   drivers/iommu/exynos-iommu.c                |  3 ---
+>>   drivers/iommu/mtk_iommu.c                   |  5 -----
+>>   drivers/iommu/mtk_iommu_v1.c                |  5 -----
+>>   drivers/iommu/sprd-iommu.c                  | 11 -----------
+>>   drivers/iommu/virtio-iommu.c                |  8 +-------
+>>   9 files changed, 5 insertions(+), 63 deletions(-)
+> 
+> Best regards,
+> baolu

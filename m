@@ -2,182 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E936554241
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 07:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5986F554247
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 07:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357026AbiFVF0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 01:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S1357041AbiFVF35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 01:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357005AbiFVF0f (ORCPT
+        with ESMTP id S232386AbiFVF34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 01:26:35 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DB336336;
-        Tue, 21 Jun 2022 22:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655875593; x=1687411593;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=+LZviGXzr1kB7ZjZg3XSFexz3Ota/CQX6Kmv0qJPBIc=;
-  b=PZJnCh/3GdXQBnZxVS9TQT5h6Wqm/lJs8Mtb2UefcAn81AytyBNiCJUp
-   qJ735DVN0j/IgHZlriWwDqNheWSQrD+E4e+0m6EeODLCAcTpZdi28lUP8
-   tryKvPSieSsGmYlcoaGOR9iGTJY97uMhf4THXBcE2l7a7k6nmHvQrLr6Z
-   MrZhhdLxkTjWZhbYrDIMy+du/ZVSfWkM3p/cZHMqfKqfuYLGv6CDmwSPr
-   yRAUEQ7RgYezHjQ5dlvNW12Gm/1MlOp+GFxZEN03O7133gcGiGZW2vMlI
-   6mQT0tUAYlxxK314sLDZP+ycld7csAC79wqCxl1f+C0xKi7S+xIAKMfSJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281390372"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="281390372"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 22:26:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="914470492"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Jun 2022 22:26:31 -0700
-Received: from orsmsx606.amr.corp.intel.com (10.22.229.19) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 21 Jun 2022 22:26:31 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 21 Jun 2022 22:26:31 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 21 Jun 2022 22:26:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A/uLP8Uja5ap+AoYZNdBYmeTGla82UNueRlDFrb2xraziaO9lJKI7k2UmvOE3Pih0L/WnXMPKbPnF2C3Y5paLGJb9RK8YQm9dsUrJSwkfkYusLzzOeM57ySNUHxfZKD4WBOgivj4C5m1K+QNO3AgsgHG8cbIfV13xHGyFsdpfwRBul8HeAZIMtTn+nYJz8iCaWS1aooQhKMXxoXGYdGcJDZtBVBy5u9eLw4lIIh3cGuAynxc6HweXR8qsxnBDL0grS1P/kiFq2NsszfCNvJOpXTtnGP9uZTYLuJqHL8J62IUveeeFG/gsmZF4IGyCViUMY7cJH/aiEEqIVZBnQvdiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+LZviGXzr1kB7ZjZg3XSFexz3Ota/CQX6Kmv0qJPBIc=;
- b=e8US3O7dxZC4i7A+taTAnaqcxyJeLBgZNgA9yFbxlRyOkRfYWtbiU1n88gSRxdJyLvb3I5VkEzd00FRZh7Se4X5NdtvJ0xK13XAI3IME9iVSnRytATyKWfgW3moZ9Hy1IGgVZlZY9LuXH21F4FQBz5EIMWdUQZ4EgQqrUMr6Aeee4sjbKKUVhrqNwN1V9NMh9x+Lh1QtsCo3+O2f4F19CAEowUsdlmGRwh8ekjDaVJvFGvvVedK3iQ/rqFspzn1WIKQFodQgLqKSVy+SqL7TCmAJ9WU74bJGaHoq6pRZIg4UkARpVDk5xXFqhVGjoLsulgIKUksQ2tQhZNjgCqwPbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CY5PR11MB6535.namprd11.prod.outlook.com (2603:10b6:930:41::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Wed, 22 Jun
- 2022 05:26:23 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c%2]) with mapi id 15.20.5353.022; Wed, 22 Jun 2022
- 05:26:23 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>
-CC:     "Qiang, Chenyi" <chenyi.qiang@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2 1/1] iommu/vt-d: Fix RID2PASID setup failure
-Thread-Topic: [PATCH v2 1/1] iommu/vt-d: Fix RID2PASID setup failure
-Thread-Index: AQHYhfLuXUM1xHXjNk+lf4Dn9CxC1a1a5TUQ
-Date:   Wed, 22 Jun 2022 05:26:23 +0000
-Message-ID: <BN9PR11MB52769E1D6C180FA0BBF820128CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220622044120.21813-1-baolu.lu@linux.intel.com>
-In-Reply-To: <20220622044120.21813-1-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4bd0bd8f-7313-4a4f-6f19-08da540fbf53
-x-ms-traffictypediagnostic: CY5PR11MB6535:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <CY5PR11MB65351F39FEE7822CF689CC6B8CB29@CY5PR11MB6535.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JjSGWFVCAlm2pJVRuend60PxmjJIe8x2qYFPPbQ9NGRXtjBTHk3vpbHlw4V9VQr/tlmVYuD4cRMeW2p8bgjV4/eihE7kSNgaVSBvgcP1xCIz8sDbsB4aH5NzYl6BOTe+Tc5EGqM5pWfPfwYsRSjqjvn9NyqW4ZSkOdXpk+P87SQDNqy2NcelLYpbsWCIWZR1clYBFI5hAhTVqDAQ4xmsk6MVm18ecBaf3WRfPRLWnfnzhwPU8Vt94s/qLww5apZ9mNbgahi4RsFXCyOExwZAWF5+gHRKlGp3oeQE8YZSHE8s9cgOdDZR8jd9XSVrHLaKaBQbK0Jqiy5ts8ruXbJTi8eTTyOWPswuWa6/op/Svun0sDuodP3GMi+o/RrHEE8UKcyY0UTrqybvbz2t3afZWwNdCIZis9JEI7hE7LNI+nr3jQkmXDlxYJCsDC9pv0F3yI+FVPsSvtkYXsggbNJC0TWMxQE3cO6kgDmbohbKjQ/4vRvDwh/6NylupRlxEnWsKsMkK+/iEIcUMPSla6+wPhNR3Ds7SfnVwq30Vmma0/oLbv4GjfE56kGYVxa/jP0Hf3lUhR+RoQlUyYRJo9T2LHLqBjrGRWZ5JCs9tdJaa6DHuJ34Z3txnuY2RRdKd2cTcpPlMLJHbOlcOe2WHl8bWAVNGZqbuU7BHVxaINQhoiQ8HkgqkWxQq9qSzEttDJpkulC1HNRzj2KrvZHOVMcLIQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(39860400002)(376002)(366004)(346002)(136003)(54906003)(66476007)(110136005)(71200400001)(66446008)(41300700001)(122000001)(66556008)(38100700002)(5660300002)(38070700005)(26005)(6506007)(86362001)(7696005)(186003)(478600001)(55016003)(6636002)(8676002)(8936002)(9686003)(4326008)(83380400001)(52536014)(33656002)(82960400001)(76116006)(316002)(66946007)(2906002)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?01MF1DX4zhq3gtVNmmTM4Tv4EQ/pMDwI9u4dIaEG7Hy/SGLl8f0dU9YQ9D/f?=
- =?us-ascii?Q?CKYz9+pbHaVrf34mj/tAyI4savNTadqsVBaqdQGtSyvIrl34KH/Calb0Mht2?=
- =?us-ascii?Q?4AIwS946K3palANeIAjqZkDsb2Zit+9QTuJFOYKGYVC9XX3sOfEe3ZyAVVoh?=
- =?us-ascii?Q?iE1j6tmGWT95MGuQEW8KfmYxfGui0KmwtyFpUFlmukLwTAF9nV1opUJLfn5D?=
- =?us-ascii?Q?w6iXBlFyxqHc9MdBS4h4sN2W3op6z/t2PMtaAzOG0uBvJu+tG5rjlqoKUd2q?=
- =?us-ascii?Q?z9o21xoXkNBXAUYpmPb2f9oQxnUOtdu9fygdn/TICbNHSv4LwOyTITCtCGoO?=
- =?us-ascii?Q?9WeWBfE/ZocVM9S7yRe+IA11hFoYZnhWn2ILN623BKm1wF0iYojRMDqpoFGi?=
- =?us-ascii?Q?OYxXfxxwKkPrFfJBERQF1IXJLih/53sYW5nRU6Z0Wi1lykbvTYiAjjSlg3+Q?=
- =?us-ascii?Q?DDpMTPadR2PrSwYuaUG90f7ZN3uvFRiCHHTQkBzQQRKgXT5I7GdownoFKxbm?=
- =?us-ascii?Q?ZxiZ+X+Ah/E8BgzhaKBtneUiC++zHaaFfezcsQ3wBIb9YjsV9Jdeazm5Q6Ht?=
- =?us-ascii?Q?WBHp9nwgzsliJ7p7SgWWcB3Wyx693NyQlr3Athsp/+0XW9v3UGN7dkxUmZNc?=
- =?us-ascii?Q?hEPLtqv+lwFp5wmJ+7RoVx/gt/q8W+II1B+Z3YgOtK3XwgZHqfemh/3GdntT?=
- =?us-ascii?Q?9ja2tTiFD7J6Deqe7nca4mmg+5tKc0Ed0ljXNoUNiP6YRLY507Kf3vnMulj/?=
- =?us-ascii?Q?+vxiyc8ucXK8/E40Pda4RmMTZhyqqFvNz9hAwXITU/VWLVkHKBD5iySom907?=
- =?us-ascii?Q?hIPZO1Bk9a/KbxZcea4p4lp56LETZC01wCfwJLMDDyT5rxfyXRrs/c6YAsT7?=
- =?us-ascii?Q?a9KsNIyG0nCdqieNaKBCnXcMtF0hHpD/tna8U0NJcco+hF2GYE0phG3YI39B?=
- =?us-ascii?Q?IR4u48yUmN/hjffyh+kB9sfZa8quRZPFV5L0sv1SW1biiCvqWZdSIRi15WUD?=
- =?us-ascii?Q?wvv3+fBsnXgzp+LUBna2E1EbJYhpIMmEIzjOvcyYS8Wtx7XLWDFZlhgBlLWF?=
- =?us-ascii?Q?5ElAphOgKE9NRMgAR8bzKFfO4czSH3cNQypc1NvHGvO8bZFHgbrQQezsPwxc?=
- =?us-ascii?Q?TdFc0Y3rtKOY61Cc0CNERjGvRRE8ZatxjnnG+31JZaV1FYWza0XrRcklb87e?=
- =?us-ascii?Q?Oq0jk0pvlGOR2oJiS0puYKYoakCDBmIzGs2Cm8ADuueAMAQJVqJeIRe4rnLa?=
- =?us-ascii?Q?5MYNrIIF7mNNsdeuOPv7QH2oADxCuyzfFPF/WSaa790SBNKaYBznWcKKzmmJ?=
- =?us-ascii?Q?4k0FOiIYDmjZFPLmvi4SwldSPiZRndBQSifDQbVhaZXZju1M2OT27Bu9qZiP?=
- =?us-ascii?Q?4c04J5spb87IDvopoVaoVmwmlOLY4gn3kzFmN9nHLjtVl/pDtwq/pCuWrF0T?=
- =?us-ascii?Q?LXhAyz04tFyiWO9wK5kDHGqZ38nO5AqCVgp3kOXEQ6bYSupSY+mCh8zmjtbs?=
- =?us-ascii?Q?6vCkbtqMWdyN7tkWzBn4t2mDMWOgAGO3cbT9+KJA9JiqalzlUxNAOgt19YZt?=
- =?us-ascii?Q?8ZQXeuG/g8cbMgbvnrgts2dQaa+QT5KpY3am0+af8RSiYP2zKf4E/j1BvIIc?=
- =?us-ascii?Q?T9oag0stx4VijQ9fOFLOMEpADidIhVsBIwzJii6UjatQomn/eWmDA8rxH7Cg?=
- =?us-ascii?Q?0lRX2rCZWbyQp2GTbfpIk2Oz+JzTAbqZFCgR7PhM8N5dOS3fN+crJLA3YN4b?=
- =?us-ascii?Q?QJP/5jxnPA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 22 Jun 2022 01:29:56 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912C33616D;
+        Tue, 21 Jun 2022 22:29:53 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id q15so8570002wmj.2;
+        Tue, 21 Jun 2022 22:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e8ZNIxBrgtMQiUBB+AomF9YceG4wweliH+wtvtHZbpM=;
+        b=NzFG6aUDVog5xCHWHWO3+6IOp6tW90NJQQ34O++uBT+OkQXW7pUMGey/QmDnrqxVzf
+         dcj8lvppKrwCWJCMLl0/ShuY5QH1AhOiErI5eUCrwWSDzDxGRDO+rrGvEC0MBjkWEY+v
+         Ut0Tx6ylAZmuuHsJGiCZR/LzBl88gGujh8oP8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e8ZNIxBrgtMQiUBB+AomF9YceG4wweliH+wtvtHZbpM=;
+        b=xjDJsPLhBioaL11Szv3a0Hx0/myyEWKDPkvERA2czSuypLpnai2d7AbFR335XFBiHw
+         GPp0XJfZzxrDZhkqH2Cp8DfZqVw6rwgo8zAvtdhLzUDVjVai2dsLK4lBUofnDwOIpMeK
+         RozllumFO89LodWK2bL1851P4qHuTOcZ/2X5laFSICC7bWSYHDUX+NUI94P2ITX32hiE
+         y9W+nUDoTD67QbqOKHfQbv1X7zc7jUiH+Lrz+IhkRaHLIk5N0iVWeBcxXubGJsCyjyww
+         ZiSh2X9x5SZMCVrgbsd/T2xmJ0ryDlHJhVtypvw+JPyONdBA/m75rWkDAqbHxXN2EPYZ
+         Gw9w==
+X-Gm-Message-State: AOAM530p6mDSoQHDMVV4CpFhIPCyMXJQPayY44tT7kvYbqaAPia0JVLO
+        4AB7weA88SWdMnBT/c99TS4UhHVwekn3n9Nug4jSq82O
+X-Google-Smtp-Source: ABdhPJzZvryKqgcWaTUQ/imYSx0Fb7tWzac85u0+/+HebZbQfMU1jqgg9EjHTaoRErRZh9y06Dm67UEboYdMRO3X0DM=
+X-Received: by 2002:a05:600c:5d3:b0:39c:506d:c987 with SMTP id
+ p19-20020a05600c05d300b0039c506dc987mr44748571wmd.10.1655875792091; Tue, 21
+ Jun 2022 22:29:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4bd0bd8f-7313-4a4f-6f19-08da540fbf53
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2022 05:26:23.7348
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cFHC9mkviygOhTLLXucit6/4jpSYBCuoHHcGSywGx0kFjEfUXQCjMuMP9NCc+A90HjpAsvDS8q4tx9ruV5pOGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6535
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <7ae260778d2c08986348ea48ce02ef148100e088.1655817534.git.geert+renesas@glider.be>
+In-Reply-To: <7ae260778d2c08986348ea48ce02ef148100e088.1655817534.git.geert+renesas@glider.be>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 22 Jun 2022 05:29:39 +0000
+Message-ID: <CACPK8Xd-+zmExboCfeHL4axgrA_P99PDO0dgda5SHGo84DYB3A@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at25: Rework buggy read splitting
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Brad Bishop <bradleyb@fuzziesquirrel.com>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Wednesday, June 22, 2022 12:41 PM
->=20
-> The IOMMU driver shares the pasid table for PCI alias devices. When the
-> RID2PASID entry of the shared pasid table has been filled by the first
-> device, the subsequent devices will encounter the "DMAR: Setup RID2PASID
-> failed" failure as the pasid entry has already been marked as present. As
-> the result, the IOMMU probing process will be aborted.
->=20
-> This fixes it by skipping RID2PASID setting if the pasid entry has been
-> populated. This works because the IOMMU core ensures that only the same
-> IOMMU domain can be attached to all PCI alias devices at the same time.
-> Therefore the subsequent devices just try to setup the RID2PASID entry
-> with the same domain, which is negligible. This also adds domain validity
-> checks for more confidence anyway.
->=20
-> Fixes: ef848b7e5a6a0 ("iommu/vt-d: Setup pasid entry for RID2PASID
-> support")
-> Reported-by: Chenyi Qiang <chenyi.qiang@intel.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+On Tue, 21 Jun 2022 at 13:22, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> The recent change to split reads into chunks has several problems:
+>   1. If an SPI controller has no transfer size limit, max_chunk is
+>      SIZE_MAX, and num_msgs becomes zero, causing no data to be read
+>      into the buffer, and exposing the original contents of the buffer
+>      to userspace,
+>   2. If the requested read size is not a multiple of the maximum
+>      transfer size, the last transfer reads too much data, overflowing
+>      the buffer,
+>   3. The loop logic differs from the write case.
+>
+> Fix the above by:
+>   1. Keeping track of the number of bytes that are still to be
+>      transferred, instead of precalculating the number of messages and
+>      keeping track of the number of bytes tranfered,
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+sp: transferred
+
+>   2. Calculating the transfer size of each individual message, taking
+>      into account the number of bytes left,
+>   3. Switching from a "while"-loop to a "do-while"-loop, and renaming
+>      "msg_count" to "segment".
+>
+> While at it, drop the superfluous cast from "unsigned int" to "unsigned
+> int", also from at25_ee_write(), where it was probably copied from.
+>
+> Fixes: 0a35780c755ccec0 ("eeprom: at25: Split reads into chunks and cap write size")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Thanks Geert for the patch. This is particularly important as I
+noticed the "fix" has been backported to stable trees.
+
+I was surprised that patch went in as-is; I thought it needed some
+discussion before merging. I wasn't sure if it was the correct fix at
+all; I wondered if it should have been fixed at the spi layer. Do you
+have an opinion there?
+
+Eddie, can you jump in for some testing and a review of this one?
+
+Cheers,
+
+Joel
+
+> ---
+> Tested on Ebisu-4D with 25LC040 EEPROM.
+> ---
+>  drivers/misc/eeprom/at25.c | 26 ++++++++++++--------------
+>  1 file changed, 12 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
+> index c9c56fd194c1301f..bdffc6543f6f8b7f 100644
+> --- a/drivers/misc/eeprom/at25.c
+> +++ b/drivers/misc/eeprom/at25.c
+> @@ -80,10 +80,9 @@ static int at25_ee_read(void *priv, unsigned int offset,
+>         struct at25_data *at25 = priv;
+>         char *buf = val;
+>         size_t max_chunk = spi_max_transfer_size(at25->spi);
+> -       size_t num_msgs = DIV_ROUND_UP(count, max_chunk);
+> -       size_t nr_bytes = 0;
+> -       unsigned int msg_offset;
+> -       size_t msg_count;
+> +       unsigned int msg_offset = offset;
+> +       size_t bytes_left = count;
+> +       size_t segment;
+>         u8                      *cp;
+>         ssize_t                 status;
+>         struct spi_transfer     t[2];
+> @@ -97,9 +96,8 @@ static int at25_ee_read(void *priv, unsigned int offset,
+>         if (unlikely(!count))
+>                 return -EINVAL;
+>
+> -       msg_offset = (unsigned int)offset;
+> -       msg_count = min(count, max_chunk);
+> -       while (num_msgs) {
+> +       do {
+> +               segment = min(bytes_left, max_chunk);
+>                 cp = at25->command;
+>
+>                 instr = AT25_READ;
+> @@ -131,8 +129,8 @@ static int at25_ee_read(void *priv, unsigned int offset,
+>                 t[0].len = at25->addrlen + 1;
+>                 spi_message_add_tail(&t[0], &m);
+>
+> -               t[1].rx_buf = buf + nr_bytes;
+> -               t[1].len = msg_count;
+> +               t[1].rx_buf = buf;
+> +               t[1].len = segment;
+>                 spi_message_add_tail(&t[1], &m);
+>
+>                 status = spi_sync(at25->spi, &m);
+> @@ -142,10 +140,10 @@ static int at25_ee_read(void *priv, unsigned int offset,
+>                 if (status)
+>                         return status;
+>
+> -               --num_msgs;
+> -               msg_offset += msg_count;
+> -               nr_bytes += msg_count;
+> -       }
+> +               msg_offset += segment;
+> +               buf += segment;
+> +               bytes_left -= segment;
+> +       } while (bytes_left > 0);
+>
+>         dev_dbg(&at25->spi->dev, "read %zu bytes at %d\n",
+>                 count, offset);
+> @@ -229,7 +227,7 @@ static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+>         do {
+>                 unsigned long   timeout, retries;
+>                 unsigned        segment;
+> -               unsigned        offset = (unsigned) off;
+> +               unsigned        offset = off;
+>                 u8              *cp = bounce;
+>                 int             sr;
+>                 u8              instr;
+> --
+> 2.25.1
+>

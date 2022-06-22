@@ -2,107 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190A3553F74
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CF5553F79
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 02:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354936AbiFVAUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 20:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S1354938AbiFVAYD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Jun 2022 20:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354006AbiFVAU3 (ORCPT
+        with ESMTP id S232257AbiFVAYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 20:20:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80D8C27FCC;
-        Tue, 21 Jun 2022 17:20:27 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxD086YLJiiTNTAA--.26216S3;
-        Wed, 22 Jun 2022 08:20:10 +0800 (CST)
-Subject: Re: [PATCH] libbpf: Fix is_pow_of_2
-To:     Zvi Effron <zeffron@riotgames.com>, Pavel Machek <pavel@ucw.cz>
-References: <20220603041701.2799595-1-irogers@google.com>
- <20220619171248.GC3362@bug>
- <CAC1LvL0rZcEHe_ZHDcB38XD49FmdURg4+yKHP0O=J7=4Xx8M3Q@mail.gmail.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuze Chi <chiyuze@google.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <baa6d799-187c-75e8-313c-36f5ea3e8f3f@loongson.cn>
-Date:   Wed, 22 Jun 2022 08:20:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 21 Jun 2022 20:24:01 -0400
+X-Greylist: delayed 7290 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 17:24:00 PDT
+Received: from mailgateway.xchanging.com (mail9.xchanging.com [213.219.10.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FC712A8A;
+        Tue, 21 Jun 2022 17:24:00 -0700 (PDT)
+Received: from pps.filterd (ACTXTSPRDPFTV05.xchanginghosting.com [127.0.0.1])
+        by ACTXTSPRDPFTV05.xchanginghosting.com (8.16.1.2/8.16.1.2) with SMTP id 25M0K7Kr009753;
+        Wed, 22 Jun 2022 01:23:56 +0100
+Received: from [91.103.252.181] ([10.146.3.241])
+        by ACTXTSPRDPFTV05.xchanginghosting.com with ESMTP id 3gufw643b8-13
+        (version=TLSv1 cipher=AES256-SHA bits=256 verify=NOT);
+        Wed, 22 Jun 2022 01:23:56 +0100
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <CAC1LvL0rZcEHe_ZHDcB38XD49FmdURg4+yKHP0O=J7=4Xx8M3Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxD086YLJiiTNTAA--.26216S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xw1rCFWxCryfAF1kGryrtFb_yoWfuwbEyr
-        1jk3s7G3y8ZF1rWwn0yr9xWrZ0k3WDXFn8trW0vr13Ja95AasrXw43Kr92vF98KFW2yry7
-        u3s5XFyfuwsayjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-xYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z2
-        80aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY
-        jI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVWDMxAIw28IcxkI7VAKI48JMxC20s026x
-        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
-        JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
-        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
-        WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJbIYCTnIWIevJa73UjIFyTuYvjxUc89NDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: RE
+To:     Recipients <p.nataraj@xchanging.com>
+From:   "Mr Elisabeth" <p.nataraj@xchanging.com>
+Date:   Tue, 21 Jun 2022 17:23:51 -0700
+Reply-To: mariaelisabethschaeffler505@gmail.com
+Message-ID: <3gufw643b8-13@ACTXTSPRDPFTV05.xchanginghosting.com>
+X-Proofpoint-GUID: 8ACgL59UEEH9fbVjPtbOtvmTPecJ2jxn
+X-Proofpoint-ORIG-GUID: 8ACgL59UEEH9fbVjPtbOtvmTPecJ2jxn
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-21_11:2022-06-21,2022-06-21 signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
+        NIXSPAM_IXHASH,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_ZBI,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -2.3 RCVD_IN_DNSWL_MED RBL: Sender listed at https://www.dnswl.org/,
+        *       medium trust
+        *      [213.219.10.34 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mariaelisabethschaeffler505[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [213.219.10.34 listed in bl.score.senderscore.com]
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        *  0.3 HK_NAME_MR_MRS No description available.
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 RCVD_IN_MSPIKE_ZBI No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06/22/2022 07:03 AM, Zvi Effron wrote:
-> On Sun, Jun 19, 2022 at 12:13 PM Pavel Machek <pavel@ucw.cz> wrote:
->>
->> Hi!
->>
->>> From: Yuze Chi <chiyuze@google.com>
->>>
->>> +++ b/tools/lib/bpf/libbpf.c
->>> @@ -4956,7 +4956,7 @@ static void bpf_map__destroy(struct bpf_map *map);
->>>
->>> static bool is_pow_of_2(size_t x)
->>> {
->>> - return x && (x & (x - 1));
->>> + return x && !(x & (x - 1));
->>> }
->>
->> I'm pretty sure we have this test in macro in includes somewhere... should we use
->> that instead?
->
-> I went looking for a macro that provided this check and could not find one. I
-
-arch/microblaze/mm/pgtable.c
-
-#define is_power_of_2(x)	((x) != 0 && (((x) & ((x) - 1)) == 0))
-
-> did find the inlined static function is_power_of_2 in log2.h, though, that we
-> could use.
-
-Here is a patch, but it seems that this is not worth the extra pain.
-
-https://lore.kernel.org/bpf/8e5291b7-bd89-6fea-bfb7-954cacdb8523@iogearbox.net/
-
-Thanks,
-Tiezhu
-
+Schöner Tag! Hast du meine vorherige Nachricht erhalten? Ich habe Ihnen eine E-Mail bezüglich der Spende von  Maria-Elisabeth Schaeffler) gesendet. E-Mail-Antwort an: mariaelisabethschaeffler505@gmail.com

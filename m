@@ -2,206 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF46F5546C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B39D554782
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348255AbiFVKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 06:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S1351766AbiFVKYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 06:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351561AbiFVKXJ (ORCPT
+        with ESMTP id S1352653AbiFVKXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:23:09 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C744615A0B;
-        Wed, 22 Jun 2022 03:22:59 -0700 (PDT)
-Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 459CA20597;
-        Wed, 22 Jun 2022 12:22:57 +0200 (CEST)
-Message-ID: <adf27e62-246a-9c5f-e517-f225d17fe1cd@somainline.org>
-Date:   Wed, 22 Jun 2022 12:22:56 +0200
+        Wed, 22 Jun 2022 06:23:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26A0E3A70E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655893390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4Vd5UfRrhClnRvajU2UKtAqYXeZzT2WxiMDDNQrFZ4=;
+        b=RcZNYMLf8autrN+pyEZhqCcfRFLhW+mbdz7WtsJOkVXE2eR+tO4i6rHdg5uE8crhrjV0X2
+        8FGmnzDEotc9yYj7b4PXTXyNVjHZfgNistKcSfhw9cTEO/Xm97nLv+xyNAjBvm8EMt4Ozj
+        jgj2IyDwkm+VgX5CZmTQyEpkS2xSKZ8=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-323-0bj_NfqfMX2AISMpBbLW5Q-1; Wed, 22 Jun 2022 06:23:09 -0400
+X-MC-Unique: 0bj_NfqfMX2AISMpBbLW5Q-1
+Received: by mail-ed1-f70.google.com with SMTP id g8-20020a056402090800b00433940d207eso13077472edz.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 03:23:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q4Vd5UfRrhClnRvajU2UKtAqYXeZzT2WxiMDDNQrFZ4=;
+        b=Zby2lT03t4h0D3OUnZlKu3PCQvxhSBqT9X7aEd93T5OcWjAQVK60rewXqlSSXg89PW
+         KJxpSE74qu4g8kzGextdjYP7POT9IeGdg13PW7axQO2iZ5pBbF43YIrcDqH4TsAuKS57
+         jpjtid/5ZnfJrqMjgMhEEYWlpEu2+N7DcRlKR77jvn1YulKqs2k/Bksmxzo4VVR2hUav
+         ny9UcX96LXs956Fi3cqqzIap5lW1EqUEaDVOpR1FymkKS1ZIvSqBKv1bQ4yCOGW6Mht9
+         yfVRXpn2cTEyiUnwnjnf8QFKrdBGwvEPldjVTxBXUWtjKm3wMIfffD2rO7CFDDEF16AT
+         Uqxw==
+X-Gm-Message-State: AJIora8bmufaCSRbI9QPke5w3tc6TFF1s+kDkoZTfYb4+yh/o03A2BzG
+        Fwc16BDwENrD6zBKm+tL8VqYp+Z8jUg4WF4YpSudpoHICIE2edxGQLjz/+mdPmE4/jxv/R4qU4V
+        paIW7QKTBXp5wqFzMPbV01diS
+X-Received: by 2002:a05:6402:149:b0:431:7dde:9b59 with SMTP id s9-20020a056402014900b004317dde9b59mr3240980edu.339.1655893388216;
+        Wed, 22 Jun 2022 03:23:08 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uLmcag7vtQWJsjDk69I3LaddPH5DLFa9DAzI9sfx5/q9tJLuEQEmoAZ+f2nmyMAfvAz7d2DA==
+X-Received: by 2002:a05:6402:149:b0:431:7dde:9b59 with SMTP id s9-20020a056402014900b004317dde9b59mr3240961edu.339.1655893388064;
+        Wed, 22 Jun 2022 03:23:08 -0700 (PDT)
+Received: from [192.168.43.127] ([109.37.135.195])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1709063d2200b006fecf74395bsm9039127ejf.8.2022.06.22.03.23.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 03:23:07 -0700 (PDT)
+Message-ID: <caaca84e-1cc4-bf81-f705-fdabe2313d71@redhat.com>
+Date:   Wed, 22 Jun 2022 12:23:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 4/6] clk: qcom: add support for SM8350 DISPCC
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1] platform/x86: intel/pmc: Add Alder Lake N support to
+ PMC core driver
 Content-Language: en-US
-To:     Robert Foss <robert.foss@linaro.org>, bjorn.andersson@linaro.org,
-        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20220621233412.506768-1-robert.foss@linaro.org>
- <20220621233412.506768-5-robert.foss@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220621233412.506768-5-robert.foss@linaro.org>
+To:     Gayatri Kammela <gayatri.kammela@linux.intel.com>
+Cc:     irenic.rajneesh@gmail.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>
+References: <20220615002751.3371730-1-gayatri.kammela@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220615002751.3371730-1-gayatri.kammela@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On 6/15/22 02:27, Gayatri Kammela wrote:
+> Add Alder Lake N (ADL-N) to the list of the platforms that Intel's
+> PMC core driver supports. RocketLake reuses all the TigerLake PCH IPs.
+> 
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: David E. Box <david.e.box@linux.intel.com>
+> Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
+
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
 
 
-On 22.06.2022 01:34, Robert Foss wrote:
-> From: Jonathan Marek <jonathan@marek.ca>
-> 
-> Add support to the SM8350 display clock controller by extending the SM8250
-> display clock controller, which is almost identical but has some minor
-> differences.
-> 
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
+>  drivers/platform/x86/intel/pmc/core.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Changes since v1
->  - Remove comment - Dmitry
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index 40183bda7894..a1fe1e0dcf4a 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -1911,6 +1911,7 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
+>  	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_L,	&icl_reg_map),
+>  	X86_MATCH_INTEL_FAM6_MODEL(ROCKETLAKE,		&tgl_reg_map),
+>  	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&tgl_reg_map),
+> +	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&tgl_reg_map),
+>  	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&adl_reg_map),
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &tgl_reg_map),
+>  	{}
 > 
-> Changes since v2
->  - Add my SoB - Bjorn
->  - Remove CLK_ASSUME_ENABLED_WHEN_UNUSED flag
-> 
-> Changes since v3
->  - Add kconfig dependency on SM_GCC_8350 - Konrad
->  - Change hex to lowercase - Konrad
->  - Split from dispcc-sm8250.c implementation
->  - Switch from .fw_name to .index
-> 
-> Changes since v4
->  - Hex to lowercase - Konrad
->  - Remove bad match table entries - Konrad
-> 
-> Changes since v5
->  - Reverted split from dispcc-sm8250
->  - Re-added tags from v3
-> 
-> 
->  drivers/clk/qcom/Kconfig         |  4 +--
->  drivers/clk/qcom/dispcc-sm8250.c | 60 +++++++++++++++++++++++++++++++-
->  2 files changed, 61 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index b11235c21952..4c3d1a548b7a 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -618,11 +618,11 @@ config SM_DISPCC_6125
->  	  splash screen
->  
->  config SM_DISPCC_8250
-> -	tristate "SM8150 and SM8250 Display Clock Controller"
-> +	tristate "SM8150/SM8250/SM8350 Display Clock Controller"
->  	depends on SM_GCC_8150 || SM_GCC_8250
-|| SM_GCC_8350
+> base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
 
->  	help
->  	  Support for the display clock controller on Qualcomm Technologies, Inc
-> -	  SM8150 and SM8250 devices.
-> +	  SM8150/SM8250/SM8350 devices.
->  	  Say Y if you want to support display devices and functionality such as
->  	  splash screen.
->  
-> diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-> index db9379634fb2..4e101d584115 100644
-> --- a/drivers/clk/qcom/dispcc-sm8250.c
-> +++ b/drivers/clk/qcom/dispcc-sm8250.c
-> @@ -43,6 +43,10 @@ static struct pll_vco vco_table[] = {
->  	{ 249600000, 2000000000, 0 },
->  };
->  
-> +static struct pll_vco lucid_5lpe_vco[] = {
-> +	{ 249600000, 1750000000, 0 },
-> +};
-> +
->  static struct alpha_pll_config disp_cc_pll0_config = {
->  	.l = 0x47,
->  	.alpha = 0xE000,
-> @@ -1228,6 +1232,7 @@ static const struct of_device_id disp_cc_sm8250_match_table[] = {
->  	{ .compatible = "qcom,sc8180x-dispcc" },
->  	{ .compatible = "qcom,sm8150-dispcc" },
->  	{ .compatible = "qcom,sm8250-dispcc" },
-> +	{ .compatible = "qcom,sm8350-dispcc" },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, disp_cc_sm8250_match_table);
-> @@ -1258,7 +1263,7 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
->  		return PTR_ERR(regmap);
->  	}
->  
-> -	/* note: trion == lucid, except for the prepare() op */
-> +	/* Apply differences for SM8150 and SM8350 */
-I think both comments should stay, as the one you're adding doesn't explain the BUILD_BUG_ON()
-
-
-Konrad
->  	BUILD_BUG_ON(CLK_ALPHA_PLL_TYPE_TRION != CLK_ALPHA_PLL_TYPE_LUCID);
->  	if (of_device_is_compatible(pdev->dev.of_node, "qcom,sc8180x-dispcc") ||
->  	    of_device_is_compatible(pdev->dev.of_node, "qcom,sm8150-dispcc")) {
-> @@ -1270,6 +1275,59 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
->  		disp_cc_pll1_config.config_ctl_hi1_val = 0x00000024;
->  		disp_cc_pll1_config.user_ctl_hi1_val = 0x000000D0;
->  		disp_cc_pll1_init.ops = &clk_alpha_pll_trion_ops;
-> +	} else if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8350-dispcc")) {
-> +		static struct clk_rcg2 * const rcgs[] = {
-> +			&disp_cc_mdss_byte0_clk_src,
-> +			&disp_cc_mdss_byte1_clk_src,
-> +			&disp_cc_mdss_dp_aux1_clk_src,
-> +			&disp_cc_mdss_dp_aux_clk_src,
-> +			&disp_cc_mdss_dp_link1_clk_src,
-> +			&disp_cc_mdss_dp_link_clk_src,
-> +			&disp_cc_mdss_dp_pixel1_clk_src,
-> +			&disp_cc_mdss_dp_pixel2_clk_src,
-> +			&disp_cc_mdss_dp_pixel_clk_src,
-> +			&disp_cc_mdss_esc0_clk_src,
-> +			&disp_cc_mdss_mdp_clk_src,
-> +			&disp_cc_mdss_pclk0_clk_src,
-> +			&disp_cc_mdss_pclk1_clk_src,
-> +			&disp_cc_mdss_rot_clk_src,
-> +			&disp_cc_mdss_vsync_clk_src,
-> +		};
-> +		static struct clk_regmap_div * const divs[] = {
-> +			&disp_cc_mdss_byte0_div_clk_src,
-> +			&disp_cc_mdss_byte1_div_clk_src,
-> +			&disp_cc_mdss_dp_link1_div_clk_src,
-> +			&disp_cc_mdss_dp_link_div_clk_src,
-> +		};
-> +		unsigned int i;
-> +		static bool offset_applied;
-> +
-> +		/* only apply the offsets once (in case of deferred probe) */
-> +		if (!offset_applied) {
-> +			for (i = 0; i < ARRAY_SIZE(rcgs); i++)
-> +				rcgs[i]->cmd_rcgr -= 4;
-> +
-> +			for (i = 0; i < ARRAY_SIZE(divs); i++) {
-> +				divs[i]->reg -= 4;
-> +				divs[i]->width = 4;
-> +			}
-> +
-> +			disp_cc_mdss_ahb_clk.halt_reg -= 4;
-> +			disp_cc_mdss_ahb_clk.clkr.enable_reg -= 4;
-> +
-> +			offset_applied = true;
-> +		}
-> +
-> +		disp_cc_mdss_ahb_clk_src.cmd_rcgr = 0x22a0;
-> +
-> +		disp_cc_pll0_config.config_ctl_hi1_val = 0x2a9a699c;
-> +		disp_cc_pll0_config.test_ctl_hi1_val = 0x01800000;
-> +		disp_cc_pll0_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
-> +		disp_cc_pll0.vco_table = lucid_5lpe_vco;
-> +		disp_cc_pll1_config.config_ctl_hi1_val = 0x2a9a699c;
-> +		disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
-> +		disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
-> +		disp_cc_pll1.vco_table = lucid_5lpe_vco;
->  	}
->  
->  	clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);

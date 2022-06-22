@@ -2,197 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69B655448C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605175543F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352727AbiFVHYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
+        id S1352855AbiFVHYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiFVHYm (ORCPT
+        with ESMTP id S1352481AbiFVHYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:24:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF42D22BF6;
-        Wed, 22 Jun 2022 00:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655882681; x=1687418681;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NgoHLyZGRgMPgNFB7tpululSiyLjykD0PpFVx9n2Or0=;
-  b=hjvJ4wk1B0xZ2fNj3mZ3rnC200GGaPOmafmT7Sp663brWx5d5H4gT5xc
-   WjdEgMTIDgawZ4CGYTF8xuLfGmip5DZEbXgYV2yDmwfnPa+nNdu2WQSz6
-   1u4LgN5tSWuLxvOOaTte1xV+JO8fAnkAI2Q2uBxGUAkzJe/5b+EGQ5Pgx
-   SStxsKD/K1QSawdY3j/qstpTRbICh4x551gvVBClIM+ovgoFDxIERvtC1
-   UpyMI1p2xfGgFctvSf/lPBwJsR+l7Pbrtrpbj24wHhAxhs+Iy50SgqqDs
-   U//XnNJRHkEDC5qOy0O7gMWu1MGY99/JQNqwQsxQ44KXzbGabr1QBRJ8p
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281071179"
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="281071179"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 00:24:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="562834083"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 22 Jun 2022 00:24:37 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o3uj7-0000zN-5j;
-        Wed, 22 Jun 2022 07:24:37 +0000
-Date:   Wed, 22 Jun 2022 15:24:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        iommu@lists.linux-foundation.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 04/10] gpu: host1x: Add context device management code
-Message-ID: <202206221557.laES8yNQ-lkp@intel.com>
-References: <20220621151022.1416300-5-cyndis@kapsi.fi>
+        Wed, 22 Jun 2022 03:24:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A4436E1F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:24:50 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o3uj8-0006a9-Lb; Wed, 22 Jun 2022 09:24:38 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o3uj5-00005j-TU; Wed, 22 Jun 2022 09:24:35 +0200
+Date:   Wed, 22 Jun 2022 09:24:35 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, festevam@gmail.com, linux-imx@nxp.com,
+        hvilleneuve@dimonoff.com, l.stach@pengutronix.de,
+        abbaraju.manojsai@amarulasolutions.com, jagan@amarulasolutions.com,
+        matteo.lisi@engicam.com, tharvey@gateworks.com, t.remmet@phytec.de,
+        u.kleine-koenig@pengutronix.de, t.remmet@phytec.deh,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH] arm64: dts: imx8mp: drop dmas property for uart console
+Message-ID: <20220622072435.GT1615@pengutronix.de>
+References: <20220622062027.994614-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621151022.1416300-5-cyndis@kapsi.fi>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220622062027.994614-1-peng.fan@oss.nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mikko,
++Cc Saravana Kannan <saravanak@google.com>, the author of 71066545b48e4
 
-Thank you for the patch! Yet something to improve:
+On Wed, Jun 22, 2022 at 02:20:27PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Commit 71066545b48e4("driver core: Set fw_devlink.strict=1 by default")
+> default set fw_devlink to true. This has a side effect to i.MX uart
+> console. The sdma will make the i.MX8MP uart driver defer probe for some
+> time (~10s with i.MX8MP-EVK board) until sdma ready, because sdma is a
+> supplier with property dmas set in device tree node.
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on tegra/for-next linus/master v5.19-rc3]
-[cannot apply to tegra-drm/drm/tegra/for-next next-20220621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I just tested this on an i.MX6 board and observed the same behaviour.
+The same will happen on any other i.MX board as well. This will also
+likely happen on any other SoC on which the UART driver uses dmaengine.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mikko-Perttunen/Host1x-context-isolation-support/20220621-231339
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: arm64-randconfig-r021-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221557.laES8yNQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/2501beeae7469b805f9f624049fd56643cf6e18e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mikko-Perttunen/Host1x-context-isolation-support/20220621-231339
-        git checkout 2501beeae7469b805f9f624049fd56643cf6e18e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/host1x/
+> 
+> Since this uart is for console, we need log printed out as soon as
+> possible, so remove the dmas property for the uart console node.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fixing this at board level is not really an option because that means
+fixing each and every, at least i.MX board in the tree. Furthermore
+this would mean to bring the deleted property back in and to remove
+another dmas property should a user want to switch to another console
+port.
 
-All errors (new ones prefixed by >>):
+For what it's worth: NACK for 71066545b48e4.
 
->> drivers/gpu/host1x/context.c:80:28: error: no member named 'ids' in 'struct iommu_fwspec'
-                   ctx->stream_id = fwspec->ids[0] & 0xffff;
-                                    ~~~~~~  ^
-   1 error generated.
+Sascha
 
-
-vim +80 drivers/gpu/host1x/context.c
-
-    15	
-    16	int host1x_memory_context_list_init(struct host1x *host1x)
-    17	{
-    18		struct host1x_memory_context_list *cdl = &host1x->context_list;
-    19		struct device_node *node = host1x->dev->of_node;
-    20		struct host1x_memory_context *ctx;
-    21		unsigned int i;
-    22		int err;
-    23	
-    24		cdl->devs = NULL;
-    25		cdl->len = 0;
-    26		mutex_init(&cdl->lock);
-    27	
-    28		err = of_property_count_u32_elems(node, "iommu-map");
-    29		if (err < 0)
-    30			return 0;
-    31	
-    32		cdl->devs = kcalloc(err, sizeof(*cdl->devs), GFP_KERNEL);
-    33		if (!cdl->devs)
-    34			return -ENOMEM;
-    35		cdl->len = err / 4;
-    36	
-    37		for (i = 0; i < cdl->len; i++) {
-    38			struct iommu_fwspec *fwspec;
-    39	
-    40			ctx = &cdl->devs[i];
-    41	
-    42			ctx->host = host1x;
-    43	
-    44			device_initialize(&ctx->dev);
-    45	
-    46			/*
-    47			 * Due to an issue with T194 NVENC, only 38 bits can be used.
-    48			 * Anyway, 256GiB of IOVA ought to be enough for anyone.
-    49			 */
-    50			ctx->dma_mask = DMA_BIT_MASK(38);
-    51			ctx->dev.dma_mask = &ctx->dma_mask;
-    52			ctx->dev.coherent_dma_mask = ctx->dma_mask;
-    53			dev_set_name(&ctx->dev, "host1x-ctx.%d", i);
-    54			ctx->dev.bus = &host1x_context_device_bus_type;
-    55			ctx->dev.parent = host1x->dev;
-    56	
-    57			dma_set_max_seg_size(&ctx->dev, UINT_MAX);
-    58	
-    59			err = device_add(&ctx->dev);
-    60			if (err) {
-    61				dev_err(host1x->dev, "could not add context device %d: %d\n", i, err);
-    62				goto del_devices;
-    63			}
-    64	
-    65			err = of_dma_configure_id(&ctx->dev, node, true, &i);
-    66			if (err) {
-    67				dev_err(host1x->dev, "IOMMU configuration failed for context device %d: %d\n",
-    68					i, err);
-    69				device_del(&ctx->dev);
-    70				goto del_devices;
-    71			}
-    72	
-    73			fwspec = dev_iommu_fwspec_get(&ctx->dev);
-    74			if (!fwspec) {
-    75				dev_err(host1x->dev, "Context device %d has no IOMMU!\n", i);
-    76				device_del(&ctx->dev);
-    77				goto del_devices;
-    78			}
-    79	
-  > 80			ctx->stream_id = fwspec->ids[0] & 0xffff;
-    81		}
-    82	
-    83		return 0;
-    84	
-    85	del_devices:
-    86		while (i--)
-    87			device_del(&cdl->devs[i].dev);
-    88	
-    89		kfree(cdl->devs);
-    90		cdl->len = 0;
-    91	
-    92		return err;
-    93	}
-    94	
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V1:
+>  The upper set fw_devlink.strict=1 patch is in linux-next tree.
+> 
+>  arch/arm64/boot/dts/freescale/imx8mp-evk.dts                  | 2 ++
+>  arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts | 2 ++
+>  arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dts  | 2 ++
+>  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts        | 2 ++
+>  4 files changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> index fb11c03bc8b1..3fdb38bc0069 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> @@ -359,6 +359,8 @@ &uart2 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_uart2>;
+>  	status = "okay";
+> +	/delete-property/ dmas;
+> +	/delete-property/ dma-names;
+>  };
+>  
+>  &usb3_phy1 {
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts b/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
+> index dd703b6a5e17..fb2b44e94482 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
+> @@ -69,6 +69,8 @@ &uart2 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_uart2>;
+>  	status = "okay";
+> +	/delete-property/ dmas;
+> +	/delete-property/ dma-names;
+>  };
+>  
+>  &usb3_phy0 {
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dts b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dts
+> index 6aa720bafe28..68a478151292 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dts
+> @@ -99,6 +99,8 @@ &uart1 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_uart1>;
+>  	status = "okay";
+> +	/delete-property/ dmas;
+> +	/delete-property/ dma-names;
+>  };
+>  
+>  /* SD-Card */
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> index 521215520a0f..f90c1ac2791c 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> @@ -554,6 +554,8 @@ &uart2 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_uart2>;
+>  	status = "okay";
+> +	/delete-property/ dmas;
+> +	/delete-property/ dma-names;
+>  };
+>  
+>  &uart4 {
+> -- 
+> 2.25.1
+> 
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

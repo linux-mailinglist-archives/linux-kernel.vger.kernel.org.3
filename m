@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB065549D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170E55549D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbiFVMQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S235905AbiFVMQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235280AbiFVMQP (ORCPT
+        with ESMTP id S243716AbiFVMQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:16:15 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51863700F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:16:14 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id p8so20899475oip.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
-        b=c1xRihTGnvd5U245Sv9uTLAoBKTZAFAS3qT4lMFr9HPZhb1Vx4d6OndrMp9kDGgdYZ
-         rbVJpSZto6yquIjBmyTk4C6zW4EADBFH77zCsu76FwZes8O2qd25zvjtaFPShlMFHd9J
-         2j849f421dKBg9OtV7SV/LL3BkWzQJlKEqJX7MiaZmMTgVcTny1iH6IpTSao7DwmMtPP
-         6JbWdUvGqxYnWyRKFSl41Fdr+uC2Hz/3aOXKsCBxsRsLrXjBqk4Fd9hy9zRIFWjAVgY5
-         M0eUWeeuFGq3+RKFJq3OEyxuxRJohWPzaVxGTwUBpUaL8VLcbFFQd3Qywx5ezsENWge1
-         N8lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
-        b=wqWh+ZrUenSQFxRs782/PbqZP0JBdj7sdSDX58jAh7RUxXs/wLMWMt68gFpbRZclmz
-         3VzAoeZANSFZe8Wn5cJLuqIS8035aRlRvHjCnzts9MC2dxWEBk/1FenVRQweus3eDbf5
-         rF/D9HnczlPzuVIsBU91NBRjsCPGV89OHrbRHvn1DyOixlTpggvnbbvxPXegJXBVqiQj
-         voqKyOZf1G4+aUCNmS68J/URgKNn4/B4ftRsOwsN2GFZd4CzD4dpyTEaePyGptxAXBDr
-         cOdLziYNgYuy5NejHwF6GdZn1m2VdNnFoGCEbcS8CaAxQkVOz9ZHq9aLyWKoDSqRS75j
-         tgaw==
-X-Gm-Message-State: AJIora9IeH5ACxlnDmApSk9wM11YDgv6yDabsVtrECOS84GvLuTPgRkQ
-        sm0xO0s7OyT3niW2EzDERddB8CfEFSJT0mvZw/s=
-X-Google-Smtp-Source: AGRyM1uDC9c7FDZ8he1DfEV9fAKpGJ1PE32QbZHduefZ6NVH8okhg3KuxCsRMz+N6/P2HP/++mOvufG6t+VT5daz0rQ=
-X-Received: by 2002:a05:6808:138e:b0:333:54f2:1740 with SMTP id
- c14-20020a056808138e00b0033354f21740mr3685708oiw.21.1655900173744; Wed, 22
- Jun 2022 05:16:13 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6838:a99:0:0:0:0 with HTTP; Wed, 22 Jun 2022 05:16:13
- -0700 (PDT)
-Reply-To: lilywilliam989@gmail.com
-From:   Lily William <mebbe4596@gmail.com>
-Date:   Wed, 22 Jun 2022 04:16:13 -0800
-Message-ID: <CAGJBxNVxDnVHP1FGgTfpoeK_O1gBYN6QUxuP4UJ96h9-+fa8Jw@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        Wed, 22 Jun 2022 08:16:45 -0400
+Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991383D482
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 05:16:37 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1655900185tjv9mfxl
+Received: from ubuntu.localdomain ( [223.104.103.173])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 20:16:21 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000B00A0000000
+X-QQ-FEAT: ZHWZeLXy+8eNRc6LoVbd8diuEGcYexDvpPzXtcbLFF5CF2z03xtRuZyndWyz4
+        oyvWu7GZ0JEPtFyn2kMI/3K061US4zBX6B1Ul+J+qQ/He3n6ZwOPn/2GddDHa9gGb9aNp9b
+        sn9cXopr1iLpDFbdC0ixcsYOhhqVJ6j2y7JS7uZKnEy+/nAgwYm7jqvW/ulcAGz/KhD9zuk
+        bD/3Mp3wmGTp4179mEAj1wKe/EWLgm8ThwViPcWcrvpJC/XO/WNcLom6JMxI2/mBx7TS+be
+        Uvpn6JCSSfAcNxCEZr+gEgg3CcPgxQ+8kFbSG9p6izMDvIad4+TrYpi8V/fZaeKJj5k3sSM
+        VjF3wKMWA99CHAT7/6uh3Jkz42d/Q==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     mpe@ellerman.id.au
+Cc:     benh@kernel.crashing.org, paulus@samba.org, jiangjian@cdjrlc.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc/ptrace: drop unexpected word 'and' in the comments
+Date:   Wed, 22 Jun 2022 20:16:16 +0800
+Message-Id: <20220622121616.16243-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+there is an unexpected word 'and' in the comments that need to be dropped
 
-My name is Dr Lily William from the United States.I am a French and
-American nationality (dual) living in the U.S and sometimes in France
-for Work Purpose.
+file & line:
+arch/powerpc/kernel/ptrace/ptrace-vsx.c:74:
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
+* Currently to set and and get all the vsx state, you need to call
+changed to:
+* Currently to set and get all the vsx state, you need to call
 
-Thanks
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ arch/powerpc/kernel/ptrace/ptrace-vsx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-With love
-Lily
+diff --git a/arch/powerpc/kernel/ptrace/ptrace-vsx.c b/arch/powerpc/kernel/ptrace/ptrace-vsx.c
+index 1da4303128ef..7df08004c47d 100644
+--- a/arch/powerpc/kernel/ptrace/ptrace-vsx.c
++++ b/arch/powerpc/kernel/ptrace/ptrace-vsx.c
+@@ -71,7 +71,7 @@ int fpr_set(struct task_struct *target, const struct user_regset *regset,
+ }
+ 
+ /*
+- * Currently to set and and get all the vsx state, you need to call
++ * Currently to set and get all the vsx state, you need to call
+  * the fp and VMX calls as well.  This only get/sets the lower 32
+  * 128bit VSX registers.
+  */
+-- 
+2.17.1
+

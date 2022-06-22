@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE2F554011
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F97A554016
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 03:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354597AbiFVB3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Jun 2022 21:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S1355243AbiFVB35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Jun 2022 21:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiFVB3B (ORCPT
+        with ESMTP id S1354853AbiFVB34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Jun 2022 21:29:01 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE8C32ED9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 18:29:00 -0700 (PDT)
-X-UUID: dafd4677dfb24b0a972f7a508371cfc2-20220622
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:b6e29bde-d88d-4d96-8ba2-de15ea8d5e73,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:10,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:15
-X-CID-META: VersionHash:b14ad71,CLOUDID:a10fb02d-1756-4fa3-be7f-474a6e4be921,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: dafd4677dfb24b0a972f7a508371cfc2-20220622
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 312043959; Wed, 22 Jun 2022 09:28:57 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 22 Jun 2022 09:28:56 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 22 Jun 2022 09:28:55 +0800
-Message-ID: <1ce1947984043bc4284abe94b53888c11a072345.camel@mediatek.com>
-Subject: Re: [PATCH v10 1/2] iommu/io-pgtable-arm-v7s: Add a quirk to allow
- pgtable PA up to 35bit
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     <yf.wang@mediatek.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
-        "Miles Chen" <miles.chen@mediatek.com>,
-        Ning Li <ning.li@mediatek.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Georgi Djakov <quic_c_gdjako@quicinc.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        "moderated list:ARM SMMU DRIVERS" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 22 Jun 2022 09:28:55 +0800
-In-Reply-To: <20220616120713.12728-2-yf.wang@mediatek.com>
-References: <20220616120713.12728-1-yf.wang@mediatek.com>
-         <20220616120713.12728-2-yf.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 21 Jun 2022 21:29:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17AEA32ED9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 18:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655861394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BoDu7G6x72FjrLLwN0eQPK25v2hz35SxV4bj0Qgj7NA=;
+        b=IconLOkdcXb1cb7BqIi52ph80PZB475oPXKjkfNwT6Uzx+qGxjTVUh6MFAcJlXyY8y3Fh0
+        FF/igQq4aL/ivCmIqHcvbm0pRK3ae1BilV/69+AXONVIJuBFsuOQvzjk1PTqAc4Z5u5Q+e
+        S0g39ndXx2lnQfpCRi5+mChioGFbCRw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-130-ccm6934pN5SeGemNeoKc_w-1; Tue, 21 Jun 2022 21:29:48 -0400
+X-MC-Unique: ccm6934pN5SeGemNeoKc_w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 099E229AB40F;
+        Wed, 22 Jun 2022 01:29:48 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-13-93.pek2.redhat.com [10.72.13.93])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CE08B40CF8E2;
+        Wed, 22 Jun 2022 01:29:42 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     cohuck@redhat.com, pasic@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, borntraeger@de.ibm.com, agordeev@linux.ibm.com,
+        mst@redhat.com, jasowang@redhat.com, linux-s390@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ben@decadent.org.uk, david@redhat.com
+Subject: [PATCH V3] virtio: disable notification hardening by default
+Date:   Wed, 22 Jun 2022 09:29:40 +0800
+Message-Id: <20220622012940.21441-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,58 +61,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-16 at 20:07 +0800, yf.wang@mediatek.com wrote:
-> From: Yunfei Wang <yf.wang@mediatek.com>
-> 
-> Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
-> cause pgtable PA size larger than 32bit.
-> 
-> Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
-> so add a quirk to allow the PA of pgtables support up to bit35.
-> 
-> Signed-off-by: Ning Li <ning.li@mediatek.com>
-> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-> ---
->  drivers/iommu/io-pgtable-arm-v7s.c | 67 +++++++++++++++++++++++-----
-> --
->  include/linux/io-pgtable.h         | 15 ++++---
->  2 files changed, 63 insertions(+), 19 deletions(-)
+We try to harden virtio device notifications in 8b4ec69d7e09 ("virtio:
+harden vring IRQ"). It works with the assumption that the driver or
+core can properly call virtio_device_ready() at the right
+place. Unfortunately, this seems to be not true and uncover various
+bugs of the existing drivers, mainly the issue of using
+virtio_device_ready() incorrectly.
 
-[...]
+So let's having a Kconfig option and disable it by default. It gives
+us a breath to fix the drivers and then we can consider to enable it
+by default.
 
->  	/* TTBR */
-> -	cfg->arm_v7s_cfg.ttbr = virt_to_phys(data->pgd) |
-> ARM_V7S_TTBR_S |
-> +	paddr = virt_to_phys(data->pgd);
-> +	cfg->arm_v7s_cfg.ttbr = paddr | ARM_V7S_TTBR_S |
->  				(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS
-> |
->  				 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBW
-> A) |
->  				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBW
-> A)) :
->  				(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC)
-> |
->  				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)
-> ));
-> +
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		cfg->arm_v7s_cfg.ttbr = (paddr & GENMASK(31, 7)) |
-> +					upper_32_bits(paddr);
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+Changes since V2:
+- Tweak the Kconfig help
+- Add comment for the read_lock() pairing in virtio_ccw
+---
+ drivers/s390/virtio/virtio_ccw.c |  9 ++++++++-
+ drivers/virtio/Kconfig           | 13 +++++++++++++
+ drivers/virtio/virtio.c          |  2 ++
+ drivers/virtio/virtio_ring.c     | 12 ++++++++++++
+ include/linux/virtio_config.h    |  2 ++
+ 5 files changed, 37 insertions(+), 1 deletion(-)
 
-If we keep ttbr u32, we have to put the special logic here. This line
-is ok for all the MediaTek cases, not only for this quirk. It means:
-
-    if (arm_v7s_is_mtk_enabled(cfg))
-           cfg->arm_v7s_cfg.ttbr = (virt_to_phys(data->pgd) &
-GENMASK(31, 7)) | upper_32_bits(paddr);
-    else
-           xxx
+diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+index 97e51c34e6cf..1f6a358f65f0 100644
+--- a/drivers/s390/virtio/virtio_ccw.c
++++ b/drivers/s390/virtio/virtio_ccw.c
+@@ -1136,8 +1136,13 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+ 			vcdev->err = -EIO;
+ 	}
+ 	virtio_ccw_check_activity(vcdev, activity);
+-	/* Interrupts are disabled here */
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
++	/*
++	 * Paried with virtio_ccw_synchronize_cbs() and interrupts are
++	 * disabled here.
++	 */
+ 	read_lock(&vcdev->irq_lock);
++#endif
+ 	for_each_set_bit(i, indicators(vcdev),
+ 			 sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
+ 		/* The bit clear must happen before the vring kick. */
+@@ -1146,7 +1151,9 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+ 		vq = virtio_ccw_vq_by_ind(vcdev, i);
+ 		vring_interrupt(0, vq);
+ 	}
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 	read_unlock(&vcdev->irq_lock);
++#endif
+ 	if (test_bit(0, indicators2(vcdev))) {
+ 		virtio_config_changed(&vcdev->vdev);
+ 		clear_bit(0, indicators2(vcdev));
+diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+index b5adf6abd241..c04f370a1e5c 100644
+--- a/drivers/virtio/Kconfig
++++ b/drivers/virtio/Kconfig
+@@ -35,6 +35,19 @@ menuconfig VIRTIO_MENU
  
-     Then we don't need add "& MMU_PT_ADDR_MASK" in mtk_iommu.c since
-you have done it here.
-
-> +
->  	return &data->iop;
->  
+ if VIRTIO_MENU
+ 
++config VIRTIO_HARDEN_NOTIFICATION
++        bool "Harden virtio notification"
++        help
++          Enable this to harden the device notifications and suppress
++          those that happen at a time where notifications are illegal.
++
++          Experimental: Note that several drivers still have bugs that
++          may cause crashes or hangs when correct handling of
++          notifications is enforced; depending on the subset of
++          drivers and devices you use, this may or may not work.
++
++          If unsure, say N.
++
+ config VIRTIO_PCI
+ 	tristate "PCI driver for virtio devices"
+ 	depends on PCI
+diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+index ef04a96942bf..21dc08d2f32d 100644
+--- a/drivers/virtio/virtio.c
++++ b/drivers/virtio/virtio.c
+@@ -220,6 +220,7 @@ static int virtio_features_ok(struct virtio_device *dev)
+  * */
+ void virtio_reset_device(struct virtio_device *dev)
+ {
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 	/*
+ 	 * The below virtio_synchronize_cbs() guarantees that any
+ 	 * interrupt for this line arriving after
+@@ -228,6 +229,7 @@ void virtio_reset_device(struct virtio_device *dev)
+ 	 */
+ 	virtio_break_device(dev);
+ 	virtio_synchronize_cbs(dev);
++#endif
+ 
+ 	dev->config->reset(dev);
+ }
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 13a7348cedff..d9d3b6e201fb 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -1688,7 +1688,11 @@ static struct virtqueue *vring_create_virtqueue_packed(
+ 	vq->we_own_ring = true;
+ 	vq->notify = notify;
+ 	vq->weak_barriers = weak_barriers;
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 	vq->broken = true;
++#else
++	vq->broken = false;
++#endif
+ 	vq->last_used_idx = 0;
+ 	vq->event_triggered = false;
+ 	vq->num_added = 0;
+@@ -2135,9 +2139,13 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+ 	}
+ 
+ 	if (unlikely(vq->broken)) {
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 		dev_warn_once(&vq->vq.vdev->dev,
+ 			      "virtio vring IRQ raised before DRIVER_OK");
+ 		return IRQ_NONE;
++#else
++		return IRQ_HANDLED;
++#endif
+ 	}
+ 
+ 	/* Just a hint for performance: so it's ok that this can be racy! */
+@@ -2180,7 +2188,11 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+ 	vq->we_own_ring = false;
+ 	vq->notify = notify;
+ 	vq->weak_barriers = weak_barriers;
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 	vq->broken = true;
++#else
++	vq->broken = false;
++#endif
+ 	vq->last_used_idx = 0;
+ 	vq->event_triggered = false;
+ 	vq->num_added = 0;
+diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+index 9a36051ceb76..d15c3cdda2d2 100644
+--- a/include/linux/virtio_config.h
++++ b/include/linux/virtio_config.h
+@@ -257,6 +257,7 @@ void virtio_device_ready(struct virtio_device *dev)
+ 
+ 	WARN_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+ 
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 	/*
+ 	 * The virtio_synchronize_cbs() makes sure vring_interrupt()
+ 	 * will see the driver specific setup if it sees vq->broken
+@@ -264,6 +265,7 @@ void virtio_device_ready(struct virtio_device *dev)
+ 	 */
+ 	virtio_synchronize_cbs(dev);
+ 	__virtio_unbreak_device(dev);
++#endif
+ 	/*
+ 	 * The transport should ensure the visibility of vq->broken
+ 	 * before setting DRIVER_OK. See the comments for the transport
+-- 
+2.25.1
 

@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B728C554409
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0C15543F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353203AbiFVHhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S1353191AbiFVHhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353122AbiFVHhU (ORCPT
+        with ESMTP id S1352299AbiFVHhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:37:20 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1E637039
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:37:18 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 09CD55C00E0;
-        Wed, 22 Jun 2022 03:37:18 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 22 Jun 2022 03:37:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1655883438; x=
-        1655969838; bh=xC3T80hMMa/KAtkEhkckBxtjK8g6J2RttpW8iWfN1EU=; b=N
-        rjEVKcSFbDeeL2+mjqiRXs8dxZ8VPagAavHFkXzmAqs/lqE9hguC62MI8KYE1zKe
-        EjHjAZipIiD73lBLNcVVkfHz8E/DXfGpi78eWb7qXP4bSbsiwOA73GO/hH+2a2YV
-        xzeK8HSvbQKqqR6qxkch7Qwjtn7XkkN2/4YlGr6kFVL+t7p31FhWBKWyjvn3Udl4
-        0MIM5Wpn+wAPnGm9YRPxdWSDWAlAESGnJCaRqF4/ojoNgTi53s76RBrKTPYnOQjO
-        jDZShdjQ4wuv4AIbASKuM8yGmNWnQ8N3hOBfDptN8J/D1gVlv7Hm8y/wIc/am3+k
-        VwGozVqDb9zYvT+D/jKAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1655883438; x=
-        1655969838; bh=xC3T80hMMa/KAtkEhkckBxtjK8g6J2RttpW8iWfN1EU=; b=b
-        DKvd43wNUKyEB9b7ULS3DZEoZJ76jrw10egcKbVjt5MxORz6qojl+oOOUlgS0RUQ
-        tAoMwlq3+VrkcxEJEWvkQRrKX9qTnIgdXAYTSmo+junYjAsLUBFGZzRX1u90c1Qr
-        PZqB84guDmYsQeqThTIVl6B/IE9GWsNB14iuMnnbOLh+lo0yOEcrelwjdSiigbmN
-        nWZ6EakEQkHuFqYK/SQiddLueGKRb3lX9TdV9jy0pujJC2/lWSGlC/YkVq1wM11l
-        WVxvSYahhzEXtDoM9gfltVbOR7u/Vt4ij8w6PwWZ1gBmJc3YDAoS12wigEMB8Dau
-        4a83Xot3lJoLIPFqwWiMQ==
-X-ME-Sender: <xms:rcayYgvNYCFUjm6CUu-eKu6GU3hf-7_Jc1TqSNwFLbbhRSWsmXamJg>
-    <xme:rcayYtdLiQZEmw_PIW3Pootsajx3DqBdN4luUA4RUL9vuq_LZ4TmxJXD_qnx8Xwks
-    YL1FBvTFwSUUXalNpU>
-X-ME-Received: <xmr:rcayYrzMLHbQoZ060U-mjDqcyxR_j4o7TXZCk7REJ1jORfe97biPHrfkYRbS26nby7nSt71INQ55AntiA25_aIjs53y1o21GX4Z4xFA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgedguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhggtgfgse
-    htkeertdertdejnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimhgv
-    segtvghrnhhordhtvggthheqnecuggftrfgrthhtvghrnhepueeigefghfffffeifeehud
-    eiuedvteegueefffevgfetvdffheehkeffvedufeeinecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:rcayYjOAN5uBm2KtQiw2c3WztAK0JdZ9Wu4I0AbPEghfER5x6mgUoQ>
-    <xmx:rcayYg8sF5myABSdKgMbY-09QX0r4VcIhy_2QBd45FNge4Ri6BQe9Q>
-    <xmx:rcayYrXYLSF02Vi5zAMNdGOiwWE57HukC6Y0QUGW4Ntp2PV22oosRQ>
-    <xmx:rsayYrYTSSwSl0FaHrMyLDjhKl-KsJ7tavSCRJRcll-sXED_GwHnWg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Jun 2022 03:37:16 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     mripard@kernel.org, jernej.skrabec@gmail.com, wens@csie.org
-Cc:     Maxime Ripard <maxime@cerno.tech>, samuel@sholland.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, daniel@ffwll.ch
-Subject: Re: (subset) [PATCH v2] drm/sun4i: Add DMA mask and segment size
-Date:   Wed, 22 Jun 2022 09:37:13 +0200
-Message-Id: <165588343010.17134.16657769855274724616.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220620181333.650301-1-jernej.skrabec@gmail.com>
-References: <20220620181333.650301-1-jernej.skrabec@gmail.com>
+        Wed, 22 Jun 2022 03:37:31 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E81F37036;
+        Wed, 22 Jun 2022 00:37:26 -0700 (PDT)
+X-UUID: fea7b2a2ce5c4c40895848c95dbeae2a-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:afca3ad1-0c30-44f9-a583-9a235af938e3,OB:10,L
+        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:100
+X-CID-INFO: VERSION:1.1.6,REQID:afca3ad1-0c30-44f9-a583-9a235af938e3,OB:10,LOB
+        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:100
+X-CID-META: VersionHash:b14ad71,CLOUDID:84a1ba2d-1756-4fa3-be7f-474a6e4be921,C
+        OID:5488c44df5a1,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: fea7b2a2ce5c4c40895848c95dbeae2a-20220622
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 966315171; Wed, 22 Jun 2022 15:37:22 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 15:37:21 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 22 Jun 2022 15:37:21 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 22 Jun 2022 15:37:20 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <stanley.chu@mediatek.com>
+Subject: [PATCH v1 2/7] scsi: ufs-mediatek: Always add delays for VCC operations
+Date:   Wed, 22 Jun 2022 15:37:14 +0800
+Message-ID: <20220622073719.21599-3-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220622073719.21599-1-stanley.chu@mediatek.com>
+References: <20220622073719.21599-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 20:13:33 +0200, Jernej Skrabec wrote:
-> Kernel occasionally complains that there is mismatch in segment size
-> when trying to render HW decoded videos and rendering them directly with
-> sun4i DRM driver. Following message can be observed on H6 SoC:
-> 
-> [  184.298308] ------------[ cut here ]------------
-> [  184.298326] DMA-API: sun4i-drm display-engine: mapping sg segment longer than device claims to support [len=6144000] [max=65536]
-> [  184.298364] WARNING: CPU: 1 PID: 382 at kernel/dma/debug.c:1162 debug_dma_map_sg+0x2b0/0x350
-> [  184.322997] CPU: 1 PID: 382 Comm: ffmpeg Not tainted 5.19.0-rc1+ #1331
-> [  184.329533] Hardware name: Tanix TX6 (DT)
-> [  184.333544] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [  184.340512] pc : debug_dma_map_sg+0x2b0/0x350
-> [  184.344882] lr : debug_dma_map_sg+0x2b0/0x350
-> [  184.349250] sp : ffff800009f33a50
-> [  184.352567] x29: ffff800009f33a50 x28: 0000000000010000 x27: ffff000001b86c00
-> [  184.359725] x26: ffffffffffffffff x25: ffff000005d8cc80 x24: 0000000000000000
-> [  184.366879] x23: ffff80000939ab18 x22: 0000000000000001 x21: 0000000000000001
-> [  184.374031] x20: 0000000000000000 x19: ffff0000018a7410 x18: ffffffffffffffff
-> [  184.381186] x17: 0000000000000000 x16: 0000000000000000 x15: ffffffffffffffff
-> [  184.388338] x14: 0000000000000001 x13: ffff800009534e86 x12: 6f70707573206f74
-> [  184.395493] x11: 20736d69616c6320 x10: 000000000000000a x9 : 0000000000010000
-> [  184.402647] x8 : ffff8000093b6d40 x7 : ffff800009f33850 x6 : 000000000000000c
-> [  184.409800] x5 : ffff0000bf997940 x4 : 0000000000000000 x3 : 0000000000000027
-> [  184.416953] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000003960e80
-> [  184.424106] Call trace:
-> [  184.426556]  debug_dma_map_sg+0x2b0/0x350
-> [  184.430580]  __dma_map_sg_attrs+0xa0/0x110
-> [  184.434687]  dma_map_sgtable+0x28/0x4c
-> [  184.438447]  vb2_dc_dmabuf_ops_map+0x60/0xcc
-> [  184.442729]  __map_dma_buf+0x2c/0xd4
-> [  184.446321]  dma_buf_map_attachment+0xa0/0x130
-> [  184.450777]  drm_gem_prime_import_dev+0x7c/0x18c
-> [  184.455410]  drm_gem_prime_fd_to_handle+0x1b8/0x214
-> [  184.460300]  drm_prime_fd_to_handle_ioctl+0x2c/0x40
-> [  184.465190]  drm_ioctl_kernel+0xc4/0x174
-> [  184.469123]  drm_ioctl+0x204/0x420
-> [  184.472534]  __arm64_sys_ioctl+0xac/0xf0
-> [  184.476474]  invoke_syscall+0x48/0x114
-> [  184.480240]  el0_svc_common.constprop.0+0x44/0xec
-> [  184.484956]  do_el0_svc+0x2c/0xc0
-> [  184.488283]  el0_svc+0x2c/0x84
-> [  184.491354]  el0t_64_sync_handler+0x11c/0x150
-> [  184.495723]  el0t_64_sync+0x18c/0x190
-> [  184.499397] ---[ end trace 0000000000000000 ]---
-> 
-> [...]
+From: Peter Wang <peter.wang@mediatek.com>
 
-Applied to drm/drm-misc (drm-misc-fixes).
+MediaTek decides to always add delays before and after VCC
+is turned-off.
 
-Thanks!
-Maxime
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/ufs/host/ufs-mediatek.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+index d970c6607b4a..f76e2999ac99 100755
+--- a/drivers/ufs/host/ufs-mediatek.c
++++ b/drivers/ufs/host/ufs-mediatek.c
+@@ -31,9 +31,10 @@
+ #include "ufs-mediatek-trace.h"
+ 
+ static const struct ufs_dev_quirk ufs_mtk_dev_fixups[] = {
+-	{ .wmanufacturerid = UFS_VENDOR_MICRON,
++	{ .wmanufacturerid = UFS_ANY_VENDOR,
+ 	  .model = UFS_ANY_MODEL,
+-	  .quirk = UFS_DEVICE_QUIRK_DELAY_AFTER_LPM },
++	  .quirk = UFS_DEVICE_QUIRK_DELAY_AFTER_LPM |
++		UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM },
+ 	{ .wmanufacturerid = UFS_VENDOR_SKHYNIX,
+ 	  .model = "H9HQ21AFAMZDAR",
+ 	  .quirk = UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES },
+-- 
+2.18.0
+

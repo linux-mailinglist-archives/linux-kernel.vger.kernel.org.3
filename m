@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B4D554969
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C3255477D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345696AbiFVIrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 04:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
+        id S1350092AbiFVIrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 04:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236729AbiFVIrD (ORCPT
+        with ESMTP id S236729AbiFVIrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 04:47:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43149393DA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:47:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655887622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eS3Mbme1/2pPmMpDc+wuDpVAj8lgyhu3EEjJBQhRSPI=;
-        b=Wr7BhTSE1dFW1bPIoojhUCCWy3bJZR6nh8ezz4AzZlCf8903mS7OyPfqza3VS9xL2EcI0o
-        qMTO3GHymb6tOprTzwrJddQ+IPOn5VQrGq+eZwZX4MPLDWvkUiK2yGtf2CxsLc43tIIxew
-        YCAnxbC9laGD6rPfUEinu9pUwGoGtYc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-240-YODQEtXKO_-c7IP-rPlMfA-1; Wed, 22 Jun 2022 04:47:01 -0400
-X-MC-Unique: YODQEtXKO_-c7IP-rPlMfA-1
-Received: by mail-wm1-f72.google.com with SMTP id l3-20020a05600c1d0300b0039c7efa2526so7513243wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 01:47:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=eS3Mbme1/2pPmMpDc+wuDpVAj8lgyhu3EEjJBQhRSPI=;
-        b=Ky2sRMjlPA713w2VlD0pSGwOnBKenK9O80eJen4Lqc5Gs1FxOVSbiCtv0UXxoqddDj
-         zZqbwgXlOjJa1/8iyG67Ra4TTs476oH4HMtYG2BviOe32A7u7ccQAau4TcbNt1D/tMoF
-         erXGrRlMiUSyFGc1LUtts4o+oK1Gu9nYUf0f0jd+WjKzT6vGlzT+QkkSw6uy7/EabtpU
-         9fSdMxmsqmoapIIcNdLo1M0u/QNSt3RwWMJ7rCb2ZphGasMuHd77GajCnM3nEZ1tI3sG
-         iTPFSRbmJDe77zqMopRm+19vR6OmubJjdASwXMDvHAQrM2a8u/s8MwYy8OJG4K+gK9Kq
-         8i7Q==
-X-Gm-Message-State: AJIora+n8kRoa33Rc9mJc5aZuqnCph1ncGY5ri3CSb8Munlb/l7oOu0L
-        1Rrb+WHuvZQYaAvCrpvVfTWQsxnrc/kUWk+2S5a+pUMDQQIweIdC2+gBEfRxOvBob2s4865FqPH
-        AIY+UEyXpg840MioRuvbFZKQC
-X-Received: by 2002:a05:600c:ac4:b0:39c:4f54:9c5f with SMTP id c4-20020a05600c0ac400b0039c4f549c5fmr2585446wmr.135.1655887619734;
-        Wed, 22 Jun 2022 01:46:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tRQuXS//dOmPMDP+OZGfs4QHv0XCl/njtBkEyzuMoLomceZAmL/OPVAmRfgr38xw4B+dmZow==
-X-Received: by 2002:a05:600c:ac4:b0:39c:4f54:9c5f with SMTP id c4-20020a05600c0ac400b0039c4f549c5fmr2585430wmr.135.1655887619490;
-        Wed, 22 Jun 2022 01:46:59 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:5100:9c77:ce13:2aeb:8748? (p200300cbc70351009c77ce132aeb8748.dip0.t-ipconnect.de. [2003:cb:c703:5100:9c77:ce13:2aeb:8748])
-        by smtp.gmail.com with ESMTPSA id z7-20020a1c4c07000000b0039c4b518df4sm25678747wmf.5.2022.06.22.01.46.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 01:46:58 -0700 (PDT)
-Message-ID: <01e9846d-1b52-0b7f-056c-e31994df3d22@redhat.com>
-Date:   Wed, 22 Jun 2022 10:46:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/4] memblock tests: add user-provided arguments to
- Makefile
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        Wed, 22 Jun 2022 04:47:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F1E396A2;
+        Wed, 22 Jun 2022 01:47:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DCA5B81CEE;
+        Wed, 22 Jun 2022 08:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD63CC34114;
+        Wed, 22 Jun 2022 08:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655887631;
+        bh=9Cic3CRnN/+87wCqzwhlvsAQjVOpaTeW1l6o5THs8CI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cVkLQHWzW3Yw9TVz2dzzKzeR+QnUq7x4+bB64283XnsAVsrEODYwYX6FfUrgY6xrH
+         nutrHVc3eirGnmejV5vkOXo90XofpO/yl0Uj3Kaqn1ip/DQJU76WjxQtCj+4DrQQ0n
+         G81OuSPJX0C9G6bABNgG6GrkH3f+4cAjBS3l7tGWXHxKzKlo9MwjsDe2SM5YFp7Cqt
+         iBHl/ezc/P6nuNMx312+xM2QzF9gSNAnj4aw8Lu4XIqg0PWcLad7EskZK8x4obrTXc
+         Rm2ocVRqmeukupGMAZEPk2zTFv1VGor1JiiXNfHTEQtCc+kURThcfDNSdxo/xn56p5
+         F79Cz7Y6CW/4g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3w0x-0002Su-Ct; Wed, 22 Jun 2022 10:47:07 +0200
+Date:   Wed, 22 Jun 2022 10:47:07 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <cover.1655878337.git.remckee0@gmail.com>
- <7deb3d3d4c05c884d3830325c816862ce927133f.1655878337.git.remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <7deb3d3d4c05c884d3830325c816862ce927133f.1655878337.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/6] dt-bindings: arm: qcom: Document additional
+ sc8280xp devices
+Message-ID: <YrLXCx90bn7Id4Bn@hovoldconsulting.com>
+References: <20220622041224.627803-1-bjorn.andersson@linaro.org>
+ <20220622041224.627803-2-bjorn.andersson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622041224.627803-2-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.22 08:19, Rebecca Mckeever wrote:
-> Add VERBOSE and MEMBLOCK_DEBUG user-provided arguments. VERBOSE will
-> enable verbose output from Memblock simulator. MEMBLOCK_DEBUG will enable
-> memblock_dbg() messages.
+On Tue, Jun 21, 2022 at 09:12:19PM -0700, Bjorn Andersson wrote:
+> Add the CRD (Customer Reference Design?) and the Lenovo Thinkpad X13s to
+
+Qualcomm refers to "Compute Reference Design", for example, in commit
+427b249504ea ("arm64: dts: qcom: sc7280-crd: Add device tree files for
+CRD").
+
+> the valid device compatibles found on the sc8280xp platform.
 > 
-> Update the help message to include VERBOSE and MEMBLOCK_DEBUG. Update
-> the README to include VERBOSE. The README does not include all available
-> options and refers to the help message for the remaining options.
-> Therefore, omit MEMBLOCK_DEBUG from README.
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
 > 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> Changes since v1:
+> - Added the two missing board compatibles
+> 
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 5c06d1bfc046..6ec7521be19d 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -238,6 +238,8 @@ properties:
+>  
+>        - items:
+>            - enum:
+> +              - lenovo,thinkpad-x13s
+> +              - qcom,sc8280xp-crd
+>                - qcom,sc8280xp-qrd
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+I believe the "qcom,sc8280xp-qrd" entry was a mistake and should have
+been "-crd" all along? Perhaps you should remove that entry in this
+patch.
 
+>            - const: qcom,sc8280xp
 
--- 
-Thanks,
+Looks good otherwise:
 
-David / dhildenb
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 
+Johan

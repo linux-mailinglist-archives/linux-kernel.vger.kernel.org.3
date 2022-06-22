@@ -2,181 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8497554B54
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2477C554B4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 15:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357142AbiFVN3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 09:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S1355474AbiFVN3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 09:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357846AbiFVN2f (ORCPT
+        with ESMTP id S231546AbiFVN3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 09:28:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B497463FE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 06:28:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83B1113D5;
-        Wed, 22 Jun 2022 06:28:03 -0700 (PDT)
-Received: from [10.57.85.1] (unknown [10.57.85.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 398063F534;
-        Wed, 22 Jun 2022 06:28:01 -0700 (PDT)
-Message-ID: <a0f0d3da-6992-7033-5262-156ffa5316e7@arm.com>
-Date:   Wed, 22 Jun 2022 14:27:57 +0100
+        Wed, 22 Jun 2022 09:29:14 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FC2BCC;
+        Wed, 22 Jun 2022 06:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Qos0wtffPi7SlJmjUa79jVr5513FHGhaJ2VhSYAiOiw=; b=hADOqLi7yR5iFGD8+rNuXfoc2o
+        AnD8wEb6RQ8hL/0sN3gkFdOvUHZR9FvscmweapTKvkA91VCNIo/ukO06jyRN63W/MVuzckR42D/3R
+        yExJEsUO/0d9fhU3YsE83frHdzP2CKi3h757rChcRPORurAyx2PP7jcxLEW/4Qmo5j9a2N9PhskLk
+        J0SSzD+iVBUpmX5gBB9JOhtLG8nnQ6UcvFNmdjDNw4oa0N6NMiyQIveUSTLg9iaVirBh7PC0+0lXM
+        qg56lauwwcPxKN+Pq7RkYyS9el0eDmTLMoyiiJb9qbiIUQXIj9ZJeyMvOBuV77rgmuZFQalluQ60R
+        zSc+S02A==;
+Received: from [193.209.96.43] (helo=[10.21.26.179])
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1o40Pu-000bYH-7S; Wed, 22 Jun 2022 16:29:09 +0300
+Message-ID: <9e80da1f-60e9-5528-3636-6443461fb207@kapsi.fi>
+Date:   Wed, 22 Jun 2022 16:29:03 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] iommu/dma: Fix race condition during iova_domain
- initialization
-Content-Language: en-GB
-To:     Joerg Roedel <joro@8bytes.org>, yf.wang@mediatek.com
-Cc:     Miles Chen <miles.chen@mediatek.com>, wsd_upstream@mediatek.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Libo Kang <Libo.Kang@mediatek.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Ning Li <ning.li@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220530120748.31733-1-yf.wang@mediatek.com>
- <YrMPG4dIEnFkCbi9@8bytes.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YrMPG4dIEnFkCbi9@8bytes.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/2] arm64: tegra: Mark BPMP channels as no-memory-wc
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Mian Yousaf Kaukab <ykaukab@suse.de>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220622132300.1746201-1-cyndis@kapsi.fi>
+ <20220622132300.1746201-2-cyndis@kapsi.fi>
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+In-Reply-To: <20220622132300.1746201-2-cyndis@kapsi.fi>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 193.209.96.43
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-22 13:46, Joerg Roedel wrote:
-> Please re-send with
+On 22.6.2022 16.23, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
 > 
-> 	Robin Murphy <robin.murphy@arm.com>
+> The Tegra SYSRAM contains regions access to which is restricted to
+> certain hardware blocks on the system, and speculative accesses to
+> those will cause issues.
 > 
-> in Cc.
+> Patch 'misc: sram: Only map reserved areas in Tegra SYSRAM' attempted
+> to resolve this by only mapping the regions specified in the device
+> tree on the assumption that there are no such restricted areas within
+> the 64K-aligned area of memory that contains the memory we wish to map.
+> 
+> Turns out this assumption is wrong, as there are such areas above the
+> 4K pages described in the device trees. As such, we need to use the
+> bigger hammer that is no-memory-wc, which causes the memory to be
+> mapped as Device memory to which speculative accesses are disallowed.
+> 
+> As such, the previous patch in the series,
+>    'firmware: tegra: bpmp: do only aligned access to IPC memory area',
+> is required with this patch to make the BPMP driver only issue aligned
+> memory accesses as those are also required with Device memory.
+> 
+> Fixes: fec29bf04994 ("misc: sram: Only map reserved areas in Tegra SYSRAM")
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> ---
 
-Apologies, I did spot this before, I've just been tied up with other 
-things and dropping everything non-critical on the floor, so didn't get 
-round to replying before it slipped my mind again.
+FWIW, with this, the aforementioned patch to misc/sram is redundant. It 
+doesn't hurt, but doesn't really help either. Whether or not it should 
+be reverted, I have no opinion.
 
-In summary, I hate it, but mostly because the whole situation of calling 
-iommu_probe_device off the back of driver probe is fundamentally broken. 
-I'm still a few steps away from fixing that properly, at which point I 
-can just as well rip all these little bodges out again. If it really 
-does need mitigating in the meantime (i.e. this is real-world async 
-probe, not just some contrived testcase), then I can't easily think of 
-any cleaner hack, so,
+Thanks,
+Mikko
 
-Acked-by: Robin Murphy <robin.murphy@arm.com>
-
-(somewhat reluctantly)
-
-Cheers,
-Robin.
-
-> On Mon, May 30, 2022 at 08:07:45PM +0800, yf.wang@mediatek.com wrote:
->> From: Yunfei Wang <yf.wang@mediatek.com>
->>
->> When many devices share the same iova domain, iommu_dma_init_domain()
->> may be called at the same time. The checking of iovad->start_pfn will
->> all get false in iommu_dma_init_domain() and both enter init_iova_domain()
->> to do iovad initialization.
->>
->> Fix this by protecting init_iova_domain() with iommu_dma_cookie->mutex.
->>
->> Exception backtrace:
->> rb_insert_color(param1=0xFFFFFF80CD2BDB40, param3=1) + 64
->> init_iova_domain() + 180
->> iommu_setup_dma_ops() + 260
->> arch_setup_dma_ops() + 132
->> of_dma_configure_id() + 468
->> platform_dma_configure() + 32
->> really_probe() + 1168
->> driver_probe_device() + 268
->> __device_attach_driver() + 524
->> __device_attach() + 524
->> bus_probe_device() + 64
->> deferred_probe_work_func() + 260
->> process_one_work() + 580
->> worker_thread() + 1076
->> kthread() + 332
->> ret_from_fork() + 16
->>
->> Signed-off-by: Ning Li <ning.li@mediatek.com>
->> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
->> ---
->>   drivers/iommu/dma-iommu.c | 17 +++++++++++++----
->>   1 file changed, 13 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index 09f6e1c0f9c0..b38c5041eeab 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -63,6 +63,7 @@ struct iommu_dma_cookie {
->>   
->>   	/* Domain for flush queue callback; NULL if flush queue not in use */
->>   	struct iommu_domain		*fq_domain;
->> +	struct mutex			mutex;
->>   };
->>   
->>   static DEFINE_STATIC_KEY_FALSE(iommu_deferred_attach_enabled);
->> @@ -309,6 +310,7 @@ int iommu_get_dma_cookie(struct iommu_domain *domain)
->>   	if (!domain->iova_cookie)
->>   		return -ENOMEM;
->>   
->> +	mutex_init(&domain->iova_cookie->mutex);
->>   	return 0;
->>   }
->>   
->> @@ -549,26 +551,33 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->>   	}
->>   
->>   	/* start_pfn is always nonzero for an already-initialised domain */
->> +	mutex_lock(&cookie->mutex);
->>   	if (iovad->start_pfn) {
->>   		if (1UL << order != iovad->granule ||
->>   		    base_pfn != iovad->start_pfn) {
->>   			pr_warn("Incompatible range for DMA domain\n");
->> -			return -EFAULT;
->> +			ret = -EFAULT;
->> +			goto done_unlock;
->>   		}
->>   
->> -		return 0;
->> +		ret = 0;
->> +		goto done_unlock;
->>   	}
->>   
->>   	init_iova_domain(iovad, 1UL << order, base_pfn);
->>   	ret = iova_domain_init_rcaches(iovad);
->>   	if (ret)
->> -		return ret;
->> +		goto done_unlock;
->>   
->>   	/* If the FQ fails we can simply fall back to strict mode */
->>   	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
->>   		domain->type = IOMMU_DOMAIN_DMA;
->>   
->> -	return iova_reserve_iommu_regions(dev, domain);
->> +	ret = iova_reserve_iommu_regions(dev, domain);
->> +
->> +done_unlock:
->> +	mutex_unlock(&cookie->mutex);
->> +	return ret;
->>   }
->>   
->>   /**
->> -- 
->> 2.18.0
-> _______________________________________________
-> iommu mailing list
-> iommu@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/iommu
+>   arch/arm64/boot/dts/nvidia/tegra186.dtsi | 1 +
+>   arch/arm64/boot/dts/nvidia/tegra194.dtsi | 1 +
+>   arch/arm64/boot/dts/nvidia/tegra234.dtsi | 1 +
+>   3 files changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> index 0e9afc3e2f26..9eca18b54698 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> @@ -1820,6 +1820,7 @@ sram@30000000 {
+>   		#address-cells = <1>;
+>   		#size-cells = <1>;
+>   		ranges = <0x0 0x0 0x30000000 0x50000>;
+> +		no-memory-wc;
+>   
+>   		cpu_bpmp_tx: sram@4e000 {
+>   			reg = <0x4e000 0x1000>;
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> index d1f8248c00f4..3fdb0b852718 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> @@ -2684,6 +2684,7 @@ sram@40000000 {
+>   		#address-cells = <1>;
+>   		#size-cells = <1>;
+>   		ranges = <0x0 0x0 0x40000000 0x50000>;
+> +		no-memory-wc;
+>   
+>   		cpu_bpmp_tx: sram@4e000 {
+>   			reg = <0x4e000 0x1000>;
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> index cb3af539e477..0213a7e3dad0 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> @@ -1325,6 +1325,7 @@ sram@40000000 {
+>   		#address-cells = <1>;
+>   		#size-cells = <1>;
+>   		ranges = <0x0 0x0 0x40000000 0x80000>;
+> +		no-memory-wc;
+>   
+>   		cpu_bpmp_tx: sram@70000 {
+>   			reg = <0x70000 0x1000>;

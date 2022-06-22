@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D01855508F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB249555097
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 18:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376341AbiFVP7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
+        id S1376365AbiFVQA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 12:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358806AbiFVP7g (ORCPT
+        with ESMTP id S1376304AbiFVQAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:59:36 -0400
-Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45EE424A5;
-        Wed, 22 Jun 2022 08:56:07 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1655913349t5adrqbn
-Received: from ubuntu.localdomain ( [106.117.78.84])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 22 Jun 2022 23:55:45 +0800 (CST)
-X-QQ-SSF: 01000000008000B0C000E00A0000000
-X-QQ-FEAT: 4LFlwc+MlXkWqkXPuo69O6o31VcC4iuyusTuvZLpaC9WVGwA3erFPe5o2KJZR
-        LXr0vAZL7Fmh5GGJcSgQxrrgKFl221Czj/8h9QyRG4AQaCLSEGDmA/Yec46IpYXXTwwmFwE
-        UCrQHw74rOsEr1XkEjXOcD1o+BMJ44qcwWDnaAM/aQtBppLG7sHRzmOsv9TZUxU6j7TQRra
-        aNp88TmL63uc5RnxhHe2ro9UO5l3JsxYprLms56KKF3YAAfie3lKIPuhNBBPjwr9SJZKN1C
-        HA4lqolxLcOBxfBh30lwhoAFqtihUIqnmknpSILFPgXRDeH9zeA9+bX6zx34SeiGQRLePYF
-        s53tAfi9Ht3ipxefgIccdZq6jayw9UInOkzubgx
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] thermal: intel: drop unexpected word 'is' in the comments
-Date:   Wed, 22 Jun 2022 23:55:43 +0800
-Message-Id: <20220622155543.9780-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 12:00:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89591CFCE;
+        Wed, 22 Jun 2022 08:58:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86FE76197F;
+        Wed, 22 Jun 2022 15:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EB551C34114;
+        Wed, 22 Jun 2022 15:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655913528;
+        bh=eJXLKQ3BYgNftB2DvfgHxogKBElNoxFmgA7Jbw3c6A4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=lDanj8MFmMSAAWgwRBAE5PvgE6L0etVXvvng4lufcoK8jCY+eIBJqBh3Rjhs5U3Db
+         Er7/j4pol3nQI/x4U8FUZFRH+TkfE+PdaTzgf1GHQqwIxW7nsfOflQrhvpRUZCrCQu
+         AvTN0QXXV9ovcObREi8qDy20n/ww+od7WMRx5Vw4Fr/4tcsOdZOni3fmztkRZ79nkx
+         mtn0QZhWX2D+cjzh3sHA8DCHojAVGAig24TRabx9h5ie150o+SKtvKMDnVSVrmOjFC
+         JGv/UOJdwqqpKpFI4CkH/UX3GFxQTAHf4ntg7lQf6uvz8sKDC7Ou5zLg5ryJh3jiA1
+         gsXdNromFXzfQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5260E574DA;
+        Wed, 22 Jun 2022 15:58:47 +0000 (UTC)
+Subject: Re: [GIT PULL] 9p fixes for 5.19-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YrKeHMRfXTNw3vTE@codewreck.org>
+References: <YrKeHMRfXTNw3vTE@codewreck.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YrKeHMRfXTNw3vTE@codewreck.org>
+X-PR-Tracked-Remote: https://github.com/martinetd/linux tags/9p-for-5.19-rc4
+X-PR-Tracked-Commit-Id: b0017602fdf6bd3f344dd49eaee8b6ffeed6dbac
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3abc3ae553c7ed73365b385b9a4cffc5176aae45
+Message-Id: <165591352786.24413.10949630559737106168.pr-tracker-bot@kernel.org>
+Date:   Wed, 22 Jun 2022 15:58:47 +0000
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word 'is' in the comments that need to be dropped
+The pull request you sent on Wed, 22 Jun 2022 13:44:12 +0900:
 
-file: ./drivers/thermal/intel/x86_pkg_temp_thermal.c
-line: 108
+> https://github.com/martinetd/linux tags/9p-for-5.19-rc4
 
-* tj-max is is interesting because threshold is set relative to this
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3abc3ae553c7ed73365b385b9a4cffc5176aae45
 
-changed to:
+Thank you!
 
-* tj-max is interesting because threshold is set relative to this
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
----
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 4d8edc61a78b..a0e234fce71a 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -105,7 +105,7 @@ static struct zone_device *pkg_temp_thermal_get_dev(unsigned int cpu)
- }
- 
- /*
--* tj-max is is interesting because threshold is set relative to this
-+* tj-max is interesting because threshold is set relative to this
- * temperature.
- */
- static int get_tj_max(int cpu, u32 *tj_max)
 -- 
-2.17.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

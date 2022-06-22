@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F9D554E98
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAC7554EA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358967AbiFVPFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S1358978AbiFVPFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358467AbiFVPF2 (ORCPT
+        with ESMTP id S1358934AbiFVPFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:05:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D31832069
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:05:26 -0700 (PDT)
+        Wed, 22 Jun 2022 11:05:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 978E23EA9E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:05:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655910325;
+        s=mimecast20190719; t=1655910340;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/2IQy+E40urhXFacB8Vj36ycB9yteHAjL3Hd6nT3fLI=;
-        b=Vokv8DTIhrQmfSx6OwfyQua+cd1PXOhnU4LCW9Bvhbjud8gpV556PwzrAetBNSJ7LpKAgK
-        2REaD32yjarYF6sfX1y0DODUWTI4EpHZb4WG57a3DFRwmpk4hyFOPZu/SMbYNGH4a8fn5c
-        fmuHsA+ehEskpVDaWIt0762dfj/8I9A=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jndzfVF++R7TsK3TV+yk+0zpm8yMa0Qnb1v8H83vdVo=;
+        b=H0cdfvo8huFhRnoSl9tTIo+ev6YZEsVj3/QUMxHLNP+Mo/YHyIPPpuZoKVL7nOgS+7ygZL
+        iGjPU238ZJuCxvtUEr3UIMeDMry1T/rHfJI44B4FrguG6hu36NPSs0X+HtEzsYm2Q4Z8nr
+        5Rixfm9t1UD+nebvl2v106rNOtvgmaA=
+Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
+ [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-43-BEKo-trQPKym2Bj7SMQhyg-1; Wed, 22 Jun 2022 11:05:23 -0400
-X-MC-Unique: BEKo-trQPKym2Bj7SMQhyg-1
-Received: by mail-qk1-f197.google.com with SMTP id bi36-20020a05620a31a400b006a79f0706e5so20270529qkb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:05:22 -0700 (PDT)
+ us-mta-460-4ro_6ZUQPzKLcCf9ta8v8w-1; Wed, 22 Jun 2022 11:05:39 -0400
+X-MC-Unique: 4ro_6ZUQPzKLcCf9ta8v8w-1
+Received: by mail-vk1-f200.google.com with SMTP id p185-20020a1fd8c2000000b0036c453f2ea4so1264709vkg.18
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:05:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/2IQy+E40urhXFacB8Vj36ycB9yteHAjL3Hd6nT3fLI=;
-        b=dO/fdvm1vi8bTXc79SbMPlwTiKli+kUAe/915SQgq/E/0xa933CYHl+mYg+MToN41l
-         eemIQBIGqjjj4X9n5LA6YUCtp5prsdGJXfPD02+E3Fan4roTJlh92bo32YpL4yz+ojHC
-         VgAJaIfrTvJrl+qwkBS55jV4WU01PItrbdqWnWTGMl1rqWUSq4ILHrv4qWPZHITCD/0b
-         4U55pSf0ijLngNiTbUfkdQA6mClWMwuF4S9lZf2Z8j1+g67VkXk4TIFuVEeFoMJsmlNF
-         4xNrJ05ePqKHgp2hwAtVodjglQe0yUupZqHilIfSj8qIpGqtPNUJzh/84ZqQIWvkXZXn
-         m79w==
-X-Gm-Message-State: AJIora95VL8wOb4qAunVQ2U2UNtzemXslZ8iXVvK2S4pdEYQRF5XFZvf
-        9UNRitfoNeiGZLENn7hW83rcyIo4bhc/jpzojR/WyyqqWX7JzAm6S+uFRcad2r3qZY4JhsVj9sR
-        gjqyY449BBjynNW/MTyqx81B3AhnituA0kz/UcKny
-X-Received: by 2002:a37:9e8d:0:b0:6ae:e97f:0 with SMTP id h135-20020a379e8d000000b006aee97f0000mr771683qke.255.1655910321124;
-        Wed, 22 Jun 2022 08:05:21 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sQQ1h9P/HHEVYnAo2mvHU2BBI6pfbGjZhVCLCVPT5jR/q5Yw/ghpcZqC3xUNOJBIwMqEbn/hBb7fQQn1SmrVE=
-X-Received: by 2002:a37:9e8d:0:b0:6ae:e97f:0 with SMTP id h135-20020a379e8d000000b006aee97f0000mr771619qke.255.1655910320506;
- Wed, 22 Jun 2022 08:05:20 -0700 (PDT)
+        bh=jndzfVF++R7TsK3TV+yk+0zpm8yMa0Qnb1v8H83vdVo=;
+        b=1yGCjGR2+7nVMpDgC434mWFOYp3bJWd9S/hU0NL02mqv5G8bczJDCvK4/FTqbAZv6C
+         4xGZjp08bCqfxgb/4DHwHnpKjGOBY3Vsiz2/quwiHQl5NjycM7KaucQbkRe6NQAF0aW8
+         bJh5jUDo2Pc1CrKfewZnEBFGD10IM8anC8FavYOY3umG3Ez3s6tHYCDREc5uMf0eZw6m
+         HMSJmDdrc6LbVRByXd9ACZ54e6V/wzWGKxqy5NLZrvon1nqx2musPQ2tBMVr20Xjp9QS
+         pcBi8AAvkOrUigljAZPq48P14kP72ncVQEY8LJYMPHMsptzhRBgx+oJe1I1CxEtu0V8r
+         7jbA==
+X-Gm-Message-State: AJIora/88qSxOoOfK+3TcQp2VagFcR6YcM/xf4hOFGSfOP0G0frWm+mm
+        v+thZxMpZZQrrTl53adggRQ3ChLtudDdK59bWgbq9VyIUsBWKBKWOGnYLtKp/jJcWIk6uiUj/AG
+        FXxf7SVCJvOGyFVJkPE5CU2DLOFew2kRi6TtpKDvd
+X-Received: by 2002:a67:ba09:0:b0:354:5d45:67ed with SMTP id l9-20020a67ba09000000b003545d4567edmr1745709vsn.18.1655910338974;
+        Wed, 22 Jun 2022 08:05:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uCzYxtP8zvgG7hdrhhklfXqLiR9sESzuYsH1TCnGyeEZJ57pWTrteDT6pEJcJyySZ/ZdON06zXfSc9hwQVjtU=
+X-Received: by 2002:a67:ba09:0:b0:354:5d45:67ed with SMTP id
+ l9-20020a67ba09000000b003545d4567edmr1745672vsn.18.1655910338758; Wed, 22 Jun
+ 2022 08:05:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220330180436.24644-1-gdawar@xilinx.com> <20220330180436.24644-20-gdawar@xilinx.com>
- <CAGxU2F6OO108oHsrLBWJnYRG2yRU8QnRxAdjJhUUcp8AqaAP-g@mail.gmail.com> <CAJaqyWd8MR9vTRcCTktzC3VL054x5H5_sXy+MLVNewFDkjQUSw@mail.gmail.com>
-In-Reply-To: <CAJaqyWd8MR9vTRcCTktzC3VL054x5H5_sXy+MLVNewFDkjQUSw@mail.gmail.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Wed, 22 Jun 2022 17:04:44 +0200
-Message-ID: <CAJaqyWc36adK-gUzc8tMgDDe5SoBPy7xN-UtcFA4=aDezdJ5LA@mail.gmail.com>
-Subject: Re: [PATCH v2 19/19] vdpasim: control virtqueue support
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Gautam Dawar <gautam.dawar@xilinx.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Gautam Dawar <gdawar@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>, Eli Cohen <elic@nvidia.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        Martin Porter <martinpo@xilinx.com>,
-        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
-        Dinan Gunawardena <dinang@xilinx.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>, habetsm.xilinx@gmail.com,
-        ecree.xilinx@gmail.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
+References: <9d6177ac-802f-eb11-4307-b0e49d8126b5@linux.intel.com>
+ <20220615183650.32075-1-steve.wahl@hpe.com> <96984350-3a04-812a-60f1-a09138014fac@linux.intel.com>
+In-Reply-To: <96984350-3a04-812a-60f1-a09138014fac@linux.intel.com>
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+Date:   Wed, 22 Jun 2022 08:05:12 -0700
+Message-ID: <CALzcdduhpOebY18hiOpMcXLcH83bY_u4fZT09pBcoz2ObqXnGg@mail.gmail.com>
+Subject: Re: [PATCH v3] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Steve Wahl <steve.wahl@hpe.com>, Joerg Roedel <jroedel@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,175 +81,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 12:21 PM Eugenio Perez Martin
-<eperezma@redhat.com> wrote:
+On Wed, Jun 22, 2022 at 7:52 AM Baolu Lu <baolu.lu@linux.intel.com> wrote:
 >
-> On Tue, Jun 21, 2022 at 5:20 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> On 2022/6/16 02:36, Steve Wahl wrote:
+> > To support up to 64 sockets with 10 DMAR units each (640), make the
+> > value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
+> > CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
+> > set.
 > >
-> > Hi Gautam,
+> > If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
+> > to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
+> > allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
+> > remapping doesn't support X2APIC mode x2apic disabled"; and the system
+> > fails to boot properly.
 > >
-> > On Wed, Mar 30, 2022 at 8:21 PM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
-> > >
-> > > This patch introduces the control virtqueue support for vDPA
-> > > simulator. This is a requirement for supporting advanced features like
-> > > multiqueue.
-> > >
-> > > A requirement for control virtqueue is to isolate its memory access
-> > > from the rx/tx virtqueues. This is because when using vDPA device
-> > > for VM, the control virqueue is not directly assigned to VM. Userspace
-> > > (Qemu) will present a shadow control virtqueue to control for
-> > > recording the device states.
-> > >
-> > > The isolation is done via the virtqueue groups and ASID support in
-> > > vDPA through vhost-vdpa. The simulator is extended to have:
-> > >
-> > > 1) three virtqueues: RXVQ, TXVQ and CVQ (control virtqueue)
-> > > 2) two virtqueue groups: group 0 contains RXVQ and TXVQ; group 1
-> > >    contains CVQ
-> > > 3) two address spaces and the simulator simply implements the address
-> > >    spaces by mapping it 1:1 to IOTLB.
-> > >
-> > > For the VM use cases, userspace(Qemu) may set AS 0 to group 0 and AS 1
-> > > to group 1. So we have:
-> > >
-> > > 1) The IOTLB for virtqueue group 0 contains the mappings of guest, so
-> > >    RX and TX can be assigned to guest directly.
-> > > 2) The IOTLB for virtqueue group 1 contains the mappings of CVQ which
-> > >    is the buffers that allocated and managed by VMM only. So CVQ of
-> > >    vhost-vdpa is visible to VMM only. And Guest can not access the CVQ
-> > >    of vhost-vdpa.
-> > >
-> > > For the other use cases, since AS 0 is associated to all virtqueue
-> > > groups by default. All virtqueues share the same mapping by default.
-> > >
-> > > To demonstrate the function, VIRITO_NET_F_CTRL_MACADDR is
-> > > implemented in the simulator for the driver to set mac address.
-> > >
-> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
-> > > ---
-> > >  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 91 ++++++++++++++++++++++------
-> > >  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  2 +
-> > >  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 88 ++++++++++++++++++++++++++-
-> > >  3 files changed, 161 insertions(+), 20 deletions(-)
-> > >
-> > > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> > > index 659e2e2e4b0c..51bd0bafce06 100644
-> > > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> > > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> > > @@ -96,11 +96,17 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
-> > >  {
-> > >         int i;
-> > >
-> > > -       for (i = 0; i < vdpasim->dev_attr.nvqs; i++)
-> > > +       spin_lock(&vdpasim->iommu_lock);
-> > > +
-> > > +       for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
-> > >                 vdpasim_vq_reset(vdpasim, &vdpasim->vqs[i]);
-> > > +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
-> > > +                                &vdpasim->iommu_lock);
-> > > +       }
-> > > +
-> > > +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
-> > > +               vhost_iotlb_reset(&vdpasim->iommu[i]);
-> > >
-> > > -       spin_lock(&vdpasim->iommu_lock);
-> > > -       vhost_iotlb_reset(vdpasim->iommu);
-> > >         spin_unlock(&vdpasim->iommu_lock);
-> > >
-> > >         vdpasim->features = 0;
-> > > @@ -145,7 +151,7 @@ static dma_addr_t vdpasim_map_range(struct vdpasim *vdpasim, phys_addr_t paddr,
-> > >         dma_addr = iova_dma_addr(&vdpasim->iova, iova);
-> > >
-> > >         spin_lock(&vdpasim->iommu_lock);
-> > > -       ret = vhost_iotlb_add_range(vdpasim->iommu, (u64)dma_addr,
-> > > +       ret = vhost_iotlb_add_range(&vdpasim->iommu[0], (u64)dma_addr,
-> > >                                     (u64)dma_addr + size - 1, (u64)paddr, perm);
-> > >         spin_unlock(&vdpasim->iommu_lock);
-> > >
-> > > @@ -161,7 +167,7 @@ static void vdpasim_unmap_range(struct vdpasim *vdpasim, dma_addr_t dma_addr,
-> > >                                 size_t size)
-> > >  {
-> > >         spin_lock(&vdpasim->iommu_lock);
-> > > -       vhost_iotlb_del_range(vdpasim->iommu, (u64)dma_addr,
-> > > +       vhost_iotlb_del_range(&vdpasim->iommu[0], (u64)dma_addr,
-> > >                               (u64)dma_addr + size - 1);
-> > >         spin_unlock(&vdpasim->iommu_lock);
-> > >
-> > > @@ -250,8 +256,9 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
-> > >         else
-> > >                 ops = &vdpasim_config_ops;
-> > >
-> > > -       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops, 1,
-> > > -                                   1, dev_attr->name, false);
-> > > +       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops,
-> > > +                                   dev_attr->ngroups, dev_attr->nas,
-> > > +                                   dev_attr->name, false);
-> > >         if (IS_ERR(vdpasim)) {
-> > >                 ret = PTR_ERR(vdpasim);
-> > >                 goto err_alloc;
-> > > @@ -278,16 +285,20 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
-> > >         if (!vdpasim->vqs)
-> > >                 goto err_iommu;
-> > >
-> > > -       vdpasim->iommu = vhost_iotlb_alloc(max_iotlb_entries, 0);
-> > > +       vdpasim->iommu = kmalloc_array(vdpasim->dev_attr.nas,
-> > > +                                      sizeof(*vdpasim->iommu), GFP_KERNEL);
-> > >         if (!vdpasim->iommu)
-> > >                 goto err_iommu;
-> > >
-> > > +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
-> > > +               vhost_iotlb_init(&vdpasim->iommu[i], 0, 0);
-> > > +
-> > >         vdpasim->buffer = kvmalloc(dev_attr->buffer_size, GFP_KERNEL);
-> > >         if (!vdpasim->buffer)
-> > >                 goto err_iommu;
-> > >
-> > >         for (i = 0; i < dev_attr->nvqs; i++)
-> > > -               vringh_set_iotlb(&vdpasim->vqs[i].vring, vdpasim->iommu,
-> > > +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
-> > >                                  &vdpasim->iommu_lock);
-> > >
-> > >         ret = iova_cache_get();
-> > > @@ -401,7 +412,11 @@ static u32 vdpasim_get_vq_align(struct vdpa_device *vdpa)
-> > >
-> > >  static u32 vdpasim_get_vq_group(struct vdpa_device *vdpa, u16 idx)
-> > >  {
-> > > -       return 0;
-> > > +       /* RX and TX belongs to group 0, CVQ belongs to group 1 */
-> > > +       if (idx == 2)
-> > > +               return 1;
-> > > +       else
-> > > +               return 0;
+> > Signed-off-by: Steve Wahl<steve.wahl@hpe.com>
+> > Reviewed-by: Kevin Tian<kevin.tian@intel.com>
+> > ---
 > >
-> > This code only works for the vDPA-net simulator, since
-> > vdpasim_get_vq_group() is also shared with other simulators (e.g.
-> > vdpa_sim_blk),
+> > Note that we could not find a reason for connecting
+> > DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
+> > it seemed like the two would continue to match on earlier processors.
+> > There doesn't appear to be kernel code that assumes that the value of
+> > one is related to the other.
+> >
+> > v2: Make this value a config option, rather than a fixed constant.  The default
+> > values should match previous configuration except in the MAXSMP case.  Keeping the
+> > value at a power of two was requested by Kevin Tian.
+> >
+> > v3: Make the config option dependent upon DMAR_TABLE, as it is not used without this.
+> >
+> >   drivers/iommu/intel/Kconfig | 7 +++++++
+> >   include/linux/dmar.h        | 6 +-----
+> >   2 files changed, 8 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
+> > index 39a06d245f12..07aaebcb581d 100644
+> > --- a/drivers/iommu/intel/Kconfig
+> > +++ b/drivers/iommu/intel/Kconfig
+> > @@ -9,6 +9,13 @@ config DMAR_PERF
+> >   config DMAR_DEBUG
+> >       bool
+> >
+> > +config DMAR_UNITS_SUPPORTED
+> > +     int "Number of DMA Remapping Units supported"
+> > +     depends on DMAR_TABLE
+> > +     default 1024 if MAXSMP
+> > +     default 128  if X86_64
+> > +     default 64
 >
-> That's totally right.
+> With this patch applied, the IOMMU configuration looks like:
 >
-> > should we move this net-specific code into
-> > vdpa_sim_net.c, maybe adding a callback implemented by the different
-> > simulators?
-> >
+> [*]   AMD IOMMU support
+> <M>     AMD IOMMU Version 2 driver
+> [*]     Enable AMD IOMMU internals in DebugFS
+> (1024) Number of DMA Remapping Units supported   <<<< NEW
+> [*]   Support for Intel IOMMU using DMA Remapping Devices
+> [*]     Export Intel IOMMU internals in Debugfs
+> [*]     Support for Shared Virtual Memory with Intel IOMMU
+> [*]     Enable Intel DMA Remapping Devices by default
+> [*]     Enable Intel IOMMU scalable mode by default
+> [*]   Support for Interrupt Remapping
+> [*]   OMAP IOMMU Support
+> [*]     Export OMAP IOMMU internals in DebugFS
+> [*]   Rockchip IOMMU Support
 >
-> At this moment, VDPASIM_BLK_VQ_NUM is fixed to 1, so maybe the right
-> thing to do for the -rc phase is to check if idx > vdpasim.attr.nvqs?
-> It's a more general fix.
+> The NEW item looks confusing. It looks to be a generic configurable
+> value though it's actually Intel DMAR specific. Any thoughts?
+>
+> Best regards,
+> baolu
 >
 
-Actually, that is already checked by vhost/vdpa.c.
+Would moving it under INTEL_IOMMU at least have it show up below
+"Support for Intel IOMMU using DMA Remapping Devices"? I'm not sure it
+can be better than that, because IRQ_REMAP selects DMAR_TABLE, so we
+can't stick it in the if INTEL_IOMMU section.
 
-Taking that into account, is it worth introducing the change for 5.19?
-I'm totally ok with the change for 5.20.
-
-Thanks!
-
-> For the general case, yes, a callback should be issued to the actual
-> simulator so it's not a surprise when VDPASIM_BLK_VQ_NUM increases,
-> either dynamically or by anyone testing it.
->
-> Thoughts?
->
-> Thanks!
+Regards,
+Jerry
 

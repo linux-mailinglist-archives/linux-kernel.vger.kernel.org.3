@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0705155433F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035B055436E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351579AbiFVGu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
+        id S1351644AbiFVGvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351561AbiFVGuv (ORCPT
+        with ESMTP id S1351334AbiFVGvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:50:51 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D855035DD9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:50:43 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id g25so32059227ejh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:50:43 -0700 (PDT)
+        Wed, 22 Jun 2022 02:51:32 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2045B35DC0;
+        Tue, 21 Jun 2022 23:51:31 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id s185so9530306pgs.3;
+        Tue, 21 Jun 2022 23:51:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hDecnGG4JqyqaEmTekjzP5TBFNFZlOAgs9hf2jW2DzU=;
-        b=ZTCaVUax35P/NMEV0BrfMR1PGal2Fyisxi/nTx1vzSLlDQjPRULxmzs1bl8qWG3i45
-         BhZOIHDp7X4mvWkIzdavkKVhF44fcyFw4j5iaBnZd9rJ0JRQ6O796iPmeCvxXcoOWPKN
-         XUqrn4QMsixzrfKAJxuU+mWbDW2x0vwMIji3h66T9WTMwBtyEZ16lPk+hr2i6tj5UZTq
-         pgWCZ/U9rHJuVjdlZ86wneJE4e/098gBAw/opNv1/AGxFnY9jMtXwn33whvZeDBvmQXT
-         wwnVx2rcT/gwfzeK0w71Rl+sg1mxc5pyvy7ZD7g3GCmZi0+gVzXYjIS/JuOssukUr9bW
-         QWBA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=niUUVRIRw4J6TsPTvzTZNTwxYV2pE3XjscebFTdFk/s=;
+        b=aDzOpZs430kj0B3FbQJdRU99FdbqzgXH5ogGDVHmt2zc88EkmYFIvkfjTrb36sVHNQ
+         +Fq/Sa7ZdiCLazdgbhnfpHsfZixsJrNSmBJq4cgbUS4Y/FDQOCn92kk7snSjhdyG6Mdi
+         VqKYElPoFWKZG8hYa5QFUwbLsiUJMPFdhuFJBMAc9XDj9bOFm8/ceoqG71WJVdScQE1s
+         H9aSK7RiP8SXerWZWl1pvtqEn+CNDRkWycE5pYUkbCLr/KxECC82/GEBl6ucNzEiqwPV
+         yOwPMNm7uUVuBATNan3CGxFnaBIKsE1UX1gGi2kyNRq7mQqTEtoV9aZrmqzstB4delFg
+         s6og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hDecnGG4JqyqaEmTekjzP5TBFNFZlOAgs9hf2jW2DzU=;
-        b=g9QC/cdST71pSbqfs5se54FsQejIM/B1Acnfu48LbSEMqLUERbrzzwCPtWFLGaLydL
-         OA8TyR5hjFlFwWsUKJxmCkFoNQPFOWFoPyaZvXDNrP0wWXS7l18oHy/EOB2j1YCLF6vA
-         XcmrClKM40RRSKjShugcKE58KXaMX+CivZ+oiwO2QMfQX+Qo+HeP9IaVKWUS7V0KRuDs
-         Dox/9f4qanG093xqXcswoJBc8x04w8LxMbBFOfD6RMFk1aJTm16a/n9ryU6Z1eY41DoP
-         Vn6Mwdv+uNKb/p1lQDc/twK/ZFfgaUCtLxcatj6jw6N5KFNzofW6eNvgdDVfqEJddbiI
-         qMkA==
-X-Gm-Message-State: AJIora87D4Hegv31BcimQ0pEcmG/XtitKKBuV07ADE+li+vgsTY79QiG
-        3j86cBlvNiCqSobIv5xtXzgPPw==
-X-Google-Smtp-Source: AGRyM1v6P9lcbhtpyb9iwwfskLAwO6UuTNjyafIdu9H1nHALG62CuEf9jvAvCWxhr00K6eTtKh+79w==
-X-Received: by 2002:a17:906:530b:b0:722:e9ad:e90 with SMTP id h11-20020a170906530b00b00722e9ad0e90mr1749111ejo.676.1655880642434;
-        Tue, 21 Jun 2022 23:50:42 -0700 (PDT)
-Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 7-20020a170906308700b00722e7e26d22sm1556075ejv.58.2022.06.21.23.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jun 2022 23:50:42 -0700 (PDT)
-Message-ID: <bdfc94d0-c634-c391-d74b-2104cbf82b22@linaro.org>
-Date:   Wed, 22 Jun 2022 08:50:41 +0200
+        bh=niUUVRIRw4J6TsPTvzTZNTwxYV2pE3XjscebFTdFk/s=;
+        b=DRnod1t8SN7FadpfyK+cJC9f3wjd1j+SCdX6bwNSQhA7DC9+561KSLFMBv29WnRjWB
+         n2QSgXvSHzlVO7GBEd0/B/SFsvV2pdRhFJ43nBVBqh5KAsLXL0T8Nat/l5stcxxTLip2
+         4Ayu2TjsATOdj4MakvtXT8Mmdg0lj2vVXmVTupsjYs6l66D4hKxadqQqAmhNp7t2nmHM
+         7wTxsBrXpczHYgb7KY/IiD5qocBKdFlb9EKa6sh++jo5TUR/aiQ4JEJTK6+gntpaT2CS
+         KbITeXb9AL76ODPiqHOT0d32JcApSfjMgyfC7M2ykmDIWF3a6MM27cv1OQWhupxR6zkF
+         2mHA==
+X-Gm-Message-State: AJIora9Y/ZSt1a0ZtxPBiirY5jchPWYI1IxEt81VixWKmrUbCLrsmLoE
+        2HaDKV0nuf/Fn36cskXGi2k=
+X-Google-Smtp-Source: AGRyM1ucRbo0zkixEc3lxNBaFFOCSRntJD+QdEDuVi0zQvwm8xxuW+tLf4pkaPcZSNa1NKFz8Rz9GQ==
+X-Received: by 2002:a63:35c4:0:b0:40c:99f6:8889 with SMTP id c187-20020a6335c4000000b0040c99f68889mr1684738pga.387.1655880690601;
+        Tue, 21 Jun 2022 23:51:30 -0700 (PDT)
+Received: from localhost.localdomain ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id bx5-20020a17090af48500b001e0899052f1sm13585858pjb.3.2022.06.21.23.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 23:51:30 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     krzysztof.kozlowski@linaro.org, sameo@linux.intel.com,
+        christophe.ricard@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] nfc: st21nfca: fix possible double free in st21nfca_im_recv_dep_res_cb()
+Date:   Wed, 22 Jun 2022 14:51:17 +0800
+Message-Id: <20220622065117.23210-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] memory/tegra: Add missing of_node_get() in
- tegra_emc_find_node_by_ram_code
-Content-Language: en-US
-To:     Liang He <windhl@126.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20220622042824.4094625-1-windhl@126.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220622042824.4094625-1-windhl@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 06:28, Liang He wrote:
-> of_find_node_by_name() will decrease the refcount of its first arg and
-> we need to add a of_node_put() to keep refcount balance.
+nfc_tm_data_received will free skb internally when it fails. There is no
+need to free skb in st21nfca_im_recv_dep_res_cb again.
 
-We do NOT need to add an of_node_put?
+Fix this by setting skb to NULL when nfc_tm_data_received fails.
 
-Anyway why do you add of_node_get which is not explained here?
+Fixes: 1892bf844ea0 ("NFC: st21nfca: Adding P2P support to st21nfca in Initiator & Target mode")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ drivers/nfc/st21nfca/dep.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> Besides, during the 'for' loop execution, the refcount of 'np' will be
-> automatically increased and decreased. There is no need to call
-> of_node_put() again.
-> 
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->  drivers/memory/tegra/tegra20-emc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/tegra20-emc.c
-> index 25ba3c5e4ad6..e43a5f8e188e 100644
-> --- a/drivers/memory/tegra/tegra20-emc.c
-> +++ b/drivers/memory/tegra/tegra20-emc.c
-> @@ -477,6 +477,7 @@ tegra_emc_find_node_by_ram_code(struct tegra_emc *emc)
->  
->  	ram_code = tegra_read_ram_code();
->  
-> +	of_get_node(dev->of_node);
->  	for (np = of_find_node_by_name(dev->of_node, "emc-tables"); np;
->  	     np = of_find_node_by_name(np, "emc-tables")) {
->  		err = of_property_read_u32(np, "nvidia,ram-code", &value);
-> @@ -484,6 +485,7 @@ tegra_emc_find_node_by_ram_code(struct tegra_emc *emc)
->  			struct device_node *lpddr2_np;
->  			bool cfg_mismatches = false;
->  
-> +			of_node_get(np);
->  			lpddr2_np = of_find_node_by_name(np, "lpddr2");
->  			if (lpddr2_np) {
->  				const struct lpddr2_info *info;
-> @@ -521,7 +523,6 @@ tegra_emc_find_node_by_ram_code(struct tegra_emc *emc)
->  			}
->  
->  			if (cfg_mismatches) {
-> -				of_node_put(np);
->  				continue;
->  			}
->  		}
+diff --git a/drivers/nfc/st21nfca/dep.c b/drivers/nfc/st21nfca/dep.c
+index 1ec651e31064..07ac5688011c 100644
+--- a/drivers/nfc/st21nfca/dep.c
++++ b/drivers/nfc/st21nfca/dep.c
+@@ -594,7 +594,8 @@ static void st21nfca_im_recv_dep_res_cb(void *context, struct sk_buff *skb,
+ 			    ST21NFCA_NFC_DEP_PFB_PNI(dep_res->pfb + 1);
+ 			size++;
+ 			skb_pull(skb, size);
+-			nfc_tm_data_received(info->hdev->ndev, skb);
++			if (nfc_tm_data_received(info->hdev->ndev, skb))
++				skb = NULL;
+ 			break;
+ 		case ST21NFCA_NFC_DEP_PFB_SUPERVISOR_PDU:
+ 			pr_err("Received a SUPERVISOR PDU\n");
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof

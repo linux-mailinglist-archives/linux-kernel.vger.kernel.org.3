@@ -2,100 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDDF554751
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9526B5548BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357303AbiFVMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S1357594AbiFVMG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiFVMFX (ORCPT
+        with ESMTP id S234389AbiFVMGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:05:23 -0400
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3265D3DA7B;
-        Wed, 22 Jun 2022 05:05:21 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-317710edb9dso160620597b3.0;
-        Wed, 22 Jun 2022 05:05:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yI4NkJ9tQG3vou1hx4UHFZoM6ZFYXNs0D2EVG0DuBZk=;
-        b=UM+X2l6xFPOy6XVwl53mVLkPeB7e/5m7gIfFRrWNnaF4HJqSwB3eZzZnTE91VODvpu
-         9r+3bYgZxuDvDFEWdkdpeUloUPu3wT5wK5r93zG9PKRkgeMf3Dw2ObGffXJE+Ye0kdjm
-         QYpU+FoBBwC2+MPI7IRpHJTmEzn5B2GH4Ldte/3m9KDgzfPy+W5hD6Im1LXQoSh+UOIq
-         DIg8D3v2TAug9qbvXA5zkbILL39U+otZ13WmFlxRGb1J965hms3Ga3O2y1JIpAUQqF1J
-         VPBDzeXuy5M27r/oqKpUQkX6XgbVQndVDwPPtdJQiWgq1ha24X+8Cd3xIQQWMJwF9QhZ
-         g9Mg==
-X-Gm-Message-State: AJIora97M1Fky5dHha4vNq3FFxx9Kryi5L+7urL2sgajBCZuqvy6ULpR
-        6AVMBu63Zo+Qb+HHXsMYW+KU7tgH6c6Y1DkCo30=
-X-Google-Smtp-Source: AGRyM1urPoZoQ3xrgU5g4oEtCQQYk48bScWTjyrE2eQR6nE0SK2a5mzoe+H9CGXazISsucOjFSDQJfs814O9L34ywCk=
-X-Received: by 2002:a81:24c7:0:b0:314:1e60:a885 with SMTP id
- k190-20020a8124c7000000b003141e60a885mr3881609ywk.301.1655899520432; Wed, 22
- Jun 2022 05:05:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-9-mw@semihalf.com>
- <YrDFmw4rziGQJCAu@lunn.ch>
-In-Reply-To: <YrDFmw4rziGQJCAu@lunn.ch>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Jun 2022 14:05:09 +0200
-Message-ID: <CAJZ5v0g4q8N5wMgk7pRYpYoCLPQoH==Z+nrM0JLyFXSgF9y0+Q@mail.gmail.com>
-Subject: Re: [net-next: PATCH 08/12] ACPI: scan: prevent double enumeration of
- MDIO bus children
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
+        Wed, 22 Jun 2022 08:06:23 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7526C3DDCC;
+        Wed, 22 Jun 2022 05:06:16 -0700 (PDT)
+X-UUID: 89cb5cfe996d45b8b5e117f9fbc5ef64-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:bca889a7-37dd-4ebc-a06b-0b4a1495cc5c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:dd68c12d-1756-4fa3-be7f-474a6e4be921,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 89cb5cfe996d45b8b5e117f9fbc5ef64-20220622
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 428670532; Wed, 22 Jun 2022 20:06:11 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 22 Jun 2022 20:06:10 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 20:06:10 +0800
+Message-ID: <9a02f733ffcffd03d173bd7d0daac1802b7dcff3.camel@mediatek.com>
+Subject: Re: [PATCH v6 16/16] arm64: dts: mediatek: Add infra #reset-cells
+ property for MT8195
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "chun-jie.chen@mediatek.com" <chun-jie.chen@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
+        <Runyang.Chen@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 22 Jun 2022 20:06:10 +0800
+In-Reply-To: <3a587e20-f991-adf8-fe4e-a09caa1e14c7@gmail.com>
+References: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
+         <20220503093856.22250-17-rex-bc.chen@mediatek.com>
+         <3a587e20-f991-adf8-fe4e-a09caa1e14c7@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 9:08 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Mon, Jun 20, 2022 at 05:02:21PM +0200, Marcin Wojtas wrote:
-> > The MDIO bus is responsible for probing and registering its respective
-> > children, such as PHYs or other kind of devices.
-> >
-> > It is required that ACPI scan code should not enumerate such
-> > devices, leaving this task for the generic MDIO bus routines,
-> > which are initiated by the controller driver.
->
-> I suppose the question is, should you ignore the ACPI way of doing
-> things, or embrace the ACPI way?
+On Wed, 2022-06-22 at 19:08 +0800, Matthias Brugger wrote:
+> 
+> On 03/05/2022 11:38, Rex-BC Chen wrote:
+> > We will use mediatek clock reset as infracfg_ao reset instead of
+> > ti-syscon. To support this, remove property of ti reset and add
+> > property of #reset-cells for mediatek clock reset.
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> 
+> My understanding is that using the old DTS with a newer kernel
+> wouldn't 
+> introduce a regression, correct?
+> 
+> Applied, thanks!
+> 
 
-What do you mean by "the ACPI way"?
+Hello Matthias,
 
-> At least please add a comment why the ACPI way is wrong, despite this
-> being an ACPI binding.
+yes, because there is no user for this infra reset controller in
+upstream mainline.
 
-The question really is whether or not it is desirable to create
-platform devices for all of the objects found in the ACPI tables that
-correspond to the devices on the MDIO bus.
+In addition, could you also help to give us some suggestion for Nancy's
+series?
 
-I don't think it is, so it should be avoided.
+Thanks for your big support!
+
+[1]: 
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=651900
+
+BRs,
+Bo-Chen
+
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 13 +------------
+> >   1 file changed, 1 insertion(+), 12 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > index b57e620c2c72..8e5ac11b19f1 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -10,7 +10,6 @@
+> >   #include <dt-bindings/interrupt-controller/irq.h>
+> >   #include <dt-bindings/phy/phy.h>
+> >   #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
+> > -#include <dt-bindings/reset/ti-syscon.h>
+> >   
+> >   / {
+> >   	compatible = "mediatek,mt8195";
+> > @@ -295,17 +294,7 @@
+> >   			compatible = "mediatek,mt8195-infracfg_ao",
+> > "syscon", "simple-mfd";
+> >   			reg = <0 0x10001000 0 0x1000>;
+> >   			#clock-cells = <1>;
+> > -
+> > -			infracfg_rst: reset-controller {
+> > -				compatible = "ti,syscon-reset";
+> > -				#reset-cells = <1>;
+> > -				ti,reset-bits = <
+> > -					0x140 18 0x144 18 0 0
+> > (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* pcie */
+> > -					0x120 0  0x124 0  0 0
+> > (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
+> > -					0x730 10 0x734 10 0 0
+> > (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
+> > -					0x150 5  0x154 5  0 0
+> > (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* svs gpu */
+> > -				>;
+> > -			};
+> > +			#reset-cells = <1>;
+> >   		};
+> >   
+> >   		pericfg: syscon@10003000 {
+

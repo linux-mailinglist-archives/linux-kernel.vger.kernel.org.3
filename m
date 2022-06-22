@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8D455434A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9AF554336
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351328AbiFVGsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S1351472AbiFVGtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350665AbiFVGso (ORCPT
+        with ESMTP id S1351301AbiFVGsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:48:44 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38E035A9A;
-        Tue, 21 Jun 2022 23:48:43 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id cw10so8361911ejb.3;
-        Tue, 21 Jun 2022 23:48:43 -0700 (PDT)
+        Wed, 22 Jun 2022 02:48:51 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F59935A83;
+        Tue, 21 Jun 2022 23:48:50 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id h23so32048155ejj.12;
+        Tue, 21 Jun 2022 23:48:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9DOoIhOIXLMpNcIvOgH0b4QaNFlGhZBdv3PWCfH2y3Q=;
-        b=qV7gMAdSgelSWa7TFM6/x0Pn3f3imGFjcBspWKsqSR6NIIr/pf+lVvZE3iKZXMnuRG
-         kdhAzuCYC+fLu06G9lXm8FEe0fHDsxw20bB9qXYITLi9BRiJ0bIg9OJ7bEr/gmd0Vf0m
-         bb9tfvRSQGgoP/wCjsh052utMVrm4pjAsK3XhwXQeiZiaOMtV/uvPxkJqk4XQoI4Klx9
-         yML4UcfP1wFfk8fU/AowEXYBlf4881Ce+nMIpTiqEGXcUOWno37ebdFO0USTjNIrSUAx
-         aTt4BXPsqzHETONwmXc1fleZuOx9ne5K97uNIokcdRLMr/dIkkBUrpeWQLxK70kj1Iog
-         w5Pg==
+        bh=GBoEfewX7uE5qiTFF5ceaeSxviE76/D0VbXLBnCtMOk=;
+        b=EUth92aS+ARXNsUtB82Fn+0F0yahSJwW0aRp3pWoXXG95IKw1RArK9Ig7q3Rce1Ehw
+         IB9YD315FvrufeFHauaTVDmyU561dpJJXVoxeP+YEOqYEB0GnwGjYYtO1LZlK0o6QfsS
+         BWFYFQiQlRYg0TliVlsC5C5feb19tNjrrKtR8kj8DM6+fCRVWi11MZKCMVbP+keN1pSk
+         Y1EH0SW0kUa5wZx/+ZvoXeYEPP577kv00tMCUDJ/q/mSmcBZtgAtalgDCO97V29+FF0L
+         wIqsPe04Qtlfs5uOqGtzgmol7qNeUSdazWS2kf76TziOEgPdeiTWHQ3efBkkbD6pe2Jo
+         fq3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9DOoIhOIXLMpNcIvOgH0b4QaNFlGhZBdv3PWCfH2y3Q=;
-        b=ZlZZ9IEUZtrlOILzaxYaAEYb+qHUZA7cPASkmJTq0NdjlTmxZpW1w7mNJQJ+N/Zj+S
-         KRpz3M/o3qGGHO+zpNGwu/NRQTxaPDHcUNEcdu4mB/H2EOvOS8WgFakYf04AaioMNAdC
-         HOM9lIbICg1LksinhKgeII+pCAKn1xJNGIyEtfyj6LgUURAVBgORMvD/sdMXq6iGRL/u
-         pdGGOq+PXnpbiNyV3keCxgq4d92SycbaOL3VK3L/9IKqnbVB9cmMsCZHiX9XEmdtJgyc
-         bnGZfo55AEUxKpXHArNIi8ND6ZDU4vFarCmZ+qy06UfofNJVZcpxT4OjM3m2kLLzD3Yb
-         bRNw==
-X-Gm-Message-State: AJIora9vuZYXsVVocSLe+W1i2qZQl7NfX4arXeEzu/t4KqK0RjyykMYo
-        dPYP/3TGFVIGMVbONSNXKzs=
-X-Google-Smtp-Source: AGRyM1scE35n8xZ+4qERsfvT4HLJEkrOBgu2EDwyloit1cuSCOWgK9XfPhZyBILW4l1ICBo28yajZA==
-X-Received: by 2002:a17:907:c202:b0:710:8d0c:6e89 with SMTP id ti2-20020a170907c20200b007108d0c6e89mr1665564ejc.141.1655880522353;
-        Tue, 21 Jun 2022 23:48:42 -0700 (PDT)
+        bh=GBoEfewX7uE5qiTFF5ceaeSxviE76/D0VbXLBnCtMOk=;
+        b=wMpAhawFPNW0Vdq5mzXoLO3H6+bcWlRzhsQHAM/MSerW/lfrdAh327/f4b5EJr9o1U
+         rss20o2TKsJovRRyhkNJh1GwfaZO3tIgdRJ5ttArdvxfkPPozKOKk7mnK1CjkR6h4xp6
+         9eUpqMmp0Jho38Sk1H4UzNToJJ58nw07+gFJ45PxoEyebsSWI7ixJdqSul44AkHLva3b
+         OCkaougOXLz4hlP4aSs9TFhwwCnG1ZCIbUFY+t6OCrR72zXlBkA6r/z35tg//x0DWaQz
+         10cWARIzPsp3RTccztRMUo2tkA0jEDVeDNB7dkzu2voZwlQ4sffSDnX8koGnmwES4unx
+         Jetg==
+X-Gm-Message-State: AJIora+SJVDS8Gs5YITqaYkFttRKiDHrPzgm3MCi5IOpyCg+H76n2Ltp
+        9P/wphD2OWvOF9y/6+P+KIo=
+X-Google-Smtp-Source: AGRyM1vWBsfxuaNlo0tjKP0/6jEDWmmlRypkx4HG/8dsYU+wsKOh1CtyzxerPhaniyY/3W5GIrXT8A==
+X-Received: by 2002:a17:906:6a27:b0:708:1282:cbe9 with SMTP id qw39-20020a1709066a2700b007081282cbe9mr1767404ejc.186.1655880528800;
+        Tue, 21 Jun 2022 23:48:48 -0700 (PDT)
 Received: from localhost.localdomain ([185.107.95.225])
-        by smtp.gmail.com with ESMTPSA id sd12-20020a1709076e0c00b00722e8c47cc9sm1197148ejc.181.2022.06.21.23.48.36
+        by smtp.gmail.com with ESMTPSA id sd12-20020a1709076e0c00b00722e8c47cc9sm1197148ejc.181.2022.06.21.23.48.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 23:48:40 -0700 (PDT)
+        Tue, 21 Jun 2022 23:48:47 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Andy Gross <agross@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] ASoC: wcd9335: Use DT bindings instead of local DAI definitions
-Date:   Wed, 22 Jun 2022 10:47:57 +0400
-Message-Id: <20220622064758.40543-3-y.oudjana@protonmail.com>
+Subject: [PATCH 3/3] arm64: dts: qcom: Use WCD9335 DT bindings
+Date:   Wed, 22 Jun 2022 10:47:58 +0400
+Message-Id: <20220622064758.40543-4-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220622064758.40543-1-y.oudjana@protonmail.com>
 References: <20220622064758.40543-1-y.oudjana@protonmail.com>
@@ -84,45 +84,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Get DAI indices from DT bindings and remove the currently used
-local definitions.
+Replace DAI indices in codec nodes with definitions from the WCD9335
+DT bindings for devices that use WCD9335.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- sound/soc/codecs/wcd9335.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts         | 5 +++--
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts  | 5 +++--
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts | 5 +++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
-index 7d40a61b03b0..3554b95462e8 100644
---- a/sound/soc/codecs/wcd9335.c
-+++ b/sound/soc/codecs/wcd9335.c
-@@ -24,6 +24,8 @@
- #include "wcd9335.h"
- #include "wcd-clsh-v2.h"
- 
+diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+index 49afbb1a066a..ff915cd8e5a6 100644
+--- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
++++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+@@ -13,6 +13,7 @@
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+ #include <dt-bindings/sound/qcom,q6afe.h>
+ #include <dt-bindings/sound/qcom,q6asm.h>
 +#include <dt-bindings/sound/qcom,wcd9335.h>
-+
- #define WCD9335_RATES_MASK (SNDRV_PCM_RATE_8000 | SNDRV_PCM_RATE_16000 |\
- 			    SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_48000 |\
- 			    SNDRV_PCM_RATE_96000 | SNDRV_PCM_RATE_192000)
-@@ -203,17 +205,6 @@ enum wcd9335_sido_voltage {
- 	SIDO_VOLTAGE_NOMINAL_MV = 1100,
- };
  
--enum {
--	AIF1_PB = 0,
--	AIF1_CAP,
--	AIF2_PB,
--	AIF2_CAP,
--	AIF3_PB,
--	AIF3_CAP,
--	AIF4_PB,
--	NUM_CODEC_DAIS,
--};
--
- enum {
- 	COMPANDER_1, /* HPH_L */
- 	COMPANDER_2, /* HPH_R */
+ /*
+  * GPIO name legend: proper name = the GPIO line is used as GPIO
+@@ -1009,7 +1010,7 @@ platform {
+ 	};
+ 
+ 		codec {
+-			sound-dai = <&wcd9335 6>;
++			sound-dai = <&wcd9335 AIF4_PB>;
+ 		};
+ 	};
+ 
+@@ -1024,7 +1025,7 @@ platform {
+ 		};
+ 
+ 		codec {
+-			sound-dai = <&wcd9335 1>;
++			sound-dai = <&wcd9335 AIF1_CAP>;
+ 		};
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
+index 22978d06f85b..261f2ea7def0 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
++++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
+@@ -9,6 +9,7 @@
+ #include <dt-bindings/sound/qcom,q6afe.h>
+ #include <dt-bindings/sound/qcom,q6asm.h>
+ #include <dt-bindings/input/ti-drv260x.h>
++#include <dt-bindings/sound/qcom,wcd9335.h>
+ 
+ / {
+ 	model = "Xiaomi Mi 5";
+@@ -193,7 +194,7 @@ platform {
+ 		};
+ 
+ 		codec {
+-			sound-dai = <&wcd9335 6>;
++			sound-dai = <&wcd9335 AIF4_PB>;
+ 		};
+ 	};
+ 
+@@ -208,7 +209,7 @@ platform {
+ 		};
+ 
+ 		codec {
+-			sound-dai = <&wcd9335 1>;
++			sound-dai = <&wcd9335 AIF1_CAP>;
+ 		};
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
+index 1e2dd6763ad1..c9f935cfb587 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
++++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
+@@ -9,6 +9,7 @@
+ #include "pmi8996.dtsi"
+ #include <dt-bindings/sound/qcom,q6afe.h>
+ #include <dt-bindings/sound/qcom,q6asm.h>
++#include <dt-bindings/sound/qcom,wcd9335.h>
+ 
+ / {
+ 	model = "Xiaomi Mi Note 2";
+@@ -171,7 +172,7 @@ platform {
+ 		};
+ 
+ 		codec {
+-			sound-dai = <&wcd9335 6>;
++			sound-dai = <&wcd9335 AIF4_PB>;
+ 		};
+ 	};
+ 
+@@ -186,7 +187,7 @@ platform {
+ 		};
+ 
+ 		codec {
+-			sound-dai = <&wcd9335 1>;
++			sound-dai = <&wcd9335 AIF1_CAP>;
+ 		};
+ 	};
+ };
 -- 
 2.36.1
 

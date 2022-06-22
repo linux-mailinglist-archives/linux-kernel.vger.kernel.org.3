@@ -2,101 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8E9554433
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69B655448C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 10:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350436AbiFVHYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 03:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S1352727AbiFVHYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 03:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233938AbiFVHYa (ORCPT
+        with ESMTP id S232569AbiFVHYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:24:30 -0400
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982736E1F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:24:30 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id 89so23991386qvc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:24:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4rOmmoLVe6WnIaNYIWpF3+s87z6ESD2tlV0e1iwEQK4=;
-        b=LRn3UdPpp+/3lCQRRtW03eidEjBtiTc46tazELNfRF6N53XXvBgknauYGH8QR953S2
-         hqWfeSwvb+tEnq/i05y5loSYl+Wrw7toEye9TbE233Ztcr0XLgmpgYzJGHEQSLFJhwc/
-         Hb1E/slTwojCMa8Vwym0xWlZeH4bUcWSlfrLqPdwlxA+3C86YxEBLeSVxRElG30PuZFC
-         oi35lG5bqfGWlvuW6g6fTlzepLEKNkqEv7r325nOfyeEdTBNU6Zmx5W9m0j1FW8vlfNS
-         4l59y7G/wPzU2JjtX/Zi+T8E3PC/U3838rFYFn1r6SpkJNGTRHbLsQI9t3H7OI7KDAsX
-         h9Nw==
-X-Gm-Message-State: AJIora83ZqQJrQOK2DI/xO6meL59Q0hArvEtawUHrfraH83+YqcsR3IH
-        ipBnHIfJUskz2MoqZCsVuc/S/QEhXYhFpg==
-X-Google-Smtp-Source: AGRyM1sN+CHHVVZcz3SDju9EJ22p6P5yqD1ogE+lScH7NC80EQPBxDegug4qCuFjDz3k2WDuqvm0QA==
-X-Received: by 2002:ac8:7d05:0:b0:305:2a4b:d86b with SMTP id g5-20020ac87d05000000b003052a4bd86bmr1788035qtb.234.1655882668925;
-        Wed, 22 Jun 2022 00:24:28 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id a15-20020ac85b8f000000b00304e38fb3dasm15433428qta.35.2022.06.22.00.24.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 00:24:28 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id u9so18519696ybq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 00:24:28 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr2248914ybu.604.1655882668340; Wed, 22
- Jun 2022 00:24:28 -0700 (PDT)
+        Wed, 22 Jun 2022 03:24:42 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF42D22BF6;
+        Wed, 22 Jun 2022 00:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655882681; x=1687418681;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NgoHLyZGRgMPgNFB7tpululSiyLjykD0PpFVx9n2Or0=;
+  b=hjvJ4wk1B0xZ2fNj3mZ3rnC200GGaPOmafmT7Sp663brWx5d5H4gT5xc
+   WjdEgMTIDgawZ4CGYTF8xuLfGmip5DZEbXgYV2yDmwfnPa+nNdu2WQSz6
+   1u4LgN5tSWuLxvOOaTte1xV+JO8fAnkAI2Q2uBxGUAkzJe/5b+EGQ5Pgx
+   SStxsKD/K1QSawdY3j/qstpTRbICh4x551gvVBClIM+ovgoFDxIERvtC1
+   UpyMI1p2xfGgFctvSf/lPBwJsR+l7Pbrtrpbj24wHhAxhs+Iy50SgqqDs
+   U//XnNJRHkEDC5qOy0O7gMWu1MGY99/JQNqwQsxQ44KXzbGabr1QBRJ8p
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="281071179"
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="281071179"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 00:24:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="562834083"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 22 Jun 2022 00:24:37 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3uj7-0000zN-5j;
+        Wed, 22 Jun 2022 07:24:37 +0000
+Date:   Wed, 22 Jun 2022 15:24:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mikko Perttunen <cyndis@kapsi.fi>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 04/10] gpu: host1x: Add context device management code
+Message-ID: <202206221557.laES8yNQ-lkp@intel.com>
+References: <20220621151022.1416300-5-cyndis@kapsi.fi>
 MIME-Version: 1.0
-References: <20220622062835.53980-1-yuanjilin@cdjrlc.com>
-In-Reply-To: <20220622062835.53980-1-yuanjilin@cdjrlc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Jun 2022 09:24:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDBEQYQZfor=wNzE_BHgCKXEnyW8WJS-dbmU++6zPDCw@mail.gmail.com>
-Message-ID: <CAMuHMdWDBEQYQZfor=wNzE_BHgCKXEnyW8WJS-dbmU++6zPDCw@mail.gmail.com>
-Subject: Re: [PATCH] m68k:coldfire:Fix typos in comments
-To:     yuanjilin@cdjrlc.com
-Cc:     Greg Ungerer <gerg@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621151022.1416300-5-cyndis@kapsi.fi>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jilin,
+Hi Mikko,
 
-On Wed, Jun 22, 2022 at 8:29 AM Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
-> Delete the redundant word 'the'.
->
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Thank you for the patch! Yet something to improve:
 
-Thanks for your patch!
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on tegra/for-next linus/master v5.19-rc3]
+[cannot apply to tegra-drm/drm/tegra/for-next next-20220621]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> --- a/arch/m68k/coldfire/intc-2.c
-> +++ b/arch/m68k/coldfire/intc-2.c
-> @@ -7,7 +7,7 @@
->   * family, the 5270, 5271, 5274, 5275, and the 528x family which have two such
->   * controllers, and the 547x and 548x families which have only one of them.
->   *
-> - * The external 7 fixed interrupts are part the the Edge Port unit of these
-> + * The external 7 fixed interrupts are part the Edge Port unit of these
+url:    https://github.com/intel-lab-lkp/linux/commits/Mikko-Perttunen/Host1x-context-isolation-support/20220621-231339
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arm64-randconfig-r021-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221557.laES8yNQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/2501beeae7469b805f9f624049fd56643cf6e18e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mikko-Perttunen/Host1x-context-isolation-support/20220621-231339
+        git checkout 2501beeae7469b805f9f624049fd56643cf6e18e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/host1x/
 
-The first "the" should be replaced by "of" instead.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->   * ColdFire parts. They can be configured as level or edge triggered.
->   *
->   * (C) Copyright 2009-2011, Greg Ungerer <gerg@snapgear.com>
+All errors (new ones prefixed by >>):
 
-Gr{oetje,eeting}s,
+>> drivers/gpu/host1x/context.c:80:28: error: no member named 'ids' in 'struct iommu_fwspec'
+                   ctx->stream_id = fwspec->ids[0] & 0xffff;
+                                    ~~~~~~  ^
+   1 error generated.
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+vim +80 drivers/gpu/host1x/context.c
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+    15	
+    16	int host1x_memory_context_list_init(struct host1x *host1x)
+    17	{
+    18		struct host1x_memory_context_list *cdl = &host1x->context_list;
+    19		struct device_node *node = host1x->dev->of_node;
+    20		struct host1x_memory_context *ctx;
+    21		unsigned int i;
+    22		int err;
+    23	
+    24		cdl->devs = NULL;
+    25		cdl->len = 0;
+    26		mutex_init(&cdl->lock);
+    27	
+    28		err = of_property_count_u32_elems(node, "iommu-map");
+    29		if (err < 0)
+    30			return 0;
+    31	
+    32		cdl->devs = kcalloc(err, sizeof(*cdl->devs), GFP_KERNEL);
+    33		if (!cdl->devs)
+    34			return -ENOMEM;
+    35		cdl->len = err / 4;
+    36	
+    37		for (i = 0; i < cdl->len; i++) {
+    38			struct iommu_fwspec *fwspec;
+    39	
+    40			ctx = &cdl->devs[i];
+    41	
+    42			ctx->host = host1x;
+    43	
+    44			device_initialize(&ctx->dev);
+    45	
+    46			/*
+    47			 * Due to an issue with T194 NVENC, only 38 bits can be used.
+    48			 * Anyway, 256GiB of IOVA ought to be enough for anyone.
+    49			 */
+    50			ctx->dma_mask = DMA_BIT_MASK(38);
+    51			ctx->dev.dma_mask = &ctx->dma_mask;
+    52			ctx->dev.coherent_dma_mask = ctx->dma_mask;
+    53			dev_set_name(&ctx->dev, "host1x-ctx.%d", i);
+    54			ctx->dev.bus = &host1x_context_device_bus_type;
+    55			ctx->dev.parent = host1x->dev;
+    56	
+    57			dma_set_max_seg_size(&ctx->dev, UINT_MAX);
+    58	
+    59			err = device_add(&ctx->dev);
+    60			if (err) {
+    61				dev_err(host1x->dev, "could not add context device %d: %d\n", i, err);
+    62				goto del_devices;
+    63			}
+    64	
+    65			err = of_dma_configure_id(&ctx->dev, node, true, &i);
+    66			if (err) {
+    67				dev_err(host1x->dev, "IOMMU configuration failed for context device %d: %d\n",
+    68					i, err);
+    69				device_del(&ctx->dev);
+    70				goto del_devices;
+    71			}
+    72	
+    73			fwspec = dev_iommu_fwspec_get(&ctx->dev);
+    74			if (!fwspec) {
+    75				dev_err(host1x->dev, "Context device %d has no IOMMU!\n", i);
+    76				device_del(&ctx->dev);
+    77				goto del_devices;
+    78			}
+    79	
+  > 80			ctx->stream_id = fwspec->ids[0] & 0xffff;
+    81		}
+    82	
+    83		return 0;
+    84	
+    85	del_devices:
+    86		while (i--)
+    87			device_del(&cdl->devs[i].dev);
+    88	
+    89		kfree(cdl->devs);
+    90		cdl->len = 0;
+    91	
+    92		return err;
+    93	}
+    94	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

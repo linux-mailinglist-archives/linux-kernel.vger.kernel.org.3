@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D0E55414E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8B655414B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 06:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356813AbiFVEMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 00:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S1356516AbiFVEMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 00:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356846AbiFVELY (ORCPT
+        with ESMTP id S1356882AbiFVELY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Jun 2022 00:11:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5B134649
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2073340D7
         for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 21:11:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E7EEB81C0D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D3CC3411B;
-        Wed, 22 Jun 2022 04:11:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DE2B61909
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:11:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A589C341CE;
+        Wed, 22 Jun 2022 04:11:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655871070;
-        bh=zWU7zFcTL4T6L1wZvGirAOoq71xYc+4bCfTaybkkAlM=;
+        s=k20201202; t=1655871071;
+        bh=h3iLpSbaIqSxlumUAzhaYH0B89//IZwGos4ci1lPn28=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=quYfJrYHUmuZ+AhU+871xttFH040ddFEL/6Fr3iGCXFAfe65jX8+8MpgEVwxCa61P
-         ci6+2fvebHkohtanHFFvCjGGZPj0kJzPPxvazu1ax7vdci3PftVGY3V4ENf/+eFkW6
-         pXdjktFpmYhyCm85g0sv+S9VS98jDiMnQKcB8QcJNKuU/OD4Zic/aB563gxsbMvswo
-         AybncbTtGEJ7M0SyMW6vn++U63teXSarL6tOBKHHVaHPZCbMzYLL5gnDpBGwPswe80
-         HpRqEe8DTXd5DmhEojS0DN8ZFnjLYuW0wI65KqyXEucsbkxThJA9+Ue2hB8AKVgV9Q
-         LbpSCcwPYyGeA==
+        b=oRKD4uh7nx7nwt/6FT+fhd2G+HM3av39+MmyoV9GmgPhAGKmnL4xaw47RQvK1GJEn
+         XVjQG8Va6zYlw669j2Pzv2ojPMQop3em54dtFPRD2VjM/sM40jvP2SQ+yZ16LEHZNE
+         lqX27N5ZdybeWRi7JqJDg27ENhl4aBS9GpCa5kUEOMYKLsN3zZ5n5BNDFlE1TMGtwm
+         ciIzkYvQoHsWwxToc2R0S/U/csBEDP5xaYn1KdDD5mZxMLoh54LSbLQLa9rcynD4Ej
+         2mZ9BJP1ObSUljnRIXs5/3gv4XNjYCjqwd8W17igVnOQxylCcL+P7sNnfvKrySSoy1
+         ksc8gB5fHeMAw==
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/7] platform/chrome: cros_ec_proto: add Kunit test for cros_ec_map_error()
-Date:   Wed, 22 Jun 2022 04:10:35 +0000
-Message-Id: <20220622041040.202737-3-tzungbi@kernel.org>
+Subject: [PATCH 3/7] platform/chrome: cros_ec_proto: add Kunit tests for get_next_event
+Date:   Wed, 22 Jun 2022 04:10:36 +0000
+Message-Id: <20220622041040.202737-4-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 In-Reply-To: <20220622041040.202737-1-tzungbi@kernel.org>
 References: <20220622041040.202737-1-tzungbi@kernel.org>
@@ -54,81 +54,308 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cros_ec_cmd_xfer_status() is the only exported function that calls
-static function cros_ec_map_error().
+cros_ec_get_next_event() gets events from EC.  It consists of 3
+versions of event retrieval:
 
-Add Kunit test for cros_ec_map_error() through calling
-cros_ec_cmd_xfer_status().
+1. No MKBP event.
+2. MKBP event version 0.
+3. MKBP event version >0.
+
+Add Kunit tests for cros_ec_get_next_event().
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/platform/chrome/cros_ec_proto_test.c | 49 ++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/platform/chrome/cros_ec_proto_test.c | 266 +++++++++++++++++++
+ 1 file changed, 266 insertions(+)
 
 diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-index 6464f6101fd3..be3ac77abdf9 100644
+index be3ac77abdf9..64c4b79f7a0c 100644
 --- a/drivers/platform/chrome/cros_ec_proto_test.c
 +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-@@ -2004,6 +2004,54 @@ static void cros_ec_proto_test_cmd_xfer_status_xfer_error(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, ret, -EPROTO);
+@@ -5,6 +5,7 @@
+ 
+ #include <kunit/test.h>
+ 
++#include <asm-generic/unaligned.h>
+ #include <linux/platform_data/cros_ec_commands.h>
+ #include <linux/platform_data/cros_ec_proto.h>
+ 
+@@ -2052,6 +2053,265 @@ static void cros_ec_proto_test_cmd_xfer_status_return_error(struct kunit *test)
+ 	}
  }
  
-+static void cros_ec_proto_test_cmd_xfer_status_return_error(struct kunit *test)
++static void cros_ec_proto_test_get_next_event_no_mkbp_event(struct kunit *test)
 +{
 +	struct cros_ec_proto_test_priv *priv = test->priv;
 +	struct cros_ec_device *ec_dev = &priv->ec_dev;
 +	struct ec_xfer_mock *mock;
-+	int ret, i;
-+	struct cros_ec_command msg;
-+	static const int map[] = {
-+		[EC_RES_SUCCESS] = 0,
-+		[EC_RES_INVALID_COMMAND] = -EOPNOTSUPP,
-+		[EC_RES_ERROR] = -EIO,
-+		[EC_RES_INVALID_PARAM] = -EINVAL,
-+		[EC_RES_ACCESS_DENIED] = -EACCES,
-+		[EC_RES_INVALID_RESPONSE] = -EPROTO,
-+		[EC_RES_INVALID_VERSION] = -ENOPROTOOPT,
-+		[EC_RES_INVALID_CHECKSUM] = -EBADMSG,
-+		/*
-+		 * EC_RES_IN_PROGRESS is special because cros_ec_send_command() has extra logic to
-+		 * handle it.  Note that default cros_kunit_ec_xfer_mock_default_ret == 0 thus
-+		 * cros_ec_xfer_command() in cros_ec_wait_until_complete() returns 0.  As a result,
-+		 * it returns -EPROTO without calling cros_ec_map_error().
-+		 */
-+		[EC_RES_IN_PROGRESS] = -EPROTO,
-+		[EC_RES_UNAVAILABLE] = -ENODATA,
-+		[EC_RES_TIMEOUT] = -ETIMEDOUT,
-+		[EC_RES_OVERFLOW] = -EOVERFLOW,
-+		[EC_RES_INVALID_HEADER] = -EBADR,
-+		[EC_RES_REQUEST_TRUNCATED] = -EBADR,
-+		[EC_RES_RESPONSE_TOO_BIG] = -EFBIG,
-+		[EC_RES_BUS_ERROR] = -EFAULT,
-+		[EC_RES_BUSY] = -EBUSY,
-+		[EC_RES_INVALID_HEADER_VERSION] = -EBADMSG,
-+		[EC_RES_INVALID_HEADER_CRC] = -EBADMSG,
-+		[EC_RES_INVALID_DATA_CRC] = -EBADMSG,
-+		[EC_RES_DUP_UNAVAILABLE] = -ENODATA,
-+	};
++	int ret;
++	bool wake_event, more_events;
 +
-+	memset(&msg, 0, sizeof(msg));
++	ec_dev->max_request = 0xff;
++	ec_dev->max_response = 0xee;
++	ec_dev->mkbp_event_supported = 0;
 +
-+	for (i = 0; i < ARRAY_SIZE(map); ++i) {
-+		mock = cros_kunit_ec_xfer_mock_addx(test, 0, i, 0);
++	/* Set some garbage bytes. */
++	wake_event = false;
++	more_events = true;
++
++	/* For get_keyboard_state_event(). */
++	{
++		union ec_response_get_next_data_v1 *data;
++
++		mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
 +		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
 +
-+		ret = cros_ec_cmd_xfer_status(ec_dev, &msg);
-+		KUNIT_EXPECT_EQ(test, ret, map[i]);
++		data = (union ec_response_get_next_data_v1 *)mock->o_data;
++		data->host_event = 0xbeef;
++	}
++
++	ret = cros_ec_get_next_event(ec_dev, &wake_event, &more_events);
++	KUNIT_EXPECT_EQ(test, ret, sizeof(union ec_response_get_next_data_v1));
++
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.event_type, EC_MKBP_EVENT_KEY_MATRIX);
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.data.host_event, 0xbeef);
++
++	KUNIT_EXPECT_TRUE(test, wake_event);
++	KUNIT_EXPECT_FALSE(test, more_events);
++
++	/* For get_keyboard_state_event(). */
++	{
++		mock = cros_kunit_ec_xfer_mock_next();
++		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
++
++		KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
++		KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MKBP_STATE);
++		KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(union ec_response_get_next_data_v1));
++		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
++	}
++}
++
++static void cros_ec_proto_test_get_next_event_mkbp_event_ec_suspended(struct kunit *test)
++{
++	struct cros_ec_proto_test_priv *priv = test->priv;
++	struct cros_ec_device *ec_dev = &priv->ec_dev;
++	int ret;
++
++	ec_dev->mkbp_event_supported = 1;
++	ec_dev->suspended = true;
++
++	ret = cros_ec_get_next_event(ec_dev, NULL, NULL);
++	KUNIT_EXPECT_EQ(test, ret, -EHOSTDOWN);
++}
++
++static void cros_ec_proto_test_get_next_event_mkbp_event_version0(struct kunit *test)
++{
++	struct cros_ec_proto_test_priv *priv = test->priv;
++	struct cros_ec_device *ec_dev = &priv->ec_dev;
++	struct ec_xfer_mock *mock;
++	int ret;
++	bool wake_event, more_events;
++
++	ec_dev->max_request = 0xff;
++	ec_dev->max_response = 0xee;
++	ec_dev->mkbp_event_supported = 1;
++
++	/* Set some garbage bytes. */
++	wake_event = true;
++	more_events = false;
++
++	/* For get_next_event_xfer(). */
++	{
++		struct ec_response_get_next_event *data;
++
++		mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
++		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
++
++		data = (struct ec_response_get_next_event *)mock->o_data;
++		data->event_type = EC_MKBP_EVENT_SENSOR_FIFO | EC_MKBP_HAS_MORE_EVENTS;
++		data->data.sysrq = 0xbeef;
++	}
++
++	ret = cros_ec_get_next_event(ec_dev, &wake_event, &more_events);
++	KUNIT_EXPECT_EQ(test, ret, sizeof(struct ec_response_get_next_event));
++
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.event_type, EC_MKBP_EVENT_SENSOR_FIFO);
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.data.sysrq, 0xbeef);
++
++	KUNIT_EXPECT_FALSE(test, wake_event);
++	KUNIT_EXPECT_TRUE(test, more_events);
++
++	/* For get_next_event_xfer(). */
++	{
++		mock = cros_kunit_ec_xfer_mock_next();
++		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
++
++		KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
++		KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_NEXT_EVENT);
++		KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_get_next_event));
++		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
++	}
++}
++
++static void cros_ec_proto_test_get_next_event_mkbp_event_version2(struct kunit *test)
++{
++	struct cros_ec_proto_test_priv *priv = test->priv;
++	struct cros_ec_device *ec_dev = &priv->ec_dev;
++	struct ec_xfer_mock *mock;
++	int ret;
++	bool wake_event, more_events;
++
++	ec_dev->max_request = 0xff;
++	ec_dev->max_response = 0xee;
++	ec_dev->mkbp_event_supported = 3;
++
++	/* Set some garbage bytes. */
++	wake_event = false;
++	more_events = true;
++
++	/* For get_next_event_xfer(). */
++	{
++		struct ec_response_get_next_event_v1 *data;
++
++		mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
++		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
++
++		data = (struct ec_response_get_next_event_v1 *)mock->o_data;
++		data->event_type = EC_MKBP_EVENT_FINGERPRINT;
++		data->data.sysrq = 0xbeef;
++	}
++
++	ret = cros_ec_get_next_event(ec_dev, &wake_event, &more_events);
++	KUNIT_EXPECT_EQ(test, ret, sizeof(struct ec_response_get_next_event_v1));
++
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.event_type, EC_MKBP_EVENT_FINGERPRINT);
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.data.sysrq, 0xbeef);
++
++	KUNIT_EXPECT_TRUE(test, wake_event);
++	KUNIT_EXPECT_FALSE(test, more_events);
++
++	/* For get_next_event_xfer(). */
++	{
++		mock = cros_kunit_ec_xfer_mock_next();
++		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
++
++		KUNIT_EXPECT_EQ(test, mock->msg.version, 2);
++		KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_NEXT_EVENT);
++		KUNIT_EXPECT_EQ(test, mock->msg.insize,
++				sizeof(struct ec_response_get_next_event_v1));
++		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
++	}
++}
++
++static void cros_ec_proto_test_get_next_event_mkbp_event_host_event_rtc(struct kunit *test)
++{
++	struct cros_ec_proto_test_priv *priv = test->priv;
++	struct cros_ec_device *ec_dev = &priv->ec_dev;
++	struct ec_xfer_mock *mock;
++	int ret;
++	bool wake_event;
++	struct ec_response_get_next_event_v1 *data;
++
++	ec_dev->max_request = 0xff;
++	ec_dev->max_response = 0xee;
++	ec_dev->mkbp_event_supported = 3;
++	ec_dev->host_event_wake_mask = U32_MAX;
++
++	/* Set some garbage bytes. */
++	wake_event = true;
++
++	/* For get_next_event_xfer(). */
++	{
++		mock = cros_kunit_ec_xfer_mock_add(test,
++						   sizeof(data->event_type) +
++						   sizeof(data->data.host_event));
++		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
++
++		data = (struct ec_response_get_next_event_v1 *)mock->o_data;
++		data->event_type = EC_MKBP_EVENT_HOST_EVENT;
++		put_unaligned_le32(EC_HOST_EVENT_MASK(EC_HOST_EVENT_RTC), &data->data.host_event);
++	}
++
++	ret = cros_ec_get_next_event(ec_dev, &wake_event, NULL);
++	KUNIT_EXPECT_EQ(test, ret, sizeof(data->event_type) + sizeof(data->data.host_event));
++
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.event_type, EC_MKBP_EVENT_HOST_EVENT);
++
++	KUNIT_EXPECT_FALSE(test, wake_event);
++
++	/* For get_next_event_xfer(). */
++	{
++		mock = cros_kunit_ec_xfer_mock_next();
++		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
++
++		KUNIT_EXPECT_EQ(test, mock->msg.version, 2);
++		KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_NEXT_EVENT);
++		KUNIT_EXPECT_EQ(test, mock->msg.insize,
++				sizeof(struct ec_response_get_next_event_v1));
++		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
++	}
++}
++
++static void cros_ec_proto_test_get_next_event_mkbp_event_host_event_masked(struct kunit *test)
++{
++	struct cros_ec_proto_test_priv *priv = test->priv;
++	struct cros_ec_device *ec_dev = &priv->ec_dev;
++	struct ec_xfer_mock *mock;
++	int ret;
++	bool wake_event;
++	struct ec_response_get_next_event_v1 *data;
++
++	ec_dev->max_request = 0xff;
++	ec_dev->max_response = 0xee;
++	ec_dev->mkbp_event_supported = 3;
++	ec_dev->host_event_wake_mask = U32_MAX & ~EC_HOST_EVENT_MASK(EC_HOST_EVENT_AC_DISCONNECTED);
++
++	/* Set some garbage bytes. */
++	wake_event = true;
++
++	/* For get_next_event_xfer(). */
++	{
++		mock = cros_kunit_ec_xfer_mock_add(test,
++						   sizeof(data->event_type) +
++						   sizeof(data->data.host_event));
++		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
++
++		data = (struct ec_response_get_next_event_v1 *)mock->o_data;
++		data->event_type = EC_MKBP_EVENT_HOST_EVENT;
++		put_unaligned_le32(EC_HOST_EVENT_MASK(EC_HOST_EVENT_AC_DISCONNECTED),
++				   &data->data.host_event);
++	}
++
++	ret = cros_ec_get_next_event(ec_dev, &wake_event, NULL);
++	KUNIT_EXPECT_EQ(test, ret, sizeof(data->event_type) + sizeof(data->data.host_event));
++
++	KUNIT_EXPECT_EQ(test, ec_dev->event_data.event_type, EC_MKBP_EVENT_HOST_EVENT);
++
++	KUNIT_EXPECT_FALSE(test, wake_event);
++
++	/* For get_next_event_xfer(). */
++	{
++		mock = cros_kunit_ec_xfer_mock_next();
++		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
++
++		KUNIT_EXPECT_EQ(test, mock->msg.version, 2);
++		KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_NEXT_EVENT);
++		KUNIT_EXPECT_EQ(test, mock->msg.insize,
++				sizeof(struct ec_response_get_next_event_v1));
++		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
 +	}
 +}
 +
  static void cros_ec_proto_test_release(struct device *dev)
  {
  }
-@@ -2086,6 +2134,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
- 	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_in_progress_return0),
+@@ -2135,6 +2395,12 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
  	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_status_normal),
  	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_status_xfer_error),
-+	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_status_return_error),
+ 	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_status_return_error),
++	KUNIT_CASE(cros_ec_proto_test_get_next_event_no_mkbp_event),
++	KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_ec_suspended),
++	KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_version0),
++	KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_version2),
++	KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_host_event_rtc),
++	KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_host_event_masked),
  	{}
  };
  

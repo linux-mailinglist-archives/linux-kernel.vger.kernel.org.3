@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031975549D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEBE5549D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234701AbiFVMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 08:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S1358354AbiFVMPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 08:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiFVMQJ (ORCPT
+        with ESMTP id S1358158AbiFVMOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 08:16:09 -0400
-X-Greylist: delayed 183 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Jun 2022 05:16:05 PDT
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [221.176.66.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4C6C340C5;
-        Wed, 22 Jun 2022 05:16:05 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.11])
-        by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee662b3074ae76-a6237;
-        Wed, 22 Jun 2022 20:12:58 +0800 (CST)
-X-RM-TRANSID: 2ee662b3074ae76-a6237
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[223.108.79.98])
-        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee662b30737662-b18ab;
-        Wed, 22 Jun 2022 20:12:58 +0800 (CST)
-X-RM-TRANSID: 2ee662b30737662-b18ab
-From:   liujing <liujing@cmss.chinamobile.com>
-To:     jhs@mojatatu.com
-Cc:     xiyou.wangcong@gmail.com, jiri@resnulli.us, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        liujing <liujing@cmss.chinamobile.com>
-Subject: [PATCH] tc-testing: gitignore, delete plugins directory
-Date:   Wed, 22 Jun 2022 08:12:37 -0400
-Message-Id: <20220622121237.5832-1-liujing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.18.2
+        Wed, 22 Jun 2022 08:14:15 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A4118B20;
+        Wed, 22 Jun 2022 05:14:13 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 157A0C0004;
+        Wed, 22 Jun 2022 12:14:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1o3zFG-0099lr-Vg; Wed, 22 Jun 2022 14:14:06 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     <michal.simek@xilinx.com>, <hao.wu@intel.com>, <trix@redhat.com>,
+        <mdf@kernel.org>, <yilun.xu@intel.com>,
+        <gregkh@linuxfoundation.org>, <ronak.jain@xilinx.com>,
+        <rajan.vaja@xilinx.com>, <abhyuday.godhasara@xilinx.com>,
+        <piyush.mehta@xilinx.com>, <harsha.harsha@xilinx.com>,
+        <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <git@xilinx.com>
+Subject: Re: [PATCH v2 2/3] firmware: xilinx: Add pm api function for PL
+ readback
+References: <20220621092833.1057408-1-nava.manne@xilinx.com>
+        <20220621092833.1057408-3-nava.manne@xilinx.com>
+Date:   Wed, 22 Jun 2022 14:14:06 +0200
+In-Reply-To: <20220621092833.1057408-3-nava.manne@xilinx.com> (Nava kishore
+        Manne's message of "Tue, 21 Jun 2022 14:58:32 +0530")
+Message-ID: <87ilos520h.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -47,32 +52,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-when we modfying kernel, commit it to our environment building. we find a error
-that is "tools/testing/selftests/tc-testing/plugins" failed: No such file or directory"
+>>>>> "Nava" == Nava kishore Manne <nava.manne@xilinx.com> writes:
 
-we find plugins directory is ignored in
-"tools/testing/selftests/tc-testing/.gitignore", but the plugins directory
-is need in "tools/testing/selftests/tc-testing/Makefile"
+ > Adds PM API for performing PL configuration readback.
+ > It provides an interface to the pmufw to readback the
+ > FPGA configuration registers as well as configuration
+ > data.
 
-Signed-off-by: liujing <liujing@cmss.chinamobile.com>
----
- tools/testing/selftests/tc-testing/.gitignore | 1 -
- 1 file changed, 1 deletion(-)
+ > For more detailed info related to the configuration
+ > registers and configuration data refer ug570.
 
-diff --git a/tools/testing/selftests/tc-testing/.gitignore b/tools/testing/selftests/tc-testing/.gitignore
-index d52f65de23b4..9fe1cef72728 100644
---- a/tools/testing/selftests/tc-testing/.gitignore
-+++ b/tools/testing/selftests/tc-testing/.gitignore
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- __pycache__/
- *.pyc
--plugins/
- *.xml
- *.tap
- tdc_config_local.py
+ > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+ > ---
+ > Changes for v2:
+ >               - None.
+
+ >  drivers/firmware/xilinx/zynqmp.c     | 33 ++++++++++++++++++++++++++++
+ >  include/linux/firmware/xlnx-zynqmp.h | 14 ++++++++++++
+ >  2 files changed, 47 insertions(+)
+
+ > diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+ > index 7977a494a651..40b99299b662 100644
+ > --- a/drivers/firmware/xilinx/zynqmp.c
+ > +++ b/drivers/firmware/xilinx/zynqmp.c
+ > @@ -927,6 +927,39 @@ int zynqmp_pm_fpga_get_status(u32 *value)
+ >  }
+ >  EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_status);
+ 
+ > +/**
+ > + * zynqmp_pm_fpga_read - Perform the fpga configuration readback
+ > + * @reg_numframes: Configuration register offset (or) Number of frames to read
+
+An offset OR a length? That sounds odd.
+
+
+ > + * @phys_address: Physical Address of the buffer
+ > + * @readback_type: Type of fpga readback operation
+ > + *                 0 - FPGA configuration register readback
+ > + *                 1 - FPGA configuration data readback
+
+readback_type is a boolean, so how about calling it `bool data` or
+something like that?
+
+
+ > + * @value: Value to read
+
+what is the relation between phys_address and this value output
+argument?
+
+ > + *
+ > + * This function provides access to xilfpga library to perform
+ > + * fpga configuration readback.
+ > + *
+ > + * Return:	Returns status, either success or error+reason
+ > + */
+ > +int zynqmp_pm_fpga_read(const u32 reg_numframes, const phys_addr_t phys_address,
+ > +			bool readback_type, u32 *value)
+ > +{
+ > +	u32 ret_payload[PAYLOAD_ARG_CNT];
+ > +	int ret;
+ > +
+ > +	if (!value)
+ > +		return -EINVAL;
+ > +
+ > +	ret = zynqmp_pm_invoke_fn(PM_FPGA_READ, reg_numframes,
+ > +				  lower_32_bits(phys_address),
+ > +				  upper_32_bits(phys_address), readback_type,
+
+You are adding PM_FPGA_READ_CONFIG_ defines, so how about using them,
+E.G.
+
+data ? PM_FPGA_READ_CONFIG_DATA : PM_FPGA_READ_CONFIG_REG
+
 -- 
-2.18.2
-
-
-
+Bye, Peter Korsgaard

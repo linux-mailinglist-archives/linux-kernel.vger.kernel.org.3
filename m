@@ -2,284 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712EE554FB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D9D554FB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 17:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359439AbiFVPo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 11:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S1359450AbiFVPpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 11:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiFVPoy (ORCPT
+        with ESMTP id S1359422AbiFVPo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:44:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED10036B70
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655912692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ihQ51bcQWrzbwEBEWv0BHU9ir5A3unDKhLlROclaoHU=;
-        b=ih8KE7EkxSv52VQhowjTwci3hilEtZVrNBEHeDTP1QJDbDLxPOB4nQHe60Os07XQUcprtY
-        DPFrRCScl1bgyLd6xl1ijv70K1Zw/rjGaBk+zfHyUfCOCwhAFkYAWJnHA7ADPnE1dFkqUG
-        6NyurRbDoxNh5J3YIvf2N3Ean/sucis=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-284-a9pGnijDOIKDmXGsZPzfkA-1; Wed, 22 Jun 2022 11:44:51 -0400
-X-MC-Unique: a9pGnijDOIKDmXGsZPzfkA-1
-Received: by mail-wr1-f70.google.com with SMTP id l9-20020adfa389000000b0021b8b489336so2831394wrb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 08:44:50 -0700 (PDT)
+        Wed, 22 Jun 2022 11:44:58 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF5936B70;
+        Wed, 22 Jun 2022 08:44:57 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id e63so14941447pgc.5;
+        Wed, 22 Jun 2022 08:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5oDfxiHmRZ/mXbqHpD2ytdlguA9TUQAUn4TSuFHpAtY=;
+        b=YYKcVhQQ8EjoxBHld0QSfGM4XbttBnOMRXH0O3MlqUeFQlDsSSdmo3NP11tVMjoTei
+         dldlJubjb9Ug9+a26LCLh3Tyzrjokl72oDPHpo+p0TmxhxTSslp9lcGYons3E9v+7URD
+         XMXn3k1d5Mo9hNDAU5GKi186t2/5+pYfIbaaRSmG0eOx0XRB+Df9WZV+aN48js9bpbT7
+         D2Ckjwcv56YNYbo/9vbC9uLxCO4PjqP17JCg9GiKhEvkq9Iy9D7xbw4kUa0zLjBAlxCk
+         jRz0hIgB1nIIuX+yzZNpEsqBodOgi0UesAD0rOdVkDCLKRmXTmFMvAs5FTUU7UPI9ghx
+         2WdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ihQ51bcQWrzbwEBEWv0BHU9ir5A3unDKhLlROclaoHU=;
-        b=oz0Y/GVPd1B5dqkgRJduXfRKbvkiL30BCCeUgMi+wzJyKxG7hO8s8Y/VDgEkiNj9Vs
-         n4grGgOL6MrgJCdgwo9RN0AvNOEtaQiGNK16ddfR25wzLL3gqDJj13J4rS3Rsn2rBwaO
-         tte1Py8g8+dv9zW9yvCZl8NPd71Wb08BR18ADxrhOvasrr3xCxEcSY0ToEnqRJRWdqm1
-         PCj69srHAjF29jbWcsLVEtoFydN+Zwd5i+cyjvjO47GWKVPQzVy2EQF58B5BBPHqRTT7
-         SrwEsSZlop1p8dNiWrI3TqFowazoETYudxlBiIHSwlI6O9yG10HwZpnt3QXQflcsR2Mo
-         e9+g==
-X-Gm-Message-State: AJIora9N6tNmGrNCJF0HpKX1PFVbw/WTtFQwLhVpBcgEqT/v5SMOf4pS
-        Ig/i2aoGRKiGmMevibOrXvAnDN4TGx3ta0YyJaHwOAPAAEhRbB6ZJXToaW2HtpfYlxAnwwF2UtK
-        J1hoeij25LtmYEFVHkG3KU8e7
-X-Received: by 2002:adf:e252:0:b0:21b:827e:4c63 with SMTP id bl18-20020adfe252000000b0021b827e4c63mr4009476wrb.307.1655912689733;
-        Wed, 22 Jun 2022 08:44:49 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u7iQW1o9hu0M1BscDqcuqnTBsDy17WvRImGANcMHb/fY6669Lsq7nWLjQNBG3zGujOvpBU4Q==
-X-Received: by 2002:adf:e252:0:b0:21b:827e:4c63 with SMTP id bl18-20020adfe252000000b0021b827e4c63mr4009443wrb.307.1655912689458;
-        Wed, 22 Jun 2022 08:44:49 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-40.retail.telecomitalia.it. [79.46.200.40])
-        by smtp.gmail.com with ESMTPSA id y6-20020a5d6206000000b0021350f7b22esm21860297wru.109.2022.06.22.08.44.47
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=5oDfxiHmRZ/mXbqHpD2ytdlguA9TUQAUn4TSuFHpAtY=;
+        b=4n/BYUBSj666FDLy5EbW+Z1r4GRHzLx2zm6lebRvjWtQgxYacbVmx3OL73D6oYyafJ
+         UlOfztcD5Xd/KAvLYE4AMw1qNi5WNz5tEuG9vmm712QeIwWyCGNeqoAKZwfihmLyXcUY
+         OKee0w8g81cCqJ+Ewkrutu8TLsR5lcDz6IsRAj5edmwZfpLwGLG/QlsVy0yXkv0mUPnD
+         nL4b+qxC+b99z6FnNS4UBlSYKRhy2xmfR4OV8tcdKmmrzfPzE/C1Ktw3QXvj3S/IGybF
+         ULQhpZOQ7kGZStguFOuCnFA+lTILboVUH8kgwgvQqnF3R02sOLntXqG7bQ+ChMWoavOO
+         2oCw==
+X-Gm-Message-State: AJIora+7vAxMXNY+ajF6qxVtAZlS/zV+BkupYPjTncrhuv+biZ2QkQkg
+        EZjJUi4+tvJwJfG4muhUmnU=
+X-Google-Smtp-Source: AGRyM1uMp1YdBusiL8ZThr7o7N2Hjf6y03sWmkLIwMrW6OJ9nKPLURpf05XsehpqNR/10i/nb9rr8Q==
+X-Received: by 2002:a05:6a00:3006:b0:525:266a:852e with SMTP id ay6-20020a056a00300600b00525266a852emr15251504pfb.60.1655912696978;
+        Wed, 22 Jun 2022 08:44:56 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o11-20020a63730b000000b003fadfd7be5asm13346730pgc.18.2022.06.22.08.44.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 08:44:48 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 17:44:44 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Eugenio Perez Martin <eperezma@redhat.com>
-Cc:     Gautam Dawar <gautam.dawar@xilinx.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Gautam Dawar <gdawar@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>, Eli Cohen <elic@nvidia.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        Martin Porter <martinpo@xilinx.com>,
-        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
-        Dinan Gunawardena <dinang@xilinx.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>, habetsm.xilinx@gmail.com,
-        ecree.xilinx@gmail.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
-Subject: Re: [PATCH v2 19/19] vdpasim: control virtqueue support
-Message-ID: <20220622154444.tjx5ehw47pqyjzjt@sgarzare-redhat>
-References: <20220330180436.24644-1-gdawar@xilinx.com>
- <20220330180436.24644-20-gdawar@xilinx.com>
- <CAGxU2F6OO108oHsrLBWJnYRG2yRU8QnRxAdjJhUUcp8AqaAP-g@mail.gmail.com>
- <CAJaqyWd8MR9vTRcCTktzC3VL054x5H5_sXy+MLVNewFDkjQUSw@mail.gmail.com>
- <CAJaqyWc36adK-gUzc8tMgDDe5SoBPy7xN-UtcFA4=aDezdJ5LA@mail.gmail.com>
+        Wed, 22 Jun 2022 08:44:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 22 Jun 2022 08:44:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Julian Haller <julian.haller@philips.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 5.4 1/2] hwmon: Introduce
+ hwmon_device_register_for_thermal
+Message-ID: <20220622154454.GA1864037@roeck-us.net>
+References: <20220622150234.GC1861763@roeck-us.net>
+ <20220622153950.3001449-1-jhaller@bbl.ms.philips.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJaqyWc36adK-gUzc8tMgDDe5SoBPy7xN-UtcFA4=aDezdJ5LA@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220622153950.3001449-1-jhaller@bbl.ms.philips.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 05:04:44PM +0200, Eugenio Perez Martin wrote:
->On Wed, Jun 22, 2022 at 12:21 PM Eugenio Perez Martin
-><eperezma@redhat.com> wrote:
->>
->> On Tue, Jun 21, 2022 at 5:20 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->> >
->> > Hi Gautam,
->> >
->> > On Wed, Mar 30, 2022 at 8:21 PM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
->> > >
->> > > This patch introduces the control virtqueue support for vDPA
->> > > simulator. This is a requirement for supporting advanced features like
->> > > multiqueue.
->> > >
->> > > A requirement for control virtqueue is to isolate its memory access
->> > > from the rx/tx virtqueues. This is because when using vDPA device
->> > > for VM, the control virqueue is not directly assigned to VM. Userspace
->> > > (Qemu) will present a shadow control virtqueue to control for
->> > > recording the device states.
->> > >
->> > > The isolation is done via the virtqueue groups and ASID support in
->> > > vDPA through vhost-vdpa. The simulator is extended to have:
->> > >
->> > > 1) three virtqueues: RXVQ, TXVQ and CVQ (control virtqueue)
->> > > 2) two virtqueue groups: group 0 contains RXVQ and TXVQ; group 1
->> > >    contains CVQ
->> > > 3) two address spaces and the simulator simply implements the address
->> > >    spaces by mapping it 1:1 to IOTLB.
->> > >
->> > > For the VM use cases, userspace(Qemu) may set AS 0 to group 0 and AS 1
->> > > to group 1. So we have:
->> > >
->> > > 1) The IOTLB for virtqueue group 0 contains the mappings of guest, so
->> > >    RX and TX can be assigned to guest directly.
->> > > 2) The IOTLB for virtqueue group 1 contains the mappings of CVQ which
->> > >    is the buffers that allocated and managed by VMM only. So CVQ of
->> > >    vhost-vdpa is visible to VMM only. And Guest can not access the CVQ
->> > >    of vhost-vdpa.
->> > >
->> > > For the other use cases, since AS 0 is associated to all virtqueue
->> > > groups by default. All virtqueues share the same mapping by default.
->> > >
->> > > To demonstrate the function, VIRITO_NET_F_CTRL_MACADDR is
->> > > implemented in the simulator for the driver to set mac address.
->> > >
->> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
->> > > Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
->> > > ---
->> > >  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 91 ++++++++++++++++++++++------
->> > >  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  2 +
->> > >  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 88 ++++++++++++++++++++++++++-
->> > >  3 files changed, 161 insertions(+), 20 deletions(-)
->> > >
->> > > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> > > index 659e2e2e4b0c..51bd0bafce06 100644
->> > > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> > > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> > > @@ -96,11 +96,17 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
->> > >  {
->> > >         int i;
->> > >
->> > > -       for (i = 0; i < vdpasim->dev_attr.nvqs; i++)
->> > > +       spin_lock(&vdpasim->iommu_lock);
->> > > +
->> > > +       for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
->> > >                 vdpasim_vq_reset(vdpasim, &vdpasim->vqs[i]);
->> > > +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
->> > > +                                &vdpasim->iommu_lock);
->> > > +       }
->> > > +
->> > > +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
->> > > +               vhost_iotlb_reset(&vdpasim->iommu[i]);
->> > >
->> > > -       spin_lock(&vdpasim->iommu_lock);
->> > > -       vhost_iotlb_reset(vdpasim->iommu);
->> > >         spin_unlock(&vdpasim->iommu_lock);
->> > >
->> > >         vdpasim->features = 0;
->> > > @@ -145,7 +151,7 @@ static dma_addr_t vdpasim_map_range(struct vdpasim *vdpasim, phys_addr_t paddr,
->> > >         dma_addr = iova_dma_addr(&vdpasim->iova, iova);
->> > >
->> > >         spin_lock(&vdpasim->iommu_lock);
->> > > -       ret = vhost_iotlb_add_range(vdpasim->iommu, (u64)dma_addr,
->> > > +       ret = vhost_iotlb_add_range(&vdpasim->iommu[0], (u64)dma_addr,
->> > >                                     (u64)dma_addr + size - 1, (u64)paddr, perm);
->> > >         spin_unlock(&vdpasim->iommu_lock);
->> > >
->> > > @@ -161,7 +167,7 @@ static void vdpasim_unmap_range(struct vdpasim *vdpasim, dma_addr_t dma_addr,
->> > >                                 size_t size)
->> > >  {
->> > >         spin_lock(&vdpasim->iommu_lock);
->> > > -       vhost_iotlb_del_range(vdpasim->iommu, (u64)dma_addr,
->> > > +       vhost_iotlb_del_range(&vdpasim->iommu[0], (u64)dma_addr,
->> > >                               (u64)dma_addr + size - 1);
->> > >         spin_unlock(&vdpasim->iommu_lock);
->> > >
->> > > @@ -250,8 +256,9 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
->> > >         else
->> > >                 ops = &vdpasim_config_ops;
->> > >
->> > > -       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops, 1,
->> > > -                                   1, dev_attr->name, false);
->> > > +       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops,
->> > > +                                   dev_attr->ngroups, dev_attr->nas,
->> > > +                                   dev_attr->name, false);
->> > >         if (IS_ERR(vdpasim)) {
->> > >                 ret = PTR_ERR(vdpasim);
->> > >                 goto err_alloc;
->> > > @@ -278,16 +285,20 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
->> > >         if (!vdpasim->vqs)
->> > >                 goto err_iommu;
->> > >
->> > > -       vdpasim->iommu = vhost_iotlb_alloc(max_iotlb_entries, 0);
->> > > +       vdpasim->iommu = kmalloc_array(vdpasim->dev_attr.nas,
->> > > +                                      sizeof(*vdpasim->iommu), GFP_KERNEL);
->> > >         if (!vdpasim->iommu)
->> > >                 goto err_iommu;
->> > >
->> > > +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
->> > > +               vhost_iotlb_init(&vdpasim->iommu[i], 0, 0);
->> > > +
->> > >         vdpasim->buffer = kvmalloc(dev_attr->buffer_size, GFP_KERNEL);
->> > >         if (!vdpasim->buffer)
->> > >                 goto err_iommu;
->> > >
->> > >         for (i = 0; i < dev_attr->nvqs; i++)
->> > > -               vringh_set_iotlb(&vdpasim->vqs[i].vring, vdpasim->iommu,
->> > > +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
->> > >                                  &vdpasim->iommu_lock);
->> > >
->> > >         ret = iova_cache_get();
->> > > @@ -401,7 +412,11 @@ static u32 vdpasim_get_vq_align(struct vdpa_device *vdpa)
->> > >
->> > >  static u32 vdpasim_get_vq_group(struct vdpa_device *vdpa, u16 idx)
->> > >  {
->> > > -       return 0;
->> > > +       /* RX and TX belongs to group 0, CVQ belongs to group 1 */
->> > > +       if (idx == 2)
->> > > +               return 1;
->> > > +       else
->> > > +               return 0;
->> >
->> > This code only works for the vDPA-net simulator, since
->> > vdpasim_get_vq_group() is also shared with other simulators (e.g.
->> > vdpa_sim_blk),
->>
->> That's totally right.
->>
->> > should we move this net-specific code into
->> > vdpa_sim_net.c, maybe adding a callback implemented by the different
->> > simulators?
->> >
->>
->> At this moment, VDPASIM_BLK_VQ_NUM is fixed to 1, so maybe the right
->> thing to do for the -rc phase is to check if idx > vdpasim.attr.nvqs?
->> It's a more general fix.
->>
->
->Actually, that is already checked by vhost/vdpa.c.
->
->Taking that into account, is it worth introducing the change for 5.19?
->I'm totally ok with the change for 5.20.
->
->Thanks!
->
->> For the general case, yes, a callback should be issued to the actual
->> simulator so it's not a surprise when VDPASIM_BLK_VQ_NUM increases,
->> either dynamically or by anyone testing it.
+On Wed, Jun 22, 2022 at 05:39:50PM +0200, Julian Haller wrote:
+> > On Wed, Jun 22, 2022 at 04:49:01PM +0200, Julian Haller wrote:
+> > > From: Guenter Roeck <linux@roeck-us.net>
+> > > 
+> > > [ upstream commit e5d21072054fbadf41cd56062a3a14e447e8c22b ]
+> > > 
+> > > The thermal subsystem registers a hwmon driver without providing
+> > > chip or sysfs group information. This is for legacy reasons and
+> > > would be difficult to change. At the same time, we want to enforce
+> > > that chip information is provided when registering a hwmon device
+> > > using hwmon_device_register_with_info(). To enable this, introduce
+> > > a special API for use only by the thermal subsystem.
+> > > 
+> > > Acked-by: Rafael J . Wysocki <rafael@kernel.org>
+> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > 
+> > What is the point of applying those patches to the 5.4 kernel ?
+> > This was intended for use with new code, not for stable releases.
+> > 
+> > Guenter
+> 
+> The upstream commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 ("hwmon: Make chip
+> parameter for with_info API mandatory") was backported to the 5.4 kernel as
+> part of v5.4.198, see commit 1ec0bc72f5dab3ab367ae5230cf6f212d805a225. This
+> breaks the hwmon device registration in the thermal drivers as these two
+> patches here have been left out. We either need to include them as well or
+> revert the original commit.
+> 
+> I'm also not sure why the original commit found its way into the 5.4 stable
+> branch.
+> 
 
-Exactly, since those parameters are not yet configurable at runtime 
-(someday I hope they will be), I often recompile the module by changing 
-them, so for me we should fix them in 5.19.
+I had complained about this backport to other branches before. That patch
+was not a bug fix, it was neither intended nor marked for stable releases,
+and it should be reverted from all stable branches.
 
-Obviously it's an advanced case, and I expect that if someone recompiles 
-the module changing some hardwired thing, they can expect to have to 
-change something else as well.
-
-So, I'm also fine with leaving it that way for 5.19, but if you want I 
-can fix it earlier.
-
-Thanks,
-Stefano
-
+Guenter

@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDC355433B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F94554326
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 09:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351947AbiFVG5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 02:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S1351582AbiFVG5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 02:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351582AbiFVG47 (ORCPT
+        with ESMTP id S1346267AbiFVG5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 02:56:59 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD7711170
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:56:57 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id lw20so9786813ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Jun 2022 23:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GVCryb+NZ1RjJur3tYCrgFj4R72wJeWsi7jJvADmLLY=;
-        b=KVdIr9FNS2CkgZZdgMYWrs9jPiiqL/Ra10PQ06IHWg9S7jHJXR8hvvZwdASiRXjCnl
-         Ws0jBogVMuWPZzTF9gVY4Knxs4ZZBl1oZhBz3cyg2QCwDOrEU1ipd6/7ag7D7NOAGHRU
-         wMA7zATaNhTIql4Egm7L8pIrhQKuSI9FwaszCUIM0vbUnFRBfC0d74xTi3hFYE10IcU4
-         Jt/k0vDD5x77hpYEZZlc6K6F/R1kqm3oCxVg30Uxs7NDvJUJg44NH+ecEQZlCX6icbJz
-         +cVwfM/0av6bunaNQp5cum+6Q79+O/02K0c3qFOYFuBQLy9wrx82RiKlInYLHhdJXOec
-         04DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GVCryb+NZ1RjJur3tYCrgFj4R72wJeWsi7jJvADmLLY=;
-        b=l+Glm9DKVUNLlmd/BkqlIZfKmwUYRIPdvzn0sbsmgEa8pYGCZ/jCq9KB65fRU6bwS7
-         +Uk4SGQ6rB+f+yt0tsuLsP64Cc3NeeC7hN8phUMdFp/6pJ7TJrKYK6TKvM70sDuQM0gC
-         h61Iy51Ms7irIP8xqIcUfkD/9u3Fi7TymwkQVdveg5unPjtjHqM393DmuDjVHw0Ks5Zv
-         G9iQJ8ZXHtBM4cqZZr+PflJ+R0zEWOirBqUBBUyaUUAiP+e9S17yPusXL/uHroksJRVs
-         A/0WTTzNfQ48CJT2+6rHRY+yrfpwXs5/wcdT0PrOAheSWgXoJFAcI07nsZ1XDjchoNAy
-         2skg==
-X-Gm-Message-State: AJIora8+lfcnfUgacAew1X9zxlk/kPi3rubpjkSPEy2Wh874XwEOV6go
-        eRK5yrQc5kpSEMDz79dtGgsbLqZZkld9gvq6wmEA3w==
-X-Google-Smtp-Source: AGRyM1sVg74726SXM1ZoL6HLHlCRixomOhvot1HwS+fJv8rCvOSjwC9qaYT6H0x6agypdmTW4tgo7pLFBoBi/DvM+34=
-X-Received: by 2002:a17:906:5350:b0:711:f866:ed8 with SMTP id
- j16-20020a170906535000b00711f8660ed8mr1604571ejo.441.1655881015882; Tue, 21
- Jun 2022 23:56:55 -0700 (PDT)
+        Wed, 22 Jun 2022 02:57:04 -0400
+Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9F7611170;
+        Tue, 21 Jun 2022 23:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=zogoA
+        n+yN5BMbClxTPpORdmKdvToRmCB4hLDgQbunzE=; b=N+Oj3fC9rOi4sSbLydqfk
+        xuFSrkVf2hII0nnri0zz5g5H0YKN9Ig/q9IEaIl2B8HIjQGA6b5ztkRsxWWu+FrJ
+        2/VcivMGxhCI3VHnvpGzrQpql3JKFQA4QZrFs4A3t+aATUERZIR433s+uV+Z2/hL
+        itZxjZDpPuMoBqT+K6iytE=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
+ (Coremail) ; Wed, 22 Jun 2022 14:56:54 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Wed, 22 Jun 2022 14:56:54 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re:Re: [PATCH] memory/tegra: Add missing of_node_get() in
+ tegra_emc_find_node_by_ram_code
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <bdfc94d0-c634-c391-d74b-2104cbf82b22@linaro.org>
+References: <20220622042824.4094625-1-windhl@126.com>
+ <bdfc94d0-c634-c391-d74b-2104cbf82b22@linaro.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-References: <20220620020727.GA3669@xsang-OptiPlex-9020> <YrBA7ysAif4I9nPv@linutronix.de>
- <CAMGffEksZGQrdHM9CS0H0Tq4TvfQMAbdcFYZej2KNWY=VxuBQg@mail.gmail.com> <YrK6Iv5jsBa7BRrL@linutronix.de>
-In-Reply-To: <YrK6Iv5jsBa7BRrL@linutronix.de>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Wed, 22 Jun 2022 08:56:45 +0200
-Message-ID: <CAMGffE=qxXNwTeRvzX3YYEgEgB9FJzDhkUM6R=v4BTsVRasH6g@mail.gmail.com>
-Subject: Re: [locking/lockdep] 4051a81774: page_allocation_failure:order:#,mode:#(GFP_KERNEL),nodemask=(null)
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        lkp@lists.01.org, lkp@intel.com,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <61741b61.46f3.1818a331e3d.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: GMqowAC3vyc3vbJiXqw6AA--.27316W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3BIoF1pEDxpG0wABsu
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 8:43 AM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
->
-> On 2022-06-21 17:27:22 [+0200], Jinpu Wang wrote:
-> > Hi, there
-> Hi,
->
-> > > > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -s=
-mp 2 -m 16G
-> > > >
-> > > =E2=80=A6
-> > > > [   17.451787][    T1] rtrs_server L2256: Loading module rtrs_serve=
-r, proto 2.0: (max_chunk_size: 131072 (pure IO 126976, headers 4096) , sess=
-_queue_depth: 512, always_invalidate: 1)
-> > > > [   17.470894][    T1] swapper: page allocation failure: order:5, m=
-ode:0xcc0(GFP_KERNEL), nodemask=3D(null)
-> > >
-> > > If I read this right, it allocates "512 * 10" chunks of order 5 / 128=
-KiB
-> > > of memory (contiguous memory). And this appears to fail.
-> > > This is either a lot of memory or something that shouldn't be used on
-> > > i386.
-> > It allocates 512 * 128 KiB of memory, which is probably to big for
-> > this VM setup.
->
-> why 512 * 128KiB? It is:
-> |         chunk_pool =3D mempool_create_page_pool(sess_queue_depth * CHUN=
-K_POOL_SZ,
-> |                                               get_order(max_chunk_size)=
-);
-> with
-> | static int __read_mostly max_chunk_size =3D DEFAULT_MAX_CHUNK_SIZE;
-> | static int __read_mostly sess_queue_depth =3D DEFAULT_SESS_QUEUE_DEPTH;
-> | #define CHUNK_POOL_SZ 10
->
-> so isn't it (512 * 10) * 128KiB?
-eh, you're right, I forgot we have mempool. We discussed internally in
-the past to remove that, we should do it.
-
-Sorry
->
-> > Thanks!
->
-> Sebastian
+CgpBdCAyMDIyLTA2LTIyIDE0OjUwOjQxLCAiS3J6eXN6dG9mIEtvemxvd3NraSIgPGtyenlzenRv
+Zi5rb3psb3dza2lAbGluYXJvLm9yZz4gd3JvdGU6Cj5PbiAyMi8wNi8yMDIyIDA2OjI4LCBMaWFu
+ZyBIZSB3cm90ZToKPj4gb2ZfZmluZF9ub2RlX2J5X25hbWUoKSB3aWxsIGRlY3JlYXNlIHRoZSBy
+ZWZjb3VudCBvZiBpdHMgZmlyc3QgYXJnIGFuZAo+PiB3ZSBuZWVkIHRvIGFkZCBhIG9mX25vZGVf
+cHV0KCkgdG8ga2VlcCByZWZjb3VudCBiYWxhbmNlLgo+Cj5XZSBkbyBOT1QgbmVlZCB0byBhZGQg
+YW4gb2Zfbm9kZV9wdXQ/Cj4KClNvcnJ5LCB0aGlzIGlzIGEgdHlwbywgSSB3YW50IHRvIHNheSB3
+ZSBuZWVkIHRvIGFkZCBhICdvZl9ub2RlX2dldCgpJwoKPkFueXdheSB3aHkgZG8geW91IGFkZCBv
+Zl9ub2RlX2dldCB3aGljaCBpcyBub3QgZXhwbGFpbmVkIGhlcmU/Cj4KClRoaXMgaXMgYSBjb21t
+b24gbWlzdGFrZSB0aGF0IG1pc3NpbmcgdGhlIG9mX25vZGVfZ2V0KFgpIGJlZm9yZSB3ZSBjYWxs
+Cm9mX2ZpbmRfbm9kZV9ieV9uYW1lKFgsLi4pIGFzIHRoZSBvZl9maW5kX3h4eCB3aWxsIGRlY3Jl
+YXNlIHRoZSByZWZjb3VudCBvZiBYLgoKQSBzaW1pbGFyIGVycm9yIGlzOgoKaHR0cHM6Ly9sb3Jl
+Lmtlcm5lbC5vcmcvYWxsLzIwMjAwNzIwMTUyODA2LjQ0MzI2MjY0OEBsaW51eGZvdW5kYXRpb24u
+b3JnLwoKSWYgSSBhbSB3cm9uZywgcGxlYXNlIGNvcnJlY3QgbWUsIHRoYW5rcy4KPj4gCj4+IEJl
+c2lkZXMsIGR1cmluZyB0aGUgJ2ZvcicgbG9vcCBleGVjdXRpb24sIHRoZSByZWZjb3VudCBvZiAn
+bnAnIHdpbGwgYmUKPj4gYXV0b21hdGljYWxseSBpbmNyZWFzZWQgYW5kIGRlY3JlYXNlZC4gVGhl
+cmUgaXMgbm8gbmVlZCB0byBjYWxsCj4+IG9mX25vZGVfcHV0KCkgYWdhaW4uCj4+IAo+PiBTaWdu
+ZWQtb2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy9t
+ZW1vcnkvdGVncmEvdGVncmEyMC1lbWMuYyB8IDMgKystCj4+ICAxIGZpbGUgY2hhbmdlZCwgMiBp
+bnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9t
+ZW1vcnkvdGVncmEvdGVncmEyMC1lbWMuYyBiL2RyaXZlcnMvbWVtb3J5L3RlZ3JhL3RlZ3JhMjAt
+ZW1jLmMKPj4gaW5kZXggMjViYTNjNWU0YWQ2Li5lNDNhNWY4ZTE4OGUgMTAwNjQ0Cj4+IC0tLSBh
+L2RyaXZlcnMvbWVtb3J5L3RlZ3JhL3RlZ3JhMjAtZW1jLmMKPj4gKysrIGIvZHJpdmVycy9tZW1v
+cnkvdGVncmEvdGVncmEyMC1lbWMuYwo+PiBAQCAtNDc3LDYgKzQ3Nyw3IEBAIHRlZ3JhX2VtY19m
+aW5kX25vZGVfYnlfcmFtX2NvZGUoc3RydWN0IHRlZ3JhX2VtYyAqZW1jKQo+PiAgCj4+ICAJcmFt
+X2NvZGUgPSB0ZWdyYV9yZWFkX3JhbV9jb2RlKCk7Cj4+ICAKPj4gKwlvZl9nZXRfbm9kZShkZXYt
+Pm9mX25vZGUpOwo+PiAgCWZvciAobnAgPSBvZl9maW5kX25vZGVfYnlfbmFtZShkZXYtPm9mX25v
+ZGUsICJlbWMtdGFibGVzIik7IG5wOwo+PiAgCSAgICAgbnAgPSBvZl9maW5kX25vZGVfYnlfbmFt
+ZShucCwgImVtYy10YWJsZXMiKSkgewo+PiAgCQllcnIgPSBvZl9wcm9wZXJ0eV9yZWFkX3UzMihu
+cCwgIm52aWRpYSxyYW0tY29kZSIsICZ2YWx1ZSk7Cj4+IEBAIC00ODQsNiArNDg1LDcgQEAgdGVn
+cmFfZW1jX2ZpbmRfbm9kZV9ieV9yYW1fY29kZShzdHJ1Y3QgdGVncmFfZW1jICplbWMpCj4+ICAJ
+CQlzdHJ1Y3QgZGV2aWNlX25vZGUgKmxwZGRyMl9ucDsKPj4gIAkJCWJvb2wgY2ZnX21pc21hdGNo
+ZXMgPSBmYWxzZTsKPj4gIAo+PiArCQkJb2Zfbm9kZV9nZXQobnApOwo+PiAgCQkJbHBkZHIyX25w
+ID0gb2ZfZmluZF9ub2RlX2J5X25hbWUobnAsICJscGRkcjIiKTsKPj4gIAkJCWlmIChscGRkcjJf
+bnApIHsKPj4gIAkJCQljb25zdCBzdHJ1Y3QgbHBkZHIyX2luZm8gKmluZm87Cj4+IEBAIC01MjEs
+NyArNTIzLDYgQEAgdGVncmFfZW1jX2ZpbmRfbm9kZV9ieV9yYW1fY29kZShzdHJ1Y3QgdGVncmFf
+ZW1jICplbWMpCj4+ICAJCQl9Cj4+ICAKPj4gIAkJCWlmIChjZmdfbWlzbWF0Y2hlcykgewo+PiAt
+CQkJCW9mX25vZGVfcHV0KG5wKTsKPj4gIAkJCQljb250aW51ZTsKPj4gIAkJCX0KPj4gIAkJfQo+
+Cj4KPkJlc3QgcmVnYXJkcywKPktyenlzenRvZgo=

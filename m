@@ -2,619 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEC7556E4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3495E556E53
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 00:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237182AbiFVWI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 18:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S245065AbiFVWRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 18:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358682AbiFVWIs (ORCPT
+        with ESMTP id S233045AbiFVWR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 18:08:48 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2FB3EAB7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:08:46 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D2B65DD;
-        Thu, 23 Jun 2022 00:08:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655935724;
-        bh=pV2fUDhuwvuTPz1TqzqTYLjHf7HrzBVnRvB0umXA/UA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LnsoSBk2+O19Vb05jKg4rh0wbvbW4I4QjNl7eHXXIBwlgibqEjVvp+IbMJ4cZvqa+
-         jdg1NojwYD3d1oIkFQfEqNISLWWboGlNLo9ubAVcTWsH0QV28w/41vzttCBXikLkkX
-         Vad0nSgH9ly9bbn6qRALD9X1f2kORsCZ4qPtJWgQ=
-Date:   Thu, 23 Jun 2022 01:08:27 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Venkateshwar Rao Gannavarapu 
-        <venkateshwar.rao.gannavarapu@xilinx.com>
-Cc:     sam@ravnborg.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        vgannava@xilinx.com
-Subject: Re: [PATCH V2 2/2] drm: xlnx: dsi: Add Xilinx MIPI DSI-Tx subsystem
- driver
-Message-ID: <YrOS24oFGiRGKW+B@pendragon.ideasonboard.com>
-References: <1655389056-37044-1-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
- <1655389056-37044-3-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
+        Wed, 22 Jun 2022 18:17:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 586EE3C488
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655936246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+ztVNbSiA59Hqeo2EpfsBK2XPsXLM0PmWucdceMDBuI=;
+        b=WViQlnwfQal9lFlBv+HhtBwQcDUUUfvjqrq0qLQ8VQgPMJqZ38lE5ppykuzf5IlWZUrVaj
+        VprJu4YvEBGUrihq8z/QVkYpm07lQ8yEvo6ZiEcpO0A9OTFWekLUatJsKaNnGh763ZPOv4
+        Um/WrWZw5x2+H/+ekEEMP9I76HWqQa8=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-637-d74kCw-fMjG5srW2mWMp7A-1; Wed, 22 Jun 2022 18:17:24 -0400
+X-MC-Unique: d74kCw-fMjG5srW2mWMp7A-1
+Received: by mail-il1-f199.google.com with SMTP id n12-20020a92260c000000b002d3c9fc68d6so11822905ile.19
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 15:17:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+ztVNbSiA59Hqeo2EpfsBK2XPsXLM0PmWucdceMDBuI=;
+        b=HLt2nLLvNmNKF9x8oXKf2S1Xp38st1BBXNwQCiveCh8skgt5DGUu4ek+c98BzYqbBe
+         rjgUzJBxca8hxr2O1i3yNpRYZEPLTdwFvI95WGTFumeE4rRl38Gw+aXH1DVZnn4M8ery
+         RLjfneHVGiih6T2T+G6qU4rgqQeC1BiSO4P+LXGyxPzq68caNl/R32ecjOHjvFvecB0v
+         xGqhjbnAQY6O21g9IXkVWIJjfPktrxmD2GW8U+JcR5DA/tMiMFx7xjV+8Nna2F+iB4Rd
+         W+1stPmpVFKA394Iw+tR71qu/TTeg2HKHrXnWnq5oIzubMmjoPaNn7q+rNtuKdPJ0H+W
+         OPUw==
+X-Gm-Message-State: AJIora9yRZvit8VEmYSUE5rV5HWEoIPq/veK7Lzo/UTfATTxc2my4quj
+        fz7LlS2LvaLjp31YOi4CA7fo53vZBgXkso2ZENJH+g5F5zdDQxZ+qwgpN1jp7i/p4v5MXY9D5bo
+        vXnHrJRSpai1FnSCj6jgmKOmY
+X-Received: by 2002:a05:6638:37a6:b0:339:c91c:76ba with SMTP id w38-20020a05663837a600b00339c91c76bamr3539219jal.103.1655936243563;
+        Wed, 22 Jun 2022 15:17:23 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sBk2e/5rFsOWMh9xUh/TGTKZf6Tu5GiqsrJf9xiWIjDmO02kCQDr6xJWXr35eKHiS7z77HHw==
+X-Received: by 2002:a05:6638:37a6:b0:339:c91c:76ba with SMTP id w38-20020a05663837a600b00339c91c76bamr3539199jal.103.1655936243237;
+        Wed, 22 Jun 2022 15:17:23 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id s17-20020a02ad11000000b0032e36d3843fsm9058243jan.19.2022.06.22.15.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 15:17:22 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 16:17:21 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     cohuck@redhat.com, jgg@nvidia.com, iommu@lists.linux.dev,
+        iommu@lists.linux-foundation.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] vfio/type1: Simplify bus_type determination
+Message-ID: <20220622161721.469fc9eb.alex.williamson@redhat.com>
+In-Reply-To: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
+References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1655389056-37044-3-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi GVRao,
+On Wed, 22 Jun 2022 13:04:11 +0100
+Robin Murphy <robin.murphy@arm.com> wrote:
 
-Thank you for the patch.
+> Since IOMMU groups are mandatory for drivers to support, it stands to
+> reason that any device which has been successfully be added to a group
 
-On Thu, Jun 16, 2022 at 07:47:36PM +0530, Venkateshwar Rao Gannavarapu wrote:
-> The Xilinx MIPI DSI Tx Subsystem soft IP is used to display video
-> data from AXI-4 stream interface.
+s/be //
+
+> must be on a bus supported by that IOMMU driver, and therefore a domain
+> viable for any device in the group must be viable for all devices in
+> the group. This already has to be the case for the IOMMU API's internal
+> default domain, for instance. Thus even if the group contains devices on
+> different buses, that can only mean that the IOMMU driver actually
+> supports such an odd topology, and so without loss of generality we can
+> expect the bus type of any device in a group to be suitable for IOMMU
+> API calls.
 > 
-> It supports upto 4 lanes, optional register interface for the DPHY
-> and multiple RGB color formats.
-> This is a MIPI-DSI host driver and provides DSI bus for panels.
-> This driver also helps to communicate with its panel using panel
-> framework.
+> Replace vfio_bus_type() with a simple call to resolve an appropriate
+> member device from which to then derive a bus type. This is also a step
+> towards removing the vague bus-based interfaces from the IOMMU API, when
+> we can subsequently switch to using this device directly.
 > 
-> Signed-off-by: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
+> Furthermore, scrutiny reveals a lack of protection for the bus being
+> removed while vfio_iommu_type1_attach_group() is using it; the reference
+> that VFIO holds on the iommu_group ensures that data remains valid, but
+> does not prevent the group's membership changing underfoot. Holding the
+> vfio_device for as long as we need here also neatly solves this.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 > ---
->  drivers/gpu/drm/xlnx/Kconfig    |  12 ++
->  drivers/gpu/drm/xlnx/Makefile   |   1 +
->  drivers/gpu/drm/xlnx/xlnx_dsi.c | 429 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 442 insertions(+)
->  create mode 100644 drivers/gpu/drm/xlnx/xlnx_dsi.c
 > 
-> diff --git a/drivers/gpu/drm/xlnx/Kconfig b/drivers/gpu/drm/xlnx/Kconfig
-> index f9cf93c..a75bd76 100644
-> --- a/drivers/gpu/drm/xlnx/Kconfig
-> +++ b/drivers/gpu/drm/xlnx/Kconfig
-> @@ -1,3 +1,15 @@
-> +config DRM_XLNX_DSI
-> +	tristate "Xilinx DRM DSI Subsystem Driver"
-> +	depends on ARCH_ZYNQMP || COMPILE_TEST
-> +	depends on DRM && OF
-> +	select DRM_KMS_HELPER
-> +	select DRM_MIPI_DSI
-> +	select DRM_PANEL_BRIDGE
-
-You can drop DRM_PANEL_BRIDGE, the driver doesn't need it.
-
-> +	help
-> +	  DRM bridge driver for Xilinx programmable DSI subsystem controller.
-> +	  choose this option if you hava a Xilinx MIPI-DSI Tx subsytem in
-
-s/choose/Choose/
-
-> +	  video pipeline.
-> +
->  config DRM_ZYNQMP_DPSUB
->  	tristate "ZynqMP DisplayPort Controller Driver"
->  	depends on ARCH_ZYNQMP || COMPILE_TEST
-> diff --git a/drivers/gpu/drm/xlnx/Makefile b/drivers/gpu/drm/xlnx/Makefile
-> index 51c24b7..f90849b 100644
-> --- a/drivers/gpu/drm/xlnx/Makefile
-> +++ b/drivers/gpu/drm/xlnx/Makefile
-> @@ -1,2 +1,3 @@
-> +obj-$(CONFIG_DRM_XLNX_DSI) += xlnx_dsi.o
->  zynqmp-dpsub-y := zynqmp_disp.o zynqmp_dpsub.o zynqmp_dp.o
->  obj-$(CONFIG_DRM_ZYNQMP_DPSUB) += zynqmp-dpsub.o
-> diff --git a/drivers/gpu/drm/xlnx/xlnx_dsi.c b/drivers/gpu/drm/xlnx/xlnx_dsi.c
-> new file mode 100644
-> index 0000000..39d8947
-> --- /dev/null
-> +++ b/drivers/gpu/drm/xlnx/xlnx_dsi.c
-> @@ -0,0 +1,429 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Xilinx FPGA MIPI DSI Tx Controller driver.
-> + *
-> + * Copyright (C) 2022 Xilinx, Inc.
-> + *
-> + * Author: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-
-I'd add at least platform_device.h to avoid depending on indirect
-inclusion of headers.
-
-> +
-> +#include <drm/drm_atomic_helper.h>
-> +#include <drm/drm_bridge.h>
-> +#include <drm/drm_mipi_dsi.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_of.h>
-> +#include <drm/drm_panel.h>
-
-Not needed.
-
-> +#include <drm/drm_print.h>
-> +
-> +/* DSI Tx IP registers */
-> +#define XDSI_CCR			0x00
-> +#define XDSI_CCR_COREENB		BIT(0)
-> +#define XDSI_CCR_SOFTRST		BIT(1)
-> +#define XDSI_CCR_CRREADY		BIT(2)
-> +#define XDSI_CCR_CMDMODE		BIT(3)
-> +#define XDSI_CCR_DFIFORST		BIT(4)
-> +#define XDSI_CCR_CMDFIFORST		BIT(5)
-> +#define XDSI_PCR			0x04
-> +#define XDSI_PCR_LANES_MASK		3
-> +#define XDSI_PCR_VIDEOMODE(x)		(((x) & 0x3) << 3)
-> +#define XDSI_PCR_VIDEOMODE_MASK	GENMASK(4, 3)
-> +#define XDSI_PCR_VIDEOMODE_SHIFT	3
-> +#define XDSI_PCR_BLLPTYPE(x)		((x) << 5)
-> +#define XDSI_PCR_BLLPMODE(x)		((x) << 6)
-> +#define XDSI_PCR_PIXELFORMAT_MASK	GENMASK(12, 11)
-> +#define XDSI_PCR_PIXELFORMAT_SHIFT	11
-> +#define XDSI_PCR_EOTPENABLE(x)		((x) << 13)
-> +#define XDSI_GIER			0x20
-> +#define XDSI_ISR			0x24
-> +#define XDSI_IER			0x28
-> +#define XDSI_STR			0x2C
-> +#define XDSI_STR_RDY_SHPKT		BIT(6)
-> +#define XDSI_STR_RDY_LNGPKT		BIT(7)
-> +#define XDSI_STR_DFIFO_FULL		BIT(8)
-> +#define XDSI_STR_DFIFO_EMPTY		BIT(9)
-> +#define XDSI_STR_WAITFR_DATA		BIT(10)
-> +#define XDSI_STR_CMD_EXE_PGS		BIT(11)
-> +#define XDSI_STR_CCMD_PROC		BIT(12)
-> +#define XDSI_CMD			0x30
-> +#define XDSI_CMD_QUEUE_PACKET(x)	((x) & GENMASK(23, 0))
-> +#define XDSI_DFR			0x34
-> +#define XDSI_TIME1			0x50
-> +#define XDSI_TIME1_BLLP_BURST(x)	((x) & GENMASK(15, 0))
-> +#define XDSI_TIME1_HSA(x)		(((x) & GENMASK(15, 0)) << 16)
-> +#define XDSI_TIME2			0x54
-> +#define XDSI_TIME2_VACT(x)		((x) & GENMASK(15, 0))
-> +#define XDSI_TIME2_HACT(x)		(((x) & GENMASK(15, 0)) << 16)
-> +#define XDSI_HACT_MULTIPLIER		GENMASK(1, 0)
-> +#define XDSI_TIME3			0x58
-> +#define XDSI_TIME3_HFP(x)		((x) & GENMASK(15, 0))
-> +#define XDSI_TIME3_HBP(x)		(((x) & GENMASK(15, 0)) << 16)
-> +#define XDSI_TIME4			0x5c
-> +#define XDSI_TIME4_VFP(x)		((x) & GENMASK(7, 0))
-> +#define XDSI_TIME4_VBP(x)		(((x) & GENMASK(7, 0)) << 8)
-> +#define XDSI_TIME4_VSA(x)		(((x) & GENMASK(7, 0)) << 16)
-> +#define XDSI_NUM_DATA_T		4
-> +
-> +/**
-> + * struct xlnx_dsi - Xilinx DSI-TX core
-> + * @bridge: DRM bridge structure
-> + * @dsi_host: DSI host device
-> + * @next_bridge: bridge structure
-> + * @dev: device structure
-> + * @clks: clock source structure
-> + * @iomem: Base address of DSI subsystem
-> + * @mode_flags: DSI operation mode related flags
-> + * @lanes: number of active data lanes supported by DSI controller
-> + * @mul_factor: multiplication factor for HACT timing
-> + * @format: pixel format for video mode of DSI controller
-> + * @device_found: Flag to indicate device presence
-> + */
-> +struct xlnx_dsi {
-> +	struct drm_bridge bridge;
-> +	struct mipi_dsi_host dsi_host;
-> +	struct drm_bridge *next_bridge;
-> +	struct device *dev;
-> +	struct clk_bulk_data *clks;
-> +	void __iomem *iomem;
-> +	unsigned long mode_flags;
-> +	u32 lanes;
-> +	u32 mul_factor;
-> +	enum mipi_dsi_pixel_format format;
-> +	bool device_found;
-> +};
-> +
-> +static const struct clk_bulk_data xdsi_clks[] = {
-> +	{ .id = "s_axis_aclk" },
-> +	{ .id = "dphy_clk_200M" },
-> +};
-> +
-> +static inline struct xlnx_dsi *host_to_dsi(struct mipi_dsi_host *host)
+> After sleeping on it, I decided to type up the helper function approach
+> to see how it looked in practice, and in doing so realised that with one
+> more tweak it could also subsume the locking out of the common paths as
+> well, so end up being a self-contained way for type1 to take care of its
+> own concern, which I rather like.
+> 
+>  drivers/vfio/vfio.c             | 18 +++++++++++++++++-
+>  drivers/vfio/vfio.h             |  3 +++
+>  drivers/vfio/vfio_iommu_type1.c | 30 +++++++++++-------------------
+>  3 files changed, 31 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+> index 61e71c1154be..73bab04880d0 100644
+> --- a/drivers/vfio/vfio.c
+> +++ b/drivers/vfio/vfio.c
+> @@ -448,7 +448,7 @@ static void vfio_group_get(struct vfio_group *group)
+>   * Device objects - create, release, get, put, search
+>   */
+>  /* Device reference always implies a group reference */
+> -static void vfio_device_put(struct vfio_device *device)
+> +void vfio_device_put(struct vfio_device *device)
+>  {
+>  	if (refcount_dec_and_test(&device->refcount))
+>  		complete(&device->comp);
+> @@ -475,6 +475,22 @@ static struct vfio_device *vfio_group_get_device(struct vfio_group *group,
+>  	return NULL;
+>  }
+>  
+> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group)
 > +{
-> +	return container_of(host, struct xlnx_dsi, dsi_host);
-> +}
-> +
-> +static inline struct xlnx_dsi *bridge_to_dsi(struct drm_bridge *bridge)
-> +{
-> +	return container_of(bridge, struct xlnx_dsi, bridge);
-> +}
-> +
-> +static inline void xlnx_dsi_write(struct xlnx_dsi *dsi, int offset, u32 val)
-> +{
-> +	writel(val, dsi->iomem + offset);
-> +}
-> +
-> +static inline u32 xlnx_dsi_read(struct xlnx_dsi *dsi, int offset)
-> +{
-> +	return readl(dsi->iomem + offset);
-> +}
-> +
-> +static int xlnx_dsi_host_attach(struct mipi_dsi_host *host,
-> +				struct mipi_dsi_device *device)
-> +{
-> +	struct xlnx_dsi *dsi = host_to_dsi(host);
-> +	struct device *dev = host->dev;
-> +
-> +	dsi->mode_flags = device->mode_flags;
-> +
-> +	if (dsi->lanes != device->lanes) {
-> +		dev_err(dsi->dev, "Mismatch of lanes. panel = %d, DSI = %d\n",
+> +	struct vfio_group *group = vfio_group_get_from_iommu(iommu_group);
+> +	struct vfio_device *device;
 
-It's not necessarily a panel. You can write
+Check group for NULL.
 
-		dev_err(dsi->dev, "Mismatch of lanes, host: %u != device: %u\n",
-			dsi->lanes, device->lanes);
-
-> +			device->lanes, dsi->lanes);
-> +		return -EINVAL;
+> +
+> +	mutex_lock(&group->device_lock);
+> +	list_for_each_entry(device, &group->device_list, group_next) {
+> +		if (vfio_device_try_get(device)) {
+> +			mutex_unlock(&group->device_lock);
+> +			return device;
+> +		}
 > +	}
-> +
-> +	if (dsi->format != device->format) {
-> +		dev_err(dsi->dev, "Mismatch of format. panel = %d, DSI = %d\n",
-> +			device->format, dsi->format);
+> +	mutex_unlock(&group->device_lock);
+> +	return NULL;
 
-Same here.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!dsi->device_found) {
-> +		dsi->next_bridge = devm_drm_of_get_bridge(dev,
-
-As dev is the same as dsi->dev, I'd use dev->dsi here and drop the local
-variable.
-
-> +							  dev->of_node, 0, 0);
-> +		if (IS_ERR(dsi->next_bridge))
-> +			return PTR_ERR(dsi->next_bridge);
-> +		drm_bridge_add(&dsi->bridge);
-> +		dsi->device_found = true;
-
-I don't think the device_found flag mechanism is right. You remove the
-bridge in xlnx_dsi_host_detach(), so it should be added back here,
-shouldn't it ?
-
-The next question would then be what to do with the next bridge acquired
-with devm_drm_of_get_bridge(). It looks like we have a lifetime
-management issue here, and I don't think it's fair to ask you to fix the
-bridge/panel core to get this driver merged, so I'm fine keeping this
-for now even if it's incorrect. I'd like feedback from others though.
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int xlnx_dsi_host_detach(struct mipi_dsi_host *host,
-> +				struct mipi_dsi_device *device)
-> +{
-> +	struct xlnx_dsi *dsi = host_to_dsi(host);
-> +
-> +	drm_bridge_remove(&dsi->bridge);
-> +	return 0;
-> +}
-> +
-> +static const struct mipi_dsi_host_ops xlnx_dsi_ops = {
-> +	.attach = xlnx_dsi_host_attach,
-> +	.detach	= xlnx_dsi_host_detach,
-> +};
-> +
-> +static void
-> +xlnx_dsi_bridge_disable(struct drm_bridge *bridge,
-> +			struct drm_bridge_state *old_bridge_state)
-> +{
-> +	struct xlnx_dsi *dsi = bridge_to_dsi(bridge);
-> +	u32 reg = xlnx_dsi_read(dsi, XDSI_CCR);
-> +
-> +	reg &= ~XDSI_CCR_COREENB;
-> +	xlnx_dsi_write(dsi, XDSI_CCR, reg);
-> +}
-> +
-> +static void
-> +xlnx_dsi_bridge_enable(struct drm_bridge *bridge,
-> +		       struct drm_bridge_state *old_bridge_state)
-> +{
-> +	struct xlnx_dsi *dsi = bridge_to_dsi(bridge);
-> +	struct drm_atomic_state *state = old_bridge_state->base.state;
-> +	struct drm_connector *connector;
-> +	struct drm_crtc *crtc;
-> +	const struct drm_crtc_state *crtc_state;
-> +	const struct drm_display_mode *mode;
-> +	u32 reg, video_mode;
-> +
-> +	connector = drm_atomic_get_new_connector_for_encoder(state,
-> +							     bridge->encoder);
-> +	crtc = drm_atomic_get_new_connector_state(state, connector)->crtc;
-> +	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
-> +	mode = &crtc_state->adjusted_mode;
-> +
-> +	reg = xlnx_dsi_read(dsi, XDSI_PCR);
-> +	video_mode = (reg & XDSI_PCR_VIDEOMODE_MASK) >> XDSI_PCR_VIDEOMODE_SHIFT;
-> +
-> +	if (!video_mode && (dsi->mode_flags & MIPI_DSI_MODE_VIDEO_SYNC_PULSE)) {
-> +		reg = XDSI_TIME1_HSA(mode->hsync_end -
-> +				     mode->hsync_start);
-
-This holds on a single line.
-
-> +		xlnx_dsi_write(dsi, XDSI_TIME1, reg);
-> +	}
-> +
-> +	reg = XDSI_TIME4_VFP(mode->vsync_start - mode->vdisplay) |
-> +		XDSI_TIME4_VBP(mode->vtotal - mode->vsync_end) |
-> +		XDSI_TIME4_VSA(mode->vsync_end - mode->vsync_start);
-> +	xlnx_dsi_write(dsi, XDSI_TIME4, reg);
-> +
-> +	reg = XDSI_TIME3_HFP(mode->hsync_start - mode->hdisplay) |
-> +		XDSI_TIME3_HBP(mode->htotal - mode->hsync_end);
-> +	xlnx_dsi_write(dsi, XDSI_TIME3, reg);
-> +
-> +	reg = XDSI_TIME2_HACT(mode->hdisplay * dsi->mul_factor / 100) |
-> +		XDSI_TIME2_VACT(mode->vdisplay);
-> +	xlnx_dsi_write(dsi->iomem, XDSI_TIME2, reg);
-> +
-> +	xlnx_dsi_write(dsi, XDSI_PCR, XDSI_PCR_VIDEOMODE(BIT(0)));
-> +
-> +	/* Enable Core */
-> +	reg = xlnx_dsi_read(dsi, XDSI_CCR);
-> +	reg |= XDSI_CCR_COREENB;
-> +	xlnx_dsi_write(dsi, XDSI_CCR, reg);
-> +}
-> +
-> +#define MAX_INPUT_SEL_FORMATS   3
-> +static u32
-> +*xlnx_dsi_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
-> +					   struct drm_bridge_state *bridge_state,
-> +					   struct drm_crtc_state *crtc_state,
-> +					   struct drm_connector_state *conn_state,
-> +					   u32 output_fmt,
-> +					   unsigned int *num_input_fmts)
-> +{
-> +	u32 *input_fmts;
-> +	unsigned int i = 0;
-> +
-> +	*num_input_fmts = 0;
-> +	input_fmts = kcalloc(MAX_INPUT_SEL_FORMATS, sizeof(*input_fmts), GFP_KERNEL);
-> +	if (!input_fmts)
-> +		return NULL;
-> +
-> +	switch (output_fmt) {
-> +	case MEDIA_BUS_FMT_FIXED:
-> +		input_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
-> +		break;
-> +	case MEDIA_BUS_FMT_RGB666_1X18:
-> +		input_fmts[i++] = MEDIA_BUS_FMT_RGB666_1X18;
-> +		break;
-> +	case MEDIA_BUS_FMT_RGB565_1X16:
-> +		input_fmts[i++] = MEDIA_BUS_FMT_RGB565_1X16;
-> +		break;
-> +	default: /* define */
-> +	}
-
-As the cases are mutually exclusive, i will always be equal to 1. You
-can drop the MAX_INPUT_SEL_FORMATS macro, the i variable, allocate a
-single entry for input_fmts, and set inputs_fmts[0].
-
-> +
-> +	*num_input_fmts = i;
-> +	if (*num_input_fmts == 0) {
-> +		kfree(input_fmts);
-> +		input_fmts = NULL;
-> +	}
-> +
-> +	return input_fmts;
-> +}
-> +
-> +static int xlnx_dsi_bridge_attach(struct drm_bridge *bridge,
-> +				  enum drm_bridge_attach_flags flags)
-> +{
-> +	struct xlnx_dsi *dsi = bridge_to_dsi(bridge);
-> +
-> +	if (!dsi->next_bridge)
-
-Can this ever happen ?
-
-> +		return 0;
-> +
-> +	/* Attach the next bridge */
-> +	return drm_bridge_attach(bridge->encoder, dsi->next_bridge, bridge,
-> +				 flags);
-> +}
-> +
-> +static void xlnx_dsi_bridge_detach(struct drm_bridge *bridge)
-> +{
-> +	struct xlnx_dsi *dsi = bridge_to_dsi(bridge);
-> +
-> +	drm_of_panel_bridge_remove(dsi->dev->of_node, 1, 0);
-
-This doesn't look right. Is it a leftover ? You should instead call
-drm_bridge_detach() on the next bridge.
+No vfio_group_put() on either path.
 
 > +}
 > +
-> +static enum drm_mode_status
-> +xlnx_dsi_bridge_mode_valid(struct drm_bridge *bridge,
-> +			   const struct drm_display_info *info,
-> +			   const struct drm_display_mode *mode)
-> +{
-> +	if ((mode->hdisplay & XDSI_HACT_MULTIPLIER) != 0)
-> +		return MODE_BAD_WIDTH;
+>  /*
+>   * VFIO driver API
+>   */
+> diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+> index a67130221151..e8f21e64541b 100644
+> --- a/drivers/vfio/vfio.h
+> +++ b/drivers/vfio/vfio.h
+> @@ -70,3 +70,6 @@ struct vfio_iommu_driver_ops {
+>  
+>  int vfio_register_iommu_driver(const struct vfio_iommu_driver_ops *ops);
+>  void vfio_unregister_iommu_driver(const struct vfio_iommu_driver_ops *ops);
 > +
-> +	return MODE_OK;
-> +}
-> +
-> +static const struct drm_bridge_funcs xlnx_dsi_bridge_funcs = {
-> +	.atomic_duplicate_state		= drm_atomic_helper_bridge_duplicate_state,
-> +	.atomic_destroy_state		= drm_atomic_helper_bridge_destroy_state,
-> +	.atomic_reset			= drm_atomic_helper_bridge_reset,
-> +	.atomic_disable                 = xlnx_dsi_bridge_disable,
-> +	.atomic_enable			= xlnx_dsi_bridge_enable,
-> +	.atomic_get_input_bus_fmts      = xlnx_dsi_bridge_atomic_get_input_bus_fmts,
-> +	.attach				= xlnx_dsi_bridge_attach,
-> +	.detach				= xlnx_dsi_bridge_detach,
-> +	.mode_valid			= xlnx_dsi_bridge_mode_valid,
-> +};
-> +
-> +static int xlnx_dsi_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	struct xlnx_dsi *dsi;
-> +	int ret;
-> +	const int xdsi_mul_fact[XDSI_NUM_DATA_T] = {300, 225, 225, 200};
+> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group);
+> +void vfio_device_put(struct vfio_device *device);
+> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+> index c13b9290e357..e38b8bfde677 100644
+> --- a/drivers/vfio/vfio_iommu_type1.c
+> +++ b/drivers/vfio/vfio_iommu_type1.c
+> @@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
+>  	return ret;
+>  }
+>  
+> -static int vfio_bus_type(struct device *dev, void *data)
+> -{
+> -	struct bus_type **bus = data;
+> -
+> -	if (*bus && *bus != dev->bus)
+> -		return -EINVAL;
+> -
+> -	*bus = dev->bus;
+> -
+> -	return 0;
+> -}
+> -
+>  static int vfio_iommu_replay(struct vfio_iommu *iommu,
+>  			     struct vfio_domain *domain)
+>  {
+> @@ -2159,7 +2147,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>  	struct vfio_iommu *iommu = iommu_data;
+>  	struct vfio_iommu_group *group;
+>  	struct vfio_domain *domain, *d;
+> -	struct bus_type *bus = NULL;
+> +	struct vfio_device *iommu_api_dev;
+>  	bool resv_msi, msi_remap;
+>  	phys_addr_t resv_msi_base = 0;
+>  	struct iommu_domain_geometry *geo;
+> @@ -2192,18 +2180,19 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>  		goto out_unlock;
+>  	}
+>  
+> -	/* Determine bus_type in order to allocate a domain */
+> -	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
+> -	if (ret)
+> +	/* Resolve the group back to a member device for IOMMU API ops */
+> +	ret = -ENODEV;
+> +	iommu_api_dev = vfio_device_get_from_iommu(iommu_group);
+> +	if (!iommu_api_dev)
+>  		goto out_free_group;
+>  
+>  	ret = -ENOMEM;
+>  	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+>  	if (!domain)
+> -		goto out_free_group;
+> +		goto out_put_dev;
+>  
+>  	ret = -EIO;
+> -	domain->domain = iommu_domain_alloc(bus);
+> +	domain->domain = iommu_domain_alloc(iommu_api_dev->dev->bus);
 
-static const, and you can move it as the first variable of the function.
+It makes sense to move away from a bus centric interface to iommu ops
+and I can see that having a device interface when we have device level
+address-ability within a group makes sense, but does it make sense to
+only have that device level interface?  For example, if an iommu_group
+is going to remain an aspect of the iommu subsystem, shouldn't we be
+able to allocate a domain and test capabilities based on the group and
+the iommu driver should have enough embedded information reachable from
+the struct iommu_group to do those things?  This "perform group level
+operations based on an arbitrary device in the group" is pretty klunky.
+Thanks,
 
-> +	u32 reg;
-> +
-> +	dsi = devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
-> +	if (!dsi)
-> +		return -ENOMEM;
-> +
-> +	dsi->dev = dev;
-> +	dsi->clks = devm_kmemdup(dev, xdsi_clks, sizeof(xdsi_clks),
-> +				 GFP_KERNEL);
-> +	if (!dsi->clks)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	dsi->iomem = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(dsi->iomem))
-> +		return PTR_ERR(dsi->iomem);
-> +
-> +	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(xdsi_clks), dsi->clks);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = clk_bulk_prepare_enable(ARRAY_SIZE(xdsi_clks), dsi->clks);
-> +	if (ret)
-> +		return ret;
+Alex
 
-Shouldn't this be done in the .atomic_enable() handler instead, possible
-through runtime PM ?
+>  	if (!domain->domain)
+>  		goto out_free_domain;
+>  
+> @@ -2258,7 +2247,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>  	list_add(&group->next, &domain->group_list);
+>  
+>  	msi_remap = irq_domain_check_msi_remap() ||
+> -		    iommu_capable(bus, IOMMU_CAP_INTR_REMAP);
+> +		    iommu_capable(iommu_api_dev->dev->bus, IOMMU_CAP_INTR_REMAP);
+>  
+>  	if (!allow_unsafe_interrupts && !msi_remap) {
+>  		pr_warn("%s: No interrupt remapping support.  Use the module param \"allow_unsafe_interrupts\" to enable VFIO IOMMU support on this platform\n",
+> @@ -2331,6 +2320,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>  	iommu->num_non_pinned_groups++;
+>  	mutex_unlock(&iommu->lock);
+>  	vfio_iommu_resv_free(&group_resv_regions);
+> +	vfio_device_put(iommu_api_dev);
+>  
+>  	return 0;
+>  
+> @@ -2342,6 +2332,8 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>  	vfio_iommu_resv_free(&group_resv_regions);
+>  out_free_domain:
+>  	kfree(domain);
+> +out_put_dev:
+> +	vfio_device_put(iommu_api_dev);
+>  out_free_group:
+>  	kfree(group);
+>  out_unlock:
 
-> +
-> +	platform_set_drvdata(pdev, dsi);
-> +	dsi->dsi_host.ops = &xlnx_dsi_ops;
-> +	dsi->dsi_host.dev = dev;
-> +
-> +	ret = mipi_dsi_host_register(&dsi->dsi_host);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register MIPI host: %d\n", ret);
-> +		goto err_clk_put;
-> +	}
-> +
-> +	dsi->bridge.driver_private = dsi;
-> +	dsi->bridge.funcs = &xlnx_dsi_bridge_funcs;
-> +	dsi->bridge.of_node = pdev->dev.of_node;
-> +
-> +	reg = xlnx_dsi_read(dsi, XDSI_PCR);
-> +	dsi->lanes = reg & XDSI_PCR_LANES_MASK;
-> +	dsi->format = (reg & XDSI_PCR_PIXELFORMAT_MASK) >>
-> +		XDSI_PCR_PIXELFORMAT_SHIFT;
-
-OK, you'll need to enable clocks for this too, so runtime PM could be a
-good option.
-
-> +
-> +	if (dsi->lanes > 4 || dsi->lanes < 1) {
-> +		dev_err(dsi->dev, "%d invalid lanes\n",	dsi->lanes);
-
-dsi->lanes is unsigned, so %u.
-
-> +		return -EINVAL;
-
-This leaves the clocks enabled.
-
-> +	}
-> +
-> +	if (dsi->format > MIPI_DSI_FMT_RGB565) {
-> +		dev_err(dsi->dev, "Invalid xlnx,dsi-data-type string\n");
-
-This is read from a register, not parsed from DT, so the message isn't
-valid.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * Used as a multiplication factor for HACT based on used
-> +	 * DSI data type.
-> +	 *
-> +	 * e.g. for RGB666_L datatype and 1920x1080 resolution,
-> +	 * the Hact (WC) would be as follows -
-> +	 * 1920 pixels * 18 bits per pixel / 8 bits per byte
-> +	 * = 1920 pixels * 2.25 bytes per pixel = 4320 bytes.
-> +	 *
-> +	 * Data Type - Multiplication factor
-> +	 * RGB888    - 3
-> +	 * RGB666_L  - 2.25
-> +-	 * RGB666_P  - 2.25
-> +	 * RGB565    - 2
-> +	 *
-> +	 * Since the multiplication factor is a floating number,
-> +	 * a 100x multiplication factor is used.
-> +	 */
-> +	dsi->mul_factor = xdsi_mul_fact[dsi->format];
-> +
-> +	dev_dbg(dsi->dev, "DSI controller num lanes = %d\n", dsi->lanes);
-> +	dev_dbg(dsi->dev, "DSI controller format = %d\n", dsi->format);
-
-You could combine both messages into a single one.
-
-Are you missing a return 0 here ?
-
-> +
-> +err_clk_put:
-> +	clk_bulk_disable_unprepare(ARRAY_SIZE(xdsi_clks), dsi->clks);
-> +
-> +	return ret;
-> +}
-> +
-> +static int xlnx_dsi_remove(struct platform_device *pdev)
-> +{
-> +	struct xlnx_dsi *dsi = platform_get_drvdata(pdev);
-> +
-> +	mipi_dsi_host_unregister(&dsi->dsi_host);
-> +	clk_bulk_disable_unprepare(ARRAY_SIZE(xdsi_clks), dsi->clks);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id xlnx_dsi_of_match[] = {
-> +	{ .compatible = "xlnx,dsi-tx-v2.0"},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, xlnx_dsi_of_match);
-> +
-> +static struct platform_driver dsi_driver = {
-> +	.probe = xlnx_dsi_probe,
-> +	.remove = xlnx_dsi_remove,
-> +	.driver = {
-> +		.name = "xlnx-dsi",
-> +		.of_match_table = xlnx_dsi_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(dsi_driver);
-> +
-> +MODULE_AUTHOR("Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>");
-> +MODULE_DESCRIPTION("Xilinx MIPI DSI host controller driver");
-> +MODULE_LICENSE("GPL");
-
--- 
-Regards,
-
-Laurent Pinchart

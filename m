@@ -2,90 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EB655549B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAE15554CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 21:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358769AbiFVTej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 15:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        id S1358756AbiFVTjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 15:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358962AbiFVTeE (ORCPT
+        with ESMTP id S1358574AbiFVTi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 15:34:04 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAB03DDC4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:33:45 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id c4so29449068lfj.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 12:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NFbRch3MP4oYfAdvYfvFh8xRiPwpBI5r6t1BeeKJjDI=;
-        b=UzPfjg3Uhny7RcirHKXTpM6X1BLTfbOJLhkHD4gGRWY0a0tN5rFpv5odkr4cWEwqc9
-         +BpnwLCdTfIKXBzH3Oqa/vnt5dxjVrC1sSX6pk94EZgY6RyhOwotmjRHUW5N2F8QBBKQ
-         aHZRW5feO56dfBhra30Q3llLrK+qx0uQEiNGMLmCPxwaHfdIs9hzkre63BMLikRjbBGm
-         8GARYSOusQ7rMBtubyguN+EQVaGXKSwVm9udIECZQ8Yuq2dmzv12lUKqlF8MQQU1NOPV
-         9ARpkQMiexdqxfXbKQzuZphHMVhVN5OyQNSj16EpbExLMYi2j+4qRirHRTE9fv7WqEm/
-         Tipw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NFbRch3MP4oYfAdvYfvFh8xRiPwpBI5r6t1BeeKJjDI=;
-        b=SVtTtqzoN7s2PiAVSh0fWMagU7yZ2F7AKAbx9tfHR0QeGvh8scsbSzf2OhuFvK1aNK
-         ViWBjZrUYqcFQawUxOUZSNDENvk3pnc8Gm2oNYq/ejE74KB424lWAYcy680x6q2jpxQ2
-         qZ5Nqn4u+tl7l56gDQnjjUuZllqvhXYVN5YyISD/uUdcRdgoL+HftSAzqs/REOnCluWx
-         /0x2a4w78XHYyHFMoQSAwBjf2Lx0DemYBMpu5465ReWiy+/5Z/FsKAggJ/eQm11iumnf
-         IPAlI2QeFEPhoMUCmDhB+DO96jxUt/hlIyUoHRMLrwlwxP3GNT2EgL9lFewRXkbHsrkW
-         b9pQ==
-X-Gm-Message-State: AJIora98eie6wmiJNtAW+Lb0Vh+SS+xOuPiP9nWCAez6Ic+nZau3yBYE
-        +e1xwWgtJ6QmGjG1fSH/0G530PLYs3W1i/O3Kr10Ow==
-X-Google-Smtp-Source: AGRyM1t2HS4ZyWkAiJQg85nvcNXwFn3bkAAE5g1dd7le8l/22YRvukDaRru6XjTm1AhTsK/kCtarFzkU/1DaCx22dOc=
-X-Received: by 2002:a19:6449:0:b0:47f:86b3:f87b with SMTP id
- b9-20020a196449000000b0047f86b3f87bmr3043737lfj.644.1655926423674; Wed, 22
- Jun 2022 12:33:43 -0700 (PDT)
+        Wed, 22 Jun 2022 15:38:26 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BF217E0E;
+        Wed, 22 Jun 2022 12:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=jzZ8niIo7Smg65/52ka6uwTAHWOyxG3OOMUtsy1PEeE=; b=frN2qRKLQlK5xMP5cQT3Lb9HVI
+        62WleJi7obpCi+3NJcwyjVzbqMUv/A6bothq/yL01s1j0b27k6EIsNFLe2zlnAZ3u/qyea7ep6jRG
+        OWdN4qSgIs4Kf8e1FPIGsnUKcLjCjPDdnPUHTX4Iu52F3zr8L4elecDhTr6fdmAT/ZObCJltnrtvc
+        VgpR65+FbzffP8eLhU+qX7j/2P851jaQhS4oZ9d6qJh1COdadmSJy6HZu3ls4Alk1xLSd8AaGVC7q
+        DtSW53jX8g8vvZ7FzFBDwnULpwRuY95QoTBBAvkW+Mxx23lGlNihpqne20stVeHbO+J1ImLxYljE/
+        JqUGhlzA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o46AI-00BGiS-IS; Wed, 22 Jun 2022 19:38:16 +0000
+Message-ID: <afe8b072-466f-c180-eeef-5c501bf523e3@infradead.org>
+Date:   Wed, 22 Jun 2022 12:37:21 -0700
 MIME-Version: 1.0
-References: <20220617195141.2866706-1-pgonda@google.com> <Yqz+CZlGCoQo7lMQ@google.com>
-In-Reply-To: <Yqz+CZlGCoQo7lMQ@google.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Wed, 22 Jun 2022 13:33:32 -0600
-Message-ID: <CAMkAt6p6U6G0N0UP-Dnatr1cLHnaU1DY-1gxvmYhvxjckhbx4g@mail.gmail.com>
-Subject: Re: [PATCH] KVM: SEV: Init target VMCBs in sev_migrate_from
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>, Marc Orr <marcorr@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: =?UTF-8?B?UmU6IFtQQVRDSF0gQ29tbW9uIGNsb2NrOiDigIvigItUbyBsaXN0IGFj?=
+ =?UTF-8?Q?tive_consumers_of_clocks?=
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, mturquette@baylibre.com,
+        inux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        badolevishal1116@gmail.com
+Cc:     chinmoyghosh2001@gmail.com, mintupatel89@gmail.com
+References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
+ <20220610194013.DD39DC34114@smtp.kernel.org> <20220622163209.GA6246@Mahakal>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220622163209.GA6246@Mahakal>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >
-> > +void sev_init_vmcb(struct vcpu_svm *svm)
-> > +{
-> > +     svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
-> > +     clr_exception_intercept(svm, UD_VECTOR);
->
-> I don't love separating SEV and SEV-ES VMCB initialization, especially since they're
-> both doing RMW operations and not straight writes.  E.g. migration ends up reversing
-> the order between the two relatively to init_vmcb().  That's just asking for a subtle
-> bug to be introduced that affects only due to the ordering difference.
->
-> What about using common top-level flows for SEV and SEV-ES so that the sequencing
-> between SEV and SEV-ES is more rigid?  The resulting sev_migrate_from() is a little
-> gross, but IMO it's worth having a fixed sequence, and the flip side to the ugliness
-> it that it documents some of the differences between SEV and SEV-ES migration.
 
-Thanks for the suggestion Sean! I like your suggestion here. I'll test
-it out, clean it up and send it out as V2. I think the distinction
-between SEV and SEV-ES migration was largely due to how I split up the
-set of patches that enabled this feature.
+
+On 6/22/22 09:32, <Vishal Badole> wrote:
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index c44247d..549cdda 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -23,6 +23,14 @@ config COMMON_CLK
+>  menu "Common Clock Framework"
+>  	depends on COMMON_CLK
+>  
+> +config DEBUG_CLK_CONSUMER
+> +	bool "Debug feature to list clocks and their active consumers"
+> +	depends on DEBUG_FS && COMMON_CLK
+> +	help
+> +	  Clock consumer debug feature supports for clock debugging. Chose y
+
+	                                                             Choose y
+
+> +	  to get debug entry in file system to list clocks and their active
+> +	  consumer devices.
+
+-- 
+~Randy

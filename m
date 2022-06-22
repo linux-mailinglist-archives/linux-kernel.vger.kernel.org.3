@@ -2,110 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617AE554692
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4294C5546E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353711AbiFVLF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S1354259AbiFVLFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbiFVLFY (ORCPT
+        with ESMTP id S1353598AbiFVLFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:05:24 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC853BBD2;
-        Wed, 22 Jun 2022 04:05:17 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id ej4so19413036edb.7;
-        Wed, 22 Jun 2022 04:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BsWeZKTMRUjS4UGWGKXKi/F6OhLV9oNlEr0sqKPjdhY=;
-        b=goSSVIS2xMmIt8+zQ+4MnTruyoXO+gM/WRoEM6Cuo0Prstx1aOOwxieSEas175GI/Y
-         pR2Ri8ptjhMZM/G7BHcC7rgqDl7INoPAriq7bsCHGZaWu/qkjeRlUw4V0ROTlGdz8Jsz
-         ZGNVA9rlMFvvpoELJv0Gr/0V7oP28iDObt/v/9fSfFXohainHuDFWRfYpz0WhcPFSn5v
-         TZkEbd++U+4Lt5ORaWDswJ87h+OTBxqy3lfL3eFCaJcKfpk3IXE4l8eYzXXW4G6vNZaq
-         /7L3bJjNz22oFeOw74YdcXFiGlAiK/Hpa+Ha3pZuSu6M0TMMTi0rSX0YXOE9lEsDAZtb
-         l3oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BsWeZKTMRUjS4UGWGKXKi/F6OhLV9oNlEr0sqKPjdhY=;
-        b=gwWPpagxg2tym0yF/TD0jGE4LAX/u3gka7dvKYdEcUELY1WEyBLs5jwSpzqWAKNLCn
-         Zo9mifafSVtbchn3n84YYOVA6b2Pnta+Bzi7vMXgLBKT3b8em40/EdNGpT3qH7JhEkuI
-         ESho1wW8uHmjzpv2TgHb4ZBZRxS2MieNcRbiH6rod8nJqDjeiPNgcPKmC7dVdrVwX5IS
-         2ztDEIAzfqhy/9DNBPrPlbmbx8yPWTNit6XRmtcQ8NDd96OvL8lpposXfThD0h2AzAAW
-         XZqGNh9kmUBTTU6DezDODB9D0o4LYf1MN9fFJbHEAyPqmnMr1fPWFDlnJN/nCxJjdXEU
-         rbqA==
-X-Gm-Message-State: AJIora9OBXkgtVf4P9PEZVqYcYxPG4LxyTOq4xBg4aviCMJhaUwYoEl6
-        uI/TKVwPq8utOiG02mjjLGM=
-X-Google-Smtp-Source: AGRyM1s9nDUowq9+/oNlBIcMXsoZizGRGfHc6q9TiQd5vkG3V7Wuhzig5PXTkxlYtZVA2ciTT6f/JA==
-X-Received: by 2002:a05:6402:4385:b0:435:9104:955b with SMTP id o5-20020a056402438500b004359104955bmr3470937edc.45.1655895915755;
-        Wed, 22 Jun 2022 04:05:15 -0700 (PDT)
-Received: from [192.168.0.24] (80.174.78.229.dyn.user.ono.com. [80.174.78.229])
-        by smtp.gmail.com with ESMTPSA id b12-20020a17090630cc00b00722edb5fb53sm1007705ejb.116.2022.06.22.04.05.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 04:05:14 -0700 (PDT)
-Message-ID: <6b4f108c-b4bc-72cf-5972-222fbb2f3fca@gmail.com>
-Date:   Wed, 22 Jun 2022 13:05:13 +0200
+        Wed, 22 Jun 2022 07:05:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD553BBF6;
+        Wed, 22 Jun 2022 04:05:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A084761572;
+        Wed, 22 Jun 2022 11:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B97AAC34114;
+        Wed, 22 Jun 2022 11:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655895944;
+        bh=SsDqw6Q8qsjUyD2DTVKU4cBnDr90hLSe04Ro4/AHDhU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V6VtdK0OV/fFf31zsPq6axy3qgNG3HgR+ZXXp2HeyKIWYUQvRdIeMk2hoOaYfU3EI
+         P7CqEiRdft6I5ytRXz7QwOyEMASGMGXHYofKgN296lpeJ1R2QFtWu1yhAyKQfeqrgt
+         ElzYr6YlczCVwGxKPe95I5YXi07xLqKuwNdXZr4G3Ynt5SgJc8W1izbTV0wVaXo5aj
+         XXh28yMv41LSU1ie1pVUAWLW/2ggPPY5mDPvIaRy33Apmlh3rHzR4V55ut8aSBst1j
+         g7cUOmRT/Iyk/+bS3p4fpcu3BPjSVC8u/xAj6qh0O2SHIKbNIcDC+WBLvMSJV298vL
+         +cIf3VJx/Ux7g==
+Date:   Wed, 22 Jun 2022 06:05:42 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Liang He <windhl@126.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 2/2] PCI: rcar: Resolve of_find_matching_node() reference
+ leak
+Message-ID: <20220622110542.GA1372130@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 15/16] arm64: dts: mediatek: Add infra #reset-cells
- property for MT8192
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
-        chun-jie.chen@mediatek.com, wenst@chromium.org,
-        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
- <20220503093856.22250-16-rex-bc.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220503093856.22250-16-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUwGLDzOQo_wwSLmzBnJXe-cOw=nqsPbFLsj-c+nHfy_w@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 03/05/2022 11:38, Rex-BC Chen wrote:
-> To support reset of infra, we add property of #reset-cells.
+On Wed, Jun 22, 2022 at 09:45:49AM +0200, Geert Uytterhoeven wrote:
+> Hi Bjorn,
 > 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied, thanks!
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 1 +
->   1 file changed, 1 insertion(+)
+> On Wed, Jun 22, 2022 at 4:57 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> >
+> > Previously, rcar_pcie_init() used of_find_matching_node() to search the
+> > entire device tree for compatible strings for which we need to install an
+> > abort handler.  If we found one, we got a device_node with refcount
+> > incremented, but we discarded the pointer and never released that
+> > reference.
+> >
+> > Extend the struct rcar_variant to indicate whether each variant requires an
+> > abort handler.  Install the handler in rcar_pcie_probe() when needed.
+> >
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Liang He <windhl@126.com>
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 411feb294613..79803420d8ef 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -269,6 +269,7 @@
->   			compatible = "mediatek,mt8192-infracfg", "syscon";
->   			reg = <0 0x10001000 0 0x1000>;
->   			#clock-cells = <1>;
-> +			#reset-cells = <1>;
->   		};
->   
->   		pericfg: syscon@10003000 {
+> Thanks for your patch!
+> 
+> > --- a/drivers/pci/controller/pcie-rcar-host.c
+> > +++ b/drivers/pci/controller/pcie-rcar-host.c
+> 
+> > @@ -964,12 +965,35 @@ static int rcar_pcie_parse_map_dma_ranges(struct rcar_pcie_host *host)
+> >         return err;
+> >  }
+> >
+> > +#ifdef CONFIG_ARM
+> > +static int rcar_pcie_aarch32_abort_handler(unsigned long addr,
+> > +               unsigned int fsr, struct pt_regs *regs)
+> > +{
+> > +       return !fixup_exception(regs);
+> > +}
+> > +#endif
+> > +
+> > +static void rcar_pcie_hook_aborts(void)
+> > +{
+> > +#ifdef CONFIG_ARM
+> > +#ifdef CONFIG_ARM_LPAE
+> > +       hook_fault_code(17, rcar_pcie_aarch32_abort_handler, SIGBUS, 0,
+> > +                       "asynchronous external abort");
+> > +#else
+> > +       hook_fault_code(22, rcar_pcie_aarch32_abort_handler, SIGBUS, 0,
+> > +                       "imprecise external abort");
+> > +#endif
+> > +#endif
+> > +}
+> > +
+> >  static const struct rcar_variant rcar_h1_data = {
+> >         .phy_init_fn = rcar_pcie_phy_init_h1,
+> > +       .hook_aborts = true,
+> >  };
+> >
+> >  static const struct rcar_variant rcar_gen2_data = {
+> >         .phy_init_fn = rcar_pcie_phy_init_gen2,
+> > +       .hook_aborts = true,
+> >  };
+> >
+> >  static const struct rcar_variant rcar_gen3_data = {
+> > @@ -1035,6 +1059,9 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+> >                 goto err_clk_disable;
+> >         }
+> >
+> > +       if (host->variant->hook_aborts)
+> > +               rcar_pcie_hook_aborts();
+> 
+> I was quite sure there was a good reason why this was not done in
+> .probe() before...
+> 
+> And indeed, the original submission[1] did have a comment explaining
+> that:
+> 
+>     + /*
+>     + * Since probe() can be deferred we need to make sure that
+>     + * hook_fault_code is not called after __init memory is freed
+>     + * by kernel and since rcar_pcie_abort_handler() is a no-op,
+>     + * we can install the handler here without risking it
+>     + * accessing some uninitialized driver state.
+>     + */
+> 
+> No idea why it was removed in v2 and later, but the point is:
+> hook_fault_code() is __init, so you cannot call it from a deferred
+> probe.
+> And you should have got a section mismatch warning ;-)
+
+Oooh, thanks for that!  I missed the builtin_platform_driver_probe()
+vs builtin_platform_driver() difference that explains why doing this
+at probe-time works for pci-ixp4xx.c but not here.
+
+Bjorn

@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E410955497E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9306A5545FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Jun 2022 14:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357187AbiFVL2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 07:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S1357372AbiFVLaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 07:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357568AbiFVL2l (ORCPT
+        with ESMTP id S235871AbiFVLaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 07:28:41 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C553B3DD
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:28:40 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso16483210pja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 04:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=jhnILhmzEMcJ9W0waJqHk3ytY2+3r+V0fU7Qx1IKaqXYRz8iSlGEf2vNGTRlDxYlbt
-         8IVKOq+bU3ISPHL1mfPwOl343YYOPP3kttd4t3KzTSDqJN4AFNbR+qDwiz8ByCWcky5q
-         0nftJekfHNkt6UNyQsa4c3sS47esWOQH43tl+gBoolHOYJE6mdRRiLu1RZRfO4kcO/al
-         SixrYLNfudzVP6phPdxF/o+V2FaQ+ECZkO8DaP8VTtiDB0rBJT8ifn8f5fpFet3lFJyo
-         /vKnxYBLJtV/GVK9sexcFYLVvR4Wm6pOu/nvi2s8GhhghSh2ORZdk1OAnFqEa0p2LS0F
-         ku3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=AZKqTvMzAGGOeRgJqLUsS7o2qIIZkYQ7W5GEIePevjS80dvsePxRrorK9B9Z8Cf+Yb
-         8GG4Fy10mAWF4g9Yu02C9k0Ww0SpwwRhw71182G2+XDm+yZtkKdbqZpoooletGaEbyNb
-         kA1Q6NwjlNeKh7q/Ap0N+hfantnHabcyNAXjZdjfRU3t6otafVY3C2tM3T86qEfEAIKt
-         quKIWHee51MHb6gCklEDhw5R+YbBNpau+8KYueAGeICpT1vgWQ+1VqNOJN6CDjEx5305
-         cdI8v/O3bq8Iy5hlX8obs36+GPya8SSDUxtSDK1ord37a6oouYvdrvbMpVWPScCahKF8
-         lMnw==
-X-Gm-Message-State: AJIora9ydmuocxRKpUxD715TWQgpMNIylvWFcVrKb/a/20rsak/2z9/C
-        5HBKryabPg5txVybLYr0f75hqclNqeNqCLgLFVY=
-X-Google-Smtp-Source: AGRyM1tjGK380BKb/obncAdz1q06qcPvXYKMGsbQLV7pCEpNo3DdEkvPKREUY/xvxIOpgZBVMp+hbUzMqoAGaj6FA5I=
-X-Received: by 2002:a17:903:2285:b0:16a:2ee7:4779 with SMTP id
- b5-20020a170903228500b0016a2ee74779mr11685099plh.43.1655897320594; Wed, 22
- Jun 2022 04:28:40 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6a11:5629:b0:2a6:9812:361a with HTTP; Wed, 22 Jun 2022
- 04:28:40 -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   mark john <dediya7777@gmail.com>
-Date:   Wed, 22 Jun 2022 12:28:40 +0100
-Message-ID: <CAK7egZpC25X6TGxTT0AGmLYDugO-EH-0+pb=ay4jq5rjJBH6uw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        Wed, 22 Jun 2022 07:30:12 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6672E3C4A6;
+        Wed, 22 Jun 2022 04:30:08 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1655897393tgcbvmch
+Received: from ubuntu.localdomain ( [223.104.103.173])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 19:29:47 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000B00A0000000
+X-QQ-FEAT: geCjBjpTnm4EPRA56z0oDsbHcnkG/Lf+2Vs5rTpFY5rpDNiLyd+628nBmWm6N
+        bVMvKa5eeFJl21o+x+3kjwaFalC7hzpPu7V6t3+uu56QhcyTVCEb7j49b6OvPNpxYjluIaG
+        fQ8VtdcoepjaBM08atr8nHIBzyrOiC6MwWIOZkekf+/9jtqUzvwgDrLqkqS3mHfnj00wVe3
+        vszQFV6BqD+ixohpElYR1m9Sw3azDnZwSM3w8PKhEHq3Xj0af6OrYldzVPrvR0oboRFE8bP
+        QZnacJS1BBmjHdT4e9ReuEEGrrJE8ENdZHJT6A69JIlHFsY1hIZ2Np7LaQc6SyITp40TD+Q
+        xn4JPJH5CEPJTisPL2WrWVeGApVah6ZmfV7UnTZ
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     anil.gurumurthy@qlogic.com, sudarsana.kalluru@qlogic.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] scsi: bfa: drop unexpected word "the" in the comments
+Date:   Wed, 22 Jun 2022 19:29:43 +0800
+Message-Id: <20220622112943.13524-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+there is an unexpected word "the" in the comments that need to be dropped
+
+file: drivers/scsi/bfa/bfa_fcs_rport.c
+line: 1974
+
+             * the the newly discovered pid, send an scn notice
+changed to:
+             * the newly discovered pid, send an scn notice
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/scsi/bfa/bfa_fcs_rport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/bfa/bfa_fcs_rport.c b/drivers/scsi/bfa/bfa_fcs_rport.c
+index c21aa37b8adb..dd78bea3e111 100644
+--- a/drivers/scsi/bfa/bfa_fcs_rport.c
++++ b/drivers/scsi/bfa/bfa_fcs_rport.c
+@@ -1971,7 +1971,7 @@ bfa_fcs_rport_gidpn_response(void *fcsarg, struct bfa_fcxp_s *fcxp, void *cbarg,
+ 			/*
+ 			 * Device's PID has changed. We need to cleanup
+ 			 * and re-login. If there is another device with
+-			 * the the newly discovered pid, send an scn notice
++			 * the newly discovered pid, send an scn notice
+ 			 * so that its new pid can be discovered.
+ 			 */
+ 			list_for_each(qe, &rport->port->rport_q) {
+-- 
+2.17.1
+

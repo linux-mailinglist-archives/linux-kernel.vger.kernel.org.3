@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99F8558A80
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98799558A81
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiFWVNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S229901AbiFWVNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiFWVNa (ORCPT
+        with ESMTP id S229451AbiFWVNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:13:30 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BB8506E0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:29 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n1so477390wrg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:29 -0700 (PDT)
+        Thu, 23 Jun 2022 17:13:31 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B255F506DB
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:30 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id s1so493155wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oky3YgKKfNXCQVslFZi4xoyuek1RvMVadIY0VBZTguA=;
-        b=Gi4aZN2sLBYp2ljUDPgzuGmqSQQkoBx224Y9NdkkPudfprFuvJKpVNzxTerjz+W79c
-         uJemVZrRHa337z29pIJwA4xKfXYxK/FLUqZgHJDI8UJbCs8rTNxdrYm8kG5EPlDUjqSa
-         43uaEfEpNdjOi0mZBsh8k2Rh6jNuIburDRnqUiLSV/PzvSeIzYQHbMFFQV5n80bGfP1I
-         ErLxO1Z4qXB5v6Pb91rXN5PavcL6BZT14uO0WgOTcxfgoE05tfD3TaeDcGNsNw16gm5g
-         /Svj0Js2kguzTPIXpp/nuLnvSqZ7CJmSwBdKQyjEj46vSmwSZIpA96aJvuWvabOIML5W
-         XnPg==
+        bh=1j/DIF/Fnv8RPcb6VzAvPxanMn+C+wmq9yB73HToH5Q=;
+        b=MRkzlNJ6E7f7MsWd8tjufz+IN8bN9Gu64Hs8WWp8eQvKuAZzORqec28MAjjHoGWV8d
+         ystjzntlOsSgckx/re43dmwR1khxqCIlOD2P01rOamRvzYHU+X40XcpGGoq3XCzrse91
+         hwRQDelZWmsI7AEusxCUNl3WK8ke7MnXkfeRGF9SzBZEwKaa8LJdEic/MvUjOonYVfsx
+         ojA2b1/2AUTFEnWn0H8Zi9VX4WnX3TbcO3lkcPvgBLNQxqKzqHuuE0rQMckKBY0LicPm
+         vBurKPahZijnxOP5KruOrpwc5Xy/Ut+EZO2hMf7OHCywbHlrCPjTGyHyIcMl4/s0KagL
+         1e8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oky3YgKKfNXCQVslFZi4xoyuek1RvMVadIY0VBZTguA=;
-        b=VEr61VA5g41B+/muu6oQRsC8PcihU4if6NpQr4r8B4g1neHdWN2VAFNFUWut0LKiqT
-         aFlHY8W8unxqQQ43A5wFmnI2JmFbGSXaYiqbJny2PTJNs+kyOokFIqfx7IOgp10O+Fxw
-         aGR6YWOSk0CsGC2pZICxjrl9BTFUFqDBKe2d4AkUTlHz82fybHrkx4aaWLUBX7LCAQ19
-         Qdt4HjemMaARNs8xMnQqHn7/acJUubUGZ2ilWxg1qpt0q6O8eu6hnnMH/SB8ZB/4jDWb
-         KBF01gsyJmTR0fLJcxVI0n0lrPWEWyhKID68BEwSFtePDvrtWz3fErIe5UpbVmIwp413
-         irGw==
-X-Gm-Message-State: AJIora/o6Bub77cj55IY9wwbBTXVMYPNPI+nztz7BkVAPzn0hv9KRJ8z
-        JrDTWQhKWits0Elalbs7JRMh8xBkj2I=
-X-Google-Smtp-Source: AGRyM1u74I3yclz1slGC+ZAtAzuCAsg8Kp437l9Kw7u2Pwp5GeLMxdxqWb94DNFdZ+yBfuNRbG5x9Q==
-X-Received: by 2002:a05:6000:192:b0:21a:3c91:df05 with SMTP id p18-20020a056000019200b0021a3c91df05mr10206433wrx.655.1656018807701;
-        Thu, 23 Jun 2022 14:13:27 -0700 (PDT)
+        bh=1j/DIF/Fnv8RPcb6VzAvPxanMn+C+wmq9yB73HToH5Q=;
+        b=acqyjp7d8QO7ENX7fH//2wz7Y1SUlaD7YiFXrM5vgsZNFXelNL/UkAqIY79uPu/s6Y
+         856DSAoZWk/RcGe9//PjKbd0mx/86P9yGCC8CaGNYjKsTRTSgevF+fAVo1hY4AQQdwcI
+         9oihq7dvplhIa9F6sxWjbuw+EZMcW2Cbb7L8ZQ0EMaooLO9roJIb2YwBYrM/SqL//8n0
+         xt95y4j7dQgVF1GA5gwoZnUzqx5t0zPvqzAZd4mGpPii1CeVZ5rDSjeG0p0s8IeTPiwA
+         PjNY6iiSrCDfZ0pgE6QrCrJyCFviSyZ91eqLUHhALK3D3hZWNtAEEKZjLMxGKdRa9mCu
+         2D9g==
+X-Gm-Message-State: AJIora+hYyRSNQ7IpOJ5vsOBytXUDgXGyfiiGNFXl12PT5xXyU1T97su
+        BZahsZ5uCt4IyATxBDSMjL8=
+X-Google-Smtp-Source: AGRyM1uzR/LHMsuFGT4K5Q38BYjn0O+T5c3D1I/X4JlnrKKqsw5B6YopRiqGEK7YhtwkaXbCHU9hRQ==
+X-Received: by 2002:a5d:4352:0:b0:213:4910:6616 with SMTP id u18-20020a5d4352000000b0021349106616mr10053266wrr.226.1656018809319;
+        Thu, 23 Jun 2022 14:13:29 -0700 (PDT)
 Received: from localhost (92.40.171.44.threembb.co.uk. [92.40.171.44])
-        by smtp.gmail.com with ESMTPSA id v15-20020a5d43cf000000b0021badf3cb26sm498689wrr.63.2022.06.23.14.13.27
+        by smtp.gmail.com with ESMTPSA id e20-20020a5d5954000000b0020fcaba73bcsm388885wri.104.2022.06.23.14.13.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 14:13:27 -0700 (PDT)
+        Thu, 23 Jun 2022 14:13:28 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
         andy.shevchenko@gmail.com, mazziesaccount@gmail.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/12] regmap-irq: Convert bool bitfields to unsigned int
-Date:   Thu, 23 Jun 2022 22:14:09 +0100
-Message-Id: <20220623211420.918875-2-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 02/12] regmap-irq: Remove unused type_reg_stride field
+Date:   Thu, 23 Jun 2022 22:14:10 +0100
+Message-Id: <20220623211420.918875-3-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220623211420.918875-1-aidanmacdonald.0x0@gmail.com>
 References: <20220623211420.918875-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -70,65 +70,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use 'unsigned int' for bitfields for consistency with most other
-kernel code.
+It appears that no chip ever required a nonzero type_reg_stride
+and commit 1066cfbdfa3f ("regmap-irq: Extend sub-irq to support
+non-fixed reg strides") broke support. Just remove the field.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c |  2 +-
- include/linux/regmap.h           | 26 +++++++++++++-------------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 6 ------
+ include/linux/regmap.h           | 3 ---
+ 2 files changed, 9 deletions(-)
 
 diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index a6db605707b0..a58b29e9c7c7 100644
+index a58b29e9c7c7..475a959e2b8b 100644
 --- a/drivers/base/regmap/regmap-irq.c
 +++ b/drivers/base/regmap/regmap-irq.c
-@@ -43,7 +43,7 @@ struct regmap_irq_chip_data {
+@@ -41,7 +41,6 @@ struct regmap_irq_chip_data {
+ 	unsigned int **virt_buf;
+ 
  	unsigned int irq_reg_stride;
- 	unsigned int type_reg_stride;
+-	unsigned int type_reg_stride;
  
--	bool clear_status:1;
-+	unsigned int clear_status:1;
+ 	unsigned int clear_status:1;
  };
+@@ -743,11 +742,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 	else
+ 		d->irq_reg_stride = 1;
  
- static int sub_irq_reg(struct regmap_irq_chip_data *data,
+-	if (chip->type_reg_stride)
+-		d->type_reg_stride = chip->type_reg_stride;
+-	else
+-		d->type_reg_stride = 1;
+-
+ 	if (!map->use_single_read && map->reg_stride == 1 &&
+ 	    d->irq_reg_stride == 1) {
+ 		d->status_reg_buf = kmalloc_array(chip->num_regs,
 diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index 8952fa3d0d59..7c5e4a20e9cf 100644
+index 7c5e4a20e9cf..f75911239977 100644
 --- a/include/linux/regmap.h
 +++ b/include/linux/regmap.h
-@@ -1518,19 +1518,19 @@ struct regmap_irq_chip {
- 	unsigned int type_base;
- 	unsigned int *virt_reg_base;
- 	unsigned int irq_reg_stride;
--	bool mask_writeonly:1;
--	bool init_ack_masked:1;
--	bool mask_invert:1;
--	bool use_ack:1;
--	bool ack_invert:1;
--	bool clear_ack:1;
--	bool wake_invert:1;
--	bool runtime_pm:1;
--	bool type_invert:1;
--	bool type_in_mask:1;
--	bool clear_on_unmask:1;
--	bool not_fixed_stride:1;
--	bool status_invert:1;
-+	unsigned int mask_writeonly:1;
-+	unsigned int init_ack_masked:1;
-+	unsigned int mask_invert:1;
-+	unsigned int use_ack:1;
-+	unsigned int ack_invert:1;
-+	unsigned int clear_ack:1;
-+	unsigned int wake_invert:1;
-+	unsigned int runtime_pm:1;
-+	unsigned int type_invert:1;
-+	unsigned int type_in_mask:1;
-+	unsigned int clear_on_unmask:1;
-+	unsigned int not_fixed_stride:1;
-+	unsigned int status_invert:1;
+@@ -1487,8 +1487,6 @@ struct regmap_irq_sub_irq_map {
+  * @num_type_reg:    Number of type registers.
+  * @num_virt_regs:   Number of non-standard irq configuration registers.
+  *		     If zero unsupported.
+- * @type_reg_stride: Stride to use for chips where type registers are not
+- *			contiguous.
+  * @handle_pre_irq:  Driver specific callback to handle interrupt from device
+  *		     before regmap_irq_handler process the interrupts.
+  * @handle_post_irq: Driver specific callback to handle interrupt from device
+@@ -1539,7 +1537,6 @@ struct regmap_irq_chip {
  
- 	int num_regs;
+ 	int num_type_reg;
+ 	int num_virt_regs;
+-	unsigned int type_reg_stride;
  
+ 	int (*handle_pre_irq)(void *irq_drv_data);
+ 	int (*handle_post_irq)(void *irq_drv_data);
 -- 
 2.35.1
 

@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40189557D18
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA4C557D16
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbiFWNcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S231667AbiFWNdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiFWNb5 (ORCPT
+        with ESMTP id S231477AbiFWNdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:31:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C704BFEC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655991106; x=1687527106;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WNLujTxRUaWm4SEGJFAxZyA0gcMS31jEwCZ5ldYOd8g=;
-  b=MEBGUjCUEeu9YR3I4VTFWzed1Tr4l57ttM4i5ZtVNQi3h0taz7Cv4N2f
-   eFNQeXR9tHr1ifNRQyV5EtzLqzwoS4WT418On8CZgVYUR9yVZ7nsGVvAj
-   V6i2zhBirg7XsccU6C6x4N3JhQ9+nt2CGTc34Fm5Xa/Zg+71UG5XqnO/i
-   JJ1dZROIVnuWvaY1DIv5+K7npsg++OhmhET//N/gQ+yct4nbf9z6ojwFZ
-   ofKgjB12gt4Z272PhTTK1MN6q4/AgFO1qV5VQjaQ6sSnvnyRgXiyweH7J
-   kIZ9v3HPSc1kN5JyB2JiuJUlwCYLve2ao144h6REarChnSNghWPxSnyn/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="263752883"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="263752883"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 06:31:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="834640663"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Jun 2022 06:31:41 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4Mvs-0001Jv-RC;
-        Thu, 23 Jun 2022 13:31:40 +0000
-Date:   Thu, 23 Jun 2022 21:31:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, Ben Widawsky <bwidawsk@kernel.org>
-Subject: [cxl:preview 47/49] csky-linux-ld: port.c:undefined reference to
- `cxl_region_init'
-Message-ID: <202206232108.duHMmFSt-lkp@intel.com>
+        Thu, 23 Jun 2022 09:33:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45462614B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:33:01 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 15:32:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1655991178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pPpbqzf1BMiD81JZxOepu7Hhw2rNGkoV4SkcaOUH470=;
+        b=bhzhdgFjtpj6ZJw5NGp3VY241MHfHBFFbf+ikiogLwkcYiRK9KNDHu76vPemiOMdggWgIH
+        aqIb0jlf3hePhub1ZhQ5yhWaW2Bp7lyHv/eq8k2DgZYu0FYWjH8nguzT8L4UEH/3Y79IDL
+        d2tJDgdDzrgnpPpMeSwxBYMUf+bvN7zv8m3NyhhWr+TEoAUMzx496Ouk+LpUllrzMvt+Rh
+        U0pxVZAEW1H6qbDiEYTvWxKAnd8jamMZtLK9ED/tXViiSnDWEhd+gba8CU1lGZDgJvlzOT
+        O7fG21B/UNp05SSS3+nDTwJ5+4rEzTGVkXEZMb8UsiQ6Ae0x2BvI2vihsv58pA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1655991178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pPpbqzf1BMiD81JZxOepu7Hhw2rNGkoV4SkcaOUH470=;
+        b=1esfgTMKP9dynFug7befiS0pxt9OuAs3G7tAE2Ysn0MBMYZSL8y5k58TTbCRsfYby+wgRb
+        mey6UHURoY+0gqBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mike Stowell <mstowell@redhat.com>
+Subject: Re: [PATCH v2] locking/rtmutex: Limit # of lock stealing for non-RT
+ waiters
+Message-ID: <YrRriHsAdxPwEnWW@linutronix.de>
+References: <20220621193641.609712-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220621193641.609712-1-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,48 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-head:   b2d4fd5c97b59f622e6c45ac51020cdcd66bb022
-commit: feed7426434db705269ed645f6380e4e2784a77d [47/49] cxl/region: Add region driver boiler plate
-config: csky-randconfig-r002-20220622 (https://download.01.org/0day-ci/archive/20220623/202206232108.duHMmFSt-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=feed7426434db705269ed645f6380e4e2784a77d
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl preview
-        git checkout feed7426434db705269ed645f6380e4e2784a77d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
+On 2022-06-21 15:36:41 [-0400], Waiman Long wrote:
+> Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
+> stealing") allows unlimited number of lock stealing's for non-RT
+> tasks. That can lead to lock starvation of non-RT top waiter tasks if
+> there is a constant incoming stream of non-RT lockers. This can cause
+> task lockup in PREEMPT_RT kernel. For example,
+> 
+> [ 1249.921363] INFO: task systemd:2178 blocked for more than 622 seconds.
+> [ 1872.984225] INFO: task kworker/6:4:63401 blocked for more than 622 seconds.
+> 
+> Avoiding this problem and ensuring forward progress by limiting the
+> number of times that a lock can be stolen from each waiter. This patch
+> sets a threshold of 10. That number is arbitrary and can be changed
+> if needed.
+> 
+> With that change, the task lockups previously observed when running
+> stressful workloads on PREEMPT_RT kernel disappeared.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Do you have more insight on how this was tested/ created? Based on that,
+systemd and a random kworker waited on a lock for more than 10 minutes.
 
-All errors (new ones prefixed by >>):
+I added a trace-printk each time a non-RT waiter got the lock stolen,
+kicked a kernel build and a package upgrade and took a look at the stats
+an hour later:
+- sh got its lock stolen 3416 times. I didn't lock the pid so I can't
+  look back and check how long it waited since the first time.
+- the median average of stolen locks is 173.
 
-   csky-linux-ld: drivers/cxl/core/port.o: in function `cxl_device_id':
-   port.c:(.text+0xc0): undefined reference to `cxl_region_type'
-   csky-linux-ld: drivers/cxl/core/port.o: in function `cxld_unregister':
-   port.c:(.text+0x51a): undefined reference to `cxl_region_detach'
-   csky-linux-ld: port.c:(.text+0x548): undefined reference to `cxl_region_rwsem'
-   csky-linux-ld: port.c:(.text+0x550): undefined reference to `cxl_region_detach'
-   csky-linux-ld: drivers/cxl/core/port.o: in function `cxl_core_exit':
-   port.c:(.text+0x5ba): undefined reference to `cxl_region_exit'
-   csky-linux-ld: drivers/cxl/core/port.o: in function `lockdep_init_map_waits.constprop.0':
-   port.c:(.text+0x6bc): undefined reference to `cxl_region_exit'
-   csky-linux-ld: drivers/cxl/core/port.o: in function `is_switch_decoder':
-   port.c:(.text+0xed0): undefined reference to `dev_attr_create_pmem_region'
-   csky-linux-ld: port.c:(.text+0xed4): undefined reference to `dev_attr_delete_region'
-   csky-linux-ld: drivers/cxl/core/port.o: in function `region_show':
-   port.c:(.text+0xf9c): undefined reference to `cxl_region_rwsem'
-   csky-linux-ld: drivers/cxl/core/port.o:(.data+0x1a0): undefined reference to `dev_attr_create_pmem_region'
-   csky-linux-ld: drivers/cxl/core/port.o:(.data+0x1a4): undefined reference to `dev_attr_delete_region'
-   csky-linux-ld: drivers/cxl/core/port.o: in function `cxl_core_init':
-   port.c:(.init.text+0x32): undefined reference to `cxl_region_init'
->> csky-linux-ld: port.c:(.init.text+0x78): undefined reference to `cxl_region_init'
+> Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock stealing")
+> Reported-by: Mike Stowell <mstowell@redhat.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sebastian

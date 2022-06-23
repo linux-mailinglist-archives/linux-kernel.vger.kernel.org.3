@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D949C558491
+	by mail.lfdr.de (Postfix) with ESMTP id 4066355848F
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234903AbiFWRmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S234723AbiFWRoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234814AbiFWRiT (ORCPT
+        with ESMTP id S234517AbiFWRhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:38:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A4E27B3A;
-        Thu, 23 Jun 2022 10:08:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0012B82498;
-        Thu, 23 Jun 2022 17:08:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E6AC3411B;
-        Thu, 23 Jun 2022 17:08:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656004098;
-        bh=de72aEPmiWhk8gVfT3liqSSGHCaeRekm8u+9NQohaUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fC2Hq0DsqYZk/Y/la3E9ChzRyhRvqK+C14cG9rRPKOo9XW3VxNyRyY+XJxtAI2J6V
-         zjV4944fzCDsPaH9u7MapC0CIl0k8ALlcDcCZwUWPPH6yy/rXPiS/Faknap7CnvLdw
-         /nwfIAaUZwX/KMRb4ITCw6xaHcHmliPDGYH4+85FZON/Uq5VpzpOWMfo31/lqA6dy4
-         WYZ6nUJkWmHIvwqwYI5CkwPi7p1tW5oYyQoNrKfGSkZL0QE7CPl1Iu1RRVkg/iSVpZ
-         QI5mm3aq6RqcpPogcGc9neDOQyjHy81EM6Z52gdIzvtBtZvjPmt4is2FwXCbotvwcl
-         8nlpcKIw2sJfQ==
-Date:   Thu, 23 Jun 2022 10:08:16 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.xin16@zte.com.cn, linux-fsdevel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>,
-        syzbot+6a5a7672f663cce8b156@syzkaller.appspotmail.com,
-        Songyi Zhang <zhang.songyi@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        Zhang wenya <zhang.wenya1@zte.com.cn>
-Subject: Re: [PATCH v2] fs/ntfs: fix BUG_ON of ntfs_read_block()
-Message-ID: <YrSeAGmk4GZndtdn@sol.localdomain>
-References: <20220623033635.973929-1-xu.xin16@zte.com.cn>
- <20220623094956.977053-1-xu.xin16@zte.com.cn>
+        Thu, 23 Jun 2022 13:37:42 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EBB848B5;
+        Thu, 23 Jun 2022 10:07:05 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id bn8so6719077ljb.2;
+        Thu, 23 Jun 2022 10:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=prMZe0pej9PoxwbNkQMGNemqFNqwjkROTTXt4DxreRU=;
+        b=K5O5IQezMguE8NJFjGVU9xeaJvkVQaswm76vVr7PLmDajGglB50+z7e1wwApf1GiHN
+         fXuOBDtSm2RL9FdWgDDGLQ6JbI2iON+xAzYgNM/t2JvndfAoUxRIivl41R674AEhxwGL
+         oXZ4lSuYJF//2xqbdyraVak9KK9NBkYJCJDxZFtRuovXINRKS5eYhn/yhd8uocQRNGSf
+         dKIM7/aVfDZ9kpmsHDlUQupDtiPLtvLot5GBClvhUz+egfLvsJgvZK6QTfHhcOnfCz7O
+         w2MIv+RGMwmTY4GMrHUciw4yZuqTUUfPFEDcNm9geZbElIIOGGE2TZlIT7UvhlhY0VB0
+         dHqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=prMZe0pej9PoxwbNkQMGNemqFNqwjkROTTXt4DxreRU=;
+        b=qs58SoHuGRVjSg8Y49hCJ/utWNFObHf0IY7k2fCE6oNLb/ftIj0SdDr+782bInKNo0
+         1pkJ4nbYZ9PgAb1k6/GINh8Y7GwykGS+aYrXOuIDsw/k/acAVdvbBedS7Plzno36gRLm
+         nzIb3NnDbpj0z9XC6XpZicAfSB8AsNyRDYwj80JFRBe01YO4N5llkBsntKqd1cRHzFq1
+         YPxeBKP5eEvsadM4kRZVGChGLIpZp/09Sq+GZ+i8+skuUL13JcALW2qOoC4tjInV84LZ
+         eDNO3udA74sUvxCw1s8w6ymgRpuRXstKks2GSVrpyoFy/4w/5l3S/StC8unz45AJbLwl
+         EH/A==
+X-Gm-Message-State: AJIora8UDz1yChUDIhaZ4RJ1eEi6Z/rX9PSKSlmXCyIYQvW1M/yHX8kY
+        pnMyS6haAtK6JowRvlEv2Wo=
+X-Google-Smtp-Source: AGRyM1v2WkGrqBVIfjrP/9HqHkETaVQ9w8qZ0MMdQDVuC8NHd/2ka1BBq8Qc7NlkJlkV9BZY4cE0OQ==
+X-Received: by 2002:a05:651c:1310:b0:255:81f3:e627 with SMTP id u16-20020a05651c131000b0025581f3e627mr5323395lja.397.1656004023694;
+        Thu, 23 Jun 2022 10:07:03 -0700 (PDT)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id w27-20020a19491b000000b0047a0bf9540asm3060405lfa.213.2022.06.23.10.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 10:07:02 -0700 (PDT)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 01/10] iio: adc: mcp3911: correct "microchip,device-addr" property
+Date:   Thu, 23 Jun 2022 19:08:35 +0200
+Message-Id: <20220623170844.2189814-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623094956.977053-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 09:49:56AM +0000, cgel.zte@gmail.com wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> As the bug description at
-> https://lore.kernel.org/lkml/20220623033635.973929-1-xu.xin16@zte.com.cn/
-> attckers can use this bug to crash the system.
-> 
-> So to avoid panic, remove the BUG_ON, and use ntfs_warning to output a
-> warning to the syslog and return instead until someone really solve
-> the problem.
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Reported-by: syzbot+6a5a7672f663cce8b156@syzkaller.appspotmail.com
-> Reviewed-by: Songyi Zhang <zhang.songyi@zte.com.cn>
-> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-> Reviewed-by: Jiang Xuexin<jiang.xuexin@zte.com.cn>
-> Reviewed-by: Zhang wenya<zhang.wenya1@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
-> 
-> Change for v2:
->  - Use ntfs_warning instead of WARN().
->  - Add the tag Cc: stable@vger.kernel.org.
-> ---
->  fs/ntfs/aops.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ntfs/aops.c b/fs/ntfs/aops.c
-> index 5f4fb6ca6f2e..84d68efb4ace 100644
-> --- a/fs/ntfs/aops.c
-> +++ b/fs/ntfs/aops.c
-> @@ -183,7 +183,12 @@ static int ntfs_read_block(struct page *page)
->  	vol = ni->vol;
->  
->  	/* $MFT/$DATA must have its complete runlist in memory at all times. */
-> -	BUG_ON(!ni->runlist.rl && !ni->mft_no && !NInoAttr(ni));
-> +	if (unlikely(!ni->runlist.rl && !ni->mft_no && !NInoAttr(ni))) {
-> +		ntfs_warning(vi->i_sb, "Error because ni->runlist.rl, ni->mft_no, "
-> +				"and NInoAttr(ni) is null.");
-> +		unlock_page(page);
-> +		return -EINVAL;
-> +	}
+Go for the right property name that is documented in the bindings.
 
-A better warning message that doesn't rely on implementation details (struct
-field and macro names) would be "Runlist of $MFT/$DATA is not cached".  Also,
-why does this situation happen in the first place?  Is there a way to prevent
-this situation in the first place?
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ drivers/iio/adc/mcp3911.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Eric
+diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+index 1cb4590fe412..4338552cd0ca 100644
+--- a/drivers/iio/adc/mcp3911.c
++++ b/drivers/iio/adc/mcp3911.c
+@@ -208,7 +208,7 @@ static int mcp3911_config(struct mcp3911 *adc)
+ 	u32 configreg;
+ 	int ret;
+ 
+-	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
++	device_property_read_u32(dev, "microchip,device-addr", &adc->dev_addr);
+ 	if (adc->dev_addr > 3) {
+ 		dev_err(&adc->spi->dev,
+ 			"invalid device address (%i). Must be in range 0-3.\n",
+-- 
+2.36.1
+

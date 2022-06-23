@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807CD5574D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD5A5574F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiFWIGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S229959AbiFWIJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiFWIF7 (ORCPT
+        with ESMTP id S231230AbiFWII6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:05:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04DA473AA;
-        Thu, 23 Jun 2022 01:05:58 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B06011FD3B;
-        Thu, 23 Jun 2022 08:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655971557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y9JvyrtgVzfCy9ltHeRGduIrfv2kgcjya7gqZ8Tg/Eg=;
-        b=NyVtGuJt8cxNsPfYFDoV+sIvK1KTL8xU6r6mwnAYB2JKqguCEJ9f/3TqAsImvAR01eR767
-        q/fw2eL8mU8xVld1PKOtc+bBWtYdBf2xpd/9Pmk20D0RpEweflTKcZjNKqraXVi4sWplQi
-        PO+js2nqOqm2w+GNEKhlXlL7F+vzvlQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 50F6B2C142;
-        Thu, 23 Jun 2022 08:05:51 +0000 (UTC)
-Date:   Thu, 23 Jun 2022 10:05:56 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
- memory pressure
-Message-ID: <YrQe5A+FXnbgOR1f@dhcp22.suse.cz>
-References: <20220623000530.1194226-1-yosryahmed@google.com>
+        Thu, 23 Jun 2022 04:08:58 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3BC48338
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:08:46 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 4HtFoR1HLEMbD4HtFo9Fxz; Thu, 23 Jun 2022 10:08:44 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 23 Jun 2022 10:08:44 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <9a320833-e951-7a0f-e2bd-3f8deb7e705b@wanadoo.fr>
+Date:   Thu, 23 Jun 2022 10:08:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623000530.1194226-1-yosryahmed@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 06/18] clk: npcm8xx: add clock controller
+Content-Language: fr
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220621131424.162355-1-tmaimon77@gmail.com>
+ <20220621131424.162355-7-tmaimon77@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220621131424.162355-7-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,34 +62,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 23-06-22 00:05:30, Yosry Ahmed wrote:
-> Commit e22c6ed90aa9 ("mm: memcontrol: don't count limit-setting reclaim
-> as memory pressure") made sure that memory reclaim that is induced by
-> userspace (limit-setting, proactive reclaim, ..) is not counted as
-> memory pressure for the purposes of psi.
+Le 21/06/2022 à 15:14, Tomer Maimon a écrit :
+> Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller which
+> generates and supplies clocks to all modules within the BMC.
 > 
-> Instead of counting psi inside try_to_free_mem_cgroup_pages(), callers
-> from try_charge() and reclaim_high() wrap the call to
-> try_to_free_mem_cgroup_pages() with psi handlers.
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>   drivers/clk/Kconfig       |   6 +
+>   drivers/clk/Makefile      |   1 +
+>   drivers/clk/clk-npcm8xx.c | 594 ++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 601 insertions(+)
+>   create mode 100644 drivers/clk/clk-npcm8xx.c
 > 
-> However, vmpressure is still counted in these cases where reclaim is
-> directly induced by userspace. This patch makes sure vmpressure is not
-> counted in those operations, in the same way as psi. Since vmpressure
-> calls need to happen deeper within the reclaim path, the same approach
-> could not be followed. Hence, a new "controlled" flag is added to struct
-> scan_control to flag a reclaim operation that is controlled by
-> userspace. This flag is set by limit-setting and proactive reclaim
-> operations, and is used to count vmpressure correctly.
-> 
-> To prevent future divergence of psi and vmpressure, commit e22c6ed90aa9
-> ("mm: memcontrol: don't count limit-setting reclaim as memory pressure")
-> is effectively reverted and the same flag is used to control psi as
-> well.
 
-Why do we need to add this is a legacy interface now? Are there any
-pre-existing users who realized this is bugging them? Please be more
-specific about the usecase.
+[...]
 
--- 
-Michal Hocko
-SUSE Labs
+> +static int npcm8xx_clk_probe(struct platform_device *pdev)
+> +{
+> +	struct clk_hw_onecell_data *npcm8xx_clk_data;
+> +	struct device *dev = &pdev->dev;
+> +	void __iomem *clk_base;
+> +	struct clk_hw *hw;
+> +	int i;
+> +
+> +	npcm8xx_clk_data = devm_kzalloc(dev, struct_size(npcm8xx_clk_data, hws,
+> +							 NPCM8XX_NUM_CLOCKS),
+> +					GFP_KERNEL);
+> +	if (!npcm8xx_clk_data)
+> +		return -ENOMEM;
+> +
+> +	clk_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(clk_base))
+> +		return PTR_ERR(clk_base);
+> +
+> +	npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
+> +
+> +	for (i = 0; i < NPCM8XX_NUM_CLOCKS; i++)
+> +		npcm8xx_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+> +
+> +	/* Reference 25MHz clock */
+> +	hw = clk_hw_register_fixed_rate(dev, "refclk", NULL, 0, NPCM8XX_REF_CLK);
+> +	if (IS_ERR(hw))
+> +		return PTR_ERR(hw);
+> +	npcm8xx_clk_data->hws[NPCM8XX_CLK_REFCLK] = hw;
+> +
+> +	/* Register plls */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_plls); i++) {
+> +		const struct npcm8xx_clk_pll_data *pll_data = &npcm8xx_plls[i];
+> +
+> +		hw = npcm8xx_clk_register_pll(dev, clk_base + pll_data->reg,
+> +					      pll_data->name,
+> +					      pll_data->parent_name,
+> +					      pll_data->flags);
+> +		if (IS_ERR(hw)) {
+> +			dev_err(dev, "npcm8xx_clk: Can't register pll\n");
+> +			goto unregister_refclk;
+
+goto err_mux_clk?
+
+(so that we unregister what has already been registered in the loop ; 
+and unregister_refclk becomes useless)
+
+> +		}
+> +
+> +		if (pll_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[pll_data->onecell_idx] = hw;
+> +	}
+> +
+> +	/* Register fixed dividers */
+> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL1_DIV2,
+> +					       NPCM8XX_CLK_S_PLL1, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		dev_err(dev, "npcm8xx_clk: Can't register fixed div\n");
+> +		goto unregister_refclk;
+> +	}
+> +
+> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL2_DIV2,
+> +					       NPCM8XX_CLK_S_PLL2, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		dev_err(dev, "npcm8xx_clk: Can't register pll div2\n");
+> +		goto unregister_refclk;
+> +	}
+> +
+> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PRE_CLK,
+> +					       NPCM8XX_CLK_S_CPU_MUX, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		dev_err(dev, "npcm8xx_clk: Can't register ckclk div2\n");
+> +		goto unregister_refclk;
+> +	}
+> +
+> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_AXI,
+> +					       NPCM8XX_CLK_S_TH, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		dev_err(dev, "npcm8xx_clk: Can't register axi div2\n");
+> +		goto unregister_refclk;
+> +	}
+> +
+> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_ATB,
+> +					       NPCM8XX_CLK_S_AXI, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		dev_err(dev, "npcm8xx_clk: Can't register atb div2\n");
+> +		goto unregister_refclk;
+> +	}
+> +
+> +	/* Register clock dividers specified in npcm8xx_divs */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
+> +		const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
+> +
+> +		hw = devm_clk_hw_register_divider(dev, div_data->name,
+> +						  div_data->parent_name,
+> +						  div_data->flags,
+> +						  clk_base + div_data->reg,
+> +						  div_data->shift,
+> +						  div_data->width,
+> +						  div_data->clk_divider_flags,
+> +						  &npcm8xx_clk_lock);
+> +		if (IS_ERR(hw)) {
+> +			dev_err(dev, "npcm8xx_clk: Can't register div table\n");
+> +			goto unregister_refclk;
+> +		}
+> +
+> +		if (div_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[div_data->onecell_idx] = hw;
+> +	}
+> +
+> +	/* Register muxes */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_muxes); i++) {
+> +		const struct npcm8xx_clk_mux_data *mux_data = &npcm8xx_muxes[i];
+> +
+> +		hw = clk_hw_register_mux_table(dev, mux_data->name,
+> +					       mux_data->parent_names,
+> +					       mux_data->num_parents,
+> +					       mux_data->flags,
+> +					       clk_base + NPCM8XX_CLKSEL,
+> +					       mux_data->shift,
+> +					       mux_data->mask, 0,
+> +					       mux_data->table,
+> +					       &npcm8xx_clk_lock);
+> +
+> +		if (IS_ERR(hw)) {
+> +			dev_err(dev, "npcm8xx_clk: Can't register mux\n");
+> +			goto err_mux_clk;
+> +		}
+> +
+> +		if (mux_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[mux_data->onecell_idx] = hw;
+> +	}
+> +
+> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+> +					   npcm8xx_clk_data);
+
+If this fails, I think we should also "goto err_mux_clk;"
+
+> +
+> +err_mux_clk:
+> +	while (i--) {
+> +		if (npcm8xx_muxes[i].onecell_idx >= 0)
+> +			clk_hw_unregister_mux(npcm8xx_clk_data->hws[npcm8xx_muxes[i].onecell_idx]);
+> +	}
+> +unregister_refclk:
+> +	clk_hw_unregister(npcm8xx_clk_data->hws[NPCM8XX_CLK_REFCLK]);
+> +	return PTR_ERR(hw);
+> +}
+
+Does a .remove() function is needed to match this error handling path? 
+(or use devm_add_action_or_reset())?
+
+CJ
+> +
+> +static const struct of_device_id npcm8xx_clk_dt_ids[] = {
+> +	{ .compatible = "nuvoton,npcm845-clk", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, npcm8xx_clk_dt_ids);
+> +
+> +static struct platform_driver npcm8xx_clk_driver = {
+> +	.probe  = npcm8xx_clk_probe,
+> +	.driver = {
+> +		.name = "npcm8xx_clk",
+> +		.of_match_table = npcm8xx_clk_dt_ids,
+> +	},
+> +};
+> +
+> +static int __init npcm8xx_clk_driver_init(void)
+> +{
+> +	return platform_driver_register(&npcm8xx_clk_driver);
+> +}
+> +arch_initcall(npcm8xx_clk_driver_init);
+> +
+

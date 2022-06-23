@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6EC55812F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF50558599
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbiFWQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S235434AbiFWR7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbiFWQwg (ORCPT
+        with ESMTP id S235931AbiFWR5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:52:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4C9388B;
-        Thu, 23 Jun 2022 09:52:31 -0700 (PDT)
+        Thu, 23 Jun 2022 13:57:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEF1B01C9;
+        Thu, 23 Jun 2022 10:15:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8797561FC2;
-        Thu, 23 Jun 2022 16:52:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629A7C3411B;
-        Thu, 23 Jun 2022 16:52:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F97F61DEE;
+        Thu, 23 Jun 2022 17:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6CC7C3411B;
+        Thu, 23 Jun 2022 17:15:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003149;
-        bh=hwza0RWJSq4Ba0aX/fWeFoGPUNuhh4zwFJUguPigW9o=;
+        s=korg; t=1656004553;
+        bh=05oCL9/vwRD2ONushJmIq7RlXP0+bm7pgIUFoypvMaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mqcPXVvQFjgr8sBNpa4VOjxJn0zEp0w1K1nBqNTo30uUkW/6kv8AMCciAxeSzHMOo
-         n+dCxrox1ivBsuAgBj1wLzYehOWfMjek2LbG0OEMNlNP+I6MAlfRp/uMTGacSoCdZG
-         Zs/yWax4JgU3QYmmle/BkEAe8O/qu1ai8y6hORbc=
+        b=RcCM5nFuiv+uWbp0Tm5kkx67/0G3CgXmFroOPanosdqjIjVVXf2gD85ED3tavyDu6
+         3IwzdvlT78R1XsUUlGrYexloIWd9MIlVUeyA6wCG9f1LmvUZCWBZ3qUHnSPNNqpUKm
+         R02VX7QAQzH1urkwgYaMHce5GtaKy+dGDhruZAyM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 146/264] hwrng: core - rewrite better comparison to NULL
-Date:   Thu, 23 Jun 2022 18:42:19 +0200
-Message-Id: <20220623164348.196072004@linuxfoundation.org>
+Subject: [PATCH 4.19 073/234] random: access primary_pool directly rather than through pointer
+Date:   Thu, 23 Jun 2022 18:42:20 +0200
+Message-Id: <20220623164345.126646052@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin LABBE <clabbe.montjoie@gmail.com>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit 2a971e3b248775f808950bdc0ac75f12a2853eff upstream.
+commit ebf7606388732ecf2821ca21087e9446cb4a5b57 upstream.
 
-This patch fix the checkpatch warning "Comparison to NULL could be written "!ptr"
+Both crng_initialize_primary() and crng_init_try_arch_early() are
+only called for the primary_pool. Accessing it directly instead of
+through a function parameter simplifies the code.
 
-Signed-off-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/hw_random/core.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/char/random.c |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
---- a/drivers/char/hw_random/core.c
-+++ b/drivers/char/hw_random/core.c
-@@ -439,8 +439,7 @@ int hwrng_register(struct hwrng *rng)
- 	int err = -EINVAL;
- 	struct hwrng *old_rng, *tmp;
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -762,7 +762,7 @@ static bool crng_init_try_arch(struct cr
+ 	return arch_init;
+ }
  
--	if (rng->name == NULL ||
--	    (rng->data_read == NULL && rng->read == NULL))
-+	if (!rng->name || (!rng->data_read && !rng->read))
- 		goto out;
+-static bool __init crng_init_try_arch_early(struct crng_state *crng)
++static bool __init crng_init_try_arch_early(void)
+ {
+ 	int i;
+ 	bool arch_init = true;
+@@ -774,7 +774,7 @@ static bool __init crng_init_try_arch_ea
+ 			rv = random_get_entropy();
+ 			arch_init = false;
+ 		}
+-		crng->state[i] ^= rv;
++		primary_crng.state[i] ^= rv;
+ 	}
  
- 	mutex_lock(&rng_mutex);
+ 	return arch_init;
+@@ -788,16 +788,16 @@ static void crng_initialize_secondary(st
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
+ 
+-static void __init crng_initialize_primary(struct crng_state *crng)
++static void __init crng_initialize_primary(void)
+ {
+-	_extract_entropy(&crng->state[4], sizeof(u32) * 12);
+-	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
++	_extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
++	if (crng_init_try_arch_early() && trust_cpu && crng_init < 2) {
+ 		invalidate_batched_entropy();
+ 		numa_crng_init();
+ 		crng_init = 2;
+ 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
+ 	}
+-	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
++	primary_crng.init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
+ 
+ static void crng_finalize_init(struct crng_state *crng)
+@@ -1698,7 +1698,7 @@ int __init rand_initialize(void)
+ 	init_std_data();
+ 	if (crng_need_final_init)
+ 		crng_finalize_init(&primary_crng);
+-	crng_initialize_primary(&primary_crng);
++	crng_initialize_primary();
+ 	crng_global_init_time = jiffies;
+ 	if (ratelimit_disable) {
+ 		urandom_warning.interval = 0;
 
 

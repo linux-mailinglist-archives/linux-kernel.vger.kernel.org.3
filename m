@@ -2,90 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D347557351
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8033C55735A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiFWGuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S229528AbiFWGv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiFWGuF (ORCPT
+        with ESMTP id S229558AbiFWGvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:50:05 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3FA44773
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:50:03 -0700 (PDT)
-Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LT9lJ3PpyzSh98;
-        Thu, 23 Jun 2022 14:46:36 +0800 (CST)
-Received: from [10.174.176.254] (10.174.176.254) by
- kwepemi500023.china.huawei.com (7.221.188.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 14:50:00 +0800
-Subject: Re: [PATCH] soc: mediatek: fix missing clk_disable_unprepare() on err
- in svs_resume()
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>
-References: <20220621114658.10054-1-wupeng58@huawei.com>
- <f48e0cca-644a-bad7-282b-28e3e0d5d437@gmail.com>
-From:   "wupeng (D)" <wupeng58@huawei.com>
-Message-ID: <6b1751c2-28c9-8b1b-4273-3f3c5681151a@huawei.com>
-Date:   Thu, 23 Jun 2022 14:50:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0
+        Thu, 23 Jun 2022 02:51:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973AE44773
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:51:21 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o4Gfk-0001vC-Io; Thu, 23 Jun 2022 08:50:36 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1o4Gff-0003Pg-AE; Thu, 23 Jun 2022 08:50:31 +0200
+Date:   Thu, 23 Jun 2022 08:50:31 +0200
+From:   Sascha Hauer <sha@pengutronix.de>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] driver core: fw_devlink: Allow firmware to mark
+ devices as best effort
+Message-ID: <20220623065031.GX1615@pengutronix.de>
+References: <20220622215912.550419-1-saravanak@google.com>
+ <20220622215912.550419-2-saravanak@google.com>
 MIME-Version: 1.0
-In-Reply-To: <f48e0cca-644a-bad7-282b-28e3e0d5d437@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.254]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500023.china.huawei.com (7.221.188.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622215912.550419-2-saravanak@google.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/22 22:02, Matthias Brugger wrote:
+On Wed, Jun 22, 2022 at 02:59:10PM -0700, Saravana Kannan wrote:
+> When firmware sets the FWNODE_FLAG_BEST_EFFORT flag for a fwnode,
+> fw_devlink will do a best effort ordering for that device where it'll
+> only enforce the probe/suspend/resume ordering of that device with
+> suppliers that have drivers. The driver of that device can then decide
+> if it wants to defer probe or probe without the suppliers.
 > 
+> This will be useful for avoid probe delays of the console device that
+> were caused by commit 71066545b48e ("driver core: Set
+> fw_devlink.strict=1 by default").
 > 
-> On 21/06/2022 13:46, Peng Wu wrote:
->> Fix the missing clk_disable_unprepare() before return
->> from svs_resume() in the error handling case.
->>
->> Signed-off-by: Peng Wu <wupeng58@huawei.com>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> ---
->>   drivers/soc/mediatek/mtk-svs.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
->> index 606a00a2e57d..1b5c297aaec5 100644
->> --- a/drivers/soc/mediatek/mtk-svs.c
->> +++ b/drivers/soc/mediatek/mtk-svs.c
->> @@ -1525,6 +1525,7 @@ static int svs_resume(struct device *dev)
->>       ret = reset_control_deassert(svsp->rst);
->>       if (ret) {
->> +        clk_disable_unprepare(svsp->main_clk);
+> Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+> Reported-by: Sascha Hauer <sha@pengutronix.de>
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/base/core.c    | 3 ++-
+>  include/linux/fwnode.h | 4 ++++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
 > 
-> Same holds for the error path of svs_init02(), correct?
-> 
-> Regards,
-> Matthias
-> 
->>           dev_err(svsp->dev, "cannot deassert reset %d\n", ret);
->>           return ret;
->>       }
-> .
-Yes, the error path of svs_init02() requires the same operation.
-I will resubmit a patch.
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 839f64485a55..61edd18b7bf3 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -968,7 +968,8 @@ static void device_links_missing_supplier(struct device *dev)
+>  
+>  static bool dev_is_best_effort(struct device *dev)
+>  {
+> -	return fw_devlink_best_effort && dev->can_match;
+> +	return (fw_devlink_best_effort && dev->can_match) ||
+> +		dev->fwnode->flags & FWNODE_FLAG_BEST_EFFORT;
 
-Regards,
-Peng
+Check for dev->fwnode first. I am running in a NULL pointer exception
+here for a device that doesn't have a fwnode.
+
+Sascha
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

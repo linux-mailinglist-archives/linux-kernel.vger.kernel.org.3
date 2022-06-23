@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05F65583B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164BB5581F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbiFWRd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S229927AbiFWRJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbiFWRcs (ORCPT
+        with ESMTP id S230518AbiFWRGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:32:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0253186AD4;
-        Thu, 23 Jun 2022 10:05:32 -0700 (PDT)
+        Thu, 23 Jun 2022 13:06:50 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43875522CA;
+        Thu, 23 Jun 2022 09:55:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58A80B82498;
-        Thu, 23 Jun 2022 17:05:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D7CC3411B;
-        Thu, 23 Jun 2022 17:05:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51DACCE25DE;
+        Thu, 23 Jun 2022 16:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45DA4C3411B;
+        Thu, 23 Jun 2022 16:55:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003930;
-        bh=UKQiL0fMPt7CKZ4+190DrLSrCHNK0gvHoGypPrC4PaY=;
+        s=korg; t=1656003351;
+        bh=ZhCC7ZSBiiKk98memvSxOwv4VlB98hX1zyUaBvs9d5Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1PfZjBfMU+iilkARUTWf/wmpOYNfdzG3SOyluumBf7kpQXqIgB4mfItCeD7w37EKA
-         jxuXxsocpL5onHtqAm8Klm1ZhMapZTjX1wDXyLJrpV5HZiIN03DugiIWI+9Tjgeb0J
-         3FUfKdsv6Xv7HKq58tw4S5/ILwtC4f6swKLBOI/E=
+        b=teb2T7EqZdmtq4lllTAJMWrFPDyFI6DNK/LNlg+3nX2RpcG0Jk38MKuPc/vcJBjgW
+         x6wD/ujLMCPEmVb81kF9XQWFZS2S/eROZ1EL7rvbp97QntRYAL9d4TDrMHGaa5YjEd
+         X72TjZDhEVrUrALBEjnM893Uu0WUInAIHCqN5GS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Theodore Tso <tytso@mit.edu>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 131/237] random: replace custom notifier chain with standard one
-Date:   Thu, 23 Jun 2022 18:42:45 +0200
-Message-Id: <20220623164346.923200419@linuxfoundation.org>
+Subject: [PATCH 4.9 173/264] random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+Date:   Thu, 23 Jun 2022 18:42:46 +0200
+Message-Id: <20220623164348.960381952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,265 +57,146 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 5acd35487dc911541672b3ffc322851769c32a56 upstream.
+commit e3c1c4fd9e6d14059ed93ebfe15e1c57793b1a05 upstream.
 
-We previously rolled our own randomness readiness notifier, which only
-has two users in the whole kernel. Replace this with a more standard
-atomic notifier block that serves the same purpose with less code. Also
-unexport the symbols, because no modules use it, only unconditional
-builtins. The only drawback is that it's possible for a notification
-handler returning the "stop" code to prevent further processing, but
-given that there are only two users, and that we're unexporting this
-anyway, that doesn't seem like a significant drawback for the
-simplification we receive here.
+In 1448769c9cdb ("random: check for signal_pending() outside of
+need_resched() check"), Jann pointed out that we previously were only
+checking the TIF_NOTIFY_SIGNAL and TIF_SIGPENDING flags if the process
+had TIF_NEED_RESCHED set, which meant in practice, super long reads to
+/dev/[u]random would delay signal handling by a long time. I tried this
+using the below program, and indeed I wasn't able to interrupt a
+/dev/urandom read until after several megabytes had been read. The bug
+he fixed has always been there, and so code that reads from /dev/urandom
+without checking the return value of read() has mostly worked for a long
+time, for most sizes, not just for <= 256.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Maybe it makes sense to keep that code working. The reason it was so
+small prior, ignoring the fact that it didn't work anyway, was likely
+because /dev/random used to block, and that could happen for pretty
+large lengths of time while entropy was gathered. But now, it's just a
+chacha20 call, which is extremely fast and is just operating on pure
+data, without having to wait for some external event. In that sense,
+/dev/[u]random is a lot more like /dev/zero.
+
+Taking a page out of /dev/zero's read_zero() function, it always returns
+at least one chunk, and then checks for signals after each chunk. Chunk
+sizes there are of length PAGE_SIZE. Let's just copy the same thing for
+/dev/[u]random, and check for signals and cond_resched() for every
+PAGE_SIZE amount of data. This makes the behavior more consistent with
+expectations, and should mitigate the impact of Jann's fix for the
+age-old signal check bug.
+
+---- test program ----
+
+  #include <unistd.h>
+  #include <signal.h>
+  #include <stdio.h>
+  #include <sys/random.h>
+
+  static unsigned char x[~0U];
+
+  static void handle(int) { }
+
+  int main(int argc, char *argv[])
+  {
+    pid_t pid = getpid(), child;
+    signal(SIGUSR1, handle);
+    if (!(child = fork())) {
+      for (;;)
+        kill(pid, SIGUSR1);
+    }
+    pause();
+    printf("interrupted after reading %zd bytes\n", getrandom(x, sizeof(x), 0));
+    kill(child, SIGTERM);
+    return 0;
+  }
+
+Cc: Jann Horn <jannh@google.com>
 Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-[Jason: for stable, also backported to crypto/drbg.c, not unexporting.]
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/drbg.c          |   17 +++++-------
- drivers/char/random.c  |   69 ++++++++++++++-----------------------------------
- include/crypto/drbg.h  |    2 -
- include/linux/random.h |   10 ++-----
- lib/random32.c         |   13 +++++----
- 5 files changed, 41 insertions(+), 70 deletions(-)
+ drivers/char/random.c |   41 ++++++++++++++++++++---------------------
+ 1 file changed, 20 insertions(+), 21 deletions(-)
 
---- a/crypto/drbg.c
-+++ b/crypto/drbg.c
-@@ -1390,12 +1390,13 @@ static int drbg_generate_long(struct drb
- 	return 0;
- }
- 
--static void drbg_schedule_async_seed(struct random_ready_callback *rdy)
-+static int drbg_schedule_async_seed(struct notifier_block *nb, unsigned long action, void *data)
- {
--	struct drbg_state *drbg = container_of(rdy, struct drbg_state,
-+	struct drbg_state *drbg = container_of(nb, struct drbg_state,
- 					       random_ready);
- 
- 	schedule_work(&drbg->seed_work);
-+	return 0;
- }
- 
- static int drbg_prepare_hrng(struct drbg_state *drbg)
-@@ -1408,10 +1409,8 @@ static int drbg_prepare_hrng(struct drbg
- 
- 	INIT_WORK(&drbg->seed_work, drbg_async_seed);
- 
--	drbg->random_ready.owner = THIS_MODULE;
--	drbg->random_ready.func = drbg_schedule_async_seed;
--
--	err = add_random_ready_callback(&drbg->random_ready);
-+	drbg->random_ready.notifier_call = drbg_schedule_async_seed;
-+	err = register_random_ready_notifier(&drbg->random_ready);
- 
- 	switch (err) {
- 	case 0:
-@@ -1422,7 +1421,7 @@ static int drbg_prepare_hrng(struct drbg
- 		/* fall through */
- 
- 	default:
--		drbg->random_ready.func = NULL;
-+		drbg->random_ready.notifier_call = NULL;
- 		return err;
- 	}
- 
-@@ -1528,8 +1527,8 @@ free_everything:
-  */
- static int drbg_uninstantiate(struct drbg_state *drbg)
- {
--	if (drbg->random_ready.func) {
--		del_random_ready_callback(&drbg->random_ready);
-+	if (drbg->random_ready.notifier_call) {
-+		unregister_random_ready_notifier(&drbg->random_ready);
- 		cancel_work_sync(&drbg->seed_work);
- 		crypto_free_rng(drbg->jent);
- 		drbg->jent = NULL;
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -83,8 +83,8 @@ static int crng_init = 0;
- /* Various types of waiters for crng_init->2 transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
--static DEFINE_SPINLOCK(random_ready_list_lock);
--static LIST_HEAD(random_ready_list);
-+static DEFINE_SPINLOCK(random_ready_chain_lock);
-+static RAW_NOTIFIER_HEAD(random_ready_chain);
+@@ -524,9 +524,7 @@ EXPORT_SYMBOL(get_random_bytes);
  
- /* Control how we warn userspace. */
- static struct ratelimit_state unseeded_warning =
-@@ -147,72 +147,45 @@ EXPORT_SYMBOL(wait_for_random_bytes);
-  *
-  * returns: 0 if callback is successfully added
-  *	    -EALREADY if pool is already initialised (callback not called)
-- *	    -ENOENT if module for callback is not alive
-  */
--int add_random_ready_callback(struct random_ready_callback *rdy)
-+int register_random_ready_notifier(struct notifier_block *nb)
+ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
  {
--	struct module *owner;
- 	unsigned long flags;
--	int err = -EALREADY;
-+	int ret = -EALREADY;
+-	bool large_request = nbytes > 256;
+-	ssize_t ret = 0;
+-	size_t len;
++	size_t len, left, ret = 0;
+ 	u32 chacha_state[CHACHA20_BLOCK_SIZE / sizeof(u32)];
+ 	u8 output[CHACHA20_BLOCK_SIZE];
  
- 	if (crng_ready())
--		return err;
-+		return ret;
- 
--	owner = rdy->owner;
--	if (!try_module_get(owner))
--		return -ENOENT;
--
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	if (crng_ready())
--		goto out;
--
--	owner = NULL;
--
--	list_add(&rdy->list, &random_ready_list);
--	err = 0;
--
--out:
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
--
--	module_put(owner);
--
--	return err;
-+	spin_lock_irqsave(&random_ready_chain_lock, flags);
-+	if (!crng_ready())
-+		ret = raw_notifier_chain_register(&random_ready_chain, nb);
-+	spin_unlock_irqrestore(&random_ready_chain_lock, flags);
-+	return ret;
- }
--EXPORT_SYMBOL(add_random_ready_callback);
-+EXPORT_SYMBOL(register_random_ready_notifier);
- 
- /*
-  * Delete a previously registered readiness callback function.
-  */
--void del_random_ready_callback(struct random_ready_callback *rdy)
-+int unregister_random_ready_notifier(struct notifier_block *nb)
- {
- 	unsigned long flags;
--	struct module *owner = NULL;
--
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	if (!list_empty(&rdy->list)) {
--		list_del_init(&rdy->list);
--		owner = rdy->owner;
--	}
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
-+	int ret;
- 
--	module_put(owner);
-+	spin_lock_irqsave(&random_ready_chain_lock, flags);
-+	ret = raw_notifier_chain_unregister(&random_ready_chain, nb);
-+	spin_unlock_irqrestore(&random_ready_chain_lock, flags);
-+	return ret;
- }
--EXPORT_SYMBOL(del_random_ready_callback);
-+EXPORT_SYMBOL(unregister_random_ready_notifier);
- 
- static void process_random_ready_list(void)
- {
- 	unsigned long flags;
--	struct random_ready_callback *rdy, *tmp;
- 
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	list_for_each_entry_safe(rdy, tmp, &random_ready_list, list) {
--		struct module *owner = rdy->owner;
--
--		list_del_init(&rdy->list);
--		rdy->func(rdy);
--		module_put(owner);
--	}
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
-+	spin_lock_irqsave(&random_ready_chain_lock, flags);
-+	raw_notifier_call_chain(&random_ready_chain, 0, NULL);
-+	spin_unlock_irqrestore(&random_ready_chain_lock, flags);
- }
- 
- #define warn_unseeded_randomness(previous) \
---- a/include/crypto/drbg.h
-+++ b/include/crypto/drbg.h
-@@ -136,7 +136,7 @@ struct drbg_state {
- 	const struct drbg_state_ops *d_ops;
- 	const struct drbg_core *core;
- 	struct drbg_string test_data;
--	struct random_ready_callback random_ready;
-+	struct notifier_block random_ready;
- };
- 
- static inline __u8 drbg_statelen(struct drbg_state *drbg)
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -10,11 +10,7 @@
- 
- #include <uapi/linux/random.h>
- 
--struct random_ready_callback {
--	struct list_head list;
--	void (*func)(struct random_ready_callback *rdy);
--	struct module *owner;
--};
-+struct notifier_block;
- 
- extern void add_device_randomness(const void *, size_t);
- extern void add_bootloader_randomness(const void *, size_t);
-@@ -39,8 +35,8 @@ extern void get_random_bytes(void *buf,
- extern int wait_for_random_bytes(void);
- extern int __init rand_initialize(void);
- extern bool rng_is_initialized(void);
--extern int add_random_ready_callback(struct random_ready_callback *rdy);
--extern void del_random_ready_callback(struct random_ready_callback *rdy);
-+extern int register_random_ready_notifier(struct notifier_block *nb);
-+extern int unregister_random_ready_notifier(struct notifier_block *nb);
- extern size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes);
- 
- #ifndef MODULE
---- a/lib/random32.c
-+++ b/lib/random32.c
-@@ -40,6 +40,7 @@
- #include <linux/sched.h>
- #include <linux/bitops.h>
- #include <linux/slab.h>
-+#include <linux/notifier.h>
- #include <asm/unaligned.h>
- 
- /**
-@@ -546,9 +547,11 @@ static void prandom_reseed(unsigned long
-  * To avoid worrying about whether it's safe to delay that interrupt
-  * long enough to seed all CPUs, just schedule an immediate timer event.
-  */
--static void prandom_timer_start(struct random_ready_callback *unused)
-+static int prandom_timer_start(struct notifier_block *nb,
-+			       unsigned long action, void *data)
- {
- 	mod_timer(&seed_timer, jiffies);
-+	return 0;
- }
- 
- /*
-@@ -557,13 +560,13 @@ static void prandom_timer_start(struct r
-  */
- static int __init prandom_init_late(void)
- {
--	static struct random_ready_callback random_ready = {
--		.func = prandom_timer_start
-+	static struct notifier_block random_ready = {
-+		.notifier_call = prandom_timer_start
- 	};
--	int ret = add_random_ready_callback(&random_ready);
-+	int ret = register_random_ready_notifier(&random_ready);
- 
- 	if (ret == -EALREADY) {
--		prandom_timer_start(&random_ready);
-+		prandom_timer_start(&random_ready, 0, NULL);
- 		ret = 0;
+@@ -538,46 +536,47 @@ static ssize_t get_random_bytes_user(voi
+ 	 * bytes, in case userspace causes copy_to_user() below to sleep
+ 	 * forever, so that we still retain forward secrecy in that case.
+ 	 */
+-	crng_make_state(chacha_state, (u8 *)&chacha_state[4], CHACHA_KEY_SIZE);
++	crng_make_state(chacha_state, (u8 *)&chacha_state[4], CHACHA20_KEY_SIZE);
+ 	/*
+ 	 * However, if we're doing a read of len <= 32, we don't need to
+ 	 * use chacha_state after, so we can simply return those bytes to
+ 	 * the user directly.
+ 	 */
+-	if (nbytes <= CHACHA_KEY_SIZE) {
+-		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
++	if (nbytes <= CHACHA20_KEY_SIZE) {
++		ret = nbytes - copy_to_user(buf, &chacha_state[4], nbytes);
+ 		goto out_zero_chacha;
  	}
- 	return ret;
+ 
+-	do {
+-		if (large_request) {
+-			if (signal_pending(current)) {
+-				if (!ret)
+-					ret = -ERESTARTSYS;
+-				break;
+-			}
+-			cond_resched();
+-		}
+-
++	for (;;) {
+ 		chacha20_block(chacha_state, output);
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+ 
+ 		len = min_t(size_t, nbytes, CHACHA20_BLOCK_SIZE);
+-		if (copy_to_user(buf, output, len)) {
+-			ret = -EFAULT;
++		left = copy_to_user(buf, output, len);
++		if (left) {
++			ret += len - left;
+ 			break;
+ 		}
+ 
+-		nbytes -= len;
+ 		buf += len;
+ 		ret += len;
+-	} while (nbytes);
++		nbytes -= len;
++		if (!nbytes)
++			break;
++
++		BUILD_BUG_ON(PAGE_SIZE % CHACHA20_BLOCK_SIZE != 0);
++		if (ret % PAGE_SIZE == 0) {
++			if (signal_pending(current))
++				break;
++			cond_resched();
++		}
++	}
+ 
+ 	memzero_explicit(output, sizeof(output));
+ out_zero_chacha:
+ 	memzero_explicit(chacha_state, sizeof(chacha_state));
+-	return ret;
++	return ret ? ret : -EFAULT;
+ }
+ 
+ /*
 
 

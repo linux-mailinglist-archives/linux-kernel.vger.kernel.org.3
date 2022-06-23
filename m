@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA77A558BF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8F5558BF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiFWXwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S231173AbiFWXwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiFWXwX (ORCPT
+        with ESMTP id S231169AbiFWXwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:52:23 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08F3609E6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:21 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id go6so1171414pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:21 -0700 (PDT)
+        Thu, 23 Jun 2022 19:52:32 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8095C60C45
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:31 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id jh14so636865plb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DefBYaY/G33kY4Ei9AvXETroX4rt5wpVrX5H893xFe8=;
-        b=Sy4dpBK9sxm6P1WYqg3D7g3GCUd2xUq4x6AnHGjjnZ47T/sRJJjc+j4mWPXxBkFEog
-         UfgGJJ/C3IVk9qX/R35CfCkxoJfLiiGuDPL/CjKxCDhatzE5d6L/bId9gF/Ly1abut+j
-         /rSa+f/H32w8OoUvMKNIRmqfV18iOSY/2h0pvrt9iba25lUmFSq7XPERVAFN+f8Jq1W4
-         lduN9LuS+ajFQ5q9rUIcl3i2lh09TtzIdBke9RxcDPtbwsS2kXOeUlv3R0lFsAqIcdXS
-         846pHtNAJS22q7crZjwXOqoAV29uCgF4ZgUC4QiV2+lzpeoVQHYZ/JtMmT7oPW8mRlO8
-         gcdA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=guCk9+fmq044uYhThIHO4V934ZX2nYq8f94Emgz8GLM=;
+        b=SUGUBrBFD30w/LODLPszAIWFJuyzy0h8yKc3XwFCVTjTpmAqYwYtNybMHRZ+ghsnt6
+         oFA4URHrauTUulNAvk0QCM67P/nkIVpijwPqu2IdFqBueiiaMSAQRPwpv6i3r+6CFCg5
+         plfgyMDGoKKdV7nNouU2+OWjZzQEV8GM9uqudK4CYp5wzLwGI5Uhh02fmt9opzL/hOuQ
+         CHb2xiFPkQFAEUzJn7vUfUw/CjDKDoPj4aI+IY/+fKamjEPVD1pKTCLT8ivMhoUVoJNj
+         HHF6gHkYy+hsHX3Jl6+v2yJCbU1tOMvmcYoLzEGZK1goInD5vx4s9WLc/yecqlQhAZqt
+         O+OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DefBYaY/G33kY4Ei9AvXETroX4rt5wpVrX5H893xFe8=;
-        b=pEjjYk9MNskMWeGU4BHAs2FbmNzBX+FYlkzgoWb2FR4ENgha9JrHGH1otgVf3E0Qjz
-         kTgUAqubWldSoOorKoRoPSujEso35KLXwFDvWZSlFZI4Lhy1+EKnePOPiiF6thBKeG4X
-         C3itj/usbeHnIahmH/hTXZn33sSyTkmTc5OVPlmulSI4+QqnT7L2Yw0RdKlRhXONpFfQ
-         8Ua2qBwxNPnHJQnhMfrpnUJC/96+jlu9JWjFb0mEHwy1TFpmNNyjTXg0mGsxJVmylgww
-         g7anYwk7TPCo8sM+xGBQBSrCFZgDJ7Jgo/477EnVAhxDWTyttkYToMmvxkVhiBBsH0hF
-         m1Zw==
-X-Gm-Message-State: AJIora9SfiWRrNamSQ9XFV0t6yOP1TE9DZ/dSjMbUlENR2jqnE6MkO1X
-        zRRqf/tCTaasL/DO76HL2A==
-X-Google-Smtp-Source: AGRyM1uJYsdX/CAb4fmaTrTq/2csUXOYUyJmGEi18K/Pcxpkbsb5kd+sUGMjL/8I4qf2COUNlcj3qA==
-X-Received: by 2002:a17:903:234e:b0:16a:2d02:add7 with SMTP id c14-20020a170903234e00b0016a2d02add7mr19621461plh.10.1656028341391;
-        Thu, 23 Jun 2022 16:52:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=guCk9+fmq044uYhThIHO4V934ZX2nYq8f94Emgz8GLM=;
+        b=p1EJjJitwRENom3Z6JKLfo0opFzzfQ1cvYrlr9DAsAWyFhDjs6QcpQL1uY7BnOwf1F
+         THoqLC55z7sPrwAo+vRY7jAHTCRIdVuHE4mKUUIMgQP3ydFFZ1G+lwLtQgF5/n9Qp0NN
+         UzUvSCfKga9+ppOVwTtks5gkfRYQb4yLE0vEqmfpnh9kXKwQAylsDh1uMlD/jcG1D1R3
+         mOuzgcCohb+Lhw/ww1rLGqTsA9YG4k9meywVrsPA+qYUczBKDxccbo6D8AxxyMAMCt7j
+         nHFFV8YKfFCZwUMIQSPubb+nFTIvk4EZ6sRipJU3NaGVnUUcHHnv6YvFj5HyOTPII+9+
+         HS/Q==
+X-Gm-Message-State: AJIora/bDabQFOxZThaRKsT149iibn+EGCDJtg2TonmdfKtVDqgaw+96
+        2CcObBZuU0sgvRl/LhIyXw==
+X-Google-Smtp-Source: AGRyM1vkLEUzFkCo4X+WONweFksRrl4oFKOzMvGjQX9HHb/bP3CF+/JL7adCPfO4KW6Vp/9kEJ5QLg==
+X-Received: by 2002:a17:90b:1a8c:b0:1ed:1afb:7a73 with SMTP id ng12-20020a17090b1a8c00b001ed1afb7a73mr571077pjb.144.1656028351028;
+        Thu, 23 Jun 2022 16:52:31 -0700 (PDT)
 Received: from ik1-406-35019.vs.sakura.ne.jp (ik1-406-35019.vs.sakura.ne.jp. [153.127.16.23])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170903020a00b00168eab11f67sm362571plh.94.2022.06.23.16.52.18
+        by smtp.gmail.com with ESMTPSA id r10-20020a170903020a00b00168eab11f67sm362571plh.94.2022.06.23.16.52.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 16:52:21 -0700 (PDT)
+        Thu, 23 Jun 2022 16:52:30 -0700 (PDT)
 From:   Naoya Horiguchi <nao.horiguchi@gmail.com>
 X-Google-Original-From: Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
@@ -61,10 +61,12 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/9] mm, hwpoison: enable 1GB hugepage support (v2)
-Date:   Fri, 24 Jun 2022 08:51:44 +0900
-Message-Id: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+Subject: [PATCH v2 1/9] mm/hugetlb: remove checking hstate_is_gigantic() in return_unused_surplus_pages()
+Date:   Fri, 24 Jun 2022 08:51:45 +0900
+Message-Id: <20220623235153.2623702-2-naoya.horiguchi@linux.dev>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,53 +79,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here is v2 of "enabling memory error handling on 1GB hugepage" patchset.
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Major updates:
+I found a weird state of 1GB hugepage pool, caused by the following
+procedure:
 
-  - (patch 3/9) I made pud_huge() and follow_huge_pud() aware of non-present
-    pud entry (based on Miaohe's comment).
+  - run a process reserving all free 1GB hugepages,
+  - shrink free 1GB hugepage pool to zero (i.e. writing 0 to
+    /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages), then
+  - kill the reserving process.
 
-  - (patch 4/9 and patch 5/9) I extended the mechanism to save raw error
-    info to support multiple error subpages in a hugepage.  Additionally,
-    I added a "unreliable" flag which prevents freeing hwpoison hugetlb
-    if any raw error info is lost.
+, then all the hugepages are free *and* surplus at the same time.
 
-  - (patch 1/9 and 2/9) During testing some common cases for 1GB hugepage,
-    I found a few issues in existing code, so this series starts
-    with fixing them.
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
+  3
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/free_hugepages
+  3
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/resv_hugepages
+  0
+  $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/surplus_hugepages
+  3
 
-The remaining patches should have only minor updates since v1.
+This state is resolved by reserving and allocating the pages then
+freeing them again, so this seems not to result in serious problem.
+But it's a little surprizing (shrinking pool suddenly fails).
 
-Patch dependency:
+This behavior is caused by hstate_is_gigantic() check in
+return_unused_surplus_pages(). This was introduced so long ago in 2008
+by commit aa888a74977a ("hugetlb: support larger than MAX_ORDER"), and
+it seems to me that this check is no longer unnecessary. Let's remove it.
 
-- "mm/memory-failure: disable unpoison once hw error happens"
-  (actually the conflict is not logical one, but adding MF_SIMULATED to
-   mf_flags conflicts with patch 6/9.)
-
-v1: https://lore.kernel.org/linux-mm/20220602050631.771414-1-naoya.horiguchi@linux.dev/T/#u
-
-Thanks,
-Naoya Horiguchi
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 ---
-Summary:
+ mm/hugetlb.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Naoya Horiguchi (9):
-      mm/hugetlb: remove checking hstate_is_gigantic() in return_unused_surplus_pages()
-      mm/hugetlb: separate path for hwpoison entry in copy_hugetlb_page_range()
-      mm/hugetlb: make pud_huge() and huge_pud() aware of non-present pud entry
-      mm, hwpoison, hugetlb: support saving mechanism of raw error pages
-      mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage
-      mm, hwpoison: set PG_hwpoison for busy hugetlb pages
-      mm, hwpoison: make __page_handle_poison returns int
-      mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
-      mm, hwpoison: enable memory error handling on 1GB hugepage
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a57e1be41401..c538278170a2 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -2432,10 +2432,6 @@ static void return_unused_surplus_pages(struct hstate *h,
+ 	/* Uncommit the reservation */
+ 	h->resv_huge_pages -= unused_resv_pages;
+ 
+-	/* Cannot return gigantic pages currently */
+-	if (hstate_is_gigantic(h))
+-		goto out;
+-
+ 	/*
+ 	 * Part (or even all) of the reservation could have been backed
+ 	 * by pre-allocated pages. Only free surplus pages.
+-- 
+2.25.1
 
- arch/x86/mm/hugetlbpage.c |   3 +-
- include/linux/hugetlb.h   |  13 ++++
- include/linux/mm.h        |   2 +-
- include/linux/swapops.h   |   9 +++
- include/ras/ras_event.h   |   1 -
- mm/hugetlb.c              |  78 ++++++++++++++--------
- mm/memory-failure.c       | 163 +++++++++++++++++++++++++++++++++++++---------
- 7 files changed, 209 insertions(+), 60 deletions(-)

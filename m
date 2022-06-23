@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54ACA557A04
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BF0557A09
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiFWMJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S231331AbiFWMKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiFWMI6 (ORCPT
+        with ESMTP id S229916AbiFWMKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:08:58 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA5C4B1FC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:08:51 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LTJs66bLJzkWLt;
-        Thu, 23 Jun 2022 20:07:06 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 20:08:49 +0800
-Subject: Re: [PATCH 04/16] mm/huge_memory: use helper touch_pud in
- huge_pud_set_accessed
-To:     Muchun Song <songmuchun@bytedance.com>
-CC:     <akpm@linux-foundation.org>, <shy828301@gmail.com>,
-        <willy@infradead.org>, <zokeefe@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220622170627.19786-1-linmiaohe@huawei.com>
- <20220622170627.19786-5-linmiaohe@huawei.com>
- <YrQLY7WzgXPM/LqJ@FVFYT0MHHV2J.usts.net>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <80a029bc-3613-1150-cbd3-134d340b3973@huawei.com>
-Date:   Thu, 23 Jun 2022 20:08:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 23 Jun 2022 08:10:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A6E4DF67;
+        Thu, 23 Jun 2022 05:10:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1ED961B54;
+        Thu, 23 Jun 2022 12:10:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13CF5C3411B;
+        Thu, 23 Jun 2022 12:10:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655986233;
+        bh=OzQU67FUybi/pveFZOeAoQ+AcUFJcMiZ4XMtbk91knQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PzQkdssZWNGcFWHFq/42zegEeJCP+11zTDP2ix072nIJuDkLl3KWS4SbO0bGa1boH
+         s1v4pE7vxaPWWtQ45QYr+ruv/+SLRvUHhHDe1+DlzvCz0a0JeDOOb9tWKbYVm1sLgi
+         yVeO3Q1nzC1J2vqHlW+yGWS8mmiy6yYioom5Kr9tMm+De+XXdt5LRn1+jK94sLR4Mu
+         Xdw90Nmh98toXlluZSPqkKTP0zffh1cN7BpDVwFQuODXOuUq9H++CvGtbc2u+b+x2s
+         5wt+r8tY7NCbnB0zkDZTs+4PgK2ohteQkjmiJLD/CWSKtBjYaYwGdsasDGuiuv9Gad
+         GmZucTY10661w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o4LfK-0002bj-Hg; Thu, 23 Jun 2022 14:10:30 +0200
+Date:   Thu, 23 Jun 2022 14:10:30 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.19-rc4
+Message-ID: <YrRYNhpf9GiyxmAQ@hovoldconsulting.com>
 MIME-Version: 1.0
-In-Reply-To: <YrQLY7WzgXPM/LqJ@FVFYT0MHHV2J.usts.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/23 14:42, Muchun Song wrote:
-> On Thu, Jun 23, 2022 at 01:06:15AM +0800, Miaohe Lin wrote:
->> Use helper touch_pud to set pud accessed to simplify the code and improve
->> the readability. No functional change intended.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/huge_memory.c | 14 ++++----------
->>  1 file changed, 4 insertions(+), 10 deletions(-)
->>
->> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index a26580da8011..a0c0e4bf9c1e 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -1281,21 +1281,15 @@ int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->>  
->>  void huge_pud_set_accessed(struct vm_fault *vmf, pud_t orig_pud)
->>  {
->> -	pud_t entry;
->> -	unsigned long haddr;
->> -	bool write = vmf->flags & FAULT_FLAG_WRITE;
->> +	int flags = 0;
->>  
->>  	vmf->ptl = pud_lock(vmf->vma->vm_mm, vmf->pud);
->>  	if (unlikely(!pud_same(*vmf->pud, orig_pud)))
->>  		goto unlock;
->>  
->> -	entry = pud_mkyoung(orig_pud);
->> -	if (write)
->> -		entry = pud_mkdirty(entry);
->> -	haddr = vmf->address & HPAGE_PUD_MASK;
->> -	if (pudp_set_access_flags(vmf->vma, haddr, vmf->pud, entry, write))
->> -		update_mmu_cache_pud(vmf->vma, vmf->address, vmf->pud);
->> -
->> +	if (vmf->flags & FAULT_FLAG_WRITE)
->> +		flags = FOLL_WRITE;
-> 
-> FOLL_* flags are used for follow_page(). But huge_pud_set_accessed() is used in mm fault
-> path. It is a little weird to me to use FOLL_WRITE here. I suggest replace the last
-> parameter of touch_pud() to "bool writable", then passing "vmf->flags & FAULT_FLAG_WRITE"
-> to it instead of converting from FAULT_FLAG* flag to FOLL* flag.
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
 
-Sounds good. Thanks!
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
 
-> 
-> Thanks.
-> 
->> +	touch_pud(vmf->vma, vmf->address, vmf->pud, flags);
->>  unlock:
->>  	spin_unlock(vmf->ptl);
->>  }
->> -- 
->> 2.23.0
->>
->>
-> .
-> 
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.19-rc4
+
+for you to fetch changes up to 15b694e96c31807d8515aacfa687a1e8a4fbbadc:
+
+  USB: serial: option: add Quectel RM500K module support (2022-06-23 13:58:05 +0200)
+
+----------------------------------------------------------------
+USB-serial fixes for 5.19-rc4
+
+Here are some new modem device ids and support for further PL2303
+device types.
+
+All but the final commit (RM500K device id) have been in linux-next and
+with no reported issues.
+
+----------------------------------------------------------------
+Carlo Lobrano (1):
+      USB: serial: option: add Telit LE910Cx 0x1250 composition
+
+Johan Hovold (1):
+      USB: serial: pl2303: add support for more HXN (G) types
+
+Macpaul Lin (1):
+      USB: serial: option: add Quectel RM500K module support
+
+Yonglin Tan (1):
+      USB: serial: option: add Quectel EM05-G modem
+
+ drivers/usb/serial/option.c |  6 ++++++
+ drivers/usb/serial/pl2303.c | 29 +++++++++++++++++------------
+ 2 files changed, 23 insertions(+), 12 deletions(-)

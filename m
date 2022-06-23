@@ -2,192 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03543558949
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C139F55894B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiFWTlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+        id S231537AbiFWTlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiFWTkl (ORCPT
+        with ESMTP id S229932AbiFWTku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:40:41 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5C381506
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:30:27 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ay16so275170ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ktnWgaGfXlUyFzw3WYN81yNQBxVyn7TH3IijN8+TCrE=;
-        b=aJ0D63AMYWj9xoBmF2Uc/pS/uPixVK/1MLddTgFsNKqRD+Lk+NJHrr6NSGwldNE+5Q
-         WHSA2c2914/o7IpqT1HL51cyNIhbTT8XQkhVbOvP1giW7+Hlgl3eHFAoCdl34bwTbHyE
-         XP3eu4e1KkJVQCNEqa/zfcs4jy0SP2quGM82d4725Tc2a4UX0doDO+80a5YDecWbD/8g
-         XieTMxDtT5YIrnq7xcNoaoSQ2KY0VhUzaYdhFnbfgdLw3dUz+vqaIquROp0e09Un/w90
-         Iv5MMK0mMghkDT+4yB21UWHHW+lF7cF0XColTMLyM3JvCRNSisAytOu2u6ByU+t1r4eX
-         v/4g==
+        Thu, 23 Jun 2022 15:40:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 233A4FD8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656012694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nmEi4t1UpiJzBwiXbayrACz8FUOD/bWJxWRST4uLWCo=;
+        b=IfzG2W1lyiuV4RSkqryDh7sGdubF2sPMIM0q27+ET0BFoY5e3E6S3EkLzkGa/yFMTHLZn+
+        kKNts6p9uUor8e90Ag4FNQQ8yorFImES8VSjnPQqV02URHAAM9JElaSVkbnQqPfQy8fKmg
+        2Z3wP0uhw6xaXkSTQyF2/uHk4ZhFrIM=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-199-mmgCd0t2NLSh7oJBL_wGyQ-1; Thu, 23 Jun 2022 15:31:32 -0400
+X-MC-Unique: mmgCd0t2NLSh7oJBL_wGyQ-1
+Received: by mail-io1-f69.google.com with SMTP id f18-20020a5d8592000000b0067289239d1dso179607ioj.22
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:31:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ktnWgaGfXlUyFzw3WYN81yNQBxVyn7TH3IijN8+TCrE=;
-        b=MDUYNbhaK7NAtRzj9P+AICYEYqSxhLlMxBYXwKXDaKWwRxBPgvbr6JVZv9pHMOAuPo
-         9/24qTR2A3lW4IkN4Vwhv6ZMso5oMFV8Jcc/NzhMJahM0laoE/F9mlqXMtcO0275ZZ2O
-         K9zkbmNsgGc1u5IKrpf3HjG4pPyuicTn2eQkeBJ/tX+pcosrnrKaOaV5XGB2C4GU+Yb8
-         ElujJAwq1ikM6nu0ISgsZnI5ohwxDcCFO907P3RKy0GOcPJF/o+7tygWZM+wXePPratb
-         Kf1U21Bz0gyHKb8hvRxbz138mp9uxnMMTbpmIrl9Ani1+VoMIQUdlExRczvm5Bqeu8A+
-         rSIw==
-X-Gm-Message-State: AJIora8oSuxJKLoAt9mODMgnYZq3qf2J3YHTTg9iAQJT4HgV25xnD0OF
-        0tizR360E/9LZ/R3ADykLKSEqoy5hzkW77rPqkK1Eg==
-X-Google-Smtp-Source: AGRyM1uGkfkSYAQGAKnZkLaETtz7YP/UT5QGMtV/dduPQuz1fa4n/cyMWGF0MVETAjU6nAYfsHYFSS6AUPCmQoDQHd4=
-X-Received: by 2002:a17:907:9715:b0:726:2a3b:9f84 with SMTP id
- jg21-20020a170907971500b007262a3b9f84mr3195116ejc.414.1656012625972; Thu, 23
- Jun 2022 12:30:25 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nmEi4t1UpiJzBwiXbayrACz8FUOD/bWJxWRST4uLWCo=;
+        b=AY0IxjgHYDqqGHAAK+HUI52YLoAZkERzJ4iQ/SuJEO4c2jxZwx4onbs0Gy1Ske3eUn
+         DAay4acrCoK5ODoiOlC+NAe0JSAna5NKADm2BnV5ftWuW4wBQs5tC2WRppZU2fkfX0em
+         YPOO+Q8vVv6k/1C8AOsfwp9o5Ng7rcRy1Jt8TFeTW+CG58EAT8WtBDPRQ4Luv1vpD4vU
+         reyj1xVq1piCGKpbKqp7AbD8p8YedrDSawU+F7lT5NMMZ0t6NIopZbZF46jY/RZyedxD
+         mA0RoL3VLjrW9Cd4DE2RCJ85RY09aTXj6+2HkmQfqrZ30mvqO4mvh9v3RC6aGMyo+qBa
+         6jaQ==
+X-Gm-Message-State: AJIora9N6xPAbh6Kv460OOGM+4haASXIGk8DnuddqFbQd+5u2c261BS/
+        8G0Bz6qt12mPaHi7xxtdx4psQCBptzyRb9NtFuxTBoSuTP1xoJaF4eYbZWSXG+WWslXFM4yLt1d
+        KgZotDMAsOKC6OEI4xxCfXJdf
+X-Received: by 2002:a6b:2c89:0:b0:669:aa1e:7790 with SMTP id s131-20020a6b2c89000000b00669aa1e7790mr5626166ios.49.1656012692234;
+        Thu, 23 Jun 2022 12:31:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v539MBz3A8fODK2oWdbD7Ma53P7m9iR4VQcs8hRmUxYNEp/givO9aGTtS2tXnL4Aiqc6xjVg==
+X-Received: by 2002:a6b:2c89:0:b0:669:aa1e:7790 with SMTP id s131-20020a6b2c89000000b00669aa1e7790mr5626159ios.49.1656012691992;
+        Thu, 23 Jun 2022 12:31:31 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id w2-20020a92db42000000b002d91d4d8ae0sm193674ilq.20.2022.06.23.12.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 12:31:31 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 15:31:29 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>
+Subject: Re: [PATCH 4/4] kvm/x86: Allow to respond to generic signals during
+ slow page faults
+Message-ID: <YrS/kegBGqsSLO7y@xz-m1.local>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-5-peterx@redhat.com>
+ <YrR8sKap6KHT22Dx@google.com>
 MIME-Version: 1.0
-References: <20220622035326.759935-1-davidgow@google.com>
-In-Reply-To: <20220622035326.759935-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 23 Jun 2022 12:30:14 -0700
-Message-ID: <CAFd5g45VTbQ+tR9Bh0nNCA_cc3myLyDSYwLwEQb1FmkwaEd2Ow@mail.gmail.com>
-Subject: Re: [RFC PATCH] kunit: tool: Enable virtio/PCI by default on UML
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YrR8sKap6KHT22Dx@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 8:53 PM David Gow <davidgow@google.com> wrote:
->
-> There are several tests which depend on PCI, and hence need a bunch of
-> extra options to run under UML. This makes it awkward to give
-> configuration instructions (whether in documentation, or as part of a
-> .kunitconfig file), as two separate, incompatible sets of config options
-> are required for UML and "most other architectures".
->
-> For non-UML architectures, it's possible to add default kconfig options
-> via the qemu_config python files, but there's no equivalent for UML. Add
-> a new tools/testing/kunit/configs/arch_uml.config file containing extra
-> kconfig options to use on UML.
->
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> It's really ugly to have to type:
->         --kconfig_add CONFIG_VIRTIO_UML=y
->         --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
-> when running many tests under UML, particularly since it isn't required
-> on other architectures.
->
-> This came up in discussion with Daniel this morning, and while the
-> ability to repeat the --kunitconfig flag would go some way to alleviate
-> this, having to add:
->         --kunitconfig ./tools/testing/kunit/config/uml_pci.kunitconfig
-> isn't all that much better.
->
-> So it seems like adding something by default would be nice.
->
-> This implementation is not perfect (in particular, there's no easy way
-> of _disabling_ these options now, though [1] probably will help). The
-> 'arch_uml.config' filename can be bikeshedded, too.
->
-> Thoughts?
+Hi, Sean,
 
-I am supportive of adding the PCI dependency as a default for UML; I
-agree that there is a common desire to use PCI for tests and enabling
-it on UML is wonky.
+On Thu, Jun 23, 2022 at 02:46:08PM +0000, Sean Christopherson wrote:
+> On Wed, Jun 22, 2022, Peter Xu wrote:
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index e92f1ab63d6a..b39acb7cb16d 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> >  			       unsigned int access)
+> >  {
+> > +	/* NOTE: not all error pfn is fatal; handle intr before the other ones */
+> > +	if (unlikely(is_intr_pfn(fault->pfn))) {
+> > +		vcpu->run->exit_reason = KVM_EXIT_INTR;
+> > +		++vcpu->stat.signal_exits;
+> > +		return -EINTR;
+> > +	}
+> > +
+> >  	/* The pfn is invalid, report the error! */
+> >  	if (unlikely(is_error_pfn(fault->pfn)))
+> >  		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
+> > @@ -4017,6 +4024,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >  		}
+> >  	}
+> >  
+> > +	/* Allow to respond to generic signals in slow page faults */
+> 
+> "slow" is being overloaded here.  The previous call __gfn_to_pfn_memslot() will
+> end up in hva_to_pfn_slow(), but because of passing a non-null async it won't wait.
+> This code really should have a more extensive comment irrespective of the interruptible
+> stuff, now would be a good time to add that.
 
-One additional note: It looks like this patch breaks kunit_tool:
-https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/21871
+Yes I agree, especially the "async" parameter along with "atomic" makes it
+even more confusing as you said.  But isn't that also means the "slow" here
+is spot-on?  I mean imho it's the "elsewhere" needs cleanup not this
+comment itself since it's really stating the fact that this is the real
+slow path?
 
-The python error in the log seems legitimate:
-https://storage.googleapis.com/oss-prow/pr-logs/pull/linux-review.googlesource.com_linux_kernel_git_torvalds_linux/21871/linux-kernel-mailing-list-presubmit/1539456886976286720/build-log.txt
+Or any other suggestions greatly welcomed on how I should improve this
+comment.
 
-This line in particular:
+> 
+> Comments aside, isn't this series incomplete from the perspective that there are
+> still many flows where KVM will hang if gfn_to_pfn() gets stuck in gup?  E.g. if
+> KVM is retrieving a page pointed at by vmcs12.
 
-AttributeError: 'LinuxSourceTreeOperationsUml' object has no attribute
-'make_arch_qemuconfig'
+Right.  The thing is I'm not confident I can make it complete easily in one
+shot..
 
-> ---
->  tools/testing/kunit/configs/arch_uml.config |  5 +++++
->  tools/testing/kunit/kunit_kernel.py         | 11 ++++++++---
->  2 files changed, 13 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/kunit/configs/arch_uml.config
->
-> diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/kunit/configs/arch_uml.config
-> new file mode 100644
-> index 000000000000..e824ce43b05a
-> --- /dev/null
-> +++ b/tools/testing/kunit/configs/arch_uml.config
-> @@ -0,0 +1,5 @@
-> +# Config options which are added to UML builds by default
-> +
-> +# Enable virtio/pci, as a lot of tests require it.
-> +CONFIG_VIRTIO_UML=y
-> +CONFIG_UML_PCI_OVER_VIRTIO=y
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 3539efaf99ba..05e7b1e188d7 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -26,6 +26,7 @@ KUNITCONFIG_PATH = '.kunitconfig'
->  OLD_KUNITCONFIG_PATH = 'last_used_kunitconfig'
->  DEFAULT_KUNITCONFIG_PATH = 'tools/testing/kunit/configs/default.config'
->  BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
-> +UML_KCONFIG_PATH = 'tools/testing/kunit/configs/arch_uml.config'
->  OUTFILE_PATH = 'test.log'
->  ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
->  QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
-> @@ -53,7 +54,7 @@ class LinuxSourceTreeOperations:
->                 except subprocess.CalledProcessError as e:
->                         raise ConfigError(e.output.decode())
->
-> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
-> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
->                 pass
->
->         def make_allyesconfig(self, build_dir: str, make_options) -> None:
-> @@ -109,7 +110,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->                 self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
->                 self._extra_qemu_params = qemu_arch_params.extra_qemu_params
->
-> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
-> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
->                 kconfig = kunit_config.parse_from_string(self._kconfig)
->                 base_kunitconfig.merge_in_entries(kconfig)
->
-> @@ -137,6 +138,10 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->         def __init__(self, cross_compile=None):
->                 super().__init__(linux_arch='um', cross_compile=cross_compile)
->
-> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
-> +               kconfig = kunit_config.parse_file(UML_KCONFIG_PATH)
-> +               base_kunitconfig.merge_in_entries(kconfig)
-> +
->         def make_allyesconfig(self, build_dir: str, make_options) -> None:
->                 kunit_parser.print_with_timestamp(
->                         'Enabling all CONFIGs for UML...')
-> @@ -313,7 +318,7 @@ class LinuxSourceTree:
->                         return self.build_config(build_dir, make_options)
->
->                 existing_kconfig = kunit_config.parse_file(kconfig_path)
-> -               self._ops.make_arch_qemuconfig(self._kconfig)
-> +               self._ops.make_arch_config(self._kconfig)
->                 if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
->                         return True
->                 print('Regenerating .config ...')
-> --
-> 2.37.0.rc0.104.g0611611a94-goog
->
+I mentioned some of that in cover letter or commit message of patch 1, in
+that I don't think all the gup call sites are okay with being interrupted
+by a non-fatal signal.
+
+So what I want to do is doing it step by step, at least by introducing
+FOLL_INTERRUPTIBLE and having one valid user of it that covers a very valid
+use case.  I'm also pretty sure the page fault path is really the most
+cases that will happen with GUP, so it already helps in many ways for me
+when running with a patched kernel.
+
+So when the complete picture is non-trivial to achieve in one shot, I think
+this could be one option we go for.  With the facility (and example code on
+x86 slow page fault) ready, hopefully we could start to convert many other
+call sites to be signal-aware, outside page faults, or even outside x86,
+because it's really a more generic problem, which I fully agree.
+
+Does it sound reasonable to you?
+
+Thanks,
+
+-- 
+Peter Xu
+

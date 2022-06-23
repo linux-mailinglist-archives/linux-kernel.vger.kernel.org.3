@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE72B557405
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6339B557404
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiFWHeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 03:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S230173AbiFWHeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 03:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiFWHeW (ORCPT
+        with ESMTP id S229873AbiFWHeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 03:34:22 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54E546658;
-        Thu, 23 Jun 2022 00:34:21 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id o13so7259071vsn.4;
-        Thu, 23 Jun 2022 00:34:21 -0700 (PDT)
+        Thu, 23 Jun 2022 03:34:16 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D53546658
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:34:16 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id h34-20020a17090a29a500b001eb01527d9eso1754270pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p9RiEF1NADhGx2PxZs/J3A5vAnWg7/apg6YcfbCSXo8=;
-        b=DZlI8+5UMZ590PJRriJ8e4ClwY1ENK+glrsTUOLzgRYCDJ1ribd0hKS3nht40xRxXW
-         p1PXsopchvpzS0xrUjkggItcvVlayXU37uaWXr9Il3piSb8km5QNKz0ZuDQFijACfrYY
-         iYbRgs5fnQ/PnR6FgrX9RhdunamTjRdpbFsDBy1iZO00BFhbSQDOonm5pHOTUUisY307
-         hyAK46/buxmCSoZgQnU+MNvcVoE/xpU3bAMjmZ2OXBbenPX9gvwd7tq7TLay/wyugl5I
-         cLCppWHTk4WkH2p8BS/vB3PBmiTfGq4afIEP95a5CRiAP7mfG3RkRrC/dwePoxfeudjR
-         6PtQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p/+VGlu7EcyPo0XUSImIBdbWTMEq+6Oc052Qp24OKmY=;
+        b=g87gZfYG/07FCtRHnX9zajUxqHETsSKV9iQC8Hu3BRmM5QH2sPaqsZtQWZyoQdy0Af
+         7/5u8dUrmds+D2gmNVlLSTHao0aS9E6oGfMBm8NyCioPs2qeB9C8v5Dz/EJA291lW+0y
+         J+a/FRmu5OIzvUL9mLUyELqNKdZcsSby8+KZW8/zr3yRmHNWfLMZ2ubjRhkW202cCKWZ
+         AlRf+qYiL0WeiHHLj9GFWuM2fUnAX2R8G+vh+Oh8TK8sxZd8crx704NQ3M8MyOoyomZV
+         h1cXsqaK/mhcm/h5cmB0uNPPS5IB9jmfvWQgvfbYdib3iaOOk0YgC+D1XWhy7QOYJFCi
+         OYKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p9RiEF1NADhGx2PxZs/J3A5vAnWg7/apg6YcfbCSXo8=;
-        b=oVjzZdwosrNRdQcI6TIA46u9s8QeqkWzWtuLNGyuq2XcENpxHSdtDpgHh4c0yd30px
-         XhD+XjziUNXVTxSFI4aWZo+Co3GAXsYehF28zVcOEim07BvrqR1mC+S25+UWrUscoBHl
-         N2mNxi/OE22Cnu9bVXuNCi/OCSMVbmxVOUGBj1VeRWdSWuTmU9T3PXqfibSNHrLX0ZoA
-         oPDEJq+ZGotACYRTnuBWUZ9tvqIn6M54fvWKki+0RHKFaxRpmxvGaQH5MG0OseEMCmKH
-         RgLmgTeZhFqUEM/IwniJgYG5mCZY3omNGhIZlcMNnhYzPul8YHVZavOZz88eTrz2CPvt
-         zKhg==
-X-Gm-Message-State: AJIora9gDk1nwl0CZnGPRok7cvshmvRll2AOAPavwXt8xIW25iSK9K8f
-        zkFCWkiIoGIFrXdUg2yQ7ysWNKfRmKiOcNYCLkPwjZIfepl2zQ==
-X-Google-Smtp-Source: AGRyM1vBqJeJTPhynUoDu1+0J1ZVdF+TN1DWWaAqEFy7DurWfQ/vYlx1pf9jOnn8m0RAc5tGG5v7LuIuO8WqywHrhvs=
-X-Received: by 2002:a05:6102:34f1:b0:354:64b4:157b with SMTP id
- bi17-20020a05610234f100b0035464b4157bmr3084628vsb.26.1655969660897; Thu, 23
- Jun 2022 00:34:20 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=p/+VGlu7EcyPo0XUSImIBdbWTMEq+6Oc052Qp24OKmY=;
+        b=Z6l0LZN6Dxe6rW8eB0YHE5jd+DMaOayAEhjFDgWJRRrdGpHsheyuf8hzQ1NRrYBW51
+         7rPoyiwx4/Rctr65rq172S0JhVZ61rgWMlkREHHKskzuaGbRUeZMkszO15g6rgqwm6s8
+         i16L8D5RULaXj+dqGWSqi1jxPFCAdAaKBsaZldAbP6ySgES1/qHTBCioHp2eUX95nkQo
+         lR7FNKAB9/DQ3FaKCrRg/Qebgkd5icuRHJFQ1W2hvNs4faORzc3P1XmgL6JKlF+YCu9X
+         a14WBE93AncjhN3q9LEEwKONz3U67WqSxjskAB/u7juK/Fe+eO/bJ6uhIdSrC2p+CWuX
+         EnXQ==
+X-Gm-Message-State: AJIora8VKAo6uuhtLJXruugXnguOW8zmCWplKMHmafibuylj0cqqNd26
+        ihHZGJ+KaZSAkQkRpZXjxgjOJ4gtdurNAVbAXQ0=
+X-Google-Smtp-Source: AGRyM1tSACTTKI3laHGL+2owy3rlfPwq/RCCBXQ5Ok3ck5BShESEmK+hmWIHJAgEEJyCzFb92o2f7w==
+X-Received: by 2002:a17:902:d5ce:b0:167:6c02:754c with SMTP id g14-20020a170902d5ce00b001676c02754cmr37379325plh.135.1655969655789;
+        Thu, 23 Jun 2022 00:34:15 -0700 (PDT)
+Received: from localhost ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id d7-20020a17090a564700b001ec2b1b7d8asm1100466pji.10.2022.06.23.00.34.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 00:34:15 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 15:34:11 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Lv qian <lvqian@nfschina.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel@nfschina.com
+Subject: Re: [PATCH] vmalloc:Merge multiple if conditional sentences
+Message-ID: <YrQXc+KUhC1Z3nnT@FVFYT0MHHV2J.usts.net>
+References: <20220623064527.4238-1-lvqian@nfschina.com>
 MIME-Version: 1.0
-References: <20220620131953.16575-1-di.shen@unisoc.com> <CAJZ5v0j380_UEsy6qJ_KuRf8YbL3KtiY-h+RdkSsfd8SRCLy_A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j380_UEsy6qJ_KuRf8YbL3KtiY-h+RdkSsfd8SRCLy_A@mail.gmail.com>
-From:   Di Shen <cindygm567@gmail.com>
-Date:   Thu, 23 Jun 2022 15:34:09 +0800
-Message-ID: <CAHYJL4qOeRyqaZS+uijNM7xQUY1y2kVxq-h6q1WECRCAtJ+GFA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] thermal/sysfs: Clear the slot left in cooling_device_attr_groups
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Di Shen <di.shen@unisoc.com>, "Zhang, Rui" <rui.zhang@intel.com>,
-        xuewen.yan@unisoc.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>, jeson.gao@unisoc.com,
-        zhang.lyra@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623064527.4238-1-lvqian@nfschina.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,176 +69,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 9:55 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, Jun 23, 2022 at 02:45:27PM +0800, Lv qian wrote:
+> Merge multiple if statements to improve code readability
 >
-> On Mon, Jun 20, 2022 at 3:20 PM Di Shen <di.shen@unisoc.com> wrote:
-> >
-> > There's a space allocated for cooling_device_stats_attr_group within co-
->
-> Please don't break words in the changelog (and variable names in
-> particular) like this.
-Ok, thank you. I will pay attention to it.
->
-> > oling_device_attr_groups. This space is shared by all cooling devices.
-> >
-> > If not clear this space before cooling_device_stats_attr_group is initi-
-> > alized, the next cooling device will still create stats sysfs file nodes.
-> > At this time, read or write related nodes will cause kernel crash.
->
-> A bit more of an explanation here wouldn't hurt IMV.  In particular,
-> what does "the next cooling device" mean and what are "related nodes"?
 
-There are some cooling devices in thermal management. During the
-registration of these
-cooling devices, they will create "stats" sysfs.
+Hi Lv qian,
 
-s9863a:/sys/class/thermal/cooling_device2 # cd stats/
-s9863a:/sys/class/thermal/cooling_device2/stats # ls
-reset  time_in_state_ms  total_trans  trans_table
+Why do you think it is more readable? For me, the original one
+is more readable than yours.
 
-Reading or writing these property nodes may cause kernel_crash.
-For example, cat time_in_state_ms caused a crash because stats is NULL.
-
-The reason why stats is NULL is "failed to get_max_state in
-cooling_device_stats_setup()", and
-then cooling_device_stats_setup() returned directly without
-initializing stats structure.
-
-static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
-{
-        //.....
-        if (cdev->ops->get_max_state(cdev, &states))
-                return;
-        //.....
-        stats = kzalloc(var, GFP_KERNEL);
-        //...
-        /* Fill the empty slot left in cooling_device_attr_groups */
-        var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-        cooling_device_attr_groups[var] = &cooling_device_stats_attr_group;
-}
-
-static ssize_t
-time_in_state_ms_show(struct device *dev, struct device_attribute *attr,
-     char *buf)
-{
-        //......
-        spin_lock(&stats->lock); // stats is NULL. Failed to get lock here.
-        //....
-        spin_unlock(&stats->lock);
-
-        return len;
-}
-The same as reset_store(), trans_table_show(), total_trans_show().
->
-> > [exception_reboot_reason]: kernel_crash
-> > [exception_panic_reason]: Fatal exception
-> > [exception_time]: 2022-06-07_06-32-25
-> > [exception_file_info]: not-bugon
-> > [exception_task_id]: 3154
-> > [exception_task_family]: [cat, 3154][sh, 2597][sh, 2362][adbd, 1804]
-> > [exception_pc_symbol]: [<747516ae>] _raw_spin_lock+0x20/0x60
-> > [exception_stack_info]: [<4cbe9ac1>] prepare_exception_info+0x19c/0x1a4
-> > [<03041be7>] sysdump_panic_event+0x57c/0x6f4
-> > [<b16f865e>] atomic_notifier_call_chain+0x48/0x7c
-> > [<5baac8d4>] panic+0x1b4/0x3c8
-> > [<9d287b0f>] arm_notify_die+0x0/0x78
-> > [<094fc22c>] __do_kernel_fault+0x94/0xa4
-> > [<3b4b69a4>] do_page_fault+0xd4/0x364
-> > [<23793e7a>] do_translation_fault+0x38/0xc0
-> > [<6e5cc52a>] do_DataAbort+0x4c/0xd0
-> > [<a28c16b8>] __dabt_svc+0x5c/0xa0
-> > [<747516ae>] _raw_spin_lock+0x20/0x60
-> > [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-> > [<cb78325e>] dev_attr_show+0x38/0x64
-> > [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-> > [<c0a843ab>] seq_read+0x244/0x620
-> > [<b316b374>] vfs_read+0xd8/0x218
-> > [<3aebf5fa>] sys_read+0x80/0xe4
-> > [<7cf100f5>] ret_fast_syscall+0x0/0x28
-> > [<08cbe22f>] 0xbe8c1198
-> >
-
-Actually, if succeed to get max state, it will not crash when cat
-time_in_state_ms. But it is worth
-noting that even if one of the cooling devices failed to get max
-state(which means stats structure
-will not be initialized), the stats sysfs was still created.
-
-The property nodes of stats sysfs are created according to the
-attribute group, like:
-
-static const struct attribute_group *cooling_device_attr_groups[] = {
-        &cooling_device_attr_group,
-        NULL, /* Space allocated for cooling_device_stats_attr_group */
-        NULL,                                   |
-};                                                   |
-                                                     v
-There's a space allocated for cooling_device_stats_attr_group within
-cooling_device_attr_groups. This space is shared by all cooling
-devices.
-
-static struct attribute *cooling_device_stats_attrs[] = {
-        &dev_attr_total_trans.attr,
-        &dev_attr_time_in_state_ms.attr,
-        &dev_attr_reset.attr,
-        &dev_attr_trans_table.attr,
-        NULL
-};
-
-static const struct attribute_group cooling_device_stats_attr_group = {
-        .attrs = cooling_device_stats_attrs,
-        .name = "stats"
-};
-
-Suppose there are two cooling devices: cooling_device0 and cooling_device1.
-The stats structure of cooling_device0 is firstly initialized
-successfully, the space allocated for cooling_device_stats_attr_group
-will be filled.
-And then cooling_device1 fails to initialize stats structure, the
-space now still remains the cooling_device_stats_attr_group of
-cooling_device0.
-The initialization has failed, so why create sysfs? It is
-inappropriate to create the sysfs at this time.
-
-> > So clear the slot left in cooling_device_attr_groups before cooling_dev-
-> > ice_stats_attr_group is initialized to avoid kernel crash.
-> >
-> > Signed-off-by: Di Shen <di.shen@unisoc.com>
-> > ---
-> >  drivers/thermal/thermal_sysfs.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> > index 1c4aac8464a7..fbc3dbc85841 100644
-> > --- a/drivers/thermal/thermal_sysfs.c
-> > +++ b/drivers/thermal/thermal_sysfs.c
-> > @@ -817,6 +817,11 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
-> >         unsigned long states;
-> >         int var;
-> >
-> > +       /* Clear the slot left in cooling_device_attr_groups */
->
-> The comment is a bit too vague IMO.  In particular, what slot do you mean?
-
-Well, I will remove it. (Slot means a space allocated for
-cooling_device_stats_attr_group in cooling_device_attr_groups[])
-
->
-> > +       var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-> > +       if (cooling_device_attr_groups[var])
-> > +               cooling_device_attr_groups[var] = NULL;
->
-> The NULL check above is redundant (it can be cleared even if it is
-> NULL already) and it all can be done in one code line.
-
-OK. I will fix it in the next patchset.
-
->
-> > +
-> >         if (cdev->ops->get_max_state(cdev, &states))
-> >                 return;
-> >
-> > --
-
-Thanks!
-Di
+Thanks.
+ 
+> Signed-off-by: Lv qian <lvqian@nfschina.com>
+> ---
+>  mm/vmalloc.c | 66 ++++++++++++++--------------------------------------
+>  1 file changed, 18 insertions(+), 48 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index effd1ff6a4b4..6902a180f8f7 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -135,22 +135,12 @@ static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
+>  			phys_addr_t phys_addr, pgprot_t prot,
+>  			unsigned int max_page_shift)
+>  {
+> -	if (max_page_shift < PMD_SHIFT)
+> -		return 0;
+> -
+> -	if (!arch_vmap_pmd_supported(prot))
+> -		return 0;
+> -
+> -	if ((end - addr) != PMD_SIZE)
+> -		return 0;
+> -
+> -	if (!IS_ALIGNED(addr, PMD_SIZE))
+> -		return 0;
+> -
+> -	if (!IS_ALIGNED(phys_addr, PMD_SIZE))
+> -		return 0;
+> -
+> -	if (pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr))
+> +	if (max_page_shift < PMD_SHIFT ||
+> +			!arch_vmap_pmd_supported(prot) ||
+> +			(end - addr) != PMD_SIZE ||
+> +			!IS_ALIGNED(addr, PMD_SIZE) ||
+> +			!IS_ALIGNED(phys_addr, PMD_SIZE) ||
+> +			(pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr)))
+>  		return 0;
+>  
+>  	return pmd_set_huge(pmd, phys_addr, prot);
+> @@ -185,22 +175,12 @@ static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
+>  			phys_addr_t phys_addr, pgprot_t prot,
+>  			unsigned int max_page_shift)
+>  {
+> -	if (max_page_shift < PUD_SHIFT)
+> -		return 0;
+> -
+> -	if (!arch_vmap_pud_supported(prot))
+> -		return 0;
+> -
+> -	if ((end - addr) != PUD_SIZE)
+> -		return 0;
+> -
+> -	if (!IS_ALIGNED(addr, PUD_SIZE))
+> -		return 0;
+> -
+> -	if (!IS_ALIGNED(phys_addr, PUD_SIZE))
+> -		return 0;
+> -
+> -	if (pud_present(*pud) && !pud_free_pmd_page(pud, addr))
+> +	if (max_page_shift < PUD_SHIFT ||
+> +			!arch_vmap_pud_supported(prot) ||
+> +			(end - addr) != PUD_SIZE ||
+> +			!IS_ALIGNED(addr, PUD_SIZE) ||
+> +			!IS_ALIGNED(phys_addr, PUD_SIZE) ||
+> +			(pud_present(*pud) && !pud_free_pmd_page(pud, addr)))
+>  		return 0;
+>  
+>  	return pud_set_huge(pud, phys_addr, prot);
+> @@ -236,22 +216,12 @@ static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
+>  			phys_addr_t phys_addr, pgprot_t prot,
+>  			unsigned int max_page_shift)
+>  {
+> -	if (max_page_shift < P4D_SHIFT)
+> -		return 0;
+> -
+> -	if (!arch_vmap_p4d_supported(prot))
+> -		return 0;
+> -
+> -	if ((end - addr) != P4D_SIZE)
+> -		return 0;
+> -
+> -	if (!IS_ALIGNED(addr, P4D_SIZE))
+> -		return 0;
+> -
+> -	if (!IS_ALIGNED(phys_addr, P4D_SIZE))
+> -		return 0;
+> -
+> -	if (p4d_present(*p4d) && !p4d_free_pud_page(p4d, addr))
+> +	if (max_page_shift < P4D_SHIFT ||
+> +			!arch_vmap_p4d_supported(prot) ||
+> +			(end - addr) != P4D_SIZE ||
+> +			!IS_ALIGNED(addr, P4D_SIZE) ||
+> +			!IS_ALIGNED(phys_addr, P4D_SIZE) ||
+> +			(p4d_present(*p4d) && !p4d_free_pud_page(p4d, addr)))
+>  		return 0;
+>  
+>  	return p4d_set_huge(p4d, phys_addr, prot);
+> -- 
+> 2.18.2
+> 
+> 

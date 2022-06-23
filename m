@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA858557BFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A41E557C08
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiFWMz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
+        id S231984AbiFWMz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiFWMzy (ORCPT
+        with ESMTP id S229765AbiFWMzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Jun 2022 08:55:54 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F27F49CA9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC1649F9F;
         Thu, 23 Jun 2022 05:55:53 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25NCtYi1088600;
-        Thu, 23 Jun 2022 07:55:34 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25NCtahc088610;
+        Thu, 23 Jun 2022 07:55:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655988934;
-        bh=N+XOku6f1FtWw79fGrMPt6rgknsDGWjAzdTjOZYpKhg=;
-        h=From:To:CC:Subject:Date;
-        b=U6mLQzN6soIsoaNwHh4u32iCiKDG42Zo1gkDSTkuazGo11jBwdmbushN1cBUIzzbn
-         D+A2C13+Vd927Qdn0c1BLlORysuEmxhwcPhLZXHkzNXS2Jhz/WoyuWfdM3Z0dUFwcR
-         /StFAZHZWD9i4+uA4Js0TM20J+kWPVn4PsN8Id0s=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25NCtY2A032180
+        s=ti-com-17Q1; t=1655988936;
+        bh=LudpT7lFWiW8BGbvk0yTcNCyZfVY1zyH1uoq35WMDh0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=RJmdbr60yJnnGGO+mhXGtsg7t6X+qk6+PPQkcZkfXCRCpgHKyUyRgJ0uOCxWnLee1
+         6gVfEX+wWMiDu4lNS/SjsBC3++fnLhbDZnKbefTvT8VopkvkIv1b0WvGiizm68kcRO
+         eP1rUiIxNnLGs32wR2yKFuyTCdBQmn1FlK6XNzNQ=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25NCtaU3091234
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Jun 2022 07:55:34 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 23 Jun 2022 07:55:36 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Jun 2022 07:55:33 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2022 07:55:35 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Jun 2022 07:55:33 -0500
+ Frontend Transport; Thu, 23 Jun 2022 07:55:35 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25NCtW4H008068;
-        Thu, 23 Jun 2022 07:55:33 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25NCtYf2028813;
+        Thu, 23 Jun 2022 07:55:35 -0500
 From:   Rahul T R <r-ravikumar@ti.com>
 To:     <linux-phy@lists.infradead.org>, <kishon@ti.com>,
         <vkoul@kernel.org>, <robh+dt@kernel.org>,
@@ -49,11 +49,14 @@ CC:     <p.yadav@ti.com>, <tomi.valkeinen@ideasonboard.com>,
         <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
         <sjakhade@cadence.com>, <mparab@cadence.com>,
         <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v4 0/3] Add support for dphy tx on j721e
-Date:   Thu, 23 Jun 2022 18:24:30 +0530
-Message-ID: <20220623125433.18467-1-r-ravikumar@ti.com>
+        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 1/3] phy: dt-bindings: cdns,dphy: Add compatible for dphy on j721e
+Date:   Thu, 23 Jun 2022 18:24:31 +0530
+Message-ID: <20220623125433.18467-2-r-ravikumar@ti.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220623125433.18467-1-r-ravikumar@ti.com>
+References: <20220623125433.18467-1-r-ravikumar@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,34 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following series of patches adds support for dphy tx on ti's j721e
-soc. new compatible is added and required cdns dphy ops are implemented.
-the series also adds band ctrl configuration required for dphy tx
+Add compatible to support dphy tx on j721e
 
-v4:
--Remove the additional Kconfig for DPHY_TX_J721E support
--Add comments wherever absolute values are used in the code
--Accumulated the acks
+Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/phy/cdns,dphy.yaml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-v3:
--Fixed the header files order
--Store bands as array of unsigned int, since min[n] = max[n-1]
--Remove unreachable code warning
-
-v2:
--fix a build error reported by kernel test robot <lkp@intel.com>
- which uses clang compiler. did not get the error with gnu toolchain
- 9.2-2019.12
-
-Rahul T R (3):
-  phy: dt-bindings: cdns,dphy: Add compatible for dphy on j721e
-  phy: cdns-dphy: Add band config for dphy tx
-  phy: cdns-dphy: Add support for DPHY TX on J721e
-
- .../devicetree/bindings/phy/cdns,dphy.yaml    |   5 +-
- drivers/phy/cadence/cdns-dphy.c               | 101 +++++++++++++++++-
- 2 files changed, 103 insertions(+), 3 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+index c50629bd1b51..f0e9ca8427bb 100644
+--- a/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
++++ b/Documentation/devicetree/bindings/phy/cdns,dphy.yaml
+@@ -11,8 +11,9 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    items:
+-      - const: cdns,dphy
++    enum:
++      - cdns,dphy
++      - ti,j721e-dphy
+ 
+   reg:
+     maxItems: 1
 -- 
 2.36.1
 

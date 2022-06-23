@@ -2,224 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B7C558BD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76A8558BD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiFWXmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
+        id S230488AbiFWXoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiFWXlg (ORCPT
+        with ESMTP id S229615AbiFWXog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:41:36 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFF13B545;
-        Thu, 23 Jun 2022 16:41:24 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 5BE433200910;
-        Thu, 23 Jun 2022 19:41:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 23 Jun 2022 19:41:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1656027679; x=1656114079; bh=GGGcHpjYU8
-        f0oqCF9sTkuf/ZNvqfHIvVbvWd6LyG0bU=; b=QC4ROALRMM2EBGXv7ovtZ3EwII
-        lxK/2BAQH/nSlfXBmGb3YW54L+MUgvM289M+JDp4EqC6NEwfksKU1v9Dta7C7CVI
-        DmHGZ73IT1dQJ2EgE0hB7CQ+aHN10pW98U+Xv+bJ8ldZbRz98sBdjdila12KU6ea
-        gLoYs8sBRO9H3WlfGzZ757Fr7hKyBl8ILNosnEUSVVl52cOWnonH3j7C+WfzITdi
-        xTTyeMNZ3DSAuX17+TuUEfehqT8LB3RtrzdB/rkTAc7Be2ZrJ9GTIn197C8vZsTA
-        NDvGgMUVzgnyU1nwLUCbFRuIclY9G0gytC5IiNBg7qeqo3DsUsiSRCdeZC+Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1656027679; x=1656114079; bh=GGGcHpjYU8f0oqCF9sTkuf/ZNvqf
-        HIvVbvWd6LyG0bU=; b=ju+sjPJq3VdZMwnNCAggcJkQuMnuIIZWCBng6LL/bbyX
-        N8ZDxvx579+FAUhbzxnsIllQ64aPZ3SucFdempLTdwqY7P3MfrBBRk2ECZsiL+YO
-        sopGkx0gt1JsXo3GYL0WYV0q0XbOk2rceo/XvSN/uz6XrGtasnpuzPxI6gh/6WLk
-        qkwPlThQN/eyTgaNGVoGbBz6WCLPZ+xffGtPTm3JuIhwodtfXCMc6zwFGWJxeSkj
-        4TZkb3MPULBdRgS/5YZMYpBwtENZA19wDICAhZnHrn6rvhMg1FMwlmFWZ2UOlFGz
-        SAsJacJe6m4MSfjWVvCvCCh5yTTLKGZBcZax0Zzjqg==
-X-ME-Sender: <xms:H_q0YoqgWPM5NHLe2HqbQU0xOkKLKnWIzTJTG4_ntCcMSp19SAwTkg>
-    <xme:H_q0YupyJjC-V7IT09SslqwRntvB_5Lfr9aMCD8g5lykBhdS3JuW34ksAL_cKfZZQ
-    eGjO1NULiYnvQAKcpU>
-X-ME-Received: <xmr:H_q0YtOBtd4kbEaoRcPBm2IzhoNZg660TYMJSSYaWAHhk3suOMhnZsKZTkaWbQ1bI27NUaDG0X087nN8p0hmF0YZ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefkedgvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
-    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
-    grthhtvghrnhepjeeiiedtkeegvefhfeehgfdvheejgedugeduledtvdejveeijefhvedv
-    kefftdehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehthigthhhosehthigthhhordhpihii
-    iigr
-X-ME-Proxy: <xmx:H_q0Yv5EU9Pj_nxA8ky_APk25sQZBQ9temOOon0czX2hOcAyzQHVZQ>
-    <xmx:H_q0Yn5Y3OST6SxxHAQkO1GB_X5ZS0G64KxYHhDkBrw9YVS4mfxnGw>
-    <xmx:H_q0Yvh9YcJ_oWzKZ_F6LteKwvBwJtyK7aoUik8-XKTN5lgICeOJrw>
-    <xmx:H_q0YtQFJrwB3Gdx8OIa8-QaQjOiEQ_GSxnsfD67v8AaAlUsgdrflA>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Jun 2022 19:41:18 -0400 (EDT)
-Date:   Thu, 23 Jun 2022 17:41:17 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        fuse-devel@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: strange interaction between fuse + pidns
-Message-ID: <YrT6Hdqp36HLK9PJ@netflix>
-References: <YrShFXRLtRt6T/j+@risky>
- <YrThSLvG8JSLHG4j@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrThSLvG8JSLHG4j@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 23 Jun 2022 19:44:36 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E764FC6B;
+        Thu, 23 Jun 2022 16:44:35 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id n14so408345ilt.10;
+        Thu, 23 Jun 2022 16:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=Q9dyH1c/WKyQejLN3Yo4vHJr2Mjmed9KfkMox7OYbHw=;
+        b=Y8r6pVrW3fnhs0FmOm3bz1xp8USIwC8ve01v9J6QV4g9KA5Uf4F2vDivQiIYNojmIs
+         U7E3kJe2r9Z6oSOjcsyIFuSCJ1VrRdC2Jw3puIyxHpgXeOaSuy1+pE0nYvEGjekaVpaA
+         fcm8wrPrPGTo9LokkV0nz1qrxaCs/NL/3/fvxdV3hJJMEe3wrve5velwn3dJTTDky17x
+         KOsBTZb/1Z7bWLeXM8+uusUi7+7WhzBswPteztfYZnwf+NKtNaUXjQBeslPq/u2D8rVE
+         +eFC+cOK4qXKDW4EVhfoTb2viliPYy3uN8w6cBCCtuheF6awJp0haifDMnfYbk+paiG8
+         Lsaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=Q9dyH1c/WKyQejLN3Yo4vHJr2Mjmed9KfkMox7OYbHw=;
+        b=mr9ELWY4szgIRoxADSiP0OODcIrqkHFdyM6+tk/WQV4AT608IeIQti1tZ645KvVk4+
+         VF9qui1WONFO7nokJD0X6UuoDH3DxgF0CUk0S5Zlrn8RDVdyAvEm8C1NkOPu/Tqpodys
+         GuPH8OLpIB6dGmGBpgBAGV9/uDKAM1oB+/Qafw6tWjYAzbXAigoAW4czhdikfKvwIT4B
+         U5+LAEdEwcZfxhO10/CtDvJ3SS3ubfh8DuC3iueADBhkBbW86E2XRlvLE5OgamvjJHvs
+         hQHWgH5pKIVHl0FU6103hv1rt6cXVDh2o7Y7mqAkEJUZIi/wVNOmdjviHygonCn7Wkmr
+         P6MQ==
+X-Gm-Message-State: AJIora9teySOd1nT5U/UvyrqN0LFU+r6gp/hbTitPGoC+l6Tdk6NC7JC
+        0VLt4lX5KjwM+gpqttfiPCA=
+X-Google-Smtp-Source: AGRyM1uAMrbwKWLgODvFzmC0vmX8VqGiUp8rWPxrkbPQuXToUKxA2kE76dkWkLpDWSUW7wErwn2qPQ==
+X-Received: by 2002:a05:6e02:154e:b0:2d9:3a5:3c61 with SMTP id j14-20020a056e02154e00b002d903a53c61mr6591762ilu.147.1656027875171;
+        Thu, 23 Jun 2022 16:44:35 -0700 (PDT)
+Received: from localhost ([172.243.153.43])
+        by smtp.gmail.com with ESMTPSA id n41-20020a056602342900b00669536b0d71sm430920ioz.14.2022.06.23.16.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 16:44:34 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 16:44:28 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Simon wang <wangchuanguo@inspur.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Simon Wang <wangchuanguo@inspur.com>
+Message-ID: <62b4fadc6aaf_26268208bf@john.notmuch>
+In-Reply-To: <20220622031923.65692-1-wangchuanguo@inspur.com>
+References: <20220622031923.65692-1-wangchuanguo@inspur.com>
+Subject: RE: [PATCH] bpf: Replace 0 with BPF_K
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 05:55:20PM -0400, Vivek Goyal wrote:
-> So in this case single process is client as well as server. IOW, one
-> thread is fuse server servicing fuse requests and other thread is fuse
-> client accessing fuse filesystem?
-
-Yes. Probably an abuse of the API and something people Should Not Do,
-but as you say the kernel still shouldn't lock up like this.
-
-> > since the thread has a copy of
-> > the fd table with an fd pointing to the same fuse device, the reference
-> > count isn't decremented to zero in fuse_dev_release(), and the task hangs
-> > forever.
+Simon wang wrote:
+> From: Simon Wang <wangchuanguo@inspur.com>
 > 
-> So why did fuse server thread stop responding to fuse messages. Why
-> did it not complete flush.
-
-In this particular case I think it's because the application crashed
-for unrelated reasons and tried to exit the pidns, hitting this
-problem.
-
-> BTW, unkillable wait happens on ly fc->no_interrupt = 1. And this seems
-> to be set only if server probably some previous interrupt request
-> returned -ENOSYS.
+> Enhance readability.
 > 
-> fuse_dev_do_write() {
->                 else if (oh.error == -ENOSYS)
->                         fc->no_interrupt = 1;
-> }
+> Signed-off-by: Simon Wang <wangchuanguo@inspur.com>
+> ---
+>  kernel/bpf/verifier.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> So a simple workaround might be for server to implement support for
-> interrupting requests.
-
-Yes, but that is the libfuse default IIUC.
-
-> Having said that, this does sounds like a problem and probably should
-> be fixed at kernel level.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2859901ffbe3..29060f15daab 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9064,7 +9064,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  
+>  	if (opcode == BPF_END || opcode == BPF_NEG) {
+>  		if (opcode == BPF_NEG) {
+> -			if (BPF_SRC(insn->code) != 0 ||
+> +			if (BPF_SRC(insn->code) != BPF_K ||
+>  			    insn->src_reg != BPF_REG_0 ||
+>  			    insn->off != 0 || insn->imm != 0) {
+>  				verbose(env, "BPF_NEG uses reserved fields\n");
+> -- 
+> 2.27.0
 > 
-> > 
-> > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-> > index 0e537e580dc1..c604dfcaec26 100644
-> > --- a/fs/fuse/dev.c
-> > +++ b/fs/fuse/dev.c
-> > @@ -297,7 +297,6 @@ void fuse_request_end(struct fuse_req *req)
-> >  		spin_unlock(&fiq->lock);
-> >  	}
-> >  	WARN_ON(test_bit(FR_PENDING, &req->flags));
-> > -	WARN_ON(test_bit(FR_SENT, &req->flags));
-> >  	if (test_bit(FR_BACKGROUND, &req->flags)) {
-> >  		spin_lock(&fc->bg_lock);
-> >  		clear_bit(FR_BACKGROUND, &req->flags);
-> > @@ -381,30 +380,33 @@ static void request_wait_answer(struct fuse_req *req)
-> >  			queue_interrupt(req);
-> >  	}
-> >  
-> > -	if (!test_bit(FR_FORCE, &req->flags)) {
-> > -		/* Only fatal signals may interrupt this */
-> > -		err = wait_event_killable(req->waitq,
-> > -					test_bit(FR_FINISHED, &req->flags));
-> > -		if (!err)
-> > -			return;
-> > +	/* Only fatal signals may interrupt this */
-> > +	err = wait_event_killable(req->waitq,
-> > +				test_bit(FR_FINISHED, &req->flags));
-> 
-> Trying to do a fatal signal killable wait sounds reasonable. But I am
-> not sure about the history.
-> 
-> - Why FORCE requests can't do killable wait.
-> - Why flush needs to have FORCE flag set.
 
-args->force implies a few other things besides this killable wait in
-fuse_simple_request(), most notably:
+Code is fine and seems everywhere else we do this check with
 
-req = fuse_request_alloc(fm, GFP_KERNEL | __GFP_NOFAIL);
+    BPF_SRC(insn->code) != BPF_K
 
-and
+One thing though this should have [PATCH bpf-next] in the title so its
+clear the code is targeted for bpf-next. Although in this case its
+obvious from the content.
 
-__set_bit(FR_WAITING, &req->flags);
-
-seems like it probably can be invoked from some non-user/atomic
-context somehow?
-
-> > +	if (!err)
-> > +		return;
-> >  
-> > -		spin_lock(&fiq->lock);
-> > -		/* Request is not yet in userspace, bail out */
-> > -		if (test_bit(FR_PENDING, &req->flags)) {
-> > -			list_del(&req->list);
-> > -			spin_unlock(&fiq->lock);
-> > -			__fuse_put_request(req);
-> > -			req->out.h.error = -EINTR;
-> > -			return;
-> > -		}
-> > +	spin_lock(&fiq->lock);
-> > +	/* Request is not yet in userspace, bail out */
-> > +	if (test_bit(FR_PENDING, &req->flags)) {
-> > +		list_del(&req->list);
-> >  		spin_unlock(&fiq->lock);
-> > +		__fuse_put_request(req);
-> > +		req->out.h.error = -EINTR;
-> > +		return;
-> >  	}
-> > +	spin_unlock(&fiq->lock);
-> >  
-> >  	/*
-> > -	 * Either request is already in userspace, or it was forced.
-> > -	 * Wait it out.
-> > +	 * Womp womp. We sent a request to userspace and now we're getting
-> > +	 * killed.
-> >  	 */
-> > -	wait_event(req->waitq, test_bit(FR_FINISHED, &req->flags));
-> > +	set_bit(FR_INTERRUPTED, &req->flags);
-> > +	/* matches barrier in fuse_dev_do_read() */
-> > +	smp_mb__after_atomic();
-> > +	/* request *must* be FR_SENT here, because we ignored FR_PENDING before */
-> > +	WARN_ON(!test_bit(FR_SENT, &req->flags));
-> > +	queue_interrupt(req);
-> >  }
-> >  
-> >  static void __fuse_request_send(struct fuse_req *req)
-> > 
-> > avaialble as a full patch here:
-> > https://github.com/tych0/linux/commit/81b9ff4c8c1af24f6544945da808dbf69a1293f7
-> > 
-> > but now things are even weirder. Tasks are stuck at the killable wait, but with
-> > a SIGKILL pending for the thread group.
-> 
-> That's strange. No idea what's going on.
-
-Thanks for taking a look. This is where it falls apart for me. In
-principle the patch seems simple, but this sleeping behavior is beyond
-my understanding.
-
-Tycho
+Acked-by: John Fastabend <john.fastabend@gmail.com>

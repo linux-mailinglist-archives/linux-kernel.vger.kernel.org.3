@@ -2,246 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C26D557A34
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2A3557A3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiFWMXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S231549AbiFWMYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiFWMXM (ORCPT
+        with ESMTP id S231157AbiFWMYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:23:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD7DC63A6;
-        Thu, 23 Jun 2022 05:23:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D34E212FC;
-        Thu, 23 Jun 2022 05:23:10 -0700 (PDT)
-Received: from [10.57.85.4] (unknown [10.57.85.4])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A8CF3F534;
-        Thu, 23 Jun 2022 05:23:09 -0700 (PDT)
-Message-ID: <68263bd7-4528-7acb-b11f-6b1c6c8c72ef@arm.com>
-Date:   Thu, 23 Jun 2022 13:23:05 +0100
+        Thu, 23 Jun 2022 08:24:35 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8D231DD6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-101cdfddfacso18262239fac.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
+        b=ZGAwRzzE8VL85qRDYfMIvCrIHJkVRiIYei98dO36+lgVyF3FWJUe7hqqUrsTwy639Y
+         fc+W8/1hfo7JZohSBn0BmrXgCAuBJ5vCaJB2sAWPRSGsx6O74BR4aBhFhTsdrI8SVpw6
+         yHYggGBjd/sq0CYiDjkFfZkeqRUmrn4J7Dg4e7iicPa2yWiHeuY+8e+bLsDAiI4i8pyr
+         EV80OclS5ilc1yqKp6AG1B401ALvhV3exYBeb2IeV0OW8rpAFVov8Ge0ATahc3RcmxRF
+         4FFQUAnzOwhEN6/m8cyLiVsmXun+S618Er5jfz5mSVTteervSKejh8lx4MtRyhHmQCtR
+         ZssA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
+        b=ZSXK9DiXK+tJSsuC9XXMCjopb+qCvq1e4ePJSod3MahCKLay0XpHcV7mZ+VB/K/HFg
+         HaO+zsQuTH3DteTnb/rcLLESSue/8AXg3Jsv3xlFqCRhXQ5pW6aY0JWo+pYCZ8wJdp/R
+         KwIBk+4YFPeniqLwWV7Y1+gdwpGWooIZa+f41h1lpgauYHNjYODtNTFzLQ2G+X7XTS8Y
+         G9DIi4xqR5DkTgcsAA0s39kqfPB/uxm1hnsZP/kcM56Txqn2Ab9YySaYzBdkV+ekQ/Zr
+         vbcMfCs4uP21hy1QsXFexs8+z1Wc4NthNqnCi+S2pzMX3rozzyilejU0jyn1jvRllnMO
+         dWSA==
+X-Gm-Message-State: AJIora8PTXhhwoMKurQ2LMI83Sey8oJmXIsrUYx6Gf2mBByO/KYflLuO
+        JPXKb3NWVd/plwCMbR9SrxtvzLVy85/WVGjmUPYfeA==
+X-Google-Smtp-Source: AGRyM1tolYit2qOF13LQll2M1apYzVAPtBssHfNXvX79yFs+qX/QdnWSuZSn9LvvuTfowIJzogE5Gto6i2wMUvkyN5I=
+X-Received: by 2002:a05:6870:33a9:b0:f2:c44c:d054 with SMTP id
+ w41-20020a05687033a900b000f2c44cd054mr2317236oae.70.1655987073368; Thu, 23
+ Jun 2022 05:24:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/2] vfio/type1: Simplify bus_type determination
-Content-Language: en-GB
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     cohuck@redhat.com, jgg@nvidia.com, iommu@lists.linux.dev,
-        iommu@lists.linux-foundation.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
- <20220622161721.469fc9eb.alex.williamson@redhat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220622161721.469fc9eb.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
+ <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 23 Jun 2022 14:23:57 +0200
+Message-ID: <CAPDyKFq0cTX5pfTLxTa9SEUBiiEcMuiEeDi3OPfMjFuBWca_jw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+To:     David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-22 23:17, Alex Williamson wrote:
-> On Wed, 22 Jun 2022 13:04:11 +0100
-> Robin Murphy <robin.murphy@arm.com> wrote:
-> 
->> Since IOMMU groups are mandatory for drivers to support, it stands to
->> reason that any device which has been successfully be added to a group
-> 
-> s/be //
+On Wed, 22 Jun 2022 at 00:19, Daniel Latypov <dlatypov@google.com> wrote:
+>
+>  On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
+> >
+> > The kunit_test_suite() macro is no-longer incompatible with module_add,
+> > so its use can be reinstated.
+> >
+> > Since this fixes parsing with builtins and kunit_tool, also enable the
+> > test by default when KUNIT_ALL_TESTS is enabled.
+> >
+> > The test can now be run via kunit_tool with:
+> >         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+> >         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
+> >         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
+> >         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
+> >         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
+> >         'sdhci-of-aspeed'
+> >
+> > (It may be worth adding a .kunitconfig at some point, as there are
+> > enough dependencies to make that command scarily long.)
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
+>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+>
+> Minor, optional suggestion below.
+>
+> >  static int __init aspeed_sdc_init(void)
+> > @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
+> >         if (rc < 0)
+> >                 goto cleanup_sdhci;
+> >
+> > -       rc = aspeed_sdc_tests_init();
+> > -       if (rc < 0) {
+> > -               platform_driver_unregister(&aspeed_sdc_driver);
+> > -               goto cleanup_sdhci;
+> > -       }
+> > -
+> >         return 0;
+> >
+> >  cleanup_sdhci:
+>
+> This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
+> kunit-related build error") to allow for this extra call to
+> aspeed_sdc_tests_init().
+>
+> This could now be reverted back to what is
+>         rc = platform_driver_register(&aspeed_sdc_driver);
+>         if (rc < 0)
+>                platform_driver_unregister(&aspeed_sdhci_driver);
+>
+>         return rc;
+>
+> but let's see what the maintainers think.
 
-Oops.
+I don't have a strong opinion on this, feel free to pick any of the options.
 
->> must be on a bus supported by that IOMMU driver, and therefore a domain
->> viable for any device in the group must be viable for all devices in
->> the group. This already has to be the case for the IOMMU API's internal
->> default domain, for instance. Thus even if the group contains devices on
->> different buses, that can only mean that the IOMMU driver actually
->> supports such an odd topology, and so without loss of generality we can
->> expect the bus type of any device in a group to be suitable for IOMMU
->> API calls.
->>
->> Replace vfio_bus_type() with a simple call to resolve an appropriate
->> member device from which to then derive a bus type. This is also a step
->> towards removing the vague bus-based interfaces from the IOMMU API, when
->> we can subsequently switch to using this device directly.
->>
->> Furthermore, scrutiny reveals a lack of protection for the bus being
->> removed while vfio_iommu_type1_attach_group() is using it; the reference
->> that VFIO holds on the iommu_group ensures that data remains valid, but
->> does not prevent the group's membership changing underfoot. Holding the
->> vfio_device for as long as we need here also neatly solves this.
->>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->> ---
->>
->> After sleeping on it, I decided to type up the helper function approach
->> to see how it looked in practice, and in doing so realised that with one
->> more tweak it could also subsume the locking out of the common paths as
->> well, so end up being a self-contained way for type1 to take care of its
->> own concern, which I rather like.
->>
->>   drivers/vfio/vfio.c             | 18 +++++++++++++++++-
->>   drivers/vfio/vfio.h             |  3 +++
->>   drivers/vfio/vfio_iommu_type1.c | 30 +++++++++++-------------------
->>   3 files changed, 31 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
->> index 61e71c1154be..73bab04880d0 100644
->> --- a/drivers/vfio/vfio.c
->> +++ b/drivers/vfio/vfio.c
->> @@ -448,7 +448,7 @@ static void vfio_group_get(struct vfio_group *group)
->>    * Device objects - create, release, get, put, search
->>    */
->>   /* Device reference always implies a group reference */
->> -static void vfio_device_put(struct vfio_device *device)
->> +void vfio_device_put(struct vfio_device *device)
->>   {
->>   	if (refcount_dec_and_test(&device->refcount))
->>   		complete(&device->comp);
->> @@ -475,6 +475,22 @@ static struct vfio_device *vfio_group_get_device(struct vfio_group *group,
->>   	return NULL;
->>   }
->>   
->> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group)
->> +{
->> +	struct vfio_group *group = vfio_group_get_from_iommu(iommu_group);
->> +	struct vfio_device *device;
-> 
-> Check group for NULL.
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-OK - FWIW in context this should only ever make sense to call with an 
-iommu_group which has already been derived from a vfio_group, and I did 
-initially consider a check with a WARN_ON(), but then decided that the 
-unguarded dereference would be a sufficiently strong message. No problem 
-with bringing that back to make it more defensive if that's what you prefer.
-
->> +
->> +	mutex_lock(&group->device_lock);
->> +	list_for_each_entry(device, &group->device_list, group_next) {
->> +		if (vfio_device_try_get(device)) {
->> +			mutex_unlock(&group->device_lock);
->> +			return device;
->> +		}
->> +	}
->> +	mutex_unlock(&group->device_lock);
->> +	return NULL;
-> 
-> No vfio_group_put() on either path.
-
-Oops indeed.
-
->> +}
->> +
->>   /*
->>    * VFIO driver API
->>    */
->> diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
->> index a67130221151..e8f21e64541b 100644
->> --- a/drivers/vfio/vfio.h
->> +++ b/drivers/vfio/vfio.h
->> @@ -70,3 +70,6 @@ struct vfio_iommu_driver_ops {
->>   
->>   int vfio_register_iommu_driver(const struct vfio_iommu_driver_ops *ops);
->>   void vfio_unregister_iommu_driver(const struct vfio_iommu_driver_ops *ops);
->> +
->> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group);
->> +void vfio_device_put(struct vfio_device *device);
->> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
->> index c13b9290e357..e38b8bfde677 100644
->> --- a/drivers/vfio/vfio_iommu_type1.c
->> +++ b/drivers/vfio/vfio_iommu_type1.c
->> @@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
->>   	return ret;
->>   }
->>   
->> -static int vfio_bus_type(struct device *dev, void *data)
->> -{
->> -	struct bus_type **bus = data;
->> -
->> -	if (*bus && *bus != dev->bus)
->> -		return -EINVAL;
->> -
->> -	*bus = dev->bus;
->> -
->> -	return 0;
->> -}
->> -
->>   static int vfio_iommu_replay(struct vfio_iommu *iommu,
->>   			     struct vfio_domain *domain)
->>   {
->> @@ -2159,7 +2147,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
->>   	struct vfio_iommu *iommu = iommu_data;
->>   	struct vfio_iommu_group *group;
->>   	struct vfio_domain *domain, *d;
->> -	struct bus_type *bus = NULL;
->> +	struct vfio_device *iommu_api_dev;
->>   	bool resv_msi, msi_remap;
->>   	phys_addr_t resv_msi_base = 0;
->>   	struct iommu_domain_geometry *geo;
->> @@ -2192,18 +2180,19 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
->>   		goto out_unlock;
->>   	}
->>   
->> -	/* Determine bus_type in order to allocate a domain */
->> -	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
->> -	if (ret)
->> +	/* Resolve the group back to a member device for IOMMU API ops */
->> +	ret = -ENODEV;
->> +	iommu_api_dev = vfio_device_get_from_iommu(iommu_group);
->> +	if (!iommu_api_dev)
->>   		goto out_free_group;
->>   
->>   	ret = -ENOMEM;
->>   	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
->>   	if (!domain)
->> -		goto out_free_group;
->> +		goto out_put_dev;
->>   
->>   	ret = -EIO;
->> -	domain->domain = iommu_domain_alloc(bus);
->> +	domain->domain = iommu_domain_alloc(iommu_api_dev->dev->bus);
-> 
-> It makes sense to move away from a bus centric interface to iommu ops
-> and I can see that having a device interface when we have device level
-> address-ability within a group makes sense, but does it make sense to
-> only have that device level interface?  For example, if an iommu_group
-> is going to remain an aspect of the iommu subsystem, shouldn't we be
-> able to allocate a domain and test capabilities based on the group and
-> the iommu driver should have enough embedded information reachable from
-> the struct iommu_group to do those things?  This "perform group level
-> operations based on an arbitrary device in the group" is pretty klunky.
-
-The fact* is that devices (and domains) are the fundamental units of the 
-IOMMU API internals, due to what's most practical within the Linux 
-driver model, while groups remain more of a mid-level abstraction - 
-IOMMU drivers themselves are only aware of groups at all in terms of 
-whether they can physically distinguish a given device from others. The 
-client-driver-facing API is already moving back to being device-centric, 
-because that's what fits everyone else's usage models, and we concluded 
-that exposing the complexity of groups everywhere was more trouble than 
-it's worth.
-
-So yes, technically we could implement an iommu_group_capable() and an 
-iommu_group_domain_alloc(), which would still just internally resolve 
-the IOMMU ops and instance data from a member device to perform the 
-driver-level call, but once again it would be for the benefit of 
-precisely one user. And I really have minimal enthusiasm for diverging 
-any further into one IOMMU API for everyone else plus a separate special 
-IOMMU API for VFIO type1, when type1 is supposed to be the 
-VFIO-to-IOMMU-API translation layer anyway! To look at it another way, 
-if most of the complexity of groups is for VFIO's benefit, then why 
-*shouldn't* VFIO take responsibility for some of the fiddly details that 
-don't matter to anyone else?
-
-Thanks,
-Robin.
-
-
-* with some inescapable degree of subjective opinion, of course
+Kind regards
+Uffe

@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4EE5576B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24ED55576BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiFWJf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S230386AbiFWJgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiFWJf5 (ORCPT
+        with ESMTP id S230323AbiFWJgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:35:57 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09904969B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:35:55 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxaeT6M7RiVkRWAA--.36340S3;
-        Thu, 23 Jun 2022 17:35:54 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Make compute_return_era() return void
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1655541551-3997-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H5oaCnRyi0xpzzoUs-VemuQtSEStHHzerZFoAQmEabCdw@mail.gmail.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <c9123763-a72e-ce2a-83e3-b3e46cec15b3@loongson.cn>
-Date:   Thu, 23 Jun 2022 17:35:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 23 Jun 2022 05:36:13 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC574969C;
+        Thu, 23 Jun 2022 02:36:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 06D691FD84;
+        Thu, 23 Jun 2022 09:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655976968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k0mbNIM+JB6w795iF5JgVuU7GedW8ezpGnJMdaZLqFc=;
+        b=J8QALNxCEW1OJSBo0kJeIxMjIArt6h8Re6hB6BbVQA/4gULvEBrBTNTLe+6MwkNfs3MdhM
+        +U2JuSV0CPigje0U5klJwA1qVPVYX2JWk26XVFAjO7P3dCaYeUdQIlAqdQlOJMReUJwNUn
+        exQz9aVA+NftUov4Qz+/5SsUaH0d4Gg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655976968;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k0mbNIM+JB6w795iF5JgVuU7GedW8ezpGnJMdaZLqFc=;
+        b=dBgp1ATEUkJdvyO973sUrTj+pbMGITd6mg1TDpSBc9TVhJc58UU/R0cB06TqI2yvifWQML
+        K7sD1WPwEYxPXSCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF225133A6;
+        Thu, 23 Jun 2022 09:36:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LrcyLQc0tGLMKgAAMHmgww
+        (envelope-from <ykaukab@suse.de>); Thu, 23 Jun 2022 09:36:07 +0000
+Date:   Thu, 23 Jun 2022 11:36:06 +0200
+From:   Yousaf Kaukab <ykaukab@suse.de>
+To:     Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: tegra: Mark BPMP channels as no-memory-wc
+Message-ID: <20220623093606.GA181983@suse.de>
+References: <20220622132300.1746201-1-cyndis@kapsi.fi>
+ <20220622132300.1746201-2-cyndis@kapsi.fi>
+ <9e80da1f-60e9-5528-3636-6443461fb207@kapsi.fi>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5oaCnRyi0xpzzoUs-VemuQtSEStHHzerZFoAQmEabCdw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9BxaeT6M7RiVkRWAA--.36340S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur4ktF1kKw17WF18WFyUZFb_yoW8Cw13pF
-        17AFyDCFWrWr95CFyDtwn8Zry7Jrs3Cr4293Z29asYkF42vr1DXr10grsrZF10yayrKr40
-        qF4rKF1a9F43X3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUOo7ZUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9e80da1f-60e9-5528-3636-6443461fb207@kapsi.fi>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06/23/2022 05:26 PM, Huacai Chen wrote:
-> Hi, Tiezhu,
->
-> On Sat, Jun 18, 2022 at 4:39 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> compute_return_era() always returns 0, make it return void,
->> and then no need to check its return value for its callers.
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>  arch/loongarch/include/asm/branch.h | 3 +--
->>  arch/loongarch/kernel/traps.c       | 3 +--
->>  2 files changed, 2 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/loongarch/include/asm/branch.h b/arch/loongarch/include/asm/branch.h
->> index 3f33c89..9a133e4 100644
->> --- a/arch/loongarch/include/asm/branch.h
->> +++ b/arch/loongarch/include/asm/branch.h
->> @@ -12,10 +12,9 @@ static inline unsigned long exception_era(struct pt_regs *regs)
->>         return regs->csr_era;
->>  }
->>
->> -static inline int compute_return_era(struct pt_regs *regs)
->> +static inline void compute_return_era(struct pt_regs *regs)
->>  {
->>         regs->csr_era += 4;
->> -       return 0;
->>  }
->>
->>  #endif /* _ASM_BRANCH_H */
->> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
->> index e4060f8..1bf58c6 100644
->> --- a/arch/loongarch/kernel/traps.c
->> +++ b/arch/loongarch/kernel/traps.c
->> @@ -475,8 +475,7 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
->>
->>         die_if_kernel("Reserved instruction in kernel code", regs);
->>
->> -       if (unlikely(compute_return_era(regs) < 0))
->> -               goto out;
->> +       compute_return_era(regs);
-> Maybe it is better to simply remove the compute_return_era() function?
-
-Good idea, if so, I think we can also remove exception_era(), and then
-arch/loongarch/include/asm/branch.h can be removed.
-
-If you are OK, I will send a v2 patch to remove
-arch/loongarch/include/asm/branch.h
-
-Thanks,
-Tiezhu
-
->
-> Huacai
->>
->>         if (unlikely(get_user(opcode, era) < 0)) {
->>                 status = SIGSEGV;
->> --
->> 2.1.0
->>
-
+On Wed, Jun 22, 2022 at 04:29:03PM +0300, Mikko Perttunen wrote:
+> On 22.6.2022 16.23, Mikko Perttunen wrote:
+> > From: Mikko Perttunen <mperttunen@nvidia.com>
+> > 
+> > The Tegra SYSRAM contains regions access to which is restricted to
+> > certain hardware blocks on the system, and speculative accesses to
+> > those will cause issues.
+> > 
+> > Patch 'misc: sram: Only map reserved areas in Tegra SYSRAM' attempted
+> > to resolve this by only mapping the regions specified in the device
+> > tree on the assumption that there are no such restricted areas within
+> > the 64K-aligned area of memory that contains the memory we wish to map.
+> > 
+> > Turns out this assumption is wrong, as there are such areas above the
+> > 4K pages described in the device trees. As such, we need to use the
+> > bigger hammer that is no-memory-wc, which causes the memory to be
+> > mapped as Device memory to which speculative accesses are disallowed.
+> > 
+> > As such, the previous patch in the series,
+> >    'firmware: tegra: bpmp: do only aligned access to IPC memory area',
+> > is required with this patch to make the BPMP driver only issue aligned
+> > memory accesses as those are also required with Device memory.
+> > 
+> > Fixes: fec29bf04994 ("misc: sram: Only map reserved areas in Tegra SYSRAM")
+> > Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> > ---
+> 
+> FWIW, with this, the aforementioned patch to misc/sram is redundant. It
+> doesn't hurt, but doesn't really help either. Whether or not it should be
+> reverted, I have no opinion.
+I am in favor of reverting commit fec29bf04994 ("misc: sram: Only map
+reserved areas in Tegra SYSRAM"). Tegra platforms are the only consumer
+of this code. I consider it to be redundant after your series.
+For both patches:
+Reviewed-by: Yousaf Kaukab <ykaukab@suse.de>
+> 
+> Thanks,
+> Mikko
+BR,
+Yousaf

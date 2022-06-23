@@ -2,111 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF2B557FA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148E7557FA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbiFWQWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S232075AbiFWQXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiFWQW0 (ORCPT
+        with ESMTP id S230338AbiFWQXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:22:26 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A664504F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:22:26 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id d5so107424yba.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:22:25 -0700 (PDT)
+        Thu, 23 Jun 2022 12:23:14 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F962CDD2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:23:12 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id i10so24923689wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=HWfdSuINNohtisnS2qVOe06xpDSp3T61e4mpFZzW/k8=;
-        b=HOFArQ3z+psjRhswfHFbkJ777acIBYuvDQtUJzNJAfYngjn9qBZfxj/3ZTsHtrWvk6
-         TqKk5mB0oo/luDPnxhxAXY/ptMqAXqploZcvts4ivkcngTcXOa/JZWs8FjiuLDyCtw5h
-         iozTmNry4cqQBFmP/U2TdVf03GlopG4433CMGGtk9lBmSt2AkxwwViJh0Dlvd9CDJUKq
-         TCF0Kx2VOe/VJDCGiKP9ljXRNhjaf32bkfSfgmiWZ44hUDO46xmoToI3KAJUyyCST2cx
-         5ADze3xnp/sLbHzjwJfgNseVgb78meUe1vyyiHbFgJaijlYdMYC5eFWefpNrp0WI/L4F
-         oALA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Prnv934r/fiLrvMDb9R4Q9UAwnFSkafyVnLRJO0ekrY=;
+        b=LcoScsX3IhV4fd9f8iupQ0Dlh9F4jxJt+pgI6sQwesfY1uulJbPFxxz3e47Y2gN5vK
+         YwtUZOQhD+OdIkZq5h5316VrCYA3zkWya3oWSYp4ktmB127kUkw7jZv3YcpAhKXNZzWo
+         1CP4PSfO9KCvKOxJTo+viKnOKsiH2EnZ9nV1sMg+EMAMtWPKjMLsiI6Uoq3ZeBAMuudO
+         eTY+3/kHyPgm68smgmjFRHiyd9g+n46HURNhMJpQIzk1BuWIibHuWzfBoKlJCRreeDvr
+         8DcMZuSyY9c//NpF//WcukCphUzRbNnFTdq7wpzcjzX96KvWRWrKZXgHpYsIq/UCMrL5
+         mNMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=HWfdSuINNohtisnS2qVOe06xpDSp3T61e4mpFZzW/k8=;
-        b=DRVHM2vk7ZnbeUVEX0AhLLDeHvNY303IXfvcIzZ2kMmzDnjymoaRCbtOewbQM0nrcj
-         y0gHTgNemlMqAQx6XeUiYzCzofdVoaWmqjCFzJ8T7LcIp7ufLP8xcbVpI7yL6ATdBRP/
-         y4GuqBRsEcP6hrvKSHictwhYZRwEafL9SUxUfGZn+fH3mAOoWPKBR//ZAceO8SwzGeBV
-         YuRK9HhPnToh4bjp1aI7Ya+ny19do2xnrPZMdg7c48dk0s3dfYwtEgYwLyTAlq10eKuB
-         H7cJCHNUvxjvBU1K5QAXz8L2HrsSBjgQjuITjYihTU/KPHdVpMnZnUTUMMw3tJceRaL2
-         iung==
-X-Gm-Message-State: AJIora+ypqOhTukgDac0qzDV9bkDy+YQSzvxuV2cNTglgAXteMULX61e
-        hdSteKVjmEg6rR9dtwoZL4rg57lUqrbQO/8URoU=
-X-Google-Smtp-Source: AGRyM1uoTDv8XCXfFkIu5FvBPYoTjCSyzN2oF2NFi7o4cKP8qZtDUDucYBGS6fCFpKiSlAKhfNQucgHCtczZcYBBnqs=
-X-Received: by 2002:a05:6902:13c3:b0:663:ee28:428d with SMTP id
- y3-20020a05690213c300b00663ee28428dmr10132669ybu.613.1656001345095; Thu, 23
- Jun 2022 09:22:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Prnv934r/fiLrvMDb9R4Q9UAwnFSkafyVnLRJO0ekrY=;
+        b=Wq9XmIo613Rg3NT6tKkdWvcwy7jolUip8Gv3SBm7BcBLHMEL1sK1R0P5/gOn/fqG6S
+         lgcnurq+JSpSi1AETkNQKo7DgqdwOqhQVF94roD2RomSeca5SMql2cfF8vsAg1lbLneY
+         /bBIqqMcbVZjwVLKd827nDN6ypKOh3OWVLS0pF7TuqGAdnXx5UBRhi6fcKx3nh87+V/O
+         tggVHYD5lN1t/16NkfD45n4XtuzO60lbPXTyMv9PvwAUbuUaCuB8Mpgn+9M09URIcewK
+         ZNNT6UcBkjxIyN7cZ1NVdgqRUwJUY1DepINKX68Saqd4hvkTDOQTEbc8UobSESqKSDMY
+         k+kQ==
+X-Gm-Message-State: AJIora8EY9Mi344+qqZDkfaZUjhcY+MuHe0i2w93be1VdyGZ273FVG+E
+        /5TnHPa9blS7aeg5HuZ8NT5bnS/m/lhXdvp9wmZHpA==
+X-Google-Smtp-Source: AGRyM1vTy6IWQuv86qCMMmSYWNfQztKY8n3VeFmwOS7QomTeUz0+bWJzjNiyKFatZ6wC44IktxYiKmcznPAqBBvH7jU=
+X-Received: by 2002:adf:f146:0:b0:21b:8c7d:7294 with SMTP id
+ y6-20020adff146000000b0021b8c7d7294mr9243960wro.582.1656001391355; Thu, 23
+ Jun 2022 09:23:11 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: miswendygeorge@protonmail.com
-Sender: mrsgadafio@gmail.com
-Received: by 2002:a05:7110:7108:b0:188:5d05:ae10 with HTTP; Thu, 23 Jun 2022
- 09:22:24 -0700 (PDT)
-From:   Miss Wendy George <misswendygeorge@gmail.com>
-Date:   Thu, 23 Jun 2022 09:22:24 -0700
-X-Google-Sender-Auth: WqN8VWx_hoLDY1PftSZF4FKYuOI
-Message-ID: <CAAPaySPNUcODqGqAVrqMcyC1GvMzS-bLkXsBkingdOJMF4h-Ww@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220623000530.1194226-1-yosryahmed@google.com>
+ <YrQe5A+FXnbgOR1f@dhcp22.suse.cz> <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
+ <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz>
+In-Reply-To: <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 23 Jun 2022 09:22:35 -0700
+Message-ID: <CAJD7tkadsLOV7GMFAm+naX4Y1WpZ-4=NkAhAMxNw60iaRPWx=w@mail.gmail.com>
+Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
+ memory pressure
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b43 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5003]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsgadafio[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am with tears and sorrow in my eyes, I know this message will come
-to you as a surprised but permit me of my desire to go into business
-relationship with you. My name is Miss Wendy George, 21 years old Girl
-from South Sudan, My father and I escaped from our country to Burkina
-Faso. At the heat of the civil war after losing my mother and two of
-my senior brothers in the war.
-I am here seeking for avenue to transfer my inheritance fund of
-$15.5Million United State Dollar to your position,
-This fund was deposited in Dubai United Arab Emirates but I am in
-Africa at the moment. Where i and my father escape to because of the
-heat of the war in my country I will be waiting to hear from you for
-more explanation about this transfer thanks
+On Thu, Jun 23, 2022 at 2:43 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 23-06-22 01:35:59, Yosry Ahmed wrote:
+> > On Thu, Jun 23, 2022 at 1:05 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Thu 23-06-22 00:05:30, Yosry Ahmed wrote:
+> > > > Commit e22c6ed90aa9 ("mm: memcontrol: don't count limit-setting reclaim
+> > > > as memory pressure") made sure that memory reclaim that is induced by
+> > > > userspace (limit-setting, proactive reclaim, ..) is not counted as
+> > > > memory pressure for the purposes of psi.
+> > > >
+> > > > Instead of counting psi inside try_to_free_mem_cgroup_pages(), callers
+> > > > from try_charge() and reclaim_high() wrap the call to
+> > > > try_to_free_mem_cgroup_pages() with psi handlers.
+> > > >
+> > > > However, vmpressure is still counted in these cases where reclaim is
+> > > > directly induced by userspace. This patch makes sure vmpressure is not
+> > > > counted in those operations, in the same way as psi. Since vmpressure
+> > > > calls need to happen deeper within the reclaim path, the same approach
+> > > > could not be followed. Hence, a new "controlled" flag is added to struct
+> > > > scan_control to flag a reclaim operation that is controlled by
+> > > > userspace. This flag is set by limit-setting and proactive reclaim
+> > > > operations, and is used to count vmpressure correctly.
+> > > >
+> > > > To prevent future divergence of psi and vmpressure, commit e22c6ed90aa9
+> > > > ("mm: memcontrol: don't count limit-setting reclaim as memory pressure")
+> > > > is effectively reverted and the same flag is used to control psi as
+> > > > well.
+> > >
+> > > Why do we need to add this is a legacy interface now? Are there any
+> > > pre-existing users who realized this is bugging them? Please be more
+> > > specific about the usecase.
+> >
+> > Sorry if I wasn't clear enough. Unfortunately we still have userspace
+> > workloads at Google that use vmpressure notifications.
+> >
+> > In our internal version of memory.reclaim that we recently upstreamed,
+> > we do not account vmpressure during proactive reclaim (similar to how
+> > psi is handled upstream). We want to make sure this behavior also
+> > exists in the upstream version so that consolidating them does not
+> > break our users who rely on vmpressure and will start seeing increased
+> > pressure due to proactive reclaim.
+>
+> These are good reasons to have this patch in your tree. But why is this
+> patch benefitial for the upstream kernel? It clearly adds some code and
+> some special casing which will add a maintenance overhead.
 
-Miss Wendy George
+It is not just Google, any existing vmpressure users will start seeing
+false pressure notifications with memory.reclaim. The main goal of the
+patch is to make sure memory.reclaim does not break pre-existing users
+of vmpressure, and doing it in a way that is consistent with psi makes
+sense.
+
+> --
+> Michal Hocko
+> SUSE Labs

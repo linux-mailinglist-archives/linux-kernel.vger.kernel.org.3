@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94199557D5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0096E557D63
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiFWNz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S231638AbiFWN64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiFWNz4 (ORCPT
+        with ESMTP id S230208AbiFWN6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:55:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B69C3B011;
-        Thu, 23 Jun 2022 06:55:55 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 23 Jun 2022 09:58:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066B63B031
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:58:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9E0E366016F0;
-        Thu, 23 Jun 2022 14:55:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655992553;
-        bh=5sW6BimoFPL/i1s52PKt0YiCTWn44ik1RGWDhHeRQB8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GTpfEeIXrd13paiafv+YQrIByKTXvEY8Kobd/ORfWfGqYDriEyp7pXCDWz50aDhgZ
-         TibaaQhb+61Y8I3n8ArhBomHaS19myHn6oBFMKy1fo+9c+Q3G6vvJSv/Z7h2w7mZQw
-         +a8LmC6RiJYmFasz2ExpGsgYF5SbQb28iMa3LU77J6IvkIOR9Hxo8J3GDYQENC1OOQ
-         SgHfMYpI6EecpMdjC5tK3HqZJwvmHBcj9LAN5NBVsNpeMsi8pgt//y07L6uVeHQNii
-         M2E/bZO3odjkn1upiIo9ASYmLtzjxSLm6FGMApfqmtepna0AL962LvJdzAZoUgjXjI
-         I8lc8ThwNgOiA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     minghsiu.tsai@mediatek.com
-Cc:     houlong.wei@mediatek.com, andrew-ct.chen@mediatek.com,
-        mchehab@kernel.org, matthias.bgg@gmail.com, hans.verkuil@cisco.com,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, acourbot@chromium.org,
-        irui.wang@mediatek.com, yunfei.dong@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] media: platform: mtk-mdp: Fix mdp_ipi_comm structure alignment
-Date:   Thu, 23 Jun 2022 15:55:46 +0200
-Message-Id: <20220623135546.121344-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8301561DE8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E18C3411D;
+        Thu, 23 Jun 2022 13:58:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655992733;
+        bh=2mVrmGmg0xr+Ozcvo3SQuzInJWS43tMd2u0JvspqRZY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=VfDbK+9xXR0NUdvVobxenGV/aPApAVTZ9kOoVcXuGXY4rLTPo7/ydth9gXKOuC5iP
+         rfgMFrGZUnvRShxQbc5Gy2CKaUtV9a+fkRPWeUW0h/pi4OlfakqhiwGhO5GWcfVjrm
+         7zp6uT2Gs5JohG5a2ru+g5GNyBKSuTSJR9In/JWC+EqLVtAC0i04AcIKpFc/v4A0xd
+         QmqpeettfwY0aY1LxRulZrmBvBRnIvkDN6Q/tNBY+JApGKhQ+zX2o0dJAjfFR2c4Sk
+         E31R06UEA4tXld+JtP2xo4WPARl7WmefM4Us3MW1XgotY7ysASsaxqBcmvUqGJNOnl
+         66m0FG9WUsoog==
+From:   Mark Brown <broonie@kernel.org>
+To:     ckeepax@opensource.cirrus.com
+Cc:     david.rhodes@cirrus.com, james.schulman@cirrus.com,
+        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com
+In-Reply-To: <20220623105120.1981154-1-ckeepax@opensource.cirrus.com>
+References: <20220623105120.1981154-1-ckeepax@opensource.cirrus.com>
+Subject: Re: (subset) [PATCH 1/6] ASoC: dapm: Initialise kcontrol data for mux/demux controls
+Message-Id: <165599273226.179867.18058864820347037377.b4-ty@kernel.org>
+Date:   Thu, 23 Jun 2022 14:58:52 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mdp_ipi_comm structure defines a command that is either
-PROCESS (start processing) or DEINIT (destroy instance); we
-are using this one to send PROCESS or DEINIT commands from Linux
-to an MDP instance through a VPU write but, while the first wants
-us to stay 4-bytes aligned, the VPU instead requires an 8-bytes
-data alignment.
+On Thu, 23 Jun 2022 11:51:15 +0100, Charles Keepax wrote:
+> DAPM keeps a copy of the current value of mux/demux controls,
+> however this value is only initialised in the case of autodisable
+> controls. This leads to false notification events when first
+> modifying a DAPM kcontrol that has a non-zero default.
+> 
+> Autodisable controls are left as they are, since they already
+> initialise the value, and there would be more work required to
+> support autodisable muxes where the first option isn't disabled
+> and/or that isn't the default.
+> 
+> [...]
 
-Keeping in mind that these commands are executed immediately
-after sending them (hence not chained with others before the
-VPU/MDP "actually" start executing), it is fine to simply add
-a padding of 4 bytes to this structure: this keeps the same
-performance as before, as we're still stack-allocating it,
-while avoiding hackery inside of mtk-vpu to ensure alignment
-bringing a definitely bigger performance impact.
+Applied to
 
-Fixes: c8eb2d7e8202 ("[media] media: Add Mediatek MDP Driver")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
-Reviewed-by: Irui Wang <irui.wang@mediatek.com>
----
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Changes in v2: Rebased on next-20220623
+Thanks!
 
- drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h | 2 ++
- 1 file changed, 2 insertions(+)
+[6/6] ASoC: dapm: Move stereo autodisable check
+      commit: 4d6c2b46d81765e920007f76185a8d1fb5e41ca3
 
-diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h b/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h
-index 2cb8cecb3077..b810c96695c8 100644
---- a/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h
-+++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_ipi.h
-@@ -40,12 +40,14 @@ struct mdp_ipi_init {
-  * @ipi_id        : IPI_MDP
-  * @ap_inst       : AP mtk_mdp_vpu address
-  * @vpu_inst_addr : VPU MDP instance address
-+ * @padding       : Alignment padding
-  */
- struct mdp_ipi_comm {
- 	uint32_t msg_id;
- 	uint32_t ipi_id;
- 	uint64_t ap_inst;
- 	uint32_t vpu_inst_addr;
-+	uint32_t padding;
- };
- 
- /**
--- 
-2.35.1
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

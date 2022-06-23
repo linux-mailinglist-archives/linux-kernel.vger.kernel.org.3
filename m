@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2726F557600
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D473557604
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbiFWIzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
+        id S230441AbiFWI4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiFWIzc (ORCPT
+        with ESMTP id S229778AbiFWI4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:55:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4042836B42;
-        Thu, 23 Jun 2022 01:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655974531; x=1687510531;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5e5LpSrE1tJXHTXV3wUUQLHgxzGmhBA+V4BYztZBrKg=;
-  b=Sfub/Y76N7+xhee7W5Yu6CL+UaFiGwcRYJYOZeoaAGfifs+PSELg7iH8
-   JJl+xRW02g2ygoMw6PPSu+6JaeKu7hlqnEPCunjV/E67xv5I69rxIjkcU
-   kFVluoV8vfA5cVVUGtCi5b6X8E2Z1KR6LFsw472dDgD2qiYdmY4gJvx5k
-   6Fr4rGI3oknhT9fpyL2cFhGwgLGvSYWHS3pPpqrTi1cK9By6T0jdXuQkG
-   oZ92pdMBUZc0DwBk7jAmYVQBnlh1J6DQbME7YhylEyQqzkYZeShb75U7s
-   W5KcJacZvblIih0BCZggIgik1CZGr3Hql0aLHaDwpWC+1F05PSUSqP7C/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="344655811"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="344655811"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 01:55:30 -0700
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644641277"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.96])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 01:55:29 -0700
-Message-ID: <b6832fce-ee48-c4d8-e898-d9aab17345d1@intel.com>
-Date:   Thu, 23 Jun 2022 11:55:24 +0300
+        Thu, 23 Jun 2022 04:56:46 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E6A38186;
+        Thu, 23 Jun 2022 01:56:45 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LTDdR3RDNz9t7C;
+        Thu, 23 Jun 2022 10:56:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rB5xfNfnoNUc; Thu, 23 Jun 2022 10:56:43 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LTDdR2ZVlz9t6Q;
+        Thu, 23 Jun 2022 10:56:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4743A8B781;
+        Thu, 23 Jun 2022 10:56:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id UwjsiME56Pee; Thu, 23 Jun 2022 10:56:43 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.34])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0E5DD8B763;
+        Thu, 23 Jun 2022 10:56:43 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25N8uSoh1200275
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 23 Jun 2022 10:56:28 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25N8uQxD1200273;
+        Thu, 23 Jun 2022 10:56:26 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org, Mike Rapoport <rppt@kernel.org>
+Subject: [PATCH] powerpc/book3e: Fix PUD allocation size in map_kernel_page()
+Date:   Thu, 23 Jun 2022 10:56:17 +0200
+Message-Id: <95ddfd6176d53e6c85e13bd1c358359daa56775f.1655974558.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH] mmc: sdhci: drop unexpected word 'a' in comments
-Content-Language: en-US
-To:     Jiang Jian <jiangjian@cdjrlc.com>, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220623071616.13873-1-jiangjian@cdjrlc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220623071616.13873-1-jiangjian@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655974576; l=1585; s=20211009; h=from:subject:message-id; bh=Jp+v78vMca/ZhgxNxJxjjN47ttG4snyxnWxwIcvn2FQ=; b=fJWL366FpnhIey5YC0D33IJ7uJFJfP4T2HGGw2n467rJNOmNOfAXj50BgSY2G8/9K+C2sVEqPX44 PQ5ia/7VBfwecEkzZYzGvniMO7D8QDIedqs7buR9CEcBRP+4L2G6
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/22 10:16, Jiang Jian wrote:
-> Remove the repeated word 'a' from comments
-> 
-> file - drivers/mmc/host/sdhci.h
-> line - 348
-> 
-> /* Allow for a a command request and a data request at the same time */
-> 
-> changed to:
-> 
-> /* Allow for a command request and a data request at the same time */
-> 
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+Commit 2fb4706057bc ("powerpc: add support for folded p4d page tables")
+erroneously changed PUD setup to a mix of PMD and PUD. Fix it.
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+While at it, use PTE_TABLE_SIZE instead of PAGE_SIZE for PTE tables
+in order to avoid any confusion.
 
-> ---
->  drivers/mmc/host/sdhci.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> index 95a08f09df30..0abe4b428ed5 100644
-> --- a/drivers/mmc/host/sdhci.h
-> +++ b/drivers/mmc/host/sdhci.h
-> @@ -345,7 +345,7 @@ struct sdhci_adma2_64_desc {
->   */
->  #define SDHCI_MAX_SEGS		128
->  
-> -/* Allow for a a command request and a data request at the same time */
-> +/* Allow for a command request and a data request at the same time */
->  #define SDHCI_MAX_MRQS		2
->  
->  /*
+Fixes: 2fb4706057bc ("powerpc: add support for folded p4d page tables")
+Cc: stable@vger.kernel.org
+Cc: Mike Rapoport <rppt@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/mm/nohash/book3e_pgtable.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/powerpc/mm/nohash/book3e_pgtable.c b/arch/powerpc/mm/nohash/book3e_pgtable.c
+index 7d4368d055a6..b80fc4a91a53 100644
+--- a/arch/powerpc/mm/nohash/book3e_pgtable.c
++++ b/arch/powerpc/mm/nohash/book3e_pgtable.c
+@@ -96,8 +96,8 @@ int __ref map_kernel_page(unsigned long ea, unsigned long pa, pgprot_t prot)
+ 		pgdp = pgd_offset_k(ea);
+ 		p4dp = p4d_offset(pgdp, ea);
+ 		if (p4d_none(*p4dp)) {
+-			pmdp = early_alloc_pgtable(PMD_TABLE_SIZE);
+-			p4d_populate(&init_mm, p4dp, pmdp);
++			pudp = early_alloc_pgtable(PUD_TABLE_SIZE);
++			p4d_populate(&init_mm, p4dp, pudp);
+ 		}
+ 		pudp = pud_offset(p4dp, ea);
+ 		if (pud_none(*pudp)) {
+@@ -106,7 +106,7 @@ int __ref map_kernel_page(unsigned long ea, unsigned long pa, pgprot_t prot)
+ 		}
+ 		pmdp = pmd_offset(pudp, ea);
+ 		if (!pmd_present(*pmdp)) {
+-			ptep = early_alloc_pgtable(PAGE_SIZE);
++			ptep = early_alloc_pgtable(PTE_TABLE_SIZE);
+ 			pmd_populate_kernel(&init_mm, pmdp, ptep);
+ 		}
+ 		ptep = pte_offset_kernel(pmdp, ea);
+-- 
+2.36.1
 

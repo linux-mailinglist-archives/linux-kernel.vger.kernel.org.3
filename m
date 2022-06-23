@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580945585B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2076B55832D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235817AbiFWSBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S232213AbiFWR0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233173AbiFWR7g (ORCPT
+        with ESMTP id S233873AbiFWRZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:59:36 -0400
+        Thu, 23 Jun 2022 13:25:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15383B2CEA;
-        Thu, 23 Jun 2022 10:16:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A432E33A34;
+        Thu, 23 Jun 2022 10:02:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24E7EB824C1;
-        Thu, 23 Jun 2022 17:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD83C341C4;
-        Thu, 23 Jun 2022 17:16:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C854FB82493;
+        Thu, 23 Jun 2022 17:02:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3E42C3411B;
+        Thu, 23 Jun 2022 17:02:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004586;
-        bh=veDQwILYuYD77O/PWU+fYo0AeKKkbMgMDyW8CYhs+zQ=;
+        s=korg; t=1656003726;
+        bh=udOWZjqsAyJnoUBfrp3fEArEEvGU0g/gUTRVNY1tDqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y/rTsevznXg3iMO4qKJcSYuWfHviIQsskti/t8y5WwNSQya9VAYYR8nAaz7eLZI12
-         gWBsZvdXWrbgqXj1958xwctdCecpXNWISkPT+Ko2Z8SE38gl0Xcz7da4SmrDVt/o46
-         z4zD3NerhJpvJ7wW3at3rqzYf1gqusdwt43kl24o=
+        b=uY423WDRzRMOUBYNhmDVcHjq+kSixkq9Fgv9z7O1C1jQ2kWYjivWai5ro2Xi8ZC2Z
+         RjCFRCsK5ymwkGgbrOZmkwAHWgEqlhvcRTvEDSKcDtGp1kTKnLqXTgvby5EXEpgQ/V
+         pHJEcswp7sHtTQPO1Nf7/+1vQnrS/qmZONh32gkQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Jann Horn <jannh@google.com>, Theodore Tso <tytso@mit.edu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.19 034/234] random: avoid warnings for !CONFIG_NUMA builds
+Subject: [PATCH 4.14 067/237] random: initialize ChaCha20 constants with correct endianness
 Date:   Thu, 23 Jun 2022 18:41:41 +0200
-Message-Id: <20220623164344.030670516@linuxfoundation.org>
+Message-Id: <20220623164345.083215443@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
-References: <20220623164343.042598055@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit ab9a7e27044b87ff2be47b8f8e095400e7fccc44 upstream.
+commit a181e0fdb2164268274453b5b291589edbb9b22d upstream.
 
-As crng_initialize_secondary() is only called by do_numa_crng_init(),
-and the latter is under ifdeffery for CONFIG_NUMA, when CONFIG_NUMA is
-not selected the compiler will warn that the former is unused:
+On big endian CPUs, the ChaCha20-based CRNG is using the wrong
+endianness for the ChaCha20 constants.
 
-| drivers/char/random.c:820:13: warning: 'crng_initialize_secondary' defined but not used [-Wunused-function]
-|   820 | static void crng_initialize_secondary(struct crng_state *crng)
-|       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+This doesn't matter cryptographically, but technically it means it's not
+ChaCha20 anymore.  Fix it to always use the standard constants.
 
-Stephen reports that this happens for x86_64 noallconfig builds.
-
-We could move crng_initialize_secondary() and crng_init_try_arch() under
-the CONFIG_NUMA ifdeffery, but this has the unfortunate property of
-separating them from crng_initialize_primary() and
-crng_init_try_arch_early() respectively. Instead, let's mark
-crng_initialize_secondary() as __maybe_unused.
-
-Link: https://lore.kernel.org/r/20200310121747.GA49602@lakrids.cambridge.arm.com
-Fixes: 5cbe0f13b51a ("random: split primary/secondary crng init paths")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-crypto@vger.kernel.org
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Jann Horn <jannh@google.com>
 Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c     |    4 ++--
+ include/crypto/chacha20.h |    8 ++++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -801,7 +801,7 @@ static bool crng_init_try_arch(struct cr
- 	return arch_init;
- }
+@@ -816,7 +816,7 @@ static bool __init crng_init_try_arch_ea
  
--static void crng_initialize_secondary(struct crng_state *crng)
-+static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
+ static void crng_initialize_secondary(struct crng_state *crng)
  {
- 	memcpy(&crng->state[0], "expand 32-byte k", 16);
+-	memcpy(&crng->state[0], "expand 32-byte k", 16);
++	chacha_init_consts(crng->state);
  	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
+ 	crng_init_try_arch(crng);
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+@@ -824,7 +824,7 @@ static void crng_initialize_secondary(st
+ 
+ static void __init crng_initialize_primary(struct crng_state *crng)
+ {
+-	memcpy(&crng->state[0], "expand 32-byte k", 16);
++	chacha_init_consts(crng->state);
+ 	_extract_entropy(&input_pool, &crng->state[4], sizeof(__u32) * 12, 0);
+ 	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
+ 		invalidate_batched_entropy();
+--- a/include/crypto/chacha20.h
++++ b/include/crypto/chacha20.h
+@@ -25,4 +25,12 @@ int crypto_chacha20_setkey(struct crypto
+ 			   unsigned int keysize);
+ int crypto_chacha20_crypt(struct skcipher_request *req);
+ 
++static inline void chacha_init_consts(u32 *state)
++{
++	state[0]  = 0x61707865; /* "expa" */
++	state[1]  = 0x3320646e; /* "nd 3" */
++	state[2]  = 0x79622d32; /* "2-by" */
++	state[3]  = 0x6b206574; /* "te k" */
++}
++
+ #endif
 
 

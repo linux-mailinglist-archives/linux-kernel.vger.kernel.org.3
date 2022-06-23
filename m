@@ -2,102 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A225589F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C725589F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiFWUUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S229765AbiFWUVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiFWUUR (ORCPT
+        with ESMTP id S229455AbiFWUVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:20:17 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37C94EA0A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:20:15 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eq6so555102edb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fAKuybCH+dwB1fMNirGRqtMvEWYeJzWmxMGv84MA8aE=;
-        b=KME+38Xcr1BELnAPftspCCgUlWz/O9gpyn6U8mMdFSQIbnfF6/U3LpylhOO7d+jjyy
-         BMLWcYPwC6aXcnhEmsrucLY1P8wAgblqe3TCOCnyu6ofrXXDy52M2iVPYWyFmKoj9fGx
-         izOSeUCLhYGk6o2oXXsVfbmeCwsA9h3U240e4gfFllwd4YGHnqaXprCiiSTsZaZ3JPte
-         ZEa8TZ6JW5KYB6yzh7rXXd2vy8i+d7c7I+QMBYLHt1y4iEKtBtWAlSyLY1HcDVdmqkHB
-         J8hnDuOa6QOJ+Zvsd1bM8cbhLgqQef0MvgGiDU7pxBush8+rh3nOFr4Lmy+yh00p0weI
-         D/3Q==
+        Thu, 23 Jun 2022 16:21:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59BAD4EA0A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656015703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MGTe6KngeQd+vhwkXpPPd5v7NkorBp+zMw2BEOEYKVU=;
+        b=TEmA+2Xewde0IFJ9ljxtXILkpN1JpRXrKw9VuFJMSR+Jm+3GI44dOJZXqdZoxIoYNBIjKX
+        vaSQNImn5DSIzhvqirc/bWG48oqFqRNkbQSs+obvnTx5mJZsi4HcW8O5AROss22HFWzAmp
+        5FL9EvI+Q21OcoGu5Wi/9/5pNU6j9IU=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-372-eb2IPo07PBCWrsHgYxhtPA-1; Thu, 23 Jun 2022 16:21:42 -0400
+X-MC-Unique: eb2IPo07PBCWrsHgYxhtPA-1
+Received: by mail-il1-f197.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so96631ile.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:21:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fAKuybCH+dwB1fMNirGRqtMvEWYeJzWmxMGv84MA8aE=;
-        b=I6p8QFzzjJuLdzSIBmhYe333TRyMV3qmaC4BBOq4lSJ8MyMGf4aX9HjUtR9eTeXwbq
-         IcF1ynQ6h+qbfv+vXMO/jQHOLIw2exNXF6VWRhAhW14sQRedNcZrxngGbpHtQvSPWmpk
-         PDsKCdK9kQ8eg4Lgyr7IYwE4okdk+1XLNS2kh9HDngK3BesMVm8O4Oz9elDosmrUKRbl
-         aqGHyaMDegcKERBSO3DKgQ2VloPp9zDq5pPYjrj+/uh1H2arPxiC9ah8Fxmu43xnQhCk
-         sUkSblyTGVAH3Kk54zWSgciAyTWMGnO3JOZQwUE5G0PJXamh5KhVFH2qON9yiI8YDOa2
-         /elA==
-X-Gm-Message-State: AJIora+8z86C27HTls2zjq3rG82WyiOydOYlH5eTIBLAIFJwCXQd7Ltv
-        Uafee5blur1jBS7WuPEwMIhDJUwSUKIGOjP2rGc7KQ==
-X-Google-Smtp-Source: AGRyM1sefRXRZuBMZmLCIuE/E/N9Qsz/+HjOWAx/A9T3s/9nmY1cLplssQUkWwd4E5zHKvzURX7iKcvBi1kbILbQHnI=
-X-Received: by 2002:a05:6402:18:b0:435:9a79:9a40 with SMTP id
- d24-20020a056402001800b004359a799a40mr12856318edu.328.1656015614585; Thu, 23
- Jun 2022 13:20:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=MGTe6KngeQd+vhwkXpPPd5v7NkorBp+zMw2BEOEYKVU=;
+        b=f1QUqvhxuxeN7RDbLt5C+7pbdKjBphQ4vod4Zuq0sA+Syslabkhdivp9oQQcUKBCZg
+         kqyjGrcsrnIpbxzKdX1rYad/RMNNwnTGqQp8un0URrwQ3sOCY9JDT8EN5o3lmkAqld/8
+         W+68VEHDIep1lFY7iTeLY9m/buDT/VzoDrK3knZV91xSCbrAJaBII0t2zFBBU4R7xXfK
+         +scMpnQNUNBvbnZSmD8ycH4Cizb+0ZT9/m7cLartIeP6wbZhXKLFvhmn2May7eN73NpN
+         NRCoIf5Omdgo4qkxQI72LcyATo7DI+REfmiaIHvFFpD5ycjaTNn9j6Eih76pXqaqkYZz
+         Saew==
+X-Gm-Message-State: AJIora+o/N1N36uOpnDHU2UprHV2I5Pu/lFEb0R8v3b65RU3vSbe5VvS
+        InsQVNDDrWm3nzQNzRxolNmRifs3jJWboQwdQ5oXooYJCORcl1HsRS0I2KKR37JdmnW/ibVdeES
+        NHGjIdnyNjZwf8u9pfKYk8YjL
+X-Received: by 2002:a05:6602:4017:b0:671:eae4:9d35 with SMTP id bk23-20020a056602401700b00671eae49d35mr5675162iob.6.1656015701263;
+        Thu, 23 Jun 2022 13:21:41 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sERAz0Cbsp1FFDc97zOssvDAgvgNpRQPBpJO08spAwNaML5gRq5IGwmQEPahTsSQjDefXMdA==
+X-Received: by 2002:a05:6602:4017:b0:671:eae4:9d35 with SMTP id bk23-20020a056602401700b00671eae49d35mr5675147iob.6.1656015701023;
+        Thu, 23 Jun 2022 13:21:41 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a11-20020a92d58b000000b002d8f2385d56sm226923iln.63.2022.06.23.13.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 13:21:40 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 14:21:39 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, akpm@linux-foundation.org,
+        minchan@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        jhubbard@nvidia.com, joaodias@google.com
+Subject: Re: [PATCH] mm: Re-allow pinning of zero pfns
+Message-ID: <20220623142139.462a0841.alex.williamson@redhat.com>
+In-Reply-To: <cb7efb0f-5537-5ce4-7aec-bb10ea81d5de@redhat.com>
+References: <165490039431.944052.12458624139225785964.stgit@omen>
+        <bb120b4a-e6f6-de81-35f0-9803acf9b0be@redhat.com>
+        <20220615155659.GA7684@nvidia.com>
+        <cb7efb0f-5537-5ce4-7aec-bb10ea81d5de@redhat.com>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com> <84cdc48a-feb8-4aa5-7d96-a68f2c556e25@gmail.com>
-In-Reply-To: <84cdc48a-feb8-4aa5-7d96-a68f2c556e25@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 23 Jun 2022 22:20:03 +0200
-Message-ID: <CAMRc=Mc85Yw3uRGwTLFtZxBt81M5T8p0B+sQ4RoxB-QvgHdm_A@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Fix kernel-doc comments to nested union
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 2:02 AM Akira Yokosawa <akiyks@gmail.com> wrote:
->
-> On Mon, 6 Jun 2022 13:44:24 +0900, Akira Yokosawa wrote:
-> > Commit 48ec13d36d3f ("gpio: Properly document parent data union")
-> > is supposed to have fixed a warning from "make htmldocs" regarding
-> > kernel-doc comments to union members.  However, the same warning
-> > still remains [1].
-> >
-> > Fix the issue by following the example found in section "Nested
-> > structs/unions" of Documentation/doc-guide/kernel-doc.rst.
-> >
-> > Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
-> > Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/ [1]
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> > Cc: Joey Gouly <joey.gouly@arm.com>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> Gentle ping to gpio maintainers.
->
-> I thought this fix would go through brgl's tree.
->
->         Thanks, Akira
->
+On Thu, 23 Jun 2022 20:07:14 +0200
+David Hildenbrand <david@redhat.com> wrote:
 
-Now applied, thanks! Sorry for the delay.
+> On 15.06.22 17:56, Jason Gunthorpe wrote:
+> > On Sat, Jun 11, 2022 at 08:29:47PM +0200, David Hildenbrand wrote:  
+> >> On 11.06.22 00:35, Alex Williamson wrote:  
+> >>> The commit referenced below subtly and inadvertently changed the logic
+> >>> to disallow pinning of zero pfns.  This breaks device assignment with
+> >>> vfio and potentially various other users of gup.  Exclude the zero page
+> >>> test from the negation.  
+> >>
+> >> I wonder which setups can reliably work with a long-term pin on a shared
+> >> zeropage. In a MAP_PRIVATE mapping, any write access via the page tables
+> >> will end up replacing the shared zeropage with an anonymous page.
+> >> Something similar should apply in MAP_SHARED mappings, when lazily
+> >> allocating disk blocks.  
+> 
+> ^ correction, shared zeropage is never user in MAP_SHARED mappings
+> (fortunally).
+> 
+> >>
+> >> In the future, we might trigger unsharing when taking a R/O pin for the
+> >> shared zeropage, just like we do as of now upstream for shared anonymous
+> >> pages (!PageAnonExclusive). And something similar could then be done
+> >> when finding a !anon page in a MAP_SHARED mapping.  
+> > 
+> > I'm also confused how qemu is hitting this and it isn't already a bug?
+> >   
+> 
+> I assume it's just some random thingy mapped into the guest physical
+> address space (by the bios? R/O?), that actually never ends up getting
+> used by a device.
+> 
+> So vfio simply only needs this to keep working ... but weon't actually
+> ever user that data.
+> 
+> But this is just my best guess after thinking about it.
 
-Bart
+Good guess.
+
+> > It is arising because vfio doesn't use FOLL_FORCE|FOLL_WRITE to move
+> > away the zero page in most cases.
+> > 
+> > And why does Yishai say it causes an infinite loop in the kernel?  
+> 
+> 
+> Good question. Maybe $something keeps retying if pinning fails, either
+> in the kernel (which would be bad) or in user space. At least QEMU seems
+> to just fail if pinning fails, but maybe it's a different user space?
+
+The loop is in __gup_longterm_locked():
+
+        do {
+                rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+                                             NULL, gup_flags);
+                if (rc <= 0)
+                        break;
+                rc = check_and_migrate_movable_pages(rc, pages, gup_flags);
+        } while (!rc);
+
+It appears we're pinning a 32 page (128K) range,
+__get_user_pages_locked() returns 32, but
+check_and_migrate_movable_pages() perpetually returns zero.  I believe
+this is because folio_is_pinnable() previously returned true, and now
+returns false.  Therefore we drop down to fail at folio_isolate_lru(),
+incrementing isolation_error_count.  From there we do nothing more than
+unpin the pages, return zero, and hope for better luck next time, which
+obviously doesn't happen.
+
+If I generate an errno here, QEMU reports failing on the pc.rom memory
+region at 0xc0000.  Thanks,
+
+Alex
+

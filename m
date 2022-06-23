@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1548955844B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077C7558454
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiFWRky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S234373AbiFWRlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234594AbiFWRhy (ORCPT
+        with ESMTP id S234605AbiFWRhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:37:54 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A92692B4F;
-        Thu, 23 Jun 2022 10:07:15 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id j21so91785lfe.1;
-        Thu, 23 Jun 2022 10:07:15 -0700 (PDT)
+        Thu, 23 Jun 2022 13:37:55 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2463B92173;
+        Thu, 23 Jun 2022 10:07:17 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a13so12442lfr.10;
+        Thu, 23 Jun 2022 10:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0E4art4WHyIDsKy+IOK+bSE3VnO/zAwRAVWiCR6wQsM=;
-        b=XK1yu15Q26rYs9zDD16HkxWE+plO8GeZ+dNujYTCKpe0TBb9yxE8UjsSaLbdNB5qgy
-         wdewUnj3qqqzHpiTGOtPOCQfXBhSf8Aa7T0CijynNDEP+9Sb+fuQu6kBrqECzbe7hJDW
-         aBFumHP43UwBjt5ZxPjA2w60ETmwUhIzpJCpCt54fTlFh40UC3ez72g0dMICG0is8RDD
-         PjLS/EGzGYJnRl41uj1poo5Iq7znQ2n+xYLNlVbYePC2Z/qqucryweylIgCBzuCVy0Oc
-         4wZqFJmB22a2V+tIDMI9B9+h4B63K2rBEqcgg6JO4RkT9H8KhnartdiDsbFlE2yCgd/m
-         RCXw==
+        bh=ept+S9MCFJKpRtcRZmZou1ZYAVo4ChcwRbtVyRYJMdc=;
+        b=JWqBhXxwp1hbh1XQ70jQ65D9d304cBsZX/9wj8GGvKcBrs6ki9VAPE7Nm+O9iF5oUO
+         iu+wpFi5JPnrwJLXEhGS5PsbWfZwBb2kv1pkcVw3c66s/bKry1R4elqnKN+0GXDolGlz
+         +F3SB3K1sjwY8a0W3ddUq/TnT6pfYqbSUP3ichMGIviqxp2e/kUeFOMz7iOPTIeudii8
+         du2plq5Sb+UrvMtNCsWB4zvuf14r0tyWP0o5j3vVT4oUupRL5T1F+FbjbfLSB5NgcqDL
+         4pi4XLpK2zg1f0DFK1yJWLN9hGrIvzsRbSE/d+PgnSUX+jV+FDaIJpeMkNqMSKSHja9R
+         zgLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0E4art4WHyIDsKy+IOK+bSE3VnO/zAwRAVWiCR6wQsM=;
-        b=AfTF06MC0ga6m29Gv6x3CeoHzW8gYCb1o2pPll/MMp10KSXdaAz8HMH5kNiS2MQieq
-         9WAi7ApMBEvIwMMqCuKbzThZonqkv7xFsbCiXa7IuFAeIoyr4DzP6JdbajSCHh1LzBZl
-         5MKZZ1/YbGZVe9IZj0PATq5G6MUaXSCgweGasmYLsRylg0mIa7Y9xiU7wYiUjiuceyOx
-         VhQ3BmqzQFxWj1YsyYKqeYt42VsmRiCWJFw/EAVWi3c8gGPPFkb2i946Q8pf34BuIhiS
-         J6Bf62KBOvSxr8fwbxUt//i0j9rN/VrQ8lAC4ceguJKGY48+RzuHbsn1zmj2v7vI60TL
-         dZQQ==
-X-Gm-Message-State: AJIora8wOzGvVg4Ea6PGmQ5TFjCI8/VRV+6yDmiVeb0Du15ppuWzV2vi
-        7avgRM3gYfnQOQVQ5yE6QFo=
-X-Google-Smtp-Source: AGRyM1vX8jlCl+4BPopA0BVNn2QNiJNNOFUmG++cyTTTiZGKTZyDG8lzDMD3GuWJRGn17RqeB6OEkA==
-X-Received: by 2002:a05:6512:22c1:b0:479:54b6:8281 with SMTP id g1-20020a05651222c100b0047954b68281mr6210521lfu.291.1656004033642;
-        Thu, 23 Jun 2022 10:07:13 -0700 (PDT)
+        bh=ept+S9MCFJKpRtcRZmZou1ZYAVo4ChcwRbtVyRYJMdc=;
+        b=BAI0FuwhlxFcyVMBAIwB+6BMbRlOqLDZxKrsyyo255Iq5ocZADEIYXt5EeKOrGNWkj
+         wDCkoBPZ6X4feeBvv7aUDpnaGoxV2gSlvzbujRWH/S6K07PZMpo76OJ5VuHitJ9iGqzu
+         39ec/ypoVNMoTiV6SV3WtHFMSoZeQmjicVLTVvndo5LZXOtc9i9HU/e5EF4xVfPot/DO
+         0nAICfLmQZZvNYDHBcc5/r5wU1gTenwKC1hcF6weNLOLgT+u4oYCCcN8StaGPQBgx3El
+         KOTJWT29XAVwY1x5LclEdYrCiVpIAHicqIDMucNC2zOnat5TP24ccnHrzCPAX8N+Dwt2
+         XWkQ==
+X-Gm-Message-State: AJIora9kClyAzBkpPSm8VS/exAUAPPz11xco31h4itSlpKh5D6Q2zocd
+        PRyXigMOjS7t6jxJR02N3Eg=
+X-Google-Smtp-Source: AGRyM1tpzsmJMfxjHHIP30Az2JIeDqD5QQ4o8hSl1yuZbdZwLwg48AaQlyAKLjBfl3h19xzJx4k1gw==
+X-Received: by 2002:a05:6512:36ce:b0:479:4e8:c208 with SMTP id e14-20020a05651236ce00b0047904e8c208mr6219729lfs.496.1656004035383;
+        Thu, 23 Jun 2022 10:07:15 -0700 (PDT)
 Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id w27-20020a19491b000000b0047a0bf9540asm3060405lfa.213.2022.06.23.10.07.12
+        by smtp.gmail.com with ESMTPSA id w27-20020a19491b000000b0047a0bf9540asm3060405lfa.213.2022.06.23.10.07.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 10:07:12 -0700 (PDT)
+        Thu, 23 Jun 2022 10:07:14 -0700 (PDT)
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Kent Gustavsson <kent@minoris.se>,
@@ -57,9 +57,9 @@ To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 07/10] iio: adc: mcp3911: use correct formula for AD conversion
-Date:   Thu, 23 Jun 2022 19:08:41 +0200
-Message-Id: <20220623170844.2189814-7-marcus.folkesson@gmail.com>
+Subject: [PATCH 08/10] iio: adc: mcp3911: add support for phase
+Date:   Thu, 23 Jun 2022 19:08:42 +0200
+Message-Id: <20220623170844.2189814-8-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623170844.2189814-1-marcus.folkesson@gmail.com>
 References: <20220623170844.2189814-1-marcus.folkesson@gmail.com>
@@ -75,51 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ADC conversion is actually not rail-to-rail but with a factor 1.5.
-Make use of this factor when calculating actual voltage.
+The MCP3911 incorporates a phase delay generator,
+which ensures that the two ADCs are converting the
+inputs with a fixed delay between them.
+Expose it to userspace.
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- drivers/iio/adc/mcp3911.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/iio/adc/mcp3911.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-index 65831bef12f6..9e365947d285 100644
+index 9e365947d285..aefc5eac874c 100644
 --- a/drivers/iio/adc/mcp3911.c
 +++ b/drivers/iio/adc/mcp3911.c
-@@ -48,8 +48,8 @@
- #define MCP3911_CHANNEL(x)		(MCP3911_REG_CHANNEL0 + x * 3)
- #define MCP3911_OFFCAL(x)		(MCP3911_REG_OFFCAL_CH0 + x * 6)
+@@ -155,6 +155,17 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
  
--/* Internal voltage reference in uV */
--#define MCP3911_INT_VREF_UV		1200000
-+/* Internal voltage reference in mV */
-+#define MCP3911_INT_VREF_MV		1200
- 
- #define MCP3911_REG_READ(reg, id)	((((reg) << 1) | ((id) << 5) | (1 << 0)) & 0xff)
- #define MCP3911_REG_WRITE(reg, id)	((((reg) << 1) | ((id) << 5) | (0 << 0)) & 0xff)
-@@ -178,11 +178,18 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
- 
- 			*val = ret / 1000;
- 		} else {
--			*val = MCP3911_INT_VREF_UV;
-+			*val = MCP3911_INT_VREF_MV;
- 		}
- 
--		*val2 = 24;
--		ret = IIO_VAL_FRACTIONAL_LOG2;
-+		/*
-+		 * For 24bit Conversion
-+		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
-+		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
-+		 */
-+
-+		/* val2 = (2^23 * 1.5) */
-+		*val2 = 12582912;
-+		ret = IIO_VAL_FRACTIONAL;
+ 		ret = IIO_VAL_INT;
  		break;
- 	}
++
++	case IIO_CHAN_INFO_PHASE:
++		ret = mcp3911_read(adc,
++				   MCP3911_REG_PHASE, val, 2);
++		if (ret)
++			goto out;
++
++		*val = sign_extend32(*val, 12);
++		ret = IIO_VAL_INT;
++		break;
++
+ 	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+ 		ret = mcp3911_read(adc,
+ 				MCP3911_REG_CONFIG, val, 2);
+@@ -225,6 +236,16 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
+ 				MCP3911_STATUSCOM_EN_OFFCAL, 2);
+ 		break;
  
++	case IIO_CHAN_INFO_PHASE:
++		if (val2 != 0 || val > 0xfff) {
++			ret = -EINVAL;
++			goto out;
++		}
++
++		/* Write phase */
++		ret = mcp3911_write(adc, MCP3911_REG_PHASE, val,
++				    2);
++		break;
+ 	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+ 		switch (val) {
+ 		case 4096:
+@@ -273,7 +294,9 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
+ 		.channel = idx,					\
+ 		.scan_index = idx,				\
+ 		.scan_index = idx,				\
+-		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO), \
++		.info_mask_shared_by_type =			\
++			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO)|	\
++			BIT(IIO_CHAN_INFO_PHASE),		\
+ 		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |	\
+ 			BIT(IIO_CHAN_INFO_OFFSET) |		\
+ 			BIT(IIO_CHAN_INFO_SCALE),		\
 -- 
 2.36.1
 

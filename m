@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B83F558007
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5F555800F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiFWQig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S232297AbiFWQjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiFWQiY (ORCPT
+        with ESMTP id S232098AbiFWQjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:38:24 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE08740E60
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:38:23 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c13so24888157eds.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:38:23 -0700 (PDT)
+        Thu, 23 Jun 2022 12:39:03 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96077167C0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:02 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id o9so20129855edt.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AAlxQgMTHS8WASi4S9BFRIXGatijsC0zjEnIxlEzU0o=;
-        b=c2Opogx1Bd/U//9VL4xN3Ue/JcsrrLE/FiXi6Nbwp8mDyOyTL6h8z0ZwfClfqhlC9Z
-         2E8Hecn/mkFBg/hGr9QnGk1foO5bOUbdW3QdCgYDxP4XNFppRM5x/z7uI1xK/cBIZftA
-         JdMVGpjr50DGlgPiSrNX7Wb7Epu27mlZZCddPUprefJtNP1Fowd+wYwfaA1spO66tkuY
-         XShc1+xoXPbCCYcWko7bva5VYupOwlJaBYwLVKLdYdJiwmGrNN+j0iOUwRZ6sFOVmu3c
-         asBSS0K4EnJmQiTIQIkvXYnn1VnttUK4OK4Oq/ZIQByORMqVzlzVPDLNo4zXiQ1xRzD7
-         e/zA==
+        bh=X8CqJoRILL/dve2sT+WdutSeuBTUJjelySjg4TNgewk=;
+        b=hjeDCAVUyq2c2N2zMhUW1OVixmztIYgy4ydCOn+R89OsiilOZyWkIi2CCds6CknrSb
+         wyFk+2wKRoxbfzdhqPH9NTj93LVSOloSr6Tfnf2+R/WBBZNNGLSxkgyJJ7J4eqzfdTU2
+         IvvoJ1ZCVS+Virc4OkimKoWeqLQInhZv2lmpM+5h4nil1oorcT6suS/bho/zZV1cqDkI
+         QrLpM8uG49Tx6/LeaVUtyr54pKjGb5KkuFB1NkKQw0pYcxepBN2LIAoLx4YpKNmsN7UL
+         4blGUXb4q1BiV3HbS44JPKrsJopW4oxkWuiN68F3S0kthRjSwgfoQpVhE/7MEXKuymfo
+         nQ4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AAlxQgMTHS8WASi4S9BFRIXGatijsC0zjEnIxlEzU0o=;
-        b=T9o/X0E0ZVf17pqo7BXvUrKW384qOntTbTuXfghsD/cjcLabYx+f8Z90XMEBD6yLce
-         5lv0x5BTmilDVL8h/rZk3IVBsfl3+ty0wKmcBjepXsDLUsWZ5wcDZ/aHdgYJsfI4MvR5
-         claPnoBH+nyFDpA7/nLjaVH3f1mw37AjNt9cjXcgkeJU2LQ1Sg/31jFoTXWsmRFeLS7i
-         nJd5YDWIg0UkI3JUE0GOFPpVvtosYCe/5YzkzAKoVY91YuAcrXJ1rR+JWnC9xmS/b6+G
-         23NiRVa5LZahiO6tnrwfRTKme5eepHmEp2hemlz0ZooBM1jSgxg8A4waNljhGVe8UfME
-         4hAw==
-X-Gm-Message-State: AJIora/AFQXbqsYQQdkcy9RnDKMUQPZp0u7GFq8qbqfBqXhQpsGTZd8L
-        3rACvOQAI7tf7PRwxl7as05h/eoro1MridY7qStQ1Njq8enBEWJm
-X-Google-Smtp-Source: AGRyM1uox2maQgIrsXGHPliPlOMPr+sIaCyTcwN2FF3VUu3js79EX3dVQ/MjttufXm+TNlb7eGKNZpVY6G4fdztUikc=
-X-Received: by 2002:a05:6402:5193:b0:435:9a5f:50a8 with SMTP id
- q19-20020a056402519300b004359a5f50a8mr12033999edd.212.1656002302254; Thu, 23
- Jun 2022 09:38:22 -0700 (PDT)
+        bh=X8CqJoRILL/dve2sT+WdutSeuBTUJjelySjg4TNgewk=;
+        b=ZjRCwfCGbC5Uk2IOlrGp6IgO8WhRemA2OZKhpB+vlMn1RW4GQCgPCTuT+44Zyhccaj
+         jEmSQVQ0QHOp8aIQiduZoU0aEjo7x/h6Ykyzitxpp0LNo2Rbz4EYKNL0tAKTirebUJ14
+         Hdi+0IAl9kj3rWNn70uvpHwZU+eKwyIiCtSBy9zmC+7ANlIKnIXcceeP3NyZaOYflRU/
+         IhWmSb9I2VUzRRTXi1IKMXn5LwzSaPr7rGV2Sq106HK2oucE/lCHtdistZ65ZKi8QtWX
+         dpCFhSc3F0m+uFI3k6QtUk/dZNoZ33n2E5veTF2vB/pydo0BJm6r42SMmn7/dg8AGDU5
+         m3PQ==
+X-Gm-Message-State: AJIora/XI1JXQU+ZPk8f8RXyEVeBTqfea+dZBQyXkKUW3VI0DsFk9+zJ
+        aj5ZXKeV8iFU7M9J3G0C9tzBuxwYbq3ux0+HSP/OOadi+PuOWn3P
+X-Google-Smtp-Source: AGRyM1tCH/TvyxXOB2A7V379L6d7opgQwhQuwNpSrSBabVWygvVnu5CjYQVuWV4BD7ZGJdbNym2j6u1vMhjfqJ9ZIP4=
+X-Received: by 2002:a05:6402:350e:b0:42f:b2c1:9393 with SMTP id
+ b14-20020a056402350e00b0042fb2c19393mr11885456edd.11.1656002340976; Thu, 23
+ Jun 2022 09:39:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220622041040.202737-1-tzungbi@kernel.org> <20220622041040.202737-5-tzungbi@kernel.org>
-In-Reply-To: <20220622041040.202737-5-tzungbi@kernel.org>
+References: <20220622041040.202737-1-tzungbi@kernel.org> <20220622041040.202737-6-tzungbi@kernel.org>
+In-Reply-To: <20220622041040.202737-6-tzungbi@kernel.org>
 From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 23 Jun 2022 09:38:10 -0700
-Message-ID: <CABXOdTfuiVan-Rascq1X-hrvf-68FPu636G1T-v6fA-kUhMArg@mail.gmail.com>
-Subject: Re: [PATCH 4/7] platform/chrome: cros_ec_proto: add Kunit tests for get_host_event
+Date:   Thu, 23 Jun 2022 09:38:49 -0700
+Message-ID: <CABXOdTdBo=PAsj1r4f0uuqjvcMtBbhSQRF=_ERf4VvSX=SoctA@mail.gmail.com>
+Subject: Re: [PATCH 5/7] platform/chrome: cros_ec_proto: add Kunit tests for check_features
 To:     Tzung-Bi Shih <tzungbi@kernel.org>
 Cc:     Benson Leung <bleung@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
@@ -72,94 +72,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, Jun 21, 2022 at 9:11 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
 >
-> cros_ec_get_host_event() performs some sanity checks, parses
-> `ec_dev->event_data.data.host_event`, and returns bitmap of
-> EC_HOST_EVENT_*.
+> cros_ec_check_features() gets EC features if it hasn't had cache, and
+> checks whether the given EC_FEATURE_* is supported or not.
 >
-> Add Kunit tests for cros_ec_get_host_event().
+> Add Kunit tests for cros_ec_check_features().
 >
 > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
 Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
 > ---
->  drivers/platform/chrome/cros_ec_proto_test.c | 59 ++++++++++++++++++++
->  1 file changed, 59 insertions(+)
+>  drivers/platform/chrome/cros_ec_proto_test.c | 77 ++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
 >
 > diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index 64c4b79f7a0c..dce9fa3b9c8d 100644
+> index dce9fa3b9c8d..93c1700deaef 100644
 > --- a/drivers/platform/chrome/cros_ec_proto_test.c
 > +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -2312,6 +2312,61 @@ static void cros_ec_proto_test_get_next_event_mkbp_event_host_event_masked(struc
->         }
+> @@ -2367,6 +2367,81 @@ static void cros_ec_proto_test_get_host_event_normal(struct kunit *test)
+>         KUNIT_EXPECT_EQ(test, ret, EC_HOST_EVENT_MASK(EC_HOST_EVENT_RTC));
 >  }
 >
-> +static void cros_ec_proto_test_get_host_event_no_mkbp_event(struct kunit *test)
+> +static void cros_ec_proto_test_check_features_cached(struct kunit *test)
 > +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       int ret;
+> +       int ret, i;
+> +       struct cros_ec_dev ec;
 > +
-> +       ec_dev->mkbp_event_supported = 0;
+> +       ec.features.flags[0] = EC_FEATURE_MASK_0(EC_FEATURE_FINGERPRINT);
+> +       ec.features.flags[1] = EC_FEATURE_MASK_0(EC_FEATURE_SCP);
 > +
-> +       ret = cros_ec_get_host_event(ec_dev);
-> +       KUNIT_EXPECT_EQ(test, ret, 0);
+> +       for (i = 0; i < EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK; ++i) {
+> +               ret = cros_ec_check_features(&ec, i);
+> +               switch (i) {
+> +               case EC_FEATURE_FINGERPRINT:
+> +               case EC_FEATURE_SCP:
+> +                       KUNIT_EXPECT_TRUE(test, ret);
+> +                       break;
+> +               default:
+> +                       KUNIT_EXPECT_FALSE(test, ret);
+> +                       break;
+> +               }
+> +       }
 > +}
 > +
-> +static void cros_ec_proto_test_get_host_event_not_host_event(struct kunit *test)
+> +static void cros_ec_proto_test_check_features_not_cached(struct kunit *test)
 > +{
 > +       struct cros_ec_proto_test_priv *priv = test->priv;
 > +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       int ret;
+> +       struct ec_xfer_mock *mock;
+> +       int ret, i;
+> +       struct cros_ec_dev ec;
 > +
-> +       ec_dev->mkbp_event_supported = 1;
-> +       ec_dev->event_data.event_type = EC_MKBP_EVENT_FINGERPRINT;
+> +       ec_dev->max_request = 0xff;
+> +       ec_dev->max_response = 0xee;
+> +       ec.ec_dev = ec_dev;
+> +       ec.dev = ec_dev->dev;
+> +       ec.cmd_offset = 0;
+> +       ec.features.flags[0] = -1;
+> +       ec.features.flags[1] = -1;
 > +
-> +       ret = cros_ec_get_host_event(ec_dev);
-> +       KUNIT_EXPECT_EQ(test, ret, 0);
-> +}
+> +       /* For EC_CMD_GET_FEATURES. */
+> +       {
+> +               struct ec_response_get_features *data;
 > +
-> +static void cros_ec_proto_test_get_host_event_wrong_event_size(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       int ret;
+> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
 > +
-> +       ec_dev->mkbp_event_supported = 1;
-> +       ec_dev->event_data.event_type = EC_MKBP_EVENT_HOST_EVENT;
-> +       ec_dev->event_size = 0xff;
+> +               data = (struct ec_response_get_features *)mock->o_data;
+> +               data->flags[0] = EC_FEATURE_MASK_0(EC_FEATURE_FINGERPRINT);
+> +               data->flags[1] = EC_FEATURE_MASK_0(EC_FEATURE_SCP);
+> +       }
 > +
-> +       ret = cros_ec_get_host_event(ec_dev);
-> +       KUNIT_EXPECT_EQ(test, ret, 0);
-> +}
+> +       for (i = 0; i < EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK; ++i) {
+> +               ret = cros_ec_check_features(&ec, i);
+> +               switch (i) {
+> +               case EC_FEATURE_FINGERPRINT:
+> +               case EC_FEATURE_SCP:
+> +                       KUNIT_EXPECT_TRUE(test, ret);
+> +                       break;
+> +               default:
+> +                       KUNIT_EXPECT_FALSE(test, ret);
+> +                       break;
+> +               }
+> +       }
 > +
-> +static void cros_ec_proto_test_get_host_event_normal(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       int ret;
+> +       /* For EC_CMD_GET_FEATURES. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
 > +
-> +       ec_dev->mkbp_event_supported = 1;
-> +       ec_dev->event_data.event_type = EC_MKBP_EVENT_HOST_EVENT;
-> +       ec_dev->event_size = sizeof(ec_dev->event_data.data.host_event);
-> +       put_unaligned_le32(EC_HOST_EVENT_MASK(EC_HOST_EVENT_RTC),
-> +                          &ec_dev->event_data.data.host_event);
-> +
-> +       ret = cros_ec_get_host_event(ec_dev);
-> +       KUNIT_EXPECT_EQ(test, ret, EC_HOST_EVENT_MASK(EC_HOST_EVENT_RTC));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_FEATURES);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_get_features));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +       }
 > +}
 > +
 >  static void cros_ec_proto_test_release(struct device *dev)
 >  {
 >  }
-> @@ -2401,6 +2456,10 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
->         KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_version2),
->         KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_host_event_rtc),
->         KUNIT_CASE(cros_ec_proto_test_get_next_event_mkbp_event_host_event_masked),
-> +       KUNIT_CASE(cros_ec_proto_test_get_host_event_no_mkbp_event),
-> +       KUNIT_CASE(cros_ec_proto_test_get_host_event_not_host_event),
-> +       KUNIT_CASE(cros_ec_proto_test_get_host_event_wrong_event_size),
-> +       KUNIT_CASE(cros_ec_proto_test_get_host_event_normal),
+> @@ -2460,6 +2535,8 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
+>         KUNIT_CASE(cros_ec_proto_test_get_host_event_not_host_event),
+>         KUNIT_CASE(cros_ec_proto_test_get_host_event_wrong_event_size),
+>         KUNIT_CASE(cros_ec_proto_test_get_host_event_normal),
+> +       KUNIT_CASE(cros_ec_proto_test_check_features_cached),
+> +       KUNIT_CASE(cros_ec_proto_test_check_features_not_cached),
 >         {}
 >  };
 >

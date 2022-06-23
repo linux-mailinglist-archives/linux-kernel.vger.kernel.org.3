@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62C5558580
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38815583C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiFWR70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S234336AbiFWRea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235386AbiFWRz0 (ORCPT
+        with ESMTP id S234616AbiFWRdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:55:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF3EAE316;
-        Thu, 23 Jun 2022 10:15:22 -0700 (PDT)
+        Thu, 23 Jun 2022 13:33:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CE9515A4;
+        Thu, 23 Jun 2022 10:05:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 710E661DE1;
-        Thu, 23 Jun 2022 17:15:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D4DC3411B;
-        Thu, 23 Jun 2022 17:15:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAB5BB824B5;
+        Thu, 23 Jun 2022 17:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438D4C3411B;
+        Thu, 23 Jun 2022 17:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004520;
-        bh=zGMzx0V/+Sn1NwVSNDMX88/j5POtGrZTAP3uXM3+C4I=;
+        s=korg; t=1656003945;
+        bh=tdJgFI6BSEbMlog94O8U41zIwpESdHgVPKAWwGejSCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f1+rushPQvp6xwwD4haZUN82uw2pkhDHmHuOEDECu7I44140rTk6/ND31XIDETRfI
-         xVhoDRSTRWsaczGJKebH+q+B1oxQedTY36fmfmYfholr4+nY0nvLaEX4L2snhSPjAV
-         YWshghdz2+4DZeILBZOU+shu9NlQFP9K2bXSIkdI=
+        b=Oc5KoBEUUr+3iDCGV9nCU+b0d3+1+PUgmq6cuwvPzbPjHFisxk8Wk/vUcxuRPi3bD
+         UhjKdvidxVnN+N6WhT1WXrHS3MMNFuPbFU/CO8BGFtBs/TARoaIwPEO9BYFjmyIjFO
+         uHyxqdteOewZK+6zGd9At+p6F1h1DolVM0+vUpBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.19 063/234] random: remove incomplete last_data logic
-Date:   Thu, 23 Jun 2022 18:42:10 +0200
-Message-Id: <20220623164344.845930432@linuxfoundation.org>
+Subject: [PATCH 4.14 097/237] random: inline leaves of rand_initialize()
+Date:   Thu, 23 Jun 2022 18:42:11 +0200
+Message-Id: <20220623164345.940720469@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
-References: <20220623164343.042598055@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,110 +58,142 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit a4bfa9b31802c14ff5847123c12b98d5e36b3985 upstream.
+commit 8566417221fcec51346ec164e920dacb979c6b5f upstream.
 
-There were a few things added under the "if (fips_enabled)" banner,
-which never really got completed, and the FIPS people anyway are
-choosing a different direction. Rather than keep around this halfbaked
-code, get rid of it so that we can focus on a single design of the RNG
-rather than two designs.
+This is a preparatory commit for the following one. We simply inline the
+various functions that rand_initialize() calls that have no other
+callers. The compiler was doing this anyway before. Doing this will
+allow us to reorganize this after. We can then move the trust_cpu and
+parse_trust_cpu definitions a bit closer to where they're actually used,
+which makes the code easier to read.
 
+Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   40 ++++------------------------------------
- 1 file changed, 4 insertions(+), 36 deletions(-)
+ drivers/char/random.c |   90 ++++++++++++++++++--------------------------------
+ 1 file changed, 33 insertions(+), 57 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -337,8 +337,6 @@
- #include <linux/spinlock.h>
- #include <linux/kthread.h>
- #include <linux/percpu.h>
--#include <linux/cryptohash.h>
--#include <linux/fips.h>
- #include <linux/ptrace.h>
- #include <linux/workqueue.h>
- #include <linux/irq.h>
-@@ -518,14 +516,12 @@ struct entropy_store {
- 	u16 add_ptr;
- 	u16 input_rotate;
- 	int entropy_count;
--	unsigned int last_data_init:1;
--	u8 last_data[EXTRACT_SIZE];
- };
+@@ -476,42 +476,6 @@ static DECLARE_WAIT_QUEUE_HEAD(crng_init
  
- static ssize_t extract_entropy(struct entropy_store *r, void *buf,
- 			       size_t nbytes, int min, int rsvd);
- static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
--				size_t nbytes, int fips);
-+				size_t nbytes);
+ static void invalidate_batched_entropy(void);
  
- static void crng_reseed(struct crng_state *crng, struct entropy_store *r);
- static u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
-@@ -822,7 +818,7 @@ static void crng_initialize_secondary(st
- 
- static void __init crng_initialize_primary(struct crng_state *crng)
- {
--	_extract_entropy(&input_pool, &crng->state[4], sizeof(u32) * 12, 0);
-+	_extract_entropy(&input_pool, &crng->state[4], sizeof(u32) * 12);
- 	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
- 		invalidate_batched_entropy();
- 		numa_crng_init();
-@@ -1427,22 +1423,13 @@ static void extract_buf(struct entropy_s
- }
- 
- static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
--				size_t nbytes, int fips)
-+				size_t nbytes)
- {
- 	ssize_t ret = 0, i;
- 	u8 tmp[EXTRACT_SIZE];
--	unsigned long flags;
- 
- 	while (nbytes) {
- 		extract_buf(r, tmp);
+-static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
+-static int __init parse_trust_cpu(char *arg)
+-{
+-	return kstrtobool(arg, &trust_cpu);
+-}
+-early_param("random.trust_cpu", parse_trust_cpu);
 -
--		if (fips) {
--			spin_lock_irqsave(&r->lock, flags);
--			if (!memcmp(tmp, r->last_data, EXTRACT_SIZE))
--				panic("Hardware RNG duplicated output!\n");
--			memcpy(r->last_data, tmp, EXTRACT_SIZE);
--			spin_unlock_irqrestore(&r->lock, flags);
--		}
- 		i = min_t(int, nbytes, EXTRACT_SIZE);
- 		memcpy(buf, tmp, i);
- 		nbytes -= i;
-@@ -1468,28 +1455,9 @@ static ssize_t _extract_entropy(struct e
- static ssize_t extract_entropy(struct entropy_store *r, void *buf,
- 				 size_t nbytes, int min, int reserved)
- {
--	u8 tmp[EXTRACT_SIZE];
--	unsigned long flags;
+-static bool __init crng_init_try_arch_early(void)
+-{
+-	int i;
+-	bool arch_init = true;
+-	unsigned long rv;
 -
--	/* if last_data isn't primed, we need EXTRACT_SIZE extra bytes */
--	if (fips_enabled) {
--		spin_lock_irqsave(&r->lock, flags);
--		if (!r->last_data_init) {
--			r->last_data_init = 1;
--			spin_unlock_irqrestore(&r->lock, flags);
--			trace_extract_entropy(r->name, EXTRACT_SIZE,
--					      ENTROPY_BITS(r), _RET_IP_);
--			extract_buf(r, tmp);
--			spin_lock_irqsave(&r->lock, flags);
--			memcpy(r->last_data, tmp, EXTRACT_SIZE);
+-	for (i = 4; i < 16; i++) {
+-		if (!arch_get_random_seed_long_early(&rv) &&
+-		    !arch_get_random_long_early(&rv)) {
+-			rv = random_get_entropy();
+-			arch_init = false;
 -		}
--		spin_unlock_irqrestore(&r->lock, flags);
+-		primary_crng.state[i] ^= rv;
 -	}
 -
- 	trace_extract_entropy(r->name, nbytes, ENTROPY_BITS(r), _RET_IP_);
- 	nbytes = account(r, nbytes, min, reserved);
+-	return arch_init;
+-}
 -
--	return _extract_entropy(r, buf, nbytes, fips_enabled);
-+	return _extract_entropy(r, buf, nbytes);
+-static void __init crng_initialize(void)
+-{
+-	extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
+-	if (crng_init_try_arch_early() && trust_cpu && crng_init < 2) {
+-		invalidate_batched_entropy();
+-		crng_init = 2;
+-		pr_notice("crng init done (trusting CPU's manufacturer)\n");
+-	}
+-	primary_crng.init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+-}
+-
+ /*
+  * crng_fast_load() can be called by code in the interrupt service
+  * path.  So we can't afford to dilly-dally. Returns the number of
+@@ -1220,17 +1184,28 @@ int __must_check get_random_bytes_arch(v
  }
+ EXPORT_SYMBOL(get_random_bytes_arch);
  
- #define warn_unseeded_randomness(previous) \
++static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
++static int __init parse_trust_cpu(char *arg)
++{
++	return kstrtobool(arg, &trust_cpu);
++}
++early_param("random.trust_cpu", parse_trust_cpu);
++
+ /*
+- * init_std_data - initialize pool with system data
+- *
+- * This function clears the pool's entropy count and mixes some system
+- * data into the pool to prepare it for use. The pool is not cleared
+- * as that can only decrease the entropy in the pool.
++ * Note that setup_arch() may call add_device_randomness()
++ * long before we get here. This allows seeding of the pools
++ * with some platform dependent data very early in the boot
++ * process. But it limits our options here. We must use
++ * statically allocated structures that already have all
++ * initializations complete at compile time. We should also
++ * take care not to overwrite the precious per platform data
++ * we were given.
+  */
+-static void __init init_std_data(void)
++int __init rand_initialize(void)
+ {
+ 	int i;
+ 	ktime_t now = ktime_get_real();
++	bool arch_init = true;
+ 	unsigned long rv;
+ 
+ 	mix_pool_bytes(&now, sizeof(now));
+@@ -1241,22 +1216,23 @@ static void __init init_std_data(void)
+ 		mix_pool_bytes(&rv, sizeof(rv));
+ 	}
+ 	mix_pool_bytes(utsname(), sizeof(*(utsname())));
+-}
+ 
+-/*
+- * Note that setup_arch() may call add_device_randomness()
+- * long before we get here. This allows seeding of the pools
+- * with some platform dependent data very early in the boot
+- * process. But it limits our options here. We must use
+- * statically allocated structures that already have all
+- * initializations complete at compile time. We should also
+- * take care not to overwrite the precious per platform data
+- * we were given.
+- */
+-int __init rand_initialize(void)
+-{
+-	init_std_data();
+-	crng_initialize();
++	extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
++	for (i = 4; i < 16; i++) {
++		if (!arch_get_random_seed_long_early(&rv) &&
++		    !arch_get_random_long_early(&rv)) {
++			rv = random_get_entropy();
++			arch_init = false;
++		}
++		primary_crng.state[i] ^= rv;
++	}
++	if (arch_init && trust_cpu && crng_init < 2) {
++		invalidate_batched_entropy();
++		crng_init = 2;
++		pr_notice("crng init done (trusting CPU's manufacturer)\n");
++	}
++	primary_crng.init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
++
+ 	if (ratelimit_disable) {
+ 		urandom_warning.interval = 0;
+ 		unseeded_warning.interval = 0;
 
 

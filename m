@@ -2,110 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03356558A17
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48740558A18
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiFWUbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S230035AbiFWUbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiFWUbb (ORCPT
+        with ESMTP id S229995AbiFWUbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:31:31 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1404B54F8F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:31:31 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c13so566637eds.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DCZ2XHP05VxtgmiRgjao5k7aHC4OaYSNudzicymZ1wE=;
-        b=uc+YKK94fwq49iJwxmPKhkTK5XKnBnI3YX1oXB7Uab4wZ4j4ijggEB5oFUzmh5/ZL7
-         on8ZDQKvzKUtGtu20Lovz1pnEF7/nkJjj9ka0EltvWLUqV+A7zub4NqsaOtzpOv1Tjd1
-         Y8qUfy8N9qWXVUIQ8fChJbLklf9LDYzggpdEG2hgJy85Q4zdWkCsEu3+ofnhUIt6wA4q
-         xIr87s6HZ908VQPulOWVQRqoHjFILXnfOdH8U0gI/VUIiqUxa0VqR4KlJ+OG1axauAD3
-         mhGNvIwonaCnRuapqLk1JMisHn3EWKIpv8B6f8QNQ50VQrdSCrwUIrFMWQQrcBmkuy9y
-         bjWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DCZ2XHP05VxtgmiRgjao5k7aHC4OaYSNudzicymZ1wE=;
-        b=B+N1syAReRHtGC+MtOAbmY0hKIG+iA74KIb+bQNS5Jeo3llhRiHurYk0ubSHYoE1kb
-         TMMkcqutIlbt51ePIE9/9nSwFtl0hnFwzFikBug5IZyHwDv4LFBFaLlgSDTz9nkiaxZv
-         rkwAcxHHgoEJI8D0/YGVH8JldCQA+WbOcdFnTI6GJeM7s7tBBgjyCvx3lnIURYYLhATE
-         Ykzfcd7UX4RzJQ4hR87g5PGBJJwY01QKtYlKK9dF56O7uCg7XLhfpmU2/EIpStnpfrcu
-         wPt6/N74xY9yNVNajIxYsVworFXbeBCPsONbPwOV2HcYeDKWtSFY2+79STDSua40KSPL
-         PZXw==
-X-Gm-Message-State: AJIora9OujtuhNEsmTpsikAvjygYG1TeOYBOTWTCUyryVo5GA9Q9CtMK
-        RVsSvWr16YctfNeGRZABwZDSyE9MzdpRdfs/7Hx07g==
-X-Google-Smtp-Source: AGRyM1tjnPoft26dvpdnhsTXSuT/m8XtJUqLXM8cpMSUyP8oXrtinFxbOkfMh4vIcxru71+K01j/EQxCoO5fZJLOxhw=
-X-Received: by 2002:a05:6402:2786:b0:435:da07:14cb with SMTP id
- b6-20020a056402278600b00435da0714cbmr4670783ede.408.1656016289692; Thu, 23
- Jun 2022 13:31:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220601050200.22213-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220601050200.22213-1-lukas.bulwahn@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 23 Jun 2022 22:31:19 +0200
-Message-ID: <CAMRc=McvogqVVvBoTCVqSPHyD0YLXGZ9d1j+e1SsNicA7+QSyw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: adjust ARM/INTEL IXP4XX ARM ARCHITECTURE to
- ixp4xx clean-up
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 23 Jun 2022 16:31:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E553654BFE;
+        Thu, 23 Jun 2022 13:31:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7515261DAD;
+        Thu, 23 Jun 2022 20:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D15BC341C0;
+        Thu, 23 Jun 2022 20:31:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656016298;
+        bh=0j66pIjl2MVj7u0i9YOrsd99nin6Ggez1Qf11YPhGdU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gWXCiNaKTLf/70eWbnYFTEiKjUoEJzY8N0dADAS9dKEaoipN+Et4mQDKBBWNrqoCL
+         zegD8ZZ9eyudiKSP3oux/v6LSKUaOqEPwwZCz+VRNQSwlN4WkgtG2G7kBGZTrcfwq8
+         QB+0dYgA4It8GtVO9vX7SPmWk+S2YiitvtHD2sdAyHzy0aDyiLYjSrFCKGMapZst3r
+         D538EYDCELljgtalrE4C/3rQk8MFcYzhRcVsTHKHUJRb6HLcE4ElSkc7ARwjF2HdYS
+         PKeUljkr7nD6AWst468BN6mMhl0IM9GfgUtshPpX5zaxyIjkUzcvVPfSGnyMu+CiwF
+         e9mz1S51L4RxA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o4TUG-002hiz-H6;
+        Thu, 23 Jun 2022 21:31:36 +0100
+Date:   Thu, 23 Jun 2022 21:31:40 +0100
+Message-ID: <874k0bf7f7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering interrupt handler
+In-Reply-To: <20220623164942.GA1457236@bhelgaas>
+References: <20220623163240.cu7cq3m7a2pjw62a@pali>
+        <20220623164942.GA1457236@bhelgaas>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: helgaas@kernel.org, pali@kernel.org, bhelgaas@google.com, thomas.petazzoni@bootlin.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 7:02 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Commit c83227a5d05e ("irq/gpio: ixp4xx: Drop boardfile probe path") and
-> commit 155e4306107f ("clocksource/drivers/ixp4xx: Drop boardfile probe
-> path") remove files include/linux/irqchip/irq-ixp4xx.h and
-> include/linux/platform_data/timer-ixp4xx.h, but miss to adjust MAINTAINERS.
->
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
-> broken references.
->
-> Remove file entries for those files in ARM/INTEL IXP4XX ARM ARCHITECTURE.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Linus, please pick this minor non-urgent clean-up patch for ixp4xx arm.
->
->  MAINTAINERS | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 58e751b9346e..e0f5895feb6b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2196,8 +2196,6 @@ F:        drivers/clocksource/timer-ixp4xx.c
->  F:     drivers/crypto/ixp4xx_crypto.c
->  F:     drivers/gpio/gpio-ixp4xx.c
->  F:     drivers/irqchip/irq-ixp4xx.c
-> -F:     include/linux/irqchip/irq-ixp4xx.h
-> -F:     include/linux/platform_data/timer-ixp4xx.h
->
->  ARM/INTEL KEEMBAY ARCHITECTURE
->  M:     Paul J. Murphy <paul.j.murphy@intel.com>
-> --
-> 2.17.1
->
+Hi Bjorn,
 
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
+On Thu, 23 Jun 2022 17:49:42 +0100,
+Bjorn Helgaas <helgaas@kernel.org> wrote:
+>=20
+> [+cc Marc, IRQ affinity vs chained IRQ handlers]
+>=20
+> On Thu, Jun 23, 2022 at 06:32:40PM +0200, Pali Roh=C3=A1r wrote:
+> > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
+> > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Roh=C3=A1r wrote:
+> > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite
+> > > > IRQ code to chained IRQ handler"") for pci-aardvark driver, use
+> > > > devm_request_irq() instead of chained IRQ handler in pci-mvebu.c
+> > > > driver.
+> > > >
+> > > > This change fixes affinity support and allows to pin interrupts
+> > > > from different PCIe controllers to different CPU cores.
+> > >=20
+> > > Several other drivers use irq_set_chained_handler_and_data().  Do
+> > > any of them need similar changes?
+> >=20
+> > I do not know. This needs testing on HW which use those other
+> > drivers.
+> >=20
+> > > The commit log suggests that using chained IRQ handlers breaks
+> > > affinity support.  But perhaps that's not the case and the real
+> > > culprit is some other difference between mvebu and the other
+> > > drivers.
+> >=20
+> > It is possible. But similar patch (revert; linked below) was
+> > required for aardvark. I tested same approach on mvebu and it fixed
+> > affinity support.
+>=20
+> This feels like something we should understand better.  If
+> irq_set_chained_handler_and_data() is a problem for affinity, we
+> should fix it across the board in all the drivers at once.
+>=20
+> If the real problem is something different, we should figure that out
+> and document it in the commit log.
+>=20
+> I cc'd Marc in case he has time to educate us.
+
+Thanks for roping me in.
+
+The problem of changing affinities for chained (or multiplexing)
+interrupts is, to make it short, that it breaks the existing userspace
+ABI that a change in affinity affects only the interrupt userspace
+acts upon, and no other. Which is why we don't expose any affinity
+setting for such an interrupt, as by definition changing its affinity
+affects all the interrupts that are muxed onto it.
+
+By turning a chained interrupt into a normal handler, people work
+around the above rule and break the contract the kernel has with
+userspace.
+
+Do I think this is acceptable? No. Can something be done about this?
+Maybe.
+
+Marek asked this exact question last month[1], and I gave a detailed
+explanation of what could be done to improve matters, allowing this to
+happen as long as userspace is made aware of the effects, which means
+creating a new userspace ABI.
+
+I would rather see people work on a proper solution than add bad hacks
+that only work in environments where the userspace ABI can be safely
+ignored, such as on an closed, embedded device.
+
+HTH,
+
+	M.
+
+[1] https://lore.kernel.org/all/20220502102137.764606ee@thinkpad/
+
+--=20
+Without deviation from the norm, progress is not possible.

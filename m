@@ -2,74 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA430557644
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD7F55764A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiFWJFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S231260AbiFWJFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiFWJFQ (ORCPT
+        with ESMTP id S231159AbiFWJFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:05:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AD42ED64;
-        Thu, 23 Jun 2022 02:05:13 -0700 (PDT)
-X-UUID: 31197568bbc745978c97424e3aa27bdb-20220623
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:58b3fb4c-fb13-464a-a65a-f3f19a5b78fe,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:fc1451ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 31197568bbc745978c97424e3aa27bdb-20220623
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 346200492; Thu, 23 Jun 2022 17:05:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 23 Jun 2022 17:05:07 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 23 Jun 2022 17:05:06 +0800
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Yong Mao <yong.mao@mediatek.com>
-Subject: [PATCH v13 3/3] mmc: mediatek: add support for SDIO eint wakup IRQ
-Date:   Thu, 23 Jun 2022 17:04:45 +0800
-Message-ID: <20220623090445.1401-4-axe.yang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220623090445.1401-1-axe.yang@mediatek.com>
-References: <20220623090445.1401-1-axe.yang@mediatek.com>
+        Thu, 23 Jun 2022 05:05:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACA236B4F;
+        Thu, 23 Jun 2022 02:05:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5F1961D5E;
+        Thu, 23 Jun 2022 09:05:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 020B6C3411B;
+        Thu, 23 Jun 2022 09:05:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655975126;
+        bh=kf3/yXuxz/dccHYqN9XASMuQr23EUbqQhNlkus0vTkI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PhUNOY9vqtaYBtjTicCFduy6w9uPxPOoyUPWt7AU/+ZI1uVfeku7D0d/OO+sj2kXI
+         3yXoE5LMVmxpPZLr9SkVdWpZ7i7PlEcvTIwLXI3HoRRAA7dZynrNFPg9QXBBhUBZAg
+         W0yInHnOJj1LhXtig8swfpKMcr4PeMYaYAay9ubo=
+Date:   Thu, 23 Jun 2022 11:05:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kai Ye <yekai13@huawei.com>
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, zhangfei.gao@linaro.org,
+        wangzhou1@hisilicon.com
+Subject: Re: [PATCH v4 3/3] crypto: hisilicon/qm - defining the device
+ isolation strategy
+Message-ID: <YrQs06SXaqwaoAOY@kroah.com>
+References: <20220623061452.40732-1-yekai13@huawei.com>
+ <20220623061452.40732-4-yekai13@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623061452.40732-4-yekai13@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,206 +55,308 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for eint IRQ when MSDC is used as an SDIO host. This
-feature requires SDIO device support async IRQ function. With this
-feature, SDIO host can be awakened by SDIO card in suspend state,
-without additional pin.
+On Thu, Jun 23, 2022 at 02:14:52PM +0800, Kai Ye wrote:
+> Define the device isolation strategy by the device driver. The
+> user configures a frequency value by uacce interface. If the
+> slot reset frequency exceeds the value of setting for a certain
+> period of time, the device will not be available in user space.
+> This frequency is an abstract number of times that can be
+> considered to occur in a time window. The time window can be set
+> to one hour or one day. The VF device use the PF device isolation
+> strategy. All the hardware errors are processed by PF driver.
+> 
+> Signed-off-by: Kai Ye <yekai13@huawei.com>
+> ---
+>  drivers/crypto/hisilicon/qm.c | 177 +++++++++++++++++++++++++++++++---
+>  include/linux/hisi_acc_qm.h   |   9 ++
+>  2 files changed, 174 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index ad83c194d664..f92cf20fc84e 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -417,6 +417,16 @@ struct hisi_qm_resource {
+>  	struct list_head list;
+>  };
+>  
+> +/**
+> + * struct qm_hw_err - structure of describes the device err
+> + * @list: hardware error list
+> + * @timestamp: timestamp when the error occurred
+> + */
+> +struct qm_hw_err {
+> +	struct list_head list;
+> +	unsigned long long timestamp;
+> +};
+> +
+>  struct hisi_qm_hw_ops {
+>  	int (*get_vft)(struct hisi_qm *qm, u32 *base, u32 *number);
+>  	void (*qm_db)(struct hisi_qm *qm, u16 qn,
+> @@ -3410,6 +3420,125 @@ static long hisi_qm_uacce_ioctl(struct uacce_queue *q, unsigned int cmd,
+>  	return 0;
+>  }
+>  
+> +/**
+> + * qm_hw_err_isolate() - Try to isolate the uacce device with its VFs
+> + * according to user's configuration of isolation strategy. Warning: this
+> + * API should be called while there the users on this device are suspended
+> + * by slot resetting preparation of PCI AER.
+> + * @qm: the uacce device
+> + */
+> +static int qm_hw_err_isolate(struct hisi_qm *qm)
+> +{
+> +	struct qm_hw_err *err, *tmp, *hw_err;
+> +	struct qm_err_isolate *isolate;
+> +	u32 count = 0;
+> +
+> +	isolate = &qm->isolate_data;
+> +
+> +#define SECONDS_PER_HOUR	3600
+> +
+> +	/* All the hw errs are processed by PF driver */
+> +	if (qm->uacce->is_vf || atomic_read(&isolate->is_isolate) ||
+> +	    !isolate->hw_err_isolate_hz)
+> +		return 0;
+> +
+> +	hw_err = kzalloc(sizeof(*hw_err), GFP_ATOMIC);
+> +	if (!hw_err)
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&isolate->isolate_lock);
+> +	hw_err->timestamp = jiffies;
+> +	list_for_each_entry_safe(err, tmp, &qm->uacce_hw_errs, list) {
+> +		if ((hw_err->timestamp - err->timestamp) / HZ >
+> +		    SECONDS_PER_HOUR) {
+> +			list_del(&err->list);
+> +			kfree(err);
+> +		} else {
+> +			count++;
+> +		}
+> +	}
+> +	list_add(&hw_err->list, &qm->uacce_hw_errs);
+> +	mutex_unlock(&isolate->isolate_lock);
+> +
+> +	if (count >= isolate->hw_err_isolate_hz)
+> +		atomic_set(&isolate->is_isolate, 1);
 
-MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-resume, switch GPIO function back to DAT1 mode then turn on clock.
+Why is this an atomic value?  You can change it after it has been set,
+and it can be modified after it is read.  A normal 'bool' would work
+exactly the same.
 
-Some device tree property should be added or modified in MSDC node
-to support SDIO eint IRQ. Pinctrls "state_eint" is mandatory. Since
-this feature depends on asynchronous interrupts, "wakeup-source",
-"keep-power-in-suspend" and "cap-sdio-irq" flags are necessary, and
-the interrupts list should be extended(the interrupt named with
-sdio_wakeup):
-        &mmcX {
-		...
-		interrupt-names = "msdc", "sdio_wakeup";
-		interrupts-extended = <...>,
-                              	      <&pio xxx IRQ_TYPE_LEVEL_LOW>;
-                ...
-                pinctrl-names = "default", "state_uhs", "state_eint";
-                ...
-                pinctrl-2 = <&mmc2_pins_eint>;
-                ...
-                cap-sdio-irq;
-		keep-power-in-suspend;
-		wakeup-source;
-                ...
-        };
 
-Co-developed-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Axe Yang <axe.yang@mediatek.com>
----
- drivers/mmc/host/mtk-sd.c | 84 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 78 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 195dc897188b..f907b96cfd87 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2015 MediaTek Inc.
-+ * Copyright (c) 2014-2015, 2022 MediaTek Inc.
-  * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-  */
- 
-@@ -20,6 +20,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-@@ -440,8 +441,10 @@ struct msdc_host {
- 	struct pinctrl *pinctrl;
- 	struct pinctrl_state *pins_default;
- 	struct pinctrl_state *pins_uhs;
-+	struct pinctrl_state *pins_eint;
- 	struct delayed_work req_timeout;
- 	int irq;		/* host interrupt */
-+	int eint_irq;		/* interrupt from sdio device for waking up system */
- 	struct reset_control *reset;
- 
- 	struct clk *src_clk;	/* msdc source clock */
-@@ -1520,17 +1523,46 @@ static void __msdc_enable_sdio_irq(struct msdc_host *host, int enb)
- 
- static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
- {
--	unsigned long flags;
- 	struct msdc_host *host = mmc_priv(mmc);
-+	unsigned long flags;
-+	int ret;
- 
- 	spin_lock_irqsave(&host->lock, flags);
- 	__msdc_enable_sdio_irq(host, enb);
- 	spin_unlock_irqrestore(&host->lock, flags);
- 
--	if (enb)
--		pm_runtime_get_noresume(host->dev);
--	else
--		pm_runtime_put_noidle(host->dev);
-+	if (mmc_card_enable_async_irq(mmc->card) && host->pins_eint) {
-+		if (enb) {
-+			/*
-+			 * In dev_pm_set_dedicated_wake_irq_reverse(), eint pin will be set to
-+			 * GPIO mode. We need to restore it to SDIO DAT1 mode after that.
-+			 * Since the current pinstate is pins_uhs, to ensure pinctrl select take
-+			 * affect successfully, we change the pinstate to pins_eint firstly.
-+			 */
-+			pinctrl_select_state(host->pinctrl, host->pins_eint);
-+			ret = dev_pm_set_dedicated_wake_irq_reverse(host->dev, host->eint_irq);
-+
-+			if (ret) {
-+				dev_err(host->dev, "Failed to register SDIO wakeup irq!\n");
-+				host->pins_eint = NULL;
-+				pm_runtime_get_noresume(host->dev);
-+			} else {
-+				dev_dbg(host->dev, "SDIO eint irq: %d!\n", host->eint_irq);
-+			}
-+
-+			pinctrl_select_state(host->pinctrl, host->pins_uhs);
-+		} else {
-+			dev_pm_clear_wake_irq(host->dev);
-+		}
-+	} else {
-+		if (enb) {
-+			/* Ensure host->pins_eint is NULL */
-+			host->pins_eint = NULL;
-+			pm_runtime_get_noresume(host->dev);
-+		} else {
-+			pm_runtime_put_noidle(host->dev);
-+		}
-+	}
- }
- 
- static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
-@@ -2631,6 +2663,20 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 		goto host_free;
- 	}
- 
-+	/* Support for SDIO eint irq ? */
-+	if ((mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ) && (mmc->pm_caps & MMC_PM_KEEP_POWER)) {
-+		host->eint_irq = platform_get_irq_byname(pdev, "sdio_wakeup");
-+		if (host->eint_irq > 0) {
-+			host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
-+			if (IS_ERR(host->pins_eint)) {
-+				dev_err(&pdev->dev, "Cannot find pinctrl eint!\n");
-+				host->pins_eint = NULL;
-+			} else {
-+				device_init_wakeup(&pdev->dev, true);
-+			}
-+		}
-+	}
-+
- 	msdc_of_property_parse(pdev, host);
- 
- 	host->dev = &pdev->dev;
-@@ -2845,6 +2891,13 @@ static int __maybe_unused msdc_runtime_suspend(struct device *dev)
- 	struct msdc_host *host = mmc_priv(mmc);
- 
- 	msdc_save_reg(host);
-+
-+	if (host->pins_eint) {
-+		disable_irq(host->irq);
-+		pinctrl_select_state(host->pinctrl, host->pins_eint);
-+		if (sdio_irq_claimed(mmc))
-+			__msdc_enable_sdio_irq(host, 0);
-+	}
- 	msdc_gate_clock(host);
- 	return 0;
- }
-@@ -2860,12 +2913,18 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
- 		return ret;
- 
- 	msdc_restore_reg(host);
-+
-+	if (host->pins_eint) {
-+		pinctrl_select_state(host->pinctrl, host->pins_uhs);
-+		enable_irq(host->irq);
-+	}
- 	return 0;
- }
- 
- static int __maybe_unused msdc_suspend(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
-+	struct msdc_host *host = mmc_priv(mmc);
- 	int ret;
- 
- 	if (mmc->caps2 & MMC_CAP2_CQE) {
-@@ -2874,11 +2933,24 @@ static int __maybe_unused msdc_suspend(struct device *dev)
- 			return ret;
- 	}
- 
-+	/*
-+	 * Bump up runtime PM usage counter otherwise dev->power.needs_force_resume will
-+	 * not be marked as 1, pm_runtime_force_resume() will go out directly.
-+	 */
-+	if (host->pins_eint)
-+		pm_runtime_get_noresume(dev);
-+
- 	return pm_runtime_force_suspend(dev);
- }
- 
- static int __maybe_unused msdc_resume(struct device *dev)
- {
-+	struct mmc_host *mmc = dev_get_drvdata(dev);
-+	struct msdc_host *host = mmc_priv(mmc);
-+
-+	if (host->pins_eint)
-+		pm_runtime_put_noidle(dev);
-+
- 	return pm_runtime_force_resume(dev);
- }
- 
--- 
-2.25.1
+> +
+> +	return 0;
+> +}
+> +
+> +static void qm_hw_err_destroy(struct hisi_qm *qm)
+> +{
+> +	struct qm_hw_err *err, *tmp;
+> +
+> +	mutex_lock(&qm->isolate_data.isolate_lock);
+> +	list_for_each_entry_safe(err, tmp, &qm->uacce_hw_errs, list) {
+> +		list_del(&err->list);
+> +		kfree(err);
+> +	}
+> +	mutex_unlock(&qm->isolate_data.isolate_lock);
+> +}
+> +
+> +static enum uacce_dev_state hisi_qm_get_isolate_state(struct uacce_device *uacce)
+> +{
+> +	struct hisi_qm *qm = uacce->priv;
+> +	struct hisi_qm *pf_qm;
+> +
+> +	if (uacce->is_vf)
+> +		pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
+> +	else
+> +		pf_qm = qm;
+> +
+> +	return atomic_read(&pf_qm->isolate_data.is_isolate) ?
+> +			UACCE_DEV_ISOLATE : UACCE_DEV_NORMAL;
+> +}
+> +
+> +static int hisi_qm_isolate_strategy_write(struct uacce_device *uacce,
+> +					  const char *buf, size_t len)
+> +{
+> +	struct hisi_qm *qm = uacce->priv;
+> +	unsigned long val;
+> +
+> +#define MAX_ISOLATE_STRATEGY	65535
 
+What is this value?  Please document it better.
+
+> +
+> +	/* Must be set by PF */
+> +	if (uacce->is_vf) {
+> +		dev_info(&qm->pdev->dev, "the isolation strategy must be set by PF.\n");
+
+Do not let userspace spam the kernel log for no good reason.
+
+And why is this an info?
+
+> +		return -EINVAL;
+
+This looks like an error.
+
+> +	}
+> +
+> +	if (atomic_read(&qm->isolate_data.is_isolate))
+> +		return -EINVAL;
+
+What happens if this changes right after reading it?
+
+> +
+> +	if (kstrtoul(buf, 0, &val) < 0)
+> +		return -EINVAL;
+> +
+> +	if (val > MAX_ISOLATE_STRATEGY)
+> +		return -EINVAL;
+> +
+> +	qm->isolate_data.hw_err_isolate_hz = val;
+> +
+> +	/* After the policy is updated, need to reset the hardware err list */
+> +	qm_hw_err_destroy(qm);
+> +
+> +	return 0;
+
+Don't you need to return the number of bytes read, not 0?
+
+> +}
+> +
+> +static int hisi_qm_isolate_strategy_read(struct uacce_device *uacce, char *buf)
+> +{
+> +	struct hisi_qm *qm = uacce->priv;
+> +	struct hisi_qm *pf_qm;
+> +	unsigned long val;
+> +
+> +	if (uacce->is_vf) {
+> +		pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
+> +		val = pf_qm->isolate_data.hw_err_isolate_hz;
+> +	} else {
+> +		val = qm->isolate_data.hw_err_isolate_hz;
+> +	}
+> +
+> +	return sysfs_emit(buf, "%lu\n", val);
+> +}
+> +
+>  static const struct uacce_ops uacce_qm_ops = {
+>  	.get_available_instances = hisi_qm_get_available_instances,
+>  	.get_queue = hisi_qm_uacce_get_queue,
+> @@ -3419,8 +3548,22 @@ static const struct uacce_ops uacce_qm_ops = {
+>  	.mmap = hisi_qm_uacce_mmap,
+>  	.ioctl = hisi_qm_uacce_ioctl,
+>  	.is_q_updated = hisi_qm_is_q_updated,
+> +	.get_isolate_state = hisi_qm_get_isolate_state,
+> +	.isolate_strategy_write = hisi_qm_isolate_strategy_write,
+> +	.isolate_strategy_read = hisi_qm_isolate_strategy_read,
+>  };
+>  
+> +static void qm_remove_uacce(struct hisi_qm *qm)
+> +{
+> +	struct uacce_device *uacce = qm->uacce;
+> +
+> +	if (qm->use_sva) {
+> +		qm_hw_err_destroy(qm);
+> +		uacce_remove(uacce);
+> +		qm->uacce = NULL;
+> +	}
+> +}
+> +
+>  static int qm_alloc_uacce(struct hisi_qm *qm)
+>  {
+>  	struct pci_dev *pdev = qm->pdev;
+> @@ -3433,6 +3576,8 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
+>  	};
+>  	int ret;
+>  
+> +	INIT_LIST_HEAD(&qm->uacce_hw_errs);
+> +	mutex_init(&qm->isolate_data.isolate_lock);
+>  	ret = strscpy(interface.name, dev_driver_string(&pdev->dev),
+>  		      sizeof(interface.name));
+>  	if (ret < 0)
+> @@ -3446,8 +3591,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
+>  		qm->use_sva = true;
+>  	} else {
+>  		/* only consider sva case */
+> -		uacce_remove(uacce);
+> -		qm->uacce = NULL;
+> +		qm_remove_uacce(qm);
+>  		return -EINVAL;
+>  	}
+>  
+> @@ -5109,6 +5253,12 @@ static int qm_controller_reset_prepare(struct hisi_qm *qm)
+>  		return ret;
+>  	}
+>  
+> +	if (qm->use_sva) {
+> +		ret = qm_hw_err_isolate(qm);
+> +		if (ret)
+> +			pci_err(pdev, "failed to isolate hw err!\n");
+> +	}
+> +
+>  	ret = qm_wait_vf_prepare_finish(qm);
+>  	if (ret)
+>  		pci_err(pdev, "failed to stop by vfs in soft reset!\n");
+> @@ -5436,19 +5586,25 @@ static int qm_controller_reset(struct hisi_qm *qm)
+>  	ret = qm_soft_reset(qm);
+>  	if (ret) {
+>  		pci_err(pdev, "Controller reset failed (%d)\n", ret);
+> -		qm_reset_bit_clear(qm);
+> -		return ret;
+> +		goto err_reset;
+>  	}
+>  
+>  	ret = qm_controller_reset_done(qm);
+> -	if (ret) {
+> -		qm_reset_bit_clear(qm);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		goto err_reset;
+>  
+>  	pci_info(pdev, "Controller reset complete\n");
+>  
+>  	return 0;
+> +
+> +err_reset:
+> +	pci_err(pdev, "Controller reset failed (%d)\n", ret);
+> +	qm_reset_bit_clear(qm);
+> +
+> +	/* if resetting fails, isolate the device */
+> +	if (qm->use_sva && !qm->uacce->is_vf)
+> +		atomic_set(&qm->isolate_data.is_isolate, 1);
+> +	return ret;
+>  }
+>  
+>  /**
+> @@ -6246,10 +6402,7 @@ int hisi_qm_init(struct hisi_qm *qm)
+>  err_free_qm_memory:
+>  	hisi_qm_memory_uninit(qm);
+>  err_alloc_uacce:
+> -	if (qm->use_sva) {
+> -		uacce_remove(qm->uacce);
+> -		qm->uacce = NULL;
+> -	}
+> +	qm_remove_uacce(qm);
+>  err_irq_register:
+>  	qm_irq_unregister(qm);
+>  err_pci_init:
+> diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
+> index 116e8bd68c99..44454150c205 100644
+> --- a/include/linux/hisi_acc_qm.h
+> +++ b/include/linux/hisi_acc_qm.h
+> @@ -271,6 +271,13 @@ struct hisi_qm_poll_data {
+>  	u16 *qp_finish_id;
+>  };
+>  
+> +struct qm_err_isolate {
+> +	struct mutex isolate_lock;
+> +	/* user cfg freq which triggers isolation */
+> +	u32 hw_err_isolate_hz;
+> +	atomic_t is_isolate;
+
+Again, why is this an atomic value?
+
+thanks,
+
+greg k-h

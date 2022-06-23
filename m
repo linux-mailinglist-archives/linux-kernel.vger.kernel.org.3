@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCEF556FB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6EA556FB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377065AbiFWBC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 21:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
+        id S1377175AbiFWBCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 21:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiFWBC2 (ORCPT
+        with ESMTP id S231239AbiFWBCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 21:02:28 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7563A41F9B;
-        Wed, 22 Jun 2022 18:02:26 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 23 Jun 2022 10:02:24 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id CB9BD205845A;
-        Thu, 23 Jun 2022 10:02:24 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 23 Jun 2022 10:02:24 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 6F134B62E2;
-        Thu, 23 Jun 2022 10:02:24 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: [PATCH] clk: Fix referring to wrong pointer in devm_clk_release()
-Date:   Thu, 23 Jun 2022 10:02:22 +0900
-Message-Id: <1655946142-1346-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 22 Jun 2022 21:02:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2606C427C3;
+        Wed, 22 Jun 2022 18:02:48 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LT25907pCzkWZJ;
+        Thu, 23 Jun 2022 09:01:33 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 23 Jun 2022 09:02:46 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 23 Jun 2022 09:02:45 +0800
+Subject: Re: [RFC 00/13] perf: Add perf kwork
+To:     "Paul A. Clarke" <pc@us.ibm.com>
+CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
+References: <20220613094605.208401-1-yangjihong1@huawei.com>
+ <YrMuQXIn9DdhZl2w@li-be644d4c-2c59-11b2-a85c-bc3dba3ed00b.ibm.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <3cccc03a-c2bc-91d9-60b9-daf180c6b108@huawei.com>
+Date:   Thu, 23 Jun 2022 09:02:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <YrMuQXIn9DdhZl2w@li-be644d4c-2c59-11b2-a85c-bc3dba3ed00b.ibm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At bind phase, __devm_clk_get() calls devres_alloc() to allocate devres,
-and dr->data is treated as a variable "state".
+Hello,
 
-At unbind phase, release_nodes() calls devm_clk_release() specified by
-devres_alloc().
+On 2022/6/22 22:59, Paul A. Clarke wrote:
+> On Mon, Jun 13, 2022 at 05:45:52PM +0800, Yang Jihong wrote:
+>> Sometimes, we need to analyze time properties of kernel work such as irq,
+>> softirq, and workqueue, such as delay and running time of specific interrupts.
+>> Currently, these events have kernel tracepoints, but perf tool does not
+>> directly analyze the delay of these events
+>>
+>> The perf-kwork tool is used to trace time properties of kernel work
+>> (such as irq, softirq, and workqueue), including runtime, latency,
+>> and timehist, using the infrastructure in the perf tools to allow
+>> tracing extra targets
+>>
+>> test case:
+>>
+>>    # perf kwork report
+>>
+>>      Kwork Name                | Cpu  | Total Runtime | Frequency | Max runtime   | Max runtime start   | Max runtime end     |
+>>     ---------------------------------------------------------------------------------------------------------------------------
+>>      (s)RCU:9                  | 0007 |      3.488 ms |      1258 |      0.145 ms |    3398384.220013 s |    3398384.220157 s |
+>>      (s)NET_RX:3               | 0003 |      1.866 ms |       156 |      0.042 ms |    3398385.629764 s |    3398385.629806 s |
+>>      (s)TIMER:1                | 0000 |      1.799 ms |       117 |      0.055 ms |    3398385.568033 s |    3398385.568088 s |
+>>      (w)0xffff9c66e563ee98     | 0006 |      1.561 ms |         5 |      0.351 ms |    3398384.060021 s |    3398384.060371 s |
+> 
+> What units are used for "Frequency"? It would be helpful to include somewhere.
+This refers to the number of event in the trace period.
 
-The argument "res" of devm_clk_release() is dr->data, and this entity is
-"state", however in devm_clk_release(), "*res" is treated as "state",
-resulting in pointer inconsistency.
-
-Unbinding a driver caused a panic.
-
-    Unable to handle kernel execute from non-executable memory
-    at virtual address ffff000100236810
-    ...
-    pc : 0xffff000100236810
-    lr : devm_clk_release+0x6c/0x9c
-    ...
-    Call trace:
-     0xffff000100236810
-     release_nodes+0xb0/0x150
-     devres_release_all+0x94/0xf8
-     device_unbind_cleanup+0x20/0x70
-     device_release_driver_internal+0x114/0x1a0
-     device_driver_detach+0x20/0x30
-
-Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Fixes: abae8e57e49a ("clk: generalize devm_clk_get() a bit")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- drivers/clk/clk-devres.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
-index 43ccd20e0298..1f37ed7ad395 100644
---- a/drivers/clk/clk-devres.c
-+++ b/drivers/clk/clk-devres.c
-@@ -11,7 +11,7 @@ struct devm_clk_state {
- 
- static void devm_clk_release(struct device *dev, void *res)
- {
--	struct devm_clk_state *state = *(struct devm_clk_state **)res;
-+	struct devm_clk_state *state = (struct devm_clk_state *)res;
- 
- 	if (state->exit)
- 		state->exit(state->clk);
--- 
-2.25.1
-
+Thanks，
+Jihong
+> 
+> PC
+> .
+> 

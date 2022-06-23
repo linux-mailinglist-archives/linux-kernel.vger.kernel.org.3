@@ -2,192 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD721557F6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5931557F66
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbiFWQIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S232207AbiFWQIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiFWQI0 (ORCPT
+        with ESMTP id S232164AbiFWQIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:08:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B5F6457AA
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656000492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 23 Jun 2022 12:08:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C0A2ACC;
+        Thu, 23 Jun 2022 09:07:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0A0131F747;
+        Thu, 23 Jun 2022 16:07:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656000477; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=8/vA61/e8JjxHZdnkvWczUDEwRb4OQPYDhdQrJqxnws=;
-        b=c65qirxrgtN3XD/btXOFWelwq3c8qtJXmAigIAi7gH8hBVUbZipbFM3auSEq4tlkdKUNKH
-        Rzf6LRtz/vYsHoV8wBtxSHC3SvCMHLcfB7Huc+0hhtXPRqc5pmTC0ILyVl4otVNe3xajnF
-        PiLHm6OWKWJwUYlsVsZ9nga7WS267xc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-iYzyeCevMvmnRUqKRXZlVA-1; Thu, 23 Jun 2022 12:08:06 -0400
-X-MC-Unique: iYzyeCevMvmnRUqKRXZlVA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=wMF9zQXoS7789benC3y1Mqff9+pXyWjyfnVX7+d4uIU=;
+        b=mvvikz1x06mAR0j9AIIjqZez94lYbuacM/0nvGLHh9QkoXhZ0Bgz3bcqKQylfvDVab1ffl
+        fs5NfryGLmDNt9mFXbPF8S/1L9pyATCAiB9FP7RkBv2Nhdqo1yCiRNngO6aqd++vLOKIUx
+        RwGAngJGkZvbsOT99UE2700SeBZB+E4=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A333382ECCA;
-        Thu, 23 Jun 2022 16:08:04 +0000 (UTC)
-Received: from eperezma.remote.csb (unknown [10.39.194.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A922D2166B26;
-        Thu, 23 Jun 2022 16:07:59 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Parav Pandit <parav@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        lulu@redhat.com, tanuj.kamde@amd.com,
-        Si-Wei Liu <si-wei.liu@oracle.com>, Piotr.Uminski@intel.com,
-        habetsm.xilinx@gmail.com, gautam.dawar@amd.com, pabloc@xilinx.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>, lvivier@redhat.com,
-        Longpeng <longpeng2@huawei.com>, dinang@xilinx.com,
-        martinh@xilinx.com, martinpo@xilinx.com,
-        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>, hanand@xilinx.com,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
-Subject: [PATCH v6 4/4] vdpa_sim: Implement suspend vdpa op
-Date:   Thu, 23 Jun 2022 18:07:38 +0200
-Message-Id: <20220623160738.632852-5-eperezma@redhat.com>
-In-Reply-To: <20220623160738.632852-1-eperezma@redhat.com>
-References: <20220623160738.632852-1-eperezma@redhat.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 52EBA2C197;
+        Thu, 23 Jun 2022 16:07:56 +0000 (UTC)
+Date:   Thu, 23 Jun 2022 18:07:55 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     kernel@openvz.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+Subject: Re: [PATCH mm v5 0/9] memcg: accounting for objects allocated by
+ mkdir, cgroup
+Message-ID: <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
+References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+ <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org>
+ <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement suspend operation for vdpa_sim devices, so vhost-vdpa will
-offer that backend feature and userspace can effectively suspend the
-device.
+On Thu 23-06-22 18:03:31, Vasily Averin wrote:
+> Dear Michal,
+> do you still have any concerns about this patch set?
 
-This is a must before get virtqueue indexes (base) for live migration,
-since the device could modify them after userland gets them. There are
-individual ways to perform that action for some devices
-(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
-way to perform it for any vhost device (and, in particular, vhost-vdpa).
-
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
- drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
- 4 files changed, 28 insertions(+)
-
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 0f2865899647..213883487f9b 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_reset(&vdpasim->iommu[i]);
- 
-+	vdpasim->running = true;
- 	spin_unlock(&vdpasim->iommu_lock);
- 
- 	vdpasim->features = 0;
-@@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
- 	return 0;
- }
- 
-+static int vdpasim_suspend(struct vdpa_device *vdpa)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	int i;
-+
-+	spin_lock(&vdpasim->lock);
-+	vdpasim->running = false;
-+	if (vdpasim->running) {
-+		/* Check for missed buffers */
-+		for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
-+			vdpasim_kick_vq(vdpa, i);
-+
-+	}
-+	spin_unlock(&vdpasim->lock);
-+
-+	return 0;
-+}
-+
- static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.suspend		= vdpasim_suspend,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-@@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.suspend		= vdpasim_suspend,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 622782e92239..061986f30911 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -66,6 +66,7 @@ struct vdpasim {
- 	u32 generation;
- 	u64 features;
- 	u32 groups;
-+	bool running;
- 	/* spinlock to synchronize iommu table */
- 	spinlock_t iommu_lock;
- };
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 42d401d43911..bcdb1982c378 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *work)
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	for (i = 0; i < VDPASIM_BLK_VQ_NUM; i++) {
- 		struct vdpasim_virtqueue *vq = &vdpasim->vqs[i];
- 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 5125976a4df8..886449e88502 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work)
- 
- 	spin_lock(&vdpasim->lock);
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
+Yes, I do not think we have concluded this to be really necessary. IIRC 
+Roman would like to see lingering cgroups addressed in not-so-distant
+future (http://lkml.kernel.org/r/Ypd2DW7id4M3KJJW@carbon) and we already
+have a limit for the number of cgroups in the tree. So why should we
+chase after allocations that correspond the cgroups and somehow try to
+cap their number via the memory consumption. This looks like something
+that will get out of sync eventually and it also doesn't seem like the
+best control to me (comparing to an explicit limit to prevent runaways).
 -- 
-2.31.1
-
+Michal Hocko
+SUSE Labs

@@ -2,239 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DF8558064
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513EE558017
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiFWQq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
+        id S232383AbiFWQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiFWQqS (ORCPT
+        with ESMTP id S232375AbiFWQk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:46:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433E049264;
-        Thu, 23 Jun 2022 09:46:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1316B82486;
-        Thu, 23 Jun 2022 16:46:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCFDC3411B;
-        Thu, 23 Jun 2022 16:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656002774;
-        bh=iB1+qzG8LI8uqYcAj/yF5Vz5fcVlgJ6e25IFzF7B2o8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ROdmonJZ0R06XBpUfJK4LmurKhMyrSe9MFWOAJREv1Ufk3BHOoEYhs4BeZvHQTb19
-         Zu+6nmZ1rnyV+CYXK+ZcDqjkm8GaA41l7X8alVLu/XZNicO5NUabd2teOSl9Wzd4/g
-         3mdQ8QntWTw43+srXpu848oojt05Pe7Mv5lyp1qI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 021/264] random: add a spinlock_t to struct batched_entropy
-Date:   Thu, 23 Jun 2022 18:40:14 +0200
-Message-Id: <20220623164344.665965711@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Thu, 23 Jun 2022 12:40:29 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106CF496A1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:40:28 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id pk21so19137423ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:40:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I1UW1A5iTJMy9XUHQDhdeFuCCBbHM+64IpJhXilvfwQ=;
+        b=TbWRbkLkwMVYyzfyCVsrhUoZeTEmXG3Jwx8lZ8ny9vilG++0V0vPCbgJYQ0Gj3fRNH
+         SGDlItoF7hdJBiqiEbERG0pV0c1OCS8cKZ7q/wF8aeqrOF4V0ti1T6ND5kmWcPgzA73c
+         tQwH6N44WdoWO41l+yS2nQjo6/QO+FQ71EnmF5OV4L/ItIuxiEs3xOtCdiJXoujfmJRZ
+         avSat2MhTJJugCwM3GiXdfDLNfY5tAFkc1budJZrpKId1fZTf2ACBOwrvQoygtau+zid
+         lKu1dl92ry6qTkfiS3LGonHJEjrEsrU2iTnxWx8SL7WeYMVowprR5+PfBml1W4Pw4mqy
+         d5wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I1UW1A5iTJMy9XUHQDhdeFuCCBbHM+64IpJhXilvfwQ=;
+        b=lktnvxhd+l+2JGsN5lV142bx6WkeJP6A9/ftip4J0XWf9iushTHHRzNxULP2GbG5fP
+         38RW+khwno3DNY2kEbwkLobXPmmUkPEt7ilDXsIl6C/aTB9fq40mWNtOQf5xjzLCdC1r
+         X6Cpca0BCNBu5A78Q1iro/gKWcLvGDaY3KluAss+78GXA5DP0eS2FZPyP/rw9JnEa97r
+         FCC5zPPrsnhnGXR8+JGve+ia8nM8H17cVFdlQnYxMnRXV8VZv729UCmgXEAu2WwGAkzF
+         vGRBQAOhVvxnN0YLxBR/4JUn06tU9IH89OvTcU8Xar0aA5WoZXDJUM6i+8uJsvZp/jx2
+         jHyQ==
+X-Gm-Message-State: AJIora/Aeih0ZoN/a11txLZBMIl2Oth0ax8dRyEQJxHExajWg0Z5XL/u
+        /V0Ws0dNGwdMXGX7f6o4Q8FeOtX3JeSz/OZVGVBZXQ==
+X-Google-Smtp-Source: AGRyM1uZfCs+3tcv3oONPrGXLyHDbOIITA35SDt1mjZF4XZ5uphCKoXYKL/A5HjQUZz/Wtd7TrkGZJcg/Nt5jK+Vfps=
+X-Received: by 2002:a17:907:72c5:b0:722:e515:fcc6 with SMTP id
+ du5-20020a17090772c500b00722e515fcc6mr8761561ejc.533.1656002426525; Thu, 23
+ Jun 2022 09:40:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220622041040.202737-1-tzungbi@kernel.org> <20220622041040.202737-8-tzungbi@kernel.org>
+In-Reply-To: <20220622041040.202737-8-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Thu, 23 Jun 2022 09:40:15 -0700
+Message-ID: <CABXOdTcQTWMWHyT5=Va1gijyLNsMSM8LQiNU79RWLH-1O4GhCg@mail.gmail.com>
+Subject: Re: [PATCH 7/7] platform/chrome: cros_ec_proto: add Kunit test for cros_ec_cmd()
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+On Tue, Jun 21, 2022 at 9:11 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> cros_ec_cmd() is a wrapper of cros_ec_cmd_xfer_status().
+>
+> Add Kunit test for cros_ec_cmd().
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-[ Upstream commit b7d5dc21072cda7124d13eae2aefb7343ef94197 ]
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-The per-CPU variable batched_entropy_uXX is protected by get_cpu_var().
-This is just a preempt_disable() which ensures that the variable is only
-from the local CPU. It does not protect against users on the same CPU
-from another context. It is possible that a preemptible context reads
-slot 0 and then an interrupt occurs and the same value is read again.
-
-The above scenario is confirmed by lockdep if we add a spinlock:
-| ================================
-| WARNING: inconsistent lock state
-| 5.1.0-rc3+ #42 Not tainted
-| --------------------------------
-| inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
-| ksoftirqd/9/56 [HC0[0]:SC1[1]:HE0:SE0] takes:
-| (____ptrval____) (batched_entropy_u32.lock){+.?.}, at: get_random_u32+0x3e/0xe0
-| {SOFTIRQ-ON-W} state was registered at:
-|   _raw_spin_lock+0x2a/0x40
-|   get_random_u32+0x3e/0xe0
-|   new_slab+0x15c/0x7b0
-|   ___slab_alloc+0x492/0x620
-|   __slab_alloc.isra.73+0x53/0xa0
-|   kmem_cache_alloc_node+0xaf/0x2a0
-|   copy_process.part.41+0x1e1/0x2370
-|   _do_fork+0xdb/0x6d0
-|   kernel_thread+0x20/0x30
-|   kthreadd+0x1ba/0x220
-|   ret_from_fork+0x3a/0x50
-…
-| other info that might help us debug this:
-|  Possible unsafe locking scenario:
-|
-|        CPU0
-|        ----
-|   lock(batched_entropy_u32.lock);
-|   <Interrupt>
-|     lock(batched_entropy_u32.lock);
-|
-|  *** DEADLOCK ***
-|
-| stack backtrace:
-| Call Trace:
-…
-|  kmem_cache_alloc_trace+0x20e/0x270
-|  ipmi_alloc_recv_msg+0x16/0x40
-…
-|  __do_softirq+0xec/0x48d
-|  run_ksoftirqd+0x37/0x60
-|  smpboot_thread_fn+0x191/0x290
-|  kthread+0xfe/0x130
-|  ret_from_fork+0x3a/0x50
-
-Add a spinlock_t to the batched_entropy data structure and acquire the
-lock while accessing it. Acquire the lock with disabled interrupts
-because this function may be used from interrupt context.
-
-Remove the batched_entropy_reset_lock lock. Now that we have a lock for
-the data scructure, we can access it from a remote CPU.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/char/random.c |   52 +++++++++++++++++++++++++-------------------------
- 1 file changed, 27 insertions(+), 25 deletions(-)
-
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -2228,8 +2228,8 @@ struct batched_entropy {
- 		u32 entropy_u32[CHACHA20_BLOCK_SIZE / sizeof(u32)];
- 	};
- 	unsigned int position;
-+	spinlock_t batch_lock;
- };
--static rwlock_t batched_entropy_reset_lock = __RW_LOCK_UNLOCKED(batched_entropy_reset_lock);
- 
- /*
-  * Get a random word for internal kernel use only. The quality of the random
-@@ -2239,12 +2239,14 @@ static rwlock_t batched_entropy_reset_lo
-  * wait_for_random_bytes() should be called and return 0 at least once
-  * at any point prior.
-  */
--static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u64);
-+static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u64) = {
-+	.batch_lock	= __SPIN_LOCK_UNLOCKED(batched_entropy_u64.lock),
-+};
-+
- u64 get_random_u64(void)
- {
- 	u64 ret;
--	bool use_lock;
--	unsigned long flags = 0;
-+	unsigned long flags;
- 	struct batched_entropy *batch;
- 	static void *previous;
- 
-@@ -2259,28 +2261,25 @@ u64 get_random_u64(void)
- 
- 	warn_unseeded_randomness(&previous);
- 
--	use_lock = READ_ONCE(crng_init) < 2;
--	batch = &get_cpu_var(batched_entropy_u64);
--	if (use_lock)
--		read_lock_irqsave(&batched_entropy_reset_lock, flags);
-+	batch = raw_cpu_ptr(&batched_entropy_u64);
-+	spin_lock_irqsave(&batch->batch_lock, flags);
- 	if (batch->position % ARRAY_SIZE(batch->entropy_u64) == 0) {
- 		extract_crng((u8 *)batch->entropy_u64);
- 		batch->position = 0;
- 	}
- 	ret = batch->entropy_u64[batch->position++];
--	if (use_lock)
--		read_unlock_irqrestore(&batched_entropy_reset_lock, flags);
--	put_cpu_var(batched_entropy_u64);
-+	spin_unlock_irqrestore(&batch->batch_lock, flags);
- 	return ret;
- }
- EXPORT_SYMBOL(get_random_u64);
- 
--static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u32);
-+static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u32) = {
-+	.batch_lock	= __SPIN_LOCK_UNLOCKED(batched_entropy_u32.lock),
-+};
- u32 get_random_u32(void)
- {
- 	u32 ret;
--	bool use_lock;
--	unsigned long flags = 0;
-+	unsigned long flags;
- 	struct batched_entropy *batch;
- 	static void *previous;
- 
-@@ -2289,18 +2288,14 @@ u32 get_random_u32(void)
- 
- 	warn_unseeded_randomness(&previous);
- 
--	use_lock = READ_ONCE(crng_init) < 2;
--	batch = &get_cpu_var(batched_entropy_u32);
--	if (use_lock)
--		read_lock_irqsave(&batched_entropy_reset_lock, flags);
-+	batch = raw_cpu_ptr(&batched_entropy_u32);
-+	spin_lock_irqsave(&batch->batch_lock, flags);
- 	if (batch->position % ARRAY_SIZE(batch->entropy_u32) == 0) {
- 		extract_crng((u8 *)batch->entropy_u32);
- 		batch->position = 0;
- 	}
- 	ret = batch->entropy_u32[batch->position++];
--	if (use_lock)
--		read_unlock_irqrestore(&batched_entropy_reset_lock, flags);
--	put_cpu_var(batched_entropy_u32);
-+	spin_unlock_irqrestore(&batch->batch_lock, flags);
- 	return ret;
- }
- EXPORT_SYMBOL(get_random_u32);
-@@ -2314,12 +2309,19 @@ static void invalidate_batched_entropy(v
- 	int cpu;
- 	unsigned long flags;
- 
--	write_lock_irqsave(&batched_entropy_reset_lock, flags);
- 	for_each_possible_cpu (cpu) {
--		per_cpu_ptr(&batched_entropy_u32, cpu)->position = 0;
--		per_cpu_ptr(&batched_entropy_u64, cpu)->position = 0;
-+		struct batched_entropy *batched_entropy;
-+
-+		batched_entropy = per_cpu_ptr(&batched_entropy_u32, cpu);
-+		spin_lock_irqsave(&batched_entropy->batch_lock, flags);
-+		batched_entropy->position = 0;
-+		spin_unlock(&batched_entropy->batch_lock);
-+
-+		batched_entropy = per_cpu_ptr(&batched_entropy_u64, cpu);
-+		spin_lock(&batched_entropy->batch_lock);
-+		batched_entropy->position = 0;
-+		spin_unlock_irqrestore(&batched_entropy->batch_lock, flags);
- 	}
--	write_unlock_irqrestore(&batched_entropy_reset_lock, flags);
- }
- 
- /**
-
-
+> ---
+>  drivers/platform/chrome/cros_ec_proto_test.c | 48 ++++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index 6b26ce3104f4..2ff2783fedfb 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -2592,6 +2592,53 @@ static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
+>         }
+>  }
+>
+> +static void cros_ec_proto_test_ec_cmd(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +       u8 out[3], in[2];
+> +
+> +       ec_dev->max_request = 0xff;
+> +       ec_dev->max_response = 0xee;
+> +
+> +       out[0] = 0xdd;
+> +       out[1] = 0xcc;
+> +       out[2] = 0xbb;
+> +
+> +       {
+> +               u8 *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_add(test, 2);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +
+> +               data = (u8 *)mock->o_data;
+> +               data[0] = 0xaa;
+> +               data[1] = 0x99;
+> +       }
+> +
+> +       ret = cros_ec_cmd(ec_dev, 0x88, 0x77, out, ARRAY_SIZE(out), in, ARRAY_SIZE(in));
+> +       KUNIT_EXPECT_EQ(test, ret, 2);
+> +
+> +       {
+> +               u8 *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0x88);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, 0x77);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, ARRAY_SIZE(in));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, ARRAY_SIZE(out));
+> +
+> +               data = (u8 *)mock->i_data;
+> +               KUNIT_EXPECT_EQ(test, data[0], 0xdd);
+> +               KUNIT_EXPECT_EQ(test, data[1], 0xcc);
+> +               KUNIT_EXPECT_EQ(test, data[2], 0xbb);
+> +       }
+> +}
+> +
+>  static void cros_ec_proto_test_release(struct device *dev)
+>  {
+>  }
+> @@ -2690,6 +2737,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
+>         KUNIT_CASE(cros_ec_proto_test_get_sensor_count_normal),
+>         KUNIT_CASE(cros_ec_proto_test_get_sensor_count_xfer_error),
+>         KUNIT_CASE(cros_ec_proto_test_get_sensor_count_legacy),
+> +       KUNIT_CASE(cros_ec_proto_test_ec_cmd),
+>         {}
+>  };
+>
+> --
+> 2.37.0.rc0.104.g0611611a94-goog
+>

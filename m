@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733CA557ED7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED86557EE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiFWPrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        id S231848AbiFWPsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiFWPrD (ORCPT
+        with ESMTP id S231533AbiFWPss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:47:03 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08718393FE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655999220; x=1687535220;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rxITMK7izGB0alXb8idrXiJ48i1N6ntO4mnnFucTTUE=;
-  b=M4IaGu4I9bREv4VvIIOl75KNncJYYfmDWYiXEiaa96RElFWRjq1Cs89K
-   KKIhbwJ6O/Ip2RmYTiimO2qY0dtf3VG37z2saBRO2Gini5Df6ByhMTCZo
-   u02T6JWJv/PjbeMlDMrfDT2ONoyhaz27o0iBOGvbNrzz8IKJKtuFVMvav
-   RLEh8qFqzJQ3O9hTz7hDQI9j6Xjr1iarPTg3hHevivS5JYAtmTWeff3Pb
-   4s/XukM1bfczB8WUc0H9nan1vQ/xzh3N5Vf7R+BS+F1f4B2BRQuucccm5
-   5zt7uJcr9YaHigIWSyuttZwjdjLY5T3Vb7UWCMvlApvCiknlvSyBpgfei
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="367075782"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="367075782"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 08:46:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="678111752"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jun 2022 08:46:49 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4P2e-0001Vt-OA;
-        Thu, 23 Jun 2022 15:46:48 +0000
-Date:   Thu, 23 Jun 2022 23:46:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tramp_11 19/21] kernel/bpf/trampoline.c:81:31:
- sparse: sparse: non size-preserving pointer to integer cast
-Message-ID: <202206232359.8QKWZqGN-lkp@intel.com>
+        Thu, 23 Jun 2022 11:48:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC41C3E0DD;
+        Thu, 23 Jun 2022 08:48:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C1A0B82468;
+        Thu, 23 Jun 2022 15:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2336C3411B;
+        Thu, 23 Jun 2022 15:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655999324;
+        bh=E2ZHa4TN+5+ejRiD5sM6vTPpHUBc/nI7dHASx3liJUE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ZJ7KRe+PPhkrhtcpZO7Hpv5xz8T2QQ0uKQ+mbtqyV/uPJUvcM/wCNVtbvASGCh0eW
+         LxZLqFi0ZfwEHAwM10jCnx3B3MseWbmmw9MVCn2HrOUFl7TnUEXOr8ttdsjm/NTeX3
+         H4vgCmDBDOJhcrSDODTfKXdf/e8XLiN5eeJIbv5xdDChY1Kl4oo9dCjj7heOWbo9fX
+         YaqDd1k9B270LN3IkVdsdngFaUxxwC/KmVcf1sflT3ARY8nkNqRSiLi+QBvylzNvMu
+         6wA51T9zaS0me1goaaGsShDd0lMpo0iF0bbAQBHI+ijzQrdrgyVKKmiasvUYLZTvyd
+         Nl8WurlOZk4lA==
+From:   Mark Brown <broonie@kernel.org>
+To:     lgirdwood@gmail.com, linux@roeck-us.net, pavel@ucw.cz,
+        jic23@kernel.org, sre@kernel.org, robh+dt@kernel.org,
+        lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, lars@metafoo.de,
+        krzysztof.kozlowski+dt@linaro.org, chunfeng.yun@mediatek.com,
+        deller@gmx.de, matthias.bgg@gmail.com, peterwu.pub@gmail.com
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, szunichen@gmail.com,
+        linux-mediatek@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        alice_chen@richtek.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, chiaen_wu@richtek.com,
+        cy_huang@richtek.com, linux-leds@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+In-Reply-To: <20220623115631.22209-1-peterwu.pub@gmail.com>
+References: <20220623115631.22209-1-peterwu.pub@gmail.com>
+Subject: Re: (subset) [PATCH v3 00/14] Add Mediatek MT6370 PMIC support
+Message-Id: <165599931844.321775.8085559092337130067.b4-ty@kernel.org>
+Date:   Thu, 23 Jun 2022 16:48:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,43 +65,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_11
-head:   c807110aa605281263da02a78af57847f5c4275e
-commit: a2660a85cc98b2db2577fd844985884cff0e5cae [19/21] bpf: Add support to store multiple ids in bpf_tramp_id object
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220623/202206232359.8QKWZqGN-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-31-g4880bd19-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=a2660a85cc98b2db2577fd844985884cff0e5cae
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tramp_11
-        git checkout a2660a85cc98b2db2577fd844985884cff0e5cae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+On Thu, 23 Jun 2022 19:56:17 +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> This patch series add Mediatek MT6370 PMIC support. The MT6370 is a
+> highly-integrated smart power management IC, which includes a single
+> cell Li-Ion/Li-Polymer switching battery charger, a USB
+> Type-C & Power Delivery (PD) controller, dual Flash LED current sources,
+> a RGB LED driver, a backlight WLED driver, a display bias driver and a
+> general LDO for portable devices.
+> 
+> [...]
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/bpf/trampoline.c:16:31: sparse: sparse: symbol 'bpf_extension_verifier_ops' was not declared. Should it be static?
-   kernel/bpf/trampoline.c:18:27: sparse: sparse: symbol 'bpf_extension_prog_ops' was not declared. Should it be static?
->> kernel/bpf/trampoline.c:81:31: sparse: sparse: non size-preserving pointer to integer cast
+Thanks!
 
-vim +81 kernel/bpf/trampoline.c
+[09/14] regulator: mt6370: Add mt6370 DisplayBias and VibLDO support
+        commit: 8171c93bac1bf9e98269b2efb19ef4e6c4e55ed7
 
-    77	
-    78	static u64 bpf_tramp_id_key(struct bpf_tramp_id *id)
-    79	{
-    80		if (bpf_tramp_id_is_multi(id))
-  > 81			return (u64) &id;
-    82		else
-    83			return ((u64) id->obj_id << 32) | id->id[0];
-    84	}
-    85	
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

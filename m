@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE575575C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DE05575CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiFWIoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S230149AbiFWIpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiFWIoI (ORCPT
+        with ESMTP id S229490AbiFWIpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:44:08 -0400
-Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424B649249;
-        Thu, 23 Jun 2022 01:44:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R911e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VHAjc-P_1655973829;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VHAjc-P_1655973829)
+        Thu, 23 Jun 2022 04:45:43 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C270149249;
+        Thu, 23 Jun 2022 01:45:42 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VHAqFao_1655973934;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VHAqFao_1655973934)
           by smtp.aliyun-inc.com;
-          Thu, 23 Jun 2022 16:44:00 +0800
+          Thu, 23 Jun 2022 16:45:39 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     neal_liu@aspeedtech.com
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, joel@jms.id.au,
-        andrew@aj.id.au, sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
+To:     kishon@ti.com
+Cc:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] usb: gadget: Fix unsigned comparison with less than zero
-Date:   Thu, 23 Jun 2022 16:43:47 +0800
-Message-Id: <20220623084347.38207-1-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] NTB: EPF: Fix missing error code in epf_ntb_bind()
+Date:   Thu, 23 Jun 2022 16:45:31 +0800
+Message-Id: <20220623084531.39837-1-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was found by coccicheck:
+The error code is missing in this code scenario, add the error code
+'-EINVAL' to the return value 'ret'.
 
-./drivers/usb/gadget/udc/aspeed_udc.c:496:8-13: WARNING: Unsigned expression compared with zero: chunk >= 0.
+This was found by smatch:
+
+drivers/pci/endpoint/functions/pci-epf-vntb.c:1317 epf_ntb_bind() warn: missing error code 'ret'.
 
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/usb/gadget/udc/aspeed_udc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pci/endpoint/functions/pci-epf-vntb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-index 1fc15228ff15..387a7abdcee4 100644
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -476,8 +476,8 @@ static int ast_dma_descriptor_setup(struct ast_udc_ep *ep, u32 dma_buf,
- {
- 	struct ast_udc_dev *udc = ep->udc;
- 	struct device *dev = &udc->pdev->dev;
--	u32 offset, chunk;
--	int count, last;
-+	u32 offset;
-+	int count, last, chunk;
+diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+index ebf7e243eefa..8791638b9f48 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
++++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+@@ -1314,6 +1314,7 @@ static int epf_ntb_bind(struct pci_epf *epf)
  
- 	if (!ep->descs) {
- 		dev_warn(dev, "%s: Empty DMA descs list failure\n",
+ 	if (pci_register_driver(&vntb_pci_driver)) {
+ 		dev_err(dev, "failure register vntb pci driver\n");
++		ret = -EINVAL;
+ 		goto err_bar_alloc;
+ 	}
+ 
 -- 
 2.20.1.7.g153144c
 

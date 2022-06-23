@@ -2,168 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701A955792F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B7055793A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiFWL5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 07:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S231467AbiFWL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiFWL5Q (ORCPT
+        with ESMTP id S231470AbiFWL51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:57:16 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CAA4D271
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:57:15 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id q9so27607179wrd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X3ySZJDusRzirICooVQnq3Muwhk4u9wKcv/U8cr1I1Q=;
-        b=MIaxpF2TZZA3FpFGmkf7iWuzW/e+FJLhNne/KTmdFaLIXQFCFGKtBdrlCC2JnGJeB8
-         0eRcChSfkE/D9VXARFkCEMpq3bW6wM2ZVEMVM2pjKROzObn40jfAYNRkGRTReEc2RrbP
-         bB9h4oqrZ55jkqHx/ksW0+tnLNBjXhbX3oZhs59XMwaAt94gZCEus5nDCyFpnctoH0Bn
-         xk6uu0E0azOzs7HARrYISg21uigZaXOGDf9j72TOaV5uMiGL0EcbWArKQD/eCpZluQZA
-         EdDOh4wm91p+05qK9w5D91ghd5WVEaoHDTqRKucObYUq/pKAr83QkofwKpCHkvEfpqYM
-         rcVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X3ySZJDusRzirICooVQnq3Muwhk4u9wKcv/U8cr1I1Q=;
-        b=dbXfE9CTZx1yS3QHQ5brhMgDO6miO4/E11lL/hA9E326DKOl1idZfEARhPPeSz4i3I
-         pKhyMeRI3S0AkOLdnTvaIhsMQAFxYZDfMOMXGvnhRmuV0+lnY+3Rd/5wmSkg5yWFNULD
-         L0wMEejZFdyyPwNki/HnE/axc7D9UAoFZEKxlLwhgvxAHvfg14blhL5Xk79wvVncFzMn
-         jcjkDd+g09E/IMFWtX//XEnk5em2U7bAFh0CQBAkXnv9GfOq6zw5pu2uT6/xw8//jwgl
-         l1WMNfy7L94CjZJ5wI8D+hdLe3t3EWuduHqkme6KzGKpdhEn4bdNnNvCpln86Z0lgzVr
-         CRVQ==
-X-Gm-Message-State: AJIora9QwH7KhrXulYverfaKOW+CARAswMy4f7IAxrHkYllaLPqRujRC
-        rKO9ujt8BtvZ/qa4sUwN18OfUQ1U5r63Kdb9OysD7g==
-X-Google-Smtp-Source: AGRyM1sVD9I3aAnpb/HGS8kvIzbhOxa+Mad9aCTXn7yixnbJgFwA0Irpw3jVe6TCur5lEYr108BlYSbGJ0TCikxRqkY=
-X-Received: by 2002:a5d:5a1a:0:b0:21b:883a:28a1 with SMTP id
- bq26-20020a5d5a1a000000b0021b883a28a1mr8112947wrb.40.1655985434225; Thu, 23
- Jun 2022 04:57:14 -0700 (PDT)
+        Thu, 23 Jun 2022 07:57:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23FF4D608;
+        Thu, 23 Jun 2022 04:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655985443; x=1687521443;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rFzp9FJ0Hi0BvdZQ2nyFZrp7Abz1SQG22Ug72RhOvrw=;
+  b=Wb3HMytS9EwKCkpsukehAgyPHfmNGFYlPS15fDHAemhUJxmxuGLLxslQ
+   WfRP1C1SuArc08PcZ4QXw+2ucFb/w4pCxA1JuhKW3tZk6risfJCqcuV7n
+   2ztMJQeiSu4J93c/Fajm0Gyx+nwYQLzUK0p075KtSZDLnBr8k01l7h4Mc
+   vozDBeJSTvtZ6wOQVnkoLhkvwHx2cK7SZlwBhsAEJxJCJWJNwduOhKGub
+   VqGbyUssS/z0xvm+ftL/CxcALEYqVfgXVDB49XsPtqyAzPJzj6Yv4JVUq
+   nTqRVI8HImQ6OFREjvQZXlvSe0H8OyKA/p6vKFPNTyDNOWDf3jYskWlU/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="280745085"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="280745085"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 04:57:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="586128577"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 23 Jun 2022 04:57:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 218AC136; Thu, 23 Jun 2022 14:57:26 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v1 1/3] clk: Remove never used devm_of_clk_del_provider()
+Date:   Thu, 23 Jun 2022 14:57:17 +0300
+Message-Id: <20220623115719.52683-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220618000907.433350-1-irogers@google.com> <YrLA5NMBv1uIx7UD@krava>
- <YrLGkqDMVidTtFMG@krava>
-In-Reply-To: <YrLGkqDMVidTtFMG@krava>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 23 Jun 2022 04:57:01 -0700
-Message-ID: <CAP-5=fVQ86hY_1z7rAXZTw=DRyrX3P28G6xx+WQT18skJYvwXQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] Rewrite jevents program in python
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com, sandipan.das@amd.com,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 12:36 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Wed, Jun 22, 2022 at 09:12:40AM +0200, Jiri Olsa wrote:
-> > On Fri, Jun 17, 2022 at 05:09:03PM -0700, Ian Rogers wrote:
-> > > New architectures bring new complexity, such as Intel's hybrid
-> > > models. jevents provides an alternative to specifying events in the
-> > > kernel and exposing them through sysfs, however, it is difficult to
-> > > work with. For example, an error in the json input would yield an
-> > > error message but no json file or location. It is also a challenge to
-> > > update jsmn.c given its forked nature.
-> > >
-> > > The changes here switch from jevents.c to a rewrite in python called
-> > > jevents.py. This means there is a build time dependency on python, but
-> > > such a dependency already exists for asciidoc (used to generate perf's
-> > > man pages). If the build detects that python isn't present or is older
-> > > than version 3.6 (released Dec. 2016) then an empty file is
-> > > substituted for the generated one.
-> > >
-> > > A challenge with this code is in avoiding regressions. For this reason
-> > > the jevents.py produces identical output to jevents.c, validated with a
-> > > test script and build target.
-> > >
-> > > v6. Fixes an annotation and use of removesuffix that aren't present in
-> > >     Python 3.6. Linter issues are also fixed.The code was tested on
-> > >     Python 3.6 and 3.8 with docker.
-> >
-> > hi,
-> > I'm getting test failures with this:
-> >
-> >  10: PMU events                                                      :
-> >  10.1: PMU event table sanity                                        : FAILED!
-> >  10.2: PMU event map aliases                                         : FAILED!
-> >  10.3: Parsing of PMU event table metrics                            : Ok
-> >  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
-> >
-> > I can see that pass without the patchset, verbose run shows:
-> >
-> >       [jolsa@krava perf]$ sudo ./perf test -vv 'PMU event map aliases'
-> >        10: PMU events                                                      :
-> >        10.2: PMU event map aliases                                         :
-> >       --- start ---
-> >       test child forked, pid 272763
-> >       Using CPUID GenuineIntel-6-8C-1
-> >       intel_pt default config: tsc,mtc,mtc_period=3,psb_period=3,pt,branch
-> >       could not find test events map
-> >       testing core PMU cpu aliases: failed
-> >       test child finished with -1
-> >       ---- end ----
-> >       PMU events subtest 2: FAILED!
-> >       [jolsa@krava perf]$ sudo ./perf test -vv 'PMU event table sanity'
-> >        10: PMU events                                                      :
-> >        10.1: PMU event table sanity                                        :
-> >       --- start ---
-> >       test child forked, pid 272771
-> >       could not find test events map
-> >       test child finished with -1
-> >       ---- end ----
-> >       PMU events subtest 1: FAILED!
->
-> ah, ok I did not notice:
->
-> Makefile.config:909: Python interpreter too old (older than 3.6) disabling jevent generation
->
-> I installed python3-devel and it's ok
->
-> should we make above tests SKIP in case there's empty pmu-events.c ?
+For the entire history of the devm_of_clk_del_provider) existence
+(since 2017) it was never used. Remove it for good.
 
-Hmm.. I didn't know the empty case was failing, that seems
-sub-optimal. It'd also be nice to report here a skip for not being
-compiled in rather than a pass. Let me take a look later.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/clk/clk.c            | 26 --------------------------
+ include/linux/clk-provider.h |  4 ++--
+ 2 files changed, 2 insertions(+), 28 deletions(-)
 
-Thanks,
-Ian
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 5cbf21acb1a8..1a9dd980f74a 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4751,32 +4751,6 @@ void of_clk_del_provider(struct device_node *np)
+ }
+ EXPORT_SYMBOL_GPL(of_clk_del_provider);
+ 
+-static int devm_clk_provider_match(struct device *dev, void *res, void *data)
+-{
+-	struct device_node **np = res;
+-
+-	if (WARN_ON(!np || !*np))
+-		return 0;
+-
+-	return *np == data;
+-}
+-
+-/**
+- * devm_of_clk_del_provider() - Remove clock provider registered using devm
+- * @dev: Device to whose lifetime the clock provider was bound
+- */
+-void devm_of_clk_del_provider(struct device *dev)
+-{
+-	int ret;
+-	struct device_node *np = get_clk_provider_node(dev);
+-
+-	ret = devres_release(dev, devm_of_clk_release_provider,
+-			     devm_clk_provider_match, np);
+-
+-	WARN_ON(ret);
+-}
+-EXPORT_SYMBOL(devm_of_clk_del_provider);
+-
+ /**
+  * of_parse_clkspec() - Parse a DT clock specifier for a given device node
+  * @np: device node to parse clock specifier from
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 72d937c03a3e..8ad92a4a748f 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -1420,7 +1420,7 @@ int devm_of_clk_add_hw_provider(struct device *dev,
+ 						 void *data),
+ 			   void *data);
+ void of_clk_del_provider(struct device_node *np);
+-void devm_of_clk_del_provider(struct device *dev);
++
+ struct clk *of_clk_src_simple_get(struct of_phandle_args *clkspec,
+ 				  void *data);
+ struct clk_hw *of_clk_hw_simple_get(struct of_phandle_args *clkspec,
+@@ -1457,7 +1457,7 @@ static inline int devm_of_clk_add_hw_provider(struct device *dev,
+ 	return 0;
+ }
+ static inline void of_clk_del_provider(struct device_node *np) {}
+-static inline void devm_of_clk_del_provider(struct device *dev) {}
++
+ static inline struct clk *of_clk_src_simple_get(
+ 	struct of_phandle_args *clkspec, void *data)
+ {
+-- 
+2.35.1
 
-> thanks,
-> jirka

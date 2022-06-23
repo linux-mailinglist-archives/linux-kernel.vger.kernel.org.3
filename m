@@ -2,85 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87904558B8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1E5558B90
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiFWXIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        id S230290AbiFWXMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiFWXIE (ORCPT
+        with ESMTP id S229996AbiFWXMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:08:04 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E93BCAD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:08:02 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id g4so1458003lfv.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:08:02 -0700 (PDT)
+        Thu, 23 Jun 2022 19:12:06 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3C5527FE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:12:05 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id h23so1168266ejj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:12:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8W/oRQBAHexnfGyJ1VqjpiqHa9H+SQBCtE7ZQrUbWF0=;
-        b=n3yuIVtow+fK5FJOgLkxsupR+xKY4GMpqUpzFcRHGUYTiV2x9/maWvxtE7TktkaP3G
-         a/AtaLW5385h6qMstwIAv2Qoe5ijPpfGRxpJHR09wVPaUXaOzkGqCwJOxbtvyucGLPv2
-         KYYjc+KYyFfD/VhDqLHAbwbtLpBZ3ad+5RKIMCBGQugoFTvnS/wh1CP1xdN5yczq0FKI
-         c7aTFG8lrAslYH0TJhTbtgo1cz3EkSxHmHvd0b30Vm7R727jBAU5YpJcR3m4js7LM2Mu
-         URJ0cVlUP/QopMEP6Pg1vMRDD0we4SlF9cS0nCW3tEhdshcBXBjDFBdp0TNMITbHDBT3
-         fvxA==
+         :cc;
+        bh=uvH+WCwwww3y35Yzw/6cK3NiQ2zgYQbh9kzZY1PopZk=;
+        b=BD0ba7qdsK1G6kW6CFHgWzYQlkQiSHnf6NLG7sdKUUT7Z3FC3EV2LHafLNV3wC5YLl
+         Bz2I2ddgL1EQn08kTtDUYBcPq/EUBzB6tHRHqY+C/p6o55o4iHKXb4AD+C8WqypChmJu
+         rHzf3OKW5dHOFzTTBqM45JTTxQ9XX+AOHYD/s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8W/oRQBAHexnfGyJ1VqjpiqHa9H+SQBCtE7ZQrUbWF0=;
-        b=J09u3mZf0qyJHFoltvCzort4hpGyHWNg/YuF8j0SE95gxp4V/XPiV5LGYGbNvjnbkG
-         d8qfiY2+06Dr7JC6US9J+rxpL9StFFFLj/ftKL6H3Di6LgY0P5mC6wOA19Sqwd0Dm72s
-         FFAS3lrhTCjRahm4VOHu8CVt6StnaVwZLoPvOtCxekcOgYbw4OuUHv+Gaan2LSRNhySk
-         xNkmi2JpGtbVF0TLZAFt88b822iDizgCHRi2PBHhmIDe/FWWWW/NcLGuo1nMLjtVMr+v
-         A7TwjwDbBkJcPER9aJM4ltbK4Bfyz74ZWbL8WE8fx/+BiPsOBFNhtMwYasEAZzBxe/ft
-         AkYA==
-X-Gm-Message-State: AJIora8XgJPRAsMs/x51Yj4vaZH4rZCSFGr381dleZpFzuM/IBrQshb1
-        Z5Ns80TtZIKabDlLLK0y5k1FXZjyu5ml1lva4MC5EQ==
-X-Google-Smtp-Source: AGRyM1sGIvrP3CG9Kp2cvOPx0vUnT4oQEGxCAzgYgCA+DSul0RFshuZr9+rk6XZqIcJOLI+94LREMotxY1kayQVDp+w=
-X-Received: by 2002:a05:6512:1308:b0:47d:b9cc:ee88 with SMTP id
- x8-20020a056512130800b0047db9ccee88mr6860281lfu.680.1656025681159; Thu, 23
- Jun 2022 16:08:01 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=uvH+WCwwww3y35Yzw/6cK3NiQ2zgYQbh9kzZY1PopZk=;
+        b=DSLtggPtf2wJn/efzmLHDO/8Bppb5mfKhFKTo7Nc8zR1zNss03L1D3OwyFMCDkC3Ld
+         JL3PQniP1iF6llLs7zO+RnW/VTcCcUs9+WDYGNWCRu0CQaElg/WNnIL7EbAxIysay2yh
+         3eH6+fDNdsxDxjBhuJz/JgD2FJXt0rduRlUqYwna1h/mKZ1np1gMpalUlvsHaFduJjsG
+         6AOglrMInkU0sCnukZVfksc/tKQ5WjU+0N1DfXeT8v4HusEzNAngyMCzzKmdEIOoiOvY
+         vOT4mRraNEpFilUYyI73TPba4RRDZfs3Y0LqE+RZOpPeg0xp3/AOXfkbm+8q73b6fIyF
+         HsOw==
+X-Gm-Message-State: AJIora8w16xyAXywaU0TVIY/Oq6PyOpdSlf6rjNBB3OgObMVZEr5heJ9
+        StAX0J31NcfFWFOK5HM/iXIkLze79f0ENHxy
+X-Google-Smtp-Source: AGRyM1tYOa4JEDIGxfUFPTbxZYNuU0AUP/U/h7cchbRAQvGzxT91YnIR6CT/XkhJfYFIVtSzvKYF1g==
+X-Received: by 2002:a17:906:4e91:b0:722:f996:fa20 with SMTP id v17-20020a1709064e9100b00722f996fa20mr8354838eju.733.1656025923761;
+        Thu, 23 Jun 2022 16:12:03 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id h6-20020aa7cdc6000000b00435720b7a1csm625048edw.20.2022.06.23.16.12.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 16:12:02 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id i10so888326wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:12:02 -0700 (PDT)
+X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
+ c18-20020adffb12000000b0020c79b2a200mr10771841wrr.617.1656025921466; Thu, 23
+ Jun 2022 16:12:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-9-mw@semihalf.com>
- <YrDFmw4rziGQJCAu@lunn.ch> <CAJZ5v0g4q8N5wMgk7pRYpYoCLPQoH==Z+nrM0JLyFXSgF9y0+Q@mail.gmail.com>
- <54618c2a-e1f3-bbd0-8fb2-1669366a3b59@gmail.com> <CAJZ5v0j3A-VYFgcnziSqejp-qJVbrbyFP40S-m9eYTv=H9J0ow@mail.gmail.com>
- <YrQZOX4n0ZuTSANP@lunn.ch>
-In-Reply-To: <YrQZOX4n0ZuTSANP@lunn.ch>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Fri, 24 Jun 2022 01:07:52 +0200
-Message-ID: <CAPv3WKc9niXpgppT27weeW0A87zNEGvd2xLCyoXeXKuqqxWs6g@mail.gmail.com>
-Subject: Re: [net-next: PATCH 08/12] ACPI: scan: prevent double enumeration of
- MDIO bus children
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
+References: <1654021066-13341-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=UF3x5RHrQH-m1X-4kQSsKiufLnkew=VuJz7W9EAi3GHQ@mail.gmail.com>
+ <5d950007-7a92-a41b-e569-79e806adb06a@quicinc.com> <CAD=FV=Xm1LJEoU5dKa5pMgqsHuAXuFVpdHvc1REULhAKTPbGnQ@mail.gmail.com>
+ <ad393ad2-a247-3c61-5033-185d39b5596d@quicinc.com> <CAD=FV=XD+LozhkJZp0C7RUO01T-XuqBA-SJ0EQeyvGk0CxC3JQ@mail.gmail.com>
+ <e677fd02-011f-4f4e-fa73-17dc96aea7d0@quicinc.com> <CAD=FV=UzjnEjMTLTRVXTrz6aoiBymJtnJ1o8dzPN9hn0Be3tng@mail.gmail.com>
+ <da18c508-f32e-fece-6392-e6a95f7c7968@quicinc.com> <CAD=FV=Wytm9EYu=4ndN+En2AFEgPK9NjrUMbFPA_h6TwyxGCYA@mail.gmail.com>
+ <765a170c-d335-d626-0609-7d0f3967b71d@quicinc.com> <CAD=FV=X2wTUH50MqFu=4WifvbTG+df-oYqQBRWeSPES7M2fxNw@mail.gmail.com>
+ <BL0PR02MB4564C633F46BBCC315D86322FAB39@BL0PR02MB4564.namprd02.prod.outlook.com>
+In-Reply-To: <BL0PR02MB4564C633F46BBCC315D86322FAB39@BL0PR02MB4564.namprd02.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 23 Jun 2022 16:11:48 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XoqTeUg9mQLck-fwtFptSqn2eC1htmRkt_b-pih+wqug@mail.gmail.com>
+Message-ID: <CAD=FV=XoqTeUg9mQLck-fwtFptSqn2eC1htmRkt_b-pih+wqug@mail.gmail.com>
+Subject: Re: [PATCH] tty: serial: qcom-geni-serial: minor fixes to get_clk_div_rate()
+To:     "Vijaya Krishna Nivarthi (Temp)" <vnivarth@qti.qualcomm.com>
+Cc:     "Vijaya Krishna Nivarthi (Temp) (QUIC)" <quic_vnivarth@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,88 +89,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-czw., 23 cze 2022 o 09:42 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
->
-> > And when the ACPI subsystem finds those device objects present in the
-> > ACPI tables, the mdio_device things have not been created yet and it
-> > doesn't know which ACPI device object will correspond to mdio_device
-> > eventually unless it is told about that somehow.  One way of doing
-> > that is to use a list of device IDs in the kernel.  The other is to
-> > have the firmware tell it about that which is what we are discussing.
->
-> Device IDs is a complex subject with MDIO devices. It has somewhat
-> evolved over time, and it could also be that ACPI decides to do
-> something different, or simpler, to what DT does.
->
-> If the device is an Ethernet PHY, and it follows C22, it has two
-> registers in a well defined location, which when combined give you a
-> vendor model and version. So we scan the bus, look at each address on
-> the bus, try to read these registers and if we don't get 0xffff back,
-> we assume it is a PHY, create an mdio_device, sub type it to
-> phy_device, and then load and probe the driver based on the ID
-> registers.
->
-> If the device is using C45, we currently will not be able to enumerate
-> it this way. We have a number of MDIO bus drivers which don't
-> implement C45, but also don't return -EOPNOTSUPP. They will perform a
-> malformed C22 transaction, or go wrong in some other horrible way. So
-> in DT, we have a compatible string to indicate there is a C45 devices
-> at the address. We then do look around in the C45 address space at the
-> different locations where the ID registers can be, and if we get a
-> valid looking ID, probe the driver using that.
->
-> We also have some chicken/egg problems. Some PHYs won't respond when
-> you read there ID registers until you have turned on clocks, disabled
-> reset lines, enable regulators etc. For these devices, we place the ID
-> as you would read from the ID registers in DT as the compatible
-> string. The mdio_device is created, sub-types as a PHY and the probe
-> happens using the ID register found in DT. The driver can then do what
-> it needs to do to get the device to respond on the bus.
->
+Hi,
 
-Currently the PHY detection (based on compatible string property in
-_DSD) and handling of both ACPI and DT paths are shared by calling the
-same routine fwnode_mdiobus_register_phy() and all the following
-generic code. No ID's involved.
-
-With MDIOSerialBus property we can probably pass additional
-information about PHY's via one of the fields in _CRS, however, this
-will implicate deviating from the common code with DT. Let's discuss
-it under ECR.
-
-> Then we have devices on the bus which are not PHYs, but generic
-> mdio_devices. These are mostly Ethernet switches, but Broadcom have
-> some other MDIO devices which are not switches. For these, we have
-> compatible strings which identifies the device as a normal string,
-> which then probes the correct driver in the normal way for a
-> compatible string.
-
-_HID/_CID fields will be used for that, as in any other driver. In
-case Broadcom decides to support ACPI, they will have to define their
-own ACPI ID and update the relevant driver (extend struct mdio_driver
-with  .acpi_match_table field) - see patch 12/12 as an example.
-
+On Tue, Jun 21, 2022 at 10:58 AM Vijaya Krishna Nivarthi (Temp)
+<vnivarth@qti.qualcomm.com> wrote:
 >
-> So giving the kernel a list of device IDs is not simple. I expect
-> dealing with this will be a big part of defining how MDIOSerialBus
-> works.
+> Hi,
 >
+> For desired_clk = 100 and clock rates like 1st from below, DIV_ROUND_UP seems to cause missing candidate solutions.
+>
+> static unsigned long clk_round_rate_test(struct clk *clk, unsigned long in_freq)
+> {
+>         //unsigned long root_freq[] = {301, 702, 1004};
+>         //unsigned long root_freq[] = {301, 702, 1004, 2000, 3000};
+>         //unsigned long root_freq[] = {50, 97, 99};
+>         //unsigned long root_freq[] = {50, 97, 99, 200};
+>         //unsigned long root_freq[] = {92, 110, 193, 230};
+>         //unsigned long root_freq[] = {92, 110, 193, 230, 300, 401};
+>         //unsigned long root_freq[] = {92, 110, 193, 230, 295, 296, 297, 401};
+>         //unsigned long root_freq[] = {92, 110, 193, 230, 295, 296, 297, 300, 401};
+>         //unsigned long root_freq[] = {197, 198, 199};
+>         unsigned long root_freq[] = {197, 198, 199, 200};
+>         int i;
+>         size_t n = sizeof root_freq / sizeof *root_freq;
+>
+>         for (i = 0; i < n; i++) {
+>                 if (root_freq[i] >= in_freq)
+>                         return root_freq[i];
+>         }
+>         return root_freq[n-1];
+> }
+>
+> I modified to handle such cases, optimised little and uploaded a patch.
+> It seems to work for all the cases like above.
 
-Actually the _HID/_CID fields values will still be required for the
-devices on the bus and the relevant drivers will use it for matching,
-which is analogous for the compatible string handling. The
-MDIOSerialBus _CRS macro will not be used for this purpose, same as
-already existing examples of I2CSerialBus or SPISerialBus (although
-the child devices use them, they also have _HID/_CID for
-identification).
+I think it would have been simpler to just change this little section:
 
-What we agreed for is to get rid of is a static list of MDIO
-controllers ID's, which I proposed in this patch, whose intention was
-to prevent its enumeration by the default ACPI scan routines, in case
-the device's parent is a listed MDIO bus. Instead, just the presence
-of MDIOSerialBus macro in the _CRS method of the child device will
-suffice to get it skipped at that point. Any other data in this macro
-will be in fact something extra that we can use for any purpose.
+/* Save the first (lowest freq) within 2% */
+actual_mult = DIV_ROUND_CLOSEST(freq, desired_clk) * desired_clk;
+if (!ser_clk && freq <= actual_mult + two_percent) {
+  ser_clk = freq;
+  *clk_div = div;
+}
 
-Best regards,
-Marcin
+That was the only bug, right? Then you could keep the DIV_ROUND_UP() solution?
+
+-Doug

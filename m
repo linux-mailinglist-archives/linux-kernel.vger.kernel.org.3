@@ -2,68 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3499C55804A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86E455817F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbiFWQs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S232331AbiFWRBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiFWQrO (ORCPT
+        with ESMTP id S232846AbiFWQsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:47:14 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAE448E74;
-        Thu, 23 Jun 2022 09:47:13 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id k22so22336533wrd.6;
-        Thu, 23 Jun 2022 09:47:12 -0700 (PDT)
+        Thu, 23 Jun 2022 12:48:37 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F604D243
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:47:36 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so3196405pjr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LoGByHoinwWKmK7sKKr5zQ+TOBzY+lDROmS+zPuNPuQ=;
-        b=qb+HzyVV6rzz0uzZEAwhfY2wMX1sIDClwtbrpGTwx5r6PcFBeSY3Xkh3ea0Rkz4woU
-         t7qi7aUVfcTiLHzjvMIiBoFebHIbnLCcWqSq6RofKoNLiu+oKzb74oZrPVo0X1VWUOOH
-         Ooqsxh9ArStzoR5aOb2jrFgP82FAVCRmz4FzY1Mqtn8hWTozzo5iR9WnmGGuIpWcpS5t
-         GA80Y5Hoq3SPwXReg66RGRIPjonKyoBRYC5Ft6pGfn1fRXFstkm83vmlN2NcetW8bGM3
-         3ooNGpzLWVS/WObq54t/yKiElB/Hv7bRMH7pixGq+1nkNSulMyJG+6YgoJsDQ0uFU6ZK
-         h6/Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3p8qkhhjZhB0PmtULtzk5+YvtFjhA5CPcKFCG5vG65E=;
+        b=Y27BijteckmP4YbkgXlxhLDVpaMo1TcD7Wf3jMh77zBbeUqzgcl36shROKvYPKizD3
+         5jV3q0VKzONJLuyaiZjBu9depsn8jAMFosX9xAhqhpAidZW7G/m3se9SH3d6mAoLE252
+         OzQ2NUNXM1m69JDzfgvPjmHWN1PDFHRcERTCq3K/I4W5m1W3UjxDSNsnRONwyulrRBsv
+         EfIDeAhXgy+CzqEQQbJd5K8ZyqoyWQw2CeQaGi2ocn6okkwkUS2ZLVDii/WjfKoX0x+H
+         dnleGF1Kp323ACyCrdtuNwwRVid6zeWGfblKCTJryNXLKB8f052GPrTMt0yI5L79zCb/
+         rsuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LoGByHoinwWKmK7sKKr5zQ+TOBzY+lDROmS+zPuNPuQ=;
-        b=W+m3M0/ln0api/sn3MBvEmoyYk6DZzOv5lv/o/fKN1LX1V0+m12rTwbF4MyGSqYyIl
-         L2ZrMK4J4wQ+tGbh4KomTrivL63qSYuMuJwJIlhdWDIpuce96VG2ZFBZugngacGh51Ww
-         PxMm5+t1LQLPCzVP55c/OjL/RXNBi5U4BfGzGK1hgxlnFkyt+R37W3WS8mTcmUXab7P3
-         PGSDgVKbM97KWGm7EsSRLg7TjP9IVW5F44tzUihQ9nJ+hW56BDV6iNesRPLdsr2Zpzkj
-         0cbS5olaM7udAsFTAnX7TIwuj02MsDAmik3QihteodtwP2DtmOVu/SN+vDQ4vmpF/hHJ
-         1KLw==
-X-Gm-Message-State: AJIora8GcZFF4Opg9ChRIjXwFzKh9dJ5Oq+/0XEqmazEkPH231kIsS7Q
-        Nzn9U45oA6Yw0xu7okrr1OQ=
-X-Google-Smtp-Source: AGRyM1tPybK6ZDZa9VdKMulI3WNE9tB5TDYMgoeNQAhJ5kJav+ER8mtHt/DBUyR6iX6ft1HyFReJEA==
-X-Received: by 2002:a5d:64aa:0:b0:218:4287:3c98 with SMTP id m10-20020a5d64aa000000b0021842873c98mr9084399wrp.453.1656002831560;
-        Thu, 23 Jun 2022 09:47:11 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id o1-20020adfeac1000000b0021b8c554196sm13786318wrn.29.2022.06.23.09.47.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3p8qkhhjZhB0PmtULtzk5+YvtFjhA5CPcKFCG5vG65E=;
+        b=eiUYZ0NTHfirPSbAJw8NX9HE1aPywDYGSNJBin/5MH9DiiILqowBg7+tdtQAFB7YkX
+         9e2C4g1beVXQ4HkKjWedcfR19kQFhbZ0ARPSnaDPzVW767btBsuJr0yZ4hG7KWjKlBxS
+         kPgS+gl1+PCZ5+umqiUlA2ZRl1OOx//FxkU1Z+BMso7HV2XsQNxWY9pMejugXRcMeSYK
+         5S2MNA5BKIRSdVvBxwK0cdQTSggvdwJCtNBJomsVbv6mRtMcIc4fw8ZOOAaKctIa/c/h
+         zFQfnZ8Yl2nirvV+FssTMAJUc97RVewGLnLKbAdoxFOT0ZHZotBURkKgoj8ZlCk0ePhh
+         W6UA==
+X-Gm-Message-State: AJIora/4Wv4/8po2kZLF0MdopE/CwANvUQpB2ezot2zjwjMXhlcz78++
+        lcphCT5MngvflXqfRPhPBMp2BQ==
+X-Google-Smtp-Source: AGRyM1snamOVcPng7Bv62NxMa7Q+d7JiT2gnpWxydw8csrKZ0vY2muyBHwqn9PGw8O5i4TYDqJn41g==
+X-Received: by 2002:a17:90b:4b8f:b0:1ec:e852:22c7 with SMTP id lr15-20020a17090b4b8f00b001ece85222c7mr4903909pjb.38.1656002856050;
+        Thu, 23 Jun 2022 09:47:36 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id v5-20020a17090a0c8500b001e2da6766ecsm2175967pja.31.2022.06.23.09.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 09:47:10 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Hannes Reinecke <hare@suse.de>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: fcoe: remove redundant assignment to variable wlen
-Date:   Thu, 23 Jun 2022 17:47:10 +0100
-Message-Id: <20220623164710.76831-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 23 Jun 2022 09:47:35 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 16:47:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org,
+        Dmytro Maluka <dmy@semihalf.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>, Dominik Behr <dbehr@google.com>,
+        Dmitry Torokhov <dtor@google.com>
+Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle
+ state
+Message-ID: <YrSZIxfWUJoQqEt/@google.com>
+References: <YqIJ8HtdqnoVzfQD@google.com>
+ <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
+ <YqNVYz4+yVbWnmNv@google.com>
+ <CAH76GKNSfaHwpy46r1WWTVgnsuijqcHe=H5nvUTUUs1UbdZvkQ@mail.gmail.com>
+ <Yqtez/J540yD7VdD@google.com>
+ <2201fe5f-5bd8-baaf-aad5-eaaea2f1e20e@amd.com>
+ <CAH76GKP=2wu4+eqLCFu1F5a4rHhReUT_7N89K8xbO-gSqEQ-3w@mail.gmail.com>
+ <88344644-44e1-0089-657a-2e34316ea4b4@amd.com>
+ <CAH76GKMKjogX9kE5jch+LqkGswGAmyOdu5sOdY_G23Dqpf0puA@mail.gmail.com>
+ <7c428b03-261f-78cb-4ce3-5949ac93f028@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7c428b03-261f-78cb-4ce3-5949ac93f028@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +110,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable wlen is being assigned a value that is never read, it is
-being re-assigned with a different value later on. The assignment
-is redundant and can be removed.
+On Wed, Jun 22, 2022, Limonciello, Mario wrote:
+> On 6/22/2022 04:53, Grzegorz Jaszczyk wrote:
+> > It will be problematic since the abort/restore notification could
+> > arrive too late and therefore the whole system will go to suspend
+> > thinking that the guest is in desired s2ilde state. Also in this case
+> > it would be impossible to prevent races and actually making sure that
+> > the guest is suspended or not. We already had similar discussion with
+> > Sean earlier in this thread why the notification have to be send just
+> > before swait_event_exclusive(s2idle_wait_head, s2idle_state ==
+> > S2IDLE_STATE_WAKE) and that the VMM have to have control over guest
+> > resumption.
+> > 
+> > Nevertheless if extending acpi_s2idle_dev_ops is possible, why not
+> > extend it about the hypervisor_notify() and use it in the same place
+> > where the hypercall is used in this patch? Do you see any issue with
+> > that?
+> 
+> If this needs to be a hypercall and the hypercall needs to go at that
+> specific time, I wouldn't bother with extending acpi_s2idle_dev_ops. The
+> whole idea there was that this would be less custom and could follow a spec.
 
-Cleans up clang scan build warning:
-drivers/scsi/fcoe/fcoe.c:1491:2: warning: Value stored to 'wlen'
-is never read [deadcode.DeadStores]
+It doesn't need to be a hypercall though.  PIO and MMIO provide the same "exit to
+host userspace" behavior, and there is zero reason to get KVM involved since KVM
+(on x86) doesn't deal with platform scoped power management.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/scsi/fcoe/fcoe.c | 1 -
- 1 file changed, 1 deletion(-)
+I get that squeezing this into the ACPI device model is awkward, but forcing KVM
+into the picture isn't any better.
 
-diff --git a/drivers/scsi/fcoe/fcoe.c b/drivers/scsi/fcoe/fcoe.c
-index c2a59109857a..6ec296321ffc 100644
---- a/drivers/scsi/fcoe/fcoe.c
-+++ b/drivers/scsi/fcoe/fcoe.c
-@@ -1488,7 +1488,6 @@ static int fcoe_xmit(struct fc_lport *lport, struct fc_frame *fp)
- 
- 	fh = fc_frame_header_get(fp);
- 	skb = fp_skb(fp);
--	wlen = skb->len / FCOE_WORD_TO_BYTE;
- 
- 	if (!lport->link_up) {
- 		kfree_skb(skb);
--- 
-2.35.3
-
+> TBH - given the strong dependency on being the very last command and this
+> being all Linux specific (you won't need to do something similar with
+> Windows) - I think the way you already did it makes the most sense.
+> It seems to me the ACPI device model doesn't really work well for this
+> scenario.

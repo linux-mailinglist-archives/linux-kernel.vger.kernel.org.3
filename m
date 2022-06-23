@@ -2,107 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A552557259
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF315571AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiFWEsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S231668AbiFWEl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239377AbiFWDbm (ORCPT
+        with ESMTP id S239635AbiFWDcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:31:42 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CB23584F;
-        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id p21so2098177qki.7;
-        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=feedback-id:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
-        b=XKQr60hHEpIr7iE2oQMJHBd/HDGQCZhaSPpmeuw6TyKQkYL2MF+8jdtsqUCz7uL090
-         Rc90KAFbCLt0JwHQ7vCIyEX0mj9/duP+7TF6SlIMyM86A8tJXhvp6mW5g1QMYcFMm06q
-         OZhDv9iwxJwHYCl8D05Sv3M3yI+gUsqDtuKv/FhshrgMg3aaZz2lgZeLKguk6uF7IRXr
-         cNriRKL9+D3vNavHkaKAfctj+1iVXUr8uNGq3KbwjLdVPWLWbnlMjLar4aOtzfnqqsG1
-         IsuxOEdrqkfV7FuJV0wVV7InjeaCmRhOkIonyeI7vJokQaKzp0nLlHjjfWTw37p0n1hs
-         m3Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
-        b=kdRh89l19FS7/sg2UmPC1+PIRxpnLY5vK9YK75uJJXDANv+XHqCCsYbV+nn18IdCIB
-         Wbiwk5Dcs7MgchFiRiA/7Psf2YzQNQEJUyew+mn5mvdxxH0Rm+EmEG6H/9Kkg57h48f6
-         nT9jLFpXdj9AWYxc8g4RpIJfrB4d+EwhrPlJiOCNXhdKuwag4cD5VFDiaLI7p6dGoCjt
-         HNh/Hp9VS3h4WYuv6GrVaB28PBB5UOuScvRXcEBIM9YIW5MT9jyXGcl4luDhyIe51gp4
-         s+z5DnawSjmTFW3Yh8uYpVVerwHfquIXa29nSeNHGawumf7fbdgQkUI5mj+UX/7zDa2T
-         Bz+A==
-X-Gm-Message-State: AJIora9lLR/l7tCpUUwqijNWEIa5YZvD73KnK1J28sX0rLcmVBRSLIIg
-        m0dxmDIzKxsx2j5r/6dsoPXVvFOgk84=
-X-Google-Smtp-Source: AGRyM1tog79QF/BM4XYNYwOk5JDAVQGSrmJOA/BPSicl6+PpfP5C/VU3C9rh50h8yJ2wwtZJnXowiQ==
-X-Received: by 2002:a05:620a:410:b0:6a6:abbe:2018 with SMTP id 16-20020a05620a041000b006a6abbe2018mr4736397qkp.645.1655955098873;
-        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id w8-20020a05620a444800b006a6f68c8a87sm19125307qkp.126.2022.06.22.20.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9792927C005A;
-        Wed, 22 Jun 2022 23:31:37 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 22 Jun 2022 23:31:37 -0400
-X-ME-Sender: <xms:mN6zYnQKaLySnOd9VxDXjDwnGZmLTZp5pcoBSLC14CVRiYD-4dkwPw>
-    <xme:mN6zYozHljR1xtO0TqSrgYgIzlLhQmxyZxq-d-vd8Ei8eOXyjVJa_tZojuQ7z_4o6
-    _v48XaZ7RZMfdGxPw>
-X-ME-Received: <xmr:mN6zYs0W6y8qNOg5L2xB5Yu6taF9iYJdInFUKKN7W13mLFGdaxvUbx6732EQ7g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefiedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvfevuffkfhggtggu
-    jgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfh
-    gvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpeffkeevvdejhedutdet
-    hfejiedttddthfetffdufeduleektddvgfduvdfhjeelueenucffohhmrghinhepkhgvrh
-    hnvghlrdhorhhgpdhgohhoghhlvgdrtghomhdprhhishgtvhdrohhrghdpghhithhhuhgs
-    rdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:mN6zYnBPdK3t52BMAfRz2zUIZllzPyUBJ7JsU8Y-7lOZuHAn8dqQow>
-    <xmx:mN6zYgg3aPGAOi1epe1R9Xa01Nw-9_ZY9KGDjke08_7ALt_XuFsALw>
-    <xmx:mN6zYro6F5dpRtrEpiVoyiFeKvd60ifj5XAEsR_CwzN6Y-SSRVXdow>
-    <xmx:md6zYvpvOSZfhora_uKsjFdbpAJiFHSus5asheFt3AsquhBWIzp1ug>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Jun 2022 23:31:36 -0400 (EDT)
-Date:   Wed, 22 Jun 2022 20:31:23 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops
- with .aqrl annotation
-Message-ID: <YrPei6q4rIAx6Ymf@boqun-archlinux>
-References: <CAJF2gTQoSQq_S4UvAiXgMviT040Ls8+VkDszQSke1a0zbXZ82A@mail.gmail.com>
- <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
- <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
- <20220614110258.GA32157@anparri>
+        Wed, 22 Jun 2022 23:32:36 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365D83584F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:32:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VH9dVlt_1655955150;
+Received: from 30.97.48.163(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VH9dVlt_1655955150)
+          by smtp.aliyun-inc.com;
+          Thu, 23 Jun 2022 11:32:31 +0800
+Message-ID: <d5dea8e0-2121-0bde-4510-73ae3b4b8767@linux.alibaba.com>
+Date:   Thu, 23 Jun 2022 11:32:37 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614110258.GA32157@anparri>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v2 2/3] mm: Add PUD level pagetable account
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1655887440.git.baolin.wang@linux.alibaba.com>
+ <f7b2a6f6f5dfecbcac07fa3e187f10860c3a39ee.1655887440.git.baolin.wang@linux.alibaba.com>
+ <YrMpZlQHMuCy06/m@linux.ibm.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YrMpZlQHMuCy06/m@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,120 +45,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, Jun 14, 2022 at 01:03:47PM +0200, Andrea Parri wrote:
-[...]
-> > 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
-> > is about fixup wrong spinlock/unlock implementation and not relate to
-> > this patch.
->
-> No.  The commit in question is evidence of the fact that the changes
-> you are presenting here (as an optimization) were buggy/incorrect at
-> the time in which that commit was worked out.
+
+On 6/22/2022 10:38 PM, Mike Rapoport wrote:
+> On Wed, Jun 22, 2022 at 04:58:53PM +0800, Baolin Wang wrote:
+>> Now the PUD level ptes are always protected by mm->page_table_lock,
+>> which means no split pagetable lock needed. So the generic PUD level
+>> pagetable pages allocation will not call pgtable_pte_page_ctor/dtor(),
+>> that means we will miss to account PUD level pagetable pages.
+>>
+>> Adding pagetable account by calling pgtable_set_and_inc() or
+>> pgtable_clear_and_dec() when allocating or freeing PUD level pagetable
+>> pages to help to get an accurate pagetable accounting.
+>>
+>> Moreover this patch will also mark the PUD level pagetable with PG_table
+>> flag, which will help to do sanity validation in unpoison_memory() and
+>> get more accurate pagetable accounting by /proc/kpageflags interface.
+>>
+>> Meanwhile converting the architectures with using generic PUD pagatable
+>> allocation to add corresponding pgtable_set_and_inc() or pgtable_clear_and_dec()
+>> to account PUD level pagetable.
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   arch/arm64/include/asm/tlb.h         |  5 ++++-
+>>   arch/loongarch/include/asm/pgalloc.h | 11 ++++++++---
+>>   arch/mips/include/asm/pgalloc.h      | 11 ++++++++---
+>>   arch/s390/include/asm/tlb.h          |  1 +
+>>   arch/x86/mm/pgtable.c                |  5 ++++-
+>>   include/asm-generic/pgalloc.h        | 12 ++++++++++--
+>>   6 files changed, 35 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
+>> index c995d1f..47e0623 100644
+>> --- a/arch/arm64/include/asm/tlb.h
+>> +++ b/arch/arm64/include/asm/tlb.h
+>> @@ -94,7 +94,10 @@ static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmdp,
+>>   static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pudp,
+>>   				  unsigned long addr)
+>>   {
+>> -	tlb_remove_table(tlb, virt_to_page(pudp));
+>> +	struct page *page = virt_to_page(pudp);
+>> +
+>> +	pgtable_clear_and_dec(page);
+>> +	tlb_remove_table(tlb, page);
+>>   }
+>>   #endif
+>>   
+>> diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/include/asm/pgalloc.h
+>> index b0a57b2..50a896f 100644
+>> --- a/arch/loongarch/include/asm/pgalloc.h
+>> +++ b/arch/loongarch/include/asm/pgalloc.h
+>> @@ -89,10 +89,15 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+>>   static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+>>   {
+>>   	pud_t *pud;
+>> +	struct page *pg;
 > 
+> 	struct page *page;
 > 
-> > Actually, sc.w.aqrl is very strong and the same with:
-> > fence rw, rw
-> > sc.w
-> > fence rw,rw
-> > 
-> > So "which do not give full-ordering with .aqrl" is not writen in
-> > RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
-> > 
-> > >
-> > > >> describes the issue more specifically, that's when we added these
-> > > >> fences.  There have certainly been complains that these fences are too
-> > > >> heavyweight for the HW to go fast, but IIUC it's the best option we have
-> > > > Yeah, it would reduce the performance on D1 and our next-generation
-> > > > processor has optimized fence performance a lot.
-> > >
-> > > Definately a bummer that the fences make the HW go slow, but I don't
-> > > really see any other way to go about this.  If you think these mappings
-> > > are valid for LKMM and RVWMO then we should figure this out, but trying
-> > > to drop fences to make HW go faster in ways that violate the memory
-> > > model is going to lead to insanity.
-> > Actually, this patch is okay with the ISA spec, and Dan also thought
-> > it was valid.
-> > 
-> > ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
+> looks better IMO.
+
+Sure.
+
 > 
-> "Thoughts" on this regard have _changed_.  Please compare that quote
-> with, e.g.
+>> +
+>> +	pg = alloc_pages(GFP_KERNEL & ~__GFP_HIGHMEM, PUD_ORDER);
+>> +	if (!pg)
+>> +		return NULL;
+>>   
+>> -	pud = (pud_t *) __get_free_pages(GFP_KERNEL, PUD_ORDER);
+>> -	if (pud)
+>> -		pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+>> +	pgtable_set_and_inc(pg);
+>> +	pud = (pud_t *)page_address(pg);
 > 
->   https://lore.kernel.org/linux-riscv/ddd5ca34-805b-60c4-bf2a-d6a9d95d89e7@nvidia.com/
+> I don't think __get_free_pages() should be replaced with alloc_pages()
+> here, just call pgtable_set_and_inc() with virt_to_page(pud).
 > 
-> So here's a suggestion:
-> 
-> Reviewers of your patches have asked:  How come that code we used to
-> consider as buggy is now considered "an optimization" (correct)?
-> 
-> Denying the evidence or going around it is not making their job (and
-> this upstreaming) easier, so why don't you address it?  Take time to
-> review previous works and discussions in this area, understand them,
-> and integrate such knowledge in future submissions.
-> 
+> The same applies for the cases below.
 
-I agree with Andrea.
-
-And I actually took a look into this, and I think I find some
-explanation. There are two versions of RISV memory model here:
-
-Model 2017: released at Dec 1, 2017 as a draft
-
-	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/hKywNHBkAXM/m/QzUtxEWLBQAJ
-
-Model 2018: released at May 2, 2018
-
-	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/xW03vmfmPuA/m/bMPk3UCWAgAJ
-
-Noted that previous conversation about commit 5ce6c1f3535f happened at
-March 2018. So the timeline is roughly:
-
-	Model 2017 -> commit 5ce6c1f3535f -> Model 2018
-
-And in the email thread of Model 2018, the commit related to model
-changes also got mentioned:
-
-	https://github.com/riscv/riscv-isa-manual/commit/b875fe417948635ed68b9644ffdf718cb343a81a
-
-in that commit, we can see the changes related to sc.aqrl are:
-
-	 to have occurred between the LR and a successful SC.  The LR/SC
-	 sequence can be given acquire semantics by setting the {\em aq} bit on
-	-the SC instruction.  The LR/SC sequence can be given release semantics
-	-by setting the {\em rl} bit on the LR instruction.  Setting both {\em
-	-  aq} and {\em rl} bits on the LR instruction, and setting the {\em
-	-  aq} bit on the SC instruction makes the LR/SC sequence sequentially
-	-consistent with respect to other sequentially consistent atomic
-	-operations.
-	+the LR instruction.  The LR/SC sequence can be given release semantics
-	+by setting the {\em rl} bit on the SC instruction.  Setting the {\em
-	+  aq} bit on the LR instruction, and setting both the {\em aq} and the {\em
-	+  rl} bit on the SC instruction makes the LR/SC sequence sequentially
-	+consistent, meaning that it cannot be reordered with earlier or
-	+later memory operations from the same hart.
-
-note that Model 2018 explicitly says that "ld.aq+sc.aqrl" is ordered
-against "earlier or later memory operations from the same hart", and
-this statement was not in Model 2017.
-
-So my understanding of the story is that at some point between March and
-May 2018, RISV memory model folks decided to add this rule, which does
-look more consistent with other parts of the model and is useful.
-
-And this is why (and when) "ld.aq+sc.aqrl" can be used as a fully-ordered
-barrier ;-)
-
-Now if my understanding is correct, to move forward, it's better that 1)
-this patch gets resend with the above information (better rewording a
-bit), and 2) gets an Acked-by from Dan to confirm this is a correct
-history ;-)
-
-Regards,
-Boqun
-
->   Andrea
-> 
-> 
-[...]
+Sure. Will do in next version. Thanks.

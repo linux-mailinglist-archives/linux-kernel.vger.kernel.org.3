@@ -2,88 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0466E556FFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B6C557009
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237336AbiFWBk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 21:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S236016AbiFWBoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 21:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347915AbiFWBkR (ORCPT
+        with ESMTP id S229778AbiFWBoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 21:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E0643396;
-        Wed, 22 Jun 2022 18:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC65AB82192;
-        Thu, 23 Jun 2022 01:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FC9DC341C6;
-        Thu, 23 Jun 2022 01:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655948413;
-        bh=8gPS3ZEbSfQhEFpb4GD8/pHWihq2qhd38yYpOCLsc2A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=P/6mB0nehD+C5+PvHOg1Da3T9tTQJNMZJ7iOYBAcZYMa/TXcian9l8y/Q7EqtwvRz
-         AFsrd3kY/M3fXQB7Ap7VrQTSiO9gNEUP7DD00oJpiGwyahPF0DSihIy2BKcppdfpkc
-         Zlh+1hbUJs0fWffWKDUIG/Al7tdXBXAFoow9L4mYmBzt9Yu2axGggyEbb0yaESzvUb
-         PWHvgFSNNsyMdFSvhw12ZT/IipF1tz3Qk65neG1e496Cyaqw1gZhzd2+bN+soEQzMA
-         tQ3wzpzRDzv6j6wKYxWmI1YTizlCBkwqrPmIf6rEu88SBTd2fPlPWq5Zm3vYHVLz4J
-         3DiptHE4u3mlQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 527C0E7387A;
-        Thu, 23 Jun 2022 01:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 22 Jun 2022 21:44:14 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235494349C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:44:14 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id t21so11415573pfq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=8OYLl95mf9+YxDcCBNvZSRU5aHDebQNBoQMTob1Sdeg=;
+        b=qxZY0UQ4su1To4vMkojOPanPe2kdRw7d+t26ToDi4Y0iFSVfRLSE6Iw+BVSwpTU2Eh
+         FnuMaWl20DljeYow8xp8Qp+pQ5FqDyV+jenzjIo3mGkEx+DtJQcNHddsF5PrcbEyZAxH
+         WNgPuuh+he0G6agaZ73XzSWcEz+T+11DSFTReZBqn7UNJ2iTaIY9sfLqmOvnQusyPMOY
+         nG5PXoIlJfR/xY26TxpqYluvBYG7GITfQryoq+trWXP92Ea/+K/wU02NsXaizU7MD97+
+         2PXgjMPOsmzyA7W42p5+mjmIC1BjKmFzAKGn52q7wDflbOzcG1UEfbjBSZjlsPaiBOGw
+         xOnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=8OYLl95mf9+YxDcCBNvZSRU5aHDebQNBoQMTob1Sdeg=;
+        b=bO2vzFKS20wvrWq/udA9XB8Lb9kjTXXC56HUpQvTh6nF9yOPERLAco5k04Yk22K4XX
+         V3+GJiHRBjeBAEy+YqeRdKtmMOVORelfgPmBHkC420l6lcJG9mNsf5JWCj01imGqsg35
+         2IXZ1KiS8K0/A1Q8fNfnVq/juDa0eR8sQKf5QlCLawacQJLwLQWVJYAffFuqsncqlVtX
+         bonWrdpeMGEMrWbpnbAlr7oas9ysB5AKPRyf5LG2BchhqlUNEGxwnJHVCgR3bmEdavx8
+         wt9EXzwmXDu76+Lgcijgi2BeDn1u+dcIjsEPThfhKTvRDsyVnuKbfvI5cN9sqN4+CEtj
+         jqnA==
+X-Gm-Message-State: AJIora/Rf0MR7/RALjQWuuAa9qE2EAtMUSwuw+0+GsKIHh2nHUNYVP7S
+        kZkLXtI8bAwgavjCKvaiDZmQidKrL0IigIKf
+X-Google-Smtp-Source: AGRyM1tHsth2D+8SWRUl0QfIlT0e02ZW+58iaAtiK8+/XIA/PjhfGZ3Heo+y2rA3m1jZN6lfLstExg==
+X-Received: by 2002:a05:6a00:179e:b0:518:9e1d:1cbd with SMTP id s30-20020a056a00179e00b005189e1d1cbdmr38052645pfg.12.1655948653642;
+        Wed, 22 Jun 2022 18:44:13 -0700 (PDT)
+Received: from [192.168.50.247] ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id h8-20020aa79f48000000b00525251ce47esm7117430pfr.103.2022.06.22.18.44.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 18:44:13 -0700 (PDT)
+Message-ID: <17b9ef27-028c-06ac-a2d9-7cb46b3951cb@gmail.com>
+Date:   Thu, 23 Jun 2022 09:44:09 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] hwtracing: stm: fix possible double free in
+ stm_register_device()
+Content-Language: en-US
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     alexander.shishkin@linux.intel.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, gregkh@linuxfoundation.org,
+        mathieu.poirier@linaro.org
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220418081632.35121-1-hbh25y@gmail.com>
+ <3e01d35c-e748-3e03-4417-8b7dea09075e@gmail.com>
+ <45ae7332-074e-cb76-2674-7431fc58b886@gmail.com>
+In-Reply-To: <45ae7332-074e-cb76-2674-7431fc58b886@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] net: dsa: qca8k: reset cpu port on MTU change
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165594841333.25849.16798970262846753043.git-patchwork-notify@kernel.org>
-Date:   Thu, 23 Jun 2022 01:40:13 +0000
-References: <20220621151122.10220-1-ansuelsmth@gmail.com>
-In-Reply-To: <20220621151122.10220-1-ansuelsmth@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, noodles@earth.li,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 21 Jun 2022 17:11:22 +0200 you wrote:
-> It was discovered that the Documentation lacks of a fundamental detail
-> on how to correctly change the MAX_FRAME_SIZE of the switch.
+On 2022/5/23 09:55, Hangyu Hua wrote:
+> Gentel ping.
 > 
-> In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
-> switch panics and cease to send any packet. This cause the mgmt ethernet
-> system to not receive any packet (the slow fallback still works) and
-> makes the device not reachable. To recover from this a switch reset is
-> required.
-> 
-> [...]
+> On 2022/5/5 09:29, Hangyu Hua wrote:
+>> Ping
+>>
+>> On 2022/4/18 16:16, Hangyu Hua wrote:
+>>> put_device() will call stm_device_release() to free stm when
+>>> stm_register_device() fails. So there is no need to call vfree() again.
+>>>
+>>> Fix this by adding a return after put_device().
+>>>
+>>> Fixes: 7bd1d4093c2f ("stm class: Introduce an abstraction for System 
+>>> Trace Module devices")
+>>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>>> ---
+>>>   drivers/hwtracing/stm/core.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/hwtracing/stm/core.c b/drivers/hwtracing/stm/core.c
+>>> index 2712e699ba08..403b4f41bb1b 100644
+>>> --- a/drivers/hwtracing/stm/core.c
+>>> +++ b/drivers/hwtracing/stm/core.c
+>>> @@ -915,6 +915,7 @@ int stm_register_device(struct device *parent, 
+>>> struct stm_data *stm_data,
+>>>       /* matches device_initialize() above */
+>>>       put_device(&stm->dev);
+>>> +    return err;
+>>>   err_free:
+>>>       vfree(stm);
 
-Here is the summary with links:
-  - [net,v2] net: dsa: qca8k: reset cpu port on MTU change
-    https://git.kernel.org/netdev/net/c/386228c694bf
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Gentel ping.

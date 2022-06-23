@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3E4557380
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590A3557384
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiFWHFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 03:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S230078AbiFWHGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 03:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiFWHFl (ORCPT
+        with ESMTP id S230044AbiFWHGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 03:05:41 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E51845513
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:05:40 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ay16so19686286ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:05:40 -0700 (PDT)
+        Thu, 23 Jun 2022 03:06:04 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF13F45530
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:06:02 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id a15so11059752pfv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FUqOVP3OH7BWYjo6vdlKJOAexlQHETbAKu5icdi+qLI=;
-        b=Z3kQtFflp9ce1ZM08KTXQjN3/rys8fUPdg6bFciqs7HRkuvSLYCXT30XIGG74Whnbo
-         2w2TMEoeFr/jQ7RQNYBZX3WPP5GrFk6oOSuyDI9iPU2/AHQZ6C3F6D69i7TAYI3AQQtz
-         03JTE7KKCSegXy9fyXaKRjsfYlgjaEyvipR/xWN811r3xokYYx+HFE3F5ZdyalC7aENR
-         vA1meuxYwHmUkmw/DxdH3xTNO2C67JIpX/1FtHHpbjEWfLwrWMaDNk579g3X2kiFsKrt
-         e7ADgDiACVsdABiMnm2fv7466/IE4PddktbRMemlBGqZsK+KKh5QmuNkv2XKCq9hHXvk
-         aKGw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e8tI85riZMOHfa3k8p/ytOZ+RJHDFY9LmShQDBd6b6I=;
+        b=Zigg+v8tn4xENI/p7pUD0A6cgE7IrpDxgNcmmB5fQLmLdR4T6qwybGkaaFx4jK7nJD
+         oCCz+CTXYTMTf1P2/a7wmjCZub9xNxZjDA4OziI7XuCCCqTdx+99nZm0KqVpuEDfVn8Q
+         oHMhd7qwoBiimFHtBpqioAV2EVIvTCEVVlwMrX8Zfw8I15t0BOZxA17UVIWzb0TD6MF7
+         9vVLkDo69BAnBFaeqXDoNICfn/2hN5ux2WHIWwefrUihW3kbG37MIkzg7slwirbm+JPD
+         ntxf77ydpogaKGoif+70x8f51ECrQb2ooW8iIRJh0KQFxzm27/qnZ+LL/n4s8KBg6Q+K
+         aI7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=FUqOVP3OH7BWYjo6vdlKJOAexlQHETbAKu5icdi+qLI=;
-        b=Hoct8YQJwILrdy6goAJqWzRTQTFhuEtEIpGmUsPfHhtBw2gY1k7qXtLKG55fI1ts2x
-         Vxj+UCbRWxg5UX907vmXaofbwtMOqqkjvKYT4pCYfvfIvMWLYJ+MYaM0HTzDcXn/Kq/p
-         O0NVvu8Yhi02kmPciCHlIjOF5P1PvPhedAfLXyneVa2TkMZpVY0cOIzbAbUMmEJBKYN1
-         GeqyUC+thK0k+2SMS+GsvELIjop2R6vul3SXPQer8YiwCNba/eBlR8wp8tDcFvcnvZpS
-         iVC3MoEu557rOPhB+Y1436DdllVdS3qLonzRwSmKBQ9uU//zOk1+M/P38URx+I+p+2S6
-         J74Q==
-X-Gm-Message-State: AJIora+a7mV7a6L4qbojAR6jtz/kQH0FJZmPEW8aIbDgz6Cq/BheBHXV
-        ZUxSIC0zFJ90gdcmC/Z9dM4QCQ==
-X-Google-Smtp-Source: AGRyM1sSWLw+uz9Wo/Vqcc2Qzmpm0rtmfs9IKZ6vHicf79GE/X5RwZggFtUqWDuVFpql/v0tm0c+Uw==
-X-Received: by 2002:a17:906:9c82:b0:6df:c5f0:d456 with SMTP id fj2-20020a1709069c8200b006dfc5f0d456mr6845907ejc.287.1655967938872;
-        Thu, 23 Jun 2022 00:05:38 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a24-20020aa7cf18000000b004356c18b2b9sm12227191edy.44.2022.06.23.00.05.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 00:05:38 -0700 (PDT)
-Message-ID: <84cba0c8-fb31-3314-5e2c-7a0c13030b9a@linaro.org>
-Date:   Thu, 23 Jun 2022 09:05:37 +0200
+        bh=e8tI85riZMOHfa3k8p/ytOZ+RJHDFY9LmShQDBd6b6I=;
+        b=0LW09/GR822lt+VLngApCR6d916WzzGavfnJ7ob3tBAQJcdH59FxndIDxiljoV0ItT
+         c2VioW6vX/UJiEnaWNj47iVGyJKiqxjuP8GuTn30JuAjKszXcoSV6JyY9zDxLa1/WXtO
+         2zIvrb8YEMLt5+Uve1A6v7GpyhsOsJ3X75WPtBpQt27NgDB6xgqgEQ8aTj08/OTR+CeV
+         s7Dl33Un91j4qZrggkNrt/XkICUfqOtBgtwCSdOETmpvpTgyw4wwPGfUaEyzFkkvMMZK
+         Hertm3F1/map7ufCKzIi5nH0/IpQrPAemeoElnV4uNUliReIV1SBx44Ww5FtD3r+U5jj
+         sW1w==
+X-Gm-Message-State: AJIora8zh9l9Ce7WHdbxVrbeWBmGln9Io56VdV1C/l2k3lz3QNYGfeqx
+        pzXKbgJsBLEhLgh84duxh7J/Bw==
+X-Google-Smtp-Source: AGRyM1vfDaqjshfAgxboI2egke3KONaPUoAHJUVzd/fMnQ7wfqRIW3ZyJtBquSw8mEz61bOUd6PItQ==
+X-Received: by 2002:a05:6a00:f8f:b0:525:537d:69b1 with SMTP id ct15-20020a056a000f8f00b00525537d69b1mr2879416pfb.52.1655967962205;
+        Thu, 23 Jun 2022 00:06:02 -0700 (PDT)
+Received: from FVFDK26JP3YV.bytedance.net ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id ji1-20020a170903324100b0016a15842cf5sm9125184plb.121.2022.06.23.00.05.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Jun 2022 00:06:01 -0700 (PDT)
+From:   Lei He <helei.sig11@bytedance.com>
+To:     davem@davemloft.net, herbert@gondor.apana.org.au,
+        dhowells@redhat.com
+Cc:     mst@redhat.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, berrange@redhat.com,
+        pizhenwei@bytedance.com, lei he <helei.sig11@bytedance.com>
+Subject: [PATCH v2 0/4] virtio-crypto: support ECDSA algorithm
+Date:   Thu, 23 Jun 2022 15:05:46 +0800
+Message-Id: <20220623070550.82053-1-helei.sig11@bytedance.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: (subset) [PATCH 7/7] ARM: dts: aspeed: centriq2400: use qcom
- compatible
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Steven Lee <steven_lee@aspeedtech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Ken Chen <chen.kenyy@inventec.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Wang <David_Wang6097@jabil.com>
-References: <20220529104928.79636-1-krzysztof.kozlowski@linaro.org>
- <20220529104928.79636-7-krzysztof.kozlowski@linaro.org>
- <165589305701.29629.10216921074802952879.b4-ty@linaro.org>
- <CACPK8XfxXi8kQr+vxta8rD6SBgxLf_oBjAH0UkPBacQta552YQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACPK8XfxXi8kQr+vxta8rD6SBgxLf_oBjAH0UkPBacQta552YQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2022 07:34, Joel Stanley wrote:
-> On Wed, 22 Jun 2022 at 10:17, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On Sun, 29 May 2022 12:49:28 +0200, Krzysztof Kozlowski wrote:
->>> "qualcomm" is not a documented compatible and instead "qcom" should be
->>> used.
->>>
->>>
->>
->> Applied, thanks!
-> 
-> What tree did you apply this to? Did you get review from the maintainer?
+From: lei he <helei.sig11@bytedance.com>
 
-Tree was mentioned below.
+This patch supports the ECDSA algorithm for virtio-crypto.
 
-> 
-> This board is unmaintained and unused. I would prefer it removed
-> rather than meaningless fixes be applied.
+V1 -> V2:
+- explicitly specified an appropriate base commit.
+- fixed the link error reported by kernel test robot <lkp@intl.com>.
+- removed irrelevant commits.
 
-I can drop the patch. I'll send the patch to remove the board.
-
-> 
->>
->> [7/7] ARM: dts: aspeed: centriq2400: use qcom compatible
->>       https://git.kernel.org/krzk/linux/c/6202c6063145cf9ec22b40aac219122dd702a10f
->>
->> Best regards,
->> --
->> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+V1:
+- fixed the problem that the max_signature_size of ECDSA is
+incorrectly calculated.
+- make pkcs8_private_key_parser can identify ECDSA private keys.
+- implement ECDSA algorithm for virtio-crypto device
 
 
-Best regards,
-Krzysztof
+lei he (4):
+  crypto: fix the calculation of max_size for ECDSA
+  crypto: pkcs8 parser support ECDSA private keys
+  crypto: remove unused field in pkcs8_parse_context
+  virtio-crypto: support ECDSA algorithm
+
+ crypto/Kconfig                                |   1 +
+ crypto/Makefile                               |   2 +
+ crypto/akcipher.c                             |  10 +
+ crypto/asymmetric_keys/pkcs8.asn1             |   2 +-
+ crypto/asymmetric_keys/pkcs8_parser.c         |  46 +++-
+ crypto/ecdsa.c                                |   3 +-
+ crypto/ecdsa_helper.c                         |  45 +++
+ drivers/crypto/virtio/Kconfig                 |   1 +
+ .../virtio/virtio_crypto_akcipher_algs.c      | 259 ++++++++++++++++--
+ include/crypto/internal/ecdsa.h               |  15 +
+ include/linux/asn1_encoder.h                  |   2 +
+ lib/asn1_encoder.c                            |   3 +-
+ 12 files changed, 361 insertions(+), 28 deletions(-)
+ create mode 100644 crypto/ecdsa_helper.c
+ create mode 100644 include/crypto/internal/ecdsa.h
+
+
+base-commit: 018ab4fabddd94f1c96f3b59e180691b9e88d5d8
+-- 
+2.20.1
+

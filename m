@@ -2,157 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE61558736
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24504558739
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237150AbiFWSWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
+        id S237240AbiFWSWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbiFWSR2 (ORCPT
+        with ESMTP id S237351AbiFWSSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:17:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72F464781
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:23:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 209BD61EE1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:23:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6FC1C385A2;
-        Thu, 23 Jun 2022 17:23:42 +0000 (UTC)
-Date:   Thu, 23 Jun 2022 13:23:40 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        sunliming <sunliming@kylinos.cn>
-Subject: [GIT PULL] tracing: Minor fixes and clean ups for 5.19
-Message-ID: <20220623132340.38f48aae@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 23 Jun 2022 14:18:15 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D487B62A1;
+        Thu, 23 Jun 2022 10:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656005081; x=1687541081;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HyD7sZmGzSIHx03CaYUHtjWHrLaftO9PYHM6NFaUHG0=;
+  b=cInEJ/OfBt/UerM5ZmBpBAYpdjXlp8Pl5hgIau9o+rmZD0trj3DNdFTj
+   Elc0NoqWhXqRDs8S9JYSwRWmYTFUJnnRZ0M1HX7qh8K/YAqRSA99TbFNF
+   pbaCPW6yEXh8SKluG0EC4ERGk0aLroTh8zzfGNIWAsKrF4mh7k4plSk5z
+   Pv27dABxFNTthbzw5uo/Ueg8kTPFwjlkFBL/TpkvjlpboQvl3GvwZJ6Ql
+   k0Kv33RDJayG2+wz38jG+aD7/OrWuRonHo899k1bBukNZ2c5N5bGpykhA
+   MqMo+0Z7cEz4JPINsuoJJb8P11GqMA/gm2JHBtHO6rM7+R7/47QXvsN0H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="269511427"
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="269511427"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 10:24:26 -0700
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="563531696"
+Received: from ckeane-mobl1.amr.corp.intel.com (HELO [10.209.81.98]) ([10.209.81.98])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 10:24:25 -0700
+Message-ID: <6be29d38-5c93-7cc9-0de7-235d3f83773c@intel.com>
+Date:   Thu, 23 Jun 2022 10:23:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv7 11/14] x86: Disable kexec if system has unaccepted
+ memory
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-12-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220614120231.48165-12-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+... adding kexec folks
 
+On 6/14/22 05:02, Kirill A. Shutemov wrote:
+> On kexec, the target kernel has to know what memory has been accepted.
+> Information in EFI map is out of date and cannot be used.
+> 
+> boot_params.unaccepted_memory can be used to pass the bitmap between two
+> kernels on kexec, but the use-case is not yet implemented.
+> 
+> Disable kexec on machines with unaccepted memory for now.
+...
+> +static int __init unaccepted_init(void)
+> +{
+> +	if (!boot_params.unaccepted_memory)
+> +		return 0;
+> +
+> +#ifdef CONFIG_KEXEC_CORE
+> +	/*
+> +	 * TODO: Information on memory acceptance status has to be communicated
+> +	 * between kernel.
+> +	 */
+> +	pr_warn("Disable kexec: not yet supported on systems with unaccepted memory\n");
+> +	kexec_load_disabled = 1;
+> +#endif
 
-Linus,
+This looks to be the *only* in-kernel user tweaking kexec_load_disabled.
+ It doesn't feel great to just be disabling kexec like this.  Why not
+just fix it properly?
 
-Tracing fixes:
-
-- Check for NULL in kretprobe_dispatcher()
-  NULL can now be passed in, make sure it can handle it
-
-- Clean up unneeded #endif #ifdef of the same preprocessor check in the
-  middle of the block.
-
-- Comment clean up
-
-- Remove unneeded initialization of the "ret" variable in
-  __trace_uprobe_create()
-
-
-Please pull the latest trace-v5.19-rc1 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-v5.19-rc1
-
-Tag SHA1: 552669fd41f0f967ea7abb1e1b9138280b916208
-Head SHA1: 12c3e0c92fd7cb3d3b698d84fdde7dccb6ba8822
-
-
-Gautam Menghani (1):
-      tracing/uprobes: Remove unwanted initialization in __trace_uprobe_create()
-
-Masami Hiramatsu (Google) (1):
-      tracing/kprobes: Check whether get_kretprobe() returns NULL in kretprobe_dispatcher()
-
-Xiang wangx (1):
-      tracefs: Fix syntax errors in comments
-
-sunliming (1):
-      tracing: Simplify conditional compilation code in tracing_set_tracer()
-
-----
- fs/tracefs/inode.c          |  2 +-
- kernel/trace/trace.c        |  2 --
- kernel/trace/trace_kprobe.c | 11 ++++++++++-
- kernel/trace/trace_uprobe.c |  1 -
- 4 files changed, 11 insertions(+), 5 deletions(-)
----------------------------
-diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-index de7252715b12..81d26abf486f 100644
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -553,7 +553,7 @@ struct dentry *tracefs_create_dir(const char *name, struct dentry *parent)
-  *
-  * Only one instances directory is allowed.
-  *
-- * The instances directory is special as it allows for mkdir and rmdir to
-+ * The instances directory is special as it allows for mkdir and rmdir
-  * to be done by userspace. When a mkdir or rmdir is performed, the inode
-  * locks are released and the methods passed in (@mkdir and @rmdir) are
-  * called without locks and with the name of the directory being created
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 2c95992e2c71..a8cfac0611bc 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -6424,9 +6424,7 @@ int tracing_set_tracer(struct trace_array *tr, const char *buf)
- 		synchronize_rcu();
- 		free_snapshot(tr);
- 	}
--#endif
- 
--#ifdef CONFIG_TRACER_MAX_TRACE
- 	if (t->use_max_tr && !had_max_tr) {
- 		ret = tracing_alloc_snapshot_instance(tr);
- 		if (ret < 0)
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 93507330462c..a245ea673715 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1718,8 +1718,17 @@ static int
- kretprobe_dispatcher(struct kretprobe_instance *ri, struct pt_regs *regs)
- {
- 	struct kretprobe *rp = get_kretprobe(ri);
--	struct trace_kprobe *tk = container_of(rp, struct trace_kprobe, rp);
-+	struct trace_kprobe *tk;
-+
-+	/*
-+	 * There is a small chance that get_kretprobe(ri) returns NULL when
-+	 * the kretprobe is unregister on another CPU between kretprobe's
-+	 * trampoline_handler and this function.
-+	 */
-+	if (unlikely(!rp))
-+		return 0;
- 
-+	tk = container_of(rp, struct trace_kprobe, rp);
- 	raw_cpu_inc(*tk->nhit);
- 
- 	if (trace_probe_test_flag(&tk->tp, TP_FLAG_TRACE))
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 9711589273cd..c3dc4f859a6b 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -546,7 +546,6 @@ static int __trace_uprobe_create(int argc, const char **argv)
- 	bool is_return = false;
- 	int i, ret;
- 
--	ret = 0;
- 	ref_ctr_offset = 0;
- 
- 	switch (argv[0][0]) {
+What do the kexec folks think?

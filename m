@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFD0558612
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585AE558630
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236258AbiFWSHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S236061AbiFWSI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235901AbiFWSGS (ORCPT
+        with ESMTP id S236050AbiFWSGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:06:18 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF4EDA5;
-        Thu, 23 Jun 2022 10:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=TGE5JNxKMzOY+twQ6t/ggEoZZmn0rKO8MkEsEl3K3GA=; b=XqLEFa8uXRGl7xk0sbFLSCsx5B
-        eRC2cYkqiK7rxv6P+gT78b7WFTJgs9CDKOy7EmP/mjfq2HvYNK1jQeHkMLxUNCUuVAE8QnWMzGMN2
-        Ua3BTzZkr/X4y7lOWzdy+Oa8nR2fFoEuXK3pL/xU/HKV1km6RdHIzz+gnpRVwnBsQO55Y8GD4huuq
-        7my+4fZOYjPjAuXWzmtCtDA9qta2IEGYnwf+Sp/AGOfBCAB5aR8fbRjUkiyLaVq1PuRaUKYKt1rQG
-        9wIrdK7hR9/QxaYvzbqjRHpvtt7x2NbGA7beFIM0JOPaeW/sbRaKkST4Sk4232EJXiMLCZDWU7UAq
-        uzbbwbuw==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1o4QTd-00F5TU-9V; Thu, 23 Jun 2022 11:18:46 -0600
-Message-ID: <09153aee-f05e-22ae-dcf5-0fbfb3b9823c@deltatee.com>
-Date:   Thu, 23 Jun 2022 11:18:42 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-CA
-To:     Song Liu <song@kernel.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20220623165552.38645-1-logang@deltatee.com>
- <CAPhsuW50vG=M6JhBEe3qwef10GQt84cg9p_ji5tqyRnMA1-xRQ@mail.gmail.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <CAPhsuW50vG=M6JhBEe3qwef10GQt84cg9p_ji5tqyRnMA1-xRQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: song@kernel.org, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, lkp@intel.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+        Thu, 23 Jun 2022 14:06:43 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C828989D11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:19:01 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id n21-20020a056a000d5500b005251893308cso83792pfv.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=OfpJNowxBUFq6HGX9ecpdnodRX9bSyGbGZdG0Pw0Nvw=;
+        b=X11UvkoUIym4fWAIiiVnNg8IPEcEu9qC1v5KMXIAXNHYPHSvSaMme4WPiW3+8qXhSx
+         uFwVvujHGLlEZ0Of9DQDDXjK7NVaCLrdU3MKbsUNyZDwayxStPR6OjY7e1ISduKG9VJK
+         ziKFElcuFjh4QgSogzI59VNvuY+ebiGUQXKQQrgdw+DklLFzL4Oz1/qYJ1pwALsh+g4P
+         RH+DnnmaZVn4LJJ4viF5MLGED9TmyJfThVsxIdc+MadWby1PLvp7b5lvbgWSHRwOYupt
+         kR/hPBMa2u6DHJ9+sTaK+bA9QhBeYCY/aYPrgyg9jnjudNVEAEeq1ugDBukNEb2OSNpw
+         6qnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=OfpJNowxBUFq6HGX9ecpdnodRX9bSyGbGZdG0Pw0Nvw=;
+        b=m6egkxnhjeCzcXBvY+qQGcuqhNR8wKafhSZikA/SNgssOImF6/b3U1FID8QZMDVLv9
+         GioYkL2gFRsoJca1P8xP67INMrDDRIKii/KEhCswLwMLWPBTOAFMBtmJTH6F1Hac12X4
+         ZQnAGt6zK1NnvWTtxr31vWUM+vae6s9USomZaFp/HET1IUnzRYWn1Y1LOCYYsXhRc6zQ
+         a2/0kFMrXgfMJto+0gRgZhYDLRiFIUIFbWvqAFnk2IgDF+11an/oEm1Yx59iU9d9G1NG
+         IVakR4OkXZ6+aujiw76b2SbnWkQWUqRUMGocRCYauQ1bcsgtgie6fK66Z6ivgekXrG8M
+         8H5g==
+X-Gm-Message-State: AJIora+2UJyaZzER4IX5mfbeq711A62GRQwd7Axs7qAcTaHgsMYoKeuw
+        YZ9dwYp3QPGoxGGQrpVznqyimCRlsIIH
+X-Google-Smtp-Source: AGRyM1sLykLfKCEgWphambxF6Mwz8XVU0CArLfRvGqh+uy1ZVV07fOUZHMnoNU22xtlsgyK8bzcNT8lU0RtA
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:a17:90b:1e42:b0:1ec:f362:8488 with SMTP id
+ pi2-20020a17090b1e4200b001ecf3628488mr5097264pjb.32.1656004741042; Thu, 23
+ Jun 2022 10:19:01 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Thu, 23 Jun 2022 17:18:58 +0000
+Message-Id: <20220623171858.2083637-1-mizhang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+Subject: [PATCH] KVM: x86/svm: add __GFP_ACCOUNT to __sev_dbg_{en,de}crypt_user()
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH] md/raid5: Fix divide type in raid5_make_request()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adding the accounting flag when allocating pages within the SEV function,
+since these memory pages should belong to individual VM.
 
+No functional change intended.
 
-On 2022-06-23 11:15, Song Liu wrote:
-> On Thu, Jun 23, 2022 at 9:56 AM Logan Gunthorpe <logang@deltatee.com> wrote:
->>
->> 0day reports a build failure on the hexagon architecture:
->>
->>   ld.lld: error: undefined symbol: __hexagon_udivdi3
->>      referenced by raid5.c
->>         md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
->>      referenced by raid5.c
->>         md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
->>      did you mean: __hexagon_udivsi3
->>         defined in: arch/hexagon/built-in.a(lib/udivsi3.o)
->>
->> This is caused by using DIV_ROUND_UP on a sector_t type.
->>
->> The actual value is known to be less than 256 so a wide 64bit divide
->> here is not desirable. Thus cast the argument to an int to ensure it
->> uses a 32bit divide.
-> 
-> I force pushed an update that uses DIV_ROUND_UP_SECTOR_T instead.
-> I guess that should also work?
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+---
+ arch/x86/kvm/svm/sev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Ah, yes, that'll also fix the bug. I chose to cast to minimize the
-performance impact of an unnecessarily wide divide. But I don't have any
-strong basis to suggest the performance will be worse with the wider
-division. So fix it whichever way you think is best.
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 51fd985cf21d..e2c7fada0b3d 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -844,7 +844,7 @@ static int __sev_dbg_encrypt_user(struct kvm *kvm, unsigned long paddr,
+ 
+ 	/* If source buffer is not aligned then use an intermediate buffer */
+ 	if (!IS_ALIGNED((unsigned long)vaddr, 16)) {
+-		src_tpage = alloc_page(GFP_KERNEL);
++		src_tpage = alloc_page(GFP_KERNEL_ACCOUNT);
+ 		if (!src_tpage)
+ 			return -ENOMEM;
+ 
+@@ -865,7 +865,7 @@ static int __sev_dbg_encrypt_user(struct kvm *kvm, unsigned long paddr,
+ 	if (!IS_ALIGNED((unsigned long)dst_vaddr, 16) || !IS_ALIGNED(size, 16)) {
+ 		int dst_offset;
+ 
+-		dst_tpage = alloc_page(GFP_KERNEL);
++		dst_tpage = alloc_page(GFP_KERNEL_ACCOUNT);
+ 		if (!dst_tpage) {
+ 			ret = -ENOMEM;
+ 			goto e_free;
 
-Logan
+base-commit: 922d4578cfd017da67f545bfd07331bda86f795d
+-- 
+2.37.0.rc0.104.g0611611a94-goog
+

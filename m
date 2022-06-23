@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95EF5585A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291915585A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbiFWSAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S235618AbiFWSBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236172AbiFWR6y (ORCPT
+        with ESMTP id S236305AbiFWR7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:58:54 -0400
+        Thu, 23 Jun 2022 13:59:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E99E993FA;
-        Thu, 23 Jun 2022 10:16:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A9EB2121;
+        Thu, 23 Jun 2022 10:16:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 511D561E17;
-        Thu, 23 Jun 2022 17:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E402BC341C4;
-        Thu, 23 Jun 2022 17:16:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CE9261E12;
+        Thu, 23 Jun 2022 17:16:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35FB7C341C5;
+        Thu, 23 Jun 2022 17:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004574;
-        bh=qphTwdliIn8w9lKPm/HwNo5p+1kw3P0H8jVb9mzhi/E=;
+        s=korg; t=1656004577;
+        bh=VX61gT+Y08KmB0rcQK6oQt7Le4cwnWnzjxbdvU33n7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lsDaluWxs64ci/XQuok2A+ZnyQaaZqoG6Z/gM3ceFMvSQnkUcjETeaNZBDPHCXjfY
-         S1rmLcH1H2tn8EFWx76FtRQESpBjaMIJ1OgkG2ZpUw5+8fHzCcC0PNHcKxSekci5xg
-         x8NG/Nng/5aBCSbPsnA4eYF+Y8M9xgm/c0puh828=
+        b=ZbOjcl+CF2Mh12ee3XPPPG7igaYbxP6724cFRBeeePUW43lrWKpOxj/xp+cHv8MLj
+         maa3qmSs6gBRi36FKZ7I1R2bkgY7BnMDCSfRIqM475/hu6dtfkq0EHzpMnIs+8cC7j
+         vJPV5muDR1HA0Ag2GcxvHpVBJp3gM7H6IPcHgkWU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Richard Henderson <rth@twiddle.net>,
         Mark Brown <broonie@kernel.org>, Theodore Tso <tytso@mit.edu>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.19 040/234] linux/random.h: Mark CONFIG_ARCH_RANDOM functions __must_check
-Date:   Thu, 23 Jun 2022 18:41:47 +0200
-Message-Id: <20220623164344.199359859@linuxfoundation.org>
+Subject: [PATCH 4.19 041/234] powerpc: Use bool in archrandom.h
+Date:   Thu, 23 Jun 2022 18:41:48 +0200
+Message-Id: <20220623164344.228002048@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
 References: <20220623164343.042598055@linuxfoundation.org>
@@ -58,47 +58,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Richard Henderson <richard.henderson@linaro.org>
 
-commit 904caa6413c87aacbf7d0682da617c39ca18cf1a upstream.
+commit 98dcfce69729f9ce0fb14f96a39bbdba21429597 upstream.
 
-We must not use the pointer output without validating the
-success of the random read.
+The generic interface uses bool not int; match that.
 
 Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Richard Henderson <rth@twiddle.net>
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20200110145422.49141-7-broonie@kernel.org
+Link: https://lore.kernel.org/r/20200110145422.49141-9-broonie@kernel.org
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/random.h |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/powerpc/include/asm/archrandom.h |   17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -118,19 +118,19 @@ unsigned long randomize_page(unsigned lo
- #ifdef CONFIG_ARCH_RANDOM
- # include <asm/archrandom.h>
- #else
--static inline bool arch_get_random_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_long(unsigned long *v)
+--- a/arch/powerpc/include/asm/archrandom.h
++++ b/arch/powerpc/include/asm/archrandom.h
+@@ -6,27 +6,28 @@
+ 
+ #include <asm/machdep.h>
+ 
+-static inline int arch_get_random_long(unsigned long *v)
++static inline bool arch_get_random_long(unsigned long *v)
  {
- 	return false;
+-	return 0;
++	return false;
  }
--static inline bool arch_get_random_int(unsigned int *v)
-+static inline bool __must_check arch_get_random_int(unsigned int *v)
+ 
+-static inline int arch_get_random_int(unsigned int *v)
++static inline bool arch_get_random_int(unsigned int *v)
  {
- 	return false;
+-	return 0;
++	return false;
  }
--static inline bool arch_get_random_seed_long(unsigned long *v)
-+static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
+ 
+-static inline int arch_get_random_seed_long(unsigned long *v)
++static inline bool arch_get_random_seed_long(unsigned long *v)
  {
- 	return false;
+ 	if (ppc_md.get_random_seed)
+ 		return ppc_md.get_random_seed(v);
+ 
+-	return 0;
++	return false;
  }
--static inline bool arch_get_random_seed_int(unsigned int *v)
-+static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
+-static inline int arch_get_random_seed_int(unsigned int *v)
++
++static inline bool arch_get_random_seed_int(unsigned int *v)
  {
- 	return false;
- }
+ 	unsigned long val;
+-	int rc;
++	bool rc;
+ 
+ 	rc = arch_get_random_seed_long(&val);
+ 	if (rc)
 
 

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73B05583D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32575581C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbiFWRfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S233039AbiFWRFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbiFWRfL (ORCPT
+        with ESMTP id S233918AbiFWRD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:35:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468078C216;
-        Thu, 23 Jun 2022 10:06:13 -0700 (PDT)
+        Thu, 23 Jun 2022 13:03:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E2B51332;
+        Thu, 23 Jun 2022 09:55:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 954DF61B76;
-        Thu, 23 Jun 2022 17:06:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB40C3411B;
-        Thu, 23 Jun 2022 17:06:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CD98B8249D;
+        Thu, 23 Jun 2022 16:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D4D1C3411B;
+        Thu, 23 Jun 2022 16:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003972;
-        bh=IPrm7l7Y4DEnj3K/unR0h1dsLN/bo46PUM9Qs6lbRoE=;
+        s=korg; t=1656003285;
+        bh=UsU2/f9tNduGPzdf8mqaOjn4woxltzh/t+6svdIsniU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PI4S9oZnwOOMMUaJ4As10R2MHiUnGAWlhUrlGH7aqitPmopL34AIkh2rnwHZ2x93q
-         7GaMaBAhB10fWKSEScNEvf2mkbzvdV4a/jjj1R4+oX97jwx96js7xtlCsekuSMyzkU
-         1F8eHR1OV8j/to9XH8RjlBZ4SFxqq7IE3gXpAd8s=
+        b=gl4Ixmp5mrNf5jpL7N0hxSXo3/oWTjRBYtAIG825BCNxFWgXYattZBApyJ49qIcbL
+         76ouRIEqIkcU7mx7nOGDfBcpW/JGq+o5PmfOVbh+bJcLqCukLqAaUGShMzV/k3nBqN
+         dd6Zv3KzLIe5ppxPuD47XIzWWmUvZlJOkPM70OSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Arnd Bergmann <arnd@arndb.de>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 148/237] ia64: define get_cycles macro for arch-override
+Subject: [PATCH 4.9 189/264] um: use fallback for random_get_entropy() instead of zero
 Date:   Thu, 23 Jun 2022 18:43:02 +0200
-Message-Id: <20220623164347.413347841@linuxfoundation.org>
+Message-Id: <20220623164349.416044839@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,32 +60,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 57c0900b91d8891ab43f0e6b464d059fda51d102 upstream.
+commit 9f13fb0cd11ed2327abff69f6501a2c124c88b5a upstream.
 
-Itanium defines a get_cycles() function, but it does not do the usual
-`#define get_cycles get_cycles` dance, making it impossible for generic
-code to see if an arch-specific function was defined. While the
-get_cycles() ifdef is not currently used, the following timekeeping
-patch in this series will depend on the macro existing (or not existing)
-when defining random_get_entropy().
+In the event that random_get_entropy() can't access a cycle counter or
+similar, falling back to returning 0 is really not the best we can do.
+Instead, at least calling random_get_entropy_fallback() would be
+preferable, because that always needs to return _something_, even
+falling back to jiffies eventually. It's not as though
+random_get_entropy_fallback() is super high precision or guaranteed to
+be entropic, but basically anything that's not zero all the time is
+better than returning zero all the time.
+
+This is accomplished by just including the asm-generic code like on
+other architectures, which means we can get rid of the empty stub
+function here.
 
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Acked-by: Johannes Berg <johannes@sipsolutions.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/ia64/include/asm/timex.h |    1 +
- 1 file changed, 1 insertion(+)
+ arch/um/include/asm/timex.h |    9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
---- a/arch/ia64/include/asm/timex.h
-+++ b/arch/ia64/include/asm/timex.h
-@@ -39,6 +39,7 @@ get_cycles (void)
- 	ret = ia64_getreg(_IA64_REG_AR_ITC);
- 	return ret;
- }
-+#define get_cycles get_cycles
+--- a/arch/um/include/asm/timex.h
++++ b/arch/um/include/asm/timex.h
+@@ -1,13 +1,8 @@
+ #ifndef __UM_TIMEX_H
+ #define __UM_TIMEX_H
  
- extern void ia64_cpu_local_tick (void);
- extern unsigned long long ia64_native_sched_clock (void);
+-typedef unsigned long cycles_t;
+-
+-static inline cycles_t get_cycles (void)
+-{
+-	return 0;
+-}
+-
+ #define CLOCK_TICK_RATE (HZ)
+ 
++#include <asm-generic/timex.h>
++
+ #endif
 
 

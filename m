@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267CC55813A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DB1558396
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiFWQ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        id S234002AbiFWRbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbiFWQwh (ORCPT
+        with ESMTP id S234347AbiFWR2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:52:37 -0400
+        Thu, 23 Jun 2022 13:28:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81160767E;
-        Thu, 23 Jun 2022 09:52:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D29B77FDD;
+        Thu, 23 Jun 2022 10:04:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39010B8248F;
-        Thu, 23 Jun 2022 16:52:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8495BC341C5;
-        Thu, 23 Jun 2022 16:52:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5FFDB8248F;
+        Thu, 23 Jun 2022 17:04:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F07C3411B;
+        Thu, 23 Jun 2022 17:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003153;
-        bh=b9t6lL+INKNOFLpFIcHfpH8GJGOZCDDRQxD+dRkzac8=;
+        s=korg; t=1656003847;
+        bh=m1t48f8J1t5GlS2HZ+kgwhOatWjtlZrYDKKdcmlt4Co=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jt7LnmEt4TtPSYbvL+zfhksgJFIrUFtAr/InYRCYVzD21yBYK85sHmy1hTNzRYw7R
-         0AFx+K4kEFWRrQOzlIBBUUJoiP3Pr/wcg2NS7kC9oA0uyB0X1bAq9AaUpFvdgoBANJ
-         QtWrZ1+lC7bs2ZtICeOW3UxJ3dVpkRi1nuvlL1Tw=
+        b=Y9uvWjqEKgEFgx9t+/Ag5PvFQaYuHGEMy0bHnsvaU02RGUswpzYPyixVnGUunNSLM
+         z4FCR47MvMZkxtONcmTZCQ26kMU+EmjsYB5PApyK+KeoKO/l4qATHg7ncVKWpG0Vxz
+         pbP+aVxBGYyNaIpVoDKRTs1u+sFOI+TfFrBFeKHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 147/264] hwrng: core - Rewrite the header
-Date:   Thu, 23 Jun 2022 18:42:20 +0200
-Message-Id: <20220623164348.223959283@linuxfoundation.org>
+Subject: [PATCH 4.14 107/237] random: add proper SPDX header
+Date:   Thu, 23 Jun 2022 18:42:21 +0200
+Message-Id: <20220623164346.229703186@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin LABBE <clabbe.montjoie@gmail.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit dd8014830d2b1fdf5328978ada706df3ec180c21 upstream.
+commit a07fdae346c35c6ba286af1c88e0effcfa330bf9 upstream.
 
-checkpatch have lot of complaint about header.
-Furthermore, the header have some offtopic/useless information.
+Convert the current license into the SPDX notation of "(GPL-2.0 OR
+BSD-3-Clause)". This infers GPL-2.0 from the text "ALTERNATIVELY, this
+product may be distributed under the terms of the GNU General Public
+License, in which case the provisions of the GPL are required INSTEAD OF
+the above restrictions" and it infers BSD-3-Clause from the verbatim
+BSD 3 clause license in the file.
 
-This patch rewrite a proper header.
-
-Signed-off-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/hw_random/core.c |   38 +++++++++-----------------------------
- 1 file changed, 9 insertions(+), 29 deletions(-)
+ drivers/char/random.c |   37 +------------------------------------
+ 1 file changed, 1 insertion(+), 36 deletions(-)
 
---- a/drivers/char/hw_random/core.c
-+++ b/drivers/char/hw_random/core.c
-@@ -1,33 +1,13 @@
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1,44 +1,9 @@
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
  /*
--        Added support for the AMD Geode LX RNG
--	(c) Copyright 2004-2005 Advanced Micro Devices, Inc.
--
--	derived from
--
-- 	Hardware driver for the Intel/AMD/VIA Random Number Generators (RNG)
--	(c) Copyright 2003 Red Hat Inc <jgarzik@redhat.com>
--
-- 	derived from
--
--        Hardware driver for the AMD 768 Random Number Generator (RNG)
--        (c) Copyright 2001 Red Hat Inc <alan@redhat.com>
--
-- 	derived from
--
--	Hardware driver for Intel i810 Random Number Generator (RNG)
--	Copyright 2000,2001 Jeff Garzik <jgarzik@pobox.com>
--	Copyright 2000,2001 Philipp Rumpf <prumpf@mandrakesoft.com>
--
--	Added generic RNG API
--	Copyright 2006 Michael Buesch <m@bues.ch>
--	Copyright 2005 (c) MontaVista Software, Inc.
--
--	Please read Documentation/hw_random.txt for details on use.
--
--	----------------------------------------------------------
--	This software may be used and distributed according to the terms
--        of the GNU General Public License, incorporated herein by reference.
--
-+ * hw_random/core.c: HWRNG core API
-+ *
-+ * Copyright 2006 Michael Buesch <m@bues.ch>
-+ * Copyright 2005 (c) MontaVista Software, Inc.
-+ *
-+ * Please read Documentation/hw_random.txt for details on use.
-+ *
-+ * This software may be used and distributed according to the terms
-+ * of the GNU General Public License, incorporated herein by reference.
+- * random.c -- A strong random number generator
+- *
+  * Copyright (C) 2017-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+- *
+  * Copyright Matt Mackall <mpm@selenic.com>, 2003, 2004, 2005
+- *
+  * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All
+  * rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, and the entire permission notice in its entirety,
+- *    including the disclaimer of warranties.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The name of the author may not be used to endorse or promote
+- *    products derived from this software without specific prior
+- *    written permission.
+- *
+- * ALTERNATIVELY, this product may be distributed under the terms of
+- * the GNU General Public License, in which case the provisions of the GPL are
+- * required INSTEAD OF the above restrictions.  (This clause is
+- * necessary due to a potential bad interaction between the GPL and
+- * the restrictions contained in a BSD-style copyright.)
+- *
+- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+- * DAMAGE.
   */
  
- #include <linux/device.h>
+ /*
 
 

@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1E6557F0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7D1557F10
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbiFWPyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
+        id S231246AbiFWPzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiFWPyE (ORCPT
+        with ESMTP id S232128AbiFWPze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:54:04 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0944E36B67
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:54:03 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id r20so8149959wra.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qmKNiEIYg43PRKcgMsCwOiMbNOijTgjI9sHdcMaEUrM=;
-        b=k/dvGPiZh9R8Hr+Gj5mmKyM7sWtdvrAuUTus62tZM3deRCqhkgc1IGm/ZGosDpcITI
-         Mar50qLk4Pv3WY2YfcMAUEBaPt0Pfc5rglmibE44yGIa1tfd+80oItL/cx0l6Ir93HpZ
-         PAbL8LoaLGCuQXIxoiJqH7Z+6moMrojBSrfCXEvCrWIZnS+KZkFpBGs6ayUhjmjblzce
-         K06p4y5PoN2taIwYM+VSAFSzSCcy6rMnBXGjZXFJMg5Ut/sCxa9T1QYAYzGZ85nP4vPp
-         pxJq3PYtOgprCgZXCoY8xTHlzsIuWLtk7RRl0D80mRy/fR7dJpOhxsDRGkdgfXYgsM7a
-         AV3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qmKNiEIYg43PRKcgMsCwOiMbNOijTgjI9sHdcMaEUrM=;
-        b=FUPkTJqFdKMOhkPd9UkYtZJniXREsXTXXeyYwr4dC7NydWXGjXTx/BDcQ+jSxi+0FF
-         0IthqG8hLmcEERNnnnOcqvaAs3rRkMAiaRO3gEkLwWLdbBktY0KA6ad72gapUXXhQyha
-         kRI7G7qnuW460LJUzsIB/GQD5dL+WZRmoG+SCUdsWGPihXIN999RcTkUwRnQhbyfXHb+
-         03GGr8/1CUwucTx4TaArseW+CW0gpnNUSDQa0nMlXQQ8NahkqYPQ+ws2vgQtXFRsMr4r
-         Yge8Jmac7Qr9EULpuMBAC0KS73qmHdDD+ub6RuGD7j1PjUlmDPNTvGI0LILRzGvJvdno
-         hVBw==
-X-Gm-Message-State: AJIora/4QKbNdaPkJPjBqGXim/pi23A/aOzzCGkjt5dcBWbqYaCK3Je6
-        6Cj6ZQdCHC7g0wfTwRyCzeB32Q==
-X-Google-Smtp-Source: AGRyM1tlDKB4//vnmD35H76Yze2SgIUp5Sn7QaGS0tOiDDh2Fck0ueeOS0nGGJd0GklRKcYQ6EO1AQ==
-X-Received: by 2002:a5d:43cd:0:b0:21b:8e53:befe with SMTP id v13-20020a5d43cd000000b0021b8e53befemr8659922wrr.255.1655999642537;
-        Thu, 23 Jun 2022 08:54:02 -0700 (PDT)
-Received: from OPPO-A74.station (net-37-182-48-184.cust.vodafonedsl.it. [37.182.48.184])
-        by smtp.gmail.com with ESMTPSA id n10-20020adffe0a000000b0021b5861eaf7sm20650830wrr.3.2022.06.23.08.54.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Jun 2022 08:54:02 -0700 (PDT)
-From:   Paolo Valente <paolo.valente@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, andrea.righi@canonical.com, glen.valante@linaro.org,
-        arie.vanderhoeven@seagate.com, Davide Zini <davidezini2@gmail.com>,
-        Paolo Valente <paolo.valente@linaro.org>
-Subject: [PATCH 8/8] block, bfq: balance I/O injection among underutilized actuators
-Date:   Thu, 23 Jun 2022 17:53:35 +0200
-Message-Id: <20220623155335.6147-9-paolo.valente@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220623155335.6147-1-paolo.valente@linaro.org>
-References: <20220623155335.6147-1-paolo.valente@linaro.org>
+        Thu, 23 Jun 2022 11:55:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCEC2E0A3;
+        Thu, 23 Jun 2022 08:55:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6112161EA8;
+        Thu, 23 Jun 2022 15:55:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E19C3411B;
+        Thu, 23 Jun 2022 15:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655999726;
+        bh=nQzJZplHc0/Ec1lWYneNbQij/MgioWH/DG89ypcJyRc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=XbAbve4X2I83UPs5Fri+9rI5uoH1A0sZYskUqDqYqp7Cq1G9ZF6g61zZTyBdR1chw
+         eQoCjC7k4SlaC8O0gF2/Nr9W6p7DvuWriIPp0/411iSTrg/5bTGlLu+RN40Ti3p2w8
+         ng+GObXTMOKoZAbErK7KYxhUt8C6PC2E4aGS+qT278rU+Z1O9o4cDjM396rvRb7f6m
+         T+Q3Mx/YfQFDl84N8F7zoEQwt4GEfI7ZiyJUXz2HE+hqVw/TWpWWTm6hArUAMfwcEG
+         aNGr8wdLGfexldfwLf17d2OjERrOEroA2vckKx/DLthRyp3hp7v5aIlbSgNlQG/3xg
+         FtlgQX4cC61QQ==
+Date:   Thu, 23 Jun 2022 10:55:24 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     Ren Zhijie <renzhijie2@huawei.com>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] NTB: EPF: Fix Kconfig dependency
+Message-ID: <20220623155524.GA1452766@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PAXPR04MB91861EE0E20E9EC71F4C494288B59@PAXPR04MB9186.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,71 +59,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davide Zini <davidezini2@gmail.com>
+On Thu, Jun 23, 2022 at 03:36:38PM +0000, Frank Li wrote:
+> > -----Original Message-----
+> > From: Ren Zhijie <renzhijie2@huawei.com>
+> > Sent: Thursday, June 23, 2022 3:46 AM
+> > To: kishon@ti.com; lpieralisi@kernel.org; kw@linux.com;
+> > bhelgaas@google.com; jdmason@kudzu.us; Frank Li <frank.li@nxp.com>
+> > Cc: linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org; Ren Zhijie
+> > <renzhijie2@huawei.com>
+> > Subject: [PATCH -next] NTB: EPF: Fix Kconfig dependency
 
-Upon the invocation of its dispatch function, BFQ returns the next I/O
-request of the in-service bfq_queue, unless some exception holds. One
-such exception is that there is some underutilized actuator, different
-from the actuator for which the in-service queue contains I/O, and
-that some other bfq_queue happens to contain I/O for such an
-actuator. In this case, the next I/O request of the latter bfq_queue,
-and not of the in-service bfq_queue, is returned (I/O is injected from
-that bfq_queue). To find such an actuator, a linear scan, in
-increasing index order, is performed among actuators.
+@Ren, please use a typical subject line for the file, e.g.,
 
-Performing a linear scan entails a prioritization among actuators: an
-underutilized actuator may be considered for injection only if all
-actuators with a lower index are currently fully utilized, or if there
-is no pending I/O for any lower-index actuator that happens to be
-underutilized.
+  PCI: endpoint: ...
 
-This commits breaks this prioritization and tends to distribute
-injection uniformly across actuators. This is obtained by adding the
-following condition to the linear scan: even if an actuator A is
-underutilized, A is however skipped if its load is higher than that of
-the next actuator.
+> > If CONFIG_NTB is not set and CONFIG_PCI_EPF_VNTB is y.
+> > 
+> > make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like
+> > this:
+> > 
+> > drivers/pci/endpoint/functions/pci-epf-vntb.o: In function
+> > `epf_ntb_cmd_handler':
+> > pci-epf-vntb.c:(.text+0x95e): undefined reference to `ntb_db_event'
+> > pci-epf-vntb.c:(.text+0xa1f): undefined reference to `ntb_link_event'
+> > pci-epf-vntb.c:(.text+0xa42): undefined reference to `ntb_link_event'
+> > drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `pci_vntb_probe':
+> > pci-epf-vntb.c:(.text+0x1250): undefined reference to `ntb_register_device'
+> > 
+> > The functions ntb_*() are defined in drivers/ntb/core.c, which need
+> > CONFIG_NTB setting y to be build-in.
+> > To fix this build error, add depends on NTB.
+> > 
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Fixes: ff32fac00d97("NTB: EPF: support NTB transfer between PCI RC and EP
+> > connection")
+> > Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> > ---
+> [Frank Li] Acked
 
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Signed-off-by: Davide Zini <davidezini2@gmail.com>
----
- block/bfq-iosched.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 80eb7d542b70..ee113d1b949f 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -4799,17 +4799,25 @@ struct bfq_queue *bfq_find_active_bfqq_for_actuator(struct bfq_data *bfqd,
- 
- /*
-  * Perform a linear scan of each actuator, until an actuator is found
-- * for which the following two conditions hold: the load of the
-- * actuator is below the threshold (see comments on actuator_load_threshold
-- * for details), and there is a queue that contains I/O for that
-- * actuator. On success, return that queue.
-+ * for which the following three conditions hold: the load of the
-+ * actuator is below the threshold (see comments on
-+ * actuator_load_threshold for details) and lower than that of the
-+ * next actuator (comments on this extra condition below), and there
-+ * is a queue that contains I/O for that actuator. On success, return
-+ * that queue.
-+ *
-+ * Performing a plain linear scan entails a prioritization among
-+ * actuators. The extra condition above breaks this prioritization and
-+ * tends to distribute injection uniformly across actuators.
-  */
- struct bfq_queue *bfq_find_bfqq_for_underused_actuator(struct bfq_data *bfqd)
- {
- 	int i;
- 
- 	for (i = 0 ; i < bfqd->num_ia_ranges; i++)
--		if (bfqd->rq_in_driver[i] < bfqd->actuator_load_threshold) {
-+		if (bfqd->rq_in_driver[i] < bfqd->actuator_load_threshold &&
-+		    (i == bfqd->num_ia_ranges - 1 ||
-+		     bfqd->rq_in_driver[i] < bfqd->rq_in_driver[i+1])) {
- 			struct bfq_queue *bfqq =
- 				bfq_find_active_bfqq_for_actuator(bfqd, i);
- 
--- 
-2.20.1
-
+@Frank: if you use the conventional style, e.g.,
+"Acked-by: Frank Li <frank.li@nxp.com>", tooling like b4 will
+automatically pick it up.  Just saying "Acked" is likely to get missed
+or ignored.
+> 
+> >  drivers/pci/endpoint/functions/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/pci/endpoint/functions/Kconfig
+> > b/drivers/pci/endpoint/functions/Kconfig
+> > index 362555b024e8..9beee4f0f4ee 100644
+> > --- a/drivers/pci/endpoint/functions/Kconfig
+> > +++ b/drivers/pci/endpoint/functions/Kconfig
+> > @@ -29,6 +29,7 @@ config PCI_EPF_NTB
+> >  config PCI_EPF_VNTB
+> >          tristate "PCI Endpoint NTB driver"
+> >          depends on PCI_ENDPOINT
+> > +        depends on NTB
+> >          select CONFIGFS_FS
+> >          help
+> >            Select this configuration option to enable the Non-Transparent
+> > --
+> > 2.17.1
+> 

@@ -2,172 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB18E55769C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8075576A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiFWJaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S229482AbiFWJb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiFWJaL (ORCPT
+        with ESMTP id S229645AbiFWJb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:30:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A1414756C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655976609;
+        Thu, 23 Jun 2022 05:31:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DEE48302;
+        Thu, 23 Jun 2022 02:31:55 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 11:31:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1655976713;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Yi0ECMkNhZdo3ou3Qb26Wd4xWq35GWgeRWMvIk5Uuew=;
-        b=NQ8aCS4ePn6KiAmrhqaB7yyP53lnzwYGdGiLkFL8rv6fFoFsc3EWlImQtN7zVtjXy3XeF4
-        yXz/8MZFUHUB4f7Uox/G/R2vHyO/HVdJi1pjUVdXdtSFwNwB/32b9iVRt/ozu/CLutF0L7
-        JFMNnIHSVtEv5Lcndq28BemTpp8qCDo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-kLhuqpouNXKz2EIGqLEnQQ-1; Thu, 23 Jun 2022 05:30:08 -0400
-X-MC-Unique: kLhuqpouNXKz2EIGqLEnQQ-1
-Received: by mail-wm1-f69.google.com with SMTP id r205-20020a1c44d6000000b003a02cd754d1so141161wma.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:30:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Yi0ECMkNhZdo3ou3Qb26Wd4xWq35GWgeRWMvIk5Uuew=;
-        b=Bjqvl5r2S/fSF3kmjwmtu8vAaI02XbBq7ETw12yXLkv/HHdocZD4Px0BQimBvk3rG8
-         rLvjA53GlSjwfHEnMFI9goxRGVGWH10ZWVrtPLH6DS+dDLZwOVrVelWdhoz3Kt8RB2zD
-         H8at4qGeNLoQhG9Cs11zywb53GD7yYkcez1EgTXBqM9MUo3aqrG86Tpl963+SzU8yO8h
-         9l+yyojLiZty+EAzmQkFD76WgQi36ToYb3Dq1XUX/oINmi8Q43oGK2KHz/Ey4oD3xH05
-         6O9s+yy8PdCpch1HZDNa2VZdRGRDo9+jtZmEx1Na6FFFtAFNuL52i+p2iWrta3F/DLeI
-         PGaA==
-X-Gm-Message-State: AJIora+MX20YOiBmjO5cUymbu9e3SGGPICZZchatBltSjYutzhEJkVCh
-        DLYN2f7QT4+s8Ox2CyIgrN1z3ywm022LOfI9VC+ZqFfqAYsiPXlpY4ssAgo+1WoxfdCiG8vZENt
-        Z9r9L/wRBXXew46pd4Gq/zMz5
-X-Received: by 2002:adf:ed05:0:b0:21b:947c:c97b with SMTP id a5-20020adfed05000000b0021b947cc97bmr7079256wro.509.1655976606756;
-        Thu, 23 Jun 2022 02:30:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s5+b+rMsQ2CD3MI59GsQBq9eBzv2lsIUGK/dQnGLx3FklVb+gWr5zXQ0BlVvxGqA+CEibk6w==
-X-Received: by 2002:adf:ed05:0:b0:21b:947c:c97b with SMTP id a5-20020adfed05000000b0021b947cc97bmr7079235wro.509.1655976606519;
-        Thu, 23 Jun 2022 02:30:06 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-113-202.dyn.eolo.it. [146.241.113.202])
-        by smtp.gmail.com with ESMTPSA id r127-20020a1c4485000000b0039c4ba160absm10051798wma.2.2022.06.23.02.30.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 02:30:05 -0700 (PDT)
-Message-ID: <30eac5047e0e3b6edce260fb31d3f6527e142dee.camel@redhat.com>
-Subject: Re: [PATCH net 2/2] net: rose: fix null-ptr-deref caused by
- rose_kill_by_neigh
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Duoming Zhou <duoming@zju.edu.cn>, linux-hams@vger.kernel.org
-Cc:     ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 23 Jun 2022 11:30:04 +0200
-In-Reply-To: <49f1e353c0a1e4f896cb255d77d08888d7b2e3fc.1655869357.git.duoming@zju.edu.cn>
-References: <cover.1655869357.git.duoming@zju.edu.cn>
-         <49f1e353c0a1e4f896cb255d77d08888d7b2e3fc.1655869357.git.duoming@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        bh=rdy+QUhPkvFcFC80rvjevTMJhfdSl1qbxeO2CTdvv58=;
+        b=NEhmq8viQ72FOh+cau9QybpV1lZZv76F0Y0skF4OQ3K33zgzmjPISWBUw8wZ8ejYmmzZtJ
+        Za/VxomJ8D0EbRmyHsp9iIgo5KJtEtw8W01lx6LJFRXY7qpRtQEeftXKQrJEcY8hZzGlao
+        KFURtbeaNG/jIDaSC6pLEds9Sjs2tQ+rHR0NN2Ab4xtI0Y5BCzxPZgxN0ZT2FcYK9XAvq7
+        gSwZLLW3g90EflW0hduk0fFEQjhbAh7nK+ixMY00pRCxuxyhm4XqHCAREYUSI49F4mfXAT
+        T+c1qZC3PMNYcahuSC2DpV5oXODqczdVooKzp4pXQI/smcHSisXnnjHwclyScw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1655976713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rdy+QUhPkvFcFC80rvjevTMJhfdSl1qbxeO2CTdvv58=;
+        b=1tpp+G+oSQjiwNGLj9aUmHGzkXlmunN6sB7hmmrXtf56s+eH5ZchYT6PhUcvWW8snWnOb/
+        i9anyEfJ1+O1mHDQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-rt-users@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juri Lelli <jlelli@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+Subject: Re: [PATCH v2] panic, kexec: Make __crash_kexec() NMI safe
+Message-ID: <YrQzB7sPD8BNxSFq@linutronix.de>
+References: <20220620111520.1039685-1-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220620111520.1039685-1-vschneid@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-22 at 12:01 +0800, Duoming Zhou wrote:
-> When the link layer connection is broken, the rose->neighbour is
-> set to null. But rose->neighbour could be used by rose_connection()
-> and rose_release() later, because there is no synchronization among
-> them. As a result, the null-ptr-deref bugs will happen.
-> 
-> One of the null-ptr-deref bugs is shown below:
-> 
->     (thread 1)                  |        (thread 2)
->                                 |  rose_connect
-> rose_kill_by_neigh              |    lock_sock(sk)
->   spin_lock_bh(&rose_list_lock) |    if (!rose->neighbour)
->   rose->neighbour = NULL;//(1)  |
->                                 |    rose->neighbour->use++;//(2)
-> 
-> The rose->neighbour is set to null in position (1) and dereferenced
-> in position (2).
-> 
-> The KASAN report triggered by POC is shown below:
-> 
-> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-> ...
-> RIP: 0010:rose_connect+0x6c2/0xf30
-> RSP: 0018:ffff88800ab47d60 EFLAGS: 00000206
-> RAX: 0000000000000005 RBX: 000000000000002a RCX: 0000000000000000
-> RDX: ffff88800ab38000 RSI: ffff88800ab47e48 RDI: ffff88800ab38309
-> RBP: dffffc0000000000 R08: 0000000000000000 R09: ffffed1001567062
-> R10: dfffe91001567063 R11: 1ffff11001567061 R12: 1ffff11000d17cd0
-> R13: ffff8880068be680 R14: 0000000000000002 R15: 1ffff11000d17cd0
-> ...
-> Call Trace:
->   <TASK>
->   ? __local_bh_enable_ip+0x54/0x80
->   ? selinux_netlbl_socket_connect+0x26/0x30
->   ? rose_bind+0x5b0/0x5b0
->   __sys_connect+0x216/0x280
->   __x64_sys_connect+0x71/0x80
->   do_syscall_64+0x43/0x90
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 
-> This patch adds lock_sock() in rose_kill_by_neigh() in order to
-> synchronize with rose_connect() and rose_release().
-> 
-> Meanwhile, this patch adds sock_hold() protected by rose_list_lock
-> that could synchronize with rose_remove_socket() in order to mitigate
-> UAF bug caused by lock_sock() we add.
-> 
-> What's more, there is no need using rose_neigh_list_lock to protect
-> rose_kill_by_neigh(). Because we have already used rose_neigh_list_lock
-> to protect the state change of rose_neigh in rose_link_failed(), which
-> is well synchronized.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+On 2022-06-20 12:15:20 [+0100], Valentin Schneider wrote:
+> Attempting to get a crash dump out of a debug PREEMPT_RT kernel via an NMI
+> panic() doesn't work. The cause of that lies in the PREEMPT_RT definition
+> of mutex_trylock():
+>=20
+=E2=80=A6
+
+> Fixes: 6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softir=
+q context")
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
 > ---
->  net/rose/af_rose.c    | 5 +++++
->  net/rose/rose_route.c | 2 ++
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
-> index bf2d986a6bc..dece637e274 100644
-> --- a/net/rose/af_rose.c
-> +++ b/net/rose/af_rose.c
-> @@ -169,9 +169,14 @@ void rose_kill_by_neigh(struct rose_neigh *neigh)
->  		struct rose_sock *rose = rose_sk(s);
->  
->  		if (rose->neighbour == neigh) {
-> +			sock_hold(s);
->  			rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
->  			rose->neighbour->use--;
-> +			spin_unlock_bh(&rose_list_lock);
+> v1 -> v2
+> ++++++++
+>=20
+> o Changed from Peterson-like synchronization to simpler atomic_cmpxchg
+>   (Petr)
+> o Slightly reworded changelog
+> o Added Fixes: tag. Technically should be up to since kexec can happen
+>   in an NMI, but that isn't such a clear target
 
-You can't release the lock protecting the list traversal, then re-
-acquire it and keep traversing using the same iterator. The list could
-be modified in-between.
+RT-wise it would be needed for each release.
+There is also a mutex_unlock() in case an image is missing. This can go
+via the scheduler if there is a waiter which does not look good with the
+NMI in the picture.
 
-Instead you could build a local list containing the relevant sockets
-(under the rose_list_lock protection), additionally acquiring a
-reference to each of them
-
-Then traverse such list outside the rose_list_lock, acquire the socket
-lock on each of them, do the neigh clearing and release the reference.
-
-Doing the above right is still fairly non trivial.
-
-/P
-
-
-
-
+Sebastian

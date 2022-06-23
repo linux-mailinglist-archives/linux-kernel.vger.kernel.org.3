@@ -2,88 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C901557EE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740B6557EEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiFWPsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        id S231698AbiFWPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiFWPsu (ORCPT
+        with ESMTP id S229970AbiFWPuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:48:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B25731357;
-        Thu, 23 Jun 2022 08:48:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3183961EDA;
-        Thu, 23 Jun 2022 15:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC4CC3411B;
-        Thu, 23 Jun 2022 15:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655999328;
-        bh=tP5tWUbsTQDyyLj7te8Y5iEraMYYD/V8xlcCjt/tgjk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ScTvqzj5l8QF3PH8z2ERvm3+5OVyM3Db3ljY0oRdGehYt6kg8o5tu6DVPf3Xi4Wiv
-         ZFHu7rNT4FC07+x2qoXkAZbA44Sk9hKggDPTvU/hj2YIs7YSrWcGtJ6tSHgWbr90P6
-         8g8XvfSPnAsmCGC3uSLdF+QPcLprkf0XULgnQnPAZHHcifRRTxAlgIYYeNgV3hNPWA
-         uRNJaTPz1OVoJ+u/K3KGsw97V4nEjxF0dcv4VjVUEcqxwbPgCMvqDLnAZxWvy9R78v
-         OIISyzWc5mpf7zATk291xcwkIl3p5L28EG2D8s1ZeIxVu5gh1eQUx8ySgid7zda93x
-         k0JDtEryl4M1w==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, eajames@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20220623140547.71762-1-eajames@linux.ibm.com>
-References: <20220623140547.71762-1-eajames@linux.ibm.com>
-Subject: Re: [PATCH] spi: fsi: Increase timeout and ensure status is checked
-Message-Id: <165599932743.321829.1888055158569368470.b4-ty@kernel.org>
-Date:   Thu, 23 Jun 2022 16:48:47 +0100
+        Thu, 23 Jun 2022 11:50:10 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F0A42ECD;
+        Thu, 23 Jun 2022 08:50:08 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id e2so18227670edv.3;
+        Thu, 23 Jun 2022 08:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rgClSWW2UqCM8L/SNMSH4tsLKWBQL5Uplu6uX6hazwo=;
+        b=HJ/+nOLoFC4nY0OQ9J5Em4y3LObFCogogj/14Snrk8UF8UKTcTQzCBHb44g3KVGAx1
+         BLfH59z5Nk2sjZCkLjHOJPgc+A35XC+MR0jVzqqiJXw9uX0z5i4W7aATIXU9RrUXVNrL
+         IvSdP2wul+YrShqT9H9xV2rDeyYL5vzuF15RMVbUMaPL8BDwBDG5Unk552Q8pN+9PwAt
+         jX07qoTYKmBnPfdv3/OUxGLGTZSBTfRVa3fQGD1wxPc/A4ux5TKQUpJFa1att2piVRTA
+         m3yZvNxM/2rWLFft16H6b/q7oLsyh7WdcNfdk6d4ZF35AMquVJXZvV39m0BtFE7Ol/rh
+         k+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rgClSWW2UqCM8L/SNMSH4tsLKWBQL5Uplu6uX6hazwo=;
+        b=HOxSfeFheqAGJRgqdEj8XtOwVNDjXNMB25FMJNu2lIXhRrhkKCSxI4ZbBwiZFCEj1I
+         7Y59COx9sC0OeLEqqWwEC3hGABYTaOGAqCXZ1lpoCcGZw62ss8cSTqVnlV0HtJbtqfVN
+         uNkiAisUQgqHiT5ytucGH6wazvWuABEeujC2VRbI5vCvixK+yHnnC/FL3M7xVMEie6BN
+         RcqQIXv/W6Pv9JI2s/81cxIYrfm7+FCOO2gVoiQyrxVvrJnIjiQ0NE6sOKfkn/zxdCKf
+         vq5u5cAuVBNbeDwqXnAgct0nf0E5JhQRovjPlRGrqvtSYpMMBa3lJccof2FYUn6maBGk
+         t0KA==
+X-Gm-Message-State: AJIora/5k3+18Kj/XL2SgkwZzZrqNgmRa6INC3prugShBogMN8AIxg0a
+        mCp/AT1dAW/n5L4hd6v6IVw=
+X-Google-Smtp-Source: AGRyM1vn+5/QLWJ2q7zv8Gv6/IkfqtYUe/3VBGN6KdRyBuc4WSuZOsHyB80t3Wr/UTHuetpaAIhpcQ==
+X-Received: by 2002:a50:fe15:0:b0:435:9155:f83b with SMTP id f21-20020a50fe15000000b004359155f83bmr11490703edt.391.1655999407215;
+        Thu, 23 Jun 2022 08:50:07 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-98-60.xnet.hr. [88.207.98.60])
+        by smtp.googlemail.com with ESMTPSA id g13-20020a170906538d00b00722e1635531sm4846182ejo.193.2022.06.23.08.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 08:50:06 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     svarbanov@mm-sol.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, p.zabel@pengutronix.de,
+        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johan+linaro@kernel.org, dmitry.baryshkov@linaro.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v3 1/2] PCI: qcom: fix IPQ8074 Gen2 support
+Date:   Thu, 23 Jun 2022 17:50:03 +0200
+Message-Id: <20220623155004.688090-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 09:05:47 -0500, Eddie James wrote:
-> Only timeout after at least one iteration of checking the
-> status registers. In addition, increase the transfer timeout
-> to 1 second.
-> 
-> 
+Currently the Gen2 port in IPQ8074 will cause the system to hang as its
+using DBI registers in the .init and those are only accesible after
+phy_power_on().
 
-Applied to
+So solve this by splitting the DBI read/writes to .post_init.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+Changes in v3:
+* Make sure it applies onto 5.19-rc3
+* Update the commit description to make it clear this only affects the
+Gen2 port
 
-Thanks!
+Changes in v2:
+* Rebase onto next-20220621
+---
+ drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
+ 1 file changed, 28 insertions(+), 20 deletions(-)
 
-[1/1] spi: fsi: Increase timeout and ensure status is checked
-      commit: 40308f9642a85c30fa7cc5ab8672020cb96ecb66
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index a1f1aca2fb59..24708d5d817d 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+ 	struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
+ 	struct dw_pcie *pci = pcie->pci;
+ 	struct device *dev = pci->dev;
+-	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+ 	int i, ret;
+-	u32 val;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
+ 		ret = reset_control_assert(res->rst[i]);
+@@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+ 		goto err_clk_aux;
+ 	}
+ 
++	return 0;
++
++err_clk_aux:
++	clk_disable_unprepare(res->ahb_clk);
++err_clk_ahb:
++	clk_disable_unprepare(res->axi_s_clk);
++err_clk_axi_s:
++	clk_disable_unprepare(res->axi_m_clk);
++err_clk_axi_m:
++	clk_disable_unprepare(res->iface);
++err_clk_iface:
++	/*
++	 * Not checking for failure, will anyway return
++	 * the original failure in 'ret'.
++	 */
++	for (i = 0; i < ARRAY_SIZE(res->rst); i++)
++		reset_control_assert(res->rst[i]);
++
++	return ret;
++}
++
++static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
++{
++	struct dw_pcie *pci = pcie->pci;
++	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
++	u32 val;
++
+ 	writel(SLV_ADDR_SPACE_SZ,
+ 		pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
+ 
+@@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+ 		PCI_EXP_DEVCTL2);
+ 
+ 	return 0;
+-
+-err_clk_aux:
+-	clk_disable_unprepare(res->ahb_clk);
+-err_clk_ahb:
+-	clk_disable_unprepare(res->axi_s_clk);
+-err_clk_axi_s:
+-	clk_disable_unprepare(res->axi_m_clk);
+-err_clk_axi_m:
+-	clk_disable_unprepare(res->iface);
+-err_clk_iface:
+-	/*
+-	 * Not checking for failure, will anyway return
+-	 * the original failure in 'ret'.
+-	 */
+-	for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+-		reset_control_assert(res->rst[i]);
+-
+-	return ret;
+ }
+ 
+ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+@@ -1596,6 +1603,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
+ static const struct qcom_pcie_ops ops_2_3_3 = {
+ 	.get_resources = qcom_pcie_get_resources_2_3_3,
+ 	.init = qcom_pcie_init_2_3_3,
++	.post_init = qcom_pcie_post_init_2_3_3,
+ 	.deinit = qcom_pcie_deinit_2_3_3,
+ 	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+ };
+-- 
+2.36.1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

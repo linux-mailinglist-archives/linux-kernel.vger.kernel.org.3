@@ -2,184 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5F555800F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D866855800B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiFWQjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S232326AbiFWQjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiFWQjD (ORCPT
+        with ESMTP id S232305AbiFWQjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:39:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96077167C0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:02 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id o9so20129855edt.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X8CqJoRILL/dve2sT+WdutSeuBTUJjelySjg4TNgewk=;
-        b=hjeDCAVUyq2c2N2zMhUW1OVixmztIYgy4ydCOn+R89OsiilOZyWkIi2CCds6CknrSb
-         wyFk+2wKRoxbfzdhqPH9NTj93LVSOloSr6Tfnf2+R/WBBZNNGLSxkgyJJ7J4eqzfdTU2
-         IvvoJ1ZCVS+Virc4OkimKoWeqLQInhZv2lmpM+5h4nil1oorcT6suS/bho/zZV1cqDkI
-         QrLpM8uG49Tx6/LeaVUtyr54pKjGb5KkuFB1NkKQw0pYcxepBN2LIAoLx4YpKNmsN7UL
-         4blGUXb4q1BiV3HbS44JPKrsJopW4oxkWuiN68F3S0kthRjSwgfoQpVhE/7MEXKuymfo
-         nQ4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X8CqJoRILL/dve2sT+WdutSeuBTUJjelySjg4TNgewk=;
-        b=ZjRCwfCGbC5Uk2IOlrGp6IgO8WhRemA2OZKhpB+vlMn1RW4GQCgPCTuT+44Zyhccaj
-         jEmSQVQ0QHOp8aIQiduZoU0aEjo7x/h6Ykyzitxpp0LNo2Rbz4EYKNL0tAKTirebUJ14
-         Hdi+0IAl9kj3rWNn70uvpHwZU+eKwyIiCtSBy9zmC+7ANlIKnIXcceeP3NyZaOYflRU/
-         IhWmSb9I2VUzRRTXi1IKMXn5LwzSaPr7rGV2Sq106HK2oucE/lCHtdistZ65ZKi8QtWX
-         dpCFhSc3F0m+uFI3k6QtUk/dZNoZ33n2E5veTF2vB/pydo0BJm6r42SMmn7/dg8AGDU5
-         m3PQ==
-X-Gm-Message-State: AJIora/XI1JXQU+ZPk8f8RXyEVeBTqfea+dZBQyXkKUW3VI0DsFk9+zJ
-        aj5ZXKeV8iFU7M9J3G0C9tzBuxwYbq3ux0+HSP/OOadi+PuOWn3P
-X-Google-Smtp-Source: AGRyM1tCH/TvyxXOB2A7V379L6d7opgQwhQuwNpSrSBabVWygvVnu5CjYQVuWV4BD7ZGJdbNym2j6u1vMhjfqJ9ZIP4=
-X-Received: by 2002:a05:6402:350e:b0:42f:b2c1:9393 with SMTP id
- b14-20020a056402350e00b0042fb2c19393mr11885456edd.11.1656002340976; Thu, 23
- Jun 2022 09:39:00 -0700 (PDT)
+        Thu, 23 Jun 2022 12:39:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9471E48E62;
+        Thu, 23 Jun 2022 09:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656002359; x=1687538359;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EI+QQ+/jwbwz1xOCAJK7+a2mr8/Kd1EZs7K/UPWhtF4=;
+  b=B0H4jhAwT9yCuhl5RKUj+DgehXTWyTO13dtL+RzviDUf49Eqwagc4mY1
+   e+6KS7drkldGFz6RD73L6/G5Mi6jFD8u0GrrTx0hon1VzXGA6w/wvuLlr
+   PDGNSzSRPQXgSMDeveGU1Rqt5x7ut5fRpHIYxY7r0JyQ8nlTDa9S2eXWL
+   HBYIy1n90+z7GqSUobqfkCRuefsC2hyDkQdCNzwkawFu3vfKwl2E6OTRm
+   0/3xis/GfyDVqIUX6CLvGLqnivMc9ZpxuSPRp1H1v+l++btgtn5hIJg0C
+   hgzFtZDX5OquyljzLAe0eBpbvo6klCjvhZFPluvLBE7mkvt6b64BGdz7j
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="342455606"
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="342455606"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 09:39:19 -0700
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="834715838"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 09:39:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o4PrG-000tDS-Q2;
+        Thu, 23 Jun 2022 19:39:06 +0300
+Date:   Thu, 23 Jun 2022 19:39:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     sascha hauer <sha@pengutronix.de>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        russell king <linux@armlinux.org.uk>,
+        "david s. miller" <davem@davemloft.net>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when
+ fw_devlink.strict=1
+Message-ID: <YrSXKkYfr+Hinsuu@smile.fi.intel.com>
+References: <20220623080344.783549-1-saravanak@google.com>
+ <20220623080344.783549-3-saravanak@google.com>
+ <20220623100421.GY1615@pengutronix.de>
 MIME-Version: 1.0
-References: <20220622041040.202737-1-tzungbi@kernel.org> <20220622041040.202737-6-tzungbi@kernel.org>
-In-Reply-To: <20220622041040.202737-6-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 23 Jun 2022 09:38:49 -0700
-Message-ID: <CABXOdTdBo=PAsj1r4f0uuqjvcMtBbhSQRF=_ERf4VvSX=SoctA@mail.gmail.com>
-Subject: Re: [PATCH 5/7] platform/chrome: cros_ec_proto: add Kunit tests for check_features
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623100421.GY1615@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 9:11 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> cros_ec_check_features() gets EC features if it hasn't had cache, and
-> checks whether the given EC_FEATURE_* is supported or not.
->
-> Add Kunit tests for cros_ec_check_features().
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+On Thu, Jun 23, 2022 at 12:04:21PM +0200, sascha hauer wrote:
+> On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+...
 
-> ---
->  drivers/platform/chrome/cros_ec_proto_test.c | 77 ++++++++++++++++++++
->  1 file changed, 77 insertions(+)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index dce9fa3b9c8d..93c1700deaef 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -2367,6 +2367,81 @@ static void cros_ec_proto_test_get_host_event_normal(struct kunit *test)
->         KUNIT_EXPECT_EQ(test, ret, EC_HOST_EVENT_MASK(EC_HOST_EVENT_RTC));
->  }
->
-> +static void cros_ec_proto_test_check_features_cached(struct kunit *test)
-> +{
-> +       int ret, i;
-> +       struct cros_ec_dev ec;
-> +
-> +       ec.features.flags[0] = EC_FEATURE_MASK_0(EC_FEATURE_FINGERPRINT);
-> +       ec.features.flags[1] = EC_FEATURE_MASK_0(EC_FEATURE_SCP);
-> +
-> +       for (i = 0; i < EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK; ++i) {
-> +               ret = cros_ec_check_features(&ec, i);
-> +               switch (i) {
-> +               case EC_FEATURE_FINGERPRINT:
-> +               case EC_FEATURE_SCP:
-> +                       KUNIT_EXPECT_TRUE(test, ret);
-> +                       break;
-> +               default:
-> +                       KUNIT_EXPECT_FALSE(test, ret);
-> +                       break;
-> +               }
-> +       }
-> +}
-> +
-> +static void cros_ec_proto_test_check_features_not_cached(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       struct ec_xfer_mock *mock;
-> +       int ret, i;
-> +       struct cros_ec_dev ec;
-> +
-> +       ec_dev->max_request = 0xff;
-> +       ec_dev->max_response = 0xee;
-> +       ec.ec_dev = ec_dev;
-> +       ec.dev = ec_dev->dev;
-> +       ec.cmd_offset = 0;
-> +       ec.features.flags[0] = -1;
-> +       ec.features.flags[1] = -1;
-> +
-> +       /* For EC_CMD_GET_FEATURES. */
-> +       {
-> +               struct ec_response_get_features *data;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +
-> +               data = (struct ec_response_get_features *)mock->o_data;
-> +               data->flags[0] = EC_FEATURE_MASK_0(EC_FEATURE_FINGERPRINT);
-> +               data->flags[1] = EC_FEATURE_MASK_0(EC_FEATURE_SCP);
-> +       }
-> +
-> +       for (i = 0; i < EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK; ++i) {
-> +               ret = cros_ec_check_features(&ec, i);
-> +               switch (i) {
-> +               case EC_FEATURE_FINGERPRINT:
-> +               case EC_FEATURE_SCP:
-> +                       KUNIT_EXPECT_TRUE(test, ret);
-> +                       break;
-> +               default:
-> +                       KUNIT_EXPECT_FALSE(test, ret);
-> +                       break;
-> +               }
-> +       }
-> +
-> +       /* For EC_CMD_GET_FEATURES. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_FEATURES);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_get_features));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
-> +       }
-> +}
-> +
->  static void cros_ec_proto_test_release(struct device *dev)
->  {
->  }
-> @@ -2460,6 +2535,8 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
->         KUNIT_CASE(cros_ec_proto_test_get_host_event_not_host_event),
->         KUNIT_CASE(cros_ec_proto_test_get_host_event_wrong_event_size),
->         KUNIT_CASE(cros_ec_proto_test_get_host_event_normal),
-> +       KUNIT_CASE(cros_ec_proto_test_check_features_cached),
-> +       KUNIT_CASE(cros_ec_proto_test_check_features_not_cached),
->         {}
->  };
->
-> --
-> 2.37.0.rc0.104.g0611611a94-goog
->
+> I wonder if it wouldn't be a better approach to just probe all devices
+> and record the device(node) they are waiting on. Then you know that you
+> don't need to probe them again until the device they are waiting for
+> is available.
+
+There may be no device, but resource. And we become again to the something like
+deferred probe ugly hack.
+
+The real solution is to rework device driver model in the kernel that it will
+create a graph of dependencies and then simply follow it. But actually it should
+be more than 1 graph, because there are resources and there are power, clock and
+resets that may be orthogonal to the higher dependencies (like driver X provides
+a resource to driver Y).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

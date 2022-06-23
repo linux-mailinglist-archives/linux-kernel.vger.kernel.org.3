@@ -2,117 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B3A557876
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48CC55787B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiFWLJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 07:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
+        id S231322AbiFWLLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiFWLJq (ORCPT
+        with ESMTP id S230209AbiFWLLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:09:46 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50083.outbound.protection.outlook.com [40.107.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB014B856;
-        Thu, 23 Jun 2022 04:09:45 -0700 (PDT)
+        Thu, 23 Jun 2022 07:11:08 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2080.outbound.protection.outlook.com [40.107.244.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B6948E6A;
+        Thu, 23 Jun 2022 04:11:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DyxDvDcffclcBfIRVTBuSWK2+Ma8FEiVI55RmnftUsaqb9c5eSQXEGmSrzg+stSegluTi94R7XqMXhB4jZ+YesvKcam6HhBzIEYw4LJJZ51rbON1jcBWt9l6dKTPvvfg4brbe637DvnWIxHN0hX2Np5rItuIJOi0i+p57I8HWGg9BHzZi2jrSnCLedZjIYjT5TBJoAvBm1JelotlIakzMz0dR136/qvxQynzbMmk4cPeYp2e44hCUsL5XanKdFUZspnIfXJK0m9WV4SZ4e7m7Nqc4or3vOf1f0GgYGOI57nemGxWEfg5dftR0K6LgyEOonWvvi9aaS1jMphPD3RLwA==
+ b=FB45glYhqnmxg7bzoiVl8GTrcENo6VLlFoDKqGhgaMJGDQqoBHXjoXHtf3AXqIulgIUem+3UGjaYii6WpjAmjCvFQax9D761JiMa87nKlZn6NXGcMbTA6a8wCheHcwmcPytj5Nnd2GkiWYzOaXG7YGlVO/iGkh1Hk8f2nObR/AacsAXofljVxrnlK47pq8ONctVbTnvW1mgluDwoUfig71B+hoTiNzflaFvTqqlf41mZm6iWgMivznpAtREQlvTh0jbm+ADeGkJhjot9C0dbHoXnkpaKc/m5xQTwYg/aEE4FNwnwX/0GmhqvI1gUNYwOo9eQ6ANCfB8dFO1R88D+sA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B1np0z7Za5smEbYnBxWT2AMtjAk5wxtm8Qhms7AUqUo=;
- b=dmZpYEWC9A9d6y4Phj85i8xF9mgJhfVlvj+FHM1aKEOR3squW7+8n4ztcIH4qY0LCZAFJ1a47B2x8j7dI8d2wPYdjB30fzh0A0odrBEF2Sd+kxlVknpTqXMF5Zdgd2cU/xFka4VTQ+iTA5f9jJ1J2wSXmKYBfiEzRM6ua9gURx3GAFjgHRquay+anNUn3rLReecLiQRE/2Qa73UWB0pVKyIfQV0XAKxPeFQCzQ4P3lbCvU6A5B/PTVpthvOCAZpcgSBIk50XWmdG0ftzCXOo7KeSY8tFYE7MqmWEkG+S7ARL2sQ5w+GeDtTEsdpc4j+fdHA4Ay/xbRFCT2Y2/kfMZQ==
+ bh=iZmPe9T8HYP/sRmJXJqUnt4rxmom/RAuzEcGG4HMJGY=;
+ b=NVJl44R74PxHEX6CDA9u2PScl1jUGFIo83V8cmmz90Bmc+BpO8NQumqrlR5AouEw2vBEyIILVeCl2C+Xeqiv0eVj5JJuRi09PllMrfUk9Ihd6qLFYXneJQxYEzzeRCpBK6AMv4hjIyS3zQBQU7pWZWcsCYAU0b0mo3pEAMzCjjaZtCWKl3mLK1a2KJCQ7B5G5t/4H9LWyjZldMsJ2VnqNgoyVuCszF2jNpBIGHOqsr1mMfbPMT+rsRDzC4o6G6lZynqGOYpqQa3S7GMkvagVaDN7ykfStGSVx+zgRE6j0vUW8s1UvPWvDWDxE93N0a9TZsJkGN7ms98AslQEz5BSgA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B1np0z7Za5smEbYnBxWT2AMtjAk5wxtm8Qhms7AUqUo=;
- b=N8E81QWf4UI/zfjIrCeazU/CggYyjZarEP9LKHkt+MvUAtmhGS1TJ6IpztR1vGGjl7gABstm+TgwL+zYgS0aYa8g1IyQa17BU5fZOIfMJ1pfxqMmZ+//gzw4MCVhzlqLCep+5RnidojvA8JafoUmXpAMnE/8Ms+g+KxPiNn7lEM=
-Received: from AM6PR04MB5334.eurprd04.prod.outlook.com (2603:10a6:209:50::28)
- by VI1PR04MB5744.eurprd04.prod.outlook.com (2603:10a6:803:e4::24) with
+ bh=iZmPe9T8HYP/sRmJXJqUnt4rxmom/RAuzEcGG4HMJGY=;
+ b=0XtsdkipG1fZWfK0k8kLsuUbDfANS27U8P3giV4+vzUT0IjUapB+OSEHheOSsjL7CTOVCO+lPGor9lt9ObVwjxaH4HKES9YZpbTS8W5TG5WHfOPTH15XFoSnqmg7IL0CUnJOkkWweS/pXeXTqnVXL5uKZEcudHrR+Ma6r3pDyOc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB4877.namprd12.prod.outlook.com (2603:10b6:5:1bb::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Thu, 23 Jun
- 2022 11:09:43 +0000
-Received: from AM6PR04MB5334.eurprd04.prod.outlook.com
- ([fe80::99e:6ee:d17:e114]) by AM6PR04MB5334.eurprd04.prod.outlook.com
- ([fe80::99e:6ee:d17:e114%5]) with mapi id 15.20.5373.015; Thu, 23 Jun 2022
- 11:09:43 +0000
-From:   Gaurav Jain <gaurav.jain@nxp.com>
-To:     Jiang Jian <jiangjian@cdjrlc.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>
-CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] [PATCH] crypto: caam - drop unexpected word 'a' in comments
-Thread-Topic: [EXT] [PATCH] crypto: caam - drop unexpected word 'a' in
- comments
-Thread-Index: AQHYhtB+o2ueF9uQqk6MJtqThgvv261c1bBg
-Date:   Thu, 23 Jun 2022 11:09:43 +0000
-Message-ID: <AM6PR04MB533467A651C6443982B60A2CE7B59@AM6PR04MB5334.eurprd04.prod.outlook.com>
-References: <20220623071123.12885-1-jiangjian@cdjrlc.com>
-In-Reply-To: <20220623071123.12885-1-jiangjian@cdjrlc.com>
-Accept-Language: en-US
+ 2022 11:11:04 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e0fd:45cf:c701:2731]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e0fd:45cf:c701:2731%6]) with mapi id 15.20.5373.015; Thu, 23 Jun 2022
+ 11:11:04 +0000
+Message-ID: <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
+Date:   Thu, 23 Jun 2022 13:10:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: DMA-buf and uncached system memory
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a2ba5e5c-bc9f-49b4-7e3c-08da5508e013
-x-ms-traffictypediagnostic: VI1PR04MB5744:EE_
-x-microsoft-antispam-prvs: <VI1PR04MB5744441673651F90DA0774BEE7B59@VI1PR04MB5744.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zqUFv0eFdiEW/QZa3yCQSTy8rJzfJZY9Kc0VMzFY20u1POhSogg/w41CEd2FC05epZm8x9gHXZQWSbEme0tWskUndWya03kKRELj6VUpbZSw8mvuDcC3ivyASBtALCiXNaMmEZSopNHO6JP4S4IVyCkrL/m1DDwSxoeGNMdgLOuObnMUvzgqwgwVmIRwKwQ9HV1dqyEW5D5I0hHix0q157GKUclGOyBKJbquSCJ3BIOMrlsoHZGrqHeTREhCQDC3bjmh/06RcLRwUqxnAv0GD8YJDaHT3WOb3W3gfi2Y/pyprB3VgZuJSXrMXDZhWcHaK3JQZcHEbQNdd2EN0dJd72OQeqlTr9BaXRlEL4/Cq9zdTjOlU6HavN5Zi/L1P9DqyikpkUd4+o27Bk1xnMCMSHTeCmPxSULtOXXQPVkRxmEkJ5I2yPp1mBZEWzxF8j62+SD+RwNTyhsB7H7AFJqnVFmbZUccNdvuuev3s+QnADtLO6qaRcyDsLiIt8JQuADATWX5BLpsLtp3Hj3cFdx9efQnlBe3FmN1xi6DGGxB16vst1uk1WIUeUYXlgxmOG2eA9px6C0RS/rYo1bjT7HksMlLaZJ6/uSuMhmQUm9fl3bEPyrYvxhQLsYf7//n/Ygrsl5N++HqAX5kp8yisR991XVnXmTog8fgZrCRNKeaqBwxuDj07YDSlJgUdZbXy4wO1KYtwCgN1/1wtBv0xl0MdFVBEvmV/BWsGU3hsEbd6G6NMc0AHqVNMMK+mSV/Mn5T
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5334.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(136003)(376002)(366004)(86362001)(186003)(71200400001)(38100700002)(33656002)(66946007)(66556008)(76116006)(66476007)(4326008)(66446008)(64756008)(316002)(54906003)(8676002)(6636002)(110136005)(6506007)(478600001)(38070700005)(52536014)(41300700001)(122000001)(55236004)(53546011)(8936002)(26005)(7696005)(44832011)(55016003)(83380400001)(5660300002)(2906002)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EZqkmZWIBKVCgEJS3BkoKGxUtsLLWzhVf9N1Qm2GnCFRDq81N6W3x7a51V16?=
- =?us-ascii?Q?2BcSUADUsqfpy3R/AyLhRSo3/FJYqfwuuLpkTNMUYqDdTld+AkuhhakCfuF+?=
- =?us-ascii?Q?9SNrW3dZKMulLYV/Tchv8umH1PtJL+CCOR71mMB6J77q+Cq5DIWcq5RcApln?=
- =?us-ascii?Q?szkEgGJKo6ylvASF+ZDLc15z680/DLecMNXikoPiNtfrZTOtwuvBHcdPlRnA?=
- =?us-ascii?Q?9ZCNuBcJH2ZTH7AaBGI2I1TtlYdYXb7K87xJV1aoJudnNbQFtRx0spiOYuws?=
- =?us-ascii?Q?6IfP31yuzpMMRitDYhqg1uTcswa45rczlw027CXlQjaWlK49oKHKpLpVDeYL?=
- =?us-ascii?Q?00P1b3G/0UaJ0DQIcr7Fu+kwNS7/2nFY3WeN6637dylzCFIc8DGUjKz3toL6?=
- =?us-ascii?Q?1LojO63Os/03NBx4SBzpbXqWyYlyhtHmOZA+wrTYslUiapah5uym6Kv2KODe?=
- =?us-ascii?Q?K1cVHW6NaKnhVcXSDIs8+8N3aqLiiwYO7XOyoCREXLH1JAXGh8EHrPxyFxCR?=
- =?us-ascii?Q?Rcvj885ciMdSTgptL+YCw6uVmbQbcYMqc+jOrgncEBEuxEvvUXk8gruyQpPi?=
- =?us-ascii?Q?y2zCDdNHPYilRDEe/Z5DYtKIOyQn5Ti/fniK/RlhlzUiJTtyjuN4jKXI4+0c?=
- =?us-ascii?Q?2z4QPvwZZNa8wwn6BFHAUd8SNOCZda0JWinLhAVc+3QClnu+1nt36qiUYCTT?=
- =?us-ascii?Q?mmRG1CJKXCFljFAIoS6ZwbrHWSTMvgCHiwUlQyoaij8yfVBZ3fltomWMd6JM?=
- =?us-ascii?Q?70lniiBu4ICl1RFvLpy1IdMywIUvDO/b59H50mSQNEDE7XIZI9mioo4of+XB?=
- =?us-ascii?Q?90gbn53wHkNu63+3Nnk2m7c3ZeQubdketf2OHugjRPxteHlyHHc5dPcPTZTy?=
- =?us-ascii?Q?v597iKN5UVX2JsOMldsxHud0pNv5/jo0+RDr79QJnESiBsNqFWctor77tn35?=
- =?us-ascii?Q?n3NLM99aSDKRPXnSsfO38ELjpIMTxld3PtZcxfTtE/nXSQkah7Fa0Bo68Chg?=
- =?us-ascii?Q?/pd7hHFIuaFkzGAYWzVlh6v/uatlL8R0z2xsNuaRMg1h1Q9kwDn9Ea9cKqlU?=
- =?us-ascii?Q?D9VTm+UpKKMh8faUt2dhQh5k6Abs9GETQCVa0/nE+5t1mosMQxKOFI83cuYR?=
- =?us-ascii?Q?51axSzssnjUw+iX55W/ZsR0AVQywiu4NkVVJlbyOZ6hZaV9O8fVwb0ncW2/p?=
- =?us-ascii?Q?zkQmMjJY3dGGh7mdXrZH8aiyYhDcLwswuIjzkxFfvBmJsqFfi6cjHtB/4RO8?=
- =?us-ascii?Q?/UOVAayO0qE9r2EOkocSHJoips4ijwMHQgWHTTsaOr9zwzNrf+ViAp97M0sA?=
- =?us-ascii?Q?43Gpb0r0uGYJjZVI/ALetkcJKtPVkbDom/jj4HkBBMkJ0IIjA4hoS22l9SEL?=
- =?us-ascii?Q?wyL7oYvOuyJjvXivky6soNTBMJ7DkZoqzTGAtFLpeAl7s6ZRqfNJzgWosOK6?=
- =?us-ascii?Q?yLem0m4O+hu3u5IebdlR4jzX6HfGM6sUUWNS5evRTxy2hXE1CsBVngiDIJws?=
- =?us-ascii?Q?q2epQF0+ZJuzltLxdF8OZKGHwHxjzJpJ1fbxnI166BFoR/WhdH5I/OiTjsNe?=
- =?us-ascii?Q?CW/l9wCdG68uyVUXUFrmsYii5iudsvD5EuNkL1DZ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+ <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
+ <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
+ <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+ <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+ <20220623101326.18beeab3@eldfell>
+ <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+ <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+ <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+ <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
+ <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
+ <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
+ <05814ddb-4f3e-99d8-025a-c31db7b2c46b@amd.com>
+ <708e27755317a7650ca08ba2e4c14691ac0d6ba2.camel@pengutronix.de>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <708e27755317a7650ca08ba2e4c14691ac0d6ba2.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM5PR04CA0001.eurprd04.prod.outlook.com
+ (2603:10a6:206:1::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a482e23b-0270-4bae-2d9a-08da55091066
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4877:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4877CA46FDFD8CD8330826F683B59@DM6PR12MB4877.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZWnYly2+OBpRyqlmsOeF+I2xM1x1hiAmgWCRjv1fu8NGr/upjA4HIMsFRZicSUXDGAm2BC2Vd2HenRjdNktWLiE1gWih7Xjgi+nlfyVlvKYGbwE+Y647U+SDMESQEIb2kEJ7mS607flCV/5DJFVxdRSZWayiFjmh1azbJWFNUL1yibjZDTkkrF4DdA0ulfSJmeEChG6pw/LETnsSg8wVhedF31tpxckjUVGhQAJvK0lHu9nZoqs/+MAP0Nlhubma9wSnjBiNopqawzYUmfP/+SQl7MMqS22hlr7mX6eINEfysLcKEHIF/sHstMR9xa0eDcBhbBAqcidTEPziRShNbEIClMhFlyqVjVcERAgimRHe8TsH7ro1H6GImHX0vFqwmVRWK7OJhrhZ98/34BPpuPVFND13T9OOh2vonOnvZhD/OwWW46ye2HCjBC/mZRaCS/hIIytTpYADOvPbwnP0VVTpgMELsM6s/MnlgtqNreivC7185Jqlu52Uu79gpLroEpNccE49GJfItwCxIt7O7U77i0g+txk6gD3+r4JYsgoQgGArrMYQePc5JUx4fL1YX90vHaRv3wwlvhDgfjECqXD9FH4UqS/fhjB/w8fRe/zSzqUVot4WfveqBV8vUtjwpusS7usQNmK5JvdC42PVvZ1U82pxJmbjaYHcJ8OegywmN9uMuig4Qns1/TkUcca+A6L2Hqjr6I3hYTL3Ke7xC9XfNpSAN3c2dQVVvtk/tsULMPpDAYU0oAqs6r4mW2wepHwyxsdBF1SsVIezTxXmPjDreDIGBTp/4qUdTr/tJdY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(366004)(39860400002)(376002)(6486002)(478600001)(6666004)(186003)(6506007)(54906003)(26005)(8936002)(2616005)(31696002)(5660300002)(6512007)(86362001)(66476007)(4326008)(316002)(83380400001)(41300700001)(8676002)(66946007)(66556008)(38100700002)(31686004)(36756003)(2906002)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enF3SHNpTkVFeEdqeWFYVlZ3YkpjU3paY1BvWWRMblFSWWpzYU9jZlMxemdi?=
+ =?utf-8?B?VVFhRm9BdjNlMDhZaWkxdXY2WHZMTTcraG96MUlXZmRFMFJqSU1SVnBSNys0?=
+ =?utf-8?B?c1RORGJoVDBibjNZeThJU0lVbUUvcTA4Ui92NWs0R3pHeWNaTm5RZDk0ajR1?=
+ =?utf-8?B?YVFhUG80ZGEvMGRzb2VlK3EzcUM1SXh6UzhTdmExTVV6cnNYSS9OTE1jZnV3?=
+ =?utf-8?B?OGNic2c4NUx5c0pmd09Id2RqUjhhamZlRGp2d3hNRGVkb3U5d3E0KzBxcDJt?=
+ =?utf-8?B?WWN2NktURjFSLy82ekQwRnV3RXdFd0JHWGRvVlBiZURQWlJmYVNsbXRWUHhi?=
+ =?utf-8?B?L3NnWllPVXFmcEFjR2FJNkE2WktGQU5RV1E0aXM1ME5Gd3RzcUNyTXQvMUJz?=
+ =?utf-8?B?TzNtcVYrb2psaTB2cE8vd2l6a0ZOczZGK3U3T3M4VHJ0T015Y0xlQ0IwWWx2?=
+ =?utf-8?B?ZXhmZjBLSlRLKy9Jd0xJM2RDYzdQdHlhQ2h1L3BrTm9sWjdnbm44WFZOWUdC?=
+ =?utf-8?B?TFRqelpYUWk1czVuYk1kcjQ3aGFObEVQRFJXU2x0QkRaejZsWlFxMDcwSzZN?=
+ =?utf-8?B?UVMvVnNCVEZTT2xwQ05OYzZhZkZzdFV6VTBjazRlMk9YR3NCRkRYSWhISWVx?=
+ =?utf-8?B?RjR6NGxrMkxETjU1OGtMTEwrTnlWRXFBRU5GYmRqSzh3QWJUQzVqelJONFpz?=
+ =?utf-8?B?aEhYbldNVG41c1ZuTVFWakM2MFlxRmNyS1BERytRWjlldTV2dVFNdXB5TzE2?=
+ =?utf-8?B?d0FqMFhWZ01VOHptZUNaQnlXRjIxUXpwaGo5c3BWaWVQeVBlSnVseXVNWm5y?=
+ =?utf-8?B?WnMxWlZHTkVhRWZnQXI2MFNqaElqNjZrY3ViekFhUkpUbUNEM09XbERTNTN1?=
+ =?utf-8?B?WkVhQ2ExeXZFTmgzRnpTc3hIWXBoUVJuY1BSWmprWkkxZUU3ZGRDZDVrdmFv?=
+ =?utf-8?B?MG9NUXp2N2pqMzljdWVXdTc5aFlUR1lrR3dmcnNaUzV5Ri9PY3o3MERYbHpQ?=
+ =?utf-8?B?QWljNWhLaEh5eDJmSmtOL1c0TWJ6OXkzaytlbzZLN2lhcXhTbUZjcmkxWmRX?=
+ =?utf-8?B?TkZkY1ZwNURlS1IxZHFWRnUxcEo5YklDRFd6NWNicVVYZklZbkF0Qy8rcDl4?=
+ =?utf-8?B?azJaZHRFZ1liVG0vU25uRTluU3lVMEtwYld0OTZOOVNpeVhWL1dXZVJHT1c2?=
+ =?utf-8?B?MFU5Z3JQcHE3azFXT0k0b0RIUFZ4NnFBNUpFbDNVcWdRa1A2b3FFSXp5anhV?=
+ =?utf-8?B?aGFEdmZUbUxWLzNHRkdKbFhtcDJRUVpjSkw2VmswZHhzN2Y5Sk1xWXNIRzRn?=
+ =?utf-8?B?WjBNWS9DOVpWUTlNY0lpUEN0dmFrb0ViL2w2RjJBdDh1b2wwZU1zL29iZlNj?=
+ =?utf-8?B?bjg1RlRNN1JIcE82VE5NL1BiVzJ2MTZUb3huclJlM1hONmJRdnhmY1RCRStC?=
+ =?utf-8?B?VmVMejZ3Ly8wL1lXNTc5dFZzNkRHK09aMjB5S3htbHJ1TFlnSTR6emh0aVh2?=
+ =?utf-8?B?QWxvMU5JdnBVa3pwbE5oRnBDMHo1VEZ0NkJnYzlyLzFSWEhVWWZTamVUMHpt?=
+ =?utf-8?B?REVHYksyNzhDTnI1ME95YVplbDloOFlObkZKQWRuOGRib24xdWhoSWFwZlRn?=
+ =?utf-8?B?Q05lb3NmZm5tYVFQeXd4cTZLTG1sNEJNNkV5OGN2YkJsdHFncDdyWko5V2sz?=
+ =?utf-8?B?eURaajZYRWt0dkJJeWdndmk4elZPQkVOM0ZnNm1NOUh0d3d5VGU0My8vd3RZ?=
+ =?utf-8?B?elNzQjNzWmhyZS9CMFNNcktFckprQkhnQzY1cmRKWEZib0xNaDBYd0g4OUhw?=
+ =?utf-8?B?eXMwNU9aaVk5U3pxczhNOWY2UlFUQkMwNHlmeGYrSXlzbU5jNUdIMllCRjBW?=
+ =?utf-8?B?enlvQnp5WGV5elNvK0QyOVRlcHdYZ1lMMDVzMTM5Z2IyNkl5MndjZHEyWTJl?=
+ =?utf-8?B?K0tmVmMyY0lRbk01TzRFVFFxcmJuazN0aHZwQytpTm1NNGdvbWRqWmNPeEMw?=
+ =?utf-8?B?NERWb1NhWnQ3M1E2MG5hbTdQb3NqMHlEU3pHdmxTWWZ6c0g1Z2J5SjBINVdo?=
+ =?utf-8?B?WnBOUlExa1EvVEMzVkU5d3dxQlNuY05PRE1qTlZSNlJFRXhPdk5xMmNrU0U1?=
+ =?utf-8?Q?njyMa5CXnnkMy31/5rgX3/z07?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a482e23b-0270-4bae-2d9a-08da55091066
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5334.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2ba5e5c-bc9f-49b4-7e3c-08da5508e013
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2022 11:09:43.3663
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 11:11:04.6888
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Xkn+tpOGqCIm4Fk1aars56kIUrdI/kD+5/1M1btZkmHrcMAO64kG0Vc2vYk1HpIPgTHfbG/EDGqu6JAMHYTO+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5744
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vhMi7gSCjWF3f23AzBSmGTUiP04FF2A3E6L/5L5aC2v4WvIiV8Eayb2II58gOeLo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4877
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -121,64 +144,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Gaurav Jain <gaurav.jain@nxp.com>
+Am 23.06.22 um 12:13 schrieb Lucas Stach:
+> [SNIP]
+>>> On most of the multimedia
+>>> targeted ARM SoCs being unable to snoop the cache is the norm, not an
+>>> exception.
+>>>
+>>>> See for example on AMD/Intel hardware most of the engines can perfectly
+>>>> deal with cache coherent memory accesses. Only the display engines can't.
+>>>>
+>>>> So on import time we can't even say if the access can be coherent and
+>>>> snoop the CPU cache or not because we don't know how the imported
+>>>> DMA-buf will be used later on.
+>>>>
+>>> So for those mixed use cases, wouldn't it help to have something
+>>> similar to the dma_sync in the DMA-buf API, so your scanout usage can
+>>> tell the exporter that it's going to do non-snoop access and any dirty
+>>> cache lines must be cleaned? Signaling this to the exporter would allow
+>>> to skip the cache maintenance if the buffer is in CPU uncached memory,
+>>> which again is a default case for the ARM SoC world.
+>> Well for the AMD and Intel use cases we at least have the opportunity to
+>> signal cache flushing, but I'm not sure if that counts for everybody.
+>>
+> Sure, all the non-coherent arches have some way to do the cache
+> maintenance in some explicit way. Non coherent and no cache maintenance
+> instruction would be a recipe for desaster. ;)
+>
+>> What we would rather do for those use cases is an indicator on the
+>> DMA-buf if the underlying backing store is CPU cached or not. The
+>> importer can then cleanly reject the use cases where it can't support
+>> CPU cache snooping.
+>>
+>> This then results in the normal fallback paths which we have anyway for
+>> those use cases because DMA-buf sharing is not always possible.
+>>
+> That's a very x86 centric world view you have there. 99% of DMA-buf
+> uses on those cheap ARM SoCs is non-snooping. We can not do any
+> fallbacks here, as the whole graphics world on those SoCs with their
+> different IP cores mixed together depends on DMA-buf sharing working
+> efficiently even when the SoC is mostly non coherent.
+>
+> In fact DMA-buf sharing works fine on most of those SoCs because
+> everyone just assumes that all the accelerators don't snoop, so the
+> memory shared via DMA-buf is mostly CPU uncached. It only falls apart
+> for uses like the UVC cameras, where the shared buffer ends up being
+> CPU cached.
 
-> -----Original Message-----
-> From: Jiang Jian <jiangjian@cdjrlc.com>
-> Sent: Thursday, June 23, 2022 12:41 PM
-> To: Horia Geanta <horia.geanta@nxp.com>; Pankaj Gupta
-> <pankaj.gupta@nxp.com>; Gaurav Jain <gaurav.jain@nxp.com>
-> Cc: herbert@gondor.apana.org.au; davem@davemloft.net; linux-
-> crypto@vger.kernel.org; linux-kernel@vger.kernel.org; Jiang Jian
-> <jiangjian@cdjrlc.com>
-> Subject: [EXT] [PATCH] crypto: caam - drop unexpected word 'a' in comment=
-s
->=20
-> Caution: EXT Email
->=20
-> Drop the unexpected word 'a' in the comments that need to be dropped
->=20
-> * This is a a cache of buffers, from which the users of CAAM QI driver
-> -->
-> * This is a cache of buffers, from which the users of CAAM QI driver
->=20
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
-> ---
->  drivers/crypto/caam/caamalg_qi2.c | 2 +-
->  drivers/crypto/caam/qi.c          | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/crypto/caam/caamalg_qi2.c
-> b/drivers/crypto/caam/caamalg_qi2.c
-> index 6753f0e6e55d..4b81fb33f199 100644
-> --- a/drivers/crypto/caam/caamalg_qi2.c
-> +++ b/drivers/crypto/caam/caamalg_qi2.c
-> @@ -29,7 +29,7 @@
->                                  SHA512_DIGEST_SIZE * 2)
->=20
->  /*
-> - * This is a a cache of buffers, from which the users of CAAM QI driver
-> + * This is a cache of buffers, from which the users of CAAM QI driver
->   * can allocate short buffers. It's speedier than doing kmalloc on the h=
-otpath.
->   * NOTE: A more elegant solution would be to have some headroom in the
-> frames
->   *       being processed. This can be added by the dpaa2-eth driver. Thi=
-s would
-> diff --git a/drivers/crypto/caam/qi.c b/drivers/crypto/caam/qi.c index
-> 8163f5df8ebf..49439d0d1b3c 100644
-> --- a/drivers/crypto/caam/qi.c
-> +++ b/drivers/crypto/caam/qi.c
-> @@ -75,7 +75,7 @@ bool caam_congested __read_mostly;
-> EXPORT_SYMBOL(caam_congested);
->=20
->  /*
-> - * This is a a cache of buffers, from which the users of CAAM QI driver
-> + * This is a cache of buffers, from which the users of CAAM QI driver
->   * can allocate short (CAAM_QI_MEMCACHE_SIZE) buffers. It's faster than
->   * doing malloc on the hotpath.
->   * NOTE: A more elegant solution would be to have some headroom in the
-> frames
-> --
-> 2.17.1
+Well then the existing DMA-buf framework is not what you want to use for 
+this.
+
+> Non-coherent without explicit domain transfer points is just not going
+> to work. So why can't we solve the issue for DMA-buf in the same way as
+> the DMA API already solved it years ago: by adding the equivalent of
+> the dma_sync calls that do cache maintenance when necessary? On x86 (or
+> any system where things are mostly coherent) you could still no-op them
+> for the common case and only trigger cache cleaning if the importer
+> explicitly says that is going to do a non-snooping access.
+
+Because DMA-buf is a framework for buffer sharing between cache coherent 
+devices which don't signal transitions.
+
+We intentionally didn't implemented any of the dma_sync_* functions 
+because that would break the intended use case.
+
+You can of course use DMA-buf in an incoherent environment, but then you 
+can't expect that this works all the time.
+
+This is documented behavior and so far we have bluntly rejected any of 
+the complains that it doesn't work on most ARM SoCs and I don't really 
+see a way to do this differently.
+
+Regards,
+Christian.
+
+>
+> Regards,
+> Lucas
+>
 

@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C139F55894B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF15255894D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiFWTlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
+        id S229460AbiFWTlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiFWTku (ORCPT
+        with ESMTP id S231514AbiFWTlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:40:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 233A4FD8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656012694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nmEi4t1UpiJzBwiXbayrACz8FUOD/bWJxWRST4uLWCo=;
-        b=IfzG2W1lyiuV4RSkqryDh7sGdubF2sPMIM0q27+ET0BFoY5e3E6S3EkLzkGa/yFMTHLZn+
-        kKNts6p9uUor8e90Ag4FNQQ8yorFImES8VSjnPQqV02URHAAM9JElaSVkbnQqPfQy8fKmg
-        2Z3wP0uhw6xaXkSTQyF2/uHk4ZhFrIM=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-mmgCd0t2NLSh7oJBL_wGyQ-1; Thu, 23 Jun 2022 15:31:32 -0400
-X-MC-Unique: mmgCd0t2NLSh7oJBL_wGyQ-1
-Received: by mail-io1-f69.google.com with SMTP id f18-20020a5d8592000000b0067289239d1dso179607ioj.22
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:31:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nmEi4t1UpiJzBwiXbayrACz8FUOD/bWJxWRST4uLWCo=;
-        b=AY0IxjgHYDqqGHAAK+HUI52YLoAZkERzJ4iQ/SuJEO4c2jxZwx4onbs0Gy1Ske3eUn
-         DAay4acrCoK5ODoiOlC+NAe0JSAna5NKADm2BnV5ftWuW4wBQs5tC2WRppZU2fkfX0em
-         YPOO+Q8vVv6k/1C8AOsfwp9o5Ng7rcRy1Jt8TFeTW+CG58EAT8WtBDPRQ4Luv1vpD4vU
-         reyj1xVq1piCGKpbKqp7AbD8p8YedrDSawU+F7lT5NMMZ0t6NIopZbZF46jY/RZyedxD
-         mA0RoL3VLjrW9Cd4DE2RCJ85RY09aTXj6+2HkmQfqrZ30mvqO4mvh9v3RC6aGMyo+qBa
-         6jaQ==
-X-Gm-Message-State: AJIora9N6xPAbh6Kv460OOGM+4haASXIGk8DnuddqFbQd+5u2c261BS/
-        8G0Bz6qt12mPaHi7xxtdx4psQCBptzyRb9NtFuxTBoSuTP1xoJaF4eYbZWSXG+WWslXFM4yLt1d
-        KgZotDMAsOKC6OEI4xxCfXJdf
-X-Received: by 2002:a6b:2c89:0:b0:669:aa1e:7790 with SMTP id s131-20020a6b2c89000000b00669aa1e7790mr5626166ios.49.1656012692234;
-        Thu, 23 Jun 2022 12:31:32 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v539MBz3A8fODK2oWdbD7Ma53P7m9iR4VQcs8hRmUxYNEp/givO9aGTtS2tXnL4Aiqc6xjVg==
-X-Received: by 2002:a6b:2c89:0:b0:669:aa1e:7790 with SMTP id s131-20020a6b2c89000000b00669aa1e7790mr5626159ios.49.1656012691992;
-        Thu, 23 Jun 2022 12:31:31 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id w2-20020a92db42000000b002d91d4d8ae0sm193674ilq.20.2022.06.23.12.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 12:31:31 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 15:31:29 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>
-Subject: Re: [PATCH 4/4] kvm/x86: Allow to respond to generic signals during
- slow page faults
-Message-ID: <YrS/kegBGqsSLO7y@xz-m1.local>
-References: <20220622213656.81546-1-peterx@redhat.com>
- <20220622213656.81546-5-peterx@redhat.com>
- <YrR8sKap6KHT22Dx@google.com>
+        Thu, 23 Jun 2022 15:41:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C408040930
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:31:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86726B82506
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 19:31:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E6FC341C7;
+        Thu, 23 Jun 2022 19:31:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656012714;
+        bh=hfn7MS7c60aS32wAZk+VBab7erUth+gMMmPjek20u6w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nFPwT5TjxvKyH95nkrvHyOzx3Dfr74NOojDIej/rUolbCIiulRbJqg6uQEQnVwk6y
+         4ebzuSmA+FMqfXT/aJqmuWcSPctzC2VjTxIywuKFHXNRJRC6aINqsZraqkKaWwe0T9
+         WWa4yhyrSeymZuWH/tq9DAY83Qil9ZUjLd6LUuAxMvcwlP4268DIJymAlcrl+V1nKi
+         HeCVhnnIqDs98NoxTeSv5B3e0/xISFzaYFW0XUp9+0RlRHBG9dJsoCngTMxjIJ5jBs
+         TRHt5VLWHxD3JaFp5g9IGMIqWZ1tmo3fHmKXN5W6227tZsX/SVOSC8dEBDlr9/XIav
+         W9nz4ZnJxmkrQ==
+From:   Will Deacon <will@kernel.org>
+To:     andrey.konovalov@linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] arm64: kasan: do not instrument stacktrace.c
+Date:   Thu, 23 Jun 2022 20:31:32 +0100
+Message-Id: <165599625020.2988777.9370908523559678089.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <c4c944a2a905e949760fbeb29258185087171708.1653317461.git.andreyknvl@google.com>
+References: <c4c944a2a905e949760fbeb29258185087171708.1653317461.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YrR8sKap6KHT22Dx@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,76 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Sean,
-
-On Thu, Jun 23, 2022 at 02:46:08PM +0000, Sean Christopherson wrote:
-> On Wed, Jun 22, 2022, Peter Xu wrote:
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index e92f1ab63d6a..b39acb7cb16d 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-> >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> >  			       unsigned int access)
-> >  {
-> > +	/* NOTE: not all error pfn is fatal; handle intr before the other ones */
-> > +	if (unlikely(is_intr_pfn(fault->pfn))) {
-> > +		vcpu->run->exit_reason = KVM_EXIT_INTR;
-> > +		++vcpu->stat.signal_exits;
-> > +		return -EINTR;
-> > +	}
-> > +
-> >  	/* The pfn is invalid, report the error! */
-> >  	if (unlikely(is_error_pfn(fault->pfn)))
-> >  		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
-> > @@ -4017,6 +4024,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> >  		}
-> >  	}
-> >  
-> > +	/* Allow to respond to generic signals in slow page faults */
+On Mon, 23 May 2022 16:51:51 +0200, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
 > 
-> "slow" is being overloaded here.  The previous call __gfn_to_pfn_memslot() will
-> end up in hva_to_pfn_slow(), but because of passing a non-null async it won't wait.
-> This code really should have a more extensive comment irrespective of the interruptible
-> stuff, now would be a good time to add that.
-
-Yes I agree, especially the "async" parameter along with "atomic" makes it
-even more confusing as you said.  But isn't that also means the "slow" here
-is spot-on?  I mean imho it's the "elsewhere" needs cleanup not this
-comment itself since it's really stating the fact that this is the real
-slow path?
-
-Or any other suggestions greatly welcomed on how I should improve this
-comment.
-
+> Disable KASAN instrumentation of arch/arm64/kernel/stacktrace.c.
 > 
-> Comments aside, isn't this series incomplete from the perspective that there are
-> still many flows where KVM will hang if gfn_to_pfn() gets stuck in gup?  E.g. if
-> KVM is retrieving a page pointed at by vmcs12.
+> This speeds up Generic KASAN by 5-20%.
+> 
+> As a side-effect, KASAN is now unable to detect bugs in the stack trace
+> collection code. This is taken as an acceptable downside.
+> 
+> [...]
 
-Right.  The thing is I'm not confident I can make it complete easily in one
-shot..
+Applied to arm64 (for-next/stacktrace), thanks! I had to fix conflicts
+in both of the patches, so please can you take a quick look at the result?
 
-I mentioned some of that in cover letter or commit message of patch 1, in
-that I don't think all the gup call sites are okay with being interrupted
-by a non-fatal signal.
+[1/2] arm64: kasan: do not instrument stacktrace.c
+      https://git.kernel.org/arm64/c/802b91118d11
+[2/2] arm64: stacktrace: use non-atomic __set_bit
+      https://git.kernel.org/arm64/c/446297b28a21
 
-So what I want to do is doing it step by step, at least by introducing
-FOLL_INTERRUPTIBLE and having one valid user of it that covers a very valid
-use case.  I'm also pretty sure the page fault path is really the most
-cases that will happen with GUP, so it already helps in many ways for me
-when running with a patched kernel.
-
-So when the complete picture is non-trivial to achieve in one shot, I think
-this could be one option we go for.  With the facility (and example code on
-x86 slow page fault) ready, hopefully we could start to convert many other
-call sites to be signal-aware, outside page faults, or even outside x86,
-because it's really a more generic problem, which I fully agree.
-
-Does it sound reasonable to you?
-
-Thanks,
-
+Cheers,
 -- 
-Peter Xu
+Will
 
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev

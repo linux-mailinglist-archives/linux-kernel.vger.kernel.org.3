@@ -2,146 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9BE5583B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A61558023
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiFWRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S232209AbiFWQnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbiFWRcY (ORCPT
+        with ESMTP id S232401AbiFWQmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:32:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53737794D9;
-        Thu, 23 Jun 2022 10:05:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ED72B82490;
-        Thu, 23 Jun 2022 17:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053F0C3411B;
-        Thu, 23 Jun 2022 17:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003912;
-        bh=DJOfc8IEF1VN/EqCHdagr52Mi4FS6cladU3yklwt0is=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dr7HuVYc/GWAUVbC+d0+pH4OSzGU/QyLPZxPpd/hBtuvpO5cIAIgLVpJVWtQPULCs
-         RcS1huTyb1rFechbmuvHq2kiYSlov/xWi7ycNxlal8iKzbk9Tj4fDJvAEgv7kbcose
-         xW/r0YrL1Sl5rRfc3b61jYAovK3c33EmPpCMf3t8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 126/237] random: cleanup UUID handling
-Date:   Thu, 23 Jun 2022 18:42:40 +0200
-Message-Id: <20220623164346.779975900@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Thu, 23 Jun 2022 12:42:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECB749911;
+        Thu, 23 Jun 2022 09:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=ZNJjmbuEFB+xE7zO2XCavODcPuKBf6BJxSUuwq7uUcI=; b=sPcn8pTVVFWGlDT37HvjMHED6M
+        J0MkK513JyB5BQr6/RBi6LVOviCaMYgBt2SwSAiJJ//gGJLN4nOMsTWVGScIcXQ9Fo6wi1272ndPM
+        7jVVj5GXuVWSF00NA+UEV100f6KRkfP6RelLOYAyShOy3U6tkp+Mn6kFEtd8ix1K26wM/NnXrLAtg
+        8zNxnVsULjG9+PwQ2pUGT14H/I16nfF7D8H5nXzOZuzNgvDK4kkPvAUQyS7PQO6fuNEizXR9ogmUi
+        O6U/9EKkTs29EmBcru+A54BMavVs0z7dCZSOS7QmGTOB7HVqd4CshkVS+XSLRCS0cu1cS4pcOn+i6
+        16u96kWQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o4Pui-0080gy-Vn; Thu, 23 Jun 2022 16:42:41 +0000
+Date:   Thu, 23 Jun 2022 17:42:40 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Pagecache fixes for 5.19-rc4
+Message-ID: <YrSYAKtoRrrgayrZ@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+The following changes since commit 78ca55889a549a9a194c6ec666836329b774ab6d:
 
-commit 64276a9939ff414f2f0db38036cf4e1a0a703394 upstream.
+  Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi (2022-06-20 09:35:04 -0500)
 
-Rather than hard coding various lengths, we can use the right constants.
-Strings should be `char *` while buffers should be `u8 *`. Rather than
-have a nonsensical and unused maxlength, just remove it. Finally, use
-snprintf instead of sprintf, just out of good hygiene.
+are available in the Git repository at:
 
-As well, remove the old comment about returning a binary UUID via the
-binary sysctl syscall. That syscall was removed from the kernel in 5.5,
-and actually, the "uuid_strategy" function and related infrastructure
-for even serving it via the binary sysctl syscall was removed with
-894d2491153a ("sysctl drivers: Remove dead binary sysctl support") back
-in 2.6.33.
+  git://git.infradead.org/users/willy/pagecache.git tags/folio-5.19b
 
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/char/random.c |   29 +++++++++++++----------------
- 1 file changed, 13 insertions(+), 16 deletions(-)
+for you to fetch changes up to 00fa15e0d56482e32d8ca1f51d76b0ee00afb16b:
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1654,22 +1654,25 @@ const struct file_operations urandom_fop
- static int sysctl_random_min_urandom_seed = 60;
- static int sysctl_random_write_wakeup_bits = POOL_MIN_BITS;
- static int sysctl_poolsize = POOL_BITS;
--static char sysctl_bootid[16];
-+static u8 sysctl_bootid[UUID_SIZE];
- 
- /*
-  * This function is used to return both the bootid UUID, and random
-- * UUID.  The difference is in whether table->data is NULL; if it is,
-+ * UUID. The difference is in whether table->data is NULL; if it is,
-  * then a new UUID is generated and returned to the user.
-- *
-- * If the user accesses this via the proc interface, the UUID will be
-- * returned as an ASCII string in the standard UUID format; if via the
-- * sysctl system call, as 16 bytes of binary data.
-  */
- static int proc_do_uuid(struct ctl_table *table, int write,
- 			void __user *buffer, size_t *lenp, loff_t *ppos)
- {
--	struct ctl_table fake_table;
--	unsigned char buf[64], tmp_uuid[16], *uuid;
-+	u8 tmp_uuid[UUID_SIZE], *uuid;
-+	char uuid_string[UUID_STRING_LEN + 1];
-+	struct ctl_table fake_table = {
-+		.data = uuid_string,
-+		.maxlen = UUID_STRING_LEN
-+	};
-+
-+	if (write)
-+		return -EPERM;
- 
- 	uuid = table->data;
- 	if (!uuid) {
-@@ -1684,12 +1687,8 @@ static int proc_do_uuid(struct ctl_table
- 		spin_unlock(&bootid_spinlock);
- 	}
- 
--	sprintf(buf, "%pU", uuid);
--
--	fake_table.data = buf;
--	fake_table.maxlen = sizeof(buf);
--
--	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
-+	snprintf(uuid_string, sizeof(uuid_string), "%pU", uuid);
-+	return proc_dostring(&fake_table, 0, buffer, lenp, ppos);
- }
- 
- extern struct ctl_table random_table[];
-@@ -1725,13 +1724,11 @@ struct ctl_table random_table[] = {
- 	{
- 		.procname	= "boot_id",
- 		.data		= &sysctl_bootid,
--		.maxlen		= 16,
- 		.mode		= 0444,
- 		.proc_handler	= proc_do_uuid,
- 	},
- 	{
- 		.procname	= "uuid",
--		.maxlen		= 16,
- 		.mode		= 0444,
- 		.proc_handler	= proc_do_uuid,
- 	},
+  filemap: Fix serialization adding transparent huge pages to page cache (2022-06-23 12:22:00 -0400)
 
+----------------------------------------------------------------
+Four folio-related fixes for 5.19:
+
+ - Mark a folio accessed at the right time (Yu Kuai)
+
+ - Fix a race for folios being replaced in the middle of a read (Brian Foster)
+
+ - Clear folio->private in more places (Xiubo Li)
+
+ - Take the invalidate_lock in page_cache_ra_order() (Alistair Popple)
+
+----------------------------------------------------------------
+Alistair Popple (1):
+      filemap: Fix serialization adding transparent huge pages to page cache
+
+Matthew Wilcox (Oracle) (3):
+      filemap: Correct the conditions for marking a folio as accessed
+      filemap: Handle sibling entries in filemap_get_read_batch()
+      mm: Clear page->private when splitting or migrating a page
+
+ mm/filemap.c     | 15 ++++++++++++---
+ mm/huge_memory.c |  1 +
+ mm/migrate.c     |  1 +
+ mm/readahead.c   |  2 ++
+ 4 files changed, 16 insertions(+), 3 deletions(-)
 

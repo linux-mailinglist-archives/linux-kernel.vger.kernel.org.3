@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1D655823B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E58558278
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiFWRMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S232593AbiFWROa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiFWRKz (ORCPT
+        with ESMTP id S229723AbiFWRMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:10:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B2756381;
-        Thu, 23 Jun 2022 09:57:39 -0700 (PDT)
+        Thu, 23 Jun 2022 13:12:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959E82DCC;
+        Thu, 23 Jun 2022 09:57:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9576603E0;
-        Thu, 23 Jun 2022 16:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779D9C3411B;
-        Thu, 23 Jun 2022 16:57:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 007F060B2C;
+        Thu, 23 Jun 2022 16:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC61EC3411B;
+        Thu, 23 Jun 2022 16:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003458;
-        bh=b5PJ7ihy/690AHpeEsqwO2CNN3oz8tPqPwW16jbeZds=;
+        s=korg; t=1656003461;
+        bh=YFSLUmsgfLwiMcvlShyqk9K23fj8lUXfyVTV4G0bNOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pVxEokclQvXEzlbfH7fo0fVv6s08RIqkO5SwHPQNNv29r2O1MyqX0pZjHSGBHsi/y
-         HuafXYJvUVThPOeTGQGpQYl/Pv4KuMUhEEhxeyL3slvcKmFkA7AJWpzYOo4gSZLh7f
-         ojF/8mqVBfl3XVaPrJTDMeAI+u7aDYx+Xrs2M6aA=
+        b=aYKQINNrKG5+/eaf5Yd+g6un6okTUIEH623GaFWnjvmWDWXrsKKJtl8z7++3mjT87
+         Kk+KffML947xCenfOGkUw8nPhxAy83++EFm0MPqJAZfzdtBmNXtutuIOr24t2pJEWz
+         JTz+wFv1K9HhroxsFH4JxgYKUWrt0dNO77nQ1ooA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Eckelmann <longnoserob@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.9 244/264] USB: serial: io_ti: add Agilent E5805A support
-Date:   Thu, 23 Jun 2022 18:43:57 +0200
-Message-Id: <20220623164350.976511933@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>
+Subject: [PATCH 4.9 245/264] usb: gadget: lpc32xx_udc: Fix refcount leak in lpc32xx_udc_probe
+Date:   Thu, 23 Jun 2022 18:43:58 +0200
+Message-Id: <20220623164351.003771829@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
 References: <20220623164344.053938039@linuxfoundation.org>
@@ -54,49 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Eckelmann <longnoserob@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 908e698f2149c3d6a67d9ae15c75545a3f392559 upstream.
+commit 4757c9ade34178b351580133771f510b5ffcf9c8 upstream.
 
-Add support for Agilent E5805A (rebranded ION Edgeport/4) to io_ti.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
+of_node_put() will check NULL pointer.
 
-Signed-off-by: Robert Eckelmann <longnoserob@gmail.com>
-Link: https://lore.kernel.org/r/20220521230808.30931eca@octoberrain
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: 24a28e428351 ("USB: gadget driver for LPC32xx")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220603140246.64529-1-linmq006@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/io_ti.c      |    2 ++
- drivers/usb/serial/io_usbvend.h |    1 +
- 2 files changed, 3 insertions(+)
+ drivers/usb/gadget/udc/lpc32xx_udc.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/serial/io_ti.c
-+++ b/drivers/usb/serial/io_ti.c
-@@ -172,6 +172,7 @@ static const struct usb_device_id edgepo
- 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
- 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
- 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
-+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A) },
- 	{ }
- };
+--- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -3034,6 +3034,7 @@ static int lpc32xx_udc_probe(struct plat
+ 	}
  
-@@ -210,6 +211,7 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
- 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
- 	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
-+	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A) },
- 	{ }
- };
- 
---- a/drivers/usb/serial/io_usbvend.h
-+++ b/drivers/usb/serial/io_usbvend.h
-@@ -215,6 +215,7 @@
- //
- // Definitions for other product IDs
- #define ION_DEVICE_ID_MT4X56USB			0x1403	// OEM device
-+#define ION_DEVICE_ID_E5805A			0x1A01  // OEM device (rebranded Edgeport/4)
- 
- 
- #define	GENERATION_ID_FROM_USB_PRODUCT_ID(ProductId)				\
+ 	udc->isp1301_i2c_client = isp1301_get_client(isp1301_node);
++	of_node_put(isp1301_node);
+ 	if (!udc->isp1301_i2c_client) {
+ 		retval = -EPROBE_DEFER;
+ 		goto phy_fail;
 
 

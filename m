@@ -2,124 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8033C55735A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E76B55735D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiFWGv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        id S230005AbiFWGxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiFWGvW (ORCPT
+        with ESMTP id S229632AbiFWGxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:51:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973AE44773
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:51:21 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1o4Gfk-0001vC-Io; Thu, 23 Jun 2022 08:50:36 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1o4Gff-0003Pg-AE; Thu, 23 Jun 2022 08:50:31 +0200
-Date:   Thu, 23 Jun 2022 08:50:31 +0200
-From:   Sascha Hauer <sha@pengutronix.de>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] driver core: fw_devlink: Allow firmware to mark
- devices as best effort
-Message-ID: <20220623065031.GX1615@pengutronix.de>
-References: <20220622215912.550419-1-saravanak@google.com>
- <20220622215912.550419-2-saravanak@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622215912.550419-2-saravanak@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 02:53:42 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5477B403E4;
+        Wed, 22 Jun 2022 23:53:37 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1655967066tj9ejmus
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 23 Jun 2022 14:51:02 +0800 (CST)
+X-QQ-SSF: 01000000008000B0C000B00A0000000
+X-QQ-FEAT: +WEp/E361GYblO3/pc21UvtZ6OSjDDsc4dVnCkwgklXM7iPTSrfatF6bfod4p
+        aXkoJT/uOmmkgmA+xPzNlGri1+Sg7xxrkDb1cui1pRjZ9zhjAF4+r4Jccc+e9pJur5LkWQj
+        z8qGO/loMcNpZKLoLdJHYyjZMuvXSFFRf0DebjAKxwvWfcn3Yvwk1YuMcSywWlaH6NGhfzp
+        5ZrOFJN/H89oXYoZTrXPxp7FYRZ+exRBGwiPrcQfXM0Vic428NDqiydgXMJMiBZI4qQwS2C
+        FwRVM5rw0JUmf8EuEQo4TjdxDZkZqKqbLqrN4NGdoNC3s7HWur6lZkllBngcgehIgbbz/Vj
+        KAqj/SGv7smRyoipas=
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     bcain@quicinc.com
+Cc:     ebiederm@xmission.com, nathan@kernel.org, mpe@ellerman.id.au,
+        keescook@chromium.org, wangkefeng.wang@huawei.com,
+        jiangjian@cdjrlc.com, linux-hexagon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hexagon: drop unexpected word 'a' in comments
+Date:   Thu, 23 Jun 2022 14:51:00 +0800
+Message-Id: <20220623065100.8268-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 02:59:10PM -0700, Saravana Kannan wrote:
-> When firmware sets the FWNODE_FLAG_BEST_EFFORT flag for a fwnode,
-> fw_devlink will do a best effort ordering for that device where it'll
-> only enforce the probe/suspend/resume ordering of that device with
-> suppliers that have drivers. The driver of that device can then decide
-> if it wants to defer probe or probe without the suppliers.
-> 
-> This will be useful for avoid probe delays of the console device that
-> were caused by commit 71066545b48e ("driver core: Set
-> fw_devlink.strict=1 by default").
-> 
-> Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> Reported-by: Sascha Hauer <sha@pengutronix.de>
-> Reported-by: Peng Fan <peng.fan@nxp.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/base/core.c    | 3 ++-
->  include/linux/fwnode.h | 4 ++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 839f64485a55..61edd18b7bf3 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -968,7 +968,8 @@ static void device_links_missing_supplier(struct device *dev)
->  
->  static bool dev_is_best_effort(struct device *dev)
->  {
-> -	return fw_devlink_best_effort && dev->can_match;
-> +	return (fw_devlink_best_effort && dev->can_match) ||
-> +		dev->fwnode->flags & FWNODE_FLAG_BEST_EFFORT;
+there is an unexpected word 'a' in the comments that need to be dropped
 
-Check for dev->fwnode first. I am running in a NULL pointer exception
-here for a device that doesn't have a fwnode.
+file - arch/hexagon/kernel/traps.c
+line - 262
 
-Sascha
+* Precise bus errors may be recoverable with a a retry,
 
+changed to:
 
+* Precise bus errors may be recoverable with a retry,
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ arch/hexagon/kernel/traps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/hexagon/kernel/traps.c b/arch/hexagon/kernel/traps.c
+index 6447763ce5a9..a1f1085887aa 100644
+--- a/arch/hexagon/kernel/traps.c
++++ b/arch/hexagon/kernel/traps.c
+@@ -259,7 +259,7 @@ static void illegal_instruction(struct pt_regs *regs)
+ }
+ 
+ /*
+- * Precise bus errors may be recoverable with a a retry,
++ * Precise bus errors may be recoverable with a retry,
+  * but for now, treat them as irrecoverable.
+  */
+ static void precise_bus_error(struct pt_regs *regs)
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.17.1
+

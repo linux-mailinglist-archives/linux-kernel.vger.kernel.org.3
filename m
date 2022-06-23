@@ -2,161 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF52C5575F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335055575FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiFWIyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
+        id S230281AbiFWIy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiFWIyp (ORCPT
+        with ESMTP id S230283AbiFWIyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:54:45 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCBC37BC9;
-        Thu, 23 Jun 2022 01:54:44 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ge10so8060802ejb.7;
-        Thu, 23 Jun 2022 01:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9ewocLK4QQe9PxZjCCcv8MwH3fNq/SZdcCp141CybdY=;
-        b=Kqjw6Rve6l85j+tA8aUQq34+hQ66vEsjrz7vZgWhz7Ljx6vlzB/s0S3zyfFQUH/3BT
-         ZkoVvbpAQT0P8iWwpcGzSap2PCc40eq4cSfiuq4QCtmnpAzDkPt+fMI4DBgkA+27LIrI
-         eN16lc3f2jh7/ppkiKXiryX6aWvVb0L2f3CHOBu2BLisB23B+Mm+9+WAoyze/eNLdB86
-         cQ6NsCSLdUsv8Nw+QsCT03NjVe4ZnUmWMNojoAUVbeFNtjfDZOzVbiJhuskuAzLjqHS8
-         udz2ZBV/V0Phaa/vIIg9iK+PVwKhCxdnuv2P+h5O+NOvgH+8yzA4YG26sHiAhVavWVzX
-         /36Q==
+        Thu, 23 Jun 2022 04:54:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8E3936685
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:54:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655974491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ULy9IIamPdfsZSRsFJ2H0uvIsCHgd0HnbDP0BI9tL4I=;
+        b=c1yZ6YjpAvFJsD473U1QzOU78HgoftUsk6hIluYupi2k6gVPIWLkYJ7CH/aqXd/E6DR5+4
+        udgtYrgGZx+mdKNcbFW+yZV6KFCRjeltz7hikwYqZWJ1vaStYwWHhcCgOB+4ZDz4IsPGwl
+        aPpE7YFrxrw1K27YV9LEO96emE5HA0w=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-401-X2EwHh3vMsChFENMyxehBA-1; Thu, 23 Jun 2022 04:54:50 -0400
+X-MC-Unique: X2EwHh3vMsChFENMyxehBA-1
+Received: by mail-pj1-f71.google.com with SMTP id bk18-20020a17090b081200b001ec747bb1f7so997980pjb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:54:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9ewocLK4QQe9PxZjCCcv8MwH3fNq/SZdcCp141CybdY=;
-        b=Bq4CLLAM2UA13887kT4CGcFu3bjt9+1YYLlygNQk2c7KBl2dNhKVbhlkSccynjusvk
-         5koI9pZKZJjhFhaqcQJW5rqCvbgkZZkfqr2dgiOpHLnRfjnsiC94rutEsNTcMJTAYeMv
-         vkteWGfMRjhlHxnSIsa6blnvZQj70+Tuz5lm7JdPng2WV5b9E0VYq2bsM0UGWB4AP/rR
-         0QiqWiBzqkyM9k8P9d/tcozA4VO7QhPsubfwp8ATRdNcwxY8lVF5NR+PDKG1SuWHMuyu
-         6iU7VrBkv6fxbmLfa8VKFtCXGx8tHa9ek7yFid5xd/67pfKZVxE6Gus3iwj+ten850Rk
-         eyNA==
-X-Gm-Message-State: AJIora+pukWAxqt3wxjVn8X5WkbIPS/dudzhqWLwFFzRK77zxyXHqBG2
-        wVeJhOuXYhLKmqELjcCHrS7z2z1uOwyv7bFv5jw=
-X-Google-Smtp-Source: AGRyM1s/cuwwgO+0Sp2pW/dYpZ5m/GlC8Pm/9k9OqASIANcWAar3Aq5myyz+KQKUvdUTygA/txrImEaGpacIQGqXKII=
-X-Received: by 2002:a17:907:6295:b0:703:92b8:e113 with SMTP id
- nd21-20020a170907629500b0070392b8e113mr7172323ejc.594.1655974482584; Thu, 23
- Jun 2022 01:54:42 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=ULy9IIamPdfsZSRsFJ2H0uvIsCHgd0HnbDP0BI9tL4I=;
+        b=4ilcPMxfoUn9BzPgjxOP5DvmcLCTfiqaNvOhltrN4+htQldP8sf7PXXwUxn/3Qyiu+
+         6Z30iQYW1u+6+WelU3mjS+e3xk4MHI3gEdkYR5pvbZmPWv6ocfQ/gt8vb8oTTaasKQyX
+         eA+KVXcvXbWq+CW2zmVzlVqZJw6+jipQQFvAWdJgDls/ixlDkMBUDh9CD4jLPLYnNR9c
+         dqTEgckn5wKpo96Y1Hn2PlPFMHV63mSmSGTzXcL9aMBdkTEbc+hbf6GiC7JPRUZ9sB8V
+         vInG3zR9nvhKioND7liqZD3IWDnzm1ZTbn7jTHYRaMP8eh7C0PEToGwo96ZDycbwQl9P
+         450Q==
+X-Gm-Message-State: AJIora8eTooQfpb6VopFFzRdpXNZillasFvaRcAQmGqN+wBUZtSQSxfZ
+        sZj/CyhukJbaHvMW9KLvkVIkA3EULCAjB4qvfU6d3wTJh6eor/nO8y6U/dfc5xu0D5ONU/tX+Rr
+        FWrOQh4lZ/3JVKgWwZ36G1j+BiXsuFKG/K0tqiWJ7
+X-Received: by 2002:a17:902:ec83:b0:16a:3029:a44 with SMTP id x3-20020a170902ec8300b0016a30290a44mr15842256plg.141.1655974489104;
+        Thu, 23 Jun 2022 01:54:49 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vK4B3HncgW6duS5f+hx8kUoau/VW9nbZ05rE0/VJMQKcwWRVhW79OpJQA/P7Sn6FUm+rj+FSdF2+5UqBofQ2s=
+X-Received: by 2002:a17:902:ec83:b0:16a:3029:a44 with SMTP id
+ x3-20020a170902ec8300b0016a30290a44mr15842235plg.141.1655974488824; Thu, 23
+ Jun 2022 01:54:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
- <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com> <YqDLflKTsYaupArl@sirena.org.uk>
- <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
-In-Reply-To: <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Date:   Thu, 23 Jun 2022 11:54:29 +0300
-Message-ID: <CANhJrGMqUmnSvyNRgRyp40YnGQkD3N_2AZLn94NDp+4RG0_x5w@mail.gmail.com>
-Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
- register layouts
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, Chen-Yu Tsai <wens@csie.org>,
-        jic23@kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, lars@metafoo.de,
-        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org, Linux PM list <linux-pm@vger.kernel.org>
+References: <000000000000b9edeb05e1aca987@google.com> <0000000000008b8cd205e2187ea2@google.com>
+In-Reply-To: <0000000000008b8cd205e2187ea2@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Thu, 23 Jun 2022 10:54:37 +0200
+Message-ID: <CABgObfarsDqG3g1L561CHvg3j0aROSz5zdcB5kOibcjbLN_y9g@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: suspicious RCU usage (5)
+To:     syzbot <syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com>
+Cc:     Alexander Lobakin <alobakin@pm.me>, Borislav Petkov <bp@alien8.de>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Anvin, H. Peter" <hpa@zytor.com>,
+        Jim Mattson <jmattson@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        "Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Networking <netdev@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        xuanzhuo@linux.alibaba.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi dee Ho peeps!
+#syz fix: x86/kvm: Fix broken irq restoration in kvm_wait
 
-Sorry for the late reply.
+On Thu, Jun 23, 2022 at 9:35 AM syzbot
+<syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this issue to:
+>
+> commit c2ff53d8049f30098153cd2d1299a44d7b124c57
+> Author: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> Date:   Thu Feb 18 20:50:02 2021 +0000
+>
+>     net: Add priv_flags for allow tx skb without linear
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11596838080000
+> start commit:   a5b00f5b78b7 Merge branch 'hns3-fixres'
+> git tree:       net
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=13596838080000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15596838080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9cbc6bed3a22f1d37395
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b22abf00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125194eff00000
+>
+> Reported-by: syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com
+> Fixes: c2ff53d8049f ("net: Add priv_flags for allow tx skb without linear")
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>
 
-pe 10. kes=C3=A4k. 2022 klo 18.43 Aidan MacDonald
-(aidanmacdonald.0x0@gmail.com) kirjoitti:
->
-> Mark Brown <broonie@kernel.org> writes:
->
-> > On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
-> >
-> >> -    if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
-> >> +    if (chip->get_irq_reg) {
-> >> +            reg =3D chip->get_irq_reg(base_reg, i);
-> >> +    } else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
-> >
-> > It seems like it would be cleaner and clearer to refactor things so tha=
-t
-> > we always have a get_irq_reg() with standard chips getting given a
-> > default implementation which implements the current behaviour.
->
-> I don't think that is a good way to clean things up. I only intended
-> get_irq_reg() to be a quick hack to solve a problem; in my opinion it
-> would be a poor abstraction to base the API around.
->
-> What I'd suggest is something that will simplify regmap-irq. Instead of
-> defining the base registers, etc. in the chip, introduce a new struct
-> to describe a register group:
->
->     struct regmap_irq_reg_group {
->         unsigned int status_base;
->         unsigned int mask_base;
->         ...
->
->         unsigned int irq_reg_stride;
->
->         int num_regs;
->     };
->
-> The idea is that the registers in a group are linearly mapped using the
-> formula "base + (i * irq_reg_stride)". Then it's possible to allow for
-> multiple register groups in regmap_irq_chip:
->
->     struct regmap_irq_chip {
->         const struct regmap_irq_reg_group *groups;
->         unsigned int num_groups;
->
->         unsigned int main_status_base;
->         unsigned int num_main_status_bits;
->         int num_main_regs;
->
->         ...
->     };
->
-> It should be straightforward to fit existing chips into this model.
->
-> - Chips that use a main status + sub-block IRQ layout will define
->   one register group for each sub-block and continue to describe the
->   location of the main status registers inside of regmap_irq_chip.
->   A group will only get polled if the corresponding main status bit
->   is set -- n'th group is polled if n'th bit is set.
-
-Does this work for devices where a single main status bit can flag
-IRQs in more than one sub-registers?
-
-Best Regards
- -- Matti
-
---=20
-
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));

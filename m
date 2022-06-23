@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2442355782B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129BD55782E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiFWKvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S230112AbiFWKvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiFWKvk (ORCPT
+        with ESMTP id S231341AbiFWKvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:51:40 -0400
+        Thu, 23 Jun 2022 06:51:36 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FB64B425
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:51:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70B4B41A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:51:35 -0700 (PDT)
 Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NAKUqD006859;
-        Thu, 23 Jun 2022 05:51:22 -0500
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NAKUqE006859;
+        Thu, 23 Jun 2022 05:51:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=bNlM6ExkPAMQh4YAtjnCAor0Jwtg9hW9tj0kYJzlsTk=;
- b=LcGVKAgDLNNQSEVhWS7LDRQ+mZM8gCuUOUYLCiXBkcNa48a5pTkRy6ZWp5ELZXd7krof
- 9iJxUXr97k9mhMj8eIEuPsuGq3A/OP9/nEWhqO+nPz9V2OariGc9oK0rHyMGy4Fv3EWl
- FRo6OsMYul1uywVRS3fm1Y/ilWwaiLWaDdNeLztX75tQwhJ5WCPD1Xq7PqPH9FEQX1Vh
- +g0DCf7PES2zS/ZyAre9PxVYA2f3JUYDY0Ay/fKFKpecLVTk2BlwfEaipEVN+wBK02HB
- WAlvdESK1SEFu28hKdWrcKcGkjVbSsnKZkTKAWOM8V3A0361Tn2uXxtZQxR7vwqG2LyC ag== 
+ bh=PqTwzrb4S4WU+IKe42NZ58931YA2zsn+4TLdSNVlyA4=;
+ b=d5Y7RicZHCIcuVwhORgaW2TwwmC4FiYNeUGB+LtM4KbURSkMr4y64k4rsC/MKKr+ziQ7
+ aU4IeN4Zbkh3rSCJHsbLNemLo/xsT9v7ZDaO5xOUz8AR9h6+WLn1vmecNOPc6FVn5fCB
+ szn4neTeZAXmIwXzmJuq+eDoWm789Ypc3fBlCRP3Y1vCYckd5LaMTxwDyVOWIz0wE1SX
+ 1ncV69gMJViHg2mNaPqIZR7Nb6v2K5eNIpW943lZvTABdYtB5FNhZDUfkWuLOiqOAD9R
+ es4L7dWW6qZoxygOauoQwjycBLkfxSPV4fqNqysbNGZyYycpPxtKyjRyNKFwdFY8MsPX gA== 
 Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41f17q-1
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gsc41f17q-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
         Thu, 23 Jun 2022 05:51:22 -0500
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
@@ -39,24 +39,24 @@ Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
  Transport; Thu, 23 Jun 2022 11:51:20 +0100
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 316F1475;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 353A511D3;
         Thu, 23 Jun 2022 10:51:20 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <broonie@kernel.org>
 CC:     <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
         <lgirdwood@gmail.com>, <alsa-devel@alsa-project.org>,
         <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/6] ASoC: cs35l41: Add ASP TX3/4 source to register patch
-Date:   Thu, 23 Jun 2022 11:51:16 +0100
-Message-ID: <20220623105120.1981154-2-ckeepax@opensource.cirrus.com>
+Subject: [PATCH 3/6] ASoC: cs47l15: Fix event generation for low power mux control
+Date:   Thu, 23 Jun 2022 11:51:17 +0100
+Message-ID: <20220623105120.1981154-3-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220623105120.1981154-1-ckeepax@opensource.cirrus.com>
 References: <20220623105120.1981154-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: Yb22yhiQAqv62OHWXfOuIbfANN5Br6ho
-X-Proofpoint-ORIG-GUID: Yb22yhiQAqv62OHWXfOuIbfANN5Br6ho
+X-Proofpoint-GUID: QT_BBaCGrsJ8nfY_jQ9gRizWN6dSzuU2
+X-Proofpoint-ORIG-GUID: QT_BBaCGrsJ8nfY_jQ9gRizWN6dSzuU2
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -67,60 +67,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mixer controls for ASP TX3/4 are set to values that are not included
-in their enumeration control. This will cause spurious event
-notifications when the controls are first changed, as the register value
-changes whilst the actual visible enumeration value does not. Use the
-register patch to set them to a known value, zero, which equates to zero
-fill, thereby avoiding the spurious notifications.
+cs47l15_in1_adc_put always returns zero regardless of if the control
+value was updated. This results in missing notifications to user-space
+of the control change. Update the handling to return 1 when the value is
+changed.
 
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- sound/soc/codecs/cs35l41-lib.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ sound/soc/codecs/cs47l15.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
-index 0c7d1c7912798..04be71435491e 100644
---- a/sound/soc/codecs/cs35l41-lib.c
-+++ b/sound/soc/codecs/cs35l41-lib.c
-@@ -37,8 +37,8 @@ static const struct reg_default cs35l41_reg[] = {
- 	{ CS35L41_DAC_PCM1_SRC,			0x00000008 },
- 	{ CS35L41_ASP_TX1_SRC,			0x00000018 },
- 	{ CS35L41_ASP_TX2_SRC,			0x00000019 },
--	{ CS35L41_ASP_TX3_SRC,			0x00000020 },
--	{ CS35L41_ASP_TX4_SRC,			0x00000021 },
-+	{ CS35L41_ASP_TX3_SRC,			0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,			0x00000000 },
- 	{ CS35L41_DSP1_RX1_SRC,			0x00000008 },
- 	{ CS35L41_DSP1_RX2_SRC,			0x00000009 },
- 	{ CS35L41_DSP1_RX3_SRC,			0x00000018 },
-@@ -644,6 +644,8 @@ static const struct reg_sequence cs35l41_reva0_errata_patch[] = {
- 	{ CS35L41_DSP1_XM_ACCEL_PL0_PRI, 0x00000000 },
- 	{ CS35L41_PWR_CTRL2,		 0x00000000 },
- 	{ CS35L41_AMP_GAIN_CTRL,	 0x00000000 },
-+	{ CS35L41_ASP_TX3_SRC,		 0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,		 0x00000000 },
- };
+diff --git a/sound/soc/codecs/cs47l15.c b/sound/soc/codecs/cs47l15.c
+index 391fd7da331fd..1c7d52bef8935 100644
+--- a/sound/soc/codecs/cs47l15.c
++++ b/sound/soc/codecs/cs47l15.c
+@@ -122,6 +122,9 @@ static int cs47l15_in1_adc_put(struct snd_kcontrol *kcontrol,
+ 		snd_soc_kcontrol_component(kcontrol);
+ 	struct cs47l15 *cs47l15 = snd_soc_component_get_drvdata(component);
  
- static const struct reg_sequence cs35l41_revb0_errata_patch[] = {
-@@ -655,6 +657,8 @@ static const struct reg_sequence cs35l41_revb0_errata_patch[] = {
- 	{ CS35L41_DSP1_XM_ACCEL_PL0_PRI, 0x00000000 },
- 	{ CS35L41_PWR_CTRL2,		 0x00000000 },
- 	{ CS35L41_AMP_GAIN_CTRL,	 0x00000000 },
-+	{ CS35L41_ASP_TX3_SRC,		 0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,		 0x00000000 },
- };
++	if (!!ucontrol->value.integer.value[0] == cs47l15->in1_lp_mode)
++		return 0;
++
+ 	switch (ucontrol->value.integer.value[0]) {
+ 	case 0:
+ 		/* Set IN1 to normal mode */
+@@ -150,7 +153,7 @@ static int cs47l15_in1_adc_put(struct snd_kcontrol *kcontrol,
+ 		break;
+ 	}
  
- static const struct reg_sequence cs35l41_revb2_errata_patch[] = {
-@@ -666,6 +670,8 @@ static const struct reg_sequence cs35l41_revb2_errata_patch[] = {
- 	{ CS35L41_DSP1_XM_ACCEL_PL0_PRI, 0x00000000 },
- 	{ CS35L41_PWR_CTRL2,		 0x00000000 },
- 	{ CS35L41_AMP_GAIN_CTRL,	 0x00000000 },
-+	{ CS35L41_ASP_TX3_SRC,		 0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,		 0x00000000 },
- };
+-	return 0;
++	return 1;
+ }
  
- static const struct reg_sequence cs35l41_fs_errata_patch[] = {
+ static const struct snd_kcontrol_new cs47l15_snd_controls[] = {
 -- 
 2.30.2
 

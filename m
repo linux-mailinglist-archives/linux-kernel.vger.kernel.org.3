@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A08558338
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E0C55810B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbiFWR0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S232989AbiFWQzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiFWR0F (ORCPT
+        with ESMTP id S233910AbiFWQvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:26:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA664F9EF;
-        Thu, 23 Jun 2022 10:02:40 -0700 (PDT)
+        Thu, 23 Jun 2022 12:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6302C2656B;
+        Thu, 23 Jun 2022 09:51:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1334461B76;
-        Thu, 23 Jun 2022 17:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19F5C341C4;
-        Thu, 23 Jun 2022 17:02:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBCC961FC2;
+        Thu, 23 Jun 2022 16:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A6AC3411B;
+        Thu, 23 Jun 2022 16:51:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003757;
-        bh=/ZmgAz/yF4n7uDYfBU2W7fDHZpOoFzytYqX2t0cr/gc=;
+        s=korg; t=1656003107;
+        bh=05Y6AWTeW8ezSzmEjPC+H7znKCnSHRPXCjLjCPqM9cQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sVlFi4lRXt6t1Qb+uovGHiYab8f3NM8m0aX4IZdAGcTsfGGnm5tidop6hTZBtZPy/
-         99CLUU8ULuSOd4bgE2PxIZ/AkSae6a/rTHLPsreCetpHCTkbrvDb/nFJGbNqe6sPUi
-         s52LpUpiG13nq2CmLGJOJgrecDIgaZxu7vNGxy7Q=
+        b=dxFRNb3U5LK8ZNPLxkKYVKv8IgxBXUnOWrDRYMovkf3MfLvOnx11oUxsLKjoy+f4f
+         1slGCyI6nr44wLzVQpdoT6NtvDne8kIiboty3zj8GLSNdNtDcZ8NK1PVRNvC2v5vbI
+         4fCSyTt1yJopombvnmfsDH/2H/4Dlf++Qod9FyYw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Mark Brown <broonie@kernel.org>, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Ard Biesheuvel <ardb@kernel.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 050/237] linux/random.h: Use false with bool
+Subject: [PATCH 4.9 091/264] random: avoid superfluous call to RDRAND in CRNG extraction
 Date:   Thu, 23 Jun 2022 18:41:24 +0200
-Message-Id: <20220623164344.593155531@linuxfoundation.org>
+Message-Id: <20220623164346.646040605@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Henderson <richard.henderson@linaro.org>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 66f5ae899ada79c0e9a3d8d954f93a72344cd350 upstream.
+commit 2ee25b6968b1b3c66ffa408de23d023c1bce81cf upstream.
 
-Keep the generic fallback versions in sync with the other architecture
-specific implementations and use the proper name for false.
+RDRAND is not fast. RDRAND is actually quite slow. We've known this for
+a while, which is why functions like get_random_u{32,64} were converted
+to use batching of our ChaCha-based CRNG instead.
 
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Richard Henderson <rth@twiddle.net>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20200110145422.49141-6-broonie@kernel.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Yet CRNG extraction still includes a call to RDRAND, in the hot path of
+every call to get_random_bytes(), /dev/urandom, and getrandom(2).
+
+This call to RDRAND here seems quite superfluous. CRNG is already
+extracting things based on a 256-bit key, based on good entropy, which
+is then reseeded periodically, updated, backtrack-mutated, and so
+forth. The CRNG extraction construction is something that we're already
+relying on to be secure and solid. If it's not, that's a serious
+problem, and it's unlikely that mixing in a measly 32 bits from RDRAND
+is going to alleviate things.
+
+And in the case where the CRNG doesn't have enough entropy yet, we're
+already initializing the ChaCha key row with RDRAND in
+crng_init_try_arch_early().
+
+Removing the call to RDRAND improves performance on an i7-11850H by
+370%. In other words, the vast majority of the work done by
+extract_crng() prior to this commit was devoted to fetching 32 bits of
+RDRAND.
+
+Reviewed-by: Theodore Ts'o <tytso@mit.edu>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/random.h |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/char/random.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -120,19 +120,19 @@ unsigned long randomize_page(unsigned lo
- #else
- static inline bool arch_get_random_long(unsigned long *v)
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1074,7 +1074,7 @@ static void crng_reseed(struct crng_stat
+ static void _extract_crng(struct crng_state *crng,
+ 			  __u32 out[CHACHA20_BLOCK_WORDS])
  {
--	return 0;
-+	return false;
- }
- static inline bool arch_get_random_int(unsigned int *v)
- {
--	return 0;
-+	return false;
- }
- static inline bool arch_get_random_seed_long(unsigned long *v)
- {
--	return 0;
-+	return false;
- }
- static inline bool arch_get_random_seed_int(unsigned int *v)
- {
--	return 0;
-+	return false;
- }
- #endif
+-	unsigned long v, flags, init_time;
++	unsigned long flags, init_time;
  
+ 	if (crng_ready()) {
+ 		init_time = READ_ONCE(crng->init_time);
+@@ -1084,8 +1084,6 @@ static void _extract_crng(struct crng_st
+ 				    &input_pool : NULL);
+ 	}
+ 	spin_lock_irqsave(&crng->lock, flags);
+-	if (arch_get_random_long(&v))
+-		crng->state[14] ^= v;
+ 	chacha20_block(&crng->state[0], out);
+ 	if (crng->state[12] == 0)
+ 		crng->state[13]++;
 
 

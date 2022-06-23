@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4D0558571
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E94255829D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiFWR6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S233104AbiFWRRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235902AbiFWRxg (ORCPT
+        with ESMTP id S231740AbiFWRLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:53:36 -0400
+        Thu, 23 Jun 2022 13:11:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532FDAA33E;
-        Thu, 23 Jun 2022 10:14:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A48F18374;
+        Thu, 23 Jun 2022 09:51:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D44B861DDC;
-        Thu, 23 Jun 2022 17:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94227C341C4;
-        Thu, 23 Jun 2022 17:14:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EE661F90;
+        Thu, 23 Jun 2022 16:51:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793D4C3411B;
+        Thu, 23 Jun 2022 16:51:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004461;
-        bh=2XrBjZ9r1JiQmbgW7MJXyVhxs+2lGIZGcEAZKhkzzC8=;
+        s=korg; t=1656003075;
+        bh=nEZOz36b4x2qt/eNS2zX1Z+zkb1SsCCGsKcLWiARx5U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MneT1sQS3bCPlE6c6lIlbNDjVnKlpmsNlcbw912Oq5XOSoYuRSotWDoLn2Ooclvr8
-         kLK3dRkU0AgLQZqWkuN98fd4fHRec1+NzbW2t598AarWYX53iVmvAbE1lgsSGg1421
-         bNJed6dp5vTx75U5SxP/YlnCdWqJifhmFgzkea1o=
+        b=Ai3FiQuwBeEdD78XCDKo02ZRBijDo2EE16HWOnupFQwwjmZoxB1VBb6G7vstBJZr0
+         uThW44K9Em/AHYsxpWDyxeXx8K7XUIp6z8v8QjJVlQnK779hQDZUews/CQwWZJFO4w
+         m16g+rhGO7mRJtDauEokSVJP4b7HTJpPWDQ10zW8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.19 046/234] crypto: blake2s - include <linux/bug.h> instead of <asm/bug.h>
-Date:   Thu, 23 Jun 2022 18:41:53 +0200
-Message-Id: <20220623164344.370161937@linuxfoundation.org>
+Subject: [PATCH 4.9 121/264] random: do not xor RDRAND when writing into /dev/random
+Date:   Thu, 23 Jun 2022 18:41:54 +0200
+Message-Id: <20220623164347.490872627@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
-References: <20220623164343.042598055@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit bbda6e0f1303953c855ee3669655a81b69fbe899 upstream.
+commit 91c2afca290ed3034841c8c8532e69ed9e16cf34 upstream.
 
-Address the following checkpatch warning:
+Continuing the reasoning of "random: ensure early RDSEED goes through
+mixer on init", we don't want RDRAND interacting with anything without
+going through the mixer function, as a backdoored CPU could presumably
+cancel out data during an xor, which it'd have a harder time doing when
+being forced through a cryptographic hash function. There's actually no
+need at all to be calling RDRAND in write_pool(), because before we
+extract from the pool, we always do so with 32 bytes of RDSEED hashed in
+at that stage. Xoring at this stage is needless and introduces a minor
+liability.
 
-	WARNING: Use #include <linux/bug.h> instead of <asm/bug.h>
-
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/crypto/blake2s.h |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/char/random.c |   14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
 
---- a/include/crypto/blake2s.h
-+++ b/include/crypto/blake2s.h
-@@ -6,12 +6,11 @@
- #ifndef BLAKE2S_H
- #define BLAKE2S_H
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1357,25 +1357,15 @@ static unsigned int random_poll(struct f
+ static int write_pool(const char __user *buffer, size_t count)
+ {
+ 	size_t bytes;
+-	u32 t, buf[16];
++	u8 buf[BLAKE2S_BLOCK_SIZE];
+ 	const char __user *p = buffer;
  
-+#include <linux/bug.h>
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/string.h>
- 
--#include <asm/bug.h>
+ 	while (count > 0) {
+-		int b, i = 0;
 -
- enum blake2s_lengths {
- 	BLAKE2S_BLOCK_SIZE = 64,
- 	BLAKE2S_HASH_SIZE = 32,
+ 		bytes = min(count, sizeof(buf));
+-		if (copy_from_user(&buf, p, bytes))
++		if (copy_from_user(buf, p, bytes))
+ 			return -EFAULT;
+-
+-		for (b = bytes; b > 0; b -= sizeof(u32), i++) {
+-			if (!arch_get_random_int(&t))
+-				break;
+-			buf[i] ^= t;
+-		}
+-
+ 		count -= bytes;
+ 		p += bytes;
+-
+ 		mix_pool_bytes(buf, bytes);
+ 		cond_resched();
+ 	}
 
 

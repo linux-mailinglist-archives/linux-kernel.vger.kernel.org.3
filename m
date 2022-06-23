@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7A55576AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4EE5576B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiFWJdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S230026AbiFWJf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiFWJdh (ORCPT
+        with ESMTP id S229761AbiFWJf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:33:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC4A48E7E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:33:36 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1o4JDQ-00062c-Ax; Thu, 23 Jun 2022 11:33:32 +0200
-Message-ID: <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
-Subject: Re: DMA-buf and uncached system memory
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media <linux-media@vger.kernel.org>
-Date:   Thu, 23 Jun 2022 11:33:30 +0200
-In-Reply-To: <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
-         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
-         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
-         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
-         <20220623101326.18beeab3@eldfell>
-         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
-         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
-         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
-         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
-         <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Thu, 23 Jun 2022 05:35:57 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09904969B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:35:55 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxaeT6M7RiVkRWAA--.36340S3;
+        Thu, 23 Jun 2022 17:35:54 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Make compute_return_era() return void
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <1655541551-3997-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H5oaCnRyi0xpzzoUs-VemuQtSEStHHzerZFoAQmEabCdw@mail.gmail.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <c9123763-a72e-ce2a-83e3-b3e46cec15b3@loongson.cn>
+Date:   Thu, 23 Jun 2022 17:35:54 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAAhV-H5oaCnRyi0xpzzoUs-VemuQtSEStHHzerZFoAQmEabCdw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9BxaeT6M7RiVkRWAA--.36340S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur4ktF1kKw17WF18WFyUZFb_yoW8Cw13pF
+        17AFyDCFWrWr95CFyDtwn8Zry7Jrs3Cr4293Z29asYkF42vr1DXr10grsrZF10yayrKr40
+        qF4rKF1a9F43X3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUOo7ZUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,120 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 23.06.2022 um 11:09 +0200 schrieb Christian König:
-> Am 23.06.22 um 10:58 schrieb Lucas Stach:
-> > Am Donnerstag, dem 23.06.2022 um 10:14 +0200 schrieb Christian König:
-> > > Am 23.06.22 um 10:04 schrieb Lucas Stach:
-> > > > Am Donnerstag, dem 23.06.2022 um 09:26 +0200 schrieb Christian König:
-> > > > > Am 23.06.22 um 09:13 schrieb Pekka Paalanen:
-> > > > > > On Thu, 23 Jun 2022 08:59:41 +0200
-> > > > > > Christian König <christian.koenig@amd.com> wrote:
-> > > > > > 
-> > > > > > > The exporter isn't doing anything wrong here. DMA-buf are supposed to be
-> > > > > > > CPU cached and can also be cache hot.
-> > > > > > Hi,
-> > > > > > 
-> > > > > > what is that statement based on?
-> > > > > On the design documentation of DMA-buf and the actual driver
-> > > > > implementations.
-> > > > > 
-> > > > > Coherency and snooping of the CPU cache is mandatory for devices and
-> > > > > root complexes in the PCI specification. Incoherent access is just an
-> > > > > extension.
-> > > > > 
-> > > > > We inherited that by basing DMA-buf on the Linux kernel DMA-API which in
-> > > > > turn is largely based on the PCI specification.
-> > > > > 
-> > > > > > Were the (mandatory for CPU access) cpu_access_begin/end functions &
-> > > > > > ioctls not supposed to ensure that CPU cache is up-to-date / CPU cache
-> > > > > > is fully flushed out?
-> > > > > No, those functions are to inform the exporter that the importer has
-> > > > > started and finished accessing the buffer using the CPU.
-> > > > > 
-> > > > > There is no signaling in the other direction. In other words the
-> > > > > exporter doesn't inform the importer about CPU accesses because it is
-> > > > > the owner of the buffer.
-> > > > > 
-> > > > > It's the responsibility of the importer to make sure that it can
-> > > > > actually access the data in the buffer. If it can't guarantee that the
-> > > > > importer shouldn't import the buffer in the first place.
-> > > > This is not really correct. DMA-buf inherited the the map/unmap part
-> > > > from the DMA API, which on cache coherent architecture is mostly a no-
-> > > > op or ties into the IOMMU implementation to set up the pagetables for
-> > > > the translation. On non cache coherent architectures this is the point
-> > > > where any any necessary cache maintenance happens. DRM breaks this
-> > > > model by caching the DMA-buf mapping for performance reasons.
-> > > That's not only because of performance reasons, but also because of
-> > > correctness.
-> > > 
-> > > At least the Vulkan API and a bunch of OpenGL extensions make it
-> > > mandatory for the buffer to be cache coherent. The kernel is simply not
-> > > informed about domain transfers.
-> > > 
-> > > For example you can just do a CPU copy to a ring buffer and the
-> > > expectation is that an already running shader sees that.
-> > Yes, that one is not really an issue as you know that at buffer
-> > creation time and can make sure to map those buffers uncached on non
-> > coherent arches. If there are no explicit domain transfer points non
-> > coherent must bite the bullet and bypass the CPU caches, running
-> > performance into the ground.
-> 
-> Yes, exactly that was what this mail thread was about. But this case is 
-> currently not supported by DMA-buf.
-> 
-> In other words, cache coherency is currently mandatory for everybody 
-> involved.
-> 
-> > > > In the DMA API keeping things mapped is also a valid use-case, but then
-> > > > you need to do explicit domain transfers via the dma_sync_* family,
-> > > > which DMA-buf has not inherited. Again those sync are no-ops on cache
-> > > > coherent architectures, but do any necessary cache maintenance on non
-> > > > coherent arches.
-> > > Correct, yes. Coherency is mandatory for DMA-buf, you can't use
-> > > dma_sync_* on it when you are the importer.
-> > > 
-> > > The exporter could of course make use of that because he is the owner of
-> > > the buffer.
-> > In the example given here with UVC video, you don't know that the
-> > buffer will be exported and needs to be coherent without
-> > synchronization points, due to the mapping cache at the DRM side. So
-> > V4L2 naturally allocates the buffers from CPU cached memory. If the
-> > expectation is that those buffers are device coherent without relying
-> > on the map/unmap_attachment calls, then V4L2 needs to always
-> > synchronize caches on DQBUF when the  buffer is allocated from CPU
-> > cached memory and a single DMA-buf attachment exists. And while writing
-> > this I realize that this is probably exactly what V4L2 should do...
-> 
-> No, the expectation is that the importer can deal with whatever the 
-> exporter provides.
-> 
-> If the importer can't access the DMA-buf coherently it's his job to 
-> handle that gracefully.
 
-How does the importer know that the memory behind the DMA-buf is in CPU
-cached memory?
 
-If you now tell me that an importer always needs to assume this and
-reject the import if it can't do snooping, then any DMA-buf usage on
-most ARM SoCs is currently invalid usage. On most of the multimedia
-targeted ARM SoCs being unable to snoop the cache is the norm, not an
-exception.
+On 06/23/2022 05:26 PM, Huacai Chen wrote:
+> Hi, Tiezhu,
+>
+> On Sat, Jun 18, 2022 at 4:39 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> compute_return_era() always returns 0, make it return void,
+>> and then no need to check its return value for its callers.
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>  arch/loongarch/include/asm/branch.h | 3 +--
+>>  arch/loongarch/kernel/traps.c       | 3 +--
+>>  2 files changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/branch.h b/arch/loongarch/include/asm/branch.h
+>> index 3f33c89..9a133e4 100644
+>> --- a/arch/loongarch/include/asm/branch.h
+>> +++ b/arch/loongarch/include/asm/branch.h
+>> @@ -12,10 +12,9 @@ static inline unsigned long exception_era(struct pt_regs *regs)
+>>         return regs->csr_era;
+>>  }
+>>
+>> -static inline int compute_return_era(struct pt_regs *regs)
+>> +static inline void compute_return_era(struct pt_regs *regs)
+>>  {
+>>         regs->csr_era += 4;
+>> -       return 0;
+>>  }
+>>
+>>  #endif /* _ASM_BRANCH_H */
+>> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+>> index e4060f8..1bf58c6 100644
+>> --- a/arch/loongarch/kernel/traps.c
+>> +++ b/arch/loongarch/kernel/traps.c
+>> @@ -475,8 +475,7 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
+>>
+>>         die_if_kernel("Reserved instruction in kernel code", regs);
+>>
+>> -       if (unlikely(compute_return_era(regs) < 0))
+>> -               goto out;
+>> +       compute_return_era(regs);
+> Maybe it is better to simply remove the compute_return_era() function?
 
-> 
-> See for example on AMD/Intel hardware most of the engines can perfectly 
-> deal with cache coherent memory accesses. Only the display engines can't.
-> 
-> So on import time we can't even say if the access can be coherent and 
-> snoop the CPU cache or not because we don't know how the imported 
-> DMA-buf will be used later on.
-> 
-So for those mixed use cases, wouldn't it help to have something
-similar to the dma_sync in the DMA-buf API, so your scanout usage can
-tell the exporter that it's going to do non-snoop access and any dirty
-cache lines must be cleaned? Signaling this to the exporter would allow
-to skip the cache maintenance if the buffer is in CPU uncached memory,
-which again is a default case for the ARM SoC world.
+Good idea, if so, I think we can also remove exception_era(), and then
+arch/loongarch/include/asm/branch.h can be removed.
 
-Regards,
-Lucas
+If you are OK, I will send a v2 patch to remove
+arch/loongarch/include/asm/branch.h
+
+Thanks,
+Tiezhu
+
+>
+> Huacai
+>>
+>>         if (unlikely(get_user(opcode, era) < 0)) {
+>>                 status = SIGSEGV;
+>> --
+>> 2.1.0
+>>
 

@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A2B558306
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB1255830A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiFWRXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S233706AbiFWRXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbiFWRWa (ORCPT
+        with ESMTP id S233769AbiFWRWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:22:30 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D866E8269B;
-        Thu, 23 Jun 2022 10:01:13 -0700 (PDT)
+        Thu, 23 Jun 2022 13:22:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAFB826A9;
+        Thu, 23 Jun 2022 10:01:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E83B2CE24F9;
-        Thu, 23 Jun 2022 17:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC50BC3411B;
-        Thu, 23 Jun 2022 17:01:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3243261408;
+        Thu, 23 Jun 2022 17:01:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09FC2C3411B;
+        Thu, 23 Jun 2022 17:01:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003670;
-        bh=+wn0+WymRz5z3OrP40/3HTfW+xJR2nBWXJBq+/z4laQ=;
+        s=korg; t=1656003673;
+        bh=IuH4ic1YsBToeSvLd3jNZS1lfWQ/zJnN8Ztg8qqvwV0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lRxq6sop6TI3olD1A0vSH0VhPUachOjH847i1skU88ru5qPtQ9kujxBBV95PJiNR4
-         xfGWv+V2C25QBkxL8/MPVsJkQ/2jZgPmPG5covWtV75Zs31Hf7WnBiFoPsuHZFzv4C
-         uTuiU4CxkV3PjRgWSJy8YImPGx08rHNyexRrz/SM=
+        b=XgpC6F6qDet1kdPkIZzth5BiIltb+CWco9wLcOu5LsMEBK3sPpYG5uooT/bJkqn8T
+         b2q4VPOL9Hmk0UaiRnLWDFi2hLhy9dhmanhJYBjwxU8Z51z0jZImz/KuLDewiSFdFD
+         CUGl9PEwUd0m9zCoxUb1SIVzhnn/mSDfQcN2kUKw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, "Theodore Tso" <tytso@mit.edu>,
+        Ingo Molnar <mingo@elte.hu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 008/237] random: add a config option to trust the CPUs hwrng
-Date:   Thu, 23 Jun 2022 18:40:42 +0200
-Message-Id: <20220623164343.387273612@linuxfoundation.org>
+Subject: [PATCH 4.14 009/237] random: remove preempt disabled region
+Date:   Thu, 23 Jun 2022 18:40:43 +0200
+Message-Id: <20220623164343.416061929@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
 References: <20220623164343.132308638@linuxfoundation.org>
@@ -54,77 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Ingo Molnar <mingo@elte.hu>
 
-commit 39a8883a2b989d1d21bd8dd99f5557f0c5e89694 upstream.
+commit b34fbaa9289328c7aec67d2b8b8b7d02bc61c67d upstream.
 
-This gives the user building their own kernel (or a Linux
-distribution) the option of deciding whether or not to trust the CPU's
-hardware random number generator (e.g., RDRAND for x86 CPU's) as being
-correctly implemented and not having a back door introduced (perhaps
-courtesy of a Nation State's law enforcement or intelligence
-agencies).
+No need to keep preemption disabled across the whole function.
 
-This will prevent getrandom(2) from blocking, if there is a
-willingness to trust the CPU manufacturer.
+mix_pool_bytes() uses a spin_lock() to protect the pool and there are
+other places like write_pool() whhich invoke mix_pool_bytes() without
+disabling preemption.
+credit_entropy_bits() is invoked from other places like
+add_hwgenerator_randomness() without disabling preemption.
 
+Before commit 95b709b6be49 ("random: drop trickle mode") the function
+used __this_cpu_inc_return() which would require disabled preemption.
+The preempt_disable() section was added in commit 43d5d3018c37 ("[PATCH]
+random driver preempt robustness", history tree).  It was claimed that
+the code relied on "vt_ioctl() being called under BKL".
+
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Signed-off-by: Ingo Molnar <mingo@elte.hu>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+[bigeasy: enhance the commit message]
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/Kconfig  |   14 ++++++++++++++
- drivers/char/random.c |   11 ++++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ drivers/char/random.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
---- a/drivers/char/Kconfig
-+++ b/drivers/char/Kconfig
-@@ -590,3 +590,17 @@ source "drivers/char/xillybus/Kconfig"
- 
- endmenu
- 
-+config RANDOM_TRUST_CPU
-+	bool "Trust the CPU manufacturer to initialize Linux's CRNG"
-+	depends on X86 || S390 || PPC
-+	default n
-+	help
-+	Assume that CPU manufacturer (e.g., Intel or AMD for RDSEED or
-+	RDRAND, IBM for the S390 and Power PC architectures) is trustworthy
-+	for the purposes of initializing Linux's CRNG.  Since this is not
-+	something that can be independently audited, this amounts to trusting
-+	that CPU manufacturer (perhaps with the insistence or mandate
-+	of a Nation State's intelligence or law enforcement agencies)
-+	has not installed a hidden back door to compromise the CPU's
-+	random number generation facilities.
-+
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -782,6 +782,7 @@ static void invalidate_batched_entropy(v
- static void crng_initialize(struct crng_state *crng)
- {
- 	int		i;
-+	int		arch_init = 1;
- 	unsigned long	rv;
+@@ -1136,8 +1136,6 @@ static void add_timer_randomness(struct
+ 	} sample;
+ 	long delta, delta2, delta3;
  
- 	memcpy(&crng->state[0], "expand 32-byte k", 16);
-@@ -792,10 +793,18 @@ static void crng_initialize(struct crng_
- 		_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
- 	for (i = 4; i < 16; i++) {
- 		if (!arch_get_random_seed_long(&rv) &&
--		    !arch_get_random_long(&rv))
-+		    !arch_get_random_long(&rv)) {
- 			rv = random_get_entropy();
-+			arch_init = 0;
-+		}
- 		crng->state[i] ^= rv;
- 	}
-+#ifdef CONFIG_RANDOM_TRUST_CPU
-+	if (arch_init) {
-+		crng_init = 2;
-+		pr_notice("random: crng done (trusting CPU's manufacturer)\n");
-+	}
-+#endif
- 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+-	preempt_disable();
+-
+ 	sample.jiffies = jiffies;
+ 	sample.cycles = random_get_entropy();
+ 	sample.num = num;
+@@ -1175,8 +1173,6 @@ static void add_timer_randomness(struct
+ 	 * and limit entropy entimate to 12 bits.
+ 	 */
+ 	credit_entropy_bits(r, min_t(int, fls(delta>>1), 11));
+-
+-	preempt_enable();
  }
  
+ void add_input_randomness(unsigned int type, unsigned int code,
 
 

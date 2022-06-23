@@ -2,57 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0618F557618
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A0755761E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiFWI6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+        id S229987AbiFWI6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiFWI6d (ORCPT
+        with ESMTP id S231159AbiFWI6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:58:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219B222522
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:58:31 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1o4IfT-0001Zu-Cc; Thu, 23 Jun 2022 10:58:27 +0200
-Message-ID: <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
-Subject: Re: DMA-buf and uncached system memory
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media <linux-media@vger.kernel.org>
-Date:   Thu, 23 Jun 2022 10:58:26 +0200
-In-Reply-To: <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
-         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
-         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
-         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
-         <20220623101326.18beeab3@eldfell>
-         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
-         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
-         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Thu, 23 Jun 2022 04:58:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0345D140CD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655974716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QA4QBFkDM19s/kmNbbq6WAZHuSSj0hjTnufoIU8Ro9o=;
+        b=PFj8nsoygWTg1I9lkxPLpzZMRczDLd5VAgMHyPm2XaonF2hOft7ui29OaVieedGV1eaPSk
+        nNgVAfYYtlRiPqsxzexezqZZns1zWYr8u0jO4Z4b4NlQzbbCL+FPx3Ut26NXUJvi2LVarc
+        k3d4vIBKnekE2UHZQT4BFnssmAtw3mc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-475-ATR2DeofOJSWOa-pVo2WLQ-1; Thu, 23 Jun 2022 04:58:35 -0400
+X-MC-Unique: ATR2DeofOJSWOa-pVo2WLQ-1
+Received: by mail-wr1-f71.google.com with SMTP id b10-20020adf9b0a000000b0021a0c74738aso4537248wrc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:58:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=QA4QBFkDM19s/kmNbbq6WAZHuSSj0hjTnufoIU8Ro9o=;
+        b=Rr13FZKKnYqrdTzdHYp51GmHJp9T5IfUkUHFdbZ45G42qtz8AqdCO3MTFGzR7D7xP5
+         zIz+zuVINmdLKmtAK17fqVvpWQ49aSnsnvjjSeJKwnRvYyTDGmwAZs5VnzQ+97A2se+A
+         iwQWqSzSjvhCqx8wEDMoM7zZvt13fy/CC2cprOTGXuyF2m52rn04wOQ4SXctnQwqK+US
+         IzCrS1v+PvdxTNgrLGnL4zEodTG2Rwd7XQ9Asn5Qk5ftFLYtTCxGszx3So3vW5mguenD
+         QmAzW/TJWR+BWX+/idnxkacKSv9Q9aG2Hb3MYA6vKAIMMOdjSDOfKXDsVuCvrMEq5NKZ
+         ID9w==
+X-Gm-Message-State: AJIora8Uu0VlE6m++1ZuKNuxaYgThfHenE5umxu0YXIwrlpNE2zwv4q2
+        iz+cvOb1uCv8knBdi16fxsFEM7xgE7Sy9PRFOZQZHB5CcHMfw/sJliLcoIQFTWvWB0w3UXVRbnt
+        wIU1E7kaa8m1dg6VTDopjjvxs
+X-Received: by 2002:a05:600c:1553:b0:39c:87fc:5784 with SMTP id f19-20020a05600c155300b0039c87fc5784mr2834938wmg.90.1655974713531;
+        Thu, 23 Jun 2022 01:58:33 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uKzKYT9XjrtQPHP5sn9zFHwuvBaPFsVvMSjtZr6AU7TKAY9p+ZWuznb3fG50371xljWLlAVQ==
+X-Received: by 2002:a05:600c:1553:b0:39c:87fc:5784 with SMTP id f19-20020a05600c155300b0039c87fc5784mr2834921wmg.90.1655974713318;
+        Thu, 23 Jun 2022 01:58:33 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-40.retail.telecomitalia.it. [79.46.200.40])
+        by smtp.gmail.com with ESMTPSA id b1-20020adfe301000000b00219b391c2d2sm26623088wrj.36.2022.06.23.01.58.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 01:58:32 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 10:58:30 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] vdpa_sim_blk: limit the number of request handled
+ per batch
+Message-ID: <20220623085830.voi6gixpikz64nm2@sgarzare-redhat>
+References: <20220621160859.196646-1-sgarzare@redhat.com>
+ <20220621160859.196646-3-sgarzare@redhat.com>
+ <CACGkMEsk-O=dVwKoEHRY-nL3XEQktPWiBot2NfOUYNdkoL-s=Q@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CACGkMEsk-O=dVwKoEHRY-nL3XEQktPWiBot2NfOUYNdkoL-s=Q@mail.gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,87 +84,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 23.06.2022 um 10:14 +0200 schrieb Christian König:
-> Am 23.06.22 um 10:04 schrieb Lucas Stach:
-> > Am Donnerstag, dem 23.06.2022 um 09:26 +0200 schrieb Christian König:
-> > > Am 23.06.22 um 09:13 schrieb Pekka Paalanen:
-> > > > On Thu, 23 Jun 2022 08:59:41 +0200
-> > > > Christian König <christian.koenig@amd.com> wrote:
-> > > > 
-> > > > > The exporter isn't doing anything wrong here. DMA-buf are supposed to be
-> > > > > CPU cached and can also be cache hot.
-> > > > Hi,
-> > > > 
-> > > > what is that statement based on?
-> > > On the design documentation of DMA-buf and the actual driver
-> > > implementations.
-> > > 
-> > > Coherency and snooping of the CPU cache is mandatory for devices and
-> > > root complexes in the PCI specification. Incoherent access is just an
-> > > extension.
-> > > 
-> > > We inherited that by basing DMA-buf on the Linux kernel DMA-API which in
-> > > turn is largely based on the PCI specification.
-> > > 
-> > > > Were the (mandatory for CPU access) cpu_access_begin/end functions &
-> > > > ioctls not supposed to ensure that CPU cache is up-to-date / CPU cache
-> > > > is fully flushed out?
-> > > No, those functions are to inform the exporter that the importer has
-> > > started and finished accessing the buffer using the CPU.
-> > > 
-> > > There is no signaling in the other direction. In other words the
-> > > exporter doesn't inform the importer about CPU accesses because it is
-> > > the owner of the buffer.
-> > > 
-> > > It's the responsibility of the importer to make sure that it can
-> > > actually access the data in the buffer. If it can't guarantee that the
-> > > importer shouldn't import the buffer in the first place.
-> > This is not really correct. DMA-buf inherited the the map/unmap part
-> > from the DMA API, which on cache coherent architecture is mostly a no-
-> > op or ties into the IOMMU implementation to set up the pagetables for
-> > the translation. On non cache coherent architectures this is the point
-> > where any any necessary cache maintenance happens. DRM breaks this
-> > model by caching the DMA-buf mapping for performance reasons.
-> 
-> That's not only because of performance reasons, but also because of 
-> correctness.
-> 
-> At least the Vulkan API and a bunch of OpenGL extensions make it 
-> mandatory for the buffer to be cache coherent. The kernel is simply not 
-> informed about domain transfers.
-> 
-> For example you can just do a CPU copy to a ring buffer and the 
-> expectation is that an already running shader sees that.
+On Thu, Jun 23, 2022 at 11:50:22AM +0800, Jason Wang wrote:
+>On Wed, Jun 22, 2022 at 12:09 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>>
+>> Limit the number of requests (4 per queue as for vdpa_sim_net) handled
+>> in a batch to prevent the worker from using the CPU for too long.
+>>
+>> Suggested-by: Eugenio P�rez <eperezma@redhat.com>
+>> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> ---
+>>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 15 ++++++++++++++-
+>>  1 file changed, 14 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>> index a83a5c76f620..ac86478845b6 100644
+>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>> @@ -197,6 +197,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+>>  static void vdpasim_blk_work(struct work_struct *work)
+>>  {
+>>         struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+>> +       bool reschedule = false;
+>>         int i;
+>>
+>>         spin_lock(&vdpasim->lock);
+>> @@ -206,11 +207,15 @@ static void vdpasim_blk_work(struct work_struct *work)
+>>
+>>         for (i = 0; i < VDPASIM_BLK_VQ_NUM; i++) {
+>>                 struct vdpasim_virtqueue *vq = &vdpasim->vqs[i];
+>> +               bool vq_work = true;
+>> +               int reqs = 0;
+>>
+>>                 if (!vq->ready)
+>>                         continue;
+>>
+>> -               while (vdpasim_blk_handle_req(vdpasim, vq)) {
+>> +               while (vq_work) {
+>> +                       vq_work = vdpasim_blk_handle_req(vdpasim, vq);
+>> +
+>
+>Is it better to check and exit the loop early here?
 
-Yes, that one is not really an issue as you know that at buffer
-creation time and can make sure to map those buffers uncached on non
-coherent arches. If there are no explicit domain transfer points non
-coherent must bite the bullet and bypass the CPU caches, running
-performance into the ground.
+Maybe, but I'm not sure.
 
-> 
-> > In the DMA API keeping things mapped is also a valid use-case, but then
-> > you need to do explicit domain transfers via the dma_sync_* family,
-> > which DMA-buf has not inherited. Again those sync are no-ops on cache
-> > coherent architectures, but do any necessary cache maintenance on non
-> > coherent arches.
-> 
-> Correct, yes. Coherency is mandatory for DMA-buf, you can't use 
-> dma_sync_* on it when you are the importer.
-> 
-> The exporter could of course make use of that because he is the owner of 
-> the buffer.
+In vdpa_sim_net we call vringh_complete_iotlb() and send notification 
+also in the error path, so I thought was better to send notification 
+also when vdpasim_blk_handle_req() return false, since we will update 
+the used.idx.
 
-In the example given here with UVC video, you don't know that the
-buffer will be exported and needs to be coherent without
-synchronization points, due to the mapping cache at the DRM side. So
-V4L2 naturally allocates the buffers from CPU cached memory. If the
-expectation is that those buffers are device coherent without relying
-on the map/unmap_attachment calls, then V4L2 needs to always
-synchronize caches on DQBUF when the  buffer is allocated from CPU
-cached memory and a single DMA-buf attachment exists. And while writing
-this I realize that this is probably exactly what V4L2 should do...
+However, I don't think it's a common path, so if you think it's better 
+to exit the loop early, I can do it.
 
-Regards,
-Lucas
+Thanks,
+Stefano
 

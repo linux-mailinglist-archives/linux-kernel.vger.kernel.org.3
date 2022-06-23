@@ -2,136 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCA1557E2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7076A557E2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbiFWOtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S231744AbiFWOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiFWOtw (ORCPT
+        with ESMTP id S229970AbiFWOuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:49:52 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFB146679
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:49:51 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id a15so12134190pfv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+qSsChT75v3dvhRAkXYqSV2TfsP5NCarupm2V9Kqui0=;
-        b=Yz5N2ry9uNEF1gaCrCZKOslUu3DOdurMNWT1q6KWoCmT2NDA4a+LtMpMgwsnVfK7zZ
-         RsRoEVr//JBe44DK1MPKhvSYbDQEx/uQDDfuM1g7Fd/GXkj2UvofhpAgxVqE6XuVFjei
-         RcT6g1GMZMEu+84zRGCPZTX491w5ladQzU+KEdRiqOwVWr85a5ka7cpCuMBsW+SyES8p
-         owJ5Gu1oonI/fBRiqhh7dfwfdguVM1ck5qAZBPl7Q3xcxrjQB0vZjt0qFDZWR34kQOjl
-         fcxmI1ChSM01swtv8XSTLbvCTm1tyxxteXF6A4GjAvQYNaZesY9YQzaluqk8xoHdg5+g
-         JdJA==
+        Thu, 23 Jun 2022 10:50:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B76D25E9B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655995805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XsUzgInIk3jiZ1t4PC5XKhl7+P7b0ZJHNMM8H/4Lgb0=;
+        b=Xjf/LXWxzpapE3EMlfjidhDShU6SEvTdvwm5SMOzcanXLaoe83ouci/cCTGOd3m4zly0Ui
+        DCbCy7UHz2PO3PCbFIg4FWaZ44yrLYqElGPISQOomfrybqJkP29JLZUSf7ZRe7TazhRKey
+        LkbeET83agIGTh69Spdlf/wvs+5r0PQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-P7qp663eNeiY7mRZMWjR0g-1; Thu, 23 Jun 2022 10:50:04 -0400
+X-MC-Unique: P7qp663eNeiY7mRZMWjR0g-1
+Received: by mail-ej1-f71.google.com with SMTP id q5-20020a17090676c500b00704ffb95131so8036108ejn.8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:50:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+qSsChT75v3dvhRAkXYqSV2TfsP5NCarupm2V9Kqui0=;
-        b=hGD620tgK9sEDrTNvMIFuECf6QWGbVt/HVBPgAoZicTuMav9CSgvdHRMXT2lZ9UtlZ
-         5jQ14ryhfIAPr0Zr/s+BUkqU4YMEjgXFWlobsKOTMsI8FjSuMjdyZYWk6dbJYO6oSiZS
-         273uXjJAZ0PFQa/YbkE8YzNE3jWNE6Qanv4UKThtKIGfrowWfGDXxTPpXiyG1AZ5CjTe
-         iALv11kxUUkipAs3+2Ug/+KccSF93IcAOLViYZWJgsyuY01nP5bPxnLbNasScWzMxWLQ
-         yXd4lgOKA3LjyuXkG8PdinXwRo2yaf771qEa9KQHmrSTp8Sbc4EfecsJDgQgY0L1n9ld
-         Rlnw==
-X-Gm-Message-State: AJIora/N0yaJ+8D1QvV8fme33p03ULkK27q2tcaZVycDl+6ACRl5heeo
-        OVhqn/onc+fRNEA8av45lkc7Bw==
-X-Google-Smtp-Source: AGRyM1u61EzUEh+JRGUbY08AnREjTd6Ub3VvJ0Hteh1fCeq4G/TENL2UDjYm4NKsqKEpJH2VZPMPPg==
-X-Received: by 2002:a05:6a00:9a2:b0:505:974f:9fd6 with SMTP id u34-20020a056a0009a200b00505974f9fd6mr40733440pfg.12.1655995790918;
-        Thu, 23 Jun 2022 07:49:50 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id i22-20020a17090ad35600b001ec8d191db4sm2003335pjx.17.2022.06.23.07.49.50
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=XsUzgInIk3jiZ1t4PC5XKhl7+P7b0ZJHNMM8H/4Lgb0=;
+        b=aCnIgjpB+LC0MCibsS5PFK90+XEOFDgSHGGChpT1pU7rfjztxVHRtvtI58sK3J/79Q
+         pWR6lBzhtKqLEkiz+fLR0Vp62MjGia8HSBRiu4lRzgMVfBVR6O+mUsasV/RSj6Ua63v3
+         LWO9elbr48sUMjtmk6GRz3x+vOvpMxhUnpQxuBnOLLuRy5RCk5TAP0MlTxv3OV4e9oL5
+         3tv3YzGdc2UrZ8MKWohTunvOHUOmxD11tHOQEiyB/Vp7K02dcCHIF8m7Dl7FHm/jLn6K
+         HSZaKPQSdJH7X/tWhWElekBqQk7/saBlSDgikR5ZOS9IpTPawJlT3eTocdw3WpfsNXbh
+         cTag==
+X-Gm-Message-State: AJIora+z36/DcXVnkHMhTMgamnKDx3GbP1yZ4AMylV3zR0x10ybJz3pv
+        qHcSO2pfHXp8SZEH5BNOUj0IT6XOfECgCClzlYnEk3LbOnQNsJYRbhtw7h+1F3Xdnu6USwimUvz
+        YJxqKkWflEO3s2Ax/hmGaYubj
+X-Received: by 2002:a05:6402:34cf:b0:435:a0b1:ae14 with SMTP id w15-20020a05640234cf00b00435a0b1ae14mr11192290edc.67.1655995803175;
+        Thu, 23 Jun 2022 07:50:03 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1thQYBHEBmaRr7+ACAivoeMG9YF2NCID7VcMCZ29wz7mVQ3jCRGgp+p58BlvZ9mwrEmn6kIkw==
+X-Received: by 2002:a05:6402:34cf:b0:435:a0b1:ae14 with SMTP id w15-20020a05640234cf00b00435a0b1ae14mr11192269edc.67.1655995802931;
+        Thu, 23 Jun 2022 07:50:02 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id m11-20020aa7d34b000000b00435a742e350sm4329642edr.75.2022.06.23.07.50.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 07:49:50 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 14:49:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>
-Subject: Re: [PATCH 2/4] kvm: Merge "atomic" and "write" in
- __gfn_to_pfn_memslot()
-Message-ID: <YrR9i3yHzh5ftOxB@google.com>
-References: <20220622213656.81546-1-peterx@redhat.com>
- <20220622213656.81546-3-peterx@redhat.com>
+        Thu, 23 Jun 2022 07:50:02 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH v2] MAINTAINERS: Reorganize KVM/x86 maintainership
+In-Reply-To: <20220623143059.2626661-1-pbonzini@redhat.com>
+References: <20220623143059.2626661-1-pbonzini@redhat.com>
+Date:   Thu, 23 Jun 2022 16:50:01 +0200
+Message-ID: <87tu8bwi1y.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622213656.81546-3-peterx@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022, Peter Xu wrote:
-> Merge two boolean parameters into a bitmask flag called kvm_gtp_flag_t for
-> __gfn_to_pfn_memslot().  This cleans the parameter lists, and also prepare
-> for new boolean to be added to __gfn_to_pfn_memslot().
+Paolo Bonzini <pbonzini@redhat.com> writes:
 
-...
-
-> @@ -3999,8 +4000,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  	}
+> For the last few years I have been the sole maintainer of KVM, albeit
+> getting serious help from all the people who have reviewed hundreds of
+> patches.  The volume of KVM x86 alone has gotten to the point where one
+> maintainer is not enough; especially if that maintainer is not doing it
+> full time and if they want to keep up with the evolution of ARM64 and
+> RISC-V at both the architecture and the hypervisor level.
+>
+> So, this patch is the first step in restoring double maintainership
+> or even transitioning to the submaintainer model of other architectures.
+>
+> The changes here were mostly proposed by Sean offlist and they are twofold:
+>
+> - revisiting the set of KVM x86 reviewers.  It's important to have an
+>   an accurate list of people that are actively reviewing patches ("R"),
+>   as well as people that are able to act on bug reports ("M").  Otherwise,
+>   voids to be filled are not easily visible.  The proposal is to split
+>   KVM on Hyper-V, which is where Vitaly has been the main contributor
+>   for quite some time now; likewise for KVM paravirt support, which
+>   has been the main interest of Wanpeng and to which Vitaly has also
+>   contributed (e.g., for async page faults).  Jim and Joerg have not been
+>   particularly active (though Joerg has worked on guest support for AMD
+>   SEV); knowing them a bit, I can't imagine they would object to their
+>   removal or even be surprised, but please speak up if you do.
+>
+> - promoting Sean to maintainer for KVM x86 host support.  While for
+>   now this changes little, let's treat it as a harbinger for future
+>   changes.  The plan is that I would keep the final integration testing
+>   for quite some time, and probably focus more on -rc work.  This will
+>   give me more time to clean up my ad hoc setup and moving towards a
+>   more public CI, with Sean focusing instead on next-release patches,
+>   and the testing up to where kvm-unit-tests and selftests pass.  In
+>   order to facilitate collaboration between Sean and myself, we'll
+>   also formalize a bit more the various branches of kvm.git.
+>
+> Nothing is going to change with respect to handling pull requests to Linus
+> and from other architectures, as well as maintainance of the generic code
+> (which I expect and hope to be more important as architectures try to
+> share more code) and documentation.  However, it's not a coincidence
+> that my entry is now the last for x86, ready to be demoted to reviewer
+> if/when the right time comes.
+>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Cc: kvm@vger.kernel.org
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Cc: Wanpeng Li <wanpengli@tencent.com>
+> Cc: Jim Mattson <jmattson@google.com>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  MAINTAINERS | 40 +++++++++++++++++++++++++++++++---------
+>  1 file changed, 31 insertions(+), 9 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 97014ae3e5ed..968b622bc3ce 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10897,28 +10897,50 @@ F:	tools/testing/selftests/kvm/*/s390x/
+>  F:	tools/testing/selftests/kvm/s390x/
 >  
->  	async = false;
-> -	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
-> -					  fault->write, &fault->map_writable,
-> +	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, flags,
-> +					  &async, &fault->map_writable,
->  					  &fault->hva);
->  	if (!async)
->  		return RET_PF_CONTINUE; /* *pfn has correct page already */
-> @@ -4016,9 +4017,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  		}
->  	}
+>  KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)
+> +M:	Sean Christopherson <seanjc@google.com>
+>  M:	Paolo Bonzini <pbonzini@redhat.com>
+> -R:	Sean Christopherson <seanjc@google.com>
+> -R:	Vitaly Kuznetsov <vkuznets@redhat.com>
+> -R:	Wanpeng Li <wanpengli@tencent.com>
+> -R:	Jim Mattson <jmattson@google.com>
+> -R:	Joerg Roedel <joro@8bytes.org>
+>  L:	kvm@vger.kernel.org
+>  S:	Supported
+> -W:	http://www.linux-kvm.org
+>  T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
+>  F:	arch/x86/include/asm/kvm*
+> -F:	arch/x86/include/asm/pvclock-abi.h
+>  F:	arch/x86/include/asm/svm.h
+>  F:	arch/x86/include/asm/vmx*.h
+>  F:	arch/x86/include/uapi/asm/kvm*
+>  F:	arch/x86/include/uapi/asm/svm.h
+>  F:	arch/x86/include/uapi/asm/vmx.h
+> -F:	arch/x86/kernel/kvm.c
+> -F:	arch/x86/kernel/kvmclock.c
+>  F:	arch/x86/kvm/
+>  F:	arch/x86/kvm/*/
 >  
-> -	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, NULL,
-> -					  fault->write, &fault->map_writable,
-> -					  &fault->hva);
-> +	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, flags, NULL,
-> +					  &fault->map_writable, &fault->hva);
->  	return RET_PF_CONTINUE;
->  }
->  
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index c20f2d55840c..b646b6fcaec6 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1146,8 +1146,15 @@ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
->  		      bool *writable);
->  kvm_pfn_t gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn);
->  kvm_pfn_t gfn_to_pfn_memslot_atomic(const struct kvm_memory_slot *slot, gfn_t gfn);
+> +KVM PARAVIRT (KVM/paravirt)
+> +M:	Paolo Bonzini <pbonzini@redhat.com>
+> +R:	Wanpeng Li <wanpengli@tencent.com>
+> +R:	Vitaly Kuznetsov <vkuznets@redhat.com>
+> +L:	kvm@vger.kernel.org
+> +S:	Supported
+> +T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
+> +F:	arch/x86/kernel/kvm.c
+> +F:	arch/x86/kernel/kvmclock.c
+> +F:	arch/x86/include/asm/pvclock-abi.h
+> +F:	include/linux/kvm_para.h
+> +F:	include/uapi/linux/kvm_para.h
+> +F:	include/uapi/asm-generic/kvm_para.h
+> +F:	include/asm-generic/kvm_para.h
+> +F:	arch/um/include/asm/kvm_para.h
+> +F:	arch/x86/include/asm/kvm_para.h
+> +F:	arch/x86/include/uapi/asm/kvm_para.h
 > +
-> +/* gfn_to_pfn (gtp) flags */
-> +typedef unsigned int __bitwise kvm_gtp_flag_t;
-> +
-> +#define  KVM_GTP_WRITE          ((__force kvm_gtp_flag_t) BIT(0))
-> +#define  KVM_GTP_ATOMIC         ((__force kvm_gtp_flag_t) BIT(1))
-> +
->  kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-> -			       bool atomic, bool *async, bool write_fault,
-> +			       kvm_gtp_flag_t gtp_flags, bool *async,
->  			       bool *writable, hva_t *hva);
+> +KVM X86 HYPER-V (KVM/hyper-v)
+> +M:	Vitaly Kuznetsov <vkuznets@redhat.com>
+> +M:	Sean Christopherson <seanjc@google.com>
+> +M:	Paolo Bonzini <pbonzini@redhat.com>
+> +L:	kvm@vger.kernel.org
+> +S:	Supported
+> +T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
+> +F:	arch/x86/kvm/hyperv.*
+> +F:	arch/x86/kvm/kvm_onhyperv.*
+> +F:	arch/x86/kvm/svm/svm_onhyperv.*
 
-I completely agree the list of booleans is a mess, but I don't love the result of
-adding @flags.  I wonder if we can do something similar to x86's struct kvm_page_fault
-and add an internal struct to pass params.  And then add e.g. gfn_to_pfn_interruptible()
-to wrap that logic.
+"arch/x86/kvm/svm/hyperv.*" is still missing) LGTM otherwise, and as it
+has my name:
 
-I suspect we could also clean up the @async behavior at the same time, as its
-interaction with FOLL_NOWAIT is confusing.
+Acked-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
+> +F:	arch/x86/kvm/vmx/evmcs.*
+> +
+>  KERNFS
+>  M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>  M:	Tejun Heo <tj@kernel.org>
+
+-- 
+Vitaly
+

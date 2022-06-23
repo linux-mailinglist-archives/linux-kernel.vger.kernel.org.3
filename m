@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7CC5581E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C840558211
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiFWRHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S231444AbiFWRJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiFWRG2 (ORCPT
+        with ESMTP id S233348AbiFWRHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:06:28 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF036517E6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:55:46 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id l4so19655294pgh.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zxNuJF6Nbe8LLHbYqIbwZg9Zj1L4NANG6tNglCp+Qvc=;
-        b=XHUVPgvbh1RbKwDTYzng/n5/obx4NKF4t5gJwAYybq7iw0yl1IDnJnj/UY6lbOdIcC
-         JkaxYapcyaMhT7hyRjqzXPDIvNUgOB31tZlsO0LlgDI/TYnfopMr1Zeep1u7xtng6c7U
-         Sm3VvZm1doZ/hhaqr8Q85AwjJvT8qWBqtgoRDufLJDPWRTqeYWW1HMtPPhtpNvrt51hn
-         OzAAz9xbjUVszG9brdyyjkJOuSgnHuvZ6zm2eprL83/CPtn07FUuEfi6zGOrWwOkzBjA
-         pYCc/T8UNb0tsN+TWWA7O5ktS1EBpp22pfEQuQWcMcqlVh/8XUXFTzRxBRfxmd9MTYgU
-         9zuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zxNuJF6Nbe8LLHbYqIbwZg9Zj1L4NANG6tNglCp+Qvc=;
-        b=YkZ1+r6UYkOVVMHCxKRZq4zMLpopbEgpOXyeFL95ezQ4v+mWpAvCmnUJRaSAxUFz1K
-         hnYo7qpzStx6YruW3WPf7PjV4rSb1LkiMjn8oTsct8zPyEGGL0JOSAGekvZIehbxMuJP
-         sqG9cqq3WEGKwfRJmRHmOTYbjOEjWCKnxesduO4E4F05bmwP8m/B9C6TiIE790U7jq6Q
-         ODIOY8liV4oB29C9GHWD2zugq3R41ipdcIuDPYiXuNYGFxMi8cmIL801OCsvGb2XPzE8
-         uFW4xtmNhxYkC4sFBxIQtP32BMUF1tihA3eKhLrL8JFj54XmGYtvVBlPLJ9Ve4FW1tr7
-         WOMg==
-X-Gm-Message-State: AJIora9hrG9hU1I5aOwcielL3dolL6wG2zufJZLAMTbbEv92lDLzjdNA
-        dr3A6qtSKLuxU8rI+CCtnmGDQ0GXcfmzezjEF3vvBQ==
-X-Google-Smtp-Source: AGRyM1tEW//oYgmqBPHq48elIVVWT5t+ubvinbX4G1Hc6hZJrESk88dK9Jd6fyiayXLcRsWyQhixpLKJ/IPg7eKqTKc=
-X-Received: by 2002:a05:6a00:2393:b0:524:eeb2:5547 with SMTP id
- f19-20020a056a00239300b00524eeb25547mr30203002pfc.8.1656003344568; Thu, 23
- Jun 2022 09:55:44 -0700 (PDT)
+        Thu, 23 Jun 2022 13:07:42 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED052E52;
+        Thu, 23 Jun 2022 09:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
+        :references:content-disposition:in-reply-to;
+        bh=152u4q3NMpIj2Wsm3Qk7KzVbZsgV3dVUGwLtauzK8mM=; b=t7C5LRUUSlY4aK5FineuqobWBj
+        IscnzFGg2xYa1BZrzHneaS8OtYzwbLzbmshMP6Q0nLbTnBFkxim26Vzy+6yYBGhIBi14T9ghnJxMA
+        /Unqw+e74DS3OzM2WuIH6jfWswM4hY6gLHeiM5uKBGRv+3b28iMA8TMao8ZNlYHNOGYcHP+iP+uWJ
+        OtuMQ3SpBUqBFlLpe5UC6VhTRANO2bmKoTjnR+GXmtNXKZfv3PxKoolErxspVOCczo0J+PQb+Andj
+        FxQE6yNlqL20JxK50aEi3CTFwi35r2P0qh1aiK9idxmGimFlWJe35tdeOWCU8OTg7UXOCpG99mfPK
+        wjEK/D/w==;
+Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
+        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1o4Q7d-00F4y1-05; Thu, 23 Jun 2022 10:56:01 -0600
+Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1o4Q7b-000A46-5V; Thu, 23 Jun 2022 10:55:59 -0600
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        kernel test robot <lkp@intel.com>
+Date:   Thu, 23 Jun 2022 10:55:52 -0600
+Message-Id: <20220623165552.38645-1-logang@deltatee.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
- <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org> <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
- <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
-In-Reply-To: <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 23 Jun 2022 09:55:33 -0700
-Message-ID: <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
-Subject: Re: [PATCH mm v5 0/9] memcg: accounting for objects allocated by
- mkdir, cgroup
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Vasily Averin <vvs@openvz.org>, kernel@openvz.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.31
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, logang@deltatee.com, lkp@intel.com
+X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] md/raid5: Fix divide type in raid5_make_request()
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 9:07 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 23-06-22 18:03:31, Vasily Averin wrote:
-> > Dear Michal,
-> > do you still have any concerns about this patch set?
->
-> Yes, I do not think we have concluded this to be really necessary. IIRC
-> Roman would like to see lingering cgroups addressed in not-so-distant
-> future (http://lkml.kernel.org/r/Ypd2DW7id4M3KJJW@carbon) and we already
-> have a limit for the number of cgroups in the tree. So why should we
-> chase after allocations that correspond the cgroups and somehow try to
-> cap their number via the memory consumption. This looks like something
-> that will get out of sync eventually and it also doesn't seem like the
-> best control to me (comparing to an explicit limit to prevent runaways).
-> --
+0day reports a build failure on the hexagon architecture:
 
-Let me give a counter argument to that. On a system running multiple
-workloads, how can the admin come up with a sensible limit for the
-number of cgroups? There will definitely be jobs that require much
-more number of sub-cgroups. Asking the admins to dynamically tune
-another tuneable is just asking for more complications. At the end all
-the users would just set it to max.
+  ld.lld: error: undefined symbol: __hexagon_udivdi3
+     referenced by raid5.c
+        md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
+     referenced by raid5.c
+        md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
+     did you mean: __hexagon_udivsi3
+        defined in: arch/hexagon/built-in.a(lib/udivsi3.o)
 
-I would recommend to see the commit ac7b79fd190b ("inotify, memcg:
-account inotify instances to kmemcg") where there is already a sysctl
-(inotify/max_user_instances) to limit the number of instances but
-there was no sensible way to set that limit on a multi-tenant system.
+This is caused by using DIV_ROUND_UP on a sector_t type.
+
+The actual value is known to be less than 256 so a wide 64bit divide
+here is not desirable. Thus cast the argument to an int to ensure it
+uses a 32bit divide.
+
+Fixes: 681fb14a7100 ("md/raid5: Pivot raid5_make_request()")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+---
+ drivers/md/raid5.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 5723a497108a..9d25696b793d 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -6091,7 +6091,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+ 	bi->bi_next = NULL;
+ 
+ 	bitmap_set(ctx.sectors_to_do, 0,
+-		   DIV_ROUND_UP(ctx.last_sector - logical_sector,
++		   DIV_ROUND_UP((int)(ctx.last_sector - logical_sector),
+ 				RAID5_STRIPE_SECTORS(conf)));
+ 
+ 	pr_debug("raid456: %s, logical %llu to %llu\n", __func__,
+
+base-commit: 57c19f921f8081c1a9444dc7f3f6b3ea43fe612e
+-- 
+2.30.2
+

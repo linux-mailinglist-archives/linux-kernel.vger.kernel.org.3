@@ -2,232 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB65C5575F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF52C5575F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiFWIyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
+        id S230201AbiFWIyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiFWIy1 (ORCPT
+        with ESMTP id S230281AbiFWIyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:54:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A012B20F73;
-        Thu, 23 Jun 2022 01:54:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BBCD61CB0;
-        Thu, 23 Jun 2022 08:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8843C3411B;
-        Thu, 23 Jun 2022 08:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655974465;
-        bh=53VjtG3sK4phU2SMSC2bl9AUDChPlVTKSBbfz22Eeto=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V5FagiNQRRaGwBs5DXgIDrEytvCZ2Un/5qZYyH3is021RS5vAFJEe3cabYAaRjaYJ
-         PL6OXNhhhGeQRwOcjSDwN4X+9c5MiYG+Rdh1us1qSEsNuEMzwDIwHQN4WS7lxKuCKn
-         USd+DvTpWc3hb++hC/pMpNfzXusSKVKRQ9SVmUxM=
-Date:   Thu, 23 Jun 2022 10:54:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nayna Jain <nayna@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        linux-efi@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>, gjoyce@ibm.com,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [RFC PATCH v2 2/3] fs: define a firmware security filesystem
- named fwsecurityfs
-Message-ID: <YrQqPhi4+jHZ1WJc@kroah.com>
-References: <20220622215648.96723-1-nayna@linux.ibm.com>
- <20220622215648.96723-3-nayna@linux.ibm.com>
+        Thu, 23 Jun 2022 04:54:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCBC37BC9;
+        Thu, 23 Jun 2022 01:54:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ge10so8060802ejb.7;
+        Thu, 23 Jun 2022 01:54:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9ewocLK4QQe9PxZjCCcv8MwH3fNq/SZdcCp141CybdY=;
+        b=Kqjw6Rve6l85j+tA8aUQq34+hQ66vEsjrz7vZgWhz7Ljx6vlzB/s0S3zyfFQUH/3BT
+         ZkoVvbpAQT0P8iWwpcGzSap2PCc40eq4cSfiuq4QCtmnpAzDkPt+fMI4DBgkA+27LIrI
+         eN16lc3f2jh7/ppkiKXiryX6aWvVb0L2f3CHOBu2BLisB23B+Mm+9+WAoyze/eNLdB86
+         cQ6NsCSLdUsv8Nw+QsCT03NjVe4ZnUmWMNojoAUVbeFNtjfDZOzVbiJhuskuAzLjqHS8
+         udz2ZBV/V0Phaa/vIIg9iK+PVwKhCxdnuv2P+h5O+NOvgH+8yzA4YG26sHiAhVavWVzX
+         /36Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9ewocLK4QQe9PxZjCCcv8MwH3fNq/SZdcCp141CybdY=;
+        b=Bq4CLLAM2UA13887kT4CGcFu3bjt9+1YYLlygNQk2c7KBl2dNhKVbhlkSccynjusvk
+         5koI9pZKZJjhFhaqcQJW5rqCvbgkZZkfqr2dgiOpHLnRfjnsiC94rutEsNTcMJTAYeMv
+         vkteWGfMRjhlHxnSIsa6blnvZQj70+Tuz5lm7JdPng2WV5b9E0VYq2bsM0UGWB4AP/rR
+         0QiqWiBzqkyM9k8P9d/tcozA4VO7QhPsubfwp8ATRdNcwxY8lVF5NR+PDKG1SuWHMuyu
+         6iU7VrBkv6fxbmLfa8VKFtCXGx8tHa9ek7yFid5xd/67pfKZVxE6Gus3iwj+ten850Rk
+         eyNA==
+X-Gm-Message-State: AJIora+pukWAxqt3wxjVn8X5WkbIPS/dudzhqWLwFFzRK77zxyXHqBG2
+        wVeJhOuXYhLKmqELjcCHrS7z2z1uOwyv7bFv5jw=
+X-Google-Smtp-Source: AGRyM1s/cuwwgO+0Sp2pW/dYpZ5m/GlC8Pm/9k9OqASIANcWAar3Aq5myyz+KQKUvdUTygA/txrImEaGpacIQGqXKII=
+X-Received: by 2002:a17:907:6295:b0:703:92b8:e113 with SMTP id
+ nd21-20020a170907629500b0070392b8e113mr7172323ejc.594.1655974482584; Thu, 23
+ Jun 2022 01:54:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622215648.96723-3-nayna@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com> <YqDLflKTsYaupArl@sirena.org.uk>
+ <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
+In-Reply-To: <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Date:   Thu, 23 Jun 2022 11:54:29 +0300
+Message-ID: <CANhJrGMqUmnSvyNRgRyp40YnGQkD3N_2AZLn94NDp+4RG0_x5w@mail.gmail.com>
+Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
+ register layouts
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Chen-Yu Tsai <wens@csie.org>,
+        jic23@kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, lars@metafoo.de,
+        "Rafael J . Wysocki" <rafael@kernel.org>, quic_gurus@quicinc.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 05:56:47PM -0400, Nayna Jain wrote:
-> securityfs is meant for linux security subsystems to expose policies/logs
-> or any other information. However, there are various firmware security
-> features which expose their variables for user management via kernel.
-> There is currently no single place to expose these variables. Different
-> platforms use sysfs/platform specific filesystem(efivarfs)/securityfs
-> interface as find appropriate. Thus, there is a gap in kernel interfaces
-> to expose variables for security features.
-> 
-> Define a firmware security filesystem (fwsecurityfs) to be used for
-> exposing variables managed by firmware and to be used by firmware
-> enabled security features. These variables are platform specific.
-> Filesystem provides platforms to implement their own underlying
-> semantics by defining own inode and file operations.
-> 
-> Similar to securityfs, the firmware security filesystem is recommended
-> to be exposed on a well known mount point /sys/firmware/security.
-> Platforms can define their own directory or file structure under this path.
-> 
-> Example:
-> 
-> # mount -t fwsecurityfs fwsecurityfs /sys/firmware/security
-> 
-> # cd /sys/firmware/security/
-> 
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> ---
->  fs/Kconfig                   |   1 +
->  fs/Makefile                  |   1 +
->  fs/fwsecurityfs/Kconfig      |  14 +++
->  fs/fwsecurityfs/Makefile     |  10 +++
->  fs/fwsecurityfs/inode.c      | 159 +++++++++++++++++++++++++++++++++++
->  fs/fwsecurityfs/internal.h   |  13 +++
->  fs/fwsecurityfs/super.c      | 154 +++++++++++++++++++++++++++++++++
->  include/linux/fwsecurityfs.h |  29 +++++++
->  include/uapi/linux/magic.h   |   1 +
->  9 files changed, 382 insertions(+)
->  create mode 100644 fs/fwsecurityfs/Kconfig
->  create mode 100644 fs/fwsecurityfs/Makefile
->  create mode 100644 fs/fwsecurityfs/inode.c
->  create mode 100644 fs/fwsecurityfs/internal.h
->  create mode 100644 fs/fwsecurityfs/super.c
->  create mode 100644 include/linux/fwsecurityfs.h
-> 
-> diff --git a/fs/Kconfig b/fs/Kconfig
-> index 5976eb33535f..19ea28143428 100644
-> --- a/fs/Kconfig
-> +++ b/fs/Kconfig
-> @@ -276,6 +276,7 @@ config ARCH_HAS_GIGANTIC_PAGE
->  
->  source "fs/configfs/Kconfig"
->  source "fs/efivarfs/Kconfig"
-> +source "fs/fwsecurityfs/Kconfig"
->  
->  endmenu
->  
-> diff --git a/fs/Makefile b/fs/Makefile
-> index 208a74e0b00e..5792cd0443cb 100644
-> --- a/fs/Makefile
-> +++ b/fs/Makefile
-> @@ -137,6 +137,7 @@ obj-$(CONFIG_F2FS_FS)		+= f2fs/
->  obj-$(CONFIG_CEPH_FS)		+= ceph/
->  obj-$(CONFIG_PSTORE)		+= pstore/
->  obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
-> +obj-$(CONFIG_FWSECURITYFS)		+= fwsecurityfs/
->  obj-$(CONFIG_EROFS_FS)		+= erofs/
->  obj-$(CONFIG_VBOXSF_FS)		+= vboxsf/
->  obj-$(CONFIG_ZONEFS_FS)		+= zonefs/
-> diff --git a/fs/fwsecurityfs/Kconfig b/fs/fwsecurityfs/Kconfig
-> new file mode 100644
-> index 000000000000..f1665511eeb9
-> --- /dev/null
-> +++ b/fs/fwsecurityfs/Kconfig
-> @@ -0,0 +1,14 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# Copyright (C) 2022 IBM Corporation
-> +# Author: Nayna Jain <nayna@linux.ibm.com>
-> +#
-> +
-> +config FWSECURITYFS
-> +	bool "Enable the fwsecurityfs filesystem"
-> +	help
-> +	  This will build the fwsecurityfs file system which is recommended
-> +	  to be mounted on /sys/firmware/security. This can be used by
-> +	  platforms to expose their variables which are managed by firmware.
-> +
-> +	  If you are unsure how to answer this question, answer N.
-> diff --git a/fs/fwsecurityfs/Makefile b/fs/fwsecurityfs/Makefile
-> new file mode 100644
-> index 000000000000..b9931d180178
-> --- /dev/null
-> +++ b/fs/fwsecurityfs/Makefile
-> @@ -0,0 +1,10 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# Copyright (C) 2022 IBM Corporation
-> +# Author: Nayna Jain <nayna@linux.ibm.com>
-> +#
-> +# Makefile for the firmware security filesystem
-> +
-> +obj-$(CONFIG_FWSECURITYFS)		+= fwsecurityfs.o
-> +
-> +fwsecurityfs-objs			:= inode.o super.o
-> diff --git a/fs/fwsecurityfs/inode.c b/fs/fwsecurityfs/inode.c
-> new file mode 100644
-> index 000000000000..5d06dc0de059
-> --- /dev/null
-> +++ b/fs/fwsecurityfs/inode.c
-> @@ -0,0 +1,159 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 IBM Corporation
-> + * Author: Nayna Jain <nayna@linux.ibm.com>
-> + */
-> +
-> +#include <linux/sysfs.h>
-> +#include <linux/kobject.h>
-> +#include <linux/fs.h>
-> +#include <linux/fs_context.h>
-> +#include <linux/mount.h>
-> +#include <linux/pagemap.h>
-> +#include <linux/init.h>
-> +#include <linux/namei.h>
-> +#include <linux/security.h>
-> +#include <linux/lsm_hooks.h>
-> +#include <linux/magic.h>
-> +#include <linux/ctype.h>
-> +#include <linux/fwsecurityfs.h>
-> +
-> +#include "internal.h"
-> +
-> +int fwsecurityfs_remove_file(struct dentry *dentry)
-> +{
-> +	drop_nlink(d_inode(dentry));
-> +	dput(dentry);
-> +	return 0;
-> +};
-> +EXPORT_SYMBOL_GPL(fwsecurityfs_remove_file);
-> +
-> +int fwsecurityfs_create_file(const char *name, umode_t mode,
-> +					u16 filesize, struct dentry *parent,
-> +					struct dentry *dentry,
-> +					const struct file_operations *fops)
-> +{
-> +	struct inode *inode;
-> +	int error;
-> +	struct inode *dir;
-> +
-> +	if (!parent)
-> +		return -EINVAL;
-> +
-> +	dir = d_inode(parent);
-> +	pr_debug("securityfs: creating file '%s'\n", name);
+Hi dee Ho peeps!
 
-Did you forget to call simple_pin_fs() here or anywhere else?
+Sorry for the late reply.
 
-And this can be just one function with the directory creation file, just
-check the mode and you will be fine.  Look at securityfs as an example
-of how to make this simpler.
+pe 10. kes=C3=A4k. 2022 klo 18.43 Aidan MacDonald
+(aidanmacdonald.0x0@gmail.com) kirjoitti:
+>
+> Mark Brown <broonie@kernel.org> writes:
+>
+> > On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
+> >
+> >> -    if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+> >> +    if (chip->get_irq_reg) {
+> >> +            reg =3D chip->get_irq_reg(base_reg, i);
+> >> +    } else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+> >
+> > It seems like it would be cleaner and clearer to refactor things so tha=
+t
+> > we always have a get_irq_reg() with standard chips getting given a
+> > default implementation which implements the current behaviour.
+>
+> I don't think that is a good way to clean things up. I only intended
+> get_irq_reg() to be a quick hack to solve a problem; in my opinion it
+> would be a poor abstraction to base the API around.
+>
+> What I'd suggest is something that will simplify regmap-irq. Instead of
+> defining the base registers, etc. in the chip, introduce a new struct
+> to describe a register group:
+>
+>     struct regmap_irq_reg_group {
+>         unsigned int status_base;
+>         unsigned int mask_base;
+>         ...
+>
+>         unsigned int irq_reg_stride;
+>
+>         int num_regs;
+>     };
+>
+> The idea is that the registers in a group are linearly mapped using the
+> formula "base + (i * irq_reg_stride)". Then it's possible to allow for
+> multiple register groups in regmap_irq_chip:
+>
+>     struct regmap_irq_chip {
+>         const struct regmap_irq_reg_group *groups;
+>         unsigned int num_groups;
+>
+>         unsigned int main_status_base;
+>         unsigned int num_main_status_bits;
+>         int num_main_regs;
+>
+>         ...
+>     };
+>
+> It should be straightforward to fit existing chips into this model.
+>
+> - Chips that use a main status + sub-block IRQ layout will define
+>   one register group for each sub-block and continue to describe the
+>   location of the main status registers inside of regmap_irq_chip.
+>   A group will only get polled if the corresponding main status bit
+>   is set -- n'th group is polled if n'th bit is set.
 
-> diff --git a/fs/fwsecurityfs/super.c b/fs/fwsecurityfs/super.c
+Does this work for devices where a single main status bit can flag
+IRQs in more than one sub-registers?
 
-super.c and inode.c can be in the same file, these are tiny, just make
-one file for the filesystem logic.
+Best Regards
+ -- Matti
 
-thanks,
+--=20
 
-greg k-h
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));

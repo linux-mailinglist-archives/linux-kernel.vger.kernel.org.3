@@ -2,164 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0897557A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C26D557A34
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiFWMUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
+        id S231418AbiFWMXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiFWMUh (ORCPT
+        with ESMTP id S231157AbiFWMXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:20:37 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B81691A6;
-        Thu, 23 Jun 2022 05:20:35 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 23 Jun 2022 20:20:25
- +0800 (GMT+08:00)
-X-Originating-IP: [10.190.71.226]
-Date:   Thu, 23 Jun 2022 20:20:25 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Paolo Abeni" <pabeni@redhat.com>
-Cc:     linux-hams@vger.kernel.org, ralf@linux-mips.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net: rose: fix UAF bugs caused by timer handler
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <91952d00df215751cbc0e4846c2d688f964fbfc1.camel@redhat.com>
-References: <cover.1655869357.git.duoming@zju.edu.cn>
- <bbc81ddb35efd09b89e2f8f6af72866bcc9c1550.1655869357.git.duoming@zju.edu.cn>
- <91952d00df215751cbc0e4846c2d688f964fbfc1.camel@redhat.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 23 Jun 2022 08:23:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD7DC63A6;
+        Thu, 23 Jun 2022 05:23:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D34E212FC;
+        Thu, 23 Jun 2022 05:23:10 -0700 (PDT)
+Received: from [10.57.85.4] (unknown [10.57.85.4])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A8CF3F534;
+        Thu, 23 Jun 2022 05:23:09 -0700 (PDT)
+Message-ID: <68263bd7-4528-7acb-b11f-6b1c6c8c72ef@arm.com>
+Date:   Thu, 23 Jun 2022 13:23:05 +0100
 MIME-Version: 1.0
-Message-ID: <6ec87210.ba32.1819081a8c5.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgD3x8iJWrRisOq6AA--.14264W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkKAVZdtaXdVQADsQ
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/2] vfio/type1: Simplify bus_type determination
+Content-Language: en-GB
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     cohuck@redhat.com, jgg@nvidia.com, iommu@lists.linux.dev,
+        iommu@lists.linux-foundation.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
+ <20220622161721.469fc9eb.alex.williamson@redhat.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220622161721.469fc9eb.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDIzIEp1biAyMDIyIDExOjEzOjQxICswMjAwIFBhb2xvIEFiZW5pIHdy
-b3RlOgoKPiA+IFRoZXJlIGFyZSBVQUYgYnVncyBpbiByb3NlX2hlYXJ0YmVhdF9leHBpcnkoKSwg
-cm9zZV90aW1lcl9leHBpcnkoKQo+ID4gYW5kIHJvc2VfaWRsZXRpbWVyX2V4cGlyeSgpLiBUaGUg
-cm9vdCBjYXVzZSBpcyB0aGF0IGRlbF90aW1lcigpCj4gPiBjb3VsZCBub3Qgc3RvcCB0aGUgdGlt
-ZXIgaGFuZGxlciB0aGF0IGlzIHJ1bm5pbmcgYW5kIHRoZSByZWZjb3VudAo+ID4gb2Ygc29jayBp
-cyBub3QgbWFuYWdlZCBwcm9wZXJseS4KPiA+IAo+ID4gT25lIG9mIHRoZSBVQUYgYnVncyBpcyBz
-aG93biBiZWxvdzoKPiA+IAo+ID4gICAgICh0aHJlYWQgMSkgICAgICAgICAgfCAgICAgICAgKHRo
-cmVhZCAyKQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgfCAgcm9zZV9iaW5kCj4gPiAgICAg
-ICAgICAgICAgICAgICAgICAgICB8ICByb3NlX2Nvbm5lY3QKPiA+ICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgICAgcm9zZV9zdGFydF9oZWFydGJlYXQKPiA+IHJvc2VfcmVsZWFzZSAgICAgICAg
-ICAgIHwgICAgKHdhaXQgYSB0aW1lKQo+ID4gICBjYXNlIFJPU0VfU1RBVEVfMCAgICAgfAo+ID4g
-ICByb3NlX2Rlc3Ryb3lfc29ja2V0ICAgfCAgcm9zZV9oZWFydGJlYXRfZXhwaXJ5Cj4gPiAgICAg
-cm9zZV9zdG9wX2hlYXJ0YmVhdCB8Cj4gPiAgICAgc29ja19wdXQoc2spICAgICAgICB8ICAgIC4u
-Lgo+ID4gICBzb2NrX3B1dChzaykgLy8gRlJFRSAgfAo+ID4gICAgICAgICAgICAgICAgICAgICAg
-ICAgfCAgICBiaF9sb2NrX3NvY2soc2spIC8vIFVTRQo+ID4gCj4gPiBUaGUgc29jayBpcyBkZWFs
-bG9jYXRlZCBieSBzb2NrX3B1dCgpIGluIHJvc2VfcmVsZWFzZSgpIGFuZAo+ID4gdGhlbiB1c2Vk
-IGJ5IGJoX2xvY2tfc29jaygpIGluIHJvc2VfaGVhcnRiZWF0X2V4cGlyeSgpLgo+ID4gCj4gPiBB
-bHRob3VnaCByb3NlX2Rlc3Ryb3lfc29ja2V0KCkgY2FsbHMgcm9zZV9zdG9wX2hlYXJ0YmVhdCgp
-LAo+ID4gaXQgY291bGQgbm90IHN0b3AgdGhlIHRpbWVyIHRoYXQgaXMgcnVubmluZy4KPiA+IAo+
-ID4gVGhlIEtBU0FOIHJlcG9ydCB0cmlnZ2VyZWQgYnkgUE9DIGlzIHNob3duIGJlbG93Ogo+ID4g
-Cj4gPiBCVUc6IEtBU0FOOiB1c2UtYWZ0ZXItZnJlZSBpbiBfcmF3X3NwaW5fbG9jaysweDVhLzB4
-MTEwCj4gPiBXcml0ZSBvZiBzaXplIDQgYXQgYWRkciBmZmZmODg4MDBhZTU5MDk4IGJ5IHRhc2sg
-c3dhcHBlci8zLzAKPiA+IC4uLgo+ID4gQ2FsbCBUcmFjZToKPiA+ICA8SVJRPgo+ID4gIGR1bXBf
-c3RhY2tfbHZsKzB4YmYvMHhlZQo+ID4gIHByaW50X2FkZHJlc3NfZGVzY3JpcHRpb24rMHg3Yi8w
-eDQ0MAo+ID4gIHByaW50X3JlcG9ydCsweDEwMS8weDIzMAo+ID4gID8gaXJxX3dvcmtfc2luZ2xl
-KzB4YmIvMHgxNDAKPiA+ICA/IF9yYXdfc3Bpbl9sb2NrKzB4NWEvMHgxMTAKPiA+ICBrYXNhbl9y
-ZXBvcnQrMHhlZC8weDEyMAo+ID4gID8gX3Jhd19zcGluX2xvY2srMHg1YS8weDExMAo+ID4gIGth
-c2FuX2NoZWNrX3JhbmdlKzB4MmJkLzB4MmUwCj4gPiAgX3Jhd19zcGluX2xvY2srMHg1YS8weDEx
-MAo+ID4gIHJvc2VfaGVhcnRiZWF0X2V4cGlyeSsweDM5LzB4MzcwCj4gPiAgPyByb3NlX3N0YXJ0
-X2hlYXJ0YmVhdCsweGIwLzB4YjAKPiA+ICBjYWxsX3RpbWVyX2ZuKzB4MmQvMHgxYzAKPiA+ICA/
-IHJvc2Vfc3RhcnRfaGVhcnRiZWF0KzB4YjAvMHhiMAo+ID4gIGV4cGlyZV90aW1lcnMrMHgxZjMv
-MHgzMjAKPiA+ICBfX3J1bl90aW1lcnMrMHgzZmYvMHg0ZDAKPiA+ICBydW5fdGltZXJfc29mdGly
-cSsweDQxLzB4ODAKPiA+ICBfX2RvX3NvZnRpcnErMHgyMzMvMHg1NDQKPiA+ICBpcnFfZXhpdF9y
-Y3UrMHg0MS8weGEwCj4gPiAgc3lzdmVjX2FwaWNfdGltZXJfaW50ZXJydXB0KzB4OGMvMHhiMAo+
-ID4gIDwvSVJRPgo+ID4gIDxUQVNLPgo+ID4gIGFzbV9zeXN2ZWNfYXBpY190aW1lcl9pbnRlcnJ1
-cHQrMHgxYi8weDIwCj4gPiBSSVA6IDAwMTA6ZGVmYXVsdF9pZGxlKzB4Yi8weDEwCj4gPiBSU1A6
-IDAwMTg6ZmZmZmM5MDAwMDEyZmVhMCBFRkxBR1M6IDAwMDAwMjAyCj4gPiBSQVg6IDAwMDAwMDAw
-MDAwMGJjYWUgUkJYOiBmZmZmODg4MDA2NjYwZjAwIFJDWDogMDAwMDAwMDAwMDAwYmNhZQo+ID4g
-UkRYOiAwMDAwMDAwMDAwMDAwMDAxIFJTSTogZmZmZmZmZmY4NDNhMTFjMCBSREk6IGZmZmZmZmZm
-ODQzYTExODAKPiA+IFJCUDogZGZmZmZjMDAwMDAwMDAwMCBSMDg6IGRmZmZmYzAwMDAwMDAwMDAg
-UjA5OiBmZmZmZWQxMDBkYTM2ZDQ2Cj4gPiBSMTA6IGRmZmZlOTEwMGRhMzZkNDcgUjExOiBmZmZm
-ZmZmZjgzY2YwOTUwIFIxMjogMDAwMDAwMDAwMDAwMDAwMAo+ID4gUjEzOiAxZmZmZjExMDAwY2Nj
-MWUwIFIxNDogZmZmZmZmZmY4NTQyYWYyOCBSMTU6IGRmZmZmYzAwMDAwMDAwMDAKPiA+IC4uLgo+
-ID4gQWxsb2NhdGVkIGJ5IHRhc2sgMTQ2Ogo+ID4gIF9fa2FzYW5fa21hbGxvYysweGM0LzB4ZjAK
-PiA+ICBza19wcm90X2FsbG9jKzB4ZGQvMHgxYTAKPiA+ICBza19hbGxvYysweDJkLzB4NGUwCj4g
-PiAgcm9zZV9jcmVhdGUrMHg3Yi8weDMzMAo+ID4gIF9fc29ja19jcmVhdGUrMHgyZGQvMHg2NDAK
-PiA+ICBfX3N5c19zb2NrZXQrMHhjNy8weDI3MAo+ID4gIF9feDY0X3N5c19zb2NrZXQrMHg3MS8w
-eDgwCj4gPiAgZG9fc3lzY2FsbF82NCsweDQzLzB4OTAKPiA+ICBlbnRyeV9TWVNDQUxMXzY0X2Fm
-dGVyX2h3ZnJhbWUrMHg0Ni8weGIwCj4gPiAKPiA+IEZyZWVkIGJ5IHRhc2sgMTUyOgo+ID4gIGth
-c2FuX3NldF90cmFjaysweDRjLzB4NzAKPiA+ICBrYXNhbl9zZXRfZnJlZV9pbmZvKzB4MWYvMHg0
-MAo+ID4gIF9fX19rYXNhbl9zbGFiX2ZyZWUrMHgxMjQvMHgxOTAKPiA+ICBrZnJlZSsweGQzLzB4
-MjcwCj4gPiAgX19za19kZXN0cnVjdCsweDMxNC8weDQ2MAo+ID4gIHJvc2VfcmVsZWFzZSsweDJm
-YS8weDNiMAo+ID4gIHNvY2tfY2xvc2UrMHhjYi8weDIzMAo+ID4gIF9fZnB1dCsweDJkOS8weDY1
-MAo+ID4gIHRhc2tfd29ya19ydW4rMHhkNi8weDE2MAo+ID4gIGV4aXRfdG9fdXNlcl9tb2RlX2xv
-b3ArMHhjNy8weGQwCj4gPiAgZXhpdF90b191c2VyX21vZGVfcHJlcGFyZSsweDRlLzB4ODAKPiA+
-ICBzeXNjYWxsX2V4aXRfdG9fdXNlcl9tb2RlKzB4MjAvMHg0MAo+ID4gIGRvX3N5c2NhbGxfNjQr
-MHg0Zi8weDkwCj4gPiAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4NDYvMHhiMAo+
-ID4gCj4gPiBUaGlzIHBhdGNoIGFkZHMgcmVmY291bnQgb2Ygc29jayB3aGVuIHdlIHVzZSBmdW5j
-dGlvbnMKPiA+IHN1Y2ggYXMgcm9zZV9zdGFydF9oZWFydGJlYXQoKSBhbmQgc28gb24gdG8gc3Rh
-cnQgdGltZXIsCj4gPiBhbmQgZGVjcmVhc2VzIHRoZSByZWZjb3VudCBvZiBzb2NrIHdoZW4gdGlt
-ZXIgaXMgZmluaXNoZWQKPiA+IG9yIGRlbGV0ZWQgYnkgZnVuY3Rpb25zIHN1Y2ggYXMgcm9zZV9z
-dG9wX2hlYXJ0YmVhdCgpCj4gPiBhbmQgc28gb24uIEFzIGEgcmVzdWx0LCB0aGUgVUFGIGJ1Z3Mg
-Y291bGQgYmUgbWl0aWdhdGVkLgo+ID4gCj4gPiBGaXhlczogMWRhMTc3ZTRjM2Y0ICgiTGludXgt
-Mi42LjEyLXJjMiIpCj4gPiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1
-LmVkdS5jbj4KPiA+IFRlc3RlZC1ieTogRHVvbWluZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+
-Cj4gPiAtLS0KPiA+ICBuZXQvcm9zZS9yb3NlX3RpbWVyLmMgfCAyMiArKysrKysrKysrKysrLS0t
-LS0tLS0tCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKyksIDkgZGVsZXRpb25z
-KC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9uZXQvcm9zZS9yb3NlX3RpbWVyLmMgYi9uZXQvcm9z
-ZS9yb3NlX3RpbWVyLmMKPiA+IGluZGV4IGIzMTM4ZmMyZTU1Li4xOGQxOTEyNTIwYiAxMDA2NDQK
-PiA+IC0tLSBhL25ldC9yb3NlL3Jvc2VfdGltZXIuYwo+ID4gKysrIGIvbmV0L3Jvc2Uvcm9zZV90
-aW1lci5jCj4gPiBAQCAtMzYsNyArMzYsNyBAQCB2b2lkIHJvc2Vfc3RhcnRfaGVhcnRiZWF0KHN0
-cnVjdCBzb2NrICpzaykKPiA+ICAJc2stPnNrX3RpbWVyLmZ1bmN0aW9uID0gcm9zZV9oZWFydGJl
-YXRfZXhwaXJ5Owo+ID4gIAlzay0+c2tfdGltZXIuZXhwaXJlcyAgPSBqaWZmaWVzICsgNSAqIEha
-Owo+ID4gIAo+ID4gLQlhZGRfdGltZXIoJnNrLT5za190aW1lcik7Cj4gPiArCXNrX3Jlc2V0X3Rp
-bWVyKHNrLCAmc2stPnNrX3RpbWVyLCBzay0+c2tfdGltZXIuZXhwaXJlcyk7Cj4gPiAgfQo+ID4g
-IAo+ID4gIHZvaWQgcm9zZV9zdGFydF90MXRpbWVyKHN0cnVjdCBzb2NrICpzaykKPiA+IEBAIC00
-OCw3ICs0OCw3IEBAIHZvaWQgcm9zZV9zdGFydF90MXRpbWVyKHN0cnVjdCBzb2NrICpzaykKPiA+
-ICAJcm9zZS0+dGltZXIuZnVuY3Rpb24gPSByb3NlX3RpbWVyX2V4cGlyeTsKPiA+ICAJcm9zZS0+
-dGltZXIuZXhwaXJlcyAgPSBqaWZmaWVzICsgcm9zZS0+dDE7Cj4gPiAgCj4gPiAtCWFkZF90aW1l
-cigmcm9zZS0+dGltZXIpOwo+ID4gKwlza19yZXNldF90aW1lcihzaywgJnJvc2UtPnRpbWVyLCBy
-b3NlLT50aW1lci5leHBpcmVzKTsKPiA+ICB9Cj4gPiAgCj4gPiAgdm9pZCByb3NlX3N0YXJ0X3Qy
-dGltZXIoc3RydWN0IHNvY2sgKnNrKQo+ID4gQEAgLTYwLDcgKzYwLDcgQEAgdm9pZCByb3NlX3N0
-YXJ0X3QydGltZXIoc3RydWN0IHNvY2sgKnNrKQo+ID4gIAlyb3NlLT50aW1lci5mdW5jdGlvbiA9
-IHJvc2VfdGltZXJfZXhwaXJ5Owo+ID4gIAlyb3NlLT50aW1lci5leHBpcmVzICA9IGppZmZpZXMg
-KyByb3NlLT50MjsKPiA+ICAKPiA+IC0JYWRkX3RpbWVyKCZyb3NlLT50aW1lcik7Cj4gPiArCXNr
-X3Jlc2V0X3RpbWVyKHNrLCAmcm9zZS0+dGltZXIsIHJvc2UtPnRpbWVyLmV4cGlyZXMpOwo+ID4g
-IH0KPiA+ICAKPiA+ICB2b2lkIHJvc2Vfc3RhcnRfdDN0aW1lcihzdHJ1Y3Qgc29jayAqc2spCj4g
-PiBAQCAtNzIsNyArNzIsNyBAQCB2b2lkIHJvc2Vfc3RhcnRfdDN0aW1lcihzdHJ1Y3Qgc29jayAq
-c2spCj4gPiAgCXJvc2UtPnRpbWVyLmZ1bmN0aW9uID0gcm9zZV90aW1lcl9leHBpcnk7Cj4gPiAg
-CXJvc2UtPnRpbWVyLmV4cGlyZXMgID0gamlmZmllcyArIHJvc2UtPnQzOwo+ID4gIAo+ID4gLQlh
-ZGRfdGltZXIoJnJvc2UtPnRpbWVyKTsKPiA+ICsJc2tfcmVzZXRfdGltZXIoc2ssICZyb3NlLT50
-aW1lciwgcm9zZS0+dGltZXIuZXhwaXJlcyk7Cj4gPiAgfQo+ID4gIAo+ID4gIHZvaWQgcm9zZV9z
-dGFydF9oYnRpbWVyKHN0cnVjdCBzb2NrICpzaykKPiA+IEBAIC04NCw3ICs4NCw3IEBAIHZvaWQg
-cm9zZV9zdGFydF9oYnRpbWVyKHN0cnVjdCBzb2NrICpzaykKPiA+ICAJcm9zZS0+dGltZXIuZnVu
-Y3Rpb24gPSByb3NlX3RpbWVyX2V4cGlyeTsKPiA+ICAJcm9zZS0+dGltZXIuZXhwaXJlcyAgPSBq
-aWZmaWVzICsgcm9zZS0+aGI7Cj4gPiAgCj4gPiAtCWFkZF90aW1lcigmcm9zZS0+dGltZXIpOwo+
-ID4gKwlza19yZXNldF90aW1lcihzaywgJnJvc2UtPnRpbWVyLCByb3NlLT50aW1lci5leHBpcmVz
-KTsKPiA+ICB9Cj4gPiAgCj4gPiAgdm9pZCByb3NlX3N0YXJ0X2lkbGV0aW1lcihzdHJ1Y3Qgc29j
-ayAqc2spCj4gPiBAQCAtOTcsMjMgKzk3LDIzIEBAIHZvaWQgcm9zZV9zdGFydF9pZGxldGltZXIo
-c3RydWN0IHNvY2sgKnNrKQo+ID4gIAkJcm9zZS0+aWRsZXRpbWVyLmZ1bmN0aW9uID0gcm9zZV9p
-ZGxldGltZXJfZXhwaXJ5Owo+ID4gIAkJcm9zZS0+aWRsZXRpbWVyLmV4cGlyZXMgID0gamlmZmll
-cyArIHJvc2UtPmlkbGU7Cj4gPiAgCj4gPiAtCQlhZGRfdGltZXIoJnJvc2UtPmlkbGV0aW1lcik7
-Cj4gPiArCQlza19yZXNldF90aW1lcihzaywgJnJvc2UtPmlkbGV0aW1lciwgcm9zZS0+aWRsZXRp
-bWVyLmV4cGlyZXMpOwo+IAo+IEEgZmV3IGxpbmVzIGFib3ZlIHRoZXJlIGlzIHN0aWxsIGEgJ2Rl
-bF90aW1lcigmcm9zZS0+aWRsZXRpbWVyKTsnIGNhbGwKPiB3aGljaCBtdXN0IGJlIGNvbnZlcnRl
-ZCB0byBza19zdG9wX3RpbWVyKCksIG90aGVyd2lzZSB0aGVyZSB3aWxsIGJlIGEKPiBwb3NzaWJs
-ZSBzayByZWZlcmVuY2UgbGVhay4KPiAKPiBUaGVyZSBhcmUgb3RoZXIgZGVsX3RpbWVyKCZyb3Nl
-LT50aW1lcikgdGhhdCBuZWVkIGNvbnZlcnNpb24uCgpUaGFuayB5b3UgZm9yIHlvdXIgdGltZSBh
-bmQgc3VnZ2VzdGlvbnMhIEkgd2lsbCBjb252ZXJ0ICdkZWxfdGltZXIoJnJvc2UtPmlkbGV0aW1l
-cik7JwphbmQgc28gb24gdG8gc2tfc3RvcF90aW1lcigpLgoKQmVzdCByZWdhcmRzLApEdW9taW5n
-IFpob3UK
+On 2022-06-22 23:17, Alex Williamson wrote:
+> On Wed, 22 Jun 2022 13:04:11 +0100
+> Robin Murphy <robin.murphy@arm.com> wrote:
+> 
+>> Since IOMMU groups are mandatory for drivers to support, it stands to
+>> reason that any device which has been successfully be added to a group
+> 
+> s/be //
+
+Oops.
+
+>> must be on a bus supported by that IOMMU driver, and therefore a domain
+>> viable for any device in the group must be viable for all devices in
+>> the group. This already has to be the case for the IOMMU API's internal
+>> default domain, for instance. Thus even if the group contains devices on
+>> different buses, that can only mean that the IOMMU driver actually
+>> supports such an odd topology, and so without loss of generality we can
+>> expect the bus type of any device in a group to be suitable for IOMMU
+>> API calls.
+>>
+>> Replace vfio_bus_type() with a simple call to resolve an appropriate
+>> member device from which to then derive a bus type. This is also a step
+>> towards removing the vague bus-based interfaces from the IOMMU API, when
+>> we can subsequently switch to using this device directly.
+>>
+>> Furthermore, scrutiny reveals a lack of protection for the bus being
+>> removed while vfio_iommu_type1_attach_group() is using it; the reference
+>> that VFIO holds on the iommu_group ensures that data remains valid, but
+>> does not prevent the group's membership changing underfoot. Holding the
+>> vfio_device for as long as we need here also neatly solves this.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>
+>> After sleeping on it, I decided to type up the helper function approach
+>> to see how it looked in practice, and in doing so realised that with one
+>> more tweak it could also subsume the locking out of the common paths as
+>> well, so end up being a self-contained way for type1 to take care of its
+>> own concern, which I rather like.
+>>
+>>   drivers/vfio/vfio.c             | 18 +++++++++++++++++-
+>>   drivers/vfio/vfio.h             |  3 +++
+>>   drivers/vfio/vfio_iommu_type1.c | 30 +++++++++++-------------------
+>>   3 files changed, 31 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+>> index 61e71c1154be..73bab04880d0 100644
+>> --- a/drivers/vfio/vfio.c
+>> +++ b/drivers/vfio/vfio.c
+>> @@ -448,7 +448,7 @@ static void vfio_group_get(struct vfio_group *group)
+>>    * Device objects - create, release, get, put, search
+>>    */
+>>   /* Device reference always implies a group reference */
+>> -static void vfio_device_put(struct vfio_device *device)
+>> +void vfio_device_put(struct vfio_device *device)
+>>   {
+>>   	if (refcount_dec_and_test(&device->refcount))
+>>   		complete(&device->comp);
+>> @@ -475,6 +475,22 @@ static struct vfio_device *vfio_group_get_device(struct vfio_group *group,
+>>   	return NULL;
+>>   }
+>>   
+>> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group)
+>> +{
+>> +	struct vfio_group *group = vfio_group_get_from_iommu(iommu_group);
+>> +	struct vfio_device *device;
+> 
+> Check group for NULL.
+
+OK - FWIW in context this should only ever make sense to call with an 
+iommu_group which has already been derived from a vfio_group, and I did 
+initially consider a check with a WARN_ON(), but then decided that the 
+unguarded dereference would be a sufficiently strong message. No problem 
+with bringing that back to make it more defensive if that's what you prefer.
+
+>> +
+>> +	mutex_lock(&group->device_lock);
+>> +	list_for_each_entry(device, &group->device_list, group_next) {
+>> +		if (vfio_device_try_get(device)) {
+>> +			mutex_unlock(&group->device_lock);
+>> +			return device;
+>> +		}
+>> +	}
+>> +	mutex_unlock(&group->device_lock);
+>> +	return NULL;
+> 
+> No vfio_group_put() on either path.
+
+Oops indeed.
+
+>> +}
+>> +
+>>   /*
+>>    * VFIO driver API
+>>    */
+>> diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+>> index a67130221151..e8f21e64541b 100644
+>> --- a/drivers/vfio/vfio.h
+>> +++ b/drivers/vfio/vfio.h
+>> @@ -70,3 +70,6 @@ struct vfio_iommu_driver_ops {
+>>   
+>>   int vfio_register_iommu_driver(const struct vfio_iommu_driver_ops *ops);
+>>   void vfio_unregister_iommu_driver(const struct vfio_iommu_driver_ops *ops);
+>> +
+>> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group);
+>> +void vfio_device_put(struct vfio_device *device);
+>> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+>> index c13b9290e357..e38b8bfde677 100644
+>> --- a/drivers/vfio/vfio_iommu_type1.c
+>> +++ b/drivers/vfio/vfio_iommu_type1.c
+>> @@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
+>>   	return ret;
+>>   }
+>>   
+>> -static int vfio_bus_type(struct device *dev, void *data)
+>> -{
+>> -	struct bus_type **bus = data;
+>> -
+>> -	if (*bus && *bus != dev->bus)
+>> -		return -EINVAL;
+>> -
+>> -	*bus = dev->bus;
+>> -
+>> -	return 0;
+>> -}
+>> -
+>>   static int vfio_iommu_replay(struct vfio_iommu *iommu,
+>>   			     struct vfio_domain *domain)
+>>   {
+>> @@ -2159,7 +2147,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>>   	struct vfio_iommu *iommu = iommu_data;
+>>   	struct vfio_iommu_group *group;
+>>   	struct vfio_domain *domain, *d;
+>> -	struct bus_type *bus = NULL;
+>> +	struct vfio_device *iommu_api_dev;
+>>   	bool resv_msi, msi_remap;
+>>   	phys_addr_t resv_msi_base = 0;
+>>   	struct iommu_domain_geometry *geo;
+>> @@ -2192,18 +2180,19 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>>   		goto out_unlock;
+>>   	}
+>>   
+>> -	/* Determine bus_type in order to allocate a domain */
+>> -	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
+>> -	if (ret)
+>> +	/* Resolve the group back to a member device for IOMMU API ops */
+>> +	ret = -ENODEV;
+>> +	iommu_api_dev = vfio_device_get_from_iommu(iommu_group);
+>> +	if (!iommu_api_dev)
+>>   		goto out_free_group;
+>>   
+>>   	ret = -ENOMEM;
+>>   	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+>>   	if (!domain)
+>> -		goto out_free_group;
+>> +		goto out_put_dev;
+>>   
+>>   	ret = -EIO;
+>> -	domain->domain = iommu_domain_alloc(bus);
+>> +	domain->domain = iommu_domain_alloc(iommu_api_dev->dev->bus);
+> 
+> It makes sense to move away from a bus centric interface to iommu ops
+> and I can see that having a device interface when we have device level
+> address-ability within a group makes sense, but does it make sense to
+> only have that device level interface?  For example, if an iommu_group
+> is going to remain an aspect of the iommu subsystem, shouldn't we be
+> able to allocate a domain and test capabilities based on the group and
+> the iommu driver should have enough embedded information reachable from
+> the struct iommu_group to do those things?  This "perform group level
+> operations based on an arbitrary device in the group" is pretty klunky.
+
+The fact* is that devices (and domains) are the fundamental units of the 
+IOMMU API internals, due to what's most practical within the Linux 
+driver model, while groups remain more of a mid-level abstraction - 
+IOMMU drivers themselves are only aware of groups at all in terms of 
+whether they can physically distinguish a given device from others. The 
+client-driver-facing API is already moving back to being device-centric, 
+because that's what fits everyone else's usage models, and we concluded 
+that exposing the complexity of groups everywhere was more trouble than 
+it's worth.
+
+So yes, technically we could implement an iommu_group_capable() and an 
+iommu_group_domain_alloc(), which would still just internally resolve 
+the IOMMU ops and instance data from a member device to perform the 
+driver-level call, but once again it would be for the benefit of 
+precisely one user. And I really have minimal enthusiasm for diverging 
+any further into one IOMMU API for everyone else plus a separate special 
+IOMMU API for VFIO type1, when type1 is supposed to be the 
+VFIO-to-IOMMU-API translation layer anyway! To look at it another way, 
+if most of the complexity of groups is for VFIO's benefit, then why 
+*shouldn't* VFIO take responsibility for some of the fiddly details that 
+don't matter to anyone else?
+
+Thanks,
+Robin.
+
+
+* with some inescapable degree of subjective opinion, of course

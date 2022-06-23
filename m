@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6873F558740
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5FC558745
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbiFWSWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S233614AbiFWSXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237054AbiFWSUg (ORCPT
+        with ESMTP id S237081AbiFWSVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:20:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5CC680A3;
-        Thu, 23 Jun 2022 10:25:09 -0700 (PDT)
+        Thu, 23 Jun 2022 14:21:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8ACB68C42;
+        Thu, 23 Jun 2022 10:25:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A793560B79;
-        Thu, 23 Jun 2022 17:25:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809B9C3411B;
-        Thu, 23 Jun 2022 17:25:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C67DD61BFA;
+        Thu, 23 Jun 2022 17:25:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B936AC3411B;
+        Thu, 23 Jun 2022 17:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656005108;
-        bh=SRMKkR6B/s1amXppPbKxKENrJIwF9K0pCjkqpT0XZf0=;
+        s=korg; t=1656005111;
+        bh=c5AcL957SsFi4ZAuL0Y2ToBTmHljoGZLqLESIUV+rfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HkuAvrA54Gg29IxW9p3Pxl0sIJM6XvZRExn53K8v9CbsIEIs00k5dk+YAZafVDUcz
-         AUyyN5Mi+M88XdXyjuAQ2X1tNEVthHg3Oe1hjWJPPZRUV7b8zpxNyxVAGq6XOu1SW2
-         hIJpWkMfQ+klnXuzs3Bi46bkkK8+KPDEJult+49M=
+        b=hKYs+yNiSDnHjxn17/VJcieBx/hsxbbGd0zYmGrDfGlM7N8TBrIwG/qNqoLXBSWdH
+         lLAPV1Mm+xjVOz2W3rN4BEF6ZrQ9cen8pzALvu0nQZbKQFFwp6+HVeXP1+GK39KOnp
+         H85u8Y6X/vEH39Hj5UQo8c8hUMlTLHKq4zeaWr1s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.4 10/11] arm64: mm: Dont invalidate FROM_DEVICE buffers at start of DMA transfer
-Date:   Thu, 23 Jun 2022 18:45:14 +0200
-Message-Id: <20220623164321.498480839@linuxfoundation.org>
+        stable@vger.kernel.org, Julian Haller <julian.haller@philips.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 11/11] Revert "hwmon: Make chip parameter for with_info API mandatory"
+Date:   Thu, 23 Jun 2022 18:45:15 +0200
+Message-Id: <20220623164321.527852885@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164321.195163701@linuxfoundation.org>
 References: <20220623164321.195163701@linuxfoundation.org>
@@ -58,56 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Will Deacon <will@kernel.org>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit c50f11c6196f45c92ca48b16a5071615d4ae0572 upstream.
+This reverts commit 1ec0bc72f5dab3ab367ae5230cf6f212d805a225 which is
+commit ddaefa209c4ac791c1262e97c9b2d0440c8ef1d5 upstream.  It should not
+have been applied to the stable trees.
 
-Invalidating the buffer memory in arch_sync_dma_for_device() for
-FROM_DEVICE transfers
-
-When using the streaming DMA API to map a buffer prior to inbound
-non-coherent DMA (i.e. DMA_FROM_DEVICE), we invalidate any dirty CPU
-cachelines so that they will not be written back during the transfer and
-corrupt the buffer contents written by the DMA. This, however, poses two
-potential problems:
-
-  (1) If the DMA transfer does not write to every byte in the buffer,
-      then the unwritten bytes will contain stale data once the transfer
-      has completed.
-
-  (2) If the buffer has a virtual alias in userspace, then stale data
-      may be visible via this alias during the period between performing
-      the cache invalidation and the DMA writes landing in memory.
-
-Address both of these issues by cleaning (aka writing-back) the dirty
-lines in arch_sync_dma_for_device(DMA_FROM_DEVICE) instead of discarding
-them using invalidation.
-
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220606152150.GA31568@willie-the-truck
-Signed-off-by: Will Deacon <will@kernel.org>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Link: https://lore.kernel.org/r/20220610151228.4562-2-will@kernel.org
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220622154454.GA1864037@roeck-us.net
+Reported-by: Julian Haller <julian.haller@philips.com>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Sasha Levin <sashal@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/mm/cache.S |    2 --
- 1 file changed, 2 deletions(-)
+ Documentation/hwmon/hwmon-kernel-api.rst |    2 +-
+ drivers/hwmon/hwmon.c                    |   16 +++++++++-------
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
---- a/arch/arm64/mm/cache.S
-+++ b/arch/arm64/mm/cache.S
-@@ -228,8 +228,6 @@ ENDPIPROC(__dma_flush_area)
-  *	- dir	- DMA direction
-  */
- ENTRY(__dma_map_area)
--	cmp	w2, #DMA_FROM_DEVICE
--	b.eq	__dma_inv_area
- 	b	__dma_clean_area
- ENDPIPROC(__dma_map_area)
+--- a/Documentation/hwmon/hwmon-kernel-api.rst
++++ b/Documentation/hwmon/hwmon-kernel-api.rst
+@@ -72,7 +72,7 @@ hwmon_device_register_with_info is the m
+ to register a hardware monitoring device. It creates the standard sysfs
+ attributes in the hardware monitoring core, letting the driver focus on reading
+ from and writing to the chip instead of having to bother with sysfs attributes.
+-The parent device parameter as well as the chip parameter must not be NULL. Its
++The parent device parameter cannot be NULL with non-NULL chip info. Its
+ parameters are described in more detail below.
  
+ devm_hwmon_device_register_with_info is similar to
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -715,12 +715,11 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_
+ 
+ /**
+  * hwmon_device_register_with_info - register w/ hwmon
+- * @dev: the parent device (mandatory)
+- * @name: hwmon name attribute (mandatory)
+- * @drvdata: driver data to attach to created device (optional)
+- * @chip: pointer to hwmon chip information (mandatory)
++ * @dev: the parent device
++ * @name: hwmon name attribute
++ * @drvdata: driver data to attach to created device
++ * @chip: pointer to hwmon chip information
+  * @extra_groups: pointer to list of additional non-standard attribute groups
+- *	(optional)
+  *
+  * hwmon_device_unregister() must be called when the device is no
+  * longer needed.
+@@ -733,10 +732,13 @@ hwmon_device_register_with_info(struct d
+ 				const struct hwmon_chip_info *chip,
+ 				const struct attribute_group **extra_groups)
+ {
+-	if (!dev || !name || !chip)
++	if (!name)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	if (!chip->ops || !chip->ops->is_visible || !chip->info)
++	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
++		return ERR_PTR(-EINVAL);
++
++	if (chip && !dev)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
 
 

@@ -2,103 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF40B557584
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FAC55758B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiFWIce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S230197AbiFWIdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiFWIc1 (ORCPT
+        with ESMTP id S229470AbiFWIdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:32:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B81548E4C;
-        Thu, 23 Jun 2022 01:32:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CB3AF21CEF;
-        Thu, 23 Jun 2022 08:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655973141; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YhxK8ZZPI3lUmCLii+65rd4UgUV1fnm192cvOMrF6jY=;
-        b=cSLQD/HW8YWib0EtDF6YMhVwjZqBHB1wXhqVj8oTrsAeRwlbEkB695BH54J5l9iI8bE9ZZ
-        kQIjySKbdNyswhTWYCpa7RbTf8ty+MBBzFFi7CxTcwTcz8ZC2YsT9clsQbMa8OqC6pwuHo
-        pJJwUlT4GyHdivZUZxMM8BpSMglX+Mk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655973141;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YhxK8ZZPI3lUmCLii+65rd4UgUV1fnm192cvOMrF6jY=;
-        b=s6UwSurfXFe9u0KCb0T1ed3urucBA8q2fdMS61gbXg3x/jy9iqMp+DxXle8rghennq6GGy
-        HzGe22e28xNhZFDg==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BBDA12C143;
-        Thu, 23 Jun 2022 08:32:15 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     mturquette@baylibre.com
-Cc:     mliska@suse.cz, linux-kernel@vger.kernel.org,
-        Andi Kleen <ak@linux.intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 2/2] clk: renesas: rcar-gen4: Fix initconst confusion for cpg_pll_config
-Date:   Thu, 23 Jun 2022 10:32:17 +0200
-Message-Id: <20220623083217.26433-2-jslaby@suse.cz>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623083217.26433-1-jslaby@suse.cz>
-References: <20220623083217.26433-1-jslaby@suse.cz>
+        Thu, 23 Jun 2022 04:33:47 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D7E13F8A;
+        Thu, 23 Jun 2022 01:33:46 -0700 (PDT)
+Received: from mail-yb1-f177.google.com ([209.85.219.177]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MORN0-1oJEda2liA-00PwU7; Thu, 23 Jun 2022 10:33:44 +0200
+Received: by mail-yb1-f177.google.com with SMTP id 23so34569416ybe.8;
+        Thu, 23 Jun 2022 01:33:44 -0700 (PDT)
+X-Gm-Message-State: AJIora9yHFTN7923r6JSeJlM2Z6Np+jeeCOJcXAP3QIKRj6MlriEi7Cr
+        Ru6Dgrq4V720635n0uZ6Dpp4TWH4YipGZ29N3/E=
+X-Google-Smtp-Source: AGRyM1vpjNUL/cDQCAr6IDE7zemhTcO8DLjRIsD3hMydd57CzdT1bmHPuTtCl+as80/GyaFbtaHiOikuetXsjsJdvX4=
+X-Received: by 2002:a25:d792:0:b0:669:2e6e:208e with SMTP id
+ o140-20020a25d792000000b006692e6e208emr8179490ybg.452.1655973223374; Thu, 23
+ Jun 2022 01:33:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220621144920.2945595-1-guoren@kernel.org> <20220621144920.2945595-2-guoren@kernel.org>
+In-Reply-To: <20220621144920.2945595-2-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 23 Jun 2022 10:33:24 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2rnz9mQqhN6-e0CGUUv9rntRELFdxt_weiD7FxH7fkfQ@mail.gmail.com>
+Message-ID: <CAK8P3a2rnz9mQqhN6-e0CGUUv9rntRELFdxt_weiD7FxH7fkfQ@mail.gmail.com>
+Subject: Re: [PATCH V6 1/2] asm-generic: spinlock: Move qspinlock &
+ ticket-lock into generic spinlock.h
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, Rui Wang <r@hev.cc>,
+        Stafford Horne <shorne@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:C580wb4YURZM/E3PsM9I4ixOvma9jHd9L4ezyUoqtQcqWRAnLHJ
+ BugBcEUsBF+A/L/1o8JF1o4nkn4ir7hurViTrb6qagOJ2l2b8zAT7dQJEbmQOMpn0SO6sGL
+ vKdGQTWTOyoO4tE4pnitcSkxSlcIBPGDyTQnWsVs7Z1a8vMqg3DF4gdfIxgXvKxzetEMnMx
+ YCHeBc4IaOqPvNXYnGsfw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FJXonaS8Pls=:UwNb83m5zTgE7b7iW/45ul
+ 4xvzGs3A0LIG10vu1BrHVgZv420w1+JWW6Gdn4l+DFaTjdiO7mjfdlhLSkll9yWH3aUvSwdP7
+ 87sci12D7cPMgPwFM/T8ZPcWcSLoxH7QwEHObOQzamRiMQ6J+0Jnmwh19MuugKAt1g0oxg6dx
+ N1AYO3L7STBLflOkf77mJnXn7n3z/KZu7cndtv7xcYNndzWsr+MatHPxZJPZfQEz8fGN2WNJE
+ Zi+6NdkJOKQSINoOu0ETo0MBKLvY2Tdw5f+8jdJxbY2hs1TpkI/bAoJWXMuWaDAKMgd+E5bCj
+ xojnUVPR2ZfJv/EAkbPyqNcMph1Z+P8e3Q0jM92lPsnqIEZrPQ5/NWlLflD2V3mySY479POWJ
+ 1ioUVcflAhtZhHb/CBLzFae9T1yXrrzEe5ttgCSEOirTxUldIEpQcB08QM4wcF/E04CQVCobA
+ 6dMWh0zTTAX/w+WMnXGOthdxztThmTlaKwc7Jxr4f7Raf55vBKz/6UfL0pSN/El3eiuUNuLqX
+ vwv9DDzlsM3W5GGUYyU93JTM0mijcArwVnCLrHCwFffRutR89/Em9pUPUP7lK/xrjWuoj9tq7
+ m5vL66UWRk8lDDRX5UAsLvIbxH7qe0/zVWrL9dpn6yllIDxUrIdc3JD3kGoutJMHst5ghP7Fd
+ tEJtf0VQ0mq43b6r1qzuhCIMjH0oRIuVAqTbrA27F4jQU/QVaJVKM91qmhqd9Hi8GdUHXRmwH
+ jaevmgJcK0ALZKaLOFlyeC5CoSGAfGo3ibDmyiesU97vAHr+NDRBjUcEJ34CWeOb5HlftjsL2
+ OIvaeOF34fEm9pMI30QLaMK92yVUcsk8gjfYVJ9jQavJDwJgzne56oe/n8QIfYX5YnDou86VC
+ Bnwb4VGeFe9hDVgTPKbA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andi Kleen <ak@linux.intel.com>
+On Tue, Jun 21, 2022 at 4:49 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Separate ticket-lock into tspinlock.h and let generic spinlock support
+> qspinlock or ticket-lock selected by CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> config.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/asm-generic/spinlock.h        | 90 ++------------------------
+>  include/asm-generic/spinlock_types.h  | 14 ++--
+>  include/asm-generic/tspinlock.h       | 92 +++++++++++++++++++++++++++
+>  include/asm-generic/tspinlock_types.h | 17 +++++
 
-A variable pointing to const isn't const itself. It'd have to contain
-"const" keyword after "*" too. Therefore, cpg_pll_config cannot be put
-to "rodata".  Hence use __initdata instead of __initconst to fix this.
+Unless someone has a very good argument for the "tspinlock" name, I would
+prefer naming the new file ticket_spinlock.h. While the 'qspinlock' name has
+an established meaning already, this is not the case for 'tspinlock', and
+the longer name would be less confusing in my opinion.
 
-[js] more explanatory commit message.
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +#include <asm/qspinlock.h>
+>  #include <asm/qrwlock.h>
+> +#else
+> +#include <asm-generic/tspinlock.h>
+> +#endif
 
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-renesas-soc@vger.kernel.org
-Cc: linux-clk@vger.kernel.org
-Signed-off-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/clk/renesas/rcar-gen4-cpg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+As Huacai Chen suggested in the other thread, the asm/qrwlock.h include should
+be outside of the #ifdef here.
 
-diff --git a/drivers/clk/renesas/rcar-gen4-cpg.c b/drivers/clk/renesas/rcar-gen4-cpg.c
-index c7ed43d6aa67..e27832e5114f 100644
---- a/drivers/clk/renesas/rcar-gen4-cpg.c
-+++ b/drivers/clk/renesas/rcar-gen4-cpg.c
-@@ -23,7 +23,7 @@
- #include "rcar-gen4-cpg.h"
- #include "rcar-cpg-lib.h"
- 
--static const struct rcar_gen4_cpg_pll_config *cpg_pll_config __initconst;
-+static const struct rcar_gen4_cpg_pll_config *cpg_pll_config __initdata;
- static unsigned int cpg_clk_extalr __initdata;
- static u32 cpg_mode __initdata;
- 
--- 
-2.36.1
+> diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/spinlock_types.h
+> index 8962bb730945..9875c1d058b3 100644
+> --- a/include/asm-generic/spinlock_types.h
+> +++ b/include/asm-generic/spinlock_types.h
+> @@ -3,15 +3,11 @@
+>  #ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
+>  #define __ASM_GENERIC_SPINLOCK_TYPES_H
+>
+> -#include <linux/types.h>
+> -typedef atomic_t arch_spinlock_t;
+> -
+> -/*
+> - * qrwlock_types depends on arch_spinlock_t, so we must typedef that before the
+> - * include.
+> - */
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +#include <asm-generic/qspinlock_types.h>
+>  #include <asm/qrwlock_types.h>
+> -
+> -#define __ARCH_SPIN_LOCK_UNLOCKED      ATOMIC_INIT(0)
+> +#else
+> +#include <asm-generic/tspinlock_types.h>
+> +#endif
 
+I don't think this file warrants the extra indirection, since both
+versions have only a
+few lines. Just put it all into one file, and change the files that include
+asm-generic/qspinlock_types.h to use asm-generic/spinlock_types.h instead.
+
+      Arnd

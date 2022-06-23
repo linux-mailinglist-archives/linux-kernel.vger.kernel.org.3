@@ -2,131 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395A855732C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2460557332
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiFWGe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S229751AbiFWGg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiFWGeZ (ORCPT
+        with ESMTP id S229560AbiFWGg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:34:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E7B38DB2;
-        Wed, 22 Jun 2022 23:34:24 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25N4ZmGo029275;
-        Thu, 23 Jun 2022 06:34:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ivouve314BzSQTYmhbx7zKJw5GkyqQ3+NZn0Y50glXA=;
- b=naVifPKRtohRFRuJsTk1nU6F5ZjQvCPrG5b9Z9F7v94BDlGcjTm+S5iph/4tOLKxDiA/
- eeFmKv8BQ62swMGtSkHnK+t6xmUBLvcNJ/bIkXmRGw/SZoZ40CW8wxbLZHTqBEHRos+u
- 13+nfO3lKC8EXoWXmdkiQIf+PuhxVmWzjRZXTVfkVR05BNpTNHZGqkPfgIi9ESzKG22n
- 8jsNRLOLrbUKfGArBIYAMalcLSwAX/lhcZG4e67/4i9vviohqJe+w0vAXAQRbQZHnEI2
- YthAfBpB6VNXNkdhNnQnrC1Gq8KsQ7grIWxIiyD7HtZZsAMTzB4MELPir5Ab9brFIzBX tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gvedq6k82-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jun 2022 06:34:21 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25N6Qgkb026302;
-        Thu, 23 Jun 2022 06:34:20 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gvedq6k77-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jun 2022 06:34:20 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25N65mNe003030;
-        Thu, 23 Jun 2022 06:34:18 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3gv3mb8tnv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jun 2022 06:34:17 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25N6YEik21954942
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jun 2022 06:34:14 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D28DA405F;
-        Thu, 23 Jun 2022 06:34:14 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CEB9AA4054;
-        Thu, 23 Jun 2022 06:34:13 +0000 (GMT)
-Received: from [9.145.6.211] (unknown [9.145.6.211])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Jun 2022 06:34:13 +0000 (GMT)
-Message-ID: <afee9027-1c4d-5c9c-8726-0b751cc13f46@linux.ibm.com>
-Date:   Thu, 23 Jun 2022 08:34:13 +0200
+        Thu, 23 Jun 2022 02:36:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5AD39146
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:36:55 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4GSR-0000gO-1n; Thu, 23 Jun 2022 08:36:51 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4GSP-0002tJ-Sd; Thu, 23 Jun 2022 08:36:49 +0200
+Date:   Thu, 23 Jun 2022 08:36:49 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Anton Lundin <glance@acc.umu.se>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [REGRESSION] AX88772 card booted without cable can't receive
+Message-ID: <20220623063649.GD23685@pengutronix.de>
+References: <20220622141638.GE930160@montezuma.acc.umu.se>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] KVM: s390: drop unexpected word 'and' in the comments
-Content-Language: en-US
-To:     Jiang Jian <jiangjian@cdjrlc.com>, borntraeger@linux.ibm.com,
-        imbrenda@linux.ibm.com
-Cc:     david@redhat.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220622140720.7617-1-jiangjian@cdjrlc.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220622140720.7617-1-jiangjian@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0_9K9oypSQMSUEHSxIR5Hz2ge2JTTeiH
-X-Proofpoint-GUID: Sw8cJhq6-4Ns5-NNeo46kSMLGlZTjnHh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-23_03,2022-06-22_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- clxscore=1011 mlxlogscore=841 phishscore=0 impostorscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206230023
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220622141638.GE930160@montezuma.acc.umu.se>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/22 16:07, Jiang Jian wrote:
-> there is an unexpected word 'and' in the comments that need to be dropped
-> 
-> file: arch/s390/kvm/interrupt.c
-> line: 705
-> 
-> * Subsystem damage are the only two and and are indicated by
-> 
-> changed to:
-> 
-> * Subsystem damage are the only two and are indicated by
-> 
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+Hi Anton,
 
-Thanks, queued
+Thank you for your report! I'll take a look on it ASAP.
 
-> ---
->   arch/s390/kvm/interrupt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
+Oleksij
+
+On Wed, Jun 22, 2022 at 04:16:38PM +0200, Anton Lundin wrote:
+> Hi.
 > 
-> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
-> index af96dc0549a4..1e3fb2d4d448 100644
-> --- a/arch/s390/kvm/interrupt.c
-> +++ b/arch/s390/kvm/interrupt.c
-> @@ -702,7 +702,7 @@ static int __must_check __deliver_machine_check(struct kvm_vcpu *vcpu)
->   	/*
->   	 * We indicate floating repressible conditions along with
->   	 * other pending conditions. Channel Report Pending and Channel
-> -	 * Subsystem damage are the only two and and are indicated by
-> +	 * Subsystem damage are the only two and are indicated by
->   	 * bits in mcic and masked in cr14.
->   	 */
->   	if (test_and_clear_bit(IRQ_PEND_MCHK_REP, &fi->pending_irqs)) {
+> I've found a issue with a Dlink usb ether adapter, that can't receive
+> anything until it self transmits if it's plugged in while booting, and
+> doesn't have link.
+> 
+> Later when a cable is attached, link is detected but nothing is received
+> either by daemons listening to ip address on that interface, or seen
+> with tcpdump.
+> 
+> The dongle is a:
+> D-Link Corp. DUB-E100 Fast Ethernet Adapter(rev.C1) [ASIX AX88772]
+> 
+> And it's detected at boot as:
+> libphy: Asix MDIO Bus: probed
+> Asix Electronics AX88772C usb-003:004:10: attached PHY driver (mii_bus:phy_addr=usb-003:004:10, irq=POLL)
+> asix 3-10.4:1.0 eth1: register 'asix' at usb-0000:00:14.0-10.4, ASIX AX88772 USB 2.0 Ethernet, <masked-mac>
+> usbcore: registered new interface driver asix
+> 
+> 
+> While in this state, the hardware starts sending pause frames to the
+> network when it has recived a couple of frames, and they look like:
+> 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> 0010   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> 
+> 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> 0010   ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> 
+> And these two frames are repeated every couple of seconds.
+> 
+> The card wakes up when something triggers a transmit on that card, and
+> then starts receiving traffic as normal.
+> 
+> I've bisected this issue down to:
+> "net: usb: asix: ax88772: add phylib support" (e532a096be0e)
+> 
+> 
+> Reverting that makes the interface work as normal, even if the machine
+> boots without a cable plugged in.
+> 
+> Another issue found with exactly the same patch is that if it's loaded
+> as a module, then unloaded and loaded again, it fails to initialize the
+> card with:
+> 
+> sysfs: cannot create duplicate filename '/devices/virtual/mdio_bus/usb-003:004'
+> CPU: 0 PID: 3733 Comm: modprobe Tainted: G           O      5.15.10-core_64_preempt #3
+> Hardware name:  <masked-hardware-name>
+> Call Trace:
+>  <TASK>
+>  ? dump_stack_lvl+0x34/0x44
+>  ? sysfs_warn_dup.cold+0x17/0x24
+>  ? sysfs_create_dir_ns+0xbc/0xd0
+>  ? kobject_add_internal+0xa6/0x260
+>  ? kobject_add+0x7e/0xb0
+>  ? preempt_count_add+0x68/0xa0
+>  ? device_add+0x10f/0x8d0
+>  ? dev_set_name+0x53/0x70
+>  ? __mdiobus_register+0xc2/0x350
+>  ? __devm_mdiobus_register+0x64/0xb0
+>  ? ax88772_bind+0x22a/0x340 [asix]
+>  ? usbnet_probe+0x346/0x870
+>  ? usb_match_dynamic_id+0x8f/0xa0
+>  ? usb_probe_interface+0x9b/0x150
+>  ? really_probe.part.0+0x237/0x280
+>  ? __driver_probe_device+0x8c/0xd0
+>  ? driver_probe_device+0x1e/0xe0
+>  ? __driver_attach+0xa8/0x170
+>  ? __device_attach_driver+0xe0/0xe0
+>  ? bus_for_each_dev+0x77/0xc0
+>  ? bus_add_driver+0x10b/0x1c0
+>  ? driver_register+0x8b/0xe0
+>  ? usb_register_driver+0x84/0x120
+>  ? 0xffffffffc06e4000
+>  ? do_one_initcall+0x41/0x1f0
+>  ? kmem_cache_alloc_trace+0x3f/0x1b0
+>  ? do_init_module+0x5c/0x260
+>  ? __do_sys_finit_module+0xa0/0xe0
+>  ? do_syscall_64+0x35/0x80
+>  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+>  </TASK>
+> kobject_add_internal failed for usb-003:004 with -EEXIST, don't try to register things with the same name in the same directory.
+> libphy: mii_bus usb-003:004 failed to register
+> asix: probe of 3-10.4:1.0 failed with error -22 
+> usbcore: registered new interface driver asix
+> 
+> 
+> Both these issues with "net: usb: asix: ax88772: add phylib support"
+> (e532a096be0e) can be reproduced all the way from when it was introduced
+> to linus current tree.
+> 
+> 
+> I'm sorry to say that I don't know enough about either libphy or asix to
+> figure out what cause the issues can be.
+> 
+> 
+> 
+> //Anton
+> 
 
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

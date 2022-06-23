@@ -2,198 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCBD558A71
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD77E558A79
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiFWVAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S229891AbiFWVHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiFWVAw (ORCPT
+        with ESMTP id S229493AbiFWVHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:00:52 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088755DC1A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:00:48 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-101d96fe0a5so1108640fac.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YFZn+6KIIWp9gABMuWoR/dKCyEO4Zr5Rzf3hYjExeKM=;
-        b=SLSQuGNHJV37cOtMEFG3uwEzqjiH7rjf8lBN6dlJxGi5K+qWAXGF9NaHB34fDTGnnG
-         5BO6KBC5M9pv9FZxmNICTOXTmCjuDmEFXatrzbKgwFgT5Xwxwx7ok4mIUzi9Zaw9ZH9j
-         hPKLQ5ipJETzDMCc1BbrD2MIcLQZi9LLB3BXeXoa6G+i5m3Lx1QgXn15IUHKZkjT/GnV
-         HRCmcy3hXV0Lzzz0YERx53i6O5/3isS7ABZxFZgI7IoNX1ywx7gub33tTSzKErrXnsAa
-         P84cUd7O2iPNeHWqT+MEBYdPFRU5j5M8eVJefEmJlF34ljWH6wgP3O2BHg+Wg97ictpa
-         mBvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YFZn+6KIIWp9gABMuWoR/dKCyEO4Zr5Rzf3hYjExeKM=;
-        b=0MH1JvRJsS5fnF7SkBhShkJ4eSbw1bc1fjaGB9xuWbusUP7RttXayn9fSzSn6d3hMh
-         zwVqgPexIhXiLQPvCjFDfSwW632CaoFV7TBAoswx0aObgapYpprcjjF8dd9o4M8xR4da
-         dOAo7ZQRt2qvFFncFhOHj3FrLLgQxXTg4fWOJLyp6WYyd01ISA/5oOMXqdT7dlOvTl9g
-         z0F+qgnHSlFly5HA104TEOoOZBOBZrfBA3BpnlGVI264JfCbkEhigMBCqSMAGY24sdFj
-         vaJgg6VwKpg9Iq4P1sFTJyAnV5vfYWmc2eX6XVDxCiAn1C8a2p9eYAph6/WatMqFtogc
-         NQHQ==
-X-Gm-Message-State: AJIora8AyQqNB7texD6uFmfIS6zqdpPSzxuaBjba4vf5Zz7BOfC5VdW2
-        YDilqWq3uSmWljQsmIzuzYhQlq3pFA05U6e4tXXlAg==
-X-Google-Smtp-Source: AGRyM1u+6NKJmTl5AxpFSRq+8aQW2BDLG8AB1hBjiM3k8m1AvB1fSE0FBJqFqc2vKOE78+7yBQ8YcxTcWmTVOZli3B8=
-X-Received: by 2002:a05:6870:b616:b0:e2:f8bb:5eb with SMTP id
- cm22-20020a056870b61600b000e2f8bb05ebmr3694057oab.218.1656018047090; Thu, 23
- Jun 2022 14:00:47 -0700 (PDT)
+        Thu, 23 Jun 2022 17:07:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFD72E9FA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656018463; x=1687554463;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BRfmO2ISk50iT4TqePceG7hzZX70sV0J2KZgjpfyUpI=;
+  b=mOCZEVnrlVggwA7zsBWtAY6kgmkEzz80efLIpJWWM+Q7AKLOmupkXQFc
+   yM/IDUKXSpb52GcgrKK8uwRp/Ta2/MbLTdVZewsnFEQ5W2zyeuaKPrYSX
+   XWqvpBfnZKvpXou4XAmUOqv3vQhxX6nofXwotGhmOaZsq/f+NJvMz1tUL
+   XbkrVMCGXGeAHgwZUCdhbS4ft28QXSWU2g2+yasSVIxdG7pJpRsScVpn9
+   GKkZThkKSjZ/GCI4KT4w8dMIfEzGfMVCpYrFwvtHGKT8RKn6UOOtUn5aV
+   udjIPuDDKrwyfSOo2mORI9ghoxaMRSsxOMTZ0J265/6BByrigkA/v7msS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="367160994"
+X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
+   d="scan'208";a="367160994"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 14:07:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
+   d="scan'208";a="615729881"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Jun 2022 14:07:41 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4U3B-00039Q-05;
+        Thu, 23 Jun 2022 21:07:41 +0000
+Date:   Fri, 24 Jun 2022 05:07:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/130-cpufreq 3/4]
+ drivers/cpufreq/apple-soc-cpufreq.c:67:19: error: implicit declaration of
+ function 'readq_relaxed'; did you mean 'readl_relaxed'?
+Message-ID: <202206240410.O3xJ4UZE-lkp@intel.com>
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <c933e87762d78e5dce78e9bbf9c41aa0b30ddba2.1655761627.git.ashish.kalra@amd.com>
-In-Reply-To: <c933e87762d78e5dce78e9bbf9c41aa0b30ddba2.1655761627.git.ashish.kalra@amd.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Thu, 23 Jun 2022 14:00:36 -0700
-Message-ID: <CAA03e5G-6-x-iOaAvrAb-fWTsuWzQdCOX6eiRAv=ZscG6QHDNg@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 04/49] x86/sev: set SYSCFG.MFMD
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Roth, Michael" <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 4:02 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
->
-> From: Brijesh Singh <brijesh.singh@amd.com>
->
-> SEV-SNP FW >= 1.51 requires that SYSCFG.MFMD must be set.
->
-> Subsequent CCP patches while require 1.51 as the minimum SEV-SNP
-> firmware version.
->
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/include/asm/msr-index.h |  3 +++
->  arch/x86/kernel/sev.c            | 24 ++++++++++++++++++++++++
->  2 files changed, 27 insertions(+)
->
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 57a8280e283a..1e36f16daa56 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -587,6 +587,9 @@
->  #define MSR_AMD64_SYSCFG_SNP_EN                BIT_ULL(MSR_AMD64_SYSCFG_SNP_EN_BIT)
->  #define MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT       25
->  #define MSR_AMD64_SYSCFG_SNP_VMPL_EN   BIT_ULL(MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT)
-> +#define MSR_AMD64_SYSCFG_MFDM_BIT              19
-> +#define MSR_AMD64_SYSCFG_MFDM          BIT_ULL(MSR_AMD64_SYSCFG_MFDM_BIT)
+tree:   https://github.com/AsahiLinux/linux bits/130-cpufreq
+head:   c1f94f72b7ae14d506b361283ef25624368b1a32
+commit: 4b2ae5bd4433c2282e699dc54bd26b066ad28f85 [3/4] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220624/202206240410.O3xJ4UZE-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/4b2ae5bd4433c2282e699dc54bd26b066ad28f85
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/130-cpufreq
+        git checkout 4b2ae5bd4433c2282e699dc54bd26b066ad28f85
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-nit: Similar to the previous patch, the alignment here doesn't look
-right. The bad alignment can be viewed on the github version of this
-patch:
-https://github.com/AMDESE/linux/commit/6d4469b86f90e67119ff110230857788a0d9dbd0
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +
->  #define MSR_K8_INT_PENDING_MSG         0xc0010055
->  /* C1E active bits in int pending message */
->  #define K8_INTP_C1E_ACTIVE_MASK                0x18000000
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index 3a233b5d47c5..25c7feb367f6 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -2257,6 +2257,27 @@ static __init void snp_enable(void *arg)
->         __snp_enable(smp_processor_id());
->  }
->
-> +static int __mfdm_enable(unsigned int cpu)
-> +{
-> +       u64 val;
-> +
-> +       if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> +               return 0;
-> +
-> +       rdmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +       val |= MSR_AMD64_SYSCFG_MFDM;
+All errors (new ones prefixed by >>):
 
-Can we do this inside `__snp_enable()`, above? Then, we'll execute if
-a hotplug event happens as well.
+   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_get_rate':
+>> drivers/cpufreq/apple-soc-cpufreq.c:67:19: error: implicit declaration of function 'readq_relaxed'; did you mean 'readl_relaxed'? [-Werror=implicit-function-declaration]
+      67 |         u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
+         |                   ^~~~~~~~~~~~~
+         |                   readl_relaxed
+   In file included from drivers/cpufreq/apple-soc-cpufreq.c:18:
+   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_set_target':
+>> include/linux/iopoll.h:165:35: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
+     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
+         |                                   ^~~~~
+   include/linux/iopoll.h:88:25: note: in definition of macro 'read_poll_timeout_atomic'
+      88 |                 (val) = op(args); \
+         |                         ^~
+   include/linux/iopoll.h:165:9: note: in expansion of macro 'readx_poll_timeout_atomic'
+     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/apple-soc-cpufreq.c:87:13: note: in expansion of macro 'readq_poll_timeout_atomic'
+      87 |         if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/apple-soc-cpufreq.c:98:9: error: implicit declaration of function 'writeq_relaxed'; did you mean 'writeb_relaxed'? [-Werror=implicit-function-declaration]
+      98 |         writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
+         |         ^~~~~~~~~~~~~~
+         |         writeb_relaxed
+   drivers/cpufreq/apple-soc-cpufreq.c: At top level:
+   drivers/cpufreq/apple-soc-cpufreq.c:291:27: warning: initialized field overwritten [-Woverride-init]
+     291 |         .attr           = apple_soc_cpufreq_hw_attr,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/apple-soc-cpufreq.c:291:27: note: (near initialization for 'apple_soc_cpufreq_driver.attr')
+   cc1: some warnings being treated as errors
 
-static int __snp_enable(unsigned int cpu)
-{
-     u64 val;
 
-     if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-          return 0;
+vim +67 drivers/cpufreq/apple-soc-cpufreq.c
 
-     rdmsrl(MSR_AMD64_SYSCFG, val);
+    62	
+    63	static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
+    64	{
+    65		struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
+    66		struct apple_cpu_priv *priv = policy->driver_data;
+  > 67		u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
+    68		unsigned int pstate = FIELD_GET(APPLE_DVFS_STATUS_CUR_PS, reg);
+    69		unsigned int i;
+    70	
+    71		for (i = 0; policy->freq_table[i].frequency != CPUFREQ_TABLE_END; i++)
+    72			if (policy->freq_table[i].driver_data == pstate)
+    73				return policy->freq_table[i].frequency;
+    74	
+    75		dev_err(priv->cpu_dev, "could not find frequency for pstate %d\n",
+    76			pstate);
+    77		return 0;
+    78	}
+    79	
+    80	static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy,
+    81						unsigned int index)
+    82	{
+    83		struct apple_cpu_priv *priv = policy->driver_data;
+    84		unsigned int pstate = policy->freq_table[index].driver_data;
+    85		u64 reg;
+    86	
+    87		if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
+    88					      !(reg & APPLE_DVFS_CMD_BUSY), 2,
+    89					      APPLE_DVFS_TRANSITION_TIMEOUT)) {
+    90			return -EIO;
+    91		}
+    92	
+    93		reg &= ~(APPLE_DVFS_CMD_PS1 | APPLE_DVFS_CMD_PS2);
+    94		reg |= FIELD_PREP(APPLE_DVFS_CMD_PS1, pstate);
+    95		reg |= FIELD_PREP(APPLE_DVFS_CMD_PS2, pstate);
+    96		reg |= APPLE_DVFS_CMD_SET;
+    97	
+  > 98		writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
+    99	
+   100		return 0;
+   101	}
+   102	
 
-     val |= MSR_AMD64_SYSCFG_SNP_EN;
-     val |= MSR_AMD64_SYSCFG_SNP_VMPL_EN;
-     val |= MSR_AMD64_SYSCFG_MFDM;
-
-     wrmsrl(MSR_AMD64_SYSCFG, val);
-
-     return 0;
-}
-
-> +
-> +       wrmsrl(MSR_AMD64_SYSCFG, val);
-> +
-> +       return 0;
-> +}
-> +
-> +static __init void mfdm_enable(void *arg)
-> +{
-> +       __mfdm_enable(smp_processor_id());
-> +}
-> +
->  static bool get_rmptable_info(u64 *start, u64 *len)
->  {
->         u64 calc_rmp_sz, rmp_sz, rmp_base, rmp_end, nr_pages;
-> @@ -2325,6 +2346,9 @@ static __init int __snp_rmptable_init(void)
->         /* Flush the caches to ensure that data is written before SNP is enabled. */
->         wbinvd_on_all_cpus();
->
-> +       /* MFDM must be enabled on all the CPUs prior to enabling SNP. */
-> +       on_each_cpu(mfdm_enable, NULL, 1);
-> +
->         /* Enable SNP on all CPUs. */
->         on_each_cpu(snp_enable, NULL, 1);
->
-> --
-> 2.25.1
->
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600C8558AF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809C3558AF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiFWVwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S229789AbiFWVyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiFWVwo (ORCPT
+        with ESMTP id S229545AbiFWVyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:52:44 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56886609D7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:52:43 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id q18so373222pld.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WP+rwC4TGDAfQrrpdmxtx5HaFMWvuSkA5tpFa2Z0KTo=;
-        b=FaIYrEPF7pH2Sg//kKmJsf4O808sp8hU3xWztRq7PW/NTqPPLAtvMC+D62zDoo+Hfo
-         nD4lTJVJCNX6DnRqCnafQOpaZ8N3Ie155liv3aGLaVYMelGO1Mt51ztufJGskpU8fqgH
-         soA/5thJgCOY4jOHBZt46Rh5pmOj6zNvlG4mmfvzHKkPscBNoRjStOvA/rY0qDp7PcGE
-         /RPTM4wLwtu067izgHGTSTyu49NPFzY1X6noKkMnKFZzk623WewYhW1yMNqhhGq5xNVU
-         /0m14dFYj73PPdK7f1clf1vXrU0z0O/T7MeJ4hLanIN4KJJk1axvx7cDOqXDjF0as+QH
-         21vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WP+rwC4TGDAfQrrpdmxtx5HaFMWvuSkA5tpFa2Z0KTo=;
-        b=ZsWEgpk9RB4i9zpcrMZ/xU4kRsVZ1qqqqkX2f2tgjKNiYAwt44ndv1zbChRKontZ4v
-         NbmxXpxLje0IvNPLIRhzgdG7bdGfzjFjAlvykvgQIdelTvMeVTcxojBRDFTk0733Prr7
-         GY6zaGni28VgAlpOqFxh5/D2Ss/wUEkrEjOjPqJ+bMC1rZApaJiZr+Fk7azYmlS9jddK
-         iS+rTStsFMPo4/JRvOaoOPHNrnQxvt9lSSBq2HB6vkY8LXvfUpTt6sqz2xRhvyh0LHyd
-         KQ0Fk6DBraxMu47BhK63vx9qTLHdfm/zz0BFb+lf3H6Moul1gxSLpIPa1ZTNmbSsfT4n
-         Ixjw==
-X-Gm-Message-State: AJIora+JpFsGQuOIE/pxm95lmpV+HPwbBvSwIOHusqlyQ6nKEqphb1Dl
-        ZRFNVDa11gkDi4pZJl9NNXzIqg==
-X-Google-Smtp-Source: AGRyM1uSglzJGxysU1/dykORfD2OPQF8J5jiG2z0akLmO9sFwpadT8seYG0Mf7zVPB0bl/0++f3GGA==
-X-Received: by 2002:a17:903:110d:b0:168:c610:9a80 with SMTP id n13-20020a170903110d00b00168c6109a80mr40966937plh.12.1656021162711;
-        Thu, 23 Jun 2022 14:52:42 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id h4-20020a17090adb8400b001ecb28cfbfesm199878pjv.51.2022.06.23.14.52.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 14:52:42 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 21:52:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>
-Subject: Re: [PATCH 2/4] kvm: Merge "atomic" and "write" in
- __gfn_to_pfn_memslot()
-Message-ID: <YrTgpjLrnRpqFnIa@google.com>
-References: <20220622213656.81546-1-peterx@redhat.com>
- <20220622213656.81546-3-peterx@redhat.com>
- <YrR9i3yHzh5ftOxB@google.com>
- <YrTDBwoddwoY1uSV@xz-m1.local>
- <YrTNGVpT8Cw2yrnr@google.com>
- <YrTbKaRe497n8M0o@xz-m1.local>
+        Thu, 23 Jun 2022 17:54:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F70162717
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656021253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZHTv9vjLjcZ5kd3TdhT6opIMcF3KqG0Q/ig2CFHaOQE=;
+        b=eiPWT23Ci1C1YL5fZ6jzecqfo+ocbFrdKotUp6gmeNGBQMZVJ1bhfO+hhfVFjx01VLr/A2
+        YH/GwXfBe/muSVAB1ZY99sLOa/rhdVcQZBHdPyAM/71b3SqbPqFwiz3RrJaawedk77S64e
+        HtiRdkKc3svOAcfXZ9aDvHUH0pvRJww=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-OHi2kHtjOr-Mf_JxbDyf6Q-1; Thu, 23 Jun 2022 17:54:09 -0400
+X-MC-Unique: OHi2kHtjOr-Mf_JxbDyf6Q-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C99B3C1104B;
+        Thu, 23 Jun 2022 21:54:09 +0000 (UTC)
+Received: from [10.22.9.91] (unknown [10.22.9.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 191D6492CA5;
+        Thu, 23 Jun 2022 21:54:07 +0000 (UTC)
+Message-ID: <f6b68466-968c-4a91-655a-23970280a072@redhat.com>
+Date:   Thu, 23 Jun 2022 17:54:07 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrTbKaRe497n8M0o@xz-m1.local>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] x86/paravirt: useless assignment instructions cause
+ Unixbench full core performance degradation
+Content-Language: en-US
+To:     Guo Hui <guohui@uniontech.com>, peterz@infradead.org
+Cc:     jpoimboe@kernel.org, song@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, daniel@iogearbox.net,
+        will@kernel.org, boqun.feng@gmail.com, wangxiaohua@uniontech.com,
+        linux-kernel@vger.kernel.org
+References: <20220623155007.3059-1-guohui@uniontech.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220623155007.3059-1-guohui@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,56 +68,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022, Peter Xu wrote:
-> On Thu, Jun 23, 2022 at 08:29:13PM +0000, Sean Christopherson wrote:
-> > This is what I came up with for splitting @async into a pure input (no_wait) and
-> > a return value (KVM_PFN_ERR_NEEDS_IO).
-> 
-> The attached patch looks good to me.  It's just that..
-> 
-> [...]
-> 
-> >  kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-> > -			       bool atomic, bool *async, bool write_fault,
-> > +			       bool atomic, bool no_wait, bool write_fault,
-> >  			       bool *writable, hva_t *hva)
-> 
-> .. with this patch on top we'll have 3 booleans already.  With the new one
-> to add separated as suggested then it'll hit 4.
-> 
-> Let's say one day we'll have that struct, but.. are you sure you think
-> keeping four booleans around is nicer than having a flag, no matter whether
-> we'd like to have a struct or not?
+On 6/23/22 11:50, Guo Hui wrote:
+> The instructions assigned to the parameters of
+> the vcpu_is_preempted function in the X86 architecture
+> physical machine are redundant instructions, which cause the
+> multi-core performance of Unixbench to drop by
+> about 300 to 500 points. The C function is as follows:
+> static bool vcpu_is_preempted(long vcpu);
+>
+> The parameter assignments in the function osq_lock
+> that call the function vcpu_is_preempted are as follows:
+> mov 0x14(%rax),%edi
+> sub $0x1,%edi
+>
+> The above instructions are unnecessary
+> in the X86 Native operating environment,
+> causing high cache-misses and degrading performance.
+>
+> This patch implements the replacement of the above instructions with
+> the nop instruction at system startup.
+> When the assignment C code changes,
+> the above assignment instructions may also change accordingly.
+> In order to flexibly replace the instructions generated by the C code,
+> this patch defines the macro ALTERNATIVE_C_CODE
+> from the ALTERNATIVE macro. Different from the first parameter
+> of the ALTERNATIVE macro, the ALTERNATIVE_C_CODE macro is
+> the first parameter is a C code statement and cannot contain
+> a return statement. To use the macro, for example,
+> replace the instructions generated by the
+> C code 'cpu = node->cpu - 1;' with the nop instruction:
+>
+> OSQ_ALTERNATIVE_C_CODE(cpu = node->cpu - 1, "nop", 0);
+>
+> The patch effect is as follows two machines,
+> Unixbench runs with full core score:
+>
+> 1. Machine configuration:
+> Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+> CPU core: 40
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0  944608003.9  80943.3
+> Double-Precision Whetstone                       55.0     212045.8  38553.8
+> Execl Throughput                                 43.0      42772.3   9947.1
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     462656.6   1168.3
+> File Copy 256 bufsize 500 maxblocks            1655.0     120043.6    725.3
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1544525.5   2663.0
+> Pipe Throughput                               12440.0   47277698.5  38004.6
+> Pipe-based Context Switching                   4000.0    1894556.8   4736.4
+> Process Creation                                126.0      86077.0   6831.5
+> Shell Scripts (1 concurrent)                     42.4      70236.3  16565.2
+> Shell Scripts (8 concurrent)                      6.0       8978.1  14963.4
+> System Call Overhead                          15000.0    4691260.0   3127.5
+>                                                                     ========
+> System Benchmarks Index Score                                        7980.9
+>
+> After using the patch:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2253984916.9 193143.5
+> Double-Precision Whetstone                       55.0     438940.3  79807.3
+> Execl Throughput                                 43.0      10720.3   2493.1
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     312233.0    788.5
+> File Copy 256 bufsize 500 maxblocks            1655.0      80050.9    483.7
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1036101.7   1786.4
+> Pipe Throughput                               12440.0  117700315.3  94614.4
+> Pipe-based Context Switching                   4000.0    8421909.8  21054.8
+> Process Creation                                126.0      36742.0   2916.0
+> Shell Scripts (1 concurrent)                     42.4      52846.2  12463.7
+> Shell Scripts (8 concurrent)                      6.0       7058.1  11763.6
+> System Call Overhead                          15000.0    6791548.2   4527.7
+>                                                                     ========
+> System Benchmarks Index Score                                        8260.6
+>
+> 2. Machine configuration:
+> Hygon C86 7185 32-core Processor
+> CPU core: 128
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2256283941.6 193340.5
+> Double-Precision Whetstone                       55.0     439577.3  79923.2
+> Execl Throughput                                 43.0      10013.6   2328.7
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     278121.5    702.3
+> File Copy 256 bufsize 500 maxblocks            1655.0      71835.5    434.1
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     905654.2   1561.5
+> Pipe Throughput                               12440.0  117715166.2  94626.3
+> Pipe-based Context Switching                   4000.0    7731331.7  19328.3
+> Process Creation                                126.0      30157.8   2393.5
+> Shell Scripts (1 concurrent)                     42.4      48670.8  11479.0
+> Shell Scripts (8 concurrent)                      6.0       6595.6  10992.7
+> System Call Overhead                          15000.0    6766475.9   4511.0
+>                                                                     ========
+> System Benchmarks Index Score                                        7688.7
+>
+> After using the patch:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2253984916.9 193143.5
+> Double-Precision Whetstone                       55.0     438940.3  79807.3
+> Execl Throughput                                 43.0      10720.3   2493.1
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     312233.0    788.5
+> File Copy 256 bufsize 500 maxblocks            1655.0      80050.9    483.7
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1036101.7   1786.4
+> Pipe Throughput                               12440.0  117700315.3  94614.4
+> Pipe-based Context Switching                   4000.0    8421909.8  21054.8
+> Process Creation                                126.0      36742.0   2916.0
+> Shell Scripts (1 concurrent)                     42.4      52846.2  12463.7
+> Shell Scripts (8 concurrent)                      6.0       7058.1  11763.6
+> System Call Overhead                          15000.0    6791548.2   4527.7
+>                                                                     ========
+> System Benchmarks Index Score                                        8260.6
+>
+> Signed-off-by: Guo Hui <guohui@uniontech.com>
+> ---
+>   arch/x86/include/asm/alternative.h | 15 +++++++++++++++
+>   arch/x86/kernel/alternative.c      | 11 +++++++++++
+>   include/linux/osq_lock.h           |  7 +++++++
+>   kernel/locking/osq_lock.c          |  6 +++++-
+>   4 files changed, 38 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+> index 9b10c8c76..5979ebe89 100644
+> --- a/arch/x86/include/asm/alternative.h
+> +++ b/arch/x86/include/asm/alternative.h
+> @@ -167,6 +167,21 @@ static inline int alternatives_text_reserved(void *start, void *end)
+>   	ALTINSTR_REPLACEMENT(newinstr, 1)				\
+>   	".popsection\n"
+>   
+> +/* alternative c code primitive: */
+> +#define ALTERNATIVE_C_CODE(oldinstr, newinstr, feature)			\
+> +do {									\
+> +	asm volatile("661:\n\t");					\
+> +	oldinstr;							\
+> +	asm volatile("\n662:\n"						\
+> +		alt_end_marker ":\n"					\
+> +		".pushsection .altinstructions,\"a\"\n"			\
+> +		ALTINSTR_ENTRY(feature, 1)				\
+> +		".popsection\n"						\
+> +		".pushsection .altinstr_replacement, \"ax\"\n"		\
+> +		ALTINSTR_REPLACEMENT(newinstr, 1)			\
+> +		".popsection\n");					\
+> +} while (0)
+> +
+>   #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
+>   	OLDINSTR_2(oldinstr, 1, 2)					\
+>   	".pushsection .altinstructions,\"a\"\n"				\
+> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> index e257f6c80..cf77be884 100644
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -251,6 +251,8 @@ static void __init_or_module noinline optimize_nops(u8 *instr, size_t len)
+>   	}
+>   }
+>   
+> +extern bool pv_is_native_vcpu_is_preempted(void);
+> +
+>   /*
+>    * Replace instructions with better alternatives for this CPU type. This runs
+>    * before SMP is initialized to avoid SMP problems with self modifying code.
+> @@ -285,6 +287,15 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+>   
+>   		instr = (u8 *)&a->instr_offset + a->instr_offset;
+>   		replacement = (u8 *)&a->repl_offset + a->repl_offset;
+> +
+> +		if (*replacement == 0x90 && a->replacementlen == 1) {
+> +#if defined(CONFIG_PARAVIRT_SPINLOCKS)
+> +			if (pv_is_native_vcpu_is_preempted())
+> +				add_nops(instr, a->instrlen);
+> +#endif
+> +			continue;
+> +		}
+> +
+This is hacky and it may incorrectly affect other alternatives that 
+patches thing to nop.
+>   		BUG_ON(a->instrlen > sizeof(insn_buff));
+>   		BUG_ON(feature >= (NCAPINTS + NBUGINTS) * 32);
+>   
+> diff --git a/include/linux/osq_lock.h b/include/linux/osq_lock.h
+> index 5581dbd3b..ee960e3aa 100644
+> --- a/include/linux/osq_lock.h
+> +++ b/include/linux/osq_lock.h
+> @@ -38,4 +38,11 @@ static inline bool osq_is_locked(struct optimistic_spin_queue *lock)
+>   	return atomic_read(&lock->tail) != OSQ_UNLOCKED_VAL;
+>   }
+>   
+> +#ifdef ALTERNATIVE_C_CODE
+> +#define OSQ_ALTERNATIVE_C_CODE(oldinstr, newinstr, feature) \
+> +		ALTERNATIVE_C_CODE(oldinstr, newinstr, feature)
+> +#else
+> +#define OSQ_ALTERNATIVE_C_CODE(oldinstr, newinstr, feature) oldinstr
+> +#endif
+> +
+>   #endif
+> diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+> index d5610ad52..bbe7d640c 100644
+> --- a/kernel/locking/osq_lock.c
+> +++ b/kernel/locking/osq_lock.c
+> @@ -24,7 +24,11 @@ static inline int encode_cpu(int cpu_nr)
+>   
+>   static inline int node_cpu(struct optimistic_spin_node *node)
+>   {
+> -	return node->cpu - 1;
+> +	int cpu = 0;
+> +
+> +	OSQ_ALTERNATIVE_C_CODE(cpu = node->cpu - 1, "nop", 0);
+> +
+> +	return cpu;
+>   }
 
-No.
+Why don't you use static_key to control the alternative and add a 
+late_initcall() to set it. I think that will be simpler and you can 
+throw away ALTERNATIVE_C_CODE().
 
->   kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-> 			       bool atomic, bool no_wait, bool write_fault,
->                                bool interruptible, bool *writable, hva_t *hva);
-> 
-> What if the booleans goes to 5, 6, or more?
-> 
-> /me starts to wonder what'll be the magic number that we'll start to think
-> a bitmask flag will be more lovely here. :)
+Cheers,
+Longman
 
-For the number to really matter, it'd have to be comically large, e.g. 100+.  This
-is all on-stack memory, so it's as close to free as can we can get.  Overhead in
-terms of (un)marshalling is likely a wash for flags versus bools.  Bools pack in
-nicely, so until there are a _lot_ of bools, memory is a non-issue.
-
-That leaves readability, which isn't dependent on the number so much as it is on
-the usage, and will be highly subjective based on the final code.
-
-In other words, I'm not dead set against flags, but I would like to see a complete
-cleanup before making a decision.  My gut reaction is to use bools, as it makes
-consumption cleaner in most cases, e.g.
-
-	if (!(xxx->write_fault || writable))
-		return false;
-
-versus
-
-	if (!((xxx->flags & KVM_GTP_WRITE) || writable))
-		return false;
-
-but again I'm not going to say never until I actually see the end result.

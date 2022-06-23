@@ -2,115 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF9755727D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC23855727F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiFWFLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 01:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
+        id S229598AbiFWFMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 01:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiFWFK5 (ORCPT
+        with ESMTP id S229802AbiFWFMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 01:10:57 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680622BB0C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:58:34 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id ay16so19197098ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eoUDrMh+erUbdaGJmsTl+ZRL/9QjZmm3J/nLPRs3FRA=;
-        b=pdeYcyzIM/EeuiIsOGwFOug2CFDdImgKiroLQPKSUymMzgHK9YYCTF2BAEsz6plaEM
-         z0t15pKe5c+FRjMrZ4RmmazpMaPT6a1ytZfgwbCxLAmQoceyLHCTouUvmwJhA5HnLfd8
-         g0xY9rpDI7/aCcCgsX0C9LS/458kRbfPQhI5W+bQK1qtZDxfmMrFWwPLb4GqYV4ZQvu1
-         zTG2z8MozpRuOheZ0gHBhjs2Z1hN3C6t5GSw1SIwCKmVidLUp60WvgQLkQGS+WORZ3Th
-         dNY1bsxYk6MAH3rTqsmDEhn6DY5QnO4wYb+BCh9wDLUkxKF2zuZGvW9TN2wuc+BElU02
-         /M/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eoUDrMh+erUbdaGJmsTl+ZRL/9QjZmm3J/nLPRs3FRA=;
-        b=TUvJ1WzqXwNwG0baoqUp+NHgD+gE01ct3BEhn5u1zAVC9x1QTxEzLXWg0dDyRmw3mV
-         Zhivc7Qry4juCzXWy6bpt/iDk+9/kZZZ1hOYzcb0NkNWPS3ib9WFGF9SAETKjqDKdeN7
-         OOPJtVoLokjpPfSD9P7LBDxl3LaFV7UpW70Ayu2YmHcjNt8/svP8TYLwFnCpIYWNSQiE
-         pUyPptsSEnA2jkXKJLkzBL1fjcUXOKI0iWGk2s8sCn9VtAjRtUPbL2mFS/m6REJb0HBb
-         4bwDJ0Xueevc6U1dSZ2Ed7o2b+qnF+lTJ+0d+OMwUkmqb+PeXZs95Yi7cWBIu/P3tdmQ
-         Nn7Q==
-X-Gm-Message-State: AJIora/Pnb8TevOy1mJXEu9WZa+DzdQmDmVyBrhtDtRmAERx9XVY+IkI
-        G1AIuFbUKBb8NZZN8GsA/Oc=
-X-Google-Smtp-Source: AGRyM1unO018+yZqKcHgMCl7hjTKn1obDbpp6FC73SYGcurEyYlhY8u1mzBcFu9wOCW10r6IW2/AfQ==
-X-Received: by 2002:a17:907:3f04:b0:6e8:4b0e:438d with SMTP id hq4-20020a1709073f0400b006e84b0e438dmr6341869ejc.391.1655960312999;
-        Wed, 22 Jun 2022 21:58:32 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2e:6923:8d97:93cc:4023:b7a9? (p200300c78f2e69238d9793cc4023b7a9.dip0.t-ipconnect.de. [2003:c7:8f2e:6923:8d97:93cc:4023:b7a9])
-        by smtp.gmail.com with ESMTPSA id ff10-20020a1709069c0a00b006fec69696a0sm9970539ejc.220.2022.06.22.21.58.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 21:58:32 -0700 (PDT)
-Message-ID: <d50c16c1-0bc2-fdc4-16ab-0c27df824ffb@gmail.com>
-Date:   Thu, 23 Jun 2022 06:58:31 +0200
+        Thu, 23 Jun 2022 01:12:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED8A44A1A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 22:04:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43E5A61E02
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:04:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B9CC3411D;
+        Thu, 23 Jun 2022 05:04:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655960679;
+        bh=96PXdvtO1VftGh3ILQ2SJTCDvrG7FSTHpe06x8inDuU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bxDTjd/pmo8vLHWatxnVGeIKAfKIMiTmrl+YcQ+tLxfFcEVmqWOqSrLtU4vKA+Zu5
+         CpatCOptJp6g1ZOWv51zrKwNgTDO9NDvh48glOqqxBiKtOBSpUemsOg4gWKUcl7m6U
+         0IeQ9lWFECEgfgbfdPDp9USH5OfDvxcyiFoxuzLPaKxuRxiU/fXFj8UecWdgipjvoY
+         NhqaTVb914JLRlIJDlHcvN4GWfqgB+4NlOzUuoo9ebkZQ6ZprIhcKc6Miu9nP/lOnD
+         m9Cv8lutzDSy8f4HslaeDlDC4sL+LDCP9c2LL5m342FQMOEf83n2RUyuz1qZZx7bYv
+         rQQ8A6gsHRsLA==
+Date:   Thu, 23 Jun 2022 00:04:33 -0500
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rebecca Mckeever <remckee0@gmail.com>
+Cc:     "Huang, Shaoqin" <shaoqin.huang@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v3 2/4] memblock tests: add verbose output to memblock
+ tests
+Message-ID: <YrP0YVMKo19Wrv44@kernel.org>
+References: <cover.1655889641.git.remckee0@gmail.com>
+ <004e021cc3cb7be8749361b3b1cb324459b9cb9f.1655889641.git.remckee0@gmail.com>
+ <b7e6565b-d9f7-a5cc-8e66-087ea7b270d1@intel.com>
+ <YrO3uyXee9DcMTzz@bertie>
+ <d53b547a-1450-82de-a3c5-4bb09f2a728d@intel.com>
+ <YrPmhzZDd9YFyEUa@kernel.org>
+ <YrPyfqENPHfUCaq4@bertie>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] staging: r8188eu: combine nested if statements into one
-Content-Language: en-US
-To:     Chang Yu <marcus.yu.56@gmail.com>, Larry.Finger@lwfinger.net
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220623031515.402691-1-marcus.yu.56@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220623031515.402691-1-marcus.yu.56@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrPyfqENPHfUCaq4@bertie>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 05:15, Chang Yu wrote:
-> -	if (padapter) {
-> -		if (pfree_recv_queue == &precvpriv->free_recv_queue)
-> -				precvpriv->free_recvframe_cnt++;
-> -	}
-> +	if (padapter && pfree_recv_queue == &precvpriv->free_recv_queue)
-> +		precvpriv->free_recvframe_cnt++;
+On Wed, Jun 22, 2022 at 11:56:30PM -0500, Rebecca Mckeever wrote:
+> On Wed, Jun 22, 2022 at 11:05:27PM -0500, Mike Rapoport wrote:
+> > On Thu, Jun 23, 2022 at 09:29:05AM +0800, Huang, Shaoqin wrote:
+> > > 
+> > > 
+> > > On 6/23/2022 8:45 AM, Rebecca Mckeever wrote:
+> > > > On Wed, Jun 22, 2022 at 06:32:04PM +0800, Huang, Shaoqin wrote:
+> > > > > Just test it and everything works fine. And I think there are some thing can
+> > > > > improve:
+> > > > > 
+> > > > >      The prefix_push() and prefix_pop() are used in so many functions and
+> > > > > almost of them just put the prefix_push(__func__) begin in the head and the
+> > > > > prefix_pop() in the end.
+> > > > >      May be you can define some macro that when you output something and
+> > > > > automatically push the __func__ as prefix. And when leave the function,
+> > > > > automatically pop it. And only in some special place, you call it manually.
+> > > > > 
+> > > > Thank you for your review. I'm not sure how you would automatically push
+> > > > __func__ since you have to be inside the function to access that
+> > > > variable. Let me know if you have any suggestions. I am thinking about
+> > > > adding another function in common.c that just calls test_pass() followed
+> > > > by prefix_pop() since those are called together so often.
+> > > 
+> > > Just like:
+> > > #define test_pass_macro()               \
+> > >          do {                            \
+> > >                  prefix_push(__func__);  \
+> > >                  test_pass();            \
+> > >                  prefix_pop();           \
+> > >          } while (0)
+> > 
+> > This will not print the name of the failing test, e.g. instead of 
+> > 
+> > not ok 28 : memblock_alloc: alloc_bottom_up_disjoint_check: failed
+> > 
+> > with Rebecca's implementation it'll print
+> > 
+> > not ok 28 : memblock_alloc: failed
+> > 
+> Oh yeah, prefix_push() needs to be called before the asserts.
+> 
+> > How about
+> > 
+> > #define PREFIX_PUSH() 	prefix_push(__func__)?
+> >  
+> Good idea. What about 
+> 
+> #define TEST_PASS() do { \
+> 	test_pass(); \
+> 	prefix_pop(); \
+> } while (0)
+> 
+> ? Or would it be better to make a function?
 
-Hi
+static inline function would be better.
+ 
+> Thanks,
+> Rebecca
 
-tested with:
-#include <stdio.h>
-int main() {
-     char padapter = 1;
-     int pfree_recv_queue = 256;
-     int free_recv_queue = 256;
-
-     if (padapter) {
-     	if (pfree_recv_queue == free_recv_queue)
-             printf("Executed before patch: 
-precvpriv->free_recvframe_cnt++;\n");
-     }
-
-     if (padapter && pfree_recv_queue == free_recv_queue)
-		printf("Executed after patch: precvpriv->free_recvframe_cnt++;\n");
-
-    return 0;
-}
-
-Seems to work. But the rules which operation is done first && or == are 
-not too easy. I would prefer to have:
-
-if (padapter && (pfree_recv_queue == free_recv_queue))
-
-So it is very easy to read what is evaluated first.
-
-But this is just my opinion and does not have to be right.
-
-Thanks for your patch.
-
-Bye Philipp
+-- 
+Sincerely yours,
+Mike.

@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBBB5572D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2482B5572D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiFWGHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S229750AbiFWGHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiFWGHp (ORCPT
+        with ESMTP id S229699AbiFWGHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Jun 2022 02:07:45 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D53744A0E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4FD44A0B;
         Wed, 22 Jun 2022 23:07:43 -0700 (PDT)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LT8rQ5HMGzkWRx;
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LT8rQ6Ry8zkWSs;
         Thu, 23 Jun 2022 14:05:58 +0800 (CST)
 Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Thu, 23 Jun 2022 14:07:41 +0800
 Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
@@ -33,13 +33,15 @@ CC:     <linux-crypto@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
         <zhangfei.gao@linaro.org>, <wangzhou1@hisilicon.com>,
         <yekai13@huawei.com>
-Subject: [PATCH v3 0/3] crypto: hisilicon - supports device isolation feature
-Date:   Thu, 23 Jun 2022 14:01:11 +0800
-Message-ID: <20220623060114.37505-1-yekai13@huawei.com>
+Subject: [PATCH v3 1/3] uacce: supports device isolation feature
+Date:   Thu, 23 Jun 2022 14:01:12 +0800
+Message-ID: <20220623060114.37505-2-yekai13@huawei.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220623060114.37505-1-yekai13@huawei.com>
+References: <20220623060114.37505-1-yekai13@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.67.165.24]
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  dggpeml100012.china.huawei.com (7.185.36.121)
@@ -53,36 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1、Add the uacce hardware error isolation interface. 
-2、Add related implementation in ACC driver to support uacce interface.
-   e.g. Defining the isolation strategy for ACC by uacce sysfs node, if
-   the AER error frequency exceeds the value of setting for a certain 
-   period of time. The device will not be available in user space. The
-   VF device use the PF device isolation strategy. as well as the 
-   isolation strategy should not be set during device use.
-   
-changes v1->v2:
-	1、deleted dev_to_uacce api.
-	2、add vfs node doc. 
-	3、move uacce->ref to driver.
-changes v2->v3:
-	1、deleted some redundant code.
-	2、use qm state instead of reference count.
-	3、add null pointer check.
-	4、isolate_strategy_read() instead of a copy.
+UACCE adds the hardware error isolation API. Users can configure
+the isolation method command by this sysfs node. This API interface
+certainly supports the configuration of user protocol strategy. Then
+parse it inside the device driver. UACCE only reports the device
+isolate state. e.g. When the error frequency is exceeded, the device
+will be isolated. The isolation strategy should be defined in each
+driver module.
 
-Kai Ye (3):
-  uacce: supports device isolation feature
-  Documentation: add a isolation strategy sysfs node for uacce
-  crypto: hisilicon/qm - defining the device isolation strategy
+Signed-off-by: Kai Ye <yekai13@huawei.com>
+---
+ drivers/misc/uacce/uacce.c | 41 ++++++++++++++++++++++++++++++++++++++
+ include/linux/uacce.h      | 11 ++++++++++
+ 2 files changed, 52 insertions(+)
 
- Documentation/ABI/testing/sysfs-driver-uacce |  18 ++
- drivers/crypto/hisilicon/qm.c                | 178 +++++++++++++++++--
- drivers/misc/uacce/uacce.c                   |  41 +++++
- include/linux/hisi_acc_qm.h                  |   9 +
- include/linux/uacce.h                        |  11 ++
- 5 files changed, 245 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+index b6219c6bfb48..440144fea656 100644
+--- a/drivers/misc/uacce/uacce.c
++++ b/drivers/misc/uacce/uacce.c
+@@ -346,12 +346,51 @@ static ssize_t region_dus_size_show(struct device *dev,
+ 		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
+ }
+ 
++static ssize_t isolate_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
++{
++	struct uacce_device *uacce = to_uacce_device(dev);
++
++	if (!uacce->ops->get_isolate_state)
++		return -ENODEV;
++
++	return sysfs_emit(buf, "%d\n", uacce->ops->get_isolate_state(uacce));
++}
++
++static ssize_t isolate_strategy_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	struct uacce_device *uacce = to_uacce_device(dev);
++
++	if (!uacce->ops->isolate_strategy_read)
++		return -ENODEV;
++
++	return uacce->ops->isolate_strategy_read(uacce, buf);
++}
++
++static ssize_t isolate_strategy_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t count)
++{
++	struct uacce_device *uacce = to_uacce_device(dev);
++	int ret;
++
++	if (!uacce->ops->isolate_strategy_write)
++		return -ENODEV;
++
++	ret = uacce->ops->isolate_strategy_write(uacce, buf, count);
++
++	return ret ? ret : count;
++}
++
+ static DEVICE_ATTR_RO(api);
+ static DEVICE_ATTR_RO(flags);
+ static DEVICE_ATTR_RO(available_instances);
+ static DEVICE_ATTR_RO(algorithms);
+ static DEVICE_ATTR_RO(region_mmio_size);
+ static DEVICE_ATTR_RO(region_dus_size);
++static DEVICE_ATTR_RO(isolate);
++static DEVICE_ATTR_RW(isolate_strategy);
+ 
+ static struct attribute *uacce_dev_attrs[] = {
+ 	&dev_attr_api.attr,
+@@ -360,6 +399,8 @@ static struct attribute *uacce_dev_attrs[] = {
+ 	&dev_attr_algorithms.attr,
+ 	&dev_attr_region_mmio_size.attr,
+ 	&dev_attr_region_dus_size.attr,
++	&dev_attr_isolate.attr,
++	&dev_attr_isolate_strategy.attr,
+ 	NULL,
+ };
+ 
+diff --git a/include/linux/uacce.h b/include/linux/uacce.h
+index 48e319f40275..a535286d2753 100644
+--- a/include/linux/uacce.h
++++ b/include/linux/uacce.h
+@@ -30,6 +30,9 @@ struct uacce_qfile_region {
+  * @is_q_updated: check whether the task is finished
+  * @mmap: mmap addresses of queue to user space
+  * @ioctl: ioctl for user space users of the queue
++ * @get_isolate_state: get the device state after set the isolate strategy
++ * @isolate_strategy_write: stored the isolate strategy to the device
++ * @isolate_strategy_read: read the isolate strategy from the device
+  */
+ struct uacce_ops {
+ 	int (*get_available_instances)(struct uacce_device *uacce);
+@@ -43,6 +46,9 @@ struct uacce_ops {
+ 		    struct uacce_qfile_region *qfr);
+ 	long (*ioctl)(struct uacce_queue *q, unsigned int cmd,
+ 		      unsigned long arg);
++	enum uacce_dev_state (*get_isolate_state)(struct uacce_device *uacce);
++	int (*isolate_strategy_write)(struct uacce_device *uacce, const char *buf, size_t count);
++	int (*isolate_strategy_read)(struct uacce_device *uacce, char *buf);
+ };
+ 
+ /**
+@@ -57,6 +63,11 @@ struct uacce_interface {
+ 	const struct uacce_ops *ops;
+ };
+ 
++enum uacce_dev_state {
++	UACCE_DEV_NORMAL,
++	UACCE_DEV_ISOLATE,
++};
++
+ enum uacce_q_state {
+ 	UACCE_Q_ZOMBIE = 0,
+ 	UACCE_Q_INIT,
 -- 
 2.33.0
 

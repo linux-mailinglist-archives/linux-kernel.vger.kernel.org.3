@@ -2,117 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D866855800B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B8B558013
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbiFWQjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S232363AbiFWQjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232305AbiFWQjV (ORCPT
+        with ESMTP id S232098AbiFWQjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:39:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9471E48E62;
-        Thu, 23 Jun 2022 09:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656002359; x=1687538359;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EI+QQ+/jwbwz1xOCAJK7+a2mr8/Kd1EZs7K/UPWhtF4=;
-  b=B0H4jhAwT9yCuhl5RKUj+DgehXTWyTO13dtL+RzviDUf49Eqwagc4mY1
-   e+6KS7drkldGFz6RD73L6/G5Mi6jFD8u0GrrTx0hon1VzXGA6w/wvuLlr
-   PDGNSzSRPQXgSMDeveGU1Rqt5x7ut5fRpHIYxY7r0JyQ8nlTDa9S2eXWL
-   HBYIy1n90+z7GqSUobqfkCRuefsC2hyDkQdCNzwkawFu3vfKwl2E6OTRm
-   0/3xis/GfyDVqIUX6CLvGLqnivMc9ZpxuSPRp1H1v+l++btgtn5hIJg0C
-   hgzFtZDX5OquyljzLAe0eBpbvo6klCjvhZFPluvLBE7mkvt6b64BGdz7j
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="342455606"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="342455606"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 09:39:19 -0700
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="834715838"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 09:39:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o4PrG-000tDS-Q2;
-        Thu, 23 Jun 2022 19:39:06 +0300
-Date:   Thu, 23 Jun 2022 19:39:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     sascha hauer <sha@pengutronix.de>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        russell king <linux@armlinux.org.uk>,
-        "david s. miller" <davem@davemloft.net>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when
- fw_devlink.strict=1
-Message-ID: <YrSXKkYfr+Hinsuu@smile.fi.intel.com>
-References: <20220623080344.783549-1-saravanak@google.com>
- <20220623080344.783549-3-saravanak@google.com>
- <20220623100421.GY1615@pengutronix.de>
+        Thu, 23 Jun 2022 12:39:47 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F7340E60
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:46 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ay16so22906267ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7HOqbuGc0f6x9tR+0yfA94PilmjI5YMqHeIZhNb7JEk=;
+        b=Il6aX5XnfiBoN5/6z3oP/ymABRj2BA2uoxnaLliYWTBPBwdl8eqFAp9ZpjbrjZyupq
+         wH8eLjEulpuQGkxplvsnxcmlhAiK56A1WmcFtXzyw0TJZGgMP01Q1Y15ZUS7JpsUF0sj
+         dPHMCe8aQRIJhhDjV86FpC8q7iL3GIfFhA5TnxkQLKDQk/ujMr/bWiplBlHzhliAdYKo
+         +c8QmZ1nRnM4DQ+CjRjMU87vRDwxfioIOjnYykUk59iaATiu7sRzb9csT9FFZx/qb4A9
+         1AQ+SSPtjJCzL6mOsZvJcJsQvjFf2f4rwcjLMD5KBQj6Vy/1m04Ofu7FxtaAY/ATzgbM
+         JKUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7HOqbuGc0f6x9tR+0yfA94PilmjI5YMqHeIZhNb7JEk=;
+        b=S3wuriAY310CEb71VhiJLwIEO3sqe3z1ZXLpsqRwiODboiiF0tCl4eTkhESi5UZWVD
+         qslMHK4BSVdbSzlpcrjbNRwNImMjZ+HuQACtDJPBbnBwKK62JV1I56eP6OdQXPJwQGLe
+         k3OdZQqiZTOWUHeGqXqL67VfQiSQSoHG/cQZPJGOHd8Zf5nJferMeIHFu0Oqq2xk/SVG
+         HzYmeMAOWd/0saL3+7SlBjUcH2G3VTD/o8yaSb5bn81e+yKDuSwjuLP6KCdGpsh1CCsB
+         qsA6yDFcEI/UbtUUJu2RPmiWJiaTSQ1VCuICR4GIZobL+jcWXoxx+MggrHWTA5ZkOqkT
+         tXpQ==
+X-Gm-Message-State: AJIora+zUT/a1CE9FYgWT0m3NAtRm2t1vViEy+0S8ztTF4XEwKLiYA+q
+        S20FllV18kXT6PXAyhbLVphtRh9pbWwhsrONpq8vDA==
+X-Google-Smtp-Source: AGRyM1tWKdVnzorRNk1pbcV2JwtPhWlStbDp0MhxShE77OmEIITnC87yPYKgp2O/R4E8tdNt78Jlvk3MzDbBzgAzgKE=
+X-Received: by 2002:a17:907:6ea0:b0:726:2b0e:9e5e with SMTP id
+ sh32-20020a1709076ea000b007262b0e9e5emr1985377ejc.189.1656002384514; Thu, 23
+ Jun 2022 09:39:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623100421.GY1615@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220622041040.202737-1-tzungbi@kernel.org> <20220622041040.202737-7-tzungbi@kernel.org>
+In-Reply-To: <20220622041040.202737-7-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Thu, 23 Jun 2022 09:39:33 -0700
+Message-ID: <CABXOdTe=-YCrVz_oL0oS46LiH51+ytX21=dE3j4GqEV0Q3pkUg@mail.gmail.com>
+Subject: Re: [PATCH 6/7] platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 12:04:21PM +0200, sascha hauer wrote:
-> On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
+On Tue, Jun 21, 2022 at 9:11 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> cros_ec_get_sensor_count() gets number of MEMS sensors.
+>
+> Add Kunit tests for cros_ec_get_sensor_count().
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-...
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-> I wonder if it wouldn't be a better approach to just probe all devices
-> and record the device(node) they are waiting on. Then you know that you
-> don't need to probe them again until the device they are waiting for
-> is available.
-
-There may be no device, but resource. And we become again to the something like
-deferred probe ugly hack.
-
-The real solution is to rework device driver model in the kernel that it will
-create a graph of dependencies and then simply follow it. But actually it should
-be more than 1 graph, because there are resources and there are power, clock and
-resets that may be orthogonal to the higher dependencies (like driver X provides
-a resource to driver Y).
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> ---
+>  drivers/platform/chrome/cros_ec_proto_test.c | 153 +++++++++++++++++++
+>  drivers/platform/chrome/cros_kunit_util.c    |  22 +++
+>  drivers/platform/chrome/cros_kunit_util.h    |   7 +
+>  3 files changed, 182 insertions(+)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index 93c1700deaef..6b26ce3104f4 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -2442,6 +2442,156 @@ static void cros_ec_proto_test_check_features_not_cached(struct kunit *test)
+>         }
+>  }
+>
+> +static void cros_ec_proto_test_get_sensor_count_normal(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +       struct cros_ec_dev ec;
+> +
+> +       ec_dev->max_request = 0xff;
+> +       ec_dev->max_response = 0xee;
+> +       ec.ec_dev = ec_dev;
+> +       ec.dev = ec_dev->dev;
+> +       ec.cmd_offset = 0;
+> +
+> +       /* For EC_CMD_MOTION_SENSE_CMD. */
+> +       {
+> +               struct ec_response_motion_sense *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +
+> +               data = (struct ec_response_motion_sense *)mock->o_data;
+> +               data->dump.sensor_count = 0xbf;
+> +       }
+> +
+> +       ret = cros_ec_get_sensor_count(&ec);
+> +       KUNIT_EXPECT_EQ(test, ret, 0xbf);
+> +
+> +       /* For EC_CMD_MOTION_SENSE_CMD. */
+> +       {
+> +               struct ec_params_motion_sense *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_motion_sense));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
+> +
+> +               data = (struct ec_params_motion_sense *)mock->i_data;
+> +               KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
+> +       }
+> +}
+> +
+> +static void cros_ec_proto_test_get_sensor_count_xfer_error(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +       struct cros_ec_dev ec;
+> +
+> +       ec_dev->max_request = 0xff;
+> +       ec_dev->max_response = 0xee;
+> +       ec.ec_dev = ec_dev;
+> +       ec.dev = ec_dev->dev;
+> +       ec.cmd_offset = 0;
+> +
+> +       /* For EC_CMD_MOTION_SENSE_CMD. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_addx(test, -EPROTO, EC_RES_SUCCESS, 0);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +       }
+> +
+> +       ret = cros_ec_get_sensor_count(&ec);
+> +       KUNIT_EXPECT_EQ(test, ret, -EPROTO);
+> +
+> +       /* For EC_CMD_MOTION_SENSE_CMD. */
+> +       {
+> +               struct ec_params_motion_sense *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_motion_sense));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
+> +
+> +               data = (struct ec_params_motion_sense *)mock->i_data;
+> +               KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
+> +       }
+> +}
+> +
+> +static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret, i;
+> +       struct cros_ec_dev ec;
+> +       struct {
+> +               u8 readmem_data;
+> +               int expected_result;
+> +       } test_data[] = {
+> +               { 0, 0 },
+> +               { EC_MEMMAP_ACC_STATUS_PRESENCE_BIT, 2 },
+> +       };
+> +
+> +       ec_dev->max_request = 0xff;
+> +       ec_dev->max_response = 0xee;
+> +       ec_dev->cmd_readmem = cros_kunit_readmem_mock;
+> +       ec.ec_dev = ec_dev;
+> +       ec.dev = ec_dev->dev;
+> +       ec.cmd_offset = 0;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
+> +               /* For EC_CMD_MOTION_SENSE_CMD. */
+> +               {
+> +                       mock = cros_kunit_ec_xfer_mock_addx(test, -EPROTO, EC_RES_SUCCESS, 0);
+> +                       KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +               }
+> +
+> +               /* For readmem. */
+> +               {
+> +                       cros_kunit_readmem_mock_data = kunit_kzalloc(test, 1, GFP_KERNEL);
+> +                       KUNIT_ASSERT_PTR_NE(test, cros_kunit_readmem_mock_data, NULL);
+> +                       cros_kunit_readmem_mock_data[0] = test_data[i].readmem_data;
+> +
+> +                       cros_kunit_ec_xfer_mock_default_ret = 1;
+> +               }
+> +
+> +               ret = cros_ec_get_sensor_count(&ec);
+> +               KUNIT_EXPECT_EQ(test, ret, test_data[i].expected_result);
+> +
+> +               /* For EC_CMD_MOTION_SENSE_CMD. */
+> +               {
+> +                       struct ec_params_motion_sense *data;
+> +
+> +                       mock = cros_kunit_ec_xfer_mock_next();
+> +                       KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +                       KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
+> +                       KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
+> +                       KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                                       sizeof(struct ec_response_motion_sense));
+> +                       KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
+> +
+> +                       data = (struct ec_params_motion_sense *)mock->i_data;
+> +                       KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
+> +               }
+> +
+> +               /* For readmem. */
+> +               {
+> +                       KUNIT_EXPECT_EQ(test, cros_kunit_readmem_mock_offset, EC_MEMMAP_ACC_STATUS);
+> +               }
+> +       }
+> +}
+> +
+>  static void cros_ec_proto_test_release(struct device *dev)
+>  {
+>  }
+> @@ -2537,6 +2687,9 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
+>         KUNIT_CASE(cros_ec_proto_test_get_host_event_normal),
+>         KUNIT_CASE(cros_ec_proto_test_check_features_cached),
+>         KUNIT_CASE(cros_ec_proto_test_check_features_not_cached),
+> +       KUNIT_CASE(cros_ec_proto_test_get_sensor_count_normal),
+> +       KUNIT_CASE(cros_ec_proto_test_get_sensor_count_xfer_error),
+> +       KUNIT_CASE(cros_ec_proto_test_get_sensor_count_legacy),
+>         {}
+>  };
+>
+> diff --git a/drivers/platform/chrome/cros_kunit_util.c b/drivers/platform/chrome/cros_kunit_util.c
+> index 3ede971e82ee..d37c334b416d 100644
+> --- a/drivers/platform/chrome/cros_kunit_util.c
+> +++ b/drivers/platform/chrome/cros_kunit_util.c
+> @@ -105,6 +105,24 @@ struct ec_xfer_mock *cros_kunit_ec_xfer_mock_next(void)
+>  }
+>  EXPORT_SYMBOL_GPL(cros_kunit_ec_xfer_mock_next);
+>
+> +int cros_kunit_readmem_mock_offset;
+> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock_offset);
+> +u8 *cros_kunit_readmem_mock_data;
+> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock_data);
+> +int cros_kunit_readmem_mock_ret;
+> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock_ret);
+> +
+> +int cros_kunit_readmem_mock(struct cros_ec_device *ec_dev, unsigned int offset,
+> +                           unsigned int bytes, void *dest)
+> +{
+> +       cros_kunit_readmem_mock_offset = offset;
+> +
+> +       memcpy(dest, cros_kunit_readmem_mock_data, bytes);
+> +
+> +       return cros_kunit_readmem_mock_ret;
+> +}
+> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock);
+> +
+>  void cros_kunit_mock_reset(void)
+>  {
+>         cros_kunit_ec_xfer_mock_default_ret = 0;
+> @@ -112,6 +130,10 @@ void cros_kunit_mock_reset(void)
+>         cros_kunit_ec_pkt_xfer_mock_called = 0;
+>         INIT_LIST_HEAD(&cros_kunit_ec_xfer_mock_in);
+>         INIT_LIST_HEAD(&cros_kunit_ec_xfer_mock_out);
+> +
+> +       cros_kunit_readmem_mock_offset = 0;
+> +       cros_kunit_readmem_mock_data = NULL;
+> +       cros_kunit_readmem_mock_ret = 0;
+>  }
+>  EXPORT_SYMBOL_GPL(cros_kunit_mock_reset);
+>
+> diff --git a/drivers/platform/chrome/cros_kunit_util.h b/drivers/platform/chrome/cros_kunit_util.h
+> index ae4080cb13f1..88134c9f1acf 100644
+> --- a/drivers/platform/chrome/cros_kunit_util.h
+> +++ b/drivers/platform/chrome/cros_kunit_util.h
+> @@ -35,6 +35,13 @@ struct ec_xfer_mock *cros_kunit_ec_xfer_mock_addx(struct kunit *test,
+>                                                   int ret, int result, size_t size);
+>  struct ec_xfer_mock *cros_kunit_ec_xfer_mock_next(void);
+>
+> +extern int cros_kunit_readmem_mock_offset;
+> +extern u8 *cros_kunit_readmem_mock_data;
+> +extern int cros_kunit_readmem_mock_ret;
+> +
+> +int cros_kunit_readmem_mock(struct cros_ec_device *ec_dev, unsigned int offset,
+> +                           unsigned int bytes, void *dest);
+> +
+>  void cros_kunit_mock_reset(void);
+>
+>  #endif
+> --
+> 2.37.0.rc0.104.g0611611a94-goog
+>

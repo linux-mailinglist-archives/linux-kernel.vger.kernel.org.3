@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB100557ED5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C2E557ED4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbiFWPqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S231533AbiFWPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiFWPqQ (ORCPT
+        with ESMTP id S230469AbiFWPqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:46:16 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB5B393FE;
-        Thu, 23 Jun 2022 08:46:12 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 25NFjdPb021143;
-        Fri, 24 Jun 2022 00:45:39 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 25NFjdPb021143
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655999140;
-        bh=j/xESgTYpvfBYOpf/MQrncNNB876CiujNKiv36ApBsU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kG9zvmHK+8+0XQmcXc01OEe4w90ZSPiHDOk+1zF8zvewXbuvkPkMjBvGOks9b8rp9
-         Qfn9sNBYUHgUkVKSsu+bHOl8lxzZ+Vsqe/KA5QPWY/q8yEjovEx5BiubuatjPjFfPr
-         dVIU2VKDEPSllH3K1RtB+FGMbaWrZMRX6SpDFZwEIQfbi22/PC+cp/ZS7O+2fLVvi9
-         8354B+KnQtvtV2ExeuogWgOEtR54XTIUuxgmHWMp8bPDbyqdgrRwoXBScfMdlCvd+t
-         T8i+9eNUpL8oxI9gLW0FaaESPvqRwpiM/JwCqBbye6tVqWzWhZ+AXfO+hDCEMfi4vB
-         ZFLPfZ4P3Gavw==
-X-Nifty-SrcIP: [209.85.221.44]
-Received: by mail-wr1-f44.google.com with SMTP id v14so28548940wra.5;
-        Thu, 23 Jun 2022 08:45:39 -0700 (PDT)
-X-Gm-Message-State: AJIora9RSoHW3j8kTWV6zU+hW852qRTAGupOu7PCEUsOufOD/+txTV9b
-        JQPysbT6KYoqu2l3zAM4d/tbkuXLgyDgWV6Ahs4=
-X-Google-Smtp-Source: AGRyM1vLtYcBsNb2y8tCxGLb/KkzQNtIx/yx2J45Hrac4bCV7fR3CpMfMyMVDrpAcCoBSFscDVRbsO6fqf/3iFZ/WlU=
-X-Received: by 2002:adf:f5ce:0:b0:21b:832c:80dd with SMTP id
- k14-20020adff5ce000000b0021b832c80ddmr8828918wrp.235.1655999137985; Thu, 23
- Jun 2022 08:45:37 -0700 (PDT)
+        Thu, 23 Jun 2022 11:46:06 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A691D37BDF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:46:05 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3185f5623edso38090797b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=MCdBPcvc3aKS/nhtwFdXptVodbMIYgt74UixyLgUydo=;
+        b=f6goSR6ZbdZjXT1FK0Snv2VFi7Wx1RINfWlfDPBfP6R47/NWgFTESA0vsi4yBfKq70
+         8y/kErk4H2XFpSWBNzTl5ULkMz64HgDKLeqyliFYhSHjORgkDRmapzsBlneZg62AJ032
+         wyuu3J8wMyMg5ltYmZ9f9wY9onUAQy15tCZrKsPUj7I47udvcYToxOLPzxXdbxxnnAjk
+         NCVvBXmB6KUg4jfipWp2XQfjDqYEBIPjdwfChK6rwSGXPaqxbHZXBoXuGNqtyQBe40yZ
+         svVHlZPqJ0DmmzgHr9wBpoHOl/mTAAYhVkTaF3oZ3ybLYQyU9Y2x5BeNhUJx3nEUx54N
+         S93Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=MCdBPcvc3aKS/nhtwFdXptVodbMIYgt74UixyLgUydo=;
+        b=evd5HDl3FZjLRdWRIrjda9IemQ5hMuq0M0/YZlrZc0+0taXwtZAdA12bQ72ReOMBWF
+         NNK4Vu3C5VUY0+i4nCUDE4f+ZJ+hNviWWAsU6NfIVch5EAcA0T45BFfFPbmhFBlXIn7J
+         lbZj0vc59Jlx7GtBkfJ/qZMiKEtNsznD3peeQJ1Du2F+r81o6LmzcSx2XwY84+sMoQXO
+         t4njAmuTqyLoA+EWG1MJ0SvOeQCMNHi682dSHn5AkNoGv6CiF5Ywo+QT6nAIJ5Udgm0/
+         iqMT1G23s+TYxMJRZdpDN0uxIvtc3AP4I9m07hM7WOmaw52Y2KU5g7dlJQ4YYUeOBwjb
+         129g==
+X-Gm-Message-State: AJIora/zaXEKXfiL4fKOCop56X3cMSeXtXI7SAReVSO3PSpgeKVwXz8M
+        2UIcQE7qVRO+FtryDKjovw8fHNy1mOq3o9wysCQ=
+X-Google-Smtp-Source: AGRyM1t6l6W52kvaF9sz8G5Mdwg3kARVYc3tn+JEaAZlVmp7aIIP3MZGntjMhl2lV8qE8i9Pc1xMOMvFoOzd32GpXLM=
+X-Received: by 2002:a81:1001:0:b0:317:d614:c3d6 with SMTP id
+ 1-20020a811001000000b00317d614c3d6mr11262541ywq.164.1655999164618; Thu, 23
+ Jun 2022 08:46:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621133526.29662-1-mikoxyzzz@gmail.com> <CAKwvOd=Bmu40+_11GOBTeJBjToUf0LNG_RX0RiLcRLimUUkgcw@mail.gmail.com>
- <CAK7LNAT3FrpLnhSgfTo5bxk-9cHm6g1ti58wSY6W-fxMx+mUrA@mail.gmail.com> <2817735.mvXUDI8C0e@sakura.myxoz.lan>
-In-Reply-To: <2817735.mvXUDI8C0e@sakura.myxoz.lan>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 24 Jun 2022 00:44:57 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQqJc74MGFyU6fvhM9VkDKYUXyCt0NF1qAr1RmfUqC0=w@mail.gmail.com>
-Message-ID: <CAK7LNAQqJc74MGFyU6fvhM9VkDKYUXyCt0NF1qAr1RmfUqC0=w@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Kconfig: -O3 enablement
-To:     Miko Larsson <mikoxyzzz@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chris Down <chris@chrisdown.name>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Oleksandr Natalenko <oleksandr@redhat.com>
+Sender: robertroland0331@gmail.com
+Received: by 2002:a05:7108:6913:0:0:0:0 with HTTP; Thu, 23 Jun 2022 08:46:04
+ -0700 (PDT)
+From:   MRS MARIA ROLAND <mariaroland74@gmail.com>
+Date:   Thu, 23 Jun 2022 08:46:04 -0700
+X-Google-Sender-Auth: HXN4nGNGTkgF1wPpoiEZzDuRpDc
+Message-ID: <CAKnR+Cc_wM+WHRW8KqqstSek10JtRbsYxvv0MZWQ5ccnPY=gVg@mail.gmail.com>
+Subject: Greetings dear
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5195]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [robertroland0331[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mariaroland74[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 12:42 AM Miko Larsson <mikoxyzzz@gmail.com> wrote:
->
-> On Wednesday, 22 June 2022 03:57:34 CEST Masahiro Yamada wrote:
-> > If you want to say "use this option carefully",
-> > EXPERT might be another option.
-> >
-> >     depends on ARC || EXPERT
-> >
->
-> Yeah, this would be a fair compromise, though I think it would be
-> better to use "visible if" instead of "depends on". I can get a v2 of
-> the series together if this is desired.
+Greetings dear
 
 
-Why is "visible if" better than "depends on"?
+   This letter might be a surprise to you, But I believe that you will
+be honest to fulfill my final wish. I bring peace and love to you. It
+is by the grace of god, I had no choice than to do what is lawful and
+right in the sight of God for eternal life and in the sight of man for
+witness of god's mercy and glory upon my life. My dear, I sent this
+mail praying it will find you in a good condition, since I myself am
+in a very critical health condition in which I sleep every night
+without knowing if I may be alive to see the next day. I am Mrs.Maria
+Roland, a widow suffering from a long time illness. I have some funds
+I inherited from my late husband, the sum of ($11,000,000.00, Eleven
+Million Dollars) my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest and God fearing person who can claim this
+money and use it for Charity works, for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of god
+and the effort that the house of god is maintained.
 
+ I do not want a situation where this money will be used in an ungodly
+manner. That's why I'm taking this decision. I'm not afraid of death,
+so I know where I'm going. I accept this decision because I do not
+have any child who will inherit this money after I die. Please I want
+your sincere and urgent answer to know if you will be able to execute
+this project, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of god be with you and all those that you
+love and  care for.
 
+I am waiting for your reply.
 
-> --
-> ~miko
->
->
+May God Bless you,
 
-
---
-Best Regards
-Masahiro Yamada
+ Mrs.Maria Roland.

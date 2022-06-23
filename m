@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA2F558AE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB378558AF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiFWVp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S229653AbiFWVtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiFWVp5 (ORCPT
+        with ESMTP id S229469AbiFWVti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:45:57 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55E25DF10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:45:56 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id y14so1953986qvs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:45:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=0CKIvS9aMMD66vxtqOCpuSRDl9nO4eJxY8IunK0l4JM=;
-        b=kiXTECQuqsVsoAs6FW8RtPr1gnI5f+58WVXHXXPoKqUaxVWZz9GwfoZQevO566/mSE
-         7rHxJ2QYgzSlhzU/3+ZpZSXb1Yvi/I1+4kp15iCNFLuG0C3DT1mzwz8Oss5Wuwed3uhF
-         d+t16nmkRA/RJf/jXj0NhFhDJ5ni5ehsdYBikC5/wL8Ztc8tq+qD3KwRMNVni7NaG8Qs
-         7FVpnXKL9BbG52h+JhKp+qBVdZAC60t9hV5omZOSSfD4SaNT4uTRCbC/HgTJYomjI4ya
-         clcc2vFCLsK4utYC4jT+BRNtCKb9AvNyVCvnesPtQ1OpHdxPodGQj6KI5sdoKwh010YI
-         4xgw==
-X-Gm-Message-State: AJIora9hKm0dPTwh60DHuxv3CLm+XGnz7z31RYbwoCai/+gUWUW0DwY8
-        pjUkR8tU3/i2FxdzCQDo5mF70iyrpdZ4af/XDFM=
-X-Google-Smtp-Source: AGRyM1v2usadGTyZlqb6Ml0femKSWEGiKQVOdlevtUzZRfFJcHhEqUEnKteRGPis2XQ5p5NCS+A1cw==
-X-Received: by 2002:a05:6214:e83:b0:470:54c3:e18e with SMTP id hf3-20020a0562140e8300b0047054c3e18emr13015049qvb.3.1656020755830;
-        Thu, 23 Jun 2022 14:45:55 -0700 (PDT)
-Received: from castiana ([2602:fc62:a:35::50])
-        by smtp.gmail.com with ESMTPSA id n8-20020a05620a222800b006ab935c1563sm483237qkh.8.2022.06.23.14.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 14:45:55 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 16:45:52 -0500
-From:   =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 23 Jun 2022 17:49:38 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67D8609D6;
+        Thu, 23 Jun 2022 14:49:36 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:50126)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o4Uhd-00DJj7-3e; Thu, 23 Jun 2022 15:49:29 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57444 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o4Uhb-0022ce-V4; Thu, 23 Jun 2022 15:49:28 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        stable@vger.kernel.org
-Subject: [PATCH RESEND] tools/vm/slabinfo: Handle files in debugfs
-Message-ID: <YrTfEHvpysJAVWWr@castiana>
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+        <20220614120231.48165-12-kirill.shutemov@linux.intel.com>
+        <6be29d38-5c93-7cc9-0de7-235d3f83773c@intel.com>
+Date:   Thu, 23 Jun 2022 16:48:59 -0500
+In-Reply-To: <6be29d38-5c93-7cc9-0de7-235d3f83773c@intel.com> (Dave Hansen's
+        message of "Thu, 23 Jun 2022 10:23:59 -0700")
+Message-ID: <87a6a3aw50.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Mailer: git-send-email 2.34.1
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1o4Uhb-0022ce-V4;;;mid=<87a6a3aw50.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18FcaF4uvLQyjo+A0LkxE1aFqSrnDlgmHM=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Dave Hansen <dave.hansen@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 559 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 11 (2.0%), b_tie_ro: 10 (1.8%), parse: 0.99
+        (0.2%), extract_message_metadata: 24 (4.3%), get_uri_detail_list: 1.45
+        (0.3%), tests_pri_-1000: 23 (4.2%), tests_pri_-950: 1.75 (0.3%),
+        tests_pri_-900: 1.46 (0.3%), tests_pri_-90: 154 (27.5%), check_bayes:
+        150 (26.8%), b_tokenize: 14 (2.4%), b_tok_get_all: 10 (1.8%),
+        b_comp_prob: 3.4 (0.6%), b_tok_touch_all: 117 (20.9%), b_finish: 1.45
+        (0.3%), tests_pri_0: 322 (57.6%), check_dkim_signature: 0.74 (0.1%),
+        check_dkim_adsp: 2.7 (0.5%), poll_dns_idle: 0.45 (0.1%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 12 (2.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCHv7 11/14] x86: Disable kexec if system has unaccepted memory
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 64dd68497be76 relocated and renamed the alloc_calls and
-free_calls files from /sys/kernel/slab/NAME/*_calls over to
-/sys/kernel/debug/slab/NAME/*_calls but didn't update the slabinfo tool
-with the new location.
+Dave Hansen <dave.hansen@intel.com> writes:
 
-This change will now have slabinfo look at the new location (and filenames)
-with a fallback to the prior files.
+> ... adding kexec folks
+>
+> On 6/14/22 05:02, Kirill A. Shutemov wrote:
+>> On kexec, the target kernel has to know what memory has been accepted.
+>> Information in EFI map is out of date and cannot be used.
+>> 
+>> boot_params.unaccepted_memory can be used to pass the bitmap between two
+>> kernels on kexec, but the use-case is not yet implemented.
+>> 
+>> Disable kexec on machines with unaccepted memory for now.
+> ...
+>> +static int __init unaccepted_init(void)
+>> +{
+>> +	if (!boot_params.unaccepted_memory)
+>> +		return 0;
+>> +
+>> +#ifdef CONFIG_KEXEC_CORE
+>> +	/*
+>> +	 * TODO: Information on memory acceptance status has to be communicated
+>> +	 * between kernel.
+>> +	 */
+>> +	pr_warn("Disable kexec: not yet supported on systems with unaccepted memory\n");
+>> +	kexec_load_disabled = 1;
+>> +#endif
+>
+> This looks to be the *only* in-kernel user tweaking kexec_load_disabled.
+>  It doesn't feel great to just be disabling kexec like this.  Why not
+> just fix it properly?
+>
+> What do the kexec folks think?
 
-Fixes: 64dd68497be76 ("mm: slub: move sysfs slab alloc/free interfaces to debugfs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Stéphane Graber <stgraber@ubuntu.com>
-Tested-by: Stéphane Graber <stgraber@ubuntu.com>
----
- tools/vm/slabinfo.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+I didn't realized someone had implemented kexec_load_disabled.  I am not
+particularly happy about that.  It looks like an over-broad stick that
+we will have to support forever.
 
-diff --git a/tools/vm/slabinfo.c b/tools/vm/slabinfo.c
-index 9b68658b6bb8..5b98f3ee58a5 100644
---- a/tools/vm/slabinfo.c
-+++ b/tools/vm/slabinfo.c
-@@ -233,6 +233,24 @@ static unsigned long read_slab_obj(struct slabinfo *s, const char *name)
- 	return l;
- }
- 
-+static unsigned long read_debug_slab_obj(struct slabinfo *s, const char *name)
-+{
-+	char x[128];
-+	FILE *f;
-+	size_t l;
-+
-+	snprintf(x, 128, "/sys/kernel/debug/slab/%s/%s", s->name, name);
-+	f = fopen(x, "r");
-+	if (!f) {
-+		buffer[0] = 0;
-+		l = 0;
-+	} else {
-+		l = fread(buffer, 1, sizeof(buffer), f);
-+		buffer[l] = 0;
-+		fclose(f);
-+	}
-+	return l;
-+}
- 
- /*
-  * Put a size string together
-@@ -409,14 +427,18 @@ static void show_tracking(struct slabinfo *s)
- {
- 	printf("\n%s: Kernel object allocation\n", s->name);
- 	printf("-----------------------------------------------------------------------\n");
--	if (read_slab_obj(s, "alloc_calls"))
-+	if (read_debug_slab_obj(s, "alloc_traces"))
-+		printf("%s", buffer);
-+	else if (read_slab_obj(s, "alloc_calls"))
- 		printf("%s", buffer);
- 	else
- 		printf("No Data\n");
- 
- 	printf("\n%s: Kernel object freeing\n", s->name);
- 	printf("------------------------------------------------------------------------\n");
--	if (read_slab_obj(s, "free_calls"))
-+	if (read_debug_slab_obj(s, "free_traces"))
-+		printf("%s", buffer);
-+	else if (read_slab_obj(s, "free_calls"))
- 		printf("%s", buffer);
- 	else
- 		printf("No Data\n");
--- 
-2.34.1
+This change looks like it just builds on that bad decision.
+
+If people don't want to deal with this situation right now, then I
+recommend they make this new code and KEXEC conflict at the Kconfig
+level.  That would give serious incentive to adding the missing
+implementation.
+
+If there is some deep and fundamental why this can not be supported
+then it probably makes sense to put some code in the arch_kexec_load
+hook that verifies that deep and fundamental reason is present.
+
+With the kexec code all we have to verify it works is a little testing
+and careful code review.  Something like this makes code review much
+harder because the entire kernel has to be checked to see if some random
+driver without locking changed a variable.  Rather than having it
+apparent that this special case exists when reading through the kexec
+code.
+
+Eric
 

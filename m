@@ -2,139 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16DA557F8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35614557F8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiFWQOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S231938AbiFWQOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiFWQOv (ORCPT
+        with ESMTP id S230212AbiFWQOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:14:51 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17692F649;
-        Thu, 23 Jun 2022 09:14:49 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id j22so17277869ljg.0;
-        Thu, 23 Jun 2022 09:14:49 -0700 (PDT)
+        Thu, 23 Jun 2022 12:14:52 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CA72F66A;
+        Thu, 23 Jun 2022 09:14:51 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id lw20so19775066ejb.4;
+        Thu, 23 Jun 2022 09:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=chAW9yXxTwtCayPDN2K4p2x7rb0AVI/k5FO9A88UkBY=;
-        b=iepp750f1IXDFnBvhK4HM5vyqZCuV/H9B+98+C6wYTafYO5h+NkfZkl1dxzQEBVmyB
-         FaXWPAUHYp0NuDlM31aN6KreHiZ5gKyAy3tRZV2MFtpveYk+Oyx+vkg15GoG1gVj6KLx
-         /KJ44R/NvwfBg2J5gU5GX4FpHFF9uXWXRHyqFCNZTsxPysn+bxGy/2mPl5tyyRF4zCu6
-         uqSQEG4NhhADABXUy98hg/xetXQgQpEUqCXYuMCXt4WyceOTcq0tbov8gMPr693Jn5iR
-         blCa5AUgMxBXUYv/UZb2N01ZjcT2fZjVJ4UmLn2GN5EYcUftX2R+0QcFvlZ6fwjUq+DT
-         p5/Q==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9my7BIzdQKToa872aa7K8z8zM0/VCCSMeCh7egVSNio=;
+        b=Ux9NVpaU2IQ7ep9PCgOib8SWPuCzBnLbniwQpQq4VjL/lVfHWqlaUAVEJlQEoi6I4k
+         GFS6oyhgLMQdPYK0qg12ic4Bfki7kq9zbe3TFIePJIiJaNsIpKVh5dW9bKH5FJfoiiK9
+         NKg+iQL22lkle2begO9zG92plfkoFcpU2B92EJrWOnzPJnh5BE/te1FfDl4pgyC94QuG
+         3Vfcl0H4Ps5ZpXJ81ErnzWeQfnk8pCUlHFsbBSnCOJNfXly7sHYpzb0TvP3BcPkLP3ac
+         yqO9+n8SEnFlNyxJleg/zvYl0ejekqA/50r+PM2ZxPxRHJYKgmirGNurJap1SK1AWqto
+         GHcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=chAW9yXxTwtCayPDN2K4p2x7rb0AVI/k5FO9A88UkBY=;
-        b=vQdMuy7cK+2sdsC9KyrQn6vUNKHHdbd+4fJzJQ0zgJL9aQfutlJc3A8UIxeerQw28M
-         xSOvVqM+JS7n1xnQbnV0A6/AOKtzUbZHHk2o/xR0cN2Vemx4xqJafODw81b5eiXXj/OZ
-         52SQUuSo3iWoz35LLzvNU/BOUQrB83HeQJSKP6wo48lGzKgUuxuAcku8Rk/AnLgwXaYH
-         BZMZvkh+Ug4M+zJowoaGHyIrWi0tuLCwXUuhNxQmbAzxpS8Url3c+pYCixIqGV8TmNA9
-         yHKssm57mgJG1u5pVzsful3VYcOaSOIy0V1aRvHkEjIDCHikJlASY6WcrB0eJekfmsqc
-         wb5Q==
-X-Gm-Message-State: AJIora8x57NoP+N48YCVL0BWi1VR0NT/UY2FqDr6kREzx6c9lTBs3lVz
-        oyeGmgTes+o4pFaUvcN/C2x4Ol0U0meAeBxfVmA=
-X-Google-Smtp-Source: AGRyM1uaOZs3XcqnApOZWDYeXACNwy3jox6uESty97oe5gc4bwE/M1cCoRJ23ADElhT0XKwR5RsMcZQXTxqHpm4Pvco=
-X-Received: by 2002:a2e:990:0:b0:25a:7c03:eb70 with SMTP id
- 138-20020a2e0990000000b0025a7c03eb70mr4983157ljj.350.1656000887671; Thu, 23
- Jun 2022 09:14:47 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9my7BIzdQKToa872aa7K8z8zM0/VCCSMeCh7egVSNio=;
+        b=JOXN1mLUonXlLaspD/pEQ5riYTBn8gB56uKcVVbEBnzD89uH/ESSyBo+lL0w6QH6Rn
+         ENy2+7vl3JPt+RJ2ig7fem4Q7FsrjP+bb/PFO0/uK62wHflmHf3gizI0w+4r85baXyMc
+         OL2PClWOUW/0dBRId5dygJeeekzGTT1S4YXBwzZwRr74CpwSe1pvCO07y8wTn0qOww3p
+         GBVD+mA16PEi1MECuxQTOsOk33hnMa2eUpiF5BiRWvGpjUgzM09/H1uTH19yaiEs7QTp
+         4FAKBOF6MhkNJtqKQhHqIcduQQp1S+2+yHfOS95LMEOG2fH/Ln4kR3t/ps0NYIXiZlAx
+         WEbA==
+X-Gm-Message-State: AJIora/F3neS0pjtYRey4+u3cTJ2NIgiccPSznyTn+jFpOCoXSJI4WyE
+        bZAiJa/3nxrWAu2OEDUe2io=
+X-Google-Smtp-Source: AGRyM1uT1nDTwnky+9bdNC1MBSakR5BvTEtg4Siws+lF99x5ZK41M/uHh6qfe4X3LFrFyNyGYrsHpw==
+X-Received: by 2002:a17:907:7f8b:b0:721:9c02:37f1 with SMTP id qk11-20020a1709077f8b00b007219c0237f1mr8914822ejc.211.1656000889827;
+        Thu, 23 Jun 2022 09:14:49 -0700 (PDT)
+Received: from [192.168.0.182] ([79.119.98.153])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1709063d2200b0070759e37183sm11161525ejf.59.2022.06.23.09.14.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 09:14:49 -0700 (PDT)
+Message-ID: <54bfff70-938f-16e1-198d-47ed9ba95db4@gmail.com>
+Date:   Thu, 23 Jun 2022 19:14:48 +0300
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
-In-Reply-To: <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
-From:   Max Krummenacher <max.oss.09@gmail.com>
-Date:   Thu, 23 Jun 2022 18:14:36 +0200
-Message-ID: <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 2/2] iio: adc: ad4130: add AD4130 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+References: <20220620162059.1097264-1-cosmin.tanislav@analog.com>
+ <20220620162059.1097264-3-cosmin.tanislav@analog.com>
+ <CAHp75VcBJkQ+CwyoDaTJ_AD+mv9d0tEd_txqHwkPRy4-xvnyKg@mail.gmail.com>
+ <2aa93eab-de6d-866b-a829-36b47ff00982@gmail.com>
+ <CAHp75Vc_fcAP6gGwMkYZUoMM6jKeUoQr8J+zYCUz8inSHnTF_w@mail.gmail.com>
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+In-Reply-To: <CAHp75Vc_fcAP6gGwMkYZUoMM6jKeUoQr8J+zYCUz8inSHnTF_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all
-
-On Thu, Jun 16, 2022 at 2:51 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Thu, Jun 9, 2022 at 5:10 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
->
-> > This series adds a PM domain provider driver which enables/disables
-> > a regulator to control its power state.
->
-> Actually, we did this on the U8500 in 2011.
->
-> IIRC this led to problems because we had to invent "atomic regulators"
-> because regulators use kernel abstractions that assume slowpath
-> (process context) and power domains does not, i.e. they execute in
-> fastpath, such as an interrupt handler.
->
-> The atomic regulator was a subset of regulator that only handled
-> regulators that would result in something like an atomic register write.
->
-> In the end it was not worth trying to upstream this approach, and
-> as I remember it, Ulf Hansson intended to let the power domains poke
-> these registers directly, which was easier. (It's on Ulfs TODO list to
-> actually implement this, hehe.)
->
-> Yours,
-> Linus Walleij
-
-Thanks for all the feedback.
-
-The approach taken with the patchset seems to be architecturally wrong
-and as Linus pointed out has additionally the flaw that the regulator
-would need to be controllable in atomic context which depending on
-the regulator driver / configuration may not be fulfilled.
-
-So our plan is to explicitly handle a (shared) regulator in every
-driver involved, adding that regulator capability for drivers not
-already having one.
 
 
-The question which remains is on how one would model functionality
-which by itself does not need a driver but would need regulator
-support to switch its supply on in run state and off in suspend
-states and poweroff, like for example a simple level shifter.
-Any suggestions on this topic? Thanks.
+On 6/23/22 18:39, Andy Shevchenko wrote:
+> On Thu, Jun 23, 2022 at 5:27 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+>> On 6/20/22 21:29, Andy Shevchenko wrote:
+>>> On Mon, Jun 20, 2022 at 6:27 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+> 
+> ...
+> 
+>>>> +       /*
+>>>> +        * DMA (thus cache coherency maintenance) requires the
+>>>> +        * transfer buffers to live in their own cache lines.
+>>>> +        */
+>>>
+>>> This is a good comment, but what fields does it apply to?
+>>
+>> Whatever is below it, grouped together. This is not hard to
+>> understand.
+> 
+> It's hard to understand what exactly is DMA-aware here. I see only one
+> buffer that is aligned properly for DMA, the rest are not, except the
+> case if all of them are going in one DMA transaction. Is this the case
+> here?
+> 
+>>>> +       u8                      reset_buf[AD4130_RESET_BUF_SIZE] __aligned(IIO_DMA_MINALIGN);
+> 
+> This is aligned.
+> 
+>>>> +       u8                      reg_write_tx_buf[4];
+> 
+> This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0).
+> 
+>>>> +       u8                      reg_read_tx_buf[1];
+> 
+> This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0 + 4).
+> 
+>>>> +       u8                      reg_read_rx_buf[3];
+> 
+> This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0 + 4 + 1).
+> And this is Rx.
+> 
+>>>> +       u8                      fifo_tx_buf[2];
+> 
+> Here is Tx again which is most likely is not aligned...
+> 
+>>>> +       u8                      fifo_rx_buf[AD4130_FIFO_SIZE *
+>>>> +                                           AD4130_FIFO_MAX_SAMPLE_SIZE];
+>>>> +};
+> 
 
-Cheers
-Max
+This has been mentioned before by Jonathan as a reply to V6 of my
+AD74413R driver.
+
+ > I'm surprised I didn't mention this before but you only need to 
+ensure  > that any memory used for DMA is not in a cacheline with memory 
+used
+ > for other things that might change concurrently.
+
+To my understanding, as long as the DMA buffers will all be accessed by
+the same DMA-compatible SPI controller, you only need to align them so
+they're not in the same cacheline with memory that will not be accessed
+by the SPI controller.

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BA8558459
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FAA5581FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbiFWRlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        id S230041AbiFWRJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbiFWRiE (ORCPT
+        with ESMTP id S229917AbiFWRG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:38:04 -0400
+        Thu, 23 Jun 2022 13:06:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A769451E77;
-        Thu, 23 Jun 2022 10:07:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A394522D4;
+        Thu, 23 Jun 2022 09:55:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B8686159A;
-        Thu, 23 Jun 2022 17:07:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECD1EC3411B;
-        Thu, 23 Jun 2022 17:07:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E8C160BA2;
+        Thu, 23 Jun 2022 16:55:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04570C3411B;
+        Thu, 23 Jun 2022 16:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004041;
-        bh=UpJOxMgEE6p9v1senGlDwZGLgJNG5Nyi30nq2XCplN0=;
+        s=korg; t=1656003357;
+        bh=XQ5t5CJq9j79RLN8jK5O5/VLTfapWnaCAjsrz8hpW8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hda9i03a9vQmHJZVK4za5V8M1SookYewVWQSNvu0MAWIMrye7BN3CiOLg3zkQgsG9
-         E7yJ7DjdputYG//Dk6k2LTTW8ZLw7xpKZXnq5XD8s7unGwK2PaHRr4NdsQUAG43TzA
-         2CDCgyVOZH8Y/wxXxkhoKMF8b47f9x7LrKz69nWU=
+        b=FkBLYn6mcb20lCfmCTMmvKXN/UmSP2Ug4V0krzJ/UEkPEQoFK8BVMywUo7tvgLu2o
+         /uei/tGkamycINRv5KoBu2wnzqZTF2vbIx9VKAqrCsidzrKje31oY3dotJfdIm6YcQ
+         FuMdh1i+kU+Hi301X6H32ZaRkEzz+jeBFiFNOBJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 168/237] siphash: use one source of truth for siphash permutations
-Date:   Thu, 23 Jun 2022 18:43:22 +0200
-Message-Id: <20220623164347.987554124@linuxfoundation.org>
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.9 210/264] random: move randomize_page() into mm where it belongs
+Date:   Thu, 23 Jun 2022 18:43:23 +0200
+Message-Id: <20220623164350.013587135@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,221 +56,456 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit e73aaae2fa9024832e1f42e30c787c7baf61d014 upstream.
+commit 5ad7dd882e45d7fe432c32e896e2aaa0b21746ea upstream.
 
-The SipHash family of permutations is currently used in three places:
+randomize_page is an mm function. It is documented like one. It contains
+the history of one. It has the naming convention of one. It looks
+just like another very similar function in mm, randomize_stack_top().
+And it has always been maintained and updated by mm people. There is no
+need for it to be in random.c. In the "which shape does not look like
+the other ones" test, pointing to randomize_page() is correct.
 
-- siphash.c itself, used in the ordinary way it was intended.
-- random32.c, in a construction from an anonymous contributor.
-- random.c, as part of its fast_mix function.
+So move randomize_page() into mm/util.c, right next to the similar
+randomize_stack_top() function.
 
-Each one of these places reinvents the wheel with the same C code, same
-rotation constants, and same symmetry-breaking constants.
+This commit contains no actual code changes.
 
-This commit tidies things up a bit by placing macros for the
-permutations and constants into siphash.h, where each of the three .c
-users can access them. It also leaves a note dissuading more users of
-them from emerging.
-
+Cc: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c   |   30 +++++++-----------------------
- include/linux/prandom.h |   23 +++++++----------------
- include/linux/siphash.h |   28 ++++++++++++++++++++++++++++
- lib/siphash.c           |   32 ++++++++++----------------------
- 4 files changed, 52 insertions(+), 61 deletions(-)
+ drivers/char/random.c  |  238 ++++++++++++++++---------------------------------
+ include/linux/mm.h     |    2 
+ include/linux/random.h |    2 
+ mm/util.c              |   33 ++++++
+ 4 files changed, 117 insertions(+), 158 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -51,6 +51,7 @@
+@@ -52,6 +52,7 @@
  #include <linux/completion.h>
  #include <linux/uuid.h>
- #include <linux/uaccess.h>
-+#include <linux/siphash.h>
+ #include <linux/siphash.h>
++#include <linux/uio.h>
  #include <crypto/chacha20.h>
  #include <crypto/blake2s.h>
  #include <asm/processor.h>
-@@ -1011,12 +1012,11 @@ struct fast_pool {
+@@ -447,13 +448,13 @@ void get_random_bytes(void *buf, size_t
+ }
+ EXPORT_SYMBOL(get_random_bytes);
  
- static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
- #ifdef CONFIG_64BIT
--	/* SipHash constants */
--	.pool = { 0x736f6d6570736575UL, 0x646f72616e646f6dUL,
--		  0x6c7967656e657261UL, 0x7465646279746573UL }
-+#define FASTMIX_PERM SIPHASH_PERMUTATION
-+	.pool = { SIPHASH_CONST_0, SIPHASH_CONST_1, SIPHASH_CONST_2, SIPHASH_CONST_3 }
- #else
--	/* HalfSipHash constants */
--	.pool = { 0, 0, 0x6c796765U, 0x74656462U }
-+#define FASTMIX_PERM HSIPHASH_PERMUTATION
-+	.pool = { HSIPHASH_CONST_0, HSIPHASH_CONST_1, HSIPHASH_CONST_2, HSIPHASH_CONST_3 }
+-static ssize_t get_random_bytes_user(void __user *ubuf, size_t len)
++static ssize_t get_random_bytes_user(struct iov_iter *iter)
+ {
+-	size_t block_len, left, ret = 0;
+ 	u32 chacha_state[CHACHA20_BLOCK_SIZE / sizeof(u32)];
+-	u8 output[CHACHA20_BLOCK_SIZE];
++	u8 block[CHACHA20_BLOCK_SIZE];
++	size_t ret = 0, copied;
+ 
+-	if (!len)
++	if (unlikely(!iov_iter_count(iter)))
+ 		return 0;
+ 
+ 	/*
+@@ -467,30 +468,22 @@ static ssize_t get_random_bytes_user(voi
+ 	 * use chacha_state after, so we can simply return those bytes to
+ 	 * the user directly.
+ 	 */
+-	if (len <= CHACHA20_KEY_SIZE) {
+-		ret = len - copy_to_user(ubuf, &chacha_state[4], len);
++	if (iov_iter_count(iter) <= CHACHA20_KEY_SIZE) {
++		ret = copy_to_iter(&chacha_state[4], CHACHA20_KEY_SIZE, iter);
+ 		goto out_zero_chacha;
+ 	}
+ 
+ 	for (;;) {
+-		chacha20_block(chacha_state, output);
++		chacha20_block(chacha_state, block);
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+ 
+-		block_len = min_t(size_t, len, CHACHA20_BLOCK_SIZE);
+-		left = copy_to_user(ubuf, output, block_len);
+-		if (left) {
+-			ret += block_len - left;
++		copied = copy_to_iter(block, sizeof(block), iter);
++		ret += copied;
++		if (!iov_iter_count(iter) || copied != sizeof(block))
+ 			break;
+-		}
+ 
+-		ubuf += block_len;
+-		ret += block_len;
+-		len -= block_len;
+-		if (!len)
+-			break;
+-
+-		BUILD_BUG_ON(PAGE_SIZE % CHACHA20_BLOCK_SIZE != 0);
++		BUILD_BUG_ON(PAGE_SIZE % sizeof(block) != 0);
+ 		if (ret % PAGE_SIZE == 0) {
+ 			if (signal_pending(current))
+ 				break;
+@@ -498,7 +491,7 @@ static ssize_t get_random_bytes_user(voi
+ 		}
+ 	}
+ 
+-	memzero_explicit(output, sizeof(output));
++	memzero_explicit(block, sizeof(block));
+ out_zero_chacha:
+ 	memzero_explicit(chacha_state, sizeof(chacha_state));
+ 	return ret ? ret : -EFAULT;
+@@ -510,96 +503,60 @@ out_zero_chacha:
+  * provided by this function is okay, the function wait_for_random_bytes()
+  * should be called and return 0 at least once at any point prior.
+  */
+-struct batched_entropy {
+-	union {
+-		/*
+-		 * We make this 1.5x a ChaCha block, so that we get the
+-		 * remaining 32 bytes from fast key erasure, plus one full
+-		 * block from the detached ChaCha state. We can increase
+-		 * the size of this later if needed so long as we keep the
+-		 * formula of (integer_blocks + 0.5) * CHACHA20_BLOCK_SIZE.
+-		 */
+-		u64 entropy_u64[CHACHA20_BLOCK_SIZE * 3 / (2 * sizeof(u64))];
+-		u32 entropy_u32[CHACHA20_BLOCK_SIZE * 3 / (2 * sizeof(u32))];
+-	};
+-	unsigned long generation;
+-	unsigned int position;
+-};
+-
+-
+-static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u64) = {
+-	.position = UINT_MAX
+-};
+-
+-u64 get_random_u64(void)
+-{
+-	u64 ret;
+-	unsigned long flags;
+-	struct batched_entropy *batch;
+-	unsigned long next_gen;
+-
+-	warn_unseeded_randomness();
+-
+-	if  (!crng_ready()) {
+-		_get_random_bytes(&ret, sizeof(ret));
+-		return ret;
+-	}
+-
+-	local_irq_save(flags);
+-	batch = raw_cpu_ptr(&batched_entropy_u64);
+-
+-	next_gen = READ_ONCE(base_crng.generation);
+-	if (batch->position >= ARRAY_SIZE(batch->entropy_u64) ||
+-	    next_gen != batch->generation) {
+-		_get_random_bytes(batch->entropy_u64, sizeof(batch->entropy_u64));
+-		batch->position = 0;
+-		batch->generation = next_gen;
+-	}
+-
+-	ret = batch->entropy_u64[batch->position];
+-	batch->entropy_u64[batch->position] = 0;
+-	++batch->position;
+-	local_irq_restore(flags);
+-	return ret;
+-}
+-EXPORT_SYMBOL(get_random_u64);
+-
+-static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u32) = {
+-	.position = UINT_MAX
+-};
+-
+-u32 get_random_u32(void)
+-{
+-	u32 ret;
+-	unsigned long flags;
+-	struct batched_entropy *batch;
+-	unsigned long next_gen;
+ 
+-	warn_unseeded_randomness();
++#define DEFINE_BATCHED_ENTROPY(type)						\
++struct batch_ ##type {								\
++	/*									\
++	 * We make this 1.5x a ChaCha block, so that we get the			\
++	 * remaining 32 bytes from fast key erasure, plus one full		\
++	 * block from the detached ChaCha state. We can increase		\
++	 * the size of this later if needed so long as we keep the		\
++	 * formula of (integer_blocks + 0.5) * CHACHA20_BLOCK_SIZE.		\
++	 */									\
++	type entropy[CHACHA20_BLOCK_SIZE * 3 / (2 * sizeof(type))];		\
++	unsigned long generation;						\
++	unsigned int position;							\
++};										\
++										\
++static DEFINE_PER_CPU(struct batch_ ##type, batched_entropy_ ##type) = {	\
++	.position = UINT_MAX							\
++};										\
++										\
++type get_random_ ##type(void)							\
++{										\
++	type ret;								\
++	unsigned long flags;							\
++	struct batch_ ##type *batch;						\
++	unsigned long next_gen;							\
++										\
++	warn_unseeded_randomness();						\
++										\
++	if  (!crng_ready()) {							\
++		_get_random_bytes(&ret, sizeof(ret));				\
++		return ret;							\
++	}									\
++										\
++	local_irq_save(flags);		\
++	batch = raw_cpu_ptr(&batched_entropy_##type);				\
++										\
++	next_gen = READ_ONCE(base_crng.generation);				\
++	if (batch->position >= ARRAY_SIZE(batch->entropy) ||			\
++	    next_gen != batch->generation) {					\
++		_get_random_bytes(batch->entropy, sizeof(batch->entropy));	\
++		batch->position = 0;						\
++		batch->generation = next_gen;					\
++	}									\
++										\
++	ret = batch->entropy[batch->position];					\
++	batch->entropy[batch->position] = 0;					\
++	++batch->position;							\
++	local_irq_restore(flags);		\
++	return ret;								\
++}										\
++EXPORT_SYMBOL(get_random_ ##type);
+ 
+-	if  (!crng_ready()) {
+-		_get_random_bytes(&ret, sizeof(ret));
+-		return ret;
+-	}
+-
+-	local_irq_save(flags);
+-	batch = raw_cpu_ptr(&batched_entropy_u32);
+-
+-	next_gen = READ_ONCE(base_crng.generation);
+-	if (batch->position >= ARRAY_SIZE(batch->entropy_u32) ||
+-	    next_gen != batch->generation) {
+-		_get_random_bytes(batch->entropy_u32, sizeof(batch->entropy_u32));
+-		batch->position = 0;
+-		batch->generation = next_gen;
+-	}
+-
+-	ret = batch->entropy_u32[batch->position];
+-	batch->entropy_u32[batch->position] = 0;
+-	++batch->position;
+-	local_irq_restore(flags);
+-	return ret;
+-}
+-EXPORT_SYMBOL(get_random_u32);
++DEFINE_BATCHED_ENTROPY(u64)
++DEFINE_BATCHED_ENTROPY(u32)
+ 
+ #ifdef CONFIG_SMP
+ /*
+@@ -620,38 +577,6 @@ int __cold random_prepare_cpu(unsigned i
+ }
  #endif
+ 
+-/**
+- * randomize_page - Generate a random, page aligned address
+- * @start:	The smallest acceptable address the caller will take.
+- * @range:	The size of the area, starting at @start, within which the
+- *		random address must fall.
+- *
+- * If @start + @range would overflow, @range is capped.
+- *
+- * NOTE: Historical use of randomize_range, which this replaces, presumed that
+- * @start was already page aligned.  We now align it regardless.
+- *
+- * Return: A page aligned address within [start, start + range).  On error,
+- * @start is returned.
+- */
+-unsigned long randomize_page(unsigned long start, unsigned long range)
+-{
+-	if (!PAGE_ALIGNED(start)) {
+-		range -= PAGE_ALIGN(start) - start;
+-		start = PAGE_ALIGN(start);
+-	}
+-
+-	if (start > ULONG_MAX - range)
+-		range = ULONG_MAX - start;
+-
+-	range >>= PAGE_SHIFT;
+-
+-	if (range == 0)
+-		return start;
+-
+-	return start + (get_random_long() % range << PAGE_SHIFT);
+-}
+-
+ /*
+  * This function will use the architecture-specific hardware random
+  * number generator if it is available. It is not recommended for
+@@ -1293,6 +1218,10 @@ static void __cold try_to_generate_entro
+ 
+ SYSCALL_DEFINE3(getrandom, char __user *, ubuf, size_t, len, unsigned int, flags)
+ {
++	struct iov_iter iter;
++	struct iovec iov;
++	int ret;
++
+ 	if (flags & ~(GRND_NONBLOCK | GRND_RANDOM | GRND_INSECURE))
+ 		return -EINVAL;
+ 
+@@ -1303,19 +1232,18 @@ SYSCALL_DEFINE3(getrandom, char __user *
+ 	if ((flags & (GRND_INSECURE | GRND_RANDOM)) == (GRND_INSECURE | GRND_RANDOM))
+ 		return -EINVAL;
+ 
+-	if (len > INT_MAX)
+-		len = INT_MAX;
+-
+ 	if (!crng_ready() && !(flags & GRND_INSECURE)) {
+-		int ret;
+-
+ 		if (flags & GRND_NONBLOCK)
+ 			return -EAGAIN;
+ 		ret = wait_for_random_bytes();
+ 		if (unlikely(ret))
+ 			return ret;
+ 	}
+-	return get_random_bytes_user(ubuf, len);
++
++	ret = import_single_range(READ, ubuf, len, &iov, &iter);
++	if (unlikely(ret))
++		return ret;
++	return get_random_bytes_user(&iter);
+ }
+ 
+ static unsigned int random_poll(struct file *file, poll_table *wait)
+@@ -1359,8 +1287,7 @@ static ssize_t random_write(struct file
+ 	return (ssize_t)len;
+ }
+ 
+-static ssize_t urandom_read(struct file *file, char __user *ubuf,
+-			    size_t len, loff_t *ppos)
++static ssize_t urandom_read_iter(struct kiocb *kiocb, struct iov_iter *iter)
+ {
+ 	static int maxwarn = 10;
+ 
+@@ -1369,23 +1296,22 @@ static ssize_t urandom_read(struct file
+ 			++urandom_warning.missed;
+ 		else if (ratelimit_disable || __ratelimit(&urandom_warning)) {
+ 			--maxwarn;
+-			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
+-				  current->comm, len);
++			pr_notice("%s: uninitialized urandom read (%zu bytes read)\n",
++				  current->comm, iov_iter_count(iter));
+ 		}
+ 	}
+ 
+-	return get_random_bytes_user(ubuf, len);
++	return get_random_bytes_user(iter);
+ }
+ 
+-static ssize_t random_read(struct file *file, char __user *ubuf,
+-			   size_t len, loff_t *ppos)
++static ssize_t random_read_iter(struct kiocb *kiocb, struct iov_iter *iter)
+ {
+ 	int ret;
+ 
+ 	ret = wait_for_random_bytes();
+ 	if (ret != 0)
+ 		return ret;
+-	return get_random_bytes_user(ubuf, len);
++	return get_random_bytes_user(iter);
+ }
+ 
+ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+@@ -1447,7 +1373,7 @@ static int random_fasync(int fd, struct
+ }
+ 
+ const struct file_operations random_fops = {
+-	.read = random_read,
++	.read_iter = random_read_iter,
+ 	.write = random_write,
+ 	.poll = random_poll,
+ 	.unlocked_ioctl = random_ioctl,
+@@ -1456,7 +1382,7 @@ const struct file_operations random_fops
  };
  
-@@ -1028,27 +1028,11 @@ static DEFINE_PER_CPU(struct fast_pool,
-  */
- static void fast_mix(unsigned long s[4], unsigned long v1, unsigned long v2)
- {
--#ifdef CONFIG_64BIT
--#define PERM() do { \
--	s[0] += s[1]; s[1] = rol64(s[1], 13); s[1] ^= s[0]; s[0] = rol64(s[0], 32); \
--	s[2] += s[3]; s[3] = rol64(s[3], 16); s[3] ^= s[2]; \
--	s[0] += s[3]; s[3] = rol64(s[3], 21); s[3] ^= s[0]; \
--	s[2] += s[1]; s[1] = rol64(s[1], 17); s[1] ^= s[2]; s[2] = rol64(s[2], 32); \
--} while (0)
--#else
--#define PERM() do { \
--	s[0] += s[1]; s[1] = rol32(s[1],  5); s[1] ^= s[0]; s[0] = rol32(s[0], 16); \
--	s[2] += s[3]; s[3] = rol32(s[3],  8); s[3] ^= s[2]; \
--	s[0] += s[3]; s[3] = rol32(s[3],  7); s[3] ^= s[0]; \
--	s[2] += s[1]; s[1] = rol32(s[1], 13); s[1] ^= s[2]; s[2] = rol32(s[2], 16); \
--} while (0)
--#endif
--
- 	s[3] ^= v1;
--	PERM();
-+	FASTMIX_PERM(s[0], s[1], s[2], s[3]);
- 	s[0] ^= v1;
- 	s[3] ^= v2;
--	PERM();
-+	FASTMIX_PERM(s[0], s[1], s[2], s[3]);
- 	s[0] ^= v2;
- }
+ const struct file_operations urandom_fops = {
+-	.read = urandom_read,
++	.read_iter = urandom_read_iter,
+ 	.write = random_write,
+ 	.unlocked_ioctl = random_ioctl,
+ 	.fasync = random_fasync,
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2059,6 +2059,8 @@ extern int install_special_mapping(struc
+ 				   unsigned long addr, unsigned long len,
+ 				   unsigned long flags, struct page **pages);
  
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -10,6 +10,7 @@
- 
- #include <linux/types.h>
- #include <linux/percpu.h>
-+#include <linux/siphash.h>
- 
- u32 prandom_u32(void);
- void prandom_bytes(void *buf, size_t nbytes);
-@@ -21,15 +22,10 @@ void prandom_reseed_late(void);
-  * The core SipHash round function.  Each line can be executed in
-  * parallel given enough CPU resources.
-  */
--#define PRND_SIPROUND(v0, v1, v2, v3) ( \
--	v0 += v1, v1 = rol64(v1, 13),  v2 += v3, v3 = rol64(v3, 16), \
--	v1 ^= v0, v0 = rol64(v0, 32),  v3 ^= v2,                     \
--	v0 += v3, v3 = rol64(v3, 21),  v2 += v1, v1 = rol64(v1, 17), \
--	v3 ^= v0,                      v1 ^= v2, v2 = rol64(v2, 32)  \
--)
-+#define PRND_SIPROUND(v0, v1, v2, v3) SIPHASH_PERMUTATION(v0, v1, v2, v3)
- 
--#define PRND_K0 (0x736f6d6570736575 ^ 0x6c7967656e657261)
--#define PRND_K1 (0x646f72616e646f6d ^ 0x7465646279746573)
-+#define PRND_K0 (SIPHASH_CONST_0 ^ SIPHASH_CONST_2)
-+#define PRND_K1 (SIPHASH_CONST_1 ^ SIPHASH_CONST_3)
- 
- #elif BITS_PER_LONG == 32
- /*
-@@ -37,14 +33,9 @@ void prandom_reseed_late(void);
-  * This is weaker, but 32-bit machines are not used for high-traffic
-  * applications, so there is less output for an attacker to analyze.
-  */
--#define PRND_SIPROUND(v0, v1, v2, v3) ( \
--	v0 += v1, v1 = rol32(v1,  5),  v2 += v3, v3 = rol32(v3,  8), \
--	v1 ^= v0, v0 = rol32(v0, 16),  v3 ^= v2,                     \
--	v0 += v3, v3 = rol32(v3,  7),  v2 += v1, v1 = rol32(v1, 13), \
--	v3 ^= v0,                      v1 ^= v2, v2 = rol32(v2, 16)  \
--)
--#define PRND_K0 0x6c796765
--#define PRND_K1 0x74656462
-+#define PRND_SIPROUND(v0, v1, v2, v3) HSIPHASH_PERMUTATION(v0, v1, v2, v3)
-+#define PRND_K0 (HSIPHASH_CONST_0 ^ HSIPHASH_CONST_2)
-+#define PRND_K1 (HSIPHASH_CONST_1 ^ HSIPHASH_CONST_3)
- 
- #else
- #error Unsupported BITS_PER_LONG
---- a/include/linux/siphash.h
-+++ b/include/linux/siphash.h
-@@ -136,4 +136,32 @@ static inline u32 hsiphash(const void *d
- 	return ___hsiphash_aligned(data, len, key);
- }
- 
-+/*
-+ * These macros expose the raw SipHash and HalfSipHash permutations.
-+ * Do not use them directly! If you think you have a use for them,
-+ * be sure to CC the maintainer of this file explaining why.
-+ */
++unsigned long randomize_page(unsigned long start, unsigned long range);
 +
-+#define SIPHASH_PERMUTATION(a, b, c, d) ( \
-+	(a) += (b), (b) = rol64((b), 13), (b) ^= (a), (a) = rol64((a), 32), \
-+	(c) += (d), (d) = rol64((d), 16), (d) ^= (c), \
-+	(a) += (d), (d) = rol64((d), 21), (d) ^= (a), \
-+	(c) += (b), (b) = rol64((b), 17), (b) ^= (c), (c) = rol64((c), 32))
-+
-+#define SIPHASH_CONST_0 0x736f6d6570736575ULL
-+#define SIPHASH_CONST_1 0x646f72616e646f6dULL
-+#define SIPHASH_CONST_2 0x6c7967656e657261ULL
-+#define SIPHASH_CONST_3 0x7465646279746573ULL
-+
-+#define HSIPHASH_PERMUTATION(a, b, c, d) ( \
-+	(a) += (b), (b) = rol32((b), 5), (b) ^= (a), (a) = rol32((a), 16), \
-+	(c) += (d), (d) = rol32((d), 8), (d) ^= (c), \
-+	(a) += (d), (d) = rol32((d), 7), (d) ^= (a), \
-+	(c) += (b), (b) = rol32((b), 13), (b) ^= (c), (c) = rol32((c), 16))
-+
-+#define HSIPHASH_CONST_0 0U
-+#define HSIPHASH_CONST_1 0U
-+#define HSIPHASH_CONST_2 0x6c796765U
-+#define HSIPHASH_CONST_3 0x74656462U
-+
- #endif /* _LINUX_SIPHASH_H */
---- a/lib/siphash.c
-+++ b/lib/siphash.c
-@@ -18,19 +18,13 @@
- #include <asm/word-at-a-time.h>
+ extern unsigned long get_unmapped_area(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
+ 
+ extern unsigned long mmap_region(struct file *file, unsigned long addr,
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -45,8 +45,6 @@ static inline unsigned long get_random_l
  #endif
- 
--#define SIPROUND \
--	do { \
--	v0 += v1; v1 = rol64(v1, 13); v1 ^= v0; v0 = rol64(v0, 32); \
--	v2 += v3; v3 = rol64(v3, 16); v3 ^= v2; \
--	v0 += v3; v3 = rol64(v3, 21); v3 ^= v0; \
--	v2 += v1; v1 = rol64(v1, 17); v1 ^= v2; v2 = rol64(v2, 32); \
--	} while (0)
-+#define SIPROUND SIPHASH_PERMUTATION(v0, v1, v2, v3)
- 
- #define PREAMBLE(len) \
--	u64 v0 = 0x736f6d6570736575ULL; \
--	u64 v1 = 0x646f72616e646f6dULL; \
--	u64 v2 = 0x6c7967656e657261ULL; \
--	u64 v3 = 0x7465646279746573ULL; \
-+	u64 v0 = SIPHASH_CONST_0; \
-+	u64 v1 = SIPHASH_CONST_1; \
-+	u64 v2 = SIPHASH_CONST_2; \
-+	u64 v3 = SIPHASH_CONST_3; \
- 	u64 b = ((u64)(len)) << 56; \
- 	v3 ^= key->key[1]; \
- 	v2 ^= key->key[0]; \
-@@ -389,19 +383,13 @@ u32 hsiphash_4u32(const u32 first, const
  }
- EXPORT_SYMBOL(hsiphash_4u32);
- #else
--#define HSIPROUND \
--	do { \
--	v0 += v1; v1 = rol32(v1, 5); v1 ^= v0; v0 = rol32(v0, 16); \
--	v2 += v3; v3 = rol32(v3, 8); v3 ^= v2; \
--	v0 += v3; v3 = rol32(v3, 7); v3 ^= v0; \
--	v2 += v1; v1 = rol32(v1, 13); v1 ^= v2; v2 = rol32(v2, 16); \
--	} while (0)
-+#define HSIPROUND HSIPHASH_PERMUTATION(v0, v1, v2, v3)
  
- #define HPREAMBLE(len) \
--	u32 v0 = 0; \
--	u32 v1 = 0; \
--	u32 v2 = 0x6c796765U; \
--	u32 v3 = 0x74656462U; \
-+	u32 v0 = HSIPHASH_CONST_0; \
-+	u32 v1 = HSIPHASH_CONST_1; \
-+	u32 v2 = HSIPHASH_CONST_2; \
-+	u32 v3 = HSIPHASH_CONST_3; \
- 	u32 b = ((u32)(len)) << 24; \
- 	v3 ^= key->key[1]; \
- 	v2 ^= key->key[0]; \
+-unsigned long randomize_page(unsigned long start, unsigned long range);
+-
+ int __init random_init(const char *command_line);
+ bool rng_is_initialized(void);
+ int wait_for_random_bytes(void);
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -11,6 +11,7 @@
+ #include <linux/mman.h>
+ #include <linux/hugetlb.h>
+ #include <linux/vmalloc.h>
++#include <linux/random.h>
+ 
+ #include <asm/sections.h>
+ #include <asm/uaccess.h>
+@@ -261,6 +262,38 @@ int vma_is_stack_for_current(struct vm_a
+ 	return (vma->vm_start <= KSTK_ESP(t) && vma->vm_end >= KSTK_ESP(t));
+ }
+ 
++/**
++ * randomize_page - Generate a random, page aligned address
++ * @start:	The smallest acceptable address the caller will take.
++ * @range:	The size of the area, starting at @start, within which the
++ *		random address must fall.
++ *
++ * If @start + @range would overflow, @range is capped.
++ *
++ * NOTE: Historical use of randomize_range, which this replaces, presumed that
++ * @start was already page aligned.  We now align it regardless.
++ *
++ * Return: A page aligned address within [start, start + range).  On error,
++ * @start is returned.
++ */
++unsigned long randomize_page(unsigned long start, unsigned long range)
++{
++	if (!PAGE_ALIGNED(start)) {
++		range -= PAGE_ALIGN(start) - start;
++		start = PAGE_ALIGN(start);
++	}
++
++	if (start > ULONG_MAX - range)
++		range = ULONG_MAX - start;
++
++	range >>= PAGE_SHIFT;
++
++	if (range == 0)
++		return start;
++
++	return start + (get_random_long() % range << PAGE_SHIFT);
++}
++
+ #if defined(CONFIG_MMU) && !defined(HAVE_ARCH_PICK_MMAP_LAYOUT)
+ void arch_pick_mmap_layout(struct mm_struct *mm)
+ {
 
 

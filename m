@@ -2,162 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2C0557222
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F3D55720E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiFWEox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S233424AbiFWEuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345789AbiFWEUS (ORCPT
+        with ESMTP id S1344351AbiFWEVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 00:20:18 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB4F2D1E9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:20:14 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id l81so23821532oif.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:20:14 -0700 (PDT)
+        Thu, 23 Jun 2022 00:21:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C72D1E9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:21:24 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id q6so1460810eji.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mTdDyLbh8tP6o7Q+FLGKTGG6l09vUb5zEGBwzqDGc4Y=;
-        b=URrd01aPjkPLzZ+FUPVluh3B9wHkVdfFgRToHXuZheiWFUv+m4z7a6jU9QbE7Y2NRw
-         2n8OJuMkGQk+Uon/H5b1Yim7U8i1uipI8DhfJxx8bzavq7QLWgq1eI5UurJvDeCdDyBt
-         znIxEWHZTND5vdiaoD9ufsJEFetTQU/AhdGX3Yu/qk3md8ByEPC/QYneIQXGi/B8vJ0F
-         9arl/Cc76b+zJX10jnKh7ffHoUAzdeqySZ2Z5A5Hud1ZK8vxo9qiOIN59Y8rMqVQeIqB
-         1oyXOl1u+DWre1Xg0egdCgLB1Kholq1edpbCV0EXeXN4aRIJ0hatik8+i53M2yRXRbrX
-         WyYg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UvEF84n19lSXOqhpJPPSQblDfpd6XZf1X0P1snbWIog=;
+        b=Vl9rLwUwaeKipQIahhDvfesL7mLKD5q5lG+qEJ+AyqMb/Xw5nUurD3i3YIkSpsfHF9
+         Ypp7wduhLoSWdVOuDBEF3w86EKbL650iusZN0MRzJoARloBjmDf7l63cuUCYDebI/DgM
+         6bQ+eSHEKrXqoiO59CBd0G8idqfUVJvpjOdomBL3X2rKwXFDhVxd7NH42QsOFXAjt3eQ
+         B9mKPH0NufWSXD7/QLoqk2z8vHtLn5g3GTwuADCAqpKTeYg1XJRZWdC71MwrGKJ14JQE
+         EhWzEQS3SzdDkmR4d2Lncqw6Q9t3D9MnWfYAuqq9rakTfgbv0HKvjHANVFAEO7H9Sh5k
+         79ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mTdDyLbh8tP6o7Q+FLGKTGG6l09vUb5zEGBwzqDGc4Y=;
-        b=kGDsra8QdeQB8l9Kkrdt/aTUWgz/NE9pNP2dDUVtcAFvTyTdqRRRqwAnsHNUGQetan
-         EEf41ChM+QtRJPTbnSxfQZywAmrBmzyRlngzArvJJ9pMAhwLbM6AM+KY9N0tI5Izygt5
-         ks5gQS9P9ABAEhf7/QAj77qhSD/Gk8ez+quTHYIfqouO1eyBhJEq5PmfE5dKEzfpHQab
-         iHggQk/ZcFjM+qfI5k7Y4XoE2OOoHxM8sp7xDT826Q/EG4hizNBjV0P4lJeD8Y14ivQh
-         i950hlKPOUkOr+GhpwbYbSQQ+JBlDlVJzK7gbjtgMgxxU+Leka6StxXU3Vo1QSIQhh53
-         kW2Q==
-X-Gm-Message-State: AJIora+iLIg2/ZD14Z5pxk9R7ERxiwOQutG9Fj+BMI7ByGrNQYA9UJdS
-        cy679aLNeVlp8hMWH4pv6uM=
-X-Google-Smtp-Source: AGRyM1s2b5Dok077072a1KKGCHrG/ui/nHrguWh4T9QOsw8X8BBakGLhoYiE0l1vUu+BDXSJ2bHlTQ==
-X-Received: by 2002:aca:674b:0:b0:333:2014:9d6e with SMTP id b11-20020aca674b000000b0033320149d6emr1074143oiy.169.1655958014189;
-        Wed, 22 Jun 2022 21:20:14 -0700 (PDT)
-Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000f886139c51sm12482737oab.53.2022.06.22.21.20.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 21:20:13 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 23:20:11 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v3 0/4] memblock tests: add VERBOSE and MEMBLOCK_DEBUG
- Makefile options
-Message-ID: <YrPp+xMGZ/n1TpTk@bertie>
-References: <cover.1655889641.git.remckee0@gmail.com>
- <YrPeXOgEQq7G4Ctq@iweiny-desk3>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UvEF84n19lSXOqhpJPPSQblDfpd6XZf1X0P1snbWIog=;
+        b=ICUW2uqpayw/c4jMr4Y3pMgDWFO3YrQnajfniw8orbhHaD/1qYCu56Cc5oGOKddZcI
+         pU8peAOTeqdrZYTdOd43UB+fHDfdPXhZRkCxr57FFvytyj/5UoFXbdQrWMN7fj0mMCnv
+         AHVu0N3hbNYCSdecMCpUJmN8IO9yGaAjqKOhfPwprhz+JF+nhaLlSmgZ+EwYWfUDrDRM
+         gk0XLrBVyOn1Wwbhzr6lMa9fB+dC/ze96KpIcBcUmjPnWtghMS/u7Lu4l4OZ5v+Fll+c
+         6JSa+0xZyPu0FKmfZ4mxPk3xhflgucy7xhJe44gQvHGSCQ43s9ermdsv94erTappMO15
+         sVOA==
+X-Gm-Message-State: AJIora+VIQfCPRzHOlKP4pm4Fs5l1DxaUV8FyxHQqipspNRg4Fsq8EEl
+        bty48ak35gCwT254lL810Fnz9tMrS4Y=
+X-Google-Smtp-Source: AGRyM1tcKwNKAopT/HBbeTPOpaKjfT3ou8JklgW1MgoCthPWnzDd8ytOhYyfoiOuT1VAZsPHz51DLw==
+X-Received: by 2002:a17:906:7292:b0:712:3880:3e7b with SMTP id b18-20020a170906729200b0071238803e7bmr6143374ejl.118.1655958083170;
+        Wed, 22 Jun 2022 21:21:23 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f2e:6923:8d97:93cc:4023:b7a9? (p200300c78f2e69238d9793cc4023b7a9.dip0.t-ipconnect.de. [2003:c7:8f2e:6923:8d97:93cc:4023:b7a9])
+        by smtp.gmail.com with ESMTPSA id w26-20020a50fa9a000000b0043575ae2051sm10806022edr.62.2022.06.22.21.21.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 21:21:22 -0700 (PDT)
+Message-ID: <be6cc1a5-3eab-d0d0-fd93-68afeed7d7a1@gmail.com>
+Date:   Thu, 23 Jun 2022 06:21:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrPeXOgEQq7G4Ctq@iweiny-desk3>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] staging: r8188eu: Make rtw_signal_stat_timer_hdl a static
+ function
+Content-Language: en-US
+To:     Chang Yu <marcus.yu.56@gmail.com>, Larry.Finger@lwfinger.net
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220623022425.395000-1-marcus.yu.56@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220623022425.395000-1-marcus.yu.56@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 08:30:36PM -0700, Ira Weiny wrote:
-> On Wed, Jun 22, 2022 at 04:29:05AM -0500, Rebecca Mckeever wrote:
-> > These patches add options VERBOSE and MEMBLOCK_DEBUG to Memblock
-> > simulator, which can be specified when running make. These patches also
-> > implement the functionality for these options.
+On 6/23/22 04:24, Chang Yu wrote:
+> Make rtw_signal_stat_timer_hdl a static function instead of a global
+> function.
 > 
-> I seem to be missing patch 3/4 and I don't see it on lore?
+> Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> https://lore.kernel.org/linux-mm/004e021cc3cb7be8749361b3b1cb324459b9cb9f.1655889641.git.remckee0@gmail.com/
-> 
-> Did it get sent?  Did it define the ASSERT_*() macros?
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index cc91638a085d..599d3e55be76 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -24,7 +24,7 @@ static u8 rtw_rfc1042_header[] = {
+>   	0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00
+>   };
+>   
+> -void rtw_signal_stat_timer_hdl(struct timer_list *t);
+> +static void rtw_signal_stat_timer_hdl(struct timer_list *t);
+>   
+>   void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
+>   {
 
-That's strange, my email shows that it was sent to linux-mm@kvack.org and
-linux-kernel@vger.kernel.org but I'm not seeing it on lore either.
-Should I resend just patch 3/4? For now, you can take a look at v1.
-Patch 3 is unchanged from v1, which is showing up on lore:
+Hi,
 
-https://lore.kernel.org/linux-mm/fe34452209f54287023ccacd666eade81ecd9a24.1655878337.git.remckee0@gmail.com/T/#u
+thanks for your patch. I think you need the "static" for the declaration 
+and the definition of the function. So it is missing in line 1789.
 
-It does not define the ASSERT_*() macros, that happens in patch 2.
-Patch 3 implements MEMBLOCK_DEBUG.
+Thanks for your support.
 
-Thanks,
-Rebecca
-
-> 
-> Ira
-> 
-> > 
-> > VERBOSE
-> > Usage:
-> > 
-> > $ make VERBOSE=1
-> > 
-> > Passing VERBOSE=1 will enable verbose output from Memblock simulator. For
-> > each test, the verbose output includes the name of the memblock function
-> > being tested, the name of the test, and whether the test passed or failed.
-> > Since all the tests in Memblock simulator run as one monolithic test, this
-> > output is a quick way to get a summary of test results.
-> > 
-> > MEMBLOCK_DEBUG
-> > Usage:
-> > 
-> > $ make MEMBLOCK_DEBUG=1
-> > 
-> > Passing MEMBLOCK_DEBUG=1 will enable memblock_dbg() messages. These
-> > are debug messages built into several functions in memblock that include
-> > information such as the name of the function and the size and start and
-> > end addresses of the memblock region.
-> > 
-> > Rebecca Mckeever (4):
-> >   memblock tests: add user-provided arguments to Makefile
-> >   memblock tests: add verbose output to memblock tests
-> >   memblock tests: set memblock_debug to enable memblock_dbg() messages
-> >   memblock tests: remove completed TODO items
-> > 
-> >  tools/testing/memblock/Makefile               |   4 +
-> >  tools/testing/memblock/README                 |  10 +-
-> >  tools/testing/memblock/TODO                   |  14 +-
-> >  tools/testing/memblock/internal.h             |   7 +
-> >  .../testing/memblock/scripts/Makefile.include |  10 +
-> >  tools/testing/memblock/tests/alloc_api.c      | 241 ++++++++----
-> >  .../memblock/tests/alloc_helpers_api.c        | 135 +++++--
-> >  tools/testing/memblock/tests/alloc_nid_api.c  | 371 ++++++++++++------
-> >  tools/testing/memblock/tests/basic_api.c      | 365 ++++++++++++-----
-> >  tools/testing/memblock/tests/common.c         |  58 +++
-> >  tools/testing/memblock/tests/common.h         |  54 +++
-> >  11 files changed, 913 insertions(+), 356 deletions(-)
-> > 
-> > ---
-> > Changes
-> > 
-> > v1 -> v2
-> > PATCH 2, in common.c:
-> >   Remove #ifdef VERBOSE around prefixes and related constants
-> >   Add __maybe_unused to prefixes
-> >   Move PREFIXES_LEN_MAX, DELIM, and DELIM_LEN so that they are
-> >     immediately after the other constants
-> >   Add #ifdef VERBOSE around definitions for test_*() and prefix_*()
-> > 
-> > v2 -> v3
-> > PATCH 1:
-> >   Add Reviewed-by tag
-> > ---
-> > 
-> > -- 
-> > 2.34.1
-> > 
-> > 
+Bye Philipp

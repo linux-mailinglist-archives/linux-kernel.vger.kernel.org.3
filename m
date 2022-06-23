@@ -2,156 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31788557E21
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A064557E27
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiFWOsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S231989AbiFWOts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiFWOss (ORCPT
+        with ESMTP id S229970AbiFWOtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:48:48 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7EC46B2C;
-        Thu, 23 Jun 2022 07:48:46 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id p14so13637466pfh.6;
-        Thu, 23 Jun 2022 07:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NsGuoNrKOwZi4+BNGtJiyK4WoJSitQyKFNOmJMq17xI=;
-        b=V2o5Ehf6KJjGJXdWPnxArGMA5u68nQNPZm7nxJHmFuS/1tpE8JNXxg6GBlNJgaPPFx
-         aHia/s+4wZmGBIBYLMsxrA+XRCg6ZpCdlq6zLzoLvli88rxxGavMue/9OT7OT3l1BM55
-         +csszujMGX+HWqrj4ur/ALcKQDaY4XtH5XJq8fu39qbhOw92BJxEfFc/zpJfoeTNOTC6
-         h//c8jmvej323nlLvc3FLJ99uDvgbHaaIdsIuQ7rUf1rCytujpZNamgA7f/awCe3P5eN
-         AmkU52yJCHoMG8iHVNNcHGDzcQF7lHfYKcZoIB60QvPyYQ4tVM30wxbPngmCd0owLbfs
-         /Ejg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NsGuoNrKOwZi4+BNGtJiyK4WoJSitQyKFNOmJMq17xI=;
-        b=3FJdMerhZ8rQm337MFWCC3lMZJln7EyUBht1zNZZi94FnZw166JSoD1Q7p3jU8pziq
-         3IbqShoSrapt/wHB5fy/kYdd/4tYsb4uxkfN57xmOXdD2X18KMbgq0BSdZ8rKPRO1bHJ
-         0/PfqzDQghWNaVNf4d7pIJlGtqOsakNQHgIlHrKEWUMWhjwj63jOmXTvoF6A9KGnhukP
-         J54Y7zNqZnumIh9xc7wqtdpg58PfBLFA+PVXPFYPnFYsN9t69B9vplL1b0XWI03g97Qn
-         bXkvx1YhCRESSIvhF9fcPYLdRJEFD9j+KByNefTB5gitrNNK8DJ/uLnWT1CTZGiPwDF3
-         iSZg==
-X-Gm-Message-State: AJIora/T/WsGJG+CDZ2gYDsLomJ0rpTOGj4XI0aK6mE7a2B9erpOO5Tx
-        6YHu8MyYqrv7MI+FRugsYBk=
-X-Google-Smtp-Source: AGRyM1uvG03JMk59g0aypaxhEUWEhGYWbNHLb64IATh4yVcG+Esi2oTV7YSoyn9H7gBse6gMRy873A==
-X-Received: by 2002:a63:f415:0:b0:408:808b:238f with SMTP id g21-20020a63f415000000b00408808b238fmr7684450pgi.469.1655995725433;
-        Thu, 23 Jun 2022 07:48:45 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id 25-20020aa79159000000b00522c0a75c39sm15815422pfi.196.2022.06.23.07.48.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 07:48:44 -0700 (PDT)
-Message-ID: <d80ad697-ed71-6671-c4ea-a7ca5883f65e@gmail.com>
-Date:   Thu, 23 Jun 2022 22:48:36 +0800
+        Thu, 23 Jun 2022 10:49:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4037025E9B;
+        Thu, 23 Jun 2022 07:49:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D549061E6C;
+        Thu, 23 Jun 2022 14:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB45C341C4;
+        Thu, 23 Jun 2022 14:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655995785;
+        bh=OvG65GhwKQTbl8Ynp1orQ26fx51gHndrm9PpnBDSVnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VsOySaRM4OQGeLKpQVr/xu1CdGLfbjeApZv7IKFcPdFdxoW3+gWpkYNbkqAOwm/z2
+         uDh6VOuy0QBDhZ4sE+XHF+PRlgJlJ0E8QAkgd8aHK96sziYNXVsa1xfsbrcZnekxIL
+         N0U6jGZSYe2w/fViO38okjEz7X6ooOVxMa8rQX59iUxWh8xXmF5y+mqpzU+5kvi+MQ
+         F0V8rS9GnPpfYRnVxM9awxjmZRGkxoPgA7QEPYPti3H6gcnPk6c1sVLK/7GLdyPOcK
+         nGFslz9w2ZuWKjtmfu5/POKMZoW8etUigrWOrZnbCXShRw1xV8vFYYp2qZ2oo3+8Bt
+         Livuio6EUTCPw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id CAE174096F; Thu, 23 Jun 2022 11:49:42 -0300 (-03)
+Date:   Thu, 23 Jun 2022 11:49:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Gang Li <ligang.bdlg@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v1] perf stat: Enable ignore_missing_thread for
+ stat
+Message-ID: <YrR9hljHVltIe0aW@kernel.org>
+References: <20220622030037.15005-1-ligang.bdlg@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH V4 1/1] swiotlb: Split up single swiotlb lock
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     corbet@lwn.net, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        paulmck@kernel.org, akpm@linux-foundation.org, bp@suse.de,
-        tglx@linutronix.de, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        michael.h.kelley@microsoft.com, kys@microsoft.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        wei.liu@kernel.org, parri.andrea@gmail.com,
-        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
-        kirill.shutemov@intel.com, andi.kleen@intel.com,
-        Andi Kleen <ak@linux.intel.com>
-References: <20220617144741.921308-1-ltykernel@gmail.com>
- <YrL02y/fYxDkDRlA@infradead.org>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <YrL02y/fYxDkDRlA@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622030037.15005-1-ligang.bdlg@bytedance.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/2022 6:54 PM, Christoph Hellwig wrote:
-> Thanks,
-> 
-> this looks pretty good to me.  A few comments below:
-> 
+Em Wed, Jun 22, 2022 at 11:00:37AM +0800, Gang Li escreveu:
+> perf already support ignore_missing_thread for -p, but not yet
+> applied to `perf stat -p <pid>`. This patch enables ignore_missing_thread
+> for `perf stat -p <pid>`.
 
-Thanks for your review.
+Thanks, will add it and stick the original explanation about
+ignore_missing_thread so that reviewers of this patch can get a
+refresher:
 
-> On Fri, Jun 17, 2022 at 10:47:41AM -0400, Tianyu Lan wrote:
->> +/**
->> + * struct io_tlb_area - IO TLB memory area descriptor
->> + *
->> + * This is a single area with a single lock.
->> + *
->> + * @used:	The number of used IO TLB block.
->> + * @index:	The slot index to start searching in this area for next round.
->> + * @lock:	The lock to protect the above data structures in the map and
->> + *		unmap calls.
->> + */
->> +struct io_tlb_area {
->> +	unsigned long used;
->> +	unsigned int index;
->> +	spinlock_t lock;
->> +};
-> 
-> This can go into swiotlb.c.
+From  ca8000684ec4e66f965e1f9547a3c6cb834154ca
+----------
+    While monitoring a multithread process with pid option, perf sometimes
+    may return sys_perf_event_open failure with 3(No such process) if any of
+    the process's threads die before we open the event. However, we want
+    perf continue monitoring the remaining threads and do not exit with
+    error.
+----------
 
-struct io_tlb_area is used in the struct io_tlb_mem.
+Thanks,
 
+- Arnaldo
+ 
+> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+> ---
+>  tools/perf/builtin-stat.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->> +void __init swiotlb_adjust_nareas(unsigned int nareas);
-> 
-> And this should be marked static.
-> 
->> +#define DEFAULT_NUM_AREAS 1
-> 
-> I'd drop this define, the magic 1 and a > 1 comparism seems to
-> convey how it is used much better as the checks aren't about default
-> or not, but about larger than one.
-> 
-> I also think that we want some good way to size the default, e.g.
-> by number of CPUs or memory size.
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index 4ce87a8eb7d7..d2ecd4d29624 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -2586,6 +2586,8 @@ int cmd_stat(int argc, const char **argv)
+>  	if (evlist__initialize_ctlfd(evsel_list, stat_config.ctl_fd, stat_config.ctl_fd_ack))
+>  		goto out;
+>  
+> +	/* Enable ignoring missing threads when -p option is defined. */
+> +	evlist__first(evsel_list)->ignore_missing_thread = target.pid;
+>  	status = 0;
+>  	for (run_idx = 0; forever || run_idx < stat_config.run_count; run_idx++) {
+>  		if (stat_config.run_count != 1 && verbose > 0)
+> -- 
+> 2.20.1
 
-swiotlb_adjust_nareas() is exposed to platforms to set area number.
-When swiotlb_init() is called, smp_init() isn't called at that point and
-so standard API of checking cpu number (e.g, num_online_cpus()) doesn't
-work. Platforms may have other ways to get cpu number(e.g x86 may ACPI
-MADT table entries to get cpu nubmer) and set area number. I will post 
-following patch to set cpu number via swiotlb_adjust_nareas(),
+-- 
 
-> 
->> +void __init swiotlb_adjust_nareas(unsigned int nareas)
->> +{
->> +	if (!is_power_of_2(nareas)) {
->> +		pr_err("swiotlb: Invalid areas parameter %d.\n", nareas);
->> +		return;
->> +	}
->> +
->> +	default_nareas = nareas;
->> +
->> +	pr_info("area num %d.\n", nareas);
->> +	/* Round up number of slabs to the next power of 2.
->> +	 * The last area is going be smaller than the rest if
->> +	 * default_nslabs is not power of two.
->> +	 */
-> 
-> Please follow the normal kernel comment style with a /* on its own line.
-> 
-
-OK. Will update.
+- Arnaldo

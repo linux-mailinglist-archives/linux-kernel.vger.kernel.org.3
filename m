@@ -2,79 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2A3557A3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFDC557A4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiFWMYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S231506AbiFWM1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiFWMYf (ORCPT
+        with ESMTP id S229505AbiFWM1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:24:35 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8D231DD6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-101cdfddfacso18262239fac.7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
-        b=ZGAwRzzE8VL85qRDYfMIvCrIHJkVRiIYei98dO36+lgVyF3FWJUe7hqqUrsTwy639Y
-         fc+W8/1hfo7JZohSBn0BmrXgCAuBJ5vCaJB2sAWPRSGsx6O74BR4aBhFhTsdrI8SVpw6
-         yHYggGBjd/sq0CYiDjkFfZkeqRUmrn4J7Dg4e7iicPa2yWiHeuY+8e+bLsDAiI4i8pyr
-         EV80OclS5ilc1yqKp6AG1B401ALvhV3exYBeb2IeV0OW8rpAFVov8Ge0ATahc3RcmxRF
-         4FFQUAnzOwhEN6/m8cyLiVsmXun+S618Er5jfz5mSVTteervSKejh8lx4MtRyhHmQCtR
-         ZssA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
-        b=ZSXK9DiXK+tJSsuC9XXMCjopb+qCvq1e4ePJSod3MahCKLay0XpHcV7mZ+VB/K/HFg
-         HaO+zsQuTH3DteTnb/rcLLESSue/8AXg3Jsv3xlFqCRhXQ5pW6aY0JWo+pYCZ8wJdp/R
-         KwIBk+4YFPeniqLwWV7Y1+gdwpGWooIZa+f41h1lpgauYHNjYODtNTFzLQ2G+X7XTS8Y
-         G9DIi4xqR5DkTgcsAA0s39kqfPB/uxm1hnsZP/kcM56Txqn2Ab9YySaYzBdkV+ekQ/Zr
-         vbcMfCs4uP21hy1QsXFexs8+z1Wc4NthNqnCi+S2pzMX3rozzyilejU0jyn1jvRllnMO
-         dWSA==
-X-Gm-Message-State: AJIora8PTXhhwoMKurQ2LMI83Sey8oJmXIsrUYx6Gf2mBByO/KYflLuO
-        JPXKb3NWVd/plwCMbR9SrxtvzLVy85/WVGjmUPYfeA==
-X-Google-Smtp-Source: AGRyM1tolYit2qOF13LQll2M1apYzVAPtBssHfNXvX79yFs+qX/QdnWSuZSn9LvvuTfowIJzogE5Gto6i2wMUvkyN5I=
-X-Received: by 2002:a05:6870:33a9:b0:f2:c44c:d054 with SMTP id
- w41-20020a05687033a900b000f2c44cd054mr2317236oae.70.1655987073368; Thu, 23
- Jun 2022 05:24:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
- <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Jun 2022 14:23:57 +0200
-Message-ID: <CAPDyKFq0cTX5pfTLxTa9SEUBiiEcMuiEeDi3OPfMjFuBWca_jw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-To:     David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 23 Jun 2022 08:27:47 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE31E3B570;
+        Thu, 23 Jun 2022 05:27:42 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1655987177tvudpioa
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 23 Jun 2022 20:26:12 +0800 (CST)
+X-QQ-SSF: 01000000008000C0C000D00A0000000
+X-QQ-FEAT: PdU/eI8FBMBa+osO4ttSIsYgTzat1MkFtXq+8udwQRW8JaFSvPU6VWlSIfETT
+        tP++IhAfi9RyKK6wzPazIj/bEJwT/Kag3/4xlJeT7FWz38+CaRCJrhEMbKzHPyyDcHEOrVG
+        4AkcQ27XTF1IOkUQNuUx9nm5ixXWqtUaoTiIweHJMNtB2qyn7wcXG84X6AC7Jhe+AG6IBUq
+        UILW/h8lrgP4SDk15KlrrZflZhDSH9kBxC0qYIP3ilRzg78WLNn6GHPvscqDEXeDM3kwlll
+        /w4MQHrRAxUEw7LzyIWa44KgompnvfMSD6i0TvrMqNGT1hu0zK/efafZ1Az/xE1SWtzuElg
+        pYXFyIxp3j0kNxiWDrOK/kcYmqoSA==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     gregory.greenman@intel.com, kvalo@kernel.org,
+        luciano.coelho@intel.com, johannes.berg@intel.com,
+        jiangjian@cdjrlc.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iwlwifi: fw: paging.c - drop unexpected word 'for' in comments
+Date:   Thu, 23 Jun 2022 20:26:10 +0800
+Message-Id: <20220623122610.52292-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,64 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 at 00:19, Daniel Latypov <dlatypov@google.com> wrote:
->
->  On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
-> >
-> > The kunit_test_suite() macro is no-longer incompatible with module_add,
-> > so its use can be reinstated.
-> >
-> > Since this fixes parsing with builtins and kunit_tool, also enable the
-> > test by default when KUNIT_ALL_TESTS is enabled.
-> >
-> > The test can now be run via kunit_tool with:
-> >         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
-> >         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-> >         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-> >         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-> >         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-> >         'sdhci-of-aspeed'
-> >
-> > (It may be worth adding a .kunitconfig at some point, as there are
-> > enough dependencies to make that command scarily long.)
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Acked-by: Daniel Latypov <dlatypov@google.com>
->
-> Minor, optional suggestion below.
->
-> >  static int __init aspeed_sdc_init(void)
-> > @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
-> >         if (rc < 0)
-> >                 goto cleanup_sdhci;
-> >
-> > -       rc = aspeed_sdc_tests_init();
-> > -       if (rc < 0) {
-> > -               platform_driver_unregister(&aspeed_sdc_driver);
-> > -               goto cleanup_sdhci;
-> > -       }
-> > -
-> >         return 0;
-> >
-> >  cleanup_sdhci:
->
-> This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
-> kunit-related build error") to allow for this extra call to
-> aspeed_sdc_tests_init().
->
-> This could now be reverted back to what is
->         rc = platform_driver_register(&aspeed_sdc_driver);
->         if (rc < 0)
->                platform_driver_unregister(&aspeed_sdhci_driver);
->
->         return rc;
->
-> but let's see what the maintainers think.
+there is an unexpected word 'for' in the comments that need to be dropped
 
-I don't have a strong opinion on this, feel free to pick any of the options.
+file - drivers/net/wireless/intel/iwlwifi/fw/paging.c
+line - 252
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+/* loop for for all paging blocks + CSS block */
 
-Kind regards
-Uffe
+changed to:
+
+/* loop for all paging blocks + CSS block */
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/net/wireless/intel/iwlwifi/fw/paging.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/fw/paging.c b/drivers/net/wireless/intel/iwlwifi/fw/paging.c
+index 945bc4160cc9..a7b7cae874a2 100644
+--- a/drivers/net/wireless/intel/iwlwifi/fw/paging.c
++++ b/drivers/net/wireless/intel/iwlwifi/fw/paging.c
+@@ -249,7 +249,7 @@ static int iwl_send_paging_cmd(struct iwl_fw_runtime *fwrt,
+ 	};
+ 	int blk_idx;
+ 
+-	/* loop for for all paging blocks + CSS block */
++	/* loop for all paging blocks + CSS block */
+ 	for (blk_idx = 0; blk_idx < fwrt->num_of_paging_blk + 1; blk_idx++) {
+ 		dma_addr_t addr = fwrt->fw_paging_db[blk_idx].fw_paging_phys;
+ 		__le32 phy_addr;
+-- 
+2.17.1
+

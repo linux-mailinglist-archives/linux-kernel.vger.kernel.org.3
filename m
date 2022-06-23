@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F47A5589F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A225589F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiFWUT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        id S229755AbiFWUUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFWUT6 (ORCPT
+        with ESMTP id S229711AbiFWUUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:19:58 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8164128723;
-        Thu, 23 Jun 2022 13:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656015566;
-        bh=7z0s+WHf2+v1qxr7m1rw9SjbVWQ/P3W5Q+Q8hQUhFL4=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=QtTskdiVf9SnLc0VDy0EIhIbvpMEzrUAMWnmUFkmkUODhMQ/kqzxpJQVzZsHpBX89
-         kCFS99QVz5o6YiBoT++oDJplAkjhZPv3AeBAgMSNGdOdtrU+5tCV/z6pnf/zKBNZiz
-         cjYEO5nRUkXUaQEGqMKQ/UWOw5/htUwm/b9qIvUE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.134]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MplXp-1nJMNn1pnR-00q9Ow; Thu, 23
- Jun 2022 22:19:26 +0200
-Subject: Re: [PATCH 1/8] serial: core: only get RS485 termination gpio if
- supported
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-2-LinoSanfilippo@gmx.de>
- <YrNLtg+BZlwKsBbF@smile.fi.intel.com>
- <2dda5707-6f13-6d33-863d-a88b89e88a88@gmx.de>
- <CAHp75Vd_ix=bJs9k6bYM8S+3f_Pw7Tvs9DhPcZxu1=33T=mQ7A@mail.gmail.com>
- <52ea773c-b5b0-fc4d-9b85-022676778af7@gmx.de>
- <YrSVozxvPZtJdQL5@smile.fi.intel.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <ed24e677-4179-5bb6-54ba-5657442b9c63@gmx.de>
-Date:   Thu, 23 Jun 2022 22:19:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 23 Jun 2022 16:20:17 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37C94EA0A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:20:15 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id eq6so555102edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fAKuybCH+dwB1fMNirGRqtMvEWYeJzWmxMGv84MA8aE=;
+        b=KME+38Xcr1BELnAPftspCCgUlWz/O9gpyn6U8mMdFSQIbnfF6/U3LpylhOO7d+jjyy
+         BMLWcYPwC6aXcnhEmsrucLY1P8wAgblqe3TCOCnyu6ofrXXDy52M2iVPYWyFmKoj9fGx
+         izOSeUCLhYGk6o2oXXsVfbmeCwsA9h3U240e4gfFllwd4YGHnqaXprCiiSTsZaZ3JPte
+         ZEa8TZ6JW5KYB6yzh7rXXd2vy8i+d7c7I+QMBYLHt1y4iEKtBtWAlSyLY1HcDVdmqkHB
+         J8hnDuOa6QOJ+Zvsd1bM8cbhLgqQef0MvgGiDU7pxBush8+rh3nOFr4Lmy+yh00p0weI
+         D/3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fAKuybCH+dwB1fMNirGRqtMvEWYeJzWmxMGv84MA8aE=;
+        b=I6p8QFzzjJuLdzSIBmhYe333TRyMV3qmaC4BBOq4lSJ8MyMGf4aX9HjUtR9eTeXwbq
+         IcF1ynQ6h+qbfv+vXMO/jQHOLIw2exNXF6VWRhAhW14sQRedNcZrxngGbpHtQvSPWmpk
+         PDsKCdK9kQ8eg4Lgyr7IYwE4okdk+1XLNS2kh9HDngK3BesMVm8O4Oz9elDosmrUKRbl
+         aqGHyaMDegcKERBSO3DKgQ2VloPp9zDq5pPYjrj+/uh1H2arPxiC9ah8Fxmu43xnQhCk
+         sUkSblyTGVAH3Kk54zWSgciAyTWMGnO3JOZQwUE5G0PJXamh5KhVFH2qON9yiI8YDOa2
+         /elA==
+X-Gm-Message-State: AJIora+8z86C27HTls2zjq3rG82WyiOydOYlH5eTIBLAIFJwCXQd7Ltv
+        Uafee5blur1jBS7WuPEwMIhDJUwSUKIGOjP2rGc7KQ==
+X-Google-Smtp-Source: AGRyM1sefRXRZuBMZmLCIuE/E/N9Qsz/+HjOWAx/A9T3s/9nmY1cLplssQUkWwd4E5zHKvzURX7iKcvBi1kbILbQHnI=
+X-Received: by 2002:a05:6402:18:b0:435:9a79:9a40 with SMTP id
+ d24-20020a056402001800b004359a799a40mr12856318edu.328.1656015614585; Thu, 23
+ Jun 2022 13:20:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YrSVozxvPZtJdQL5@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:R+h3v9u71I2BMWiuwJYl5ijLux5TSOJmiFNOdVkiUBhncJoBYBj
- Rpba1VLsz5PHFzMjtBa1BsosaVGfcUk1ZECJJOlVS4qskkA5UY/GboaENpFRfKFWsxMBvd9
- 91FcB4CF+HNLwr8+H2xoEBkMJY56ompf3/WhsPfqj3qGjPuquDLrVq2Lmfm1vXqwHiAx345
- xPfK2FSueTie/lNWc0DiQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ypiX5zbmpH8=:3CTlB2vV9+v2noZpkCw0V2
- 1ToshIfaQqtoMscI0pX4QT62ADYtN+IpTCk2i7BkrnHytxC7icSm1HWVYvJwdoKZwhyW9SRp0
- xfqEHnzToVVi7We2Y+xv4O855spRcG0Y9KDFOVBuC0PZT3UZwr5zel2fNJJ63a13PcNaTvOnX
- tlMZlW4ogqyGCrkBeRlwNXRa6xG8iEZEWQHALl1mHRRcSZKQAKQ2NAQN/+sK332zRVROiXJHs
- ycPqL9BJ0/bH/HxY1nWdaT1Iq44oH2PKLOa3Tpgw5t82OzexUIOF2/YmS20KINt5HAaavOsu8
- ugSfRP99tjSz/1ZHrzq6mfFNxsniw2r/UG36ORQwCLezs4sGG2k3XJkX0S+51xwIA1tlwMTK8
- FxbSmkHGg1+A8QPutHq4ia3Tb0MQQ5ZqM/GMNgzadlr6lax0J2Q/hiRF/U6a6yPx5iNXqeU90
- kMxgZqOU3cbZqnZW+OGNrjbIG2h5nS5/YB6zVWji/p3fphtfL92u/lSfHvxHk1thsV7AksN+C
- xsn/5z9ipZo50IHuxYCzpHfYmYxpv7VEhfnP5lBsp0GaqWSVCBHXDooFK5Rxh1uqU1foPZ68t
- CSH2TLnBrZ9XOofredqSdV5NcY0myIxfLJ4FOr4FKoMKSTQA9j8iDdoNkgzl1WMNyfNDF/Ids
- NHDPssN8+4axOHqWt6Vvh3aXpvomN+NCowaYBrUle20g49spd7I/tLGGFDDXkQLUoE07jn6NZ
- 1PE/2dy9ZVrzNYpCD+rCAllqrP9wT9Shm3eAIAtLit1+1+YWSbAB2QQ8yYB/+B1EuMPgS4iRu
- wiypOa1DvVby8APC0n775tUZYsXAvlpah0iMrEA9+mO8pSFOUCr1nmIS0vTD/It5kdG+g4VPw
- LTQYhDotdZYbL5pekeP1pQPhO4hzE1lwgIddL4xFyTM53QKp87QCUjCy2uHe+EwerKDk+Q4Pc
- mG2G2LhXOhjVdRcvPrft8flDrVE1WPnn4yaTcDMvwSgOHwz8QJ+nOOsWU1J4oUMTcv1ifjzJv
- GGnyzzdpKaRxCKD+qm2ozFYQsF1jxxzKgA5mZiiV/rdeNWOzpx0t5GUGpoxNGB0fVAzF128b4
- NE6awCfFITxHdB11Xh0DxC0f2HgzcllNK69RBsP/yOJIux8TkGhahtS1Q==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com> <84cdc48a-feb8-4aa5-7d96-a68f2c556e25@gmail.com>
+In-Reply-To: <84cdc48a-feb8-4aa5-7d96-a68f2c556e25@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 23 Jun 2022 22:20:03 +0200
+Message-ID: <CAMRc=Mc85Yw3uRGwTLFtZxBt81M5T8p0B+sQ4RoxB-QvgHdm_A@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Fix kernel-doc comments to nested union
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.22 at 18:32, Andy Shevchenko wrote:
-
->>
->> Ok I see the point. So what about changing it to:
+On Sun, Jun 12, 2022 at 2:02 AM Akira Yokosawa <akiyks@gmail.com> wrote:
 >
-> You mean adding below after the existing code in the module?
-
-Right, to be more precise between getting the gpio and the error check:
-
-
-	port->rs485_term_gpio =3D devm_gpiod_get_optional(dev, "rs485-term",
-							GPIOD_OUT_LOW);
-
-	if (port->rs485_term_gpio &&
-	    !(port->rs485_supported->flags & SER_RS485_TERMINATE_BUS)) {
-		dev_warn(port->dev,
-			"%s (%d): RS485 termination gpio not supported by driver\n",
-			port->name, port->line);
-		devm_gpiod_put(dev, port->rs485_term_gpio);
-		port->rs485_term_gpio =3D NULL;
-	}
-
-	if (IS_ERR(port->rs485_term_gpio)) {
-		ret =3D PTR_ERR(port->rs485_term_gpio);
-		port->rs485_term_gpio =3D NULL;
-		return dev_err_probe(dev, ret, "Cannot get rs485-term-gpios\n");
-	}
-
-Regards,
-Lino
-
+> On Mon, 6 Jun 2022 13:44:24 +0900, Akira Yokosawa wrote:
+> > Commit 48ec13d36d3f ("gpio: Properly document parent data union")
+> > is supposed to have fixed a warning from "make htmldocs" regarding
+> > kernel-doc comments to union members.  However, the same warning
+> > still remains [1].
+> >
+> > Fix the issue by following the example found in section "Nested
+> > structs/unions" of Documentation/doc-guide/kernel-doc.rst.
+> >
+> > Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
+> > Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/ [1]
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> > Cc: Joey Gouly <joey.gouly@arm.com>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> Gentle ping to gpio maintainers.
 >
->> 	if (port->rs485_term_gpio &&
->> 	    !(port->rs485_supported->flags & SER_RS485_TERMINATE_BUS)) {
->> 		dev_warn(port->dev,
->> 			"%s (%d): RS485 termination gpio not supported by driver\n",
->> 			port->name, port->line);
->> 		devm_gpiod_put(dev, port->rs485_term_gpio);
->> 		port->rs485_term_gpio =3D NULL;
->> 	}
->>
->> This would also be consistent to the warnings we print in uart_sanitize=
-_serial_rs485() for invalid
->> RS485 settings.
+> I thought this fix would go through brgl's tree.
 >
-> Probably it's okay, but I dunno we have much on this to gain. Users may =
-start
-> complaining of this (harmless) warning. I leave it to others to comment.
+>         Thanks, Akira
 >
 
+Now applied, thanks! Sorry for the delay.
+
+Bart

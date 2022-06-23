@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2E2558556
+	by mail.lfdr.de (Postfix) with ESMTP id D96C3558557
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbiFWR4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S230486AbiFWR4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbiFWRws (ORCPT
+        with ESMTP id S235511AbiFWRws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Jun 2022 13:52:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7118956776
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:13:36 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A95156C00;
+        Thu, 23 Jun 2022 10:13:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 135C9B82489
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:13:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451B1C341C8;
-        Thu, 23 Jun 2022 17:13:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20AA061DB9;
+        Thu, 23 Jun 2022 17:13:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00482C3411B;
+        Thu, 23 Jun 2022 17:13:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656004413;
-        bh=H9XDdoABPSpvLcbeZb6mrxq8vL7qtowAVPQVxrIBCh0=;
+        s=k20201202; t=1656004416;
+        bh=rMClqc3zvDXfYMCOvdBp6CeRJmIcRkGT8/7yt5f5Kj4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LddGc6vdrk8EgF6Z4hnLIdZwz699aX1/xvWQ0jdTMOyMcerBIMcJRmXrjXOiQ+2M3
-         i/6hCrDYIpxTCbiGyHA5kXvrVbJZBW+83+tTY+TLw3ruGq+d6xthR4k3mIsnCmdhuI
-         rMwYwpUQw7S42bYg88j0+naQ8aKNnfVm51nd7yXwlwHq+01IgqtNeBL/VyEWOgIGKB
-         6VXMahkdQdyTzFHYHXzV050pv6Evvsa/Xwv0KUgRN/f+qLB7QO6nGEB01sCW5Hi5Pw
-         5OpRGqtrJ1P1p8PXOc0sk1w+AwEkimSl3mGL7g15Q5RMMPlDmQLl3BriNp9A1twMHM
-         2pSiDazAborBg==
-Date:   Thu, 23 Jun 2022 12:13:30 -0500
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] powerpc/64e: Rewrite p4d_populate() as a static inline
- function
-Message-ID: <YrSfOp5B+LhFXgjt@kernel.org>
-References: <1b416f8a8fe1bc3f4e01175680ce310b7eb3a1e4.1655974565.git.christophe.leroy@csgroup.eu>
+        b=hy8Xfb3CaW83gPTXBez87TKF6HsLY6Vgm+L3dfAfuvodGOX+OUOmbQ/Ghk1w6n2+M
+         2DV+2gMkStrDZHG0tUAgHCir1JmtSae//xHrbJSV2gG+wwa4uN1WE2Ew04+yShP6x+
+         Wo8Q7FH6WA50N/wiz6O1C6ye8ptPWUlTYD6uObRVS2xQ/Ze/MF5VWCHOxq6jfKo6l0
+         mCqmrUBFwatWgjD3iv0rzwXH1Z/HLaoZYGH27u8U6kOqNS9YP0NtGaBshrq51xY8/4
+         F7Nj+Vat3OIy1SzwGsAmMrhnN50t3L35HZyEIHe3J5ItFl3WXqp5QqxgJxdZ26l/2R
+         70TYqohWcia9w==
+Date:   Thu, 23 Jun 2022 10:13:34 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Andreas Dilger <adilger@dilger.ca>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: Re: [man-pages RFC PATCH] statx.2, open.2: document STATX_DIOALIGN
+Message-ID: <YrSfPmaWCTOfmQ8H@sol.localdomain>
+References: <20220616202141.125079-1-ebiggers@kernel.org>
+ <YrSOm2murB4Bc1RQ@magnolia>
+ <622BA3BB-03EA-4271-8A2E-2ADAFB574155@dilger.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1b416f8a8fe1bc3f4e01175680ce310b7eb3a1e4.1655974565.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <622BA3BB-03EA-4271-8A2E-2ADAFB574155@dilger.ca>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,42 +60,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 10:56:57AM +0200, Christophe Leroy wrote:
-> Rewrite p4d_populate() as a static inline function instead of
-> a macro.
+On Thu, Jun 23, 2022 at 10:27:19AM -0600, Andreas Dilger wrote:
+> On Jun 23, 2022, at 10:02 AM, Darrick J. Wong <djwong@kernel.org> wrote:
+> > 
+> > On Thu, Jun 16, 2022 at 01:21:41PM -0700, Eric Biggers wrote:
+> >> From: Eric Biggers <ebiggers@google.com>
+> >> 
+> >> @@ -244,8 +249,11 @@ STATX_SIZE	Want stx_size
+> >> STATX_BLOCKS	Want stx_blocks
+> >> STATX_BASIC_STATS	[All of the above]
+> >> STATX_BTIME	Want stx_btime
+> >> +STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+> >> +         	This is deprecated and should not be used.
+> > 
+> > STATX_ALL is deprecated??  I was under the impression that _ALL meant
+> > all the known bits for that kernel release, but...
 > 
-> This change allows typechecking and would have helped detecting
-> a recently found bug in map_kernel_page().
+> For userspace STATX_ALL doesn't make sense, and it isn't used by the kernel.
 > 
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-
-> ---
->  arch/powerpc/include/asm/nohash/64/pgalloc.h | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Firstly, that would be a compile-time value for an application, so it
+> may be incorrect for the kernel the code is actually run on (either too
+> many or too few bits could be set).
 > 
-> diff --git a/arch/powerpc/include/asm/nohash/64/pgalloc.h b/arch/powerpc/include/asm/nohash/64/pgalloc.h
-> index 668aee6017e7..e50b211becb3 100644
-> --- a/arch/powerpc/include/asm/nohash/64/pgalloc.h
-> +++ b/arch/powerpc/include/asm/nohash/64/pgalloc.h
-> @@ -15,7 +15,10 @@ struct vmemmap_backing {
->  };
->  extern struct vmemmap_backing *vmemmap_list;
->  
-> -#define p4d_populate(MM, P4D, PUD)	p4d_set(P4D, (unsigned long)PUD)
-> +static inline void p4d_populate(struct mm_struct *mm, p4d_t *p4d, pud_t *pud)
-> +{
-> +	p4d_set(p4d, (unsigned long)pud);
-> +}
->  
->  static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
->  {
-> -- 
-> 2.36.1
+> Secondly, it isn't really useful for an app to request "all attributes"
+> if it doesn't know what they all mean, as that potentially adds useless
+> overhead.  Better for it to explicitly request the attributes that it
+> needs.  If that is fewer than the kernel could return it is irrelevant,
+> since the app would ignore them anyway.
+> 
+> The kernel will already ignore and mask attributes that *it* doesn't
+> understand, so requesting more is fine and STATX_ALL doesn't help this.
 > 
 
--- 
-Sincerely yours,
-Mike.
+What Andreas said.  Note, this discussion really should be happening on my
+standalone patch that fixes the documentation for STATX_ALL:
+https://lore.kernel.org/r/20220614034459.79889-1-ebiggers@kernel.org.  I folded
+it into this RFC one only so that it applies cleanly without a prerequisite.
+
+- Eric

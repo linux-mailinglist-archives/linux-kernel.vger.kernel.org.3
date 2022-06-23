@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C665578AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F8B5578B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiFWL2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 07:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S231318AbiFWL3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiFWL2F (ORCPT
+        with ESMTP id S230257AbiFWL3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:28:05 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5920D101D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:27:55 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id q132so1734154ybg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:27:55 -0700 (PDT)
+        Thu, 23 Jun 2022 07:29:11 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EBC4BB94
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:29:10 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id sb34so11343386ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:29:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fooishbar-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HQf7Xetq2qw6O5KGu3AbqobLNDGED8NEFyUud0J6jJM=;
-        b=VEN3Qne6XvMDufDpYDjue8IlCIvivVl8JFu/jLxgngalD1/GMI3oF0ptB6V7/xOt3K
-         56nk6EdjeK21hW+EgnPmUcQjhTOZu2L+nCHZ/dz7r5YcIt6BualYKr1jTrtCN6NK2GnI
-         5eO64xmF1te0Lg3+balozAi+GTh2Xnjc0UewkUU8P25Xf7ad2UW656SYSbbGFnqga39u
-         jccbLKVhWMro6OEjZj8SgFJXOS163jz+dK1yqRaOvVc5XCM+QHihtGx0Cz5Uq/K30XU5
-         4qSphkxZC9JI9PIYLmimuvhocycPMlHijZggDOE863PMPKGvpYdJ0RsYDD21fTqWOgSH
-         OkxA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y5PmuIo7mYW3CN+sFVEg61+n+8PCcK1fiGszLtqNBkE=;
+        b=P3gPXxuZ6ksVlpTZiR36XjCGEeVdjZXDDLl4AQ/oh28NtYEm4DU9LantR/Dlct0XCl
+         Z0w6zQCjHnnQ3mQ5xztonY9oSX9xHdgUmXlbzw6DyxVEQ9G3A7qPbfDy4i+zLek/np0V
+         By4/BOrqGqbieW260s2Iq1bfkMoWkbzL8pWc+qxWFKZXDO2/Ug6Zqqd5f4Kf3G398Sn+
+         ioQBmIUqacMOHM2JHrkc7s/vWXHFt+rOS/bW76vohiiXyhlWmY0zdemkVC/gO5xOJt0r
+         kms8boIoKhlyOzgR+wY6NKkDzBXCohJPGA+ln3OpfZ3mtHgp1p485glfr4ZVtKWTU/ej
+         VQ6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HQf7Xetq2qw6O5KGu3AbqobLNDGED8NEFyUud0J6jJM=;
-        b=Z+8VKNK/PMyLfM4bdGgONVlDSb0PW0OnXNrZW+Mg3aF+TGuazepZoCvUjvIFqTDfZe
-         OQiv+3su78t5qF1qXFExYikWSfmS602KGUjLZ08GJRt60LRyf9lih3ygDVqyCxISKK7G
-         tj25e3oGDNNfEY3UE67nE5ayipZ8fxDpiSz0J2Fucaqx1Cffdrw/ISXOT437TXHgadTs
-         KXj8aPh8zIb6nhXmafBugbXfkvgcJhIojKr2yk5WdrXBs16rb8ZluX5maE1qvr2wIEFe
-         Bue2DCWRYEWbjKUNwMptr/aUZL2Lyyy5xrw0deArRrCbTnkrNUC98CO17Gf6Ox3vIqLI
-         Z9GA==
-X-Gm-Message-State: AJIora+x73palqSbHCd28v3UKix9tkwUHBI21zlm0hfH7TKF3r6OiDUE
-        F3hoxVnu54/GlTo9k4z6qz3r2Ej75jZu4UVkqga17+1e6wjrHcuO
-X-Google-Smtp-Source: AGRyM1tqH9BZAOHPTjQSl2yFEhXyjX3QtI5AG18dKht12xn42EllI+c4QF+m43lD/JpEaOKNqaydDkuDMX/OPwRgqBs=
-X-Received: by 2002:a05:6902:c5:b0:669:1646:b07 with SMTP id
- i5-20020a05690200c500b0066916460b07mr1220654ybs.553.1655983674521; Thu, 23
- Jun 2022 04:27:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y5PmuIo7mYW3CN+sFVEg61+n+8PCcK1fiGszLtqNBkE=;
+        b=qxSXtVvO/9XP/HYvAybAGlt4kv7S1DtkEzw/kxyzmcVt0/YbcbLn9UNjNdXKJl+a7Q
+         kidaR6ogglWvBfs6/nSIJ40BxSjOxtbcDrrNW1LyTKJMJJ8D973qRWMWFfmhpDBSlpI3
+         q6eR9xH0Yfin1uD8DJI4J0FgD9KL/P0MDeUxOnssYyXAei2Ygkq+Gsm2ParPCQ8QQBJ1
+         RF8tSp82nn5AZR0VWDdqcI0JinTcdAI+rY/m7QukaU8zzeRctU6Ip/gUlGZSq/Xg4NHQ
+         Tnqh+V0VkjVQLtsD1nA9bRLYa8ux6ckMbAsm6zZAg40J3F+QN53U5MKnt8ZguaYngX3j
+         whiw==
+X-Gm-Message-State: AJIora8l82WwMh6gQyUhaaO0RjEjdAJeVNV73+Vm7Jt+XnI2bJ7ylbM9
+        JxPVeSWcgp3Iwy3E+ZVR2Y0A7w==
+X-Google-Smtp-Source: AGRyM1vlJNeyno6YRTMSYN5fCFkHIVRrt2/G/UFpHdTwakW1nLE5XtZkaNm9rgjUJE5W33x19uhZCw==
+X-Received: by 2002:a17:907:da1:b0:722:bc0b:4f4c with SMTP id go33-20020a1709070da100b00722bc0b4f4cmr7761188ejc.761.1655983748760;
+        Thu, 23 Jun 2022 04:29:08 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090614cb00b00712057b037fsm10268110ejc.167.2022.06.23.04.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 04:29:08 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] riscv: traps_misaligned: do not duplicate stringify
+Date:   Thu, 23 Jun 2022 13:29:05 +0200
+Message-Id: <20220623112905.253157-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com> <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
- <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
- <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
- <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com> <20220623101326.18beeab3@eldfell>
- <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com> <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
- <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com> <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
- <e691bccc-171d-f674-2817-13a945970f4a@amd.com> <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
- <05814ddb-4f3e-99d8-025a-c31db7b2c46b@amd.com> <708e27755317a7650ca08ba2e4c14691ac0d6ba2.camel@pengutronix.de>
- <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
-In-Reply-To: <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
-From:   Daniel Stone <daniel@fooishbar.org>
-Date:   Thu, 23 Jun 2022 12:27:26 +0100
-Message-ID: <CAPj87rOykZv7bjNhHPT4StrsPz8Y_DWqab4Ryq=Qqh77LS2e=Q@mail.gmail.com>
-Subject: Re: DMA-buf and uncached system memory
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        "Sharma, Shashank" <Shashank.Sharma@amd.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+Use existing stringify macro from the kernel headers.
 
-On Thu, 23 Jun 2022 at 12:11, Christian K=C3=B6nig <christian.koenig@amd.co=
-m> wrote:
-> > In fact DMA-buf sharing works fine on most of those SoCs because
-> > everyone just assumes that all the accelerators don't snoop, so the
-> > memory shared via DMA-buf is mostly CPU uncached. It only falls apart
-> > for uses like the UVC cameras, where the shared buffer ends up being
-> > CPU cached.
->
-> Well then the existing DMA-buf framework is not what you want to use for
-> this.
->
-> > Non-coherent without explicit domain transfer points is just not going
-> > to work. So why can't we solve the issue for DMA-buf in the same way as
-> > the DMA API already solved it years ago: by adding the equivalent of
-> > the dma_sync calls that do cache maintenance when necessary? On x86 (or
-> > any system where things are mostly coherent) you could still no-op them
-> > for the common case and only trigger cache cleaning if the importer
-> > explicitly says that is going to do a non-snooping access.
->
-> Because DMA-buf is a framework for buffer sharing between cache coherent
-> devices which don't signal transitions.
->
-> We intentionally didn't implemented any of the dma_sync_* functions
-> because that would break the intended use case.
->
-> You can of course use DMA-buf in an incoherent environment, but then you
-> can't expect that this works all the time.
->
-> This is documented behavior and so far we have bluntly rejected any of
-> the complains that it doesn't work on most ARM SoCs and I don't really
-> see a way to do this differently.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/riscv/kernel/traps_misaligned.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-For some strange reason, 'let's do buffer sharing but make sure it
-doesn't work on Arm' wasn't exactly the intention of the groups who
-came together under the Linaro umbrella to create dmabuf.
+diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+index 46c4dafe3ba0..378f5b151443 100644
+--- a/arch/riscv/kernel/traps_misaligned.c
++++ b/arch/riscv/kernel/traps_misaligned.c
+@@ -7,6 +7,7 @@
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/irq.h>
++#include <linux/stringify.h>
+ 
+ #include <asm/processor.h>
+ #include <asm/ptrace.h>
+@@ -150,9 +151,6 @@
+ #define PRECISION_S 0
+ #define PRECISION_D 1
+ 
+-#define STR(x) XSTR(x)
+-#define XSTR(x) #x
+-
+ #define DECLARE_UNPRIVILEGED_LOAD_FUNCTION(type, insn)			\
+ static inline type load_##type(const type *addr)			\
+ {									\
+@@ -207,9 +205,9 @@ static inline ulong get_insn(ulong mepc)
+ 	asm ("and %[tmp], %[addr], 2\n"
+ 		"bnez %[tmp], 1f\n"
+ #if defined(CONFIG_64BIT)
+-		STR(LWU) " %[insn], (%[addr])\n"
++		__stringify(LWU) " %[insn], (%[addr])\n"
+ #else
+-		STR(LW) " %[insn], (%[addr])\n"
++		__stringify(LW) " %[insn], (%[addr])\n"
+ #endif
+ 		"and %[tmp], %[insn], %[rvc_mask]\n"
+ 		"beq %[tmp], %[rvc_mask], 2f\n"
+-- 
+2.34.1
 
-If it's really your belief that dmabuf requires universal snooping, I
-recommend you send the patch to update the documentation, as well as
-to remove DRIVER_PRIME from, realistically, most non-PCIE drivers.
-
-Cheers,
-Daniel

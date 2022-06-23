@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC11155814C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09AA558146
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233268AbiFWQ5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S233152AbiFWQ5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiFWQwh (ORCPT
+        with ESMTP id S232692AbiFWQxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:52:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B92110B6;
-        Thu, 23 Jun 2022 09:52:37 -0700 (PDT)
+        Thu, 23 Jun 2022 12:53:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE2B12613;
+        Thu, 23 Jun 2022 09:52:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B574461FC2;
-        Thu, 23 Jun 2022 16:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A19C341C5;
-        Thu, 23 Jun 2022 16:52:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CE74B82490;
+        Thu, 23 Jun 2022 16:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEA0C3411B;
+        Thu, 23 Jun 2022 16:52:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003156;
-        bh=YpkhMeXBrmX0JFVy3p78yrqaOUSWZX8GthRE//wHpMs=;
+        s=korg; t=1656003158;
+        bh=Bv+xIPC3SbJTSVPMQ8rGVtTpPskdGB1ImBsO2eYtUMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nz2foMzqH5YA/P1PqV7Yh+t8SSGXygZ/O7dmJ3dK2HJUFbBEZJLyBJwEZAB5oprV4
-         orxx0S2FQV59j8+8f4SJhGP2TPVdcaByE3y9DQUW2mXUH+gf178vvVr+PxLoLWi7SV
-         4qoJQL1PZt/enjysA87iLPFVDIoxFEvyqxDDW6QM=
+        b=RlPACd7iOz6cshjbsqhRdf5WFdSYMHuRB5fLFgWqd4tyb1hiR9bCjx5kR4t37NtXg
+         /gWZGxAiKdUWi02A3pGxQPMc14T73Ws1KTw00s9JnOWjjPip9+6ERH7Qk5HrupBCHb
+         ony1nSKtVNZ7H/6dXmv2kjF9MMacZ/20SeWkomH4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 148/264] hwrng: core - Move hwrng miscdev minor number to include/linux/miscdevice.h
-Date:   Thu, 23 Jun 2022 18:42:21 +0200
-Message-Id: <20220623164348.252752481@linuxfoundation.org>
+Subject: [PATCH 4.9 149/264] hwrng: core - remove unused PFX macro
+Date:   Thu, 23 Jun 2022 18:42:22 +0200
+Message-Id: <20220623164348.280852697@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
 References: <20220623164344.053938039@linuxfoundation.org>
@@ -57,51 +57,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Corentin LABBE <clabbe.montjoie@gmail.com>
 
-commit fd50d71f94fb1c8614098949db068cd4c8dbb91d upstream.
+commit 079840bd13f793b915f6c8e44452eeb4a0aba8ba upstream.
 
-This patch move the define for hwrng's miscdev minor number to
-include/linux/miscdevice.h.
-It's better that all minor number are in the same place.
-Rename it to HWRNG_MINOR (from RNG_MISCDEV_MINOR) in he process since
-no other miscdev define have MISCDEV in their name.
+This patch remove the unused PFX macro.
 
 Signed-off-by: Corentin Labbe <clabbe.montjoie@gmail.com>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/hw_random/core.c |    3 +--
- include/linux/miscdevice.h    |    1 +
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/hw_random/core.c |    1 -
+ 1 file changed, 1 deletion(-)
 
 --- a/drivers/char/hw_random/core.c
 +++ b/drivers/char/hw_random/core.c
-@@ -26,7 +26,6 @@
+@@ -25,7 +25,6 @@
+ #include <asm/uaccess.h>
  
  #define RNG_MODULE_NAME		"hw_random"
- #define PFX			RNG_MODULE_NAME ": "
--#define RNG_MISCDEV_MINOR	183 /* official */
+-#define PFX			RNG_MODULE_NAME ": "
  
  static struct hwrng *current_rng;
  static struct task_struct *hwrng_fill;
-@@ -283,7 +282,7 @@ static const struct file_operations rng_
- static const struct attribute_group *rng_dev_groups[];
- 
- static struct miscdevice rng_miscdev = {
--	.minor		= RNG_MISCDEV_MINOR,
-+	.minor		= HWRNG_MINOR,
- 	.name		= RNG_MODULE_NAME,
- 	.nodename	= "hwrng",
- 	.fops		= &rng_chrdev_ops,
---- a/include/linux/miscdevice.h
-+++ b/include/linux/miscdevice.h
-@@ -31,6 +31,7 @@
- #define SGI_MMTIMER		153
- #define STORE_QUEUE_MINOR	155	/* unused */
- #define I2O_MINOR		166
-+#define HWRNG_MINOR		183
- #define MICROCODE_MINOR		184
- #define VFIO_MINOR		196
- #define TUN_MINOR		200
 
 

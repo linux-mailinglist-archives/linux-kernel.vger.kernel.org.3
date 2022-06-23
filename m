@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B582A558288
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F3D558297
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiFWRP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+        id S232769AbiFWRRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiFWRMn (ORCPT
+        with ESMTP id S233714AbiFWRNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:12:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECEB4EA11;
-        Thu, 23 Jun 2022 09:58:18 -0700 (PDT)
+        Thu, 23 Jun 2022 13:13:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE8D4F1CD;
+        Thu, 23 Jun 2022 09:59:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA0AE60AD7;
-        Thu, 23 Jun 2022 16:58:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AE0C341C6;
-        Thu, 23 Jun 2022 16:58:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE4A8B8249A;
+        Thu, 23 Jun 2022 16:59:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD0DC3411B;
+        Thu, 23 Jun 2022 16:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003497;
-        bh=qOxbimxBQ+BB2CE/6f3pBmDmBtSD3l6gkMENxniCBQE=;
+        s=korg; t=1656003540;
+        bh=cBOv8hjlO7Jg88ZZ0AFqVPo4tENAv9nmdUnh2smA/h0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q9ZKw9hVjkwi4cU40zEZRE2bYkTgc6fldWY05QSRWUBeL/i0hgJZ0+CHr33NHt3K6
-         ur9ae/QlFItQIY/iY5a9CcvgGQx76LUiWLeZlBBrPGmp6Xx4Uy4npTQw24Xx8GEIjk
-         sva4aj6v0QzocJqcpeXOAsMzd3GnVSKkrCL6gjQ4=
+        b=mOlwFcKjNmcTrXKU+Dwj0k7vfmGnegq5KDepq6HojEv9ATVd9CHdZSoz+BuswBaZQ
+         fFVX/CnCPH327rcBgcaBTM183McJ63rEcr4DBnCMcE8VPn+bZJg1zG1qDFERVysWXi
+         CyLW6ZfDgNyc5VgsU+g/2BsaEVDqt0z3fq4fb/60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Zach OKeefe <zokeefe@google.com>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        David Dworken <ddworken@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 4.9 256/264] fuse: fix pipe buffer lifetime for direct_io
-Date:   Thu, 23 Jun 2022 18:44:09 +0200
-Message-Id: <20220623164351.308519608@linuxfoundation.org>
+Subject: [PATCH 4.9 257/264] tcp: change source port randomizarion at connect() time
+Date:   Thu, 23 Jun 2022 18:44:10 +0200
+Message-Id: <20220623164351.338190438@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
 References: <20220623164344.053938039@linuxfoundation.org>
@@ -56,83 +57,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miklos Szeredi <mszeredi@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 0c4bcfdecb1ac0967619ee7ff44871d93c08c909 upstream.
+commit 190cc82489f46f9d88e73c81a47e14f80a791e1a upstream.
 
-In FOPEN_DIRECT_IO mode, fuse_file_write_iter() calls
-fuse_direct_write_iter(), which normally calls fuse_direct_io(), which then
-imports the write buffer with fuse_get_user_pages(), which uses
-iov_iter_get_pages() to grab references to userspace pages instead of
-actually copying memory.
+RFC 6056 (Recommendations for Transport-Protocol Port Randomization)
+provides good summary of why source selection needs extra care.
 
-On the filesystem device side, these pages can then either be read to
-userspace (via fuse_dev_read()), or splice()d over into a pipe using
-fuse_dev_splice_read() as pipe buffers with &nosteal_pipe_buf_ops.
+David Dworken reminded us that linux implements Algorithm 3
+as described in RFC 6056 3.3.3
 
-This is wrong because after fuse_dev_do_read() unlocks the FUSE request,
-the userspace filesystem can mark the request as completed, causing write()
-to return. At that point, the userspace filesystem should no longer have
-access to the pipe buffer.
+Quoting David :
+   In the context of the web, this creates an interesting info leak where
+   websites can count how many TCP connections a user's computer is
+   establishing over time. For example, this allows a website to count
+   exactly how many subresources a third party website loaded.
+   This also allows:
+   - Distinguishing between different users behind a VPN based on
+       distinct source port ranges.
+   - Tracking users over time across multiple networks.
+   - Covert communication channels between different browsers/browser
+       profiles running on the same computer
+   - Tracking what applications are running on a computer based on
+       the pattern of how fast source ports are getting incremented.
 
-Fix by copying pages coming from the user address space to new pipe
-buffers.
+Section 3.3.4 describes an enhancement, that reduces
+attackers ability to use the basic information currently
+stored into the shared 'u32 hint'.
 
-Reported-by: Jann Horn <jannh@google.com>
-Fixes: c3021629a0d8 ("fuse: support splice() reading from fuse device")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Zach O'Keefe <zokeefe@google.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This change also decreases collision rate when
+multiple applications need to connect() to
+different destinations.
+
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: David Dworken <ddworken@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[bwh: Backported to 4.9: adjust context]
 Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fuse/dev.c    |   12 +++++++++++-
- fs/fuse/file.c   |    1 +
- fs/fuse/fuse_i.h |    2 ++
- 3 files changed, 14 insertions(+), 1 deletion(-)
+ net/ipv4/inet_hashtables.c |   20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -992,7 +992,17 @@ static int fuse_copy_page(struct fuse_co
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -537,6 +537,17 @@ void inet_unhash(struct sock *sk)
+ }
+ EXPORT_SYMBOL_GPL(inet_unhash);
  
- 	while (count) {
- 		if (cs->write && cs->pipebufs && page) {
--			return fuse_ref_page(cs, page, offset, count);
-+			/*
-+			 * Can't control lifetime of pipe buffers, so always
-+			 * copy user pages.
-+			 */
-+			if (cs->req->user_pages) {
-+				err = fuse_copy_fill(cs);
-+				if (err)
-+					return err;
-+			} else {
-+				return fuse_ref_page(cs, page, offset, count);
-+			}
- 		} else if (!cs->len) {
- 			if (cs->move_pages && page &&
- 			    offset == 0 && count == PAGE_SIZE) {
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -1319,6 +1319,7 @@ static int fuse_get_user_pages(struct fu
- 			(PAGE_SIZE - ret) & (PAGE_SIZE - 1);
- 	}
- 
-+	req->user_pages = true;
- 	if (write)
- 		req->in.argpages = 1;
- 	else
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -310,6 +310,8 @@ struct fuse_req {
- 	/** refcount */
- 	atomic_t count;
- 
-+	bool user_pages;
++/* RFC 6056 3.3.4.  Algorithm 4: Double-Hash Port Selection Algorithm
++ * Note that we use 32bit integers (vs RFC 'short integers')
++ * because 2^16 is not a multiple of num_ephemeral and this
++ * property might be used by clever attacker.
++ * RFC claims using TABLE_LENGTH=10 buckets gives an improvement,
++ * we use 256 instead to really give more isolation and
++ * privacy, this only consumes 1 KB of kernel memory.
++ */
++#define INET_TABLE_PERTURB_SHIFT 8
++static u32 table_perturb[1 << INET_TABLE_PERTURB_SHIFT];
 +
- 	/** Unique ID for the interrupt request */
- 	u64 intr_unique;
+ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+ 		struct sock *sk, u32 port_offset,
+ 		int (*check_established)(struct inet_timewait_death_row *,
+@@ -550,7 +561,7 @@ int __inet_hash_connect(struct inet_time
+ 	struct inet_bind_bucket *tb;
+ 	u32 remaining, offset;
+ 	int ret, i, low, high;
+-	static u32 hint;
++	u32 index;
  
+ 	if (port) {
+ 		head = &hinfo->bhash[inet_bhashfn(net, port,
+@@ -575,7 +586,10 @@ int __inet_hash_connect(struct inet_time
+ 	if (likely(remaining > 1))
+ 		remaining &= ~1U;
+ 
+-	offset = (hint + port_offset) % remaining;
++	net_get_random_once(table_perturb, sizeof(table_perturb));
++	index = hash_32(port_offset, INET_TABLE_PERTURB_SHIFT);
++
++	offset = (READ_ONCE(table_perturb[index]) + port_offset) % remaining;
+ 	/* In first pass we try ports of @low parity.
+ 	 * inet_csk_get_port() does the opposite choice.
+ 	 */
+@@ -628,7 +642,7 @@ next_port:
+ 	return -EADDRNOTAVAIL;
+ 
+ ok:
+-	hint += i + 2;
++	WRITE_ONCE(table_perturb[index], READ_ONCE(table_perturb[index]) + i + 2);
+ 
+ 	/* Head lock still held and bh's disabled */
+ 	inet_bind_hash(sk, tb, port);
 
 

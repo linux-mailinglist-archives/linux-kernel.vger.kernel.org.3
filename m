@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C01355829C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC398558142
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbiFWRRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S233015AbiFWQ5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbiFWRNW (ORCPT
+        with ESMTP id S233721AbiFWQv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:13:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023904F1D1;
-        Thu, 23 Jun 2022 09:59:08 -0700 (PDT)
+        Thu, 23 Jun 2022 12:51:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C73506DC;
+        Thu, 23 Jun 2022 09:49:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87EAE60AE7;
-        Thu, 23 Jun 2022 16:59:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C257C3411B;
-        Thu, 23 Jun 2022 16:59:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C8661F90;
+        Thu, 23 Jun 2022 16:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36664C3411B;
+        Thu, 23 Jun 2022 16:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003546;
-        bh=sySnz3P5M8+iE6nn71P7rAeB498H1szpACM3pBtmXCc=;
+        s=korg; t=1656002966;
+        bh=wvFpbs1M7ItDJ+3maBjTlk+lo8NuZRntPs7fyIL4zXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MvSyf5p+WyaOP3L9jS2ikgica2AgMDz2d+wrQPXdU/v6L6IznqOELNFWH7ZU9Gtdo
-         xJ4uIyUGok381TmwJin5uBUfrMSbX3mrDzK7coYclyviVqEWIKMvsd1gkec5yo+Po4
-         IAB4llHykCFESBqQo5pAO7tP/ZDeI1MIQ6I9GGTI=
+        b=od1hafUwmZCbu7wFm2P307TOQ/rg3/7Po+FOUDfDzxvsywxnFVJ4pjARY0O9bsYOh
+         CNIKDmMOlGRoOwnmqciFq1XrKvxEB8CNRKKinRKYESVUGiSozCq92msuMUANvAHC42
+         2IASxK9aPJyFzIBGd7VpjYHnvhNbAjK4gqZxJC3o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        stable@vger.kernel.org, Keerthy <j-keerthy@ti.com>,
+        Stephen Boyd <swboyd@chromium.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 002/237] crypto: chacha20 - Fix keystream alignment for chacha20_block()
-Date:   Thu, 23 Jun 2022 18:40:36 +0200
-Message-Id: <20220623164343.208539228@linuxfoundation.org>
+Subject: [PATCH 4.9 044/264] random: Support freezable kthreads in add_hwgenerator_randomness()
+Date:   Thu, 23 Jun 2022 18:40:37 +0200
+Message-Id: <20220623164345.316194775@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,187 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Stephen Boyd <swboyd@chromium.org>
 
-commit 9f480faec58cd6197a007ea1dcac6b7c3daf1139 upstream.
+commit ff296293b3538d19278a7f7cd1f3aa600ad9164c upstream.
 
-When chacha20_block() outputs the keystream block, it uses 'u32' stores
-directly.  However, the callers (crypto/chacha20_generic.c and
-drivers/char/random.c) declare the keystream buffer as a 'u8' array,
-which is not guaranteed to have the needed alignment.
+The kthread calling this function is freezable after commit 03a3bb7ae631
+("hwrng: core - Freeze khwrng thread during suspend") is applied.
+Unfortunately, this function uses wait_event_interruptible() but doesn't
+check for the kthread being woken up by the fake freezer signal. When a
+user suspends the system, this kthread will wake up and if it fails the
+entropy size check it will immediately go back to sleep and not go into
+the freezer. Eventually, suspend will fail because the task never froze
+and a warning message like this may appear:
 
-Fix it by having both callers declare the keystream as a 'u32' array.
-For now this is preferable to switching over to the unaligned access
-macros because chacha20_block() is only being used in cases where we can
-easily control the alignment (stack buffers).
+ PM: suspend entry (deep)
+ Filesystems sync: 0.000 seconds
+ Freezing user space processes ... (elapsed 0.001 seconds) done.
+ OOM killer disabled.
+ Freezing remaining freezable tasks ...
+ Freezing of tasks failed after 20.003 seconds (1 tasks refusing to freeze, wq_busy=0):
+ hwrng           R  running task        0   289      2 0x00000020
+ [<c08c64c4>] (__schedule) from [<c08c6a10>] (schedule+0x3c/0xc0)
+ [<c08c6a10>] (schedule) from [<c05dbd8c>] (add_hwgenerator_randomness+0xb0/0x100)
+ [<c05dbd8c>] (add_hwgenerator_randomness) from [<bf1803c8>] (hwrng_fillfn+0xc0/0x14c [rng_core])
+ [<bf1803c8>] (hwrng_fillfn [rng_core]) from [<c015abec>] (kthread+0x134/0x148)
+ [<c015abec>] (kthread) from [<c01010e8>] (ret_from_fork+0x14/0x2c)
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
+Check for a freezer signal here and skip adding any randomness if the
+task wakes up because it was frozen. This should make the kthread freeze
+properly and suspend work again.
+
+Fixes: 03a3bb7ae631 ("hwrng: core - Freeze khwrng thread during suspend")
+Reported-by: Keerthy <j-keerthy@ti.com>
+Tested-by: Keerthy <j-keerthy@ti.com>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/chacha20_generic.c |    6 +++---
- drivers/char/random.c     |   24 ++++++++++++------------
- include/crypto/chacha20.h |    3 ++-
- lib/chacha20.c            |    2 +-
- 4 files changed, 18 insertions(+), 17 deletions(-)
+ drivers/char/random.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/crypto/chacha20_generic.c
-+++ b/crypto/chacha20_generic.c
-@@ -22,20 +22,20 @@ static inline u32 le32_to_cpuvp(const vo
- static void chacha20_docrypt(u32 *state, u8 *dst, const u8 *src,
- 			     unsigned int bytes)
- {
--	u8 stream[CHACHA20_BLOCK_SIZE];
-+	u32 stream[CHACHA20_BLOCK_WORDS];
- 
- 	if (dst != src)
- 		memcpy(dst, src, bytes);
- 
- 	while (bytes >= CHACHA20_BLOCK_SIZE) {
- 		chacha20_block(state, stream);
--		crypto_xor(dst, stream, CHACHA20_BLOCK_SIZE);
-+		crypto_xor(dst, (const u8 *)stream, CHACHA20_BLOCK_SIZE);
- 		bytes -= CHACHA20_BLOCK_SIZE;
- 		dst += CHACHA20_BLOCK_SIZE;
- 	}
- 	if (bytes) {
- 		chacha20_block(state, stream);
--		crypto_xor(dst, stream, bytes);
-+		crypto_xor(dst, (const u8 *)stream, bytes);
- 	}
- }
- 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -433,9 +433,9 @@ static int crng_init_cnt = 0;
- static unsigned long crng_global_init_time = 0;
- #define CRNG_INIT_CNT_THRESH (2*CHACHA20_KEY_SIZE)
- static void _extract_crng(struct crng_state *crng,
--			  __u8 out[CHACHA20_BLOCK_SIZE]);
-+			  __u32 out[CHACHA20_BLOCK_WORDS]);
- static void _crng_backtrack_protect(struct crng_state *crng,
--				    __u8 tmp[CHACHA20_BLOCK_SIZE], int used);
-+				    __u32 tmp[CHACHA20_BLOCK_WORDS], int used);
- static void process_random_ready_list(void);
- static void _get_random_bytes(void *buf, int nbytes);
+@@ -2473,6 +2473,7 @@ void add_hwgenerator_randomness(const ch
+ 				size_t entropy)
+ {
+ 	struct entropy_store *poolp = &input_pool;
++	bool frozen = false;
  
-@@ -929,7 +929,7 @@ static void crng_reseed(struct crng_stat
- 	unsigned long	flags;
- 	int		i, num;
- 	union {
--		__u8	block[CHACHA20_BLOCK_SIZE];
-+		__u32	block[CHACHA20_BLOCK_WORDS];
- 		__u32	key[8];
- 	} buf;
- 
-@@ -976,7 +976,7 @@ static void crng_reseed(struct crng_stat
+ 	if (unlikely(crng_init == 0)) {
+ 		crng_fast_load(buffer, count);
+@@ -2483,9 +2484,12 @@ void add_hwgenerator_randomness(const ch
+ 	 * We'll be woken up again once below random_write_wakeup_thresh,
+ 	 * or when the calling thread is about to terminate.
+ 	 */
+-	wait_event_interruptible(random_write_wait, kthread_should_stop() ||
++	wait_event_interruptible(random_write_wait,
++			kthread_freezable_should_stop(&frozen) ||
+ 			ENTROPY_BITS(&input_pool) <= random_write_wakeup_bits);
+-	mix_pool_bytes(poolp, buffer, count);
+-	credit_entropy_bits(poolp, entropy);
++	if (!frozen) {
++		mix_pool_bytes(poolp, buffer, count);
++		credit_entropy_bits(poolp, entropy);
++	}
  }
- 
- static void _extract_crng(struct crng_state *crng,
--			  __u8 out[CHACHA20_BLOCK_SIZE])
-+			  __u32 out[CHACHA20_BLOCK_WORDS])
- {
- 	unsigned long v, flags, init_time;
- 
-@@ -996,7 +996,7 @@ static void _extract_crng(struct crng_st
- 	spin_unlock_irqrestore(&crng->lock, flags);
- }
- 
--static void extract_crng(__u8 out[CHACHA20_BLOCK_SIZE])
-+static void extract_crng(__u32 out[CHACHA20_BLOCK_WORDS])
- {
- 	_extract_crng(select_crng(), out);
- }
-@@ -1006,7 +1006,7 @@ static void extract_crng(__u8 out[CHACHA
-  * enough) to mutate the CRNG key to provide backtracking protection.
-  */
- static void _crng_backtrack_protect(struct crng_state *crng,
--				    __u8 tmp[CHACHA20_BLOCK_SIZE], int used)
-+				    __u32 tmp[CHACHA20_BLOCK_WORDS], int used)
- {
- 	unsigned long	flags;
- 	__u32		*s, *d;
-@@ -1018,14 +1018,14 @@ static void _crng_backtrack_protect(stru
- 		used = 0;
- 	}
- 	spin_lock_irqsave(&crng->lock, flags);
--	s = (__u32 *) &tmp[used];
-+	s = &tmp[used / sizeof(__u32)];
- 	d = &crng->state[4];
- 	for (i=0; i < 8; i++)
- 		*d++ ^= *s++;
- 	spin_unlock_irqrestore(&crng->lock, flags);
- }
- 
--static void crng_backtrack_protect(__u8 tmp[CHACHA20_BLOCK_SIZE], int used)
-+static void crng_backtrack_protect(__u32 tmp[CHACHA20_BLOCK_WORDS], int used)
- {
- 	_crng_backtrack_protect(select_crng(), tmp, used);
- }
-@@ -1033,7 +1033,7 @@ static void crng_backtrack_protect(__u8
- static ssize_t extract_crng_user(void __user *buf, size_t nbytes)
- {
- 	ssize_t ret = 0, i = CHACHA20_BLOCK_SIZE;
--	__u8 tmp[CHACHA20_BLOCK_SIZE];
-+	__u32 tmp[CHACHA20_BLOCK_WORDS];
- 	int large_request = (nbytes > 256);
- 
- 	while (nbytes) {
-@@ -1619,7 +1619,7 @@ static void _warn_unseeded_randomness(co
-  */
- static void _get_random_bytes(void *buf, int nbytes)
- {
--	__u8 tmp[CHACHA20_BLOCK_SIZE];
-+	__u32 tmp[CHACHA20_BLOCK_WORDS];
- 
- 	trace_get_random_bytes(nbytes, _RET_IP_);
- 
-@@ -2220,7 +2220,7 @@ u64 get_random_u64(void)
- 	batch = raw_cpu_ptr(&batched_entropy_u64);
- 	spin_lock_irqsave(&batch->batch_lock, flags);
- 	if (batch->position % ARRAY_SIZE(batch->entropy_u64) == 0) {
--		extract_crng((u8 *)batch->entropy_u64);
-+		extract_crng((__u32 *)batch->entropy_u64);
- 		batch->position = 0;
- 	}
- 	ret = batch->entropy_u64[batch->position++];
-@@ -2244,7 +2244,7 @@ u32 get_random_u32(void)
- 	batch = raw_cpu_ptr(&batched_entropy_u32);
- 	spin_lock_irqsave(&batch->batch_lock, flags);
- 	if (batch->position % ARRAY_SIZE(batch->entropy_u32) == 0) {
--		extract_crng((u8 *)batch->entropy_u32);
-+		extract_crng(batch->entropy_u32);
- 		batch->position = 0;
- 	}
- 	ret = batch->entropy_u32[batch->position++];
---- a/include/crypto/chacha20.h
-+++ b/include/crypto/chacha20.h
-@@ -13,12 +13,13 @@
- #define CHACHA20_IV_SIZE	16
- #define CHACHA20_KEY_SIZE	32
- #define CHACHA20_BLOCK_SIZE	64
-+#define CHACHA20_BLOCK_WORDS	(CHACHA20_BLOCK_SIZE / sizeof(u32))
- 
- struct chacha20_ctx {
- 	u32 key[8];
- };
- 
--void chacha20_block(u32 *state, void *stream);
-+void chacha20_block(u32 *state, u32 *stream);
- void crypto_chacha20_init(u32 *state, struct chacha20_ctx *ctx, u8 *iv);
- int crypto_chacha20_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 			   unsigned int keysize);
---- a/lib/chacha20.c
-+++ b/lib/chacha20.c
-@@ -21,7 +21,7 @@ static inline u32 rotl32(u32 v, u8 n)
- 	return (v << n) | (v >> (sizeof(v) * 8 - n));
- }
- 
--extern void chacha20_block(u32 *state, void *stream)
-+void chacha20_block(u32 *state, u32 *stream)
- {
- 	u32 x[16], *out = stream;
- 	int i;
+ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
 
 

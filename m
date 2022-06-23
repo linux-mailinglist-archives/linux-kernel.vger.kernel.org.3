@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D8B5577AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534CC5577B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiFWKRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S230125AbiFWKSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiFWKRd (ORCPT
+        with ESMTP id S230340AbiFWKSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:17:33 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB93C49F9F;
-        Thu, 23 Jun 2022 03:17:29 -0700 (PDT)
-Received: from anrayabh-desk (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E114E20C63C9;
-        Thu, 23 Jun 2022 03:17:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E114E20C63C9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1655979449;
-        bh=ReoHMI5JhpilguE9X6PU0nYis/u6+UJ/Af/HK8AAjZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sHf/2Tlb4InhVSYT03UGIfr/kqdGxn++tPTa0f4Sc4REdV0O8T77inimwEka9HLEA
-         W7aQ1A52rdYUEn9UeDxxQL4XKMzI+IyFcFyyBxJfDLF1+pD+n+JJUIkZ8gvxPBKKBY
-         t6m6IF2Uj4t1fIF3vLOGGKLvSWINXVEUlnDCDCC4=
-Date:   Thu, 23 Jun 2022 15:47:18 +0530
-From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Ilias Stamatis <ilstam@amazon.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, mail@anirudhrb.com,
-        kumarpraveen@linux.microsoft.com, wei.liu@kernel.org,
-        robert.bradford@intel.com, liuwe@microsoft.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
-Message-ID: <YrQ9rt61a8tPWWGO@anrayabh-desk>
-References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
- <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
- <YqdsjW4/zsYaJahf@google.com>
- <YqipLpHI24NdhgJO@anrayabh-desk>
- <YqiwoOP4HX2LniI4@google.com>
- <87zgi5xh42.fsf@redhat.com>
- <YrMenI1mTbqA9MaR@anrayabh-desk>
- <87r13gyde8.fsf@redhat.com>
- <YrNBHFLzAgcsw19O@anrayabh-desk>
- <87k098y77x.fsf@redhat.com>
+        Thu, 23 Jun 2022 06:18:43 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E08F6425;
+        Thu, 23 Jun 2022 03:18:38 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z11so21650618edp.9;
+        Thu, 23 Jun 2022 03:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t9ea/dcrsF9M+CJZqSv3b2zBRCLTq5sbj7L8gKts0jQ=;
+        b=TFTkb1ZVGMYu/zxZXjN6uNtzgfXwdi5FhXkpJzXoeNdndwLMun/iKmle1hFkXuCQeG
+         LpoODm0Lna7VSP+5PxRcrJDWzKHaBM9E/ncY2ewlWX9jNjHDhxl+5OHrhLpfjEp0Zf97
+         gBAB2R2knxHO910erbKRa7ejBc32apiS1PAqj0IiNgkOddWvcy9HQA2K40aLJKWpBU90
+         qtSgIufbyfRRNTGI6vCGwKkR0plB7q9wySpHOxAe0JylCtquBq66ADfxiiNdjCoIVruI
+         teSome/MdQO8c5Dvb+cWUyFDE3XY86OYC1bQ/hfLOMelogpYs7KAhdDZ3coGEh7nyrqw
+         a83g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t9ea/dcrsF9M+CJZqSv3b2zBRCLTq5sbj7L8gKts0jQ=;
+        b=3mlthcogdvnIukMiBnH8sGPhSw8Jmt1g5CX4modGW5gO4n5SYLlWj6mxFt6z1/ZQYC
+         fSDSuY/Ed0L9Ykkk1WcVVU7hiuN6WTWnC2fg/7wa1gMde2kk/n95qSMm8I3KUynfIpxa
+         /lmDBJEMB115tAG0lxSWRhlZPAE0i0j23JI1LLeVSAsKhaPfAt7lb2r/ivIAzRkZYQKT
+         JdLenwqeUWcpis0hrbE3oJ6tfGKU3gVzPD25hkyJVei83kZJEc5QDosKVS3DG9ooByAd
+         EywNImuED4pXPkVroqs0fBN38wOCYJ2TEGWPtAIUwAU45//siCgxFFz3cvKgX9keQMr1
+         xwew==
+X-Gm-Message-State: AJIora+BrGYCN+Hpg13UOYKJFwjlKqJHWGRbf+SaceXKNCKfuZfweAt2
+        femAhSluS3Y1pQBvFcTrLEgTEQzEW7bdR7p5bbE=
+X-Google-Smtp-Source: AGRyM1tj9InnAI9P8P0ZW+y2x54HIErM5Ii+utwX0T1UDOfArPynP5xeyj+97Kd2EGKyVPBYIxmDT0Wht2Omb3rWlLQ=
+X-Received: by 2002:aa7:d29a:0:b0:435:705f:1319 with SMTP id
+ w26-20020aa7d29a000000b00435705f1319mr9609494edq.54.1655979516662; Thu, 23
+ Jun 2022 03:18:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k098y77x.fsf@redhat.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
+ <20220621124958.3342-7-ilpo.jarvinen@linux.intel.com> <03467516-3962-4ff2-23d2-2b3a1d647c5a@kernel.org>
+ <CAHp75VeKhY6dN7j_yXQXUMhOqRwqQ2yN_qF95U9wU6K4uKPdaQ@mail.gmail.com>
+ <c7115ff1-2a97-f5a0-a0c2-c7c1064af291@kernel.org> <CAHp75Vfsy5yY3saSCvCu87E-arifwEZXUNtFMrMn38gJY2LU0g@mail.gmail.com>
+In-Reply-To: <CAHp75Vfsy5yY3saSCvCu87E-arifwEZXUNtFMrMn38gJY2LU0g@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 23 Jun 2022 12:17:58 +0200
+Message-ID: <CAHp75VdSadbtkH1JeiPuJ_CSBDq82GaRWLvJFd8Egg7poY8Lxw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] serial: Consolidate BOTH_EMPTY use
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        William Hubbs <w.d.hubbs@gmail.com>,
+        Chris Brannon <chris@the-brannons.com>,
+        Kirk Reiser <kirk@reisers.ca>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "speakup@linux-speakup.org" <speakup@linux-speakup.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 06:48:50PM +0200, Vitaly Kuznetsov wrote:
-> Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
-> 
-> > On Wed, Jun 22, 2022 at 04:35:27PM +0200, Vitaly Kuznetsov wrote:
-> 
-> ...
-> 
-> >> 
-> >> I've tried to pick it up but it's actually much harder than I think. The
-> >> patch has some minor issues ('&vmcs_config.nested' needs to be switched
-> >> to '&vmcs_conf->nested' in nested_vmx_setup_ctls_msrs()), but the main
-> >> problem is that the set of controls nested_vmx_setup_ctls_msrs() needs
-> >> is NOT a subset of vmcs_config (setup_vmcs_config()). I was able to
-> >> identify at least:
-> 
-> ...
-> 
-> I've jsut sent "[PATCH RFC v1 00/10] KVM: nVMX: Use vmcs_config for
-> setting up nested VMX MSRs" which implements Sean's suggestion. Hope
-> this is the way to go for mainline.
-> 
+On Thu, Jun 23, 2022 at 12:15 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Thu, Jun 23, 2022 at 10:24 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+> > On 23. 06. 22, 10:11, Andy Shevchenko wrote:
+> > >     * prom_putchar_wait() should be implemented using
+> > >        read_poll_timeout_atomic(), incl. failure/timeout handling.
+> > >
+> > > Not sure since it is an early stage and scheduler might not work as
+> > > expected. Conversions to iopoll.h macros bitten us a few times already.
 > >
-> > How about we do something simple like the patch below to start with?
-> > This will easily apply to stable and we can continue improving upon
-> > it with follow up patches on mainline.
-> >
-> 
-> Personally, I'm not against this for @stable. Alternatively, in case the
+> > Except _atomic does not use scheduler :).
+>
+> Sorry for a bit misleading comment, but I chased it down, so this what
+> I had in mind when commenting:
+> be24c6a71ecf ("soc: qcom: rpmh-rsc: Don't use ktime for timeout in
+> write_tcs_reg_sync()")
 
-I think it's a good intermediate fix for mainline too. It is easier to land
-it in stable if it already exists in mainline. It can stay in mainline
-until your series lands and replaces it with the vmcs_config approach.
+...and this one (specifically for early stages)
 
-What do you think?
+c4d936efa46d ("Revert "usb: early: convert to readl_poll_timeout_atomic()"")
 
-> only observed issue is with TSC scaling, we can add support for it for
-> KVM-on-Hyper-V but not for Hyper-V-on-KVM (a small subset of "[PATCH
-> 00/11] KVM: VMX: Support TscScaling and EnclsExitingBitmap whith
-> eVMCS"). I can prepare patches if needed.
+> (Yes, it's about _atomic variant)
+>
+> Means we need to use those macros with care.
 
-Will it fit in stable's 100 line rule?
-
-Thanks!
-
-	- Anirudh.
+-- 
+With Best Regards,
+Andy Shevchenko

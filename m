@@ -2,109 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3274D5576A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7A55576AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbiFWJdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
+        id S229534AbiFWJdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiFWJdA (ORCPT
+        with ESMTP id S230427AbiFWJdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:33:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDC8655A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655976779; x=1687512779;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=/10fnuDxKEJMd2TxLq1MP7a4UvhbAzgZkhcCFlHcNzM=;
-  b=dLS6LXNLiQoZvacI3WxtSnrGB0kOVaChPq2+YB7la4iY4PfYwbsfWrHm
-   fILcAAFZbS3fDjxhYKARWnwohn+e3onGEmQtQJuVMw6ZVMGxCp87Uc02C
-   GoWVbB0D2l3WGnwZgl9vo3PbHnjKByEcR4zUoDtu6kYZZOjjOYpKA6utA
-   iZY05dNnUnwN5JrhUXpl+AqN59MTbs9GbskUr9W0oy1fCx1gWuW2cf6qF
-   vruS85xt2p1VUSP3/C5UA+Th6hUxvYa3dsd2v1istz+fZHuIycNKi8sy3
-   eNLQjFv39RUf5gJKp30hYYy8N6LKaGRe3l2jMMYRAsyNouMDqHUWL5Fbg
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="279441083"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="279441083"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 02:32:59 -0700
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644653251"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.96])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 02:32:57 -0700
-Message-ID: <bc7bf65b-046c-788f-b817-6b8694c0d110@intel.com>
-Date:   Thu, 23 Jun 2022 12:32:52 +0300
+        Thu, 23 Jun 2022 05:33:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC4A48E7E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:33:36 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4JDQ-00062c-Ax; Thu, 23 Jun 2022 11:33:32 +0200
+Message-ID: <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
+Subject: Re: DMA-buf and uncached system memory
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Thu, 23 Jun 2022 11:33:30 +0200
+In-Reply-To: <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
+         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
+         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+         <20220623101326.18beeab3@eldfell>
+         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
+         <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH 0/5] perf record: Preparation for sideband injection
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220610113316.6682-1-adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220610113316.6682-1-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/22 14:33, Adrian Hunter wrote:
-> Hi
+Am Donnerstag, dem 23.06.2022 um 11:09 +0200 schrieb Christian König:
+> Am 23.06.22 um 10:58 schrieb Lucas Stach:
+> > Am Donnerstag, dem 23.06.2022 um 10:14 +0200 schrieb Christian König:
+> > > Am 23.06.22 um 10:04 schrieb Lucas Stach:
+> > > > Am Donnerstag, dem 23.06.2022 um 09:26 +0200 schrieb Christian König:
+> > > > > Am 23.06.22 um 09:13 schrieb Pekka Paalanen:
+> > > > > > On Thu, 23 Jun 2022 08:59:41 +0200
+> > > > > > Christian König <christian.koenig@amd.com> wrote:
+> > > > > > 
+> > > > > > > The exporter isn't doing anything wrong here. DMA-buf are supposed to be
+> > > > > > > CPU cached and can also be cache hot.
+> > > > > > Hi,
+> > > > > > 
+> > > > > > what is that statement based on?
+> > > > > On the design documentation of DMA-buf and the actual driver
+> > > > > implementations.
+> > > > > 
+> > > > > Coherency and snooping of the CPU cache is mandatory for devices and
+> > > > > root complexes in the PCI specification. Incoherent access is just an
+> > > > > extension.
+> > > > > 
+> > > > > We inherited that by basing DMA-buf on the Linux kernel DMA-API which in
+> > > > > turn is largely based on the PCI specification.
+> > > > > 
+> > > > > > Were the (mandatory for CPU access) cpu_access_begin/end functions &
+> > > > > > ioctls not supposed to ensure that CPU cache is up-to-date / CPU cache
+> > > > > > is fully flushed out?
+> > > > > No, those functions are to inform the exporter that the importer has
+> > > > > started and finished accessing the buffer using the CPU.
+> > > > > 
+> > > > > There is no signaling in the other direction. In other words the
+> > > > > exporter doesn't inform the importer about CPU accesses because it is
+> > > > > the owner of the buffer.
+> > > > > 
+> > > > > It's the responsibility of the importer to make sure that it can
+> > > > > actually access the data in the buffer. If it can't guarantee that the
+> > > > > importer shouldn't import the buffer in the first place.
+> > > > This is not really correct. DMA-buf inherited the the map/unmap part
+> > > > from the DMA API, which on cache coherent architecture is mostly a no-
+> > > > op or ties into the IOMMU implementation to set up the pagetables for
+> > > > the translation. On non cache coherent architectures this is the point
+> > > > where any any necessary cache maintenance happens. DRM breaks this
+> > > > model by caching the DMA-buf mapping for performance reasons.
+> > > That's not only because of performance reasons, but also because of
+> > > correctness.
+> > > 
+> > > At least the Vulkan API and a bunch of OpenGL extensions make it
+> > > mandatory for the buffer to be cache coherent. The kernel is simply not
+> > > informed about domain transfers.
+> > > 
+> > > For example you can just do a CPU copy to a ring buffer and the
+> > > expectation is that an already running shader sees that.
+> > Yes, that one is not really an issue as you know that at buffer
+> > creation time and can make sure to map those buffers uncached on non
+> > coherent arches. If there are no explicit domain transfer points non
+> > coherent must bite the bullet and bypass the CPU caches, running
+> > performance into the ground.
 > 
-> Here are some small patches in preparation for "sideband injection".
+> Yes, exactly that was what this mail thread was about. But this case is 
+> currently not supported by DMA-buf.
 > 
-> I hope to run perf record in a virtual machine to capture sideband events
-> while simulataneously running perf record with Intel PT on the host, and
-> then subsequently inject the sideband events from the guest perf.data file
-> into the host perf.data file, so that decoding can decode the Intel PT
-> trace for the periods when the guest is running user space (kernel space
-> is already decodable).
+> In other words, cache coherency is currently mandatory for everybody 
+> involved.
 > 
-> The patches are changes I have found so far that will be needed.
+> > > > In the DMA API keeping things mapped is also a valid use-case, but then
+> > > > you need to do explicit domain transfers via the dma_sync_* family,
+> > > > which DMA-buf has not inherited. Again those sync are no-ops on cache
+> > > > coherent architectures, but do any necessary cache maintenance on non
+> > > > coherent arches.
+> > > Correct, yes. Coherency is mandatory for DMA-buf, you can't use
+> > > dma_sync_* on it when you are the importer.
+> > > 
+> > > The exporter could of course make use of that because he is the owner of
+> > > the buffer.
+> > In the example given here with UVC video, you don't know that the
+> > buffer will be exported and needs to be coherent without
+> > synchronization points, due to the mapping cache at the DRM side. So
+> > V4L2 naturally allocates the buffers from CPU cached memory. If the
+> > expectation is that those buffers are device coherent without relying
+> > on the map/unmap_attachment calls, then V4L2 needs to always
+> > synchronize caches on DQBUF when the  buffer is allocated from CPU
+> > cached memory and a single DMA-buf attachment exists. And while writing
+> > this I realize that this is probably exactly what V4L2 should do...
+> 
+> No, the expectation is that the importer can deal with whatever the 
+> exporter provides.
+> 
+> If the importer can't access the DMA-buf coherently it's his job to 
+> handle that gracefully.
 
-Are there OK?
+How does the importer know that the memory behind the DMA-buf is in CPU
+cached memory?
+
+If you now tell me that an importer always needs to assume this and
+reject the import if it can't do snooping, then any DMA-buf usage on
+most ARM SoCs is currently invalid usage. On most of the multimedia
+targeted ARM SoCs being unable to snoop the cache is the norm, not an
+exception.
 
 > 
+> See for example on AMD/Intel hardware most of the engines can perfectly 
+> deal with cache coherent memory accesses. Only the display engines can't.
 > 
-> Adrian Hunter (5):
->       perf record: Always get text_poke events with --kcore option
->       perf record: Always record id index
->       perf record: Add new option to sample identifier
->       perf record: Add finished init event
->       perf script: Add some missing event dumps
+> So on import time we can't even say if the access can be coherent and 
+> snoop the CPU cache or not because we don't know how the imported 
+> DMA-buf will be used later on.
 > 
->  tools/lib/perf/include/perf/event.h      |  1 +
->  tools/perf/Documentation/perf-record.txt |  3 +++
->  tools/perf/builtin-inject.c              |  1 +
->  tools/perf/builtin-record.c              | 44 +++++++++++++++++++++++++++-----
->  tools/perf/builtin-script.c              |  6 +++++
->  tools/perf/util/event.c                  |  1 +
->  tools/perf/util/header.c                 |  3 +++
->  tools/perf/util/record.c                 |  2 +-
->  tools/perf/util/record.h                 |  1 +
->  tools/perf/util/session.c                |  4 +++
->  tools/perf/util/synthetic-events.c       |  7 +++--
->  tools/perf/util/tool.h                   |  3 ++-
->  12 files changed, 65 insertions(+), 11 deletions(-)
-> 
-> 
-> Regards
-> Adrian
+So for those mixed use cases, wouldn't it help to have something
+similar to the dma_sync in the DMA-buf API, so your scanout usage can
+tell the exporter that it's going to do non-snoop access and any dirty
+cache lines must be cleaned? Signaling this to the exporter would allow
+to skip the cache maintenance if the buffer is in CPU uncached memory,
+which again is a default case for the ARM SoC world.
+
+Regards,
+Lucas
 

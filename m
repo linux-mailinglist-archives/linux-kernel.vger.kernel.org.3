@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF9B55821F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB5355846F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiFWRKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S234980AbiFWRms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbiFWRIL (ORCPT
+        with ESMTP id S234810AbiFWRiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:08:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F9653A55;
-        Thu, 23 Jun 2022 09:56:48 -0700 (PDT)
+        Thu, 23 Jun 2022 13:38:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F5C26572;
+        Thu, 23 Jun 2022 10:08:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CFD9B8248C;
-        Thu, 23 Jun 2022 16:56:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E30C3411B;
-        Thu, 23 Jun 2022 16:56:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2DF461408;
+        Thu, 23 Jun 2022 17:08:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8B3C341C7;
+        Thu, 23 Jun 2022 17:08:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003403;
-        bh=E7cEh5bK6lTWhyfkc4/D18C7BicyDM/aUr421bJZuwI=;
+        s=korg; t=1656004097;
+        bh=9P2pvINs/sgb/fVH7QEjMuFU0EZR1PdrE2W4adZFrjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pqeiofqbZAEqh1bYgyh/rs5sp1rvIe61FpzJ+5hcvlTwNK4U7WUBxnLw/33/ZWgPz
-         ErOIRCDxN954pDCzOaMhPHOzml8gbhnKH6xRupIUFWe3aV+hdVU5qRpvEPsqX4i91w
-         UWmHUQFkD09wqDyOcYaEHVmgmRm/+VQJXGFtn/5I=
+        b=AI5/Ka3vRZS9WPnxmOAMawjkR8x6EsOZ0Dw1ob9bosB7SQ8DQ9+juKpknK+9RYmoP
+         P8IEZUBkrkt4NcjA1CA9XeDRMwNFNViuagMI3fpeZyoPrGZeaJFrWMCWxQiHAtgMlg
+         csxQG6SdJU+GIOMYy/xV/49YYt7C8nBTqo0Omcuw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 228/264] ASoC: cs42l56: Correct typo in minimum level for SX volume controls
-Date:   Thu, 23 Jun 2022 18:43:41 +0200
-Message-Id: <20220623164350.529581882@linuxfoundation.org>
+        stable@vger.kernel.org, Nicolai Stange <nstange@suse.de>,
+        =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.14 188/237] crypto: drbg - move dynamic ->reseed_threshold adjustments to __drbg_seed()
+Date:   Thu, 23 Jun 2022 18:43:42 +0200
+Message-Id: <20220623164348.556012308@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Nicolai Stange <nstange@suse.de>
 
-[ Upstream commit a8928ada9b96944cadd8b65d191e33199fd38782 ]
+commit 262d83a4290c331cd4f617a457408bdb82fbb738 upstream.
 
-A couple of the SX volume controls specify 0x84 as the lowest volume
-value, however the correct value from the datasheet is 0x44. The
-datasheet don't include spaces in the value it displays as binary so
-this was almost certainly just a typo reading 1000100.
+Since commit 42ea507fae1a ("crypto: drbg - reseed often if seedsource is
+degraded"), the maximum seed lifetime represented by ->reseed_threshold
+gets temporarily lowered if the get_random_bytes() source cannot provide
+sufficient entropy yet, as is common during boot, and restored back to
+the original value again once that has changed.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220602162119.3393857-6-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+More specifically, if the add_random_ready_callback() invoked from
+drbg_prepare_hrng() in the course of DRBG instantiation does not return
+-EALREADY, that is, if get_random_bytes() has not been fully initialized
+at this point yet, drbg_prepare_hrng() will lower ->reseed_threshold
+to a value of 50. The drbg_async_seed() scheduled from said
+random_ready_callback will eventually restore the original value.
+
+A future patch will replace the random_ready_callback based notification
+mechanism and thus, there will be no add_random_ready_callback() return
+value anymore which could get compared to -EALREADY.
+
+However, there's __drbg_seed() which gets invoked in the course of both,
+the DRBG instantiation as well as the eventual reseeding from
+get_random_bytes() in aforementioned drbg_async_seed(), if any. Moreover,
+it knows about the get_random_bytes() initialization state by the time the
+seed data had been obtained from it: the new_seed_state argument introduced
+with the previous patch would get set to DRBG_SEED_STATE_PARTIAL in case
+get_random_bytes() had not been fully initialized yet and to
+DRBG_SEED_STATE_FULL otherwise. Thus, __drbg_seed() provides a convenient
+alternative for managing that ->reseed_threshold lowering and restoring at
+a central place.
+
+Move all ->reseed_threshold adjustment code from drbg_prepare_hrng() and
+drbg_async_seed() respectively to __drbg_seed(). Make __drbg_seed()
+lower the ->reseed_threshold to 50 in case its new_seed_state argument
+equals DRBG_SEED_STATE_PARTIAL and let it restore the original value
+otherwise.
+
+There is no change in behaviour.
+
+Signed-off-by: Nicolai Stange <nstange@suse.de>
+Reviewed-by: Stephan Müller <smueller@chronox.de>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/cs42l56.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ crypto/drbg.c |   29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/sound/soc/codecs/cs42l56.c b/sound/soc/codecs/cs42l56.c
-index a2535a7eb4bb..f9f8a9112ff8 100644
---- a/sound/soc/codecs/cs42l56.c
-+++ b/sound/soc/codecs/cs42l56.c
-@@ -405,9 +405,9 @@ static const struct snd_kcontrol_new cs42l56_snd_controls[] = {
- 	SOC_DOUBLE("ADC Boost Switch", CS42L56_GAIN_BIAS_CTL, 3, 2, 1, 1),
+--- a/crypto/drbg.c
++++ b/crypto/drbg.c
+@@ -1048,6 +1048,26 @@ static inline int __drbg_seed(struct drb
+ 	/* 10.1.1.2 / 10.1.1.3 step 5 */
+ 	drbg->reseed_ctr = 1;
  
- 	SOC_DOUBLE_R_SX_TLV("Headphone Volume", CS42L56_HPA_VOLUME,
--			      CS42L56_HPB_VOLUME, 0, 0x84, 0x48, hl_tlv),
-+			      CS42L56_HPB_VOLUME, 0, 0x44, 0x48, hl_tlv),
- 	SOC_DOUBLE_R_SX_TLV("LineOut Volume", CS42L56_LOA_VOLUME,
--			      CS42L56_LOB_VOLUME, 0, 0x84, 0x48, hl_tlv),
-+			      CS42L56_LOB_VOLUME, 0, 0x44, 0x48, hl_tlv),
++	switch (drbg->seeded) {
++	case DRBG_SEED_STATE_UNSEEDED:
++		/* Impossible, but handle it to silence compiler warnings. */
++	case DRBG_SEED_STATE_PARTIAL:
++		/*
++		 * Require frequent reseeds until the seed source is
++		 * fully initialized.
++		 */
++		drbg->reseed_threshold = 50;
++		break;
++
++	case DRBG_SEED_STATE_FULL:
++		/*
++		 * Seed source has become fully initialized, frequent
++		 * reseeds no longer required.
++		 */
++		drbg->reseed_threshold = drbg_max_requests(drbg);
++		break;
++	}
++
+ 	return ret;
+ }
  
- 	SOC_SINGLE_TLV("Bass Shelving Volume", CS42L56_TONE_CTL,
- 			0, 0x00, 1, tone_tlv),
--- 
-2.35.1
-
+@@ -1096,9 +1116,6 @@ static void drbg_async_seed(struct work_
+ 
+ 	__drbg_seed(drbg, &seedlist, true, DRBG_SEED_STATE_FULL);
+ 
+-	if (drbg->seeded == DRBG_SEED_STATE_FULL)
+-		drbg->reseed_threshold = drbg_max_requests(drbg);
+-
+ unlock:
+ 	mutex_unlock(&drbg->drbg_mutex);
+ 
+@@ -1532,12 +1549,6 @@ static int drbg_prepare_hrng(struct drbg
+ 		return err;
+ 	}
+ 
+-	/*
+-	 * Require frequent reseeds until the seed source is fully
+-	 * initialized.
+-	 */
+-	drbg->reseed_threshold = 50;
+-
+ 	return err;
+ }
+ 
 
 

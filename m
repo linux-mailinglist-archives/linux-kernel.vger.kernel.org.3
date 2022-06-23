@@ -2,222 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4087558A55
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098E9558A59
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiFWUrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
+        id S229894AbiFWUst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiFWUrP (ORCPT
+        with ESMTP id S229851AbiFWUsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:47:15 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1FCC5D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:47:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fzm0xUn31Pm/Wg3fgHhB0BIV4CKu3NRALLqFJvYYT+FtsHr5KlgpylilNJ00CeVTEHQHvYRZA6EXMRQmqX2MbpS5S7xcS3Dy7/1gCD9GePSyQbq71GtrG/W77sVXzEG7YmpekuyE2dD1buU1g7+AkW6lJCsAcxIYcT2rF108Y13P+qxYxVthX1KK89r+Qpp6VLOQABWqQ9GasojDZeRyfqLd+fCyZ/PO2mM1Y08qt5FpBUADuNGs/i91hMTN1Az0bVWznhk9IuJ4LfLITk5Eq6gfbBYKkXuaFR0h0kdF+1dhv5d9dBXC4BTJCO/3rHEhQSBt07dgsJfn4jHo+FBI+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ul+h/x1vwYbxFpQ+p6dJ3++3PM+RJZLNicPZA2HGrjY=;
- b=OrTVf5twvAncGvySiFCkgSoS3vrRjT44fjJU2zSRPy6xGJkyZLVDPB7kt4b1eWPHtBF2SbdzzdVT6F7e52zO5nsP5LTvGbrloDLF45kWF0e6Y/mvn6Lfbx1H8ebglU7I1TXmb5Pc6kkk1TwBUdU2D6Eiqk2TR6HmX2jXn925Y2/wLaZblQRTHBOXuqqeK+Y+Li/tj+TmArqePl7n9ZXIshNmAiYB5/F0/0fe2HzFsW++zkuKR9PzyoIL/zRic2oh2SOo4BVltFD3vDQJkoObhpXZWWcmKdTgu7NNVMuACuYaWWXDfU3PSxIOyPgYW/ji4Oz7MeirEJi4Cwh75q91xg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ul+h/x1vwYbxFpQ+p6dJ3++3PM+RJZLNicPZA2HGrjY=;
- b=A/poxKU1drxBPC7Xg6l4Now4r8uNfRTFpUJk3e2+2G29SobIE325x0SQrjc5/sPgvjGnS547crbl8CFLmqkG2nonciLj4sHDEygkofdHKgOGVwpddSbvo180H/V6KlurmRx45w07UGnNxUWEHnsCwmfKUeFpbLeqIqn6F6BvPhwIux46XKgPTvrWCGPaATNtEeaXNDfVzDGFwpFlTS6pTHbE9PjBwCV9CaHSYZ5CrXtPANrz1nKf/b8CHQtBV/p25uflg0qJxj7k4+gx6iU2yF1dUdRu8qQJabkPWl3p5EvxhNYTeOUQjJmFRrjceWzKpcruQJAjnen4xBc/u6dxGw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM4PR12MB6637.namprd12.prod.outlook.com (2603:10b6:8:bb::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.22; Thu, 23 Jun
- 2022 20:47:13 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5373.016; Thu, 23 Jun 2022
- 20:47:13 +0000
-Date:   Thu, 23 Jun 2022 17:47:12 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        minchan@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, paulmck@kernel.org,
-        jhubbard@nvidia.com, joaodias@google.com
-Subject: Re: [PATCH] mm: Re-allow pinning of zero pfns
-Message-ID: <20220623204712.GG4147@nvidia.com>
-References: <165490039431.944052.12458624139225785964.stgit@omen>
- <bb120b4a-e6f6-de81-35f0-9803acf9b0be@redhat.com>
- <20220615155659.GA7684@nvidia.com>
- <cb7efb0f-5537-5ce4-7aec-bb10ea81d5de@redhat.com>
- <20220623142139.462a0841.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623142139.462a0841.alex.williamson@redhat.com>
-X-ClientProxiedBy: MN2PR05CA0032.namprd05.prod.outlook.com
- (2603:10b6:208:c0::45) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 23 Jun 2022 16:48:47 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED88452E41
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:48:43 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id w193so1024145oie.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ghBL8B+VYZnSMGW+02Rnd6WA6Oi+9/f0M5wCqFvghoc=;
+        b=I9cx70w3Sipdo0o6uZKXEUMrdV3T9V9/ZX8sHn3O+6S/yQCOtShpuI5fGHWVJhe336
+         Sd9hvaUatZk8dcRCKJzrK2r03U0fEEd2ZXfi+8LgFDC4UrT3wsS5tDiu7zFu4ay0LJ6O
+         nza81P3M6EWdtEm8MkjNp1/ZY9uRZnyM0IGXPvck5eNqh96r/wXuNlpmPlK/U77E7uqK
+         qUB210+F4cpA0GZqiHqbiTb4AVMsQiR2ZhWknTQbWEfDj9gvBHXr4jl3NusX2YUgJTRs
+         EMB7H6mRNPu1NhC9bwE54cEQe1/0A2kIyWnuPCXdlb+FX07YNO8Ly5aluWVj6q6zbz3Y
+         Dktw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ghBL8B+VYZnSMGW+02Rnd6WA6Oi+9/f0M5wCqFvghoc=;
+        b=CLPIaOWAA7W8os6zN5DZlFcClo4CmbQbq07qRXq17innOu7g16zIBO++a6PGH2xJeI
+         L6iHTfMz/Y7GFw0mBdEo85uj4vQsjcN+iMYR9n3xE11Y7s6rREq5VI/gcNk7e5OxbH3Z
+         G/QVWVpMHQbKk0b3q/p42G/d12PYLWWCanLkZ3AMRtNwAq2rSez6XIqECgXpaUGjAUbS
+         DXCnWHxBACbJQqTGQed3KToqpLMLaD4MDPRuFC8Mk7ncaYekxCpgxAFvvt51oQa1xdjq
+         x5yoNwznEMwMDBdXMpYweipkQWMYu/0964nbKbF+DuGV28Oo9sPbyPQjrwv9r8dDDiq8
+         CKIg==
+X-Gm-Message-State: AJIora/1R6wXbl3RH1LTpZPf/QNNRchxJ8626XmdKakIC2J+a0LkZ++b
+        UkB4IKT998l//+vukKpoGX9GzR/PR6ifMnP2P5kyzA==
+X-Google-Smtp-Source: AGRyM1tZUukGk0WYWTaAZndO4B+WbhHEg6ly52tuKeWVNEAYvaI1LeACu0B1pFOWVO8T/AOqt/jklnrY6m4gzyywiXA=
+X-Received: by 2002:a05:6808:140b:b0:335:30a3:25df with SMTP id
+ w11-20020a056808140b00b0033530a325dfmr2262308oiv.110.1656017322863; Thu, 23
+ Jun 2022 13:48:42 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2c1e9d49-cbcf-4980-dd65-08da55598cfe
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6637:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WxNjds5k6mPMWejzreZfF/SCLo6DnlcKYO5EemXpgfr9Vh7HUSLobHx/M399NL02aGyFfASusqOvSwpsuuLnM6oK+iytzvnD2hYS6X1JDUb1UQNQUz9Cx9QazsNlxxCggzHcK3x44ErvyN943/ggWqbjl+aQqhBLc/8OgzjBRISm66MewbbKyL4tVYrPlHe3t9/LGl3rl6fC8CbxyZEvL9v61bupa8Vz0A8+xHOeaI7WFDXbAn5wk0qieWxEZgpuwvWjye4IE1rjlclZfsWnGzatTeVimGco5ulwU3vvzGZYSuOkQk/tzGHOAspNhvhIDj+hDG/EyqkwTpKh+QqRsSEa0IpM4AHi/eEwy3iCdMNGrt8GG28/xPjih/gkaUG9U4cSa+NETiUWvZe1MUMJmwK023rN5GSZwdAahdQz38G5rJp1wOhKbceMDfSMeGjPcO9QZavJUQNhuHjgyUl2tfhgnit5YJmcBqJ24ZP3hGclTZhUdng6D57mTpzx398p6KLe88guwJ/+LLfOLdiKQwoEi1ZG1Sd3NKP5mUbRfi+LcbeBpy2ZhvWrmy+5kqKHFueIDoBzCFIWLKtFzOPI5B71TmY6invSQvrtnBfgFO+mpWNvuXl7atGSaRXdVR/uUbVcfZjSVO8X42ljguYnfTbEs0dilNLfEDyxL2JsSh3sp4L5yDzXVOfiiGpSA7TPEmwDQBNPzcnGSjboxjcUcL+cGl6r2DfhV2k/bvT/488+rBxlQTV9yru22xXqy1yB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(8676002)(8936002)(478600001)(6636002)(36756003)(316002)(41300700001)(2906002)(186003)(110136005)(83380400001)(38100700002)(66556008)(6512007)(66476007)(6486002)(86362001)(4326008)(33656002)(26005)(5660300002)(1076003)(66946007)(6506007)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?14UumVPcMZLUBCUMD3KcIUK+UM6XvUuiANBNSBIGdMLiwct0O5dkU9rEl0az?=
- =?us-ascii?Q?4jg8Zf8z6B0r+TCMRkpSwKMUAlQaBckyJfEQ+qV9/hSAqx2hSLIsQSRUolTN?=
- =?us-ascii?Q?JsrXwIGMNE3hQIPnawUWBwKmnqsjE2w8Gcp5yTkkXRX152uZzNNSBl1Sjcry?=
- =?us-ascii?Q?yKnE2MpkuPz1vL5n3XB2XACoLo0ZjFSPKbp7H38nS5SKAqR9khecoj0kLwTC?=
- =?us-ascii?Q?k8lJJ//JBM9GyAf+jQhwYE8rGI2WRzVpF8SH4Bg2d06uatKI2Q6ZojZszFK3?=
- =?us-ascii?Q?Spo+XCZJHuaobrCF8EeuqhN68BNN4bhHlJSX6Yis4vxfVM7MTc8Bggb90kz2?=
- =?us-ascii?Q?+KvrBmAs05wiPyJJififXLzx6JLU0/zBo1PGqakj0aapSwa2KxwIW54zprK7?=
- =?us-ascii?Q?/xMOiQ5XKsmrELirMwUkDoLotdwCB/m9TaHRA0O545kwXjzJ0nHpFiRigRu0?=
- =?us-ascii?Q?4JxUzJBS5skA4Ty5apdz1uekrfsDTkYw/KD5B9i9RxXD3ORUxAynPUjd3+yK?=
- =?us-ascii?Q?j5PcJDIqDRy7BdwiWVewxn6ONQIBSRKCP1hQiI4QN6hrlinn4UwgHVVKOSOH?=
- =?us-ascii?Q?sc7UgxnecQcGrqGoPjJx7lsdIr0+jJcjlb1GzSgTWBm9hDU0LyxPhqXVXsRb?=
- =?us-ascii?Q?UsZMwHTl2Cqc395g7/K+DWLwBdfGsDYiMqx/i1k8F+Ozb9/xYoj5jcVsduZ/?=
- =?us-ascii?Q?5FRzTnXRxM/Jh2WYlCQUmiPsYCX8iT32hyYOje9pnu2J97fGs9vOtaigOQ4U?=
- =?us-ascii?Q?cedbDlV81y0bs9bw9F5kIt24YWXKBYrpfEYqjCwh6zepX6nbeWUv0L9bD4Hu?=
- =?us-ascii?Q?uyhUTserrCijLsNYVPAhmowIbHvguxpxxvKUtjB7TtlYqlH2nNQlKvKp4Sjk?=
- =?us-ascii?Q?TT2szk+TjvGYBN4JesedwwT5RbopPeEu6AeEHmE4veFqexslOJ47HQK5lP0k?=
- =?us-ascii?Q?DVoqKDNNixbMPOEd54EIC7sxsZgZTwqODcdwVVG1vxeyqQuCxRnMSP1kJMqO?=
- =?us-ascii?Q?YzDQoZn+jxsbcsyh3h0XTw1PpuYzaDGmIVeWc9NSQhCsPyYd7IYG7xWG648o?=
- =?us-ascii?Q?AEf9XCbx1nfNbAkwb2Z/aT19xrSEhV41AAdi9kM98x8so6scZKKCn0bnZg0I?=
- =?us-ascii?Q?X1nOwFixXyx3GV79lh3Q83SpSvYfHWVwghx0XqdziwtgGBmbKEQvBCcuOfYv?=
- =?us-ascii?Q?BX191hBZjyiBdoWisrIJSRyXI97nkvdeHLLB2RuasThTwU4yu0H6QB90MjSY?=
- =?us-ascii?Q?7oWj2Aa9CJ/pqJMYsoRL8CwtFUywLELD8lWtSAl6/abultzpq/dxzvdRA/Dh?=
- =?us-ascii?Q?aQM+QO8ETV1Up4k7Nurt3fZEYgZwmdaXgODq1h2kGIFanAzakVL5onFDUbFX?=
- =?us-ascii?Q?BNfpvimiKZXgaVSgySvsQB90BTM5D4JyMsnpcPC/hjsgwAeu+JUJjbNwU15i?=
- =?us-ascii?Q?yMvlRLPRM6TKC+Tm9h9EgPeC2b2gltRgcyMYhUvTDmmW77RgP3MEy7Z8I88W?=
- =?us-ascii?Q?qjSMroHCUiiU6huB2JJuUKNUIVO5NBuSCYywI+m+vb8KL1GlRkA/DKPKI5PM?=
- =?us-ascii?Q?0wU8CZ3WTNp86ZE631xNTrYKeUT7SMXsqGqiV/eR?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c1e9d49-cbcf-4980-dd65-08da55598cfe
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 20:47:13.3560
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a0D/u7oz5pQc6p28Z2waHw4WKZdrkbrQD9+UkXm0oazueLMASkx4XpjuDQ83xZ5S
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6637
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1655761627.git.ashish.kalra@amd.com> <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Thu, 23 Jun 2022 13:48:31 -0700
+Message-ID: <CAA03e5FgfVQbz=pvMeBpOHENe5Rf_7UvE3iAqcgm=9nmwGEEBw@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
+ initialization support
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 02:21:39PM -0600, Alex Williamson wrote:
+On Mon, Jun 20, 2022 at 4:02 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
+>
+> From: Brijesh Singh <brijesh.singh@amd.com>
+>
+> The memory integrity guarantees of SEV-SNP are enforced through a new
+> structure called the Reverse Map Table (RMP). The RMP is a single data
+> structure shared across the system that contains one entry for every 4K
+> page of DRAM that may be used by SEV-SNP VMs. The goal of RMP is to
+> track the owner of each page of memory. Pages of memory can be owned by
+> the hypervisor, owned by a specific VM or owned by the AMD-SP. See APM2
+> section 15.36.3 for more detail on RMP.
+>
+> The RMP table is used to enforce access control to memory. The table itself
+> is not directly writable by the software. New CPU instructions (RMPUPDATE,
+> PVALIDATE, RMPADJUST) are used to manipulate the RMP entries.
+>
+> Based on the platform configuration, the BIOS reserves the memory used
+> for the RMP table. The start and end address of the RMP table must be
+> queried by reading the RMP_BASE and RMP_END MSRs. If the RMP_BASE and
+> RMP_END are not set then disable the SEV-SNP feature.
+>
+> The SEV-SNP feature is enabled only after the RMP table is successfully
+> initialized.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/include/asm/disabled-features.h |   8 +-
+>  arch/x86/include/asm/msr-index.h         |   6 +
+>  arch/x86/kernel/sev.c                    | 144 +++++++++++++++++++++++
+>  3 files changed, 157 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+> index 36369e76cc63..c1be3091a383 100644
+> --- a/arch/x86/include/asm/disabled-features.h
+> +++ b/arch/x86/include/asm/disabled-features.h
+> @@ -68,6 +68,12 @@
+>  # define DISABLE_TDX_GUEST     (1 << (X86_FEATURE_TDX_GUEST & 31))
+>  #endif
+>
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +# define DISABLE_SEV_SNP       0
+> +#else
+> +# define DISABLE_SEV_SNP       (1 << (X86_FEATURE_SEV_SNP & 31))
+> +#endif
+> +
+>  /*
+>   * Make sure to add features to the correct mask
+>   */
+> @@ -91,7 +97,7 @@
+>                          DISABLE_ENQCMD)
+>  #define DISABLED_MASK17        0
+>  #define DISABLED_MASK18        0
+> -#define DISABLED_MASK19        0
+> +#define DISABLED_MASK19        (DISABLE_SEV_SNP)
+>  #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
+>
+>  #endif /* _ASM_X86_DISABLED_FEATURES_H */
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index 9e2e7185fc1d..57a8280e283a 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -507,6 +507,8 @@
+>  #define MSR_AMD64_SEV_ENABLED          BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
+>  #define MSR_AMD64_SEV_ES_ENABLED       BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
+>  #define MSR_AMD64_SEV_SNP_ENABLED      BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
+> +#define MSR_AMD64_RMP_BASE             0xc0010132
+> +#define MSR_AMD64_RMP_END              0xc0010133
+>
+>  #define MSR_AMD64_VIRT_SPEC_CTRL       0xc001011f
+>
+> @@ -581,6 +583,10 @@
+>  #define MSR_AMD64_SYSCFG               0xc0010010
+>  #define MSR_AMD64_SYSCFG_MEM_ENCRYPT_BIT       23
+>  #define MSR_AMD64_SYSCFG_MEM_ENCRYPT   BIT_ULL(MSR_AMD64_SYSCFG_MEM_ENCRYPT_BIT)
+> +#define MSR_AMD64_SYSCFG_SNP_EN_BIT            24
+> +#define MSR_AMD64_SYSCFG_SNP_EN                BIT_ULL(MSR_AMD64_SYSCFG_SNP_EN_BIT)
+> +#define MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT       25
+> +#define MSR_AMD64_SYSCFG_SNP_VMPL_EN   BIT_ULL(MSR_AMD64_SYSCFG_SNP_VMPL_EN_BIT)
 
-> check_and_migrate_movable_pages() perpetually returns zero.  I believe
-> this is because folio_is_pinnable() previously returned true, and now
-> returns false.
+nit: The alignment here looks off. The rest of the file left-aligns
+the macro definition column under a comment header. The bad alignment
+can be viewed on the github version of this patch:
+https://github.com/AMDESE/linux/commit/5101daef92f448c046207b701c0c420b1fce3eaf
 
-Indeed, it is a bug that check_and_migrate_movable_pages() returns
-0 when it didn't do anything. It should return an error code.
+>  #define MSR_K8_INT_PENDING_MSG         0xc0010055
+>  /* C1E active bits in int pending message */
+>  #define K8_INTP_C1E_ACTIVE_MASK                0x18000000
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index f01f4550e2c6..3a233b5d47c5 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -22,6 +22,8 @@
+>  #include <linux/efi.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/io.h>
+> +#include <linux/cpumask.h>
+> +#include <linux/iommu.h>
+>
+>  #include <asm/cpu_entry_area.h>
+>  #include <asm/stacktrace.h>
+> @@ -38,6 +40,7 @@
+>  #include <asm/apic.h>
+>  #include <asm/cpuid.h>
+>  #include <asm/cmdline.h>
+> +#include <asm/iommu.h>
+>
+>  #define DR7_RESET_VALUE        0x400
+>
+> @@ -57,6 +60,12 @@
+>  #define AP_INIT_CR0_DEFAULT            0x60000010
+>  #define AP_INIT_MXCSR_DEFAULT          0x1f80
+>
+> +/*
+> + * The first 16KB from the RMP_BASE is used by the processor for the
+> + * bookkeeping, the range need to be added during the RMP entry lookup.
+> + */
+> +#define RMPTABLE_CPU_BOOKKEEPING_SZ    0x4000
+> +
+>  /* For early boot hypervisor communication in SEV-ES enabled guests */
+>  static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
+>
+> @@ -69,6 +78,10 @@ static struct ghcb *boot_ghcb __section(".data");
+>  /* Bitmap of SEV features supported by the hypervisor */
+>  static u64 sev_hv_features __ro_after_init;
+>
+> +static unsigned long rmptable_start __ro_after_init;
+> +static unsigned long rmptable_end __ro_after_init;
+> +
+> +
+>  /* #VC handler runtime per-CPU data */
+>  struct sev_es_runtime_data {
+>         struct ghcb ghcb_page;
+> @@ -2218,3 +2231,134 @@ static int __init snp_init_platform_device(void)
+>         return 0;
+>  }
+>  device_initcall(snp_init_platform_device);
+> +
+> +#undef pr_fmt
+> +#define pr_fmt(fmt)    "SEV-SNP: " fmt
+> +
+> +static int __snp_enable(unsigned int cpu)
+> +{
+> +       u64 val;
+> +
+> +       if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+> +               return 0;
+> +
+> +       rdmsrl(MSR_AMD64_SYSCFG, val);
+> +
+> +       val |= MSR_AMD64_SYSCFG_SNP_EN;
+> +       val |= MSR_AMD64_SYSCFG_SNP_VMPL_EN;
+> +
+> +       wrmsrl(MSR_AMD64_SYSCFG, val);
+> +
+> +       return 0;
+> +}
+> +
+> +static __init void snp_enable(void *arg)
+> +{
+> +       __snp_enable(smp_processor_id());
+> +}
+> +
+> +static bool get_rmptable_info(u64 *start, u64 *len)
+> +{
+> +       u64 calc_rmp_sz, rmp_sz, rmp_base, rmp_end, nr_pages;
+> +
+> +       rdmsrl(MSR_AMD64_RMP_BASE, rmp_base);
+> +       rdmsrl(MSR_AMD64_RMP_END, rmp_end);
+> +
+> +       if (!rmp_base || !rmp_end) {
+> +               pr_info("Memory for the RMP table has not been reserved by BIOS\n");
+> +               return false;
+> +       }
+> +
+> +       rmp_sz = rmp_end - rmp_base + 1;
+> +
+> +       /*
+> +        * Calculate the amount the memory that must be reserved by the BIOS to
+> +        * address the full system RAM. The reserved memory should also cover the
+> +        * RMP table itself.
+> +        *
+> +        * See PPR Family 19h Model 01h, Revision B1 section 2.1.4.2 for more
+> +        * information on memory requirement.
+> +        */
+> +       nr_pages = totalram_pages();
+> +       calc_rmp_sz = (((rmp_sz >> PAGE_SHIFT) + nr_pages) << 4) + RMPTABLE_CPU_BOOKKEEPING_SZ;
+> +
+> +       if (calc_rmp_sz > rmp_sz) {
+> +               pr_info("Memory reserved for the RMP table does not cover full system RAM (expected 0x%llx got 0x%llx)\n",
+> +                       calc_rmp_sz, rmp_sz);
+> +               return false;
+> +       }
+> +
+> +       *start = rmp_base;
+> +       *len = rmp_sz;
+> +
+> +       pr_info("RMP table physical address 0x%016llx - 0x%016llx\n", rmp_base, rmp_end);
+> +
+> +       return true;
+> +}
+> +
+> +static __init int __snp_rmptable_init(void)
+> +{
+> +       u64 rmp_base, sz;
+> +       void *start;
+> +       u64 val;
+> +
+> +       if (!get_rmptable_info(&rmp_base, &sz))
+> +               return 1;
+> +
+> +       start = memremap(rmp_base, sz, MEMREMAP_WB);
+> +       if (!start) {
+> +               pr_err("Failed to map RMP table 0x%llx+0x%llx\n", rmp_base, sz);
+> +               return 1;
+> +       }
+> +
+> +       /*
+> +        * Check if SEV-SNP is already enabled, this can happen if we are coming from
+> +        * kexec boot.
+> +        */
+> +       rdmsrl(MSR_AMD64_SYSCFG, val);
+> +       if (val & MSR_AMD64_SYSCFG_SNP_EN)
+> +               goto skip_enable;
+> +
+> +       /* Initialize the RMP table to zero */
+> +       memset(start, 0, sz);
+> +
+> +       /* Flush the caches to ensure that data is written before SNP is enabled. */
+> +       wbinvd_on_all_cpus();
+> +
+> +       /* Enable SNP on all CPUs. */
+> +       on_each_cpu(snp_enable, NULL, 1);
+> +
+> +skip_enable:
+> +       rmptable_start = (unsigned long)start;
+> +       rmptable_end = rmptable_start + sz;
+> +
+> +       return 0;
+> +}
+> +
+> +static int __init snp_rmptable_init(void)
+> +{
+> +       if (!boot_cpu_has(X86_FEATURE_SEV_SNP))
+> +               return 0;
+> +
+> +       if (!iommu_sev_snp_supported())
+> +               goto nosnp;
+> +
+> +       if (__snp_rmptable_init())
+> +               goto nosnp;
+> +
+> +       cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/rmptable_init:online", __snp_enable, NULL);
+> +
+> +       return 0;
+> +
+> +nosnp:
+> +       setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
+> +       return 1;
 
-Hum.. Alistair, maybe you should look at this as well, I'm struggling
-alot to understand how it is safe to drop the reference on the page
-but hold a pointer to it on the movable_page_list - sure it was
-isolated - but why does that mean it won't be concurrently unmapped
-and freed?
+Seems odd that we're returning 1 here, rather than 0. I tried to
+figure out how the initcall return values are used and failed. My
+impression was 0 means success and a negative number means failure.
+But maybe this is normal.
 
-Anyhow, it looks like the problem is the tortured logic in this
-function, what do you think about this:
-
-diff --git a/mm/gup.c b/mm/gup.c
-index 5512644076246d..2ffcb3f4ff4a7b 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1879,10 +1879,15 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 					    unsigned int gup_flags)
- {
- 	unsigned long isolation_error_count = 0, i;
-+	struct migration_target_control mtc = {
-+		.nid = NUMA_NO_NODE,
-+		.gfp_mask = GFP_USER | __GFP_NOWARN,
-+	};
- 	struct folio *prev_folio = NULL;
- 	LIST_HEAD(movable_page_list);
- 	bool drain_allow = true;
--	int ret = 0;
-+	int not_migrated;
-+	int ret;
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		struct folio *folio = page_folio(pages[i]);
-@@ -1919,16 +1924,13 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 				    folio_nr_pages(folio));
- 	}
- 
--	if (!list_empty(&movable_page_list) || isolation_error_count)
--		goto unpin_pages;
--
- 	/*
- 	 * If list is empty, and no isolation errors, means that all pages are
--	 * in the correct zone.
-+	 * in the correct zone, nothing to do.
- 	 */
--	return nr_pages;
-+	if (list_empty(&movable_page_list) && !isolation_error_count)
-+		return nr_pages;
- 
--unpin_pages:
- 	if (gup_flags & FOLL_PIN) {
- 		unpin_user_pages(pages, nr_pages);
- 	} else {
-@@ -1936,20 +1938,22 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 			put_page(pages[i]);
- 	}
- 
--	if (!list_empty(&movable_page_list)) {
--		struct migration_target_control mtc = {
--			.nid = NUMA_NO_NODE,
--			.gfp_mask = GFP_USER | __GFP_NOWARN,
--		};
-+	if (isolation_error_count) {
-+		ret = -EINVAL;
-+		goto err_putback;
-+	}
- 
--		ret = migrate_pages(&movable_page_list, alloc_migration_target,
--				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
--				    MR_LONGTERM_PIN, NULL);
--		if (ret > 0) /* number of pages not migrated */
--			ret = -ENOMEM;
-+	not_migrated = migrate_pages(&movable_page_list, alloc_migration_target,
-+				     NULL, (unsigned long)&mtc, MIGRATE_SYNC,
-+				     MR_LONGTERM_PIN, NULL);
-+	if (not_migrated > 0) {
-+		ret = -ENOMEM;
-+		goto err_putback;
- 	}
-+	return 0;
- 
--	if (ret && !list_empty(&movable_page_list))
-+err_putback:
-+	if (!list_empty(&movable_page_list))
- 		putback_movable_pages(&movable_page_list);
- 	return ret;
- }
-
-> If I generate an errno here, QEMU reports failing on the pc.rom memory
-> region at 0xc0000.  Thanks,
-
-Ah, a ROM region that is all zero'd makes some sense why it has gone
-unnoticed as a bug.
-
-Jason
+> +}
+> +
+> +/*
+> + * This must be called after the PCI subsystem. This is because before enabling
+> + * the SNP feature we need to ensure that IOMMU supports the SEV-SNP feature.
+> + * The iommu_sev_snp_support() is used for checking the feature, and it is
+> + * available after subsys_initcall().
+> + */
+> +fs_initcall(snp_rmptable_init);
+> --
+> 2.25.1
+>

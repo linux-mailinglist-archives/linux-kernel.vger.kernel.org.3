@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E45955829A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C32558141
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiFWRRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S233316AbiFWQ5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbiFWRNT (ORCPT
+        with ESMTP id S233648AbiFWQvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:13:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BB856F85;
-        Thu, 23 Jun 2022 09:59:06 -0700 (PDT)
+        Thu, 23 Jun 2022 12:51:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B93B50029;
+        Thu, 23 Jun 2022 09:49:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC690B82493;
-        Thu, 23 Jun 2022 16:59:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325FDC3411B;
-        Thu, 23 Jun 2022 16:59:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF4561F99;
+        Thu, 23 Jun 2022 16:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9B2C3411B;
+        Thu, 23 Jun 2022 16:49:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003543;
-        bh=bC9DTLtvzQkenP0Knef0ZUSmmW0hUV8voMCfBw0foiU=;
+        s=korg; t=1656002963;
+        bh=5mbXSzNjpSRj9Uu7DEFHfMoAvquSppTKosRivKzhN5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZDlHIoJtA/kpJMhFnAzI2jWM6ZYmTGd8nIizqWIlMxyT2cJV8xXc/yxVf37nYRlPv
-         HjMiT+VSx3SdaHFCnXWC04ujK7hERYmmxuu/Y5tDM+i5KOxhvjT1nEQt2ujgHXhZdX
-         NCkTHeRdm5mbcDyrP/SeI4hrJAd/uTtXmBhCvIQ4=
+        b=2ZEK6z8mAoWSSIr+bLIM09xmP7bDEMBulwXLf5RIXpo+IgtkCnER5ks9BvaGqDkc+
+         zxJ3wFlNZGPuXFEeGVCbRZ/e3omSqfVO54c4Ry9uBfprqbFOqJl4bu1wHy2F1k1Kf0
+         xSXpq4t2qSVvep81PVR2QgoV2bU1+/R0vDc9Mr0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 4.14 001/237] 9p: missing chunk of "fs/9p: Dont update file type when updating file attributes"
-Date:   Thu, 23 Jun 2022 18:40:35 +0200
-Message-Id: <20220623164343.179654020@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Theodore Tso <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.9 043/264] random: fix soft lockup when trying to read from an uninitialized blocking pool
+Date:   Thu, 23 Jun 2022 18:40:36 +0200
+Message-Id: <20220623164345.287939032@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,41 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Theodore Ts'o <tytso@mit.edu>
 
-commit b577d0cd2104fdfcf0ded3707540a12be8ddd8b0 upstream.
+commit 58be0106c5306b939b07b4b8bf00669a20593f4b upstream.
 
-In commit 45089142b149 Aneesh had missed one (admittedly, very unlikely
-to hit) case in v9fs_stat2inode_dotl().  However, the same considerations
-apply there as well - we have no business whatsoever to change ->i_rdev
-or the file type.
-
-Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: eb9d1bf079bb: "random: only read from /dev/random after its pool has received 128 bits"
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/9p/vfs_inode_dotl.c |   10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/char/random.c |   16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
---- a/fs/9p/vfs_inode_dotl.c
-+++ b/fs/9p/vfs_inode_dotl.c
-@@ -657,14 +657,10 @@ v9fs_stat2inode_dotl(struct p9_stat_dotl
- 		if (stat->st_result_mask & P9_STATS_NLINK)
- 			set_nlink(inode, stat->st_nlink);
- 		if (stat->st_result_mask & P9_STATS_MODE) {
--			inode->i_mode = stat->st_mode;
--			if ((S_ISBLK(inode->i_mode)) ||
--						(S_ISCHR(inode->i_mode)))
--				init_special_inode(inode, inode->i_mode,
--								inode->i_rdev);
-+			mode = stat->st_mode & S_IALLUGO;
-+			mode |= inode->i_mode & ~S_IALLUGO;
-+			inode->i_mode = mode;
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -774,8 +774,11 @@ retry:
+ 	if (cmpxchg(&r->entropy_count, orig, entropy_count) != orig)
+ 		goto retry;
+ 
+-	if (has_initialized)
++	if (has_initialized) {
+ 		r->initialized = 1;
++		wake_up_interruptible(&random_read_wait);
++		kill_fasync(&fasync, SIGIO, POLL_IN);
++	}
+ 
+ 	trace_credit_entropy_bits(r->name, nbits,
+ 				  entropy_count >> ENTROPY_SHIFT, _RET_IP_);
+@@ -791,6 +794,13 @@ retry:
+ 			entropy_bits = r->entropy_count >> ENTROPY_SHIFT;
  		}
--		if (stat->st_result_mask & P9_STATS_RDEV)
--			inode->i_rdev = new_decode_dev(stat->st_rdev);
- 		if (!(flags & V9FS_STAT2INODE_KEEP_ISIZE) &&
- 		    stat->st_result_mask & P9_STATS_SIZE)
- 			v9fs_i_size_write(inode, stat->st_size);
+ 
++		/* initialize the blocking pool if necessary */
++		if (entropy_bits >= random_read_wakeup_bits &&
++		    !other->initialized) {
++			schedule_work(&other->push_work);
++			return;
++		}
++
+ 		/* should we wake readers? */
+ 		if (entropy_bits >= random_read_wakeup_bits &&
+ 		    wq_has_sleeper(&random_read_wait)) {
+@@ -1992,8 +2002,8 @@ _random_read(int nonblock, char __user *
+ 			return -EAGAIN;
+ 
+ 		wait_event_interruptible(random_read_wait,
+-			ENTROPY_BITS(&input_pool) >=
+-			random_read_wakeup_bits);
++		    blocking_pool.initialized &&
++		    (ENTROPY_BITS(&input_pool) >= random_read_wakeup_bits));
+ 		if (signal_pending(current))
+ 			return -ERESTARTSYS;
+ 	}
 
 

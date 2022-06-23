@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F8B5578B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41265578B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiFWL3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 07:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S231377AbiFWL3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiFWL3L (ORCPT
+        with ESMTP id S230257AbiFWL3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:29:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EBC4BB94
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:29:10 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id sb34so11343386ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y5PmuIo7mYW3CN+sFVEg61+n+8PCcK1fiGszLtqNBkE=;
-        b=P3gPXxuZ6ksVlpTZiR36XjCGEeVdjZXDDLl4AQ/oh28NtYEm4DU9LantR/Dlct0XCl
-         Z0w6zQCjHnnQ3mQ5xztonY9oSX9xHdgUmXlbzw6DyxVEQ9G3A7qPbfDy4i+zLek/np0V
-         By4/BOrqGqbieW260s2Iq1bfkMoWkbzL8pWc+qxWFKZXDO2/Ug6Zqqd5f4Kf3G398Sn+
-         ioQBmIUqacMOHM2JHrkc7s/vWXHFt+rOS/bW76vohiiXyhlWmY0zdemkVC/gO5xOJt0r
-         kms8boIoKhlyOzgR+wY6NKkDzBXCohJPGA+ln3OpfZ3mtHgp1p485glfr4ZVtKWTU/ej
-         VQ6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y5PmuIo7mYW3CN+sFVEg61+n+8PCcK1fiGszLtqNBkE=;
-        b=qxSXtVvO/9XP/HYvAybAGlt4kv7S1DtkEzw/kxyzmcVt0/YbcbLn9UNjNdXKJl+a7Q
-         kidaR6ogglWvBfs6/nSIJ40BxSjOxtbcDrrNW1LyTKJMJJ8D973qRWMWFfmhpDBSlpI3
-         q6eR9xH0Yfin1uD8DJI4J0FgD9KL/P0MDeUxOnssYyXAei2Ygkq+Gsm2ParPCQ8QQBJ1
-         RF8tSp82nn5AZR0VWDdqcI0JinTcdAI+rY/m7QukaU8zzeRctU6Ip/gUlGZSq/Xg4NHQ
-         Tnqh+V0VkjVQLtsD1nA9bRLYa8ux6ckMbAsm6zZAg40J3F+QN53U5MKnt8ZguaYngX3j
-         whiw==
-X-Gm-Message-State: AJIora8l82WwMh6gQyUhaaO0RjEjdAJeVNV73+Vm7Jt+XnI2bJ7ylbM9
-        JxPVeSWcgp3Iwy3E+ZVR2Y0A7w==
-X-Google-Smtp-Source: AGRyM1vlJNeyno6YRTMSYN5fCFkHIVRrt2/G/UFpHdTwakW1nLE5XtZkaNm9rgjUJE5W33x19uhZCw==
-X-Received: by 2002:a17:907:da1:b0:722:bc0b:4f4c with SMTP id go33-20020a1709070da100b00722bc0b4f4cmr7761188ejc.761.1655983748760;
-        Thu, 23 Jun 2022 04:29:08 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090614cb00b00712057b037fsm10268110ejc.167.2022.06.23.04.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 04:29:08 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] riscv: traps_misaligned: do not duplicate stringify
-Date:   Thu, 23 Jun 2022 13:29:05 +0200
-Message-Id: <20220623112905.253157-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 23 Jun 2022 07:29:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DCC4BB99
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:29:39 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4L1j-0004KC-6N; Thu, 23 Jun 2022 13:29:35 +0200
+Message-ID: <f3c32cdd2ab4e76546c549b0cebba8e1d19d1cb0.camel@pengutronix.de>
+Subject: Re: DMA-buf and uncached system memory
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Thu, 23 Jun 2022 13:29:34 +0200
+In-Reply-To: <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
+         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
+         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+         <20220623101326.18beeab3@eldfell>
+         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
+         <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
+         <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
+         <05814ddb-4f3e-99d8-025a-c31db7b2c46b@amd.com>
+         <708e27755317a7650ca08ba2e4c14691ac0d6ba2.camel@pengutronix.de>
+         <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,47 +66,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use existing stringify macro from the kernel headers.
+Am Donnerstag, dem 23.06.2022 um 13:10 +0200 schrieb Christian König:
+> Am 23.06.22 um 12:13 schrieb Lucas Stach:
+> > [SNIP]
+> > > > On most of the multimedia
+> > > > targeted ARM SoCs being unable to snoop the cache is the norm, not an
+> > > > exception.
+> > > > 
+> > > > > See for example on AMD/Intel hardware most of the engines can perfectly
+> > > > > deal with cache coherent memory accesses. Only the display engines can't.
+> > > > > 
+> > > > > So on import time we can't even say if the access can be coherent and
+> > > > > snoop the CPU cache or not because we don't know how the imported
+> > > > > DMA-buf will be used later on.
+> > > > > 
+> > > > So for those mixed use cases, wouldn't it help to have something
+> > > > similar to the dma_sync in the DMA-buf API, so your scanout usage can
+> > > > tell the exporter that it's going to do non-snoop access and any dirty
+> > > > cache lines must be cleaned? Signaling this to the exporter would allow
+> > > > to skip the cache maintenance if the buffer is in CPU uncached memory,
+> > > > which again is a default case for the ARM SoC world.
+> > > Well for the AMD and Intel use cases we at least have the opportunity to
+> > > signal cache flushing, but I'm not sure if that counts for everybody.
+> > > 
+> > Sure, all the non-coherent arches have some way to do the cache
+> > maintenance in some explicit way. Non coherent and no cache maintenance
+> > instruction would be a recipe for desaster. ;)
+> > 
+> > > What we would rather do for those use cases is an indicator on the
+> > > DMA-buf if the underlying backing store is CPU cached or not. The
+> > > importer can then cleanly reject the use cases where it can't support
+> > > CPU cache snooping.
+> > > 
+> > > This then results in the normal fallback paths which we have anyway for
+> > > those use cases because DMA-buf sharing is not always possible.
+> > > 
+> > That's a very x86 centric world view you have there. 99% of DMA-buf
+> > uses on those cheap ARM SoCs is non-snooping. We can not do any
+> > fallbacks here, as the whole graphics world on those SoCs with their
+> > different IP cores mixed together depends on DMA-buf sharing working
+> > efficiently even when the SoC is mostly non coherent.
+> > 
+> > In fact DMA-buf sharing works fine on most of those SoCs because
+> > everyone just assumes that all the accelerators don't snoop, so the
+> > memory shared via DMA-buf is mostly CPU uncached. It only falls apart
+> > for uses like the UVC cameras, where the shared buffer ends up being
+> > CPU cached.
+> 
+> Well then the existing DMA-buf framework is not what you want to use for 
+> this.
+> 
+Sorry, but this is just ignoring reality. You try to flag 8+ years of
+DMA-buf usage on non-coherent arches as "you shouldn't do this". At
+this point there are probably a lot more users (drivers) of DMA-buf in
+the kernel for devices, which are used on non-coherent arches, than
+there are on coherent arches.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/riscv/kernel/traps_misaligned.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+> > Non-coherent without explicit domain transfer points is just not going
+> > to work. So why can't we solve the issue for DMA-buf in the same way as
+> > the DMA API already solved it years ago: by adding the equivalent of
+> > the dma_sync calls that do cache maintenance when necessary? On x86 (or
+> > any system where things are mostly coherent) you could still no-op them
+> > for the common case and only trigger cache cleaning if the importer
+> > explicitly says that is going to do a non-snooping access.
+> 
+> Because DMA-buf is a framework for buffer sharing between cache coherent 
+> devices which don't signal transitions.
+> 
+> We intentionally didn't implemented any of the dma_sync_* functions 
+> because that would break the intended use case.
+> 
+Non coherent access, including your non-snoop scanout, and no domain
+transition signal just doesn't go together when you want to solve
+things in a generic way.
 
-diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index 46c4dafe3ba0..378f5b151443 100644
---- a/arch/riscv/kernel/traps_misaligned.c
-+++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -7,6 +7,7 @@
- #include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/irq.h>
-+#include <linux/stringify.h>
- 
- #include <asm/processor.h>
- #include <asm/ptrace.h>
-@@ -150,9 +151,6 @@
- #define PRECISION_S 0
- #define PRECISION_D 1
- 
--#define STR(x) XSTR(x)
--#define XSTR(x) #x
--
- #define DECLARE_UNPRIVILEGED_LOAD_FUNCTION(type, insn)			\
- static inline type load_##type(const type *addr)			\
- {									\
-@@ -207,9 +205,9 @@ static inline ulong get_insn(ulong mepc)
- 	asm ("and %[tmp], %[addr], 2\n"
- 		"bnez %[tmp], 1f\n"
- #if defined(CONFIG_64BIT)
--		STR(LWU) " %[insn], (%[addr])\n"
-+		__stringify(LWU) " %[insn], (%[addr])\n"
- #else
--		STR(LW) " %[insn], (%[addr])\n"
-+		__stringify(LW) " %[insn], (%[addr])\n"
- #endif
- 		"and %[tmp], %[insn], %[rvc_mask]\n"
- 		"beq %[tmp], %[rvc_mask], 2f\n"
--- 
-2.34.1
+Remember that in a fully (not only IO) coherent system the CPU isn't
+the only agent that may cache the content you are trying to access
+here. The dirty cacheline could reasonably still be sitting in a GPU or
+VPU cache, so you need some way to clean those cachelines, which isn't
+a magic "importer knows how to call CPU cache clean instructions".
+
+> You can of course use DMA-buf in an incoherent environment, but then you 
+> can't expect that this works all the time.
+> 
+> This is documented behavior and so far we have bluntly rejected any of 
+> the complains that it doesn't work on most ARM SoCs and I don't really 
+> see a way to do this differently.
+
+Can you point me to that part of the documentation? A quick grep for
+"coherent" didn't immediately turn something up within the DMA-buf
+dirs.
+
+Regards,
+Lucas
 

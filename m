@@ -2,81 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9479F558B45
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 00:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8D4558B4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 00:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiFWWgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 18:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S230083AbiFWWjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 18:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiFWWgp (ORCPT
+        with ESMTP id S229473AbiFWWjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 18:36:45 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822425132E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 15:36:44 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id go6so1035169pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 15:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JetDtHU3X+1B2pqv06q6XrBYV3K3bGShzpXgJBS5x0g=;
-        b=dyEgVIex9SIwN8/Oyba1p0Nc/YJDQKTUUM+mY41FwvpygkyZzf0UtRzkKtS4EIBHHA
-         Xck2+vMALl3GyO0YO8LzH+UzcYB+LWSq4wyqHpkd6GB7JHgdEgY4GmC2kYqywMW9wsls
-         zHvDQWimUQ2Amyryb6JyWPUCRISy1yFQeB2SK1K2Q1zmns78u8LqMrF2dCe0rnOnEtOS
-         s4EI3EPGuqp63XvDPn4eK8iO6Q9nl13rFabYy1ssU8BiQGN2cC5gYvW0Kh0SSQATdEo1
-         YR4qTvqz2T8gAwdcHcKLG32P3KZmowtxSSGghozM+FEM9d62/53a/FQfUV/bBixZfntZ
-         9BUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JetDtHU3X+1B2pqv06q6XrBYV3K3bGShzpXgJBS5x0g=;
-        b=Hjeh5JW2zyKIn26gF+D3Frgo1jdOtP0TGhLPqQiurBGnHdDxzK6g6Db7tJ6Rplvrjc
-         V4qLMHI/n9pwAC4BrFFpo31BmuCqNTORN1/XSQviT6u1LLdKnAIiq91TontCMk1VzRmK
-         F9sJT+R7jrLr2dpQkpPfQPIC0dZwAx/R76Xh7/voc4jHmO8ZvgPwH99KSD3ACl8J1/4h
-         tjr1ZETBwdzv6cv126wNWHn/rzcThGiZRoLh67wWv7fK4zMQ+M24Z89yquUwPkIXJcGp
-         aHx4Y3Tt5fiD+/Xvv2F34sY9mbsZw28GmNtYpq1xexaKiSv9unbDBrtd5cFo3px7Xozl
-         taUQ==
-X-Gm-Message-State: AJIora/+//KrdN1k0CqXaDyzcol8MsIB45zfKSW16WdMkJdalcTvwfoW
-        ett7eXLnvMACHoTLE7m3LKDy3O8qte+rXw==
-X-Google-Smtp-Source: AGRyM1tvIami/If6+RQSfpCBjEgTqjpFW/6mqfqXNmMf74n8X2WXBnNOJEHAYhBFEwQGjNfyTfwJcg==
-X-Received: by 2002:a17:903:10a:b0:16a:2762:88e2 with SMTP id y10-20020a170903010a00b0016a276288e2mr21456838plc.22.1656023803838;
-        Thu, 23 Jun 2022 15:36:43 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id ca27-20020a056a00419b00b00525133f98adsm154148pfb.146.2022.06.23.15.36.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 15:36:42 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 22:36:37 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v7 22/23] KVM: x86/mmu: Extend Eager Page Splitting to
- nested MMUs
-Message-ID: <YrTq9RU7r05ud+tb@google.com>
-References: <20220622192710.2547152-1-pbonzini@redhat.com>
- <20220622192710.2547152-23-pbonzini@redhat.com>
- <CALzav=fH_9_LKVE0_UCftwy2KZaB3nSBoWU07aPWALag4_mcHQ@mail.gmail.com>
- <YrTDcrsn0/+alpzf@google.com>
+        Thu, 23 Jun 2022 18:39:18 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70074.outbound.protection.outlook.com [40.107.7.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED02517DE;
+        Thu, 23 Jun 2022 15:39:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kI7pJBUDuQaeyWA8H951eFqAUeA7r/RHfYcBqTLOF30OuXYjs2mjJum4qa0zxakj3W5PX4k150hVtMjNxybtG0muR+blmxFeStwZeKZ4N86VuConhuwrNTp0/pvsk2eyePTkk0A1TUTUUH85f8ZTtfAddPNXJ8Ha3EP4KmMtAxZZ9FinL7WRlm2DejHfwPMEal8JEhRfZDI+8BMNDXziA4DL5w1RJM7QQnc5kv4l11L4NcLHSmPLwbWedOWpYTQYBOf+ry9jw2oIICVYP7sE4LcgS1TOm8+fG7X2cQgVEmTG2D6r47aTligRTbqtgASM5c1bZQNMySxqYpTc3U1lKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mgd7gNbiWgpBxgwWaGZ7bZapGSfTMEf2tKlNTZQAI7Y=;
+ b=cMoSmgFMvaBzBOJ5PKjYZXv2HunUVXgCSMeC04m6/8Ee0BXyJ5CveSl41RDrDlS7cxURmseS8/okwfv7zMuPqfIeMvoAT3ErZG8NKk8QmYoK5QDPKp2RntB5q+bEbpfWmVNAiAh+9XEJEIPxRogDC4Eh0w9ZcMBRst1IYoMrwzJDLhIdUL3MO7PutFIL1QAMYf9pVvy9LrVvH1rmxbocuivQkn54dx0yIpR4onH7TOS0FepB7QSVJ2PKwXcbW1BRkK62g0jrir9nlxxg9UP3SBpacZqNKfkFXVk3vwENm8Y3g0/qvDlzMJxXdgNJfByPLUkreDsJ44AZBSk2I0nKUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mgd7gNbiWgpBxgwWaGZ7bZapGSfTMEf2tKlNTZQAI7Y=;
+ b=tSYDKCfSAziqtinHyCRZFZX8hJ1paxatTHuHvngScBjyXa+KHBF7QdLkyY+k1uh+fW1+TBpX2y3oJsScDHiasr5cE152Uy+4yMXsgy9HuB6qz1tIUs+uT1mCoQ+RD5eBn7axHS/MPVsspjQSoOj8uaOec7NKBb5eYv1sAtUso/uHO4mXidjg4sYSztPiBzmwU22Yr6LHD3I9DzijL7godOELxkQx8pJ6kJ64StuNyA9W2s+oJvF9IXmO13AN7U2zFrNiG+Ygxfpcx2hHPCUnaLSE6H/000RQ29EaiFkCkWpVSJtnHec/aiVYMfDney3bhatM/CGJXXQq0liPvC8yVA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by AM6PR03MB5830.eurprd03.prod.outlook.com (2603:10a6:20b:e8::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Thu, 23 Jun
+ 2022 22:39:13 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5353.022; Thu, 23 Jun 2022
+ 22:39:13 +0000
+Subject: Re: [PATCH net-next 25/28] [RFC] net: dpaa: Convert to phylink
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+References: <20220617203312.3799646-1-sean.anderson@seco.com>
+ <20220617203312.3799646-26-sean.anderson@seco.com>
+ <Yqz5wHy9zAQL1ddg@shell.armlinux.org.uk>
+ <dde1fcc4-4ee8-6426-4f1f-43277e88d406@seco.com>
+ <Yq2LLW5twHaHtRBY@shell.armlinux.org.uk>
+ <84c2aaaf-6efb-f170-e6d3-76774f3fa98a@seco.com>
+Message-ID: <8becaec4-6dc3-8a45-081a-1a1e8e5f9a45@seco.com>
+Date:   Thu, 23 Jun 2022 18:39:08 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <84c2aaaf-6efb-f170-e6d3-76774f3fa98a@seco.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR19CA0060.namprd19.prod.outlook.com
+ (2603:10b6:208:19b::37) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrTDcrsn0/+alpzf@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 121bfe2f-9864-400f-3db9-08da5569325f
+X-MS-TrafficTypeDiagnostic: AM6PR03MB5830:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gv+aalcDYsenAAnyRDUHcMsP23VTf5nHJ9fI239I5M3N7B5iZJai1yjEf+kQBfVwSAfVNWVXEggfbz0mdOrbduHzIxVSNsMwZxo/rvRe4OyMohzuYbJ0KtTIyc5BBjLc7A7G83Pk4FiTmme2womECpTnK9yk8z9WnMBLIYfdvvi0ArfODo3DPsK4dkrq52/0hHiSo0ZC89Ap7byv78Fw4Y4FhSFBCo6OTq/MIAMEaae00yxVpSGVz0eE8+bPZvsuFEfs2njIkRkCXSz0qrtBvzhPtKIJIX8hU7//12Nj8D3k8/kwU4VR7MBCvfEDSV+2wZLECF3W8h+Na/raBFPy3+fXmCqZdh9Y++bH0KEyXeDOUIUn3tMhSDCU/ztRHcMViMJIJvsl5cws3eaCRR+VK670S39Lxv4S4fA3929adQFdSBkM6hpwd+VZ7jItQLZb5T8DczSYcWWQ9CIYq2ZTJFLXEOCn5a2tRchZurgRwIng5MVF4xV+VdGbWLzvu8JhZWyzTYoOzfWzwKjUKOcTOckzOSa0nXUgGrMMvYOByGq98FE2LofIH42+rKY0L+JOzMnidP3/hSX0UCIkr7wM7yMZfb0n0zwv1gzA+E+6cSC2M221et/UYUGO/zqinRqu3idLqqkqSLT9vilZEEFOoxVCELlC+El8UidkYkzPWVOrL2zngwMUbLMjeaDBpsXIBfAp7zfCypDhHKE0PzO6ALHA3aiUa1Yw38r0V7lK8rHCnqKmSpa5VA1HtejTQJNTC0nzXYaqblUyewpW+U8UmFuKYOK0xLxOnIecsmMOvXdHH/23ihIEAAJaQx+df/yZgyNo0hk5Mmy+bZgRQZE0BRSHsoQSB96YSxHPd+V2djo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39850400004)(366004)(396003)(376002)(346002)(136003)(52116002)(86362001)(31696002)(478600001)(4326008)(6512007)(26005)(53546011)(6486002)(6506007)(316002)(6666004)(54906003)(6916009)(66476007)(66556008)(8676002)(83380400001)(66946007)(186003)(2616005)(41300700001)(38350700002)(5660300002)(36756003)(38100700002)(44832011)(8936002)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEE5SHc1QThtWkpyK3l3SUpwOVBndnVIU2JvM0FSNWh2VUhhcEoyYlVCblNk?=
+ =?utf-8?B?V1dPMmpGcTN6aTdjbWtSeStJR3V3Qi9STnBZYVRjZTRXVFBOaUxzZVAvMVAr?=
+ =?utf-8?B?MitqaDlZUjRUM0NFR0l6YjZpMEI3SGJwUWs2bXJOenNCMG82ZUEyMWVlaWZR?=
+ =?utf-8?B?dlFRaFNVY1BVMlRlN2pyY25RaVcxVVNwTnhJeUFWbHRjT0lWMU1aVlZOblc3?=
+ =?utf-8?B?N2o2SUVZREIxK1lUMGh6SW0ybFlVK2JTM3BVWThDaUYvZFUwckdYZERreHY1?=
+ =?utf-8?B?dzM2RGxCa2lIb1pPQmdwaFZBZVoxYUkwa3RPM3J0dmhlUkhzVGdUTkRhQTJp?=
+ =?utf-8?B?eUVNaWtzSk5FY0NzMDJkMlIzTDNGKzROQWJObkwwSVVmY1dRbWV6c2swaXBR?=
+ =?utf-8?B?cmVFUWxaNGhFeU0zdlM4dWorVWNkc1E4U0h5aWpmTC80S0RXejlsYjZaMGFD?=
+ =?utf-8?B?SWdTb2RtQ3hlOGNJUlF4QjFESTEzODlsdTdPZHB5RktBdCs4M1YzamtmdDN6?=
+ =?utf-8?B?SVNEL2NVbXBlWjR1Z01RUWtUdTN2dWhZV2kyN3BURy9NeGNvS0xtK09ZYS94?=
+ =?utf-8?B?MFZLYk1UWlE1cWZpNUNrM0owdHF1WVVyeUxwUy9GbTJxWjdoaTdYRyttRHp1?=
+ =?utf-8?B?eVJxUTRuV05TNFFhaTRTMFlwcWlQSmNGWWhUVndaNEJ1SnJVMUUvM0xBT0Ro?=
+ =?utf-8?B?SU1OaU40a3FHMFRLeXlNQ29XUHJhQWRVM1o1ZE41UGdGUVBPTXR0UjVsRWFh?=
+ =?utf-8?B?QTg3dVVZNzJYTUlRS0NJUXp1NmRDWXdELzJjMWVDc1VPWFVyY2E5RnlsTXRp?=
+ =?utf-8?B?UDJZMVVCZGhoUFd5SUsxby9NOXMxN2FtSDR2NVNOWFQ4QnR2bC9Xc2xaajI5?=
+ =?utf-8?B?WGh6RXBMK3BDV2l1aDVUTU9BdDVKK21PUWVPcEZteGM4QUdPNHZNdGI5bWlW?=
+ =?utf-8?B?aGd3NEZJaXRkS3Q4Q3k3UEdxREs5a1ZCMGNYaThDTmRmNDJ4L2ZnSjM1UmMv?=
+ =?utf-8?B?cFRMaWVGZEY3b1gyaWVLN0l3ZGxwL3Erc3NDUzhPayswMU0xR1BTZGs1K0Zl?=
+ =?utf-8?B?MlpYdHFYd1AxYlBhUmxaL3N5akNPSGEzYUNWYVdyN29IV2RQYnVDNDdXNGRX?=
+ =?utf-8?B?bDB2bFVTdzhacGhNTFMxT200TC96bkhUWHpKdW1EMEVsNmdUaHIvc0JqM0dk?=
+ =?utf-8?B?WjBudGtubmFHSEt0SDRHZXpaUkRSS2NZeFg0dlUwYWlSeTBhRU55NDU0cjln?=
+ =?utf-8?B?NG1KL2t4RjMvR1lmdldlS0NIbmp3dXY4TzFoQlJXZFJXT21sNHpGdXE0YUxa?=
+ =?utf-8?B?ZGNhZzd2d3ZZZ2ZlMW5pK3FSWjRPVERXSDZaWjkvTDBLRUJkWmxvMXliZGQz?=
+ =?utf-8?B?Z2NwajA2NmhjRjhnVmhHZVBZODhaeE9NdCtaREFLWGFRZ1Z0bm5aNUdaMC9s?=
+ =?utf-8?B?U3licE1FUzZKL1YxWU8vTCszUVFKYUdjbjhudXlia3dsbElMWThGYy9raWhh?=
+ =?utf-8?B?MFhSRXl2MlY2dzUxVk80QjFJczREcUsvUmhNUGZYeTdQSXlXV1ppS24xc2lj?=
+ =?utf-8?B?OHhrbDV3SVpXWUY3UGZXdW40OGZScHIrUVYzOEtpb3R1L3F5VGZRUjJwZUZD?=
+ =?utf-8?B?andiUCsyVHlOcEhyRWFLK0NPeFdPYzhrMHV0MEx6K3JjeDdzN2hIbDcxTGY0?=
+ =?utf-8?B?Zm9OMG1MOTdTSlNsK1BwdGpiL1lObnlHYUJ6WVQ2S3NCcmFWV0ZZNTlpbDRL?=
+ =?utf-8?B?NGxpQnVUVDFDcVgwVUJDbjZJU0YwV1dRM1NacDgvWkZQS2tLVzNoMXo3c3J6?=
+ =?utf-8?B?ZDEwSWpvbUptdkg2ZDJvb1I1NDd3WHpPVld0MHpkRlJXQmJGcElHamVFVzcw?=
+ =?utf-8?B?SElWRU9NTURCQXhzcVhJR2M2amdEenlCcnhSSUc5Vjh0L2xQNjg4Q3dPQ2lq?=
+ =?utf-8?B?WklFNTR1bWl3Q1VmcUVzUUNQd2dNY1dZd1hjYTZWZk00dGdiUzl6dWk3STFh?=
+ =?utf-8?B?OGNxbXZWYVVjR1hsVUtQSGFYZzVKOWRvUU5WVUVRK25WYVBBNG9EQk0yMUdF?=
+ =?utf-8?B?a0FPZHQvTkVNYWNZR2txRFpLd2J1TFpEcFhaK1Zkc0prSlgrMXJ5OFBYYm9B?=
+ =?utf-8?B?Wm5Ka2FFUW5TbmpXWFQrTWk3L2lyREI5L1UzQS9NSzIydDB0NEtMdW9iVXFu?=
+ =?utf-8?B?aTZGK0xRTGV4UkUvK0FvLzBwOU9MNmNoeFJ1YXU0R1EyWXQwRG5CQUZ0Ty81?=
+ =?utf-8?B?RDlGZUxRbVBGeWhhcUplRGRsQmFwaFVIRjJQT3BzM3kvVmhjaVJKNk14MC8y?=
+ =?utf-8?B?UzloT0xtbXhNYVVGbFVIa3kwR0k5WllLcUVOVWN2SkY2QmcreFFyM25KaFFX?=
+ =?utf-8?Q?emFUmHXqUzP5KHfA=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 121bfe2f-9864-400f-3db9-08da5569325f
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 22:39:13.2469
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OiHo9bNpT8u1zUolmZwDF9HOIdSIuXeT3x7krSfqU3y2jhr9T13JjPPy6qQ9P1ExmNYNXqTn3T7K5O+nnflITQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB5830
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,90 +137,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 07:48:02PM +0000, Sean Christopherson wrote:
-> On Thu, Jun 23, 2022, David Matlack wrote:
-> > On Wed, Jun 22, 2022 at 12:27 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> 
-> Please trim replies.
-> 
-> > > +static int topup_split_caches(struct kvm *kvm)
-> > > +{
-> > > +       int r;
-> > > +
-> > > +       lockdep_assert_held(&kvm->slots_lock);
-> > > +
-> > > +       /*
-> > > +        * It's common to need all SPLIT_DESC_CACHE_MIN_NR_OBJECTS (513) objects
-> > > +        * when splitting a page, but setting capacity == min would cause
-> > > +        * KVM to drop mmu_lock even if just one object was consumed from the
-> > > +        * cache.  So make capacity larger than min and handle two huge pages
-> > > +        * without having to drop the lock.
-> > 
-> > I was going to do some testing this week to confirm, but IIUC KVM will
-> > only allocate from split_desc_cache if the L1 hypervisor has aliased a
-> > huge page in multiple {E,N}PT12 page table entries. i.e. L1 is mapping
-> > a huge page into an L2 multiple times, or mapped into multiple L2s.
-> > This should be common in traditional, process-level, shadow paging,
-> > but I think will be quite rare for nested shadow paging.
-> 
-> Ooooh, right, I forgot that that pte_list_add() needs to allocate if and only if
-> there are multiple rmap entries, otherwise rmap->val points that the one and only
-> rmap directly.
-> 
-> Doubling the capacity is all but guaranteed to be pointless overhead.  What about
-> buffering with the default capacity?  That way KVM doesn't have to topup if it
-> happens to encounter an aliased gfn.  It's arbitrary, but so is the default capacity
-> size.
-> 
-> E.g. as fixup
+Hi Russell,
 
-LGTM
+On 6/18/22 11:58 AM, Sean Anderson wrote:
+> Hi Russell,
+> 
+> On 6/18/22 4:22 AM, Russell King (Oracle) wrote:
+>> On Fri, Jun 17, 2022 at 08:45:38PM -0400, Sean Anderson wrote:
+>>> Hi Russell,
+>>>
+>>> Thanks for the quick response.
+>>> ...
+>>> Yes, I've been using the debug prints in phylink extensively as part of
+>>> debugging :)
+>>>
+>>> In this case, I added a debug statement to phylink_resolve printing out
+>>> cur_link_state, link_state.link, and pl->phy_state.link. I could see that
+>>> the phy link state was up and the mac (pcs) state was down. By inspecting
+>>> the PCS's registers, I determined that this was because AN had not completed
+>>> (in particular, the link was up in BMSR). I believe that forcing in-band-status
+>>> (by setting ovr_an_inband) shouldn't be necessary, but I was unable to get a link
+>>> up on any interface without it. In particular, the pre-phylink implementation
+>>> disabled PCS AN only for fixed links (which you can see in patch 23).
+>>
+>> I notice that prior to patch 23, the advertisment register was set to
+>> 0x4001, but in phylink_mii_c22_pcs_encode_advertisement() we set it to
+>> 0x0001 (bit 14 being the acknowledge bit from the PCS to the PHY, which
+>> is normally managed by hardware.
+>>
+>> It may be worth testing whether setting bit 14 changes the behaviour.
+> 
+> Thanks for the tip. I'll try that out on Monday.
 
-> 
-> ---
->  arch/x86/kvm/mmu/mmu.c | 26 +++++++++++++++-----------
->  1 file changed, 15 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 22b87007efff..90d6195edcf3 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6125,19 +6125,23 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
-> 
->  static int topup_split_caches(struct kvm *kvm)
->  {
-> -	int r;
-> -
-> -	lockdep_assert_held(&kvm->slots_lock);
-> -
->  	/*
-> -	 * It's common to need all SPLIT_DESC_CACHE_MIN_NR_OBJECTS (513) objects
-> -	 * when splitting a page, but setting capacity == min would cause
-> -	 * KVM to drop mmu_lock even if just one object was consumed from the
-> -	 * cache.  So make capacity larger than min and handle two huge pages
-> -	 * without having to drop the lock.
-> +	 * Allocating rmap list entries when splitting huge pages for nested
-> +	 * MMUs is rare as KVM needs to allocate if and only if there is more
-> +	 * than one rmap entry for the gfn, i.e. requires an L1 gfn to be
-> +	 * aliased by multiple L2 gfns, which is very atypical for VMMs.  If
-> +	 * there is only one rmap entry, rmap->val points directly at that one
-> +	 * entry and doesn't need to allocate a list.  Buffer the cache by the
-> +	 * default capacity so that KVM doesn't have to topup the cache if it
-> +	 * encounters an aliased gfn or two.
->  	 */
-> -	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache,
-> -					 2 * SPLIT_DESC_CACHE_MIN_NR_OBJECTS,
-> +	const int capacity = SPLIT_DESC_CACHE_MIN_NR_OBJECTS +
-> +			     KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
-> +	int r;
-> +
-> +	lockdep_assert_held(&kvm->slots_lock);
-> +
-> +	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache, capacity,
->  					 SPLIT_DESC_CACHE_MIN_NR_OBJECTS);
->  	if (r)
->  		return r;
-> 
-> base-commit: 436b1c29f36ed3d4385058ba6f0d6266dbd2a882
-> --
-> 
+Well, I was playing around with this some more, and I found that I could enable
+it if I set one of the 10G lanes to SGMII. Not sure what's going on there. It's
+possible one of the lanes is mismatched, but I'm still looking into it.
+
+---
+
+How is rate adaptation in the phy supposed to work? One of the 10G interfaces on
+the RDB is hooked up to an AQR113 which can adapt rates below 10G to XFI using
+pause frames. This is nice and all, but the problem is that phylink_get_linkmodes
+sees that we're using PHY_INTERFACE_MODE_10GKR and doesn't add any of the lower
+link speeds (just MAC_10000). This results in ethtool output of
+
+Settings for eth6:
+	Supported ports: [  ]
+	Supported link modes:   10000baseT/Full
+	                        10000baseKX4/Full
+	                        10000baseKR/Full
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10000baseT/Full
+	                        10000baseKX4/Full
+	                        10000baseKR/Full
+	Advertised pause frame use: Symmetric Receive-only
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Link partner advertised link modes:  10baseT/Half 10baseT/Full
+	                                     100baseT/Half 100baseT/Full
+	Link partner advertised pause frame use: Symmetric
+	Link partner advertised auto-negotiation: Yes
+	Link partner advertised FEC modes: Not reported
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Auto-negotiation: on
+	Port: MII
+	PHYAD: 0
+	Transceiver: external
+        Current message level: 0x00002037 (8247)
+                               drv probe link ifdown ifup hw
+	Link detected: yes
+
+The speed and duplex are "Unknown!" because the negotiated link mode (100Base-TX)
+doesn't intersect with the advertised link modes (10000Base-T etc). This is
+currently using genphy; does there need to be driver support for this sort of thing?
+Should the correct speed even be reported here? The MAC and PCS still need to be
+configured for XFI.
+
+Another problem is that the rate adaptation is supposed to happen with pause frames.
+Unfortunately, pause frames are disabled:
+
+Pause parameters for eth6:
+Autonegotiate:	on
+RX:		off
+TX:		off
+RX negotiated: on
+TX negotiated: on
+
+Maybe this is because phylink_mii_c45_pcs_get_state doesn't check for pause modes?
+The far end link partner of course doesn't necessarily support pause frames. I tried
+this with managed = "phy" and "in-band-status" and it didn't seem to make a difference.
+
+--Sean

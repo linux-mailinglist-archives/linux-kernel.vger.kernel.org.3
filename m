@@ -2,50 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2460557332
+	by mail.lfdr.de (Postfix) with ESMTP id 55C34557331
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiFWGg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S229832AbiFWGhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiFWGg6 (ORCPT
+        with ESMTP id S229673AbiFWGg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:36:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5AD39146
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:36:55 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o4GSR-0000gO-1n; Thu, 23 Jun 2022 08:36:51 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o4GSP-0002tJ-Sd; Thu, 23 Jun 2022 08:36:49 +0200
-Date:   Thu, 23 Jun 2022 08:36:49 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Anton Lundin <glance@acc.umu.se>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [REGRESSION] AX88772 card booted without cable can't receive
-Message-ID: <20220623063649.GD23685@pengutronix.de>
-References: <20220622141638.GE930160@montezuma.acc.umu.se>
+        Thu, 23 Jun 2022 02:36:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170543C480;
+        Wed, 22 Jun 2022 23:36:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C967FB82131;
+        Thu, 23 Jun 2022 06:36:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD2EC3411B;
+        Thu, 23 Jun 2022 06:36:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655966215;
+        bh=L/HtZBe8zfTCnMDIyq2DhtLoHfHks0NxfofySG0XV9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hT1mVhq0udRcgy8oU0WisKa8/OPYSHG0lKmSa+3PFcKW84ty6BVzt6wvJO6L8OcB7
+         WIP8xOX5mjNYGnRS63obGply7lvVS1IdGa7PKRAViK7vnOJEOztQIUELGt0cOUySNU
+         QQDKSCJcebadwBgyhmVCgo6W+PLXSU/rCQCQPHC/1PAU3gAE/QwLoRTeVwHQokKFrS
+         bVsXRpBxosPui8zyHdteaqX3sujNNX0N5Er6D5401IDijWcUnS2EDvVWF7CyM+v76D
+         9npbK4XTDjrcEkPhZEbezJQX6IL4t7olkVQCg+zPJZtuACZz4j0k8DVLukYJKM+WC6
+         QxWZLPDEOvWNg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o4GSQ-0004VV-Vx; Thu, 23 Jun 2022 08:36:51 +0200
+Date:   Thu, 23 Jun 2022 08:36:50 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Miles Chen <miles.chen@mediatek.com>,
+        Bear Wang <bear.wang@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>, stable@vger.kernel.org,
+        Ballon Shi <ballon.shi@quectel.com>
+Subject: Re: [PATCH] USB: serial: option: add Quectel RM500K module support
+Message-ID: <YrQKApkdi//0ysiP@hovoldconsulting.com>
+References: <20220623035214.20124-1-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622141638.GE930160@montezuma.acc.umu.se>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220623035214.20124-1-macpaul.lin@mediatek.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,119 +66,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anton,
+On Thu, Jun 23, 2022 at 11:52:14AM +0800, Macpaul Lin wrote:
+> Add usb product id of the Quectel RM500K module.
+> 
+> RM500K provides 2 maindatory interfaces to Linux host after enumeration.
 
-Thank you for your report! I'll take a look on it ASAP.
+typo: mandatory
 
-Regards,
-Oleksij
+>  - /dev/ttyUSB5: this is a serial interface for control path. User needs
+>    to write AT commands to this device node to query status, set APN,
+>    set PIN code, and enable/disable the data connection to 5G network.
+>  - ethX: this is the data path provided as a RNDIS devices. After the
+>    data connection has been established, Linux host can access 5G data
+>    network via this interface.
+> 
+> The following kernel settings is required for RM500K.
+>  - CONFIG_USB_SERIAL_GENERIC
+>  - CONFIG_USB_SERIAL_CONSOLE
 
-On Wed, Jun 22, 2022 at 04:16:38PM +0200, Anton Lundin wrote:
-> Hi.
-> 
-> I've found a issue with a Dlink usb ether adapter, that can't receive
-> anything until it self transmits if it's plugged in while booting, and
-> doesn't have link.
-> 
-> Later when a cable is attached, link is detected but nothing is received
-> either by daemons listening to ip address on that interface, or seen
-> with tcpdump.
-> 
-> The dongle is a:
-> D-Link Corp. DUB-E100 Fast Ethernet Adapter(rev.C1) [ASIX AX88772]
-> 
-> And it's detected at boot as:
-> libphy: Asix MDIO Bus: probed
-> Asix Electronics AX88772C usb-003:004:10: attached PHY driver (mii_bus:phy_addr=usb-003:004:10, irq=POLL)
-> asix 3-10.4:1.0 eth1: register 'asix' at usb-0000:00:14.0-10.4, ASIX AX88772 USB 2.0 Ethernet, <masked-mac>
-> usbcore: registered new interface driver asix
-> 
-> 
-> While in this state, the hardware starts sending pause frames to the
-> network when it has recived a couple of frames, and they look like:
-> 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
-> 0010   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> 0030   00 00 00 00 00 00 00 00 00 00 00 00
-> 
-> 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
-> 0010   ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> 0030   00 00 00 00 00 00 00 00 00 00 00 00
-> 
-> And these two frames are repeated every couple of seconds.
-> 
-> The card wakes up when something triggers a transmit on that card, and
-> then starts receiving traffic as normal.
-> 
-> I've bisected this issue down to:
-> "net: usb: asix: ax88772: add phylib support" (e532a096be0e)
-> 
-> 
-> Reverting that makes the interface work as normal, even if the machine
-> boots without a cable plugged in.
-> 
-> Another issue found with exactly the same patch is that if it's loaded
-> as a module, then unloaded and loaded again, it fails to initialize the
-> card with:
-> 
-> sysfs: cannot create duplicate filename '/devices/virtual/mdio_bus/usb-003:004'
-> CPU: 0 PID: 3733 Comm: modprobe Tainted: G           O      5.15.10-core_64_preempt #3
-> Hardware name:  <masked-hardware-name>
-> Call Trace:
->  <TASK>
->  ? dump_stack_lvl+0x34/0x44
->  ? sysfs_warn_dup.cold+0x17/0x24
->  ? sysfs_create_dir_ns+0xbc/0xd0
->  ? kobject_add_internal+0xa6/0x260
->  ? kobject_add+0x7e/0xb0
->  ? preempt_count_add+0x68/0xa0
->  ? device_add+0x10f/0x8d0
->  ? dev_set_name+0x53/0x70
->  ? __mdiobus_register+0xc2/0x350
->  ? __devm_mdiobus_register+0x64/0xb0
->  ? ax88772_bind+0x22a/0x340 [asix]
->  ? usbnet_probe+0x346/0x870
->  ? usb_match_dynamic_id+0x8f/0xa0
->  ? usb_probe_interface+0x9b/0x150
->  ? really_probe.part.0+0x237/0x280
->  ? __driver_probe_device+0x8c/0xd0
->  ? driver_probe_device+0x1e/0xe0
->  ? __driver_attach+0xa8/0x170
->  ? __device_attach_driver+0xe0/0xe0
->  ? bus_for_each_dev+0x77/0xc0
->  ? bus_add_driver+0x10b/0x1c0
->  ? driver_register+0x8b/0xe0
->  ? usb_register_driver+0x84/0x120
->  ? 0xffffffffc06e4000
->  ? do_one_initcall+0x41/0x1f0
->  ? kmem_cache_alloc_trace+0x3f/0x1b0
->  ? do_init_module+0x5c/0x260
->  ? __do_sys_finit_module+0xa0/0xe0
->  ? do_syscall_64+0x35/0x80
->  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
->  </TASK>
-> kobject_add_internal failed for usb-003:004 with -EEXIST, don't try to register things with the same name in the same directory.
-> libphy: mii_bus usb-003:004 failed to register
-> asix: probe of 3-10.4:1.0 failed with error -22 
-> usbcore: registered new interface driver asix
-> 
-> 
-> Both these issues with "net: usb: asix: ax88772: add phylib support"
-> (e532a096be0e) can be reproduced all the way from when it was introduced
-> to linus current tree.
-> 
-> 
-> I'm sorry to say that I don't know enough about either libphy or asix to
-> figure out what cause the issues can be.
-> 
-> 
-> 
-> //Anton
-> 
+You shouldn't need either of those.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+>  - CONFIG_USB_NET_RNDIS_HOST
+>  - CONFIG_USB_SERIAL_WWAN
+>  - CONFIG_USB_SERIAL_OPTION
+
+And OPTION selects WWAN so no need to mention that.
+
+But you can probably just drop this paragraph.
+
+> usb-devices output for 0x7001:
+> T:  Bus=05 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
+> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=7001 Rev=00.01
+> S:  Manufacturer=MediaTek Inc.
+> S:  Product=USB DATA CARD
+> S:  SerialNumber=869206050009672
+> C:  #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=02 Prot=ff Driver=rndis_host
+> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+> I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+Can you say something about what the other interfaces are for?
+
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Signed-off-by: Ballon Shi <ballon.shi@quectel.com>
+
+The submitters SoB always goes last (to reflect how the patch was
+forwarded).
+
+If Ballon is the primary author you need to add a From line at the
+beginning of mail body.
+
+Otherwise you should add a Co-developed-by tag before the co-author's
+SoB.
+
+More details in
+
+	Documentation/process/submitting-patches.rst
+
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/usb/serial/option.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index e7755d9cfc61..e2587a3c7600 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -253,6 +253,7 @@ static void option_instat_callback(struct urb *urb);
+>  #define QUECTEL_PRODUCT_BG96			0x0296
+>  #define QUECTEL_PRODUCT_EP06			0x0306
+>  #define QUECTEL_PRODUCT_EM12			0x0512
+> +#define QUECTEL_PRODUCT_RM500K			0x7001
+
+Please keep the defines sorted by PID here.
+
+>  #define QUECTEL_PRODUCT_RM500Q			0x0800
+>  #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+>  #define QUECTEL_PRODUCT_EC200T			0x6026
+> @@ -1135,6 +1136,7 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 0x0620, 0xff, 0, 0) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x0700, 0xff), /* BG95 */
+>  	  .driver_info = RSVD(3) | ZLP },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x30) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
+
+Johan

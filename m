@@ -2,370 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47E1557EF1
+	by mail.lfdr.de (Postfix) with ESMTP id 7912E557EF0
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbiFWPuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
+        id S231887AbiFWPua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiFWPuL (ORCPT
+        with ESMTP id S229579AbiFWPu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:50:11 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE18041626;
-        Thu, 23 Jun 2022 08:50:09 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id eq6so21809835edb.6;
-        Thu, 23 Jun 2022 08:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4Y+yLSMrdCGUHobF51SbVj+8O8ISeGFP4kiqicTle64=;
-        b=bHuccVRWEDzvSbs4CzTQxclGJ3E1xsCwrTPj8YoTs9sFghGzjIkaI/ahK+9YSN0S4Q
-         D7Q/qGGevY+rq4Dd6+rwjJ0KjFULS5791x2jvSXIY6/eI+AwQ/B7fahW9C96EwM3fmqn
-         JTCOugzltfclHYVwQeYTQTM0yKJ+/WESQFfCC4XCiqmugv708yeq+CcVKb2XCZOdz0qr
-         M24UBgzWeUVbOuBifPv/ljoeD/boWIxkK+r5ioqtuEIusVVJvEH4X4fq+bkUmTG9qoVr
-         hMa+Y0dCdj705hqziwJkgVlPF9wmM7R65GwA7M41zlMVZwndyk35EIedAXXhYKfvdZl4
-         ddOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4Y+yLSMrdCGUHobF51SbVj+8O8ISeGFP4kiqicTle64=;
-        b=R7zEg22eDT/rHhzmwstkrdKAzpvPGoZIviLBcQqCfP2qyamhYQGxIaz8rp6rl8VSTA
-         +pKCIdAUhlw2/E1moy0y1fdmRThyFAtPQTVt1/l0bYWJhv9W32YS/8JGMQHaBLOovHvn
-         O+GY38Lah5s7BuAVueLx3dkNo2V4CxvebtYkJU3LtO/DRoertc6yGHaPBzhtOq4HVlF4
-         NnlSIdvtGMjO2NEU4nYbJVjK883k2jW6WVNz2Sf55WvdKbVFjp8ZSb5Y38MrHJlE7bZV
-         TlvRvzx+3eOZnix/o0ibf/LIXK2Zz/JPVBh+c8siqQ5JqfLcQG4gNQky11Raor62DuWD
-         gqAA==
-X-Gm-Message-State: AJIora/TLePC1jjFt65qTKpba4/5CNNKZj3k3a3e5vQafmRZU87AT1co
-        FeaF7oeT4uCwbrYkcHEHiLU=
-X-Google-Smtp-Source: AGRyM1tm2ORuUsCmuCKLBmlltaHM69A3v7m6o3c5Sz3Andn34zfJuaIE+5MSjENKw6iDTFBIuBvzBg==
-X-Received: by 2002:a05:6402:2077:b0:435:a428:76e4 with SMTP id bd23-20020a056402207700b00435a42876e4mr11581115edb.367.1655999408331;
-        Thu, 23 Jun 2022 08:50:08 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-98-60.xnet.hr. [88.207.98.60])
-        by smtp.googlemail.com with ESMTPSA id g13-20020a170906538d00b00722e1635531sm4846182ejo.193.2022.06.23.08.50.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 08:50:08 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     svarbanov@mm-sol.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, p.zabel@pengutronix.de,
-        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, dmitry.baryshkov@linaro.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 2/2] PCI: qcom: move register accesses to .post_init
-Date:   Thu, 23 Jun 2022 17:50:04 +0200
-Message-Id: <20220623155004.688090-2-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623155004.688090-1-robimarko@gmail.com>
-References: <20220623155004.688090-1-robimarko@gmail.com>
+        Thu, 23 Jun 2022 11:50:27 -0400
+Received: from smtpproxy21.qq.com (smtpbg703.qq.com [203.205.195.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B5A433AC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:50:22 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1655999412tk48o1uw
+Received: from localhost.localdomain ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 23 Jun 2022 23:50:10 +0800 (CST)
+X-QQ-SSF: 01400000002000C0E000000A0000000
+X-QQ-FEAT: FXvDfBZI5O4oltWk+zkm+mZf3ZqXX46o97OaoFEbMaWnVCPTjeTDgWN8wQ36S
+        V28iDHyl083WZN94jYB0kDD2jIY4tgGjAtHRUTBWiZeabVP/3afUkS/kSq1yORVR9YTLELV
+        HBZgbu41xccitx07ulMTGsy5lL45vQGB5yvHa/dbCZw28USXzzPYb76IVvAzWErg4WqHMIK
+        GX0g7YB9PS1fvwDq11V45u+LBJXe3/rBYgdrksbSqHjAqO7dR0FnhsePF+5DvNDfTloFN9J
+        WobKDJv5ijEcn/BezKBqrhVgANFlWvZhdNFeWNza/2bihC+yNpfFcTwUn1vLnikKBiwD7E+
+        frjdOXuJPKP6k3e1tdVx3VKmlLCliMaPrzfOQKY
+X-QQ-GoodBg: 1
+From:   Guo Hui <guohui@uniontech.com>
+To:     peterz@infradead.org
+Cc:     jpoimboe@kernel.org, song@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, daniel@iogearbox.net,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org,
+        Guo Hui <guohui@uniontech.com>
+Subject: [PATCH] x86/paravirt: useless assignment instructions cause Unixbench full core performance degradation
+Date:   Thu, 23 Jun 2022 23:50:07 +0800
+Message-Id: <20220623155007.3059-1-guohui@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign9
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move register accesses from .init to .post_init callbacks to maintain
-consinstency for all IP since IPQ8074 specifically requires PHY-s to be
-powered on before register access and its accesses have been moved to
-.post_init.
+The instructions assigned to the parameters of
+the vcpu_is_preempted function in the X86 architecture
+physical machine are redundant instructions, which cause the
+multi-core performance of Unixbench to drop by
+about 300 to 500 points. The C function is as follows:
+static bool vcpu_is_preempted(long vcpu);
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
+The parameter assignments in the function osq_lock
+that call the function vcpu_is_preempted are as follows:
+mov 0x14(%rax),%edi
+sub $0x1,%edi
+
+The above instructions are unnecessary
+in the X86 Native operating environment,
+causing high cache-misses and degrading performance.
+
+This patch implements the replacement of the above instructions with
+the nop instruction at system startup.
+When the assignment C code changes,
+the above assignment instructions may also change accordingly.
+In order to flexibly replace the instructions generated by the C code,
+this patch defines the macro ALTERNATIVE_C_CODE
+from the ALTERNATIVE macro. Different from the first parameter
+of the ALTERNATIVE macro, the ALTERNATIVE_C_CODE macro is
+the first parameter is a C code statement and cannot contain
+a return statement. To use the macro, for example,
+replace the instructions generated by the
+C code 'cpu = node->cpu - 1;' with the nop instruction:
+
+OSQ_ALTERNATIVE_C_CODE(cpu = node->cpu - 1, "nop", 0);
+
+The patch effect is as follows two machines,
+Unixbench runs with full core score:
+
+1. Machine configuration:
+Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+CPU core: 40
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0  944608003.9  80943.3
+Double-Precision Whetstone                       55.0     212045.8  38553.8
+Execl Throughput                                 43.0      42772.3   9947.1
+File Copy 1024 bufsize 2000 maxblocks          3960.0     462656.6   1168.3
+File Copy 256 bufsize 500 maxblocks            1655.0     120043.6    725.3
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1544525.5   2663.0
+Pipe Throughput                               12440.0   47277698.5  38004.6
+Pipe-based Context Switching                   4000.0    1894556.8   4736.4
+Process Creation                                126.0      86077.0   6831.5
+Shell Scripts (1 concurrent)                     42.4      70236.3  16565.2
+Shell Scripts (8 concurrent)                      6.0       8978.1  14963.4
+System Call Overhead                          15000.0    4691260.0   3127.5
+                                                                   ========
+System Benchmarks Index Score                                        7980.9
+
+After using the patch:
+
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2253984916.9 193143.5
+Double-Precision Whetstone                       55.0     438940.3  79807.3
+Execl Throughput                                 43.0      10720.3   2493.1
+File Copy 1024 bufsize 2000 maxblocks          3960.0     312233.0    788.5
+File Copy 256 bufsize 500 maxblocks            1655.0      80050.9    483.7
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1036101.7   1786.4
+Pipe Throughput                               12440.0  117700315.3  94614.4
+Pipe-based Context Switching                   4000.0    8421909.8  21054.8
+Process Creation                                126.0      36742.0   2916.0
+Shell Scripts (1 concurrent)                     42.4      52846.2  12463.7
+Shell Scripts (8 concurrent)                      6.0       7058.1  11763.6
+System Call Overhead                          15000.0    6791548.2   4527.7
+                                                                   ========
+System Benchmarks Index Score                                        8260.6
+
+2. Machine configuration:
+Hygon C86 7185 32-core Processor
+CPU core: 128
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2256283941.6 193340.5
+Double-Precision Whetstone                       55.0     439577.3  79923.2
+Execl Throughput                                 43.0      10013.6   2328.7
+File Copy 1024 bufsize 2000 maxblocks          3960.0     278121.5    702.3
+File Copy 256 bufsize 500 maxblocks            1655.0      71835.5    434.1
+File Copy 4096 bufsize 8000 maxblocks          5800.0     905654.2   1561.5
+Pipe Throughput                               12440.0  117715166.2  94626.3
+Pipe-based Context Switching                   4000.0    7731331.7  19328.3
+Process Creation                                126.0      30157.8   2393.5
+Shell Scripts (1 concurrent)                     42.4      48670.8  11479.0
+Shell Scripts (8 concurrent)                      6.0       6595.6  10992.7
+System Call Overhead                          15000.0    6766475.9   4511.0
+                                                                   ========
+System Benchmarks Index Score                                        7688.7
+
+After using the patch:
+
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2253984916.9 193143.5
+Double-Precision Whetstone                       55.0     438940.3  79807.3
+Execl Throughput                                 43.0      10720.3   2493.1
+File Copy 1024 bufsize 2000 maxblocks          3960.0     312233.0    788.5
+File Copy 256 bufsize 500 maxblocks            1655.0      80050.9    483.7
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1036101.7   1786.4
+Pipe Throughput                               12440.0  117700315.3  94614.4
+Pipe-based Context Switching                   4000.0    8421909.8  21054.8
+Process Creation                                126.0      36742.0   2916.0
+Shell Scripts (1 concurrent)                     42.4      52846.2  12463.7
+Shell Scripts (8 concurrent)                      6.0       7058.1  11763.6
+System Call Overhead                          15000.0    6791548.2   4527.7
+                                                                   ========
+System Benchmarks Index Score                                        8260.6
+
+Signed-off-by: Guo Hui <guohui@uniontech.com>
 ---
- drivers/pci/controller/dwc/pcie-qcom.c | 171 ++++++++++++++-----------
- 1 file changed, 97 insertions(+), 74 deletions(-)
+ arch/x86/include/asm/alternative.h | 15 +++++++++++++++
+ arch/x86/kernel/alternative.c      | 11 +++++++++++
+ include/linux/osq_lock.h           |  7 +++++++
+ kernel/locking/osq_lock.c          |  6 +++++-
+ 4 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 24708d5d817d..1aa11f12c069 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -348,8 +348,6 @@ static int qcom_pcie_init_2_1_0(struct qcom_pcie *pcie)
- 	struct qcom_pcie_resources_2_1_0 *res = &pcie->res.v2_1_0;
- 	struct dw_pcie *pci = pcie->pci;
- 	struct device *dev = pci->dev;
--	struct device_node *node = dev->of_node;
--	u32 val;
- 	int ret;
+diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+index 9b10c8c76..5979ebe89 100644
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -167,6 +167,21 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 	ALTINSTR_REPLACEMENT(newinstr, 1)				\
+ 	".popsection\n"
  
- 	/* reset the PCIe interface as uboot can leave it undefined state */
-@@ -360,8 +358,6 @@ static int qcom_pcie_init_2_1_0(struct qcom_pcie *pcie)
- 	reset_control_assert(res->ext_reset);
- 	reset_control_assert(res->phy_reset);
- 
--	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
--
- 	ret = regulator_bulk_enable(ARRAY_SIZE(res->supplies), res->supplies);
- 	if (ret < 0) {
- 		dev_err(dev, "cannot enable regulators\n");
-@@ -408,6 +404,35 @@ static int qcom_pcie_init_2_1_0(struct qcom_pcie *pcie)
- 	if (ret)
- 		goto err_clks;
- 
-+	return 0;
++/* alternative c code primitive: */
++#define ALTERNATIVE_C_CODE(oldinstr, newinstr, feature)			\
++do {									\
++	asm volatile("661:\n\t");					\
++	oldinstr;							\
++	asm volatile("\n662:\n"						\
++		alt_end_marker ":\n"					\
++		".pushsection .altinstructions,\"a\"\n"			\
++		ALTINSTR_ENTRY(feature, 1)				\
++		".popsection\n"						\
++		".pushsection .altinstr_replacement, \"ax\"\n"		\
++		ALTINSTR_REPLACEMENT(newinstr, 1)			\
++		".popsection\n");					\
++} while (0)
 +
-+err_clks:
-+	reset_control_assert(res->axi_reset);
-+err_deassert_axi:
-+	reset_control_assert(res->por_reset);
-+err_deassert_por:
-+	reset_control_assert(res->pci_reset);
-+err_deassert_pci:
-+	reset_control_assert(res->phy_reset);
-+err_deassert_phy:
-+	reset_control_assert(res->ext_reset);
-+err_deassert_ext:
-+	reset_control_assert(res->ahb_reset);
-+err_deassert_ahb:
-+	regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
-+
-+	return ret;
-+}
-+
-+static int qcom_pcie_post_init_2_1_0(struct qcom_pcie *pcie)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+	struct device *dev = pci->dev;
-+	struct device_node *node = dev->of_node;
-+	u32 val;
-+
-+	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
-+
- 	/* enable PCIe clocks and resets */
- 	val = readl(pcie->parf + PCIE20_PARF_PHY_CTRL);
- 	val &= ~BIT(0);
-@@ -451,23 +476,6 @@ static int qcom_pcie_init_2_1_0(struct qcom_pcie *pcie)
- 	       pci->dbi_base + PCIE20_AXI_MSTR_RESP_COMP_CTRL1);
- 
- 	return 0;
--
--err_clks:
--	reset_control_assert(res->axi_reset);
--err_deassert_axi:
--	reset_control_assert(res->por_reset);
--err_deassert_por:
--	reset_control_assert(res->pci_reset);
--err_deassert_pci:
--	reset_control_assert(res->phy_reset);
--err_deassert_phy:
--	reset_control_assert(res->ext_reset);
--err_deassert_ext:
--	reset_control_assert(res->ahb_reset);
--err_deassert_ahb:
--	regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
--
--	return ret;
- }
- 
- static int qcom_pcie_get_resources_1_0_0(struct qcom_pcie *pcie)
-@@ -555,16 +563,6 @@ static int qcom_pcie_init_1_0_0(struct qcom_pcie *pcie)
- 		goto err_slave;
+ #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
+ 	OLDINSTR_2(oldinstr, 1, 2)					\
+ 	".pushsection .altinstructions,\"a\"\n"				\
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index e257f6c80..cf77be884 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -251,6 +251,8 @@ static void __init_or_module noinline optimize_nops(u8 *instr, size_t len)
  	}
- 
--	/* change DBI base address */
--	writel(0, pcie->parf + PCIE20_PARF_DBI_BASE_ADDR);
--
--	if (IS_ENABLED(CONFIG_PCI_MSI)) {
--		u32 val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
--
--		val |= BIT(31);
--		writel(val, pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
--	}
--
- 	return 0;
- err_slave:
- 	clk_disable_unprepare(res->slave_bus);
-@@ -580,6 +578,22 @@ static int qcom_pcie_init_1_0_0(struct qcom_pcie *pcie)
- 	return ret;
  }
  
-+static int qcom_pcie_post_init_1_0_0(struct qcom_pcie *pcie)
-+{
++extern bool pv_is_native_vcpu_is_preempted(void);
 +
-+	/* change DBI base address */
-+	writel(0, pcie->parf + PCIE20_PARF_DBI_BASE_ADDR);
+ /*
+  * Replace instructions with better alternatives for this CPU type. This runs
+  * before SMP is initialized to avoid SMP problems with self modifying code.
+@@ -285,6 +287,15 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+ 
+ 		instr = (u8 *)&a->instr_offset + a->instr_offset;
+ 		replacement = (u8 *)&a->repl_offset + a->repl_offset;
 +
-+	if (IS_ENABLED(CONFIG_PCI_MSI)) {
-+		u32 val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
++		if (*replacement == 0x90 && a->replacementlen == 1) {
++#if defined(CONFIG_PARAVIRT_SPINLOCKS)
++			if (pv_is_native_vcpu_is_preempted())
++				add_nops(instr, a->instrlen);
++#endif
++			continue;
++		}
 +
-+		val |= BIT(31);
-+		writel(val, pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
-+	}
+ 		BUG_ON(a->instrlen > sizeof(insn_buff));
+ 		BUG_ON(feature >= (NCAPINTS + NBUGINTS) * 32);
+ 
+diff --git a/include/linux/osq_lock.h b/include/linux/osq_lock.h
+index 5581dbd3b..ee960e3aa 100644
+--- a/include/linux/osq_lock.h
++++ b/include/linux/osq_lock.h
+@@ -38,4 +38,11 @@ static inline bool osq_is_locked(struct optimistic_spin_queue *lock)
+ 	return atomic_read(&lock->tail) != OSQ_UNLOCKED_VAL;
+ }
+ 
++#ifdef ALTERNATIVE_C_CODE
++#define OSQ_ALTERNATIVE_C_CODE(oldinstr, newinstr, feature) \
++		ALTERNATIVE_C_CODE(oldinstr, newinstr, feature)
++#else
++#define OSQ_ALTERNATIVE_C_CODE(oldinstr, newinstr, feature) oldinstr
++#endif
 +
-+	return 0;
-+}
-+
- static void qcom_pcie_2_3_2_ltssm_enable(struct qcom_pcie *pcie)
+ #endif
+diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+index d5610ad52..bbe7d640c 100644
+--- a/kernel/locking/osq_lock.c
++++ b/kernel/locking/osq_lock.c
+@@ -24,7 +24,11 @@ static inline int encode_cpu(int cpu_nr)
+ 
+ static inline int node_cpu(struct optimistic_spin_node *node)
  {
- 	u32 val;
-@@ -648,7 +662,6 @@ static int qcom_pcie_init_2_3_2(struct qcom_pcie *pcie)
- 	struct qcom_pcie_resources_2_3_2 *res = &pcie->res.v2_3_2;
- 	struct dw_pcie *pci = pcie->pci;
- 	struct device *dev = pci->dev;
--	u32 val;
- 	int ret;
- 
- 	ret = regulator_bulk_enable(ARRAY_SIZE(res->supplies), res->supplies);
-@@ -681,27 +694,6 @@ static int qcom_pcie_init_2_3_2(struct qcom_pcie *pcie)
- 		goto err_slave_clk;
- 	}
- 
--	/* enable PCIe clocks and resets */
--	val = readl(pcie->parf + PCIE20_PARF_PHY_CTRL);
--	val &= ~BIT(0);
--	writel(val, pcie->parf + PCIE20_PARF_PHY_CTRL);
--
--	/* change DBI base address */
--	writel(0, pcie->parf + PCIE20_PARF_DBI_BASE_ADDR);
--
--	/* MAC PHY_POWERDOWN MUX DISABLE  */
--	val = readl(pcie->parf + PCIE20_PARF_SYS_CTRL);
--	val &= ~BIT(29);
--	writel(val, pcie->parf + PCIE20_PARF_SYS_CTRL);
--
--	val = readl(pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
--	val |= BIT(4);
--	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
--
--	val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT_V2);
--	val |= BIT(31);
--	writel(val, pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT_V2);
--
- 	return 0;
- 
- err_slave_clk:
-@@ -722,8 +714,30 @@ static int qcom_pcie_post_init_2_3_2(struct qcom_pcie *pcie)
- 	struct qcom_pcie_resources_2_3_2 *res = &pcie->res.v2_3_2;
- 	struct dw_pcie *pci = pcie->pci;
- 	struct device *dev = pci->dev;
-+	u32 val;
- 	int ret;
- 
-+	/* enable PCIe clocks and resets */
-+	val = readl(pcie->parf + PCIE20_PARF_PHY_CTRL);
-+	val &= ~BIT(0);
-+	writel(val, pcie->parf + PCIE20_PARF_PHY_CTRL);
+-	return node->cpu - 1;
++	int cpu = 0;
 +
-+	/* change DBI base address */
-+	writel(0, pcie->parf + PCIE20_PARF_DBI_BASE_ADDR);
++	OSQ_ALTERNATIVE_C_CODE(cpu = node->cpu - 1, "nop", 0);
 +
-+	/* MAC PHY_POWERDOWN MUX DISABLE  */
-+	val = readl(pcie->parf + PCIE20_PARF_SYS_CTRL);
-+	val &= ~BIT(29);
-+	writel(val, pcie->parf + PCIE20_PARF_SYS_CTRL);
-+
-+	val = readl(pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
-+	val |= BIT(4);
-+	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
-+
-+	val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT_V2);
-+	val |= BIT(31);
-+	writel(val, pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT_V2);
-+
- 	ret = clk_prepare_enable(res->pipe_clk);
- 	if (ret) {
- 		dev_err(dev, "cannot prepare/enable pipe clock\n");
-@@ -837,7 +851,6 @@ static int qcom_pcie_init_2_4_0(struct qcom_pcie *pcie)
- 	struct qcom_pcie_resources_2_4_0 *res = &pcie->res.v2_4_0;
- 	struct dw_pcie *pci = pcie->pci;
- 	struct device *dev = pci->dev;
--	u32 val;
- 	int ret;
- 
- 	ret = reset_control_assert(res->axi_m_reset);
-@@ -962,6 +975,33 @@ static int qcom_pcie_init_2_4_0(struct qcom_pcie *pcie)
- 	if (ret)
- 		goto err_clks;
- 
-+	return 0;
-+
-+err_clks:
-+	reset_control_assert(res->ahb_reset);
-+err_rst_ahb:
-+	reset_control_assert(res->pwr_reset);
-+err_rst_pwr:
-+	reset_control_assert(res->axi_s_reset);
-+err_rst_axi_s:
-+	reset_control_assert(res->axi_m_sticky_reset);
-+err_rst_axi_m_sticky:
-+	reset_control_assert(res->axi_m_reset);
-+err_rst_axi_m:
-+	reset_control_assert(res->pipe_sticky_reset);
-+err_rst_pipe_sticky:
-+	reset_control_assert(res->pipe_reset);
-+err_rst_pipe:
-+	reset_control_assert(res->phy_reset);
-+err_rst_phy:
-+	reset_control_assert(res->phy_ahb_reset);
-+	return ret;
-+}
-+
-+static int qcom_pcie_post_init_2_4_0(struct qcom_pcie *pcie)
-+{
-+	u32 val;
-+
- 	/* enable PCIe clocks and resets */
- 	val = readl(pcie->parf + PCIE20_PARF_PHY_CTRL);
- 	val &= ~BIT(0);
-@@ -984,26 +1024,6 @@ static int qcom_pcie_init_2_4_0(struct qcom_pcie *pcie)
- 	writel(val, pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT_V2);
- 
- 	return 0;
--
--err_clks:
--	reset_control_assert(res->ahb_reset);
--err_rst_ahb:
--	reset_control_assert(res->pwr_reset);
--err_rst_pwr:
--	reset_control_assert(res->axi_s_reset);
--err_rst_axi_s:
--	reset_control_assert(res->axi_m_sticky_reset);
--err_rst_axi_m_sticky:
--	reset_control_assert(res->axi_m_reset);
--err_rst_axi_m:
--	reset_control_assert(res->pipe_sticky_reset);
--err_rst_pipe_sticky:
--	reset_control_assert(res->pipe_reset);
--err_rst_pipe:
--	reset_control_assert(res->phy_reset);
--err_rst_phy:
--	reset_control_assert(res->phy_ahb_reset);
--	return ret;
++	return cpu;
  }
  
- static int qcom_pcie_get_resources_2_3_3(struct qcom_pcie *pcie)
-@@ -1569,6 +1589,7 @@ static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
- static const struct qcom_pcie_ops ops_2_1_0 = {
- 	.get_resources = qcom_pcie_get_resources_2_1_0,
- 	.init = qcom_pcie_init_2_1_0,
-+	.post_init = qcom_pcie_post_init_2_1_0,
- 	.deinit = qcom_pcie_deinit_2_1_0,
- 	.ltssm_enable = qcom_pcie_2_1_0_ltssm_enable,
- };
-@@ -1577,6 +1598,7 @@ static const struct qcom_pcie_ops ops_2_1_0 = {
- static const struct qcom_pcie_ops ops_1_0_0 = {
- 	.get_resources = qcom_pcie_get_resources_1_0_0,
- 	.init = qcom_pcie_init_1_0_0,
-+	.post_init = qcom_pcie_post_init_1_0_0,
- 	.deinit = qcom_pcie_deinit_1_0_0,
- 	.ltssm_enable = qcom_pcie_2_1_0_ltssm_enable,
- };
-@@ -1595,6 +1617,7 @@ static const struct qcom_pcie_ops ops_2_3_2 = {
- static const struct qcom_pcie_ops ops_2_4_0 = {
- 	.get_resources = qcom_pcie_get_resources_2_4_0,
- 	.init = qcom_pcie_init_2_4_0,
-+	.post_init = qcom_pcie_post_init_2_4_0,
- 	.deinit = qcom_pcie_deinit_2_4_0,
- 	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
- };
+ static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
 -- 
-2.36.1
+2.20.1
+
+
 

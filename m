@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9737955873C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802C6558750
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbiFWSWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
+        id S234489AbiFWSYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbiFWSTG (ORCPT
+        with ESMTP id S237432AbiFWSWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:19:06 -0400
+        Thu, 23 Jun 2022 14:22:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174226801D;
-        Thu, 23 Jun 2022 10:25:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3F7C228E;
+        Thu, 23 Jun 2022 10:25:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CCC561F08;
-        Thu, 23 Jun 2022 17:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5C2C341C5;
-        Thu, 23 Jun 2022 17:25:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 417EB61EDC;
+        Thu, 23 Jun 2022 17:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2FBC3411B;
+        Thu, 23 Jun 2022 17:25:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656005102;
-        bh=pKgidH1iBtYdAQlTT+9cdhSza1ynLiI3QaAdMB6TxqQ=;
+        s=korg; t=1656005126;
+        bh=HEEZ8FxHLtysK9flu47T6VVosykVCYfgUWGJVfxf+hM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lJtkmTiaCg0Mj3ZvVFeqGniUWRYC/FYIgzuF1UWMKmtkS5tNXCsjHmMDHz+e2SJkr
-         j1lBxCRqCQLUrwY6yP87CLHDdXoSUVDMPkfObvCVJez2mT432zht17o1SupTmfdKqL
-         N0g55OTOLAD1c5H7RGI6VR8ZkYRA8NUTzY7X7tWE=
+        b=TQGId9EsJLVo1L9W/kB7dUpru5cnnk8WXpqN4f5Bst+cryfXJ+Thni3CPgzbz1Q1D
+         xT2H0cLrCLhPLrRv5ng6+uQKQMuCiOh8eR52dXn2wMKkLkpsydib7T6ZfFwRSEmrQq
+         p6L8KT/3l+oaCBs1ctEYMLH58dtw3mZYBA0NVBkc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Amit Klein <aksecurity@gmail.com>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 5.4 09/11] tcp: drop the hash_32() part from the index calculation
-Date:   Thu, 23 Jun 2022 18:45:13 +0200
-Message-Id: <20220623164321.470700805@linuxfoundation.org>
+        stable@vger.kernel.org, Jorgen Hansen <Jorgen.Hansen@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: [PATCH 5.18 02/11] zonefs: fix zonefs_iomap_begin() for reads
+Date:   Thu, 23 Jun 2022 18:45:14 +0200
+Message-Id: <20220623164322.387694481@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164321.195163701@linuxfoundation.org>
-References: <20220623164321.195163701@linuxfoundation.org>
+In-Reply-To: <20220623164322.315085512@linuxfoundation.org>
+References: <20220623164322.315085512@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +56,261 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau <w@1wt.eu>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit e8161345ddbb66e449abde10d2fdce93f867eba9 upstream.
+commit c1c1204c0d0c1dccc1310b9277fb2bd8b663d8fe upstream.
 
-In commit 190cc82489f4 ("tcp: change source port randomizarion at
-connect() time"), the table_perturb[] array was introduced and an
-index was taken from the port_offset via hash_32(). But it turns
-out that hash_32() performs a multiplication while the input here
-comes from the output of SipHash in secure_seq, that is well
-distributed enough to avoid the need for yet another hash.
+If a readahead is issued to a sequential zone file with an offset
+exactly equal to the current file size, the iomap type is set to
+IOMAP_UNWRITTEN, which will prevent an IO, but the iomap length is
+calculated as 0. This causes a WARN_ON() in iomap_iter():
 
-Suggested-by: Amit Klein <aksecurity@gmail.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Cc: Ben Hutchings <ben@decadent.org.uk>
+[17309.548939] WARNING: CPU: 3 PID: 2137 at fs/iomap/iter.c:34 iomap_iter+0x9cf/0xe80
+[...]
+[17309.650907] RIP: 0010:iomap_iter+0x9cf/0xe80
+[...]
+[17309.754560] Call Trace:
+[17309.757078]  <TASK>
+[17309.759240]  ? lock_is_held_type+0xd8/0x130
+[17309.763531]  iomap_readahead+0x1a8/0x870
+[17309.767550]  ? iomap_read_folio+0x4c0/0x4c0
+[17309.771817]  ? lockdep_hardirqs_on_prepare+0x400/0x400
+[17309.778848]  ? lock_release+0x370/0x750
+[17309.784462]  ? folio_add_lru+0x217/0x3f0
+[17309.790220]  ? reacquire_held_locks+0x4e0/0x4e0
+[17309.796543]  read_pages+0x17d/0xb60
+[17309.801854]  ? folio_add_lru+0x238/0x3f0
+[17309.807573]  ? readahead_expand+0x5f0/0x5f0
+[17309.813554]  ? policy_node+0xb5/0x140
+[17309.819018]  page_cache_ra_unbounded+0x27d/0x450
+[17309.825439]  filemap_get_pages+0x500/0x1450
+[17309.831444]  ? filemap_add_folio+0x140/0x140
+[17309.837519]  ? lock_is_held_type+0xd8/0x130
+[17309.843509]  filemap_read+0x28c/0x9f0
+[17309.848953]  ? zonefs_file_read_iter+0x1ea/0x4d0 [zonefs]
+[17309.856162]  ? trace_contention_end+0xd6/0x130
+[17309.862416]  ? __mutex_lock+0x221/0x1480
+[17309.868151]  ? zonefs_file_read_iter+0x166/0x4d0 [zonefs]
+[17309.875364]  ? filemap_get_pages+0x1450/0x1450
+[17309.881647]  ? __mutex_unlock_slowpath+0x15e/0x620
+[17309.888248]  ? wait_for_completion_io_timeout+0x20/0x20
+[17309.895231]  ? lock_is_held_type+0xd8/0x130
+[17309.901115]  ? lock_is_held_type+0xd8/0x130
+[17309.906934]  zonefs_file_read_iter+0x356/0x4d0 [zonefs]
+[17309.913750]  new_sync_read+0x2d8/0x520
+[17309.919035]  ? __x64_sys_lseek+0x1d0/0x1d0
+
+Furthermore, this causes iomap_readahead() to loop forever as
+iomap_readahead_iter() always returns 0, making no progress.
+
+Fix this by treating reads after the file size as access to holes,
+setting the iomap type to IOMAP_HOLE, the iomap addr to IOMAP_NULL_ADDR
+and using the length argument as is for the iomap length. To simplify
+the code with this change, zonefs_iomap_begin() is split into the read
+variant, zonefs_read_iomap_begin() and zonefs_read_iomap_ops, and the
+write variant, zonefs_write_iomap_begin() and zonefs_write_iomap_ops.
+
+Reported-by: Jorgen Hansen <Jorgen.Hansen@wdc.com>
+Fixes: 8dcc1a9d90c1 ("fs: New zonefs file system")
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Reviewed-by: Jorgen Hansen <Jorgen.Hansen@wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/inet_hashtables.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/zonefs/super.c |   94 ++++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 64 insertions(+), 30 deletions(-)
 
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -727,7 +727,7 @@ int __inet_hash_connect(struct inet_time
+--- a/fs/zonefs/super.c
++++ b/fs/zonefs/super.c
+@@ -72,15 +72,51 @@ static inline void zonefs_i_size_write(s
+ 		zi->i_flags &= ~ZONEFS_ZONE_OPEN;
+ }
  
- 	net_get_random_once(table_perturb,
- 			    INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
--	index = hash_32(port_offset, INET_TABLE_PERTURB_SHIFT);
-+	index = port_offset & (INET_TABLE_PERTURB_SIZE - 1);
+-static int zonefs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+-			      unsigned int flags, struct iomap *iomap,
+-			      struct iomap *srcmap)
++static int zonefs_read_iomap_begin(struct inode *inode, loff_t offset,
++				   loff_t length, unsigned int flags,
++				   struct iomap *iomap, struct iomap *srcmap)
+ {
+ 	struct zonefs_inode_info *zi = ZONEFS_I(inode);
+ 	struct super_block *sb = inode->i_sb;
+ 	loff_t isize;
  
- 	offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32);
- 	offset %= remaining;
+-	/* All I/Os should always be within the file maximum size */
++	/*
++	 * All blocks are always mapped below EOF. If reading past EOF,
++	 * act as if there is a hole up to the file maximum size.
++	 */
++	mutex_lock(&zi->i_truncate_mutex);
++	iomap->bdev = inode->i_sb->s_bdev;
++	iomap->offset = ALIGN_DOWN(offset, sb->s_blocksize);
++	isize = i_size_read(inode);
++	if (iomap->offset >= isize) {
++		iomap->type = IOMAP_HOLE;
++		iomap->addr = IOMAP_NULL_ADDR;
++		iomap->length = length;
++	} else {
++		iomap->type = IOMAP_MAPPED;
++		iomap->addr = (zi->i_zsector << SECTOR_SHIFT) + iomap->offset;
++		iomap->length = isize - iomap->offset;
++	}
++	mutex_unlock(&zi->i_truncate_mutex);
++
++	trace_zonefs_iomap_begin(inode, iomap);
++
++	return 0;
++}
++
++static const struct iomap_ops zonefs_read_iomap_ops = {
++	.iomap_begin	= zonefs_read_iomap_begin,
++};
++
++static int zonefs_write_iomap_begin(struct inode *inode, loff_t offset,
++				    loff_t length, unsigned int flags,
++				    struct iomap *iomap, struct iomap *srcmap)
++{
++	struct zonefs_inode_info *zi = ZONEFS_I(inode);
++	struct super_block *sb = inode->i_sb;
++	loff_t isize;
++
++	/* All write I/Os should always be within the file maximum size */
+ 	if (WARN_ON_ONCE(offset + length > zi->i_max_size))
+ 		return -EIO;
+ 
+@@ -90,7 +126,7 @@ static int zonefs_iomap_begin(struct ino
+ 	 * operation.
+ 	 */
+ 	if (WARN_ON_ONCE(zi->i_ztype == ZONEFS_ZTYPE_SEQ &&
+-			 (flags & IOMAP_WRITE) && !(flags & IOMAP_DIRECT)))
++			 !(flags & IOMAP_DIRECT)))
+ 		return -EIO;
+ 
+ 	/*
+@@ -99,47 +135,44 @@ static int zonefs_iomap_begin(struct ino
+ 	 * write pointer) and unwriten beyond.
+ 	 */
+ 	mutex_lock(&zi->i_truncate_mutex);
++	iomap->bdev = inode->i_sb->s_bdev;
++	iomap->offset = ALIGN_DOWN(offset, sb->s_blocksize);
++	iomap->addr = (zi->i_zsector << SECTOR_SHIFT) + iomap->offset;
+ 	isize = i_size_read(inode);
+-	if (offset >= isize)
++	if (iomap->offset >= isize) {
+ 		iomap->type = IOMAP_UNWRITTEN;
+-	else
++		iomap->length = zi->i_max_size - iomap->offset;
++	} else {
+ 		iomap->type = IOMAP_MAPPED;
+-	if (flags & IOMAP_WRITE)
+-		length = zi->i_max_size - offset;
+-	else
+-		length = min(length, isize - offset);
++		iomap->length = isize - iomap->offset;
++	}
+ 	mutex_unlock(&zi->i_truncate_mutex);
+ 
+-	iomap->offset = ALIGN_DOWN(offset, sb->s_blocksize);
+-	iomap->length = ALIGN(offset + length, sb->s_blocksize) - iomap->offset;
+-	iomap->bdev = inode->i_sb->s_bdev;
+-	iomap->addr = (zi->i_zsector << SECTOR_SHIFT) + iomap->offset;
+-
+ 	trace_zonefs_iomap_begin(inode, iomap);
+ 
+ 	return 0;
+ }
+ 
+-static const struct iomap_ops zonefs_iomap_ops = {
+-	.iomap_begin	= zonefs_iomap_begin,
++static const struct iomap_ops zonefs_write_iomap_ops = {
++	.iomap_begin	= zonefs_write_iomap_begin,
+ };
+ 
+ static int zonefs_readpage(struct file *unused, struct page *page)
+ {
+-	return iomap_readpage(page, &zonefs_iomap_ops);
++	return iomap_readpage(page, &zonefs_read_iomap_ops);
+ }
+ 
+ static void zonefs_readahead(struct readahead_control *rac)
+ {
+-	iomap_readahead(rac, &zonefs_iomap_ops);
++	iomap_readahead(rac, &zonefs_read_iomap_ops);
+ }
+ 
+ /*
+  * Map blocks for page writeback. This is used only on conventional zone files,
+  * which implies that the page range can only be within the fixed inode size.
+  */
+-static int zonefs_map_blocks(struct iomap_writepage_ctx *wpc,
+-			     struct inode *inode, loff_t offset)
++static int zonefs_write_map_blocks(struct iomap_writepage_ctx *wpc,
++				   struct inode *inode, loff_t offset)
+ {
+ 	struct zonefs_inode_info *zi = ZONEFS_I(inode);
+ 
+@@ -153,12 +186,12 @@ static int zonefs_map_blocks(struct ioma
+ 	    offset < wpc->iomap.offset + wpc->iomap.length)
+ 		return 0;
+ 
+-	return zonefs_iomap_begin(inode, offset, zi->i_max_size - offset,
+-				  IOMAP_WRITE, &wpc->iomap, NULL);
++	return zonefs_write_iomap_begin(inode, offset, zi->i_max_size - offset,
++					IOMAP_WRITE, &wpc->iomap, NULL);
+ }
+ 
+ static const struct iomap_writeback_ops zonefs_writeback_ops = {
+-	.map_blocks		= zonefs_map_blocks,
++	.map_blocks		= zonefs_write_map_blocks,
+ };
+ 
+ static int zonefs_writepage(struct page *page, struct writeback_control *wbc)
+@@ -188,7 +221,8 @@ static int zonefs_swap_activate(struct s
+ 		return -EINVAL;
+ 	}
+ 
+-	return iomap_swapfile_activate(sis, swap_file, span, &zonefs_iomap_ops);
++	return iomap_swapfile_activate(sis, swap_file, span,
++				       &zonefs_read_iomap_ops);
+ }
+ 
+ static const struct address_space_operations zonefs_file_aops = {
+@@ -607,7 +641,7 @@ static vm_fault_t zonefs_filemap_page_mk
+ 
+ 	/* Serialize against truncates */
+ 	filemap_invalidate_lock_shared(inode->i_mapping);
+-	ret = iomap_page_mkwrite(vmf, &zonefs_iomap_ops);
++	ret = iomap_page_mkwrite(vmf, &zonefs_write_iomap_ops);
+ 	filemap_invalidate_unlock_shared(inode->i_mapping);
+ 
+ 	sb_end_pagefault(inode->i_sb);
+@@ -860,7 +894,7 @@ static ssize_t zonefs_file_dio_write(str
+ 	if (append)
+ 		ret = zonefs_file_dio_append(iocb, from);
+ 	else
+-		ret = iomap_dio_rw(iocb, from, &zonefs_iomap_ops,
++		ret = iomap_dio_rw(iocb, from, &zonefs_write_iomap_ops,
+ 				   &zonefs_write_dio_ops, 0, 0);
+ 	if (zi->i_ztype == ZONEFS_ZTYPE_SEQ &&
+ 	    (ret > 0 || ret == -EIOCBQUEUED)) {
+@@ -902,7 +936,7 @@ static ssize_t zonefs_file_buffered_writ
+ 	if (ret <= 0)
+ 		goto inode_unlock;
+ 
+-	ret = iomap_file_buffered_write(iocb, from, &zonefs_iomap_ops);
++	ret = iomap_file_buffered_write(iocb, from, &zonefs_write_iomap_ops);
+ 	if (ret > 0)
+ 		iocb->ki_pos += ret;
+ 	else if (ret == -EIO)
+@@ -995,7 +1029,7 @@ static ssize_t zonefs_file_read_iter(str
+ 			goto inode_unlock;
+ 		}
+ 		file_accessed(iocb->ki_filp);
+-		ret = iomap_dio_rw(iocb, to, &zonefs_iomap_ops,
++		ret = iomap_dio_rw(iocb, to, &zonefs_read_iomap_ops,
+ 				   &zonefs_read_dio_ops, 0, 0);
+ 	} else {
+ 		ret = generic_file_read_iter(iocb, to);
 
 

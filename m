@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE688557890
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496C0557897
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiFWLS0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Jun 2022 07:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S230412AbiFWLS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiFWLSU (ORCPT
+        with ESMTP id S229765AbiFWLS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:18:20 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF9AC64F6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:18:18 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-135-F5csG3KMMyCOZzSfmLQ2PA-1; Thu, 23 Jun 2022 12:18:15 +0100
-X-MC-Unique: F5csG3KMMyCOZzSfmLQ2PA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Thu, 23 Jun 2022 12:18:14 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Thu, 23 Jun 2022 12:18:14 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'George Cherian' <george.cherian@marvell.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "sgoutham@marvell.com" <sgoutham@marvell.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>
-Subject: RE: [PATCH] genirq: Increase the number of interrupters
-Thread-Topic: [PATCH] genirq: Increase the number of interrupters
-Thread-Index: AQHYhrze4USA0Oy8jUywbP1lQPnHp61c1/2A
-Date:   Thu, 23 Jun 2022 11:18:14 +0000
-Message-ID: <7974b4d7782b4f8682547389d4f294f8@AcuMS.aculab.com>
-References: <20220623031541.1716745-1-george.cherian@marvell.com>
-In-Reply-To: <20220623031541.1716745-1-george.cherian@marvell.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 23 Jun 2022 07:18:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F276D4BBA0;
+        Thu, 23 Jun 2022 04:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655983137; x=1687519137;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ZDmviisAQFt/A72ntxTrOHQF561xAWJ5eMxmpFohiy4=;
+  b=Knkz5DmEYNKy7rBucfltf1wCQeZbmZDlm5A1yZf2G1qwGJvcSwr5dTjU
+   3XgrSCdTKAmfljqiWg2i9L1mCLlHFl4tV7Z3Mjt6mDBXjaRzDHHYqgYJ5
+   y//d80sRddUagmpAsiu2RLCEJqbYMDqX4OPRAvpPSYG/vd3swOAcMA9y7
+   ey5pV9rxCSVAlm5mtmc2Od2o5KulmgpdAsGuDYd7UJ/A+VcgU2M/BG6gz
+   wMpOr2dEzTNEC+zy0cHV395IsvTylmMPx9muvjFbvu9lkfsX9/6iyEUG4
+   eJ7hAY2xS4UJo5W7sTs4lniyyK1P9FzJbUmQzaKnQVJIrmMC0SiJ1GcZd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="344682191"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="344682191"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 04:18:56 -0700
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="644691087"
+Received: from hazegrou-mobl.ger.corp.intel.com (HELO intel.com) ([10.251.216.121])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 04:18:50 -0700
+Date:   Thu, 23 Jun 2022 13:18:47 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Chris Wilson <chris.p.wilson@intel.com>,
+        Fei Yang <fei.yang@intel.com>,
+        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Thomas =?iso-8859-15?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, mauro.chehab@linux.intel.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 6/6] drm/i915/gt: Serialize TLB invalidates with GT resets
+Message-ID: <YrRMF9fY46KJcMG/@intel.intel>
+References: <cover.1655306128.git.mchehab@kernel.org>
+ <cd5696e3800fd29114ddf0cebc950b57a17bc1b8.1655306128.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cd5696e3800fd29114ddf0cebc950b57a17bc1b8.1655306128.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,46 +80,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Cherian
-> Sent: 23 June 2022 04:16
-> 
-> Currently the maximum number of interrupters is capped at 8260 (64 +
-> 8196) in most of the architectures were CONFIG_SPARSE_IRQ is selected.
-> This upper limit is not sufficient for couple of existing SoC's from
-> Marvell.
-> For eg: Octeon TX2 series of processors support a maximum of 32K
-> interrupters.
-> 
-> Bump up the upper limit from 8196 to 65536.
+Hi Mauro,
 
-This seems to add 7kB of static data to the kernel just on
-the off chance that some sparse interrupt numbers are large.
-
-	David
-
+On Wed, Jun 15, 2022 at 04:27:40PM +0100, Mauro Carvalho Chehab wrote:
+> From: Chris Wilson <chris.p.wilson@intel.com>
 > 
-> Signed-off-by: George Cherian <george.cherian@marvell.com>
-> ---
->  kernel/irq/internals.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Avoid trying to invalidate the TLB in the middle of performing an
+> engine reset, as this may result in the reset timing out. Currently,
+> the TLB invalidate is only serialised by its own mutex, forgoing the
+> uncore lock, but we can take the uncore->lock as well to serialise
+> the mmio access, thereby serialising with the GDRST.
 > 
-> diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
-> index f09c60393e559..9bb42757d4afc 100644
-> --- a/kernel/irq/internals.h
-> +++ b/kernel/irq/internals.h
-> @@ -12,7 +12,7 @@
->  #include <linux/sched/clock.h>
+> Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
+> i915 selftest/hangcheck.
 > 
->  #ifdef CONFIG_SPARSE_IRQ
-> -# define IRQ_BITMAP_BITS	(NR_IRQS + 8196)
-> +# define IRQ_BITMAP_BITS	(NR_IRQS + 65536)
->  #else
->  # define IRQ_BITMAP_BITS	NR_IRQS
->  #endif
-> --
-> 2.25.1
+> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+> 
+> Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: stable@vger.kernel.org
+> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
+Thanks,
+Andi

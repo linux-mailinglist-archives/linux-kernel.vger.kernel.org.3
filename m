@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA2F557587
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E635C55754C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiFWIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S229950AbiFWIWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFWIdL (ORCPT
+        with ESMTP id S229778AbiFWIWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:33:11 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E35DEB5;
-        Thu, 23 Jun 2022 01:33:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VHAoIhL_1655973184;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VHAoIhL_1655973184)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Jun 2022 16:33:05 +0800
-Message-ID: <1655972550.3746855-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [syzbot] WARNING: suspicious RCU usage (5)
-Date:   Thu, 23 Jun 2022 16:22:30 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     syzbot <syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com>
-Cc:     alobakin@pm.me, bp@alien8.de, daniel@iogearbox.net, hpa@zytor.com,
-        jmattson@google.com, john.fastabend@gmail.com, joro@8bytes.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, netdev@vger.kernel.org, pbonzini@redhat.com,
-        seanjc@google.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-References: <000000000000b9edeb05e1aca987@google.com>
- <0000000000008b8cd205e2187ea2@google.com>
-In-Reply-To: <0000000000008b8cd205e2187ea2@google.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 04:22:44 -0400
+Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC7F488A5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:22:41 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 40B0B447; Thu, 23 Jun 2022 10:22:40 +0200 (CEST)
+Date:   Thu, 23 Jun 2022 10:22:38 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        robin.murphy@arm.com, ashish.kalra@amd.com, vasant.hegde@amd.com,
+        thomas.lendacky@amd.com
+Subject: Re: [PATCH v3 1/7] iommu/amd: Warn when found inconsistency EFR mask
+Message-ID: <YrQizrI5lR3ki37B@8bytes.org>
+References: <20220622171131.11870-1-suravee.suthikulpanit@amd.com>
+ <20220622171131.11870-2-suravee.suthikulpanit@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622171131.11870-2-suravee.suthikulpanit@amd.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 00:35:13 -0700, syzbot <syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com> wrote:
-> syzbot has bisected this issue to:
->
-> commit c2ff53d8049f30098153cd2d1299a44d7b124c57
-> Author: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Date:   Thu Feb 18 20:50:02 2021 +0000
->
->     net: Add priv_flags for allow tx skb without linear
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11596838080000
-> start commit:   a5b00f5b78b7 Merge branch 'hns3-fixres'
-> git tree:       net
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=13596838080000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15596838080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9cbc6bed3a22f1d37395
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b22abf00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125194eff00000
->
-> Reported-by: syzbot+9cbc6bed3a22f1d37395@syzkaller.appspotmail.com
-> Fixes: c2ff53d8049f ("net: Add priv_flags for allow tx skb without linear")
+On Wed, Jun 22, 2022 at 12:11:25PM -0500, Suravee Suthikulpanit wrote:
+>  #ifdef CONFIG_IRQ_REMAP
+> +/*
+> + * Iterate through all the IOMMUs to verify if the specified
+> + * EFR bitmask of IOMMU feature are set.
+> + * Warn and return false if found inconsistency.
+> + */
+>  static bool check_feature_on_all_iommus(u64 mask)
+>  {
+>  	bool ret = false;
+>  	struct amd_iommu *iommu;
+>  
+>  	for_each_iommu(iommu) {
+> -		ret = iommu_feature(iommu, mask);
+> -		if (!ret)
+> +		bool tmp = iommu_feature(iommu, mask);
+> +
+> +		if ((ret != tmp) &&
+> +		    !list_is_first(&iommu->list, &amd_iommu_list)) {
+> +			pr_err(FW_BUG "Found inconsistent EFR mask (%#llx) on iommu%d (%04x:%02x:%02x.%01x).\n",
+> +			       mask, iommu->index, iommu->pci_seg->id, PCI_BUS_NUM(iommu->devid),
+> +			       PCI_SLOT(iommu->devid), PCI_FUNC(iommu->devid));
+>  			return false;
+> +		}
+> +		ret = tmp;
 
+It is better to implement this by introducing a global feature mask,
+which represents the minial set of features supported by any IOMMU in
+the system.
 
-I think it's unlikely that my patch is causing the problem, because my patch is
-very simple and doesn't have any effect on the kernel. I don't know if there is
-something wrong.
+The warning is then something like:
 
-I used the above config (make olddefconfig) to compile this commit, and it
-crashed directly after starting it in qemu.
+	if ((global_feature_mask & iommu_features) != global_feature_mask)
+		pr_warn(...);
 
-Thanks.
+This also makes the global variable to track SNP support obsolete.
 
+Regards,
 
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+	Joerg

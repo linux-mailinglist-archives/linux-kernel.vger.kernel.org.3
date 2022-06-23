@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5ED557DFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5FC557E06
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiFWOl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
+        id S231544AbiFWOoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiFWOlY (ORCPT
+        with ESMTP id S231383AbiFWOoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:41:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEA5145AC3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655995281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SraIdLWRv06GMoMmKgbS8PufkzalRVLr236WwWYc8aU=;
-        b=D4cYI2rzbhTNCCBmSEU5BNM/RqDi2Xny3nvYLdexuyrPfORAH92Gb29LFbMFjFjKv1mT8k
-        JYyocOFL/BgJPeJUB7sysSF8M72lLcHFWps9UYLsj1m18r6hm+i582eIir6xqFeQOT3KAd
-        NcCUxd9iuMMX7l93UjeZyN2rMi2LSUQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-163-UzXsHW3KP22zUZYaytu0Qg-1; Thu, 23 Jun 2022 10:41:18 -0400
-X-MC-Unique: UzXsHW3KP22zUZYaytu0Qg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5238A3C1172D;
-        Thu, 23 Jun 2022 14:41:18 +0000 (UTC)
-Received: from [10.22.9.91] (unknown [10.22.9.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E6CB8C44AE3;
-        Thu, 23 Jun 2022 14:41:17 +0000 (UTC)
-Message-ID: <be4db8af-7855-1f54-c2f2-947577b71f94@redhat.com>
-Date:   Thu, 23 Jun 2022 10:41:17 -0400
+        Thu, 23 Jun 2022 10:44:01 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEB5263A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:44:00 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id a2so33756382lfg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GGJIrQZ1dGSDsKYzwTH8HIyaaJizqDdsQhaO3cSd77A=;
+        b=VyZDga2b/+FX3G3SKJuI1An91g3UxE0TwKAwvFaK/fL0Fqvkz2FEMxknoUnozT8+dB
+         3kTZp5StOUpoFilAHKDb+M5haITHntU/I+BPELbwz/Nw9Bdbw7ZmuKi0JrdLWRTlzRrr
+         4gUDayGFMJ1tSOd5omRo8sPPTSdz/s/8oCXCNfI+/lTH9Wj3kYp1smHCHOv8KWSPsCoH
+         WhFZEQPAsHtzB1AztC72raIhyUlh2N3esPKrKAaH3YQidQAkKxtxryJWi0M8bot6A6G7
+         yRfDzvR2ubk0s3WPEadN6gV6KHvH0YkK2n01SgW32PphAhc4Bul61AAc8Q8h9GGlzZjo
+         cjaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GGJIrQZ1dGSDsKYzwTH8HIyaaJizqDdsQhaO3cSd77A=;
+        b=0f4T1fIfNJXnK/Xk/tM66BMVqIRuwsmq/6mUk+g4ryK5VwejKx1uTp5rDAjfg6f6kM
+         bkajMttum7FLXMCBExH/HkBk1u+NCNDqDA7skjvxVrhj/4H4fu5t6GIYKp0OsLBtHI6W
+         MudPyxaHlHxvnKedSQ8Op0e0+oksg5V8EURO6sVLQFH2Mh1/Zj6oM563HpJZXP1d7bKW
+         PVmpNPH2tTBfVrnSbaJ4Pd8reXN7njPU2DE80ZzOSpitqPvr/UtvnZP6bSnAU5Xg2wYJ
+         ++rzr2WgtRk7RMuNNXtqG3sxCBjKvUOKb1Tyjwwze6FAT+YwlM46F1HD3ZPBAlruMHXc
+         2SeA==
+X-Gm-Message-State: AJIora976lxnV0JF8VYf073H/WRp7TSoKNHCZlhudZdjU5dfKxFnlJC2
+        4O2Z2916VNz1u+Td2atn6E5gwQ==
+X-Google-Smtp-Source: AGRyM1vu4XsRKStXmVemK3XSOHQdmb7PE2OQGpbcamLonbZcjvVe2ZA5WEVQUTLq0JFh+Vw55ulpZg==
+X-Received: by 2002:a05:6512:318a:b0:47f:9fdc:fdb with SMTP id i10-20020a056512318a00b0047f9fdc0fdbmr3363003lfe.584.1655995438923;
+        Thu, 23 Jun 2022 07:43:58 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id x4-20020a056512078400b0047f6c48a603sm1829647lfr.202.2022.06.23.07.43.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 07:43:58 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Rob Herring <robh@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Tom Rini <trini@konsulko.com>, linux-kbuild@vger.kernel.org
+Subject: [PATCH v3] kbuild: Enable DT schema checks for %.dtb targets
+Date:   Thu, 23 Jun 2022 17:43:57 +0300
+Message-Id: <20220623144357.297252-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] locking/rtmutex: Limit # of lock stealing for non-RT
- waiters
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mike Stowell <mstowell@redhat.com>
-References: <20220621193641.609712-1-longman@redhat.com>
- <YrRriHsAdxPwEnWW@linutronix.de>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YrRriHsAdxPwEnWW@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It is possible to build a single dtb, but not with DT schema validation
+enabled. Enable the schema validation to run for %.dtb and %.dtbo
+targets. Anyone building a dtb for a specific platform *should* pay
+attention to schema warnings.
 
-On 6/23/22 09:32, Sebastian Andrzej Siewior wrote:
-> On 2022-06-21 15:36:41 [-0400], Waiman Long wrote:
->> Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
->> stealing") allows unlimited number of lock stealing's for non-RT
->> tasks. That can lead to lock starvation of non-RT top waiter tasks if
->> there is a constant incoming stream of non-RT lockers. This can cause
->> task lockup in PREEMPT_RT kernel. For example,
->>
->> [ 1249.921363] INFO: task systemd:2178 blocked for more than 622 seconds.
->> [ 1872.984225] INFO: task kworker/6:4:63401 blocked for more than 622 seconds.
->>
->> Avoiding this problem and ensuring forward progress by limiting the
->> number of times that a lock can be stolen from each waiter. This patch
->> sets a threshold of 10. That number is arbitrary and can be changed
->> if needed.
->>
->> With that change, the task lockups previously observed when running
->> stressful workloads on PREEMPT_RT kernel disappeared.
-> Do you have more insight on how this was tested/ created? Based on that,
-> systemd and a random kworker waited on a lock for more than 10 minutes.
+This could be supported with a separate %.dt.yaml target instead.
+However, the .dt.yaml format is considered an intermediate format and
+could possibly go away at some point if schema checking is integrated
+into dtc. Also, the plan is to enable the schema checks by default once
+platforms are free of warnings, and this is a move in that direction.
 
-The hang happens when our QE team run thier kernel tier 1 test which, I 
-think, lasts several hours. The hang happens in some runs but not all of 
-them. So it is kind of opportunistic. Mike should be able to provide a 
-better idea about frequency and so on.
+This patch differs from the previous one ([1]) in the fact that it
+requires specifying VALIDATE_DT=1 to run the checks while doing the
+build. Thus default build procedures would not obtain additional build
+dependency, while maintainers can still build a single DTB file an get
+only corresponding warnings.
 
->
-> I added a trace-printk each time a non-RT waiter got the lock stolen,
-> kicked a kernel build and a package upgrade and took a look at the stats
-> an hour later:
-> - sh got its lock stolen 3416 times. I didn't lock the pid so I can't
->    look back and check how long it waited since the first time.
-> - the median average of stolen locks is 173.
-Maybe we should also more lock stealing per waiter than the 10 that I 
-used in the patch. I am open to suggestion to what is a good value to use.
->
->> Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock stealing")
->> Reported-by: Mike Stowell <mstowell@redhat.com>
->> Signed-off-by: Waiman Long <longman@redhat.com>
+[1] https://lore.kernel.org/all/20210913145146.766080-1-robh@kernel.org/
 
-Thanks for your time looking at the patch.
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Tom Rini <trini@konsulko.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org
+Co-developed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ Makefile | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-Cheers,
-Longman
+diff --git a/Makefile b/Makefile
+index c43d825a3c4c..0942922384c4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1365,11 +1365,17 @@ endif
+ 
+ ifneq ($(dtstree),)
+ 
+-%.dtb: include/config/kernel.release scripts_dtc
+-	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
++ifneq ($(VALIDATE_DT),)
++DT_YAML = $(dtstree)/$*.dt.yaml
++DT_CHECK = dt_binding_check
++export CHECK_DTBS=y
++endif
+ 
+-%.dtbo: include/config/kernel.release scripts_dtc
+-	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
++%.dtb: include/config/kernel.release scripts_dtc $(DT_CHECK)
++	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@ $(DT_YAML)
++
++%.dtbo: include/config/kernel.release scripts_dtc $(DT_CHECK)
++	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@ $(DT_YAML)
+ 
+ PHONY += dtbs dtbs_install dtbs_check
+ dtbs: include/config/kernel.release scripts_dtc
+@@ -1654,6 +1660,10 @@ help:
+ 	@echo  '		3: more obscure warnings, can most likely be ignored'
+ 	@echo  '		e: warnings are being treated as errors'
+ 	@echo  '		Multiple levels can be combined with W=12 or W=123'
++	@$(if $(dtstree), \
++		echo '  make VALIDATE_DT=y [targets] Validate all DT processsed during the build'; \
++		echo '         This can be applied both to "dtbs" and to individual "foo.dtb" targets' ; \
++		)
+ 	@echo  ''
+ 	@echo  'Execute "make" or "make all" to build all targets marked with [*] '
+ 	@echo  'For further info see the ./README file'
+-- 
+2.35.1
 

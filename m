@@ -2,233 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0165576EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7500557707
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiFWJph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S230129AbiFWJqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiFWJpf (ORCPT
+        with ESMTP id S229937AbiFWJqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:45:35 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DAA496AA;
-        Thu, 23 Jun 2022 02:45:33 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25N9jPcr047116;
-        Thu, 23 Jun 2022 04:45:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655977525;
-        bh=Pi/6nVVvO0gXMhT7Kn1W6gxKOmLcIzaVRT/1b0Zz+xc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=VyY23mELmk/vUp2ZjpDn+yDkNkSebXrzlrA9+S24zuqYsBD9VoLXBXns1tQGSPlbZ
-         MyxchKa7cKJvNLKvvegOwlUlVNuEIY93paEhOnWW682fJ1JSq14d2XtoJ07YheyBWd
-         MekidNOMeV4cPweDn7pFtU+lilAs+SP5pFgcg9Fw=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25N9jP3F043556
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Jun 2022 04:45:25 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Jun 2022 04:45:24 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Jun 2022 04:45:24 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25N9jNaI007380;
-        Thu, 23 Jun 2022 04:45:24 -0500
-Date:   Thu, 23 Jun 2022 15:15:23 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Rahul T R <r-ravikumar@ti.com>
-CC:     <linux-phy@lists.infradead.org>, <kishon@ti.com>,
-        <vkoul@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <laurent.pinchart@ideasonboard.com>,
-        <tomi.valkeinen@ideasonboard.com>, <linux-kernel@vger.kernel.org>,
-        <jpawar@cadence.com>, <sjakhade@cadence.com>, <mparab@cadence.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>
-Subject: Re: [PATCH v3 3/3] phy: cdns-dphy: Add support for DPHY TX on J721e
-Message-ID: <20220623094523.ccrsmw477a5btgcf@ti.com>
-References: <20220622105311.21415-1-r-ravikumar@ti.com>
- <20220622105311.21415-4-r-ravikumar@ti.com>
+        Thu, 23 Jun 2022 05:46:34 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A63B49B40;
+        Thu, 23 Jun 2022 02:46:30 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 25N9kFqq015247;
+        Thu, 23 Jun 2022 18:46:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 25N9kFqq015247
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1655977576;
+        bh=1uhnTAJRfb/h1YXlrMjIdSP2he3o0rrnFwOQHF2pkvc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lkaGpbmJrHiinfaqJkDmd2SI0Zrk2Z0Zl8RHfO24a+pGvf1DP49THExTXaP/NtIOK
+         MgpWztEdofHAi3xtfoa519PmaEsBjFbSJkiGUDLorqxDTHKdX4MUK8caOx7bF2ad2i
+         YX6bYkfl1aDiAIJO8ft+fbcm6Sp4pAx4jpiq8IrcKWp++WA4/Cpo0wqCyLYWCB1+mE
+         jkqjwvrZ+jBjwWZxUnsLL66yYO3pfEALRXAtEAodTuXJfYfeSFViJK3ErH5J/Nd/PQ
+         v1jU6jjUIqACDJAJGK/T101YrK0D6T5eZL3+c3U5bnkKx1saOdzsCUiLtt77GFRj45
+         5xI6mAyPnTOPA==
+X-Nifty-SrcIP: [209.85.128.41]
+Received: by mail-wm1-f41.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so1124211wmb.5;
+        Thu, 23 Jun 2022 02:46:16 -0700 (PDT)
+X-Gm-Message-State: AJIora+dFgumbqaTis/3en0sSgHEjIoPJBMw5khr6Q6sHIh0cAgD/4/m
+        qPb050OinulgOnsYiD1BSCPEYZ7xZwpc+27tnJg=
+X-Google-Smtp-Source: AGRyM1tQ1TimxhhoceiZVUCEyqRunMVLsqa3SY56McKgJhhBFde9zSnnhe3dkK9WNOjy6Tzgk5uNzVUZwkMqBgAcUOk=
+X-Received: by 2002:a05:600c:2157:b0:39a:a4d0:54e1 with SMTP id
+ v23-20020a05600c215700b0039aa4d054e1mr3111566wml.14.1655977574443; Thu, 23
+ Jun 2022 02:46:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220622105311.21415-4-r-ravikumar@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220623083105.26354-1-jslaby@suse.cz>
+In-Reply-To: <20220623083105.26354-1-jslaby@suse.cz>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 23 Jun 2022 18:45:37 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARaB8-4mm4sZwH2DxGE=GAhS8HiF+-uT9suiHYHe8PgwQ@mail.gmail.com>
+Message-ID: <CAK7LNARaB8-4mm4sZwH2DxGE=GAhS8HiF+-uT9suiHYHe8PgwQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild, link-vmlinux: Don't delete output files with make -i
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andi Kleen <andi@firstfloor.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rahul,
-
-On 22/06/22 04:23PM, Rahul T R wrote:
-> Add support new compatible for dphy-tx on j721e
-> and implement dphy ops required.
-> 
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+On Thu, Jun 23, 2022 at 5:31 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>
+> From: Andi Kleen <andi@firstfloor.org>
+>
+> make -i is useful to see output files which normally get deleted on an
+> error.  Make this work with link-vmlinux.sh too. Don't delete the output
+> files on error when make -i is used.
+>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Michal Marek <michal.lkml@markovi.net>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Signed-off-by: Andi Kleen <ak@linux.intel.com>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 > ---
->  drivers/phy/cadence/Kconfig     | 10 ++++++
->  drivers/phy/cadence/cdns-dphy.c | 62 +++++++++++++++++++++++++++++++++
->  2 files changed, 72 insertions(+)
-> 
-> diff --git a/drivers/phy/cadence/Kconfig b/drivers/phy/cadence/Kconfig
-> index 1adde2d99ae7..18024ac6d511 100644
-> --- a/drivers/phy/cadence/Kconfig
-> +++ b/drivers/phy/cadence/Kconfig
-> @@ -22,6 +22,16 @@ config PHY_CADENCE_DPHY
->  	  system. If M is selected, the module will be called
->  	  cdns-dphy.
->  
-> +if PHY_CADENCE_DPHY
-> +
-> +config PHY_CADENCE_DPHY_J721E
-> +	depends on ARCH_K3 || COMPILE_TEST
-> +	bool "J721E DPHY TX Wiz support"
-> +	default y
-> +	help
-> +	  Support J721E Cadence DPHY TX Wiz configuration.
-> +endif
-> +
->  config PHY_CADENCE_DPHY_RX
->  	tristate "Cadence D-PHY Rx Support"
->  	depends on HAS_IOMEM && OF
-> diff --git a/drivers/phy/cadence/cdns-dphy.c b/drivers/phy/cadence/cdns-dphy.c
-> index 14f951013b4f..a6b7d696f77a 100644
-> --- a/drivers/phy/cadence/cdns-dphy.c
-> +++ b/drivers/phy/cadence/cdns-dphy.c
-> @@ -7,6 +7,7 @@
->  #include <linux/bitops.h>
->  #include <linux/clk.h>
->  #include <linux/io.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of_address.h>
->  #include <linux/of_device.h>
-> @@ -18,6 +19,7 @@
->  
->  #define REG_WAKEUP_TIME_NS		800
->  #define DPHY_PLL_RATE_HZ		108000000
-> +#define POLL_TIMEOUT_US			1000
->  
->  /* DPHY registers */
->  #define DPHY_PMA_CMN(reg)		(reg)
-> @@ -62,6 +64,18 @@
->  #define DSI_NULL_FRAME_OVERHEAD		6
->  #define DSI_EOT_PKT_SIZE		4
->  
-> +#define DPHY_TX_J721E_WIZ_PLL_CTRL	0xF04
-> +#define DPHY_TX_J721E_WIZ_STATUS	0xF08
-> +#define DPHY_TX_J721E_WIZ_RST_CTRL	0xF0C
-> +#define DPHY_TX_J721E_WIZ_PSM_FREQ	0xF10
-> +
-> +#define DPHY_TX_J721E_WIZ_IPDIV		GENMASK(4, 0)
-> +#define DPHY_TX_J721E_WIZ_OPDIV		GENMASK(13, 8)
-> +#define DPHY_TX_J721E_WIZ_FBDIV		GENMASK(25, 16)
-> +#define DPHY_TX_J721E_WIZ_LANE_RSTB	BIT(31)
-> +#define DPHY_TX_WIZ_PLL_LOCK		BIT(31)
-> +#define DPHY_TX_WIZ_O_CMN_READY		BIT(31)
-> +
->  struct cdns_dphy_cfg {
->  	u8 pll_ipdiv;
->  	u8 pll_opdiv;
-> @@ -210,6 +224,43 @@ static void cdns_dphy_ref_set_psm_div(struct cdns_dphy *dphy, u8 div)
->  	       dphy->regs + DPHY_PSM_CFG);
->  }
->  
-> +#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
 
-Honestly, I don't think there is much use for using this config here. I 
-prefer to have as little ifdefs scattered in code as possible. And I 
-don't think the code you add makes much of a difference in terms of 
-size.
 
-I have not looked much into the WIZ module but the code looks fine to 
-me.
 
-> +static unsigned long cdns_dphy_j721e_get_wakeup_time_ns(struct cdns_dphy *dphy)
-> +{
-> +	return 1000000;
-> +}
-> +
-> +static void cdns_dphy_j721e_set_pll_cfg(struct cdns_dphy *dphy,
-> +					const struct cdns_dphy_cfg *cfg)
-> +{
-> +	u32 status;
-> +
-> +	writel(DPHY_CMN_PWM_HIGH(6) | DPHY_CMN_PWM_LOW(0x101) |
-> +	       DPHY_CMN_PWM_DIV(0x8),
+I am afraid you missed this commit:
 
-Please avoid using magic numbers. Or if you are going to use them, at 
-least explain in a comment what they are doing.
 
-> +	       dphy->regs + DPHY_CMN_PWM);
+
+commit 51eb95e2da41802454f48b9afeb4d96a77295035
+Author: Andi Kleen <ak@linux.intel.com>
+Date:   Tue May 4 20:35:27 2021 -0700
+
+    kbuild: Don't remove link-vmlinux temporary files on exit/signal
+
+    Keep them around until they are cleaned up by make clean. This
+    uses a bit more disk space, but makes it easier to debug any
+    problems with the kernel link process.
+
+    Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+    Signed-off-by: Andi Kleen <ak@linux.intel.com>
+    Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+
+
+
+
+
+
+
+
+
+
+
+
+>  scripts/link-vmlinux.sh | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index eecc1863e556..d21759aad4f3 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -193,6 +193,11 @@ sorttable()
+>  # Delete output files in case of error
+>  cleanup()
+>  {
+> +       # don't delete for make -i
+> +       case "$MFLAGS" in
+> +       *-i*) return ;;
+> +       esac
 > +
-> +	writel((FIELD_PREP(DPHY_TX_J721E_WIZ_IPDIV, cfg->pll_ipdiv) |
-> +		FIELD_PREP(DPHY_TX_J721E_WIZ_OPDIV, cfg->pll_opdiv) |
-> +		FIELD_PREP(DPHY_TX_J721E_WIZ_FBDIV, cfg->pll_fbdiv)),
-> +		dphy->regs + DPHY_TX_J721E_WIZ_PLL_CTRL);
-> +
-> +	writel(DPHY_TX_J721E_WIZ_LANE_RSTB,
-> +	       dphy->regs + DPHY_TX_J721E_WIZ_RST_CTRL);
-> +
-> +	readl_poll_timeout(dphy->regs + DPHY_TX_J721E_WIZ_PLL_CTRL, status,
-> +			   (status & DPHY_TX_WIZ_PLL_LOCK), 0, POLL_TIMEOUT_US);
-> +
-> +	readl_poll_timeout(dphy->regs + DPHY_TX_J721E_WIZ_STATUS, status,
-> +			   (status & DPHY_TX_WIZ_O_CMN_READY), 0,
-> +			   POLL_TIMEOUT_US);
-> +}
-> +
-> +static void cdns_dphy_j721e_set_psm_div(struct cdns_dphy *dphy, u8 div)
-> +{
-> +	writel(div, dphy->regs + DPHY_TX_J721E_WIZ_PSM_FREQ);
-> +}
-> +#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
-> +
->  /*
->   * This is the reference implementation of DPHY hooks. Specific integration of
->   * this IP may have to re-implement some of them depending on how they decided
-> @@ -221,6 +272,14 @@ static const struct cdns_dphy_ops ref_dphy_ops = {
->  	.set_psm_div = cdns_dphy_ref_set_psm_div,
->  };
->  
-> +#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
-> +static const struct cdns_dphy_ops j721e_dphy_ops = {
-> +	.get_wakeup_time_ns = cdns_dphy_j721e_get_wakeup_time_ns,
-> +	.set_pll_cfg = cdns_dphy_j721e_set_pll_cfg,
-> +	.set_psm_div = cdns_dphy_j721e_set_psm_div,
-> +};
-> +#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
-> +
->  static int cdns_dphy_config_from_opts(struct phy *phy,
->  				      struct phy_configure_opts_mipi_dphy *opts,
->  				      struct cdns_dphy_cfg *cfg)
-> @@ -408,6 +467,9 @@ static int cdns_dphy_remove(struct platform_device *pdev)
->  
->  static const struct of_device_id cdns_dphy_of_match[] = {
->  	{ .compatible = "cdns,dphy", .data = &ref_dphy_ops },
-> +#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
-> +	{ .compatible = "ti,j721e-dphy", .data = &j721e_dphy_ops },
-> +#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
->  	{ /* sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, cdns_dphy_of_match);
-> -- 
+>         rm -f .btf.*
+>         rm -f System.map
+>         rm -f vmlinux
+> --
 > 2.36.1
-> 
+>
+
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Best Regards
+Masahiro Yamada

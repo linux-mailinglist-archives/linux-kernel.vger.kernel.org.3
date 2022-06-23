@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FF8557468
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 517C8557470
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiFWHsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 03:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S230136AbiFWHsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 03:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiFWHr6 (ORCPT
+        with ESMTP id S231193AbiFWHsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 03:47:58 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1D2FFD;
-        Thu, 23 Jun 2022 00:47:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LTC5y4yXnz4xZj;
-        Thu, 23 Jun 2022 17:47:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655970471;
-        bh=ix/DajIzg43HKlGKICbftZP/HTh2T/l0UKcK7J6EmxA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jNGeEVXUPTw0ziOduhBHXMzl74s/2YIGSTZ9obIaZEYgoQzr9CB+IKQxGJpaTNkhI
-         ieggZjn3A8dwyAGv328xM6uA2n3CQCO4ZoquhpuFci3dFqw+DDFAFx4kBpAjlbX6SR
-         xT/pMGme8Ro0UTwOZPlvQV3s3+HZL7r5SuWzJIE42Pz/uz0P4WRs8W5YyVnUP0FVyW
-         LPj8Xc695ivX55WdanOmkffAzLxrzipJG5xevXuFE2oocMlf57W4sqWZ62SeCp89IL
-         6RmNain/YOOQLOMgLQN+6rFI5uMd4Gj8fTyzHxu/KNMEIrpH+gkmt/0uChhm2T9qjg
-         70N8Qhf1uc86w==
-Date:   Thu, 23 Jun 2022 17:47:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220623174750.49e01139@canb.auug.org.au>
-In-Reply-To: <CADnq5_MZ1HqM3C49MNn=4+nufbWOQbQhDtVpAeqtKzKOC+e1ew@mail.gmail.com>
-References: <20220603144315.5adcddbf@canb.auug.org.au>
- <20220615150013.30c9d7ad@canb.auug.org.au>
- <20220621181551.5eb294f5@canb.auug.org.au>
- <CADnq5_OxNm9EwLDXishu+pMfT2mgOSTvkmgSm+cm98JiCsiJog@mail.gmail.com>
- <20220622080726.39cbeb14@canb.auug.org.au>
- <CADnq5_MZ1HqM3C49MNn=4+nufbWOQbQhDtVpAeqtKzKOC+e1ew@mail.gmail.com>
+        Thu, 23 Jun 2022 03:48:41 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC241274F;
+        Thu, 23 Jun 2022 00:48:34 -0700 (PDT)
+Received: from mail-ot1-f54.google.com ([209.85.210.54]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mkn8B-1nONOZ1ds7-00mMNU; Thu, 23 Jun 2022 09:48:32 +0200
+Received: by mail-ot1-f54.google.com with SMTP id c3-20020a9d6843000000b0060c2c63c337so14876060oto.5;
+        Thu, 23 Jun 2022 00:48:31 -0700 (PDT)
+X-Gm-Message-State: AJIora/gvnfOGrSrwEDCwyieKynJHmWnCdWF1oCn/h0sOPAdhXn4Uk3Z
+        ZZ5CayhBLw3lG/sYsZgIJejZmLEQOYxor8idRTo=
+X-Google-Smtp-Source: AGRyM1uHkBIdCkI9mpCrsEZDA8zvdmE7/Fo1G/+3sQac7LSyKfcZpANe6OOE8iPxe+xA5YpR3xLpoECCt9dTyF/gSRw=
+X-Received: by 2002:a9d:4a8:0:b0:60c:76b1:f1be with SMTP id
+ 37-20020a9d04a8000000b0060c76b1f1bemr3345332otm.347.1655970510870; Thu, 23
+ Jun 2022 00:48:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/L9kKsRWbDOiF2C1dORFQW=J";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220621120355.2903-1-chrubis@suse.cz>
+In-Reply-To: <20220621120355.2903-1-chrubis@suse.cz>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 23 Jun 2022 09:48:13 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2J5k2ub6TNu9qDympdWEdQkqpbL_SqAznpwaQa+S9kXQ@mail.gmail.com>
+Message-ID: <CAK8P3a2J5k2ub6TNu9qDympdWEdQkqpbL_SqAznpwaQa+S9kXQ@mail.gmail.com>
+Subject: Re: [PATCH v3] uapi: Make __{u,s}64 match {u,}int64_t in userspace
+To:     Cyril Hrubis <chrubis@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        Arnd Bergmann <arnd@arndb.de>, LTP List <ltp@lists.linux.it>,
+        David Laight <David.Laight@aculab.com>,
+        Zack Weinberg <zack@owlfolio.org>,
+        David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:0YkVNDOX+L/OqW9IxfeVC4LojecooO6C77iFFbpozHXYPlwVsWH
+ +o/qbJpHRnjjmwkLIhTqThaPZpcR8Gx7Kx6Zf9NWRVyKJg6n758aH7T3jYp2CikebyDzZ7V
+ 9V+ifZhxLIBRV1w1wIGmBcXqIqZHvF8Ni5an5evbn/cSy3Ffq61eh7wWT2gDyg9u9cryE9V
+ QxENscWPSVQTPNSFppI7A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wBylCmi8U3M=:kl6DPcI8z4JI8lfngq4jge
+ bFknkHbJ1j6r84/1gKToOveBYGHynwzCNPsiaQEQ1PjIgzLSgtWJUWaR6dSvn854zEDQkC5o0
+ KYhDL11dGd3F6gIcctFbm3CmHfb4+HXng0lsvebaDGXpV40tE4o+rm4RoXezPTWCRQrvIRUQ/
+ 6WLuooA+ZxqPbvqWDvmaTSYL6FpozKKc7WPxHcsUlTtLEyDU3POzReXpKoZb3vpB8/9nvhBMe
+ wo1usFVF1gsKAJViA/eppZSF0cc58vVq764VP5YWTj1KMcN0P4gSkp90oLf/222Gc3AnEi48t
+ FxzQikUBHaI6Ud7a+9DgRyOGh1yJX9y+AacPlx1uG8vnZQl6qBEFthyA/nxfKEVWEFJLPBaKk
+ MXHonUm403LLQN0vupnLKJjCKg3Wpuy6+9fOAdwz0zCQdPZHj0/J00hKxBmnqz3r7IGboibco
+ +BsRYqObopmuS0zAxN0qTOTGV1anCO5I1lnyZjblcPLwXT34C7RKBgb1Cu3jpQjN12L2D/+P5
+ PuxdxdRT0dYPIBDsQLauODqnRvIhqJgto2YzchLO9fv8vgZMNEJHwiJjAnAOx0zEKxCzeMlP7
+ 0VP029uNhMiwPpqfbCly6NK55ub1pMhyZrLraGfcEnGtpQ0fdIO+XwnD/yMJugL+qefX5xp1I
+ +Wza0EPnY8sLaLAJH1egiuwAlbscschVA8bG3EPt8hdgbtzEWEZ8ti+18J5qQ+eKxMt3wqOFQ
+ Hr1G0I5yE7vJVn0VXfxmVz7/omi4Qv+bVXNWjYOfT3T4QAcktkDIpunq1/GKN6sJPVlhIXqeT
+ AdZEDeINMDNJYIIepgERVWtpNAKZfWjhdBYhK7jZjMvFLu+Ef53HaapEYbzFHoIY/PCb5asxb
+ jLmZ1zuLMFmoF6NsEqIw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/L9kKsRWbDOiF2C1dORFQW=J
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Alex,
-
-On Wed, 22 Jun 2022 10:48:50 -0400 Alex Deucher <alexdeucher@gmail.com> wro=
-te:
+On Tue, Jun 21, 2022 at 2:03 PM Cyril Hrubis <chrubis@suse.cz> wrote:
 >
-> Thanks.  I think I fixed it.  Patch sent out.
+> This changes the __u64 and __s64 in userspace on 64bit platforms from
+> long long (unsigned) int to just long (unsigned) int in order to match
+> the uint64_t and int64_t size in userspace for C code.
+>
+> We cannot make the change for C++ since that would be non-backwards
+> compatible change and may cause possible regressions and even
+> compilation failures, e.g. overloaded function may no longer find a
+> correct match.
+>
+> This allows us to use the kernel structure definitions in userspace in C
+> code. For example we can use PRIu64 and PRId64 modifiers in printf() to
+> print structure membere. Morever with this there would be no need to
+> redefine these structures in an libc implementations as it is done now.
+>
+> Consider for example the newly added statx() syscall. If we use the
+> header from uapi we will get warnings when attempting to print it's
+> members as:
+>
+>         printf("%" PRIu64 "\n", stx.stx_size);
+>
+> We get:
+>
+>         warning: format '%lu' expects argument of type 'long unsigned int',
+>                  but argument 5 has type '__u64' {aka 'long long unsigned int'}
+>
+> Signed-off-by: Cyril Hrubis <chrubis@suse.cz>
 
-Yes, that got it.  Thanks.
+I understand the problem you are solving here, but I'm not convinced
+that this is actually an overall improvement as you introduce two
+similar problems in its place:
 
---=20
-Cheers,
-Stephen Rothwell
+- any application that has previously used the correct %ll or %ull format
+  strings for members of kernel data structures now gains a new warning
 
---Sig_/L9kKsRWbDOiF2C1dORFQW=J
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+- After your patch, neither the PRIu64 nor the "%ull" format strings are
+  portable across old and new kernel headers, so applications are now
+  forced to add an explicit cast to 'unsigned long long' or 'uint64_t' to
+  every print statement for these members if they want to guarantee a
+  clean build.
 
------BEGIN PGP SIGNATURE-----
+Do you have an estimate of how many build time warnings in common
+packages actually get fixed by your patch, compared to the number
+of warnings that get introduced?
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK0GqYACgkQAVBC80lX
-0Gz28wf+IB2XHQPT0dyiMky1xSPDeSNu5OXHxMm1VR+e/kWzoXPe3OkazoZfdtDu
-ff6s6jmrEEjgRnWwRa7nAyaDpZJVqlyU64m+8gHqtQkHVromQgOzRiUSp8YC7jT1
-w4thsbyw04/jvmUFXS+AkNowf1gPGTvGadqqjd6bEcLmMViuvR/m76el7RQWQCgM
-wA//dGCinK3x9StWBm8uF2WqfoPE1KZrdotBDuRLiy68+knbNVZGq/lzofHgsrJp
-WJfyWNttgc9Gxlr0uizE5RxnNNv+UcZ6ZlvH49whWDsJtwA4DvMBFp/rZFgMF2dg
-/LTTB8QqHjgg5SojeD1bx/pMaWKktw==
-=iagx
------END PGP SIGNATURE-----
-
---Sig_/L9kKsRWbDOiF2C1dORFQW=J--
+        Arnd

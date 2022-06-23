@@ -2,269 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCAD55879E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB18B5587A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234589AbiFWSeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S235781AbiFWSgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237492AbiFWScy (ORCPT
+        with ESMTP id S234594AbiFWSgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:32:54 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F27D1917
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:34:18 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id a10-20020a170902ecca00b0016a50049af0so2292684plh.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=YzBiLCY4klTYtqAR87IAA6VD+HxSLPVS13bS8WvciXc=;
-        b=sKnXVkJcT/HWTdp8+iZMbVnsW11LhtEvgOwL4zayP6rwcEwEVSw5XjC4Pc6bVQggsu
-         CWbJgUKzOLz7sYZMfFaw3MKvLlkoX6OZ6GS4bewHNc0TZBqwpNGuy5a0WMEi7EetJlhd
-         NycAp0WSqSK9tX9WTMon+6/phpGY2LodBWt7jf1LKijODwfjN0eSpMiqjgRmKBJf6N0r
-         oeUG90uhZQWqp5yG8KrsoDcjaAKENVm2KRA4r6jgeW8v5HoRLPD6BX1tFihCkxBDRJGr
-         0C3E8b7LDbjhzIXXlMIGtnv53sq3giEH62PsnQ676AVr4EBflodtXY9U+FPCRLlB34AG
-         /ZDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=YzBiLCY4klTYtqAR87IAA6VD+HxSLPVS13bS8WvciXc=;
-        b=QdCuSmEhV/A0M255gM/TRPEKvyVV05Hd42KOzZAuLP/pNEc1Rcy26Z0iYRxSGH/IZo
-         ETBsU9mU1t2OUAVRx33tSXM8bLh18TJ65E4ePHkmDL49m655C90eHgOgeWr+tz830f86
-         qYH5dkuAFccjxP0iN4DCLblkQntG3tb+r5lvChJvhjVzazPV4McJhZdaTkVxGrGaDOBG
-         rd4PJQenphHgEjZBwfuCPVTaNAZacvympxjKu6QXw34jr0tQ9JO0eshn/uZmV8gds78E
-         uJE6714UmxLq6LfSXKcBicYjD4Dp8K9e7GhtHleEnSB16m5xa1KU71XeomFDYOn2qC98
-         AESA==
-X-Gm-Message-State: AJIora/aIHQqWTXPDB5uKsV+J/bnT9UmTWEy6FFFysusqQ+e8Ot6Avnt
-        BCpFlzP/aGQ+OprEHRSWaIv1mej6WpI=
-X-Google-Smtp-Source: AGRyM1s7DibOnE7Mbl6KtMM0c/TJRvFVMdwV6LfruY9B46xoaSSmTP191nkYGoiaR70UiIkHPnHJKO9AUic=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:9b6a:a8a1:3593:35c2])
- (user=pgonda job=sendgmr) by 2002:a05:6a00:1683:b0:4f7:e497:6a55 with SMTP id
- k3-20020a056a00168300b004f7e4976a55mr41576663pfc.21.1656005652667; Thu, 23
- Jun 2022 10:34:12 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 10:34:06 -0700
-Message-Id: <20220623173406.744645-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH V2] KVM: SEV: Init target VMCBs in sev_migrate_from
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 14:36:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1328F9C7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:37:21 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1o4QkO-00079c-Ee; Thu, 23 Jun 2022 19:36:04 +0200
+Message-ID: <ec4168b6-36f1-0183-b1ed-6a33d9fa1bbc@pengutronix.de>
+Date:   Thu, 23 Jun 2022 19:35:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when
+ fw_devlink.strict=1
+Content-Language: en-US
+To:     Saravana Kannan <saravanak@google.com>,
+        sascha hauer <sha@pengutronix.de>
+Cc:     andrew lunn <andrew@lunn.ch>, peng fan <peng.fan@nxp.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linus walleij <linus.walleij@linaro.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        eric dumazet <edumazet@google.com>,
+        pavel machek <pavel@ucw.cz>, will deacon <will@kernel.org>,
+        kevin hilman <khilman@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        joerg roedel <joro@8bytes.org>,
+        russell king <linux@armlinux.org.uk>,
+        linux-acpi@vger.kernel.org, jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>, kernel-team@android.com,
+        Len Brown <lenb@kernel.org>, len brown <len.brown@intel.com>,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        david ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        iommu@lists.linux-foundation.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        netdev@vger.kernel.org, "david s. miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, heiner kallweit <hkallweit1@gmail.com>
+References: <20220623080344.783549-1-saravanak@google.com>
+ <20220623080344.783549-3-saravanak@google.com>
+ <20220623100421.GY1615@pengutronix.de>
+ <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The target VMCBs during an intra-host migration need to correctly setup
-for running SEV and SEV-ES guests. Add sev_init_vmcb() function and make
-sev_es_init_vmcb() static. sev_init_vmcb() uses the now private function
-to init SEV-ES guests VMCBs when needed.
+Hello Saravana,
 
-Fixes: 0b020f5af092 ("KVM: SEV: Add support for SEV-ES intra host migration")
-Fixes: b56639318bb2 ("KVM: SEV: Add support for SEV intra host migration")
+On 23.06.22 19:26, Saravana Kannan wrote:
+> On Thu, Jun 23, 2022 at 3:05 AM sascha hauer <sha@pengutronix.de> wrote:
+>>
+>> On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
+>>> Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+>>> enabled iommus and dmas dependency enforcement by default. On some
+>>> systems, this caused the console device's probe to get delayed until the
+>>> deferred_probe_timeout expires.
+>>>
+>>> We need consoles to work as soon as possible, so mark the console device
+>>> node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
+>>> the probe of the console device for suppliers without drivers. The
+>>> driver can then make the decision on where it can probe without those
+>>> suppliers or defer its probe.
+>>>
+>>> Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+>>> Reported-by: Sascha Hauer <sha@pengutronix.de>
+>>> Reported-by: Peng Fan <peng.fan@nxp.com>
+>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
+>>> Tested-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>  drivers/of/base.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/of/base.c b/drivers/of/base.c
+>>> index d4f98c8469ed..a19cd0c73644 100644
+>>> --- a/drivers/of/base.c
+>>> +++ b/drivers/of/base.c
+>>> @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
+>>>                       of_property_read_string(of_aliases, "stdout", &name);
+>>>               if (name)
+>>>                       of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
+>>> +             if (of_stdout)
+>>> +                     of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
+>>
+>> The device given in the stdout-path property doesn't necessarily have to
+>> be consistent with the console= parameter. The former is usually
+>> statically set in the device trees contained in the kernel while the
+>> latter is dynamically set by the bootloader. So if you change the
+>> console uart in the bootloader then you'll still run into this trap.
+>>
+>> It's problematic to consult only the device tree for dependencies. I
+>> found several examples of drivers in the tree for which dma support
+>> is optional. They use it if they can, but continue without it when
+>> not available. "hwlock" is another property which consider several
+>> drivers as optional. Also consider SoCs in early upstreaming phases
+>> when the device tree is merged with "dmas" or "hwlock" properties,
+>> but the corresponding drivers are not yet upstreamed. It's not nice
+>> to defer probing of all these devices for a long time.
+>>
+>> I wonder if it wouldn't be a better approach to just probe all devices
+>> and record the device(node) they are waiting on. Then you know that you
+>> don't need to probe them again until the device they are waiting for
+>> is available.
+> 
+> That actually breaks things in a worse sense. There are cases where
+> the consumer driver is built in and the optional supplier driver is
+> loaded at boot. Without fw_devlink and the deferred probe timeout, we
+> end up probing the consumer with limited functionality. With the
+> current setup, sure we delay some probes a bit but at least everything
+> works with the right functionality. And you can reduce or remove the
+> delay if you want to optimize it.
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
+I have a system that doesn't use stdout-path and has the bootloader
+set console= either to ttynull when secure booting or to an UART
+when booting normally. How would I optimize the kernel to avoid
+my UART being loaded after DMA controller probe without touching
+the bootloader?
 
-V2
-* Refactor of sev_es_init_vmcb() and sev_migrate_from suggested by Sean.
+Cheers,
+Ahmad
 
----
- arch/x86/kvm/svm/sev.c | 68 ++++++++++++++++++++++++++++--------------
- arch/x86/kvm/svm/svm.c | 11 ++-----
- arch/x86/kvm/svm/svm.h |  2 +-
- 3 files changed, 48 insertions(+), 33 deletions(-)
+> 
+> -Saravana
+> 
+> 
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 309bcdb2f929..d45868031954 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -1662,19 +1662,24 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
- {
- 	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
- 	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
-+	struct kvm_vcpu *dst_vcpu, *src_vcpu;
-+	struct vcpu_svm *dst_svm, *src_svm;
- 	struct kvm_sev_info *mirror;
-+	unsigned long i;
- 
- 	dst->active = true;
- 	dst->asid = src->asid;
- 	dst->handle = src->handle;
- 	dst->pages_locked = src->pages_locked;
- 	dst->enc_context_owner = src->enc_context_owner;
-+	dst->es_active = src->es_active;
- 
- 	src->asid = 0;
- 	src->active = false;
- 	src->handle = 0;
- 	src->pages_locked = 0;
- 	src->enc_context_owner = NULL;
-+	src->es_active = false;
- 
- 	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
- 
-@@ -1701,26 +1706,21 @@ static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
- 		list_del(&src->mirror_entry);
- 		list_add_tail(&dst->mirror_entry, &owner_sev_info->mirror_vms);
- 	}
--}
- 
--static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
--{
--	unsigned long i;
--	struct kvm_vcpu *dst_vcpu, *src_vcpu;
--	struct vcpu_svm *dst_svm, *src_svm;
-+	kvm_for_each_vcpu(i, dst_vcpu, dst_kvm) {
-+		dst_svm = to_svm(dst_vcpu);
- 
--	if (atomic_read(&src->online_vcpus) != atomic_read(&dst->online_vcpus))
--		return -EINVAL;
-+		sev_init_vmcb(dst_svm);
- 
--	kvm_for_each_vcpu(i, src_vcpu, src) {
--		if (!src_vcpu->arch.guest_state_protected)
--			return -EINVAL;
--	}
-+		if (!dst->es_active)
-+			continue;
- 
--	kvm_for_each_vcpu(i, src_vcpu, src) {
-+		/*
-+		 * Note, the source is not required to have the same number of
-+		 * vCPUs as the destination when migrating a vanilla SEV VM.
-+		 */
-+		src_vcpu = kvm_get_vcpu(dst_kvm, i);
- 		src_svm = to_svm(src_vcpu);
--		dst_vcpu = kvm_get_vcpu(dst, i);
--		dst_svm = to_svm(dst_vcpu);
- 
- 		/*
- 		 * Transfer VMSA and GHCB state to the destination.  Nullify and
-@@ -1737,8 +1737,23 @@ static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
- 		src_svm->vmcb->control.vmsa_pa = INVALID_PAGE;
- 		src_vcpu->arch.guest_state_protected = false;
- 	}
--	to_kvm_svm(src)->sev_info.es_active = false;
--	to_kvm_svm(dst)->sev_info.es_active = true;
-+}
-+
-+static int sev_check_source_vcpus(struct kvm *dst, struct kvm *src)
-+{
-+	struct kvm_vcpu *src_vcpu;
-+	unsigned long i;
-+
-+	if (!sev_es_guest(src))
-+		return 0;
-+
-+	if (atomic_read(&src->online_vcpus) != atomic_read(&dst->online_vcpus))
-+		return -EINVAL;
-+
-+	kvm_for_each_vcpu(i, src_vcpu, src) {
-+		if (!src_vcpu->arch.guest_state_protected)
-+			return -EINVAL;
-+	}
- 
- 	return 0;
- }
-@@ -1786,11 +1801,9 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
- 	if (ret)
- 		goto out_dst_vcpu;
- 
--	if (sev_es_guest(source_kvm)) {
--		ret = sev_es_migrate_from(kvm, source_kvm);
--		if (ret)
--			goto out_source_vcpu;
--	}
-+	ret = sev_check_source_vcpus(kvm, source_kvm);
-+	if (ret)
-+		goto out_source_vcpu;
- 
- 	sev_migrate_from(kvm, source_kvm);
- 	kvm_vm_dead(source_kvm);
-@@ -2911,7 +2924,7 @@ int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in)
- 				    count, in);
- }
- 
--void sev_es_init_vmcb(struct vcpu_svm *svm)
-+static void sev_es_init_vmcb(struct vcpu_svm *svm)
- {
- 	struct kvm_vcpu *vcpu = &svm->vcpu;
- 
-@@ -2964,6 +2977,15 @@ void sev_es_init_vmcb(struct vcpu_svm *svm)
- 	}
- }
- 
-+void sev_init_vmcb(struct vcpu_svm *svm)
-+{
-+	svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
-+	clr_exception_intercept(svm, UD_VECTOR);
-+
-+	if (sev_es_guest(svm->vcpu.kvm))
-+		sev_es_init_vmcb(svm);
-+}
-+
- void sev_es_vcpu_reset(struct vcpu_svm *svm)
- {
- 	/*
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 136298cfb3fb..3c0e581676c3 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1259,15 +1259,8 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
- 		svm->vmcb->control.int_ctl |= V_GIF_ENABLE_MASK;
- 	}
- 
--	if (sev_guest(vcpu->kvm)) {
--		svm->vmcb->control.nested_ctl |= SVM_NESTED_CTL_SEV_ENABLE;
--		clr_exception_intercept(svm, UD_VECTOR);
--
--		if (sev_es_guest(vcpu->kvm)) {
--			/* Perform SEV-ES specific VMCB updates */
--			sev_es_init_vmcb(svm);
--		}
--	}
-+	if (sev_guest(vcpu->kvm))
-+		sev_init_vmcb(svm);
- 
- 	svm_hv_init_vmcb(vmcb);
- 	init_vmcb_after_set_cpuid(vcpu);
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index d51de3c9264a..0897ce8a4863 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -649,10 +649,10 @@ void __init sev_set_cpu_caps(void);
- void __init sev_hardware_setup(void);
- void sev_hardware_unsetup(void);
- int sev_cpu_init(struct svm_cpu_data *sd);
-+void sev_init_vmcb(struct vcpu_svm *svm);
- void sev_free_vcpu(struct kvm_vcpu *vcpu);
- int sev_handle_vmgexit(struct kvm_vcpu *vcpu);
- int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in);
--void sev_es_init_vmcb(struct vcpu_svm *svm);
- void sev_es_vcpu_reset(struct vcpu_svm *svm);
- void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
- void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa);
+
 -- 
-2.37.0.rc0.104.g0611611a94-goog
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

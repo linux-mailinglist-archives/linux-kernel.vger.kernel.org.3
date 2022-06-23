@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2464F5580BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE2F55851A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiFWQxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S235351AbiFWRyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiFWQvv (ORCPT
+        with ESMTP id S232215AbiFWRwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BD41CFD7;
-        Thu, 23 Jun 2022 09:51:35 -0700 (PDT)
+        Thu, 23 Jun 2022 13:52:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3CFA8B4C;
+        Thu, 23 Jun 2022 10:12:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DE0961F99;
-        Thu, 23 Jun 2022 16:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC00C3411B;
-        Thu, 23 Jun 2022 16:51:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D688B82490;
+        Thu, 23 Jun 2022 17:12:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1FFC3411B;
+        Thu, 23 Jun 2022 17:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003094;
-        bh=k/0LJkN2/FgEcWubVtK4K0/TeNEztiXv555kEZbY2+Y=;
+        s=korg; t=1656004358;
+        bh=ehgCtttAw7Z0rTcd1lJ4Muinu7j3UQAqN14lOnPikEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GVL75FwfLduXIHvg34PUzjso0jsnzdENOxQyu34joON+qgciXwb7tJ75rqF1EDl4R
-         Dug/uVLXPehDPIW7HZNTtY1vlg/KjaAqnVJq1cM5E4at3QfotPRA6jjl7p4qWB8exC
-         hch53NPIBDDJrr8OXQYcFgfmzM4eouPfu50NFUFc=
+        b=YPYcH8feaazkFhRibn16o0FYdP48+W6xORJnGPGN5t58h5nO0FHe7NzYm3+dVRlYZ
+         wV1Ox9vJLxtXT8bQBkda2Yp4IWG4TJXJE9y9JUDNjdlp5fj12XLekAyOACNxra8BW0
+         clH51yWLgtEDc6xIOb/QNJgasmu2FHD6kFZLgJzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 087/264] random: harmonize "crng init done" messages
+Subject: [PATCH 4.19 013/234] char/random: Add a newline at the end of the file
 Date:   Thu, 23 Jun 2022 18:41:20 +0200
-Message-Id: <20220623164346.530644296@linuxfoundation.org>
+Message-Id: <20220623164343.435429565@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,14 +55,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominik Brodowski <linux@dominikbrodowski.net>
+From: Borislav Petkov <bp@alien8.de>
 
-commit 161212c7fd1d9069b232785c75492e50941e2ea8 upstream.
+commit 3fd57e7a9e66b9a8bcbf0560ff09e84d0b8de1bd upstream.
 
-We print out "crng init done" for !TRUST_CPU, so we should also print
-out the same for TRUST_CPU.
+On Tue, Oct 01, 2019 at 10:14:40AM -0700, Linus Torvalds wrote:
+> The previous state of the file didn't have that 0xa at the end, so you get that
+>
+>
+>   -EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+>   \ No newline at end of file
+>   +EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+>
+> which is "the '-' line doesn't have a newline, the '+' line does" marker.
 
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Aaha, that makes total sense, thanks for explaining. Oh well, let's fix
+it then so that people don't scratch heads like me.
+
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -71,14 +81,12 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -833,7 +833,7 @@ static void __init crng_initialize_prima
- 		invalidate_batched_entropy();
- 		numa_crng_init();
- 		crng_init = 2;
--		pr_notice("crng done (trusting CPU's manufacturer)\n");
-+		pr_notice("crng init done (trusting CPU's manufacturer)\n");
- 	}
- 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+@@ -2514,4 +2514,4 @@ void add_bootloader_randomness(const voi
+ 	else
+ 		add_device_randomness(buf, size);
  }
+-EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+\ No newline at end of file
++EXPORT_SYMBOL_GPL(add_bootloader_randomness);
 
 

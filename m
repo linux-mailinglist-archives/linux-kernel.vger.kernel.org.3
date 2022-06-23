@@ -2,157 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D74F557671
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5EC557675
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiFWJR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S230420AbiFWJSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFWJR5 (ORCPT
+        with ESMTP id S230302AbiFWJSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:17:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7827270D;
-        Thu, 23 Jun 2022 02:17:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4261A61D9A;
-        Thu, 23 Jun 2022 09:17:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A128BC341C0;
-        Thu, 23 Jun 2022 09:17:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655975873;
-        bh=U8j5P0qtBZIDNBnCMPBu0upIuqsJV+Rdn2D6qm/fQeE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NtJ3Zr13mthb3BDCLbM39D2dq7T07zfd88Rhronw3t2GgWJdMTh5TzfHiFmSGDOwS
-         7EtsaQMNvrjA3NDtR+BnDeRTBb2N0wenD0R6Co5vP9meSLo8hpP0tDmNxS4TcSgtI+
-         rVzpEHUWoiS5UajU2zeJGjVXQRDehoCeEg4XJQTddGDOlTf4GXqlqg20zTqv5TC6pH
-         BugmY/ITKB1sS4tyYnN+EarvAlERWRFZrWlzq4DTegD8A5rv/4L2gRTemknuLyhjdf
-         aSOTuZEpDzMQreTcbsTIfNYCqZviWaFXXNcjQ1656vAzIwi6KyubK1KPd0w3uszi9x
-         74sXg+nUqfUsw==
-Received: by mail-vs1-f49.google.com with SMTP id j1so9926703vsj.12;
-        Thu, 23 Jun 2022 02:17:53 -0700 (PDT)
-X-Gm-Message-State: AJIora/KXXJ8Z7dRmBGqXxUqraX7obMts5PzOTSrJAuOygjx/MvmGhw2
-        tIFFCdq5xnxtc3xvjyJ5H2/5+xzISBUnQnNI974=
-X-Google-Smtp-Source: AGRyM1vRxDL3RZ5DSRydCo8VPaFKP8w64JSpP9HmeCA1/VJQQp5/RZMHA6dneZ6BrymmJh8xDJhiM4APQg/4l0bZllc=
-X-Received: by 2002:a05:6102:3e93:b0:353:a8fb:e922 with SMTP id
- m19-20020a0561023e9300b00353a8fbe922mr11614815vsv.51.1655975872663; Thu, 23
- Jun 2022 02:17:52 -0700 (PDT)
+        Thu, 23 Jun 2022 05:18:42 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCE946CBA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:18:38 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id j22so15909775ljg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XcQS1XCkl/vk/iiK9UlBRssI2Zu/U1XTYmHdI6QOmKg=;
+        b=NCukPQSVf9nm4WScxjlBsKJl1tSICpwfp1JKN9pkxN5Js4SU4FWxjMg0gKJq4i/Z3m
+         juea/x0zHxdUfCT/ONLj7NebPZEoZJQqOyHhdztWJd5fEexSPqteI81MXJCxC5gpxjwn
+         UdWSFNlaYPg6BXAtysbcR07TeooqQQPSQryAXEZvP4+kg0k+4fBeJ6fAk+GWUnxbteMk
+         TjTguyQ95dylDp9yGPe2XzK81ISIWdfO08e8MwwSvjEb7vRfPC/KRSfzQA49Ib/nxmlh
+         70eR5CzA+OqKFS/EQ/t2WDFWh9SEsUU4uWB0Mx4QH7EQY6iI5lEus1EvmxmQZBcWKTGM
+         Dy9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XcQS1XCkl/vk/iiK9UlBRssI2Zu/U1XTYmHdI6QOmKg=;
+        b=vyTsO6nlhQpkIELFlTYgxHlWDp2IHjgf5lRAYTBEX8Rjq5YJMsunD/FSi6Oaan2RWB
+         U97QyhDbygtFJRGT0kr1BEwTPBKADpyfdRFHLZgQqqfDqSZfBBGntoTwSIy8y9KzRx4q
+         evfSTJAUuTFX/DDDhpgV6Yp54aB+8+rUu4ywefbJncfOKNS5d/gmKzReMntzY7jc0RSE
+         oxAQ+AHDV+Grr+LzUJzjsjbPEfys+vtbAm5Lh7cygyfIUVH9HtF9N2JWs8WEFabIvHaJ
+         2lni8KnbuGV0rKCZ+2xy40IexsZQPLAeZRWW6WQfv5LKX4FnqSROTliL5GoUu7rJvZ7V
+         YN1w==
+X-Gm-Message-State: AJIora/d3unGOciYMytJAoesPFgJCRF511MeKp1dJgauOYcUHOl+kGny
+        0fAz6S1uiv61vpfvc+r0qxyNY67lbhfb5jF2bhXQrA==
+X-Google-Smtp-Source: AGRyM1uZOd8+a/MGh7Ds9XxSG3qQcz0C1wEyURCRfKYw863suXgA3Ov2iAiQPtxpH7+zkOQpaRk2+sY63kjzx4nYjIU=
+X-Received: by 2002:a2e:b0fc:0:b0:255:6f92:f9d4 with SMTP id
+ h28-20020a2eb0fc000000b002556f92f9d4mr4259427ljl.92.1655975917005; Thu, 23
+ Jun 2022 02:18:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621144920.2945595-1-guoren@kernel.org> <20220621144920.2945595-2-guoren@kernel.org>
- <CAK8P3a2rnz9mQqhN6-e0CGUUv9rntRELFdxt_weiD7FxH7fkfQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a2rnz9mQqhN6-e0CGUUv9rntRELFdxt_weiD7FxH7fkfQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 23 Jun 2022 17:17:41 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTagygiQmNnxFG01ZbVKoHNc0rSbaPAjNFxxf7D7te3uQ@mail.gmail.com>
-Message-ID: <CAJF2gTTagygiQmNnxFG01ZbVKoHNc0rSbaPAjNFxxf7D7te3uQ@mail.gmail.com>
-Subject: Re: [PATCH V6 1/2] asm-generic: spinlock: Move qspinlock &
- ticket-lock into generic spinlock.h
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, Rui Wang <r@hev.cc>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+References: <20220607104015.2126118-1-poprdi@google.com> <CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com>
+ <CAPUC6b+xMnk8VDGv_7p9j4GHD75FrxG3hWKpTSF2zHj508=x9A@mail.gmail.com> <CANp29Y7gb7cop8p8k-LqR1WoLwOLxi+QGRGLEZrbYW8Tw6_i2w@mail.gmail.com>
+In-Reply-To: <CANp29Y7gb7cop8p8k-LqR1WoLwOLxi+QGRGLEZrbYW8Tw6_i2w@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 23 Jun 2022 11:18:25 +0200
+Message-ID: <CACT4Y+b3LHerJNwcPuUSxWMXRKFAunK83BHEXiwGs53Jves6QQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     =?UTF-8?Q?Tam=C3=A1s_Koczka?= <poprdi@google.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Nguyen <theflow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 4:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Wed, 22 Jun 2022 at 12:20, Aleksandr Nogikh <nogikh@google.com> wrote:
 >
-> On Tue, Jun 21, 2022 at 4:49 PM <guoren@kernel.org> wrote:
+> (Resending the reply I sent to the v1 of the patch. I sent it by
+> mistake with HTML content, so it did not reach lore.)
+>
+> I checked out v5.18.1, applied this patch and fuzzed it with syzkaller
+> for a day. The fuzzer was indeed able to find and report more coverage
+> of the BT subsystem than without the patch.
+>
+> Tested-by: Aleksandr Nogikh <nogikh@google.com>
+>
+>
+> On Tue, Jun 14, 2022 at 3:34 PM Tam=C3=A1s Koczka <poprdi@google.com> wro=
+te:
 > >
-> > From: Guo Ren <guoren@linux.alibaba.com>
+> > Hello Marcel,
 > >
-> > Separate ticket-lock into tspinlock.h and let generic spinlock support
-> > qspinlock or ticket-lock selected by CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > config.
+> > I hope this was the change you originally requested, and I did not
+> > misunderstand anything, but if you need any additional modification to
+> > the code or the commit, please feel free to let me know!
 > >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  include/asm-generic/spinlock.h        | 90 ++------------------------
-> >  include/asm-generic/spinlock_types.h  | 14 ++--
-> >  include/asm-generic/tspinlock.h       | 92 +++++++++++++++++++++++++++
-> >  include/asm-generic/tspinlock_types.h | 17 +++++
->
-> Unless someone has a very good argument for the "tspinlock" name, I would
-> prefer naming the new file ticket_spinlock.h. While the 'qspinlock' name has
-> an established meaning already, this is not the case for 'tspinlock', and
-> the longer name would be less confusing in my opinion.
-Okay. ticket_spinlock is also good to me.
-
->
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +#include <asm/qspinlock.h>
-> >  #include <asm/qrwlock.h>
-> > +#else
-> > +#include <asm-generic/tspinlock.h>
-> > +#endif
->
-> As Huacai Chen suggested in the other thread, the asm/qrwlock.h include should
-> be outside of the #ifdef here.
-Okay
-
-
->
-> > diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/spinlock_types.h
-> > index 8962bb730945..9875c1d058b3 100644
-> > --- a/include/asm-generic/spinlock_types.h
-> > +++ b/include/asm-generic/spinlock_types.h
-> > @@ -3,15 +3,11 @@
-> >  #ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
-> >  #define __ASM_GENERIC_SPINLOCK_TYPES_H
+> > Thank you,
+> > Tamas
 > >
-> > -#include <linux/types.h>
-> > -typedef atomic_t arch_spinlock_t;
-> > -
-> > -/*
-> > - * qrwlock_types depends on arch_spinlock_t, so we must typedef that before the
-> > - * include.
-> > - */
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +#include <asm-generic/qspinlock_types.h>
-> >  #include <asm/qrwlock_types.h>
-> > -
-> > -#define __ARCH_SPIN_LOCK_UNLOCKED      ATOMIC_INIT(0)
-> > +#else
-> > +#include <asm-generic/tspinlock_types.h>
-> > +#endif
->
-> I don't think this file warrants the extra indirection, since both
-> versions have only a
-> few lines. Just put it all into one file, and change the files that include
-> asm-generic/qspinlock_types.h to use asm-generic/spinlock_types.h instead.
+> > On Tue, Jun 7, 2022 at 1:44 PM Tam=C3=A1s Koczka <poprdi@google.com> wr=
+ote:
+> > >
+> > > Hello Marcel,
+> > >
+> > > I added some comments into the code about what the kcov_remote calls =
+do and
+> > > why they were implemented and I also added some reasoning to the comm=
+it
+> > > message.
+> > >
+> > > I did not mention in the commit but these functions only run if the k=
+ernel
+> > > is compiled with CONFIG_KCOV.
+> > >
+> > > Thank you again for reviewing the patch!
+> > >
+> > > --
+> > > Tamas
+> > >
+> > > On Tue, Jun 7, 2022 at 12:40 PM Tamas Koczka <poprdi@google.com> wrot=
+e:
+> > > >
+> > > > Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_sto=
+p()
+> > > > calls, so remote KCOV coverage is collected while processing the rx=
+_q
+> > > > queue which is the main incoming Bluetooth packet queue.
+> > > >
+> > > > Coverage is associated with the thread which created the packet skb=
+.
+> > > >
+> > > > The collected extra coverage helps kernel fuzzing efforts in findin=
+g
+> > > > vulnerabilities.
+> > > >
+> > > > Signed-off-by: Tamas Koczka <poprdi@google.com>
+> > > > ---
+> > > > Changelog since v1:
+> > > >  - add comment about why kcov_remote functions are called
+> > > >
+> > > > v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@goo=
+gle.com/
+> > > >
+> > > >  net/bluetooth/hci_core.c | 10 +++++++++-
+> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> > > > index 45c2dd2e1590..0af43844c55a 100644
+> > > > --- a/net/bluetooth/hci_core.c
+> > > > +++ b/net/bluetooth/hci_core.c
+> > > > @@ -29,6 +29,7 @@
+> > > >  #include <linux/rfkill.h>
+> > > >  #include <linux/debugfs.h>
+> > > >  #include <linux/crypto.h>
+> > > > +#include <linux/kcov.h>
+> > > >  #include <linux/property.h>
+> > > >  #include <linux/suspend.h>
+> > > >  #include <linux/wait.h>
+> > > > @@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct *=
+work)
+> > > >
+> > > >         BT_DBG("%s", hdev->name);
+> > > >
+> > > > -       while ((skb =3D skb_dequeue(&hdev->rx_q))) {
+> > > > +       /* The kcov_remote functions used for collecting packet par=
+sing
+> > > > +        * coverage information from this background thread and ass=
+ociate
+> > > > +        * the coverage with the syscall's thread which originally =
+injected
+> > > > +        * the packet. This helps fuzzing the kernel.
+> > > > +        */
+> > > > +       for (; (skb =3D skb_dequeue(&hdev->rx_q)); kcov_remote_stop=
+()) {
+> > > > +               kcov_remote_start_common(skb_get_kcov_handle(skb));
+> > > > +
+> > > >                 /* Send copy to monitor */
+> > > >                 hci_send_to_monitor(hdev, skb);
 
-Okay, I'll try that.
+Looks good to me.
+Anything else needed to merge this patch?
 
-
->
->       Arnd
-
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>

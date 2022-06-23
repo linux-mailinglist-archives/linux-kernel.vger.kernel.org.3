@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAB7557D55
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8661557D59
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiFWNyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        id S231641AbiFWNz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiFWNyV (ORCPT
+        with ESMTP id S231841AbiFWNzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:54:21 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF54F313AE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:54:19 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t25so33461192lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tfyugb+VK3SgQwCDhaT7lGAM/LqJxpybK+Hc9WzFhzQ=;
-        b=mQzYdMV1CCi2YOP1mcnFFsH2intAb3xNeNh4JQJqOcnCrvbR3FHp1x8Y69dLYpT6NK
-         QPsAOC73P/q95/mm+3RG7i6fcO2LNzzQeasKQG9g1tGBUfX9eyYiPI8ut2wI+5b9XYys
-         CwL1HtPmzRUhyx1gxrB6LzROBvt81qCeaHVsyk1OqWIBETj+BDvrXT4BCtj/y2UExvLW
-         7gFcUIbPjCSY85mR+fzeyubdtrMYJEKfIXl+I/yE2GaTNndWs+dixFP85jEUuZwYXNpf
-         PKwTxKxqPobcDyh2Ql3zd52Bhd2zm58McIIkMEfYsHNE3rdm689o9R8tDvTw3BaIxJBA
-         fIsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tfyugb+VK3SgQwCDhaT7lGAM/LqJxpybK+Hc9WzFhzQ=;
-        b=OWPHwq5ltVOJWdR7KVQZ9EUnQYZi8PzSuV/ZDhdQ1+OTXvlL9A6tyy0lsveASe0Okt
-         CXIZLbRlFPjX+NZkOoltLyN9ELhvFHOdB1Gc5iBh5ZRkivZctmcjPmdU3P/YSJQVIgT2
-         4pYKqhN4XHBpgOQk+j6Ez3nlCaP5saRkjE5sswZp/vgg8/F0tnB3GYcdnqLW540nOsz2
-         l/ynV6EOK9RHMOCQexWbXKAllKUEmx8c+5QPEGP0rQrrSIMx3nXDu900UbzB7CWFFa8C
-         g6Yk9BRIDSbqLElV+52FHtYCYestFJpEMNHLVF2v7hljwOJxYTH9Vt85OcpBgYmJy2a7
-         MVYw==
-X-Gm-Message-State: AJIora/AhS1fZ0lpoyT/O6+nGH/hsiJn1fzop/D0q9UmuZ+cTS+coICd
-        3c+SAH6i5VDbShj/lTKdw2mRnqPs78FhVkgmS53BTl2iAO6Gmw==
-X-Google-Smtp-Source: AGRyM1uFayviSfvWLDlRHgU6O1QCdl6DS51+zpC7nX7dalGdEzTq2NeLL8I42F7LNZxAdS3PrNXFat9Oy0e+B1LmL1g=
-X-Received: by 2002:a05:6512:3054:b0:47f:7bb1:2fd2 with SMTP id
- b20-20020a056512305400b0047f7bb12fd2mr5547605lfb.71.1655992458169; Thu, 23
- Jun 2022 06:54:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220623080009.1775574-1-vincent.whitchurch@axis.com>
-In-Reply-To: <20220623080009.1775574-1-vincent.whitchurch@axis.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Jun 2022 15:53:41 +0200
-Message-ID: <CAPDyKFpg9Gs3qOeXWM2A1gSDEKA89i72NoTcF0M_a3jO-AC+dw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: Allow speed modes to be adjusted via module param
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     kernel@axis.com, linux-mmc@vger.kernel.org,
+        Thu, 23 Jun 2022 09:55:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E83134674
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:55:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D89C2B823D9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:55:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29CF6C3411B;
+        Thu, 23 Jun 2022 13:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655992515;
+        bh=epergsoEs6hnkzfvF83JzYWuJWsBUhVaxsqBILAQAq8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f1wY8jCciOeT4ljJuzhjzsbMW/e2GLh6LYxdEvUBiKIQPSuDQawDM3vu8WPHvzJkl
+         XdXWd2o+vgEP2icc/LHsubvGEG+pZJSlgClvuRgOFxHlMDBmtq+7X/I4RlPsRUn5FA
+         l6VRTGPQLdP3P7sZ9QGJSuqMdPZAln9JMqylRM8Jzl5A4YDZVT8CYw470pO0rGIab7
+         3AyQug+aC2F7zusb617plylUjtVqFoE35ZjBNsWeO984M4pJQY7y5PbxiCpP2sCjxN
+         k/DxfHtfoIB0blGZJEE+zX0NB99VGcIJKcobJTLUB0WftxUhRLCrhUJ1FjsdzF3WYw
+         Z7HgSYGaFRLWw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AD61B4096F; Thu, 23 Jun 2022 10:55:12 -0300 (-03)
+Date:   Thu, 23 Jun 2022 10:55:12 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Namhyung Kim <namhyung@kernel.org>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH 4/5] perf record: Add finished init event
+Message-ID: <YrRwwMtOc/5kZC9r@kernel.org>
+References: <20220610113316.6682-1-adrian.hunter@intel.com>
+ <20220610113316.6682-5-adrian.hunter@intel.com>
+ <YrRtiqE3gm/zQxfj@kernel.org>
+ <YrRuqp988gFrE3YY@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YrRuqp988gFrE3YY@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,104 +62,264 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 at 10:00, Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> During board verification, there is a need to test the various supported
-> eMMC/SD speed modes.  However, since the framework chooses the best mode
-> supported by the card and the host controller's caps, this currently
-> necessitates changing the devicetree for every iteration.
->
-> To make changing the modes easier, allow the various host controller
-> capabilities to be cleared via a module parameter.  (A per-controller
-> debugfs wouldn't work since the controller needs to be re-probed to
-> trigger re-init of cards.  A module parameter is used instead of a
+Em Thu, Jun 23, 2022 at 10:46:18AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, Jun 23, 2022 at 10:41:31AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Fri, Jun 10, 2022 at 02:33:15PM +0300, Adrian Hunter escreveu:
+> > > In preparation for recording sideband events in a virtual machine guest so
+> > > that they can be injected into a host perf.data file.
+> > > 
+> > > This is needed to enable injecting events after the initial synthesized
+> > > user events (that have an all zero id sample) but before regular events.
+> > 
+> > Humm, can't we consider the first FINISHED_ROUND as a good enough marker
+> > for this?
+> 
+> Nope, synthesize_flush() may be called multiple times during the
+> initialization (the synthesizing of PERF_RECORD_ events for pre-existing
+> threads)...
+> 
+> I'm reapplying this patch.
 
-I think we could make use of a per-controller debugfs thing, if used
-in combination with MMC_CAP_AGGRESSIVE_PM and runtime PM.
+And add this, please check:
 
-As runtime PM also has sysfs interface for each device, we can control
-runtime PM for the card's device (to trigger re-initialization of the
-card). In between runtime suspend/resume of the card's device, we
-should be able to change the supported speed modes, through debug fs.
+diff --git a/tools/perf/Documentation/perf.data-file-format.txt b/tools/perf/Documentation/perf.data-file-format.txt
+index f56d0e0fbff6ef66..bc9f0aa113d8b6d4 100644
+--- a/tools/perf/Documentation/perf.data-file-format.txt
++++ b/tools/perf/Documentation/perf.data-file-format.txt
+@@ -607,6 +607,16 @@ struct compressed_event {
+        char                            data[];
+ };
 
-Would this work for you?
++       PERF_RECORD_FINISHED_INIT                       = 82,
++
++Marks the end of records for the system, pre-existing threads in system wide
++sessions, etc. Those are the ones prefixed PERF_RECORD_USER_*.
++
++This is used, for instance, to 'perf inject' events after init and before
++regular events, those emitted by the kernel, to support combining guest and
++host records.
++
++
+ The header is followed by compressed data frame that can be decompressed
+ into array of perf trace records. The size of the entire compressed event
+ record including the header is limited by the max value of header.size.
+⬢[acme@toolbox perf]$
 
-Kind regards
-Uffe
 
-> global debugfs to allow this to be also set via the kernel command
-> line.)
->
-> The values to be written are the raw MMC_CAP* values from
-> include/linux/mmc/host.h.  This is rather low-level, and these defines
-> are not guaranteed to be stable, but it is perhaps good enough for the
-> indented use case.  A warning is emitted when the caps clearing is in
-> effect.
->
-> Example of use:
->
->  # grep timing /sys/kernel/debug/mmc0/ios
->  timing spec:   9 (mmc HS200)
->
->  // MMC_CAP2_HS200_1_8V_SDR
->  # echo $((1 << 5)) > /sys/module/mmc_core/parameters/caps2_clear
->
->  # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/unbind
->  # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/bind
->  # grep timing /sys/kernel/debug/mmc0/ios
->  timing spec:   8 (mmc DDR52)
->
->  // MMC_CAP_1_8V_DDR
->  # echo $((1 << 12)) > /sys/module/mmc_core/parameters/caps_clear
->
->  # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/unbind
->  # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/bind
->  # grep timing /sys/kernel/debug/mmc0/ios
->  timing spec:   1 (mmc high-speed)
->
->  # echo 0 > /sys/module/mmc_core/parameters/caps2_clear
->
->  # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/unbind
->  # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/bind
->  # grep timing /sys/kernel/debug/mmc0/ios
->  timing spec:   9 (mmc HS200)
->
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  drivers/mmc/core/host.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-> index 2ed2b4d5e5a5..37971b7c7f62 100644
-> --- a/drivers/mmc/core/host.c
-> +++ b/drivers/mmc/core/host.c
-> @@ -34,6 +34,10 @@
->  #define cls_dev_to_mmc_host(d) container_of(d, struct mmc_host, class_dev)
->
->  static DEFINE_IDA(mmc_host_ida);
-> +static unsigned int caps_clear, caps2_clear;
-> +
-> +module_param(caps_clear, uint, 0644);
-> +module_param(caps2_clear, uint, 0644);
->
->  #ifdef CONFIG_PM_SLEEP
->  static int mmc_host_class_prepare(struct device *dev)
-> @@ -411,6 +415,14 @@ int mmc_of_parse(struct mmc_host *host)
->                 host->caps2 &= ~(MMC_CAP2_HS400_1_8V | MMC_CAP2_HS400_1_2V |
->                                  MMC_CAP2_HS400_ES);
->
-> +       if (caps_clear || caps2_clear)
-> +               dev_warn(host->parent,
-> +                        "clearing host controller caps %#x caps2 %#x\n",
-> +                        caps_clear, caps2_clear);
-> +
-> +       host->caps &= ~caps_clear;
-> +       host->caps2 &= ~caps2_clear;
-> +
->         /* Must be after "non-removable" check */
->         if (device_property_read_u32(dev, "fixed-emmc-driver-type", &drv_type) == 0) {
->                 if (host->caps & MMC_CAP_NONREMOVABLE)
-> --
-> 2.34.1
->
+- Arnaldo
+ 
+> - Arnaldo
+>  
+> > 0 0x4fc8 [0x48]: PERF_RECORD_KSYMBOL addr ffffffffc10d0650 len 255 type 1 flags 0x0 name bpf_prog_ee0e253c78993a24
+> > 
+> > 0x5010@perf.data [0x28]: event: 18
+> > .
+> > . ... raw event: size 40 bytes
+> > .  0000:  12 00 00 00 00 00 28 00 01 00 00 00 28 00 00 00  ......(.....(...
+> > .  0010:  ee 0e 25 3c 78 99 3a 24 00 00 00 00 00 00 00 00  ..%<x.:$........
+> > .  0020:  00 00 00 00 00 00 00 00                          ........
+> > 
+> > 0 0x5010 [0x28]: PERF_RECORD_BPF_EVENT type 1, flags 0, id 40
+> > 
+> > 0x5038@perf.data [0x30]: event: 3
+> > .
+> > . ... raw event: size 48 bytes
+> > .  0000:  03 00 00 00 00 00 30 00 3a 5d 00 00 3a 5d 00 00  ......0.:]..:]..
+> > .  0010:  70 65 72 66 2d 65 78 65 63 00 00 00 00 00 00 00  perf-exec.......
+> > .  0020:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> > 
+> > 0 0x5038 [0x30]: PERF_RECORD_COMM: perf-exec:23866/23866
+> > 
+> > 0x5068@perf.data [0x8]: event: 82
+> > .
+> > . ... raw event: size 8 bytes
+> > .  0000:  52 00 00 00 00 00 08 00                          R.......
+> > 
+> > 0 0x5068 [0x8]: PERF_RECORD_FINISHED_INIT: unhandled!
+> > 
+> > 0x5390@perf.data [0x8]: event: 68
+> > .
+> > . ... raw event: size 8 bytes
+> > .  0000:  44 00 00 00 00 00 08 00                          D.......
+> > 
+> > 0 0x5390 [0x8]: PERF_RECORD_FINISHED_ROUND
+> > 
+> > 0x5070@perf.data [0x28]: event: 9
+> > .
+> > . ... raw event: size 40 bytes
+> > .  0000:  09 00 00 00 01 00 28 00 50 b5 16 a7 ff ff ff ff  ......(.P.......
+> > .  0010:  3a 5d 00 00 3a 5d 00 00 54 90 f5 bf 52 01 00 00  :]..:]..T...R...
+> > .  0020:  01 00 00 00 00 00 00 00                          ........
+> > 
+> > 1454919487572 0x5070 [0x28]: PERF_RECORD_SAMPLE(IP, 0x1): 23866/23866: 0xffffffffa716b550 period: 1 addr: 0
+> > 
+> >  
+> > > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> > > ---
+> > >  tools/lib/perf/include/perf/event.h |  1 +
+> > >  tools/perf/builtin-inject.c         |  1 +
+> > >  tools/perf/builtin-record.c         | 27 +++++++++++++++++++++++++++
+> > >  tools/perf/util/event.c             |  1 +
+> > >  tools/perf/util/session.c           |  4 ++++
+> > >  tools/perf/util/tool.h              |  3 ++-
+> > >  6 files changed, 36 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+> > > index e7758707cadd..9f7ca070da87 100644
+> > > --- a/tools/lib/perf/include/perf/event.h
+> > > +++ b/tools/lib/perf/include/perf/event.h
+> > > @@ -389,6 +389,7 @@ enum perf_user_event_type { /* above any possible kernel type */
+> > >  	PERF_RECORD_TIME_CONV			= 79,
+> > >  	PERF_RECORD_HEADER_FEATURE		= 80,
+> > >  	PERF_RECORD_COMPRESSED			= 81,
+> > > +	PERF_RECORD_FINISHED_INIT		= 82,
+> > >  	PERF_RECORD_HEADER_MAX
+> > >  };
+> > >  
+> > > diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> > > index a75bf11585b5..42e2918fd1cc 100644
+> > > --- a/tools/perf/builtin-inject.c
+> > > +++ b/tools/perf/builtin-inject.c
+> > > @@ -1059,6 +1059,7 @@ int cmd_inject(int argc, const char **argv)
+> > >  			.stat		= perf_event__repipe_op2_synth,
+> > >  			.stat_round	= perf_event__repipe_op2_synth,
+> > >  			.feature	= perf_event__repipe_op2_synth,
+> > > +			.finished_init	= perf_event__repipe_op2_synth,
+> > >  			.compressed	= perf_event__repipe_op4_synth,
+> > >  			.auxtrace	= perf_event__repipe_auxtrace,
+> > >  		},
+> > > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> > > index 40dca1fba4e3..cf5c5379ceaa 100644
+> > > --- a/tools/perf/builtin-record.c
+> > > +++ b/tools/perf/builtin-record.c
+> > > @@ -1388,6 +1388,11 @@ static struct perf_event_header finished_round_event = {
+> > >  	.type = PERF_RECORD_FINISHED_ROUND,
+> > >  };
+> > >  
+> > > +static struct perf_event_header finished_init_event = {
+> > > +	.size = sizeof(struct perf_event_header),
+> > > +	.type = PERF_RECORD_FINISHED_INIT,
+> > > +};
+> > > +
+> > >  static void record__adjust_affinity(struct record *rec, struct mmap *map)
+> > >  {
+> > >  	if (rec->opts.affinity != PERF_AFFINITY_SYS &&
+> > > @@ -1696,6 +1701,14 @@ static int record__synthesize_workload(struct record *rec, bool tail)
+> > >  	return err;
+> > >  }
+> > >  
+> > > +static int write_finished_init(struct record *rec, bool tail)
+> > > +{
+> > > +	if (rec->opts.tail_synthesize != tail)
+> > > +		return 0;
+> > > +
+> > > +	return record__write(rec, NULL, &finished_init_event, sizeof(finished_init_event));
+> > > +}
+> > > +
+> > >  static int record__synthesize(struct record *rec, bool tail);
+> > >  
+> > >  static int
+> > > @@ -1710,6 +1723,8 @@ record__switch_output(struct record *rec, bool at_exit)
+> > >  
+> > >  	record__aio_mmap_read_sync(rec);
+> > >  
+> > > +	write_finished_init(rec, true);
+> > > +
+> > >  	record__synthesize(rec, true);
+> > >  	if (target__none(&rec->opts.target))
+> > >  		record__synthesize_workload(rec, true);
+> > > @@ -1764,6 +1779,7 @@ record__switch_output(struct record *rec, bool at_exit)
+> > >  		 */
+> > >  		if (target__none(&rec->opts.target))
+> > >  			record__synthesize_workload(rec, false);
+> > > +		write_finished_init(rec, false);
+> > >  	}
+> > >  	return fd;
+> > >  }
+> > > @@ -2419,6 +2435,15 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
+> > >  	trigger_ready(&auxtrace_snapshot_trigger);
+> > >  	trigger_ready(&switch_output_trigger);
+> > >  	perf_hooks__invoke_record_start();
+> > > +
+> > > +	/*
+> > > +	 * Must write FINISHED_INIT so it will be seen after all other
+> > > +	 * synthesized user events, but before any regular events.
+> > > +	 */
+> > > +	err = write_finished_init(rec, false);
+> > > +	if (err < 0)
+> > > +		goto out_child;
+> > > +
+> > >  	for (;;) {
+> > >  		unsigned long long hits = thread->samples;
+> > >  
+> > > @@ -2563,6 +2588,8 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
+> > >  		fprintf(stderr, "[ perf record: Woken up %ld times to write data ]\n",
+> > >  			record__waking(rec));
+> > >  
+> > > +	write_finished_init(rec, true);
+> > > +
+> > >  	if (target__none(&rec->opts.target))
+> > >  		record__synthesize_workload(rec, true);
+> > >  
+> > > diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+> > > index 0476bb3a4188..1fa14598b916 100644
+> > > --- a/tools/perf/util/event.c
+> > > +++ b/tools/perf/util/event.c
+> > > @@ -76,6 +76,7 @@ static const char *perf_event__names[] = {
+> > >  	[PERF_RECORD_TIME_CONV]			= "TIME_CONV",
+> > >  	[PERF_RECORD_HEADER_FEATURE]		= "FEATURE",
+> > >  	[PERF_RECORD_COMPRESSED]		= "COMPRESSED",
+> > > +	[PERF_RECORD_FINISHED_INIT]		= "FINISHED_INIT",
+> > >  };
+> > >  
+> > >  const char *perf_event__name(unsigned int id)
+> > > diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> > > index 0aa818977d2b..37f833c3c81b 100644
+> > > --- a/tools/perf/util/session.c
+> > > +++ b/tools/perf/util/session.c
+> > > @@ -562,6 +562,8 @@ void perf_tool__fill_defaults(struct perf_tool *tool)
+> > >  		tool->feature = process_event_op2_stub;
+> > >  	if (tool->compressed == NULL)
+> > >  		tool->compressed = perf_session__process_compressed_event;
+> > > +	if (tool->finished_init == NULL)
+> > > +		tool->finished_init = process_event_op2_stub;
+> > >  }
+> > >  
+> > >  static void swap_sample_id_all(union perf_event *event, void *data)
+> > > @@ -1706,6 +1708,8 @@ static s64 perf_session__process_user_event(struct perf_session *session,
+> > >  		if (err)
+> > >  			dump_event(session->evlist, event, file_offset, &sample, file_path);
+> > >  		return err;
+> > > +	case PERF_RECORD_FINISHED_INIT:
+> > > +		return tool->finished_init(session, event);
+> > >  	default:
+> > >  		return -EINVAL;
+> > >  	}
+> > > diff --git a/tools/perf/util/tool.h b/tools/perf/util/tool.h
+> > > index f2352dba1875..c957fb849ac6 100644
+> > > --- a/tools/perf/util/tool.h
+> > > +++ b/tools/perf/util/tool.h
+> > > @@ -76,7 +76,8 @@ struct perf_tool {
+> > >  			stat_config,
+> > >  			stat,
+> > >  			stat_round,
+> > > -			feature;
+> > > +			feature,
+> > > +			finished_init;
+> > >  	event_op4	compressed;
+> > >  	event_op3	auxtrace;
+> > >  	bool		ordered_events;
+> > > -- 
+> > > 2.25.1
+> > 
+> > -- 
+> > 
+> > - Arnaldo
+> 
+> -- 
+> 
+> - Arnaldo
+
+-- 
+
+- Arnaldo

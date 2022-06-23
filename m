@@ -2,47 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975995581C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACB65581C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbiFWRFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S229725AbiFWRFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233961AbiFWRDb (ORCPT
+        with ESMTP id S231147AbiFWRD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:03:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908C950E02;
-        Thu, 23 Jun 2022 09:55:16 -0700 (PDT)
+        Thu, 23 Jun 2022 13:03:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9425F515B4;
+        Thu, 23 Jun 2022 09:55:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D56D2B82499;
-        Thu, 23 Jun 2022 16:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D31C3411B;
-        Thu, 23 Jun 2022 16:54:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9630861FFA;
+        Thu, 23 Jun 2022 16:54:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54036C3411B;
+        Thu, 23 Jun 2022 16:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003295;
-        bh=IrixH32uPNA8SrzjrToJPFG5vozAbai3k8bBrKhcugE=;
+        s=korg; t=1656003298;
+        bh=zKEdd6NvTJzBHsyfROtu4mv4Q5aLir8CQW3/CWVc6us=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z7yt755rH96s4WMfiYQCfdf8q0jHKyoU+qrKW2fqvfDGZqgZ5wHKXXtRCagDoCqRI
-         V429PBEzY9hwxxf/TxsUg7nFwdr6UbRK+8cU82cWWfpMkOEhAE68eBz9qEDGP1/bBU
-         okMeQTBe0mIBKFPwu9HeX02o9JGdTnGPBJUNc1OE=
+        b=vKjBwopdXKVHEUsmGR1rGiP/jDUhdx0DxmAKqkWmcJu6Y1zL8iwXwxVhOalu5vo9E
+         +Ccma+pPfxDmluDAKmJVNyO5Fregv1xANPgOBaXGqUnkGF67RKjeWZktuI4Ua2e713
+         LIZ60R5e8qlPazccV6JmGJMVXrtFlTDwl2pbjUes=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-        Allison Randal <allison@lohutok.net>,
-        Joe Perches <joe@perches.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 192/264] uapi: rename ext2_swab() to swab() and share globally in swab.h
-Date:   Thu, 23 Jun 2022 18:43:05 +0200
-Message-Id: <20220623164349.502210468@linuxfoundation.org>
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.9 193/264] random: insist on random_get_entropy() existing in order to simplify
+Date:   Thu, 23 Jun 2022 18:43:06 +0200
+Message-Id: <20220623164349.530613591@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
 References: <20220623164344.053938039@linuxfoundation.org>
@@ -60,109 +54,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-[ Upstream commit d5767057c9a76a29f073dad66b7fa12a90e8c748 ]
+commit 4b758eda851eb9336ca86a0041a4d3da55f66511 upstream.
 
-ext2_swab() is defined locally in lib/find_bit.c However it is not
-specific to ext2, neither to bitmaps.
+All platforms are now guaranteed to provide some value for
+random_get_entropy(). In case some bug leads to this not being so, we
+print a warning, because that indicates that something is really very
+wrong (and likely other things are impacted too). This should never be
+hit, but it's a good and cheap way of finding out if something ever is
+problematic.
 
-There are many potential users of it, so rename it to just swab() and
-move to include/uapi/linux/swab.h
+Since we now have viable fallback code for random_get_entropy() on all
+platforms, which is, in the worst case, not worse than jiffies, we can
+count on getting the best possible value out of it. That means there's
+no longer a use for using jiffies as entropy input. It also means we no
+longer have a reason for doing the round-robin register flow in the IRQ
+handler, which was always of fairly dubious value.
 
-ABI guarantees that size of unsigned long corresponds to BITS_PER_LONG,
-therefore drop unneeded cast.
+Instead we can greatly simplify the IRQ handler inputs and also unify
+the construction between 64-bits and 32-bits. We now collect the cycle
+counter and the return address, since those are the two things that
+matter. Because the return address and the irq number are likely
+related, to the extent we mix in the irq number, we can just xor it into
+the top unchanging bytes of the return address, rather than the bottom
+changing bytes of the cycle counter as before. Then, we can do a fixed 2
+rounds of SipHash/HSipHash. Finally, we use the same construction of
+hashing only half of the [H]SipHash state on 32-bit and 64-bit. We're
+not actually discarding any entropy, since that entropy is carried
+through until the next time. And more importantly, it lets us do the
+same sponge-like construction everywhere.
 
-Link: http://lkml.kernel.org/r/20200103202846.21616-1-yury.norov@gmail.com
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Cc: Allison Randal <allison@lohutok.net>
-Cc: Joe Perches <joe@perches.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: William Breathitt Gray <vilhelm.gray@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/swab.h      |    1 +
- include/uapi/linux/swab.h |   10 ++++++++++
- lib/find_bit.c            |   16 ++--------------
- 3 files changed, 13 insertions(+), 14 deletions(-)
+ drivers/char/random.c |   86 +++++++++++++++-----------------------------------
+ 1 file changed, 26 insertions(+), 60 deletions(-)
 
---- a/include/linux/swab.h
-+++ b/include/linux/swab.h
-@@ -6,6 +6,7 @@
- # define swab16 __swab16
- # define swab32 __swab32
- # define swab64 __swab64
-+# define swab __swab
- # define swahw32 __swahw32
- # define swahb32 __swahb32
- # define swab16p __swab16p
---- a/include/uapi/linux/swab.h
-+++ b/include/uapi/linux/swab.h
-@@ -3,6 +3,7 @@
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1018,15 +1018,14 @@ int __init rand_initialize(void)
+  */
+ void add_device_randomness(const void *buf, size_t size)
+ {
+-	unsigned long cycles = random_get_entropy();
+-	unsigned long flags, now = jiffies;
++	unsigned long entropy = random_get_entropy();
++	unsigned long flags;
  
- #include <linux/types.h>
- #include <linux/compiler.h>
-+#include <asm/bitsperlong.h>
- #include <asm/swab.h>
+ 	if (crng_init == 0 && size)
+ 		crng_pre_init_inject(buf, size, false);
  
- /*
-@@ -131,6 +132,15 @@ static inline __attribute_const__ __u32
- 	__fswab64(x))
- #endif
+ 	spin_lock_irqsave(&input_pool.lock, flags);
+-	_mix_pool_bytes(&cycles, sizeof(cycles));
+-	_mix_pool_bytes(&now, sizeof(now));
++	_mix_pool_bytes(&entropy, sizeof(entropy));
+ 	_mix_pool_bytes(buf, size);
+ 	spin_unlock_irqrestore(&input_pool.lock, flags);
+ }
+@@ -1049,12 +1048,11 @@ struct timer_rand_state {
+  */
+ static void add_timer_randomness(struct timer_rand_state *state, unsigned int num)
+ {
+-	unsigned long cycles = random_get_entropy(), now = jiffies, flags;
++	unsigned long entropy = random_get_entropy(), now = jiffies, flags;
+ 	long delta, delta2, delta3;
  
-+static __always_inline unsigned long __swab(const unsigned long y)
-+{
-+#if BITS_PER_LONG == 64
-+	return __swab64(y);
-+#else /* BITS_PER_LONG == 32 */
-+	return __swab32(y);
-+#endif
-+}
-+
- /**
-  * __swahw32 - return a word-swapped 32-bit value
-  * @x: value to wordswap
---- a/lib/find_bit.c
-+++ b/lib/find_bit.c
-@@ -133,18 +133,6 @@ EXPORT_SYMBOL(find_last_bit);
+ 	spin_lock_irqsave(&input_pool.lock, flags);
+-	_mix_pool_bytes(&cycles, sizeof(cycles));
+-	_mix_pool_bytes(&now, sizeof(now));
++	_mix_pool_bytes(&entropy, sizeof(entropy));
+ 	_mix_pool_bytes(&num, sizeof(num));
+ 	spin_unlock_irqrestore(&input_pool.lock, flags);
  
- #ifdef __BIG_ENDIAN
+@@ -1182,7 +1180,6 @@ struct fast_pool {
+ 	unsigned long pool[4];
+ 	unsigned long last;
+ 	unsigned int count;
+-	u16 reg_idx;
+ };
  
--/* include/linux/byteorder does not support "unsigned long" type */
--static inline unsigned long ext2_swab(const unsigned long y)
--{
--#if BITS_PER_LONG == 64
--	return (unsigned long) __swab64((u64) y);
--#elif BITS_PER_LONG == 32
--	return (unsigned long) __swab32((u32) y);
--#else
--#error BITS_PER_LONG not defined
--#endif
--}
--
- #if !defined(find_next_bit_le) || !defined(find_next_zero_bit_le)
- static unsigned long _find_next_bit_le(const unsigned long *addr,
- 		unsigned long nbits, unsigned long start, unsigned long invert)
-@@ -157,7 +145,7 @@ static unsigned long _find_next_bit_le(c
- 	tmp = addr[start / BITS_PER_LONG] ^ invert;
+ static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
+@@ -1200,13 +1197,13 @@ static DEFINE_PER_CPU(struct fast_pool,
+  * This is [Half]SipHash-1-x, starting from an empty key. Because
+  * the key is fixed, it assumes that its inputs are non-malicious,
+  * and therefore this has no security on its own. s represents the
+- * 128 or 256-bit SipHash state, while v represents a 128-bit input.
++ * four-word SipHash state, while v represents a two-word input.
+  */
+-static void fast_mix(unsigned long s[4], const unsigned long *v)
++static void fast_mix(unsigned long s[4], const unsigned long v[2])
+ {
+ 	size_t i;
  
- 	/* Handle 1st word. */
--	tmp &= ext2_swab(BITMAP_FIRST_WORD_MASK(start));
-+	tmp &= swab(BITMAP_FIRST_WORD_MASK(start));
- 	start = round_down(start, BITS_PER_LONG);
- 
- 	while (!tmp) {
-@@ -168,7 +156,7 @@ static unsigned long _find_next_bit_le(c
- 		tmp = addr[start / BITS_PER_LONG] ^ invert;
- 	}
- 
--	return min(start + __ffs(ext2_swab(tmp)), nbits);
-+	return min(start + __ffs(swab(tmp)), nbits);
+-	for (i = 0; i < 16 / sizeof(long); ++i) {
++	for (i = 0; i < 2; ++i) {
+ 		s[3] ^= v[i];
+ #ifdef CONFIG_64BIT
+ 		s[0] += s[1]; s[1] = rol64(s[1], 13); s[1] ^= s[0]; s[0] = rol64(s[0], 32);
+@@ -1246,33 +1243,17 @@ int random_online_cpu(unsigned int cpu)
  }
  #endif
+ 
+-static unsigned long get_reg(struct fast_pool *f, struct pt_regs *regs)
+-{
+-	unsigned long *ptr = (unsigned long *)regs;
+-	unsigned int idx;
+-
+-	if (regs == NULL)
+-		return 0;
+-	idx = READ_ONCE(f->reg_idx);
+-	if (idx >= sizeof(struct pt_regs) / sizeof(unsigned long))
+-		idx = 0;
+-	ptr += idx++;
+-	WRITE_ONCE(f->reg_idx, idx);
+-	return *ptr;
+-}
+-
+ static void mix_interrupt_randomness(struct work_struct *work)
+ {
+ 	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
+ 	/*
+-	 * The size of the copied stack pool is explicitly 16 bytes so that we
+-	 * tax mix_pool_byte()'s compression function the same amount on all
+-	 * platforms. This means on 64-bit we copy half the pool into this,
+-	 * while on 32-bit we copy all of it. The entropy is supposed to be
+-	 * sufficiently dispersed between bits that in the sponge-like
+-	 * half case, on average we don't wind up "losing" some.
++	 * The size of the copied stack pool is explicitly 2 longs so that we
++	 * only ever ingest half of the siphash output each time, retaining
++	 * the other half as the next "key" that carries over. The entropy is
++	 * supposed to be sufficiently dispersed between bits so on average
++	 * we don't wind up "losing" some.
+ 	 */
+-	u8 pool[16];
++	unsigned long pool[2];
+ 
+ 	/* Check to see if we're running on the wrong CPU due to hotplug. */
+ 	local_irq_disable();
+@@ -1304,36 +1285,21 @@ static void mix_interrupt_randomness(str
+ void add_interrupt_randomness(int irq)
+ {
+ 	enum { MIX_INFLIGHT = 1U << 31 };
+-	unsigned long cycles = random_get_entropy(), now = jiffies;
++	unsigned long entropy = random_get_entropy();
+ 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
+ 	struct pt_regs *regs = get_irq_regs();
+ 	unsigned int new_count;
+-	union {
+-		u32 u32[4];
+-		u64 u64[2];
+-		unsigned long longs[16 / sizeof(long)];
+-	} irq_data;
+-
+-	if (cycles == 0)
+-		cycles = get_reg(fast_pool, regs);
+-
+-	if (sizeof(unsigned long) == 8) {
+-		irq_data.u64[0] = cycles ^ rol64(now, 32) ^ irq;
+-		irq_data.u64[1] = regs ? instruction_pointer(regs) : _RET_IP_;
+-	} else {
+-		irq_data.u32[0] = cycles ^ irq;
+-		irq_data.u32[1] = now;
+-		irq_data.u32[2] = regs ? instruction_pointer(regs) : _RET_IP_;
+-		irq_data.u32[3] = get_reg(fast_pool, regs);
+-	}
+ 
+-	fast_mix(fast_pool->pool, irq_data.longs);
++	fast_mix(fast_pool->pool, (unsigned long[2]){
++		entropy,
++		(regs ? instruction_pointer(regs) : _RET_IP_) ^ swab(irq)
++	});
+ 	new_count = ++fast_pool->count;
+ 
+ 	if (new_count & MIX_INFLIGHT)
+ 		return;
+ 
+-	if (new_count < 64 && (!time_after(now, fast_pool->last + HZ) ||
++	if (new_count < 64 && (!time_is_before_jiffies(fast_pool->last + HZ) ||
+ 			       unlikely(crng_init == 0)))
+ 		return;
+ 
+@@ -1369,28 +1335,28 @@ static void entropy_timer(unsigned long
+ static void try_to_generate_entropy(void)
+ {
+ 	struct {
+-		unsigned long cycles;
++		unsigned long entropy;
+ 		struct timer_list timer;
+ 	} stack;
+ 
+-	stack.cycles = random_get_entropy();
++	stack.entropy = random_get_entropy();
+ 
+ 	/* Slow counter - or none. Don't even bother */
+-	if (stack.cycles == random_get_entropy())
++	if (stack.entropy == random_get_entropy())
+ 		return;
+ 
+ 	__setup_timer_on_stack(&stack.timer, entropy_timer, 0, 0);
+ 	while (!crng_ready() && !signal_pending(current)) {
+ 		if (!timer_pending(&stack.timer))
+ 			mod_timer(&stack.timer, jiffies + 1);
+-		mix_pool_bytes(&stack.cycles, sizeof(stack.cycles));
++		mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ 		schedule();
+-		stack.cycles = random_get_entropy();
++		stack.entropy = random_get_entropy();
+ 	}
+ 
+ 	del_timer_sync(&stack.timer);
+ 	destroy_timer_on_stack(&stack.timer);
+-	mix_pool_bytes(&stack.cycles, sizeof(stack.cycles));
++	mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ }
+ 
  
 
 

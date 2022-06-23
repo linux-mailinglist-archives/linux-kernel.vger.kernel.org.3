@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C840558211
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2903558228
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiFWRJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S231547AbiFWRLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbiFWRHm (ORCPT
+        with ESMTP id S234105AbiFWRIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:07:42 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED052E52;
-        Thu, 23 Jun 2022 09:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
-        :references:content-disposition:in-reply-to;
-        bh=152u4q3NMpIj2Wsm3Qk7KzVbZsgV3dVUGwLtauzK8mM=; b=t7C5LRUUSlY4aK5FineuqobWBj
-        IscnzFGg2xYa1BZrzHneaS8OtYzwbLzbmshMP6Q0nLbTnBFkxim26Vzy+6yYBGhIBi14T9ghnJxMA
-        /Unqw+e74DS3OzM2WuIH6jfWswM4hY6gLHeiM5uKBGRv+3b28iMA8TMao8ZNlYHNOGYcHP+iP+uWJ
-        OtuMQ3SpBUqBFlLpe5UC6VhTRANO2bmKoTjnR+GXmtNXKZfv3PxKoolErxspVOCczo0J+PQb+Andj
-        FxQE6yNlqL20JxK50aEi3CTFwi35r2P0qh1aiK9idxmGimFlWJe35tdeOWCU8OTg7UXOCpG99mfPK
-        wjEK/D/w==;
-Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
-        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o4Q7d-00F4y1-05; Thu, 23 Jun 2022 10:56:01 -0600
-Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o4Q7b-000A46-5V; Thu, 23 Jun 2022 10:55:59 -0600
-From:   Logan Gunthorpe <logang@deltatee.com>
-To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        kernel test robot <lkp@intel.com>
-Date:   Thu, 23 Jun 2022 10:55:52 -0600
-Message-Id: <20220623165552.38645-1-logang@deltatee.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 23 Jun 2022 13:08:46 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B5C55353;
+        Thu, 23 Jun 2022 09:57:24 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so1367183wmr.0;
+        Thu, 23 Jun 2022 09:57:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3U0JvexK71NTNZkmX0NIsRWRyI4BPMxyMDkrutu/XI=;
+        b=PlGKEfs2QZJui/v+gDPXf87JqHxXFHLJ1YzIZsM5GVST3Fym+W4HJLW7lSGfKRzNh5
+         s5LxljZzyQCDtTVTk5WQ5SMXJbkPzJ+408oUftaJ2zskfP0ilQIezQ/hEnRF0LYvTHD8
+         prQo+p6LaPhWsJcAW8r1jj1NqF/s2A3J2gprJJTPFTF/jqmWeRbeGOqKWrSQYebwEXnH
+         FLTz5x5QgqmEX/1UREMMBGR/f6EceUGn8C4Lo2A8l7npCYnQdWoXkrA+dXChs+OexcpF
+         BdYqJn7CQMtZT+/pBJuPIUUz6Gttfu/EmBU96WixCQVByRUTdUPGDnaVNBFXaUjZrnVx
+         br+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3U0JvexK71NTNZkmX0NIsRWRyI4BPMxyMDkrutu/XI=;
+        b=Bnlf1B/lnUngkZjN0TKzLOPOsysTOrHnoXEOWyuHpwpUruY6wV0DTqn7cSIGDUpj64
+         kxgzN7UswXEkSZaiLotj4Y6z+Bh0oZOvWtlDt+Zltwbjxa/OhLQf+4kLsaiVZmcV6x5w
+         9PFBPTiZ2QYju98kbrOLPtyMdsqd5oIoKhijuJ8dOnXoOMkEU4oVGgEtwz5PAUAmNDLj
+         rBTp4qGo6zKhQHXp/tlCtXxcbQ3kJUAgXp82Bm9eF78Ki5AYKbKPEfZbdFheTjaprrrF
+         3lyjh3WQweD6130AnHq4mXKr3h5osF1Rr3W0zyvKOFBnyY224bZ97zy253VdlPsk85ok
+         9ppA==
+X-Gm-Message-State: AJIora/XMJulfNMCPkxMmtcKMP1wxFNojOzfTaKKAyTQVxdkIul9K4Dg
+        GYSciN78FHACVHBEl2kbjyQ=
+X-Google-Smtp-Source: AGRyM1vOnY+XPrdkmfg3FiuwdduapQjCO/zQGdKRk02eOow6Z1ktaEfsJfb1f/ZWqebxM5JEn8htBw==
+X-Received: by 2002:a1c:f213:0:b0:39b:ad32:5e51 with SMTP id s19-20020a1cf213000000b0039bad325e51mr5107372wmc.72.1656003430485;
+        Thu, 23 Jun 2022 09:57:10 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m25-20020a7bca59000000b0039746638d6esm3602006wml.33.2022.06.23.09.57.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 09:57:09 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jon Mason <jdmason@kudzu.us>, Frank Li <Frank.Li@nxp.com>,
+        linux-pci@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] NTB: EPF: set pointer addr to null using NULL rather than 0
+Date:   Thu, 23 Jun 2022 17:57:09 +0100
+Message-Id: <20220623165709.77229-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, logang@deltatee.com, lkp@intel.com
-X-SA-Exim-Mail-From: gunthorp@deltatee.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH] md/raid5: Fix divide type in raid5_make_request()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0day reports a build failure on the hexagon architecture:
+The pointer addr is being set to null using 0. Use NULL instead.
 
-  ld.lld: error: undefined symbol: __hexagon_udivdi3
-     referenced by raid5.c
-        md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
-     referenced by raid5.c
-        md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
-     did you mean: __hexagon_udivsi3
-        defined in: arch/hexagon/built-in.a(lib/udivsi3.o)
+Cleans up sparse warning:
+warning: Using plain integer as NULL pointer
 
-This is caused by using DIV_ROUND_UP on a sector_t type.
-
-The actual value is known to be less than 256 so a wide 64bit divide
-here is not desirable. Thus cast the argument to an int to ensure it
-uses a 32bit divide.
-
-Fixes: 681fb14a7100 ("md/raid5: Pivot raid5_make_request()")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/md/raid5.c | 2 +-
+ drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index 5723a497108a..9d25696b793d 100644
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -6091,7 +6091,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
- 	bi->bi_next = NULL;
+diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+index ebf7e243eefa..fb31c868af6a 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
++++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+@@ -605,7 +605,7 @@ static int epf_ntb_mw_bar_init(struct epf_ntb *ntb)
  
- 	bitmap_set(ctx.sectors_to_do, 0,
--		   DIV_ROUND_UP(ctx.last_sector - logical_sector,
-+		   DIV_ROUND_UP((int)(ctx.last_sector - logical_sector),
- 				RAID5_STRIPE_SECTORS(conf)));
- 
- 	pr_debug("raid456: %s, logical %llu to %llu\n", __func__,
-
-base-commit: 57c19f921f8081c1a9444dc7f3f6b3ea43fe612e
+ 		ntb->epf->bar[barno].barno = barno;
+ 		ntb->epf->bar[barno].size = size;
+-		ntb->epf->bar[barno].addr = 0;
++		ntb->epf->bar[barno].addr = NULL;
+ 		ntb->epf->bar[barno].phys_addr = 0;
+ 		ntb->epf->bar[barno].flags |= upper_32_bits(size) ?
+ 				PCI_BASE_ADDRESS_MEM_TYPE_64 :
 -- 
-2.30.2
+2.35.3
 

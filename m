@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0888D5587E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735C2558859
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiFWS4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S230183AbiFWTIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiFWSzz (ORCPT
+        with ESMTP id S229477AbiFWS5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:55:55 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB951037CC;
-        Thu, 23 Jun 2022 11:00:57 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v14so29037073wra.5;
-        Thu, 23 Jun 2022 11:00:57 -0700 (PDT)
+        Thu, 23 Jun 2022 14:57:06 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593F5B4316;
+        Thu, 23 Jun 2022 11:01:45 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id p6-20020a05600c1d8600b003a035657950so165832wms.4;
+        Thu, 23 Jun 2022 11:01:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dRJQoHw1UG1x5dNKh7G6ADZfil6pTNVqaifRMO6ggF0=;
-        b=MLfROjT9/wqnuFpNELvplnXAfdW9jH48Eqh1salfv/Iekdf/56jqn/sNuyZRUiEz10
-         LOcxnnmDfEqCQ5Un9E78BJU/fWmqt5NBklAScqUPcry29uRuvK/keaXyz2Ow/qdOk2iV
-         A9oYQFcNBZWZNTxTamiLRbqZ79v6n4ZM+3JkdRjUm95FXoEKfU1rvz5O3+emNoF1KwPk
-         bvUWyACqMfwaBX/P1MvNDnUpBY2MDdGZ4E31GS4iQDWIZlRo1xPsjWcEUSoNIB+IVqv0
-         7fVsBU9TCuMwQA49LZMGOWZqLYkTEMabyIML70inShUXE3twRqxjpWjWXHZ5YOVsmYtZ
-         LevA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QYPcW1hEJAKXQTfy6ssNBNN9iygcjxjI39Ht44KpS84=;
+        b=SMx7rDnKYxQ/yE41yzcDYth0Dxqlu1QtP2qcFwcdkcex3AS/qnkkhlm8aGLy8Xe7PE
+         Hefyqx5E7QCIFxfCgMUatHuSeZ7c5mqUv++NWDsEBdcgHL5IVYTdmxTEQXJLgLeBWXDs
+         180AzNiH7f1Fbs7tT5aJuWW8cwiV1t91jGBn9W7nD1e17F+V4lV2qAUUERVau8cWjGvQ
+         qWsj/VKZapAO5Up3BTd7zd7/q/6KWcjUbdVT7XO4E+t7XElGn7U0WOhYHsV25NH2n+AE
+         ax672YvSn+6bFakOjmcUZU+j4MOePY8qLV+g2vccyayJeSx1DKI0nwa0iSBRrCb/BHWo
+         CSLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=dRJQoHw1UG1x5dNKh7G6ADZfil6pTNVqaifRMO6ggF0=;
-        b=llWtAVIj7hQv67rCdnFS5oCvyP1c0pU1R9mZ2DtzheE3FfJeiAXVrbn8iA49Mvcv/3
-         O//AcrEusc3bZoqkJeH8npxRAB2JfHG2QIlIG7IRsXCnzDeOQGNFoH9YtbFFUVBG7nxj
-         w1U7+SQo/l5AD5gXRF32h9rUaQI9CWAt1jsdDXnvpBrCFSQAigLS3QDrr3hRozjhF8W6
-         hXZPh5cIEtR7spyS5stn1OmNQZQTd8FJ92PbzWqn31NxU1YJGdx0ikUQsy+ROHGYckn0
-         8x29TQ+aG3WjExGcEpbO3dtEcNn7X2qBqxIA3ckZAheSGxWfmkeueZtKWAyTPPlgVEvC
-         pjmw==
-X-Gm-Message-State: AJIora8//T6m6iiyk8FfXjPkfobyvRdXi47l/BSQaB8JobuMdaaVwdok
-        k8s+xWUb7I6roKxfKKDr8qI=
-X-Google-Smtp-Source: AGRyM1toobZl5B1XzSCHMlvHvQl5Nai3QbUhmgtQcRWFRH+ixEaJocohOwMe9KH9e6aUg3VghL2QrQ==
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id c18-20020adffb12000000b0020c79b2a200mr9789991wrr.617.1656007255590;
-        Thu, 23 Jun 2022 11:00:55 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05600c4e8b00b0039c4945c753sm4678551wmq.39.2022.06.23.11.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 11:00:55 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PM / devfreq: imx-bus: use NULL to pass a null pointer rather than zero
-Date:   Thu, 23 Jun 2022 19:00:54 +0100
-Message-Id: <20220623180054.79687-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        bh=QYPcW1hEJAKXQTfy6ssNBNN9iygcjxjI39Ht44KpS84=;
+        b=pcaYdqJNIrG9VPSMvI3wsFP9lwVfSACqRB7hT+L4GsuLK60d4+AnbbYEjrpKzE+Cmo
+         OpQYKRG9eJz1cCVMn3y7ebYYKfshDcNR8KeawrlT4GBLZOJjcRBM8XYm0ZjqdJd31yWG
+         5A72q8EQrSnTo+Z5kjt8CMBd/tb2aWv2yI+X4TveAHQc+y2R6YxjD+BES0x7pZZ5mndj
+         Bvzzpmqand6wuj+FgFB8VQA+bFwzE7yuilXV1Ko3CmKjcRadPYOgK2RAU6BxG5m3feWV
+         JptlKRrSivzjg8YwBVKqraoDmkE1BzrOlVJfn9vslNQidcncygHnEhsMS8B49JxVUhmV
+         ASDA==
+X-Gm-Message-State: AJIora+NtKaCg6gv1utq31uwg5uPw5m7BndSfJ7sd2z3cYIkCo8mhvqw
+        xnbnyrVUq2wrb/fOc026qzY=
+X-Google-Smtp-Source: AGRyM1seeWn1XAx+b2vbfPrOYxt9H4MzoYh20GcLYgTRvrxDQVLVBf4IxxreeZEKG6d3YeVset+DEg==
+X-Received: by 2002:a7b:c4ce:0:b0:3a0:2ac4:3233 with SMTP id g14-20020a7bc4ce000000b003a02ac43233mr5568067wmk.92.1656007304136;
+        Thu, 23 Jun 2022 11:01:44 -0700 (PDT)
+Received: from [192.168.0.118] (88-113-28-27.elisa-laajakaista.fi. [88.113.28.27])
+        by smtp.gmail.com with ESMTPSA id p17-20020a7bcc91000000b0039c4ec6fdacsm6275wma.40.2022.06.23.11.01.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 11:01:43 -0700 (PDT)
+Message-ID: <62d69463-35c0-683d-f03e-c668ea82136d@gmail.com>
+Date:   Thu, 23 Jun 2022 21:01:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] hid: Add support for the xp-pen deco mini7 tablet
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Stefan Berzl <stefanberzl@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <85312611-797f-2dd2-f864-f7c13cb889f9@gmail.com>
+ <nycvar.YFH.7.76.2206091058530.14340@cbobk.fhfr.pm>
+ <c856a79c-1d42-6af5-0ff3-589688701fc0@gmail.com>
+ <20220623175116.GA4757@elementary>
+From:   Nikolai Kondrashov <spbnick@gmail.com>
+In-Reply-To: <20220623175116.GA4757@elementary>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,30 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 3rd argument to the function of_get_property is a pointer and it is
-being passed using 0. Use NULL instead.
+On 6/23/22 20:51, José Expósito wrote:
+>> I would of course fix this, but I don't really know what's the preferred
+>> way. One can obviously simply set up an urb to catch this, but it would
+>> have to be a special corner case for the mini 7, as José assures me that
+>> none of his tablets display similar behavior. Is this acceptable?
+> 
+> My tablets also send an ACK packet, but in my case it does not have any
+> visible effects. Maybe it is related to the DE environment used. I
+> tested it on elementary OS (Ubuntu) and Fedora 36, in both cases the
+> ACK is ignored... But catching it is fine, we can include the code you
+> suggest.
+> 
+>> José already had a look at some firmware device descriptor string that
+>> reports the number of buttons and what not, but as far as I know, it
+>> doesn't say anything about ack packets (right José? Does it say
+>> anything about touch strips or similar?).
+> 
+> In the devices I tested, the ACK packet is always present, so it should
+> be fine to catch it. I'll test your patch in all the devices I own to
+> be safe.
 
-Cleans up sparse warning:
-warning: Using plain integer as NULL pointer
+I think it's OK to just ignore the first packet for these devices, even if the 
+ACK packet is not sent for some of them. Even with the report rate of 20 years 
+ago nobody would've noticed if you dropped one packet.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/devfreq/imx-bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
-index f3f6e25053ed..f87067fc574d 100644
---- a/drivers/devfreq/imx-bus.c
-+++ b/drivers/devfreq/imx-bus.c
-@@ -59,7 +59,7 @@ static int imx_bus_init_icc(struct device *dev)
- 	struct imx_bus *priv = dev_get_drvdata(dev);
- 	const char *icc_driver_name;
- 
--	if (!of_get_property(dev->of_node, "#interconnect-cells", 0))
-+	if (!of_get_property(dev->of_node, "#interconnect-cells", NULL))
- 		return 0;
- 	if (!IS_ENABLED(CONFIG_INTERCONNECT_IMX)) {
- 		dev_warn(dev, "imx interconnect drivers disabled\n");
--- 
-2.35.3
-
+Nick

@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260BC557C5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7509557C60
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiFWM6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S231970AbiFWNAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiFWM6w (ORCPT
+        with ESMTP id S231659AbiFWNAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:58:52 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571304CD6F;
-        Thu, 23 Jun 2022 05:58:51 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25NCwhwH105256;
-        Thu, 23 Jun 2022 07:58:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655989123;
-        bh=dEdplwCwtEDFgi/0d5oXOvVBBdic+AuCAVyP2g1wFQE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=FFNIY9KO82/adMF66J5twkGRph5lwMEDKbpq/55vNHqXTyXYmbiwNNX0c9cfcX8EH
-         XVtsJvrml3URqD2aae2WjHZIRv+m/K+5rgero4J9a5+aQ2cCbcM74H5m4ByRwFG3T4
-         ePMd0cHK9KKkmH7j6NfsrzqDFD/2mqvl8R0Ndgfs=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25NCwhKw001017
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Jun 2022 07:58:43 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Jun 2022 07:58:43 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Jun 2022 07:58:43 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25NCwgQc031922;
-        Thu, 23 Jun 2022 07:58:43 -0500
-Date:   Thu, 23 Jun 2022 18:28:41 +0530
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-CC:     <linux-phy@lists.infradead.org>, <kishon@ti.com>,
-        <vkoul@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <laurent.pinchart@ideasonboard.com>,
-        <tomi.valkeinen@ideasonboard.com>, <linux-kernel@vger.kernel.org>,
-        <jpawar@cadence.com>, <sjakhade@cadence.com>, <mparab@cadence.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>
-Subject: Re: [PATCH v3 3/3] phy: cdns-dphy: Add support for DPHY TX on J721e
-Message-ID: <20220623125839.pkrt55ftvvjomzrc@uda0490373>
-References: <20220622105311.21415-1-r-ravikumar@ti.com>
- <20220622105311.21415-4-r-ravikumar@ti.com>
- <20220623094523.ccrsmw477a5btgcf@ti.com>
+        Thu, 23 Jun 2022 09:00:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70374BFFD;
+        Thu, 23 Jun 2022 06:00:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8046E21D51;
+        Thu, 23 Jun 2022 13:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655989216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F5rp4biCzxhXRUFFWAT3ZfHsc7jcuLns1eT+TYiLgcU=;
+        b=NqsE+R3A+G8jfvqHrFsMuoKCkpU3h16m/I3olzV12/gzWJYQnZry4r7vqoqr6NhswyO6h2
+        H6QYZ7NaQx9JdHJiyXiAgpf+4bobmSp/YZsZ8Td5v6o2WBBo9q8xRUBq5rv/QmmTDOHPKw
+        vTS61WJ9aH0xaigngd/NdcuTQGPeK/E=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3A20B13461;
+        Thu, 23 Jun 2022 13:00:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id biyuDOBjtGITGwAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 23 Jun 2022 13:00:16 +0000
+Message-ID: <7ec07c28-479a-4fa6-cd9c-dcd0b71e3f42@suse.com>
+Date:   Thu, 23 Jun 2022 15:00:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220623094523.ccrsmw477a5btgcf@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] xen-blkfront: Handle NULL gendisk
+Content-Language: en-US
+To:     Jason Andryuk <jandryuk@gmail.com>,
+        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>
+References: <20220601195341.28581-1-jandryuk@gmail.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220601195341.28581-1-jandryuk@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------DRCs634Vc3nA0yR6EDITkIC9"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,176 +71,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pratyush,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------DRCs634Vc3nA0yR6EDITkIC9
+Content-Type: multipart/mixed; boundary="------------l05qm07gdYiFOKB7dc7Wllsf";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Jason Andryuk <jandryuk@gmail.com>, =?UTF-8?Q?Roger_Pau_Monn=c3=a9?=
+ <roger.pau@citrix.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Stefano Stabellini <sstabellini@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc: xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= <marmarek@invisiblethingslab.com>
+Message-ID: <7ec07c28-479a-4fa6-cd9c-dcd0b71e3f42@suse.com>
+Subject: Re: [PATCH] xen-blkfront: Handle NULL gendisk
+References: <20220601195341.28581-1-jandryuk@gmail.com>
+In-Reply-To: <20220601195341.28581-1-jandryuk@gmail.com>
 
-On 15:15-20220623, Pratyush Yadav wrote:
-> Hi Rahul,
-> 
-> On 22/06/22 04:23PM, Rahul T R wrote:
-> > Add support new compatible for dphy-tx on j721e
-> > and implement dphy ops required.
-> > 
-> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> > ---
-> >  drivers/phy/cadence/Kconfig     | 10 ++++++
-> >  drivers/phy/cadence/cdns-dphy.c | 62 +++++++++++++++++++++++++++++++++
-> >  2 files changed, 72 insertions(+)
-> > 
-> > diff --git a/drivers/phy/cadence/Kconfig b/drivers/phy/cadence/Kconfig
-> > index 1adde2d99ae7..18024ac6d511 100644
-> > --- a/drivers/phy/cadence/Kconfig
-> > +++ b/drivers/phy/cadence/Kconfig
-> > @@ -22,6 +22,16 @@ config PHY_CADENCE_DPHY
-> >  	  system. If M is selected, the module will be called
-> >  	  cdns-dphy.
-> >  
-> > +if PHY_CADENCE_DPHY
-> > +
-> > +config PHY_CADENCE_DPHY_J721E
-> > +	depends on ARCH_K3 || COMPILE_TEST
-> > +	bool "J721E DPHY TX Wiz support"
-> > +	default y
-> > +	help
-> > +	  Support J721E Cadence DPHY TX Wiz configuration.
-> > +endif
-> > +
-> >  config PHY_CADENCE_DPHY_RX
-> >  	tristate "Cadence D-PHY Rx Support"
-> >  	depends on HAS_IOMEM && OF
-> > diff --git a/drivers/phy/cadence/cdns-dphy.c b/drivers/phy/cadence/cdns-dphy.c
-> > index 14f951013b4f..a6b7d696f77a 100644
-> > --- a/drivers/phy/cadence/cdns-dphy.c
-> > +++ b/drivers/phy/cadence/cdns-dphy.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/bitops.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/io.h>
-> > +#include <linux/iopoll.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of_address.h>
-> >  #include <linux/of_device.h>
-> > @@ -18,6 +19,7 @@
-> >  
-> >  #define REG_WAKEUP_TIME_NS		800
-> >  #define DPHY_PLL_RATE_HZ		108000000
-> > +#define POLL_TIMEOUT_US			1000
-> >  
-> >  /* DPHY registers */
-> >  #define DPHY_PMA_CMN(reg)		(reg)
-> > @@ -62,6 +64,18 @@
-> >  #define DSI_NULL_FRAME_OVERHEAD		6
-> >  #define DSI_EOT_PKT_SIZE		4
-> >  
-> > +#define DPHY_TX_J721E_WIZ_PLL_CTRL	0xF04
-> > +#define DPHY_TX_J721E_WIZ_STATUS	0xF08
-> > +#define DPHY_TX_J721E_WIZ_RST_CTRL	0xF0C
-> > +#define DPHY_TX_J721E_WIZ_PSM_FREQ	0xF10
-> > +
-> > +#define DPHY_TX_J721E_WIZ_IPDIV		GENMASK(4, 0)
-> > +#define DPHY_TX_J721E_WIZ_OPDIV		GENMASK(13, 8)
-> > +#define DPHY_TX_J721E_WIZ_FBDIV		GENMASK(25, 16)
-> > +#define DPHY_TX_J721E_WIZ_LANE_RSTB	BIT(31)
-> > +#define DPHY_TX_WIZ_PLL_LOCK		BIT(31)
-> > +#define DPHY_TX_WIZ_O_CMN_READY		BIT(31)
-> > +
-> >  struct cdns_dphy_cfg {
-> >  	u8 pll_ipdiv;
-> >  	u8 pll_opdiv;
-> > @@ -210,6 +224,43 @@ static void cdns_dphy_ref_set_psm_div(struct cdns_dphy *dphy, u8 div)
-> >  	       dphy->regs + DPHY_PSM_CFG);
-> >  }
-> >  
-> > +#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
-> 
-> Honestly, I don't think there is much use for using this config here. I 
-> prefer to have as little ifdefs scattered in code as possible. And I 
-> don't think the code you add makes much of a difference in terms of 
-> size.
-> 
-> I have not looked much into the WIZ module but the code looks fine to 
-> me.
-> 
-> > +static unsigned long cdns_dphy_j721e_get_wakeup_time_ns(struct cdns_dphy *dphy)
-> > +{
-> > +	return 1000000;
-> > +}
-> > +
-> > +static void cdns_dphy_j721e_set_pll_cfg(struct cdns_dphy *dphy,
-> > +					const struct cdns_dphy_cfg *cfg)
-> > +{
-> > +	u32 status;
-> > +
-> > +	writel(DPHY_CMN_PWM_HIGH(6) | DPHY_CMN_PWM_LOW(0x101) |
-> > +	       DPHY_CMN_PWM_DIV(0x8),
-> 
-> Please avoid using magic numbers. Or if you are going to use them, at 
-> least explain in a comment what they are doing.
-> 
+--------------l05qm07gdYiFOKB7dc7Wllsf
+Content-Type: multipart/mixed; boundary="------------OBLMJDStp9e1aD6PHxmVHL9f"
 
-Thanks for the review!
-I have addressed your review comments
-and sent a v4
-Please review,
+--------------OBLMJDStp9e1aD6PHxmVHL9f
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Regards
-Rahul T R
-> > +	       dphy->regs + DPHY_CMN_PWM);
-> > +
-> > +	writel((FIELD_PREP(DPHY_TX_J721E_WIZ_IPDIV, cfg->pll_ipdiv) |
-> > +		FIELD_PREP(DPHY_TX_J721E_WIZ_OPDIV, cfg->pll_opdiv) |
-> > +		FIELD_PREP(DPHY_TX_J721E_WIZ_FBDIV, cfg->pll_fbdiv)),
-> > +		dphy->regs + DPHY_TX_J721E_WIZ_PLL_CTRL);
-> > +
-> > +	writel(DPHY_TX_J721E_WIZ_LANE_RSTB,
-> > +	       dphy->regs + DPHY_TX_J721E_WIZ_RST_CTRL);
-> > +
-> > +	readl_poll_timeout(dphy->regs + DPHY_TX_J721E_WIZ_PLL_CTRL, status,
-> > +			   (status & DPHY_TX_WIZ_PLL_LOCK), 0, POLL_TIMEOUT_US);
-> > +
-> > +	readl_poll_timeout(dphy->regs + DPHY_TX_J721E_WIZ_STATUS, status,
-> > +			   (status & DPHY_TX_WIZ_O_CMN_READY), 0,
-> > +			   POLL_TIMEOUT_US);
-> > +}
-> > +
-> > +static void cdns_dphy_j721e_set_psm_div(struct cdns_dphy *dphy, u8 div)
-> > +{
-> > +	writel(div, dphy->regs + DPHY_TX_J721E_WIZ_PSM_FREQ);
-> > +}
-> > +#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
-> > +
-> >  /*
-> >   * This is the reference implementation of DPHY hooks. Specific integration of
-> >   * this IP may have to re-implement some of them depending on how they decided
-> > @@ -221,6 +272,14 @@ static const struct cdns_dphy_ops ref_dphy_ops = {
-> >  	.set_psm_div = cdns_dphy_ref_set_psm_div,
-> >  };
-> >  
-> > +#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
-> > +static const struct cdns_dphy_ops j721e_dphy_ops = {
-> > +	.get_wakeup_time_ns = cdns_dphy_j721e_get_wakeup_time_ns,
-> > +	.set_pll_cfg = cdns_dphy_j721e_set_pll_cfg,
-> > +	.set_psm_div = cdns_dphy_j721e_set_psm_div,
-> > +};
-> > +#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
-> > +
-> >  static int cdns_dphy_config_from_opts(struct phy *phy,
-> >  				      struct phy_configure_opts_mipi_dphy *opts,
-> >  				      struct cdns_dphy_cfg *cfg)
-> > @@ -408,6 +467,9 @@ static int cdns_dphy_remove(struct platform_device *pdev)
-> >  
-> >  static const struct of_device_id cdns_dphy_of_match[] = {
-> >  	{ .compatible = "cdns,dphy", .data = &ref_dphy_ops },
-> > +#ifdef CONFIG_PHY_CADENCE_DPHY_J721E
-> > +	{ .compatible = "ti,j721e-dphy", .data = &j721e_dphy_ops },
-> > +#endif /* !CONFIG_PHY_CADENCE_DPHY_J721E */
-> >  	{ /* sentinel */ },
-> >  };
-> >  MODULE_DEVICE_TABLE(of, cdns_dphy_of_match);
-> > -- 
-> > 2.36.1
-> > 
-> 
-> -- 
-> Regards,
-> Pratyush Yadav
-> Texas Instruments Inc.
+T24gMDEuMDYuMjIgMjE6NTMsIEphc29uIEFuZHJ5dWsgd3JvdGU6DQo+IFdoZW4gYSBWQkQg
+aXMgbm90IGZ1bGx5IGNyZWF0ZWQgYW5kIHRoZW4gY2xvc2VkLCB0aGUga2VybmVsIGNhbiBo
+YXZlIGENCj4gTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlOg0KPiANCj4gVGhlIHJlcHJvZHVj
+ZXIgaXMgdHJpdmlhbDoNCj4gDQo+IFt1c2VyQGRvbTAgfl0kIHN1ZG8geGwgYmxvY2stYXR0
+YWNoIHdvcmsgYmFja2VuZD1zeXMtdXNiIHZkZXY9eHZkaSB0YXJnZXQ9L2Rldi9zZHoNCj4g
+W3VzZXJAZG9tMCB+XSQgeGwgYmxvY2stbGlzdCB3b3JrDQo+IFZkZXYgIEJFICBoYW5kbGUg
+c3RhdGUgZXZ0LWNoIHJpbmctcmVmIEJFLXBhdGgNCj4gNTE3MTIgMCAgIDI0MSAgICA0ICAg
+ICAtMSAgICAgLTEgICAgICAgL2xvY2FsL2RvbWFpbi8wL2JhY2tlbmQvdmJkLzI0MS81MTcx
+Mg0KPiA1MTcyOCAwICAgMjQxICAgIDQgICAgIC0xICAgICAtMSAgICAgICAvbG9jYWwvZG9t
+YWluLzAvYmFja2VuZC92YmQvMjQxLzUxNzI4DQo+IDUxNzQ0IDAgICAyNDEgICAgNCAgICAg
+LTEgICAgIC0xICAgICAgIC9sb2NhbC9kb21haW4vMC9iYWNrZW5kL3ZiZC8yNDEvNTE3NDQN
+Cj4gNTE3NjAgMCAgIDI0MSAgICA0ICAgICAtMSAgICAgLTEgICAgICAgL2xvY2FsL2RvbWFp
+bi8wL2JhY2tlbmQvdmJkLzI0MS81MTc2MA0KPiA1MTg0MCAzICAgMjQxICAgIDMgICAgIC0x
+ICAgICAtMSAgICAgICAvbG9jYWwvZG9tYWluLzMvYmFja2VuZC92YmQvMjQxLzUxODQwDQo+
+ICAgICAgICAgICAgICAgICAgIF4gbm90ZSBzdGF0ZSwgdGhlIC9kZXYvc2R6IGRvZXNuJ3Qg
+ZXhpc3QgaW4gdGhlIGJhY2tlbmQNCj4gDQo+IFt1c2VyQGRvbTAgfl0kIHN1ZG8geGwgYmxv
+Y2stZGV0YWNoIHdvcmsgeHZkaQ0KPiBbdXNlckBkb20wIH5dJCB4bCBibG9jay1saXN0IHdv
+cmsNCj4gVmRldiAgQkUgIGhhbmRsZSBzdGF0ZSBldnQtY2ggcmluZy1yZWYgQkUtcGF0aA0K
+PiB3b3JrIGlzIGFuIGludmFsaWQgZG9tYWluIGlkZW50aWZpZXINCj4gDQo+IEFuZCBpdHMg
+Y29uc29sZSBoYXM6DQo+IA0KPiBCVUc6IGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVu
+Y2UsIGFkZHJlc3M6IDAwMDAwMDAwMDAwMDAwNTANCj4gUEdEIDgwMDAwMDAwZWRlYmIwNjcg
+UDREIDgwMDAwMDAwZWRlYmIwNjcgUFVEIGVkZWMyMDY3IFBNRCAwDQo+IE9vcHM6IDAwMDAg
+WyMxXSBQUkVFTVBUIFNNUCBQVEkNCj4gQ1BVOiAxIFBJRDogNTIgQ29tbTogeGVud2F0Y2gg
+Tm90IHRhaW50ZWQgNS4xNi4xOC0yLjQzLmZjMzIucXViZXMueDg2XzY0ICMxDQo+IFJJUDog
+MDAxMDpibGtfbXFfc3RvcF9od19xdWV1ZXMrMHg1LzB4NDANCj4gQ29kZTogMDAgNDggODMg
+ZTAgZmQgODMgYzMgMDEgNDggODkgODUgYTggMDAgMDAgMDAgNDEgMzkgNWMgMjQgNTAgNzcg
+YzAgNWIgNWQgNDEgNWMgNDEgNWQgYzMgYzMgMGYgMWYgODAgMDAgMDAgMDAgMDAgMGYgMWYg
+NDQgMDAgMDAgPDhiPiA0NyA1MCA4NSBjMCA3NCAzMiA0MSA1NCA0OSA4OSBmYyA1NSA1MyAz
+MSBkYiA0OSA4YiA0NCAyNCA0OCA0OA0KPiBSU1A6IDAwMTg6ZmZmZmM5MDAwMGJjZmU5OCBF
+RkxBR1M6IDAwMDEwMjkzDQo+IFJBWDogZmZmZmZmZmZjMDAwODM3MCBSQlg6IDAwMDAwMDAw
+MDAwMDAwMDUgUkNYOiAwMDAwMDAwMDAwMDAwMDAwDQo+IFJEWDogMDAwMDAwMDAwMDAwMDAw
+MCBSU0k6IDAwMDAwMDAwMDAwMDAwMDUgUkRJOiAwMDAwMDAwMDAwMDAwMDAwDQo+IFJCUDog
+ZmZmZjg4ODAwNzc1ZjAwMCBSMDg6IDAwMDAwMDAwMDAwMDAwMDEgUjA5OiBmZmZmODg4MDA2
+ZTYyMGI4DQo+IFIxMDogZmZmZjg4ODAwNmU2MjBiMCBSMTE6IGYwMDAwMDAwMDAwMDAwMDAg
+UjEyOiBmZmZmODg4MGJmZjM5MDAwDQo+IFIxMzogZmZmZjg4ODBiZmYzOTAwMCBSMTQ6IDAw
+MDAwMDAwMDAwMDAwMDAgUjE1OiBmZmZmODg4MDA2MDRiZTAwDQo+IEZTOiAgMDAwMDAwMDAw
+MDAwMDAwMCgwMDAwKSBHUzpmZmZmODg4MGYzMzAwMDAwKDAwMDApIGtubEdTOjAwMDAwMDAw
+MDAwMDAwMDANCj4gQ1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDogMDAwMDAwMDA4
+MDA1MDAzMw0KPiBDUjI6IDAwMDAwMDAwMDAwMDAwNTAgQ1IzOiAwMDAwMDAwMGU5MzJlMDAy
+IENSNDogMDAwMDAwMDAwMDM3MDZlMA0KPiBDYWxsIFRyYWNlOg0KPiAgIDxUQVNLPg0KPiAg
+IGJsa2JhY2tfY2hhbmdlZCsweDk1LzB4MTM3IFt4ZW5fYmxrZnJvbnRdDQo+ICAgPyByZWFk
+X3JlcGx5KzB4MTYwLzB4MTYwDQo+ICAgeGVud2F0Y2hfdGhyZWFkKzB4YzAvMHgxYTANCj4g
+ICA/IGRvX3dhaXRfaW50cl9pcnErMHhhMC8weGEwDQo+ICAga3RocmVhZCsweDE2Yi8weDE5
+MA0KPiAgID8gc2V0X2t0aHJlYWRfc3RydWN0KzB4NDAvMHg0MA0KPiAgIHJldF9mcm9tX2Zv
+cmsrMHgyMi8weDMwDQo+ICAgPC9UQVNLPg0KPiBNb2R1bGVzIGxpbmtlZCBpbjogc25kX3Nl
+cV9kdW1teSBzbmRfaHJ0aW1lciBzbmRfc2VxIHNuZF9zZXFfZGV2aWNlIHNuZF90aW1lciBz
+bmQgc291bmRjb3JlIGlwdF9SRUpFQ1QgbmZfcmVqZWN0X2lwdjQgeHRfc3RhdGUgeHRfY29u
+bnRyYWNrIG5mdF9jb3VudGVyIG5mdF9jaGFpbl9uYXQgeHRfTUFTUVVFUkFERSBuZl9uYXQg
+bmZfY29ubnRyYWNrIG5mX2RlZnJhZ19pcHY2IG5mX2RlZnJhZ19pcHY0IG5mdF9jb21wYXQg
+bmZfdGFibGVzIG5mbmV0bGluayBpbnRlbF9yYXBsX21zciBpbnRlbF9yYXBsX2NvbW1vbiBj
+cmN0MTBkaWZfcGNsbXVsIGNyYzMyX3BjbG11bCBjcmMzMmNfaW50ZWwgZ2hhc2hfY2xtdWxu
+aV9pbnRlbCB4ZW5fbmV0ZnJvbnQgcGNzcGtyIHhlbl9zY3NpYmFjayB0YXJnZXRfY29yZV9t
+b2QgeGVuX25ldGJhY2sgeGVuX3ByaXZjbWQgeGVuX2dudGRldiB4ZW5fZ250YWxsb2MgeGVu
+X2Jsa2JhY2sgeGVuX2V2dGNobiBpcG1pX2RldmludGYgaXBtaV9tc2doYW5kbGVyIGZ1c2Ug
+YnBmX3ByZWxvYWQgaXBfdGFibGVzIG92ZXJsYXkgeGVuX2Jsa2Zyb250DQo+IENSMjogMDAw
+MDAwMDAwMDAwMDA1MA0KPiAtLS1bIGVuZCB0cmFjZSA3YmM5NTk3ZmQwNmFlODlkIF0tLS0N
+Cj4gUklQOiAwMDEwOmJsa19tcV9zdG9wX2h3X3F1ZXVlcysweDUvMHg0MA0KPiBDb2RlOiAw
+MCA0OCA4MyBlMCBmZCA4MyBjMyAwMSA0OCA4OSA4NSBhOCAwMCAwMCAwMCA0MSAzOSA1YyAy
+NCA1MCA3NyBjMCA1YiA1ZCA0MSA1YyA0MSA1ZCBjMyBjMyAwZiAxZiA4MCAwMCAwMCAwMCAw
+MCAwZiAxZiA0NCAwMCAwMCA8OGI+IDQ3IDUwIDg1IGMwIDc0IDMyIDQxIDU0IDQ5IDg5IGZj
+IDU1IDUzIDMxIGRiIDQ5IDhiIDQ0IDI0IDQ4IDQ4DQo+IFJTUDogMDAxODpmZmZmYzkwMDAw
+YmNmZTk4IEVGTEFHUzogMDAwMTAyOTMNCj4gUkFYOiBmZmZmZmZmZmMwMDA4MzcwIFJCWDog
+MDAwMDAwMDAwMDAwMDAwNSBSQ1g6IDAwMDAwMDAwMDAwMDAwMDANCj4gUkRYOiAwMDAwMDAw
+MDAwMDAwMDAwIFJTSTogMDAwMDAwMDAwMDAwMDAwNSBSREk6IDAwMDAwMDAwMDAwMDAwMDAN
+Cj4gUkJQOiBmZmZmODg4MDA3NzVmMDAwIFIwODogMDAwMDAwMDAwMDAwMDAwMSBSMDk6IGZm
+ZmY4ODgwMDZlNjIwYjgNCj4gUjEwOiBmZmZmODg4MDA2ZTYyMGIwIFIxMTogZjAwMDAwMDAw
+MDAwMDAwMCBSMTI6IGZmZmY4ODgwYmZmMzkwMDANCj4gUjEzOiBmZmZmODg4MGJmZjM5MDAw
+IFIxNDogMDAwMDAwMDAwMDAwMDAwMCBSMTU6IGZmZmY4ODgwMDYwNGJlMDANCj4gRlM6ICAw
+MDAwMDAwMDAwMDAwMDAwKDAwMDApIEdTOmZmZmY4ODgwZjMzMDAwMDAoMDAwMCkga25sR1M6
+MDAwMDAwMDAwMDAwMDAwMA0KPiBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAw
+MDAwMDAwMDgwMDUwMDMzDQo+IENSMjogMDAwMDAwMDAwMDAwMDA1MCBDUjM6IDAwMDAwMDAw
+ZTkzMmUwMDIgQ1I0OiAwMDAwMDAwMDAwMzcwNmUwDQo+IEtlcm5lbCBwYW5pYyAtIG5vdCBz
+eW5jaW5nOiBGYXRhbCBleGNlcHRpb24NCj4gS2VybmVsIE9mZnNldDogZGlzYWJsZWQNCj4g
+DQo+IGluZm8tPnJxIGFuZCBpbmZvLT5nZCBhcmUgb25seSBzZXQgaW4gYmxrZnJvbnRfY29u
+bmVjdCgpLCB3aGljaCBpcw0KPiBjYWxsZWQgZm9yIHN0YXRlIDQgKFhlbmJ1c1N0YXRlQ29u
+bmVjdGVkKS4gIEd1YXJkIGFnYWluc3QgdXNpbmcgTlVMTA0KPiB2YXJpYWJsZXMgaW4gYmxr
+ZnJvbnRfY2xvc2luZygpIHRvIGF2b2lkIHRoZSBpc3N1ZS4NCj4gDQo+IFRoZSByZXN0IG9m
+IGJsa2Zyb250X2Nsb3NpbmcgbG9va3Mgb2theS4gIElmIGluZm8tPm5yX3JpbmdzIGlzIDAs
+IHRoZW4NCj4gZm9yX2VhY2hfcmluZm8gd29uJ3QgZG8gYW55dGhpbmcuDQo+IA0KPiBibGtm
+cm9udF9yZW1vdmUgYWxzbyBuZWVkcyB0byBjaGVjayBmb3Igbm9uLU5VTEwgcG9pbnRlcnMg
+YmVmb3JlDQo+IGNsZWFuaW5nIHVwIHRoZSBnZW5kaXNrIGFuZCByZXF1ZXN0IHF1ZXVlLg0K
+PiANCj4gRml4ZXM6IDA1ZDY5ZDk1MGQ5ZCAieGVuLWJsa2Zyb250OiBzYW5pdGl6ZSB0aGUg
+cmVtb3ZhbCBzdGF0ZSBtYWNoaW5lIg0KPiBSZXBvcnRlZC1ieTogTWFyZWsgTWFyY3p5a293
+c2tpLUfDs3JlY2tpIDxtYXJtYXJla0BpbnZpc2libGV0aGluZ3NsYWIuY29tPg0KPiBTaWdu
+ZWQtb2ZmLWJ5OiBKYXNvbiBBbmRyeXVrIDxqYW5kcnl1a0BnbWFpbC5jb20+DQoNClB1c2hl
+ZCB0byB4ZW4vdGlwLmdpdCBmb3ItbGludXMtNS4xOWENCg0KDQpKdWVyZ2VuDQo=
+--------------OBLMJDStp9e1aD6PHxmVHL9f
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------OBLMJDStp9e1aD6PHxmVHL9f--
+
+--------------l05qm07gdYiFOKB7dc7Wllsf--
+
+--------------DRCs634Vc3nA0yR6EDITkIC9
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmK0Y98FAwAAAAAACgkQsN6d1ii/Ey+B
+3Af+OlWAew+/rVw9xQNVq3C6Rxh/irHSZKtoDD1WkEH8nbIsVafo7VGa6jHIZF9V4oNWBk7b2D1Y
+gtdrram4DlL3XBaDPpbR9LMY4sVcfJaNomL5p1zmK/fNEXgZcqpNMaeuHxoJTDUYabe38/6LJaYJ
+OKMPFu6uyfEWI7z05EDDKLy0VtYy/GtlMn0YzMk1NcR0Oc7s1lIHfXthlNW69ixsEI3dPa9WKdj1
+IZzm3IJQRYH00few3/lZNbZdPaanMaP/pZEMlNMPp2yqhCdIEEBotuWmJuTRBi7FK34M37j/cJYp
+Xp7Xktepq6jBTUbhXhDS//yeDrcBIqGW+qqUVppZzQ==
+=tToZ
+-----END PGP SIGNATURE-----
+
+--------------DRCs634Vc3nA0yR6EDITkIC9--

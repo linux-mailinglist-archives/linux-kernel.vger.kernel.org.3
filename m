@@ -2,196 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B913557A95
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F47E557A90
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiFWMoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S231790AbiFWMoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiFWMom (ORCPT
+        with ESMTP id S229996AbiFWMo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:44:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F4637A93
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655988280; x=1687524280;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BFbAMACBm8TDlyXmQJtQstcYXw4c11FwG4ToNhazoJg=;
-  b=UHMoR5LVi1uU6Jeut52h8a3xPnQ/rk1bQHYv7fDvyU1TUAIJvEgoiELR
-   /PnaitzN5IfrQ3VX66QMpiar3JSHmIjBvG4S5XiMxAtY8RBSfwZFfWFIN
-   6pUZf02vCG+zjnWJyoGKdpRrGjrURiPTUVAMuyu9/TaYCmYrFLES2ttYA
-   oH0Prb/3M4VmYuFVpjDKpUEDVffbx4mMewmg82/UQVH+Y/AnNIwWjfVsv
-   RiaNm6hGYJk53DGIy3+RAdbGTHrXU/SMGh0zm8I3PPWwrGEvHp/4yg+1p
-   eUv81oMAxFGceZm7+STenbkeyYB3asEa4JRlawgY+X8rIgtSVFetZ0wV8
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281437808"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="281437808"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 05:44:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="765282867"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2022 05:44:39 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4MCM-0001GU-7b;
-        Thu, 23 Jun 2022 12:44:38 +0000
-Date:   Thu, 23 Jun 2022 20:44:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [bvanassche:block-bitwise-opf 12/50] fs/ntfs3/fsntfs.c:1488:60:
- sparse: sparse: incorrect type in argument 3 (different base types)
-Message-ID: <202206231848.pQZIrKC6-lkp@intel.com>
+        Thu, 23 Jun 2022 08:44:29 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D662E087
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:44:28 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id z9so10956158wmf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Z9rGjSfXtb8eRSK/n+BJ7mobKDZ9UgvblW8JzowF+70=;
+        b=F4ho8GPifSNEiaJ3OOu/Ys/zAAZDKYj9T9456rvtB+wYjAdoiinN9EDFU+i0OdKIPX
+         41dNWZXyl03G2k60TtoryC/DdpLQV/l89buXmtp7wU5TvTsum4IWuvhkL5DdWAsDL6wG
+         BGDod2kqxVMp9eYk5LZeGLKhQdhcNuQHFlif43mjQ2QqDpqgtNbZZwiQMwhdA4+OEi7P
+         Dxjn8IT5PoG8ENlm8S3HAS9NEa93DiCTHvlEPTUg9ZKJaaN8fFoxXP06esqz8N8+BtyY
+         mtNmPnkpRRlwV7dwuSgkJ3Fvu+WlVacwlR07xCU4YRKFmd1lo59oqJCod3iDWjP3F1+1
+         roWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z9rGjSfXtb8eRSK/n+BJ7mobKDZ9UgvblW8JzowF+70=;
+        b=kkycHMSlw2bVpumXqrQ3y0fpGzaBMMGdDxETN/fgf+S4RUcolfjkzSG0hugxf6NQF2
+         hc5ZQd8hvhcO1FVCh1q+B58HgmeRrVzDKDFpYtR5HUe4/CtFrm3u56xMo7yutX8LKgJB
+         3hm0qk2Lij5KTOpwWGVGKf8cL7ZSp3+ayzEWcOkdtb67DOsPq7AKB+Wi60CqhqOw6Ife
+         i5enThwSAWR/Acu1+Jh0njgBX0FqnlUgtTGQIaDuHXoIbUa65xd2AcxJHN9VglURpzgT
+         bgjr2SYHRF1UhnUYB+8YJ9dtnyp4hNIA+QQVLa55gJubgtzWn7bq/Jq3AOavJj9Mi+as
+         fzNw==
+X-Gm-Message-State: AJIora+A95xInUfhUsA1awd0itSHRaLmSBqjcVGevSmWf5dvYLXKXih4
+        uXvFXVcnCKuYNoZm4QokvdKtHA==
+X-Google-Smtp-Source: AGRyM1vBTrOx7oLPgd2Rgw1IooQ35oPHLBqBKqYncA5oj9YrqLklhJ1b8G+HWdoNem9nhWWwXfZFpA==
+X-Received: by 2002:a1c:ed08:0:b0:39c:80b1:b0b3 with SMTP id l8-20020a1ced08000000b0039c80b1b0b3mr4015635wmh.134.1655988266885;
+        Thu, 23 Jun 2022 05:44:26 -0700 (PDT)
+Received: from [192.168.149.129] ([80.233.63.220])
+        by smtp.gmail.com with ESMTPSA id bs27-20020a056000071b00b0021b932de5d6sm4272983wrb.39.2022.06.23.05.44.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 05:44:26 -0700 (PDT)
+Message-ID: <64979f56-ec31-eedb-9ef7-5b21e19be3f6@conchuod.ie>
+Date:   Thu, 23 Jun 2022 13:44:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] MAINTAINERS: repair pattern in DIALOG SEMICONDUCTOR
+ DRIVERS
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220623104456.27144-1-lukas.bulwahn@gmail.com>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220623104456.27144-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux block-bitwise-opf
-head:   cdae45bfee03111b49b421b4c01dcddb643f64a2
-commit: 7852822e9b1bd84a693fa1d56b7c872f6c0cf6ba [12/50] block: Use the new blk_opf_t type
-config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220623/202206231848.pQZIrKC6-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-31-g4880bd19-dirty
-        # https://github.com/bvanassche/linux/commit/7852822e9b1bd84a693fa1d56b7c872f6c0cf6ba
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche block-bitwise-opf
-        git checkout 7852822e9b1bd84a693fa1d56b7c872f6c0cf6ba
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ntfs3/
+On 23/06/2022 11:44, Lukas Bulwahn wrote:
+> Commit 441613662db7 ("dt-bindings: mfd: Convert da9063 to yaml") converts
+> da9063.txt to dlg,da9063.yaml and adds a new file pattern in MAINTAINERS.
+> Unfortunately, the file pattern matches da90*.yaml, but the yaml file is
+> prefixed with dlg,da90.
+> 
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken file pattern.
+> 
+> Repair this file pattern in DIALOG SEMICONDUCTOR DRIVERS.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Conor, please ack.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+that's the second fix you've done for that series, I'll be
+sure to run the self-test in the future...
 
-sparse warnings: (new ones prefixed by >>)
->> fs/ntfs3/fsntfs.c:1488:60: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted blk_opf_t [usertype] opf @@     got unsigned int [usertype] op @@
-   fs/ntfs3/fsntfs.c:1488:60: sparse:     expected restricted blk_opf_t [usertype] opf
-   fs/ntfs3/fsntfs.c:1488:60: sparse:     got unsigned int [usertype] op
+Thanks again,
+Conor.
 
-vim +1488 fs/ntfs3/fsntfs.c
-
-82cae269cfa953 Konstantin Komarov 2021-08-13  1445  
-e8b8e97f91b80f Kari Argillander   2021-08-03  1446  /*
-e8b8e97f91b80f Kari Argillander   2021-08-03  1447   * ntfs_bio_pages - Read/write pages from/to disk.
-e8b8e97f91b80f Kari Argillander   2021-08-03  1448   */
-82cae269cfa953 Konstantin Komarov 2021-08-13  1449  int ntfs_bio_pages(struct ntfs_sb_info *sbi, const struct runs_tree *run,
-82cae269cfa953 Konstantin Komarov 2021-08-13  1450  		   struct page **pages, u32 nr_pages, u64 vbo, u32 bytes,
-82cae269cfa953 Konstantin Komarov 2021-08-13  1451  		   u32 op)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1452  {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1453  	int err = 0;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1454  	struct bio *new, *bio = NULL;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1455  	struct super_block *sb = sbi->sb;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1456  	struct block_device *bdev = sb->s_bdev;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1457  	struct page *page;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1458  	u8 cluster_bits = sbi->cluster_bits;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1459  	CLST lcn, clen, vcn, vcn_next;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1460  	u32 add, off, page_idx;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1461  	u64 lbo, len;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1462  	size_t run_idx;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1463  	struct blk_plug plug;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1464  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1465  	if (!bytes)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1466  		return 0;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1467  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1468  	blk_start_plug(&plug);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1469  
-e8b8e97f91b80f Kari Argillander   2021-08-03  1470  	/* Align vbo and bytes to be 512 bytes aligned. */
-82cae269cfa953 Konstantin Komarov 2021-08-13  1471  	lbo = (vbo + bytes + 511) & ~511ull;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1472  	vbo = vbo & ~511ull;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1473  	bytes = lbo - vbo;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1474  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1475  	vcn = vbo >> cluster_bits;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1476  	if (!run_lookup_entry(run, vcn, &lcn, &clen, &run_idx)) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1477  		err = -ENOENT;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1478  		goto out;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1479  	}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1480  	off = vbo & sbi->cluster_mask;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1481  	page_idx = 0;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1482  	page = pages[0];
-82cae269cfa953 Konstantin Komarov 2021-08-13  1483  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1484  	for (;;) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1485  		lbo = ((u64)lcn << cluster_bits) + off;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1486  		len = ((u64)clen << cluster_bits) - off;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1487  new_bio:
-07888c665b405b Christoph Hellwig  2022-01-24 @1488  		new = bio_alloc(bdev, nr_pages - page_idx, op, GFP_NOFS);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1489  		if (bio) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1490  			bio_chain(bio, new);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1491  			submit_bio(bio);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1492  		}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1493  		bio = new;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1494  		bio->bi_iter.bi_sector = lbo >> 9;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1495  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1496  		while (len) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1497  			off = vbo & (PAGE_SIZE - 1);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1498  			add = off + len > PAGE_SIZE ? (PAGE_SIZE - off) : len;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1499  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1500  			if (bio_add_page(bio, page, add, off) < add)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1501  				goto new_bio;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1502  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1503  			if (bytes <= add)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1504  				goto out;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1505  			bytes -= add;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1506  			vbo += add;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1507  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1508  			if (add + off == PAGE_SIZE) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1509  				page_idx += 1;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1510  				if (WARN_ON(page_idx >= nr_pages)) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1511  					err = -EINVAL;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1512  					goto out;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1513  				}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1514  				page = pages[page_idx];
-82cae269cfa953 Konstantin Komarov 2021-08-13  1515  			}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1516  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1517  			if (len <= add)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1518  				break;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1519  			len -= add;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1520  			lbo += add;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1521  		}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1522  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1523  		vcn_next = vcn + clen;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1524  		if (!run_get_entry(run, ++run_idx, &vcn, &lcn, &clen) ||
-82cae269cfa953 Konstantin Komarov 2021-08-13  1525  		    vcn != vcn_next) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1526  			err = -ENOENT;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1527  			goto out;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1528  		}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1529  		off = 0;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1530  	}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1531  out:
-82cae269cfa953 Konstantin Komarov 2021-08-13  1532  	if (bio) {
-82cae269cfa953 Konstantin Komarov 2021-08-13  1533  		if (!err)
-82cae269cfa953 Konstantin Komarov 2021-08-13  1534  			err = submit_bio_wait(bio);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1535  		bio_put(bio);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1536  	}
-82cae269cfa953 Konstantin Komarov 2021-08-13  1537  	blk_finish_plug(&plug);
-82cae269cfa953 Konstantin Komarov 2021-08-13  1538  
-82cae269cfa953 Konstantin Komarov 2021-08-13  1539  	return err;
-82cae269cfa953 Konstantin Komarov 2021-08-13  1540  }
-82cae269cfa953 Konstantin Komarov 2021-08-13  1541  
-
-:::::: The code at line 1488 was first introduced by commit
-:::::: 07888c665b405b1cd3577ddebfeb74f4717a84c4 block: pass a block_device and opf to bio_alloc
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Lee, pleae pick this minor non-urgent clean-up patch.
+> 
+>   MAINTAINERS | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f84dba7ee301..4b08464abb1b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5876,7 +5876,7 @@ W:	http://www.dialog-semiconductor.com/products
+>   F:	Documentation/devicetree/bindings/input/da90??-onkey.txt
+>   F:	Documentation/devicetree/bindings/input/dlg,da72??.txt
+>   F:	Documentation/devicetree/bindings/mfd/da90*.txt
+> -F:	Documentation/devicetree/bindings/mfd/da90*.yaml
+> +F:	Documentation/devicetree/bindings/mfd/dlg,da90*.yaml
+>   F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
+>   F:	Documentation/devicetree/bindings/regulator/da92*.txt
+>   F:	Documentation/devicetree/bindings/regulator/slg51000.txt

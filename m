@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F10B5588CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752665588DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiFWT22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
+        id S230223AbiFWT3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiFWT2F (ORCPT
+        with ESMTP id S231244AbiFWT3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:28:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217688C7E4;
-        Thu, 23 Jun 2022 11:56:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D67FEB82480;
-        Thu, 23 Jun 2022 18:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D67C341C8;
-        Thu, 23 Jun 2022 18:56:28 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mm4ALGWg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656010586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5YpLmQ7Abl0j2shy8v1mtUe5EoOtXzN9rIjE6y2miWk=;
-        b=mm4ALGWgXiMkAeh/rW8fCViz2esyFQHn9rhHe3t/wIcygoCe2HJURsEdKfg2nj9T16ocAi
-        aT07ugYPUlMDO84QnvDIexAhDIHzvfSA5O+tjvfZzBp4wiFkF8YDn0zM+uOj8zK2VtjgXl
-        WOkmkkUPVtgaEF7T9eET7EysDuPhg8Y=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id af793dff (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 23 Jun 2022 18:56:26 +0000 (UTC)
-Received: by mail-io1-f46.google.com with SMTP id r133so387754iod.3;
-        Thu, 23 Jun 2022 11:56:25 -0700 (PDT)
-X-Gm-Message-State: AJIora+paCHaEshhdJ5izq4f5/hMp7YMBJiJPpmj1REMFmg4TikhIP/2
-        iuWOmrnBSIccRhvDu9yuILX/wm6QJsQF96UOZKw=
-X-Google-Smtp-Source: AGRyM1vnGuVnyGYus/8ipu3FTOK8NaPL5KpSrD9ihTvl2t1z4os/T+QA+XPcOeEeqwFmfXBphzMld+wA51c6a9jfUL4=
-X-Received: by 2002:a05:6638:210b:b0:339:e070:518c with SMTP id
- n11-20020a056638210b00b00339e070518cmr5171709jaj.196.1656010585296; Thu, 23
- Jun 2022 11:56:25 -0700 (PDT)
+        Thu, 23 Jun 2022 15:29:02 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DB2DF1D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 11:58:39 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-317a66d62dfso3464957b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 11:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FGzlsKlEfCGevmle/pHXLhVfx4U6rXBQGlZEgzoZTXI=;
+        b=dvSmYPqhPiGxfI/5Zh18vm11MWcK7wOb8aYAdPwZxHqODG5Cuad8CaOEmv/Y2sa9p5
+         VFVhZ3n04fnAE4EIBrxppU2JaQtCw+HwNGxNTftlpnSpGrlUtLsEAh3L0ohX07rtK8oT
+         vpTgkigl4cA4ZXj7VK0JpmQlWypFDFhQ+PPfA1npnvuud8+/3Lrzirf0Ok6pZdv9uXCk
+         VQcI1MF7PNbwpflSIIU5YLGwsfEJ+D0pBc2y9RzFdvO63vg93D63dsccsAeQnJ/ihgqY
+         4KLTrkboG5Upk2hTkDe4NH4xsTpqB4jE9ojiP37WepP0vtdLf6M8E6YgpB9gFhYJ6DSW
+         ukCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FGzlsKlEfCGevmle/pHXLhVfx4U6rXBQGlZEgzoZTXI=;
+        b=oCB2gv4lz5pLYqul0uBF+vum3qPpFEWTtbllIJ6mbREGldrDl5cebQTDhEYt2uSfn+
+         QcroYEA9veqYAq7y8kjJC5mRir8ek7M/QQDvUHhypKl/qe+fC4cc3UEcggmqVXYK1LQ9
+         ilWN/jINC/2LNcuT22t5Er1RyoF+lsQzVB9VXBJ/hhO9aIf2Z645ep93Hp326akL0Rhl
+         YjVsX1K5RzWopi/F9daZJXwx5KRkE48Ez7A7ToXuOqyJNnr+imccZgd42DzJEpvMI3AP
+         cOtMIqYdKYKmCs7hMDJQtavux1Yfbu0a12pYfP126PxS2P943cf2IE0f2KbN8GhMjgyn
+         jw7Q==
+X-Gm-Message-State: AJIora/a5Br3aC38Ci/OFFhVY65bsBz1aFmrPblCIY7DOhnuu/bq59lJ
+        l19ynqMsNvYy2V+lEBno6DwPT3Adudsf5KGRrgW4Tw==
+X-Google-Smtp-Source: AGRyM1u/7wTdCyiFsm9BDRpZC1OybvAg1SKbmp+485CFKjjGjAnrIHBxFj8KE4k+UDRgnBvuLIE8imoEDuaOOm432SE=
+X-Received: by 2002:a0d:dfd5:0:b0:317:f0d4:505b with SMTP id
+ i204-20020a0ddfd5000000b00317f0d4505bmr11837779ywe.518.1656010718792; Thu, 23
+ Jun 2022 11:58:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHmME9qy0N3BvDo-0jkS+om0N3Yk--ZAyKvSKshzDBzvuoP+UA@mail.gmail.com>
- <20220623180555.1345684-1-Jason@zx2c4.com> <YrS2jtI+mt99AOz1@sol.localdomain>
-In-Reply-To: <YrS2jtI+mt99AOz1@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 23 Jun 2022 20:56:14 +0200
-X-Gmail-Original-Message-ID: <CAHmME9rbOt14sHkPVgb7yysYSXk-eiwzkp9PzPnyO_9HyrmQ3Q@mail.gmail.com>
-Message-ID: <CAHmME9rbOt14sHkPVgb7yysYSXk-eiwzkp9PzPnyO_9HyrmQ3Q@mail.gmail.com>
-Subject: Re: [PATCH v2] timekeeping: contribute wall clock to rng on time change
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
+References: <20220622062027.994614-1-peng.fan@oss.nxp.com> <20220622072435.GT1615@pengutronix.de>
+ <CAGETcx9JpTbYtGFoKttWLeiBB73QzzBM1o-OL0o-XuFouLcEog@mail.gmail.com>
+ <CAOMZO5DFX72xuxWwAPsuk4Q667Ap7Dk+pR89cWDQJkzT0D2osA@mail.gmail.com>
+ <CAOMZO5Ccu_v_G9DEwrEfVHq83-hfrXCP_h20Rv0=oFTLux5AkQ@mail.gmail.com>
+ <CAGETcx85z_hkhKFHUwnihqcD0UQG3xtSZjw=BZxqwQB0D1CMgw@mail.gmail.com> <CAOMZO5A6Zn=6tXU2VQ+-cj=50mpxCmoZ8c437=w1Spd34k7T6A@mail.gmail.com>
+In-Reply-To: <CAOMZO5A6Zn=6tXU2VQ+-cj=50mpxCmoZ8c437=w1Spd34k7T6A@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 23 Jun 2022 11:58:02 -0700
+Message-ID: <CAGETcx-_nwrzJzaY3yc80g4AfydV5J9-JYE5h1m+5TT05jyKOw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mp: drop dmas property for uart console
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>, hvilleneuve@dimonoff.com,
+        Lucas Stach <l.stach@pengutronix.de>,
+        abbaraju.manojsai@amarulasolutions.com,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Matteo Lisi <matteo.lisi@engicam.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Teresa Remmet <t.remmet@phytec.de>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, t.remmet@phytec.deh,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 8:53 PM Eric Biggers <ebiggers@kernel.org> wrote:
+On Thu, Jun 23, 2022 at 11:43 AM Fabio Estevam <festevam@gmail.com> wrote:
 >
-> On Thu, Jun 23, 2022 at 08:05:55PM +0200, Jason A. Donenfeld wrote:
-> > The rng's random_init() function contributes the real time to the rng at
-> > boot time, so that events can at least start in relation to something
-> > particular in the real world. But this clock might not yet be set that
-> > point in boot, so nothing is contributed. In addition, the relation
-> > between minor clock changes from, say, NTP, and the cycle counter is
-> > potentially useful entropic data.
-> >
-> > This commit addresses this by mixing in a time stamp on calls to
-> > settimeofday and adjtimex. No entropy is credited in doing so, so it
-> > doesn't make initialization faster, but it is still useful input to
-> > have.
-> >
-> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  kernel/time/timekeeping.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> > index 8e4b3c32fcf9..89b894b3ede8 100644
-> > --- a/kernel/time/timekeeping.c
-> > +++ b/kernel/time/timekeeping.c
-> > @@ -23,6 +23,7 @@
-> >  #include <linux/pvclock_gtod.h>
-> >  #include <linux/compiler.h>
-> >  #include <linux/audit.h>
-> > +#include <linux/random.h>
-> >
-> >  #include "tick-internal.h"
-> >  #include "ntp_internal.h"
-> > @@ -1331,6 +1332,8 @@ int do_settimeofday64(const struct timespec64 *ts)
-> >               goto out;
-> >       }
-> >
-> > +     add_device_randomness(&ts, sizeof(ts));
-> > +
-> >       tk_set_wall_to_mono(tk, timespec64_sub(tk->wall_to_monotonic, ts_delta));
+> On Thu, Jun 23, 2022 at 3:26 PM Saravana Kannan <saravanak@google.com> wrote:
 >
-> This is now nested inside:
+> > I don't think it'll be hard to fix the console= case either. In the
+> > case where you are not using stdout-path, how are you setting the
+> > console? Just want to make sure I'm handling that case too.
 >
->         raw_spin_lock_irqsave(&timekeeper_lock, flags);
->         write_seqcount_begin(&tk_core.seq);
+> When stdout-path is not passed in DT, then the bootloader needs to pass
+> console=ttymxc0,115200, for example.
 >
-> Could there be a deadlock if random_get_entropy() in add_device_randomness()
-> falls back to reading the monotonic clock?
+> Please copy me in v3 if you send it.
 
-Also nice find as the raw_spin_lock itself is problematic on RT,
-because add_device_randomness can take a normal one. I'll do some
-hoisting.
+Will do. I'm looking at the serial console code and I don't see a
+difference between earlycon= vs console= handling. And I know that
+earlycon= doesn't go through the driver core and isn't affected by any
+of this. If you have additional pointers on where console= is parsed,
+feel free to pass it on. I'll continue poking at this.
 
-Jason
+-Saravana

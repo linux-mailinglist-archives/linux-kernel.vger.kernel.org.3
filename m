@@ -2,69 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F58557FD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A789C557FD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiFWQ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S232209AbiFWQcA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Jun 2022 12:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiFWQ33 (ORCPT
+        with ESMTP id S231837AbiFWQb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:29:29 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761A746C85
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:29:27 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id q18so7172221pld.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2/BbUVh0cfAq2g3sTTEh1dhxjM0IAKM6s6X7XzEKPTg=;
-        b=VWllvdwMR3kg3Ed9OEhiULEzlVtdbGFjCVqY5hxwaSsPeVO0C4FtOn6i/ejhUxwhK7
-         5BaqtUspFCu1Oo+6JYQP9uzzM5huJBJSyWEXE1dg8jQ+FPKzN9E9Uf9zgpf+iuEHwhay
-         uQAGtCBiZz5u2eJnCGRK72yS3LfhQ+LwphT6Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2/BbUVh0cfAq2g3sTTEh1dhxjM0IAKM6s6X7XzEKPTg=;
-        b=vI0sk/uj/MXCek6NRw+4IFuqIttZDHfL/8Hjeiw7fqlyUUv7Ar+ESyYBqgyRWANYvE
-         zNc6W3uGmQr3fkXO5kXv5o8GdaSlYfj4/E1o51+2TcH8MNhQB4wEPLYy2VfMYWw5U3Ee
-         rwZWkPjKRLXn9uFmjMtDSOw/3S/qzP8zG09qUMgz7w1zAM6iQo8LnNWlbrtJBu54Wvy8
-         xE6w1eX162Lhxjeiqj3sNZdwLnaibYBf/dlxsGaOmLLYVvITtDqoGGwdaGnWf3eczQq/
-         AGbT9xOoF3tHrU6LMM9LNlLmGYL2Ncvm0bIMl1YfxiiGXFMFZslpQxo8pCPXtqfyywfK
-         zRfQ==
-X-Gm-Message-State: AJIora+YQWadfZ6BSGMDAeOa+R0KxpXCjQcZwHX5GPRQheXNax6IoWuW
-        isszKSJl03opzlSHSB2s7M3X0g==
-X-Google-Smtp-Source: AGRyM1sDLE9y8/LYsf2Bs4AoD2epoxqcEYkWHYEs7FdrsqvUm6zri1tArpRTJRcLpuvSTzkiIQvqdg==
-X-Received: by 2002:a17:90a:bb91:b0:1ec:7062:32cc with SMTP id v17-20020a17090abb9100b001ec706232ccmr4827208pjr.231.1656001766975;
-        Thu, 23 Jun 2022 09:29:26 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t66-20020a637845000000b004088f213f68sm15702091pgc.56.2022.06.23.09.29.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 09:29:26 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 09:29:25 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 8/8][next] scsi: aacraid: Replace one-element array with
- flexible-array member in struct aac_aifcmd
-Message-ID: <202206230926.8C76CFCC@keescook>
-References: <cover.1645513670.git.gustavoars@kernel.org>
- <7d0571ef5dc87904008c325a942cfed24dbbf42e.1645513670.git.gustavoars@kernel.org>
+        Thu, 23 Jun 2022 12:31:56 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF3746B28
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:31:53 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o4PkE-0002xb-Gk; Thu, 23 Jun 2022 18:31:50 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Aaron Durbin <adurbin@rivosinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christoph Muellner <christoph.muellner@vrull.eu>
+Cc:     Christoph =?ISO-8859-1?Q?M=FCllner?= <christoph.muellner@vrull.eu>
+Subject: Re: [RFC PATCH v2] riscv: Add Zawrs support for spinlocks
+Date:   Thu, 23 Jun 2022 18:31:49 +0200
+Message-ID: <1903087.PYKUYFuaPT@diego>
+In-Reply-To: <20220623152948.1607295-1-christoph.muellner@vrull.eu>
+References: <20220623152948.1607295-1-christoph.muellner@vrull.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d0571ef5dc87904008c325a942cfed24dbbf42e.1645513670.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,57 +48,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 01:31:07AM -0600, Gustavo A. R. Silva wrote:
-> Replace one-element array with flexible-array member in struct
-> aac_aifcmd.
+Hi Christoph,
+
+Am Donnerstag, 23. Juni 2022, 17:29:48 CEST schrieb Christoph Muellner:
+> From: Christoph Müllner <christoph.muellner@vrull.eu>
 > 
-> This issue was found with the help of Coccinelle and audited and fixed,
-> manually.
+> The current RISC-V code uses the generic ticket lock implementation,
+> that calls the macros smp_cond_load_relaxed() and smp_cond_load_acquire().
+> Currently, RISC-V uses the generic implementation of these macros.
+> This patch introduces a RISC-V specific implementation, of these
+> macros, that peels off the first loop iteration and modifies the waiting
+> loop such, that it is possible to use the WRS.STO instruction of the Zawrs
+> ISA extension to stall the CPU.
 > 
-> Link: https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-> Link: https://github.com/KSPP/linux/issues/79
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> The resulting implementation of smp_cond_load_*() will only work for
+> 32-bit or 64-bit types for RV64 and 32-bit types for RV32.
+> This is caused by the restrictions of the LR instruction (RISC-V only
+> has LR.W and LR.D). Compiler assertions guard this new restriction.
+> 
+> This patch uses the existing RISC-V ISA extension framework
+> to detect the presents of Zawrs at run-time.
+> If available a NOP instruction will be replaced by WRS.NTO or WRS.STO.
+> 
+> The whole mechanism is gated by Kconfig setting, which defaults to Y.
+> 
+> The Zawrs specification can be found here:
+> https://github.com/riscv/riscv-zawrs/blob/main/zawrs.adoc
+> 
+> Note, that the Zawrs extension is not frozen or ratified yet.
+> Therefore this patch is an RFC and not intended to get merged.
+> 
+> Changes since v1:
+> * Adding "depends on !XIP_KERNEL" to RISCV_ISA_ZAWRS
+> * Fixing type checking code in __smp_load_reserved*
+> * Adjustments according to the specification change
+> 
+> Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
+
+With the matching Qemu-Patch on
+- rv64 + Debian rootfs
+- rv32 + 32bit-Buildroot rootfs
+
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+
+apart from the one nit below
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
 > ---
->  drivers/scsi/aacraid/aacraid.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/riscv/Kconfig                   | 11 ++++
+>  arch/riscv/include/asm/barrier.h     | 92 ++++++++++++++++++++++++++++
+>  arch/riscv/include/asm/errata_list.h | 19 +++++-
+>  arch/riscv/include/asm/hwcap.h       |  3 +-
+>  arch/riscv/kernel/cpu.c              |  1 +
+>  arch/riscv/kernel/cpufeature.c       | 13 ++++
+>  6 files changed, 136 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-> index 97948cd5f13c..447feabf5360 100644
-> --- a/drivers/scsi/aacraid/aacraid.h
-> +++ b/drivers/scsi/aacraid/aacraid.h
-> @@ -2616,7 +2616,7 @@ struct aac_hba_info {
->  struct aac_aifcmd {
->  	__le32 command;		/* Tell host what type of notify this is */
->  	__le32 seqnum;		/* To allow ordering of reports (if necessary) */
-> -	u8 data[1];		/* Undefined length (from kernel viewpoint) */
-> +	u8 data[];		/* Undefined length (from kernel viewpoint) */
->  };
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 32ffef9f6e5b..9d40569237c9 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -358,6 +358,17 @@ config RISCV_ISA_C
 >  
->  /**
-> -- 
-> 2.27.0
-> 
+>  	   If you don't know what to do here, say Y.
+>  
+> +config RISCV_ISA_ZAWRS
+> +	bool "Zawrs extension support"
+> +	depends on !XIP_KERNEL
+> +	select RISCV_ALTERNATIVE
+> +	default y
+> +	help
+> +	   Adds support to dynamically detect the presence of the Zawrs extension
+> +	   (wait for reservation set) and enable its usage.
+> +
+> +	   If you don't know what to do here, say Y.
+> +
+>  config RISCV_ISA_SVPBMT
+>  	bool "SVPBMT extension support"
+>  	depends on 64BIT && MMU
+> diff --git a/arch/riscv/include/asm/barrier.h b/arch/riscv/include/asm/barrier.h
+> index d0e24aaa2aa0..1f9628aaa7cb 100644
+> --- a/arch/riscv/include/asm/barrier.h
+> +++ b/arch/riscv/include/asm/barrier.h
+> @@ -12,6 +12,8 @@
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> +#include <asm/errata_list.h>
+> +
+>  #define nop()		__asm__ __volatile__ ("nop")
+>  
+>  #define RISCV_FENCE(p, s) \
+> @@ -42,6 +44,64 @@ do {									\
+>  	___p1;								\
+>  })
+>  
+> +#if __riscv_xlen == 64
+> +
 
-FWIW, this patch solves an -Warray-bounds warning that is seen under
--fstrict-flex-arrays=3 (coming soon[1]):
+nit: I guess we could do without the extra blanks?
+asm.h does so, and also the #else block below also doesn't
+use them ;-) . But I guess that is more a style debate
 
-../drivers/scsi/aacraid/commsup.c:1166:17: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                                (((__le32 *)aifcmd->data)[1] == cpu_to_le32(3));
-                                            ^             ~
-../drivers/scsi/aacraid/aacraid.h:2620:2: note: array 'data' declared here
-        u8 data[1];             /* Undefined length (from kernel viewpoint) */
-        ^
-../drivers/scsi/aacraid/commsup.c:1286:20: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                                  ((((__le32 *)aifcmd->data)[3]
-                                               ^             ~
-../drivers/scsi/aacraid/aacraid.h:2620:2: note: array 'data' declared here
-        u8 data[1];             /* Undefined length (from kernel viewpoint) */
-        ^
+> +#define __riscv_lrsc_word(t)						\
+> +	(sizeof(t) == sizeof(int) ||					\
+> +	 sizeof(t) == sizeof(long))
+> +
+> +#elif __riscv_xlen == 32
+> +
+> +#define __riscv_lrsc_word(t)						\
+> +	(sizeof(t) == sizeof(int))
+> +
+> +#else
+> +#error "Unexpected __riscv_xlen"
+> +#endif /* __riscv_xlen */
 
-[1] new flag in GCC and Clang:
-    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836
-    https://reviews.llvm.org/D126864
+[...]
+
+Thanks
+Heiko
 
 
--- 
-Kees Cook

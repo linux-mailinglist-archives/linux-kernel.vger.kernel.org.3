@@ -2,64 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E542B556FB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69884556FBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbiFWBI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 21:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S234283AbiFWBKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 21:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiFWBIX (ORCPT
+        with ESMTP id S230101AbiFWBKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 21:08:23 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864E82FE41;
-        Wed, 22 Jun 2022 18:08:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VH95W38_1655946498;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VH95W38_1655946498)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Jun 2022 09:08:18 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] usb: gadget: u_ether: Remove duplicated include in u_ether.c
-Date:   Thu, 23 Jun 2022 09:08:08 +0800
-Message-Id: <20220623010808.9816-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 22 Jun 2022 21:10:44 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFF230F68;
+        Wed, 22 Jun 2022 18:10:41 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 23 Jun
+ 2022 09:10:38 +0800
+Received: from [10.32.64.1] (10.32.64.1) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 23 Jun
+ 2022 09:10:36 +0800
+Subject: Re: [PATCH] x86/cstate: Add Zhaoxin ACPI Cx FFH MWAIT support
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <bccae278-e735-4681-cb3a-41359e42032b@zhaoxin.com>
+ <CAJZ5v0i78UPYpc9epEOndigxAsj3YVXJJTrQDoX0Dw5p-zpgaQ@mail.gmail.com>
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Message-ID: <61d5a117-c0d8-8752-5d70-b383530aef86@zhaoxin.com>
+Date:   Thu, 23 Jun 2022 09:10:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0i78UPYpc9epEOndigxAsj3YVXJJTrQDoX0Dw5p-zpgaQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.32.64.1]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following includecheck warning:
-./drivers/usb/gadget/function/u_ether.c: linux/etherdevice.h is included
-more than once.
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/usb/gadget/function/u_ether.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index f51694f29de9..7887def05dc2 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -17,7 +17,6 @@
- #include <linux/etherdevice.h>
- #include <linux/ethtool.h>
- #include <linux/if_vlan.h>
--#include <linux/etherdevice.h>
- 
- #include "u_ether.h"
- 
+On 22/6/2022 21:38, Rafael J. Wysocki wrote:
+> Please CC linux-acpi@vger.kernel.org on ACPI-related changes (added now).
+
+Ok.
+
+> 
+> On Wed, Jun 22, 2022 at 5:29 AM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
+>>
+>> Recent Zhaoxin CPUs support X86_FEATURE_MWAIT that implies the
+>> MONITOR/MWAIT instructions can be used for ACPI Cx state. The BIOS
+>> declares Cx state in _CST object to use FFH on Zhaoxin systems. So
+>> let function ffh_cstate_init() support Zhaoxin too.
+>>
+>> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+>> ---
+>>    arch/x86/kernel/acpi/cstate.c | 4 +++-
+>>    1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+>> index 7945eae..d4185e1 100644
+>> --- a/arch/x86/kernel/acpi/cstate.c
+>> +++ b/arch/x86/kernel/acpi/cstate.c
+>> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
+>>
+>>          if (c->x86_vendor != X86_VENDOR_INTEL &&
+>>              c->x86_vendor != X86_VENDOR_AMD &&
+>> -           c->x86_vendor != X86_VENDOR_HYGON)
+>> +           c->x86_vendor != X86_VENDOR_HYGON &&
+>> +           c->x86_vendor != X86_VENDOR_CENTAUR &&
+>> +           c->x86_vendor != X86_VENDOR_ZHAOXIN)
+> 
+> Centaur is not mentioned in the changelog and it should be.
+
+Will add Centaur in the changelog. Thanks a lot.
+
+> 
+>>                  return -1;
+>>
+>>          cpu_cstate_entry = alloc_percpu(struct cstate_entry);
+>> --
+> .
+> 
+
 -- 
-2.20.1.7.g153144c
-
+Sincerely
+TonyWWang-oc

@@ -2,260 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF995577B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917C75577AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiFWKRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S230259AbiFWKRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiFWKRf (ORCPT
+        with ESMTP id S229769AbiFWKRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:17:35 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9976749FAB
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:17:33 -0700 (PDT)
+        Thu, 23 Jun 2022 06:17:34 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C088149FA4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655979453; x=1687515453;
+  t=1655979452; x=1687515452;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TYV97gHZA5yGEmcvgVZDsIZeLNy29ZJBZ8fG5o69Izc=;
-  b=KybHuiVMDin0el/dO4MHkb41IXih1ggPPHMpQB+KWrZWvLHb0HKc+eMa
-   XeX1yF+ErmjPKPrafCKkjoDRfD+FdCXcJC5/WqJmglDz5aFaK41umXnjt
-   Hapo+sEBPB6WiL4WTRw2TLGsZ9uPEvfLTFvsMv2wIspM1QrEWxVm8brz/
-   oio2sz6R/TWX5lTTMMNt1mpqPKnoKF9e09+aw05ECZ9TDIS9zjCgs6YtM
-   lUqJul4PoG/SkiJTLm+hfFaHhOdCfPF3lNB6WD5OQaXeeklqx0V+h5N+x
-   O9PF7Nn1gxWfChYYYPCofeIPbQCteoFe7Ukd6tZFoQ7QrUYqRD2YKxUBi
+  bh=hZ2tjvRwF4zEqYSWATtz4dM6/WVIqKJMyDNHCGJXNiw=;
+  b=gZTiJk/DSum3xTqI62UYk5KKBHSnM1cNaJqQDbmaYILFanOIkbeOiD1G
+   NzVFEPzwEctFSOKWfWfGSmxw9mFo3a602oWXLKvu5fg6swkFeQzlg5uGR
+   JCjLJpQCNJqPjAEeoBuVy8unPN5w2k+skBGGcUF80+ji6t0Yag8OKiwrf
+   i8yS6OWZq4YZh07o+ng2v+FObxkbxxUm+pAGeY4XorLozNav+N0ky8qUX
+   yeorv1so6a7w6UgdusjK0m9wAUdQKovZHEO4MeIkxFLqia3909HaqwMLV
+   6XFMnYluMT7VgxhwA1KqcNTr9q7vmnXryifAEuj9MpkMAwiwu3MKA6Pz4
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="269405561"
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="260496786"
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="269405561"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:17:33 -0700
+   d="scan'208";a="260496786"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:17:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644669560"
+   d="scan'208";a="656109171"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Jun 2022 03:17:31 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jun 2022 03:17:31 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o4Jty-00016d-O0;
+        id 1o4Jty-00016s-R6;
         Thu, 23 Jun 2022 10:17:30 +0000
-Date:   Thu, 23 Jun 2022 18:17:07 +0800
+Date:   Thu, 23 Jun 2022 18:17:09 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
+To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [bvanassche:block-bitwise-opf 11/50] fs/ntfs3/attrib.c:1292:57:
- sparse: sparse: incorrect type in argument 7 (different base types)
-Message-ID: <202206231852.vDdFxMC4-lkp@intel.com>
+Subject: [jolsa-perf:bpf/tramp_11 17/21] kernel/bpf/syscall.c:2994:20:
+ warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from
+ integer without a cast
+Message-ID: <202206231801.yHlkCDk1-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux block-bitwise-opf
-head:   cdae45bfee03111b49b421b4c01dcddb643f64a2
-commit: 389f5e4037ed787995e6d3753e502cf1a7c5a9f5 [11/50] block: Introduce the type blk_opf_t
-config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220623/202206231852.vDdFxMC4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-31-g4880bd19-dirty
-        # https://github.com/bvanassche/linux/commit/389f5e4037ed787995e6d3753e502cf1a7c5a9f5
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche block-bitwise-opf
-        git checkout 389f5e4037ed787995e6d3753e502cf1a7c5a9f5
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_11
+head:   c807110aa605281263da02a78af57847f5c4275e
+commit: ac6153f8956b357b52e16ea68b70ea51aff1752c [17/21] bpf: Use bpf_tramp_id object in attach
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220623/202206231801.yHlkCDk1-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=ac6153f8956b357b52e16ea68b70ea51aff1752c
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tramp_11
+        git checkout ac6153f8956b357b52e16ea68b70ea51aff1752c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ntfs3/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
->> fs/ntfs3/attrib.c:1292:57: sparse: sparse: incorrect type in argument 7 (different base types) @@     expected unsigned int [usertype] op @@     got restricted blk_opf_t @@
-   fs/ntfs3/attrib.c:1292:57: sparse:     expected unsigned int [usertype] op
-   fs/ntfs3/attrib.c:1292:57: sparse:     got restricted blk_opf_t
+   kernel/bpf/syscall.c: In function 'bpf_tracing_prog_attach':
+   kernel/bpf/syscall.c:2994:22: error: implicit declaration of function 'bpf_tramp_id_alloc'; did you mean 'bpf_map_kzalloc'? [-Werror=implicit-function-declaration]
+    2994 |                 id = bpf_tramp_id_alloc();
+         |                      ^~~~~~~~~~~~~~~~~~
+         |                      bpf_map_kzalloc
+>> kernel/bpf/syscall.c:2994:20: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    2994 |                 id = bpf_tramp_id_alloc();
+         |                    ^
+   kernel/bpf/syscall.c:3007:17: error: implicit declaration of function 'bpf_tramp_id_init' [-Werror=implicit-function-declaration]
+    3007 |                 bpf_tramp_id_init(id, tgt_prog, NULL, btf_id);
+         |                 ^~~~~~~~~~~~~~~~~
+   kernel/bpf/syscall.c:3053:20: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    3053 |                 id = bpf_tramp_id_alloc();
+         |                    ^
+   kernel/bpf/syscall.c:3062:36: error: implicit declaration of function 'bpf_tramp_id_is_equal' [-Werror=implicit-function-declaration]
+    3062 |         if (!prog->aux->dst_id || !bpf_tramp_id_is_equal(id, prog->aux->dst_id)) {
+         |                                    ^~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 --
->> fs/ntfs3/frecord.c:2194:46: sparse: sparse: incorrect type in argument 7 (different base types) @@     expected unsigned int [usertype] op @@     got restricted blk_opf_t @@
-   fs/ntfs3/frecord.c:2194:46: sparse:     expected unsigned int [usertype] op
-   fs/ntfs3/frecord.c:2194:46: sparse:     got restricted blk_opf_t
-   fs/ntfs3/frecord.c:2561:46: sparse: sparse: incorrect type in argument 7 (different base types) @@     expected unsigned int [usertype] op @@     got restricted blk_opf_t @@
-   fs/ntfs3/frecord.c:2561:46: sparse:     expected unsigned int [usertype] op
-   fs/ntfs3/frecord.c:2561:46: sparse:     got restricted blk_opf_t
-   fs/ntfs3/frecord.c:2593:43: sparse: sparse: incorrect type in argument 7 (different base types) @@     expected unsigned int [usertype] op @@     got restricted blk_opf_t @@
-   fs/ntfs3/frecord.c:2593:43: sparse:     expected unsigned int [usertype] op
-   fs/ntfs3/frecord.c:2593:43: sparse:     got restricted blk_opf_t
-   fs/ntfs3/frecord.c:2805:30: sparse: sparse: incorrect type in argument 7 (different base types) @@     expected unsigned int [usertype] op @@     got restricted blk_opf_t @@
-   fs/ntfs3/frecord.c:2805:30: sparse:     expected unsigned int [usertype] op
-   fs/ntfs3/frecord.c:2805:30: sparse:     got restricted blk_opf_t
+   kernel/bpf/verifier.c: In function 'check_attach_btf_id':
+   kernel/bpf/verifier.c:15073:14: error: implicit declaration of function 'bpf_tramp_id_alloc'; did you mean 'bpf_map_kzalloc'? [-Werror=implicit-function-declaration]
+   15073 |         id = bpf_tramp_id_alloc();
+         |              ^~~~~~~~~~~~~~~~~~
+         |              bpf_map_kzalloc
+>> kernel/bpf/verifier.c:15073:12: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   15073 |         id = bpf_tramp_id_alloc();
+         |            ^
+   kernel/bpf/verifier.c:15077:9: error: implicit declaration of function 'bpf_tramp_id_init' [-Werror=implicit-function-declaration]
+   15077 |         bpf_tramp_id_init(id, tgt_prog, prog->aux->attach_btf, btf_id);
+         |         ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-vim +1292 fs/ntfs3/attrib.c
 
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1193  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1194  #ifdef CONFIG_NTFS3_LZX_XPRESS
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1195  /*
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1196   * attr_wof_frame_info
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1197   *
-e8b8e97f91b80f Kari Argillander   2021-08-03  1198   * Read header of Xpress/LZX file to get info about frame.
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1199   */
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1200  int attr_wof_frame_info(struct ntfs_inode *ni, struct ATTRIB *attr,
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1201  			struct runs_tree *run, u64 frame, u64 frames,
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1202  			u8 frame_bits, u32 *ondisk_size, u64 *vbo_data)
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1203  {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1204  	struct ntfs_sb_info *sbi = ni->mi.sbi;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1205  	u64 vbo[2], off[2], wof_size;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1206  	u32 voff;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1207  	u8 bytes_per_off;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1208  	char *addr;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1209  	struct page *page;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1210  	int i, err;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1211  	__le32 *off32;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1212  	__le64 *off64;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1213  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1214  	if (ni->vfs_inode.i_size < 0x100000000ull) {
-e8b8e97f91b80f Kari Argillander   2021-08-03  1215  		/* File starts with array of 32 bit offsets. */
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1216  		bytes_per_off = sizeof(__le32);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1217  		vbo[1] = frame << 2;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1218  		*vbo_data = frames << 2;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1219  	} else {
-e8b8e97f91b80f Kari Argillander   2021-08-03  1220  		/* File starts with array of 64 bit offsets. */
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1221  		bytes_per_off = sizeof(__le64);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1222  		vbo[1] = frame << 3;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1223  		*vbo_data = frames << 3;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1224  	}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1225  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1226  	/*
-e8b8e97f91b80f Kari Argillander   2021-08-03  1227  	 * Read 4/8 bytes at [vbo - 4(8)] == offset where compressed frame starts.
-e8b8e97f91b80f Kari Argillander   2021-08-03  1228  	 * Read 4/8 bytes at [vbo] == offset where compressed frame ends.
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1229  	 */
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1230  	if (!attr->non_res) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1231  		if (vbo[1] + bytes_per_off > le32_to_cpu(attr->res.data_size)) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1232  			ntfs_inode_err(&ni->vfs_inode, "is corrupted");
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1233  			return -EINVAL;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1234  		}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1235  		addr = resident_data(attr);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1236  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1237  		if (bytes_per_off == sizeof(__le32)) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1238  			off32 = Add2Ptr(addr, vbo[1]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1239  			off[0] = vbo[1] ? le32_to_cpu(off32[-1]) : 0;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1240  			off[1] = le32_to_cpu(off32[0]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1241  		} else {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1242  			off64 = Add2Ptr(addr, vbo[1]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1243  			off[0] = vbo[1] ? le64_to_cpu(off64[-1]) : 0;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1244  			off[1] = le64_to_cpu(off64[0]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1245  		}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1246  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1247  		*vbo_data += off[0];
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1248  		*ondisk_size = off[1] - off[0];
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1249  		return 0;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1250  	}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1251  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1252  	wof_size = le64_to_cpu(attr->nres.data_size);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1253  	down_write(&ni->file.run_lock);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1254  	page = ni->file.offs_page;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1255  	if (!page) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1256  		page = alloc_page(GFP_KERNEL);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1257  		if (!page) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1258  			err = -ENOMEM;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1259  			goto out;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1260  		}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1261  		page->index = -1;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1262  		ni->file.offs_page = page;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1263  	}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1264  	lock_page(page);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1265  	addr = page_address(page);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1266  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1267  	if (vbo[1]) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1268  		voff = vbo[1] & (PAGE_SIZE - 1);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1269  		vbo[0] = vbo[1] - bytes_per_off;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1270  		i = 0;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1271  	} else {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1272  		voff = 0;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1273  		vbo[0] = 0;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1274  		off[0] = 0;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1275  		i = 1;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1276  	}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1277  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1278  	do {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1279  		pgoff_t index = vbo[i] >> PAGE_SHIFT;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1280  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1281  		if (index != page->index) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1282  			u64 from = vbo[i] & ~(u64)(PAGE_SIZE - 1);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1283  			u64 to = min(from + PAGE_SIZE, wof_size);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1284  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1285  			err = attr_load_runs_range(ni, ATTR_DATA, WOF_NAME,
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1286  						   ARRAY_SIZE(WOF_NAME), run,
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1287  						   from, to);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1288  			if (err)
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1289  				goto out1;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1290  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1291  			err = ntfs_bio_pages(sbi, run, &page, 1, from,
-be71b5cba2e648 Konstantin Komarov 2021-08-13 @1292  					     to - from, REQ_OP_READ);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1293  			if (err) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1294  				page->index = -1;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1295  				goto out1;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1296  			}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1297  			page->index = index;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1298  		}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1299  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1300  		if (i) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1301  			if (bytes_per_off == sizeof(__le32)) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1302  				off32 = Add2Ptr(addr, voff);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1303  				off[1] = le32_to_cpu(*off32);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1304  			} else {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1305  				off64 = Add2Ptr(addr, voff);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1306  				off[1] = le64_to_cpu(*off64);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1307  			}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1308  		} else if (!voff) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1309  			if (bytes_per_off == sizeof(__le32)) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1310  				off32 = Add2Ptr(addr, PAGE_SIZE - sizeof(u32));
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1311  				off[0] = le32_to_cpu(*off32);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1312  			} else {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1313  				off64 = Add2Ptr(addr, PAGE_SIZE - sizeof(u64));
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1314  				off[0] = le64_to_cpu(*off64);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1315  			}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1316  		} else {
-e8b8e97f91b80f Kari Argillander   2021-08-03  1317  			/* Two values in one page. */
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1318  			if (bytes_per_off == sizeof(__le32)) {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1319  				off32 = Add2Ptr(addr, voff);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1320  				off[0] = le32_to_cpu(off32[-1]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1321  				off[1] = le32_to_cpu(off32[0]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1322  			} else {
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1323  				off64 = Add2Ptr(addr, voff);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1324  				off[0] = le64_to_cpu(off64[-1]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1325  				off[1] = le64_to_cpu(off64[0]);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1326  			}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1327  			break;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1328  		}
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1329  	} while (++i < 2);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1330  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1331  	*vbo_data += off[0];
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1332  	*ondisk_size = off[1] - off[0];
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1333  
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1334  out1:
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1335  	unlock_page(page);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1336  out:
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1337  	up_write(&ni->file.run_lock);
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1338  	return err;
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1339  }
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1340  #endif
-be71b5cba2e648 Konstantin Komarov 2021-08-13  1341  
+vim +2994 kernel/bpf/syscall.c
 
-:::::: The code at line 1292 was first introduced by commit
-:::::: be71b5cba2e6485e8959da7a9f9a44461a1bb074 fs/ntfs3: Add attrib operations
-
-:::::: TO: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-:::::: CC: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+  2942	
+  2943	static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+  2944					   int tgt_prog_fd,
+  2945					   u32 btf_id,
+  2946					   u64 bpf_cookie)
+  2947	{
+  2948		struct bpf_attach_target_info tgt_info_buf = {};
+  2949		struct bpf_attach_target_info *tgt_info = &tgt_info_buf;
+  2950		struct bpf_link_primer link_primer;
+  2951		struct bpf_prog *tgt_prog = NULL;
+  2952		struct bpf_tramp_id *id = NULL;
+  2953		struct bpf_tracing_link *link;
+  2954		int err;
+  2955	
+  2956		switch (prog->type) {
+  2957		case BPF_PROG_TYPE_TRACING:
+  2958			if (prog->expected_attach_type != BPF_TRACE_FENTRY &&
+  2959			    prog->expected_attach_type != BPF_TRACE_FEXIT &&
+  2960			    prog->expected_attach_type != BPF_MODIFY_RETURN) {
+  2961				err = -EINVAL;
+  2962				goto out_put_prog;
+  2963			}
+  2964			break;
+  2965		case BPF_PROG_TYPE_EXT:
+  2966			if (prog->expected_attach_type != 0) {
+  2967				err = -EINVAL;
+  2968				goto out_put_prog;
+  2969			}
+  2970			break;
+  2971		case BPF_PROG_TYPE_LSM:
+  2972			if (prog->expected_attach_type != BPF_LSM_MAC) {
+  2973				err = -EINVAL;
+  2974				goto out_put_prog;
+  2975			}
+  2976			break;
+  2977		default:
+  2978			err = -EINVAL;
+  2979			goto out_put_prog;
+  2980		}
+  2981	
+  2982		if (!!tgt_prog_fd != !!btf_id) {
+  2983			err = -EINVAL;
+  2984			goto out_put_prog;
+  2985		}
+  2986	
+  2987		if (tgt_prog_fd) {
+  2988			/* For now we only allow new targets for BPF_PROG_TYPE_EXT */
+  2989			if (prog->type != BPF_PROG_TYPE_EXT) {
+  2990				err = -EINVAL;
+  2991				goto out_put_prog;
+  2992			}
+  2993	
+> 2994			id = bpf_tramp_id_alloc();
+  2995			if (!id) {
+  2996				err = -ENOMEM;
+  2997				goto out_put_prog;
+  2998			}
+  2999	
+  3000			tgt_prog = bpf_prog_get(tgt_prog_fd);
+  3001			if (IS_ERR(tgt_prog)) {
+  3002				err = PTR_ERR(tgt_prog);
+  3003				tgt_prog = NULL;
+  3004				goto out_put_prog;
+  3005			}
+  3006	
+  3007			bpf_tramp_id_init(id, tgt_prog, NULL, btf_id);
+  3008		}
+  3009	
+  3010		link = kzalloc(sizeof(*link), GFP_USER);
+  3011		if (!link) {
+  3012			err = -ENOMEM;
+  3013			goto out_put_prog;
+  3014		}
+  3015		bpf_link_init(&link->link, BPF_LINK_TYPE_TRACING,
+  3016			      &bpf_tracing_link_lops, prog);
+  3017		link->attach_type = prog->expected_attach_type;
+  3018		link->attach.tp.cookie = bpf_cookie;
+  3019		link->attach.tp.prog = prog;
+  3020	
+  3021		mutex_lock(&prog->aux->dst_mutex);
+  3022	
+  3023		/* There are a few possible cases here:
+  3024		 *
+  3025		 * - if prog->aux->dst_key is set, the program was just loaded
+  3026		 *   and not yet attached to anything, so we can use the values stored
+  3027		 *   in prog->aux
+  3028		 *
+  3029		 * - if prog->aux->dst_key is NULL, the program has already been
+  3030	         *   attached to a target and its initial target was cleared (below)
+  3031		 *
+  3032		 * - if tgt_prog != NULL, the caller specified tgt_prog_fd +
+  3033		 *   target_btf_id using the link_create API.
+  3034		 *
+  3035		 * - if tgt_prog == NULL when this function was called using the old
+  3036		 *   raw_tracepoint_open API, and we need a target from prog->aux
+  3037		 *
+  3038		 * - if prog->aux->dst_key and tgt_prog is NULL, the program
+  3039		 *   was detached and is going for re-attachment.
+  3040		 */
+  3041		if (!prog->aux->dst_id && !tgt_prog) {
+  3042			/*
+  3043			 * Allow re-attach for TRACING and LSM programs. If it's
+  3044			 * currently linked, bpf_trampoline_link_prog will fail.
+  3045			 * EXT programs need to specify tgt_prog_fd, so they
+  3046			 * re-attach in separate code path.
+  3047			 */
+  3048			if (prog->type != BPF_PROG_TYPE_TRACING &&
+  3049			    prog->type != BPF_PROG_TYPE_LSM) {
+  3050				err = -EINVAL;
+  3051				goto out_unlock;
+  3052			}
+  3053			id = bpf_tramp_id_alloc();
+  3054			if (!id) {
+  3055				err = -ENOMEM;
+  3056				goto out_unlock;
+  3057			}
+  3058			btf_id = prog->aux->attach_btf_id;
+  3059			bpf_tramp_id_init(id, NULL, prog->aux->attach_btf, btf_id);
+  3060		}
+  3061	
+  3062		if (!prog->aux->dst_id || !bpf_tramp_id_is_equal(id, prog->aux->dst_id)) {
+  3063			/* If there is no saved target, or the specified target is
+  3064			 * different from the destination specified at load time, we
+  3065			 * need a new trampoline and a check for compatibility
+  3066			 */
+  3067	
+  3068			err = bpf_check_attach_target(NULL, prog, tgt_prog, btf_id,
+  3069						      tgt_info);
+  3070			if (err)
+  3071				goto out_unlock;
+  3072		} else {
+  3073			/* The caller didn't specify a target, or the target was the
+  3074			 * same as the destination supplied during program load. This
+  3075			 * means we can reuse the trampoline and reference from program
+  3076			 * load time, and there is no need to allocate a new one. This
+  3077			 * can only happen once for any program, as the saved values in
+  3078			 * prog->aux are cleared below.
+  3079			 */
+  3080			id = prog->aux->dst_id;
+  3081			tgt_prog = prog->aux->dst_prog;
+  3082			tgt_info = &prog->aux->dst_tgt_info;
+  3083		}
+  3084	
+  3085		link->attach.id = id;
+  3086	
+  3087		err = bpf_link_prime(&link->link, &link_primer);
+  3088		if (err)
+  3089			goto out_unlock;
+  3090	
+  3091		err = bpf_trampoline_attach(&link->attach, tgt_info);
+  3092		if (err) {
+  3093			bpf_link_cleanup(&link_primer);
+  3094			link = NULL;
+  3095			goto out_unlock;
+  3096		}
+  3097	
+  3098		link->tgt_prog = tgt_prog;
+  3099	
+  3100		/* Always clear the trampoline and target prog from prog->aux to make
+  3101		 * sure the original attach destination is not kept alive after a
+  3102		 * program is (re-)attached to another target.
+  3103		 */
+  3104		if (prog->aux->dst_prog &&
+  3105		    (tgt_prog_fd || !bpf_tramp_id_is_equal(id, prog->aux->dst_id)))
+  3106			/* got extra prog ref from syscall, or attaching to different prog */
+  3107			bpf_prog_put(prog->aux->dst_prog);
+  3108	
+  3109		prog->aux->dst_prog = NULL;
+  3110		prog->aux->dst_id = NULL;
+  3111		mutex_unlock(&prog->aux->dst_mutex);
+  3112	
+  3113		return bpf_link_settle(&link_primer);
+  3114	out_unlock:
+  3115		mutex_unlock(&prog->aux->dst_mutex);
+  3116		kfree(link);
+  3117	out_put_prog:
+  3118		if (tgt_prog_fd && tgt_prog)
+  3119			bpf_prog_put(tgt_prog);
+  3120		return err;
+  3121	}
+  3122	
 
 -- 
 0-DAY CI Kernel Test Service

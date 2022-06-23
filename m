@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76A8558BD9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97194558BDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiFWXoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S230462AbiFWXpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiFWXog (ORCPT
+        with ESMTP id S230513AbiFWXpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:44:36 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E764FC6B;
-        Thu, 23 Jun 2022 16:44:35 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id n14so408345ilt.10;
-        Thu, 23 Jun 2022 16:44:35 -0700 (PDT)
+        Thu, 23 Jun 2022 19:45:10 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFE9506E7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:45:08 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id pk21so1377459ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=Q9dyH1c/WKyQejLN3Yo4vHJr2Mjmed9KfkMox7OYbHw=;
-        b=Y8r6pVrW3fnhs0FmOm3bz1xp8USIwC8ve01v9J6QV4g9KA5Uf4F2vDivQiIYNojmIs
-         U7E3kJe2r9Z6oSOjcsyIFuSCJ1VrRdC2Jw3puIyxHpgXeOaSuy1+pE0nYvEGjekaVpaA
-         fcm8wrPrPGTo9LokkV0nz1qrxaCs/NL/3/fvxdV3hJJMEe3wrve5velwn3dJTTDky17x
-         KOsBTZb/1Z7bWLeXM8+uusUi7+7WhzBswPteztfYZnwf+NKtNaUXjQBeslPq/u2D8rVE
-         +eFC+cOK4qXKDW4EVhfoTb2viliPYy3uN8w6cBCCtuheF6awJp0haifDMnfYbk+paiG8
-         Lsaw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4ikmHtD58shD6bwBLVpbuZjlxH1kCE1s2bn5lg6TI84=;
+        b=Idb+m4MmDg0qMd2DH6fEfYzuuttvLSeFBYJHLxEIpsJQi14s4A53HQuCSN5EPUcDlu
+         cHZr8bJG8h/PTgfMQpO0HbbedR/xKjdcHTojqasgMK1W7NG1vLAyJp2ONOWhpxRkyeua
+         SwHT1Aus7rtxzv/TDgM3Hsx5fXimanh7yIQWU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=Q9dyH1c/WKyQejLN3Yo4vHJr2Mjmed9KfkMox7OYbHw=;
-        b=mr9ELWY4szgIRoxADSiP0OODcIrqkHFdyM6+tk/WQV4AT608IeIQti1tZ645KvVk4+
-         VF9qui1WONFO7nokJD0X6UuoDH3DxgF0CUk0S5Zlrn8RDVdyAvEm8C1NkOPu/Tqpodys
-         GuPH8OLpIB6dGmGBpgBAGV9/uDKAM1oB+/Qafw6tWjYAzbXAigoAW4czhdikfKvwIT4B
-         U5+LAEdEwcZfxhO10/CtDvJ3SS3ubfh8DuC3iueADBhkBbW86E2XRlvLE5OgamvjJHvs
-         hQHWgH5pKIVHl0FU6103hv1rt6cXVDh2o7Y7mqAkEJUZIi/wVNOmdjviHygonCn7Wkmr
-         P6MQ==
-X-Gm-Message-State: AJIora9teySOd1nT5U/UvyrqN0LFU+r6gp/hbTitPGoC+l6Tdk6NC7JC
-        0VLt4lX5KjwM+gpqttfiPCA=
-X-Google-Smtp-Source: AGRyM1uAMrbwKWLgODvFzmC0vmX8VqGiUp8rWPxrkbPQuXToUKxA2kE76dkWkLpDWSUW7wErwn2qPQ==
-X-Received: by 2002:a05:6e02:154e:b0:2d9:3a5:3c61 with SMTP id j14-20020a056e02154e00b002d903a53c61mr6591762ilu.147.1656027875171;
-        Thu, 23 Jun 2022 16:44:35 -0700 (PDT)
-Received: from localhost ([172.243.153.43])
-        by smtp.gmail.com with ESMTPSA id n41-20020a056602342900b00669536b0d71sm430920ioz.14.2022.06.23.16.44.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 16:44:34 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 16:44:28 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Simon wang <wangchuanguo@inspur.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Simon Wang <wangchuanguo@inspur.com>
-Message-ID: <62b4fadc6aaf_26268208bf@john.notmuch>
-In-Reply-To: <20220622031923.65692-1-wangchuanguo@inspur.com>
-References: <20220622031923.65692-1-wangchuanguo@inspur.com>
-Subject: RE: [PATCH] bpf: Replace 0 with BPF_K
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4ikmHtD58shD6bwBLVpbuZjlxH1kCE1s2bn5lg6TI84=;
+        b=wcnHcAi4Suy3a7pWzSrYAct8LCw/7QiW7Ovn0SfF35RjZPhf90oN4X/g5mrqY8kEKq
+         DVoUpJEFWQbUgSS6v2YqpHB1+49E/BAFG9BU/A2+PM4WppbYAcytzSlyLPqPB/1YbHJ2
+         mNsLkbBZcOXWgxRMbHqiMovmzpNB72x2j0/O0j+t9uCeVn5coONVLt5J/wN7MvgFBvi1
+         fBxyTNy/kuoMhDQx3Z7LNSK4mnLj78boopnAqNPWTCvRmzEEi3c1yYVYKTdQaEmYHPL9
+         eB1nJmgh4hfghn8hxfURx8f5ck98KEaQLY3x5kdlhpMOC+bF8KFaVyHa0x89MULW/o0d
+         FJ+A==
+X-Gm-Message-State: AJIora9RcxDzyFr0bRRRMxe5gs6n7QuId9qIK3BFBY2sCxdMh0xQvC+x
+        HyMSyoQaXeahYMQp4b2qvwj52Iavp+3BUWtg
+X-Google-Smtp-Source: AGRyM1vxXJ+z0I0K0jz5fZFsngyynwkvtYcHUlQhX02j+XSbNp/wBupdtVcxLQAkEH4+cTJbjo4miw==
+X-Received: by 2002:a17:907:7f8c:b0:726:2c53:2f82 with SMTP id qk12-20020a1709077f8c00b007262c532f82mr1877405ejc.140.1656027907411;
+        Thu, 23 Jun 2022 16:45:07 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id dx13-20020a170906a84d00b0070f7d1c5a18sm221727ejb.55.2022.06.23.16.45.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 16:45:06 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id p6-20020a05600c1d8600b0039c630b8d96so2677897wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:45:05 -0700 (PDT)
+X-Received: by 2002:a05:600c:22d9:b0:39c:4b1b:5f99 with SMTP id
+ 25-20020a05600c22d900b0039c4b1b5f99mr469227wmg.151.1656027905540; Thu, 23 Jun
+ 2022 16:45:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220617172623.1.I62db228170b1559ada60b8d3e1637e1688424926@changeid>
+In-Reply-To: <20220617172623.1.I62db228170b1559ada60b8d3e1637e1688424926@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 23 Jun 2022 16:44:52 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wsp6GA=L4GsEVjMqazgtw4qG40gtLq1HT++5e9eRrvTw@mail.gmail.com>
+Message-ID: <CAD=FV=Wsp6GA=L4GsEVjMqazgtw4qG40gtLq1HT++5e9eRrvTw@mail.gmail.com>
+Subject: Re: [PATCH] drm/rockchip: vop: Don't crash for invalid duplicate_state()
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Sean Paul <seanpaul@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simon wang wrote:
-> From: Simon Wang <wangchuanguo@inspur.com>
-> 
-> Enhance readability.
-> 
-> Signed-off-by: Simon Wang <wangchuanguo@inspur.com>
+Hi,
+
+On Fri, Jun 17, 2022 at 5:27 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> It's possible for users to try to duplicate the CRTC state even when the
+> state doesn't exist. drm_atomic_helper_crtc_duplicate_state() (and other
+> users of __drm_atomic_helper_crtc_duplicate_state()) already guard this
+> with a WARN_ON() instead of crashing, so let's do that here too.
+>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 > ---
->  kernel/bpf/verifier.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2859901ffbe3..29060f15daab 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9064,7 +9064,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
->  
->  	if (opcode == BPF_END || opcode == BPF_NEG) {
->  		if (opcode == BPF_NEG) {
-> -			if (BPF_SRC(insn->code) != 0 ||
-> +			if (BPF_SRC(insn->code) != BPF_K ||
->  			    insn->src_reg != BPF_REG_0 ||
->  			    insn->off != 0 || insn->imm != 0) {
->  				verbose(env, "BPF_NEG uses reserved fields\n");
-> -- 
-> 2.27.0
-> 
+>
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Code is fine and seems everywhere else we do this check with
+I'm not an expert in this area, but it makes sense to me to match
+drm_atomic_helper_crtc_duplicate_state() in this way. Thus:
 
-    BPF_SRC(insn->code) != BPF_K
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-One thing though this should have [PATCH bpf-next] in the title so its
-clear the code is targeted for bpf-next. Although in this case its
-obvious from the content.
+I would tend to assume that this would be landed in drm-misc by Heiko
+if he's good with it. After several weeks of silence, however, I'll
+commit it myself.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+-Doug

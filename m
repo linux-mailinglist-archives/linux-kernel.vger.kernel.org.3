@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471D0558594
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB40755860F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiFWR7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S236170AbiFWSHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbiFWR5s (ORCPT
+        with ESMTP id S236017AbiFWSGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:57:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E836F4B5;
-        Thu, 23 Jun 2022 10:15:51 -0700 (PDT)
+        Thu, 23 Jun 2022 14:06:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AFD885A3;
+        Thu, 23 Jun 2022 10:18:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B63861E1D;
-        Thu, 23 Jun 2022 17:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672EEC341C6;
-        Thu, 23 Jun 2022 17:15:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656004550;
-        bh=8R+RW0DB9EQ2uVvtR45zq4/JAUy2m7hPxnil1cTbtlk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mtxeAVFNaaUOJEFUJk7ElG9DH1UpHpB/WNY7S4GrmCBJ31fzAmELxc5zbtlTNydIx
-         FYkxzZ/oqMyAIiOJB9C42FooAnuW7HA2I2atqBgZ59duf9XuPRV+Zwny2acXTiTueu
-         HG/G5bsTK5vZPQmSthSNalyuORED+RwbABSp254wcTd2GoZtGtYlBQHlnPOmCWzLtt
-         vZIRaRd4RzSZaL7plFY0pX3htWj8+YcJJpTQvDKkDCYF7D5I6VdCUs8SES1J27w1cW
-         IRESsHWyRF/hVr21wXjpueLL8Q05Xy9iHqA5UcGqf400nTnWxSqsXbmlmxsgulGt/+
-         vYpp/sE/CXecw==
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3178acf2a92so870667b3.6;
-        Thu, 23 Jun 2022 10:15:50 -0700 (PDT)
-X-Gm-Message-State: AJIora/hmev4rmtUmLQWZ7oc9DYvh68wHJvaN5cYi6PwC80TqEUfKR7W
-        SvZCDPGwdvky0zSxG6UT4mx4iPyIZWn6sO2ibZo=
-X-Google-Smtp-Source: AGRyM1t1olztSDrteGXYMB7kj+MmjwKdDzfi/VVXgAWzrN71mL+qoji3GFIBqR9bTs5XYPv9Msej5AWqsmKYH2U9il8=
-X-Received: by 2002:a81:2f45:0:b0:317:71c7:fcdc with SMTP id
- v66-20020a812f45000000b0031771c7fcdcmr11702449ywv.73.1656004549455; Thu, 23
- Jun 2022 10:15:49 -0700 (PDT)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F1CBB82498;
+        Thu, 23 Jun 2022 17:18:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C52C3411B;
+        Thu, 23 Jun 2022 17:18:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656004723;
+        bh=c46pAXHq4U0E+vspwdos/oVmYZ8r+eZfjQNMySlGohs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Vnw1HFHHuNZoW1T4RTZddl2WyvoNvFZXFwmGQckce59vtWiOdKIDbBP43Mo3ionVs
+         gcVf8kFgOTcVglIkPIOBgqufk8jzsX+/bjSP9q7h+oZjf+fopHFjkVTyeY2BU7wzZD
+         S6L9TpYZvla2Cf+V7ikrzAhWUlPr4wdJtHiujfkU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.19 078/234] random: always wake up entropy writers after extraction
+Date:   Thu, 23 Jun 2022 18:42:25 +0200
+Message-Id: <20220623164345.266205691@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-References: <20220623165552.38645-1-logang@deltatee.com>
-In-Reply-To: <20220623165552.38645-1-logang@deltatee.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 23 Jun 2022 10:15:38 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW50vG=M6JhBEe3qwef10GQt84cg9p_ji5tqyRnMA1-xRQ@mail.gmail.com>
-Message-ID: <CAPhsuW50vG=M6JhBEe3qwef10GQt84cg9p_ji5tqyRnMA1-xRQ@mail.gmail.com>
-Subject: Re: [PATCH] md/raid5: Fix divide type in raid5_make_request()
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,53 +57,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 9:56 AM Logan Gunthorpe <logang@deltatee.com> wrote:
->
-> 0day reports a build failure on the hexagon architecture:
->
->   ld.lld: error: undefined symbol: __hexagon_udivdi3
->      referenced by raid5.c
->         md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
->      referenced by raid5.c
->         md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
->      did you mean: __hexagon_udivsi3
->         defined in: arch/hexagon/built-in.a(lib/udivsi3.o)
->
-> This is caused by using DIV_ROUND_UP on a sector_t type.
->
-> The actual value is known to be less than 256 so a wide 64bit divide
-> here is not desirable. Thus cast the argument to an int to ensure it
-> uses a 32bit divide.
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-I force pushed an update that uses DIV_ROUND_UP_SECTOR_T instead.
-I guess that should also work?
+commit 489c7fc44b5740d377e8cfdbf0851036e493af00 upstream.
 
-Thanks,
-Song
+Now that POOL_BITS == POOL_MIN_BITS, we must unconditionally wake up
+entropy writers after every extraction. Therefore there's no point of
+write_wakeup_threshold, so we can move it to the dustbin of unused
+compatibility sysctls. While we're at it, we can fix a small comparison
+where we were waking up after <= min rather than < min.
 
->
-> Fixes: 681fb14a7100 ("md/raid5: Pivot raid5_make_request()")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-> ---
->  drivers/md/raid5.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index 5723a497108a..9d25696b793d 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -6091,7 +6091,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
->         bi->bi_next = NULL;
->
->         bitmap_set(ctx.sectors_to_do, 0,
-> -                  DIV_ROUND_UP(ctx.last_sector - logical_sector,
-> +                  DIV_ROUND_UP((int)(ctx.last_sector - logical_sector),
->                                 RAID5_STRIPE_SECTORS(conf)));
->
->         pr_debug("raid456: %s, logical %llu to %llu\n", __func__,
->
-> base-commit: 57c19f921f8081c1a9444dc7f3f6b3ea43fe612e
-> --
-> 2.30.2
->
+Cc: Theodore Ts'o <tytso@mit.edu>
+Suggested-by: Eric Biggers <ebiggers@kernel.org>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ Documentation/sysctl/kernel.txt |   44 ++++++++++++++++++++++++++++++++++++++--
+ drivers/char/random.c           |   36 ++++++++++++--------------------
+ 2 files changed, 56 insertions(+), 24 deletions(-)
+
+--- a/Documentation/sysctl/kernel.txt
++++ b/Documentation/sysctl/kernel.txt
+@@ -821,9 +821,49 @@ The kernel command line parameter printk
+ a one-time setting until next reboot: once set, it cannot be changed by
+ this sysctl interface anymore.
+ 
+-==============================================================
++pty
++===
+ 
+-randomize_va_space:
++See Documentation/filesystems/devpts.rst.
++
++
++random
++======
++
++This is a directory, with the following entries:
++
++* ``boot_id``: a UUID generated the first time this is retrieved, and
++  unvarying after that;
++
++* ``entropy_avail``: the pool's entropy count, in bits;
++
++* ``poolsize``: the entropy pool size, in bits;
++
++* ``urandom_min_reseed_secs``: obsolete (used to determine the minimum
++  number of seconds between urandom pool reseeding). This file is
++  writable for compatibility purposes, but writing to it has no effect
++  on any RNG behavior.
++
++* ``uuid``: a UUID generated every time this is retrieved (this can
++  thus be used to generate UUIDs at will);
++
++* ``write_wakeup_threshold``: when the entropy count drops below this
++  (as a number of bits), processes waiting to write to ``/dev/random``
++  are woken up. This file is writable for compatibility purposes, but
++  writing to it has no effect on any RNG behavior.
++
++If ``drivers/char/random.c`` is built with ``ADD_INTERRUPT_BENCH``
++defined, these additional entries are present:
++
++* ``add_interrupt_avg_cycles``: the average number of cycles between
++  interrupts used to feed the pool;
++
++* ``add_interrupt_avg_deviation``: the standard deviation seen on the
++  number of cycles between interrupts used to feed the pool.
++
++
++randomize_va_space
++==================
+ 
+ This option can be used to select the type of process address
+ space randomization that is used in the system, for architectures
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -296,12 +296,6 @@ enum {
+  */
+ static DECLARE_WAIT_QUEUE_HEAD(random_write_wait);
+ static struct fasync_struct *fasync;
+-/*
+- * If the entropy count falls under this number of bits, then we
+- * should wake up processes which are selecting or polling on write
+- * access to /dev/random.
+- */
+-static int random_write_wakeup_bits = POOL_MIN_BITS;
+ 
+ static DEFINE_SPINLOCK(random_ready_list_lock);
+ static LIST_HEAD(random_ready_list);
+@@ -739,10 +733,8 @@ static void crng_reseed(struct crng_stat
+ 				return;
+ 		} while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
+ 		extract_entropy(buf.key, sizeof(buf.key));
+-		if (random_write_wakeup_bits) {
+-			wake_up_interruptible(&random_write_wait);
+-			kill_fasync(&fasync, SIGIO, POLL_OUT);
+-		}
++		wake_up_interruptible(&random_write_wait);
++		kill_fasync(&fasync, SIGIO, POLL_OUT);
+ 	} else {
+ 		_extract_crng(&primary_crng, buf.block);
+ 		_crng_backtrack_protect(&primary_crng, buf.block,
+@@ -1471,7 +1463,7 @@ static __poll_t random_poll(struct file
+ 	mask = 0;
+ 	if (crng_ready())
+ 		mask |= EPOLLIN | EPOLLRDNORM;
+-	if (input_pool.entropy_count < random_write_wakeup_bits)
++	if (input_pool.entropy_count < POOL_MIN_BITS)
+ 		mask |= EPOLLOUT | EPOLLWRNORM;
+ 	return mask;
+ }
+@@ -1556,7 +1548,10 @@ static long random_ioctl(struct file *f,
+ 		 */
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
+-		input_pool.entropy_count = 0;
++		if (xchg(&input_pool.entropy_count, 0)) {
++			wake_up_interruptible(&random_write_wait);
++			kill_fasync(&fasync, SIGIO, POLL_OUT);
++		}
+ 		return 0;
+ 	case RNDRESEEDCRNG:
+ 		if (!capable(CAP_SYS_ADMIN))
+@@ -1631,9 +1626,9 @@ SYSCALL_DEFINE3(getrandom, char __user *
+ 
+ #include <linux/sysctl.h>
+ 
+-static int min_write_thresh;
+-static int max_write_thresh = POOL_BITS;
+ static int random_min_urandom_seed = 60;
++static int random_write_wakeup_bits = POOL_MIN_BITS;
++static int sysctl_poolsize = POOL_BITS;
+ static char sysctl_bootid[16];
+ 
+ /*
+@@ -1672,7 +1667,6 @@ static int proc_do_uuid(struct ctl_table
+ 	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
+ }
+ 
+-static int sysctl_poolsize = POOL_BITS;
+ extern struct ctl_table random_table[];
+ struct ctl_table random_table[] = {
+ 	{
+@@ -1694,9 +1688,7 @@ struct ctl_table random_table[] = {
+ 		.data		= &random_write_wakeup_bits,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &min_write_thresh,
+-		.extra2		= &max_write_thresh,
++		.proc_handler	= proc_dointvec,
+ 	},
+ 	{
+ 		.procname	= "urandom_min_reseed_secs",
+@@ -1877,13 +1869,13 @@ void add_hwgenerator_randomness(const ch
+ 	}
+ 
+ 	/* Throttle writing if we're above the trickle threshold.
+-	 * We'll be woken up again once below random_write_wakeup_thresh,
+-	 * when the calling thread is about to terminate, or once
+-	 * CRNG_RESEED_INTERVAL has lapsed.
++	 * We'll be woken up again once below POOL_MIN_BITS, when
++	 * the calling thread is about to terminate, or once
++	 * CRNG_RESEED_INTERVAL has elapsed.
+ 	 */
+ 	wait_event_interruptible_timeout(random_write_wait,
+ 			!system_wq || kthread_should_stop() ||
+-			input_pool.entropy_count <= random_write_wakeup_bits,
++			input_pool.entropy_count < POOL_MIN_BITS,
+ 			CRNG_RESEED_INTERVAL);
+ 	mix_pool_bytes(buffer, count);
+ 	credit_entropy_bits(entropy);
+
+

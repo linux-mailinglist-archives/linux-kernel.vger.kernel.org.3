@@ -2,126 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4021755899F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E5C5589A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiFWT6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
+        id S230104AbiFWT7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiFWT6o (ORCPT
+        with ESMTP id S229455AbiFWT70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:58:44 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A5A33A16
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:58:43 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id by38so365603ljb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YZmdOLUgEpuTcs1Er5G/nrfMC7op/4LBGH4A+xFyAt0=;
-        b=ZebJOSWT2zWcG2uvS9eF3zF5SQ4HNIFc/WJ7Bphdxi0+AerWwxhNUpk+VEMC8yc6xp
-         aGFOeMpzCTsccoXpVwW0qQYIANqcICuf2JQDu2E2/B8r0M+GP2tgwouM5IeHrcpE4bgO
-         aA+Ll+TejeUihxrA/Dg8oI4agSim/A3o9gYWF5yTB5rGhl0sO5ocEhni9kIRj0CNUPFO
-         W1uBH2Sg05XhI3I29EhBiPhJNGYtC5OB5kiC+4/o6I1ZFry+SFWV66SOkIJQ9Gn49MWq
-         oW++ew/TpJk2iiIt5mb7xisPBSZyvhmWHIdHNYsJKHRh/wRV6E5lJoY3XSKiONqetOrh
-         e4yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YZmdOLUgEpuTcs1Er5G/nrfMC7op/4LBGH4A+xFyAt0=;
-        b=quJwtr3o7C1VPnvBn6kb8O8NP3HctzYc1tZhPPgxjwpTh8+0LNKPg8jbDZFlgEOA0t
-         s7rK31guiB7A4h0zqm0qJ2fyo3wWHcYm7m6VktC8cEzZvkrpUoPpDaYp3EcO3vy5I0zn
-         aEgwSewAvlmztZSR+88NakObeQARtKM+bqHejO3BgzGJ/xbzIfJFxPbmgnsKWu0HKm8B
-         hEla18jacrT3JFBlTMui4NfnW8EozFTuHX53l9DDbIjgggGr212pGQAtO/21CseRGr2Q
-         Q+bqrIdCWP/Tw8qQ/WTZURNgCpj2uBy3sIZ1u91iZgt8K4GCvNVDGrqsE7ZyzXYLNUu2
-         8mrA==
-X-Gm-Message-State: AJIora9XB6A0mrw7uzAGVIFPVlHxu3tC7ukewqWU7JlWcTAXvD2XLiFY
-        2gB1VdTgnMkXATHmmMnMlWDzBP3UcuwtKFuvI568wA==
-X-Google-Smtp-Source: AGRyM1sW41dkNu1yPnHok/IKa2eFD9oNjNnp9/++s2YawW1f4VSUU9UuDeraaVVUzZk6WxiUJgd5EpGB76EEj5iBgdQ=
-X-Received: by 2002:a2e:3109:0:b0:25a:8a0c:40e2 with SMTP id
- x9-20020a2e3109000000b0025a8a0c40e2mr5029528ljx.26.1656014321462; Thu, 23 Jun
- 2022 12:58:41 -0700 (PDT)
+        Thu, 23 Jun 2022 15:59:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEDC3585E;
+        Thu, 23 Jun 2022 12:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=FSMg2Z7yO0AcWYQ2gWnef9GPN8JvwvL0049CciGXkhQ=; b=47o098vAIvp02jqSoWGX2uS/Cm
+        10e9UlhtbQoMVH78coRqkO/K06s/40+49doNoAxwtWQnabRjgKC51GhrInqJyR/0Ih61BMbNgechN
+        /GQp6Q+qRl4eYz796mv5wLVWpW02RYF8NosqID9MCcDDHHvaJ3II1/N+y3LXl0IqvbGIbje8Zzu1M
+        /QVRCcIqwFhnX8YxWyjYGPsF/D5Y5V4nFr4pgoRECbfM8gAelCZ8vinMoWPSCaF0rY1M71GmvvoRw
+        qyZwpf9m37ec4jXBkM/fz6k+QlmcHB/3MB1V6BGChKgez16N3p6aIw42vn/lZUQuCmwVvEn8oKvo+
+        HuDR16sg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o4Sz4-00GeSN-Cy; Thu, 23 Jun 2022 19:59:22 +0000
+Message-ID: <082d7355-819e-a1a3-7d41-0e642a302e35@infradead.org>
+Date:   Thu, 23 Jun 2022 12:58:46 -0700
 MIME-Version: 1.0
-References: <20220623191147.1916067-1-masahiroy@kernel.org>
-In-Reply-To: <20220623191147.1916067-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 23 Jun 2022 12:58:29 -0700
-Message-ID: <CAKwvOd=DWQBQC4OnF8Y=T7s0+kAai7QseN7_zYRoraU4a9Nosw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS
- (2nd attempt)
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Pitre <nico@fluxnic.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: linux-next: Tree for Jun 23
+ [drivers/gpu/drm/amd/amdgpu/amdgpu.ko]
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+References: <20220623165724.42f9bf9b@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220623165724.42f9bf9b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 12:12 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> If CONFIG_TRIM_UNUSED_KSYMS is enabled and the kernel is built from
-> a pristine state, the vmlinux is linked twice.
->
-> Commit 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for
-> CONFIG_TRIM_UNUSED_KSYMS") explains why this happens, but it did not fix
-> the issue at all.
->
-> Now I realized I had applied a wrong patch.
->
-> In v1 patch [1], the autoksyms_recursive target correctly recurses to
-> "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive".
->
-> In v2 patch [2], I accidentally dropped the diff line, and it recurses to
-> "$(MAKE) -f $(srctree)/Makefile vmlinux".
->
-> Restore the code I intended in v1.
->
-> [1]: https://lore.kernel.org/linux-kbuild/1521045861-22418-8-git-send-email-yamada.masahiro@socionext.com/
-> [2]: https://lore.kernel.org/linux-kbuild/1521166725-24157-8-git-send-email-yamada.masahiro@socionext.com/
->
-> Fixes: 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS")
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Thanks for digging into this more!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-> ---
->
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 513c1fbf7888..a3ff166c5035 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1141,7 +1141,7 @@ KBUILD_MODULES := 1
->
->  autoksyms_recursive: descend modules.order
->         $(Q)$(CONFIG_SHELL) $(srctree)/scripts/adjust_autoksyms.sh \
-> -         "$(MAKE) -f $(srctree)/Makefile vmlinux"
-> +         "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive"
->  endif
->
->  autoksyms_h := $(if $(CONFIG_TRIM_UNUSED_KSYMS), include/generated/autoksyms.h)
-> --
-> 2.34.1
->
+On 6/22/22 23:57, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220622:
+> 
+> 
+> The amdgpu tree lost its build failure.
+> The amdgpu tree gained a semantic conflict against the driver-core tree.
+> 
+
+on i386:
+
+ERROR: modpost: "__umoddi3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+ERROR: modpost: "__floatunsidf" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+ERROR: modpost: "__muldf3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+ERROR: modpost: "__nedf2" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
 
 
 -- 
-Thanks,
-~Nick Desaulniers
+~Randy

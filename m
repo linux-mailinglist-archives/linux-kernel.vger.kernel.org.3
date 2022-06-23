@@ -2,131 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C8D557770
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A93A557774
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiFWKIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S230525AbiFWKJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiFWKIo (ORCPT
+        with ESMTP id S230313AbiFWKJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:08:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05B7B44756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:08:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF97712FC;
-        Thu, 23 Jun 2022 03:08:42 -0700 (PDT)
-Received: from [10.57.85.4] (unknown [10.57.85.4])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 291B53F534;
-        Thu, 23 Jun 2022 03:08:40 -0700 (PDT)
-Message-ID: <2f66f488-687c-033c-a5a2-9d54633838cd@arm.com>
-Date:   Thu, 23 Jun 2022 11:08:36 +0100
+        Thu, 23 Jun 2022 06:09:04 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3961D47066
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:09:02 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LTGDr5885z9t7p;
+        Thu, 23 Jun 2022 12:09:00 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id vntViZZ-_Zqc; Thu, 23 Jun 2022 12:09:00 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LTGDq4HsQz9t7Z;
+        Thu, 23 Jun 2022 12:08:59 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8446B8B786;
+        Thu, 23 Jun 2022 12:08:59 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id K2dNwoA-VKlO; Thu, 23 Jun 2022 12:08:59 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.34])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A9D68B763;
+        Thu, 23 Jun 2022 12:08:59 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25NA8ivA1209344
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 23 Jun 2022 12:08:44 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25NA8ggc1209341;
+        Thu, 23 Jun 2022 12:08:42 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] powerpc/powermac: Remove empty function note_scsi_host()
+Date:   Thu, 23 Jun 2022 12:08:36 +0200
+Message-Id: <26f8b72a4276c0bd8ed63860c7316f6361c351b4.1655978907.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 2/5] iommu/mediatek: Add error path for loop of
- mm_dts_parse
-Content-Language: en-GB
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, chengci.xu@mediatek.com,
-        youlin.pei@mediatek.com, anan.sun@mediatek.com,
-        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220616054203.11365-1-yong.wu@mediatek.com>
- <20220616054203.11365-3-yong.wu@mediatek.com>
- <e2091397-b6e2-7296-1378-dc10b24c6ef4@arm.com>
- <b2ea919315d0084adb465378e6970dbfa4f0829e.camel@mediatek.com>
- <521ed82e-f213-f635-6f5e-3e35ff8cc020@arm.com>
- <a53c4a4d9922c9a3fc774976494dea6da1bd8daa.camel@mediatek.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <a53c4a4d9922c9a3fc774976494dea6da1bd8daa.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655978915; l=2083; s=20211009; h=from:subject:message-id; bh=PdnNcP7zieVTyswgbCfJHTxp8O+UOgulPpTHBsScjg0=; b=vUQkW6U5O2rm42ZnOAxvu0c7tzgjshQbKHb0OWQFayobFQkndBCQhqYuFHiE+mY7rP+PGfGmxrNn 8OGjcF0GBuOstmuGAYhjG2Zl8ggAEPw12EshB0V168Tk03o+BK89
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-23 02:54, Yong Wu wrote:
-> On Thu, 2022-06-16 at 11:31 +0100, Robin Murphy wrote:
->> On 2022-06-16 11:08, Yong Wu wrote:
->>> On Thu, 2022-06-16 at 09:59 +0100, Robin Murphy wrote:
->>>> On 2022-06-16 06:42, Yong Wu wrote:
->>>>> The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if
->>>>> the
->>>>> i+1
->>>>> larb is parsed fail(return -EINVAL), we should of_node_put for
->>>>> the
->>>>> 0..i
->>>>> larbs. In the fail path, one of_node_put matches with
->>>>> of_parse_phandle in
->>>>> it.
->>>>>
->>>>> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow
->>>>> with
->>>>> the MM TYPE")
->>>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
->>>>> ---
->>>>>     drivers/iommu/mtk_iommu.c | 21 ++++++++++++++++-----
->>>>>     1 file changed, 16 insertions(+), 5 deletions(-)
-> 
-> [snip..]
-> 
->>>>> +err_larbnode_put:
->>>>> +	while (i--) {
->>>>> +		larbnode = of_parse_phandle(dev->of_node,
->>>>> "mediatek,larbs", i);
->>>>> +		if (larbnode &&
->>>>> of_device_is_available(larbnode)) {
->>>>> +			of_node_put(larbnode);
->>>>> +			of_node_put(larbnode);
->>>>> +		}
->>>>
->>>> This looks a bit awkward - could we not just iterate through
->>>> data->larb_imu and put dev->of_node for each valid dev?
->>>
->>> It should work. Thanks very much.
->>>
->>>>
->>>> Also, of_find_device_by_node() takes a reference on the struct
->>>> device
->>>> itself, so strictly we should be doing put_device() on those as
->>>> well
->>>> if we're bailing out.
->>>
->>> Thanks for this hint. A new reference for me. I will add it.
->>
->> In fact, thinking about it some more we may as well do the
->> of_node_put()
->> unconditionally immediately after the of_find_device_by_node() call,
-> 
-> of_node_put is called in component_release_of in the normal case, thus
-> we shouldn't call of_node_put unconditionally. Right?
+note_scsi_host() has been an empty function since
+commit 6ee0d9f744d4 ("[POWERPC] Remove unused old code
+from powermac setup code").
 
-As it stands, yes. However I'm also figuring that we could just use 
-component_match_add() there, and probably also switch to 
-component_compare_dev as the the comparison, since we've already 
-resolved the larb device, and it is the device itself that we're 
-interested in here, rather than just its of_node.
+Remove it.
 
-I *think* this idea could end up with simpler code overall, but as 
-always, feel free to ignore the suggestion if you think it wouldn't make 
-enough difference to be worth the bother.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/setup.h        | 1 -
+ arch/powerpc/platforms/powermac/setup.c | 7 -------
+ drivers/scsi/mesh.c                     | 5 -----
+ 3 files changed, 13 deletions(-)
 
-Thanks,
-Robin.
+diff --git a/arch/powerpc/include/asm/setup.h b/arch/powerpc/include/asm/setup.h
+index 8fa37ef5da4d..07b487896c27 100644
+--- a/arch/powerpc/include/asm/setup.h
++++ b/arch/powerpc/include/asm/setup.h
+@@ -12,7 +12,6 @@ extern unsigned long long memory_limit;
+ extern void *zalloc_maybe_bootmem(size_t size, gfp_t mask);
+ 
+ struct device_node;
+-extern void note_scsi_host(struct device_node *, void *);
+ 
+ /* Used in very early kernel initialization. */
+ extern unsigned long reloc_offset(void);
+diff --git a/arch/powerpc/platforms/powermac/setup.c b/arch/powerpc/platforms/powermac/setup.c
+index f71735ec449f..04daa7f0a03c 100644
+--- a/arch/powerpc/platforms/powermac/setup.c
++++ b/arch/powerpc/platforms/powermac/setup.c
+@@ -320,13 +320,6 @@ static void __init pmac_setup_arch(void)
+ #endif /* CONFIG_ADB */
+ }
+ 
+-#ifdef CONFIG_SCSI
+-void note_scsi_host(struct device_node *node, void *host)
+-{
+-}
+-EXPORT_SYMBOL(note_scsi_host);
+-#endif
+-
+ static int initializing = 1;
+ 
+ static int pmac_late_init(void)
+diff --git a/drivers/scsi/mesh.c b/drivers/scsi/mesh.c
+index 322d3ad38159..1f8e240592a9 100644
+--- a/drivers/scsi/mesh.c
++++ b/drivers/scsi/mesh.c
+@@ -1882,11 +1882,6 @@ static int mesh_probe(struct macio_dev *mdev, const struct of_device_id *match)
+ 		goto out_release;
+ 	}
+ 	
+-	/* Old junk for root discovery, that will die ultimately */
+-#if !defined(MODULE)
+-       	note_scsi_host(mesh, mesh_host);
+-#endif
+-
+ 	mesh_host->base = macio_resource_start(mdev, 0);
+ 	mesh_host->irq = macio_irq(mdev, 0);
+        	ms = (struct mesh_state *) mesh_host->hostdata;
+-- 
+2.36.1
+

@@ -2,55 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D98557F93
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC50557F98
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbiFWQRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S232062AbiFWQRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiFWQQ7 (ORCPT
+        with ESMTP id S231948AbiFWQRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:16:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9FD2FE70;
-        Thu, 23 Jun 2022 09:16:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1540461F16;
-        Thu, 23 Jun 2022 16:16:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A17C3411B;
-        Thu, 23 Jun 2022 16:16:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656001017;
-        bh=9hzaq+Mj5SOymDnqMHxkRzyT7FLLGSDp3XZppwjM7vc=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=bcMuQmysro0TsXmL8ruICaNvqn2Xbf6ulty7DnbtRaX96SM8S0cYRcRL6PKGNILvx
-         nRiViwV1gXvzfuTZxAnhZmiX0iOgsYHCd9rbukkTgurzFeRoJLAf1sy3nbMU9uWNGg
-         yBa6wLJTpNv+wAHBqlfHaIAyYw84Ir9HsVs2hcghDyvitzX5mrB0YmVThQA94eTpOd
-         DOuKuUNOLBi1oCZpPGc8j92NlJwKQaVkhUxLp8jOJqRoerqAcywRWH8EW0zZUUivNL
-         2TY7oVgqahNIkR2Nu3IMarrMArpuV58EhAujInXavZ+/raIWIh5tVPN2KuhmqczObc
-         bAevbG7QbCDwg==
-Message-ID: <1f1ac1ad-0eed-0871-93a9-56f710eeba98@kernel.org>
-Date:   Thu, 23 Jun 2022 11:16:55 -0500
+        Thu, 23 Jun 2022 12:17:44 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BFA4504A;
+        Thu, 23 Jun 2022 09:17:43 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id n15so2292qvh.12;
+        Thu, 23 Jun 2022 09:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s3Y6QsGpKcifMEy5jwY1arynj5IGJLuoZJcuD3pJplQ=;
+        b=mm/vEw9RZF65k1tVgif6qonUph5GLN/dlS3yD2GhuVF9r8HBDe8dXzCBz1BB04HyBf
+         gjz2Yht0xmRhJ5XQGbuqCzJJCsKb1/WH9u8L+0gWgBMSpENINh3z+rusl8CJxCHcdoWu
+         CAQqUShINaYIyIyByM4iilryauT4dF3bXjo/LFfwyfnAx297sAXJMELDkzwSGMSPNa4o
+         NO3vO8gEcKsqJsMGEb29pv0g342Ng0evXd7g5O1/CLAKsp6fPRjGrnSHkRdLi0kjERXu
+         tjAC09RaKR7rQ+L6CxcRCfjp6lw+HOzkiHv8CwC5Se9hx8HkX6zjeVAtecVQyoXWyggw
+         J/dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s3Y6QsGpKcifMEy5jwY1arynj5IGJLuoZJcuD3pJplQ=;
+        b=gGYETP8y86gxTablSabey7rJYGixtWfiImr0yxS+3bcGFTP14A7ckroDLMi2cuTZ68
+         YcEzGYd9WUW1AIeBPg7RiOFvn/RSwITui6oaD3BGoOIfBeniQ4YvqSYFLQgARdCeDXOZ
+         CipEnIFC7EAy9TlqocIvfgNxoqd8Gd+E+2ppnntsIMjy4KOD1TwCvsExAT2PV3RtUl20
+         nMW5+YdYPH9PaVJBKEJtT0btJY3+99hnV02x4l9hsdlY79xyEHsu4qRnrcnHfrplKdXH
+         Bw7Rpnt7u7PRgvACmx0cmx/Yjtc/H8FqNZYWVKGyONLr1uon3y/1sqbn93v5wvz8TFiS
+         CPXA==
+X-Gm-Message-State: AJIora/UXXU6NWvglO/njAH3eTk+CNAleNXZ7x/UPVpMNKbDFgMYMyxe
+        pcocAZhJZHUQFAPahwkLU7D+bRqetMKyCuT9txk=
+X-Google-Smtp-Source: AGRyM1t99O9MWamhT05ubKuwASitY1LLCgamjT6r2rEmwPYaHR9nq6O92KCqQYUkT+rQpEI/JpRGSpiqu0jSzhUIR6I=
+X-Received: by 2002:a05:622a:355:b0:305:2f9:9ce8 with SMTP id
+ r21-20020a05622a035500b0030502f99ce8mr8671872qtw.297.1656001062062; Thu, 23
+ Jun 2022 09:17:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arm64: dts: altera: socfpga_stratix10: move clocks out of
- soc node
-Content-Language: en-US
-To:     niravkumar.l.rabara@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220623024221.2766255-1-niravkumar.l.rabara@intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220623024221.2766255-1-niravkumar.l.rabara@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220623155004.688090-1-robimarko@gmail.com> <20220623160328.GA1453945@bhelgaas>
+In-Reply-To: <20220623160328.GA1453945@bhelgaas>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Thu, 23 Jun 2022 18:17:31 +0200
+Message-ID: <CAOX2RU4gy4ERWvsqoaT0fR0eXVpzHVK=tuvTK=8e-1SkFMgEfg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PCI: qcom: fix IPQ8074 Gen2 support
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lpieralisi@kernel.org, Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>, p.zabel@pengutronix.de,
+        jingoohan1@gmail.com, linux-pci@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        johan+linaro@kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,95 +74,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 23 Jun 2022 at 18:03, Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Thu, Jun 23, 2022 at 05:50:03PM +0200, Robert Marko wrote:
+> > Currently the Gen2 port in IPQ8074 will cause the system to hang as its
+> > using DBI registers in the .init and those are only accesible after
+> > phy_power_on().
+> >
+> > So solve this by splitting the DBI read/writes to .post_init.
+> >
+> > Fixes: a0fd361db8e5 ("PCI: dwc: Move "dbi", "dbi2", and "addr_space" resource setup into common code")
+>
+> Does v5.11 or some v5.11-based stable kernel contain IPQ8074 support?
+> If so, I'll mark this for backporting to stable.
 
+Hi Bjorn,
+Initial IPQ8074 support was added way back in 4.14.
 
-On 6/22/22 21:42, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> 
-> The clocks are not part of the SoC but provided on the board
-> (external oscillators). Moving them out of soc node.
-> 
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->   .../boot/dts/altera/socfpga_stratix10.dtsi    | 56 +++++++++----------
->   1 file changed, 28 insertions(+), 28 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> index aa2bba75265f..5c7d926d18f7 100644
-> --- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> @@ -97,6 +97,34 @@ intc: interrupt-controller@fffc1000 {
->   		      <0x0 0xfffc6000 0x0 0x2000>;
->   	};
->   
-> +	clocks {
-> +		cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		cb_intosc_ls_clk: cb-intosc-ls-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		f2s_free_clk: f2s-free-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		osc1: osc1 {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		qspi_clk: qspi-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <200000000>;
-> +		};
-> +	};
-> +
->   	soc {
->   		#address-cells = <1>;
->   		#size-cells = <1>;
-> @@ -119,34 +147,6 @@ clkmgr: clock-controller@ffd10000 {
->   			#clock-cells = <1>;
->   		};
->   
-> -		clocks {
-> -			cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
-> -				#clock-cells = <0>;
-> -				compatible = "fixed-clock";
-> -			};
-> -
-> -			cb_intosc_ls_clk: cb-intosc-ls-clk {
-> -				#clock-cells = <0>;
-> -				compatible = "fixed-clock";
-> -			};
-> -
-> -			f2s_free_clk: f2s-free-clk {
-> -				#clock-cells = <0>;
-> -				compatible = "fixed-clock";
-> -			};
-> -
-> -			osc1: osc1 {
-> -				#clock-cells = <0>;
-> -				compatible = "fixed-clock";
-> -			};
-> -
-> -			qspi_clk: qspi-clk {
-> -				#clock-cells = <0>;
-> -				compatible = "fixed-clock";
-> -				clock-frequency = <200000000>;
-> -			};
-> -		};
-> -
->   		gmac0: ethernet@ff800000 {
->   			compatible = "altr,socfpga-stmmac-a10-s10", "snps,dwmac-3.74a", "snps,dwmac";
->   			reg = <0xff800000 0x2000>;
+Note that DTS nodes for both QMP PCI PHY-s and PCIe itself
+for IPQ8074 are broken as well.
 
-NAK! This patch breaks the Stratix10 boot. Also these clocks are part of 
-the SoC!
+That is my TODO to clean up and send upstream as well.
 
-Dinh
+Regards,
+Robert
+>
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> > Changes in v3:
+> > * Make sure it applies onto 5.19-rc3
+> > * Update the commit description to make it clear this only affects the
+> > Gen2 port
+> >
+> > Changes in v2:
+> > * Rebase onto next-20220621
+> > ---
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 48 +++++++++++++++-----------
+> >  1 file changed, 28 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index a1f1aca2fb59..24708d5d817d 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -1061,9 +1061,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+> >       struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
+> >       struct dw_pcie *pci = pcie->pci;
+> >       struct device *dev = pci->dev;
+> > -     u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> >       int i, ret;
+> > -     u32 val;
+> >
+> >       for (i = 0; i < ARRAY_SIZE(res->rst); i++) {
+> >               ret = reset_control_assert(res->rst[i]);
+> > @@ -1120,6 +1118,33 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+> >               goto err_clk_aux;
+> >       }
+> >
+> > +     return 0;
+> > +
+> > +err_clk_aux:
+> > +     clk_disable_unprepare(res->ahb_clk);
+> > +err_clk_ahb:
+> > +     clk_disable_unprepare(res->axi_s_clk);
+> > +err_clk_axi_s:
+> > +     clk_disable_unprepare(res->axi_m_clk);
+> > +err_clk_axi_m:
+> > +     clk_disable_unprepare(res->iface);
+> > +err_clk_iface:
+> > +     /*
+> > +      * Not checking for failure, will anyway return
+> > +      * the original failure in 'ret'.
+> > +      */
+> > +     for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> > +             reset_control_assert(res->rst[i]);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
+> > +{
+> > +     struct dw_pcie *pci = pcie->pci;
+> > +     u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> > +     u32 val;
+> > +
+> >       writel(SLV_ADDR_SPACE_SZ,
+> >               pcie->parf + PCIE20_v3_PARF_SLV_ADDR_SPACE_SIZE);
+> >
+> > @@ -1147,24 +1172,6 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+> >               PCI_EXP_DEVCTL2);
+> >
+> >       return 0;
+> > -
+> > -err_clk_aux:
+> > -     clk_disable_unprepare(res->ahb_clk);
+> > -err_clk_ahb:
+> > -     clk_disable_unprepare(res->axi_s_clk);
+> > -err_clk_axi_s:
+> > -     clk_disable_unprepare(res->axi_m_clk);
+> > -err_clk_axi_m:
+> > -     clk_disable_unprepare(res->iface);
+> > -err_clk_iface:
+> > -     /*
+> > -      * Not checking for failure, will anyway return
+> > -      * the original failure in 'ret'.
+> > -      */
+> > -     for (i = 0; i < ARRAY_SIZE(res->rst); i++)
+> > -             reset_control_assert(res->rst[i]);
+> > -
+> > -     return ret;
+> >  }
+> >
+> >  static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+> > @@ -1596,6 +1603,7 @@ static const struct qcom_pcie_ops ops_2_4_0 = {
+> >  static const struct qcom_pcie_ops ops_2_3_3 = {
+> >       .get_resources = qcom_pcie_get_resources_2_3_3,
+> >       .init = qcom_pcie_init_2_3_3,
+> > +     .post_init = qcom_pcie_post_init_2_3_3,
+> >       .deinit = qcom_pcie_deinit_2_3_3,
+> >       .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+> >  };
+> > --
+> > 2.36.1
+> >

@@ -2,221 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5719558B9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F3B558B9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbiFWXOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
+        id S230336AbiFWXPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiFWXOs (ORCPT
+        with ESMTP id S230109AbiFWXPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:14:48 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C05D127
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:14:47 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-101ec2d6087so1495023fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:14:47 -0700 (PDT)
+        Thu, 23 Jun 2022 19:15:36 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABD9609C7;
+        Thu, 23 Jun 2022 16:15:35 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-101dc639636so1479869fac.6;
+        Thu, 23 Jun 2022 16:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=u2JKqHVyLSRZBXOkaIltewzMrD4pEO849tuySbHDpwc=;
-        b=ThCoMRZVlzD3JZVM5bQQPX5vhiupuoW4v/3wdvco6scQqVAZitzrddJfdkyplTyehS
-         JZ9k9G7cKpXJ/MFoQT6dYLK4JpoYjT15t00LJpVSVZybSphePavVdLh80M5BW8KApsg2
-         IFawMA9OkxkM3dk/SZcOeeDwiYToFJUww13y4=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F8orSQtOec8KrzPU44fdlfLRNKNSwXPREkwc+TPv8+I=;
+        b=X5ojva3y1aiV0YOPI1U3n3i+eZQAJS89mQnbOnNM4nKcQWxaDlme/8/t0sU3mv/0fN
+         d04Qql1LbR9KL3zWudxS/uf1i37U9vkBOSahzol8lxVdLcmOr0TO6zaw/hLo31Viy67+
+         uC1pBiJstUTbNAmOLmkhMdTytHGSSOu2fxtxMyu80iLVpc7kHjxesOE0g8xDg2Z6xqkg
+         Z/2B7wdBgC8Yupz4djtBvHBhne6ohHiJir1hqCtgpnDLYnlMZkO5ziyE6dw9Rx1m9Pas
+         LVgoHeCa8a6BTIt5OpT/QKmZ+ahzQhvlIBxsMAqhNWwpO7YiYFU3Qff0sg62Q3Cu2Bh/
+         IgDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=u2JKqHVyLSRZBXOkaIltewzMrD4pEO849tuySbHDpwc=;
-        b=ImMIA334yPwd39VkdKyW/2p4NNUOIhIeMZhdFIOqoWWM14Q9mV1re2WQgScW1AZhVR
-         /Hwhju1MCGoEha20cgdDgZ12KOk2LCMpC09pYesPI5MxV4l3OxnvYrabsUoc9cIiwB9b
-         JOe5k8rGEc3/HUjpu9mkKKtrfbr/hKqIoSmBE4bUTtHR7fL2IvSD1HQo4+KEo6uKzUXa
-         d6wkjIIZfSTUOjExO4JdMBMXTdmDUcZBUraW19BftgKv3xZpkM3k+EYxaGrDmjmOoxLu
-         B7FDlMq3SuDqRDiY/m9L6nb8DC47k97u6zPrHgMyeV8GigRaQWhRNuvKRljF5TN7I9L3
-         3PZg==
-X-Gm-Message-State: AJIora8XaUUAI2uCCNKo+0OpenGiVokMvLEuqiikUuS1x3V2BvWAFTC6
-        Vy2nw/rtbrJRfVpomoRmwqDabJrMxT+l3WCp0t1qzQ==
-X-Google-Smtp-Source: AGRyM1vGcj9wdhnXfYcW15SE2elwZofl+K6gam8C4ktPrjNMjEUlSOW18Z8GsUBiy0N2iC9aY8GH6El/ZS/RoeZfOmI=
-X-Received: by 2002:a05:6870:b627:b0:102:f25:a460 with SMTP id
- cm39-20020a056870b62700b001020f25a460mr227480oab.193.1656026086919; Thu, 23
- Jun 2022 16:14:46 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 23 Jun 2022 16:14:46 -0700
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F8orSQtOec8KrzPU44fdlfLRNKNSwXPREkwc+TPv8+I=;
+        b=t0BuCRcfx48G79AvXNb927KdZFj7+cdwStipEut2N9WCly33Dc8s/K4eXH8YrwBSMw
+         QJfjJ3SzAVCR841L3j8TZA6H9itg+SKyF9GOINuvH4xRoWRXMpHRi0ucv8olTivU5R8+
+         pi4VyyoKbIeDlWz1/6EfO+R/84nqCGUMFTxl34l4dnDHP8POv1pUEDZ78+8+5ClPW9O7
+         FWBjgoYcPruPXVNCWLB00YqaCVuFtC/kt/9aK7rS1frfiQYpo0+iCJQgon5ZHbvNsrUV
+         GztM9RgCrYmkg8/VAkaqd7RyF7WBflKe/cJBBHC7SiUGn9N/Sw3wVbAhlhXFOMavlRVo
+         xGSw==
+X-Gm-Message-State: AJIora8ruDxEU2PqIzNAZqOWB6uUceSEEhMVqzvR6suH6w2m+tupDbeK
+        VWE8T6tEcHIaXfmFM5r1TVM=
+X-Google-Smtp-Source: AGRyM1vwMmfQCtpaLtdMlr5OMZbuc/fCmoNhHdSMVjEjgbNRQYZJo04ONYqOyhbBOD9O/UPhIaUL7Q==
+X-Received: by 2002:a05:6871:29b:b0:101:c395:a100 with SMTP id i27-20020a056871029b00b00101c395a100mr251838oae.174.1656026133423;
+        Thu, 23 Jun 2022 16:15:33 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:742c:47ee:54c0:bcc7? ([2600:1700:2442:6db0:742c:47ee:54c0:bcc7])
+        by smtp.gmail.com with ESMTPSA id y203-20020aca4bd4000000b0032eb81e352asm256043oia.38.2022.06.23.16.15.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 16:15:32 -0700 (PDT)
+Message-ID: <ecf13de1-531f-b73b-b325-44ef78a3f818@gmail.com>
+Date:   Thu, 23 Jun 2022 18:15:31 -0500
 MIME-Version: 1.0
-In-Reply-To: <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
- <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 23 Jun 2022 16:14:46 -0700
-Message-ID: <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 1/2] of: base: populate of_root node if not set
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@xilinx.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+References: <20220623105044.152832-1-clement.leger@bootlin.com>
+ <20220623105044.152832-2-clement.leger@bootlin.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20220623105044.152832-2-clement.leger@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Prashant Malani (2022-06-23 12:08:21)
-> On Thu, Jun 23, 2022 at 11:30 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Prashant Malani (2022-06-22 10:34:30)
-> > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > new file mode 100644
-> > > index 000000000000..78b0190c8543
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > @@ -0,0 +1,74 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-[...]
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +    description: OF graph binding modelling data lines to the Type-C switch.
-> > > +
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: Link between the switch and a Type-C connector.
-> >
-> > Is there an update to the usb-c-connector binding to accept this port
-> > connection?
->
-> Not at this time. I don't think we should enforce that either.
-> (Type-C data-lines could theoretically be routed through intermediate
-> hardware like retimers/repeaters)
+Hi Clement,
 
-I'm mostly wondering if having such a connection to the usb-c-connector,
-or even through some retimer/repeater, would be sufficient to detect how
-many type-c ports are connected to the device. If the type-c pin
-assignments only support two or four lanes for DP then it seems like we
-should describe the two lanes or four lanes as one graph endpoint
-"output" and then have some 'data-lanes' property in case the DP lanes
-are flipped while being sent to the retimer or usb-c-connector. This
-would of course depend on the capability of the device, i.e. if it can
-remap DP lanes or only has 2 lanes of DP, etc.
+I said that I would send a patch to do this, but have failed to follow
+through.  Sorry about that.
 
-> > > +  - |
-> > > +    drm-bridge {
-> > > +        usb-switch {
-> > > +            compatible = "typec-switch";
-> >
-> > I still don't understand the subnode design here. usb-switch as a
-> > container node indicates to me that this is a bus, but in earlier rounds
-> > of this series it was stated this isn't a bus.
->
-> I am not aware of this as a requirement. Can you please point me to the
-> documentation that states this needs to be the case?
 
-I'm not aware of any documentation for the dos and don'ts here. Are
-there any examples in the bindings directory that split up a device into
-subnodes that isn't in bindings/mfd? I just know from experience that
-any time I try to make a child node of an existing node that I'm
-supposed to be describing a bus, unless I'm adding some sort of
-exception node like a graph binding or an opp table. Typically a node
-corresponds 1:1 with a device in the kernel. I'll defer to Rob for any
-citations.
+On 6/23/22 06:50, Clément Léger wrote:
+> When enabling CONFIG_OF on a platform where of_root is not populated by
+> firmware, we end up without a root node. In order to apply overlays and
+> create subnodes of the root node, we need one. Create this root node
+> by unflattening an empty builtin dtb with of_fdt_unflatten().
+> 
+> Co-developed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+>  drivers/of/Makefile       |  2 +-
+>  drivers/of/base.c         | 18 ++++++++++++++++--
+>  drivers/of/empty_root.dts |  6 ++++++
+>  3 files changed, 23 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/of/empty_root.dts
+> 
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index e0360a44306e..ce56c8b95c83 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -obj-y = base.o device.o platform.o property.o
+> +obj-y = base.o empty_root.dtb.o device.o platform.o property.o
+>  obj-$(CONFIG_OF_KOBJ) += kobj.o
+>  obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
+>  obj-$(CONFIG_OF_FLATTREE) += fdt.o
+> diff --git a/drivers/of/base.c b/drivers/of/base.c
+> index d4f98c8469ed..43e0f027a49c 100644
+> --- a/drivers/of/base.c
+> +++ b/drivers/of/base.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_fdt.h>
+>  #include <linux/of_graph.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/slab.h>
+> @@ -163,6 +164,8 @@ void __of_phandle_cache_inv_entry(phandle handle)
+>  		phandle_cache[handle_hash] = NULL;
+>  }
+>  
+> +extern const char __dtb_empty_root_begin[];
+> +
+>  void __init of_core_init(void)
+>  {
+>  	struct device_node *np;
+> @@ -176,6 +179,18 @@ void __init of_core_init(void)
+>  		pr_err("failed to register existing nodes\n");
+>  		return;
+>  	}
+> +
+> +	if (!of_root) {
+> +		void *dt;
+> +		const unsigned long *fdt = (const unsigned long *)
+> +							__dtb_empty_root_begin;
+> +		dt = of_fdt_unflatten_tree(fdt, NULL, &of_root);
+> +		if (!dt) {
+> +			pr_err("Failed to setup empty root dt\n");
+> +			return;
+> +		}
+> +	}
+> +
+>  	for_each_of_allnodes(np) {
+>  		__of_attach_node_sysfs(np);
+>  		if (np->phandle && !phandle_cache[of_phandle_cache_hash(np->phandle)])
+> @@ -184,8 +199,7 @@ void __init of_core_init(void)
+>  	mutex_unlock(&of_mutex);
+>  
+>  	/* Symlink in /proc as required by userspace ABI */
+> -	if (of_root)
+> -		proc_symlink("device-tree", NULL, "/sys/firmware/devicetree/base");
+> +	proc_symlink("device-tree", NULL, "/sys/firmware/devicetree/base");
+>  }
 
->
-> > Why doesn't it work to
-> > merge everything inside usb-switch directly into the drm-bridge node?
->
-> I attempted to explain the rationale in the previous version [1], but
-> using a dedicated sub-node means the driver doesn't haven't to
-> inspect individual ports to determine which of them need switches
-> registered for them. If it sees a `typec-switch`, it registers a
-> mode-switch and/or orientation-switch. IMO it simplifies the hardware
-> device binding too.
+This approach is adding an additional method of unflattening the tree.
+I would prefer to consolidate in a single location.
 
-How is that any harder than hard-coding that detail into the driver
-about which port and endpoint is possibly connected to the
-usb-c-connector (or retimer)? All of that logic could be behind some API
-that registers a typec-switch based on a graph port number that's passed
-in, ala drm_of_find_panel_or_bridge()'s design.
+I have leveraged this patch series into a different patch series to
+accomplish that.  I have boot tested with one configuration, but want
+to test two more configurations before sending the new series.  It
+should only take "a few minutes".
 
-Coming from a DT writer's perspective, I just want to go through the
-list of output pins in the datasheet and match them up to the ports
-binding for this device. If it's a pure DP bridge, where USB hardware
-isn't an input or an output like the ITE chip, then I don't want to have
-to describe a port graph binding for the case when it's connected to a
-dp-connector (see dp-connector.yaml) in the top-level node and then have
-to make an entirely different subnode for the usb-c-connector case with
-a whole other set of graph ports.
+-Frank
 
-How would I even know which two differential pairs correspond to port0
-or port1 in this binding in the ITE case? Ideally we make the graph
-binding more strict for devices by enforcing that their graph ports
-exist. Otherwise we're not fully describing the connections between
-devices and our dtb checkers are going to let things through where the
-driver most likely will fail because it can't figure out what to do,
-e.g. display DP on 4 lanes or play some DP lane rerouting games to act
-as a mux.
+>  
+>  static struct property *__of_find_property(const struct device_node *np,
+> diff --git a/drivers/of/empty_root.dts b/drivers/of/empty_root.dts
+> new file mode 100644
+> index 000000000000..cf9e97a60f48
+> --- /dev/null
+> +++ b/drivers/of/empty_root.dts
+> @@ -0,0 +1,6 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/dts-v1/;
+> +
+> +/ {
+> +
+> +};
 
->
-> It also maps with the internal block diagram for these hardware
-> components (for ex. the anx7625 crosspoint switch is a separate
-> sub-block within anx7625).
-
-We don't make DT bindings for sub-components like this very often. It
-would make more sense to me to have a subnode if a typec switch was some
-sort of off the shelf hard macro that the hardware engineer placed down
-inside the IC that they delivered. Then we could have a completely
-generic driver that binds to the generic binding that knows how to drive
-the hardware, because it's an unchangeable hard macro with a well
-defined programming interface.
-
->
-> [1] https://lore.kernel.org/linux-usb/CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com/
-
-I looked at the fsa4480 driver and the device has a publicly available
-datasheet[2]. That device is designed for "audio accessory mode" but I
-guess it's being used to simply mux SBU lines? There isn't an upstream
-user of the binding so far, but it also doesn't look like a complete
-binding. I'd expect to see DN_L/R as a graph output connected to the
-usb-c-connector and probably have a usb2.0 input port and a 'sound-dai'
-property to represent the input audio path.
-
-Finally, simply connecting to the typec controller node isn't sufficient
-because a typec controller can be controlling many usb-c-connectors so I
-don't see how the graph binding would be able to figure out how many
-usb-c-connectors are connected to a mux like device, unless we took the
-approach of this patch. Is that why you're proposing this binding? To
-avoid describing a graph binding in the usb-c-connector and effectively
-"pushing" the port count up to the mux?
-
-[2] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf

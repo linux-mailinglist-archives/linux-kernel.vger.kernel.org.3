@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1467955811F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C997055854D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiFWQ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
+        id S235363AbiFWRzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233826AbiFWQvm (ORCPT
+        with ESMTP id S235423AbiFWRwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:42 -0400
+        Thu, 23 Jun 2022 13:52:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DDD183;
-        Thu, 23 Jun 2022 09:50:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D27150E00;
+        Thu, 23 Jun 2022 10:13:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 121ECB8248A;
-        Thu, 23 Jun 2022 16:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B08C3411B;
-        Thu, 23 Jun 2022 16:49:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C0C6B82497;
+        Thu, 23 Jun 2022 17:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D19DC3411B;
+        Thu, 23 Jun 2022 17:13:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656002999;
-        bh=Y9mVDio3WEFZZp4RGG01fMDPYBjNy9mVBmjuXp065Q4=;
+        s=korg; t=1656004393;
+        bh=yShs4CLgiSiL5yOs2cheKeyu1fuup6Ae93T9KxZMWWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j+k4n5xcw8UnFvt9MKwMo8L+iJsp1DogziU7FfE+vPTTBndSfXFLjIva/SrpN1cVR
-         6EQafH6WNgTyA4xdQjzG49T0xRlmE3aPWMn4uy0PbkJlnq+NulF+Kf3EPqQXkcRqNH
-         RgPYIRhQPAgLUXA0ebV0wQ1tvwaVJeaUYvA01O28=
+        b=1ZCxPmIl8EnCTCoOFcmf3ICq1VCtaxH+ijVOTOZtu1Wfkj81B8BhIFd9+ohwbpokL
+         rNDcIk9fcNoSjN5Z/e8/fy/fi+4U674PB43yKcwMV+rbd4UwN84AbDmH6FP0qFPuyk
+         mkfj8mkCIlKSt+9vdBXrOmM5FxaWsRMXqMiEFMPg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 097/264] random: remove incomplete last_data logic
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Qian Cai <cai@lca.pw>, Theodore Tso <tytso@mit.edu>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 023/234] char/random: silence a lockdep splat with printk()
 Date:   Thu, 23 Jun 2022 18:41:30 +0200
-Message-Id: <20220623164346.815943386@linuxfoundation.org>
+Message-Id: <20220623164343.720032616@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,112 +56,274 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
 
-commit a4bfa9b31802c14ff5847123c12b98d5e36b3985 upstream.
+[ Upstream commit 1b710b1b10eff9d46666064ea25f079f70bc67a8 ]
 
-There were a few things added under the "if (fips_enabled)" banner,
-which never really got completed, and the FIPS people anyway are
-choosing a different direction. Rather than keep around this halfbaked
-code, get rid of it so that we can focus on a single design of the RNG
-rather than two designs.
+Sergey didn't like the locking order,
 
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+uart_port->lock  ->  tty_port->lock
+
+uart_write (uart_port->lock)
+  __uart_start
+    pl011_start_tx
+      pl011_tx_chars
+        uart_write_wakeup
+          tty_port_tty_wakeup
+            tty_port_default
+              tty_port_tty_get (tty_port->lock)
+
+but those code is so old, and I have no clue how to de-couple it after
+checking other locks in the splat. There is an onging effort to make all
+printk() as deferred, so until that happens, workaround it for now as a
+short-term fix.
+
+LTP: starting iogen01 (export LTPROOT; rwtest -N iogen01 -i 120s -s
+read,write -Da -Dv -n 2 500b:$TMPDIR/doio.f1.$$
+1000b:$TMPDIR/doio.f2.$$)
+WARNING: possible circular locking dependency detected
+------------------------------------------------------
+doio/49441 is trying to acquire lock:
+ffff008b7cff7290 (&(&zone->lock)->rlock){..-.}, at: rmqueue+0x138/0x2050
+
+but task is already holding lock:
+60ff000822352818 (&pool->lock/1){-.-.}, at: start_flush_work+0xd8/0x3f0
+
+  which lock already depends on the new lock.
+
+  the existing dependency chain (in reverse order) is:
+
+  -> #4 (&pool->lock/1){-.-.}:
+       lock_acquire+0x320/0x360
+       _raw_spin_lock+0x64/0x80
+       __queue_work+0x4b4/0xa10
+       queue_work_on+0xac/0x11c
+       tty_schedule_flip+0x84/0xbc
+       tty_flip_buffer_push+0x1c/0x28
+       pty_write+0x98/0xd0
+       n_tty_write+0x450/0x60c
+       tty_write+0x338/0x474
+       __vfs_write+0x88/0x214
+       vfs_write+0x12c/0x1a4
+       redirected_tty_write+0x90/0xdc
+       do_loop_readv_writev+0x140/0x180
+       do_iter_write+0xe0/0x10c
+       vfs_writev+0x134/0x1cc
+       do_writev+0xbc/0x130
+       __arm64_sys_writev+0x58/0x8c
+       el0_svc_handler+0x170/0x240
+       el0_sync_handler+0x150/0x250
+       el0_sync+0x164/0x180
+
+  -> #3 (&(&port->lock)->rlock){-.-.}:
+       lock_acquire+0x320/0x360
+       _raw_spin_lock_irqsave+0x7c/0x9c
+       tty_port_tty_get+0x24/0x60
+       tty_port_default_wakeup+0x1c/0x3c
+       tty_port_tty_wakeup+0x34/0x40
+       uart_write_wakeup+0x28/0x44
+       pl011_tx_chars+0x1b8/0x270
+       pl011_start_tx+0x24/0x70
+       __uart_start+0x5c/0x68
+       uart_write+0x164/0x1c8
+       do_output_char+0x33c/0x348
+       n_tty_write+0x4bc/0x60c
+       tty_write+0x338/0x474
+       redirected_tty_write+0xc0/0xdc
+       do_loop_readv_writev+0x140/0x180
+       do_iter_write+0xe0/0x10c
+       vfs_writev+0x134/0x1cc
+       do_writev+0xbc/0x130
+       __arm64_sys_writev+0x58/0x8c
+       el0_svc_handler+0x170/0x240
+       el0_sync_handler+0x150/0x250
+       el0_sync+0x164/0x180
+
+  -> #2 (&port_lock_key){-.-.}:
+       lock_acquire+0x320/0x360
+       _raw_spin_lock+0x64/0x80
+       pl011_console_write+0xec/0x2cc
+       console_unlock+0x794/0x96c
+       vprintk_emit+0x260/0x31c
+       vprintk_default+0x54/0x7c
+       vprintk_func+0x218/0x254
+       printk+0x7c/0xa4
+       register_console+0x734/0x7b0
+       uart_add_one_port+0x734/0x834
+       pl011_register_port+0x6c/0xac
+       sbsa_uart_probe+0x234/0x2ec
+       platform_drv_probe+0xd4/0x124
+       really_probe+0x250/0x71c
+       driver_probe_device+0xb4/0x200
+       __device_attach_driver+0xd8/0x188
+       bus_for_each_drv+0xbc/0x110
+       __device_attach+0x120/0x220
+       device_initial_probe+0x20/0x2c
+       bus_probe_device+0x54/0x100
+       device_add+0xae8/0xc2c
+       platform_device_add+0x278/0x3b8
+       platform_device_register_full+0x238/0x2ac
+       acpi_create_platform_device+0x2dc/0x3a8
+       acpi_bus_attach+0x390/0x3cc
+       acpi_bus_attach+0x108/0x3cc
+       acpi_bus_attach+0x108/0x3cc
+       acpi_bus_attach+0x108/0x3cc
+       acpi_bus_scan+0x7c/0xb0
+       acpi_scan_init+0xe4/0x304
+       acpi_init+0x100/0x114
+       do_one_initcall+0x348/0x6a0
+       do_initcall_level+0x190/0x1fc
+       do_basic_setup+0x34/0x4c
+       kernel_init_freeable+0x19c/0x260
+       kernel_init+0x18/0x338
+       ret_from_fork+0x10/0x18
+
+  -> #1 (console_owner){-...}:
+       lock_acquire+0x320/0x360
+       console_lock_spinning_enable+0x6c/0x7c
+       console_unlock+0x4f8/0x96c
+       vprintk_emit+0x260/0x31c
+       vprintk_default+0x54/0x7c
+       vprintk_func+0x218/0x254
+       printk+0x7c/0xa4
+       get_random_u64+0x1c4/0x1dc
+       shuffle_pick_tail+0x40/0xac
+       __free_one_page+0x424/0x710
+       free_one_page+0x70/0x120
+       __free_pages_ok+0x61c/0xa94
+       __free_pages_core+0x1bc/0x294
+       memblock_free_pages+0x38/0x48
+       __free_pages_memory+0xcc/0xfc
+       __free_memory_core+0x70/0x78
+       free_low_memory_core_early+0x148/0x18c
+       memblock_free_all+0x18/0x54
+       mem_init+0xb4/0x17c
+       mm_init+0x14/0x38
+       start_kernel+0x19c/0x530
+
+  -> #0 (&(&zone->lock)->rlock){..-.}:
+       validate_chain+0xf6c/0x2e2c
+       __lock_acquire+0x868/0xc2c
+       lock_acquire+0x320/0x360
+       _raw_spin_lock+0x64/0x80
+       rmqueue+0x138/0x2050
+       get_page_from_freelist+0x474/0x688
+       __alloc_pages_nodemask+0x3b4/0x18dc
+       alloc_pages_current+0xd0/0xe0
+       alloc_slab_page+0x2b4/0x5e0
+       new_slab+0xc8/0x6bc
+       ___slab_alloc+0x3b8/0x640
+       kmem_cache_alloc+0x4b4/0x588
+       __debug_object_init+0x778/0x8b4
+       debug_object_init_on_stack+0x40/0x50
+       start_flush_work+0x16c/0x3f0
+       __flush_work+0xb8/0x124
+       flush_work+0x20/0x30
+       xlog_cil_force_lsn+0x88/0x204 [xfs]
+       xfs_log_force_lsn+0x128/0x1b8 [xfs]
+       xfs_file_fsync+0x3c4/0x488 [xfs]
+       vfs_fsync_range+0xb0/0xd0
+       generic_write_sync+0x80/0xa0 [xfs]
+       xfs_file_buffered_aio_write+0x66c/0x6e4 [xfs]
+       xfs_file_write_iter+0x1a0/0x218 [xfs]
+       __vfs_write+0x1cc/0x214
+       vfs_write+0x12c/0x1a4
+       ksys_write+0xb0/0x120
+       __arm64_sys_write+0x54/0x88
+       el0_svc_handler+0x170/0x240
+       el0_sync_handler+0x150/0x250
+       el0_sync+0x164/0x180
+
+       other info that might help us debug this:
+
+ Chain exists of:
+   &(&zone->lock)->rlock --> &(&port->lock)->rlock --> &pool->lock/1
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&pool->lock/1);
+                               lock(&(&port->lock)->rlock);
+                               lock(&pool->lock/1);
+  lock(&(&zone->lock)->rlock);
+
+                *** DEADLOCK ***
+
+4 locks held by doio/49441:
+ #0: a0ff00886fc27408 (sb_writers#8){.+.+}, at: vfs_write+0x118/0x1a4
+ #1: 8fff00080810dfe0 (&xfs_nondir_ilock_class){++++}, at:
+xfs_ilock+0x2a8/0x300 [xfs]
+ #2: ffff9000129f2390 (rcu_read_lock){....}, at:
+rcu_lock_acquire+0x8/0x38
+ #3: 60ff000822352818 (&pool->lock/1){-.-.}, at:
+start_flush_work+0xd8/0x3f0
+
+               stack backtrace:
+CPU: 48 PID: 49441 Comm: doio Tainted: G        W
+Hardware name: HPE Apollo 70             /C01_APACHE_MB         , BIOS
+L50_5.13_1.11 06/18/2019
+Call trace:
+ dump_backtrace+0x0/0x248
+ show_stack+0x20/0x2c
+ dump_stack+0xe8/0x150
+ print_circular_bug+0x368/0x380
+ check_noncircular+0x28c/0x294
+ validate_chain+0xf6c/0x2e2c
+ __lock_acquire+0x868/0xc2c
+ lock_acquire+0x320/0x360
+ _raw_spin_lock+0x64/0x80
+ rmqueue+0x138/0x2050
+ get_page_from_freelist+0x474/0x688
+ __alloc_pages_nodemask+0x3b4/0x18dc
+ alloc_pages_current+0xd0/0xe0
+ alloc_slab_page+0x2b4/0x5e0
+ new_slab+0xc8/0x6bc
+ ___slab_alloc+0x3b8/0x640
+ kmem_cache_alloc+0x4b4/0x588
+ __debug_object_init+0x778/0x8b4
+ debug_object_init_on_stack+0x40/0x50
+ start_flush_work+0x16c/0x3f0
+ __flush_work+0xb8/0x124
+ flush_work+0x20/0x30
+ xlog_cil_force_lsn+0x88/0x204 [xfs]
+ xfs_log_force_lsn+0x128/0x1b8 [xfs]
+ xfs_file_fsync+0x3c4/0x488 [xfs]
+ vfs_fsync_range+0xb0/0xd0
+ generic_write_sync+0x80/0xa0 [xfs]
+ xfs_file_buffered_aio_write+0x66c/0x6e4 [xfs]
+ xfs_file_write_iter+0x1a0/0x218 [xfs]
+ __vfs_write+0x1cc/0x214
+ vfs_write+0x12c/0x1a4
+ ksys_write+0xb0/0x120
+ __arm64_sys_write+0x54/0x88
+ el0_svc_handler+0x170/0x240
+ el0_sync_handler+0x150/0x250
+ el0_sync+0x164/0x180
+
+Reviewed-by: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Signed-off-by: Qian Cai <cai@lca.pw>
+Link: https://lore.kernel.org/r/1573679785-21068-1-git-send-email-cai@lca.pw
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   40 ++++------------------------------------
- 1 file changed, 4 insertions(+), 36 deletions(-)
+ drivers/char/random.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -337,8 +337,6 @@
- #include <linux/spinlock.h>
- #include <linux/kthread.h>
- #include <linux/percpu.h>
--#include <linux/cryptohash.h>
--#include <linux/fips.h>
- #include <linux/ptrace.h>
- #include <linux/kmemcheck.h>
- #include <linux/workqueue.h>
-@@ -519,14 +517,12 @@ struct entropy_store {
- 	u16 add_ptr;
- 	u16 input_rotate;
- 	int entropy_count;
--	unsigned int last_data_init:1;
--	u8 last_data[EXTRACT_SIZE];
- };
- 
- static ssize_t extract_entropy(struct entropy_store *r, void *buf,
- 			       size_t nbytes, int min, int rsvd);
- static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
--				size_t nbytes, int fips);
-+				size_t nbytes);
- 
- static void crng_reseed(struct crng_state *crng, struct entropy_store *r);
- static u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
-@@ -822,7 +818,7 @@ static void crng_initialize_secondary(st
- 
- static void __init crng_initialize_primary(struct crng_state *crng)
- {
--	_extract_entropy(&input_pool, &crng->state[4], sizeof(u32) * 12, 0);
-+	_extract_entropy(&input_pool, &crng->state[4], sizeof(u32) * 12);
- 	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
- 		invalidate_batched_entropy();
- 		numa_crng_init();
-@@ -1478,22 +1474,13 @@ static void extract_buf(struct entropy_s
+@@ -1690,8 +1690,9 @@ static void _warn_unseeded_randomness(co
+ 	print_once = true;
+ #endif
+ 	if (__ratelimit(&unseeded_warning))
+-		pr_notice("random: %s called from %pS with crng_init=%d\n",
+-			  func_name, caller, crng_init);
++		printk_deferred(KERN_NOTICE "random: %s called from %pS "
++				"with crng_init=%d\n", func_name, caller,
++				crng_init);
  }
  
- static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
--				size_t nbytes, int fips)
-+				size_t nbytes)
- {
- 	ssize_t ret = 0, i;
- 	u8 tmp[EXTRACT_SIZE];
--	unsigned long flags;
- 
- 	while (nbytes) {
- 		extract_buf(r, tmp);
--
--		if (fips) {
--			spin_lock_irqsave(&r->lock, flags);
--			if (!memcmp(tmp, r->last_data, EXTRACT_SIZE))
--				panic("Hardware RNG duplicated output!\n");
--			memcpy(r->last_data, tmp, EXTRACT_SIZE);
--			spin_unlock_irqrestore(&r->lock, flags);
--		}
- 		i = min_t(int, nbytes, EXTRACT_SIZE);
- 		memcpy(buf, tmp, i);
- 		nbytes -= i;
-@@ -1519,28 +1506,9 @@ static ssize_t _extract_entropy(struct e
- static ssize_t extract_entropy(struct entropy_store *r, void *buf,
- 				 size_t nbytes, int min, int reserved)
- {
--	u8 tmp[EXTRACT_SIZE];
--	unsigned long flags;
--
--	/* if last_data isn't primed, we need EXTRACT_SIZE extra bytes */
--	if (fips_enabled) {
--		spin_lock_irqsave(&r->lock, flags);
--		if (!r->last_data_init) {
--			r->last_data_init = 1;
--			spin_unlock_irqrestore(&r->lock, flags);
--			trace_extract_entropy(r->name, EXTRACT_SIZE,
--					      ENTROPY_BITS(r), _RET_IP_);
--			extract_buf(r, tmp);
--			spin_lock_irqsave(&r->lock, flags);
--			memcpy(r->last_data, tmp, EXTRACT_SIZE);
--		}
--		spin_unlock_irqrestore(&r->lock, flags);
--	}
--
- 	trace_extract_entropy(r->name, nbytes, ENTROPY_BITS(r), _RET_IP_);
- 	nbytes = account(r, nbytes, min, reserved);
--
--	return _extract_entropy(r, buf, nbytes, fips_enabled);
-+	return _extract_entropy(r, buf, nbytes);
- }
- 
- #define warn_unseeded_randomness(previous) \
+ /*
 
 

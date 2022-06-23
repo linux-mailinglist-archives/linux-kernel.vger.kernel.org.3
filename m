@@ -2,82 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B22558962
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A276B55896D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiFWToc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S231913AbiFWToo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiFWToM (ORCPT
+        with ESMTP id S229806AbiFWToT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:44:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0094B60E37;
-        Thu, 23 Jun 2022 12:36:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45D91619E2;
-        Thu, 23 Jun 2022 19:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BCDC341C0;
-        Thu, 23 Jun 2022 19:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656012985;
-        bh=nDfbSGYCTY10pLb2wgmFt1IEf1MTe6t7GSlKVQ2JcT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TNYj8V4Vk+eOmExRYynKVKPcBCfhQDJxUM4nvDKUQbCJDlLXhl1G35xwsJDd0vx72
-         AzX0zlP2qu8ObxTIQRvIFsUmCqVIHtybwiKaKtyHXianqPNd8Qd+P2ACY9YCXgq4I7
-         iPWf01DgDD94W5hX8S/IzHvvAva4fmB8xwnrYOikZBmb01btT9RcFQ7YOrSkLVMovg
-         xjbzZMfeekny02F1E1E1XGk1soGlEHoFCietgUSOe5v79RQhW1UCruedhljPnV50xf
-         gAtM4zl+cqSOgVz/tLnMObKzUZcPdUdf8e5PJcDGAQf9n9+29HChputg/bdbzWun+S
-         GiBiQcg4YrY1g==
-Date:   Thu, 23 Jun 2022 12:36:23 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4] timekeeping: contribute wall clock to rng on time
- change
-Message-ID: <YrTAt2g4gg/2e+5L@sol.localdomain>
-References: <CAHmME9qGQrgCEGgQpomq6W2EMUy_D5AxqgYHykmmgND+PPVjjw@mail.gmail.com>
- <20220623191249.1357363-1-Jason@zx2c4.com>
+        Thu, 23 Jun 2022 15:44:19 -0400
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83066262C;
+        Thu, 23 Jun 2022 12:36:44 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 21:36:41 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Wei Han <lailitty@foxmail.com>
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH] netfilter: xt_esp: add support for ESP match in NAT
+ Traversal
+Message-ID: <YrTAyW0phD0OiYN/@salvia>
+References: <tencent_DDE91CB7412D427A442DB4362364DC04F20A@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220623191249.1357363-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <tencent_DDE91CB7412D427A442DB4362364DC04F20A@qq.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 09:12:49PM +0200, Jason A. Donenfeld wrote:
-> The rng's random_init() function contributes the real time to the rng at
-> boot time, so that events can at least start in relation to something
-> particular in the real world. But this clock might not yet be set that
-> point in boot, so nothing is contributed. In addition, the relation
-> between minor clock changes from, say, NTP, and the cycle counter is
-> potentially useful entropic data.
+On Thu, Jun 23, 2022 at 08:42:48PM +0800, Wei Han wrote:
+> when the ESP packets traversing Network Address Translators,
+> which are encapsulated and decapsulated inside UDP packets,
+> so we need to get ESP data in UDP.
 > 
-> This commit addresses this by mixing in a time stamp on calls to
-> settimeofday and adjtimex. No entropy is credited in doing so, so it
-> doesn't make initialization faster, but it is still useful input to
-> have.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Wei Han <lailitty@foxmail.com>
 > ---
->  kernel/time/timekeeping.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  net/netfilter/xt_esp.c | 54 +++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 45 insertions(+), 9 deletions(-)
+> 
+> diff --git a/net/netfilter/xt_esp.c b/net/netfilter/xt_esp.c
+> index 2a1c0ad0ff07..c3feb79a830a 100644
+> --- a/net/netfilter/xt_esp.c
+> +++ b/net/netfilter/xt_esp.c
+> @@ -8,12 +8,14 @@
+>  #include <linux/skbuff.h>
+>  #include <linux/in.h>
+>  #include <linux/ip.h>
+> +#include <linux/ipv6.h>
+>  
+>  #include <linux/netfilter/xt_esp.h>
+>  #include <linux/netfilter/x_tables.h>
+>  
+>  #include <linux/netfilter_ipv4/ip_tables.h>
+>  #include <linux/netfilter_ipv6/ip6_tables.h>
+> +#include <net/ip.h>
+>  
+>  MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Yon Uriarte <yon@astaro.de>");
+> @@ -39,17 +41,53 @@ static bool esp_mt(const struct sk_buff *skb, struct xt_action_param *par)
+>  	struct ip_esp_hdr _esp;
+>  	const struct xt_esp *espinfo = par->matchinfo;
+>  
+> +	const struct iphdr *iph = NULL;
+> +	const struct ipv6hdr *ip6h = NULL;
+> +	const struct udphdr *udph = NULL;
+> +	struct udphdr _udph;
+> +	int proto = -1;
+> +
+>  	/* Must not be a fragment. */
+>  	if (par->fragoff != 0)
+>  		return false;
+>  
+> -	eh = skb_header_pointer(skb, par->thoff, sizeof(_esp), &_esp);
+> -	if (eh == NULL) {
+> -		/* We've been asked to examine this packet, and we
+> -		 * can't.  Hence, no choice but to drop.
+> -		 */
+> -		pr_debug("Dropping evil ESP tinygram.\n");
+> -		par->hotdrop = true;
+> +	if (xt_family(par) == NFPROTO_IPV6) {
+> +		ip6h = ipv6_hdr(skb);
+> +		if (!ip6h)
+> +			return false;
+> +		proto = ip6h->nexthdr;
+> +	} else {
+> +		iph = ip_hdr(skb);
+> +		if (!iph)
+> +			return false;
+> +		proto = iph->protocol;
+> +	}
+> +
+> +	if (proto == IPPROTO_UDP) {
+> +		//for NAT-T
+> +		udph = skb_header_pointer(skb, par->thoff, sizeof(_udph), &_udph);
+> +		if (udph && (udph->source == htons(4500) || udph->dest == htons(4500))) {
+> +			/* Not deal with above data it don't conflict with SPI
+> +			 * 1.IKE Header Format for Port 4500(Non-ESP Marker 0x00000000)
+> +			 * 2.NAT-Keepalive Packet Format(0xFF)
+> +			 */
+> +			eh = (struct ip_esp_hdr *)((char *)udph + sizeof(struct udphdr));
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+this is not safe, skbuff might not be linear.
 
-- Eric
+> +		} else {
+> +			return false;
+> +		}
+> +	} else if (proto == IPPROTO_ESP) {
+> +		//not NAT-T
+> +		eh = skb_header_pointer(skb, par->thoff, sizeof(_esp), &_esp);
+> +		if (!eh) {
+> +			/* We've been asked to examine this packet, and we
+> +			 * can't.  Hence, no choice but to drop.
+> +			 */
+> +			pr_debug("Dropping evil ESP tinygram.\n");
+> +			par->hotdrop = true;
+> +			return false;
+> +		}
+
+This is loose, the user does not have a way to restrict to either
+ESP over UDP or native ESP. I don't think this is going to look nice
+from iptables syntax perspective to restrict either one or another
+mode.
+
+> +	} else {
+> +		//not esp data
+>  		return false;
+>  	}
+>  
+> @@ -76,7 +114,6 @@ static struct xt_match esp_mt_reg[] __read_mostly = {
+>  		.checkentry	= esp_mt_check,
+>  		.match		= esp_mt,
+>  		.matchsize	= sizeof(struct xt_esp),
+> -		.proto		= IPPROTO_ESP,
+>  		.me		= THIS_MODULE,
+>  	},
+>  	{
+> @@ -85,7 +122,6 @@ static struct xt_match esp_mt_reg[] __read_mostly = {
+>  		.checkentry	= esp_mt_check,
+>  		.match		= esp_mt,
+>  		.matchsize	= sizeof(struct xt_esp),
+> -		.proto		= IPPROTO_ESP,
+>  		.me		= THIS_MODULE,
+>  	},
+>  };
+> -- 
+> 2.17.1
+> 

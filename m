@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56B05589DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015E45589E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiFWUN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S229584AbiFWUQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiFWUN4 (ORCPT
+        with ESMTP id S229451AbiFWUQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:13:56 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E411B5253D;
-        Thu, 23 Jun 2022 13:13:55 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id q18so174234pld.13;
-        Thu, 23 Jun 2022 13:13:55 -0700 (PDT)
+        Thu, 23 Jun 2022 16:16:50 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED422527E1;
+        Thu, 23 Jun 2022 13:16:49 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id o43so1685216qvo.4;
+        Thu, 23 Jun 2022 13:16:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/8L+loe/q0oKT/VSQkC4sJ2q8bSMJVMgNJ3tpE0MVRw=;
-        b=bgNDjsJHhD7Jt7jSeJqq+BbE1CRzryJmICngF6BWjMfhac5B/vvzMT0Jdt8gviLAnG
-         Nz+J1CvUibpAlrlugHykIQTscNxyq/0oTxKWDTN7uFkDUHbOLr68IyY39ag4rk28GNBn
-         +wUsNHq9se3djiYmxxjhWx6x29CblN4kfK5Q2byhWXOK2cYSAjlv1mJFTQgvuXdh+WqZ
-         xIfDAhr0lW5VOvEYlvO5FRTk5Doj32zwjnRAuacmxpuD2lvd+SvcO75GTBG7FC+Itwdx
-         9QEPa7sZcjqGZmLgY6qE7OykDSGPrvbMkxZQYxWCs4QR9dgxPNpDi7noXVQgGeNKfVxx
-         TKKw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YWrCQp6H9wIltSv1NIBwWayinjF3IWxeRXdz64C/6O8=;
+        b=H0iRj/c6MpY2eSSDDZgyYSk4nDUWmxYHRjgj/m/4qUypbcJDTPIYhuazKHcWobrHr5
+         gzMxPmUZ9TfzoBSbDy93yX8ibOTfAgZvUQ9nlTwbpwBobAafrndImc/rjqlIdrsjGgIU
+         f939IpzQVfemTQC12tvKJFYdtEcTrC9hRKFPx1sxB9nFhDjPgJUcZl+Gj7cuYk5uqdlc
+         Wuhk8GAWrGirtvCXM2trIZbiskzbpJqoWnkSSuLaP6YZXRsHMIp2vx68N6kkGoejR9Bc
+         OnLAZPnHxE1tdrKATsSqZJRPMxMIxGVQ7N5PWXw8NOaCt9IJo+MjipZvs8RqUkY5as6R
+         kA+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/8L+loe/q0oKT/VSQkC4sJ2q8bSMJVMgNJ3tpE0MVRw=;
-        b=lyzurWNBxEF5JrWDfrjgcxHfLR6tzXts9/bt91gdqdxLWNIfL0Pb0P3sbC9IwodiiK
-         mBjRqMsy4pQ424skJttg31pfxUoptCwoWtDLq/N6cjbIzlPwxbVch8jNiE/NWedTWIRb
-         mnGGu9vltigHUigBUeOyc9K5ZWjDWfIHKUmV3TrJ5/cy84bYWTfqwQVeiXFYDEW07Iuu
-         JQJ/+7HkKPKwfp0f5n6H2CIA+O6kVZqb0wUGvVSi5YW7ADe5UPMGSICF17PjlKYCbndB
-         blqQSL51kMsN1h0wZaDInIYWtBQ7UyW8TwhEj1WXoo0jNYX3AL1qCm90mOG4jm6N1VBv
-         HxFA==
-X-Gm-Message-State: AJIora83736cqg6iFYrejhjj5dr4LAr+0qFu7C95MPiR6XdqzRA7R4X0
-        eg5lz8FDVQFRNi67Nd65eQCHloLOzqw=
-X-Google-Smtp-Source: AGRyM1vxqmSRQEHmnQQ+B2pzLKb5nEpaqUCziy/6ajxNlaCb5rSokxISfhbY19OchkSxdU6Q7+awQQ==
-X-Received: by 2002:a17:902:c2ca:b0:168:db72:16a with SMTP id c10-20020a170902c2ca00b00168db72016amr41334471pla.171.1656015235402;
-        Thu, 23 Jun 2022 13:13:55 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ez7-20020a17090ae14700b001ec8d191db4sm147380pjb.17.2022.06.23.13.13.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 13:13:54 -0700 (PDT)
-Message-ID: <831bb649-fa74-8e54-f3f2-499a843d9e88@gmail.com>
-Date:   Thu, 23 Jun 2022 13:13:52 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YWrCQp6H9wIltSv1NIBwWayinjF3IWxeRXdz64C/6O8=;
+        b=t5iY1kIaeAGt94QrZdjRrTwAdd3Wsai7H3+/OsB/LM3FwgXoOQrKXXeNg9Dw146R/P
+         l842nbLuuPhT2jnnVvOkoVedttM99TnpnL52yikM/yU1YqWirgPBnIJ0XV35ednPXHb9
+         jMkO769m64sv9aM9NTyFbIQP4qzleVHC3DC1fY76lS1z3493jQqZKnld+G7nbj4+HMvA
+         2fE693NGq30L7tiGCxujn1/apjr40D5vS06wMqVV9WvzMREY3ZUZsBz2EsaCLik8PiA6
+         E4aet7uZegq5zge21kFyDeyH2FB8/VfP9S24Z+vLDWnCoTpCQRlP1PVJbY58XO1FVgTA
+         9adg==
+X-Gm-Message-State: AJIora84HQ1fgUyO59de1hyMboiahQTCeQg0fzTGsy1VaZRZCXA/B1V3
+        evtY5Ph1zUtt2y30hy4GIdNrHn1pAlRqBerXZDc=
+X-Google-Smtp-Source: AGRyM1uOtTXMj9r/qGMK6GqGlRRTsCptlK8dfpB68zWK8onR9QisCok7v5sadUPaTDEsbVzVvhUCa+H87ScWox2/GG4=
+X-Received: by 2002:ac8:5dce:0:b0:305:300e:146d with SMTP id
+ e14-20020ac85dce000000b00305300e146dmr10167380qtx.546.1656015409065; Thu, 23
+ Jun 2022 13:16:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.10 00/11] 5.10.125-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220623164322.296526800@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220623164322.296526800@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220621135339.1269409-1-robimarko@gmail.com> <a194d4c5-8e31-ecd9-ecd0-0c96af03485b@linaro.org>
+ <CAOX2RU6fBo5f6cxAUgLKj3j+_oP7nSm7awCpr_yiO_p3NssWkQ@mail.gmail.com> <60ee4aa5-4fef-24e0-0ccf-b93eee1db876@linaro.org>
+In-Reply-To: <60ee4aa5-4fef-24e0-0ccf-b93eee1db876@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Thu, 23 Jun 2022 22:16:38 +0200
+Message-ID: <CAOX2RU7da_bUNM0Zr-YA1eQN96ENcfsKLD9C2PVVNijN6Y2hNw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: ath11k: add new DT entry
+ for board ID
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Kalle Valo <kvalo@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
+        pabeni@redhat.com, Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,27 +73,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 09:44, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.125 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.125-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Wed, 22 Jun 2022 at 16:55, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/06/2022 20:47, Robert Marko wrote:
+> > On Tue, 21 Jun 2022 at 17:58, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 21/06/2022 15:53, Robert Marko wrote:
+> >>> bus + qmi-chip-id + qmi-board-id and optionally the variant are currently
+> >>> used for identifying the correct board data file.
+> >>>
+> >>> This however is sometimes not enough as all of the IPQ8074 boards that I
+> >>> have access to dont have the qmi-board-id properly fused and simply return
+> >>> the default value of 0xFF.
+> >>>
+> >>> So, to provide the correct qmi-board-id add a new DT property that allows
+> >>> the qmi-board-id to be overridden from DTS in cases where its not set.
+> >>> This is what vendors have been doing in the stock firmwares that were
+> >>> shipped on boards I have.
+> >>>
+> >>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> >>
+> >> Thank you for your patch. There is something to discuss/improve.
+> >>
+> >>> ---
+> >>>  .../devicetree/bindings/net/wireless/qcom,ath11k.yaml     | 8 ++++++++
+> >>>  1 file changed, 8 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+> >>> index a677b056f112..fe6aafdab9d4 100644
+> >>> --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+> >>> +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+> >>> @@ -41,6 +41,14 @@ properties:
+> >>>          * reg
+> >>>          * reg-names
+> >>>
+> >>> +  qcom,ath11k-board-id:
+> >>
+> >> The "board" a bit confuses me because in the context of entire system it
+> >> means the entire hardware running Qualcomm SoC. This is sometimes
+> >> encoded as qcom,board-id property.
+> >
+> > Hi Krzysztof,
+> > I agree that the name is a bit confusing, it's not the same as
+> > qcom,board-id AFAIK
+> > and QCA as well as vendors are using a similar property in the wifi
+> > node to override
+> > the default qmi-board-id to the correct one as its rarely properly fused.
+> >
+> > I assume it would be better-called qcom,ath11k-qmi-board-id as you
+> > dont even have
+> > to be using a Qualcomm SoC as the same is used by PCI ath11k cards as well.
+> >
+>
+> Thanks for the explanation. What is the "board" in that context? The
+> card/hardware with ath11k? Then maybe qcom,ath11k-qmi-id or
+> qcom,ath11k-qmi-hw-id?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Hi,
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+I assume it started off as a numerical value to match the board design and was
+then simply carried off to the PCI cards as well.
+
+qcom,ath11k-qmi-hw-id is fine by me, will just expand the description to make
+it clear.
+
+Regards,
+Robert
+
+>
+> Best regards,
+> Krzysztof

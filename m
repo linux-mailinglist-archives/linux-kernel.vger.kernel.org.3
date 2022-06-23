@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7711558225
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B1F55846E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiFWRKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S234945AbiFWRmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233775AbiFWRIM (ORCPT
+        with ESMTP id S234815AbiFWRiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:08:12 -0400
+        Thu, 23 Jun 2022 13:38:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D471B53A5E;
-        Thu, 23 Jun 2022 09:56:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7830137A05;
+        Thu, 23 Jun 2022 10:08:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 207A0B82493;
-        Thu, 23 Jun 2022 16:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74423C3411B;
-        Thu, 23 Jun 2022 16:56:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A03CB82499;
+        Thu, 23 Jun 2022 17:08:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D860C3411B;
+        Thu, 23 Jun 2022 17:08:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003406;
-        bh=u1D/hLqCjUAb9AG1DeAYgoHN8PQ3oSyKG26DNohWGvI=;
+        s=korg; t=1656004100;
+        bh=isyO/DTQYlF73FEx2d7UejnaUEw+tJ7LlnZ7gQHbFIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L3a5eFpaqVxiJw7iAkzv8It7zjuowXmq9heDBYpq12K6kvH7sRjz5p5vzEQMjsvp/
-         ZF31JtKVWuDW0WHUw2rR7X0IzNUoahNPXb1dy3Mh08c+l+MkOKxfZTdYuYX54ekeAw
-         ohlYbN5Fp6ddvJBfJtk2VboObUNP3l8GXaMaSbds=
+        b=FNi2IbYqFrW57MqVBADydZB4RpcRboxzRr36Pkz+LmGb4BgnOOuIx+4FZMPZ5dGim
+         stLLRAcKgwSqUhZnbmEIEWa+reWaMjxmo8PZHwtRE9xYWqoClGHc1UqKf1B2AtZNin
+         lD0IgrvhdsC9ZOI370VEOTDi2h9NXTGkMcs2+b1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 229/264] ata: libata-core: fix NULL pointer deref in ata_host_alloc_pinfo()
-Date:   Thu, 23 Jun 2022 18:43:42 +0200
-Message-Id: <20220623164350.557247053@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+2e635807decef724a1fa@syzkaller.appspotmail.com,
+        Stephan Mueller <smueller@chronox.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.14 189/237] crypto: drbg - always try to free Jitter RNG instance
+Date:   Thu, 23 Jun 2022 18:43:43 +0200
+Message-Id: <20220623164348.584744527@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: "Stephan Müller" <smueller@chronox.de>
 
-[ Upstream commit bf476fe22aa1851bab4728e0c49025a6a0bea307 ]
+commit 819966c06b759022e9932f328284314d9272b9f3 upstream.
 
-In an unlikely (and probably wrong?) case that the 'ppi' parameter of
-ata_host_alloc_pinfo() points to an array starting with a NULL pointer,
-there's going to be a kernel oops as the 'pi' local variable won't get
-reassigned from the initial value of NULL. Initialize 'pi' instead to
-'&ata_dummy_port_info' to fix the possible kernel oops for good...
+The Jitter RNG is unconditionally allocated as a seed source follwoing
+the patch 97f2650e5040. Thus, the instance must always be deallocated.
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-analysis tool.
-
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: syzbot+2e635807decef724a1fa@syzkaller.appspotmail.com
+Fixes: 97f2650e5040 ("crypto: drbg - always seeded with SP800-90B ...")
+Signed-off-by: Stephan Mueller <smueller@chronox.de>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ crypto/drbg.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 35db918a1de5..42f0a592b5ab 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -6051,7 +6051,7 @@ struct ata_host *ata_host_alloc_pinfo(struct device *dev,
- 				      const struct ata_port_info * const * ppi,
- 				      int n_ports)
- {
--	const struct ata_port_info *pi;
-+	const struct ata_port_info *pi = &ata_dummy_port_info;
- 	struct ata_host *host;
- 	int i, j;
+--- a/crypto/drbg.c
++++ b/crypto/drbg.c
+@@ -1646,10 +1646,12 @@ static int drbg_uninstantiate(struct drb
+ 	if (drbg->random_ready.notifier_call) {
+ 		unregister_random_ready_notifier(&drbg->random_ready);
+ 		cancel_work_sync(&drbg->seed_work);
+-		crypto_free_rng(drbg->jent);
+-		drbg->jent = NULL;
+ 	}
  
-@@ -6059,7 +6059,7 @@ struct ata_host *ata_host_alloc_pinfo(struct device *dev,
- 	if (!host)
- 		return NULL;
- 
--	for (i = 0, j = 0, pi = NULL; i < host->n_ports; i++) {
-+	for (i = 0, j = 0; i < host->n_ports; i++) {
- 		struct ata_port *ap = host->ports[i];
- 
- 		if (ppi[j])
--- 
-2.35.1
-
++	if (!IS_ERR_OR_NULL(drbg->jent))
++		crypto_free_rng(drbg->jent);
++	drbg->jent = NULL;
++
+ 	if (drbg->d_ops)
+ 		drbg->d_ops->crypto_fini(drbg);
+ 	drbg_dealloc_state(drbg);
 
 

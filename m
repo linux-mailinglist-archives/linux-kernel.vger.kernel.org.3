@@ -2,189 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3ABF5572DA
+	by mail.lfdr.de (Postfix) with ESMTP id A8EFF5572D9
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiFWGIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S229808AbiFWGIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiFWGHt (ORCPT
+        with ESMTP id S229730AbiFWGID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:07:49 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0264477F;
-        Wed, 22 Jun 2022 23:07:46 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LT8tN2J1hz4xZj;
-        Thu, 23 Jun 2022 16:07:40 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655964462;
-        bh=DIECM9rabt+6+wTd58y+akkzG6KhfGCuRfy6xDMDTaE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Vjb8nXaI3FUenZyvhRKP/nNNKBkQWcF1uwuloyaQUJa6x0qf77R9yzI6CfRpRKdlx
-         B2gfJyh1isX7i2t+MFMv/1i1j91k1Z6VFcevzHOx94MOzS7mOc0qEoQd6kf7a8CrJO
-         dtSMhn26GsNM4By9LqDVhYFwgvdfi0yU4qKB19IGSfiyhPxDx5KUuWpT8nXolAk6hI
-         YooH+duggbpBGbu+bPGZvLjOJXNTJG/l2oHExJyzkFUmXJoxoPwCWS2f1fuT5NMEIQ
-         Xz1tUUCSNJquSaaVmn+GCSHFzMaZcjSmpoI+6ubp6YNxu/3jMmGFjioQdeYhm8Y2Ke
-         Ss9Gkms52m9Vw==
-Date:   Thu, 23 Jun 2022 16:07:23 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>, Greg KH <greg@kroah.com>
-Cc:     Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220623160723.7a44b573@canb.auug.org.au>
+        Thu, 23 Jun 2022 02:08:03 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3085E44A1C;
+        Wed, 22 Jun 2022 23:07:51 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id t5so6298509eje.1;
+        Wed, 22 Jun 2022 23:07:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=t6P+OEr0vrvpoPfUHObsMCgB6b3hmJkinrDt6rRS438=;
+        b=8BUgWMSfTAhLk4L1Ji+3kgabm7zr1yzHrTGc00QxJqGGJZkysZhkbfbNQQcFBMdFi3
+         1uSAglJXg9UbNjg3JRd/6MXT49vN2JrEm+W+dUvN8kyu61+LMVBnnK5e+UulMLOwLAbZ
+         K9L+mJNflekphxNqy1WQ+cJcbA2esR1hM90kThCPWIdNoT9h1ipA1P2qiZYrwllDQCxf
+         zN9ryX83xN9rRZ9qyvpsLc2BYS9KCIoUDlhcE+RLQmL8fGgRBmNcQ3sLkULGSvOijijc
+         u6F+176UrxPRsr6e/cXkKxH86OiOV44JKlkasJg8ILJrphed2HzBw1Y+u3MThTqSjUP8
+         +7zg==
+X-Gm-Message-State: AJIora+cwpAapQaPGoGIMtat7sz8+WhDmeHE4WECVdpqYch8sQH+aqBs
+        z087ckBFjrs+eCRHf3grWOw=
+X-Google-Smtp-Source: AGRyM1tn6B67l/KiBQ/N+kEIHBz4CdfpAEFNHBqKz02petrPe74UxMGHsnlG2ds/8MuCKUkLJu1t9A==
+X-Received: by 2002:a17:906:dc8f:b0:723:a62a:cd0e with SMTP id cs15-20020a170906dc8f00b00723a62acd0emr2420289ejc.444.1655964469427;
+        Wed, 22 Jun 2022 23:07:49 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id d21-20020a056402517500b00435640c141esm13717890ede.93.2022.06.22.23.07.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 23:07:48 -0700 (PDT)
+Message-ID: <9284b3dd-3da5-1a52-1e92-a434cfe2e1e1@kernel.org>
+Date:   Thu, 23 Jun 2022 08:07:47 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WGFqr7wXQvk8d+QUrjBo9mH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] tty: serial: qcom-geni-serial: Fix get_clk_div_rate()
+ which otherwise could return a sub-optimal clock rate.
+Content-Language: en-US
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org
+References: <1655834239-20812-1-git-send-email-quic_vnivarth@quicinc.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <1655834239-20812-1-git-send-email-quic_vnivarth@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WGFqr7wXQvk8d+QUrjBo9mH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 21. 06. 22, 19:57, Vijaya Krishna Nivarthi wrote:
+> In the logic around call to clk_round_rate, for some corner conditions,
+> get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
+> exact clock rate was not found lowest clock was being returned.
+> 
+> Search for suitable clock rate in 2 steps
+> a) exact match or within 2% tolerance
+> b) within 5% tolerance
+> This also takes care of corner conditions.
+> 
+> Fixes: c2194bc999d4 ("tty: serial: qcom-geni-serial: Remove uart frequency table. Instead, find suitable frequency with call to clk_round_rate")
 
-Hi all,
+Hmm, provided the complexity, was this worth it -- how many typos/bugs 
+can be in such complex and twisted functions?
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+The original intention was not to touch the driver when new HW arrives. 
+Now it looks like you'd be chasing corner cases like these for quite 
+some releases.
 
-In file included from include/linux/radix-tree.h:12,
-                 from include/linux/idr.h:15,
-                 from include/linux/kernfs.h:12,
-                 from include/linux/sysfs.h:16,
-                 from include/linux/kobject.h:20,
-                 from include/linux/energy_model.h:7,
-                 from include/linux/device.h:16,
-                 from include/linux/power_supply.h:15,
-                 from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:28:
-drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function 'amdgpu_reset_captu=
-re_coredumpm':
-include/linux/gfp.h:337:25: error: passing argument 5 of 'dev_coredumpm' ma=
-kes pointer from integer without a cast [-Werror=3Dint-conversion]
-  337 | #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                         |
-      |                         unsigned int
-drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:55: note: in expansion of m=
-acro 'GFP_KERNEL'
- 4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
-      |                                                       ^~~~~~~~~~
-In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-include/linux/devcoredump.h:59:30: note: expected 'ssize_t (*)(char *, loff=
-_t,  size_t,  void *, size_t)' {aka 'long int (*)(char *, long long int,  l=
-ong unsigned int,  void *, long unsigned int)'} but argument is of type 'un=
-signed int'
-   59 |                    ssize_t (*read)(char *buffer, loff_t offset, siz=
-e_t count,
-      |                    ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~
-   60 |                                    void *data, size_t datalen),
-      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4727:23: error: passing argument=
- 6 of 'dev_coredumpm' from incompatible pointer type [-Werror=3Dincompatibl=
-e-pointer-types]
- 4727 |                       amdgpu_devcoredump_read, amdgpu_devcoredump_f=
-ree);
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~
-      |                       |
-      |                       ssize_t (*)(char *, loff_t,  size_t,  void *,=
- size_t) {aka long int (*)(char *, long long int,  long unsigned int,  void=
- *, long unsigned int)}
-In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-include/linux/devcoredump.h:61:27: note: expected 'void (*)(void *)' but ar=
-gument is of type 'ssize_t (*)(char *, loff_t,  size_t,  void *, size_t)' {=
-aka 'long int (*)(char *, long long int,  long unsigned int,  void *, long =
-unsigned int)'}
-   61 |                    void (*free)(void *data));
-      |                    ~~~~~~~^~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:9: error: too many argument=
-s to function 'dev_coredumpm'
- 4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
-      |         ^~~~~~~~~~~~~
-In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-include/linux/devcoredump.h:57:6: note: declared here
-   57 | void dev_coredumpm(struct device *dev, struct module *owner,
-      |      ^~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+So going back in time, reconsidering the whole thing: how often do you 
+expect the original rate table would need to be updated?
 
-Caused by commit
+NACK
 
-  3d8785f6c04a ("drm/amdgpu: adding device coredump support")
+in any way -- see my comment below -- if you really want to go this 
+path, you'd need to split this.
 
-interacting with commit
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> ---
+>   drivers/tty/serial/qcom_geni_serial.c | 134 ++++++++++++++++++++++++++--------
+>   1 file changed, 102 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index 2e23b65..8d247c1 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -943,52 +943,123 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
+>   	return 0;
+>   }
+>   
+> -static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+> -			unsigned int sampling_rate, unsigned int *clk_div)
+> +static unsigned long find_clk_rate_in_tol(struct clk *clk, unsigned int desired_clk,
+> +			unsigned int *clk_div, unsigned int percent_tol, bool *exact_match)
+>   {
+> +	unsigned long freq;
+> +	unsigned long div, maxdiv, new_div;
+> +	unsigned long long mult;
+>   	unsigned long ser_clk;
+> -	unsigned long desired_clk;
+> -	unsigned long freq, prev;
+> -	unsigned long div, maxdiv;
+> -	int64_t mult;
+> -
+> -	desired_clk = baud * sampling_rate;
+> -	if (!desired_clk) {
+> -		pr_err("%s: Invalid frequency\n", __func__);
+> -		return 0;
+> -	}
+> +	unsigned long test_freq, offset, new_freq;
+>   
+> +	ser_clk = 0;
+>   	maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
+> -	prev = 0;
+> +	div = 1;
+>   
+> -	for (div = 1; div <= maxdiv; div++) {
+> -		mult = div * desired_clk;
+> -		if (mult > ULONG_MAX)
+> +	while (div <= maxdiv) {
+> +		mult = (unsigned long long)div * desired_clk;
+> +		if (mult != (unsigned long)mult)
+>   			break;
+>   
+> -		freq = clk_round_rate(clk, (unsigned long)mult);
+> -		if (!(freq % desired_clk)) {
+> -			ser_clk = freq;
+> -			break;
+> +		/*
+> +		 * Loop requesting a freq within tolerance and possibly exact freq.
+> +		 *
+> +		 * We'll keep track of the lowest freq inexact match we found
+> +		 * but always try to find a perfect match. NOTE: this algorithm
+> +		 * could miss a slightly better freq if there's more than one
+> +		 * freq between (freq - offset) and (freq) but (freq) can't be made
+> +		 * exactly, but that's OK.
+> +		 *
+> +		 * This absolutely relies on the fact that the Qualcomm clock
+> +		 * driver always rounds up.
+> +		 * We make use of exact_match as an I/O param.
+> +		 */
+> +
+> +		/* look only for exact match if within tolerance is already found */
+> +		if (ser_clk)
+> +			offset = 0;
+> +		else
+> +			offset = (mult * percent_tol) / 100;
+> +
+> +		test_freq = mult - offset;
+> +		freq = clk_round_rate(clk, test_freq);
+> +
+> +		/*
+> +		 * A dead-on freq is an insta-win, look for it only in 1st run
+> +		 */
+> +		if (*exact_match) {
+> +			if (!(freq % desired_clk)) {
+> +				ser_clk = freq;
+> +				*clk_div = freq / desired_clk;
+> +				return ser_clk;
+> +			}
+> +		}
+> +
+> +		if (!ser_clk) {
+> +			new_div = DIV_ROUND_CLOSEST(freq, desired_clk);
+> +			new_freq = new_div * desired_clk;
+> +			offset = (new_freq * percent_tol) / 100;
+> +
+> +			if (new_freq - offset <= freq && freq <= new_freq + offset) {
+> +				/* Save the first (lowest freq) within tolerance */
+> +				ser_clk = freq;
+> +				*clk_div = new_div;
+> +				/* no more search for exact match required in 2nd run */
+> +				if (!(*exact_match))
+> +					break;
+> +			}
+>   		}
+>   
+> -		if (!prev)
+> -			ser_clk = freq;
+> -		else if (prev == freq)
+> +		div = freq / desired_clk + 1;
+> +
+> +		/*
+> +		 * Only time clock framework doesn't round up is if
+> +		 * we're past the max clock rate. We're done searching
+> +		 * if that's the case.
+> +		 */
+> +		if (freq < test_freq)
+>   			break;
+> +	}
+> +
+> +	*exact_match = false;
+> +	return ser_clk;
+> +}
+> +
+> +static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+> +			unsigned int sampling_rate, unsigned int *clk_div)
 
-  77515ebaf019 ("devcoredump: remove the useless gfp_t parameter in dev_cor=
-edumpv and dev_coredumpm")
+This cannot be reviewed properly. Care to split this into 2-3 patches? 
+Looks at the nesting and the complexity, it also looks like you need 
+more helper functions.
 
-from the driver-core tree.
+> +{
+> +	unsigned long ser_clk;
+> +	unsigned long desired_clk;
+> +	unsigned long desired_tol;
+> +	bool exact_match;
+>   
+> -		prev = freq;
+> +	desired_clk = baud * sampling_rate;
+> +	if (!desired_clk) {
+> +		pr_err("%s: Invalid frequency\n", __func__);
+> +		return 0;
+>   	}
+>   
+> -	if (!ser_clk) {
+> -		pr_err("%s: Can't find matching DFS entry for baud %d\n",
+> -								__func__, baud);
+> +	/* try to find exact clock rate or within 2% tolerance */
+> +	ser_clk = 0;
+> +	exact_match = true;
+> +	desired_tol = 2;
+> +
+> +	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, desired_tol, &exact_match);
+> +	if (ser_clk) {
+> +		if (!exact_match)
+> +			pr_warn("Cannot find exact match clk_rate, using one within 2 percent tolerance\n");
+>   		return ser_clk;
+>   	}
+>   
+> -	*clk_div = ser_clk / desired_clk;
+> -	if (!(*clk_div))
+> -		*clk_div = 1;
+> +	/* try within 5% tolerance now, no need to look for exact match */
+> +	exact_match = false;
+> +	desired_tol = 5;
+> +
+> +	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, desired_tol, &exact_match);
+> +	if (ser_clk)
+> +		pr_warn("Cannot find exact match clk_rate, using one within 5 percent tolerance\n");
+> +	else
+> +		pr_err("Cannot find suitable clk_rate, giving up\n");
+>   
+>   	return ser_clk;
+>   }
+> @@ -1021,8 +1092,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+>   	if (ver >= QUP_SE_VERSION_2_5)
+>   		sampling_rate /= 2;
+>   
+> -	clk_rate = get_clk_div_rate(port->se.clk, baud,
+> -		sampling_rate, &clk_div);
+> +	clk_rate = get_clk_div_rate(port->se.clk, baud, sampling_rate, &clk_div);
+>   	if (!clk_rate)
+>   		goto out_restart_rx;
+>   
 
-I have applied the following merge resolution patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 23 Jun 2022 15:56:22 +1000
-Subject: [PATCH] fix up for "devcoredump: remove the useless gfp_t paramete=
-r in dev_coredumpv and dev_coredumpm"
-
-interacting with
-
-  3d8785f6c04a ("drm/amdgpu: adding device coredump support")
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/a=
-md/amdgpu/amdgpu_device.c
-index f2a4c268ac72..9d6418bb963e 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -4723,7 +4723,7 @@ static void amdgpu_reset_capture_coredumpm(struct amd=
-gpu_device *adev)
- 	struct drm_device *dev =3D adev_to_drm(adev);
-=20
- 	ktime_get_ts64(&adev->reset_time);
--	dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
-+	dev_coredumpm(dev->dev, THIS_MODULE, adev, 0,
- 		      amdgpu_devcoredump_read, amdgpu_devcoredump_free);
- }
- #endif
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/WGFqr7wXQvk8d+QUrjBo9mH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK0AxsACgkQAVBC80lX
-0GxKKggAph9gBasqfVPiZkSSFWEaS536wSbZ05kPaC3YBGfIU5aJqtrQblXFovlX
-zLP+xlYTTghd5gnFIOdcfUuj8dyJoKOdCpO2Qikn6j0ycrhWsPDQ4i3FbwHEbQe5
-baN2ld4WbV9WjDJA6aa5qySIBy1aaPRUcCXKdiDJmKHE2w6Zz3HIiqFvkD+i/jDJ
-yFPqUJ2hZPk9Fwyi2HkE2xi5N81cq8xuzFWo9isWlLfiOnMna4Uvm2h2vnB9oWxT
-92/fYO/x4LPfMGZB4HaDrdlLxoJ07TE1UscVYIZ85e5vNMisTu9wNNm/mXZSRNCY
-X0xdpcRbzQpMUbDHtA5SuMmp1u389Q==
-=hbFV
------END PGP SIGNATURE-----
-
---Sig_/WGFqr7wXQvk8d+QUrjBo9mH--
+thanks,
+-- 
+js
+suse labs

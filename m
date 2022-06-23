@@ -2,177 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593DB557A11
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A4F557A18
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiFWMO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S231622AbiFWMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiFWMOy (ORCPT
+        with ESMTP id S230229AbiFWMQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:14:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9655B2DAB6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:14:53 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1o4LjV-0003Qz-PU; Thu, 23 Jun 2022 14:14:49 +0200
-Message-ID: <3c088a9a511762f7868b10dbe431942d3724917a.camel@pengutronix.de>
-Subject: Re: DMA-buf and uncached system memory
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media <linux-media@vger.kernel.org>
-Date:   Thu, 23 Jun 2022 14:14:48 +0200
-In-Reply-To: <34a1efd9-5447-848b-c08c-de75b48e997e@amd.com>
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
-         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
-         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
-         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
-         <20220623101326.18beeab3@eldfell>
-         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
-         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
-         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
-         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
-         <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
-         <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
-         <05814ddb-4f3e-99d8-025a-c31db7b2c46b@amd.com>
-         <708e27755317a7650ca08ba2e4c14691ac0d6ba2.camel@pengutronix.de>
-         <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
-         <f3c32cdd2ab4e76546c549b0cebba8e1d19d1cb0.camel@pengutronix.de>
-         <34a1efd9-5447-848b-c08c-de75b48e997e@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Thu, 23 Jun 2022 08:16:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC1619F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:16:06 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 020916601796;
+        Thu, 23 Jun 2022 13:16:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655986565;
+        bh=c1ltb7P9u2qj0Fs9oN4PA6mGEwCxXTSVI8fdy2xBOek=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RX3sx2edtnPFcOUv7DhwLjcZnlIaU5CXGUFNocWsBWPytjo8PsYREV0r1riRDTLJP
+         PW2HWltXu4DfHXZP7dWqOJ1PoLkqfRDAX/WO43328Vv/EjCvaS6iK+LrmttSpYJa4B
+         0IoS/v0N3SiDaxzONf52VZ7Zv8OYasyujEPr4/Sj3eElcVfKq6hFMdxKeN+LDrJFC/
+         liVLI3d4q7A6IROK7EczfZVtPkYIR1FTtHJBMW/5NbokP758X8lP/KeY0EK1PsBuzN
+         2nKE+Lu+tJzXCN7oowhpCr3Hg69fA7KNZsFp6m6WKwPupQ1bElBMsIXP/eDyfBcqhF
+         fDt/iGrpfvcww==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     srinivas.kandagatla@linaro.org
+Cc:     matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] nvmem: mtk-efuse: Simplify with devm_platform_get_and_ioremap_resource()
+Date:   Thu, 23 Jun 2022 14:15:58 +0200
+Message-Id: <20220623121558.107400-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 23.06.2022 um 13:54 +0200 schrieb Christian König:
-> Am 23.06.22 um 13:29 schrieb Lucas Stach:
-> > [SNIP]
-> > > Well then the existing DMA-buf framework is not what you want to use for
-> > > this.
-> > > 
-> > Sorry, but this is just ignoring reality. You try to flag 8+ years of
-> > DMA-buf usage on non-coherent arches as "you shouldn't do this". At
-> > this point there are probably a lot more users (drivers) of DMA-buf in
-> > the kernel for devices, which are used on non-coherent arches, than
-> > there are on coherent arches.
-> 
-> Well, it's my reality that people come up with bug reports about that 
-> and we have been pushing back on this with the explanation "Hey this is 
-> not supported" as long as I can think about it.
-> 
-> I mean I even had somebody from ARM which told me that this is not going 
-> to work with our GPUs on a specific SoC. That there are ARM internal use 
-> cases which just seem to work because all the devices are non-coherent 
-> is completely new to me.
-> 
-Yes, trying to hook up a peripheral that assumes cache snooping in some
-design details to a non coherent SoC may end up exploding in various
-ways. On the other hand you can work around most of those assumptions
-by marking the memory as uncached to the CPU, which may tank
-performance, but will work from a correctness PoV.
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-> I'm as much surprised as you are about this lack of agreement about such 
-> fundamental stuff.
-> 
-> > > > Non-coherent without explicit domain transfer points is just not going
-> > > > to work. So why can't we solve the issue for DMA-buf in the same way as
-> > > > the DMA API already solved it years ago: by adding the equivalent of
-> > > > the dma_sync calls that do cache maintenance when necessary? On x86 (or
-> > > > any system where things are mostly coherent) you could still no-op them
-> > > > for the common case and only trigger cache cleaning if the importer
-> > > > explicitly says that is going to do a non-snooping access.
-> > > Because DMA-buf is a framework for buffer sharing between cache coherent
-> > > devices which don't signal transitions.
-> > > 
-> > > We intentionally didn't implemented any of the dma_sync_* functions
-> > > because that would break the intended use case.
-> > > 
-> > Non coherent access, including your non-snoop scanout, and no domain
-> > transition signal just doesn't go together when you want to solve
-> > things in a generic way.
-> 
-> Yeah, that's the stuff I totally agree on.
-> 
-> See we absolutely do have the requirement of implementing coherent 
-> access without domain transitions for Vulkan and OpenGL+extensions.
-> 
-Coherent can mean 2 different things:
-1. CPU cached with snooping from the IO device
-2. CPU uncached
+No functional changes.
 
-The Vulkan and GL "coherent" uses are really coherent without explicit
-domain transitions, so on non coherent arches that require the
-transitions the only way to implement this is by making the memory CPU
-uncached. Which from a performance PoV will probably not be what app
-developers expect, but will still expose the correct behavior.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/nvmem/mtk-efuse.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> When we now have to introduce domain transitions to get non coherent 
-> access working we are essentially splitting all the drivers into 
-> coherent and non-coherent ones.
-> 
-> That doesn't sounds like it would improve interop.
-> 
-> > Remember that in a fully (not only IO) coherent system the CPU isn't
-> > the only agent that may cache the content you are trying to access
-> > here. The dirty cacheline could reasonably still be sitting in a GPU or
-> > VPU cache, so you need some way to clean those cachelines, which isn't
-> > a magic "importer knows how to call CPU cache clean instructions".
-> 
-> IIRC we do already have/had a SYNC_IOCTL for cases like this, but (I 
-> need to double check as well, that's way to long ago) this was kicked 
-> out because of the requirements above.
-> 
-The DMA_BUF_IOCTL_SYNC is available in upstream, with the explicit
-documentation that "userspace can not rely on coherent access".
-
-> > > You can of course use DMA-buf in an incoherent environment, but then you
-> > > can't expect that this works all the time.
-> > > 
-> > > This is documented behavior and so far we have bluntly rejected any of
-> > > the complains that it doesn't work on most ARM SoCs and I don't really
-> > > see a way to do this differently.
-> > Can you point me to that part of the documentation? A quick grep for
-> > "coherent" didn't immediately turn something up within the DMA-buf
-> > dirs.
-> 
-> Search for "cache coherency management". It's quite a while ago, but I 
-> do remember helping to review that stuff.
-> 
-That only turns up the lines in DMA_BUF_IOCTL_SYNC doc, which are
-saying the exact opposite of the DMA-buf is always coherent.
-
-I also don't see why you think that both world views are so totally
-different. We could just require explicit domain transitions for non-
-snoop access, which would probably solve your scanout issue and would
-not be a problem for most ARM systems, where we could no-op this if the
-buffer is already in uncached memory and at the same time keep the "x86
-assumes cached + snooped access by default" semantics.
-
-Regards,
-Lucas
-
+diff --git a/drivers/nvmem/mtk-efuse.c b/drivers/nvmem/mtk-efuse.c
+index e9a375dd84af..a08e0aedd21c 100644
+--- a/drivers/nvmem/mtk-efuse.c
++++ b/drivers/nvmem/mtk-efuse.c
+@@ -41,8 +41,7 @@ static int mtk_efuse_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	priv->base = devm_ioremap_resource(dev, res);
++	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+ 
+-- 
+2.35.1
 

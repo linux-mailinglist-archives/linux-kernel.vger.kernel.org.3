@@ -2,109 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E35558B88
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87904558B8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiFWXHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
+        id S230237AbiFWXIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiFWXHY (ORCPT
+        with ESMTP id S230166AbiFWXIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:07:24 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504885DF3B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656025643; x=1687561643;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9dK5AkiFzx6BZn0opH02USW8M+3ZT6QfoFeqIc0A1zU=;
-  b=lVWVIeGc3aKhpIxMOvFFGf+BBJJtl5rOQ4YH40XGz5uzPr8A6k4VE7B+
-   YJZOtvU7KLlfToxaxOC0yOtxxyWYOIyDex5rjrnwL/0d37J57qZcBdvJA
-   lxhsxOeI1vx0F5ycNqe3TDWReUemBiP/cqkzy6Sbbh7dx4UygSZrzantu
-   x1iTUbROlnliNW8mW5fJaOnfMitfq1uHdIfNHNjYxFXPi9XVAsSFF2Y3c
-   RzNJ6wub3csns76uOqwz+i1d6CWxer+5AL/0gQIJkhO8ucpVvDGrRkjb+
-   N8wX2Rmc7csBh1PYCZCmkqHrexLWxAJ1WPhBNqxulw7AlPcyDvulGPsfX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="306330217"
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="306330217"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 16:07:23 -0700
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="915421573"
-Received: from schen9-mobl.amr.corp.intel.com ([10.209.125.82])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 16:07:22 -0700
-Message-ID: <bacbf819cc7a8ad6c1ca2a668c412ec8ee2c6edc.camel@linux.intel.com>
-Subject: Re: [RFC PATCH 1/3] mm/memory-tiers Add functions for tier memory
- usage in a cgroup
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 23 Jun 2022 16:07:21 -0700
-In-Reply-To: <875ykuabth.fsf@linux.ibm.com>
-References: <cover.1655242024.git.tim.c.chen@linux.intel.com>
-         <94a10c772c50d378b81dad654476551bfc50e3d7.1655242024.git.tim.c.chen@linux.intel.com>
-         <875ykuabth.fsf@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Thu, 23 Jun 2022 19:08:04 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E93BCAD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:08:02 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id g4so1458003lfv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8W/oRQBAHexnfGyJ1VqjpiqHa9H+SQBCtE7ZQrUbWF0=;
+        b=n3yuIVtow+fK5FJOgLkxsupR+xKY4GMpqUpzFcRHGUYTiV2x9/maWvxtE7TktkaP3G
+         a/AtaLW5385h6qMstwIAv2Qoe5ijPpfGRxpJHR09wVPaUXaOzkGqCwJOxbtvyucGLPv2
+         KYYjc+KYyFfD/VhDqLHAbwbtLpBZ3ad+5RKIMCBGQugoFTvnS/wh1CP1xdN5yczq0FKI
+         c7aTFG8lrAslYH0TJhTbtgo1cz3EkSxHmHvd0b30Vm7R727jBAU5YpJcR3m4js7LM2Mu
+         URJ0cVlUP/QopMEP6Pg1vMRDD0we4SlF9cS0nCW3tEhdshcBXBjDFBdp0TNMITbHDBT3
+         fvxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8W/oRQBAHexnfGyJ1VqjpiqHa9H+SQBCtE7ZQrUbWF0=;
+        b=J09u3mZf0qyJHFoltvCzort4hpGyHWNg/YuF8j0SE95gxp4V/XPiV5LGYGbNvjnbkG
+         d8qfiY2+06Dr7JC6US9J+rxpL9StFFFLj/ftKL6H3Di6LgY0P5mC6wOA19Sqwd0Dm72s
+         FFAS3lrhTCjRahm4VOHu8CVt6StnaVwZLoPvOtCxekcOgYbw4OuUHv+Gaan2LSRNhySk
+         xNkmi2JpGtbVF0TLZAFt88b822iDizgCHRi2PBHhmIDe/FWWWW/NcLGuo1nMLjtVMr+v
+         A7TwjwDbBkJcPER9aJM4ltbK4Bfyz74ZWbL8WE8fx/+BiPsOBFNhtMwYasEAZzBxe/ft
+         AkYA==
+X-Gm-Message-State: AJIora8XgJPRAsMs/x51Yj4vaZH4rZCSFGr381dleZpFzuM/IBrQshb1
+        Z5Ns80TtZIKabDlLLK0y5k1FXZjyu5ml1lva4MC5EQ==
+X-Google-Smtp-Source: AGRyM1sGIvrP3CG9Kp2cvOPx0vUnT4oQEGxCAzgYgCA+DSul0RFshuZr9+rk6XZqIcJOLI+94LREMotxY1kayQVDp+w=
+X-Received: by 2002:a05:6512:1308:b0:47d:b9cc:ee88 with SMTP id
+ x8-20020a056512130800b0047db9ccee88mr6860281lfu.680.1656025681159; Thu, 23
+ Jun 2022 16:08:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220620150225.1307946-1-mw@semihalf.com> <20220620150225.1307946-9-mw@semihalf.com>
+ <YrDFmw4rziGQJCAu@lunn.ch> <CAJZ5v0g4q8N5wMgk7pRYpYoCLPQoH==Z+nrM0JLyFXSgF9y0+Q@mail.gmail.com>
+ <54618c2a-e1f3-bbd0-8fb2-1669366a3b59@gmail.com> <CAJZ5v0j3A-VYFgcnziSqejp-qJVbrbyFP40S-m9eYTv=H9J0ow@mail.gmail.com>
+ <YrQZOX4n0ZuTSANP@lunn.ch>
+In-Reply-To: <YrQZOX4n0ZuTSANP@lunn.ch>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Fri, 24 Jun 2022 01:07:52 +0200
+Message-ID: <CAPv3WKc9niXpgppT27weeW0A87zNEGvd2xLCyoXeXKuqqxWs6g@mail.gmail.com>
+Subject: Re: [net-next: PATCH 08/12] ACPI: scan: prevent double enumeration of
+ MDIO bus children
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-21 at 09:48 +0530, Aneesh Kumar K.V wrote:
-> Tim Chen <tim.c.chen@linux.intel.com> writes:
-> 
->  +unsigned long mem_cgroup_toptier_usage(struct mem_cgroup *memcg)
-> > +{
-> > +	struct memory_tier *top_tier;
-> > +
-> > +	top_tier = list_first_entry(&memory_tiers, struct memory_tier, list);
-> > +	if (top_tier)
-> > +		return mem_cgroup_memtier_usage(memcg, top_tier);
-> > +	else
-> > +		return 0;
-> > +}
-> 
-> As discussed here, we would want to consider all memory tiers that got
-> compute as top tier.
-> 
-> https://lore.kernel.org/linux-mm/11f94e0c50f17f4a6a2f974cb69a1ae72853e2be.camel@intel.com
-> 
-> V6 patchset actually walk the full memory tier hierarchy reverse and consider any
-> memory tier with higher or equal rank value than the first memory tier with CPU as top tier.
-> 
-> https://lore.kernel.org/linux-mm/20220610135229.182859-12-aneesh.kumar@linux.ibm.com
-> 
+czw., 23 cze 2022 o 09:42 Andrew Lunn <andrew@lunn.ch> napisa=C5=82(a):
+>
+> > And when the ACPI subsystem finds those device objects present in the
+> > ACPI tables, the mdio_device things have not been created yet and it
+> > doesn't know which ACPI device object will correspond to mdio_device
+> > eventually unless it is told about that somehow.  One way of doing
+> > that is to use a list of device IDs in the kernel.  The other is to
+> > have the firmware tell it about that which is what we are discussing.
+>
+> Device IDs is a complex subject with MDIO devices. It has somewhat
+> evolved over time, and it could also be that ACPI decides to do
+> something different, or simpler, to what DT does.
+>
+> If the device is an Ethernet PHY, and it follows C22, it has two
+> registers in a well defined location, which when combined give you a
+> vendor model and version. So we scan the bus, look at each address on
+> the bus, try to read these registers and if we don't get 0xffff back,
+> we assume it is a PHY, create an mdio_device, sub type it to
+> phy_device, and then load and probe the driver based on the ID
+> registers.
+>
+> If the device is using C45, we currently will not be able to enumerate
+> it this way. We have a number of MDIO bus drivers which don't
+> implement C45, but also don't return -EOPNOTSUPP. They will perform a
+> malformed C22 transaction, or go wrong in some other horrible way. So
+> in DT, we have a compatible string to indicate there is a C45 devices
+> at the address. We then do look around in the C45 address space at the
+> different locations where the ID registers can be, and if we get a
+> valid looking ID, probe the driver using that.
+>
+> We also have some chicken/egg problems. Some PHYs won't respond when
+> you read there ID registers until you have turned on clocks, disabled
+> reset lines, enable regulators etc. For these devices, we place the ID
+> as you would read from the ID registers in DT as the compatible
+> string. The mdio_device is created, sub-types as a PHY and the probe
+> happens using the ID register found in DT. The driver can then do what
+> it needs to do to get the device to respond on the bus.
+>
 
-Thanks.  Will take that into consideration for future patches.
+Currently the PHY detection (based on compatible string property in
+_DSD) and handling of both ACPI and DT paths are shared by calling the
+same routine fwnode_mdiobus_register_phy() and all the following
+generic code. No ID's involved.
 
-Tim
+With MDIOSerialBus property we can probably pass additional
+information about PHY's via one of the fields in _CRS, however, this
+will implicate deviating from the common code with DT. Let's discuss
+it under ECR.
 
+> Then we have devices on the bus which are not PHYs, but generic
+> mdio_devices. These are mostly Ethernet switches, but Broadcom have
+> some other MDIO devices which are not switches. For these, we have
+> compatible strings which identifies the device as a normal string,
+> which then probes the correct driver in the normal way for a
+> compatible string.
+
+_HID/_CID fields will be used for that, as in any other driver. In
+case Broadcom decides to support ACPI, they will have to define their
+own ACPI ID and update the relevant driver (extend struct mdio_driver
+with  .acpi_match_table field) - see patch 12/12 as an example.
+
+>
+> So giving the kernel a list of device IDs is not simple. I expect
+> dealing with this will be a big part of defining how MDIOSerialBus
+> works.
+>
+
+Actually the _HID/_CID fields values will still be required for the
+devices on the bus and the relevant drivers will use it for matching,
+which is analogous for the compatible string handling. The
+MDIOSerialBus _CRS macro will not be used for this purpose, same as
+already existing examples of I2CSerialBus or SPISerialBus (although
+the child devices use them, they also have _HID/_CID for
+identification).
+
+What we agreed for is to get rid of is a static list of MDIO
+controllers ID's, which I proposed in this patch, whose intention was
+to prevent its enumeration by the default ACPI scan routines, in case
+the device's parent is a listed MDIO bus. Instead, just the presence
+of MDIOSerialBus macro in the _CRS method of the child device will
+suffice to get it skipped at that point. Any other data in this macro
+will be in fact something extra that we can use for any purpose.
+
+Best regards,
+Marcin

@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B56E558187
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7572255839C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiFWRBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S234238AbiFWRcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbiFWQ5c (ORCPT
+        with ESMTP id S231173AbiFWR33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:57:32 -0400
+        Thu, 23 Jun 2022 13:29:29 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95BA4D260;
-        Thu, 23 Jun 2022 09:53:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7707C7FD21;
+        Thu, 23 Jun 2022 10:04:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A4A17CE25E6;
-        Thu, 23 Jun 2022 16:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CF7C3411B;
-        Thu, 23 Jun 2022 16:53:09 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D96F0CE25B2;
+        Thu, 23 Jun 2022 17:04:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE378C3411B;
+        Thu, 23 Jun 2022 17:04:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003189;
-        bh=1WHGREk6VpvGi11di3QakbO+TNb1GMaPkag3KyNvD1A=;
+        s=korg; t=1656003885;
+        bh=5kDImO9RoNMxTP1t0HIIHeJTH69GPGyd3ot5AYiBb+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1NrRNgKQsIFeLXihNVtWHIuCSAQQK1Z+jwmF82RJZ9UiOpY/MvKsN7WbMDrqnVCQg
-         5MM9AShyl2mq+dIkH+sQO0v5galUspTFwf2HH3rfdN0/WyU1jOdHw9xroRQ3P5Fz6N
-         v1rqupBS9WrCztzZiPFHIa/AjTKElWXwDXQuCJ60=
+        b=P9/E4Ts3c5UaTg1MWfSt7gi2T6SPUgWxylwWL8h89QZbZ7ULMb2gf74InZPAVa0fe
+         0eGuchY8RK72bd55XCvz2X2do/fyBdBMkuF6CZr5I2OlkvR6i4yrn2kLs4GtZzjMq+
+         jleaeM4aleshadXUQTvzeyEfdixYFzkV45P0fr7w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Eric Biggers <ebiggers@kernel.org>,
         Theodore Tso <tytso@mit.edu>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 158/264] random: do crng pre-init loading in worker rather than irq
-Date:   Thu, 23 Jun 2022 18:42:31 +0200
-Message-Id: <20220623164348.532986624@linuxfoundation.org>
+Subject: [PATCH 4.14 118/237] random: defer fast pool mixing to worker
+Date:   Thu, 23 Jun 2022 18:42:32 +0200
+Message-Id: <20220623164346.550065012@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,163 +62,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit c2a7de4feb6e09f23af7accc0f882a8fa92e7ae5 upstream.
+commit 58340f8e952b613e0ead0bed58b97b05bf4743c5 upstream.
 
-Taking spinlocks from IRQ context is generally problematic for
-PREEMPT_RT. That is, in part, why we take trylocks instead. However, a
-spin_try_lock() is also problematic since another spin_lock() invocation
-can potentially PI-boost the wrong task, as the spin_try_lock() is
-invoked from an IRQ-context, so the task on CPU (random task or idle) is
-not the actual owner.
+On PREEMPT_RT, it's problematic to take spinlocks from hard irq
+handlers. We can fix this by deferring to a workqueue the dumping of
+the fast pool into the input pool.
 
-Additionally, by deferring the crng pre-init loading to the worker, we
-can use the cryptographic hash function rather than xor, which is
-perhaps a meaningful difference when considering this data has only been
-through the relatively weak fast_mix() function.
+We accomplish this with some careful rules on fast_pool->count:
 
-The biggest downside of this approach is that the pre-init loading is
-now deferred until later, which means things that need random numbers
-after interrupts are enabled, but before workqueues are running -- or
-before this particular worker manages to run -- are going to get into
-trouble. Hopefully in the real world, this window is rather small,
-especially since this code won't run until 64 interrupts had occurred.
+  - When it's incremented to >= 64, we schedule the work.
+  - If the top bit is set, we never schedule the work, even if >= 64.
+  - The worker is responsible for setting it back to 0 when it's done.
 
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+There are two small issues around using workqueues for this purpose that
+we work around.
+
+The first issue is that mix_interrupt_randomness() might be migrated to
+another CPU during CPU hotplug. This issue is rectified by checking that
+it hasn't been migrated (after disabling irqs). If it has been migrated,
+then we set the count to zero, so that when the CPU comes online again,
+it can requeue the work. As part of this, we switch to using an
+atomic_t, so that the increment in the irq handler doesn't wipe out the
+zeroing if the CPU comes back online while this worker is running.
+
+The second issue is that, though relatively minor in effect, we probably
+want to make sure we get a consistent view of the pool onto the stack,
+in case it's interrupted by an irq while reading. To do this, we don't
+reenable irqs until after the copy. There are only 18 instructions
+between the cli and sti, so this is a pretty tiny window.
+
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Eric Biggers <ebiggers@kernel.org>
 Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Sultan Alsawaf <sultan@kerneltoast.com>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   65 ++++++++++++++------------------------------------
- 1 file changed, 19 insertions(+), 46 deletions(-)
+ drivers/char/random.c |   63 ++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 49 insertions(+), 14 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -442,10 +442,6 @@ static void crng_make_state(u32 chacha_s
-  * boot time when it's better to have something there rather than
-  * nothing.
-  *
-- * There are two paths, a slow one and a fast one. The slow one
-- * hashes the input along with the current key. The fast one simply
-- * xors it in, and should only be used from interrupt context.
-- *
-  * If account is set, then the crng_init_cnt counter is incremented.
-  * This shouldn't be set by functions like add_device_randomness(),
-  * where we can't trust the buffer passed to it is guaranteed to be
-@@ -454,19 +450,15 @@ static void crng_make_state(u32 chacha_s
-  * Returns the number of bytes processed from input, which is bounded
-  * by CRNG_INIT_CNT_THRESH if account is true.
-  */
--static size_t crng_pre_init_inject(const void *input, size_t len,
--				   bool fast, bool account)
-+static size_t crng_pre_init_inject(const void *input, size_t len, bool account)
- {
- 	static int crng_init_cnt = 0;
-+	struct blake2s_state hash;
- 	unsigned long flags;
+@@ -1173,9 +1173,10 @@ struct fast_pool {
+ 		u32 pool32[4];
+ 		u64 pool64[2];
+ 	};
++	struct work_struct mix;
+ 	unsigned long last;
++	atomic_t count;
+ 	u16 reg_idx;
+-	u8 count;
+ };
  
--	if (fast) {
--		if (!spin_trylock_irqsave(&base_crng.lock, flags))
--			return 0;
--	} else {
--		spin_lock_irqsave(&base_crng.lock, flags);
--	}
-+	blake2s_init(&hash, sizeof(base_crng.key));
- 
-+	spin_lock_irqsave(&base_crng.lock, flags);
- 	if (crng_init != 0) {
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
- 		return 0;
-@@ -475,21 +467,9 @@ static size_t crng_pre_init_inject(const
- 	if (account)
- 		len = min_t(size_t, len, CRNG_INIT_CNT_THRESH - crng_init_cnt);
- 
--	if (fast) {
--		const u8 *src = input;
--		size_t i;
--
--		for (i = 0; i < len; ++i)
--			base_crng.key[(crng_init_cnt + i) %
--				      sizeof(base_crng.key)] ^= src[i];
--	} else {
--		struct blake2s_state hash;
--
--		blake2s_init(&hash, sizeof(base_crng.key));
--		blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
--		blake2s_update(&hash, input, len);
--		blake2s_final(&hash, base_crng.key);
--	}
-+	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
-+	blake2s_update(&hash, input, len);
-+	blake2s_final(&hash, base_crng.key);
- 
- 	if (account) {
- 		crng_init_cnt += len;
-@@ -1030,7 +1010,7 @@ void add_device_randomness(const void *b
- 	unsigned long flags, now = jiffies;
- 
- 	if (crng_init == 0 && size)
--		crng_pre_init_inject(buf, size, false, false);
-+		crng_pre_init_inject(buf, size, false);
- 
- 	spin_lock_irqsave(&input_pool.lock, flags);
- 	_mix_pool_bytes(&cycles, sizeof(cycles));
-@@ -1151,7 +1131,7 @@ void add_hwgenerator_randomness(const vo
- 				size_t entropy)
- {
- 	if (unlikely(crng_init == 0)) {
--		size_t ret = crng_pre_init_inject(buffer, count, false, true);
-+		size_t ret = crng_pre_init_inject(buffer, count, true);
- 		mix_pool_bytes(buffer, ret);
- 		count -= ret;
- 		buffer += ret;
-@@ -1291,8 +1271,14 @@ static void mix_interrupt_randomness(str
- 	fast_pool->last = jiffies;
- 	local_irq_enable();
- 
--	mix_pool_bytes(pool, sizeof(pool));
--	credit_entropy_bits(1);
-+	if (unlikely(crng_init == 0)) {
-+		crng_pre_init_inject(pool, sizeof(pool), true);
-+		mix_pool_bytes(pool, sizeof(pool));
-+	} else {
-+		mix_pool_bytes(pool, sizeof(pool));
-+		credit_entropy_bits(1);
-+	}
-+
- 	memzero_explicit(pool, sizeof(pool));
+ /*
+@@ -1225,12 +1226,49 @@ static u32 get_reg(struct fast_pool *f,
+ 	return *ptr;
  }
  
-@@ -1325,24 +1311,11 @@ void add_interrupt_randomness(int irq)
++static void mix_interrupt_randomness(struct work_struct *work)
++{
++	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
++	u32 pool[4];
++
++	/* Check to see if we're running on the wrong CPU due to hotplug. */
++	local_irq_disable();
++	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
++		local_irq_enable();
++		/*
++		 * If we are unlucky enough to have been moved to another CPU,
++		 * during CPU hotplug while the CPU was shutdown then we set
++		 * our count to zero atomically so that when the CPU comes
++		 * back online, it can enqueue work again. The _release here
++		 * pairs with the atomic_inc_return_acquire in
++		 * add_interrupt_randomness().
++		 */
++		atomic_set_release(&fast_pool->count, 0);
++		return;
++	}
++
++	/*
++	 * Copy the pool to the stack so that the mixer always has a
++	 * consistent view, before we reenable irqs again.
++	 */
++	memcpy(pool, fast_pool->pool32, sizeof(pool));
++	atomic_set(&fast_pool->count, 0);
++	fast_pool->last = jiffies;
++	local_irq_enable();
++
++	mix_pool_bytes(pool, sizeof(pool));
++	credit_entropy_bits(1);
++	memzero_explicit(pool, sizeof(pool));
++}
++
+ void add_interrupt_randomness(int irq)
+ {
++	enum { MIX_INFLIGHT = 1U << 31 };
+ 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
+ 	struct pt_regs *regs = get_irq_regs();
+ 	unsigned long now = jiffies;
+ 	cycles_t cycles = random_get_entropy();
++	unsigned int new_count;
+ 
+ 	if (cycles == 0)
+ 		cycles = get_reg(fast_pool, regs);
+@@ -1250,12 +1288,13 @@ void add_interrupt_randomness(int irq)
+ 	}
+ 
  	fast_mix(fast_pool->pool32);
- 	new_count = ++fast_pool->count;
+-	++fast_pool->count;
++	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
++	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
  
--	if (unlikely(crng_init == 0)) {
--		if (new_count >= 64 &&
--		    crng_pre_init_inject(fast_pool->pool32, sizeof(fast_pool->pool32),
--					 true, true) > 0) {
+ 	if (unlikely(crng_init == 0)) {
+-		if (fast_pool->count >= 64 &&
++		if (new_count >= 64 &&
+ 		    crng_fast_load(fast_pool->pool32, sizeof(fast_pool->pool32)) > 0) {
 -			fast_pool->count = 0;
--			fast_pool->last = now;
--			if (spin_trylock(&input_pool.lock)) {
--				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
--				spin_unlock(&input_pool.lock);
--			}
--		}
--		return;
--	}
++			atomic_set(&fast_pool->count, 0);
+ 			fast_pool->last = now;
+ 			if (spin_trylock(&input_pool.lock)) {
+ 				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+@@ -1265,20 +1304,16 @@ void add_interrupt_randomness(int irq)
+ 		return;
+ 	}
+ 
+-	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
++	if (new_count & MIX_INFLIGHT)
+ 		return;
+ 
+-	if (!spin_trylock(&input_pool.lock))
++	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
+ 		return;
+ 
+-	fast_pool->last = now;
+-	_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+-	spin_unlock(&input_pool.lock);
 -
- 	if (new_count & MIX_INFLIGHT)
- 		return;
+-	fast_pool->count = 0;
+-
+-	/* Award one bit for the contents of the fast pool. */
+-	credit_entropy_bits(1);
++	if (unlikely(!fast_pool->mix.func))
++		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
++	atomic_or(MIX_INFLIGHT, &fast_pool->count);
++	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
  
--	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
-+	if (new_count < 64 && (!time_after(now, fast_pool->last + HZ) ||
-+			       unlikely(crng_init == 0)))
- 		return;
- 
- 	if (unlikely(!fast_pool->mix.func))
 
 

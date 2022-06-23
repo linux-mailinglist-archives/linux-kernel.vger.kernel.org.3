@@ -2,172 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81155589D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207605589D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiFWUHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S229551AbiFWUKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiFWUHI (ORCPT
+        with ESMTP id S229449AbiFWUJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:07:08 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C11B15826
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:07:05 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n10so240250plp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iv5jva5TUOt2ku2nB7C0OTsUP7d83IExGKqGEiymvsc=;
-        b=e1F6IgK+yYSsHs8pHQthv2V6RjdQQldw5p5m1hjIJdzXou3wx7+X4vB23gfg5Hwmgc
-         AY/p1NkQWT6Xv76NktOc7f49to6KwwLUZsTKaxW8DpsjtfWPo9BjR6HPlgNdE3W0ddvW
-         Z0gwq4RYiXQPgDLn6AO5FUfjWPEpD0JpLU3ydxlfIoOTWVO0zzWvnu8enNYS1jIvQ8G9
-         Au+Q7jZfh2S2qABO1HrBiXSi23MpL8HpwONA2bwCIwA7C28d5rAjm1Unc7xcJUaQ//ui
-         nAr/4XQUU7S9+1TeBPY39D7mexDzfj95Zi6CWTthGSWUDYIGMbTyzsVkRfLPuGsP71c7
-         tP5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iv5jva5TUOt2ku2nB7C0OTsUP7d83IExGKqGEiymvsc=;
-        b=YdpR9ltk01dOrDEeIIQwF64DkQmZ3PUNvk/9DKsPk3K1VOXWWoCR58oGk+S1LGblLd
-         As4rmto1KzyadR2/9zdDozHcEdLL73Cw+2phBN3P3AEJOHMld1CUqxFhBDGjcgyC/5RX
-         KwFymNHjlbt9b363zO5CEj5xtFMIK2l1b5ZzRVqIEuiv0IgXzDuP5heUFuogl0voTFrT
-         yarGtKQkgKavCbO7GcQVjkoVsmLYuUemrLCGCYH1QSgLgkDAfrG6E6WVPCwfhaSZDu10
-         JMUI5Ls3xgXGYv9MEFi3esBCd1lMHPEMrtZA7nAunrZ+zLp66mM3dXhb8hIlOnZ4oPQK
-         30sg==
-X-Gm-Message-State: AJIora+eeEJE6G1I62fs58TnWPEYc+fDBhQvlPCHoEp1iCUAzQoh1aB8
-        IdkcXOF9ELyhFKIwm7tFjqIaTg==
-X-Google-Smtp-Source: AGRyM1t7UmjSfrw8HFzilsNA3C/f4EmxNXPzQ2pS+mk2EDomXk1Yc1oDdfr7iKBQ0z8tLOvc9qqoRw==
-X-Received: by 2002:a17:90b:4a92:b0:1e8:2c09:d008 with SMTP id lp18-20020a17090b4a9200b001e82c09d008mr5734848pjb.169.1656014824610;
-        Thu, 23 Jun 2022 13:07:04 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id w16-20020a1709026f1000b0016160b3331bsm168701plk.305.2022.06.23.13.07.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 13:07:04 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 20:07:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>
-Subject: Re: [PATCH 4/4] kvm/x86: Allow to respond to generic signals during
- slow page faults
-Message-ID: <YrTH5ARKVEmy1bUj@google.com>
-References: <20220622213656.81546-1-peterx@redhat.com>
- <20220622213656.81546-5-peterx@redhat.com>
- <YrR8sKap6KHT22Dx@google.com>
- <YrS/kegBGqsSLO7y@xz-m1.local>
+        Thu, 23 Jun 2022 16:09:59 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A444EA0A;
+        Thu, 23 Jun 2022 13:09:57 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 1901F1C0C05; Thu, 23 Jun 2022 22:09:55 +0200 (CEST)
+Date:   Thu, 23 Jun 2022 22:09:54 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/11] 5.10.125-rc1 review
+Message-ID: <20220623200954.GA15759@duo.ucw.cz>
+References: <20220623164322.296526800@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
 Content-Disposition: inline
-In-Reply-To: <YrS/kegBGqsSLO7y@xz-m1.local>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220623164322.296526800@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022, Peter Xu wrote:
-> Hi, Sean,
-> 
-> On Thu, Jun 23, 2022 at 02:46:08PM +0000, Sean Christopherson wrote:
-> > On Wed, Jun 22, 2022, Peter Xu wrote:
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index e92f1ab63d6a..b39acb7cb16d 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-> > >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> > >  			       unsigned int access)
-> > >  {
-> > > +	/* NOTE: not all error pfn is fatal; handle intr before the other ones */
-> > > +	if (unlikely(is_intr_pfn(fault->pfn))) {
-> > > +		vcpu->run->exit_reason = KVM_EXIT_INTR;
-> > > +		++vcpu->stat.signal_exits;
-> > > +		return -EINTR;
-> > > +	}
-> > > +
-> > >  	/* The pfn is invalid, report the error! */
-> > >  	if (unlikely(is_error_pfn(fault->pfn)))
-> > >  		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
-> > > @@ -4017,6 +4024,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > >  		}
-> > >  	}
-> > >  
-> > > +	/* Allow to respond to generic signals in slow page faults */
-> > 
-> > "slow" is being overloaded here.  The previous call __gfn_to_pfn_memslot() will
-> > end up in hva_to_pfn_slow(), but because of passing a non-null async it won't wait.
-> > This code really should have a more extensive comment irrespective of the interruptible
-> > stuff, now would be a good time to add that.
-> 
-> Yes I agree, especially the "async" parameter along with "atomic" makes it
-> even more confusing as you said.  But isn't that also means the "slow" here
-> is spot-on?  I mean imho it's the "elsewhere" needs cleanup not this
-> comment itself since it's really stating the fact that this is the real
-> slow path?
 
-No, because atomic=false here, i.e. KVM will try hva_to_pfn_slow() if hva_to_pfn_fast()
-fails.  So even if we agree that the "wait for IO" path is the true slow path,
-when reading KVM code the vast, vast majority of developers will associate "slow"
-with hva_to_pfn_slow().
+--/04w6evG8XlLl3ft
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Or any other suggestions greatly welcomed on how I should improve this
-> comment.
+Hi!
 
-Something along these lines?
+> This is the start of the stable review cycle for the 5.10.125 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-	/*
-	 * Allow gup to bail on pending non-fatal signals when it's also allowed
-	 * to wait for IO.  Note, gup always bails if it is unable to quickly
-	 * get a page and a fatal signal, i.e. SIGKILL, is pending.
-	 */
-> 
-> > 
-> > Comments aside, isn't this series incomplete from the perspective that there are
-> > still many flows where KVM will hang if gfn_to_pfn() gets stuck in gup?  E.g. if
-> > KVM is retrieving a page pointed at by vmcs12.
-> 
-> Right.  The thing is I'm not confident I can make it complete easily in one
-> shot..
-> 
-> I mentioned some of that in cover letter or commit message of patch 1, in
-> that I don't think all the gup call sites are okay with being interrupted
-> by a non-fatal signal.
-> 
-> So what I want to do is doing it step by step, at least by introducing
-> FOLL_INTERRUPTIBLE and having one valid user of it that covers a very valid
-> use case.  I'm also pretty sure the page fault path is really the most
-> cases that will happen with GUP, so it already helps in many ways for me
-> when running with a patched kernel.
-> 
-> So when the complete picture is non-trivial to achieve in one shot, I think
-> this could be one option we go for.  With the facility (and example code on
-> x86 slow page fault) ready, hopefully we could start to convert many other
-> call sites to be signal-aware, outside page faults, or even outside x86,
-> because it's really a more generic problem, which I fully agree.
-> 
-> Does it sound reasonable to you?
+CIP testing did not find any problems here:
 
-Yep.  In fact, I'd be totally ok keeping this to just the page fault path.  I
-missed one cruicial detail on my first read through: gup already bails on SIGKILL,
-it's only these technically-not-fatal signals that gup ignores by default.  In
-other words, using FOLL_INTERRUPTIBLE is purely opportunsitically as userspace
-can always resort to SIGKILL if the VM really needs to die.
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
 
-It would be very helpful to explicit call that out in the changelog, that way
-it's (hopefully) clear that KVM uses FOLL_INTERRUPTIBLE to be user friendly when
-it's easy to do so, and that it's not required for correctness/robustness.
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--/04w6evG8XlLl3ft
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYrTIkgAKCRAw5/Bqldv6
+8nFDAKCzYN6C6V4MH62/HN4qXu78nYLg6ACbBO37pvPCumk0+b0omGD10r3Yfyw=
+=pymW
+-----END PGP SIGNATURE-----
+
+--/04w6evG8XlLl3ft--

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EB655849A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52B3558237
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiFWRo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S232521AbiFWRL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiFWRiX (ORCPT
+        with ESMTP id S230199AbiFWRKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:38:23 -0400
+        Thu, 23 Jun 2022 13:10:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3E4527E5;
-        Thu, 23 Jun 2022 10:09:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17924B841;
+        Thu, 23 Jun 2022 09:57:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC8DF61D18;
-        Thu, 23 Jun 2022 17:09:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA25C3411B;
-        Thu, 23 Jun 2022 17:09:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9908260FFA;
+        Thu, 23 Jun 2022 16:57:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA8BC3411B;
+        Thu, 23 Jun 2022 16:57:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004140;
-        bh=Ot3Q6uO03UhYryp1ilXcGYzTa38wFdlGT/ePez9+IT8=;
+        s=korg; t=1656003454;
+        bh=bLc/uzwhwumxTQr/g8oSJE2ipqPDTrjDSdcBHWUxshE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N22aCom4gH/XkM/q7zj6SjBns1w67kJJXuuSMG8WSyvuhmvzfHXYlZNKmXoIIfCbe
-         HlIXacg9AaymKegCc5aeFqNgEU0apKH5OVY+fpgq//VxqP7pjDtxY+JlRjAlHgDtj5
-         SbfzltACpphsdkxs+6hTvH4B91GBNIszhqR14aB8=
+        b=ukwqiv+3mqtxPhWE53wCHjZKMrYTSCVmij41KJeyWCnH9AYVtX9aR8auWEwdsZ0BV
+         HtWYYCgDwUZRtyWMAj6awR2Nw7Mz2LyZmiPKJXKkPTTTlfU/HjKXxjPt7q0Jx1GWjv
+         sx+JwPSVYrDVfQxMfwkbL2nhGxPKiqDLUcc2STOg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 201/237] scsi: lpfc: Fix port stuck in bypassed state after LIP in PT2PT topology
-Date:   Thu, 23 Jun 2022 18:43:55 +0200
-Message-Id: <20220623164348.929953663@linuxfoundation.org>
+        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 243/264] USB: serial: option: add support for Cinterion MV31 with new baseline
+Date:   Thu, 23 Jun 2022 18:43:56 +0200
+Message-Id: <20220623164350.948874350@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Slark Xiao <slark_xiao@163.com>
 
-[ Upstream commit 336d63615466b4c06b9401c987813fd19bdde39b ]
+commit 158f7585bfcea4aae0ad4128d032a80fec550df1 upstream.
 
-After issuing a LIP, a specific target vendor does not ACC the FLOGI that
-lpfc sends.  However, it does send its own FLOGI that lpfc ACCs.  The
-target then establishes the port IDs by sending a PLOGI.  lpfc PLOGI_ACCs
-and starts the RPI registration for DID 0x000001.  The target then sends a
-LOGO to the fabric DID.  lpfc is currently treating the LOGO from the
-fabric DID as a link down and cleans up all the ndlps.  The ndlp for DID
-0x000001 is put back into NPR and discovery stops, leaving the port in
-stuck in bypassed mode.
+Adding support for Cinterion device MV31 with Qualcomm
+new baseline. Use different PIDs to separate it from
+previous base line products.
+All interfaces settings keep same as previous.
 
-Change lpfc behavior such that if a LOGO is received for the fabric DID in
-PT2PT topology skip the lpfc_linkdown_port() routine and just move the
-fabric DID back to NPR.
+Below is test evidence:
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  6 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00b8 Rev=04.14
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00B8 USB Mobile Broadband
+S:  SerialNumber=90418e79
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-Link: https://lore.kernel.org/r/20220603174329.63777-7-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+T:  Bus=03 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  7 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00b9 Rev=04.14
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00B9 USB Mobile Broadband
+S:  SerialNumber=90418e79
+C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+
+For PID 00b8, interface 3 is GNSS port which don't use serial driver.
+
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Link: https://lore.kernel.org/r/20220601034740.5438-1-slark_xiao@163.com
+[ johan: rename defines using a "2" infix ]
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/lpfc/lpfc_nportdisc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/serial/option.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index da6685700b04..70733d751bb8 100644
---- a/drivers/scsi/lpfc/lpfc_nportdisc.c
-+++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -662,7 +662,8 @@ lpfc_rcv_logo(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 	else
- 		lpfc_els_rsp_acc(vport, ELS_CMD_ACC, cmdiocb, ndlp, NULL);
- 	if (ndlp->nlp_DID == Fabric_DID) {
--		if (vport->port_state <= LPFC_FDISC)
-+		if (vport->port_state <= LPFC_FDISC ||
-+		    vport->fc_flag & FC_PT2PT)
- 			goto out;
- 		lpfc_linkdown_port(vport);
- 		spin_lock_irq(shost->host_lock);
--- 
-2.35.1
-
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -430,6 +430,8 @@ static void option_instat_callback(struc
+ #define CINTERION_PRODUCT_CLS8			0x00b0
+ #define CINTERION_PRODUCT_MV31_MBIM		0x00b3
+ #define CINTERION_PRODUCT_MV31_RMNET		0x00b7
++#define CINTERION_PRODUCT_MV31_2_MBIM		0x00b8
++#define CINTERION_PRODUCT_MV31_2_RMNET		0x00b9
+ #define CINTERION_PRODUCT_MV32_WA		0x00f1
+ #define CINTERION_PRODUCT_MV32_WB		0x00f2
+ 
+@@ -1953,6 +1955,10 @@ static const struct usb_device_id option
+ 	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET, 0xff),
+ 	  .driver_info = RSVD(0)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_2_MBIM, 0xff),
++	  .driver_info = RSVD(3)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_2_RMNET, 0xff),
++	  .driver_info = RSVD(0)},
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
+ 	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
 
 

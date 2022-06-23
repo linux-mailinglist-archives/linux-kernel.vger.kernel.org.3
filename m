@@ -2,142 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6898F5577C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2E45577C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiFWKX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S229970AbiFWKYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiFWKXV (ORCPT
+        with ESMTP id S229987AbiFWKYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:23:21 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D732BB0E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:23:19 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25N6g0vx009481;
-        Thu, 23 Jun 2022 10:23:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=q2xPT9aYNv3n8ZfbCyQkPK3lG0v/KfOw17OG2y43ouA=;
- b=ogFjMWkgSgfJ5U2G3Ic3PdulQz1HuEa+/oSvr6TRLQePXV3hdxfSfujPnGM+/yBmVtJu
- hfo9spOKYMA0jOXwO5sQOVggo/3wtp7x3x+zTvbBgFzJGQOLCw9hI/vulVU1stK2DdEc
- /fW9DXLOhLWvSF4x67VJ6E3xtCeVuWAsaBxLD1/zy8qF9vgpXJtmXce9VRZjcvG8EK6O
- HxF9x648hHwkQ10ei7ylPsBPMJjPURW+IUZfwu3R0D5P4GFH/pMvrXpLN63dNPpREiWv
- zWnYkbDKfyKvqhqrYFsZCiCSNMNUTuRfYnBW2e0g8M4IGEjOnQMjAwIg46+QfcC2W3bc 1g== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs5g22uqt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jun 2022 10:23:13 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25NAGvOM014412;
-        Thu, 23 Jun 2022 10:23:12 GMT
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2049.outbound.protection.outlook.com [104.47.74.49])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gtf5egyuf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jun 2022 10:23:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WtQ2XYYidpJTLAd05SrqrOz+PeQxyjOeJMN6cnlGvDWyIYYX14Xvyt3ZJtfSi93lzxi4u81PzXMOXGqVMQ5CxbdCsw/0Nf7nptLOMA8LCTYG2Dnp1v8cH3VTkY0SzdH8c8zTqOmEelxN+tpuwD+fs+DgFE+3cC7+pLdRz77n1Nb2TnoFtrO1A2zBqvwZmflwGu/n3X84rgEKIzePgt+BpYxVgsvISVhoJgyJi4+IlEwhJhVVSkS6SEHnO23c9UuzE+571KzedBW3xt+DjakU8j1sRbjKEklVCGNNh3Bd9dWgXBnVxs/IgYKJuD1dIXPQzgkZlohFKgpvbE7Cu0dDyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q2xPT9aYNv3n8ZfbCyQkPK3lG0v/KfOw17OG2y43ouA=;
- b=lIhk7uBxMCrpbfpFu51V+2PT/+UgCu344ND/2weRwrjVFI+0JzLXZzekzATd+JeO+5tKbgAhqQ+/a+MYiDbmN4BUswekbjRYntBdwsM+XbOI6WlCSr5k7qMZa0YZDTxXWfQntk6iw3n1kJF6Zr3Q2GMZsB1gF1li4OSjeJcReZ17418RjiCWteqRtJ5xYiY2rAJ8G7j1nW3BeWsihX790FMmCzUdqcG+t/kMcifmH1xcuTll7alsIwpJ1ubu59h6BnCQJA4mCognO9PblxKO8UYrbhJED5AO+7ndd4Tto5mJ/pCsK/MmBZFTf0sxay5beb2pqpTjGS0LgLey0WsSCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q2xPT9aYNv3n8ZfbCyQkPK3lG0v/KfOw17OG2y43ouA=;
- b=QGQEQMGZRtwi5sVvmepJWZq4uBbKgnfsagwJ7gC1Yxt7gzHFDcQw4U/fRi35YYVI8H+VggX/iTQTtM0v6HN+/Yi0wxLbFR/jbyEOqQutBpzH6Z7054m8l+rTQ18TcCM3wG4rlX91MyBqsS1IRpGTsqT6GOzK4DAsyfgwP1wwC7Y=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CH0PR10MB5228.namprd10.prod.outlook.com
- (2603:10b6:610:db::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Thu, 23 Jun
- 2022 10:23:10 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5373.015; Thu, 23 Jun 2022
- 10:23:09 +0000
-Date:   Thu, 23 Jun 2022 13:22:52 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Felix Schlepper <f3sch.git@outlook.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] Staging: rtl8192e: Safer allocation and cleaner
- error handling
-Message-ID: <20220623102252.GR16517@kadam>
-References: <AM9P190MB1299A41E3A9B2F9C0916A260A5B59@AM9P190MB1299.EURP190.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM9P190MB1299A41E3A9B2F9C0916A260A5B59@AM9P190MB1299.EURP190.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0071.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::22)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Thu, 23 Jun 2022 06:24:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57FE31391;
+        Thu, 23 Jun 2022 03:24:13 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LTGTs4XkFz686kD;
+        Thu, 23 Jun 2022 18:20:17 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 23 Jun 2022 12:24:11 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 23 Jun
+ 2022 11:24:10 +0100
+Date:   Thu, 23 Jun 2022 11:24:08 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        "Vishal Verma" <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V11 3/8] PCI: Create PCI library functions in support of
+ DOE mailboxes.
+Message-ID: <20220623112408.00006cd2@Huawei.com>
+In-Reply-To: <YrOy3vodu3FcRjUY@iweiny-desk3>
+References: <20220610202259.3544623-1-ira.weiny@intel.com>
+        <20220610202259.3544623-4-ira.weiny@intel.com>
+        <62ad06a643ddf_844b1294f@dwillia2-xfh.notmuch>
+        <YrObe+AdfziEPlYB@iweiny-desk3>
+        <62b39e5eead1_32f38a294b6@dwillia2-xfh.notmuch>
+        <YrOy3vodu3FcRjUY@iweiny-desk3>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 03c6afe5-6f46-45d2-b747-08da55025eaf
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5228:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR10MB522862A5BFDA65443947BAFD8EB59@CH0PR10MB5228.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LEOspOEfy2uW7Rem813Pv0EQX6wIKQNjAMOOingogO8pXQ8V8d5ELbxa6bkOV2MDPkLZrS2ZsbpGttlIKcEgMLXz+uKpMSFVxopL/hp4zBzR0zdoSwa6HRRDjG0tQ+qsUbVKxpJXGoCRBxs8sq3mqT4QVrHY36lNWxHy2iZPc9a8/4b0I9xesWeM1V3TNJjpJBoVUGXtt22G6kdg6DvjYgRNkcNRxypV+3d12xhrd2uophFZgKQWC1oKbHaT2vMw1+iW24pTvRj+gIZyeP7jZNvzH9B6rMWPkYPPEa3e8qA05nmt/8HWa2OtWLEW8EwoOqoD04zfEGxqgLN7Dorl6U3081PhC+KFfUeQW+5zU1ZJIVkAI/NT+gcWXY3MxvxAP/QNTUJDBvBvuMI7NFFKhlbdV/Aa4hua3ytKpwaiR9SDQS0eBnnI9J4N78uN/tYXF9iikG42tfu0xf/AfOWpy6AYzbxXKfD0K9WIJ4bXvLtHcJckgO/fS8A5XdCgHiA/fUzqk0TblO9pmP2rf73oyj7n61XIqZpb5ytp2OHwAwF67+JrSWuVqGWNra+frauhrZf6K47NeeUphwO2pGF147VGz6tyYd+3u4GpiPuSkfm2X/MRKNZVdTip4hFGCJvRnFOkHX/XWzvmBF8X8C2IoCYPQM0Tgf1/uOtGjiNXubnt5Obmtu8H+ChiGQPAzxj/PYCNUoT9EXVJa63DBUnIXUGzSIcDKI8rdoEjPi4TUHlCpoP3Fd0yzQq26x70B2BU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(39860400002)(366004)(136003)(346002)(376002)(33716001)(4270600006)(186003)(26005)(1076003)(9686003)(66556008)(558084003)(33656002)(41300700001)(6512007)(66946007)(6506007)(2906002)(6666004)(38100700002)(52116002)(44832011)(86362001)(6916009)(6486002)(8936002)(8676002)(38350700002)(4326008)(316002)(5660300002)(478600001)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tjdna2gumW+8D/JzEfrDKss234rtt/QUa5wCxKbIIXnTo8Kh3PQfv2AtBpWn?=
- =?us-ascii?Q?Qi/xxWY3iVbu589b5TS6fv9svse/kA6p6o83SiwlVZzIuwX2+3nNjmTpNoA4?=
- =?us-ascii?Q?iXcIVeXDpoJCLyWdgNslAqIcVScJXU+jsKtKyc/x8oGmupAZoxRoPRAtMN86?=
- =?us-ascii?Q?wEMDbZDHQyfqhz3d1TT84QDXL2kR/n6JW8LJhj+28M+LFHFwu/rw3K02SxNM?=
- =?us-ascii?Q?Td/p0XpiZRsbK50UP5Cmk0I2MedRioJGMUUa5mZYq0w7cWmq0cpNdU6f6QEJ?=
- =?us-ascii?Q?aU8WuINXBeJFuUglpy/87gXhaeO7pjWsSPIBvs6SIRqTtm2ogtqhuk4SmgPI?=
- =?us-ascii?Q?ZZne6dxwOb2eITrVfVc6ktQypS2PpxxdWj6n2XM6vDmb+es9XP+k0emTuKF2?=
- =?us-ascii?Q?OPkwm5crqIyFG/0bQvReAs/5qFRXf/dfI9o7KSMj7Ud1M08V70V08ZIj4YtM?=
- =?us-ascii?Q?57VOYy1tC8U4iSa8qDzcrDXahIly7TlEaZtZqFolx4h1QneRB12A04i4GfHZ?=
- =?us-ascii?Q?4+x2nk/TXIECTRVCr85DTLDOnm1I7qXXpMHjXkFLTwp07twRXZHASmPLI9Sb?=
- =?us-ascii?Q?ntHgwp4W/OhT+xschz5OdsIbBak9BRvKdpYQoaDiQWlrA74It+DlZ0ZJRS/R?=
- =?us-ascii?Q?BLe4ey2Yn8vknibtEJB0rGfEC9wcjyA8WrT+cuUbcp41ZDgKBJVUWeX5/M0c?=
- =?us-ascii?Q?tl4sPWhKIAvHSn0fyXazOnIStkdaZTpbEIX5N0TzLBzwcXddieQ4mrz+bpze?=
- =?us-ascii?Q?L1kqAAlx+MtQlVGCXoRYmvaCkIk97QQAkbPj50aVeNF2DMMpb73ef7CpKyTB?=
- =?us-ascii?Q?ryBLxx3X9B/farc4/+lS5mKYMYzI/NOw0C4t4IcJVwYKtxzjwM43RiChkNtx?=
- =?us-ascii?Q?jJTvnrF7qdliHhS3rKhtLJTgNHdLA4BCsmZC1kAFsMtkIi+6+lmtFyBmq2vM?=
- =?us-ascii?Q?LS7P36Kf4jEiS82LxbEYGVDMsWVOwm4iBIyJcTknfkUSjxPc6W4vT34bj/Bh?=
- =?us-ascii?Q?v7x5mvO5fN8O5fSM40zzSj3OxlbJ1Fc7dy3d+sfjbDL+5+cu91ukhZ3tH8OA?=
- =?us-ascii?Q?MHAfbrTJquLmL9s5NLf2LMvarNlnmcc2Q+0KXpQTTPdxJgGXeNPpPH5YYcq2?=
- =?us-ascii?Q?xl/h4/H/Ho6WTgO+kr8srFLvdMioJeyHwieSsEJ7FplK/z/baN9cEmGI7oGp?=
- =?us-ascii?Q?CeJ/utvRw7yeNtPW4STce7G205FznpjNx78I7LaE/LSwh4NO2Yjl7gj/0/Q2?=
- =?us-ascii?Q?8xb80VvwdJgzfqJ+j/1naBXo34jmpAOX1bUZIDku4ZEQz21iPSCJ5uJ5lFAw?=
- =?us-ascii?Q?hY7viKkKk42pgi4KoQlRjvWOgLucCKARXHRYZIKK3ykbCnKMoAT9w/wlL5N0?=
- =?us-ascii?Q?3+O+EbNUunAYcpyL3iS6giAy/XVUYApEfenBOkmo3g39QSxlVFmNiRucTw5E?=
- =?us-ascii?Q?I4pfBkZeW2Fe+yQclMvu82i5uX6CCAQg8MyX8t5UKpvtlMc9a1jLJo6j5kcW?=
- =?us-ascii?Q?5HTGTFPqDV4c0CL8/2XVwIeli93tL3amj3nZjBViHexobWtD/tPJa0T44SKQ?=
- =?us-ascii?Q?/ScJ2alH2rGV72Pss/eIoMZ8xI0RICpOzlkwsxqVoFudSVS6ChUpw2WhgxPu?=
- =?us-ascii?Q?Ng=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03c6afe5-6f46-45d2-b747-08da55025eaf
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 10:23:09.6653
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Sg+Bz0m5kEe8KX+ZB+U60Loltxgk1YbPX+iRKeHdcywDCximlP4ihRN4zsQItBDk8z1X7Apf+yWsHM/Org6Ceufn/56Y19JaAlD2vwodOjo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5228
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-23_05:2022-06-23,2022-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 suspectscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206230042
-X-Proofpoint-GUID: 6BJ5TuLvjk8EZjJcbN086tCLeNZdZht6
-X-Proofpoint-ORIG-GUID: 6BJ5TuLvjk8EZjJcbN086tCLeNZdZht6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -145,10 +65,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks!
+On Wed, 22 Jun 2022 17:25:02 -0700
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> On Wed, Jun 22, 2022 at 03:57:34PM -0700, Dan Williams wrote:
+> > Ira Weiny wrote:  
+> > > On Fri, Jun 17, 2022 at 03:56:38PM -0700, Dan Williams wrote:  
+> > [..]  
+> > > > > +static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
+> > > > > +			     u8 *protocol)
+> > > > > +{
+> > > > > +	u32 request_pl = FIELD_PREP(PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX,
+> > > > > +				    *index);
+> > > > > +	u32 response_pl;
+> > > > > +	DECLARE_COMPLETION_ONSTACK(c);
+> > > > > +	struct pci_doe_task task = {
+> > > > > +		.prot.vid = PCI_VENDOR_ID_PCI_SIG,
+> > > > > +		.prot.type = PCI_DOE_PROTOCOL_DISCOVERY,
+> > > > > +		.request_pl = &request_pl,
+> > > > > +		.request_pl_sz = sizeof(request_pl),
+> > > > > +		.response_pl = &response_pl,
+> > > > > +		.response_pl_sz = sizeof(response_pl),
+> > > > > +		.complete = pci_doe_task_complete,
+> > > > > +		.private = &c,
+> > > > > +	};
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	ret = pci_doe_submit_task(doe_mb, &task);
+> > > > > +	if (ret < 0)
+> > > > > +		return ret;
+> > > > > +
+> > > > > +	wait_for_completion(&c);  
+> > > > 
+> > > > Another place where the need for a completion can be replaced with
+> > > > flush_work().  
+> > > 
+> > > No not here.  While this call is internal it is actually acting like an
+> > > external caller.  This specific wait is for that response to get back.
+> > > 
+> > > This pattern was specifically asked for by you.  Previously Jonathan had a
+> > > synchronous call which took care of this but you said let all callers just
+> > > handle it themselves.  So all callers submit a task and if they want to wait
+> > > for the response they have to do so themselves.  
+> > 
+> > Ah, true I remember that. The nice thing about a doing your own
+> > wait_for_completion() like this is that you can make it
+> > wait_for_completion_interruptible() to give up on the DOE if it gets
+> > stalled. However, if you have a work item per-task and you're willing to
+> > do an uninterruptible sleep, then flush_work(&task->work) is identical.  
+> 
+> So when you mentioned a work item per task I really jumped on that idea.  But I
+> realize now that it is a bit more complicated than that.
+> 
+> Currently a work item is actually one step of the state machine.  The state
+> machine queues the next step of work as a new work item.
+> 
+> I'm going to have to change the state machine quite a bit.  I still agree with
+> the one work item per task but it is going to take a bit of work to get the
+> state machine to operate within that single task.
+> 
+> I don't like what might result if I layer a work queue on top of using the
+> system work queue for the individual steps of the state machine.  So stay
+> tuned.
 
-regards,
-dan carpenter
+Yup.  I went through that (between RFC v1 and RFC v2) and it wasn't pretty
+- maybe it's worth a revisit though.
+
+To throw another view point in the mix. Note that I want a solution and
+in my view DOE is slow and never on a fast path + I don't see it being
+high churn code so needs to be fairly maintainable but not super simple
+or architecturally clean (at the level of state machines / work queues etc
+- interfaces need to be clean!)
+
+If we go back to RFC v1, which IIRC was basically queue on a mutex, and
+consider it in the light of where we've ended up.  I wussed out on arguing much
+about this at the time because consensus + moving forward was more
+important to me than the chosen architecture.
+
+Taking a slightly black and white view of requirements. I don't think
+we loose anything by using this list...
+
+1. Synchronous (if anyone needs async at level of caller, they can spin
+   a thread up).  Async is the corner case, not the common one.
+2. Small number (< 3 I'm guessing) of protocols per instance.
+3. Very rare there is significant contention.  Fairness doesn't matter.
+   Normally the only reason we'd get contention is userspace triggering
+   access to multiple protocols at a time - probably via sysfs or other slow
+   method.
+4. Per protocol ordering can be maintained by the protocol, not the DOE layer.
+5. DOE is basically a bus over which we are talking to different devices
+  - think of it like I2C but rather than address we have protocol IDs.
+
+That last analogy brings us back to how I think almost all slow buses are
+handled.
+
+At level of a bus, a lock is used for mutual exclusion (often also protecting
+bus controller register state etc). No workqueues or similar complexity
+- Underlying hardware typically doing DMA of result into a provided buffer
+with only one transaction in flight at that layer at anyone time.
+Note there is more complex handling for high perf cases, but in many cases
+its not really used.
+
+We have a bus lock that can ensure exclusion over sequences if necessary
+(there's one in SPI).
+
+If a given driver needs to ensure exclusion for RMW or similar sequences
+of operations it takes a driver specific mutex and holds it across these
+sequences of slow operations, which usually sleep, include interrupts and all
+sorts of fun.  Normally there is a completion in there somewhere to
+get from the 'done' interrupt on the bus controller back to the
+i2c_smbus_bus_read() etc that is waiting on the result.
+
+This model works, is super simple and layered.
+
+In case of no contention (perhaps 99% of time), it immediately runs the
+DOE/bus access in the thread that made the read/write request.
+So no overhead of going to a workqueue.  
+
+Implementation is one linear function, no state machine needed.
+
+Anyhow, to refer back to my initial comment.  I'm not that fussed on how
+we do this but it's a blocker on other work so quick solution is more
+important to me than perfect one.
+
+Jonathan
+
+
+
+
+
+> 
+> Ira
 

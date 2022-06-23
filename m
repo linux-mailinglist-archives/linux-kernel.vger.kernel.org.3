@@ -2,131 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB91955890E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BA7558919
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiFWTfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S231382AbiFWTfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiFWTeq (ORCPT
+        with ESMTP id S230436AbiFWTet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:34:46 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B11467E5C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:15:54 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id d5so714166yba.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:15:54 -0700 (PDT)
+        Thu, 23 Jun 2022 15:34:49 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFDA67E7A;
+        Thu, 23 Jun 2022 12:16:29 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t24so645518lfr.4;
+        Thu, 23 Jun 2022 12:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=icBv02YthTFvrtUFWz0nh/9bhPVkmRsemm78ezrfeog=;
-        b=O+7rr+XqABJcGtIev7QuTB6drGNOp0FepFlPL9QPhSNPXGIt3f7U4DTmMg9xIEHhKZ
-         uTsyrzAeqt3Tu0JjNpXw1NwLXmH8BI895ef+JPO5kn8Lr2RsyoARbK33Ko1ZYta+uF3e
-         VkUFUxb84/ecefpxjKQWFURfIRjRbjiFwBW6w=
+        bh=eRoo8gwukGSsHOsbRrXr9T/EZLikeGS+5uPgeGWMFmY=;
+        b=ST8X3DX1V4jN7py9xmmJbgHpdlBUOunm1IpWgc8EDD+21t2KOvL1AbFEvpx3KTG/HU
+         fvCU47npbo864gJ2mAHOCTgn3Sq/MSzoPTqZh7ffYwZGVqSPq2hQKl2VDd4l+2lbhbiN
+         afKv8O17+ALKX/JnZHgUsRD2GSb5Qa0rEc8bGZ663yewBzXbo8I/fdKhmkBipgQJJ+Kt
+         k7YkLI6mVlz43u8wpg3G1yqT4ZMjKPrt+4oxM5IRaxQfHh6PNQWik/PSywtNkfAWQ/qY
+         l/LAo2VqSPLJMO7qjswmXMiWkaGUdkZGhhsbReU5IOtCKOGD4c9VdlRWFJ8nTrKzpS7i
+         RTdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=icBv02YthTFvrtUFWz0nh/9bhPVkmRsemm78ezrfeog=;
-        b=6gn8ttPqf2BjyB9JrxjwrZsvIC5rd/z7U3G5gc6atdL6h+kJFXRUiQh8okOKEf/sgS
-         L4J65LF7ryonlFYa2o9GKsWkTRK02yAaNaP3rnHHms/t3inWCCl5KgRf4EpVMnYCWJ9s
-         TGlPBmtBNUUguGxbgw9eQgbO2H4l/AG/edTpVMgstayQu5ZS8oFCK+NahMBM4ugHu/hI
-         Im3hCLbVsv5kSbMOD01H2phvVq9lqcZr9MN2oAgmEmFIYZ4WnZhA5pYx6EGlUoR/1KR9
-         TUoish/wyprSRYN2SgWv/XpKvD71UpkI4xB3TtuhtudIrmjln2GygLIpLBaQAdH9bwHr
-         sAHQ==
-X-Gm-Message-State: AJIora+/lIAPvDYKm+P6h/zq6fw7fU4Ow5AUhPahwLxFtw2ufeeB7nn3
-        /7a+rorf7DlNchuoDWjRpVbnw9vPgQ0eSDjiaY7yRw==
-X-Google-Smtp-Source: AGRyM1vo9eclvYKWlnI8Z1IzhZDtiALcpS4DTk5sKAvdnhcBIHH5/5ayi+8XWmysWgoIxmF1Fz9B2bQ3stMqDTeW3yQ=
-X-Received: by 2002:a25:540a:0:b0:669:b4cb:41d7 with SMTP id
- i10-20020a25540a000000b00669b4cb41d7mr3084875ybb.196.1656011753251; Thu, 23
- Jun 2022 12:15:53 -0700 (PDT)
+        bh=eRoo8gwukGSsHOsbRrXr9T/EZLikeGS+5uPgeGWMFmY=;
+        b=hDY4NyxDY3Vz2SuB9ae1seVvVKzuuXScJYFhcsHw48N45tZL5OyiqV1bPuzYV7aPZm
+         tQmZopJV1q9coadSVXLxK0CSQdY60MGZMo0JXuVeuHF/hw0/h4DYu4tuorbI8P44LK+J
+         BqGiEDQxhYKGV5ja+GDiVX0DyFhaIN9+4sFISSPF5DMOMo6Oj2wVd+B+gB+DfC+0UU1F
+         6QaoMnv8rPr8NWpikVFHNDU7121cSgrEi6lClPkktntZmvmIHb9Nd6MC5yejfSYlzcVd
+         /xD0QpC9x84Y8wI0kzIteRiiPyx8ODsKH8s5EACkr/F/4Rt6yFz7By6u338uO5pfUEbt
+         pAGA==
+X-Gm-Message-State: AJIora9uFyjTUsSNxkmSGjo280NPTJOULmCdm/hZ8klycPeRmCL46wHx
+        y7GixWmWiZPoke1/T60FYGe9GPmqJ9LyPey6e/U=
+X-Google-Smtp-Source: AGRyM1sMrZfy8H6ui6CHsvGYbX7zEbqSrILUBfkOGZnMQ6pGuJoonGzKSDkBggS72kyQnnVsOb4hcs8ihF4IsdRO9Wc=
+X-Received: by 2002:a05:6512:ea5:b0:47f:785c:7031 with SMTP id
+ bi37-20020a0565120ea500b0047f785c7031mr6549249lfb.35.1656011787996; Thu, 23
+ Jun 2022 12:16:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-7-pmalani@chromium.org> <CAE-0n51d4S3T+_f+YXsu3es7AMxuyFORSXFQe2LTSkZB4C56Ng@mail.gmail.com>
- <CACeCKaduttgNfxyzE2_7eD1N4NLNp_8J1EaWTnn+eqp+_P-i1A@mail.gmail.com> <CAE-0n53Y4pe3TvNQVKZsqLU4cA-Vs4zH3HHV5U97W_6qCNsEow@mail.gmail.com>
-In-Reply-To: <CAE-0n53Y4pe3TvNQVKZsqLU4cA-Vs4zH3HHV5U97W_6qCNsEow@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 23 Jun 2022 12:15:42 -0700
-Message-ID: <CACeCKaem-b5ePtkeR2njS9ZgX3Ez1GViArPxS92fk7eF0=NmFA@mail.gmail.com>
-Subject: Re: [PATCH v5 6/9] dt/bindings: drm/bridge: it6505: Add mode-switch support
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Robert Foss <robert.foss@linaro.org>,
+References: <20220623170844.2189814-1-marcus.folkesson@gmail.com> <20220623170844.2189814-10-marcus.folkesson@gmail.com>
+In-Reply-To: <20220623170844.2189814-10-marcus.folkesson@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 23 Jun 2022 21:15:51 +0200
+Message-ID: <CAHp75Vf7=Pk7T8ysrFS9u1sKQXUpqczGJkaeX-MLbwpx-iM2rg@mail.gmail.com>
+Subject: Re: [PATCH 10/10] iio: adc: mcp3911: add support to set PGA
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 12:08 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On Thu, Jun 23, 2022 at 7:41 PM Marcus Folkesson
+<marcus.folkesson@gmail.com> wrote:
 >
-> Quoting Prashant Malani (2022-06-23 11:37:08)
-> > On Thu, Jun 23, 2022 at 11:24 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> > >
-> > > Quoting Prashant Malani (2022-06-22 10:34:35)
-> > > > From: Pin-Yen Lin <treapking@chromium.org>
-> > > >
-> > > > ITE IT6505 can be used in systems to switch USB Type-C DisplayPort
-> > > > alternate mode lane traffic between 2 Type-C ports.
-> > >
-> > > How does it work? From what I can tell from the information I find when
-> > > googling this part[1] and looking at the existing binding doc is that
-> > > this device is a DPI to DP bridge, and it outputs DP (probably 4 lanes
-> > > of it?). Does the 2 type-c port design work by transmitting DP on two
-> > > lanes of DP for one type-c port and another two lanes of DP for the
-> > > other type-c port?
-> > >
-> > > DP could be one lane, so if this device is able to output one lane on
-> > > any output differential pair then I suspect it could support 4 type-c
-> > > ports if the hardware engineer connected it that way. Can you confirm my
-> > > suspicion?
-> >
-> > I will let Pin-Yen comment re: this hardware, but 1-lane DP is not a
-> > supported Type-C Pin assignment
-> > (as per VESA DP Alternate Mode Spec version 2.0 [2]), so the H/W
->
-> Some missing link?
+> Add support for setting the Programmable Gain Amplifiers by adjust the
+> scale value.
 
-My bad. I tried to find a publicly accessible link to the DP altmode
-spec, but it
-seems like one needs to be a VESA member to access it :/
+...
 
->
-> > configuration you are suggesting shouldn't be possible.
-> >
->
-> Alright, cool. But it is possible in the DP spec. So it seems like if
-> this is connected to 4 DP connectors it could be used to mux between DP
-> on 4 DP ports.
+> +       int ret = mcp3911_read(adc, MCP3911_REG_GAIN, val, 1);
+> +
+> +       if (ret)
+> +               return ret;
 
-Ack. In that case, no "typec-switches" should be added to the DT.
+Please split the assignment.
+
+  int ret;
+
+  ret = ...
+  if (ret)
+
+
+...
+
+> +       *val >>= channel * 3;
+> +       *val &= 0x07;
+
+GENMASK() ?
+
+> +       *val = (1 << *val);
+
+Unneeded parentheses, perhaps BIT()?
+
+...
+
+> +                               ret = mcp3911_update(adc, MCP3911_REG_GAIN,
+> +                                               MCP3911_GAIN_MASK(channel->channel),
+> +                                               MCP3911_GAIN_VAL(channel->channel,
+> +                                                       i), 1);
+
+This is not good indentation, at least i), should be on the previous line.
+
+...
+
+> +static int mcp3911_calc_scale_table(struct mcp3911 *adc)
+> +{
+> +       u32 ref = MCP3911_INT_VREF_MV;
+> +       u32 div;
+
+> +       int ret = 0;
+
+Useless assignment.
+
+> +       int tmp0, tmp1;
+> +       s64 tmp2;
+> +
+> +       if (adc->vref) {
+> +               ret = regulator_get_voltage(adc->vref);
+> +               if (ret < 0) {
+> +                       dev_err(&adc->spi->dev,
+> +                               "failed to get vref voltage: %d\n",
+> +                              ret);
+
+> +                       goto out;
+
+Return directly.
+
+> +               }
+> +
+> +               ref = ret / 1000;
+> +       }
+> +
+> +       /*
+> +        * For 24bit Conversion
+> +        * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
+> +        * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
+> +        */
+> +
+> +       /* ref = Reference voltage
+> +        * div = (2^23 * 1.5 * gain) = 12582912 * gain
+> +        */
+> +       for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
+> +               div = 12582912 * BIT(i);
+> +               tmp2 = div_s64((s64)ref * 1000000000LL, div);
+> +               tmp1 = div;
+> +               tmp0 = (int)div_s64_rem(tmp2, 1000000000, &tmp1);
+> +
+> +               mcp3911_scale_table[i][0] = 0;
+> +               mcp3911_scale_table[i][1] = tmp1;
+> +       }
+
+> +out:
+
+The useless label.
+
+> +       return ret;
+
+return 0;
+
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko

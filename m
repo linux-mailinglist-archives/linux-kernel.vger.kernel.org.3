@@ -2,92 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318CA558AC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0804C558AD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiFWVae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S229649AbiFWViH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFWVab (ORCPT
+        with ESMTP id S230251AbiFWViD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:30:31 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CF35251E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:30:29 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id y10-20020a9d634a000000b006167f7ce0c5so505277otk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kqoxMpiX3Gf231GDDR9G1b2VInfGIDsRQZcWz3Knh/w=;
-        b=duKobLilhDL22sXP3vyLSU2BHZyOr2DEfkeMxf1DgR3Y/mj/UVxd0/FjJUWSHAAhF4
-         XTmHTTtJ09Tc1kjquB/l2p06WXyLcldCI7l+B1aOGxHYCGylgl5hK/cz8djVlrS99/Nr
-         peXeW1qWKBk2LQb9EaWYmlaQtVSHHNeozxFZ7bisTPZYO06jVn/y8jw5yMvtmv9QQGvW
-         29rCl/n6tRgPnRQHVL6RARL+BabO2B3TUqdT8CbdsbKSLtDlnLif4+yL93OesaPwN8ct
-         z14R8ml2C+fezKONoCirxhP//Xcsvd2aU3wfL+yQgZyNsA7xlKXGztw4TdQ2Fwe/OGE6
-         fseA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kqoxMpiX3Gf231GDDR9G1b2VInfGIDsRQZcWz3Knh/w=;
-        b=QyhNwLteIlROnJEWlFE00Y0FMETIyoVsJPS2hpqwz8BaaAiZayBP8k+Q99fxxNZmI9
-         JqYjcTfeDL6xvkF8fR74u+So7bRg24IeENkI9OG4eCDYeN0oWF8Sb1fUUNgY+fElLPCu
-         2J9sbaKhQie9NK/qJPNhqsV4y/uOBwO6tlunWUWjYbXS5JpY6FUqh3lTfTPFsfPZgUSU
-         02Lbfl9HKxKhrJc+lUsZVls3GSBSuAc25Kru8mwSBo/wRQtdGDtFx+jGaMD62sg5367f
-         NnkvoBon2vXHkkG/ZaAgskdOFKpFKX6rryJk+2lEsHjRda3LVRgkfoWD9G3aY2/7Xy+E
-         6PFQ==
-X-Gm-Message-State: AJIora+gFm26uB3iuzym833D+aTCcx71wbEspyDpAEqc3dHr7NAQEKLW
-        fjG1aZed9vr0RHLlQC24XhMl4P+pd6ZfT3Q6LSdHmQ==
-X-Google-Smtp-Source: AGRyM1veXOvim13DoOcVFPocfJu+YK8saHoB9/PkjheoBqMOiwNRF5W/rzCDzSmOj5ZWh6liga9mLs9vDiTICXpTFwY=
-X-Received: by 2002:a9d:5888:0:b0:606:10d2:2fc1 with SMTP id
- x8-20020a9d5888000000b0060610d22fc1mr4691492otg.29.1656019828771; Thu, 23 Jun
- 2022 14:30:28 -0700 (PDT)
+        Thu, 23 Jun 2022 17:38:03 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56B1B78D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:38:00 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id E9AA8240108
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:37:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1656020278; bh=o+zEnjZneqzTskv0wxGKR7oSFYyBticMFCftbUGH1Ig=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fDhojbkUqGTnsp5YKlJUpWEjbmepgeiSxyaVB9ZcMowt5cbfP8JsahOhMee9x6Ou2
+         Rba2VMlwScFo+pE9IxammdExCoh3jT2OrGo5nufTnLxCY2fkkRB8jJgRCMFC9JQQbB
+         Wcqly3lwK8A9zGZAZNub0uqYhKpYRjzmc9qbVpsAew1mgtuybrQnBAADm4KKdSUGpw
+         ZWWE+UTC3jfIwQJdUgAJ62tXxy2TzPOCpVHh0oOVSfWwWZeXlE37rHD5ElwNQu7txQ
+         cfyzF54z8pjhhBhFwL1fNSzWhua8e0iYhb6Qj80vLkbNXDxs0qVuIcGznwLeXLsddA
+         BxnT7G5w7s+3A==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4LTYWp2XHgz6tmR;
+        Thu, 23 Jun 2022 23:37:58 +0200 (CEST)
+Date:   Thu, 23 Jun 2022 21:37:06 +0000
+From:   Tom Schwindl <schwindl@posteo.de>
+To:     corbet@lwn.net
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] docs: driver-api: gpio: Fix some typos
+Message-ID: <YrTdAv3YPlCiDr2u@posteo.de>
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <8f63961f00fd170ba0e561f499292175f3155d26.1655761627.git.ashish.kalra@amd.com>
-In-Reply-To: <8f63961f00fd170ba0e561f499292175f3155d26.1655761627.git.ashish.kalra@amd.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Thu, 23 Jun 2022 14:30:17 -0700
-Message-ID: <CAA03e5E==P_Ua6UBz+ZBBMkmhSpacZR-z+5OvObpErk09xCfuA@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Roth, Michael" <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,176 +51,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 4:02 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
->
-> From: Brijesh Singh <brijesh.singh@amd.com>
->
-> The snp_lookup_page_in_rmptable() can be used by the host to read the RMP
-> entry for a given page. The RMP entry format is documented in AMD PPR, see
-> https://bugzilla.kernel.org/attachment.cgi?id=296015.
->
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/include/asm/sev.h | 27 ++++++++++++++++++++++++
->  arch/x86/kernel/sev.c      | 43 ++++++++++++++++++++++++++++++++++++++
->  include/linux/sev.h        | 30 ++++++++++++++++++++++++++
->  3 files changed, 100 insertions(+)
->  create mode 100644 include/linux/sev.h
->
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index 9c2d33f1cfee..cb16f0e5b585 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -9,6 +9,7 @@
->  #define __ASM_ENCRYPTED_STATE_H
->
->  #include <linux/types.h>
-> +#include <linux/sev.h>
->  #include <asm/insn.h>
->  #include <asm/sev-common.h>
->  #include <asm/bootparam.h>
-> @@ -84,6 +85,32 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
->
->  /* RMP page size */
->  #define RMP_PG_SIZE_4K                 0
-> +#define RMP_TO_X86_PG_LEVEL(level)     (((level) == RMP_PG_SIZE_4K) ? PG_LEVEL_4K : PG_LEVEL_2M)
-> +
-> +/*
-> + * The RMP entry format is not architectural. The format is defined in PPR
-> + * Family 19h Model 01h, Rev B1 processor.
-> + */
-> +struct __packed rmpentry {
-> +       union {
-> +               struct {
-> +                       u64     assigned        : 1,
-> +                               pagesize        : 1,
-> +                               immutable       : 1,
-> +                               rsvd1           : 9,
-> +                               gpa             : 39,
-> +                               asid            : 10,
-> +                               vmsa            : 1,
-> +                               validated       : 1,
-> +                               rsvd2           : 1;
-> +               } info;
-> +               u64 low;
-> +       };
-> +       u64 high;
-> +};
-> +
-> +#define rmpentry_assigned(x)   ((x)->info.assigned)
-> +#define rmpentry_pagesize(x)   ((x)->info.pagesize)
->
->  #define RMPADJUST_VMSA_PAGE_BIT                BIT(16)
->
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index 25c7feb367f6..59e7ec6b0326 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -65,6 +65,8 @@
->   * bookkeeping, the range need to be added during the RMP entry lookup.
->   */
->  #define RMPTABLE_CPU_BOOKKEEPING_SZ    0x4000
-> +#define RMPENTRY_SHIFT                 8
-> +#define rmptable_page_offset(x)        (RMPTABLE_CPU_BOOKKEEPING_SZ + (((unsigned long)x) >> RMPENTRY_SHIFT))
->
->  /* For early boot hypervisor communication in SEV-ES enabled guests */
->  static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
-> @@ -2386,3 +2388,44 @@ static int __init snp_rmptable_init(void)
->   * available after subsys_initcall().
->   */
->  fs_initcall(snp_rmptable_init);
-> +
-> +static struct rmpentry *__snp_lookup_rmpentry(u64 pfn, int *level)
-> +{
-> +       unsigned long vaddr, paddr = pfn << PAGE_SHIFT;
-> +       struct rmpentry *entry, *large_entry;
-> +
-> +       if (!pfn_valid(pfn))
-> +               return ERR_PTR(-EINVAL);
-> +
-> +       if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> +               return ERR_PTR(-ENXIO);
+Correct some simple spelling mistakes in consumer.rst, driver.rst
+and using-gpio.rst.
 
-nit: I think we should check if SNP is enabled first, before doing
-anything else. In other words, I think we should move this check above
-the `!pfn_valid()` check.
+Signed-off-by: Tom Schwindl <schwindl@posteo.de>
+---
+ Documentation/driver-api/gpio/consumer.rst   | 2 +-
+ Documentation/driver-api/gpio/driver.rst     | 6 +++---
+ Documentation/driver-api/gpio/using-gpio.rst | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-> +
-> +       vaddr = rmptable_start + rmptable_page_offset(paddr);
-> +       if (unlikely(vaddr > rmptable_end))
-> +               return ERR_PTR(-ENXIO);
+diff --git a/Documentation/driver-api/gpio/consumer.rst b/Documentation/driver-api/gpio/consumer.rst
+index 72bcf5f5e3a2..de6fc79ad6f0 100644
+--- a/Documentation/driver-api/gpio/consumer.rst
++++ b/Documentation/driver-api/gpio/consumer.rst
+@@ -114,7 +114,7 @@ For a function using multiple GPIOs all of those can be obtained with one call::
+ 
+ This function returns a struct gpio_descs which contains an array of
+ descriptors.  It also contains a pointer to a gpiolib private structure which,
+-if passed back to get/set array functions, may speed up I/O proocessing::
++if passed back to get/set array functions, may speed up I/O processing::
+ 
+ 	struct gpio_descs {
+ 		struct gpio_array *info;
+diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/driver-api/gpio/driver.rst
+index 70ff43ac4fcc..6baaeab79534 100644
+--- a/Documentation/driver-api/gpio/driver.rst
++++ b/Documentation/driver-api/gpio/driver.rst
+@@ -119,7 +119,7 @@ GPIO lines with debounce support
+ Debouncing is a configuration set to a pin indicating that it is connected to
+ a mechanical switch or button, or similar that may bounce. Bouncing means the
+ line is pulled high/low quickly at very short intervals for mechanical
+-reasons. This can result in the value being unstable or irqs fireing repeatedly
++reasons. This can result in the value being unstable or irqs firing repeatedly
+ unless the line is debounced.
+ 
+ Debouncing in practice involves setting up a timer when something happens on
+@@ -219,7 +219,7 @@ use a trick: when a line is set as output, if the line is flagged as open
+ drain, and the IN output value is low, it will be driven low as usual. But
+ if the IN output value is set to high, it will instead *NOT* be driven high,
+ instead it will be switched to input, as input mode is high impedance, thus
+-achieveing an "open drain emulation" of sorts: electrically the behaviour will
++achieving an "open drain emulation" of sorts: electrically the behaviour will
+ be identical, with the exception of possible hardware glitches when switching
+ the mode of the line.
+ 
+@@ -642,7 +642,7 @@ In this case the typical set-up will look like this:
+ 
+ As you can see pretty similar, but you do not supply a parent handler for
+ the IRQ, instead a parent irqdomain, an fwnode for the hardware and
+-a funcion .child_to_parent_hwirq() that has the purpose of looking up
++a function .child_to_parent_hwirq() that has the purpose of looking up
+ the parent hardware irq from a child (i.e. this gpio chip) hardware irq.
+ As always it is good to look at examples in the kernel tree for advice
+ on how to find the required pieces.
+diff --git a/Documentation/driver-api/gpio/using-gpio.rst b/Documentation/driver-api/gpio/using-gpio.rst
+index 64c8d3f76c3a..894d88855d73 100644
+--- a/Documentation/driver-api/gpio/using-gpio.rst
++++ b/Documentation/driver-api/gpio/using-gpio.rst
+@@ -44,7 +44,7 @@ These devices will appear on the system as ``/dev/gpiochip0`` thru
+ found in the kernel tree ``tools/gpio`` subdirectory.
+ 
+ For structured and managed applications, we recommend that you make use of the
+-libgpiod_ library. This provides helper abstractions, command line utlities
++libgpiod_ library. This provides helper abstractions, command line utilities
+ and arbitration for multiple simultaneous consumers on the same GPIO chip.
+ 
+ .. _libgpiod: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
+-- 
+2.36.1
 
-nit: It would be nice to use a different error code here, from the SNP
-feature check. That way, if this function fails, it's easier to
-diagnose where the function failed from the error code.
-
-> +
-> +       entry = (struct rmpentry *)vaddr;
-> +
-> +       /* Read a large RMP entry to get the correct page level used in RMP entry. */
-> +       vaddr = rmptable_start + rmptable_page_offset(paddr & PMD_MASK);
-> +       large_entry = (struct rmpentry *)vaddr;
-> +       *level = RMP_TO_X86_PG_LEVEL(rmpentry_pagesize(large_entry));
-> +
-> +       return entry;
-> +}
-> +
-> +/*
-> + * Return 1 if the RMP entry is assigned, 0 if it exists but is not assigned,
-> + * and -errno if there is no corresponding RMP entry.
-> + */
-> +int snp_lookup_rmpentry(u64 pfn, int *level)
-> +{
-> +       struct rmpentry *e;
-> +
-> +       e = __snp_lookup_rmpentry(pfn, level);
-> +       if (IS_ERR(e))
-> +               return PTR_ERR(e);
-> +
-> +       return !!rmpentry_assigned(e);
-> +}
-> +EXPORT_SYMBOL_GPL(snp_lookup_rmpentry);
-> diff --git a/include/linux/sev.h b/include/linux/sev.h
-> new file mode 100644
-> index 000000000000..1a68842789e1
-> --- /dev/null
-> +++ b/include/linux/sev.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * AMD Secure Encrypted Virtualization
-> + *
-> + * Author: Brijesh Singh <brijesh.singh@amd.com>
-> + */
-> +
-> +#ifndef __LINUX_SEV_H
-> +#define __LINUX_SEV_H
-> +
-> +/* RMUPDATE detected 4K page and 2MB page overlap. */
-> +#define RMPUPDATE_FAIL_OVERLAP         7
-> +
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +int snp_lookup_rmpentry(u64 pfn, int *level);
-> +int psmash(u64 pfn);
-> +int rmp_make_private(u64 pfn, u64 gpa, enum pg_level level, int asid, bool immutable);
-> +int rmp_make_shared(u64 pfn, enum pg_level level);
-
-nit: I think the declarations for `psmash()`, `rmp_make_private()`,
-and `rmp_make_shared()` should be introduced in the patches that have
-their definitions.
-
-> +#else
-> +static inline int snp_lookup_rmpentry(u64 pfn, int *level) { return 0; }
-> +static inline int psmash(u64 pfn) { return -ENXIO; }
-> +static inline int rmp_make_private(u64 pfn, u64 gpa, enum pg_level level, int asid,
-> +                                  bool immutable)
-> +{
-> +       return -ENODEV;
-> +}
-> +static inline int rmp_make_shared(u64 pfn, enum pg_level level) { return -ENODEV; }
-> +
-> +#endif /* CONFIG_AMD_MEM_ENCRYPT */
-> +#endif /* __LINUX_SEV_H */
-> --
-> 2.25.1
->

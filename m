@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B655558336
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3B95580CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbiFWR0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S231875AbiFWQxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiFWRZu (ORCPT
+        with ESMTP id S233892AbiFWQvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:25:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7265160E16;
-        Thu, 23 Jun 2022 10:02:37 -0700 (PDT)
+        Thu, 23 Jun 2022 12:51:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D62510B6;
+        Thu, 23 Jun 2022 09:50:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B26160AD7;
-        Thu, 23 Jun 2022 17:02:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB81C3411B;
-        Thu, 23 Jun 2022 17:02:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0508461FC0;
+        Thu, 23 Jun 2022 16:50:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4AE5C3411B;
+        Thu, 23 Jun 2022 16:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003735;
-        bh=fyk1c3FroVDVmsJqooBiVsy0716rDl9nxmrUILbei6I=;
+        s=korg; t=1656003049;
+        bh=4GR8oyKWM2/BqiosT7l6ARfU3jo4/zYyoHEZ3xTwUSM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=buFCKzL7njXvaAF9yTIm5jeSAUZumGIdPAZ8yvCJhyHcP4cfp0tzV9SzAT993UnBP
-         oXQ9kjHAlPoAexFocRGuwcrKqzirxn51W4j9rWJplV6z8uReRcL8VUXHWXSMdQFxAf
-         LlmuZMeoFNTxr18rOZXmCICZk0ctxUq4/hXnNhr0=
+        b=bSeq7QrrL6epUDwxra2YTPoYg2DG/7Bmx7UNtjrw77+LGEOEZKGGvhHPS/7MoeGha
+         aWTnDor6wB/gZCs4UAg1ru+JMEc0MB7/yKsgoAv7K4tA+Lb8P1VIk0HUW3rfn0nRlh
+         S7kFBh320IatfsW/ahSWN8pYWzn6kdHkv6Jqgs4A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 070/237] random: dont reset crng_init_cnt on urandom_read()
-Date:   Thu, 23 Jun 2022 18:41:44 +0200
-Message-Id: <20220623164345.168119294@linuxfoundation.org>
+Subject: [PATCH 4.9 112/264] random: use linear min-entropy accumulation crediting
+Date:   Thu, 23 Jun 2022 18:41:45 +0200
+Message-Id: <20220623164347.238513365@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +57,285 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 6c8e11e08a5b74bb8a5cdd5cbc1e5143df0fba72 upstream.
+commit c570449094844527577c5c914140222cb1893e3f upstream.
 
-At the moment, urandom_read() (used for /dev/urandom) resets crng_init_cnt
-to zero when it is called at crng_init<2. This is inconsistent: We do it
-for /dev/urandom reads, but not for the equivalent
-getrandom(GRND_INSECURE).
+30e37ec516ae ("random: account for entropy loss due to overwrites")
+assumed that adding new entropy to the LFSR pool probabilistically
+cancelled out old entropy there, so entropy was credited asymptotically,
+approximating Shannon entropy of independent sources (rather than a
+stronger min-entropy notion) using 1/8th fractional bits and replacing
+a constant 2-2/√𝑒 term (~0.786938) with 3/4 (0.75) to slightly
+underestimate it. This wasn't superb, but it was perhaps better than
+nothing, so that's what was done. Which entropy specifically was being
+cancelled out and how much precisely each time is hard to tell, though
+as I showed with the attack code in my previous commit, a motivated
+adversary with sufficient information can actually cancel out
+everything.
 
-(And worse, as Jason pointed out, we're only doing this as long as
-maxwarn>0.)
+Since we're no longer using an LFSR for entropy accumulation, this
+probabilistic cancellation is no longer relevant. Rather, we're now
+using a computational hash function as the accumulator and we've
+switched to working in the random oracle model, from which we can now
+revisit the question of min-entropy accumulation, which is done in
+detail in <https://eprint.iacr.org/2019/198>.
 
-crng_init_cnt is only read in crng_fast_load(); it is relevant at
-crng_init==0 for determining when to switch to crng_init==1 (and where in
-the RNG state array to write).
+Consider a long input bit string that is built by concatenating various
+smaller independent input bit strings. Each one of these inputs has a
+designated min-entropy, which is what we're passing to
+credit_entropy_bits(h). When we pass the concatenation of these to a
+random oracle, it means that an adversary trying to receive back the
+same reply as us would need to become certain about each part of the
+concatenated bit string we passed in, which means becoming certain about
+all of those h values. That means we can estimate the accumulation by
+simply adding up the h values in calls to credit_entropy_bits(h);
+there's no probabilistic cancellation at play like there was said to be
+for the LFSR. Incidentally, this is also what other entropy accumulators
+based on computational hash functions do as well.
 
-As far as I understand:
+So this commit replaces credit_entropy_bits(h) with essentially `total =
+min(POOL_BITS, total + h)`, done with a cmpxchg loop as before.
 
- - crng_init==0 means "we have nothing, we might just be returning the same
-   exact numbers on every boot on every machine, we don't even have
-   non-cryptographic randomness; we should shove every bit of entropy we
-   can get into the RNG immediately"
- - crng_init==1 means "well we have something, it might not be
-   cryptographic, but at least we're not gonna return the same data every
-   time or whatever, it's probably good enough for TCP and ASLR and stuff;
-   we now have time to build up actual cryptographic entropy in the input
-   pool"
- - crng_init==2 means "this is supposed to be cryptographically secure now,
-   but we'll keep adding more entropy just to be sure".
+What if we're wrong and the above is nonsense? It's not, but let's
+assume we don't want the actual _behavior_ of the code to change much.
+Currently that behavior is not extracting from the input pool until it
+has 128 bits of entropy in it. With the old algorithm, we'd hit that
+magic 128 number after roughly 256 calls to credit_entropy_bits(1). So,
+we can retain more or less the old behavior by waiting to extract from
+the input pool until it hits 256 bits of entropy using the new code. For
+people concerned about this change, it means that there's not that much
+practical behavioral change. And for folks actually trying to model
+the behavior rigorously, it means that we have an even higher margin
+against attacks.
 
-The current code means that if someone is pulling data from /dev/urandom
-fast enough at crng_init==0, we'll keep resetting crng_init_cnt, and we'll
-never make forward progress to crng_init==1. It seems to be intended to
-prevent an attacker from bruteforcing the contents of small individual RNG
-inputs on the way from crng_init==0 to crng_init==1, but that's misguided;
-crng_init==1 isn't supposed to provide proper cryptographic security
-anyway, RNG users who care about getting secure RNG output have to wait
-until crng_init==2.
-
-This code was inconsistent, and it probably made things worse - just get
-rid of it.
-
-Signed-off-by: Jann Horn <jannh@google.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    4 ----
- 1 file changed, 4 deletions(-)
+ drivers/char/random.c |  114 ++++++++------------------------------------------
+ 1 file changed, 20 insertions(+), 94 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1770,7 +1770,6 @@ urandom_read_nowarn(struct file *file, c
- static ssize_t
- urandom_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
+@@ -287,17 +287,9 @@
+ 
+ /* #define ADD_INTERRUPT_BENCH */
+ 
+-enum poolinfo {
++enum {
+ 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
+-	POOL_BITSHIFT = ilog2(POOL_BITS),
+-	POOL_MIN_BITS = POOL_BITS / 2,
+-
+-	/* To allow fractional bits to be tracked, the entropy_count field is
+-	 * denominated in units of 1/8th bits. */
+-	POOL_ENTROPY_SHIFT = 3,
+-#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
+-	POOL_FRACBITS = POOL_BITS << POOL_ENTROPY_SHIFT,
+-	POOL_MIN_FRACBITS = POOL_MIN_BITS << POOL_ENTROPY_SHIFT
++	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
+ };
+ 
+ /*
+@@ -310,7 +302,7 @@ static struct fasync_struct *fasync;
+  * should wake up processes which are selecting or polling on write
+  * access to /dev/random.
+  */
+-static int random_write_wakeup_bits = POOL_BITS * 3 / 4;
++static int random_write_wakeup_bits = POOL_MIN_BITS;
+ 
+ static DEFINE_SPINLOCK(random_ready_list_lock);
+ static LIST_HEAD(random_ready_list);
+@@ -470,66 +462,18 @@ static void process_random_ready_list(vo
+ static void credit_entropy_bits(int nbits)
  {
--	unsigned long flags;
- 	static int maxwarn = 10;
+ 	int entropy_count, orig;
+-	int nfrac = nbits << POOL_ENTROPY_SHIFT;
+-
+-	/* Ensure that the multiplication can avoid being 64 bits wide. */
+-	BUILD_BUG_ON(2 * (POOL_ENTROPY_SHIFT + POOL_BITSHIFT) > 31);
  
- 	if (!crng_ready() && maxwarn > 0) {
-@@ -1778,9 +1777,6 @@ urandom_read(struct file *file, char __u
- 		if (__ratelimit(&urandom_warning))
- 			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
- 				  current->comm, nbytes);
--		spin_lock_irqsave(&primary_crng.lock, flags);
--		crng_init_cnt = 0;
--		spin_unlock_irqrestore(&primary_crng.lock, flags);
- 	}
+ 	if (!nbits)
+ 		return;
  
- 	return urandom_read_nowarn(file, buf, nbytes, ppos);
+-retry:
+-	entropy_count = orig = READ_ONCE(input_pool.entropy_count);
+-	if (nfrac < 0) {
+-		/* Debit */
+-		entropy_count += nfrac;
+-	} else {
+-		/*
+-		 * Credit: we have to account for the possibility of
+-		 * overwriting already present entropy.	 Even in the
+-		 * ideal case of pure Shannon entropy, new contributions
+-		 * approach the full value asymptotically:
+-		 *
+-		 * entropy <- entropy + (pool_size - entropy) *
+-		 *	(1 - exp(-add_entropy/pool_size))
+-		 *
+-		 * For add_entropy <= pool_size/2 then
+-		 * (1 - exp(-add_entropy/pool_size)) >=
+-		 *    (add_entropy/pool_size)*0.7869...
+-		 * so we can approximate the exponential with
+-		 * 3/4*add_entropy/pool_size and still be on the
+-		 * safe side by adding at most pool_size/2 at a time.
+-		 *
+-		 * The use of pool_size-2 in the while statement is to
+-		 * prevent rounding artifacts from making the loop
+-		 * arbitrarily long; this limits the loop to log2(pool_size)*2
+-		 * turns no matter how large nbits is.
+-		 */
+-		int pnfrac = nfrac;
+-		const int s = POOL_BITSHIFT + POOL_ENTROPY_SHIFT + 2;
+-		/* The +2 corresponds to the /4 in the denominator */
+-
+-		do {
+-			unsigned int anfrac = min(pnfrac, POOL_FRACBITS / 2);
+-			unsigned int add =
+-				((POOL_FRACBITS - entropy_count) * anfrac * 3) >> s;
+-
+-			entropy_count += add;
+-			pnfrac -= anfrac;
+-		} while (unlikely(entropy_count < POOL_FRACBITS - 2 && pnfrac));
+-	}
+-
+-	if (WARN_ON(entropy_count < 0)) {
+-		pr_warn("negative entropy/overflow: count %d\n", entropy_count);
+-		entropy_count = 0;
+-	} else if (entropy_count > POOL_FRACBITS)
+-		entropy_count = POOL_FRACBITS;
+-	if (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig)
+-		goto retry;
++	do {
++		orig = READ_ONCE(input_pool.entropy_count);
++		entropy_count = min(POOL_BITS, orig + nbits);
++	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
+ 
+-	trace_credit_entropy_bits(nbits, entropy_count >> POOL_ENTROPY_SHIFT, _RET_IP_);
++	trace_credit_entropy_bits(nbits, entropy_count, _RET_IP_);
+ 
+-	if (crng_init < 2 && entropy_count >= POOL_MIN_FRACBITS)
++	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
+ 		crng_reseed(&primary_crng, true);
+ }
+ 
+@@ -842,7 +786,7 @@ static void crng_reseed(struct crng_stat
+ 		int entropy_count;
+ 		do {
+ 			entropy_count = READ_ONCE(input_pool.entropy_count);
+-			if (entropy_count < POOL_MIN_FRACBITS)
++			if (entropy_count < POOL_MIN_BITS)
+ 				return;
+ 		} while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
+ 		extract_entropy(buf.key, sizeof(buf.key));
+@@ -1065,7 +1009,7 @@ void add_input_randomness(unsigned int t
+ 	last_value = value;
+ 	add_timer_randomness(&input_timer_state,
+ 			     (type << 4) ^ code ^ (code >> 4) ^ value);
+-	trace_add_input_randomness(POOL_ENTROPY_BITS());
++	trace_add_input_randomness(input_pool.entropy_count);
+ }
+ EXPORT_SYMBOL_GPL(add_input_randomness);
+ 
+@@ -1163,7 +1107,7 @@ void add_disk_randomness(struct gendisk
+ 		return;
+ 	/* first major is 1, so we get >= 0x200 here */
+ 	add_timer_randomness(disk->random, 0x100 + disk_devt(disk));
+-	trace_add_disk_randomness(disk_devt(disk), POOL_ENTROPY_BITS());
++	trace_add_disk_randomness(disk_devt(disk), input_pool.entropy_count);
+ }
+ EXPORT_SYMBOL_GPL(add_disk_randomness);
+ #endif
+@@ -1188,7 +1132,7 @@ static void extract_entropy(void *buf, s
+ 	} block;
+ 	size_t i;
+ 
+-	trace_extract_entropy(nbytes, POOL_ENTROPY_BITS());
++	trace_extract_entropy(nbytes, input_pool.entropy_count);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(block.rdrand); ++i) {
+ 		if (!arch_get_random_long(&block.rdrand[i]))
+@@ -1537,9 +1481,9 @@ static ssize_t urandom_read_nowarn(struc
+ {
+ 	int ret;
+ 
+-	nbytes = min_t(size_t, nbytes, INT_MAX >> (POOL_ENTROPY_SHIFT + 3));
++	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
+ 	ret = extract_crng_user(buf, nbytes);
+-	trace_urandom_read(8 * nbytes, 0, POOL_ENTROPY_BITS());
++	trace_urandom_read(8 * nbytes, 0, input_pool.entropy_count);
+ 	return ret;
+ }
+ 
+@@ -1578,7 +1522,7 @@ static unsigned int random_poll(struct f
+ 	mask = 0;
+ 	if (crng_ready())
+ 		mask |= POLLIN | POLLRDNORM;
+-	if (POOL_ENTROPY_BITS() < random_write_wakeup_bits)
++	if (input_pool.entropy_count < random_write_wakeup_bits)
+ 		mask |= POLLOUT | POLLWRNORM;
+ 	return mask;
+ }
+@@ -1633,8 +1577,7 @@ static long random_ioctl(struct file *f,
+ 	switch (cmd) {
+ 	case RNDGETENTCNT:
+ 		/* inherently racy, no point locking */
+-		ent_count = POOL_ENTROPY_BITS();
+-		if (put_user(ent_count, p))
++		if (put_user(input_pool.entropy_count, p))
+ 			return -EFAULT;
+ 		return 0;
+ 	case RNDADDTOENTCNT:
+@@ -1780,23 +1723,6 @@ static int proc_do_uuid(struct ctl_table
+ 	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
+ }
+ 
+-/*
+- * Return entropy available scaled to integral bits
+- */
+-static int proc_do_entropy(struct ctl_table *table, int write,
+-			   void __user *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	struct ctl_table fake_table;
+-	int entropy_count;
+-
+-	entropy_count = *(int *)table->data >> POOL_ENTROPY_SHIFT;
+-
+-	fake_table.data = &entropy_count;
+-	fake_table.maxlen = sizeof(entropy_count);
+-
+-	return proc_dointvec(&fake_table, write, buffer, lenp, ppos);
+-}
+-
+ static int sysctl_poolsize = POOL_BITS;
+ extern struct ctl_table random_table[];
+ struct ctl_table random_table[] = {
+@@ -1809,10 +1735,10 @@ struct ctl_table random_table[] = {
+ 	},
+ 	{
+ 		.procname	= "entropy_avail",
++		.data		= &input_pool.entropy_count,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0444,
+-		.proc_handler	= proc_do_entropy,
+-		.data		= &input_pool.entropy_count,
++		.proc_handler	= proc_dointvec,
+ 	},
+ 	{
+ 		.procname	= "write_wakeup_threshold",
+@@ -2008,7 +1934,7 @@ void add_hwgenerator_randomness(const ch
+ 	 */
+ 	wait_event_interruptible_timeout(random_write_wait,
+ 			!system_wq || kthread_should_stop() ||
+-			POOL_ENTROPY_BITS() <= random_write_wakeup_bits,
++			input_pool.entropy_count <= random_write_wakeup_bits,
+ 			CRNG_RESEED_INTERVAL);
+ 	mix_pool_bytes(buffer, count);
+ 	credit_entropy_bits(entropy);
 
 

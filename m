@@ -2,252 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD5A5574F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBD75574F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiFWIJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S229790AbiFWIJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiFWII6 (ORCPT
+        with ESMTP id S229843AbiFWIJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:08:58 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3BC48338
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:08:46 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 4HtFoR1HLEMbD4HtFo9Fxz; Thu, 23 Jun 2022 10:08:44 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 23 Jun 2022 10:08:44 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <9a320833-e951-7a0f-e2bd-3f8deb7e705b@wanadoo.fr>
-Date:   Thu, 23 Jun 2022 10:08:36 +0200
+        Thu, 23 Jun 2022 04:09:18 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50069.outbound.protection.outlook.com [40.107.5.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A8E47565
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:09:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZJhFpq7OKKJxV1imeH6+lddhdA1Wa5NX9r/GalrKdbhMgV+BvnQscGOAS8cIdfV+MI9hdfNmQKBclr7ZNjIHJuFTzqSBlEsX/z9C2FjHUb1ygGIrEs7tKKenJeC/5j+gjepXV3nJ/2aeUfBXlDbHQJX+6/8UAmPJMvJSwNh0GSpWGd6hlSEUVhOuRZNBcDSRkfYkOmPw2F5ohLKxJA5Nprr+bREq9MTdzbuQvl/CDxk08gtki4SAtnus38vU2ByYOlIZrmAZMX0k0dpYbNkGJD9EfkZVpa9tLJHH8ZekdirWZUxIJXDg2DjecfC8y9TFRGGESKRoJyEX7CvdoozYvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YJ2EBGK9IpOyjiMtgo2Xldv69VXYF9fFvP/n00ISXz0=;
+ b=bxEQp9oQwaPlneqw3PVwqXrZd+Zdbv9LESGy9A9FQsgjP1GGPGR7gJq4pvTLyxJodCitupWGqeXFFpqJ21o8ITf2RnMd9ouiRjOl4opHqRPcTzUiQD8QPqtyKDekIM8QuYk6TaoikdTPalfdKc+pM/4yMfTpEvU1Q35uHKTkIUqI0xbHsj+aoWuQ5TBsQXfB440c9UtpRK11LDJVl2Pzn/FS9VttUqjcHYW+Yt4NS+M2SPQLmrhdlJ1ZWF/JFkMZ1M3tjfVIIuWxFWG9/o+fU1NlYFWl6kvWxDYO7UNYkmenVP/jKdMWb8KshxinoNyiKri+NUPEo01zSg2Jzk8cDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YJ2EBGK9IpOyjiMtgo2Xldv69VXYF9fFvP/n00ISXz0=;
+ b=gB126O64gmNLgxpxXdB32bDn5oYUFKShn3fKAfujJGNFWOiMi77db2MbIkkvdXUHPBjgzCWurhRXFYRIZIxcfAZPCqZpDhi6gpmM0DSWPmxmMesdPShHC6wZ+3q4NTj58vkur4PK+Ue9fOMOyWnD+i7cUVV34cbCzLM9Ydk8+GyatK95cxFrOVwo8aTA0TdY+m+YJxwL7ebXkc0YP3iTmuxM5w2S9andp16WnXulUlBdOA07mGR/Gpj3cug1FofCvneMrnTjSzBEI+mDw1rebpgacEbJAHkEeHo0GQziNu1RH6ysyf8vexU7vPmanZ/noOg75nxwUMePpOE27mp9tw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
+ by AM6PR04MB5462.eurprd04.prod.outlook.com (2603:10a6:20b:95::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.22; Thu, 23 Jun
+ 2022 08:09:11 +0000
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::dfa:a64a:432f:e26b]) by VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::dfa:a64a:432f:e26b%7]) with mapi id 15.20.5353.022; Thu, 23 Jun 2022
+ 08:09:11 +0000
+Message-ID: <b210d5c7-26cc-df6f-fa37-56fe04c8d0dc@suse.com>
+Date:   Thu, 23 Jun 2022 10:09:09 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] x86: fix setup of brk area
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <20220622161048.4483-1-jgross@suse.com>
+ <20220622161048.4483-3-jgross@suse.com>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <20220622161048.4483-3-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0110.eurprd06.prod.outlook.com
+ (2603:10a6:20b:465::29) To VE1PR04MB6560.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::25)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 06/18] clk: npcm8xx: add clock controller
-Content-Language: fr
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220621131424.162355-1-tmaimon77@gmail.com>
- <20220621131424.162355-7-tmaimon77@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220621131424.162355-7-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a0832061-a9d2-4ef4-e581-08da54efa7d1
+X-MS-TrafficTypeDiagnostic: AM6PR04MB5462:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-Microsoft-Antispam-PRVS: <AM6PR04MB5462DB7AE73AEBA21BC50F7BB3B59@AM6PR04MB5462.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: E6gTYhVqCWgOD/Jq/oLmDPMz6qoAqfJJK4swhhCHCMYZKlPqaf1bYM7nG3Bh7UBRP7PJMefrtyI8Jw8/nx87jSS+lvgeV8DMnmRt9RnykSj4OTtae68sqSotWzz6mZI1GK+775aSlNP5Qbp4FHgpqCCvjyviFhb14x5qLPxzSYXl3k9T4C17Sm+jK1fD6+y2TF/EtdmhTk9mXYdnrv7a1tyqA8QVI4tCB6Vy6eSTcxfnskSEq6RfghtSj1yfoNgcI7/GvOnV5SQ0OwHF89jjTSo1t4wZv3YSjhhzC3yrssWWMO6oE/kbkK0i9f0rUmpVEkWkpvV4fR+M29yaNccg09PmDEa1Z/sNarTUNm3oDG6r9CIAH436aROu8wOwFT+USvnpFMq3asiv5ZTHJ9Q6ZU4q+wu9IOrYYq4nCokSvwvzawJz3l8EC6r5AZYcs9pJ5NeJJzaeroWwpWvTjsg6K4NUzyuiR/A8s+jMJUUfJFOm+TM6NKOz9qUR7tA713p9a370adGokyf+cWkup8TOFG/kGj/cdWzCiPE4JhCrbdSRyg7KzT40UacR4ncY20LrxriRkMM+Jtxb81Z3Wjq1eWQpb69VMcmNoYXM5QcJoFG4lqVPnGunohThPuPu54m1e0fWyWvF0Gp1OoGqFjF+akncjlde3My1I3qseNx5cMpFiFCHwbaVsxYyL1PMyfgvx0KmzBc4PEmipS3g0ndzHyemcXcLLh07vj1sPaPV3tJGnrr7TKZfxEq9atOM4VrUdSUZNX1D79O+4GsR0yCZZ3oQdNtmYgHlaNknuJatRRo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(39860400002)(136003)(366004)(346002)(478600001)(53546011)(6636002)(2906002)(6512007)(6862004)(38100700002)(4744005)(2616005)(41300700001)(6506007)(31686004)(8936002)(36756003)(66556008)(5660300002)(37006003)(26005)(8676002)(66946007)(31696002)(6486002)(186003)(4326008)(316002)(54906003)(66476007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bHFrQXkzcUlPTFFVQmNoYWYvaFVWTjM5V2lhR0hRM3hQd3p1RkJ6NTgza2Rr?=
+ =?utf-8?B?bWkxbHRRNzVkWXFveWM0RkcraWJCcjREYndrY3loWlB3L0NFMW9oalF4YUFT?=
+ =?utf-8?B?ZTFDelFPQXhRUVVJeFYwT3FGUUFIWlprL24wMlBiU2pPN0wzNTVwTUp3OVdB?=
+ =?utf-8?B?NlVONUlDTllEOVpwM0cyUmZnUU01VS9UNDdHM1dJOXNwUmhyZEQ2N3RGZjVk?=
+ =?utf-8?B?YVBsNGVVbWhYOFM5WUVCZXlIQ1YzQTd5M0EvMkpzWjZiUlRhK1dLNVV2ZzNo?=
+ =?utf-8?B?SkVHTjQxVng3WGJKaS9kZkViYk0vUmM3TWJZS2NwUzl4Q2haOFN3amRSMUlh?=
+ =?utf-8?B?TjFjU3d4V0o1Y1RBMXQ0cWVHZSs0amVSWkh1OEtzT3BhTHZJTkJ1WTVTOU1q?=
+ =?utf-8?B?eGF4NjlnZlYyYVkrZjRaTW1MZlJVcElJZVlXMTUyeUNtYWdpREdDTFVMYlVp?=
+ =?utf-8?B?ZEhzMHZHRVFvTlZVckI3TXlQc2pMWW5hM3BvTXNIVmJ3OVhudHZxMG12NW95?=
+ =?utf-8?B?Q3BDczBlMUZaSzB3WkNhb3o4RDJxZU5hVVFqZE51Y2EvZEJwc2ZsSHU1UWlZ?=
+ =?utf-8?B?K09mN2E4eGt4ekdIdkJ5YjE2R2NZUlkxbnZaT05sZFFhOFNXZ3NmK0FlcFJw?=
+ =?utf-8?B?b1drdW5ESG9DMHREWlI2a0ZjTkk3aXU4UG1BM1lJM3JzNUp5dEp6aWo5Tm1U?=
+ =?utf-8?B?eUxWZzB0MzNlbmRNWGN5SExFZ0tZTXJOUUQweHRmZ1dMUXJuK0xETTNpVnBO?=
+ =?utf-8?B?RHVlMytlYjhtbm5GUTU0UzJNVkd5amFRRndyb1JmUDZKNkJTTCtHdk5pYjJU?=
+ =?utf-8?B?bGcxZ2ZvVGZBRUR4UVI2SjdhMTU0K3ZjUGVNcStidEFMTUxLeUp6Rm9IdVdj?=
+ =?utf-8?B?Z2FreXhXYUd1YVR4WVZwTnFneW4yYTUrT1dDUkNreVdEdDIwQjM1T0RMM1hX?=
+ =?utf-8?B?b1ZKdDRFM1d3VlZBQkNUTGJvZE5yNzJpTElwVjFaTlNzMExqVkpiVTdSMHNp?=
+ =?utf-8?B?NEN4L2wwb0MvSlh3bzQwL204b0JUbHAxQlM4QU1YKzlDTCtiRldZYUduU0NY?=
+ =?utf-8?B?bjJEbkdpYmxjMlFFekIvOVlnNm4wSDkya2NQZVJNSkZucnI0a3hMaFFBSnAx?=
+ =?utf-8?B?eHFJY0d5QjVvcTl6NWtacWxKSlo1Ynp3MzJGTlB2RFdlRUl5UmhSU0lCQ1pX?=
+ =?utf-8?B?bXhmOFdpd2cyYmo4MFh3UFZNa2o0S0VaOWp0UVZFUXh4UHA3OFdGMjN5Ny9z?=
+ =?utf-8?B?STZxU2h4Rm1YbHZadjNpd2FBQUZPdmhlY2t0bWpacFJ1QzFtcklueUsrRHNC?=
+ =?utf-8?B?UmpWeTk5NkVoSGsrZ09UOGZ4YmY5SVEzeUowZXVIYlZnN1dGUzRwd043UnB4?=
+ =?utf-8?B?YkZvazgxeDZ3UWpOM0tqWnFJSDkrVXBWZ2ViUnU2cFdyVXZHU2ROZ2cwbTIw?=
+ =?utf-8?B?YW5NbThvQThGMk1WbG40V3lMN3Zxc250aHBLMXdrcFI5WThXTXFKcGJQRURL?=
+ =?utf-8?B?VnNWSGZia01YYUJYOFZsYnhkTWRkMEQ2K2hab2xndVRTU1ZGR1RYS1ZQZitE?=
+ =?utf-8?B?aFA4K0wzb1c0R1lwZEN6a29pY2ladWR2Y25YYmYyYjYwbXFSZWE1VGVGN3hs?=
+ =?utf-8?B?Q05obDhFdVo5YTVlNVUxNy9jRjBvaGRrT09RaVB0M0tLV21XWDJ5RkJBOEtt?=
+ =?utf-8?B?bkFNVCtIaDhrRGpyc0I3cjlZZ3VGT2JMdG9YWWtQZXlaWDhleGdHdHFraEZB?=
+ =?utf-8?B?ZVFIWENuWTh3bW4rYTNUUExRUTdjUFBzdmdDYXFtKzJVZUM1QVNJZmMybDNh?=
+ =?utf-8?B?Z3l3bEQ3d0swbkNZSU04NEJVajVjN1hzRDdqbjJpMkJXWEEyZlpGTnhicmJr?=
+ =?utf-8?B?NDJYOTREVjZ4VTZFV3lIUjArQzE1Q1AvS0o3YjJXV1F5WDIyY0JDcWJHMmxU?=
+ =?utf-8?B?cEdIN1Vscy9ZT3dsSW9ZSWFtQjkvNE55dkZXZFQ5a1hoNU0ramFWc3ZRZ1F3?=
+ =?utf-8?B?cGFlNUNhTEJMaWtPS0NrbFd2aGhMbklacWdKdC9tZy9kekM0NkR1ekRYWUtP?=
+ =?utf-8?B?dUozb0RvN1lyS3lyTk4rYmVaQUJvSUErS0NkRTQ4MEgwWmlUeVk4Tmx6ZjNj?=
+ =?utf-8?Q?h7xfqpCAl9sDb6W9dmX+001nn?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0832061-a9d2-4ef4-e581-08da54efa7d1
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 08:09:11.7220
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lgGyemEK2+WSMskD2quSzIT+b3OFqPMooCFfkJmhapV6VIVs9TJ3/GsEIss8Lw1tQZN7NhAYp32Tk1va56v6Ow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5462
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 21/06/2022 à 15:14, Tomer Maimon a écrit :
-> Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller which
-> generates and supplies clocks to all modules within the BMC.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->   drivers/clk/Kconfig       |   6 +
->   drivers/clk/Makefile      |   1 +
->   drivers/clk/clk-npcm8xx.c | 594 ++++++++++++++++++++++++++++++++++++++
->   3 files changed, 601 insertions(+)
->   create mode 100644 drivers/clk/clk-npcm8xx.c
-> 
+On 22.06.2022 18:10, Juergen Gross wrote:
+> Commit e32683c6f7d2 ("x86/mm: Fix RESERVE_BRK() for older binutils")
+> put the brk area into the .bss segment, causing it not to be cleared
+> initially.
 
-[...]
+This reads contradictively: If the area was put in .bss, it would be
+cleared. Thing is it is put in .bss..brk in the object files, while
+the linker script puts it in .brk (i.e. outside of .bss).
 
-> +static int npcm8xx_clk_probe(struct platform_device *pdev)
-> +{
-> +	struct clk_hw_onecell_data *npcm8xx_clk_data;
-> +	struct device *dev = &pdev->dev;
-> +	void __iomem *clk_base;
-> +	struct clk_hw *hw;
-> +	int i;
-> +
-> +	npcm8xx_clk_data = devm_kzalloc(dev, struct_size(npcm8xx_clk_data, hws,
-> +							 NPCM8XX_NUM_CLOCKS),
-> +					GFP_KERNEL);
-> +	if (!npcm8xx_clk_data)
-> +		return -ENOMEM;
-> +
-> +	clk_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(clk_base))
-> +		return PTR_ERR(clk_base);
-> +
-> +	npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
-> +
-> +	for (i = 0; i < NPCM8XX_NUM_CLOCKS; i++)
-> +		npcm8xx_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
-> +
-> +	/* Reference 25MHz clock */
-> +	hw = clk_hw_register_fixed_rate(dev, "refclk", NULL, 0, NPCM8XX_REF_CLK);
-> +	if (IS_ERR(hw))
-> +		return PTR_ERR(hw);
-> +	npcm8xx_clk_data->hws[NPCM8XX_CLK_REFCLK] = hw;
-> +
-> +	/* Register plls */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_plls); i++) {
-> +		const struct npcm8xx_clk_pll_data *pll_data = &npcm8xx_plls[i];
-> +
-> +		hw = npcm8xx_clk_register_pll(dev, clk_base + pll_data->reg,
-> +					      pll_data->name,
-> +					      pll_data->parent_name,
-> +					      pll_data->flags);
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register pll\n");
-> +			goto unregister_refclk;
+> As the brk area is used to allocate early page tables, these
+> might contain garbage in not explicitly written entries.
 
-goto err_mux_clk?
+I'm surprised this lack of zero-initialization didn't cause any issue
+outside of PV Xen. Unless of course there never was the intention for
+users of the facility to assume blank pages coming from there, in
+which case Xen's use for early page tables would have been wrong (in
+not explicitly zeroing the space first).
 
-(so that we unregister what has already been registered in the loop ; 
-and unregister_refclk becomes useless)
-
-> +		}
-> +
-> +		if (pll_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[pll_data->onecell_idx] = hw;
-> +	}
-> +
-> +	/* Register fixed dividers */
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL1_DIV2,
-> +					       NPCM8XX_CLK_S_PLL1, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register fixed div\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL2_DIV2,
-> +					       NPCM8XX_CLK_S_PLL2, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register pll div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PRE_CLK,
-> +					       NPCM8XX_CLK_S_CPU_MUX, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register ckclk div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_AXI,
-> +					       NPCM8XX_CLK_S_TH, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register axi div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_ATB,
-> +					       NPCM8XX_CLK_S_AXI, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register atb div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	/* Register clock dividers specified in npcm8xx_divs */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
-> +		const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
-> +
-> +		hw = devm_clk_hw_register_divider(dev, div_data->name,
-> +						  div_data->parent_name,
-> +						  div_data->flags,
-> +						  clk_base + div_data->reg,
-> +						  div_data->shift,
-> +						  div_data->width,
-> +						  div_data->clk_divider_flags,
-> +						  &npcm8xx_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register div table\n");
-> +			goto unregister_refclk;
-> +		}
-> +
-> +		if (div_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[div_data->onecell_idx] = hw;
-> +	}
-> +
-> +	/* Register muxes */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_muxes); i++) {
-> +		const struct npcm8xx_clk_mux_data *mux_data = &npcm8xx_muxes[i];
-> +
-> +		hw = clk_hw_register_mux_table(dev, mux_data->name,
-> +					       mux_data->parent_names,
-> +					       mux_data->num_parents,
-> +					       mux_data->flags,
-> +					       clk_base + NPCM8XX_CLKSEL,
-> +					       mux_data->shift,
-> +					       mux_data->mask, 0,
-> +					       mux_data->table,
-> +					       &npcm8xx_clk_lock);
-> +
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register mux\n");
-> +			goto err_mux_clk;
-> +		}
-> +
-> +		if (mux_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[mux_data->onecell_idx] = hw;
-> +	}
-> +
-> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-> +					   npcm8xx_clk_data);
-
-If this fails, I think we should also "goto err_mux_clk;"
-
-> +
-> +err_mux_clk:
-> +	while (i--) {
-> +		if (npcm8xx_muxes[i].onecell_idx >= 0)
-> +			clk_hw_unregister_mux(npcm8xx_clk_data->hws[npcm8xx_muxes[i].onecell_idx]);
-> +	}
-> +unregister_refclk:
-> +	clk_hw_unregister(npcm8xx_clk_data->hws[NPCM8XX_CLK_REFCLK]);
-> +	return PTR_ERR(hw);
-> +}
-
-Does a .remove() function is needed to match this error handling path? 
-(or use devm_add_action_or_reset())?
-
-CJ
-> +
-> +static const struct of_device_id npcm8xx_clk_dt_ids[] = {
-> +	{ .compatible = "nuvoton,npcm845-clk", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, npcm8xx_clk_dt_ids);
-> +
-> +static struct platform_driver npcm8xx_clk_driver = {
-> +	.probe  = npcm8xx_clk_probe,
-> +	.driver = {
-> +		.name = "npcm8xx_clk",
-> +		.of_match_table = npcm8xx_clk_dt_ids,
-> +	},
-> +};
-> +
-> +static int __init npcm8xx_clk_driver_init(void)
-> +{
-> +	return platform_driver_register(&npcm8xx_clk_driver);
-> +}
-> +arch_initcall(npcm8xx_clk_driver_init);
-> +
-
+Jan

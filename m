@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C00557503
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD72855750C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiFWIKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
+        id S230013AbiFWIKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiFWIJz (ORCPT
+        with ESMTP id S229610AbiFWIK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:09:55 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B184147560;
-        Thu, 23 Jun 2022 01:09:49 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id e5so10557390wma.0;
-        Thu, 23 Jun 2022 01:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WUf4hh7XmxGqI1TyChD6Q9Q40vdp6ztxwpVVqyoKOb0=;
-        b=M/Ksx3wAMaMxEES700OFBcZXpRa4wc0oINeNKEcajTDoEYnhRbdBv4KdmPmYqil1rp
-         s67yY7qs7Z9uMQX9abv80e6zOAxDf0D4FQ9gS8Ga6gTnE2vJi86reVunCnB/mp9/pQNX
-         0plD3hZ2Om0IwBM8oJlmj9IJZ0h+C6PSU8pSut0A69n3kNt5ZW2TV9wEfEzQLC1agRLE
-         +d/BDuJsc7ByQwocxAPKAwfkXzenkyPNr1edj63us5r9waaF8KjiU8C4Fb4STONfOx86
-         mtkXTc5YDmD6uI+sZyTbh64Tn0D6Ey2JmdkqzHdBVvVuJQIlPIkk3XGshW5rM3RJKjgC
-         LKFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WUf4hh7XmxGqI1TyChD6Q9Q40vdp6ztxwpVVqyoKOb0=;
-        b=JgSROAbTUpcCGWtZr/skmtehZ9CWqS5DhQlxnpr6rBdft70YTZ69DX8cY4cLMaRVVU
-         vOomEEO8/E20UursnBdfgH9bH01CqYjG9jcDZNFRQZJJ39XMqoPIZ9Idn9CPoT7U07Er
-         kXGJJtru4rLMG5E7010Ip7bjDgMylksNS6spkVQPRbdGjoBD37j6rvubia0xCSspWpJv
-         xP85D4aD6NkOuKQxeNjL+VCFGyYCevGbPY71LwfiB7avsVZI2+bKiMukQ5ftN29ReRUi
-         IIDqnNOAPeMHbs35y7+XkKyzRyoaUf3X5pw/KlplxeNijeuha+ylM8qC+I9FQk4JLQPP
-         EJ6A==
-X-Gm-Message-State: AJIora++1uq0HIfjH2RuavKRKXifZgq/W2qUsCeHpOaEFUmDEF6i6+Zp
-        b+DVACCwHnVod1gdvkQUp7k=
-X-Google-Smtp-Source: AGRyM1tQCbkUDkb6HTKJP5xcbeP5k2VYytY3SaNTGGVmqI0KWdLDTOTW45BA4TJBrtuUMuOyZy642Q==
-X-Received: by 2002:a05:600c:6020:b0:39c:5cec:da86 with SMTP id az32-20020a05600c602000b0039c5cecda86mr2610353wmb.75.1655971788177;
-        Thu, 23 Jun 2022 01:09:48 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id k17-20020a5d6e91000000b0021a39f5ba3bsm21009445wrz.7.2022.06.23.01.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 01:09:47 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Xinhui.Pan@amd.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] drm/amdgpu/display: Fix spelling mistake "supporing" -> "supporting"
-Date:   Thu, 23 Jun 2022 09:09:46 +0100
-Message-Id: <20220623080946.19116-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 23 Jun 2022 04:10:28 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282AB47566;
+        Thu, 23 Jun 2022 01:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655971827; x=1687507827;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QcYh2jZjsF9QfkU41AW34wJJx148DZOcArwuObfigGo=;
+  b=b8fPrHXWC73WaTZHhKjS9EIlbsxvgIk+uMySQwFMlkpAIK0bsbm8+EWV
+   KlN9Xqi7v7d+OCMcPRy4kkjE/nzQeNSgqZ1LbvqKKNQB1UUAdFaH82tPG
+   c9mh4hwuAV5Sfea/fjSt/gyg/vSat4n8ohfXOlsrQJ+djduAOpXgiOT6d
+   LV+OzhsrEAAfPSp5Q28OXLmKPP3s2nIhuk6lR6qVqE/RbPf6+vMXVnKnb
+   tktqj1xBsnPSZbOrTYyoKF2C5B9TO6j68omGFbgNE/AR/qimMMkG9ygzw
+   sENwu1rC4pFFOSp2re5I+lmJZquKBF/4dVBDUR1wyaj88CNSEBBfkJTRK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="280704808"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="280704808"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 01:10:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="586071816"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 23 Jun 2022 01:10:24 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4Hux-0000vd-HU;
+        Thu, 23 Jun 2022 08:10:23 +0000
+Date:   Thu, 23 Jun 2022 16:10:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        rcu@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
+        rostedt@goodmis.org, vineeth@bitbyteword.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: Re: [PATCH v2 6/8] rcuscale: Add test for using call_rcu_lazy() to
+ emulate kfree_rcu()
+Message-ID: <202206231529.kLjzriV0-lkp@intel.com>
+References: <20220622225102.2112026-8-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622225102.2112026-8-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dml_print message. Fix it.
+Hi "Joel,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-index 7f144adb1e36..7d536c2f4477 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-@@ -1098,7 +1098,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
- 				if (mode_lib->vba.ImmediateFlipRequirement[k] != dm_immediate_flip_not_required && v->ImmediateFlipSupportedForPipe[k] == false) {
- 					v->ImmediateFlipSupported = false;
- #ifdef __DML_VBA_DEBUG__
--					dml_print("DML::%s: Pipe %0d not supporing iflip\n", __func__, k);
-+					dml_print("DML::%s: Pipe %0d not supporting iflip\n", __func__, k);
- #endif
- 				}
- 			}
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19-rc3 next-20220622]
+[cannot apply to paulmck-rcu/dev]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Joel-Fernandes-Google/Implement-call_rcu_lazy-and-miscellaneous-fixes/20220623-065447
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git de5c208d533a46a074eb46ea17f672cc005a7269
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220623/202206231529.kLjzriV0-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-31-g4880bd19-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/6c59cb940f39b882c20e6858c41df7c1470b930a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Joel-Fernandes-Google/Implement-call_rcu_lazy-and-miscellaneous-fixes/20220623-065447
+        git checkout 6c59cb940f39b882c20e6858c41df7c1470b930a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/rcu/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> kernel/rcu/rcuscale.c:663:6: sparse: sparse: symbol 'kfree_rcu_lazy' was not declared. Should it be static?
+>> kernel/rcu/rcuscale.c:786:15: sparse: sparse: symbol 'jiffies_at_lazy_cb' was not declared. Should it be static?
+>> kernel/rcu/rcuscale.c:787:17: sparse: sparse: symbol 'lazy_test1_rh' was not declared. Should it be static?
+>> kernel/rcu/rcuscale.c:788:5: sparse: sparse: symbol 'rcu_lazy_test1_cb_called' was not declared. Should it be static?
+>> kernel/rcu/rcuscale.c:789:6: sparse: sparse: symbol 'call_rcu_lazy_test1' was not declared. Should it be static?
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,208 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7076A557E2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51C3557E3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiFWOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        id S231439AbiFWOuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiFWOuH (ORCPT
+        with ESMTP id S231401AbiFWOup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:50:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B76D25E9B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655995805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XsUzgInIk3jiZ1t4PC5XKhl7+P7b0ZJHNMM8H/4Lgb0=;
-        b=Xjf/LXWxzpapE3EMlfjidhDShU6SEvTdvwm5SMOzcanXLaoe83ouci/cCTGOd3m4zly0Ui
-        DCbCy7UHz2PO3PCbFIg4FWaZ44yrLYqElGPISQOomfrybqJkP29JLZUSf7ZRe7TazhRKey
-        LkbeET83agIGTh69Spdlf/wvs+5r0PQ=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-P7qp663eNeiY7mRZMWjR0g-1; Thu, 23 Jun 2022 10:50:04 -0400
-X-MC-Unique: P7qp663eNeiY7mRZMWjR0g-1
-Received: by mail-ej1-f71.google.com with SMTP id q5-20020a17090676c500b00704ffb95131so8036108ejn.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:50:04 -0700 (PDT)
+        Thu, 23 Jun 2022 10:50:45 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367DE4667E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:50:44 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z13so3298780lfj.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=1bcYs/tPp9DPi/Wqk7L+riaRA+D466h+ZJY4pfI0O2g=;
+        b=2nVn4C1yCEydX2fk5EcrBIpk/CFe9RFSZALX8zPrL8etewPDITPil7xcCntvZB6Fay
+         4zuaF9OVJOb8XEZmGQ1AZnzIrVQbR5weeT2K8jCyk8Uv4UysqcWsURbgqc2IqPni0YoM
+         qqdAQo5VH8ThIirYGZTjVUKR2Le7kvoAwMNsewNWCjWTtpGMJEgMdrh5JIBpsB/YqJnG
+         zttFzE0lgyM/J0O6GKeoTA7sXcWcCcBADmcMO2nyOpFCFOPOonnxG3zBV9GwSV/qwNO+
+         g11zvxGlf7osZ3ONy1Ws9tsJLBwTTCv/+Pweo6JUzGspIvt8VX4SCpE75HrTIM+skuEr
+         iofA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=XsUzgInIk3jiZ1t4PC5XKhl7+P7b0ZJHNMM8H/4Lgb0=;
-        b=aCnIgjpB+LC0MCibsS5PFK90+XEOFDgSHGGChpT1pU7rfjztxVHRtvtI58sK3J/79Q
-         pWR6lBzhtKqLEkiz+fLR0Vp62MjGia8HSBRiu4lRzgMVfBVR6O+mUsasV/RSj6Ua63v3
-         LWO9elbr48sUMjtmk6GRz3x+vOvpMxhUnpQxuBnOLLuRy5RCk5TAP0MlTxv3OV4e9oL5
-         3tv3YzGdc2UrZ8MKWohTunvOHUOmxD11tHOQEiyB/Vp7K02dcCHIF8m7Dl7FHm/jLn6K
-         HSZaKPQSdJH7X/tWhWElekBqQk7/saBlSDgikR5ZOS9IpTPawJlT3eTocdw3WpfsNXbh
-         cTag==
-X-Gm-Message-State: AJIora+z36/DcXVnkHMhTMgamnKDx3GbP1yZ4AMylV3zR0x10ybJz3pv
-        qHcSO2pfHXp8SZEH5BNOUj0IT6XOfECgCClzlYnEk3LbOnQNsJYRbhtw7h+1F3Xdnu6USwimUvz
-        YJxqKkWflEO3s2Ax/hmGaYubj
-X-Received: by 2002:a05:6402:34cf:b0:435:a0b1:ae14 with SMTP id w15-20020a05640234cf00b00435a0b1ae14mr11192290edc.67.1655995803175;
-        Thu, 23 Jun 2022 07:50:03 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1thQYBHEBmaRr7+ACAivoeMG9YF2NCID7VcMCZ29wz7mVQ3jCRGgp+p58BlvZ9mwrEmn6kIkw==
-X-Received: by 2002:a05:6402:34cf:b0:435:a0b1:ae14 with SMTP id w15-20020a05640234cf00b00435a0b1ae14mr11192269edc.67.1655995802931;
-        Thu, 23 Jun 2022 07:50:02 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id m11-20020aa7d34b000000b00435a742e350sm4329642edr.75.2022.06.23.07.50.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 07:50:02 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH v2] MAINTAINERS: Reorganize KVM/x86 maintainership
-In-Reply-To: <20220623143059.2626661-1-pbonzini@redhat.com>
-References: <20220623143059.2626661-1-pbonzini@redhat.com>
-Date:   Thu, 23 Jun 2022 16:50:01 +0200
-Message-ID: <87tu8bwi1y.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=1bcYs/tPp9DPi/Wqk7L+riaRA+D466h+ZJY4pfI0O2g=;
+        b=hQ5DUNr2pR1gQQywFNle9u0LKpVc3vorenpwglPmqffASQan9bHGc0T7bib26j0stz
+         Lpc3y8keEPDdCXtrK2lJjNIzsWoxPhwxMQOVAK4kgQ63VRbzO263/RlB3GzztLs//x6r
+         00jgILhnw/9ftq4LXJ+WTYN0mRIeLCujxWztOhWJhKs5BUHNcpSsevZ7xb+vQ4qyn811
+         16PeMpHquez3Bba4ZwbyatyFKkf3a9L0Z+Qtl9czSp2O/5tBtlSQYQM0BKPCyIf++ZK9
+         K+Lx8NAPuAtHmskkierkuksDnPVniIw1N0LrNGFjD6w0iiZrVcSIwo81UfUKalX44zFW
+         whbg==
+X-Gm-Message-State: AJIora9G9OvnXJARigCv5933Moy+TYUimtjFVCOy7IzYduPflsKurIfs
+        SY9AuQ9siwFEzW4D0ZJFA22jKw==
+X-Google-Smtp-Source: AGRyM1vrz8cgtEnvLDZrtm9xg+8BYIcCZwc6rUBAu40Yw4vy7D36HuI0qYdj/5xvJFCwwwbPdiJjWg==
+X-Received: by 2002:a05:6512:688:b0:47f:5f74:de81 with SMTP id t8-20020a056512068800b0047f5f74de81mr5708499lfe.477.1655995842563;
+        Thu, 23 Jun 2022 07:50:42 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id e18-20020ac25cb2000000b0047f8790085csm1017767lfq.71.2022.06.23.07.50.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 07:50:42 -0700 (PDT)
+Message-ID: <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org>
+Date:   Thu, 23 Jun 2022 17:50:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH mm v5 0/9] memcg: accounting for objects allocated by mkdir,
+ cgroup
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+Content-Language: en-US
+In-Reply-To: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+In some cases, creating a cgroup allocates a noticeable amount of memory.
+This operation can be executed from inside memory-limited container,
+but currently this memory is not accounted to memcg and can be misused.
+This allow container to exceed the assigned memory limit and avoid
+memcg OOM. Moreover, in case of global memory shortage on the host,
+the OOM-killer may not find a real memory eater and start killing
+random processes on the host.
 
-> For the last few years I have been the sole maintainer of KVM, albeit
-> getting serious help from all the people who have reviewed hundreds of
-> patches.  The volume of KVM x86 alone has gotten to the point where one
-> maintainer is not enough; especially if that maintainer is not doing it
-> full time and if they want to keep up with the evolution of ARM64 and
-> RISC-V at both the architecture and the hypervisor level.
->
-> So, this patch is the first step in restoring double maintainership
-> or even transitioning to the submaintainer model of other architectures.
->
-> The changes here were mostly proposed by Sean offlist and they are twofold:
->
-> - revisiting the set of KVM x86 reviewers.  It's important to have an
->   an accurate list of people that are actively reviewing patches ("R"),
->   as well as people that are able to act on bug reports ("M").  Otherwise,
->   voids to be filled are not easily visible.  The proposal is to split
->   KVM on Hyper-V, which is where Vitaly has been the main contributor
->   for quite some time now; likewise for KVM paravirt support, which
->   has been the main interest of Wanpeng and to which Vitaly has also
->   contributed (e.g., for async page faults).  Jim and Joerg have not been
->   particularly active (though Joerg has worked on guest support for AMD
->   SEV); knowing them a bit, I can't imagine they would object to their
->   removal or even be surprised, but please speak up if you do.
->
-> - promoting Sean to maintainer for KVM x86 host support.  While for
->   now this changes little, let's treat it as a harbinger for future
->   changes.  The plan is that I would keep the final integration testing
->   for quite some time, and probably focus more on -rc work.  This will
->   give me more time to clean up my ad hoc setup and moving towards a
->   more public CI, with Sean focusing instead on next-release patches,
->   and the testing up to where kvm-unit-tests and selftests pass.  In
->   order to facilitate collaboration between Sean and myself, we'll
->   also formalize a bit more the various branches of kvm.git.
->
-> Nothing is going to change with respect to handling pull requests to Linus
-> and from other architectures, as well as maintainance of the generic code
-> (which I expect and hope to be more important as architectures try to
-> share more code) and documentation.  However, it's not a coincidence
-> that my entry is now the last for x86, ready to be demoted to reviewer
-> if/when the right time comes.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
-> Cc: kvm@vger.kernel.org
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Cc: Wanpeng Li <wanpengli@tencent.com>
-> Cc: Jim Mattson <jmattson@google.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  MAINTAINERS | 40 +++++++++++++++++++++++++++++++---------
->  1 file changed, 31 insertions(+), 9 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 97014ae3e5ed..968b622bc3ce 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10897,28 +10897,50 @@ F:	tools/testing/selftests/kvm/*/s390x/
->  F:	tools/testing/selftests/kvm/s390x/
->  
->  KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)
-> +M:	Sean Christopherson <seanjc@google.com>
->  M:	Paolo Bonzini <pbonzini@redhat.com>
-> -R:	Sean Christopherson <seanjc@google.com>
-> -R:	Vitaly Kuznetsov <vkuznets@redhat.com>
-> -R:	Wanpeng Li <wanpengli@tencent.com>
-> -R:	Jim Mattson <jmattson@google.com>
-> -R:	Joerg Roedel <joro@8bytes.org>
->  L:	kvm@vger.kernel.org
->  S:	Supported
-> -W:	http://www.linux-kvm.org
->  T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
->  F:	arch/x86/include/asm/kvm*
-> -F:	arch/x86/include/asm/pvclock-abi.h
->  F:	arch/x86/include/asm/svm.h
->  F:	arch/x86/include/asm/vmx*.h
->  F:	arch/x86/include/uapi/asm/kvm*
->  F:	arch/x86/include/uapi/asm/svm.h
->  F:	arch/x86/include/uapi/asm/vmx.h
-> -F:	arch/x86/kernel/kvm.c
-> -F:	arch/x86/kernel/kvmclock.c
->  F:	arch/x86/kvm/
->  F:	arch/x86/kvm/*/
->  
-> +KVM PARAVIRT (KVM/paravirt)
-> +M:	Paolo Bonzini <pbonzini@redhat.com>
-> +R:	Wanpeng Li <wanpengli@tencent.com>
-> +R:	Vitaly Kuznetsov <vkuznets@redhat.com>
-> +L:	kvm@vger.kernel.org
-> +S:	Supported
-> +T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
-> +F:	arch/x86/kernel/kvm.c
-> +F:	arch/x86/kernel/kvmclock.c
-> +F:	arch/x86/include/asm/pvclock-abi.h
-> +F:	include/linux/kvm_para.h
-> +F:	include/uapi/linux/kvm_para.h
-> +F:	include/uapi/asm-generic/kvm_para.h
-> +F:	include/asm-generic/kvm_para.h
-> +F:	arch/um/include/asm/kvm_para.h
-> +F:	arch/x86/include/asm/kvm_para.h
-> +F:	arch/x86/include/uapi/asm/kvm_para.h
-> +
-> +KVM X86 HYPER-V (KVM/hyper-v)
-> +M:	Vitaly Kuznetsov <vkuznets@redhat.com>
-> +M:	Sean Christopherson <seanjc@google.com>
-> +M:	Paolo Bonzini <pbonzini@redhat.com>
-> +L:	kvm@vger.kernel.org
-> +S:	Supported
-> +T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
-> +F:	arch/x86/kvm/hyperv.*
-> +F:	arch/x86/kvm/kvm_onhyperv.*
-> +F:	arch/x86/kvm/svm/svm_onhyperv.*
+This is especially important for OpenVZ and LXC used on hosting,
+where containers are used by untrusted end users.
 
-"arch/x86/kvm/svm/hyperv.*" is still missing) LGTM otherwise, and as it
-has my name:
+Below is tracing results of mkdir /sys/fs/cgroup/vvs.test on 
+4cpu VM with Fedora and self-complied upstream kernel. The calculations
+are not precise, it depends on kernel config options, number of cpus,
+enabled controllers, ignores possible page allocations etc.
+However this is enough to clarify the general situation.
+All allocations are splitted into:
+- common part, always called for each cgroup type
+- per-cgroup allocations
 
-Acked-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+In each group we consider 2 corner cases:
+- usual allocations, important for 1-2 CPU nodes/Vms
+- percpu allocations, important for 'big irons'
 
-> +F:	arch/x86/kvm/vmx/evmcs.*
-> +
->  KERNFS
->  M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->  M:	Tejun Heo <tj@kernel.org>
+common part: 	~11Kb	+  318 bytes percpu
+memcg: 		~17Kb	+ 4692 bytes percpu
+cpu:		~2.5Kb	+ 1036 bytes percpu
+cpuset:		~3Kb	+   12 bytes percpu
+blkcg:		~3Kb	+   12 bytes percpu
+pid:		~1.5Kb	+   12 bytes percpu		
+perf:		 ~320b	+   60 bytes percpu
+-------------------------------------------
+total:		~38Kb	+ 6142 bytes percpu
+currently accounted:	  4668 bytes percpu
+
+- it's important to account usual allocations called
+in common part, because almost all of cgroup-specific allocations
+are small. One exception here is memory cgroup, it allocates a few
+huge objects that should be accounted.
+- Percpu allocation called in common part, in memcg and cpu cgroups
+should be accounted, rest ones are small an can be ignored.
+- KERNFS objects are allocated both in common part and in most of
+cgroups 
+
+Details can be found here:
+https://lore.kernel.org/all/d28233ee-bccb-7bc3-c2ec-461fd7f95e6a@openvz.org/
+
+I checked other cgroups types was found that they all can be ignored.
+Additionally I found allocation of struct rt_rq called in cpu cgroup 
+if CONFIG_RT_GROUP_SCHED was enabled, it allocates huge (~1700 bytes)
+percpu structure and should be accounted too.
+
+v5:
+ 1) re-based to linux-mm (mm-everything-2022-06-22-20-36)
+
+v4:
+ 1) re-based to linux-next (next-20220610)
+   now psi_group is not a part of struct cgroup and is allocated on demand
+ 2) added received approval from Muchun Song
+ 3) improved cover letter description according to akpm@ request
+
+v3:
+ 1) re-based to current upstream (v5.18-11267-gb00ed48bb0a7)
+ 2) fixed few typos
+ 3) added received approvals
+
+v2:
+ 1) re-split to simplify possible bisect, re-ordered
+ 2) added accounting for percpu psi_group_cpu and cgroup_rstat_cpu,
+     allocated in common part
+ 3) added accounting for percpu allocation of struct rt_rq
+     (actual if CONFIG_RT_GROUP_SCHED is enabled)
+ 4) improved patches descriptions 
+
+Vasily Averin (9):
+  memcg: enable accounting for struct cgroup
+  memcg: enable accounting for kernfs nodes
+  memcg: enable accounting for kernfs iattrs
+  memcg: enable accounting for struct simple_xattr
+  memcg: enable accounting for percpu allocation of struct psi_group_cpu
+  memcg: enable accounting for percpu allocation of struct
+    cgroup_rstat_cpu
+  memcg: enable accounting for large allocations in mem_cgroup_css_alloc
+  memcg: enable accounting for allocations in alloc_fair_sched_group
+  memcg: enable accounting for perpu allocation of struct rt_rq
+
+ fs/kernfs/mount.c      | 6 ++++--
+ fs/xattr.c             | 2 +-
+ kernel/cgroup/cgroup.c | 2 +-
+ kernel/cgroup/rstat.c  | 3 ++-
+ kernel/sched/fair.c    | 4 ++--
+ kernel/sched/psi.c     | 2 +-
+ kernel/sched/rt.c      | 2 +-
+ mm/memcontrol.c        | 4 ++--
+ 8 files changed, 14 insertions(+), 11 deletions(-)
 
 -- 
-Vitaly
+2.36.1
 

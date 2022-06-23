@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F2855808E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC84558551
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiFWQw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
+        id S235429AbiFWRzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233868AbiFWQvr (ORCPT
+        with ESMTP id S235475AbiFWRwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:47 -0400
+        Thu, 23 Jun 2022 13:52:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A5BCE1A;
-        Thu, 23 Jun 2022 09:50:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CF056753;
+        Thu, 23 Jun 2022 10:13:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 553D9B8248E;
-        Thu, 23 Jun 2022 16:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB919C3411B;
-        Thu, 23 Jun 2022 16:50:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC501B824C0;
+        Thu, 23 Jun 2022 17:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2156FC3411B;
+        Thu, 23 Jun 2022 17:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003018;
-        bh=iKj0d19AD6khnTYeBRFaztB0HYd0A7RuvG1Teazl0+Q=;
+        s=korg; t=1656004408;
+        bh=RyjBYvJarK0fEcO+XSsnBDGxh8WRAAYAEBi+RJNIeaA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dPPuCOHQ5aQk54o/7o4L8Ulv0kZV7kRFo8WJC0wn0j7A6G+UADF8eY1w0xXd4HdrS
-         FCnra/BdYNx8sTqYwmm9O+bQQxBix2vuXR9kZTHt6AHQWZ5Cy/AGryh2Yu3z9Bs1Kh
-         QevOkmsKa/2+sfbtL6Y3aG/CQf1z3I9wQcTfz5kY=
+        b=J3zvq4+FhmfsQqYRPQOUWxIXQiMopSVnMYFIRtHDYMaXBA4C/EIb36HSc4fm15EB4
+         jy8N+8XWwiDcxKUPwO+x8ijU//nb6FuFsJmxaoP2SpcnPuq8ieVnH9o0uYhI+CdlQh
+         AM4T/pDhbkq/SAhtj6sJcAxg9hKt9B02Xh+mPh8Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Yangtao Li <tiny.windzz@gmail.com>,
+        Theodore Tso <tytso@mit.edu>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 102/264] random: de-duplicate INPUT_POOL constants
+Subject: [PATCH 4.19 028/234] random: remove unnecessary unlikely()
 Date:   Thu, 23 Jun 2022 18:41:35 +0200
-Message-Id: <20220623164346.957134437@linuxfoundation.org>
+Message-Id: <20220623164343.861303963@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Yangtao Li <tiny.windzz@gmail.com>
 
-commit 5b87adf30f1464477169a1d653e9baf8c012bbfe upstream.
+commit 870e05b1b18814911cb2703a977f447cb974f0f9 upstream.
 
-We already had the POOL_* constants, so deduplicate the older INPUT_POOL
-ones. As well, fold EXTRACT_SIZE into the poolinfo enum, since it's
-related.
+WARN_ON() already contains an unlikely(), so it's not necessary to use
+unlikely.
 
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+Link: https://lore.kernel.org/r/20190607182517.28266-1-tiny.windzz@gmail.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/char/random.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -360,13 +360,6 @@
- /* #define ADD_INTERRUPT_BENCH */
+@@ -738,10 +738,9 @@ retry:
+ 		} while (unlikely(entropy_count < pool_size-2 && pnfrac));
+ 	}
  
- /*
-- * Configuration information
-- */
--#define INPUT_POOL_SHIFT	12
--#define INPUT_POOL_WORDS	(1 << (INPUT_POOL_SHIFT-5))
--#define EXTRACT_SIZE		(BLAKE2S_HASH_SIZE / 2)
--
--/*
-  * To allow fractional bits to be tracked, the entropy_count field is
-  * denominated in units of 1/8th bits.
-  *
-@@ -441,7 +434,9 @@ enum poolinfo {
- 	POOL_TAP2 = 76,
- 	POOL_TAP3 = 51,
- 	POOL_TAP4 = 25,
--	POOL_TAP5 = 1
-+	POOL_TAP5 = 1,
-+
-+	EXTRACT_SIZE = BLAKE2S_HASH_SIZE / 2
- };
+-	if (unlikely(entropy_count < 0)) {
++	if (WARN_ON(entropy_count < 0)) {
+ 		pr_warn("random: negative entropy/overflow: pool %s count %d\n",
+ 			r->name, entropy_count);
+-		WARN_ON(1);
+ 		entropy_count = 0;
+ 	} else if (entropy_count > pool_size)
+ 		entropy_count = pool_size;
+@@ -1383,10 +1382,9 @@ retry:
+ 	if (ibytes < min)
+ 		ibytes = 0;
  
- /*
-@@ -504,7 +499,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Dis
-  *
-  **********************************************************************/
- 
--static u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
-+static u32 input_pool_data[POOL_WORDS] __latent_entropy;
- 
- static struct {
- 	/* read-only data: */
-@@ -2009,7 +2004,7 @@ SYSCALL_DEFINE3(getrandom, char __user *
- #include <linux/sysctl.h>
- 
- static int min_write_thresh;
--static int max_write_thresh = INPUT_POOL_WORDS * 32;
-+static int max_write_thresh = POOL_BITS;
- static int random_min_urandom_seed = 60;
- static char sysctl_bootid[16];
- 
-@@ -2066,7 +2061,7 @@ static int proc_do_entropy(struct ctl_ta
- 	return proc_dointvec(&fake_table, write, buffer, lenp, ppos);
- }
- 
--static int sysctl_poolsize = INPUT_POOL_WORDS * 32;
-+static int sysctl_poolsize = POOL_BITS;
- extern struct ctl_table random_table[];
- struct ctl_table random_table[] = {
- 	{
+-	if (unlikely(entropy_count < 0)) {
++	if (WARN_ON(entropy_count < 0)) {
+ 		pr_warn("random: negative entropy count: pool %s count %d\n",
+ 			r->name, entropy_count);
+-		WARN_ON(1);
+ 		entropy_count = 0;
+ 	}
+ 	nfrac = ibytes << (ENTROPY_SHIFT + 3);
 
 

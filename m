@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC23855727F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D521557282
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiFWFMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 01:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S229511AbiFWFPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 01:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiFWFMC (ORCPT
+        with ESMTP id S229448AbiFWFOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 01:12:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED8A44A1A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 22:04:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43E5A61E02
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B9CC3411D;
-        Thu, 23 Jun 2022 05:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655960679;
-        bh=96PXdvtO1VftGh3ILQ2SJTCDvrG7FSTHpe06x8inDuU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bxDTjd/pmo8vLHWatxnVGeIKAfKIMiTmrl+YcQ+tLxfFcEVmqWOqSrLtU4vKA+Zu5
-         CpatCOptJp6g1ZOWv51zrKwNgTDO9NDvh48glOqqxBiKtOBSpUemsOg4gWKUcl7m6U
-         0IeQ9lWFECEgfgbfdPDp9USH5OfDvxcyiFoxuzLPaKxuRxiU/fXFj8UecWdgipjvoY
-         NhqaTVb914JLRlIJDlHcvN4GWfqgB+4NlOzUuoo9ebkZQ6ZprIhcKc6Miu9nP/lOnD
-         m9Cv8lutzDSy8f4HslaeDlDC4sL+LDCP9c2LL5m342FQMOEf83n2RUyuz1qZZx7bYv
-         rQQ8A6gsHRsLA==
-Date:   Thu, 23 Jun 2022 00:04:33 -0500
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rebecca Mckeever <remckee0@gmail.com>
-Cc:     "Huang, Shaoqin" <shaoqin.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v3 2/4] memblock tests: add verbose output to memblock
- tests
-Message-ID: <YrP0YVMKo19Wrv44@kernel.org>
-References: <cover.1655889641.git.remckee0@gmail.com>
- <004e021cc3cb7be8749361b3b1cb324459b9cb9f.1655889641.git.remckee0@gmail.com>
- <b7e6565b-d9f7-a5cc-8e66-087ea7b270d1@intel.com>
- <YrO3uyXee9DcMTzz@bertie>
- <d53b547a-1450-82de-a3c5-4bb09f2a728d@intel.com>
- <YrPmhzZDd9YFyEUa@kernel.org>
- <YrPyfqENPHfUCaq4@bertie>
+        Thu, 23 Jun 2022 01:14:37 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39A8199
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 22:14:36 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id k14so5698710plh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 22:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ls9hvwuUqtcL6CqYob/ByEfPEYjTHPxmgj5hdQsgzm4=;
+        b=kyfmQSmCpsjYYdL7jn90nALrRXSCuqzIsFH3u2VRXfKfeCKSf7QIvbbq3cus2lYWd5
+         8jvQ1JU+g1AcrYhHP7TgB5k2LO7jlQ6Gkt9oI/AKK5nfD307Uv7hkm1hVwQsNP0Ael8P
+         P+nAYmmb+4MulutY3BZ/fLsAM1nrnfWJ2cbS3qdvUxKV+eXxigVxA7vQbjW6CjFpJpkB
+         QI0KyfnoZOZEivz324whZRrj4bJxjzFZreYfV5SX5qkNlzaeYeWHreuoFvHpHVGhHmxJ
+         nmuNOXEEONtBu2wtDUlPZJeVWNFdSc0/RDb9/rqJPVJq7IMG/75zSAZTd2fiXWiZW9i0
+         uwEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ls9hvwuUqtcL6CqYob/ByEfPEYjTHPxmgj5hdQsgzm4=;
+        b=mDp6b0EYkq7MYjttRa7UTVjOZYG4U+vlHeyapLE43oloJTU4l0eHvsGUwTRC3Ywf2I
+         +TS09Xq4WMzi8+DCUurS1UwOAtYcLSZd4IlCI34CdG3GUcZ4C8hW+Ll4IrS++Q7kPKj5
+         OmHU31RcE8PHAn34VxZo46LkRXyllF02YlGuvSOim+qnuinfrwJ0e7BBAGsVYBx59Spe
+         MF6xk8+sk25qD4J+uU3Ao5Uy8N+q7qb7mx8iagInD7bqRR+4vYYRoWW5JA/0mJ4BRNfB
+         4gCvHkQjul/TT1pCjl5Pajnjr1AZ2Z1zv+tWqV1vQo3r1mqD+5ZSiDJGSMFIWm0eWGEn
+         q3Pw==
+X-Gm-Message-State: AJIora+ZW8R5qy/aLlhploecBwnej435x7J4y85qrQS1dnGCQvpHTN2y
+        JU08UQMXCtwYzuVpziNXox8=
+X-Google-Smtp-Source: AGRyM1uAxPHhfCJYCgRNEaq5XQtzwprlgYiOK6tmeNSOFsF0j8QXUgWcrmWLJtU8glJWlEDWMSrpzg==
+X-Received: by 2002:a17:903:2347:b0:16a:33cd:5308 with SMTP id c7-20020a170903234700b0016a33cd5308mr13824497plh.122.1655961276305;
+        Wed, 22 Jun 2022 22:14:36 -0700 (PDT)
+Received: from localhost (c-67-180-87-133.hsd1.ca.comcast.net. [67.180.87.133])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001676f87473fsm13735730plk.302.2022.06.22.22.14.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 22:14:35 -0700 (PDT)
+From:   Chang Yu <marcus.yu.56@gmail.com>
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Chang Yu <marcus.yu.56@gmail.com>
+Subject: [PATCH v2] staging: r8188eu: combine nested if statements into one
+Date:   Wed, 22 Jun 2022 22:14:04 -0700
+Message-Id: <20220623051404.410632-1-marcus.yu.56@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220623031515.402691-1-marcus.yu.56@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrPyfqENPHfUCaq4@bertie>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:56:30PM -0500, Rebecca Mckeever wrote:
-> On Wed, Jun 22, 2022 at 11:05:27PM -0500, Mike Rapoport wrote:
-> > On Thu, Jun 23, 2022 at 09:29:05AM +0800, Huang, Shaoqin wrote:
-> > > 
-> > > 
-> > > On 6/23/2022 8:45 AM, Rebecca Mckeever wrote:
-> > > > On Wed, Jun 22, 2022 at 06:32:04PM +0800, Huang, Shaoqin wrote:
-> > > > > Just test it and everything works fine. And I think there are some thing can
-> > > > > improve:
-> > > > > 
-> > > > >      The prefix_push() and prefix_pop() are used in so many functions and
-> > > > > almost of them just put the prefix_push(__func__) begin in the head and the
-> > > > > prefix_pop() in the end.
-> > > > >      May be you can define some macro that when you output something and
-> > > > > automatically push the __func__ as prefix. And when leave the function,
-> > > > > automatically pop it. And only in some special place, you call it manually.
-> > > > > 
-> > > > Thank you for your review. I'm not sure how you would automatically push
-> > > > __func__ since you have to be inside the function to access that
-> > > > variable. Let me know if you have any suggestions. I am thinking about
-> > > > adding another function in common.c that just calls test_pass() followed
-> > > > by prefix_pop() since those are called together so often.
-> > > 
-> > > Just like:
-> > > #define test_pass_macro()               \
-> > >          do {                            \
-> > >                  prefix_push(__func__);  \
-> > >                  test_pass();            \
-> > >                  prefix_pop();           \
-> > >          } while (0)
-> > 
-> > This will not print the name of the failing test, e.g. instead of 
-> > 
-> > not ok 28 : memblock_alloc: alloc_bottom_up_disjoint_check: failed
-> > 
-> > with Rebecca's implementation it'll print
-> > 
-> > not ok 28 : memblock_alloc: failed
-> > 
-> Oh yeah, prefix_push() needs to be called before the asserts.
-> 
-> > How about
-> > 
-> > #define PREFIX_PUSH() 	prefix_push(__func__)?
-> >  
-> Good idea. What about 
-> 
-> #define TEST_PASS() do { \
-> 	test_pass(); \
-> 	prefix_pop(); \
-> } while (0)
-> 
-> ? Or would it be better to make a function?
+Combine two nested if statements into a single one
 
-static inline function would be better.
+Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
+---
+Changes in v2:
+Added a pair of parentheses to make operator precedence explicit.
+
+ drivers/staging/r8188eu/core/rtw_recv.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index 6564e82ddd66..020bc212532f 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -166,10 +166,8 @@ int rtw_free_recvframe(struct recv_frame *precvframe, struct __queue *pfree_recv
  
-> Thanks,
-> Rebecca
-
+ 	list_add_tail(&precvframe->list, get_list_head(pfree_recv_queue));
+ 
+-	if (padapter) {
+-		if (pfree_recv_queue == &precvpriv->free_recv_queue)
+-				precvpriv->free_recvframe_cnt++;
+-	}
++	if (padapter && (pfree_recv_queue == &precvpriv->free_recv_queue))
++		precvpriv->free_recvframe_cnt++;
+ 
+ 	spin_unlock_bh(&pfree_recv_queue->lock);
+ 
 -- 
-Sincerely yours,
-Mike.
+2.36.1
+

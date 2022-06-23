@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DE5557492
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B11A55749A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiFWHzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 03:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S230445AbiFWH4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 03:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiFWHza (ORCPT
+        with ESMTP id S229812AbiFWH4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 03:55:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB9A47061
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:55:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA6C61B01
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:55:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96720C3411B;
-        Thu, 23 Jun 2022 07:55:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655970928;
-        bh=+mCsuKkg6J4843YgoICH76eZkbbsWWPv4bN1r397BFU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ryn/wFyICQZLHrQUR7HdI9ruJoyDQO4rvJTV6kIaJItCZA7TrYXFQmtn+C1MFr4t0
-         Uggw5RZjt97WHgadbomOND0G6IEZVUow7NnL/t9Pb4N8pJp2ZkGR/ii4JnaToVqnUD
-         yXqGhU1qM/T3Hhvo+I9ObGBIA9i2oO6j4COS/yg9GliuywGOj4iAqFrizLnQ86AcKw
-         sHvytYP4CY/UskGrquWz8o+i05nr3LIv4ffQh3raROCD5oYgeBxE+NKBwzaT95QJZR
-         P+FmP3Aaf445fPgIO674cr+tUwXte0DfPKpMNrv00V7FTaqE6FB7hi0e/c1hoXLGe7
-         ZYlLam1dG7i+g==
-Date:   Thu, 23 Jun 2022 13:25:23 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        bard.liao@intel.com
-Subject: Re: [PATCH] soundwire: bus_type: fix remove and shutdown support
-Message-ID: <YrQca7YH8v6XCl02@matsya>
-References: <20220610015105.25987-1-yung-chuan.liao@linux.intel.com>
+        Thu, 23 Jun 2022 03:56:35 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1BE47062
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:56:34 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so1793912pjj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 00:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=52DOKUmijPrR1llFW9K3DBIew/ljlnTH6iwCtWc1Dcw=;
+        b=exQnH0NQbD26Rfz+zMOaKrsn9PANlcA9Lv4uS4pbvNApPEF7QMuYvgKaP8SoEPjHPN
+         CeIOcPQy5Bgl6x3/PUA9e+SwYRvohXoQpAEvSVgcCBGVZqNoUVJM5P7NYald6MKEyOkO
+         4DzyCvykmIZtkgBnANfHPcsfKorJF4SjFwTJZ7+Lsn1O3dyWwH/HL3G2b02X1tbnFSG1
+         xY5mAccjq6mocIz68F1WL5WT4ChDt1eWSfBDVVouNF8q/ACxNV+rhrcQT5CPpJ5CIyW6
+         9ri04H8gIFDXjuwcK5OLNNCM4Js6DdbLExipOFQNwxVZW71UsXXPR22s9f5EmyrDBLpq
+         G4Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=52DOKUmijPrR1llFW9K3DBIew/ljlnTH6iwCtWc1Dcw=;
+        b=T/RfcV1CmzhK2SwI7t2EHmUIRwfe5xpmftSX+ECxjHa/uWILQaPog/Esq5qMRJpVYt
+         ORkdZQO7gtmszvLgUl5TPI75z7U33LqU7t5OqaYrMIindagmaL9VPLbamsFp+Z7Ux1L5
+         TUa8dl/PSXxw3QBQjl1TqyktrqTc4AQhjjSQ6mSytZJ2KVGJnT3Ob1aAtf5sm23GFAPC
+         xrY1L92QX1dTmEzk6j+C2KmH0IJaLidKb8TezLpilf3mt5AcOJ0BF6zGXh7h00rZUoJH
+         TCgCfnotG77i0Q/hST3c1JgMo6MRrP7pUyKwCml2sM9BcNmDrr2Vux065usOA0D7n6jk
+         QIoQ==
+X-Gm-Message-State: AJIora8qKjLT3R+APiQ20lCbTnRcIXCGo9n7ZV13SwH2pM3gEOAuZqG1
+        2GElWWx/9Hkq/M7jNRorV+8=
+X-Google-Smtp-Source: AGRyM1udj65Ge4ca9XFsOJwZwt9pFP2X01j5Lj0HcNbhtI8hHeiq88W2Din8RIUWd62QMSAqgA6W/g==
+X-Received: by 2002:a17:902:9a97:b0:168:a97e:2457 with SMTP id w23-20020a1709029a9700b00168a97e2457mr38139523plp.33.1655970994002;
+        Thu, 23 Jun 2022 00:56:34 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-43.three.co.id. [116.206.12.43])
+        by smtp.gmail.com with ESMTPSA id v1-20020a62c301000000b0052090076426sm15492531pfg.19.2022.06.23.00.56.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 00:56:33 -0700 (PDT)
+Message-ID: <89bc29c5-ad82-4f20-2855-44e57b043c49@gmail.com>
+Date:   Thu, 23 Jun 2022 14:56:28 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610015105.25987-1-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] ARC:mm:Fix syntax errors in comments
+Content-Language: en-US
+To:     Vineet Gupta <vgupta@kernel.org>, Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     Julia.Lawall@inria.fr, rdunlap@infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220622080423.41570-1-yuanjilin@cdjrlc.com>
+ <YrLTCXLrr3HB39lv@debian.me>
+ <d104124c-5196-bc80-b3e3-0ab55f0cc35e@kernel.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <d104124c-5196-bc80-b3e3-0ab55f0cc35e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-06-22, 09:51, Bard Liao wrote:
-> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On 6/23/22 09:50, Vineet Gupta wrote:
+>> The patch is OK, but its subject is wrong.
 > 
-> The bus sdw_drv_remove() and sdw_drv_shutdown() helpers are used
-> conditionally, if the driver provides these routines.
+> Right.
 > 
-> These helpers already test if the driver provides a .remove or
-> .shutdown callback, so there's no harm in invoking the
-> sdw_drv_remove() and sdw_drv_shutdown() unconditionally.
-
-Okay sounds good
-
-> In addition, the current code is imbalanced with
-> dev_pm_domain_attach() called from sdw_drv_probe(), but
-> dev_pm_domain_detach() called from sdw_drv_remove() only if the driver
-> provides a .remove callback.
-
-Am not sure I follow what is imbalance, pm_domain_attach/detach?
-
-> Fixes: 9251345dca24b ("soundwire: Add SoundWire bus type")
-
-How is this a fix is still unclear to me. At best I think this is code
-optimization and removing checks which maybe redundant.
-
-> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Rander Wang <rander.wang@intel.com>
-> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-> ---
->  drivers/soundwire/bus_type.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+>> The patch above isn't fixing any syntax errors, but rather minor cleanup.
+>> The subject should have been "Remove duplicate 'to' in the
+>> flush_dcache_page() comment".
 > 
-> diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
-> index 893296f3fe39..b81e04dd3a9f 100644
-> --- a/drivers/soundwire/bus_type.c
-> +++ b/drivers/soundwire/bus_type.c
-> @@ -193,12 +193,8 @@ int __sdw_register_driver(struct sdw_driver *drv, struct module *owner)
->  
->  	drv->driver.owner = owner;
->  	drv->driver.probe = sdw_drv_probe;
-> -
-> -	if (drv->remove)
-> -		drv->driver.remove = sdw_drv_remove;
-> -
-> -	if (drv->shutdown)
-> -		drv->driver.shutdown = sdw_drv_shutdown;
-> +	drv->driver.remove = sdw_drv_remove;
-> +	drv->driver.shutdown = sdw_drv_shutdown;
->  
->  	return driver_register(&drv->driver);
->  }
-> -- 
-> 2.17.1
+> I'd just say "ARC: mm: fix typos"
+> 
+
+OK.
+
+> In an ideal world yes. But sometimes maintainer complain to break whitespacxe fixes and such into independent fix. Also as someone said later in the thread, for somebody just getting into kernel and figuring out patch submission etc this could be a perfect dry run and helps improve the code anyways.
+> 
+
+Seems like you missed the point that it's OK to have typofixes while
+doing other real changes (like refactoring) in the same patch.
+
+Quoting from [1]:
+
+> My opinion is that trivial patches like this are fine as a starting
+> point for new contributors, which is why I acked the previous patch from
+> you guys. However, if we start getting two of these every week it just
+> adds more maintenance burden than it's worth.
+
+I tend to agree with the last sentence of above quote. Let's pretend that
+I'm the tree maintainer. Besides reviewing real change patches, I get
+flooded by these similar minor cleanup patches that I need to review.
+Some (but not all) these patches have issues (say subject or description
+error) that are repeated. Lazily speaking, I'd like to privately notice the
+submitter about the situation, and I withhold these for now.
+
+Thanks.
+
+[1]: https://lore.kernel.org/lkml/0308c92a-0e10-35a4-928b-8f715a7bae44@linbit.com/
 
 -- 
-~Vinod
+An old man doll... just what I always wanted! - Clara

@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4175571FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A997557226
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiFWErD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        id S232853AbiFWEqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244487AbiFWDzJ (ORCPT
+        with ESMTP id S245591AbiFWECR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:55:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FF086439
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655956507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7r6qmkZmyFSR/QZW2a5u/i7ubHA3ZPKofanFmUp6yzI=;
-        b=FjShoX/tj3b18ti2xlYx0mIeX6tMHjrR+os1geN/jFhySG8Hi2io+01Pntr8n+33CEZCoL
-        R17+lyc3eZGPCiBJp/mTPo9q/jQ+i63Wz5Hnr5G1cCLVzEtCtrdE5moqh2YuJ23UnYEv/N
-        zHGKkO7uvSQDCvado9zsZ01c/lwqbeE=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-99-7LInVIQkNU2LEcdW46pMCQ-1; Wed, 22 Jun 2022 23:55:04 -0400
-X-MC-Unique: 7LInVIQkNU2LEcdW46pMCQ-1
-Received: by mail-lf1-f72.google.com with SMTP id bi38-20020a0565120ea600b0047f640eaee0so6082405lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:55:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7r6qmkZmyFSR/QZW2a5u/i7ubHA3ZPKofanFmUp6yzI=;
-        b=oogNRlGrBGZ72Dd8yLnierGDg/lnxoRBMngXE0aBPCCtn+XRoI07iIXVcz8nrDQIBv
-         r9dlqoiyxnvpN+bFA5oAEtLjCQh88BtGeolKbGu0HK3iYHD4dnOnUXfGSQgJi+I8zGAT
-         moPPoKwmW1JHf0r0IJILh4ZEo40aLQrexX4MIoH6FL00z6PhRJfhAMysn3Ak0kN6cgX1
-         y76/n/VtI6T4yYmCKwux0NVn0Vm78HBop5/ZBPuKUDkz3nmsith0UYz2bT0dG1jLhaaZ
-         b39U/Sgvmbe7ObEy2zYY+vwCO7/jCtWpZDgS67a8hIyYigyqBVQXvlTJNNCHo2VNZCER
-         Kr6Q==
-X-Gm-Message-State: AJIora94c7A0D5WgmTTlbN/SOorHr9E3o9LqA48c/x8q6mc/7HzR6Pmt
-        SUM4rzQTQapPv3JYhUQljLgmRdjf0N/AAbHX02JYhsmsxYtDm+HzQlyWtU5OE/SfNPUW3dpvxMB
-        VfDwiy+dBDllS/HkMUOKEltdYvcpL1Ia0T/fXFYxh
-X-Received: by 2002:a2e:8958:0:b0:25a:852a:c302 with SMTP id b24-20020a2e8958000000b0025a852ac302mr3663581ljk.130.1655956501264;
-        Wed, 22 Jun 2022 20:55:01 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vrF3BW4ecp7uMp7ixhwZNP6zrC/7mtr9RBqWZSr7h7Xd5f5VroJYLw4ej6faDfjvvTZLb0DpnhA3R+kdmS/XI=
-X-Received: by 2002:a2e:8958:0:b0:25a:852a:c302 with SMTP id
- b24-20020a2e8958000000b0025a852ac302mr3663568ljk.130.1655956501094; Wed, 22
- Jun 2022 20:55:01 -0700 (PDT)
+        Thu, 23 Jun 2022 00:02:17 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A14B2D1F4;
+        Wed, 22 Jun 2022 21:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655956936; x=1687492936;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iAIaqF7rha3sZC6nzOYKWGpBVTJjKr5yx5Wg7Q0/sfA=;
+  b=QSB1tx95/AqoiQTiK3p0kFOnZl/yAq3x2FEmLrUzjTbOPtFAcnKBPHVz
+   fDX1m9t1kuBewDrDjioyic7H5bm4XSQbBuEK3ZeuUaQLkyHeE0W+KxQ2P
+   ad/fmc4CgP+wKtcft5FqXRWQc5hro//Q0a+6F2Gc9JxLnWwm2O+WJ0OI0
+   8IPhpMlJpEDxE3h1SQZ0LIED6uAVHfBNPx8YyCJIX4DptrXgqUJXA0k9v
+   l85BFmo0J5+vFsbwf1PHZqrGZOdvkW6IIP0yUAGQuZ7/cz03WC+ZoaPVo
+   QMbEDqhp57Cl/3thXmxAdHLHbL3Khffjvbi9+bqKh2vvbTkrc971AN+2M
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="280664601"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="280664601"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 21:02:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="655991306"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Jun 2022 21:02:13 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4E2m-0000fn-QR;
+        Thu, 23 Jun 2022 04:02:12 +0000
+Date:   Thu, 23 Jun 2022 12:01:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v1 2/2] ASoC: cs35l41: Read System Name from ACPI _SUB to
+ identify firmware
+Message-ID: <202206231108.xPflWTbR-lkp@intel.com>
+References: <20220622130730.1573747-3-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
-References: <20220622151407.51232-1-sgarzare@redhat.com>
-In-Reply-To: <20220622151407.51232-1-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 23 Jun 2022 11:54:50 +0800
-Message-ID: <CACGkMEsW7OAWHZvD6rjGtCE6t3BmEvpz=PmQvbHh1hMq-6RwhA@mail.gmail.com>
-Subject: Re: [PATCH] vhost-vdpa: call vhost_vdpa_cleanup during the release
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622130730.1573747-3-sbinding@opensource.cirrus.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +70,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:14 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> Before commit 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
-> we call vhost_vdpa_iotlb_free() during the release to clean all regions
-> mapped in the iotlb.
->
-> That commit removed vhost_vdpa_iotlb_free() and added vhost_vdpa_cleanup()
-> to do some cleanup, including deleting all mappings, but we forgot to call
-> it in vhost_vdpa_release().
->
-> This causes that if an application does not remove all mappings explicitly
-> (or it crashes), the mappings remain in the iotlb and subsequent
-> applications may fail if they map the same addresses.
->
-> Calling vhost_vdpa_cleanup() also fixes a memory leak since we are not
-> freeing `v->vdev.vqs` during the release from the same commit.
->
-> Since vhost_vdpa_cleanup() calls vhost_dev_cleanup() we can remove its
-> call from vhost_vdpa_release().
->
-> Fixes: 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
-> Cc: gautam.dawar@xilinx.com
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Hi Stefan,
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Thank you for the patch! Yet something to improve:
 
-> ---
->  drivers/vhost/vdpa.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 5ad2596c6e8a..23dcbfdfa13b 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -1209,7 +1209,7 @@ static int vhost_vdpa_release(struct inode *inode, struct file *filep)
->         vhost_dev_stop(&v->vdev);
->         vhost_vdpa_free_domain(v);
->         vhost_vdpa_config_put(v);
-> -       vhost_dev_cleanup(&v->vdev);
-> +       vhost_vdpa_cleanup(v);
->         mutex_unlock(&d->mutex);
->
->         atomic_dec(&v->opened);
-> --
-> 2.36.1
->
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on broonie-sound/for-next linus/master v5.19-rc3 next-20220622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Binding/Read-_SUB-from-ACPI-to-be-able-to-identify-firmware/20220622-211004
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: sparc64-randconfig-r002-20220622 (https://download.01.org/0day-ci/archive/20220623/202206231108.xPflWTbR-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/338eadc59e88d60759ea445011a6537222b233e3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stefan-Binding/Read-_SUB-from-ACPI-to-be-able-to-identify-firmware/20220622-211004
+        git checkout 338eadc59e88d60759ea445011a6537222b233e3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash sound/soc/codecs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   sound/soc/codecs/cs35l41.c: In function 'cs35l41_probe_acpi':
+>> sound/soc/codecs/cs35l41.c:1157:32: error: invalid use of undefined type 'struct acpi_device'
+    1157 |         ret = acpi_get_sub(adev->handle, sub, sizeof(sub));
+         |                                ^~
+
+
+vim +1157 sound/soc/codecs/cs35l41.c
+
+  1145	
+  1146	static int cs35l41_probe_acpi(struct cs35l41_private *cs35l41)
+  1147	{
+  1148		struct acpi_device *adev;
+  1149		int ret;
+  1150		char sub[ACPI_MAX_SUB_BUF_SIZE];
+  1151	
+  1152		adev = ACPI_COMPANION(cs35l41->dev);
+  1153		/* If there is no ACPI_COMPANION, there is no ACPI for this system, return 0 */
+  1154		if (!adev)
+  1155			return 0;
+  1156	
+> 1157		ret = acpi_get_sub(adev->handle, sub, sizeof(sub));
+  1158		if (ret < 0)
+  1159			return ret;
+  1160	
+  1161		cs35l41->dsp.system_name = devm_kstrdup(cs35l41->dev, sub, GFP_KERNEL);
+  1162		if (!cs35l41->dsp.system_name)
+  1163			return -ENOMEM;
+  1164	
+  1165		return 0;
+  1166	}
+  1167	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,77 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45DB557C99
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F99557C9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiFWNLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S230482AbiFWNLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiFWNLC (ORCPT
+        with ESMTP id S231625AbiFWNLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:11:02 -0400
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7E22E9DC;
-        Thu, 23 Jun 2022 06:11:01 -0700 (PDT)
-Received: by mail-pl1-f173.google.com with SMTP id n10so796517plp.0;
-        Thu, 23 Jun 2022 06:11:01 -0700 (PDT)
+        Thu, 23 Jun 2022 09:11:33 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503FE30554
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:11:29 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id e5so11020223wma.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JF3KFGuU5d1nPOiqYMvyN5E84aUzwajF94ekFp44h3w=;
+        b=LBM2kqEtnMXJotGt8/OvyPuEtGx1Lesxgls/2wFhLs9qSftGQ766tmIXd3WtwmiAmJ
+         bQrPEbNbQZlDk8k5THkJ5JiD9r+CUc/co1hveaXpvT3hW/fP8g+dZfjW8FdtvzE0cCvW
+         05IVbMQGu7Y5AvjL3f5J6255yMHT5RNJ6uym2VtetnFXj+Uk1k5QidCWSDIDaU6bgHip
+         c4wN1OLm7R9uBf4TL+T3pOkDJA/e1GKHRnUdG25r/1DuGPdE9PR1VmlVsiS8e+dJDPsH
+         VFw1wZYF+EAvKWjfhE9/8H7Q8GyRWbUxpCPp0YLXcgGrs/epk+o7o95YiFYR7b9H2czt
+         P3nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=68nt+J0G/haWsaqcORubs5/O2GXyfdJNdDR4QR4VCKw=;
-        b=OOXLkug51HBqCw3dNk3pSEFynWE9ri2JWFspSvWJxb/TckhcRf012zC2sGXlgNEuFU
-         cR+1wwiAFMsh5uoVp+5JcbylySNFJdgqrA3t5V21Wk7QnHD4Nu6kXrBI5fbhYl80+iof
-         dCZAs1StpH0Y8xwSxqsDpK5cv7ddaJGi98rnb0zlF6Fh7NdcVVe3l6dfdZo48yUXJE6Y
-         oeNu9w1r3v6tKeYjxWHa9AiY3QwG4vX59YIS7CpNUiotR7SWPrwf6GCMmXnDdeZJI9+R
-         aBFDJQPWHbf5AngdMelmJKIGt9A7B2kjwxo0KjKAtpLP8B5g5RYMjR30Af9zeBKiReMW
-         Yb/g==
-X-Gm-Message-State: AJIora/2q4cP3au2rrc4u+5JfrNd+l86AiuiDyMxAWp/Um9eTW2XE7Ed
-        gR/fNuEEbxBN5Ftr5ewfeNo=
-X-Google-Smtp-Source: AGRyM1ug8aOaBKwK2eQ4pDHsrijU8aBX0RbI1irUvRXGrh/3bVzmBklJ17kBxFIfIHeCUSDk8qqjYg==
-X-Received: by 2002:a17:90b:4c8a:b0:1e3:60f:58c3 with SMTP id my10-20020a17090b4c8a00b001e3060f58c3mr4043995pjb.230.1655989860307;
-        Thu, 23 Jun 2022 06:11:00 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id jf12-20020a170903268c00b0016a0ac06424sm11978240plb.51.2022.06.23.06.10.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 06:10:59 -0700 (PDT)
-Message-ID: <3a2a2d1a-ab52-687d-d521-4a05d7047701@acm.org>
-Date:   Thu, 23 Jun 2022 06:10:57 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JF3KFGuU5d1nPOiqYMvyN5E84aUzwajF94ekFp44h3w=;
+        b=gwGDEhVVTcMM+9OWqAff457WN2DKl+ejZny1FdSCXHrI4MxORyQd7yNFJ6SQdZ1WTJ
+         rys7VY9sJH2HAlygIelbh94jF9WVWui4ioA6EZineuaVTOfTI4HsGYPqCa7HDzlQx/jM
+         EgByVeo2GImZmQ+W5QozSEovT6z8jVAUEDucYXmVziK2jsDQHyPiOfPHG68mzKubNj3a
+         YvIljSZ3cDTWKDmngzA6YMrkww/sYzNLAsbKkDq2QQKrISkh5zyxuScfxEnVBPPX4M52
+         d4NxewUtHDau8edFSJrDmrBrA2IXzoabJGo1UXNKO0RuhAwXFXoqUFj1UgFMK/ESrG7q
+         dr3g==
+X-Gm-Message-State: AJIora9dEKkq4YI8Su1kR5gYUSgAIWAsygzGatwgsAJ4SXdz+WiW7CRQ
+        X+mJcasO2k2mwcQUV6MGznGTJBXOeRugj6COJ3dxjg==
+X-Google-Smtp-Source: AGRyM1s8jERg0p36PqyphiAkwtRLgjreNmeqmAHlkeVHNpYZOMl7w1X/p6JVFgAnddSW/XKcAhKGiNVel50D01z461A=
+X-Received: by 2002:a05:600c:4fd4:b0:3a0:334e:241e with SMTP id
+ o20-20020a05600c4fd400b003a0334e241emr2072446wmq.73.1655989887621; Thu, 23
+ Jun 2022 06:11:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 6/6] blk-mq: Drop local variable for reserved tag
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, hch@lst.de, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hare@suse.de, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com
-Cc:     linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mpi3mr-linuxdrv.pdl@broadcom.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nbd@other.debian.org
-References: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
- <1655810143-67784-7-git-send-email-john.garry@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1655810143-67784-7-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220623112905.253157-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220623112905.253157-1-krzysztof.kozlowski@linaro.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 23 Jun 2022 18:41:15 +0530
+Message-ID: <CAAhSdy35972j=qpqQWak1Ot1nZb0iiURzYqhrbZ1bfuuAdpw_w@mail.gmail.com>
+Subject: Re: [PATCH] riscv: traps_misaligned: do not duplicate stringify
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/22 04:15, John Garry wrote:
-> The local variable is now only referenced once so drop it.
+On Thu, Jun 23, 2022 at 4:59 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Use existing stringify macro from the kernel headers.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Looks good to me.
 
+Reviewed-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
+> ---
+>  arch/riscv/kernel/traps_misaligned.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+> index 46c4dafe3ba0..378f5b151443 100644
+> --- a/arch/riscv/kernel/traps_misaligned.c
+> +++ b/arch/riscv/kernel/traps_misaligned.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/mm.h>
+>  #include <linux/module.h>
+>  #include <linux/irq.h>
+> +#include <linux/stringify.h>
+>
+>  #include <asm/processor.h>
+>  #include <asm/ptrace.h>
+> @@ -150,9 +151,6 @@
+>  #define PRECISION_S 0
+>  #define PRECISION_D 1
+>
+> -#define STR(x) XSTR(x)
+> -#define XSTR(x) #x
+> -
+>  #define DECLARE_UNPRIVILEGED_LOAD_FUNCTION(type, insn)                 \
+>  static inline type load_##type(const type *addr)                       \
+>  {                                                                      \
+> @@ -207,9 +205,9 @@ static inline ulong get_insn(ulong mepc)
+>         asm ("and %[tmp], %[addr], 2\n"
+>                 "bnez %[tmp], 1f\n"
+>  #if defined(CONFIG_64BIT)
+> -               STR(LWU) " %[insn], (%[addr])\n"
+> +               __stringify(LWU) " %[insn], (%[addr])\n"
+>  #else
+> -               STR(LW) " %[insn], (%[addr])\n"
+> +               __stringify(LW) " %[insn], (%[addr])\n"
+>  #endif
+>                 "and %[tmp], %[insn], %[rvc_mask]\n"
+>                 "beq %[tmp], %[rvc_mask], 2f\n"
+> --
+> 2.34.1
+>

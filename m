@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A32557D2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525D5557D15
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiFWNli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
+        id S231387AbiFWNcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiFWNlg (ORCPT
+        with ESMTP id S231907AbiFWNcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:41:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878163A5C7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:41:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2393461DC6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:41:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6D8C3411B;
-        Thu, 23 Jun 2022 13:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655991694;
-        bh=pdE0P0CC8X0YMtHsR3cA0mOmhgevcVf8IPNunQb9ykU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FwVEvIbQjUxSWOuSvpcUPGT7t7RLDyHhjjWJeDrfgF69mM8J9KJ9sUrfY/HlJGECN
-         NO3B7+0A3hgh2UsjMpQpZiLaanDv9tItKziLc1cO5LjRdXgbUiUFVF/KqsMMT4tZFG
-         o4AU8iVFWFPu4YYmJYlJHgohtVzYTx1Y6cUC8dNQf3Hk4npB9LMPOBk10JAapLPZue
-         ADv33OsvURqzna2D2/S4prIVVoRTjuQZxNUtjCDgMFw6s2dAW8kGhpecSgvTWBiDul
-         bDnrz+hXUUQqLgqNvVfw+AeK0Bdh9lVhgU+4sYJrse39sTj/+TAG9s0LSHsx2zkMsM
-         +xiw+ykXVdZbA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 095B34096F; Thu, 23 Jun 2022 10:41:31 -0300 (-03)
-Date:   Thu, 23 Jun 2022 10:41:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] perf record: Add finished init event
-Message-ID: <YrRtiqE3gm/zQxfj@kernel.org>
-References: <20220610113316.6682-1-adrian.hunter@intel.com>
- <20220610113316.6682-5-adrian.hunter@intel.com>
+        Thu, 23 Jun 2022 09:32:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB23E0C2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:32:34 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LTLjj53M0zdfwY;
+        Thu, 23 Jun 2022 21:30:49 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 23 Jun 2022 21:32:32 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 23 Jun
+ 2022 21:32:32 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+CC:     <akpm@linux-foundation.org>, <liam.howlett@oracle.com>,
+        <quic_qiancai@quicinc.com>, <yuzhao@google.com>
+Subject: [PATCH -next] mm/mmap: fix error return code in do_mas_align_munmap()
+Date:   Thu, 23 Jun 2022 21:42:37 +0800
+Message-ID: <20220623134237.2127440-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610113316.6682-5-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,218 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jun 10, 2022 at 02:33:15PM +0300, Adrian Hunter escreveu:
-> In preparation for recording sideband events in a virtual machine guest so
-> that they can be injected into a host perf.data file.
-> 
-> This is needed to enable injecting events after the initial synthesized
-> user events (that have an all zero id sample) but before regular events.
+Return error code when munmap_sidetree() fails in do_mas_align_munmap().
 
-Humm, can't we consider the first FINISHED_ROUND as a good enough marker
-for this?
+Fixes: 81f5504dfb36 ("mm/mmap: change do_mas_align_munmap() to avoid preallocations for sidetree")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ mm/mmap.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-0 0x4fc8 [0x48]: PERF_RECORD_KSYMBOL addr ffffffffc10d0650 len 255 type 1 flags 0x0 name bpf_prog_ee0e253c78993a24
-
-0x5010@perf.data [0x28]: event: 18
-.
-. ... raw event: size 40 bytes
-.  0000:  12 00 00 00 00 00 28 00 01 00 00 00 28 00 00 00  ......(.....(...
-.  0010:  ee 0e 25 3c 78 99 3a 24 00 00 00 00 00 00 00 00  ..%<x.:$........
-.  0020:  00 00 00 00 00 00 00 00                          ........
-
-0 0x5010 [0x28]: PERF_RECORD_BPF_EVENT type 1, flags 0, id 40
-
-0x5038@perf.data [0x30]: event: 3
-.
-. ... raw event: size 48 bytes
-.  0000:  03 00 00 00 00 00 30 00 3a 5d 00 00 3a 5d 00 00  ......0.:]..:]..
-.  0010:  70 65 72 66 2d 65 78 65 63 00 00 00 00 00 00 00  perf-exec.......
-.  0020:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-
-0 0x5038 [0x30]: PERF_RECORD_COMM: perf-exec:23866/23866
-
-0x5068@perf.data [0x8]: event: 82
-.
-. ... raw event: size 8 bytes
-.  0000:  52 00 00 00 00 00 08 00                          R.......
-
-0 0x5068 [0x8]: PERF_RECORD_FINISHED_INIT: unhandled!
-
-0x5390@perf.data [0x8]: event: 68
-.
-. ... raw event: size 8 bytes
-.  0000:  44 00 00 00 00 00 08 00                          D.......
-
-0 0x5390 [0x8]: PERF_RECORD_FINISHED_ROUND
-
-0x5070@perf.data [0x28]: event: 9
-.
-. ... raw event: size 40 bytes
-.  0000:  09 00 00 00 01 00 28 00 50 b5 16 a7 ff ff ff ff  ......(.P.......
-.  0010:  3a 5d 00 00 3a 5d 00 00 54 90 f5 bf 52 01 00 00  :]..:]..T...R...
-.  0020:  01 00 00 00 00 00 00 00                          ........
-
-1454919487572 0x5070 [0x28]: PERF_RECORD_SAMPLE(IP, 0x1): 23866/23866: 0xffffffffa716b550 period: 1 addr: 0
-
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 1bdf56804048..bb978061a790 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2427,7 +2427,8 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
  
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/lib/perf/include/perf/event.h |  1 +
->  tools/perf/builtin-inject.c         |  1 +
->  tools/perf/builtin-record.c         | 27 +++++++++++++++++++++++++++
->  tools/perf/util/event.c             |  1 +
->  tools/perf/util/session.c           |  4 ++++
->  tools/perf/util/tool.h              |  3 ++-
->  6 files changed, 36 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
-> index e7758707cadd..9f7ca070da87 100644
-> --- a/tools/lib/perf/include/perf/event.h
-> +++ b/tools/lib/perf/include/perf/event.h
-> @@ -389,6 +389,7 @@ enum perf_user_event_type { /* above any possible kernel type */
->  	PERF_RECORD_TIME_CONV			= 79,
->  	PERF_RECORD_HEADER_FEATURE		= 80,
->  	PERF_RECORD_COMPRESSED			= 81,
-> +	PERF_RECORD_FINISHED_INIT		= 82,
->  	PERF_RECORD_HEADER_MAX
->  };
->  
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index a75bf11585b5..42e2918fd1cc 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -1059,6 +1059,7 @@ int cmd_inject(int argc, const char **argv)
->  			.stat		= perf_event__repipe_op2_synth,
->  			.stat_round	= perf_event__repipe_op2_synth,
->  			.feature	= perf_event__repipe_op2_synth,
-> +			.finished_init	= perf_event__repipe_op2_synth,
->  			.compressed	= perf_event__repipe_op4_synth,
->  			.auxtrace	= perf_event__repipe_auxtrace,
->  		},
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 40dca1fba4e3..cf5c5379ceaa 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -1388,6 +1388,11 @@ static struct perf_event_header finished_round_event = {
->  	.type = PERF_RECORD_FINISHED_ROUND,
->  };
->  
-> +static struct perf_event_header finished_init_event = {
-> +	.size = sizeof(struct perf_event_header),
-> +	.type = PERF_RECORD_FINISHED_INIT,
-> +};
-> +
->  static void record__adjust_affinity(struct record *rec, struct mmap *map)
->  {
->  	if (rec->opts.affinity != PERF_AFFINITY_SYS &&
-> @@ -1696,6 +1701,14 @@ static int record__synthesize_workload(struct record *rec, bool tail)
->  	return err;
->  }
->  
-> +static int write_finished_init(struct record *rec, bool tail)
-> +{
-> +	if (rec->opts.tail_synthesize != tail)
-> +		return 0;
-> +
-> +	return record__write(rec, NULL, &finished_init_event, sizeof(finished_init_event));
-> +}
-> +
->  static int record__synthesize(struct record *rec, bool tail);
->  
->  static int
-> @@ -1710,6 +1723,8 @@ record__switch_output(struct record *rec, bool at_exit)
->  
->  	record__aio_mmap_read_sync(rec);
->  
-> +	write_finished_init(rec, true);
-> +
->  	record__synthesize(rec, true);
->  	if (target__none(&rec->opts.target))
->  		record__synthesize_workload(rec, true);
-> @@ -1764,6 +1779,7 @@ record__switch_output(struct record *rec, bool at_exit)
->  		 */
->  		if (target__none(&rec->opts.target))
->  			record__synthesize_workload(rec, false);
-> +		write_finished_init(rec, false);
->  	}
->  	return fd;
->  }
-> @@ -2419,6 +2435,15 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->  	trigger_ready(&auxtrace_snapshot_trigger);
->  	trigger_ready(&switch_output_trigger);
->  	perf_hooks__invoke_record_start();
-> +
-> +	/*
-> +	 * Must write FINISHED_INIT so it will be seen after all other
-> +	 * synthesized user events, but before any regular events.
-> +	 */
-> +	err = write_finished_init(rec, false);
-> +	if (err < 0)
-> +		goto out_child;
-> +
->  	for (;;) {
->  		unsigned long long hits = thread->samples;
->  
-> @@ -2563,6 +2588,8 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->  		fprintf(stderr, "[ perf record: Woken up %ld times to write data ]\n",
->  			record__waking(rec));
->  
-> +	write_finished_init(rec, true);
-> +
->  	if (target__none(&rec->opts.target))
->  		record__synthesize_workload(rec, true);
->  
-> diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-> index 0476bb3a4188..1fa14598b916 100644
-> --- a/tools/perf/util/event.c
-> +++ b/tools/perf/util/event.c
-> @@ -76,6 +76,7 @@ static const char *perf_event__names[] = {
->  	[PERF_RECORD_TIME_CONV]			= "TIME_CONV",
->  	[PERF_RECORD_HEADER_FEATURE]		= "FEATURE",
->  	[PERF_RECORD_COMPRESSED]		= "COMPRESSED",
-> +	[PERF_RECORD_FINISHED_INIT]		= "FINISHED_INIT",
->  };
->  
->  const char *perf_event__name(unsigned int id)
-> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-> index 0aa818977d2b..37f833c3c81b 100644
-> --- a/tools/perf/util/session.c
-> +++ b/tools/perf/util/session.c
-> @@ -562,6 +562,8 @@ void perf_tool__fill_defaults(struct perf_tool *tool)
->  		tool->feature = process_event_op2_stub;
->  	if (tool->compressed == NULL)
->  		tool->compressed = perf_session__process_compressed_event;
-> +	if (tool->finished_init == NULL)
-> +		tool->finished_init = process_event_op2_stub;
->  }
->  
->  static void swap_sample_id_all(union perf_event *event, void *data)
-> @@ -1706,6 +1708,8 @@ static s64 perf_session__process_user_event(struct perf_session *session,
->  		if (err)
->  			dump_event(session->evlist, event, file_offset, &sample, file_path);
->  		return err;
-> +	case PERF_RECORD_FINISHED_INIT:
-> +		return tool->finished_init(session, event);
->  	default:
->  		return -EINVAL;
->  	}
-> diff --git a/tools/perf/util/tool.h b/tools/perf/util/tool.h
-> index f2352dba1875..c957fb849ac6 100644
-> --- a/tools/perf/util/tool.h
-> +++ b/tools/perf/util/tool.h
-> @@ -76,7 +76,8 @@ struct perf_tool {
->  			stat_config,
->  			stat,
->  			stat_round,
-> -			feature;
-> +			feature,
-> +			finished_init;
->  	event_op4	compressed;
->  	event_op3	auxtrace;
->  	bool		ordered_events;
-> -- 
-> 2.25.1
-
+ 			mas_set(mas, end);
+ 			split = mas_prev(mas, 0);
+-			if (munmap_sidetree(split, &mas_detach))
++			error = munmap_sidetree(split, &mas_detach);
++			if (error)
+ 				goto munmap_sidetree_failed;
+ 
+ 			count++;
+@@ -2435,7 +2436,8 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+ 				vma = split;
+ 			break;
+ 		}
+-		if (munmap_sidetree(next, &mas_detach))
++		error = munmap_sidetree(next, &mas_detach);
++		if (error)
+ 			goto munmap_sidetree_failed;
+ 
+ 		count++;
 -- 
+2.25.1
 
-- Arnaldo

@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF0F55724D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9F0557250
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbiFWEuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S232504AbiFWEpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242166AbiFWDnI (ORCPT
+        with ESMTP id S242500AbiFWDoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:43:08 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6496811A08;
-        Wed, 22 Jun 2022 20:43:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LT5gT2f72z4xYL;
-        Thu, 23 Jun 2022 13:43:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655955781;
-        bh=0Iy4OEIOAU8zNkxPzQHF1oZRYaY+Gs5GZUVJpOQqm6U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ljmLcDfgNKT7tCXEBhGwtXtk9yyYQL74Hzrdh9wPpXDUQ416zvWnd3y8nNZhT89L4
-         Scm1DNEakRlhCeFuYMh9aLH0DGmgopyCOuDFkAw7Z9BEjFMd9gAeQSjNtbF2N7U1q6
-         5mQW0C8ExfJDLRVydjBNwF//EQzF//s+PTEZpUTGR87izG9T0HcrSDidpxGTEuexZa
-         u/CdCe2/OFDku+YaC5HVUqBRiLqTTqYERXMumxgYZc/W3K6SIpaaPfO5mV5noQ1Bdt
-         +feu50jjzFpOAaL/o1O57pxD9XA8R+5sbgxETbLi8BTsn6XIeZF3/YDDZ+GpHiKzDg
-         GGdRz4WVFlDow==
-Date:   Thu, 23 Jun 2022 13:42:59 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Mark Brown <broonie@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the spi tree
-Message-ID: <20220623134259.03af40f6@canb.auug.org.au>
+        Wed, 22 Jun 2022 23:44:46 -0400
+Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143F38BEA;
+        Wed, 22 Jun 2022 20:44:45 -0700 (PDT)
+Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-3176d94c236so182190667b3.3;
+        Wed, 22 Jun 2022 20:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=87+jqdc/swXM39LR3YrT/Es6B7pcswSF3qdCNbDWq7A=;
+        b=b4xE/R+DYlSKO8+dNve958FxZBZUlIgYpsivvBKmOjH2uG/XkZyL5obCInFUR87cPw
+         xOTAx5qd4ptFLqRFf8HgiwSg1IeuQcpj3SnbBtcwneYXaNxjuD26kP3gJKwaSkIU5kDH
+         gubJVj5FAlMxu+HxxgEWFPL9hC7Pr6u4CGOKLC0OCrLNdl95xrD6YImbovykzdaPahki
+         JBk77KuNTSR35R5CddxaiNW0u/q3m/Oy2Uii5HQ0yMpAVeL62fltTQq4BEHyRiBRUTWP
+         5X16Q8NdvcdZZwxLaCZhWPhgLIS5TqWNLUiwZkmhtohHNdHOvoUd9q6GAvRwF+PUg6lC
+         hlPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=87+jqdc/swXM39LR3YrT/Es6B7pcswSF3qdCNbDWq7A=;
+        b=ZKpsoLD8u9xezGk7ANWG5DzthZT5UihopMvQLGvSeNHJHc05qX4lWsfotgyXdXBAtC
+         Xtb2tkCFovujD/7EfiK7L1w6Oz9jkSwHntiJ2RoywCSHbNvq/oD82Ql0V8iocBXbs46F
+         BpQFp7G4r1P2UZw8rk6tMFGzj019FNU2FR6sNWiSnQTQxbftwWRKIGn6eFt22st60kUC
+         wFvgkbn9HovvkL2iqJV9jwFyBTLPYyCrQBDdcVVoOvLDTtM32aNtcvrBuMLgrQ4+9+1q
+         XDhIsJaiMB53dmWEaKmZR6y3Mv30Our3cDl/2l8dBqLLlJE2WjAg4jfx6vL8OuHA3Z8f
+         oihw==
+X-Gm-Message-State: AJIora9CXH0Uh9iMTiCV1Gw7eS3t81fkQH+i7cy99HQo7NIyfeX/7InC
+        oH5oYtOaBQgGTCGcapauyCAc2da8XRHG27QDMarMzCK8WA==
+X-Google-Smtp-Source: AGRyM1uyqSObM5djsfE5PLDD65Jl8onD8RTBriLFddJHv6e+wkdSDAMk4iMnMvKA97WWkBxT9lu+9RJNjymiNNUWYgg=
+X-Received: by 2002:a81:4857:0:b0:318:48dd:4165 with SMTP id
+ v84-20020a814857000000b0031848dd4165mr6599997ywa.481.1655955884782; Wed, 22
+ Jun 2022 20:44:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/E/VbeL2eq.0rP8GbAN0KS4w";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220622085146.444516-1-sunliming@kylinos.cn> <YrLwU27DNm0YWOvB@ZenIV>
+In-Reply-To: <YrLwU27DNm0YWOvB@ZenIV>
+From:   sunliming <kelulanainsley@gmail.com>
+Date:   Thu, 23 Jun 2022 11:44:29 +0800
+Message-ID: <CAJncD7RuTTLoRS_pzvn729_SX5Xsv6Pub44eCD_RbbANjn9joA@mail.gmail.com>
+Subject: Re: [PATCH] walk_component(): get inode in lookup_slow branch
+ statement block
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sunliming@kylino.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,65 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/E/VbeL2eq.0rP8GbAN0KS4w
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Al Viro <viro@zeniv.linux.org.uk> =E4=BA=8E2022=E5=B9=B46=E6=9C=8822=E6=97=
+=A5=E5=91=A8=E4=B8=89 18:35=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, Jun 22, 2022 at 04:51:46PM +0800, sunliming wrote:
+> > The inode variable is used as a parameter by the step_into function,
+> > but is not assigned a value in the sub-lookup_slow branch path. So
+> > get the inode in the sub-lookup_slow branch path.
+>
+> Take a good look at handle_mounts() and the things it does when
+> *not* in RCU mode (i.e. LOOKUP_RCU is not set).  Specifically,
+>                 *inode =3D d_backing_inode(path->dentry);
+>                 *seqp =3D 0; /* out of RCU mode, so the value doesn't mat=
+ter */
+> this part.
+>
+> IOW, the values passed to step_into() in inode/seq are overridden unless
+> we stay in RCU mode.  And if we'd been through lookup_slow(), we'd been
+> out of RCU mode since before we called step_into().
 
-Hi all,
-
-Today's linux-next merge of the usb tree got a conflict in:
-
-  MAINTAINERS
-
-between commit:
-
-  f303c6b26ced ("MAINTAINERS: add spi to PolarFire SoC entry")
-
-from the spi tree and commit:
-
-  4a691b8c157a ("MAINTAINERS: add musb to PolarFire SoC entry")
-
-from the usb tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index fcaa66ea848b,e73c77d479bb..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -17225,7 -17169,7 +17232,8 @@@ S:	Supporte
-  F:	arch/riscv/boot/dts/microchip/
-  F:	drivers/mailbox/mailbox-mpfs.c
-  F:	drivers/soc/microchip/
- +F:	drivers/spi/spi-microchip-core.c
-+ F:	drivers/usb/musb/mpfs.c
-  F:	include/soc/microchip/mpfs.h
- =20
-  RNBD BLOCK DRIVERS
-
---Sig_/E/VbeL2eq.0rP8GbAN0KS4w
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKz4UMACgkQAVBC80lX
-0GwcBQf+OuIXeWzcmZAswkWlIzS3ucWc5npCDzGPxbA7hTkS0tScBpXd0QvajdB7
-c0TlhkxBnrcUvlDNitJkx7jypSJYAxRxSItUPq33TOd3SX+KyQveCIYmum7G+MZ6
-RO6keSv3ymYOtSBtW8Ma0BgGQM56XwdA6cSc4K1275y2JC/uNco53js6txzN8eX9
-D+QBPDpCXAzmygOMGPwRwEC9WP0i3pL+2WjjawrAozr7lIZcKZW1aFeifRXAuTZN
-58ifu6UsCXP9PKCKZ5VzXYiuERlAbRBFOvpbIoxNkLZN532GQ5u0tJB31KGSBxfc
-yAPMIGAyXaTorNSZkm1piAnh6vK0gw==
-=2uj1
------END PGP SIGNATURE-----
-
---Sig_/E/VbeL2eq.0rP8GbAN0KS4w--
+It might be more appropriate and easier to understand to do this
+before parameter passing in the top-level  walk_component function=EF=BC=9F

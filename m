@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1C95580CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F304555836B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbiFWQxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S233880AbiFWR3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiFWQv5 (ORCPT
+        with ESMTP id S233985AbiFWR1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:57 -0400
+        Thu, 23 Jun 2022 13:27:32 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E43127;
-        Thu, 23 Jun 2022 09:51:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A301D2A725;
+        Thu, 23 Jun 2022 10:03:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AD735CE25E1;
-        Thu, 23 Jun 2022 16:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1CCBC3411B;
-        Thu, 23 Jun 2022 16:51:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B7CC6CE25B2;
+        Thu, 23 Jun 2022 17:03:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9940C3411B;
+        Thu, 23 Jun 2022 17:03:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003113;
-        bh=iHbkmEutcboVPlB7K4tet0H+QZo0exSmmdF3rPc2IUQ=;
+        s=korg; t=1656003788;
+        bh=HxsF//LMM3JJR1J5IevOPcjtuSOU/tXHhDbZ1N4LuPI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m3XdzQKG07gVAAl8dwKaJwZ2cYbdWA72GVIzGZJHEBHCn4APc0U8kLuXwybCJsWdd
-         XnJV42LAjPZrxWT8TyY838TklnOoRXZWFSmr9RUaJc08EVMT38WS3PDgsNpckvjhKa
-         N9QDAfG38DR8WsRV0mN71bIvfIt6MYI2TiltXiCM=
+        b=ZHg2BFvb0RGKgunki8sUNDYUTHtl4Ev2wnE1N0YD/Xvnb2IksAVM0STYyC2rjCXlN
+         OdcgRKwoBJFS9jJgq8QiK6qOPso1pz/m0c1fJm8Ysmu2gTiPA5jPLuG/MBErQG3LN9
+         izFPPBrrKszziwdrNGHxZ24IucbErkSk4Pwj1PB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Eric Biggers <ebiggers@google.com>,
+        stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 127/264] random: remove ifdefd out interrupt bench
+Subject: [PATCH 4.14 086/237] random: access primary_pool directly rather than through pointer
 Date:   Thu, 23 Jun 2022 18:42:00 +0200
-Message-Id: <20220623164347.660298605@linuxfoundation.org>
+Message-Id: <20220623164345.625525226@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,112 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit 95e6060c20a7f5db60163274c5222a725ac118f9 upstream.
+commit ebf7606388732ecf2821ca21087e9446cb4a5b57 upstream.
 
-With tools like kbench9000 giving more finegrained responses, and this
-basically never having been used ever since it was initially added,
-let's just get rid of this. There *is* still work to be done on the
-interrupt handler, but this really isn't the way it's being developed.
+Both crng_initialize_primary() and crng_init_try_arch_early() are
+only called for the primary_pool. Accessing it directly instead of
+through a function parameter simplifies the code.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/sysctl/kernel.txt |    9 ---------
- drivers/char/random.c           |   40 ----------------------------------------
- 2 files changed, 49 deletions(-)
+ drivers/char/random.c |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
---- a/Documentation/sysctl/kernel.txt
-+++ b/Documentation/sysctl/kernel.txt
-@@ -808,15 +808,6 @@ This is a directory, with the following
-   are woken up. This file is writable for compatibility purposes, but
-   writing to it has no effect on any RNG behavior.
- 
--If ``drivers/char/random.c`` is built with ``ADD_INTERRUPT_BENCH``
--defined, these additional entries are present:
--
--* ``add_interrupt_avg_cycles``: the average number of cycles between
--  interrupts used to feed the pool;
--
--* ``add_interrupt_avg_deviation``: the standard deviation seen on the
--  number of cycles between interrupts used to feed the pool.
--
- 
- randomize_va_space
- ==================
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -241,8 +241,6 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/random.h>
+@@ -761,7 +761,7 @@ static bool crng_init_try_arch(struct cr
+ 	return arch_init;
+ }
  
--/* #define ADD_INTERRUPT_BENCH */
--
- enum {
- 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
- 	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
-@@ -858,27 +856,6 @@ EXPORT_SYMBOL_GPL(add_input_randomness);
- 
- static DEFINE_PER_CPU(struct fast_pool, irq_randomness);
- 
--#ifdef ADD_INTERRUPT_BENCH
--static unsigned long avg_cycles, avg_deviation;
--
--#define AVG_SHIFT 8 /* Exponential average factor k=1/256 */
--#define FIXED_1_2 (1 << (AVG_SHIFT - 1))
--
--static void add_interrupt_bench(cycles_t start)
--{
--	long delta = random_get_entropy() - start;
--
--	/* Use a weighted moving average */
--	delta = delta - ((avg_cycles + FIXED_1_2) >> AVG_SHIFT);
--	avg_cycles += delta;
--	/* And average deviation */
--	delta = abs(delta) - ((avg_deviation + FIXED_1_2) >> AVG_SHIFT);
--	avg_deviation += delta;
--}
--#else
--#define add_interrupt_bench(x)
--#endif
--
- static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
+-static bool __init crng_init_try_arch_early(struct crng_state *crng)
++static bool __init crng_init_try_arch_early(void)
  {
- 	u32 *ptr = (u32 *)regs;
-@@ -915,7 +892,6 @@ void add_interrupt_randomness(int irq)
- 		(sizeof(ip) > 4) ? ip >> 32 : get_reg(fast_pool, regs);
+ 	int i;
+ 	bool arch_init = true;
+@@ -773,7 +773,7 @@ static bool __init crng_init_try_arch_ea
+ 			rv = random_get_entropy();
+ 			arch_init = false;
+ 		}
+-		crng->state[i] ^= rv;
++		primary_crng.state[i] ^= rv;
+ 	}
  
- 	fast_mix(fast_pool);
--	add_interrupt_bench(cycles);
+ 	return arch_init;
+@@ -787,16 +787,16 @@ static void crng_initialize_secondary(st
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
  
- 	if (unlikely(crng_init == 0)) {
- 		if (fast_pool->count >= 64 &&
-@@ -1623,22 +1599,6 @@ struct ctl_table random_table[] = {
- 		.mode		= 0444,
- 		.proc_handler	= proc_do_uuid,
- 	},
--#ifdef ADD_INTERRUPT_BENCH
--	{
--		.procname	= "add_interrupt_avg_cycles",
--		.data		= &avg_cycles,
--		.maxlen		= sizeof(avg_cycles),
--		.mode		= 0444,
--		.proc_handler	= proc_doulongvec_minmax,
--	},
--	{
--		.procname	= "add_interrupt_avg_deviation",
--		.data		= &avg_deviation,
--		.maxlen		= sizeof(avg_deviation),
--		.mode		= 0444,
--		.proc_handler	= proc_doulongvec_minmax,
--	},
--#endif
- 	{ }
- };
- #endif	/* CONFIG_SYSCTL */
+-static void __init crng_initialize_primary(struct crng_state *crng)
++static void __init crng_initialize_primary(void)
+ {
+-	_extract_entropy(&crng->state[4], sizeof(u32) * 12);
+-	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
++	_extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
++	if (crng_init_try_arch_early() && trust_cpu && crng_init < 2) {
+ 		invalidate_batched_entropy();
+ 		numa_crng_init();
+ 		crng_init = 2;
+ 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
+ 	}
+-	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
++	primary_crng.init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
+ 
+ static void crng_finalize_init(struct crng_state *crng)
+@@ -1697,7 +1697,7 @@ int __init rand_initialize(void)
+ 	init_std_data();
+ 	if (crng_need_final_init)
+ 		crng_finalize_init(&primary_crng);
+-	crng_initialize_primary(&primary_crng);
++	crng_initialize_primary();
+ 	crng_global_init_time = jiffies;
+ 	if (ratelimit_disable) {
+ 		urandom_warning.interval = 0;
 
 

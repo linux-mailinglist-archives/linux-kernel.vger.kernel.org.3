@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74045558135
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9801055855A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233567AbiFWQ54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S235576AbiFWR4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233583AbiFWQvO (ORCPT
+        with ESMTP id S235715AbiFWRxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:14 -0400
+        Thu, 23 Jun 2022 13:53:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44F64FC75;
-        Thu, 23 Jun 2022 09:49:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2123AA308;
+        Thu, 23 Jun 2022 10:13:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BB2EB82490;
-        Thu, 23 Jun 2022 16:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781BCC3411B;
-        Thu, 23 Jun 2022 16:49:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27BC5B824B4;
+        Thu, 23 Jun 2022 17:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2D7C36AEA;
+        Thu, 23 Jun 2022 17:13:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656002951;
-        bh=TCA2eW/394gZdU9DbDrD2+sFkBb+4almQ6gSFNAKYCE=;
+        s=korg; t=1656004429;
+        bh=TXlJw9jpEOS1fyd0OpgzA5Jz8hgGqgEotnlXApTzPMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KvXmhNIbxWl8BaJ1Y+cJ4Lu/lVnlVSDWh0gIR4F6apXuJVSlM7E0iA3whYsYE6eof
-         VAZxrx6I6A8OXVKQ1Q0GQmQtyMMlch67GwrpzOpPq4BAsBYtG/tWEL6IQYnGpEje0x
-         Wpe5Vto70X6NfTTiMhtPFzeiVrrNGAJv2XlKpaHs=
+        b=X52KbEDGy+e6AoiaxYhUixSlreNTu6jeIXYfPrtSpN+nfW1ACzsXfeRUmJtx29rnA
+         Ps4rLbBiS21gZGxPF+EaSY+AfPSd7JUsDSyzdG1mBcqfwPbqI3nX/SCPSp4rlIA72b
+         08hp9kBzzwPXN0QlqYKMdhpZYkIqq6MrsyrNRzDE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.9 078/264] MAINTAINERS: co-maintain random.c
+        stable@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Theodore Tso <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.19 004/234] drivers/char/random.c: make primary_crng static
 Date:   Thu, 23 Jun 2022 18:41:11 +0200
-Message-Id: <20220623164346.277922920@linuxfoundation.org>
+Message-Id: <20220623164343.175186212@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-commit 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d upstream.
+commit 764ed189c82090c1d85f0e30636156736d8f09a8 upstream.
 
-random.c is a bit understaffed, and folks want more prompt reviews. I've
-got the crypto background and the interest to do these reviews, and have
-authored parts of the file already.
+Since the definition of struct crng_state is private to random.c, and
+primary_crng is neither declared or used elsewhere, there's no reason
+for that symbol to have external linkage.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- MAINTAINERS |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10068,6 +10068,7 @@ F:	drivers/block/brd.c
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -415,7 +415,7 @@ struct crng_state {
+ 	spinlock_t	lock;
+ };
  
- RANDOM NUMBER DRIVER
- M:	"Theodore Ts'o" <tytso@mit.edu>
-+M:	Jason A. Donenfeld <Jason@zx2c4.com>
- S:	Maintained
- F:	drivers/char/random.c
+-struct crng_state primary_crng = {
++static struct crng_state primary_crng = {
+ 	.lock = __SPIN_LOCK_UNLOCKED(primary_crng.lock),
+ };
  
 
 

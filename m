@@ -2,116 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5105576E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A715576E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbiFWJnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S230326AbiFWJod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiFWJnD (ORCPT
+        with ESMTP id S229720AbiFWJob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:43:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE0564F9;
-        Thu, 23 Jun 2022 02:43:02 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CF1FA21CFB;
-        Thu, 23 Jun 2022 09:43:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655977380; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 23 Jun 2022 05:44:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4F5149279
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655977469;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gdZnnoaTG6/in9QGnqYjtzbMQOKcr+nleBeI2IghgO4=;
-        b=Mc1wVFGem2YqPRd3+41ems0z57Z3EKWvAnCwaelIpAwCzRZuErwv2/w0XdR8RnVV//v9i8
-        f65xaqkG/QIE5wKkFV63Q/Gwa0D814VvV89jo49Eug7zMf2u6J2sZWF3Em7jrfQOx3LLRK
-        jF3fUJJak1Mx/E0qkmfSDiIiXFVDCtY=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=5Z+ZDJJgpbgIXOZdFi38EUFLQ9DT89Je0CI9wqZBuNk=;
+        b=WsK7lRIqe8O26GxhDScwQm/bUutjhuKUXXph/u1vHjZT5VZRWSb0M51xqfeUhGecQWXV7j
+        MXSowZesw4fbYX0mGb7CzypgSSCHBJsd3CeJqe+ImCtf5L449obS5h705mW4jbEC59a27J
+        j3TwELUP+p21POee6UcCy8iodS4frJI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-163-smz41-0vPfiHxCFPUHlplg-1; Thu, 23 Jun 2022 05:44:26 -0400
+X-MC-Unique: smz41-0vPfiHxCFPUHlplg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6A30B2C142;
-        Thu, 23 Jun 2022 09:42:54 +0000 (UTC)
-Date:   Thu, 23 Jun 2022 11:42:59 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
- memory pressure
-Message-ID: <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz>
-References: <20220623000530.1194226-1-yosryahmed@google.com>
- <YrQe5A+FXnbgOR1f@dhcp22.suse.cz>
- <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 623D4185A7B2;
+        Thu, 23 Jun 2022 09:44:25 +0000 (UTC)
+Received: from starship (unknown [10.40.194.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3462E492CA5;
+        Thu, 23 Jun 2022 09:44:19 +0000 (UTC)
+Message-ID: <f64191bf059d1fe73627a8738b831ce4b06548c4.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the
+ guest and/or host changes apic id/base from the defaults.
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Date:   Thu, 23 Jun 2022 12:44:18 +0300
+In-Reply-To: <YoZrG3n5fgMp4LQl@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+         <20220427200314.276673-3-mlevitsk@redhat.com> <YoZrG3n5fgMp4LQl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 23-06-22 01:35:59, Yosry Ahmed wrote:
-> On Thu, Jun 23, 2022 at 1:05 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 23-06-22 00:05:30, Yosry Ahmed wrote:
-> > > Commit e22c6ed90aa9 ("mm: memcontrol: don't count limit-setting reclaim
-> > > as memory pressure") made sure that memory reclaim that is induced by
-> > > userspace (limit-setting, proactive reclaim, ..) is not counted as
-> > > memory pressure for the purposes of psi.
-> > >
-> > > Instead of counting psi inside try_to_free_mem_cgroup_pages(), callers
-> > > from try_charge() and reclaim_high() wrap the call to
-> > > try_to_free_mem_cgroup_pages() with psi handlers.
-> > >
-> > > However, vmpressure is still counted in these cases where reclaim is
-> > > directly induced by userspace. This patch makes sure vmpressure is not
-> > > counted in those operations, in the same way as psi. Since vmpressure
-> > > calls need to happen deeper within the reclaim path, the same approach
-> > > could not be followed. Hence, a new "controlled" flag is added to struct
-> > > scan_control to flag a reclaim operation that is controlled by
-> > > userspace. This flag is set by limit-setting and proactive reclaim
-> > > operations, and is used to count vmpressure correctly.
-> > >
-> > > To prevent future divergence of psi and vmpressure, commit e22c6ed90aa9
-> > > ("mm: memcontrol: don't count limit-setting reclaim as memory pressure")
-> > > is effectively reverted and the same flag is used to control psi as
-> > > well.
-> >
-> > Why do we need to add this is a legacy interface now? Are there any
-> > pre-existing users who realized this is bugging them? Please be more
-> > specific about the usecase.
+On Thu, 2022-05-19 at 16:06 +0000, Sean Christopherson wrote:
+> On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > Neither of these settings should be changed by the guest and it is
+> > a burden to support it in the acceleration code, so just inhibit
+> > it instead.
+> > 
+> > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/include/asm/kvm_host.h |  3 +++
+> >  arch/x86/kvm/lapic.c            | 25 ++++++++++++++++++++++---
+> >  arch/x86/kvm/lapic.h            |  8 ++++++++
+> >  3 files changed, 33 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 63eae00625bda..636df87542555 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1070,6 +1070,8 @@ enum kvm_apicv_inhibit {
+> >  	APICV_INHIBIT_REASON_ABSENT,
+> >  	/* AVIC is disabled because SEV doesn't support it */
+> >  	APICV_INHIBIT_REASON_SEV,
+> > +	/* APIC ID and/or APIC base was changed by the guest */
 > 
-> Sorry if I wasn't clear enough. Unfortunately we still have userspace
-> workloads at Google that use vmpressure notifications.
+> I don't see any reason to inhibit APICv if the APIC base is changed.  KVM has
+> never supported that, and disabling APICv won't "fix" anything.
 > 
-> In our internal version of memory.reclaim that we recently upstreamed,
-> we do not account vmpressure during proactive reclaim (similar to how
-> psi is handled upstream). We want to make sure this behavior also
-> exists in the upstream version so that consolidating them does not
-> break our users who rely on vmpressure and will start seeing increased
-> pressure due to proactive reclaim.
+> Ignoring that is a minor simplification, but also allows for a more intuitive
+> name, e.g.
+> 
+> 	APICV_INHIBIT_REASON_APIC_ID_MODIFIED,
+> 
+> The inhibit also needs to be added avic_check_apicv_inhibit_reasons() and
+> vmx_check_apicv_inhibit_reasons().
+> 
+> > +	APICV_INHIBIT_REASON_RO_SETTINGS,
+> >  };
+> >  
+> >  struct kvm_arch {
+> > @@ -1258,6 +1260,7 @@ struct kvm_arch {
+> >  	hpa_t	hv_root_tdp;
+> >  	spinlock_t hv_root_tdp_lock;
+> >  #endif
+> > +	bool apic_id_changed;
+> >  };
+> >  
+> >  struct kvm_vm_stat {
+> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > index 66b0eb0bda94e..8996675b3ef4c 100644
+> > --- a/arch/x86/kvm/lapic.c
+> > +++ b/arch/x86/kvm/lapic.c
+> > @@ -2038,6 +2038,19 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
+> >  	}
+> >  }
+> >  
+> > +static void kvm_lapic_check_initial_apic_id(struct kvm_lapic *apic)
+> 
+> The "check" part is misleading/confusing.  "check" helpers usually query and return
+> state.  I assume you avoided "changed" because the ID may or may not actually be
+> changing.  Maybe kvm_apic_id_updated()?  Ah, better idea.  What about
+> kvm_lapic_xapic_id_updated()?  See below for reasoning.
+> 
+> > +{
+> > +	if (kvm_apic_has_initial_apic_id(apic))
+> 
+> Rather than add a single-use helper, invoke the helper from kvm_apic_state_fixup()
+> in the !x2APIC path, then this can KVM_BUG_ON() x2APIC to help document that KVM
+> should never allow the ID to change for x2APIC.
+> 
+> > +		return;
+> > +
+> > +	pr_warn_once("APIC ID change is unsupported by KVM");
+> 
+> It's supported (modulo x2APIC shenanigans), otherwise KVM wouldn't need to disable
+> APICv.
+> 
+> > +	kvm_set_apicv_inhibit(apic->vcpu->kvm,
+> > +			APICV_INHIBIT_REASON_RO_SETTINGS);
+> > +
+> > +	apic->vcpu->kvm->arch.apic_id_changed = true;
+> > +}
+> > +
+> >  static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> >  {
+> >  	int ret = 0;
+> > @@ -2046,9 +2059,11 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> >  
+> >  	switch (reg) {
+> >  	case APIC_ID:		/* Local APIC ID */
+> > -		if (!apic_x2apic_mode(apic))
+> > +		if (!apic_x2apic_mode(apic)) {
+> > +
+> 
+> Spurious newline.
+> 
+> >  			kvm_apic_set_xapic_id(apic, val >> 24);
+> > -		else
+> > +			kvm_lapic_check_initial_apic_id(apic);
+> > +		} else
+> 
+> Needs curly braces for both paths.
+> 
+> >  			ret = 1;
+> >  		break;
+> >  
+> 
+> E.g.
+> 
+> ---
+>  arch/x86/include/asm/kvm_host.h |  1 +
+>  arch/x86/kvm/lapic.c            | 21 +++++++++++++++++++--
+>  arch/x86/kvm/svm/avic.c         |  3 ++-
+>  arch/x86/kvm/vmx/vmx.c          |  3 ++-
+>  4 files changed, 24 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index d895d25c5b2f..d888fa1bae77 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1071,6 +1071,7 @@ enum kvm_apicv_inhibit {
+>  	APICV_INHIBIT_REASON_BLOCKIRQ,
+>  	APICV_INHIBIT_REASON_ABSENT,
+>  	APICV_INHIBIT_REASON_SEV,
+> +	APICV_INHIBIT_REASON_APIC_ID_MODIFIED,
+>  };
+> 
+>  struct kvm_arch {
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 5fd678c90288..6fe8f20f03d8 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2039,6 +2039,19 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
+>  	}
+>  }
+> 
+> +static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
+> +{
+> +	struct kvm *kvm = apic->vcpu->kvm;
+> +
+> +	if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
+> +		return;
+> +
+> +	if (kvm_xapic_id(apic) == apic->vcpu->vcpu_id)
+> +		return;
+> +
+> +	kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+> +}
+> +
+>  static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+>  {
+>  	int ret = 0;
+> @@ -2047,10 +2060,12 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> 
+>  	switch (reg) {
+>  	case APIC_ID:		/* Local APIC ID */
+> -		if (!apic_x2apic_mode(apic))
+> +		if (!apic_x2apic_mode(apic)) {
+>  			kvm_apic_set_xapic_id(apic, val >> 24);
+> -		else
+> +			kvm_lapic_xapic_id_updated(apic);
+> +		} else {
+>  			ret = 1;
+> +		}
+>  		break;
+> 
+>  	case APIC_TASKPRI:
+> @@ -2665,6 +2680,8 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+>  			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
+>  			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
+>  		}
+> +	} else {
+> +		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
+>  	}
+> 
+>  	return 0;
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 54fe03714f8a..239c3e8b1f3f 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -910,7 +910,8 @@ bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
+>  			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
+>  			  BIT(APICV_INHIBIT_REASON_X2APIC) |
+>  			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
+> -			  BIT(APICV_INHIBIT_REASON_SEV);
+> +			  BIT(APICV_INHIBIT_REASON_SEV) |
+> +			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+> 
+>  	return supported & BIT(reason);
+>  }
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index b06eafa5884d..941adade21ea 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7818,7 +7818,8 @@ static bool vmx_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
+>  	ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
+>  			  BIT(APICV_INHIBIT_REASON_ABSENT) |
+>  			  BIT(APICV_INHIBIT_REASON_HYPERV) |
+> -			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ);
+> +			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
+> +			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+> 
+>  	return supported & BIT(reason);
+>  }
+> 
+> base-commit: 6ab6e3842d18e4529fa524fb6c668ae8a8bf54f4
+> --
+> 
 
-These are good reasons to have this patch in your tree. But why is this
-patch benefitial for the upstream kernel? It clearly adds some code and
-some special casing which will add a maintenance overhead.
--- 
-Michal Hocko
-SUSE Labs
+
+Hi Sean!
+
+So, I decided to stop beeing lazy and to understand how KVM actually treats the whole thing:
+
+
+- kvm_apic_set_xapic_id - called when apic id changes either by guest write,
+  cpu reset or x2apic beeing disabled due to write to apic base msr.
+  apic register is updated, and apic map is recalculated
+
+
+- kvm_apic_set_x2apic_id - called only when apic base write (guest or userspace),
+  enables x2apic. caller uses vcpu->vcpu_id explicity
+
+
+- kvm_apic_state_fixup - when apic state is uploaded by userspace, has check
+  that check for x2apic api. Also triggers apic map update
+
+
+- kvm_recalculate_apic_map
+  this updates the apic map that we use in IPI emulation.
+  - xapic id (aka APIC_ID >> 24) is only used for APICs which are not in xapic mode.
+  - x2apic ids (aka vcpu->vcpu_id) are used for all APICs which are in x2apic mode,
+    and also (as a hack, when an apic has vcpu_id > 255, even if not in x2apic mode,
+    its x2apic id is still put in the map)
+
+
+Conclusions:
+
+- Practically speaking, when an apic is in x2apic mode, even if userspace uploaded
+non standard APIC_ID, it is ignored, and just read back (garbage in - garbage out)
+
+- Non standard APIC ID is lost when switching to x2apic mode.
+
+
+
+
+Best regards,
+	Maxim Levitsky
+
+
+
+PS: sending this so this info is not lost.
+
+Thankfully my APICv inhibit patch got accepted upstream,
+so one issue less to deal with.
+
+

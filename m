@@ -2,124 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A014B557EC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AAC557EC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbiFWPkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S231796AbiFWPks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiFWPkf (ORCPT
+        with ESMTP id S231686AbiFWPkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:40:35 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7804348A;
-        Thu, 23 Jun 2022 08:40:33 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id n15so12162001ljg.8;
-        Thu, 23 Jun 2022 08:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xo3NKjzYcYrSFDKH7f5H5c3gspyfCAKzPPrQ5FJ0QBY=;
-        b=n6Ya8T5VM4CdJFKMItCxxqy104iNjfKStuVzDC/DuuwRRWj2l6D0uEH4gujwk4srg9
-         ell69hg6NCjg5OuXQYKE1ZCRe9yftbFFBhntbdj4TjvnQDJpIZKDB97FfrmgLRUYHtj9
-         ee5V8PyEQdVWO/LtUK1fruscf3BvoEsYzgxq5vpeX6keri8mIwIqCxH6tBt0QZFQsR0g
-         I7ssuQQcACX6tdIe2rlvkGTLRJ+h6r2LuyQbdfyvZaEC/7JzPUXwOApwub8VcG+sFtKO
-         Hwa/nqvaj0K0bn2IuO7Tr6gEqDUV4J1pSMUxZi7S1bMcXWtRdJrNDExRzom5gsMn/LX7
-         vFPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xo3NKjzYcYrSFDKH7f5H5c3gspyfCAKzPPrQ5FJ0QBY=;
-        b=UtamY5CyJKZTPI+4G9BzjnN5g4bB5EkTI8/VQ8/RoPtKg7n6wmgr5M4GmijmYirEJJ
-         MHvR4PGQjeZX6GBU3OJ7QUmICJPCb7+RFuBN39p1+4RO8b46rH7XCsFH2VakqfrZ4HHs
-         6wo+rFr8Fz1lrhk5ZIN62gtTwxJT768t19iUS0Z5yDxHo7SadZPeX1F6mYKPjTeNzZuE
-         kKrPibsiG3PXFTeG4GkfaiTZqJD1gBvtR0Ugqcf0o8z2qAEqFw8KJY/p1PaHO0kY7e9/
-         07gsQlWqLGtZENEoMB+O1x9NSEadpeQ3dUhnPySpP7CVzV+TpV8Fk8rKAoLAFL2kDksJ
-         kVVQ==
-X-Gm-Message-State: AJIora/bA7cJJHBypTt0Ts45FQu7aN4lGJUXMCI/DsKYrygPZvL5w08p
-        7gn5iluIKx+2CeNp+UWN5y9h8+928wzkNss4KWQ=
-X-Google-Smtp-Source: AGRyM1sxNfXyEUG5fs8Firg5juHCdJ881udwdPMUtVWcipHu8U/F4XPJL14dI3a+MDqZ4f+GoMbNZvNmPEyowpLlTV4=
-X-Received: by 2002:a2e:b8d1:0:b0:255:bfef:7212 with SMTP id
- s17-20020a2eb8d1000000b00255bfef7212mr5108176ljp.378.1655998831709; Thu, 23
- Jun 2022 08:40:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620162059.1097264-1-cosmin.tanislav@analog.com>
- <20220620162059.1097264-3-cosmin.tanislav@analog.com> <CAHp75VcBJkQ+CwyoDaTJ_AD+mv9d0tEd_txqHwkPRy4-xvnyKg@mail.gmail.com>
- <2aa93eab-de6d-866b-a829-36b47ff00982@gmail.com>
-In-Reply-To: <2aa93eab-de6d-866b-a829-36b47ff00982@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 23 Jun 2022 17:39:54 +0200
-Message-ID: <CAHp75Vc_fcAP6gGwMkYZUoMM6jKeUoQr8J+zYCUz8inSHnTF_w@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] iio: adc: ad4130: add AD4130 driver
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Thu, 23 Jun 2022 11:40:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAA043AF2;
+        Thu, 23 Jun 2022 08:40:44 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CEDD166016D1;
+        Thu, 23 Jun 2022 16:40:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655998843;
+        bh=2jeuLe0zedb6o0kZiLElfapJFeQNLh2yeAOrBr+93uA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ievPSFp8BOVHTNdBWk7zQxRgt3pXWx7VJs/89gkU+G9/atXtB8iOppycZdYKnmXT3
+         RX9hJi2qRNLOZcTVK3Lrx0a44cDa1zBiY+W4djjWhG4TjwdgileT54Yz/4c+8wcPdr
+         qHIUgDdc9LpXcoZ0Ku/YpA7BeCu52v4Hydz66jID5ip/BSnxdnbhSBAFsf1bRjQvHJ
+         VbbMGEgcUa/4DCNTxhm7Y38mkaMP5U4wGf93dAFqghvZ3w/XW6U0Kjmn31ZqiZEo77
+         RwfOLxK+4pd7NtMIGmhQ3iS4USpMwto5NslI56resJiso4eo8iwcrUW6gfBUfHIPy+
+         ouO0NH/jPxcFg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-mmc@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: mmc: mtk-sd: Set clocks based on compatible
+Date:   Thu, 23 Jun 2022 11:40:38 -0400
+Message-Id: <20220623154038.771874-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 5:27 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> On 6/20/22 21:29, Andy Shevchenko wrote:
-> > On Mon, Jun 20, 2022 at 6:27 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+The binding was describing a single clock list for all platforms, but
+that's not really suitable: mt2712 requires an extra 'bus_clk' on some
+of its controllers, while mt8192 requires four different extra clocks.
+The rest of the platforms can share the same 3 clocks, with the third
+being optional as it's not present on all platforms.
 
-...
+Move the clock definitions inside if blocks that match on the
+compatibles. In practice this gets rid of dtbs_check warnings on mt8192,
+since the 'bus_clk' clock from mt2712 is no longer expected on this
+platform.
 
-> >> +       /*
-> >> +        * DMA (thus cache coherency maintenance) requires the
-> >> +        * transfer buffers to live in their own cache lines.
-> >> +        */
-> >
-> > This is a good comment, but what fields does it apply to?
->
-> Whatever is below it, grouped together. This is not hard to
-> understand.
+Fixes: 59a23395d8aa ("dt-bindings: mmc: Add support for MT8192 SoC")
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-It's hard to understand what exactly is DMA-aware here. I see only one
-buffer that is aligned properly for DMA, the rest are not, except the
-case if all of them are going in one DMA transaction. Is this the case
-here?
+---
+v1: https://lore.kernel.org/all/20220617230114.2438875-1-nfraprado@collabora.com
 
-> >> +       u8                      reset_buf[AD4130_RESET_BUF_SIZE] __aligned(IIO_DMA_MINALIGN);
+Changes in v2:
+- Kept widest minItems/maxItems outside the if blocks
 
-This is aligned.
+ .../devicetree/bindings/mmc/mtk-sd.yaml       | 111 +++++++++++++-----
+ 1 file changed, 81 insertions(+), 30 deletions(-)
 
-> >> +       u8                      reg_write_tx_buf[4];
-
-This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0).
-
-> >> +       u8                      reg_read_tx_buf[1];
-
-This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0 + 4).
-
-> >> +       u8                      reg_read_rx_buf[3];
-
-This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0 + 4 + 1).
-And this is Rx.
-
-> >> +       u8                      fifo_tx_buf[2];
-
-Here is Tx again which is most likely is not aligned...
-
-> >> +       u8                      fifo_rx_buf[AD4130_FIFO_SIZE *
-> >> +                                           AD4130_FIFO_MAX_SAMPLE_SIZE];
-> >> +};
-
+diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+index 2a2e9fa8c188..5e73218d2e6e 100644
+--- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
++++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+@@ -10,9 +10,6 @@ maintainers:
+   - Chaotian Jing <chaotian.jing@mediatek.com>
+   - Wenbin Mei <wenbin.mei@mediatek.com>
+ 
+-allOf:
+-  - $ref: mmc-controller.yaml#
+-
+ properties:
+   compatible:
+     oneOf:
+@@ -49,27 +46,11 @@ properties:
+     description:
+       Should contain phandle for the clock feeding the MMC controller.
+     minItems: 2
+-    items:
+-      - description: source clock (required).
+-      - description: HCLK which used for host (required).
+-      - description: independent source clock gate (required for MT2712).
+-      - description: bus clock used for internal register access (required for MT2712 MSDC0/3).
+-      - description: msdc subsys clock gate (required for MT8192).
+-      - description: peripheral bus clock gate (required for MT8192).
+-      - description: AXI bus clock gate (required for MT8192).
+-      - description: AHB bus clock gate (required for MT8192).
++    maxItems: 7
+ 
+   clock-names:
+     minItems: 2
+-    items:
+-      - const: source
+-      - const: hclk
+-      - const: source_cg
+-      - const: bus_clk
+-      - const: sys_cg
+-      - const: pclk_cg
+-      - const: axi_cg
+-      - const: ahb_cg
++    maxItems: 7
+ 
+   interrupts:
+     maxItems: 1
+@@ -171,15 +152,85 @@ required:
+   - vmmc-supply
+   - vqmmc-supply
+ 
+-if:
+-  properties:
+-    compatible:
+-      contains:
+-        const: mediatek,mt8183-mmc
+-then:
+-  properties:
+-    reg:
+-      minItems: 2
++allOf:
++  - $ref: mmc-controller.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mediatek,mt8183-mmc
++    then:
++      properties:
++        reg:
++          minItems: 2
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mediatek,mt8192-mmc
++    then:
++      properties:
++        clocks:
++          items:
++            - description: source clock
++            - description: HCLK which used for host
++            - description: independent source clock gate
++            - description: msdc subsys clock gate
++            - description: peripheral bus clock gate
++            - description: AXI bus clock gate
++            - description: AHB bus clock gate
++        clock-names:
++          items:
++            - const: source
++            - const: hclk
++            - const: source_cg
++            - const: sys_cg
++            - const: pclk_cg
++            - const: axi_cg
++            - const: ahb_cg
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mediatek,mt2712-mmc
++    then:
++      properties:
++        clocks:
++          minItems: 3
++          items:
++            - description: source clock
++            - description: HCLK which used for host
++            - description: independent source clock gate
++            - description: bus clock used for internal register access (required for MSDC0/3).
++        clock-names:
++          minItems: 3
++          items:
++            - const: source
++            - const: hclk
++            - const: source_cg
++            - const: bus_clk
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - mediatek,mt2712-mmc
++                - mediatek,mt8192-mmc
++    then:
++      properties:
++        clocks:
++          minItems: 2
++          items:
++            - description: source clock
++            - description: HCLK which used for host
++            - description: independent source clock gate
++        clock-names:
++          minItems: 2
++          items:
++            - const: source
++            - const: hclk
++            - const: source_cg
+ 
+ unevaluatedProperties: false
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.36.1
+

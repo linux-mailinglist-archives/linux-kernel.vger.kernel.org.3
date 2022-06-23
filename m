@@ -2,145 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663FA557347
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D7C55734A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiFWGqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        id S229741AbiFWGrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiFWGqP (ORCPT
+        with ESMTP id S229930AbiFWGrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:46:15 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C6B342A13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:46:14 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 5E12C1E80C85;
-        Thu, 23 Jun 2022 14:45:56 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id B06JfwXUQAjO; Thu, 23 Jun 2022 14:45:53 +0800 (CST)
-Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: lvqian@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 9A95E1E80C7D;
-        Thu, 23 Jun 2022 14:45:53 +0800 (CST)
-From:   Lv qian <lvqian@nfschina.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel@nfschina.com, Lv qian <lvqian@nfschina.com>
-Subject: [PATCH] vmalloc:Merge multiple if conditional sentences
-Date:   Thu, 23 Jun 2022 14:45:27 +0800
-Message-Id: <20220623064527.4238-1-lvqian@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 02:47:20 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A054475E;
+        Wed, 22 Jun 2022 23:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655966840; x=1687502840;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4mo3Auz6NZMqFD1nkIrxnbi027ADaGF0eOPOXEV96Jw=;
+  b=mqwZm5whutlnASAClUEZn7qFlNg9nHJhBbYrFp7Z5AZ1mUPkcVSmhGCa
+   3MvVrCCOdg51x1cO/7JBjl50oH4LRG0MPwZmu/itTBlwHgB+9ibEMO8Zv
+   gdgfxspE3xNfCPpKFP5v2ETbEBgXSz1QmO6fnH3a3n37V80pq/5cisKEl
+   A=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 22 Jun 2022 23:47:20 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Jun 2022 23:47:18 -0700
+X-QCInternal: smtphost
+Received: from hu-kshivnan-hyd.qualcomm.com (HELO hu-maiyas-hyd.qualcomm.com) ([10.213.107.231])
+  by ironmsg02-blr.qualcomm.com with ESMTP/TLS/AES256-SHA; 23 Jun 2022 12:17:09 +0530
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 427426)
+        id 8F08D21D7F; Thu, 23 Jun 2022 12:17:08 +0530 (+0530)
+From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Subject: [PATCH]     PM: QoS: Add check to make sure CPU freq is non-negative
+Date:   Thu, 23 Jun 2022 12:16:05 +0530
+Message-Id: <20220623064605.2538969-1-quic_kshivnan@quicinc.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Merge multiple if statements to improve code readability
+	CPU frequency should never be non-negative.
+	If some client driver calls freq_qos_update_request with some
+	value greater than INT_MAX, then it will set max CPU freq at
+	fmax but it will add plist node with some negative priority.
+	plist node has priority from INT_MIN (highest) to INT_MAX
+	(lowest). Once priority is set as negative, another client
+	will not be able to reduce max CPU frequency. Adding check
+	to make sure CPU freq is non-negative will fix this problem.
+Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
 
-Signed-off-by: Lv qian <lvqian@nfschina.com>
 ---
- mm/vmalloc.c | 66 ++++++++++++++--------------------------------------
- 1 file changed, 18 insertions(+), 48 deletions(-)
+ kernel/power/qos.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index effd1ff6a4b4..6902a180f8f7 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -135,22 +135,12 @@ static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
- 			phys_addr_t phys_addr, pgprot_t prot,
- 			unsigned int max_page_shift)
+diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+index ec7e1e85923e..41e96fe34bfd 100644
+--- a/kernel/power/qos.c
++++ b/kernel/power/qos.c
+@@ -531,7 +531,8 @@ int freq_qos_add_request(struct freq_constraints *qos,
  {
--	if (max_page_shift < PMD_SHIFT)
--		return 0;
--
--	if (!arch_vmap_pmd_supported(prot))
--		return 0;
--
--	if ((end - addr) != PMD_SIZE)
--		return 0;
--
--	if (!IS_ALIGNED(addr, PMD_SIZE))
--		return 0;
--
--	if (!IS_ALIGNED(phys_addr, PMD_SIZE))
--		return 0;
--
--	if (pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr))
-+	if (max_page_shift < PMD_SHIFT ||
-+			!arch_vmap_pmd_supported(prot) ||
-+			(end - addr) != PMD_SIZE ||
-+			!IS_ALIGNED(addr, PMD_SIZE) ||
-+			!IS_ALIGNED(phys_addr, PMD_SIZE) ||
-+			(pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr)))
- 		return 0;
+ 	int ret;
  
- 	return pmd_set_huge(pmd, phys_addr, prot);
-@@ -185,22 +175,12 @@ static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
- 			phys_addr_t phys_addr, pgprot_t prot,
- 			unsigned int max_page_shift)
+-	if (IS_ERR_OR_NULL(qos) || !req)
++	if (IS_ERR_OR_NULL(qos) || !req || value < FREQ_QOS_MIN_DEFAULT_VALUE
++		|| value > FREQ_QOS_MAX_DEFAULT_VALUE)
+ 		return -EINVAL;
+ 
+ 	if (WARN(freq_qos_request_active(req),
+@@ -563,7 +564,8 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+  */
+ int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
  {
--	if (max_page_shift < PUD_SHIFT)
--		return 0;
--
--	if (!arch_vmap_pud_supported(prot))
--		return 0;
--
--	if ((end - addr) != PUD_SIZE)
--		return 0;
--
--	if (!IS_ALIGNED(addr, PUD_SIZE))
--		return 0;
--
--	if (!IS_ALIGNED(phys_addr, PUD_SIZE))
--		return 0;
--
--	if (pud_present(*pud) && !pud_free_pmd_page(pud, addr))
-+	if (max_page_shift < PUD_SHIFT ||
-+			!arch_vmap_pud_supported(prot) ||
-+			(end - addr) != PUD_SIZE ||
-+			!IS_ALIGNED(addr, PUD_SIZE) ||
-+			!IS_ALIGNED(phys_addr, PUD_SIZE) ||
-+			(pud_present(*pud) && !pud_free_pmd_page(pud, addr)))
- 		return 0;
+-	if (!req)
++	if (!req || new_value < FREQ_QOS_MIN_DEFAULT_VALUE ||
++		new_value > FREQ_QOS_MAX_DEFAULT_VALUE)
+ 		return -EINVAL;
  
- 	return pud_set_huge(pud, phys_addr, prot);
-@@ -236,22 +216,12 @@ static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
- 			phys_addr_t phys_addr, pgprot_t prot,
- 			unsigned int max_page_shift)
- {
--	if (max_page_shift < P4D_SHIFT)
--		return 0;
--
--	if (!arch_vmap_p4d_supported(prot))
--		return 0;
--
--	if ((end - addr) != P4D_SIZE)
--		return 0;
--
--	if (!IS_ALIGNED(addr, P4D_SIZE))
--		return 0;
--
--	if (!IS_ALIGNED(phys_addr, P4D_SIZE))
--		return 0;
--
--	if (p4d_present(*p4d) && !p4d_free_pud_page(p4d, addr))
-+	if (max_page_shift < P4D_SHIFT ||
-+			!arch_vmap_p4d_supported(prot) ||
-+			(end - addr) != P4D_SIZE ||
-+			!IS_ALIGNED(addr, P4D_SIZE) ||
-+			!IS_ALIGNED(phys_addr, P4D_SIZE) ||
-+			(p4d_present(*p4d) && !p4d_free_pud_page(p4d, addr)))
- 		return 0;
- 
- 	return p4d_set_huge(p4d, phys_addr, prot);
+ 	if (WARN(!freq_qos_request_active(req),
 -- 
-2.18.2
+2.25.1
 

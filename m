@@ -2,124 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C96B55760C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0618F557618
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbiFWI51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S231147AbiFWI6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiFWI5Y (ORCPT
+        with ESMTP id S229750AbiFWI6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:57:24 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D74247AE6;
-        Thu, 23 Jun 2022 01:57:23 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id cv13so15522294pjb.4;
-        Thu, 23 Jun 2022 01:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XuNmdMIPTwgFRn+KXfNoshLUyGzQ84uByLpqYdBwMbo=;
-        b=U/ubG/f6T+EUydId86UG4ca9OLcoHD5k4QQ+3eWunYtB5/55nD7030zV+fXBywy/N8
-         rnIgSdfB+mbLoTBsYX+LF0KMiQc/tCvdbiOPBmGHEWYljqJ7+Ytp6ICBpcUlIxLwFszu
-         Bd75dGeE3PfTsG7RxUMO+p9USOiA8uuUGemciMWT3XztxTLJfkA1W/KrDSzoBc3nKrUL
-         Cwcfd75z6z36xyZzdLGXmsmBmNz77+sTdpo257ezhnuJkv+JyQ+dg5OeZZwzveFMgHSf
-         WybOMRUVwz2uedWXTuGnCWlCv3haS3eK3HoXG8O+YXEigs7NNQE0yfgkxZHHJTzcQ1mN
-         h3hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XuNmdMIPTwgFRn+KXfNoshLUyGzQ84uByLpqYdBwMbo=;
-        b=TCE0grziqw8xmymDOobXTR/IqHrVLzKSAb8veJZS+lIfrTVo/VUCf/ROqlH/GF4V8Q
-         O8QMhhKZPn+0CkGXm8NhhribBotk19MZsn/xADscv4leKLaoliPg89f47s8Nz9Y8DX9p
-         6H95iBlvv9mXaIf5YeSR09QQ9oLGGxRb6nY8qfHx5bZ2IKinLH4y6xc6eMDNuFkJK4lU
-         Z7VvWQKBeiNpFyG8Rz82OGio/I+pZp2DA8t+ubbNL+a5CQDMg/DedHnQWtg6ivPBPlxr
-         7u84h7nB9XvTqNo8uKJacdL/aWWH4bJ72iA6SmyZEsmHg+u13sw4MlLiKzkEBJv6q6hK
-         gv9w==
-X-Gm-Message-State: AJIora9JLAI5CHH1dqV6pE75qh+QeiuuHt1FwifOLT3myTVlAbfl9rlm
-        jotgvPgIv0l04ujkQl+tgCo=
-X-Google-Smtp-Source: AGRyM1tmqcpLbADtd2gc4SGwWOE/T7MnAN+wXT6gAvIivgKm0kg/9B7WObW+jCA563pNquyOh73RBw==
-X-Received: by 2002:a17:90b:3c0c:b0:1ec:c5b1:ce56 with SMTP id pb12-20020a17090b3c0c00b001ecc5b1ce56mr3017768pjb.102.1655974643009;
-        Thu, 23 Jun 2022 01:57:23 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o12-20020a62f90c000000b0051be16492basm15178139pfh.195.2022.06.23.01.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 01:57:22 -0700 (PDT)
-Message-ID: <62b42af2.1c69fb81.6e00c.63b1@mx.google.com>
-X-Google-Original-Message-ID: <20220623085721.GA976022@cgel.zte@gmail.com>
-Date:   Thu, 23 Jun 2022 08:57:21 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.xin16@zte.com.cn, linux-fsdevel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>,
-        syzbot+6a5a7672f663cce8b156@syzkaller.appspotmail.com,
-        Songyi Zhang <zhang.songyi@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        Zhang wenya <zhang.wenya1@zte.com.cn>
-Subject: Re: [PATCH] fs/ntfs: fix BUG_ON of ntfs_read_block()
-References: <20220623033635.973929-1-xu.xin16@zte.com.cn>
- <20220623035131.974098-1-xu.xin16@zte.com.cn>
- <YrQc4ZOBGhmpvfaP@kroah.com>
+        Thu, 23 Jun 2022 04:58:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219B222522
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:58:31 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4IfT-0001Zu-Cc; Thu, 23 Jun 2022 10:58:27 +0200
+Message-ID: <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
+Subject: Re: DMA-buf and uncached system memory
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Thu, 23 Jun 2022 10:58:26 +0200
+In-Reply-To: <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
+         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
+         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+         <20220623101326.18beeab3@eldfell>
+         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrQc4ZOBGhmpvfaP@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 09:57:21AM +0200, Greg KH wrote:
-> On Thu, Jun 23, 2022 at 03:51:31AM +0000, cgel.zte@gmail.com wrote:
-> > From: xu xin <xu.xin16@zte.com.cn>
-> > 
-> > As the bug description, attckers can use this bug to crash the system
-> > When CONFIG_NTFS_FS is set.
-> > 
-> > So remove the BUG_ON, and use WARN and return instead until someone
-> > really solve the bug.
-> > 
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Reported-by: syzbot+6a5a7672f663cce8b156@syzkaller.appspotmail.com
-> > Reviewed-by: Songyi Zhang <zhang.songyi@zte.com.cn>
-> > Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-> > Reviewed-by: Jiang Xuexin<jiang.xuexin@zte.com.cn>
-> > Reviewed-by: Zhang wenya<zhang.wenya1@zte.com.cn>
-> > Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> > ---
-> >  fs/ntfs/aops.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/ntfs/aops.c b/fs/ntfs/aops.c
-> > index 5f4fb6ca6f2e..b6fd7e711420 100644
-> > --- a/fs/ntfs/aops.c
-> > +++ b/fs/ntfs/aops.c
-> > @@ -183,7 +183,11 @@ static int ntfs_read_block(struct page *page)
-> >  	vol = ni->vol;
-> >  
-> >  	/* $MFT/$DATA must have its complete runlist in memory at all times. */
-> > -	BUG_ON(!ni->runlist.rl && !ni->mft_no && !NInoAttr(ni));
-> > +	if (unlikely(!ni->runlist.rl && !ni->mft_no && !NInoAttr(ni))) {
-> > +		WARN(1, "NTFS: ni->runlist.rl, ni->mft_no, and NInoAttr(ni) is null!\n");
+Am Donnerstag, dem 23.06.2022 um 10:14 +0200 schrieb Christian König:
+> Am 23.06.22 um 10:04 schrieb Lucas Stach:
+> > Am Donnerstag, dem 23.06.2022 um 09:26 +0200 schrieb Christian König:
+> > > Am 23.06.22 um 09:13 schrieb Pekka Paalanen:
+> > > > On Thu, 23 Jun 2022 08:59:41 +0200
+> > > > Christian König <christian.koenig@amd.com> wrote:
+> > > > 
+> > > > > The exporter isn't doing anything wrong here. DMA-buf are supposed to be
+> > > > > CPU cached and can also be cache hot.
+> > > > Hi,
+> > > > 
+> > > > what is that statement based on?
+> > > On the design documentation of DMA-buf and the actual driver
+> > > implementations.
+> > > 
+> > > Coherency and snooping of the CPU cache is mandatory for devices and
+> > > root complexes in the PCI specification. Incoherent access is just an
+> > > extension.
+> > > 
+> > > We inherited that by basing DMA-buf on the Linux kernel DMA-API which in
+> > > turn is largely based on the PCI specification.
+> > > 
+> > > > Were the (mandatory for CPU access) cpu_access_begin/end functions &
+> > > > ioctls not supposed to ensure that CPU cache is up-to-date / CPU cache
+> > > > is fully flushed out?
+> > > No, those functions are to inform the exporter that the importer has
+> > > started and finished accessing the buffer using the CPU.
+> > > 
+> > > There is no signaling in the other direction. In other words the
+> > > exporter doesn't inform the importer about CPU accesses because it is
+> > > the owner of the buffer.
+> > > 
+> > > It's the responsibility of the importer to make sure that it can
+> > > actually access the data in the buffer. If it can't guarantee that the
+> > > importer shouldn't import the buffer in the first place.
+> > This is not really correct. DMA-buf inherited the the map/unmap part
+> > from the DMA API, which on cache coherent architecture is mostly a no-
+> > op or ties into the IOMMU implementation to set up the pagetables for
+> > the translation. On non cache coherent architectures this is the point
+> > where any any necessary cache maintenance happens. DRM breaks this
+> > model by caching the DMA-buf mapping for performance reasons.
 > 
-> So for systems with panic-on-warn, you are still crashing?  Why is this
-> WARN() line still needed here?
->
-
-Sorry, I forgot about panic-on-warn. Use pr_warn() may be better.
-I'll send a patch-v2 .
-
-> thanks,
+> That's not only because of performance reasons, but also because of 
+> correctness.
 > 
-> greg k-h
+> At least the Vulkan API and a bunch of OpenGL extensions make it 
+> mandatory for the buffer to be cache coherent. The kernel is simply not 
+> informed about domain transfers.
+> 
+> For example you can just do a CPU copy to a ring buffer and the 
+> expectation is that an already running shader sees that.
+
+Yes, that one is not really an issue as you know that at buffer
+creation time and can make sure to map those buffers uncached on non
+coherent arches. If there are no explicit domain transfer points non
+coherent must bite the bullet and bypass the CPU caches, running
+performance into the ground.
+
+> 
+> > In the DMA API keeping things mapped is also a valid use-case, but then
+> > you need to do explicit domain transfers via the dma_sync_* family,
+> > which DMA-buf has not inherited. Again those sync are no-ops on cache
+> > coherent architectures, but do any necessary cache maintenance on non
+> > coherent arches.
+> 
+> Correct, yes. Coherency is mandatory for DMA-buf, you can't use 
+> dma_sync_* on it when you are the importer.
+> 
+> The exporter could of course make use of that because he is the owner of 
+> the buffer.
+
+In the example given here with UVC video, you don't know that the
+buffer will be exported and needs to be coherent without
+synchronization points, due to the mapping cache at the DRM side. So
+V4L2 naturally allocates the buffers from CPU cached memory. If the
+expectation is that those buffers are device coherent without relying
+on the map/unmap_attachment calls, then V4L2 needs to always
+synchronize caches on DQBUF when the  buffer is allocated from CPU
+cached memory and a single DMA-buf attachment exists. And while writing
+this I realize that this is probably exactly what V4L2 should do...
+
+Regards,
+Lucas
+

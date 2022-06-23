@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50DC558562
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CA4558353
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbiFWR4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S231620AbiFWR3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235917AbiFWRxh (ORCPT
+        with ESMTP id S233384AbiFWR04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:53:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E81AABA4E;
-        Thu, 23 Jun 2022 10:14:25 -0700 (PDT)
+        Thu, 23 Jun 2022 13:26:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D15BDA;
+        Thu, 23 Jun 2022 10:02:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 024A261DDC;
-        Thu, 23 Jun 2022 17:14:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C00E7C3411B;
-        Thu, 23 Jun 2022 17:14:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12FB7B8248C;
+        Thu, 23 Jun 2022 17:02:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73CEDC3411B;
+        Thu, 23 Jun 2022 17:02:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004464;
-        bh=IXRIJ1GHDIZo2SuBShIm4o6PtlLtHIr1VFnSfZwBj5Q=;
+        s=korg; t=1656003772;
+        bh=Q0rmfeP5l7HOgGDPdDM5pa8ABdpH8MZa0NQ4WnY/aek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGeNvfO2r4PYqCj8y+mqXlqDH3xXdEE5oG9Wa9Y5Gw+pICP9S1TTuxHYOqO8O4Ipx
-         hbKXQ+oxlMmGpWke9AXSh1sZ0E9kDxE92PJIcnrThzKmuqJW4uzV3GTe8qIQo8KXLl
-         H2/NhWQn55gLCwl0J2h3Jel5jIo48cn1jitgNE58=
+        b=nlZa3j2s8GFQEhiHmo/BTleZ8bvvN7j7vSHIGYptNHoIfIHKc4cUOCif3y3H1qmfs
+         4VN7P5SR00SXW4QwFstB9H6AKfQ+1vnsQne0A9ebQPjIbBGOKG8ycf34I6Nv1ZHiZT
+         yf6VAio08Qk5hIH80JXK0FKiwYX6lzX5vdfrGBKY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.19 047/234] crypto: blake2s - adjust include guard naming
-Date:   Thu, 23 Jun 2022 18:41:54 +0200
-Message-Id: <20220623164344.398089594@linuxfoundation.org>
+Subject: [PATCH 4.14 081/237] random: prepend remaining pool constants with POOL_
+Date:   Thu, 23 Jun 2022 18:41:55 +0200
+Message-Id: <20220623164345.482435697@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
-References: <20220623164343.042598055@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +55,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 8786841bc2020f7f2513a6c74e64912f07b9c0dc upstream.
+commit b3d51c1f542113342ddfbf6007e38a684b9dbec9 upstream.
 
-Use the full path in the include guards for the BLAKE2s headers to avoid
-ambiguity and to match the convention for most files in include/crypto/.
+The other pool constants are prepended with POOL_, but not these last
+ones. Rename them. This will then let us move them into the enum in the
+following commit.
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/crypto/blake2s.h          |    6 +++---
- include/crypto/internal/blake2s.h |    6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/char/random.c |   40 ++++++++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
---- a/include/crypto/blake2s.h
-+++ b/include/crypto/blake2s.h
-@@ -3,8 +3,8 @@
-  * Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -362,11 +362,11 @@
+  * To allow fractional bits to be tracked, the entropy_count field is
+  * denominated in units of 1/8th bits.
+  *
+- * 2*(ENTROPY_SHIFT + poolbitshift) must <= 31, or the multiply in
++ * 2*(POOL_ENTROPY_SHIFT + poolbitshift) must <= 31, or the multiply in
+  * credit_entropy_bits() needs to be 64 bits wide.
   */
+-#define ENTROPY_SHIFT 3
+-#define ENTROPY_BITS() (input_pool.entropy_count >> ENTROPY_SHIFT)
++#define POOL_ENTROPY_SHIFT 3
++#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
  
--#ifndef BLAKE2S_H
--#define BLAKE2S_H
-+#ifndef _CRYPTO_BLAKE2S_H
-+#define _CRYPTO_BLAKE2S_H
+ /*
+  * If the entropy count falls under this number of bits, then we
+@@ -426,7 +426,7 @@ enum poolinfo {
+ 	POOL_BYTES = POOL_WORDS * sizeof(u32),
+ 	POOL_BITS = POOL_BYTES * 8,
+ 	POOL_BITSHIFT = ilog2(POOL_WORDS) + 5,
+-	POOL_FRACBITS = POOL_WORDS << (ENTROPY_SHIFT + 5),
++	POOL_FRACBITS = POOL_WORDS << (POOL_ENTROPY_SHIFT + 5),
  
- #include <linux/bug.h>
- #include <linux/types.h>
-@@ -99,4 +99,4 @@ static inline void blake2s(u8 *out, cons
- 	blake2s_final(&state, out);
+ 	/* x^128 + x^104 + x^76 + x^51 +x^25 + x + 1 */
+ 	POOL_TAP1 = 104,
+@@ -650,7 +650,7 @@ static void process_random_ready_list(vo
+ static void credit_entropy_bits(int nbits)
+ {
+ 	int entropy_count, entropy_bits, orig;
+-	int nfrac = nbits << ENTROPY_SHIFT;
++	int nfrac = nbits << POOL_ENTROPY_SHIFT;
+ 
+ 	if (!nbits)
+ 		return;
+@@ -683,7 +683,7 @@ retry:
+ 		 * turns no matter how large nbits is.
+ 		 */
+ 		int pnfrac = nfrac;
+-		const int s = POOL_BITSHIFT + ENTROPY_SHIFT + 2;
++		const int s = POOL_BITSHIFT + POOL_ENTROPY_SHIFT + 2;
+ 		/* The +2 corresponds to the /4 in the denominator */
+ 
+ 		do {
+@@ -704,9 +704,9 @@ retry:
+ 	if (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig)
+ 		goto retry;
+ 
+-	trace_credit_entropy_bits(nbits, entropy_count >> ENTROPY_SHIFT, _RET_IP_);
++	trace_credit_entropy_bits(nbits, entropy_count >> POOL_ENTROPY_SHIFT, _RET_IP_);
+ 
+-	entropy_bits = entropy_count >> ENTROPY_SHIFT;
++	entropy_bits = entropy_count >> POOL_ENTROPY_SHIFT;
+ 	if (crng_init < 2 && entropy_bits >= 128)
+ 		crng_reseed(&primary_crng, true);
+ }
+@@ -1186,7 +1186,7 @@ void add_input_randomness(unsigned int t
+ 	last_value = value;
+ 	add_timer_randomness(&input_timer_state,
+ 			     (type << 4) ^ code ^ (code >> 4) ^ value);
+-	trace_add_input_randomness(ENTROPY_BITS());
++	trace_add_input_randomness(POOL_ENTROPY_BITS());
+ }
+ EXPORT_SYMBOL_GPL(add_input_randomness);
+ 
+@@ -1285,7 +1285,7 @@ void add_disk_randomness(struct gendisk
+ 		return;
+ 	/* first major is 1, so we get >= 0x200 here */
+ 	add_timer_randomness(disk->random, 0x100 + disk_devt(disk));
+-	trace_add_disk_randomness(disk_devt(disk), ENTROPY_BITS());
++	trace_add_disk_randomness(disk_devt(disk), POOL_ENTROPY_BITS());
+ }
+ EXPORT_SYMBOL_GPL(add_disk_randomness);
+ #endif
+@@ -1312,7 +1312,7 @@ retry:
+ 	entropy_count = orig = READ_ONCE(input_pool.entropy_count);
+ 	ibytes = nbytes;
+ 	/* never pull more than available */
+-	have_bytes = entropy_count >> (ENTROPY_SHIFT + 3);
++	have_bytes = entropy_count >> (POOL_ENTROPY_SHIFT + 3);
+ 
+ 	if (have_bytes < 0)
+ 		have_bytes = 0;
+@@ -1324,7 +1324,7 @@ retry:
+ 		pr_warn("negative entropy count: count %d\n", entropy_count);
+ 		entropy_count = 0;
+ 	}
+-	nfrac = ibytes << (ENTROPY_SHIFT + 3);
++	nfrac = ibytes << (POOL_ENTROPY_SHIFT + 3);
+ 	if ((size_t) entropy_count > nfrac)
+ 		entropy_count -= nfrac;
+ 	else
+@@ -1334,7 +1334,7 @@ retry:
+ 		goto retry;
+ 
+ 	trace_debit_entropy(8 * ibytes);
+-	if (ibytes && ENTROPY_BITS() < random_write_wakeup_bits) {
++	if (ibytes && POOL_ENTROPY_BITS() < random_write_wakeup_bits) {
+ 		wake_up_interruptible(&random_write_wait);
+ 		kill_fasync(&fasync, SIGIO, POLL_OUT);
+ 	}
+@@ -1422,7 +1422,7 @@ static ssize_t _extract_entropy(void *bu
+  */
+ static ssize_t extract_entropy(void *buf, size_t nbytes, int min)
+ {
+-	trace_extract_entropy(nbytes, ENTROPY_BITS(), _RET_IP_);
++	trace_extract_entropy(nbytes, POOL_ENTROPY_BITS(), _RET_IP_);
+ 	nbytes = account(nbytes, min);
+ 	return _extract_entropy(buf, nbytes);
+ }
+@@ -1748,9 +1748,9 @@ urandom_read_nowarn(struct file *file, c
+ {
+ 	int ret;
+ 
+-	nbytes = min_t(size_t, nbytes, INT_MAX >> (ENTROPY_SHIFT + 3));
++	nbytes = min_t(size_t, nbytes, INT_MAX >> (POOL_ENTROPY_SHIFT + 3));
+ 	ret = extract_crng_user(buf, nbytes);
+-	trace_urandom_read(8 * nbytes, 0, ENTROPY_BITS());
++	trace_urandom_read(8 * nbytes, 0, POOL_ENTROPY_BITS());
+ 	return ret;
  }
  
--#endif /* BLAKE2S_H */
-+#endif /* _CRYPTO_BLAKE2S_H */
---- a/include/crypto/internal/blake2s.h
-+++ b/include/crypto/internal/blake2s.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 OR MIT */
- 
--#ifndef BLAKE2S_INTERNAL_H
--#define BLAKE2S_INTERNAL_H
-+#ifndef _CRYPTO_INTERNAL_BLAKE2S_H
-+#define _CRYPTO_INTERNAL_BLAKE2S_H
- 
- #include <crypto/blake2s.h>
- 
-@@ -16,4 +16,4 @@ static inline void blake2s_set_lastblock
- 	state->f[0] = -1;
+@@ -1790,7 +1790,7 @@ random_poll(struct file *file, poll_tabl
+ 	mask = 0;
+ 	if (crng_ready())
+ 		mask |= POLLIN | POLLRDNORM;
+-	if (ENTROPY_BITS() < random_write_wakeup_bits)
++	if (POOL_ENTROPY_BITS() < random_write_wakeup_bits)
+ 		mask |= POLLOUT | POLLWRNORM;
+ 	return mask;
  }
+@@ -1846,7 +1846,7 @@ static long random_ioctl(struct file *f,
+ 	switch (cmd) {
+ 	case RNDGETENTCNT:
+ 		/* inherently racy, no point locking */
+-		ent_count = ENTROPY_BITS();
++		ent_count = POOL_ENTROPY_BITS();
+ 		if (put_user(ent_count, p))
+ 			return -EFAULT;
+ 		return 0;
+@@ -2002,7 +2002,7 @@ static int proc_do_entropy(struct ctl_ta
+ 	struct ctl_table fake_table;
+ 	int entropy_count;
  
--#endif /* BLAKE2S_INTERNAL_H */
-+#endif /* _CRYPTO_INTERNAL_BLAKE2S_H */
+-	entropy_count = *(int *)table->data >> ENTROPY_SHIFT;
++	entropy_count = *(int *)table->data >> POOL_ENTROPY_SHIFT;
+ 
+ 	fake_table.data = &entropy_count;
+ 	fake_table.maxlen = sizeof(entropy_count);
+@@ -2221,7 +2221,7 @@ void add_hwgenerator_randomness(const ch
+ 	 */
+ 	wait_event_interruptible(random_write_wait,
+ 			!system_wq || kthread_should_stop() ||
+-			ENTROPY_BITS() <= random_write_wakeup_bits);
++			POOL_ENTROPY_BITS() <= random_write_wakeup_bits);
+ 	mix_pool_bytes(buffer, count);
+ 	credit_entropy_bits(entropy);
+ }
 
 

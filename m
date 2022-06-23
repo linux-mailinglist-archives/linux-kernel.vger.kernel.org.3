@@ -2,225 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD53B557568
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7DF55756D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiFWI0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S230140AbiFWI1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiFWI0h (ORCPT
+        with ESMTP id S230078AbiFWI06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:26:37 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729BB48883;
-        Thu, 23 Jun 2022 01:26:31 -0700 (PDT)
-X-UUID: fb55d257849d41a2a97ea1a6b12931bc-20220623
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:38e7695c-074a-4db0-9de9-83513716d3a5,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:38e7695c-074a-4db0-9de9-83513716d3a5,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:b938d82d-1756-4fa3-be7f-474a6e4be921,C
-        OID:f395d47c0c6c,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: fb55d257849d41a2a97ea1a6b12931bc-20220623
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 875172891; Thu, 23 Jun 2022 16:26:24 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 23 Jun 2022 16:26:22 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 23 Jun 2022 16:26:22 +0800
-Subject: Re: [PATCH] USB: serial: option: add Quectel RM500K module support
-To:     Johan Hovold <johan@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Bear Wang <bear.wang@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>, <stable@vger.kernel.org>,
-        Ballon Shi <ballon.shi@quectel.com>
-References: <20220623035214.20124-1-macpaul.lin@mediatek.com>
- <YrQKApkdi//0ysiP@hovoldconsulting.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-Message-ID: <8da94613-17b1-bcad-9dce-a8dd401d2e38@mediatek.com>
-Date:   Thu, 23 Jun 2022 16:26:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <YrQKApkdi//0ysiP@hovoldconsulting.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        Thu, 23 Jun 2022 04:26:58 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2070.outbound.protection.outlook.com [40.107.212.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135ED488A0;
+        Thu, 23 Jun 2022 01:26:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Oe5K6WiRbg/2usFqvO3cxKGtFuf3bNmhTMpXBoUQomDeXJFs8DyfpFCdfC3F5hFQO3lpGJd7WbWKiSPL1zJtCtCRP6UEx88XTGR/XSSMXlo0FfXSO2X73UXWhcynlOuOiiRbTImJF6tUzSxSrykYAAvrQTYr9j+R7pmXEiwSIkW3M6+/J/kaIsRwyY0tyY9F3rWGlNGfqSj5Hia+I9bXwye1mFnpW9XxwXhmaACgOVvMbOz1Xa1OxA6aJAShq7idODLPrxCAwLMNyHPKH2B8IfDR6tYM26Z9SyjS+FZmp0gqZScqCE+41TTHKTJCZc5edr9UuYasbBqvb0ZS7/LbEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1cDbVoyuIkUexteR48Ue/tGMML8XocbS4FmnCEbt44o=;
+ b=DCfQLrEUK7u362FlQKv/vAX1K+EY84Ve6uhf7PYX2j8Wdb+7HXH40t8fsz/esJG3ciBBLP7WAt/CyVp1fYTgmV8L42x8YwOsY1dwgrPfGAGwiNae67UhNlhCcLXCww2ufyukLjWKIJPvrvWhYcJEIeNMqsr/hNdmxOAQqJX1IGtm6RDC4OZrU4CBEgmP2k1fU6v0jDIqS7RJaTuMqoRkDqYBbc4BsVKp3D5vSQVcnyrkFim7z+tFhFeqnYVuFA9aZr9lkWjfgC4znbv2BPqcbFooZcA+cX6sZo9hh8puB9sKb0NXQuLcuFqrHRuq2uz8AwVXn/ItvVN/WjMvlWFCHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1cDbVoyuIkUexteR48Ue/tGMML8XocbS4FmnCEbt44o=;
+ b=tq1YOZkLkEmP8/VPmjcdNyfJtyNb6WlxJbWgC3jNhAKhtTrLyZNNpfuuG4z5gUv26NY3SKPh/L+rJsrPmWxSw4l8hcZv9zBF6p+takjiu6Qbm6J67UQqyCoB5XnxQ8d/q8WVrCtMtXP8tmzXyOcLM0yJa4hyiQSKqGeYqG22aCE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BY5PR12MB4324.namprd12.prod.outlook.com (2603:10b6:a03:209::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Thu, 23 Jun
+ 2022 08:26:54 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e0fd:45cf:c701:2731]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e0fd:45cf:c701:2731%6]) with mapi id 15.20.5373.015; Thu, 23 Jun 2022
+ 08:26:53 +0000
+Message-ID: <dbf87831-1b14-d18f-f8ca-b5fe1f850190@amd.com>
+Date:   Thu, 23 Jun 2022 10:26:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: DMA-buf and uncached system memory
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RDNS_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org, lkml <linux-kernel@vger.kernel.org>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+ <58e11013-01ab-8a2c-732e-860ae83a3df6@suse.de>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <58e11013-01ab-8a2c-732e-860ae83a3df6@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9P250CA0013.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:532::24) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 15ee4006-c820-4c1c-2062-08da54f220db
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4324:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB43246384C2D210DF740F06DD83B59@BY5PR12MB4324.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ara8IX/8BnF3Y+c2F46BwRmWhvPry9NdTBJFgHFSrGvCs0cjyRKx9bRY7hsWXyj5YtzUEtiiZlZ0WG8Lpb/aw+oNteYYQwApiiA5ZhzuSEsqtQSru0pdNxEptMqJ+sWVAqp88cgEAeRkTInidcHf+AcqwlUjnyxobTIcZ1e+rl7ErRnsW3rriIW8897m9VMx/kpdf70oHUrmwVUDufX3clLcSoixSr5Jg28GbQKHMegJk2+A/6hb9eoKidBPdAzU8JjCYC/hPbkU7LxhGbp9DakjEijQuMY5PtcQDqhWZYMYSvozQDqiLQ5upy8NC+t7thhjWTnq4fq5Omwd2zZpBxCetpX74teXCJNYoQtiM80BVMsCkjz4krZBiI1tE9x62kwora2nT6uLA7nj2kvRi4AxJp9dbbWrsTk6H95AvRMV58CbsBerFl+veB6QLI3BkkEMR8BHiRatNQD+K9FLqtCiJOsaybhse2a+WPeelVgmSZdCTOu7G6Y1wjz0SVyy1uWvrUvFJvgMXaLXIkCPZ2OFeNp7rBKNY3ISr82Pdx5HmjcFcB7m5RRaNB0EstbNda9GW1snvG9O2rkwZXVVd/5q2wExTZx+usL8hnb8cgmiIjmXHNeDIs+ptPXU0I63BAPLDcb/rCcxdrbiTTW46+ePsQJbDNtnvfCM8BtT7CHCNCraMz+tnBd4g9TiGsnPrvkqWpEmnYOsMrAol5u/hpUZhTdkoNAaoahZNMWJTJY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(366004)(396003)(39860400002)(66476007)(66556008)(478600001)(966005)(6486002)(86362001)(66946007)(31696002)(36756003)(6512007)(41300700001)(66574015)(38100700002)(6506007)(31686004)(6666004)(26005)(2616005)(110136005)(186003)(2906002)(8676002)(4326008)(5660300002)(8936002)(83380400001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Sm1BK1hNWFdvQ1JoU0JkQ2VldTcrdmZMbWowMVh2UnZnWUx3MlBGWHAwN2sx?=
+ =?utf-8?B?UkpGTkdlbHdpRnI4aXVXRnN6Y2hqT1FQendNbk1mN3RaY0NIQW9MRVlpdzNQ?=
+ =?utf-8?B?b3ZXMklHNUliZTZLUUxqakNHc1BLZk5WWjlheDQyRkFxL1RUNVJMUURPdjMw?=
+ =?utf-8?B?ZEZ2UkxtMTZkYkVtcGJKNlN6U1h5M3VENmtoMjV3cVI4aWt5czhnNy9TMldO?=
+ =?utf-8?B?RVhoOWx4MFdQVFUyOEZ3a2QyWEZEZlRRMFI3Z2dPL29KUGlKWlN2YlYrcWpK?=
+ =?utf-8?B?SUdhQWd3SDNSV1B2RnVZVUVXT1RncjBHZlQyTmYyMXlzakwrczg1L2R1TzV5?=
+ =?utf-8?B?dFZMMTVYVUF3QndnM1ZuSHlkM0UwZnFveHZ6b3d0Q3REOFc2dm9FM1VZTnUw?=
+ =?utf-8?B?OHNPOWJqVENSbzVWUWhwVlIySFU4anhjOU41Nm5hL1ZUMjYzelFUOEppenZj?=
+ =?utf-8?B?TEkxenZEelNKZUtqei8vR25sNGN0QWlJV2UvQ1VBRTZpc2NCVjd4RjNCUjRz?=
+ =?utf-8?B?a2VZcHdKNUhuTGVhUDQrL1NENmRZWFp6UWFheFNOQjZ1WmdsaGN1QVlRMlJ0?=
+ =?utf-8?B?alYxLzMrNUJ4ZVlBSmdPMXFVNE0yOTEwQmJBaXAvUmk5amU2SDB2MkoxazZN?=
+ =?utf-8?B?cm1vWVR1S2tUSTJRZlovU2JsNnJnSUxSdVNnRmp3dmpKVzFPc3JiMmdDV1lP?=
+ =?utf-8?B?ZVVzVDNMQng0TVQwOHBvNWtXKzhvUHVleEhBOVQ4QXl3a2tNazN4QW5hamZy?=
+ =?utf-8?B?T01pRlQ0a29yOVViak1aUEZVOFhOaTlBTm9SYVkwa0kwbFFvVFJyNFZ5SEVh?=
+ =?utf-8?B?VkNjOStKRWsycmpZMXgxUFc2ZlNHaVFOOFJwZ3pmVEdmZWhtVUFzdlVZc2NH?=
+ =?utf-8?B?MkNQbytPWFNGYTFpVGJ6ZzRPRlVsalcxZ1NTSDdEMVUvTnR3b0pkS1ZFZ0th?=
+ =?utf-8?B?N2tGekNKZlpZQk9FRFBKSXZuU1UxM3F6NjhQZFgxazV3b1BpU1VlSUVUQXJv?=
+ =?utf-8?B?bWowT2hCZE5RZ0pFdzhLejh5a3l4a05mSytWcElrdjRyTUVGL0JJWHFVU1VV?=
+ =?utf-8?B?VXFFVDFjTFh0cllxdy9DV0llQnQwUFdPVXRWUkJLRXR2TnZGNGFOcjdJV2xz?=
+ =?utf-8?B?clFtNTkzSjFzVXR1Q3dCYTVXWVdqNUhsSkJYRVh0bmRrWXRBOFMwM1A5OGY1?=
+ =?utf-8?B?cWZPQ2gyMU9pdnJqSmhkbW1ubWtnWThmY0tic3RuOEZKaXRWSVFpZVZtVFBz?=
+ =?utf-8?B?V0tma2dOdlpETkUraytOdEpNelZwTDNJdEk0azdQVEFOcnNPYk40RmRHdVFO?=
+ =?utf-8?B?Qk0yK2pjUDVyVk83T3BPeWZNTVpZaHp4QWxDVmRxdjBJUWV1K016ZEFmUzJB?=
+ =?utf-8?B?OVpzVWt0dWtjNlN0dkdEWDRER1oxOUVwOFBYaTZISlo1QmJjWng2YnpZZnI1?=
+ =?utf-8?B?TVN4ZHhJVFI5cUJsUm5tcXVKLzBKMVBncmdxbXVpaFNNbHNDTDBCd0FCb1lT?=
+ =?utf-8?B?cWF2ZXI2OXZ5SXZmWWVwQ3VsSzVxN0FUVUhoaCsxVFV2NVlhVUtJNVpYNkda?=
+ =?utf-8?B?RVlrZ0JmclNRakhocWlZd1J0Tm45TVlvdytPVkJLQ2gzbTlreWlYRDl4L2ZL?=
+ =?utf-8?B?eXJZamdZOVd3VVVZeW1kU3ZZTHQwMEZtY0pHazIzZGFTdGlscUV4RjVYaEVC?=
+ =?utf-8?B?a0pyelNjVmRIcUU4SW5Db2M0Y0hrLzhEK3NwWHNQVzhwbkdKaEFzQ212R2pE?=
+ =?utf-8?B?N3ZHQVl6M1RhWnFsN0kxQkcrWkZZUWRTQnFLNTdBMFl3VGJMUnJOT1FraHZI?=
+ =?utf-8?B?d0tEVGRpVnFhRktvb3RpZlR2bkd2WlFsbGxWVDR2TXdQc2N1Tm1HNStRUjAw?=
+ =?utf-8?B?cEQ2Mkg2VWQwSW1wOTc2ODU1TDh6NzNJVnd2a2pHc2FrZE91N3NIczVuR2ho?=
+ =?utf-8?B?MXR3dFdROTEzSGIxSVpKbmYyc3h2Y1laOWJHNUpSSnU0bmc2OHV6Wmc5aHFE?=
+ =?utf-8?B?ajFnckFkaHpibjBOUG1qbWFNSzBxRm8zckQ4OHByTy90RVYrRU44UjN2SEI2?=
+ =?utf-8?B?Q2swaEJMWG9waWhhdHptUlBwcitzVXlLMGkvTEJMbHVabUZuMVNSSXpRNjFy?=
+ =?utf-8?Q?6P5q4V4xlHrWdFce8V048TVik?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15ee4006-c820-4c1c-2062-08da54f220db
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 08:26:53.8584
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: if1ZZH0+hvF6aVMQowp64KHct8ahuNDKIGwa6vncbedG5xYsWobEqKrD7/Nf7TIL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4324
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/23/22 2:36 PM, Johan Hovold wrote:
-> On Thu, Jun 23, 2022 at 11:52:14AM +0800, Macpaul Lin wrote:
->> Add usb product id of the Quectel RM500K module.
+Am 23.06.22 um 10:13 schrieb Thomas Zimmermann:
+> Hi Christian
+>
+> Am 15.02.21 um 09:58 schrieb Christian König:
+>> Hi guys,
 >>
->> RM500K provides 2 maindatory interfaces to Linux host after enumeration.
-> 
-> typo: mandatory
-
-Will be fixed on patch v2.
-
->>   - /dev/ttyUSB5: this is a serial interface for control path. User needs
->>     to write AT commands to this device node to query status, set APN,
->>     set PIN code, and enable/disable the data connection to 5G network.
->>   - ethX: this is the data path provided as a RNDIS devices. After the
->>     data connection has been established, Linux host can access 5G data
->>     network via this interface.
+>> we are currently working an Freesync and direct scan out from system 
+>> memory on AMD APUs in A+A laptops.
 >>
->> The following kernel settings is required for RM500K.
->>   - CONFIG_USB_SERIAL_GENERIC
->>   - CONFIG_USB_SERIAL_CONSOLE
-
-Double checked: no need confirmed.
-
-> You shouldn't need either of those.
-> 
->>   - CONFIG_USB_NET_RNDIS_HOST
->>   - CONFIG_USB_SERIAL_WWAN
->>   - CONFIG_USB_SERIAL_OPTION
-
-Will remove this paragraph in patch v2.
-
-> And OPTION selects WWAN so no need to mention that.
-> 
-> But you can probably just drop this paragraph.
-> 
->> usb-devices output for 0x7001:
->> T:  Bus=05 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
->> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
->> P:  Vendor=2c7c ProdID=7001 Rev=00.01
->> S:  Manufacturer=MediaTek Inc.
->> S:  Product=USB DATA CARD
->> S:  SerialNumber=869206050009672
->> C:  #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
-
-RDNIS interface, will be enumerated as ethX.
->> I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=02 Prot=ff Driver=rndis_host
->> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=125us
->> I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
->> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-COM port.
->> I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Debug interface (will be disabled with mass-production shipping).
->> I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
->> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-COM port.
->> I:  If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> I:  If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
->> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Can you say something about what the other interfaces are for?
-
-The others COM ports are MODEM related interface but I'm not sure the 
-exactly purpose and how they are used.
-
-I'll summarize the part I know in patch v2.
-
->> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
->> Signed-off-by: Ballon Shi <ballon.shi@quectel.com>
-> 
-> The submitters SoB always goes last (to reflect how the patch was
-> forwarded).
-
-Will be fixed in patch v2.
-
-> If Ballon is the primary author you need to add a From line at the
-> beginning of mail body.
-
-No need for this patch.
-
-> Otherwise you should add a Co-developed-by tag before the co-author's
-> SoB.
-> 
-> More details in
-> 
-> 	Documentation/process/submitting-patches.rst
-> 
-
-Will be fixed in patch v2.
-
->> Cc: stable@vger.kernel.org
->> ---
->>   drivers/usb/serial/option.c | 2 ++
->>   1 file changed, 2 insertions(+)
+>> On problem we stumbled over is that our display hardware needs to 
+>> scan out from uncached system memory and we currently don't have a 
+>> way to communicate that through DMA-buf.
 >>
->> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
->> index e7755d9cfc61..e2587a3c7600 100644
->> --- a/drivers/usb/serial/option.c
->> +++ b/drivers/usb/serial/option.c
->> @@ -253,6 +253,7 @@ static void option_instat_callback(struct urb *urb);
->>   #define QUECTEL_PRODUCT_BG96			0x0296
->>   #define QUECTEL_PRODUCT_EP06			0x0306
->>   #define QUECTEL_PRODUCT_EM12			0x0512
->> +#define QUECTEL_PRODUCT_RM500K			0x7001
-> 
-> Please keep the defines sorted by PID here.
+>> For our specific use case at hand we are going to implement something 
+>> driver specific, but the question is should we have something more 
+>> generic for this?
+>
+> I had a patchset here that extends iosys-map (former dma-buf-map) with 
+> caching information. I'll post a copy.
 
-Will be fixed in patch v2.
+Oh, nice. But why on iosys-map? We need that per DMA-buf.
 
-> 
->>   #define QUECTEL_PRODUCT_RM500Q			0x0800
->>   #define QUECTEL_PRODUCT_EC200S_CN		0x6002
->>   #define QUECTEL_PRODUCT_EC200T			0x6026
->> @@ -1135,6 +1136,7 @@ static const struct usb_device_id option_ids[] = {
->>   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, 0x0620, 0xff, 0, 0) },
->>   	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x0700, 0xff), /* BG95 */
->>   	  .driver_info = RSVD(3) | ZLP },
->> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
->>   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x30) },
->>   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
->>   	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
-> 
-> Johan
-> 
+Thanks,
+Christian.
 
-Thanks for the quick review.
-I'll fix them all and send patch v2.
+>
+> Sorry for being late to reply.
+>
+> Best regards
+> Thomas
+>
+>>
+>> After all the system memory access pattern is a PCIe extension and as 
+>> such something generic.
+>>
+>> Regards,
+>> Christian.
+>> _______________________________________________
+>> dri-devel mailing list
+>> dri-devel@lists.freedesktop.org
+>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>
 
-Macpaul Lin

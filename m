@@ -2,176 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CB7557A4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 299CA557A52
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiFWM1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S231624AbiFWM2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiFWM1R (ORCPT
+        with ESMTP id S231599AbiFWM2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:27:17 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B7D3CA40;
-        Thu, 23 Jun 2022 05:27:15 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LTKHg0JJqzDsPx;
-        Thu, 23 Jun 2022 20:26:39 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 20:27:13 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 20:27:12 +0800
-Subject: Re: [PATCH -next v5 4/8] blk-throttle: fix io hung due to config
- updates
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-CC:     <tj@kernel.org>, <axboe@kernel.dk>, <ming.lei@redhat.com>,
-        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220528064330.3471000-1-yukuai3@huawei.com>
- <20220528064330.3471000-5-yukuai3@huawei.com>
- <20220622172621.GA28246@blackbody.suse.cz>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <f5165488-2461-8946-593f-14154e404850@huawei.com>
-Date:   Thu, 23 Jun 2022 20:27:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 23 Jun 2022 08:28:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D54520F65;
+        Thu, 23 Jun 2022 05:28:04 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFF836601796;
+        Thu, 23 Jun 2022 13:28:02 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655987283;
+        bh=IwL6iPRd+xbXzEa1NNLhk/737SOyuXYMWwedlhFBIcQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TgAlMRXbzSxcaX2zPy20reDYxQQsk+xodm14NOXdG7rKGc0+NIDiA4PoaCy2QGIw0
+         mXfiMuZEG8rk6n6M53Vy1fomVFj6tdM9IT9UNJn6Hc0Iumqi4QnISWeMG99gFAJJry
+         gQflStppiv0dHF8bItCTYposeZtXD6tOatNm/GBc3P2hZSOFneluxYoo256oVueKek
+         auzmyppiGXke/xmb8Oe8tkEnj4grw7Cw5iSZgRFM0vp20zB1GAH3NGmIWmVCk8Ch0y
+         Z0KIXlk52dXXI44xbcz5LmBgnjNz/SuTXOszhRBjVhs4qqFNLj1MOHJMgCIxFcCsTC
+         oiYArA24BvqhA==
+Message-ID: <24bd8e36-d836-74f0-2006-781d6458b7da@collabora.com>
+Date:   Thu, 23 Jun 2022 14:27:59 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220622172621.GA28246@blackbody.suse.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/5] Allow getting regulator on MFG for multiple SoCs
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wenst@chromium.org
+References: <20220623100951.21153-1-angelogioacchino.delregno@collabora.com>
+ <11da278b-f7ce-d668-2c8a-46d7a9c71eb9@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <11da278b-f7ce-d668-2c8a-46d7a9c71eb9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2022/06/23 1:26, Michal Koutný 写道:
-> (Apologies for taking so long before answering.)
+Il 23/06/22 13:40, Matthias Brugger ha scritto:
 > 
-> On Sat, May 28, 2022 at 02:43:26PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
->> Some simple test:
->> 1)
->> cd /sys/fs/cgroup/blkio/
->> echo $$ > cgroup.procs
->> echo "8:0 2048" > blkio.throttle.write_bps_device
->> {
->>          sleep 2
->>          echo "8:0 1024" > blkio.throttle.write_bps_device
->> } &
->> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
+> 
+> On 23/06/2022 12:09, AngeloGioacchino Del Regno wrote:
+>> This is one of the steps to enable DVFS with the Panfrost driver:
+>> since Panfrost is already enabling the (required) MFG power domains
+>> and since the mtk-pm-domains driver is already responsible for
+>> actually enabling the SRAM PDN, it makes sense to make sure that
+>> the VSRAM supply is ON when trying to reset/enable the SRAM.
 >>
->> 2)
->> cd /sys/fs/cgroup/blkio/
->> echo $$ > cgroup.procs
->> echo "8:0 1024" > blkio.throttle.write_bps_device
->> {
->>          sleep 4
->>          echo "8:0 2048" > blkio.throttle.write_bps_device
->> } &
->> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
+>> For this reason, the MTK_SCPD_DOMAIN_SUPPLY flag was added to one
+>> more MFG domain, ensuring that the SRAM is actually powered and
+>> also not relying on the bootloader leaving this supply on; on the
+>> other hand, this is also making possible to avoid setting a
+>> sram-supply on the GPU node, making devfreq happy about having
+>> only one supply and finally allowing DVFS to happen.
 >>
->> test results: io finish time
->> 	before this patch	with this patch
->> 1)	10s			6s
->> 2)	8s			6s
-> 
-> I agree these are consistent and correct times.
-> 
-> And the new implementation won't make it worse (in terms of delaying a
-> bio) than configuring minimal limits from the beginning, AFACT.
-> 
->> @@ -801,7 +836,8 @@ static bool tg_with_in_iops_limit(struct throtl_grp *tg, struct bio *bio,
->>   
->>   	/* Round up to the next throttle slice, wait time must be nonzero */
->>   	jiffy_elapsed_rnd = roundup(jiffy_elapsed + 1, tg->td->throtl_slice);
->> -	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd);
->> +	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd) +
->> +		     tg->io_skipped[rw];
->>   	if (tg->io_disp[rw] + 1 <= io_allowed) {
->>   		if (wait)
->>   			*wait = 0;
->> @@ -838,7 +874,8 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
->>   		jiffy_elapsed_rnd = tg->td->throtl_slice;
->>   
->>   	jiffy_elapsed_rnd = roundup(jiffy_elapsed_rnd, tg->td->throtl_slice);
->> -	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd);
->> +	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd) +
->> +			tg->bytes_skipped[rw];
->>   	if (tg->bytes_disp[rw] + bio_size <= bytes_allowed) {
->>   		if (wait)
->>   			*wait = 0;
+>> If no domain-supply is declared in devicetree, mtk-pm-domains driver
+>> probe will anyway keep going, so this is not breaking old devicetrees.
 >>
+>> No side effects either when this supply is declared for both a MFG
+>> domain and Panfrost together.
+>>
+>> This series has no dependencies.
+>>
+>> AngeloGioacchino Del Regno (5):
+>>    soc: mediatek: mt8192-pm-domains: Allow probing vreg supply on MFG0/1
+>>    soc: mediatek: mt8183-pm-domains: Allow probing vreg supply on
+>>      MFG_ASYNC
+>>    soc: mediatek: mt8195-pm-domains: Allow probing vreg supply on MFG1
+>>    soc: mediatek: mt8186-pm-domains: Allow probing vreg supply on MFG1
 > 
-> Here we may allow to dispatch a bio above current slice's
-> calculate_bytes_allowed() if bytes_skipped is already >0.
-
-Hi, I don't expect that to happen. For example, if a bio is still
-throttled, then old slice is keeped with proper 'bytes_skipped',
-then new wait time is caculated based on (bio_size - bytes_skipped).
-
-After the bio is dispatched(I assum that other bios can't preempt),
-if new slice is started, then 'bytes_skipped' is cleared, there should
-be no problem; If old slice is extended, note that we only wait
-for 'bio_size - bytes_skipped' bytes, while 'bio_size' bytes is added
-to 'tg->bytes_disp'. I think this will make sure new bio won't be
-dispatched above slice.
-
-What do you think?
-> 
-> bytes_disp + bio_size <= calculate_bytes_allowed() + bytes_skipped
-> 
-> Then on the next update
-> 
->> [shuffle]
->> +static void __tg_update_skipped(struct throtl_grp *tg, bool rw)
->> +{
->> +	unsigned long jiffy_elapsed = jiffies - tg->slice_start[rw];
->> +	u64 bps_limit = tg_bps_limit(tg, rw);
->> +	u32 iops_limit = tg_iops_limit(tg, rw);
->> +
->> +	if (bps_limit != U64_MAX)
->> +		tg->bytes_skipped[rw] +=
->> +			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
->> +			tg->bytes_disp[rw];
->> +	if (iops_limit != UINT_MAX)
->> +		tg->io_skipped[rw] +=
->> +			calculate_io_allowed(iops_limit, jiffy_elapsed) -
->> +			tg->io_disp[rw];
->> +}
-> 
-> the difference(s) here could be negative. bytes_skipped should be
-> reduced to account for the additionally dispatched bio.
-> This is all unsigned so negative numbers underflow, however, we add them
-> again to the unsigned, so thanks to modular arithmetics the result is
-> correctly updated bytes_skipped.
-> 
-> Maybe add a comment about this (unsigned) intention?
-
-Of course I can do that.
-> 
-> (But can this happen? The discussed bio would have to outrun another bio
-> (the one which defined the current slice_end) but since blk-throttle
-> uses queues (FIFO) everywhere this shouldn't really happen. But it's
-> good to know this works as intended.)
-I can also mention that in comment.
-> 
-> This patch can have
-> Reviewed-by: Michal Koutný <mkoutny@suse.com>
+> I think we can squash the 4 patches into one. Other then that series looks good.
 > 
 
-Thanks for the review!
-Kuai
+I was wondering the same... the reason why I haven't squashed the patches is
+that I'm not sure if MT8173 also needs that or not - and this makes really
+clear to whoever reads the git log that MT8173 was omitted.
+Looking back at that though, be it one and squashed, or be it four, shouldn't
+change much for that kind of intention, what do you say?
+
+Eh, for clarity - I didn't even check/touch MT8173 because that's PowerVR... and
+currently there's no driver that's currently upstream.
+
+Anyway, if you think that squashing is the right way to go, I can do that in
+practically no time and send a v2.
+
+Cheers,
+Angelo
+
+> Matthias
+> 
+>>    arm64: dts: mediatek: mt8183-kukui: Assign sram supply to mfg_async pd
+>>
+>>   arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
+>>   arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 2 +-
+>>   drivers/soc/mediatek/mt8183-pm-domains.h       | 1 +
+>>   drivers/soc/mediatek/mt8186-pm-domains.h       | 2 +-
+>>   drivers/soc/mediatek/mt8192-pm-domains.h       | 2 ++
+>>   drivers/soc/mediatek/mt8195-pm-domains.h       | 2 +-
+>>   6 files changed, 10 insertions(+), 3 deletions(-)
+>>

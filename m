@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5485558A67
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69797558A61
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiFWUy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S229493AbiFWUxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiFWUy2 (ORCPT
+        with ESMTP id S229449AbiFWUxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:54:28 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DFB62728;
-        Thu, 23 Jun 2022 13:54:27 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id lw20so695437ejb.4;
-        Thu, 23 Jun 2022 13:54:27 -0700 (PDT)
+        Thu, 23 Jun 2022 16:53:36 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3745660C71;
+        Thu, 23 Jun 2022 13:53:34 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so384932wmb.5;
+        Thu, 23 Jun 2022 13:53:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+NeDhzIsosAc6zjoUbMznd330rNHziGlr8pP4p3fVF0=;
-        b=fAx3pvL2mb1wUs/cl1pnaZOCuwao8+6SnBAODybSfO6ROi8NVo0gsKiyWCmyMbmkMF
-         b9S4yoI2SKgUW/Vp2Y4iNLOKbFtK0G6tdJi2kYeqDOqZaUlXCixb5Yx09/gLwJDkX9g2
-         WYGdfXOv7BKXlYhDmhz/UJrZDqvzmK5TbDKG9S39mn/+cW6tq78J/W6GZrg7aeuMCjOx
-         bz6q/v5o5SuZy856wRedvW5sCeM0PJprg1hDe5IvdltJYfCPXMmnNkS8QYXRUI89g290
-         AiXG2CJPs4gS2iuURPvnSXllm4vbU7SppK6KhveNTjEuGhjUDsg5v1ziIpgHh/S2n47a
-         lGWA==
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=uR19dUJmcNaxBwdM2oTyzNVaO2KBzPX6s9JgcdgMii0=;
+        b=ij55DIpBjm/hJbjc0ntL8Q2eWnzNJC2eDhKfxvV1EykMihvHpPJDo3uD/32lOcvKvF
+         +Nub1SNXWszsbsqNrrOZywFANBPl6ZQxpN+ByL6OCsk5SheLF4ClaATXOY2xs7A0cBlg
+         JAh8CpZNLrm1wTf/ZyU42B38HdJvGMfVTdfI7NPHrngS9uVghyow7eDum8QPsJURP/lm
+         nGsgFVuP5u+Sj/fy1JQvRyFUTWu4ChJBQh70+mErYPMicSVDCWeFZv0Qmp42+DP8RQWH
+         37PqXCX0mjI5Ww40jRdGzUjybml3+Zz/VJod3AczUP5t0Ncdc/pVDM3foOeWPsbmZdmU
+         YUEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+NeDhzIsosAc6zjoUbMznd330rNHziGlr8pP4p3fVF0=;
-        b=TX766x9RN6iQgt5sl+tL+hokKmzPlBmAP4pZaJYHgH0KdjW5GXjHOrjAb4/NEnjwkR
-         2HluYevT3cIFFue8Pb86QW9XdVSPgmOA4/wttBPY1QzNrNxtSMSnUp+scG4JXkaWL5ZL
-         1HAteUtbh1nk2L5SQuYXpXpuwjBzo5XqWiiPNma3d8ZjeJsPRO6vDt4ArLEAnT75dZvE
-         xA+xUt3OW8yQ8oqGHpjN3cd9XyxfLtpMnMoNPOSI0N3Kfw5EsY8+8Bq/rx4oISwqFij3
-         e07OxdiXszyqwmmd3SwqGWDz6mvcvjyemsbwaXgsyzhf6Vd0Mv2t/DM605ZWL/uelRQS
-         NsJQ==
-X-Gm-Message-State: AJIora8nans6J/nKolpLjuTJFNSps6ppc1ngspxo2bxcdRJwsG1yRg3t
-        JTXFZw0yABTCuwMBgdk7ESXFtQonNt4zvqX/ma0=
-X-Google-Smtp-Source: AGRyM1uthzr9Oy84rLqxABiXeKGAOyvcg+MqzD8Qykjqulo8c8PXkSAiveDwBCRGCtZDd07fq0RBqRpxnYdg/51DLHM=
-X-Received: by 2002:a17:907:971e:b0:71d:955c:b296 with SMTP id
- jg30-20020a170907971e00b0071d955cb296mr9639163ejc.633.1656017665626; Thu, 23
- Jun 2022 13:54:25 -0700 (PDT)
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=uR19dUJmcNaxBwdM2oTyzNVaO2KBzPX6s9JgcdgMii0=;
+        b=tepO17FqAE8NY/PDvLHksCYL6RRXUHIv/emEobJO2JgQME7GVyjWfhDvIhvMH2aRop
+         H0AxOoU2yyLjqZeKfdzEChM48np+A7PhhE4/YlHZOCnDM4+vYNqJ/qEjiZxpNzHB05Oa
+         gBJRcqdL2p8WsuLxoarTPkkvcA6lOW86HOkkAGHekr4l2ZdjbuLqm8QT2UowtLmfvAdT
+         mifECCjiX/OFCVyQfKDPUv6cXtgXmU78ws1cl7bGFWFU+p54q4/7aPDoRP6IXVq8kYSt
+         1xsqcBmHFv0VLZO76hkurfRuP6dTpNpg/UzFauDIPZisdnhiWEBqDjtrUom1yjFxEVg2
+         V3/Q==
+X-Gm-Message-State: AJIora/XVYDrkb5rcCmhwyQgrSqU/tB06XvQcs73KxP7LSfIajUHC9ut
+        V7MhE5aWlEncx+c4oDE5b90=
+X-Google-Smtp-Source: AGRyM1tIBcbqqjiLWicrbHaR6vX8/2L6/5uVJuB9R6VbK4sR7Y33O50Sc4VbODYyYuYA5cMC0BoYeA==
+X-Received: by 2002:a05:600c:4f15:b0:39c:7eaf:97e7 with SMTP id l21-20020a05600c4f1500b0039c7eaf97e7mr6415694wmq.199.1656017612752;
+        Thu, 23 Jun 2022 13:53:32 -0700 (PDT)
+Received: from localhost (92.40.171.44.threembb.co.uk. [92.40.171.44])
+        by smtp.gmail.com with ESMTPSA id n14-20020a5d67ce000000b0021b89c07b6asm406757wrw.108.2022.06.23.13.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 13:53:32 -0700 (PDT)
+References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
+ <20220620200644.1961936-16-aidanmacdonald.0x0@gmail.com>
+ <CAHp75Vd7Sq9RMqin_y-8qUEAJLaGfuqxAbe+qcMB22=bqkyZqg@mail.gmail.com>
+ <FQHPnJKuXUHf8vLiZoXidpoim5RtEYUC@localhost>
+ <CAHp75VfoMKo9-_OTF1AAC0KyNJOb5qvYPTgHxmkYwOfTJFSLkg@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "rjones@gateworks.com" <rjones@gateworks.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
+        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
+        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-actions@lists.infradead.org" 
+        <linux-actions@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 15/49] regmap-irq: Change the behavior of mask_writeonly
+In-reply-to: <CAHp75VfoMKo9-_OTF1AAC0KyNJOb5qvYPTgHxmkYwOfTJFSLkg@mail.gmail.com>
+Date:   Thu, 23 Jun 2022 21:54:37 +0100
+Message-ID: <8qRxwIYmbvte9HM2KVfkdhwPpeZ7oY9s@localhost>
 MIME-Version: 1.0
-References: <20220621163757.760304-1-roberto.sassu@huawei.com>
- <20220621163757.760304-3-roberto.sassu@huawei.com> <20220621223248.f6wgyewajw6x4lgr@macbook-pro-3.dhcp.thefacebook.com>
- <796b55c79be142cab6a22dd281fdb9fa@huawei.com> <f2d3da08e7774df9b44cc648dda7d0b8@huawei.com>
-In-Reply-To: <f2d3da08e7774df9b44cc648dda7d0b8@huawei.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 23 Jun 2022 13:54:13 -0700
-Message-ID: <CAADnVQKVx9o1PcCV_F3ywJCzDTPtQG4MTKM2BmwdCwNvyxdNPg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/5] bpf: Add bpf_lookup_user_key() and bpf_key_put() helpers
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 5:36 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> > Sent: Wednesday, June 22, 2022 9:12 AM
-> > > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> > > Sent: Wednesday, June 22, 2022 12:33 AM
-> > > On Tue, Jun 21, 2022 at 06:37:54PM +0200, Roberto Sassu wrote:
-> > > > Add the bpf_lookup_user_key() and bpf_key_put() helpers, to respectively
-> > > > search a key with a given serial, and release the reference count of the
-> > > > found key.
-> > > >
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  include/uapi/linux/bpf.h       | 16 ++++++++++++
-> > > >  kernel/bpf/bpf_lsm.c           | 46 ++++++++++++++++++++++++++++++++++
-> > > >  kernel/bpf/verifier.c          |  6 +++--
-> > > >  scripts/bpf_doc.py             |  2 ++
-> > > >  tools/include/uapi/linux/bpf.h | 16 ++++++++++++
-> > > >  5 files changed, 84 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > index e81362891596..7bbcf2cd105d 100644
-> > > > --- a/include/uapi/linux/bpf.h
-> > > > +++ b/include/uapi/linux/bpf.h
-> > > > @@ -5325,6 +5325,20 @@ union bpf_attr {
-> > > >   *               **-EACCES** if the SYN cookie is not valid.
-> > > >   *
-> > > >   *               **-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-> > > > + *
-> > > > + * struct key *bpf_lookup_user_key(u32 serial, unsigned long flags)
-> > > > + *       Description
-> > > > + *               Search a key with a given *serial* and the provided *flags*, and
-> > > > + *               increment the reference count of the key.
-> > >
-> > > Why passing 'flags' is ok to do?
-> > > Please think through every line of the patch.
-> >
-> > To be honest, I thought about it. Probably yes, I should do some
-> > sanitization, like I did for the keyring ID. When I checked
-> > lookup_user_key(), I saw that flags are checked individually, so
-> > an arbitrary value passed to the helper should not cause harm.
-> > Will do sanitization, if you prefer. It is just that we have to keep
-> > the eBPF code in sync with key flag definition (unless we have
-> > a 'last' flag).
->
-> I'm not sure that having a helper for lookup_user_key() alone is
-> correct. By having separate helpers for lookup and usage of the
-> key, nothing would prevent an eBPF program to ask for a
-> permission to pass the access control check, and then use the
-> key for something completely different from what it requested.
->
-> Looking at how lookup_user_key() is used in security/keys/keyctl.c,
-> it seems clear that it should be used together with the operation
-> that needs to be performed. Only in this way, the key permission
-> would make sense.
 
-lookup is roughly equivalent to open when all permission checks are done.
-And using the key is read/write.
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
-> What do you think (also David)?
+> On Tuesday, June 21, 2022, Aidan MacDonald <aidanmacdonald.0x0@gmail.com>=
+ wrote:
+>> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+>>
+>> > On Mon, Jun 20, 2022 at 10:08 PM Aidan MacDonald
+>> > <aidanmacdonald.0x0@gmail.com> wrote:
+>> >>
+>> >> No drivers currently use mask_writeonly, and in its current form
+>> >> it seems a bit misleading. When set, mask registers will be
+>> >> updated with regmap_write_bits() instead of regmap_update_bits(),
+>> >> but regmap_write_bits() still does a read-modify-write under the
+>> >> hood. It's not a write-only operation.
+>> >>
+>> >> Performing a simple regmap_write() is probably more useful, since
+>> >> it can be used for chips that have separate set & clear registers
+>> >> for controlling mask bits. Such registers are normally volatile
+>> >> and read as 0, so avoiding a register read minimizes bus traffic.
+>> >
+>> > Reading your explanations and the code, I would rather think about
+>> > fixing the regmap_write_bits() to be writeonly op.
+>>
+>> That's impossible without special hardware support.
+>>
+>> > Otherwise it's unclear what's the difference between
+>> > regmap_write_bits() vs. regmap_update_bits().
+>>
+>> This was not obvious to me either. They're the same except in how they
+>> issue the low-level write op -- regmap_update_bits() will only do the
+>> write if the new value differs from the current one. regmap_write_bits()
+>> will always do a write, even if the new value is the same.
 >
-> Thanks
->
-> Roberto
->
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Yang Xi, Li He
+> Okay, it makes a lot of sense for W1C type of bits in the register.
+> Also, =E2=80=9Creading=E2=80=9D might imply to restore last value from ca=
+che, no?
 
-Please use a different email server and get rid of this.
+Maybe there needs to be some explanation of what the typical use case is
+and why you'd choose write_bits() over update_bits(), because the more I
+think about it the less clear it is. You're right that the read could be
+served from a cache. But I'm not sure if a cache would be safe if even
+one bit in the register is volatile, and I can't really see a use case
+for write_bits() that doesn't involve volatile behavior of some sort.
+
+In any event, I'm just going to drop this patch and the related driver
+patches in favor of removing mask_writeonly entirely, since it looks
+like it was never used, and after thinking about it I'm not sure what
+I did helps much. If some driver needs write_bits() for mask registers
+down the road it's not a big deal to add this back.
+
+>> I think the problem is lack of documentation. I only figured this out
+>> by reading the implementation.
+>>
+>> >>         if (d->chip->mask_writeonly)
+>> >> -               return regmap_write_bits(d->map, reg, mask, val);
+>> >> +               return regmap_write(d->map, reg, val & mask);
+>> >>         else
+>> >>                 return regmap_update_bits(d->map, reg, mask, val);
+

@@ -2,67 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287EC55754A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B1D557548
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiFWIWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S229689AbiFWIWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiFWIWo (ORCPT
+        with ESMTP id S229842AbiFWIWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:22:44 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B84848890;
-        Thu, 23 Jun 2022 01:22:39 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25N8MNBp044453;
-        Thu, 23 Jun 2022 03:22:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1655972543;
-        bh=I3Kzpe4Zao+JGFPeNsw2PKGMWnjaFeLczTJXnIkQ3CM=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=kg9nHwl5LlPcfmdLQ7nc4WvIgEw0Vtjc0SfgQTh12+xs1a3mR2CpcL1v4TpMDaBXF
-         e9Z3O51z9Ojw0s/2clRJuCUvg6lifPrmg1vCX+n2pOMKpuVtxv60La4TV4P2ZGCLlF
-         FtwMHu4PzW/owIv+eutma/E+NaZipn4kG4p+OzDg=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25N8MN91129679
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Jun 2022 03:22:23 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Jun 2022 03:22:23 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Jun 2022 03:22:23 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25N8MMS5004868;
-        Thu, 23 Jun 2022 03:22:23 -0500
-Date:   Thu, 23 Jun 2022 13:52:21 +0530
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     Aradhya Bhatia <a-bhatia1@ti.com>
-CC:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        DRI Devel List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] drm/tidss: Add support for AM625 DSS
-Message-ID: <20220623082220.wpnnzkzjmkcni3o6@uda0490373>
-References: <20220620123217.25809-1-a-bhatia1@ti.com>
- <20220620123217.25809-3-a-bhatia1@ti.com>
+        Thu, 23 Jun 2022 04:22:32 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DE748338
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655972549; x=1687508549;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=gNpD1bVqKlbsMksw4J8hMe8jV69hgwr3fUwwPSY2qLA=;
+  b=qAhq1bT7pxdyh56n/a0Ym9U7LTvD5Fd3ta6J2KL4G22V32iqPzq8jw2W
+   mH2Ck9S1/Zrw81eHoSuFkZhX2Y5x2212R+bazOVYDrCDmpL7pWR8OY3r+
+   EgBcb23HI+wxN9yiM/9HHxQL0oPQs/KuTYIhzuZ2xiN0TDtR6dD7uZuuO
+   lm42gi2NKsbiQixryfjKCnPvGnLE8kUhNyOQXeUAyfFYPekaBDLutclko
+   /uzXb1WWHCa8rqpW7iL/vyPiYX3fBQcD3zCj9gmpTZgHhUtuHTiMYAtr6
+   wGRF3ezEt3kVWzvKeht+Kgw6QrKzs+EL1PLLDvVrf8ekYOhdco68K/1WT
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,215,1650902400"; 
+   d="scan'208";a="208765632"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 23 Jun 2022 16:22:28 +0800
+IronPort-SDR: XDXLo5ApAaRhi0afwnW74uDZsVX0lSUIPDN8rnv4CBqp63QZ1cWjeRrI4ezv7vJ5sGoPv0UCJ+
+ RMlCwCXBue4SoLbv1oV3+H3OdeZ8Dk5Kz3+p8StJ4SRuFKRnUYKEjpWihza0vV7UmZP43a8t5m
+ oG6q7TWA4GsN+sohKZTY2SCMU7tR9mri6kPaclpdZp4XCUJKyUQu8C3rK0UX+dxX4NTu6rTSiC
+ m4zHKhW6HH1Orx9pKaUUhTLdXDC4HbiXWhXy91tFootiWiQ54hEUNSWSIcBiyT4Iy4+KkyIOyc
+ 0AkGiLAI7fse701pG39+mTrn
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jun 2022 00:44:58 -0700
+IronPort-SDR: 2hazUpMPcBpzorNqrDgkm+cC+yZ+ALgqj+krYfhrFUdvN4hQVTqPkB9ewjOOjs3kN4+1gnbVTI
+ PeNy+OgUbkYZ/PapUzpmAGt/weKWrNtsIIbakCuwch+SZ2ZDNnaRm0h0ub7QIaKG/r8cBgwfIL
+ Lb+5CmlwAteWyu6hYp3U7R3thlgh+9gRoe+AMWpGjFW0DOFiGgf7RmyxFd3BSt9622YEzk4Fqq
+ 5WwVRrsxqvJS0buTPqtWkHGOPNDYeufxwFBiFgMuUNKUmAgS8SOD+8ZnnkE+ShiYY86sJVErdf
+ xPw=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jun 2022 01:22:30 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LTCsy0HYjz1Rwnx
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:22:30 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655972549; x=1658564550; bh=gNpD1bVqKlbsMksw4J8hMe8jV69hgwr3fUw
+        wPSY2qLA=; b=PAibzQuoVnPczN2jLQ68p94iASR4uLcJfBZHQqcQDsJaW2YfISQ
+        cQpMlHIFZIte6e/DJ1vIzK9Nx5B24TRuxsYoTbQ3vZ6Ng8m9MhT1cbnRikYbEgNM
+        xaF93brbXSVsXrYRZIiTOhfzIdvRTPMLwer9bZbnDWpL1j1JhzMryjNmTVwvsfoJ
+        XbActMEXZhie+v6RhoYu5GwFaEK5O0pu0N0DcOeJJYvs5ijWZJZNTPOVoatWBLPw
+        vsUURP7qsOwp2hd7x7sX3KGcoNT9zrYfAjiFPGjVuTiZpDgGX3rkJAP+HCFcytxY
+        Vn+LkB07Rdz/ZPQuHRiv75FjwtZQvLSv3sg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1aTqyC4z-ea2 for <linux-kernel@vger.kernel.org>;
+        Thu, 23 Jun 2022 01:22:29 -0700 (PDT)
+Received: from [10.225.163.90] (unknown [10.225.163.90])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LTCsw5vFCz1RtVk;
+        Thu, 23 Jun 2022 01:22:28 -0700 (PDT)
+Message-ID: <09091cc4-f652-0978-bb6a-b63f24fdcf49@opensource.wdc.com>
+Date:   Thu, 23 Jun 2022 17:22:27 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220620123217.25809-3-a-bhatia1@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] libata: add horkage for M88V29
+Content-Language: en-US
+To:     =?UTF-8?B?QsO2c3rDtnJtw6lueWkgWm9sdMOhbg==?= <zboszor@gmail.com>,
+        zboszor@pr.hu, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org
+References: <20220204125750.1771303-1-zboszor@pr.hu>
+ <f726e9e1-bdad-ac8a-368b-aae423a00676@opensource.wdc.com>
+ <78c29f43-3b67-8e70-0711-14e997f3efb1@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <78c29f43-3b67-8e70-0711-14e997f3efb1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,195 +100,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aradhya,
+On 6/23/22 16:47, B=C3=B6sz=C3=B6rm=C3=A9nyi Zolt=C3=A1n wrote:
+> 2022. 02. 08. 9:07 keltez=C3=A9ssel, Damien Le Moal =C3=ADrta:
+>> On 2/4/22 21:57, zboszor@pr.hu wrote:
+>>> From: Zolt=C3=A1n B=C3=B6sz=C3=B6rm=C3=A9nyi <zboszor@gmail.com>
+>>>
+>>> This device is a CF card, or possibly an SSD in CF form factor.
+>>> It supports NCQ and high speed DMA.
+>>>
+>>> While it also advertises TRIM support, I/O errors are reported
+>>> when the discard mount option fstrim is used. TRIM also fails
+>>> when disabling NCQ and not just as an NCQ command.
+>>>
+>>> TRIM must be disabled for this device.
+>>>
+>>> Signed-off-by: Zolt=C3=A1n B=C3=B6sz=C3=B6rm=C3=A9nyi <zboszor@gmail.=
+com>
+>>> ---
+>>>   drivers/ata/libata-core.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+>>> index 67f88027680a..4a7f58fcc411 100644
+>>> --- a/drivers/ata/libata-core.c
+>>> +++ b/drivers/ata/libata-core.c
+>>> @@ -4028,6 +4028,7 @@ static const struct ata_blacklist_entry ata_dev=
+ice_blacklist [] =3D {
+>>>  =20
+>>>   	/* devices that don't properly handle TRIM commands */
+>>>   	{ "SuperSSpeed S238*",		NULL,	ATA_HORKAGE_NOTRIM, },
+>>> +	{ "M88V29*",			NULL,	ATA_HORKAGE_NOTRIM, },
+>>>  =20
+>>>   	/*
+>>>   	 * As defined, the DRAT (Deterministic Read After Trim) and RZAT
+>> Applied to for-5.17-fixes. Thanks !
+>=20
+> Thank you. However, I have second thoughts about this patch.
+> The device advertises this:
+>=20
+> # hdparm -iI /dev/sda
+> ...
+>  =C2=A0Enabled Supported
+>  =C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0=C2=A0 Data Set Management TRIM suppor=
+ted (limit 1 block)
+> ...
+>=20
+> but the I/O failures always reported higher number of blocks,
+> IIRC the attempted number of block was 8 or so.
+>=20
+> Can the kernel limit or split TRIM commands according to the
+> advertised limit? If not (or not yet) then the quirk is good for now.
 
-On 18:02-20220620, Aradhya Bhatia wrote:
-> Add support for the DSS IP on TI's new AM625 soc in the tidss driver.
-> 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> ---
->  drivers/gpu/drm/tidss/tidss_dispc.c | 83 ++++++++++++++++++++++++++++-
->  drivers/gpu/drm/tidss/tidss_dispc.h |  2 +
->  drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
->  3 files changed, 85 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
-> index dae47853b728..511d1f1d46fc 100644
-> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
-> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
-> @@ -272,6 +272,82 @@ const struct dispc_features dispc_j721e_feats = {
->  	.vid_order = { 1, 3, 0, 2 },
->  };
->  
-> +static const u16 tidss_am62x_common_regs[DISPC_COMMON_REG_TABLE_LEN] = {
-> +	[DSS_REVISION_OFF] =			0x4,
-> +	[DSS_SYSCONFIG_OFF] =			0x8,
-> +	[DSS_SYSSTATUS_OFF] =			0x20,
-> +	[DISPC_IRQ_EOI_OFF] =			0x24,
-> +	[DISPC_IRQSTATUS_RAW_OFF] =		0x28,
-> +	[DISPC_IRQSTATUS_OFF] =			0x2c,
-> +	[DISPC_IRQENABLE_SET_OFF] =		0x30,
-> +	[DISPC_IRQENABLE_CLR_OFF] =		0x40,
-> +	[DISPC_VID_IRQENABLE_OFF] =		0x44,
-> +	[DISPC_VID_IRQSTATUS_OFF] =		0x58,
-> +	[DISPC_VP_IRQENABLE_OFF] =		0x70,
-> +	[DISPC_VP_IRQSTATUS_OFF] =		0x7c,
-> +
-> +	[WB_IRQENABLE_OFF] =			0x88,
-> +	[WB_IRQSTATUS_OFF] =			0x8c,
-> +
-> +	[DISPC_GLOBAL_MFLAG_ATTRIBUTE_OFF] =	0x90,
-> +	[DISPC_GLOBAL_OUTPUT_ENABLE_OFF] =	0x94,
-> +	[DISPC_GLOBAL_BUFFER_OFF] =		0x98,
-> +	[DSS_CBA_CFG_OFF] =			0x9c,
-> +	[DISPC_DBG_CONTROL_OFF] =		0xa0,
-> +	[DISPC_DBG_STATUS_OFF] =		0xa4,
-> +	[DISPC_CLKGATING_DISABLE_OFF] =		0xa8,
-> +	[DISPC_SECURE_DISABLE_OFF] =		0xac,
-> +};
-> +
+Yes, the kernel does that. See the sysfs queue attributes
+discard_max_bytes and discard_max_hw_bytes. What are the values for your
+device ? I think that the "limit 1 block" indicated by hdparm is simply t=
+o
+say that the DSM command (to trim the device) accept only at most a 1
+block (512 B) list of sectors to trim. That is not the actual trim limit
+for each sector range in that list.
 
-register offsets are exactly same as
-am65x, same can be reused here
+>=20
+> Best regards,
+> Zolt=C3=A1n B=C3=B6sz=C3=B6rm=C3=A9nyi
+>=20
 
-with that
-Reviewed-by: Rahul T R <r-ravikumar@ti.com>
 
-Regards
-Rahul T R
-> +const struct dispc_features dispc_am625_feats = {
-> +	.max_pclk_khz = {
-> +		[DISPC_VP_DPI] = 165000,
-> +		[DISPC_VP_OLDI] = 165000,
-> +	},
-> +
-> +	.scaling = {
-> +		.in_width_max_5tap_rgb = 1280,
-> +		.in_width_max_3tap_rgb = 2560,
-> +		.in_width_max_5tap_yuv = 2560,
-> +		.in_width_max_3tap_yuv = 4096,
-> +		.upscale_limit = 16,
-> +		.downscale_limit_5tap = 4,
-> +		.downscale_limit_3tap = 2,
-> +		/*
-> +		 * The max supported pixel inc value is 255. The value
-> +		 * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
-> +		 * The maximum bpp of all formats supported by the HW
-> +		 * is 8. So the maximum supported xinc value is 32,
-> +		 * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
-> +		 */
-> +		.xinc_max = 32,
-> +	},
-> +
-> +	.subrev = DISPC_AM625,
-> +
-> +	.common = "common",
-> +	.common_regs = tidss_am62x_common_regs,
-> +
-> +	.num_vps = 2,
-> +	.vp_name = { "vp1", "vp2" },
-> +	.ovr_name = { "ovr1", "ovr2" },
-> +	.vpclk_name =  { "vp1", "vp2" },
-> +	.vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
-> +
-> +	.vp_feat = { .color = {
-> +			.has_ctm = true,
-> +			.gamma_size = 256,
-> +			.gamma_type = TIDSS_GAMMA_8BIT,
-> +		},
-> +	},
-> +
-> +	.num_planes = 2,
-> +	/* note: vid is plane_id 0 and vidl1 is plane_id 1 */
-> +	.vid_name = { "vid", "vidl1" },
-> +	.vid_lite = { false, true, },
-> +	.vid_order = { 1, 0 },
-> +};
-> +
->  static const u16 *dispc_common_regmap;
->  
->  struct dss_vp_data {
-> @@ -775,6 +851,7 @@ dispc_irq_t dispc_read_and_clear_irqstatus(struct dispc_device *dispc)
->  		return dispc_k2g_read_and_clear_irqstatus(dispc);
->  	case DISPC_AM65X:
->  	case DISPC_J721E:
-> +	case DISPC_AM625:
->  		return dispc_k3_read_and_clear_irqstatus(dispc);
->  	default:
->  		WARN_ON(1);
-> @@ -790,6 +867,7 @@ void dispc_set_irqenable(struct dispc_device *dispc, dispc_irq_t mask)
->  		break;
->  	case DISPC_AM65X:
->  	case DISPC_J721E:
-> +	case DISPC_AM625:
->  		dispc_k3_set_irqenable(dispc, mask);
->  		break;
->  	default:
-> @@ -1279,6 +1357,7 @@ void dispc_ovr_set_plane(struct dispc_device *dispc, u32 hw_plane,
->  					x, y, layer);
->  		break;
->  	case DISPC_AM65X:
-> +	case DISPC_AM625:
->  		dispc_am65x_ovr_set_plane(dispc, hw_plane, hw_videoport,
->  					  x, y, layer);
->  		break;
-> @@ -2202,6 +2281,7 @@ static void dispc_plane_init(struct dispc_device *dispc)
->  		break;
->  	case DISPC_AM65X:
->  	case DISPC_J721E:
-> +	case DISPC_AM625:
->  		dispc_k3_plane_init(dispc);
->  		break;
->  	default:
-> @@ -2307,6 +2387,7 @@ static void dispc_vp_write_gamma_table(struct dispc_device *dispc,
->  		dispc_k2g_vp_write_gamma_table(dispc, hw_videoport);
->  		break;
->  	case DISPC_AM65X:
-> +	case DISPC_AM625:
->  		dispc_am65x_vp_write_gamma_table(dispc, hw_videoport);
->  		break;
->  	case DISPC_J721E:
-> @@ -2580,7 +2661,7 @@ int dispc_runtime_resume(struct dispc_device *dispc)
->  		REG_GET(dispc, DSS_SYSSTATUS, 2, 2),
->  		REG_GET(dispc, DSS_SYSSTATUS, 3, 3));
->  
-> -	if (dispc->feat->subrev == DISPC_AM65X)
-> +	if (dispc->feat->subrev == DISPC_AM65X || dispc->feat->subrev == DISPC_AM625)
->  		dev_dbg(dispc->dev, "OLDI RESETDONE %d,%d,%d\n",
->  			REG_GET(dispc, DSS_SYSSTATUS, 5, 5),
->  			REG_GET(dispc, DSS_SYSSTATUS, 6, 6),
-> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
-> index e49432f0abf5..a28005dafdc9 100644
-> --- a/drivers/gpu/drm/tidss/tidss_dispc.h
-> +++ b/drivers/gpu/drm/tidss/tidss_dispc.h
-> @@ -61,6 +61,7 @@ enum dispc_dss_subrevision {
->  	DISPC_K2G,
->  	DISPC_AM65X,
->  	DISPC_J721E,
-> +	DISPC_AM625,
->  };
->  
->  struct dispc_features {
-> @@ -88,6 +89,7 @@ struct dispc_features {
->  extern const struct dispc_features dispc_k2g_feats;
->  extern const struct dispc_features dispc_am65x_feats;
->  extern const struct dispc_features dispc_j721e_feats;
-> +extern const struct dispc_features dispc_am625_feats;
->  
->  void dispc_set_irqenable(struct dispc_device *dispc, dispc_irq_t mask);
->  dispc_irq_t dispc_read_and_clear_irqstatus(struct dispc_device *dispc);
-> diff --git a/drivers/gpu/drm/tidss/tidss_drv.c b/drivers/gpu/drm/tidss/tidss_drv.c
-> index 04cfff89ee51..326059e99696 100644
-> --- a/drivers/gpu/drm/tidss/tidss_drv.c
-> +++ b/drivers/gpu/drm/tidss/tidss_drv.c
-> @@ -235,6 +235,7 @@ static const struct of_device_id tidss_of_table[] = {
->  	{ .compatible = "ti,k2g-dss", .data = &dispc_k2g_feats, },
->  	{ .compatible = "ti,am65x-dss", .data = &dispc_am65x_feats, },
->  	{ .compatible = "ti,j721e-dss", .data = &dispc_j721e_feats, },
-> +	{ .compatible = "ti,am625-dss", .data = &dispc_am625_feats, },
->  	{ }
->  };
->  
-> -- 
-> 2.36.1
-> 
+--=20
+Damien Le Moal
+Western Digital Research

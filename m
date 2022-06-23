@@ -2,72 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CB6557533
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0A3557539
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiFWIPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
+        id S229741AbiFWIUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiFWIPh (ORCPT
+        with ESMTP id S229604AbiFWIUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:15:37 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEF24830E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:15:35 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id g26so17989968ejb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=P+XcOEy9p1h3Fxh8Fy1822xcwZda9M13RTFNQq3+31k=;
-        b=rwI24HMje9XFQhcuonhk1e2/rCsylPS/S5Wc1sPYxyasnuPz/ZfpDr9lYgAe9j3E5R
-         fw9A+hD+RXuikn2sI2YQzHUot+5vcElzYFprvHJb1rs4W2kOFQWDqIWbKr422o6KeBcB
-         eiSVLkWYNRM31fU6zpGlSmPMpHN31WqaMWDZe9HMhmotizbJNycTUoHu+aZx/iPWQ4Vk
-         GteN5RtBYWN1SY9BDy0NUy6/yaRqINJwN+Y6s3unycel+TO3pRcaaMXDi90YpRy8+TRT
-         E+CEW3pIwkVm7hlRHAn+k0SZCH66HEjrksZcrmnbHC4ULW7904wDyONWWY3IYM9YkN04
-         Ys/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P+XcOEy9p1h3Fxh8Fy1822xcwZda9M13RTFNQq3+31k=;
-        b=2Ho+FJlFiB9VFEj/Xe5kN5QaGIwJK3gn5ZcW9vvoWo2+KR181dTDSqz8PDwk4hZ2K9
-         hvHXJ7vUDdi+H4imeDRPm5dJ1pV4zO5sdj437AKAOyfxDN/lsSaW399v965cDQSse3Oh
-         kN3VigsZMez2FBCmdrJNg20g21nN5yEpc68XDerZp8+WY1oM6RaParkXeaYSLarE6XdJ
-         lDBWiMrbccFArfCYgUOjXMO2Gbukltcd+w2ZxzfyLO30ulqpoaR4GY0rTotUTxVQxWIv
-         4GuL735NURFnXkGfufXxc5/xvMx1k0hWUIm2IxcRzENMOCNYdu9xfuqUr2u4fQQHwEzd
-         xsDw==
-X-Gm-Message-State: AJIora8RXWml5mdY/h26RdFtMizbIMXZZcH4lK8xH3H3WaYXw3YWsPxP
-        PJg/5wVcRlaguW3qfFBs6x8D2A==
-X-Google-Smtp-Source: AGRyM1sJsRRh7W2dyDuAB4R0FUYB9AuoqmYRDtX8CqitjM7Y8647bAZjIJiUGwsOUhaWiT1RF355LQ==
-X-Received: by 2002:a17:906:6a1c:b0:70a:fd95:ee6a with SMTP id qw28-20020a1709066a1c00b0070afd95ee6amr7050360ejc.36.1655972134214;
-        Thu, 23 Jun 2022 01:15:34 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id x16-20020aa7cd90000000b0042fb3badd48sm16552125edv.9.2022.06.23.01.15.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 01:15:33 -0700 (PDT)
-Message-ID: <050a390d-1ede-04ee-3870-9434ffd671b8@linaro.org>
-Date:   Thu, 23 Jun 2022 10:15:33 +0200
+        Thu, 23 Jun 2022 04:20:21 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5245247AFA;
+        Thu, 23 Jun 2022 01:20:20 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 97A6F1E80C85;
+        Thu, 23 Jun 2022 16:20:01 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7wjOeX0SpMb4; Thu, 23 Jun 2022 16:19:59 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.64.61.33])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 488A51E80C7D;
+        Thu, 23 Jun 2022 16:19:58 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     chuck.lever@oracle.com, jlayton@kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschin.com, renyu@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] NFSD: Fix space and spelling mistake
+Date:   Thu, 23 Jun 2022 16:20:05 +0800
+Message-Id: <20220623082005.8521-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] rpmsg: fix possible refcount leak in
- rpmsg_register_device_override()
-Content-Language: en-US
-To:     Hangyu Hua <hbh25y@gmail.com>, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, gregkh@linuxfoundation.org
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220623073605.27386-1-hbh25y@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220623073605.27386-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,30 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2022 09:36, Hangyu Hua wrote:
-> [1] commit 1680939e9ecf ("rpmsg: virtio: Fix possible double free in
-> rpmsg_virtio_add_ctrl_dev()")
-> [2] commit c2eecefec5df ("rpmsg: virtio: Fix possible double free in
-> rpmsg_probe()")
-> [3] commit bb17d110cbf2 ("rpmsg: Fix calling device_lock() on
-> non-initialized device")
+Add a blank space after ','.
+Change 'succesful' to 'successful'.
 
-I think only the last [3] introduced it, because it's the commit missing
-put_device in first error path.
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ fs/nfsd/nfs4proc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> The above three patches merged at the same time introduced a new bug.
-> [1] and [2] make rpmsg_ns_register_device and rpmsg_ctrldev_register_device
-> need to call the callback function internally to free vch when it fails.
-> [3] has an error return path not handled vch.
-> 
-> Fix this by adding a put_device() to the error path.
-> 
-> Fixes: bb17d110cbf2 ("rpmsg: Fix calling device_lock() on non-initialized device")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+diff --git a/fs/nfsd/nfs4proc.c b/fs/nfsd/nfs4proc.c
+index 3895eb52d2b1..d267b9bcf1fc 100644
+--- a/fs/nfsd/nfs4proc.c
++++ b/fs/nfsd/nfs4proc.c
+@@ -828,7 +828,7 @@ nfsd4_create(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
+ 			goto out_umask;
+ 		status = nfsd_create(rqstp, &cstate->current_fh,
+ 				     create->cr_name, create->cr_namelen,
+-				     &create->cr_iattr,S_IFCHR, rdev, &resfh);
++				     &create->cr_iattr, S_IFCHR, rdev, &resfh);
+ 		break;
+ 
+ 	case NF4SOCK:
+@@ -2711,7 +2711,7 @@ nfsd4_proc_compound(struct svc_rqst *rqstp)
+ 		if (op->opdesc->op_flags & OP_MODIFIES_SOMETHING) {
+ 			/*
+ 			 * Don't execute this op if we couldn't encode a
+-			 * succesful reply:
++			 * successful reply:
+ 			 */
+ 			u32 plen = op->opdesc->op_rsize_bop(rqstp, op);
+ 			/*
+-- 
+2.25.1
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8336B558BFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719AB558BFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiFWXxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S231347AbiFWXxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiFWXwy (ORCPT
+        with ESMTP id S231244AbiFWXw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:52:54 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E18360C5D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:50 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id p14so1046258pfh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:50 -0700 (PDT)
+        Thu, 23 Jun 2022 19:52:56 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE1910F1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:53 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id h192so878265pgc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:52:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5pQfND038h5QWcn78qM/I1ai1qmbxoygS2JmZLRC1mQ=;
-        b=iXRbqsMPfof+NUltQHH89pGwAzb42H/dstNMxQgGGt6Yt//W8LgTGOTG0OaoSTeNRz
-         dZWUB59vT4SDDN3iALIsxg16784gK20+rZPhBd+mZNDSqMB9O7U2WxsqjohKmBB6pXUG
-         nibweuhhc5VKaNupCNP0N0YPwZxrsIyX/Bb9vW1e68rAyv5FmPBsYHd9kQFfKyW1Ez5f
-         w5un26afpOlcnOq5acBDDRhfwfXCkdcFPIehGQOKnQhnUuw02P3Yd7V2Oqo0X9yKyjgn
-         RWPTgZnrtjJ7VlJaB/hzIuIdKb1hqY3+8AgAQyB9hZ3NMamUhCbmytLPWpfDRAdW+V2/
-         eftw==
+        bh=LG1rSzGEsPK4iv+N/lwp5PXQGNIYUtfM/aAuTYkg0vc=;
+        b=kp5Fq94l6Q8wgGQCHb0XGJwN4XF5JHuSExD/vq+W4HulxPu4y7NpXpzk0sC4IbGOF0
+         M8KAGgZc5kObwch9yTED6BTWncP2yvMtbr+bH+KSPK3guq1ThRAzdHSa+W71rWfvYi5Y
+         ysRgIgyiMWh4MKt7L42JrZc5NkKFssOV2e5P4ICRr7BACAKuoQ/eu+QswjxOjsF8Qh9L
+         /9q19zgN4ONQWZgUIzp2zk9FPdJ7T/61qXbmDITGTyaGcabR3hZpeQjiZAfpcM4Id7Ms
+         ZxiNLZtA8OmC0bfzSoEwTbnAiH5hXBWlOsZ/GgJaKy63TSCZUNEzfRNHl4QZ+uHeTTH/
+         Cbxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5pQfND038h5QWcn78qM/I1ai1qmbxoygS2JmZLRC1mQ=;
-        b=4EYLeTeKHX/bMD540LzGlXEce64YbqkipMphbczigDOH9F/OMTR/iYdsR2sdu/6tfJ
-         RFd9VWkXjUhR1vtQkEvIJJbdCHYPgu+mZvysBpnFn9dCbyaJuoTo9NS/ata5TfPNoMW/
-         CFxZTn+A7BQoyy3aLL2rfsXX+WwYv9Uozp+QzSAoMEsXvPRlmBZJBrXhI9eSFp7geoSH
-         yOluR7paWeZ/KgQOkIdCKjRjy0z/61m7vWL7/wsKzhCshBZbQ0QMe3Kve0FjMdPapnIE
-         T8/UDWbkFfCJrgOHNvMA2S5ElDJva/U61/gibWJNho6lbHZRybopPdfqtW52uVztju2q
-         zwZA==
-X-Gm-Message-State: AJIora9HVy/1vaCLTdcbAZin1JnFzcngNK8ZkHzVU5sdABqkLtLKMQLE
-        pPIyrMF4Vf1i66wUMI3DIA==
-X-Google-Smtp-Source: AGRyM1s96G2FFH66JXa8bc7eH4qd+fIDxeMhCkK8flgwP1JhK2XMzt6hxEJTmkotzQNPWlNmHQYnig==
-X-Received: by 2002:a63:7b5c:0:b0:40d:684:b760 with SMTP id k28-20020a637b5c000000b0040d0684b760mr9535270pgn.323.1656028369640;
-        Thu, 23 Jun 2022 16:52:49 -0700 (PDT)
+        bh=LG1rSzGEsPK4iv+N/lwp5PXQGNIYUtfM/aAuTYkg0vc=;
+        b=Rf9POphUVuawOCUwtvG2fJ/qZr+RxT/6lKQlsnLl9gi1rP4qde5CE/l5dLzCo/+yWQ
+         Ey63T8V1VTTFh+50hdFnxkSKWF3exqCF9OwuWSVTtYWuprBKTWplZZ44RJCOdoK5ruYg
+         +I/cR6PBZgwBBJeFq4FArS9E5O7pF/bKrjr4eyLcJAOx7Zl4KRLPq0b/ueBvUYRBN7Kh
+         JhPQM+pH0lD/MkhjaFV40Mb4O+uz/odJU05N26qdO8GHdFAc4IVBFks6p/XJ8ZxWur6b
+         MstZ1g3qAx2/RfwjK8JCpX6I9u5+7oLAw8TI79POIYcV/JiZXihm5H/F0g47nzdrLBF1
+         e1HQ==
+X-Gm-Message-State: AJIora+uP2cs0XUNXKOiFrunz2B2UlX4gGeap2tQPK/huIIINbJo/KG+
+        KcI/JydZjHAhuuTRmaoYZA==
+X-Google-Smtp-Source: AGRyM1tcKr8yX9/tffiNeAaqH/kIj/EK53FgF4ggMpoeeio6m/TIPEIsDaxtlmNYN+u9v8W4FmnXEg==
+X-Received: by 2002:a62:6410:0:b0:4f3:9654:266d with SMTP id y16-20020a626410000000b004f39654266dmr43077948pfb.59.1656028372725;
+        Thu, 23 Jun 2022 16:52:52 -0700 (PDT)
 Received: from ik1-406-35019.vs.sakura.ne.jp (ik1-406-35019.vs.sakura.ne.jp. [153.127.16.23])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170903020a00b00168eab11f67sm362571plh.94.2022.06.23.16.52.46
+        by smtp.gmail.com with ESMTPSA id r10-20020a170903020a00b00168eab11f67sm362571plh.94.2022.06.23.16.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 16:52:49 -0700 (PDT)
+        Thu, 23 Jun 2022 16:52:52 -0700 (PDT)
 From:   Naoya Horiguchi <nao.horiguchi@gmail.com>
 X-Google-Original-From: Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
@@ -61,9 +61,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/9] mm, hwpoison: make __page_handle_poison returns int
-Date:   Fri, 24 Jun 2022 08:51:51 +0900
-Message-Id: <20220623235153.2623702-8-naoya.horiguchi@linux.dev>
+Subject: [PATCH v2 8/9] mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
+Date:   Fri, 24 Jun 2022 08:51:52 +0900
+Message-Id: <20220623235153.2623702-9-naoya.horiguchi@linux.dev>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
 References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
@@ -81,73 +81,74 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-__page_handle_poison() returns bool that shows whether
-take_page_off_buddy() has passed or not now.  But we will want to
-distinguish another case of "dissolve has passed but taking off failed"
-by its return value. So change the type of the return value.
-No functional change.
+Currently if memory_failure() (modified to remove blocking code with
+subsequent patch) is called on a page in some 1GB hugepage, memory error
+handling fails and the raw error page gets into leaked state.  The impact
+is small in production systems (just leaked single 4kB page), but this
+limits the testability because unpoison doesn't work for it.
+We can no longer create 1GB hugepage on the 1GB physical address range
+with such leaked pages, that's not useful when testing on small systems.
+
+When a hwpoison page in a 1GB hugepage is handled, it's caught by the
+PageHWPoison check in free_pages_prepare() because the 1GB hugepage is
+broken down into raw error pages before coming to this point:
+
+        if (unlikely(PageHWPoison(page)) && !order) {
+                ...
+                return false;
+        }
+
+Then, the page is not sent to buddy and the page refcount is left 0.
+
+Originally this check is supposed to work when the error page is freed from
+page_handle_poison() (that is called from soft-offline), but now we are
+opening another path to call it, so the callers of __page_handle_poison()
+need to handle the case by considering the return value 0 as success. Then
+page refcount for hwpoison is properly incremented so unpoison works.
 
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 ---
- mm/memory-failure.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ mm/memory-failure.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index ce045d0d6115..db85f644a1e3 100644
+index db85f644a1e3..fc7b83cb6468 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -71,7 +71,13 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
- 
- static bool hw_memory_failure __read_mostly = false;
- 
--static bool __page_handle_poison(struct page *page)
-+/*
-+ * Return values:
-+ *   1:   the page is dissolved (if needed) and taken off from buddy,
-+ *   0:   the page is dissolved (if needed) and not taken off from buddy,
-+ *   < 0: failed to dissolve.
-+ */
-+static int __page_handle_poison(struct page *page)
- {
- 	int ret;
- 
-@@ -81,7 +87,7 @@ static bool __page_handle_poison(struct page *page)
- 		ret = take_page_off_buddy(page);
- 	zone_pcp_enable(page_zone(page));
- 
--	return ret > 0;
-+	return ret;
- }
- 
- static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, bool release)
-@@ -91,7 +97,7 @@ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, boo
- 		 * Doing this check for free pages is also fine since dissolve_free_huge_page
- 		 * returns 0 for non-hugetlb pages as well.
- 		 */
--		if (!__page_handle_poison(page))
-+		if (__page_handle_poison(page) <= 0)
- 			/*
- 			 * We could fail to take off the target page from buddy
- 			 * for example due to racy page allocation, but that's
-@@ -1048,7 +1054,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+@@ -1046,7 +1046,6 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+ 		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
+ 		unlock_page(hpage);
+ 	} else {
+-		res = MF_FAILED;
+ 		unlock_page(hpage);
+ 		/*
+ 		 * migration entry prevents later access on error hugepage,
+@@ -1054,9 +1053,11 @@ static int me_huge_page(struct page_state *ps, struct page *p)
  		 * subpages.
  		 */
  		put_page(hpage);
--		if (__page_handle_poison(p)) {
-+		if (__page_handle_poison(p) > 0) {
+-		if (__page_handle_poison(p) > 0) {
++		if (__page_handle_poison(p) >= 0) {
  			page_ref_inc(p);
  			res = MF_RECOVERED;
++		} else {
++			res = MF_FAILED;
  		}
-@@ -1698,8 +1704,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 	}
+ 
+@@ -1704,9 +1705,11 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
  	 */
  	if (res == 0) {
  		unlock_page(head);
--		res = MF_FAILED;
--		if (__page_handle_poison(p)) {
-+		if (__page_handle_poison(p) > 0) {
+-		if (__page_handle_poison(p) > 0) {
++		if (__page_handle_poison(p) >= 0) {
  			page_ref_inc(p);
  			res = MF_RECOVERED;
++		} else {
++			res = MF_FAILED;
  		}
+ 		action_result(pfn, MF_MSG_FREE_HUGE, res);
+ 		return res == MF_RECOVERED ? 0 : -EBUSY;
 -- 
 2.25.1
 

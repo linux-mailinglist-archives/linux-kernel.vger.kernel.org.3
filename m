@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7912E557EF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DDC557EF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiFWPua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S231929AbiFWPwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiFWPu1 (ORCPT
+        with ESMTP id S231848AbiFWPwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:50:27 -0400
-Received: from smtpproxy21.qq.com (smtpbg703.qq.com [203.205.195.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B5A433AC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:50:22 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1655999412tk48o1uw
-Received: from localhost.localdomain ( [113.200.76.118])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 23 Jun 2022 23:50:10 +0800 (CST)
-X-QQ-SSF: 01400000002000C0E000000A0000000
-X-QQ-FEAT: FXvDfBZI5O4oltWk+zkm+mZf3ZqXX46o97OaoFEbMaWnVCPTjeTDgWN8wQ36S
-        V28iDHyl083WZN94jYB0kDD2jIY4tgGjAtHRUTBWiZeabVP/3afUkS/kSq1yORVR9YTLELV
-        HBZgbu41xccitx07ulMTGsy5lL45vQGB5yvHa/dbCZw28USXzzPYb76IVvAzWErg4WqHMIK
-        GX0g7YB9PS1fvwDq11V45u+LBJXe3/rBYgdrksbSqHjAqO7dR0FnhsePF+5DvNDfTloFN9J
-        WobKDJv5ijEcn/BezKBqrhVgANFlWvZhdNFeWNza/2bihC+yNpfFcTwUn1vLnikKBiwD7E+
-        frjdOXuJPKP6k3e1tdVx3VKmlLCliMaPrzfOQKY
-X-QQ-GoodBg: 1
-From:   Guo Hui <guohui@uniontech.com>
-To:     peterz@infradead.org
-Cc:     jpoimboe@kernel.org, song@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, daniel@iogearbox.net,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org,
-        Guo Hui <guohui@uniontech.com>
-Subject: [PATCH] x86/paravirt: useless assignment instructions cause Unixbench full core performance degradation
-Date:   Thu, 23 Jun 2022 23:50:07 +0800
-Message-Id: <20220623155007.3059-1-guohui@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 23 Jun 2022 11:52:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB5A43EEE;
+        Thu, 23 Jun 2022 08:52:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E188B8246B;
+        Thu, 23 Jun 2022 15:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B520C3411B;
+        Thu, 23 Jun 2022 15:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655999534;
+        bh=f1yUMkNQijNCMovgwuypQ/49a7NNjLshwaNNnee92ic=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=cZA4xdw8NI4eRz/aTRQgagViZw4M68kmeCM2dI0bWgt3PB4+7+eM+Q+PLkU3rq8iu
+         B2x5yvp/8+6A8KjY2mtsK9GJ1cV1YXGoR0Yk2pyLRAZGnaXzXaoKBAgpD5hZ1WL20e
+         P88/o6ghFWcD23j4nUi1fg2Jf3WiSRofqFq2TazctaRyLHSz4/Dja1v6WBPlVTH9X7
+         mvYWPxcOWGiWfAD5QSLTfiIGC1TjlmJdmU4tNY/6xlgkE5DO8I3xwe8EhVsLTlvJ/9
+         eENNgA1CSZ88oR0YBm/LbRtJiE8C6TBycpQlC9xpFpJTlbtGdpGdka9eLjYUqPPYzI
+         D8ZKzxsjxoMtQ==
+Date:   Thu, 23 Jun 2022 10:52:13 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
+Message-ID: <20220623155213.GA1450949@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign9
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519094646.23009-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,222 +60,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The instructions assigned to the parameters of
-the vcpu_is_preempted function in the X86 architecture
-physical machine are redundant instructions, which cause the
-multi-core performance of Unixbench to drop by
-about 300 to 500 points. The C function is as follows:
-static bool vcpu_is_preempted(long vcpu);
+On Thu, May 19, 2022 at 11:46:46AM +0200, Johan Hovold wrote:
+> Allow the Qualcomm PCIe controller driver to be built as a module, which
+> is useful for multi-platform kernels as well as during development.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/pci/controller/dwc/Kconfig     |  2 +-
+>  drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
+>  2 files changed, 34 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+> index 62ce3abf0f19..230f56d1a268 100644
+> --- a/drivers/pci/controller/dwc/Kconfig
+> +++ b/drivers/pci/controller/dwc/Kconfig
+> @@ -168,7 +168,7 @@ config PCI_HISI
+>  	  Hip05 and Hip06 SoCs
+>  
+>  config PCIE_QCOM
+> -	bool "Qualcomm PCIe controller"
+> +	tristate "Qualcomm PCIe controller"
+>  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
+>  	depends on PCI_MSI_IRQ_DOMAIN
+>  	select PCIE_DW_HOST
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 8523b5ef9d16..e25d5c09657c 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -16,7 +16,7 @@
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/init.h>
+> +#include <linux/module.h>
+>  #include <linux/of_device.h>
+>  #include <linux/of_gpio.h>
+>  #include <linux/pci.h>
+> @@ -1425,6 +1425,15 @@ static int qcom_pcie_host_init(struct pcie_port *pp)
+>  	return ret;
+>  }
+>  
+> +static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
+> +{
+> +	qcom_ep_reset_assert(pcie);
+> +	if (pcie->cfg->ops->post_deinit)
+> +		pcie->cfg->ops->post_deinit(pcie);
+> +	phy_power_off(pcie->phy);
+> +	pcie->cfg->ops->deinit(pcie);
 
-The parameter assignments in the function osq_lock
-that call the function vcpu_is_preempted are as follows:
-mov 0x14(%rax),%edi
-sub $0x1,%edi
+These post_deinit/deinit names look backwards.  Why would we call a
+"post_deinit()" method *before* the "deinit()" method?  It would make
+sense if we called "pre_deinit()" followed by "deinit()".
 
-The above instructions are unnecessary
-in the X86 Native operating environment,
-causing high cache-misses and degrading performance.
+>  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
+>  	.host_init = qcom_pcie_host_init,
+>  };
+> @@ -1651,6 +1660,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int qcom_pcie_remove(struct platform_device *pdev)
+> +{
+> +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
+> +	struct device *dev = &pdev->dev;
+> +
+> +	dw_pcie_host_deinit(&pcie->pci->pp);
+> +	qcom_pcie_host_deinit(pcie);
+> +
+> +	phy_exit(pcie->phy);
+> +
+> +	pm_runtime_put_sync(dev);
+> +	pm_runtime_disable(dev);
 
-This patch implements the replacement of the above instructions with
-the nop instruction at system startup.
-When the assignment C code changes,
-the above assignment instructions may also change accordingly.
-In order to flexibly replace the instructions generated by the C code,
-this patch defines the macro ALTERNATIVE_C_CODE
-from the ALTERNATIVE macro. Different from the first parameter
-of the ALTERNATIVE macro, the ALTERNATIVE_C_CODE macro is
-the first parameter is a C code statement and cannot contain
-a return statement. To use the macro, for example,
-replace the instructions generated by the
-C code 'cpu = node->cpu - 1;' with the nop instruction:
+Why is this not more symmetric with qcom_pcie_probe()?  Maybe struct
+dw_pcie_host_ops needs a new .host_deinit() pointer that would be
+called from dw_pcie_host_deinit()?
 
-OSQ_ALTERNATIVE_C_CODE(cpu = node->cpu - 1, "nop", 0);
+In the probe path, we have this:
 
-The patch effect is as follows two machines,
-Unixbench runs with full core score:
+  qcom_pcie_probe
+    pm_runtime_enable
+    pm_runtime_get_sync
+    phy_init(pcie->phy)
+    dw_pcie_host_init
+      pp->ops->host_init
+        qcom_pcie_host_init             # .host_init()
+          pcie->cfg->ops->init(pcie)
+          phy_power_on(pcie->phy)
+          pcie->cfg->ops->post_init(pcie)
+          qcom_ep_reset_deassert(pcie)
 
-1. Machine configuration:
-Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
-CPU core: 40
-Memory: 256G
-OS Kernel: 5.19-rc3
+The remove path does do things in the opposite order, which makes
+sense, but the call to qcom_pcie_host_deinit() breaks the symmetry:
 
-Before using the patch:
+  qcom_pcie_remove
+    dw_pcie_host_deinit
+    qcom_pcie_host_deinit
+      qcom_ep_reset_assert
+      pcie->cfg->ops->post_deinit
+      phy_power_off(pcie->phy)
+      pcie->cfg->ops->deinit
+    phy_exit(pcie->phy)
+    pm_runtime_put_sync
+    pm_runtime_disable
 
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0  944608003.9  80943.3
-Double-Precision Whetstone                       55.0     212045.8  38553.8
-Execl Throughput                                 43.0      42772.3   9947.1
-File Copy 1024 bufsize 2000 maxblocks          3960.0     462656.6   1168.3
-File Copy 256 bufsize 500 maxblocks            1655.0     120043.6    725.3
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1544525.5   2663.0
-Pipe Throughput                               12440.0   47277698.5  38004.6
-Pipe-based Context Switching                   4000.0    1894556.8   4736.4
-Process Creation                                126.0      86077.0   6831.5
-Shell Scripts (1 concurrent)                     42.4      70236.3  16565.2
-Shell Scripts (8 concurrent)                      6.0       8978.1  14963.4
-System Call Overhead                          15000.0    4691260.0   3127.5
-                                                                   ========
-System Benchmarks Index Score                                        7980.9
-
-After using the patch:
-
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0 2253984916.9 193143.5
-Double-Precision Whetstone                       55.0     438940.3  79807.3
-Execl Throughput                                 43.0      10720.3   2493.1
-File Copy 1024 bufsize 2000 maxblocks          3960.0     312233.0    788.5
-File Copy 256 bufsize 500 maxblocks            1655.0      80050.9    483.7
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1036101.7   1786.4
-Pipe Throughput                               12440.0  117700315.3  94614.4
-Pipe-based Context Switching                   4000.0    8421909.8  21054.8
-Process Creation                                126.0      36742.0   2916.0
-Shell Scripts (1 concurrent)                     42.4      52846.2  12463.7
-Shell Scripts (8 concurrent)                      6.0       7058.1  11763.6
-System Call Overhead                          15000.0    6791548.2   4527.7
-                                                                   ========
-System Benchmarks Index Score                                        8260.6
-
-2. Machine configuration:
-Hygon C86 7185 32-core Processor
-CPU core: 128
-Memory: 256G
-OS Kernel: 5.19-rc3
-
-Before using the patch:
-
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0 2256283941.6 193340.5
-Double-Precision Whetstone                       55.0     439577.3  79923.2
-Execl Throughput                                 43.0      10013.6   2328.7
-File Copy 1024 bufsize 2000 maxblocks          3960.0     278121.5    702.3
-File Copy 256 bufsize 500 maxblocks            1655.0      71835.5    434.1
-File Copy 4096 bufsize 8000 maxblocks          5800.0     905654.2   1561.5
-Pipe Throughput                               12440.0  117715166.2  94626.3
-Pipe-based Context Switching                   4000.0    7731331.7  19328.3
-Process Creation                                126.0      30157.8   2393.5
-Shell Scripts (1 concurrent)                     42.4      48670.8  11479.0
-Shell Scripts (8 concurrent)                      6.0       6595.6  10992.7
-System Call Overhead                          15000.0    6766475.9   4511.0
-                                                                   ========
-System Benchmarks Index Score                                        7688.7
-
-After using the patch:
-
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0 2253984916.9 193143.5
-Double-Precision Whetstone                       55.0     438940.3  79807.3
-Execl Throughput                                 43.0      10720.3   2493.1
-File Copy 1024 bufsize 2000 maxblocks          3960.0     312233.0    788.5
-File Copy 256 bufsize 500 maxblocks            1655.0      80050.9    483.7
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1036101.7   1786.4
-Pipe Throughput                               12440.0  117700315.3  94614.4
-Pipe-based Context Switching                   4000.0    8421909.8  21054.8
-Process Creation                                126.0      36742.0   2916.0
-Shell Scripts (1 concurrent)                     42.4      52846.2  12463.7
-Shell Scripts (8 concurrent)                      6.0       7058.1  11763.6
-System Call Overhead                          15000.0    6791548.2   4527.7
-                                                                   ========
-System Benchmarks Index Score                                        8260.6
-
-Signed-off-by: Guo Hui <guohui@uniontech.com>
----
- arch/x86/include/asm/alternative.h | 15 +++++++++++++++
- arch/x86/kernel/alternative.c      | 11 +++++++++++
- include/linux/osq_lock.h           |  7 +++++++
- kernel/locking/osq_lock.c          |  6 +++++-
- 4 files changed, 38 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index 9b10c8c76..5979ebe89 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -167,6 +167,21 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 	ALTINSTR_REPLACEMENT(newinstr, 1)				\
- 	".popsection\n"
- 
-+/* alternative c code primitive: */
-+#define ALTERNATIVE_C_CODE(oldinstr, newinstr, feature)			\
-+do {									\
-+	asm volatile("661:\n\t");					\
-+	oldinstr;							\
-+	asm volatile("\n662:\n"						\
-+		alt_end_marker ":\n"					\
-+		".pushsection .altinstructions,\"a\"\n"			\
-+		ALTINSTR_ENTRY(feature, 1)				\
-+		".popsection\n"						\
-+		".pushsection .altinstr_replacement, \"ax\"\n"		\
-+		ALTINSTR_REPLACEMENT(newinstr, 1)			\
-+		".popsection\n");					\
-+} while (0)
-+
- #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
- 	OLDINSTR_2(oldinstr, 1, 2)					\
- 	".pushsection .altinstructions,\"a\"\n"				\
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index e257f6c80..cf77be884 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -251,6 +251,8 @@ static void __init_or_module noinline optimize_nops(u8 *instr, size_t len)
- 	}
- }
- 
-+extern bool pv_is_native_vcpu_is_preempted(void);
-+
- /*
-  * Replace instructions with better alternatives for this CPU type. This runs
-  * before SMP is initialized to avoid SMP problems with self modifying code.
-@@ -285,6 +287,15 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
- 
- 		instr = (u8 *)&a->instr_offset + a->instr_offset;
- 		replacement = (u8 *)&a->repl_offset + a->repl_offset;
-+
-+		if (*replacement == 0x90 && a->replacementlen == 1) {
-+#if defined(CONFIG_PARAVIRT_SPINLOCKS)
-+			if (pv_is_native_vcpu_is_preempted())
-+				add_nops(instr, a->instrlen);
-+#endif
-+			continue;
-+		}
-+
- 		BUG_ON(a->instrlen > sizeof(insn_buff));
- 		BUG_ON(feature >= (NCAPINTS + NBUGINTS) * 32);
- 
-diff --git a/include/linux/osq_lock.h b/include/linux/osq_lock.h
-index 5581dbd3b..ee960e3aa 100644
---- a/include/linux/osq_lock.h
-+++ b/include/linux/osq_lock.h
-@@ -38,4 +38,11 @@ static inline bool osq_is_locked(struct optimistic_spin_queue *lock)
- 	return atomic_read(&lock->tail) != OSQ_UNLOCKED_VAL;
- }
- 
-+#ifdef ALTERNATIVE_C_CODE
-+#define OSQ_ALTERNATIVE_C_CODE(oldinstr, newinstr, feature) \
-+		ALTERNATIVE_C_CODE(oldinstr, newinstr, feature)
-+#else
-+#define OSQ_ALTERNATIVE_C_CODE(oldinstr, newinstr, feature) oldinstr
-+#endif
-+
- #endif
-diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
-index d5610ad52..bbe7d640c 100644
---- a/kernel/locking/osq_lock.c
-+++ b/kernel/locking/osq_lock.c
-@@ -24,7 +24,11 @@ static inline int encode_cpu(int cpu_nr)
- 
- static inline int node_cpu(struct optimistic_spin_node *node)
- {
--	return node->cpu - 1;
-+	int cpu = 0;
-+
-+	OSQ_ALTERNATIVE_C_CODE(cpu = node->cpu - 1, "nop", 0);
-+
-+	return cpu;
- }
- 
- static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
--- 
-2.20.1
-
-
-
+> +	return 0;
+> +}
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+>  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> @@ -1669,6 +1694,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+>  	{ }
+>  };
+> +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
+>  
+>  static void qcom_fixup_class(struct pci_dev *dev)
+>  {
+> @@ -1684,10 +1710,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+>  
+>  static struct platform_driver qcom_pcie_driver = {
+>  	.probe = qcom_pcie_probe,
+> +	.remove = qcom_pcie_remove,
+>  	.driver = {
+>  		.name = "qcom-pcie",
+> -		.suppress_bind_attrs = true,
+>  		.of_match_table = qcom_pcie_match,
+>  	},
+>  };
+> -builtin_platform_driver(qcom_pcie_driver);
+> +module_platform_driver(qcom_pcie_driver);
+> +
+> +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
+> +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.35.1
+> 

@@ -2,78 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6987B557346
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663FA557347
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiFWGoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S229939AbiFWGqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiFWGoQ (ORCPT
+        with ESMTP id S229613AbiFWGqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:44:16 -0400
-Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDF542EC6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:44:11 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1655966624tsricmyf
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 23 Jun 2022 14:43:40 +0800 (CST)
-X-QQ-SSF: 01000000008000B0C000B00A0000000
-X-QQ-FEAT: FXvDfBZI5O727lhUz+nlWuwIfirc6ZhVwF0lsZC8BwSjiLSB+j2tErHwKUCEo
-        u4ALB53nlk8R7c38/r69vVBD5FtfCj4YC+mL7+Cj0OA0lfbE4vEBdYmdG+mTSWF/EMFZJPO
-        Hgd1fCzDrJJggQy29veEENxJaaIylp069XwqndCQe7RmXCUXX2TjPZQagmz+Wd2uNzNt9iC
-        2GYcqY8c770xj+H0bd6fPDSVRxxXizHgXZcC4hVNeVBOB3aaE9MSr003PrjcMeDu2bhzrvR
-        L0MjOAYm3uwtVV+xKbxS16bMhKLUO0qyfMveijhPKESPlpmRaRyRQT1f/fE9Suse1rSw/m8
-        nTgIfVwV0GgPIk1/XORHePgmXhGTg==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com
-Cc:     linux@armlinux.org.uk, linux-kernel@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] ARM: mvebu: drop unexpected word 'a' in comments
-Date:   Thu, 23 Jun 2022 14:43:38 +0800
-Message-Id: <20220623064338.6496-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 02:46:15 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C6B342A13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:46:14 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 5E12C1E80C85;
+        Thu, 23 Jun 2022 14:45:56 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id B06JfwXUQAjO; Thu, 23 Jun 2022 14:45:53 +0800 (CST)
+Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: lvqian@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 9A95E1E80C7D;
+        Thu, 23 Jun 2022 14:45:53 +0800 (CST)
+From:   Lv qian <lvqian@nfschina.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel@nfschina.com, Lv qian <lvqian@nfschina.com>
+Subject: [PATCH] vmalloc:Merge multiple if conditional sentences
+Date:   Thu, 23 Jun 2022 14:45:27 +0800
+Message-Id: <20220623064527.4238-1-lvqian@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word 'a' in the comments that need to be dropped
+Merge multiple if statements to improve code readability
 
-file - arch/arm/mach-mvebu/pmsu.c
-line - 404
-
-	 * replace the restart code of the bootrom by a a simple jump
-changed to:
-	 * replace the restart code of the bootrom by a a simple jump
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+Signed-off-by: Lv qian <lvqian@nfschina.com>
 ---
- arch/arm/mach-mvebu/pmsu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/vmalloc.c | 66 ++++++++++++++--------------------------------------
+ 1 file changed, 18 insertions(+), 48 deletions(-)
 
-diff --git a/arch/arm/mach-mvebu/pmsu.c b/arch/arm/mach-mvebu/pmsu.c
-index af27a7156675..ea4f5beeffb7 100644
---- a/arch/arm/mach-mvebu/pmsu.c
-+++ b/arch/arm/mach-mvebu/pmsu.c
-@@ -401,7 +401,7 @@ static __init int armada_370_cpuidle_init(void)
- 	 * On Armada 370, there is "a slow exit process from the deep
- 	 * idle state due to heavy L1/L2 cache cleanup operations
- 	 * performed by the BootROM software". To avoid this, we
--	 * replace the restart code of the bootrom by a a simple jump
-+	 * replace the restart code of the bootrom by a simple jump
- 	 * to the boot address. Then the code located at this boot
- 	 * address will take care of the initialization.
- 	 */
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index effd1ff6a4b4..6902a180f8f7 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -135,22 +135,12 @@ static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
+ 			phys_addr_t phys_addr, pgprot_t prot,
+ 			unsigned int max_page_shift)
+ {
+-	if (max_page_shift < PMD_SHIFT)
+-		return 0;
+-
+-	if (!arch_vmap_pmd_supported(prot))
+-		return 0;
+-
+-	if ((end - addr) != PMD_SIZE)
+-		return 0;
+-
+-	if (!IS_ALIGNED(addr, PMD_SIZE))
+-		return 0;
+-
+-	if (!IS_ALIGNED(phys_addr, PMD_SIZE))
+-		return 0;
+-
+-	if (pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr))
++	if (max_page_shift < PMD_SHIFT ||
++			!arch_vmap_pmd_supported(prot) ||
++			(end - addr) != PMD_SIZE ||
++			!IS_ALIGNED(addr, PMD_SIZE) ||
++			!IS_ALIGNED(phys_addr, PMD_SIZE) ||
++			(pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr)))
+ 		return 0;
+ 
+ 	return pmd_set_huge(pmd, phys_addr, prot);
+@@ -185,22 +175,12 @@ static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
+ 			phys_addr_t phys_addr, pgprot_t prot,
+ 			unsigned int max_page_shift)
+ {
+-	if (max_page_shift < PUD_SHIFT)
+-		return 0;
+-
+-	if (!arch_vmap_pud_supported(prot))
+-		return 0;
+-
+-	if ((end - addr) != PUD_SIZE)
+-		return 0;
+-
+-	if (!IS_ALIGNED(addr, PUD_SIZE))
+-		return 0;
+-
+-	if (!IS_ALIGNED(phys_addr, PUD_SIZE))
+-		return 0;
+-
+-	if (pud_present(*pud) && !pud_free_pmd_page(pud, addr))
++	if (max_page_shift < PUD_SHIFT ||
++			!arch_vmap_pud_supported(prot) ||
++			(end - addr) != PUD_SIZE ||
++			!IS_ALIGNED(addr, PUD_SIZE) ||
++			!IS_ALIGNED(phys_addr, PUD_SIZE) ||
++			(pud_present(*pud) && !pud_free_pmd_page(pud, addr)))
+ 		return 0;
+ 
+ 	return pud_set_huge(pud, phys_addr, prot);
+@@ -236,22 +216,12 @@ static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
+ 			phys_addr_t phys_addr, pgprot_t prot,
+ 			unsigned int max_page_shift)
+ {
+-	if (max_page_shift < P4D_SHIFT)
+-		return 0;
+-
+-	if (!arch_vmap_p4d_supported(prot))
+-		return 0;
+-
+-	if ((end - addr) != P4D_SIZE)
+-		return 0;
+-
+-	if (!IS_ALIGNED(addr, P4D_SIZE))
+-		return 0;
+-
+-	if (!IS_ALIGNED(phys_addr, P4D_SIZE))
+-		return 0;
+-
+-	if (p4d_present(*p4d) && !p4d_free_pud_page(p4d, addr))
++	if (max_page_shift < P4D_SHIFT ||
++			!arch_vmap_p4d_supported(prot) ||
++			(end - addr) != P4D_SIZE ||
++			!IS_ALIGNED(addr, P4D_SIZE) ||
++			!IS_ALIGNED(phys_addr, P4D_SIZE) ||
++			(p4d_present(*p4d) && !p4d_free_pud_page(p4d, addr)))
+ 		return 0;
+ 
+ 	return p4d_set_huge(p4d, phys_addr, prot);
 -- 
-2.17.1
+2.18.2
 

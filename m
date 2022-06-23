@@ -2,110 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A064557E27
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCA1557E2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbiFWOts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S232005AbiFWOtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiFWOtq (ORCPT
+        with ESMTP id S231995AbiFWOtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:49:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4037025E9B;
-        Thu, 23 Jun 2022 07:49:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D549061E6C;
-        Thu, 23 Jun 2022 14:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB45C341C4;
-        Thu, 23 Jun 2022 14:49:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655995785;
-        bh=OvG65GhwKQTbl8Ynp1orQ26fx51gHndrm9PpnBDSVnM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VsOySaRM4OQGeLKpQVr/xu1CdGLfbjeApZv7IKFcPdFdxoW3+gWpkYNbkqAOwm/z2
-         uDh6VOuy0QBDhZ4sE+XHF+PRlgJlJ0E8QAkgd8aHK96sziYNXVsa1xfsbrcZnekxIL
-         N0U6jGZSYe2w/fViO38okjEz7X6ooOVxMa8rQX59iUxWh8xXmF5y+mqpzU+5kvi+MQ
-         F0V8rS9GnPpfYRnVxM9awxjmZRGkxoPgA7QEPYPti3H6gcnPk6c1sVLK/7GLdyPOcK
-         nGFslz9w2ZuWKjtmfu5/POKMZoW8etUigrWOrZnbCXShRw1xV8vFYYp2qZ2oo3+8Bt
-         Livuio6EUTCPw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CAE174096F; Thu, 23 Jun 2022 11:49:42 -0300 (-03)
-Date:   Thu, 23 Jun 2022 11:49:42 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v1] perf stat: Enable ignore_missing_thread for
- stat
-Message-ID: <YrR9hljHVltIe0aW@kernel.org>
-References: <20220622030037.15005-1-ligang.bdlg@bytedance.com>
+        Thu, 23 Jun 2022 10:49:52 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFB146679
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:49:51 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id a15so12134190pfv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+qSsChT75v3dvhRAkXYqSV2TfsP5NCarupm2V9Kqui0=;
+        b=Yz5N2ry9uNEF1gaCrCZKOslUu3DOdurMNWT1q6KWoCmT2NDA4a+LtMpMgwsnVfK7zZ
+         RsRoEVr//JBe44DK1MPKhvSYbDQEx/uQDDfuM1g7Fd/GXkj2UvofhpAgxVqE6XuVFjei
+         RcT6g1GMZMEu+84zRGCPZTX491w5ladQzU+KEdRiqOwVWr85a5ka7cpCuMBsW+SyES8p
+         owJ5Gu1oonI/fBRiqhh7dfwfdguVM1ck5qAZBPl7Q3xcxrjQB0vZjt0qFDZWR34kQOjl
+         fcxmI1ChSM01swtv8XSTLbvCTm1tyxxteXF6A4GjAvQYNaZesY9YQzaluqk8xoHdg5+g
+         JdJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+qSsChT75v3dvhRAkXYqSV2TfsP5NCarupm2V9Kqui0=;
+        b=hGD620tgK9sEDrTNvMIFuECf6QWGbVt/HVBPgAoZicTuMav9CSgvdHRMXT2lZ9UtlZ
+         5jQ14ryhfIAPr0Zr/s+BUkqU4YMEjgXFWlobsKOTMsI8FjSuMjdyZYWk6dbJYO6oSiZS
+         273uXjJAZ0PFQa/YbkE8YzNE3jWNE6Qanv4UKThtKIGfrowWfGDXxTPpXiyG1AZ5CjTe
+         iALv11kxUUkipAs3+2Ug/+KccSF93IcAOLViYZWJgsyuY01nP5bPxnLbNasScWzMxWLQ
+         yXd4lgOKA3LjyuXkG8PdinXwRo2yaf771qEa9KQHmrSTp8Sbc4EfecsJDgQgY0L1n9ld
+         Rlnw==
+X-Gm-Message-State: AJIora/N0yaJ+8D1QvV8fme33p03ULkK27q2tcaZVycDl+6ACRl5heeo
+        OVhqn/onc+fRNEA8av45lkc7Bw==
+X-Google-Smtp-Source: AGRyM1u61EzUEh+JRGUbY08AnREjTd6Ub3VvJ0Hteh1fCeq4G/TENL2UDjYm4NKsqKEpJH2VZPMPPg==
+X-Received: by 2002:a05:6a00:9a2:b0:505:974f:9fd6 with SMTP id u34-20020a056a0009a200b00505974f9fd6mr40733440pfg.12.1655995790918;
+        Thu, 23 Jun 2022 07:49:50 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id i22-20020a17090ad35600b001ec8d191db4sm2003335pjx.17.2022.06.23.07.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 07:49:50 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 14:49:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>
+Subject: Re: [PATCH 2/4] kvm: Merge "atomic" and "write" in
+ __gfn_to_pfn_memslot()
+Message-ID: <YrR9i3yHzh5ftOxB@google.com>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-3-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622030037.15005-1-ligang.bdlg@bytedance.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220622213656.81546-3-peterx@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Jun 22, 2022 at 11:00:37AM +0800, Gang Li escreveu:
-> perf already support ignore_missing_thread for -p, but not yet
-> applied to `perf stat -p <pid>`. This patch enables ignore_missing_thread
-> for `perf stat -p <pid>`.
+On Wed, Jun 22, 2022, Peter Xu wrote:
+> Merge two boolean parameters into a bitmask flag called kvm_gtp_flag_t for
+> __gfn_to_pfn_memslot().  This cleans the parameter lists, and also prepare
+> for new boolean to be added to __gfn_to_pfn_memslot().
 
-Thanks, will add it and stick the original explanation about
-ignore_missing_thread so that reviewers of this patch can get a
-refresher:
+...
 
-From  ca8000684ec4e66f965e1f9547a3c6cb834154ca
-----------
-    While monitoring a multithread process with pid option, perf sometimes
-    may return sys_perf_event_open failure with 3(No such process) if any of
-    the process's threads die before we open the event. However, we want
-    perf continue monitoring the remaining threads and do not exit with
-    error.
-----------
-
-Thanks,
-
-- Arnaldo
- 
-> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
-> ---
->  tools/perf/builtin-stat.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 4ce87a8eb7d7..d2ecd4d29624 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -2586,6 +2586,8 @@ int cmd_stat(int argc, const char **argv)
->  	if (evlist__initialize_ctlfd(evsel_list, stat_config.ctl_fd, stat_config.ctl_fd_ack))
->  		goto out;
+> @@ -3999,8 +4000,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  	}
 >  
-> +	/* Enable ignoring missing threads when -p option is defined. */
-> +	evlist__first(evsel_list)->ignore_missing_thread = target.pid;
->  	status = 0;
->  	for (run_idx = 0; forever || run_idx < stat_config.run_count; run_idx++) {
->  		if (stat_config.run_count != 1 && verbose > 0)
-> -- 
-> 2.20.1
+>  	async = false;
+> -	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
+> -					  fault->write, &fault->map_writable,
+> +	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, flags,
+> +					  &async, &fault->map_writable,
+>  					  &fault->hva);
+>  	if (!async)
+>  		return RET_PF_CONTINUE; /* *pfn has correct page already */
+> @@ -4016,9 +4017,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  		}
+>  	}
+>  
+> -	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, NULL,
+> -					  fault->write, &fault->map_writable,
+> -					  &fault->hva);
+> +	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, flags, NULL,
+> +					  &fault->map_writable, &fault->hva);
+>  	return RET_PF_CONTINUE;
+>  }
+>  
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index c20f2d55840c..b646b6fcaec6 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1146,8 +1146,15 @@ kvm_pfn_t gfn_to_pfn_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+>  		      bool *writable);
+>  kvm_pfn_t gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn);
+>  kvm_pfn_t gfn_to_pfn_memslot_atomic(const struct kvm_memory_slot *slot, gfn_t gfn);
+> +
+> +/* gfn_to_pfn (gtp) flags */
+> +typedef unsigned int __bitwise kvm_gtp_flag_t;
+> +
+> +#define  KVM_GTP_WRITE          ((__force kvm_gtp_flag_t) BIT(0))
+> +#define  KVM_GTP_ATOMIC         ((__force kvm_gtp_flag_t) BIT(1))
+> +
+>  kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
+> -			       bool atomic, bool *async, bool write_fault,
+> +			       kvm_gtp_flag_t gtp_flags, bool *async,
+>  			       bool *writable, hva_t *hva);
 
--- 
+I completely agree the list of booleans is a mess, but I don't love the result of
+adding @flags.  I wonder if we can do something similar to x86's struct kvm_page_fault
+and add an internal struct to pass params.  And then add e.g. gfn_to_pfn_interruptible()
+to wrap that logic.
 
-- Arnaldo
+I suspect we could also clean up the @async behavior at the same time, as its
+interaction with FOLL_NOWAIT is confusing.

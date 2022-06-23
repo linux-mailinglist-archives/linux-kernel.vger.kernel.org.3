@@ -2,97 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C5355899C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4021755899F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiFWT4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
+        id S229735AbiFWT6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiFWT4k (ORCPT
+        with ESMTP id S229470AbiFWT6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:56:40 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7782F661
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656014198; x=1687550198;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0VTzvJA0Gl2kb/wPFNFbyrNjSRdnhPyKMdGhL0neyZo=;
-  b=IQwhnWfDKIpLzJJBJsyFBHBtQPiEVBJ8h8ZR/Xua31zWcGHzR800NWk2
-   Y5ULjgjU9e4PUya9qdrMcULwdTlb01BhVO3CSWsOYzeRXvfFXZJCt/ahV
-   x89hGoh7JL8kWX19imNytQukhTQk4LvqQABQLy+MJm/qchGMcKt22HdT2
-   yY+ISk7NYsn85sT5gJBmj3GgCeMNbWrf5qcra845w7a6qJ0DRulBPJzbv
-   n9qwmd/TBLXHugHmVAdBWcedzoqiqbDkDhmyjXIZw2q0n7nbWuzlS2mjZ
-   q4R5/YkYdvKcy3NfoHbw5oDILJNLx4mEWV1Dbr6YjkmgaepWyR/yzQYhX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="278373727"
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="278373727"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 12:56:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="656324211"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Jun 2022 12:56:37 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4SwO-00033b-KF;
-        Thu, 23 Jun 2022 19:56:36 +0000
-Date:   Fri, 24 Jun 2022 03:56:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ardb:arm64-compat-alignment-fixups 2/2]
- arch/arm64/kernel/compat_alignment.c:391:5: warning: no previous prototype
- for 'do_compat_alignment_fixup'
-Message-ID: <202206240300.IJJqMAVn-lkp@intel.com>
+        Thu, 23 Jun 2022 15:58:44 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A5A33A16
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:58:43 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id by38so365603ljb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YZmdOLUgEpuTcs1Er5G/nrfMC7op/4LBGH4A+xFyAt0=;
+        b=ZebJOSWT2zWcG2uvS9eF3zF5SQ4HNIFc/WJ7Bphdxi0+AerWwxhNUpk+VEMC8yc6xp
+         aGFOeMpzCTsccoXpVwW0qQYIANqcICuf2JQDu2E2/B8r0M+GP2tgwouM5IeHrcpE4bgO
+         aA+Ll+TejeUihxrA/Dg8oI4agSim/A3o9gYWF5yTB5rGhl0sO5ocEhni9kIRj0CNUPFO
+         W1uBH2Sg05XhI3I29EhBiPhJNGYtC5OB5kiC+4/o6I1ZFry+SFWV66SOkIJQ9Gn49MWq
+         oW++ew/TpJk2iiIt5mb7xisPBSZyvhmWHIdHNYsJKHRh/wRV6E5lJoY3XSKiONqetOrh
+         e4yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YZmdOLUgEpuTcs1Er5G/nrfMC7op/4LBGH4A+xFyAt0=;
+        b=quJwtr3o7C1VPnvBn6kb8O8NP3HctzYc1tZhPPgxjwpTh8+0LNKPg8jbDZFlgEOA0t
+         s7rK31guiB7A4h0zqm0qJ2fyo3wWHcYm7m6VktC8cEzZvkrpUoPpDaYp3EcO3vy5I0zn
+         aEgwSewAvlmztZSR+88NakObeQARtKM+bqHejO3BgzGJ/xbzIfJFxPbmgnsKWu0HKm8B
+         hEla18jacrT3JFBlTMui4NfnW8EozFTuHX53l9DDbIjgggGr212pGQAtO/21CseRGr2Q
+         Q+bqrIdCWP/Tw8qQ/WTZURNgCpj2uBy3sIZ1u91iZgt8K4GCvNVDGrqsE7ZyzXYLNUu2
+         8mrA==
+X-Gm-Message-State: AJIora9XB6A0mrw7uzAGVIFPVlHxu3tC7ukewqWU7JlWcTAXvD2XLiFY
+        2gB1VdTgnMkXATHmmMnMlWDzBP3UcuwtKFuvI568wA==
+X-Google-Smtp-Source: AGRyM1sW41dkNu1yPnHok/IKa2eFD9oNjNnp9/++s2YawW1f4VSUU9UuDeraaVVUzZk6WxiUJgd5EpGB76EEj5iBgdQ=
+X-Received: by 2002:a2e:3109:0:b0:25a:8a0c:40e2 with SMTP id
+ x9-20020a2e3109000000b0025a8a0c40e2mr5029528ljx.26.1656014321462; Thu, 23 Jun
+ 2022 12:58:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220623191147.1916067-1-masahiroy@kernel.org>
+In-Reply-To: <20220623191147.1916067-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 23 Jun 2022 12:58:29 -0700
+Message-ID: <CAKwvOd=DWQBQC4OnF8Y=T7s0+kAai7QseN7_zYRoraU4a9Nosw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS
+ (2nd attempt)
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nicolas Pitre <nico@fluxnic.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-compat-alignment-fixups
-head:   16de979d9372710aaa42cd93d3af1e9a43d53369
-commit: 16de979d9372710aaa42cd93d3af1e9a43d53369 [2/2] arm64: compat: Implement misalignment fixups for multiword loads
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220624/202206240300.IJJqMAVn-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=16de979d9372710aaa42cd93d3af1e9a43d53369
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb arm64-compat-alignment-fixups
-        git checkout 16de979d9372710aaa42cd93d3af1e9a43d53369
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On Thu, Jun 23, 2022 at 12:12 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> If CONFIG_TRIM_UNUSED_KSYMS is enabled and the kernel is built from
+> a pristine state, the vmlinux is linked twice.
+>
+> Commit 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for
+> CONFIG_TRIM_UNUSED_KSYMS") explains why this happens, but it did not fix
+> the issue at all.
+>
+> Now I realized I had applied a wrong patch.
+>
+> In v1 patch [1], the autoksyms_recursive target correctly recurses to
+> "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive".
+>
+> In v2 patch [2], I accidentally dropped the diff line, and it recurses to
+> "$(MAKE) -f $(srctree)/Makefile vmlinux".
+>
+> Restore the code I intended in v1.
+>
+> [1]: https://lore.kernel.org/linux-kbuild/1521045861-22418-8-git-send-email-yamada.masahiro@socionext.com/
+> [2]: https://lore.kernel.org/linux-kbuild/1521166725-24157-8-git-send-email-yamada.masahiro@socionext.com/
+>
+> Fixes: 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS")
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for digging into this more!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All warnings (new ones prefixed by >>):
+> ---
+>
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 513c1fbf7888..a3ff166c5035 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1141,7 +1141,7 @@ KBUILD_MODULES := 1
+>
+>  autoksyms_recursive: descend modules.order
+>         $(Q)$(CONFIG_SHELL) $(srctree)/scripts/adjust_autoksyms.sh \
+> -         "$(MAKE) -f $(srctree)/Makefile vmlinux"
+> +         "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive"
+>  endif
+>
+>  autoksyms_h := $(if $(CONFIG_TRIM_UNUSED_KSYMS), include/generated/autoksyms.h)
+> --
+> 2.34.1
+>
 
->> arch/arm64/kernel/compat_alignment.c:391:5: warning: no previous prototype for 'do_compat_alignment_fixup' [-Wmissing-prototypes]
-     391 | int do_compat_alignment_fixup(unsigned long addr, struct pt_regs *regs)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/do_compat_alignment_fixup +391 arch/arm64/kernel/compat_alignment.c
-
-   390	
- > 391	int do_compat_alignment_fixup(unsigned long addr, struct pt_regs *regs)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers

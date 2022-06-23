@@ -2,274 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1A0556F9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 02:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0A1556F9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 02:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358502AbiFWAnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 20:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S1359870AbiFWApB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 20:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376872AbiFWAnk (ORCPT
+        with ESMTP id S1354197AbiFWAo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 20:43:40 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFD792FFDC
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 17:43:38 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL983t7NiK3ZVAA--.30427S3;
-        Thu, 23 Jun 2022 08:43:36 +0800 (CST)
-Subject: Re: [PATCH v2 2/2] LoongArch: No need to call RESTORE_ALL_AND_RET for
- all syscalls
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1655806074-17454-1-git-send-email-yangtiezhu@loongson.cn>
- <1655806074-17454-3-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H6YYhMAyOG+-PDKiLBv1fDoFmkQUSBa4zt=Lf4=HZGxHQ@mail.gmail.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>, Jun Yi <yijun@loongson.cn>,
-        Rui Wang <wangrui@loongson.cn>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1a431c16-ecef-f7e9-4c4f-936e4bb3aeea@loongson.cn>
-Date:   Thu, 23 Jun 2022 08:43:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6YYhMAyOG+-PDKiLBv1fDoFmkQUSBa4zt=Lf4=HZGxHQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxL983t7NiK3ZVAA--.30427S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3XryruFykJrWxCr1kZry3twb_yoWxKrWDpF
-        WxAFnakF4DWry8Ar9a9F18WrZ0y3Z3WF45Gr4UCFWxCw1v93sxXryvvFWUKF1qgw4FkF4j
-        qa4Fq3s2gws8t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
-        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCY02Avz4vE14v_twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUjg18DUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 22 Jun 2022 20:44:58 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895C03AA66
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 17:44:57 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id v74-20020a252f4d000000b00668b16baa8bso14473257ybv.23
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 17:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Ymo7Rxhyocn/FvcXMtitPNOXuGv65pgzZZRA3BhOg+U=;
+        b=BVh1qWcBjmTtI4sUM7Lm7CYQbPfXqjf0plMCgpo/LQ5CNE3+7ZTZT1AMNXFGEgf7L4
+         GxcHKXUXoNhWxjTm5armDTa7BX/otZDHra4jT1ZppZczC8TTJwybXPZneqkKISdzzTmD
+         q2joAjWl/TxolDCbUXoDMWP3YUEmebh0HXkG62nyQU5UpxfsNl7vzclXGS1Mk7YIH6Nn
+         Pyc7GxAUY5sQrd/litNCGuSDpDJyxXrMbu4YGEN79PdDwr0M4xzaZK9Szv6MkviOb0aq
+         GAl7WZEe8VIXL3KVGJhnP2mK7OlMpEmuDnzET+csWZhaBAsA8x66EBfp7MjhTfxHNak/
+         Xvwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Ymo7Rxhyocn/FvcXMtitPNOXuGv65pgzZZRA3BhOg+U=;
+        b=vqdMMiWJcEnPZOTpVPmmlfUST5LLjg96zdCebBc0RY9cbH8E5YKKdourPHIX+aaFdc
+         VCko9pBb6kbXZG/qXGntfZTAzzwWsfM0mp1Rmvma42LhME6OgpgrEzes7u9OyRy7Mkas
+         c0l7WRAQpXWsiL+CJT73fkQ9c10mF11LYPbwN/V4aA8Z4naGL8yGff7yE6tqAGeEL7SM
+         lnNy4xismyTMbd1aDwL+A8CORaM8OAZS31CBVmJj3SKVjav8mlUMs60chIirRmRMBtIq
+         pi1Bscg0vnYak2HX/dYOfWuvUHg315KvIHQ+hYcSez40fykL2d9Qdka0fx4HRcWegBHv
+         VInA==
+X-Gm-Message-State: AJIora/3AR8vbMzzkic8iGUSdGe37EpHFcUVtmwDAofcdPdHMOCb37ND
+        xspleIfSnfhGDwCDv7DPfRoWYrjukRBBSxNH
+X-Google-Smtp-Source: AGRyM1uZE4vQrO8iEJNpgYL1u3hjonNaFAyvrPPQyOuEfYr323CGssDbaH/XJBQENNM0Zjoh1AvNvJTszbJRFC9z
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a25:afd4:0:b0:668:a903:ebd7 with SMTP
+ id d20-20020a25afd4000000b00668a903ebd7mr7157182ybj.359.1655945096876; Wed,
+ 22 Jun 2022 17:44:56 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 00:44:52 +0000
+Message-Id: <20220623004452.1217326-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+Subject: [PATCH v2] mm: vmpressure: don't count userspace-induced reclaim as
+ memory pressure
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc Jiaxun Yang <jiaxun.yang@flygoat.com>
+Commit e22c6ed90aa9 ("mm: memcontrol: don't count limit-setting reclaim
+as memory pressure") made sure that memory reclaim that is induced by
+userspace (limit-setting, proactive reclaim, ..) is not counted as
+memory pressure for the purposes of psi.
 
-On 06/22/2022 06:01 PM, Huacai Chen wrote:
-> Hi, Tiezhu,
->
-> On Tue, Jun 21, 2022 at 6:08 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> In handle_syscall, it is unnecessary to call RESTORE_ALL_AND_RET
->> for all syscalls.
->>
->> (1) rt_sigreturn call RESTORE_ALL_AND_RET.
->> (2) The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
->>
->> This patch only adds the minimal changes as simple as possible
->> to reduce the code complexity, at the same time, it can reduce
->> many load instructions.
->>
->> Here are the test environments:
->>
->>   Hardware: Loongson-LS3A5000-7A1000-1w-A2101
->>   Firmware: UDK2018-LoongArch-A2101-pre-beta8 [1]
->>   System: loongarch64-clfs-system-5.0 [2]
->>
->> The system passed functional testing used with the following
->> test case without and with this patch:
->>
->>   git clone https://github.com/hevz/sigaction-test.git
->>   cd sigaction-test
->>   make check
->>
->> Additionally, use UnixBench syscall to test the performance:
->>
->>   git clone https://github.com/kdlucas/byte-unixbench.git
->>   cd byte-unixbench/UnixBench/
->>   make
->>   pgms/syscall 600
->>
->> In order to avoid the performance impact, add init=/bin/bash
->> to the boot cmdline.
->>
->> Here is the test result, the bigger the better, it shows about
->> 1.2% gain tested with close, getpid and exec [3]:
->>
->>   duration  without_this_patch  with_this_patch
->>   600 s     626558267 lps       634244079 lps
->>
->> [1] https://github.com/loongson/Firmware/tree/main/5000Series/PC/A2101
->> [2] https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/tag/5.0
->> [3] https://github.com/kdlucas/byte-unixbench/blob/master/UnixBench/src/syscall.c
-> I test your patch and the whole UnixBench result is like this:
->
-> Before patch, single thread:
->
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0    9235787.7    791.4
-> Double-Precision Whetstone                       55.0       2758.7    501.6
-> Execl Throughput                                 43.0       2386.8    555.1
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     191752.0    484.2
-> File Copy 256 bufsize 500 maxblocks            1655.0      78737.9    475.8
-> File Copy 4096 bufsize 8000 maxblocks          5800.0     297402.5    512.8
-> Pipe Throughput                               12440.0     353658.1    284.3
-> Pipe-based Context Switching                   4000.0     120140.8    300.4
-> Process Creation                                126.0       5735.0    455.2
-> Shell Scripts (1 concurrent)                     42.4       2701.5    637.1
-> Shell Scripts (8 concurrent)                      6.0        894.9   1491.5
-> System Call Overhead                          15000.0     557467.4    371.6
->                                                                    ========
-> System Benchmarks Index Score                                         516.1
->
-> After patch, single thread:
->
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0    9235688.9    791.4
-> Double-Precision Whetstone                       55.0       2758.7    501.6
-> Execl Throughput                                 43.0       2377.8    553.0
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     192545.5    486.2
-> File Copy 256 bufsize 500 maxblocks            1655.0      79735.0    481.8
-> File Copy 4096 bufsize 8000 maxblocks          5800.0     299621.9    516.6
-> Pipe Throughput                               12440.0     354969.1    285.3
-> Pipe-based Context Switching                   4000.0     118307.5    295.8
-> Process Creation                                126.0       5757.0    456.9
-> Shell Scripts (1 concurrent)                     42.4       2695.4    635.7
-> Shell Scripts (8 concurrent)                      6.0        894.4   1490.6
-> System Call Overhead                          15000.0     563582.7    375.7
->                                                                    ========
-> System Benchmarks Index Score                                         517.0
->
-> Before patch, multi-threads:
->
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0   36943633.4   3165.7
-> Double-Precision Whetstone                       55.0      11035.8   2006.5
-> Execl Throughput                                 43.0       8800.1   2046.5
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     277638.3    701.1
-> File Copy 256 bufsize 500 maxblocks            1655.0      92530.5    559.1
-> File Copy 4096 bufsize 8000 maxblocks          5800.0     524344.3    904.0
-> Pipe Throughput                               12440.0    1359237.2   1092.6
-> Pipe-based Context Switching                   4000.0     571511.4   1428.8
-> Process Creation                                126.0      20823.3   1652.6
-> Shell Scripts (1 concurrent)                     42.4       6883.9   1623.6
-> Shell Scripts (8 concurrent)                      6.0        981.7   1636.1
-> System Call Overhead                          15000.0    2029539.8   1353.0
->                                                                    ========
-> System Benchmarks Index Score                                        1367.4
->
-> After patch, multi-threads:
->
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0   36943793.6   3165.7
-> Double-Precision Whetstone                       55.0      11035.5   2006.4
-> Execl Throughput                                 43.0       8768.3   2039.1
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     277962.9    701.9
-> File Copy 256 bufsize 500 maxblocks            1655.0      92059.7    556.3
-> File Copy 4096 bufsize 8000 maxblocks          5800.0     525937.5    906.8
-> Pipe Throughput                               12440.0    1361566.6   1094.5
-> Pipe-based Context Switching                   4000.0     575835.4   1439.6
-> Process Creation                                126.0      20426.4   1621.1
-> Shell Scripts (1 concurrent)                     42.4       6877.5   1622.0
-> Shell Scripts (8 concurrent)                      6.0        980.3   1633.8
-> System Call Overhead                          15000.0    2049771.6   1366.5
->                                                                    ========
-> System Benchmarks Index Score                                        1366.6
->
-> From my point of view, the benefit is negligible.
+Instead of counting psi inside try_to_free_mem_cgroup_pages(), callers
+from try_charge() and reclaim_high() wrap the call to
+try_to_free_mem_cgroup_pages() with psi handlers.
 
-There is another way to look at what is going on.
-This patch is related with syscall, I prefer to
-observe "System Call Overhead" in the test results.
+However, vmpressure is still counted in these cases where reclaim is
+directly induced by userspace. This patch makes sure vmpressure is not
+counted in those operations, in the same way as psi. Since vmpressure
+calls need to happen deeper within the reclaim path, the same approach
+could not be followed. Hence, a new "controlled" flag is added to struct
+scan_control to flag a reclaim operation that is controlled by
+userspace. This flag is set by limit-setting and proactive reclaim
+operations, and is used to count vmpressure correctly.
 
-Here are the INDEX of "System Call Overhead" in your test results:
+To prevent future divergence of psi and vmpressure, commit e22c6ed90aa9
+("mm: memcontrol: don't count limit-setting reclaim as memory pressure")
+is effectively reverted and the same flag is used to control psi as
+well.
 
-thread   before_patch    after_patch    gain
-single   371.6           375.7          1.103%
-multi    1353.0          1366.5         0.998%
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 
-For now, I would like to wait for other people's review.
-If the conclusion is the optimization is meaningless,
-I am fine with ignoring this patch.
+---
 
-Thanks,
-Tiezhu
+Changes in v2:
+- Removed unnecessary initializations to zero (Andrew).
+- Separate declarations and initializations when it causes line wrapping
+  (Andrew).
 
->
->
-> Huacai
->
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>  arch/loongarch/include/asm/stackframe.h |  5 +++++
->>  arch/loongarch/kernel/entry.S           | 15 +++++++++++++++
->>  2 files changed, 20 insertions(+)
->>
->> diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
->> index 4ca9530..551ab8f 100644
->> --- a/arch/loongarch/include/asm/stackframe.h
->> +++ b/arch/loongarch/include/asm/stackframe.h
->> @@ -216,4 +216,9 @@
->>         RESTORE_SP_AND_RET \docfi
->>         .endm
->>
->> +       .macro  RESTORE_STATIC_SOME_SP_AND_RET docfi=0
->> +       RESTORE_STATIC \docfi
->> +       RESTORE_SOME \docfi
->> +       RESTORE_SP_AND_RET \docfi
->> +       .endm
->>  #endif /* _ASM_STACKFRAME_H */
->> diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
->> index d5b3dbc..c764c99 100644
->> --- a/arch/loongarch/kernel/entry.S
->> +++ b/arch/loongarch/kernel/entry.S
->> @@ -14,6 +14,7 @@
->>  #include <asm/regdef.h>
->>  #include <asm/stackframe.h>
->>  #include <asm/thread_info.h>
->> +#include <asm/unistd.h>
->>
->>         .text
->>         .cfi_sections   .debug_frame
->> @@ -62,9 +63,23 @@ SYM_FUNC_START(handle_syscall)
->>         li.d    tp, ~_THREAD_MASK
->>         and     tp, tp, sp
->>
->> +       /* Syscall number held in a7, we can store it in TI_SYSCALL. */
->> +        LONG_S  a7, tp, TI_SYSCALL
->> +
->>         move    a0, sp
->>         bl      do_syscall
->>
->> +       /*
->> +        * Syscall number held in a7 which is stored in TI_SYSCALL.
->> +        * rt_sigreturn call RESTORE_ALL_AND_RET.
->> +        * The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
->> +        */
->> +       LONG_L  t3, tp, TI_SYSCALL
->> +       li.w    t4, __NR_rt_sigreturn
->> +       beq     t3, t4, 1f
->> +
->> +       RESTORE_STATIC_SOME_SP_AND_RET
->> +1:
->>         RESTORE_ALL_AND_RET
->>  SYM_FUNC_END(handle_syscall)
->>
->> --
->> 2.1.0
->>
+---
+ include/linux/swap.h |  5 ++++-
+ mm/memcontrol.c      | 41 +++++++++++++++++++++++------------------
+ mm/vmscan.c          | 36 ++++++++++++++++++++++++++----------
+ 3 files changed, 53 insertions(+), 29 deletions(-)
+
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 0c0fed1b348f2..5a6766e417afe 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -411,10 +411,13 @@ extern void lru_cache_add_inactive_or_unevictable(struct page *page,
+ extern unsigned long zone_reclaimable_pages(struct zone *zone);
+ extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
+ 					gfp_t gfp_mask, nodemask_t *mask);
++
++#define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
++#define MEMCG_RECLAIM_CONTROLLED (1 << 2)
+ extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 						  unsigned long nr_pages,
+ 						  gfp_t gfp_mask,
+-						  bool may_swap);
++						  unsigned int reclaim_options);
+ extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
+ 						gfp_t gfp_mask, bool noswap,
+ 						pg_data_t *pgdat,
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index abec50f31fe64..9d0ba4cff5e16 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2319,20 +2319,16 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+ 				  gfp_t gfp_mask)
+ {
+ 	unsigned long nr_reclaimed = 0;
++	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
+ 
+ 	do {
+-		unsigned long pflags;
+-
+ 		if (page_counter_read(&memcg->memory) <=
+ 		    READ_ONCE(memcg->memory.high))
+ 			continue;
+-
+ 		memcg_memory_event(memcg, MEMCG_HIGH);
+-
+-		psi_memstall_enter(&pflags);
+ 		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
+-							     gfp_mask, true);
+-		psi_memstall_leave(&pflags);
++							     gfp_mask,
++							     reclaim_options);
+ 	} while ((memcg = parent_mem_cgroup(memcg)) &&
+ 		 !mem_cgroup_is_root(memcg));
+ 
+@@ -2576,9 +2572,8 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	struct page_counter *counter;
+ 	unsigned long nr_reclaimed;
+ 	bool passed_oom = false;
+-	bool may_swap = true;
++	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
+ 	bool drained = false;
+-	unsigned long pflags;
+ 
+ retry:
+ 	if (consume_stock(memcg, nr_pages))
+@@ -2593,7 +2588,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 		mem_over_limit = mem_cgroup_from_counter(counter, memory);
+ 	} else {
+ 		mem_over_limit = mem_cgroup_from_counter(counter, memsw);
+-		may_swap = false;
++		reclaim_options &= ~MEMCG_RECLAIM_MAY_SWAP;
+ 	}
+ 
+ 	if (batch > nr_pages) {
+@@ -2618,10 +2613,8 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 
+ 	memcg_memory_event(mem_over_limit, MEMCG_MAX);
+ 
+-	psi_memstall_enter(&pflags);
+ 	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
+-						    gfp_mask, may_swap);
+-	psi_memstall_leave(&pflags);
++						    gfp_mask, reclaim_options);
+ 
+ 	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
+ 		goto retry;
+@@ -3369,7 +3362,9 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
+ 	int ret;
+ 	bool limits_invariant;
+ 	struct page_counter *counter = memsw ? &memcg->memsw : &memcg->memory;
++	unsigned int reclaim_options = memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP;
+ 
++	reclaim_options |= MEMCG_RECLAIM_CONTROLLED;
+ 	do {
+ 		if (signal_pending(current)) {
+ 			ret = -EINTR;
+@@ -3403,7 +3398,7 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
+ 		}
+ 
+ 		if (!try_to_free_mem_cgroup_pages(memcg, 1,
+-					GFP_KERNEL, !memsw)) {
++					GFP_KERNEL, reclaim_options)) {
+ 			ret = -EBUSY;
+ 			break;
+ 		}
+@@ -3502,6 +3497,9 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
+ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
+ {
+ 	int nr_retries = MAX_RECLAIM_RETRIES;
++	unsigned int reclaim_options;
++
++	reclaim_options = MEMCG_RECLAIM_CONTROLLED | MEMCG_RECLAIM_MAY_SWAP;
+ 
+ 	/* we call try-to-free pages for make this cgroup empty */
+ 	lru_add_drain_all();
+@@ -3513,7 +3511,8 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
+ 		if (signal_pending(current))
+ 			return -EINTR;
+ 
+-		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL, true))
++		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
++						  reclaim_options))
+ 			nr_retries--;
+ 	}
+ 
+@@ -6215,6 +6214,7 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
+ 	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+ 	bool drained = false;
+ 	unsigned long high;
++	unsigned int reclaim_options;
+ 	int err;
+ 
+ 	buf = strstrip(buf);
+@@ -6223,6 +6223,7 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
+ 		return err;
+ 
+ 	page_counter_set_high(&memcg->memory, high);
++	reclaim_options = MEMCG_RECLAIM_CONTROLLED | MEMCG_RECLAIM_MAY_SWAP;
+ 
+ 	for (;;) {
+ 		unsigned long nr_pages = page_counter_read(&memcg->memory);
+@@ -6241,7 +6242,7 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
+ 		}
+ 
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
+-							 GFP_KERNEL, true);
++						GFP_KERNEL, reclaim_options);
+ 
+ 		if (!reclaimed && !nr_retries--)
+ 			break;
+@@ -6264,6 +6265,7 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
+ 	unsigned int nr_reclaims = MAX_RECLAIM_RETRIES;
+ 	bool drained = false;
+ 	unsigned long max;
++	unsigned int reclaim_options;
+ 	int err;
+ 
+ 	buf = strstrip(buf);
+@@ -6272,6 +6274,7 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
+ 		return err;
+ 
+ 	xchg(&memcg->memory.max, max);
++	reclaim_options = MEMCG_RECLAIM_CONTROLLED | MEMCG_RECLAIM_MAY_SWAP;
+ 
+ 	for (;;) {
+ 		unsigned long nr_pages = page_counter_read(&memcg->memory);
+@@ -6290,7 +6293,7 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
+ 
+ 		if (nr_reclaims) {
+ 			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
+-							  GFP_KERNEL, true))
++						GFP_KERNEL, reclaim_options))
+ 				nr_reclaims--;
+ 			continue;
+ 		}
+@@ -6419,6 +6422,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+ 	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+ 	unsigned long nr_to_reclaim, nr_reclaimed = 0;
++	unsigned int reclaim_options;
+ 	int err;
+ 
+ 	buf = strstrip(buf);
+@@ -6426,6 +6430,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 	if (err)
+ 		return err;
+ 
++	reclaim_options = MEMCG_RECLAIM_CONTROLLED | MEMCG_RECLAIM_MAY_SWAP;
+ 	while (nr_reclaimed < nr_to_reclaim) {
+ 		unsigned long reclaimed;
+ 
+@@ -6442,7 +6447,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg,
+ 						nr_to_reclaim - nr_reclaimed,
+-						GFP_KERNEL, true);
++						GFP_KERNEL, reclaim_options);
+ 
+ 		if (!reclaimed && !nr_retries--)
+ 			return -EAGAIN;
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index f7d9a683e3a7d..a972ff28f2d38 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -102,6 +102,9 @@ struct scan_control {
+ 	/* Can pages be swapped as part of reclaim? */
+ 	unsigned int may_swap:1;
+ 
++	/* Reclaim is controlled by userspace */
++	unsigned int controlled:1;
++
+ 	/*
+ 	 * Cgroup memory below memory.low is protected as long as we
+ 	 * don't threaten to OOM. If any cgroup is reclaimed at
+@@ -3125,9 +3128,10 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
+ 			    sc->priority);
+ 
+ 		/* Record the group's reclaim efficiency */
+-		vmpressure(sc->gfp_mask, memcg, false,
+-			   sc->nr_scanned - scanned,
+-			   sc->nr_reclaimed - reclaimed);
++		if (!sc->controlled)
++			vmpressure(sc->gfp_mask, memcg, false,
++				   sc->nr_scanned - scanned,
++				   sc->nr_reclaimed - reclaimed);
+ 
+ 	} while ((memcg = mem_cgroup_iter(target_memcg, memcg, NULL)));
+ }
+@@ -3250,9 +3254,10 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+ 	}
+ 
+ 	/* Record the subtree's reclaim efficiency */
+-	vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
+-		   sc->nr_scanned - nr_scanned,
+-		   sc->nr_reclaimed - nr_reclaimed);
++	if (!sc->controlled)
++		vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
++			   sc->nr_scanned - nr_scanned,
++			   sc->nr_reclaimed - nr_reclaimed);
+ 
+ 	if (sc->nr_reclaimed - nr_reclaimed)
+ 		reclaimable = true;
+@@ -3534,8 +3539,9 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
+ 		__count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
+ 
+ 	do {
+-		vmpressure_prio(sc->gfp_mask, sc->target_mem_cgroup,
+-				sc->priority);
++		if (!sc->controlled)
++			vmpressure_prio(sc->gfp_mask, sc->target_mem_cgroup,
++					sc->priority);
+ 		sc->nr_scanned = 0;
+ 		shrink_zones(zonelist, sc);
+ 
+@@ -3825,10 +3831,12 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
+ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 					   unsigned long nr_pages,
+ 					   gfp_t gfp_mask,
+-					   bool may_swap)
++					   unsigned int reclaim_options)
+ {
+ 	unsigned long nr_reclaimed;
++	unsigned long pflags;
+ 	unsigned int noreclaim_flag;
++	bool controlled_reclaim = reclaim_options & MEMCG_RECLAIM_CONTROLLED;
+ 	struct scan_control sc = {
+ 		.nr_to_reclaim = max(nr_pages, SWAP_CLUSTER_MAX),
+ 		.gfp_mask = (current_gfp_context(gfp_mask) & GFP_RECLAIM_MASK) |
+@@ -3838,7 +3846,8 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 		.priority = DEF_PRIORITY,
+ 		.may_writepage = !laptop_mode,
+ 		.may_unmap = 1,
+-		.may_swap = may_swap,
++		.may_swap = !!(reclaim_options & MEMCG_RECLAIM_MAY_SWAP),
++		.controlled = controlled_reclaim,
+ 	};
+ 	/*
+ 	 * Traverse the ZONELIST_FALLBACK zonelist of the current node to put
+@@ -3848,12 +3857,19 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 	struct zonelist *zonelist = node_zonelist(numa_node_id(), sc.gfp_mask);
+ 
+ 	set_task_reclaim_state(current, &sc.reclaim_state);
++
+ 	trace_mm_vmscan_memcg_reclaim_begin(0, sc.gfp_mask);
++
++	if (!controlled_reclaim)
++		psi_memstall_enter(&pflags);
+ 	noreclaim_flag = memalloc_noreclaim_save();
+ 
+ 	nr_reclaimed = do_try_to_free_pages(zonelist, &sc);
+ 
+ 	memalloc_noreclaim_restore(noreclaim_flag);
++	if (!controlled_reclaim)
++		psi_memstall_leave(&pflags);
++
+ 	trace_mm_vmscan_memcg_reclaim_end(nr_reclaimed);
+ 	set_task_reclaim_state(current, NULL);
+ 
+-- 
+2.37.0.rc0.104.g0611611a94-goog
 

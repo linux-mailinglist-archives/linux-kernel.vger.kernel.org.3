@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21C1557258
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E5D5571DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbiFWEtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
+        id S231879AbiFWEnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbiFWDLy (ORCPT
+        with ESMTP id S234915AbiFWDPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:11:54 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C995723177
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:11:51 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id bn8so4332521ljb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:11:51 -0700 (PDT)
+        Wed, 22 Jun 2022 23:15:36 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1709B344C5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:15:35 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so1288019pjz.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5jDNpLxr7cGIqADzC3sdvFFhgsnexUiy02PrUDQv/Rc=;
-        b=n3/SAojrz0/DrGQPMh4WqNM2k2NjcEc6nMVjVXXxCdYX2AIyZ6sytS0oG0ItZ4mnUM
-         XzKImwOIP3Y25IOGjXWiew1cP8zrvTIyKI7z5SigqInuCta2YY3bnLyIvj17PD8QLtP+
-         IhoABN7knreFAv/nNhpWcSc0umlHnQc30OCBrOVLgmk6RmwxabUzCbnAnWWix/PDDc8f
-         dFrB9wKnFBqufwQ/HJSDBRP+LkRXVIeURSo1LtMoPhWac5z8oG95PZoLls0MKkvS/PCn
-         zH8p1qVzN4Jxeu9xnfHFvwYzXokVFx01f+j+RwZSe1u5A5xTBJ7UrQsqZaXfXYbWlvf4
-         JP7Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5bbDJzaPEeyqFN7WwD+EORQ7ilgccQy1ek7UFlep3No=;
+        b=X5sqadBIfeoEVVqfCQqIihmyJ/vNxor6/7OLtJXs2ojCze2fPOZSGzn9+U46DpQVNz
+         zavmEZn/EKQIYUU8Jh7go63SfAzPN3ST9Ug8kFR9QUb7a9FMQyBAdOSL2k0Fs6Dxq/d/
+         SMsKZwCZLZblNzbXasWWin1+T/2DuVY7oXOPYhfBaY666vERTeiXdAwakZDqTCXe+Zpb
+         SE6hSJzM1gwCNC833ipQNwtkM0w9waPIXQpmkK9ysfpl0Cct0/0nRrP559XKURs/MhRg
+         4rZPkz259IpOxNMZBMC6ZGry5lc+jXn1xKtux2pLUJLf6MaBCFGCZxlkclU73D0LKgnT
+         d7+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5jDNpLxr7cGIqADzC3sdvFFhgsnexUiy02PrUDQv/Rc=;
-        b=zfhHj7cpu2pj8LswL95UBk93H2jioTwzuuPZ3Bs4JkRO0d1qr246+jCOOds4fTuTm+
-         15j1XOeeHe4BI6TeDpsTmgBb55ADffxpsCgKSsulFlJAKA/b4c5obupKL6g/Olq82S94
-         epordO9pb+K6DNlVL0BNZCCZ8m9DjJndrQCVpJ+aYhDbWc9Rn+LzC2kK0qeb7Lkd/Nvd
-         4HTqa9w2J1NEIVk9iFjtgHzeqzW1TL87cFqfyFimhaxi3SC7E8mOeJLtFqwNhuhKhwKw
-         nLt8f0b/QDu0YdS9hVRQsViBSL8YsiBfp8oIMqViashLHZsAfRn5hH0qT0pkQIOklMOQ
-         pn/w==
-X-Gm-Message-State: AJIora8wZJ3NKZ4qu5Din7UewQtYa+idcR01JEfLjohToCc7cgoCaVyl
-        dlRHsntt4f7vpB52SvYSMnCjUw==
-X-Google-Smtp-Source: AGRyM1uv21oXvWhnlrC67bIpBGrktWhfdrCeenGfpqFQHyuq00SiRyba6eLq2NOvwzgLyWGhXEbY6g==
-X-Received: by 2002:a2e:9283:0:b0:253:e175:dd84 with SMTP id d3-20020a2e9283000000b00253e175dd84mr3557956ljh.221.1655953910136;
-        Wed, 22 Jun 2022 20:11:50 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id a15-20020ac2504f000000b0047f665e2df8sm1754606lfm.257.2022.06.22.20.11.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5bbDJzaPEeyqFN7WwD+EORQ7ilgccQy1ek7UFlep3No=;
+        b=kzP9dKCMNTx7GlS0L1388OR2CYGxL7BP0EO9DG21PFDJl7WnFSuFUKzRSwlXa1u8Zi
+         qAFw+3nwsuHNAz1ePAiHvoRWZhDQd0UxYCp0+DmGqm7IIS0M8FOCJ5K+ThaIneFnoz1R
+         +rm74gtqFuWS9bEUTph5xcK1PeN2r4yGkrDqQbzF5JbNfQB/pzbNwd4yCxiHxFy9vRNe
+         5pgLmz4iaDvdgvGPwVJJzXE+jJrVwUbkI6kPOvHeNG8H0artRTFU4ChBnOX74NnMQ0Nq
+         OxYMPEoXu8zmSWfSVeNj+XoBQx2XwIBaqqVtiF2ZtviS32jIvhEW+UQm/d4vSRll7cmH
+         OrZQ==
+X-Gm-Message-State: AJIora/T8RSKOc3EzVZgxcBMSo77q1LPtHgk8Jmgkv9q7CpZVh9GDNIU
+        6AQYlsaSIGU6v3u5MU9+kJC/KUdPgmlZIQ==
+X-Google-Smtp-Source: AGRyM1t0HBVkrwZfOWux9s4jXHJ/Rbgt0brzGNBEeAIi0/0tjlE84bnQrXSt6fJQdOz/dL6F1PnofQ==
+X-Received: by 2002:a17:902:db10:b0:168:f71a:2fcb with SMTP id m16-20020a170902db1000b00168f71a2fcbmr36910923plx.165.1655954134610;
+        Wed, 22 Jun 2022 20:15:34 -0700 (PDT)
+Received: from localhost (c-67-180-87-133.hsd1.ca.comcast.net. [67.180.87.133])
+        by smtp.gmail.com with ESMTPSA id v16-20020aa78090000000b0051bd9981ccbsm14234328pff.39.2022.06.22.20.15.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 20:11:48 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id BC825104A32; Thu, 23 Jun 2022 06:14:01 +0300 (+03)
-Date:   Thu, 23 Jun 2022 06:14:01 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, shy828301@gmail.com,
-        willy@infradead.org, zokeefe@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/16] mm/huge_memory: access vm_page_prot with READ_ONCE
- in remove_migration_pmd
-Message-ID: <20220623031401.wdyt5ylin4aijzhh@box.shutemov.name>
-References: <20220622170627.19786-1-linmiaohe@huawei.com>
- <20220622170627.19786-3-linmiaohe@huawei.com>
+        Wed, 22 Jun 2022 20:15:34 -0700 (PDT)
+From:   Chang Yu <marcus.yu.56@gmail.com>
+To:     Larry.Finger@lwfinger.net
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Chang Yu <marcus.yu.56@gmail.com>
+Subject: [PATCH] staging: r8188eu: combine nested if statements into one
+Date:   Wed, 22 Jun 2022 20:15:15 -0700
+Message-Id: <20220623031515.402691-1-marcus.yu.56@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622170627.19786-3-linmiaohe@huawei.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,15 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 01:06:13AM +0800, Miaohe Lin wrote:
-> vma->vm_page_prot is read lockless from the rmap_walk, it may be updated
-> concurrently. Using READ_ONCE to prevent the risk of reading intermediate
-> values.
+Combine two nested if statements into a single one
 
-Have you checked all other vm_page_prot reads that they hold mmap_lock?
+Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_recv.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-I think the right fix would be to provide a helper to read vm_page_prot
-which does READ_ONCE() and use it everywhere. This seems more sustainable.
-
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index 599d3e55be76..c7564af39023 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -166,10 +166,8 @@ int rtw_free_recvframe(struct recv_frame *precvframe, struct __queue *pfree_recv
+ 
+ 	list_add_tail(&precvframe->list, get_list_head(pfree_recv_queue));
+ 
+-	if (padapter) {
+-		if (pfree_recv_queue == &precvpriv->free_recv_queue)
+-				precvpriv->free_recvframe_cnt++;
+-	}
++	if (padapter && pfree_recv_queue == &precvpriv->free_recv_queue)
++		precvpriv->free_recvframe_cnt++;
+ 
+ 	spin_unlock_bh(&pfree_recv_queue->lock);
+ 
 -- 
- Kirill A. Shutemov
+2.36.1
+

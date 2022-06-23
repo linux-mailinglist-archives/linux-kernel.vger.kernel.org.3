@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C875585AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471D0558594
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235808AbiFWSAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S235395AbiFWR7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236215AbiFWR66 (ORCPT
+        with ESMTP id S235891AbiFWR5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:58:58 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1A9993DB;
-        Thu, 23 Jun 2022 10:16:12 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 25NHFruH009674;
-        Fri, 24 Jun 2022 02:15:54 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 25NHFruH009674
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1656004554;
-        bh=PFMCdlXbalpZFV18Es/vk2cklPdZH8cwyXNb6XthAtM=;
+        Thu, 23 Jun 2022 13:57:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E836F4B5;
+        Thu, 23 Jun 2022 10:15:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B63861E1D;
+        Thu, 23 Jun 2022 17:15:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672EEC341C6;
+        Thu, 23 Jun 2022 17:15:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656004550;
+        bh=8R+RW0DB9EQ2uVvtR45zq4/JAUy2m7hPxnil1cTbtlk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PGzfKulegRNZxR2tbL3yTm1lM0mxjmLymAvvDYwdtqaJ1Wlxof/aOiJOgXgvUeSie
-         IqeRfm9m4aVrRqmeKraWU1fbwbbiAfMNG3VSPHP8cyzit7eNNDbBPA+PbdL+PAIkyh
-         wU6D5X6/u0x4mcMo7ouQN6j1XEVK02wVWjlRzsJDdynSpxdgvGjVMo+XBHyyMh38T9
-         7I965GY+H49vFWdFYgV9MeKyftpcrZtv+6dEcqaqKM+yi7Qh0PxrvAIE51r8+LVoNA
-         SScyNDkuCWDtzRjQl2KJWnlo44d7lI5SdXhG/ZxBVAUnSPkyE1ibA4PyC4J3d8OmuH
-         Ex0oRKe5rZ1Ow==
-X-Nifty-SrcIP: [209.85.221.50]
-Received: by mail-wr1-f50.google.com with SMTP id v14so28885383wra.5;
-        Thu, 23 Jun 2022 10:15:54 -0700 (PDT)
-X-Gm-Message-State: AJIora/Qy2Q7QGBhTnB1mllCMCxbAHrH2eqzK8rT2xlPpigcIphZ6og+
-        kZd98hqFqVZhd0cKwxt3r7aTCDCtac6OOZ0z+qg=
-X-Google-Smtp-Source: AGRyM1u5H7gMkGpAckFdpl8BPR/XeZ+9/LZ/rWTFIyiIiwjHNpr74i/u6/TtqTiQVwJ/IOx+s6IKcIftpmxZRC4G5eY=
-X-Received: by 2002:a5d:5e92:0:b0:21a:278c:b901 with SMTP id
- ck18-20020a5d5e92000000b0021a278cb901mr9327218wrb.461.1656004552543; Thu, 23
- Jun 2022 10:15:52 -0700 (PDT)
+        b=mtxeAVFNaaUOJEFUJk7ElG9DH1UpHpB/WNY7S4GrmCBJ31fzAmELxc5zbtlTNydIx
+         FYkxzZ/oqMyAIiOJB9C42FooAnuW7HA2I2atqBgZ59duf9XuPRV+Zwny2acXTiTueu
+         HG/G5bsTK5vZPQmSthSNalyuORED+RwbABSp254wcTd2GoZtGtYlBQHlnPOmCWzLtt
+         vZIRaRd4RzSZaL7plFY0pX3htWj8+YcJJpTQvDKkDCYF7D5I6VdCUs8SES1J27w1cW
+         IRESsHWyRF/hVr21wXjpueLL8Q05Xy9iHqA5UcGqf400nTnWxSqsXbmlmxsgulGt/+
+         vYpp/sE/CXecw==
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3178acf2a92so870667b3.6;
+        Thu, 23 Jun 2022 10:15:50 -0700 (PDT)
+X-Gm-Message-State: AJIora/hmev4rmtUmLQWZ7oc9DYvh68wHJvaN5cYi6PwC80TqEUfKR7W
+        SvZCDPGwdvky0zSxG6UT4mx4iPyIZWn6sO2ibZo=
+X-Google-Smtp-Source: AGRyM1t1olztSDrteGXYMB7kj+MmjwKdDzfi/VVXgAWzrN71mL+qoji3GFIBqR9bTs5XYPv9Msej5AWqsmKYH2U9il8=
+X-Received: by 2002:a81:2f45:0:b0:317:71c7:fcdc with SMTP id
+ v66-20020a812f45000000b0031771c7fcdcmr11702449ywv.73.1656004549455; Thu, 23
+ Jun 2022 10:15:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621133526.29662-1-mikoxyzzz@gmail.com> <2817735.mvXUDI8C0e@sakura.myxoz.lan>
- <CAK7LNAQqJc74MGFyU6fvhM9VkDKYUXyCt0NF1qAr1RmfUqC0=w@mail.gmail.com> <2650588.mvXUDI8C0e@sakura.myxoz.lan>
-In-Reply-To: <2650588.mvXUDI8C0e@sakura.myxoz.lan>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 24 Jun 2022 02:15:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ_4QUfBxRu2HpPS99Ay7JTcqFTHsrBmrPk+d8So5tjOQ@mail.gmail.com>
-Message-ID: <CAK7LNAQ_4QUfBxRu2HpPS99Ay7JTcqFTHsrBmrPk+d8So5tjOQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Kconfig: -O3 enablement
-To:     Miko Larsson <mikoxyzzz@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chris Down <chris@chrisdown.name>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Oleksandr Natalenko <oleksandr@redhat.com>
+References: <20220623165552.38645-1-logang@deltatee.com>
+In-Reply-To: <20220623165552.38645-1-logang@deltatee.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 23 Jun 2022 10:15:38 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW50vG=M6JhBEe3qwef10GQt84cg9p_ji5tqyRnMA1-xRQ@mail.gmail.com>
+Message-ID: <CAPhsuW50vG=M6JhBEe3qwef10GQt84cg9p_ji5tqyRnMA1-xRQ@mail.gmail.com>
+Subject: Re: [PATCH] md/raid5: Fix divide type in raid5_make_request()
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 2:00 AM Miko Larsson <mikoxyzzz@gmail.com> wrote:
+On Thu, Jun 23, 2022 at 9:56 AM Logan Gunthorpe <logang@deltatee.com> wrote:
 >
-> On Thursday, 23 June 2022 17:44:57 CEST Masahiro Yamada wrote:
-> > On Fri, Jun 24, 2022 at 12:42 AM Miko Larsson <mikoxyzzz@gmail.com> wrote:
-> > > On Wednesday, 22 June 2022 03:57:34 CEST Masahiro Yamada wrote:
-> > > > If you want to say "use this option carefully",
-> > > > EXPERT might be another option.
-> > > >
-> > > >     depends on ARC || EXPERT
-> > >
-> > > Yeah, this would be a fair compromise, though I think it would be
-> > > better to use "visible if" instead of "depends on". I can get a v2 of
-> > > the series together if this is desired.
-> >
-> > Why is "visible if" better than "depends on"?
-> >
+> 0day reports a build failure on the hexagon architecture:
 >
-> Technically it most likely doesn't matter, but logically it makes more
-> sense, since we'd make CC_OPTIMIZE_FOR_PERFORMANCE_O3 be visible if
-> we're on ARC or if we have EXPERT enabled, instead of depending on
-> them. But yeah, it probably doesn't matter.
+>   ld.lld: error: undefined symbol: __hexagon_udivdi3
+>      referenced by raid5.c
+>         md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
+>      referenced by raid5.c
+>         md/raid5.o:(raid5_make_request) in archive drivers/built-in.a
+>      did you mean: __hexagon_udivsi3
+>         defined in: arch/hexagon/built-in.a(lib/udivsi3.o)
+>
+> This is caused by using DIV_ROUND_UP on a sector_t type.
+>
+> The actual value is known to be less than 256 so a wide 64bit divide
+> here is not desirable. Thus cast the argument to an int to ensure it
+> uses a 32bit divide.
 
+I force pushed an update that uses DIV_ROUND_UP_SECTOR_T instead.
+I guess that should also work?
 
-Did you write and test the code?
+Thanks,
+Song
 
-
-"visible if" is only supported for "menu".
-This is clearly documented at line 207
-of Documentation/kbuild/kconfig-language.rst
-
-
-Using "visible if" for config entry will just
-result in the syntax error.
-
-
-
-
-
+>
+> Fixes: 681fb14a7100 ("md/raid5: Pivot raid5_make_request()")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+> ---
+>  drivers/md/raid5.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> index 5723a497108a..9d25696b793d 100644
+> --- a/drivers/md/raid5.c
+> +++ b/drivers/md/raid5.c
+> @@ -6091,7 +6091,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+>         bi->bi_next = NULL;
+>
+>         bitmap_set(ctx.sectors_to_do, 0,
+> -                  DIV_ROUND_UP(ctx.last_sector - logical_sector,
+> +                  DIV_ROUND_UP((int)(ctx.last_sector - logical_sector),
+>                                 RAID5_STRIPE_SECTORS(conf)));
+>
+>         pr_debug("raid456: %s, logical %llu to %llu\n", __func__,
+>
+> base-commit: 57c19f921f8081c1a9444dc7f3f6b3ea43fe612e
 > --
-> ~miko
+> 2.30.2
 >
->
->
-
-
---
-Best Regards
-Masahiro Yamada

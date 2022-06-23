@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508A9558301
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6342558515
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiFWRXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S235316AbiFWRyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbiFWRWF (ORCPT
+        with ESMTP id S235191AbiFWRv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:22:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E781B90FA3;
-        Thu, 23 Jun 2022 10:01:06 -0700 (PDT)
+        Thu, 23 Jun 2022 13:51:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674FEA18D;
+        Thu, 23 Jun 2022 10:12:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08DE0B8248C;
-        Thu, 23 Jun 2022 17:01:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502F5C3411B;
-        Thu, 23 Jun 2022 17:01:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9861F61D1E;
+        Thu, 23 Jun 2022 17:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 854BBC3411B;
+        Thu, 23 Jun 2022 17:12:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003663;
-        bh=OmzC7V4eFcpWTGj4IkCutE4YTGLbRDKXs5Xy15gQa+0=;
+        s=korg; t=1656004355;
+        bh=4+zUTGtNcS5lJ5osrctbx8IJCZEIwR0zeawXRMFO8s0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Boh8dPTV/bXFJoMtVWR/UUq+tL86COvbRMHF5epFy7gHk2TxAT59JnLEQBSb0cZLp
-         FG0EWtUPg1b/QXwSXKyUU8MB2V5yMJYnrwi3hL3t7gwI2vg4Aa5HgETLVfay6p1bLE
-         78FAC6HVtmKhKr7+OvES5/LW5VXQ3oK/TXaT6r0o=
+        b=zF5bsGnIcfK9wG4M+PISXfICsOgAsxRoP4ewgduS+MjxeV5EV6QHnTrQvDJ9Ax7FV
+         fPBUM5+ab//FQ4JeSaCXHDhTOcRMQ+jYI0dqWCpsvmrVqd2BjEhM1Ipdtndimorvz1
+         sNPbKtVDfHa9B2l4pavM1/T7XaHfO028cAZQrpuM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Keerthy <j-keerthy@ti.com>, Stephen Boyd <swboyd@chromium.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 045/237] random: avoid warnings for !CONFIG_NUMA builds
+Subject: [PATCH 4.19 012/234] random: Use wait_event_freezable() in add_hwgenerator_randomness()
 Date:   Thu, 23 Jun 2022 18:41:19 +0200
-Message-Id: <20220623164344.450645767@linuxfoundation.org>
+Message-Id: <20220623164343.406758077@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +57,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Stephen Boyd <swboyd@chromium.org>
 
-commit ab9a7e27044b87ff2be47b8f8e095400e7fccc44 upstream.
+commit 59b569480dc8bb9dce57cdff133853a842dfd805 upstream.
 
-As crng_initialize_secondary() is only called by do_numa_crng_init(),
-and the latter is under ifdeffery for CONFIG_NUMA, when CONFIG_NUMA is
-not selected the compiler will warn that the former is unused:
+Sebastian reports that after commit ff296293b353 ("random: Support freezable
+kthreads in add_hwgenerator_randomness()") we can call might_sleep() when the
+task state is TASK_INTERRUPTIBLE (state=1). This leads to the following warning.
 
-| drivers/char/random.c:820:13: warning: 'crng_initialize_secondary' defined but not used [-Wunused-function]
-|   820 | static void crng_initialize_secondary(struct crng_state *crng)
-|       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+ do not call blocking ops when !TASK_RUNNING; state=1 set at [<00000000349d1489>] prepare_to_wait_event+0x5a/0x180
+ WARNING: CPU: 0 PID: 828 at kernel/sched/core.c:6741 __might_sleep+0x6f/0x80
+ Modules linked in:
 
-Stephen reports that this happens for x86_64 noallconfig builds.
+ CPU: 0 PID: 828 Comm: hwrng Not tainted 5.3.0-rc7-next-20190903+ #46
+ RIP: 0010:__might_sleep+0x6f/0x80
 
-We could move crng_initialize_secondary() and crng_init_try_arch() under
-the CONFIG_NUMA ifdeffery, but this has the unfortunate property of
-separating them from crng_initialize_primary() and
-crng_init_try_arch_early() respectively. Instead, let's mark
-crng_initialize_secondary() as __maybe_unused.
+ Call Trace:
+  kthread_freezable_should_stop+0x1b/0x60
+  add_hwgenerator_randomness+0xdd/0x130
+  hwrng_fillfn+0xbf/0x120
+  kthread+0x10c/0x140
+  ret_from_fork+0x27/0x50
 
-Link: https://lore.kernel.org/r/20200310121747.GA49602@lakrids.cambridge.arm.com
-Fixes: 5cbe0f13b51a ("random: split primary/secondary crng init paths")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+We shouldn't call kthread_freezable_should_stop() from deep within the
+wait_event code because the task state is still set as
+TASK_INTERRUPTIBLE instead of TASK_RUNNING and
+kthread_freezable_should_stop() will try to call into the freezer with
+the task in the wrong state. Use wait_event_freezable() instead so that
+it calls schedule() in the right place and tries to enter the freezer
+when the task state is TASK_RUNNING instead.
+
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Keerthy <j-keerthy@ti.com>
+Fixes: ff296293b353 ("random: Support freezable kthreads in add_hwgenerator_randomness()")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |   12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -800,7 +800,7 @@ static bool crng_init_try_arch(struct cr
- 	return arch_init;
- }
- 
--static void crng_initialize_secondary(struct crng_state *crng)
-+static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
+@@ -327,6 +327,7 @@
+ #include <linux/percpu.h>
+ #include <linux/cryptohash.h>
+ #include <linux/fips.h>
++#include <linux/freezer.h>
+ #include <linux/ptrace.h>
+ #include <linux/workqueue.h>
+ #include <linux/irq.h>
+@@ -2483,7 +2484,6 @@ void add_hwgenerator_randomness(const ch
+ 				size_t entropy)
  {
- 	memcpy(&crng->state[0], "expand 32-byte k", 16);
- 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
+ 	struct entropy_store *poolp = &input_pool;
+-	bool frozen = false;
+ 
+ 	if (unlikely(crng_init == 0)) {
+ 		crng_fast_load(buffer, count);
+@@ -2494,13 +2494,11 @@ void add_hwgenerator_randomness(const ch
+ 	 * We'll be woken up again once below random_write_wakeup_thresh,
+ 	 * or when the calling thread is about to terminate.
+ 	 */
+-	wait_event_interruptible(random_write_wait,
+-			kthread_freezable_should_stop(&frozen) ||
++	wait_event_freezable(random_write_wait,
++			kthread_should_stop() ||
+ 			ENTROPY_BITS(&input_pool) <= random_write_wakeup_bits);
+-	if (!frozen) {
+-		mix_pool_bytes(poolp, buffer, count);
+-		credit_entropy_bits(poolp, entropy);
+-	}
++	mix_pool_bytes(poolp, buffer, count);
++	credit_entropy_bits(poolp, entropy);
+ }
+ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+ 
 
 

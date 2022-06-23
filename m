@@ -2,97 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0275557A02
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ACA557A04
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiFWMIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
+        id S231341AbiFWMJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbiFWMIp (ORCPT
+        with ESMTP id S231576AbiFWMI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:08:45 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF424B403;
-        Thu, 23 Jun 2022 05:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1655986122; x=1687522122;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9/CCr0snWfftSFhkeAYUhF2+vCU0/VTKAyn0ef5b+1M=;
-  b=RfLwjfKgpEQJskz0RHl1y/wsjOtM21oPgA41GOcm36Prlk0L+V6Lt+ae
-   jxD/4pLS5An/DikbhT92gC1r0r3pZlHOir14EHNaWyaX6585ZZoI5+tc6
-   eam11olTQOYvdbXOq+Xu9iSL3RsSWyZDBJ+kxstTdCyOrw+3c+Rlzm/To
-   ZgjU4ZAVxLK/nSgHoKbv9o1zeFfONkeabUw22LWSSeGD/ndYGt0jRpzJH
-   A/D4nJ8F5GiI6828iI9n3umJFtbZnfGSguJB1xsMMAvpEiFXXVUjBsK9J
-   kcObcbG9vysqfGvdILhrn9dnYrbAuw4H38YiOudt78jtrRD3Hw2FJTIUR
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,216,1650924000"; 
-   d="scan'208";a="24631790"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 23 Jun 2022 14:08:39 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 23 Jun 2022 14:08:39 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 23 Jun 2022 14:08:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1655986119; x=1687522119;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9/CCr0snWfftSFhkeAYUhF2+vCU0/VTKAyn0ef5b+1M=;
-  b=HqDs5ssF8L1EkiBFh2ujtpvauytr8wW9ynjPp2xOnD4EQm4zS6BPcHVl
-   lxCOGE9jVnfEHBD/8sdZQllqvQTP/1hCMj4QZY6SY4Dsotw+F09xiTIbq
-   kPGuT6sVq23fcovCydMWi8mwrwIkHuq0JdWTnYE+8HL1BZeE7m/EB/0Z2
-   jXy8EAKffPqzrkqqO6YcQzKY7pIfLm1sMMrgzEp3d8Y8kwIXrn9ZM9Ms+
-   zqG3kEyie1oOETmmWcRSdR2GYyqnkSUJwZUXPsUDFrdSKw9PLlNJufhlU
-   z97RAyDul51fuxwcMhrOWtYtivSC6bw3XtK+NKpUAday6W/pIZCXrl64Z
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,216,1650924000"; 
-   d="scan'208";a="24631789"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 23 Jun 2022 14:08:39 +0200
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C37F4280056;
-        Thu, 23 Jun 2022 14:08:38 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Saravana Kannan <saravanak@google.com>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-Date:   Thu, 23 Jun 2022 14:08:38 +0200
-Message-ID: <4799738.LvFx2qVVIh@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <YrFzK6EiVvXmzVG6@atomide.com>
-References: <20220601070707.3946847-1-saravanak@google.com> <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
+        Thu, 23 Jun 2022 08:08:58 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA5C4B1FC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:08:51 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LTJs66bLJzkWLt;
+        Thu, 23 Jun 2022 20:07:06 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 23 Jun 2022 20:08:49 +0800
+Subject: Re: [PATCH 04/16] mm/huge_memory: use helper touch_pud in
+ huge_pud_set_accessed
+To:     Muchun Song <songmuchun@bytedance.com>
+CC:     <akpm@linux-foundation.org>, <shy828301@gmail.com>,
+        <willy@infradead.org>, <zokeefe@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220622170627.19786-1-linmiaohe@huawei.com>
+ <20220622170627.19786-5-linmiaohe@huawei.com>
+ <YrQLY7WzgXPM/LqJ@FVFYT0MHHV2J.usts.net>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <80a029bc-3613-1150-cbd3-134d340b3973@huawei.com>
+Date:   Thu, 23 Jun 2022 20:08:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YrQLY7WzgXPM/LqJ@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,84 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am Dienstag, 21. Juni 2022, 09:28:43 CEST schrieb Tony Lindgren:
-> Hi,
+On 2022/6/23 14:42, Muchun Song wrote:
+> On Thu, Jun 23, 2022 at 01:06:15AM +0800, Miaohe Lin wrote:
+>> Use helper touch_pud to set pud accessed to simplify the code and improve
+>> the readability. No functional change intended.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/huge_memory.c | 14 ++++----------
+>>  1 file changed, 4 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index a26580da8011..a0c0e4bf9c1e 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -1281,21 +1281,15 @@ int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+>>  
+>>  void huge_pud_set_accessed(struct vm_fault *vmf, pud_t orig_pud)
+>>  {
+>> -	pud_t entry;
+>> -	unsigned long haddr;
+>> -	bool write = vmf->flags & FAULT_FLAG_WRITE;
+>> +	int flags = 0;
+>>  
+>>  	vmf->ptl = pud_lock(vmf->vma->vm_mm, vmf->pud);
+>>  	if (unlikely(!pud_same(*vmf->pud, orig_pud)))
+>>  		goto unlock;
+>>  
+>> -	entry = pud_mkyoung(orig_pud);
+>> -	if (write)
+>> -		entry = pud_mkdirty(entry);
+>> -	haddr = vmf->address & HPAGE_PUD_MASK;
+>> -	if (pudp_set_access_flags(vmf->vma, haddr, vmf->pud, entry, write))
+>> -		update_mmu_cache_pud(vmf->vma, vmf->address, vmf->pud);
+>> -
+>> +	if (vmf->flags & FAULT_FLAG_WRITE)
+>> +		flags = FOLL_WRITE;
 > 
-> * Saravana Kannan <saravanak@google.com> [700101 02:00]:
-> > Now that fw_devlink=on by default and fw_devlink supports
-> > "power-domains" property, the execution will never get to the point
-> > where driver_deferred_probe_check_state() is called before the supplier
-> > has probed successfully or before deferred probe timeout has expired.
-> > 
-> > So, delete the call and replace it with -ENODEV.
+> FOLL_* flags are used for follow_page(). But huge_pud_set_accessed() is used in mm fault
+> path. It is a little weird to me to use FOLL_WRITE here. I suggest replace the last
+> parameter of touch_pud() to "bool writable", then passing "vmf->flags & FAULT_FLAG_WRITE"
+> to it instead of converting from FAULT_FLAG* flag to FOLL* flag.
+
+Sounds good. Thanks!
+
 > 
-> Looks like this causes omaps to not boot in Linux next. With this
-> simple-pm-bus fails to probe initially as the power-domain is not
-> yet available. On platform_probe() genpd_get_from_provider() returns
-> -ENOENT.
+> Thanks.
 > 
-> Seems like other stuff is potentially broken too, any ideas on
-> how to fix this?
-
-I think I'm hit by this as well, although I do not get a lockup.
-In my case I'm using arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts 
-and probing of 38320000.blk-ctrl fails as the power-domain is not (yet) 
-registed. See the (filtered) dmesg output:
-
-> [    0.744245] PM: Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@0 [    0.744756] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@2 [    0.745012] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@3 [    0.745268] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@4 [    0.746121] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@7 [    0.746400] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@8 [    0.746665] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@9 [    0.746927] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@a [    0.748870]
-> imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV: failed to attach bus power
-> domain [    1.265279] PM: Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@5 [    1.265861] PM:
-> Added domain provider from
-> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@6
-
-blk-ctrl@38320000 requires the power-domain 'pgc_vpu', which is power-domain@6 
-in pgc.
-
-Best regards,
-Alexander
-
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> > 
-> >  drivers/base/power/domain.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 739e52cd4aba..3e86772d5fac 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev,
-> > struct device *base_dev,> 
-> >  		mutex_unlock(&gpd_list_lock);
-> >  		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
-> >  		
-> >  			__func__, PTR_ERR(pd));
-> > 
-> > -		return driver_deferred_probe_check_state(base_dev);
-> > +		return -ENODEV;
-> > 
-> >  	}
-> >  	
-> >  	dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-
-
-
+>> +	touch_pud(vmf->vma, vmf->address, vmf->pud, flags);
+>>  unlock:
+>>  	spin_unlock(vmf->ptl);
+>>  }
+>> -- 
+>> 2.23.0
+>>
+>>
+> .
+> 
 

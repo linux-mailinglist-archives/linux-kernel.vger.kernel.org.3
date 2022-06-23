@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692885570EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9455570F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377806AbiFWCM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 22:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S238420AbiFWCMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 22:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377675AbiFWCMS (ORCPT
+        with ESMTP id S230296AbiFWCMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 22:12:18 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2976220F3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:12:17 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id jb13so3329729plb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LO7XuaEC/0vDNLbgeDoJilJKS3NWSolp4n621az3TKo=;
-        b=YTdodIHecq0rIHPbOUNfMDsBOBFCCQZTpt8Mae1FUo/OzFM6XdXMJqT6FAiu7e9CXF
-         PxEgtptDJcI0oMyWCxN8NsK8HX4VKQAnnRy7sEUIStaqxwAiGptBSPMulN6V+Gcit6n2
-         NDv7VnHGcSOV1n6yNb6uEy6L+zlw+RJ1HHkXI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LO7XuaEC/0vDNLbgeDoJilJKS3NWSolp4n621az3TKo=;
-        b=m+4pcqRZjbFkc5U8VYrrsY6y220v5rP5GAnmpS/GS0SxcTmmpBW9jC8aE5zNmLbKJ3
-         tm6udUUWTfpysGnhNrpVOFFDZOFftjOffKKU8bh5iH10POL/CUg6dtMCW60oOuPe1PU0
-         LSfqotlewWQD2ogGojJCvBbihCGOGm6RnTQdZYOvOtM+vgm8vQsfUwO5CkcEIQ6HyRr6
-         g0AOaDYB3iD4LlUR4PvbFfnIOatYRJqSOQAMbQX/uggm76sW7fGfEmYV32aBXOJnuHG7
-         HJX9AGzeRpCDr8w9CUPAPuAKdaytIexs5VHsOOh1lnC/JWV38SDak18CDKwFAndRc7yG
-         oMjQ==
-X-Gm-Message-State: AJIora827/EkthGY65NnfRS5Gc4oCtSBnaoH+S093CpsRtxAc9LUgk+F
-        osKe9lWlhMfUl92XUp13H9mZ7Q==
-X-Google-Smtp-Source: AGRyM1vyoRc4GfoYYaOKyQJWI5gEHK7cxz3myYUl/C/h7waRa2CFuT2tcdE9FdsAox69KLspbd1rCg==
-X-Received: by 2002:a17:902:ee55:b0:16a:5e4:26b with SMTP id 21-20020a170902ee5500b0016a05e4026bmr29350254plo.29.1655950337415;
-        Wed, 22 Jun 2022 19:12:17 -0700 (PDT)
-Received: from judyhsiao0523.c.googlers.com.com (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
-        by smtp.gmail.com with ESMTPSA id m6-20020a170902768600b0016196bd15f4sm6194000pll.15.2022.06.22.19.12.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 19:12:16 -0700 (PDT)
-From:   Judy Hsiao <judyhsiao@chromium.org>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Chen-Yu Tsai <wenst@chromium.org>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Judy Hsiao <judyhsiao@chromium.org>
-Subject: [PATCH v5 3/3] ASoC: dt-bindings: rockchip: Document pinctrl-names for i2s
-Date:   Thu, 23 Jun 2022 02:11:53 +0000
-Message-Id: <20220623021153.587423-4-judyhsiao@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-In-Reply-To: <20220623021153.587423-1-judyhsiao@chromium.org>
-References: <20220623021153.587423-1-judyhsiao@chromium.org>
+        Wed, 22 Jun 2022 22:12:42 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B9B2DAA0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:12:40 -0700 (PDT)
+X-UUID: 5c88b84ab1e44ff8a0e15fee5939852a-20220623
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:5eb5f367-5a71-4b8e-8560-c83c262d8b7c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:0e6c3938-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 5c88b84ab1e44ff8a0e15fee5939852a-20220623
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1641060623; Thu, 23 Jun 2022 10:12:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 23 Jun 2022 10:12:32 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 23 Jun 2022 10:12:31 +0800
+Message-ID: <561adc680c9af8e8813baf698f2f6ba67ce046e9.camel@mediatek.com>
+Subject: Re: [PATCH v2 2/5] iommu/mediatek: Add error path for loop of
+ mm_dts_parse
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        <iommu@lists.linux-foundation.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>,
+        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
+        <xueqi.zhang@mediatek.com>, Guenter Roeck <groeck@chromium.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Date:   Thu, 23 Jun 2022 10:12:31 +0800
+In-Reply-To: <22c40a7f-d759-5b4a-f554-cf679102d91f@gmail.com>
+References: <20220616054203.11365-1-yong.wu@mediatek.com>
+         <20220616054203.11365-3-yong.wu@mediatek.com>
+         <22c40a7f-d759-5b4a-f554-cf679102d91f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,31 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch documents pinctrl-names for i2s.
+On Thu, 2022-06-16 at 15:49 +0200, Matthias Brugger wrote:
+> 
+> On 16/06/2022 07:42, Yong Wu wrote:
+> > The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the
+> > i+1
+> > larb is parsed fail(return -EINVAL), we should of_node_put for the
+> > 0..i
+> > larbs. In the fail path, one of_node_put matches with
+> > of_parse_phandle in
+> > it.
+> > 
+> > Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with
+> > the MM TYPE")
+> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> > ---
+> >   drivers/iommu/mtk_iommu.c | 21 ++++++++++++++++-----
+> >   1 file changed, 16 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> > index 3b2489e8a6dd..ab24078938bf 100644
+> > --- a/drivers/iommu/mtk_iommu.c
+> > +++ b/drivers/iommu/mtk_iommu.c
+> > @@ -1071,12 +1071,12 @@ static int mtk_iommu_mm_dts_parse(struct
+> > device *dev, struct component_match **m
+> >   
+> 
+> Don't we need to call the goto also on error case of:
+> 
+> larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
 
-Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
----
- Documentation/devicetree/bindings/sound/rockchip-i2s.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thanks very much.
 
-diff --git a/Documentation/devicetree/bindings/sound/rockchip-i2s.yaml b/Documentation/devicetree/bindings/sound/rockchip-i2s.yaml
-index 5ea16b8ef93f..7e36e389e976 100644
---- a/Documentation/devicetree/bindings/sound/rockchip-i2s.yaml
-+++ b/Documentation/devicetree/bindings/sound/rockchip-i2s.yaml
-@@ -61,6 +61,13 @@ properties:
-           - const: tx
-           - const: rx
- 
-+  pinctrl-names:
-+    oneOf:
-+      - const: default
-+      - items:
-+          - const: bclk_on
-+          - const: bclk_off
-+
-   power-domains:
-     maxItems: 1
- 
--- 
-2.37.0.rc0.104.g0611611a94-goog
+exactly right. I will add in next version.
+
+> Regards,
+> Matthias
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A684558317
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613845580FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbiFWRYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
+        id S233220AbiFWQy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiFWRXS (ORCPT
+        with ESMTP id S233877AbiFWQvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:23:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E29862C2F;
-        Thu, 23 Jun 2022 10:01:49 -0700 (PDT)
+        Thu, 23 Jun 2022 12:51:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B640EE07;
+        Thu, 23 Jun 2022 09:50:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5492661408;
-        Thu, 23 Jun 2022 17:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2548EC3411B;
-        Thu, 23 Jun 2022 17:01:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C56EAB82490;
+        Thu, 23 Jun 2022 16:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35202C3411B;
+        Thu, 23 Jun 2022 16:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003707;
-        bh=2e6ozog50rVhgaO01r/Nkzs/rPS+Giyrtcuxu+y0u9s=;
+        s=korg; t=1656003023;
+        bh=t1sQBqOkiTHsARiRLmonyqAeVDU+sFjt7joITwh4v3c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PW3TAizDryF3KCYyWYNlOcNqQnlN4QfDh8aVS4KFkf3PBSJysa8jLEGKTERRhlphe
-         J9Z0TqkYp51YKzGjDlYBy0SQEpy0VkrBY9V5B2jrPg3ouZvyoBxAdSDP7vdzVNJuQU
-         lPgqeXdqP33DMhufRFPFQosFHyFfhv4zsnanVQdw=
+        b=M6DGAINYazMIhrkiLph1dSJNWqNnltInZMloGYVK0aZSX4U0GRW5wkyaltfKk/k78
+         0qEnq0xKtxqM3QsE3gJTlUCVqnxczE3gVowzCMc6IQynj+SYoVOSYnbJuEG+ZQBdi4
+         6YKeSnmTx0EUyvzAwM11H+k2p9Ut8dzC1utEAcdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 062/237] random: do not sign extend bytes for rotation when mixing
-Date:   Thu, 23 Jun 2022 18:41:36 +0200
-Message-Id: <20220623164344.941835765@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.9 104/264] random: cleanup fractional entropy shift constants
+Date:   Thu, 23 Jun 2022 18:41:37 +0200
+Message-Id: <20220623164347.012838506@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +57,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 0d9488ffbf2faddebc6bac055bfa6c93b94056a3 upstream.
+commit 18263c4e8e62f7329f38f5eadc568751242ca89c upstream.
 
-By using `char` instead of `unsigned char`, certain platforms will sign
-extend the byte when `w = rol32(*bytes++, input_rotate)` is called,
-meaning that bit 7 is overrepresented when mixing. This isn't a real
-problem (unless the mixer itself is already broken) since it's still
-invertible, but it's not quite correct either. Fix this by using an
-explicit unsigned type.
+The entropy estimator is calculated in terms of 1/8 bits, which means
+there are various constants where things are shifted by 3. Move these
+into our pool info enum with the other relevant constants. While we're
+at it, move an English assertion about sizes into a proper BUILD_BUG_ON
+so that the compiler can ensure this invariant.
 
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |   28 +++++++++++++---------------
+ 1 file changed, 13 insertions(+), 15 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -549,7 +549,7 @@ static void _mix_pool_bytes(struct entro
- 	unsigned long i, tap1, tap2, tap3, tap4, tap5;
- 	int input_rotate;
- 	int wordmask = r->poolinfo->poolwords - 1;
--	const char *bytes = in;
-+	const unsigned char *bytes = in;
- 	__u32 w;
+@@ -360,16 +360,6 @@
+ /* #define ADD_INTERRUPT_BENCH */
  
- 	tap1 = r->poolinfo->tap1;
+ /*
+- * To allow fractional bits to be tracked, the entropy_count field is
+- * denominated in units of 1/8th bits.
+- *
+- * 2*(POOL_ENTROPY_SHIFT + poolbitshift) must <= 31, or the multiply in
+- * credit_entropy_bits() needs to be 64 bits wide.
+- */
+-#define POOL_ENTROPY_SHIFT 3
+-#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
+-
+-/*
+  * If the entropy count falls under this number of bits, then we
+  * should wake up processes which are selecting or polling on write
+  * access to /dev/random.
+@@ -426,8 +416,13 @@ enum poolinfo {
+ 	POOL_WORDMASK = POOL_WORDS - 1,
+ 	POOL_BYTES = POOL_WORDS * sizeof(u32),
+ 	POOL_BITS = POOL_BYTES * 8,
+-	POOL_BITSHIFT = ilog2(POOL_WORDS) + 5,
+-	POOL_FRACBITS = POOL_WORDS << (POOL_ENTROPY_SHIFT + 5),
++	POOL_BITSHIFT = ilog2(POOL_BITS),
++
++	/* To allow fractional bits to be tracked, the entropy_count field is
++	 * denominated in units of 1/8th bits. */
++	POOL_ENTROPY_SHIFT = 3,
++#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
++	POOL_FRACBITS = POOL_BITS << POOL_ENTROPY_SHIFT,
+ 
+ 	/* x^128 + x^104 + x^76 + x^51 +x^25 + x + 1 */
+ 	POOL_TAP1 = 104,
+@@ -653,6 +648,9 @@ static void credit_entropy_bits(int nbit
+ 	int entropy_count, entropy_bits, orig;
+ 	int nfrac = nbits << POOL_ENTROPY_SHIFT;
+ 
++	/* Ensure that the multiplication can avoid being 64 bits wide. */
++	BUILD_BUG_ON(2 * (POOL_ENTROPY_SHIFT + POOL_BITSHIFT) > 31);
++
+ 	if (!nbits)
+ 		return;
+ 
+@@ -688,13 +686,13 @@ retry:
+ 		/* The +2 corresponds to the /4 in the denominator */
+ 
+ 		do {
+-			unsigned int anfrac = min(pnfrac, POOL_FRACBITS/2);
++			unsigned int anfrac = min(pnfrac, POOL_FRACBITS / 2);
+ 			unsigned int add =
+-				((POOL_FRACBITS - entropy_count)*anfrac*3) >> s;
++				((POOL_FRACBITS - entropy_count) * anfrac * 3) >> s;
+ 
+ 			entropy_count += add;
+ 			pnfrac -= anfrac;
+-		} while (unlikely(entropy_count < POOL_FRACBITS-2 && pnfrac));
++		} while (unlikely(entropy_count < POOL_FRACBITS - 2 && pnfrac));
+ 	}
+ 
+ 	if (WARN_ON(entropy_count < 0)) {
 
 

@@ -2,303 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F07557A98
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B913557A95
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiFWMoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S231836AbiFWMoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiFWMom (ORCPT
+        with ESMTP id S231803AbiFWMom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Jun 2022 08:44:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CE936E14
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F4637A93
         for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1655988280; x=1687524280;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9f4fHvjwPUQcIHH8mDgrJtA+HQ7lV5L45kcdcYMN6Ro=;
-  b=bI+hBRDOV+5ovHYotox1w8qMnnMN1u1B7qjYY8FFlxFTPSTNXUnNnqni
-   Ca0X1fgq8hKMT5iH/gcBP9NGD0ppI6VS4pCI6gxdsfMPKK/S32aEscc0V
-   S0/ERyd1FhbO6wIVY7nAtMh8lqTAkytABaYcRRsKWWKlvPCayCIwNTcyk
-   qNZdz2lydx0Bh6BHDNwdG8dWgSf14ktW5evrumSriI91qyV8XGRawEn+u
-   zmBlVgP9paoSpJrrZaEl/rmv0BUkyGaq88gizJ7IgDYTs92CR9b5Iimhh
-   /WaIiIKvCqhXX4ZXAT9vuMbXM+e3kd72+nNl0MmPuKijr9SsCK8zY8AQU
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="279475065"
+  bh=BFbAMACBm8TDlyXmQJtQstcYXw4c11FwG4ToNhazoJg=;
+  b=UHMoR5LVi1uU6Jeut52h8a3xPnQ/rk1bQHYv7fDvyU1TUAIJvEgoiELR
+   /PnaitzN5IfrQ3VX66QMpiar3JSHmIjBvG4S5XiMxAtY8RBSfwZFfWFIN
+   6pUZf02vCG+zjnWJyoGKdpRrGjrURiPTUVAMuyu9/TaYCmYrFLES2ttYA
+   oH0Prb/3M4VmYuFVpjDKpUEDVffbx4mMewmg82/UQVH+Y/AnNIwWjfVsv
+   RiaNm6hGYJk53DGIy3+RAdbGTHrXU/SMGh0zm8I3PPWwrGEvHp/4yg+1p
+   eUv81oMAxFGceZm7+STenbkeyYB3asEa4JRlawgY+X8rIgtSVFetZ0wV8
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281437808"
 X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="279475065"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 05:44:40 -0700
+   d="scan'208";a="281437808"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 05:44:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="592688808"
+   d="scan'208";a="765282867"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Jun 2022 05:44:38 -0700
+  by orsmga005.jf.intel.com with ESMTP; 23 Jun 2022 05:44:39 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o4MCM-0001Gb-A7;
+        id 1o4MCM-0001GU-7b;
         Thu, 23 Jun 2022 12:44:38 +0000
-Date:   Thu, 23 Jun 2022 20:44:21 +0800
+Date:   Thu, 23 Jun 2022 20:44:24 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
+To:     Bart Van Assche <bvanassche@acm.org>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tramp_11 17/21] kernel/bpf/syscall.c:2994:22: error:
- implicit declaration of function 'bpf_tramp_id_alloc'; did you mean
- 'bpf_map_kzalloc'?
-Message-ID: <202206231811.4oKVaGhJ-lkp@intel.com>
+Subject: [bvanassche:block-bitwise-opf 12/50] fs/ntfs3/fsntfs.c:1488:60:
+ sparse: sparse: incorrect type in argument 3 (different base types)
+Message-ID: <202206231848.pQZIrKC6-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_11
-head:   c807110aa605281263da02a78af57847f5c4275e
-commit: ac6153f8956b357b52e16ea68b70ea51aff1752c [17/21] bpf: Use bpf_tramp_id object in attach
-config: arc-randconfig-r043-20220622 (https://download.01.org/0day-ci/archive/20220623/202206231811.4oKVaGhJ-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=ac6153f8956b357b52e16ea68b70ea51aff1752c
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tramp_11
-        git checkout ac6153f8956b357b52e16ea68b70ea51aff1752c
+tree:   https://github.com/bvanassche/linux block-bitwise-opf
+head:   cdae45bfee03111b49b421b4c01dcddb643f64a2
+commit: 7852822e9b1bd84a693fa1d56b7c872f6c0cf6ba [12/50] block: Use the new blk_opf_t type
+config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220623/202206231848.pQZIrKC6-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-31-g4880bd19-dirty
+        # https://github.com/bvanassche/linux/commit/7852822e9b1bd84a693fa1d56b7c872f6c0cf6ba
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche block-bitwise-opf
+        git checkout 7852822e9b1bd84a693fa1d56b7c872f6c0cf6ba
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash kernel/bpf/
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ntfs3/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
 
-   kernel/bpf/syscall.c: In function 'bpf_tracing_prog_attach':
->> kernel/bpf/syscall.c:2994:22: error: implicit declaration of function 'bpf_tramp_id_alloc'; did you mean 'bpf_map_kzalloc'? [-Werror=implicit-function-declaration]
-    2994 |                 id = bpf_tramp_id_alloc();
-         |                      ^~~~~~~~~~~~~~~~~~
-         |                      bpf_map_kzalloc
->> kernel/bpf/syscall.c:2994:20: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    2994 |                 id = bpf_tramp_id_alloc();
-         |                    ^
->> kernel/bpf/syscall.c:3007:17: error: implicit declaration of function 'bpf_tramp_id_init' [-Werror=implicit-function-declaration]
-    3007 |                 bpf_tramp_id_init(id, tgt_prog, NULL, btf_id);
-         |                 ^~~~~~~~~~~~~~~~~
-   kernel/bpf/syscall.c:3053:20: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    3053 |                 id = bpf_tramp_id_alloc();
-         |                    ^
->> kernel/bpf/syscall.c:3062:36: error: implicit declaration of function 'bpf_tramp_id_is_equal' [-Werror=implicit-function-declaration]
-    3062 |         if (!prog->aux->dst_id || !bpf_tramp_id_is_equal(id, prog->aux->dst_id)) {
-         |                                    ^~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   kernel/bpf/verifier.c: In function 'check_attach_btf_id':
->> kernel/bpf/verifier.c:15073:14: error: implicit declaration of function 'bpf_tramp_id_alloc'; did you mean 'bpf_map_kzalloc'? [-Werror=implicit-function-declaration]
-   15073 |         id = bpf_tramp_id_alloc();
-         |              ^~~~~~~~~~~~~~~~~~
-         |              bpf_map_kzalloc
->> kernel/bpf/verifier.c:15073:12: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   15073 |         id = bpf_tramp_id_alloc();
-         |            ^
->> kernel/bpf/verifier.c:15077:9: error: implicit declaration of function 'bpf_tramp_id_init' [-Werror=implicit-function-declaration]
-   15077 |         bpf_tramp_id_init(id, tgt_prog, prog->aux->attach_btf, btf_id);
-         |         ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+sparse warnings: (new ones prefixed by >>)
+>> fs/ntfs3/fsntfs.c:1488:60: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted blk_opf_t [usertype] opf @@     got unsigned int [usertype] op @@
+   fs/ntfs3/fsntfs.c:1488:60: sparse:     expected restricted blk_opf_t [usertype] opf
+   fs/ntfs3/fsntfs.c:1488:60: sparse:     got unsigned int [usertype] op
 
+vim +1488 fs/ntfs3/fsntfs.c
 
-vim +2994 kernel/bpf/syscall.c
+82cae269cfa953 Konstantin Komarov 2021-08-13  1445  
+e8b8e97f91b80f Kari Argillander   2021-08-03  1446  /*
+e8b8e97f91b80f Kari Argillander   2021-08-03  1447   * ntfs_bio_pages - Read/write pages from/to disk.
+e8b8e97f91b80f Kari Argillander   2021-08-03  1448   */
+82cae269cfa953 Konstantin Komarov 2021-08-13  1449  int ntfs_bio_pages(struct ntfs_sb_info *sbi, const struct runs_tree *run,
+82cae269cfa953 Konstantin Komarov 2021-08-13  1450  		   struct page **pages, u32 nr_pages, u64 vbo, u32 bytes,
+82cae269cfa953 Konstantin Komarov 2021-08-13  1451  		   u32 op)
+82cae269cfa953 Konstantin Komarov 2021-08-13  1452  {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1453  	int err = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1454  	struct bio *new, *bio = NULL;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1455  	struct super_block *sb = sbi->sb;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1456  	struct block_device *bdev = sb->s_bdev;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1457  	struct page *page;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1458  	u8 cluster_bits = sbi->cluster_bits;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1459  	CLST lcn, clen, vcn, vcn_next;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1460  	u32 add, off, page_idx;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1461  	u64 lbo, len;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1462  	size_t run_idx;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1463  	struct blk_plug plug;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1464  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1465  	if (!bytes)
+82cae269cfa953 Konstantin Komarov 2021-08-13  1466  		return 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1467  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1468  	blk_start_plug(&plug);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1469  
+e8b8e97f91b80f Kari Argillander   2021-08-03  1470  	/* Align vbo and bytes to be 512 bytes aligned. */
+82cae269cfa953 Konstantin Komarov 2021-08-13  1471  	lbo = (vbo + bytes + 511) & ~511ull;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1472  	vbo = vbo & ~511ull;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1473  	bytes = lbo - vbo;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1474  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1475  	vcn = vbo >> cluster_bits;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1476  	if (!run_lookup_entry(run, vcn, &lcn, &clen, &run_idx)) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1477  		err = -ENOENT;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1478  		goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1479  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1480  	off = vbo & sbi->cluster_mask;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1481  	page_idx = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1482  	page = pages[0];
+82cae269cfa953 Konstantin Komarov 2021-08-13  1483  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1484  	for (;;) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1485  		lbo = ((u64)lcn << cluster_bits) + off;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1486  		len = ((u64)clen << cluster_bits) - off;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1487  new_bio:
+07888c665b405b Christoph Hellwig  2022-01-24 @1488  		new = bio_alloc(bdev, nr_pages - page_idx, op, GFP_NOFS);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1489  		if (bio) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1490  			bio_chain(bio, new);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1491  			submit_bio(bio);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1492  		}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1493  		bio = new;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1494  		bio->bi_iter.bi_sector = lbo >> 9;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1495  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1496  		while (len) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1497  			off = vbo & (PAGE_SIZE - 1);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1498  			add = off + len > PAGE_SIZE ? (PAGE_SIZE - off) : len;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1499  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1500  			if (bio_add_page(bio, page, add, off) < add)
+82cae269cfa953 Konstantin Komarov 2021-08-13  1501  				goto new_bio;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1502  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1503  			if (bytes <= add)
+82cae269cfa953 Konstantin Komarov 2021-08-13  1504  				goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1505  			bytes -= add;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1506  			vbo += add;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1507  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1508  			if (add + off == PAGE_SIZE) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1509  				page_idx += 1;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1510  				if (WARN_ON(page_idx >= nr_pages)) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1511  					err = -EINVAL;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1512  					goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1513  				}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1514  				page = pages[page_idx];
+82cae269cfa953 Konstantin Komarov 2021-08-13  1515  			}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1516  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1517  			if (len <= add)
+82cae269cfa953 Konstantin Komarov 2021-08-13  1518  				break;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1519  			len -= add;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1520  			lbo += add;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1521  		}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1522  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1523  		vcn_next = vcn + clen;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1524  		if (!run_get_entry(run, ++run_idx, &vcn, &lcn, &clen) ||
+82cae269cfa953 Konstantin Komarov 2021-08-13  1525  		    vcn != vcn_next) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1526  			err = -ENOENT;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1527  			goto out;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1528  		}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1529  		off = 0;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1530  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1531  out:
+82cae269cfa953 Konstantin Komarov 2021-08-13  1532  	if (bio) {
+82cae269cfa953 Konstantin Komarov 2021-08-13  1533  		if (!err)
+82cae269cfa953 Konstantin Komarov 2021-08-13  1534  			err = submit_bio_wait(bio);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1535  		bio_put(bio);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1536  	}
+82cae269cfa953 Konstantin Komarov 2021-08-13  1537  	blk_finish_plug(&plug);
+82cae269cfa953 Konstantin Komarov 2021-08-13  1538  
+82cae269cfa953 Konstantin Komarov 2021-08-13  1539  	return err;
+82cae269cfa953 Konstantin Komarov 2021-08-13  1540  }
+82cae269cfa953 Konstantin Komarov 2021-08-13  1541  
 
-  2942	
-  2943	static int bpf_tracing_prog_attach(struct bpf_prog *prog,
-  2944					   int tgt_prog_fd,
-  2945					   u32 btf_id,
-  2946					   u64 bpf_cookie)
-  2947	{
-  2948		struct bpf_attach_target_info tgt_info_buf = {};
-  2949		struct bpf_attach_target_info *tgt_info = &tgt_info_buf;
-  2950		struct bpf_link_primer link_primer;
-  2951		struct bpf_prog *tgt_prog = NULL;
-  2952		struct bpf_tramp_id *id = NULL;
-  2953		struct bpf_tracing_link *link;
-  2954		int err;
-  2955	
-  2956		switch (prog->type) {
-  2957		case BPF_PROG_TYPE_TRACING:
-  2958			if (prog->expected_attach_type != BPF_TRACE_FENTRY &&
-  2959			    prog->expected_attach_type != BPF_TRACE_FEXIT &&
-  2960			    prog->expected_attach_type != BPF_MODIFY_RETURN) {
-  2961				err = -EINVAL;
-  2962				goto out_put_prog;
-  2963			}
-  2964			break;
-  2965		case BPF_PROG_TYPE_EXT:
-  2966			if (prog->expected_attach_type != 0) {
-  2967				err = -EINVAL;
-  2968				goto out_put_prog;
-  2969			}
-  2970			break;
-  2971		case BPF_PROG_TYPE_LSM:
-  2972			if (prog->expected_attach_type != BPF_LSM_MAC) {
-  2973				err = -EINVAL;
-  2974				goto out_put_prog;
-  2975			}
-  2976			break;
-  2977		default:
-  2978			err = -EINVAL;
-  2979			goto out_put_prog;
-  2980		}
-  2981	
-  2982		if (!!tgt_prog_fd != !!btf_id) {
-  2983			err = -EINVAL;
-  2984			goto out_put_prog;
-  2985		}
-  2986	
-  2987		if (tgt_prog_fd) {
-  2988			/* For now we only allow new targets for BPF_PROG_TYPE_EXT */
-  2989			if (prog->type != BPF_PROG_TYPE_EXT) {
-  2990				err = -EINVAL;
-  2991				goto out_put_prog;
-  2992			}
-  2993	
-> 2994			id = bpf_tramp_id_alloc();
-  2995			if (!id) {
-  2996				err = -ENOMEM;
-  2997				goto out_put_prog;
-  2998			}
-  2999	
-  3000			tgt_prog = bpf_prog_get(tgt_prog_fd);
-  3001			if (IS_ERR(tgt_prog)) {
-  3002				err = PTR_ERR(tgt_prog);
-  3003				tgt_prog = NULL;
-  3004				goto out_put_prog;
-  3005			}
-  3006	
-> 3007			bpf_tramp_id_init(id, tgt_prog, NULL, btf_id);
-  3008		}
-  3009	
-  3010		link = kzalloc(sizeof(*link), GFP_USER);
-  3011		if (!link) {
-  3012			err = -ENOMEM;
-  3013			goto out_put_prog;
-  3014		}
-  3015		bpf_link_init(&link->link, BPF_LINK_TYPE_TRACING,
-  3016			      &bpf_tracing_link_lops, prog);
-  3017		link->attach_type = prog->expected_attach_type;
-  3018		link->attach.tp.cookie = bpf_cookie;
-  3019		link->attach.tp.prog = prog;
-  3020	
-  3021		mutex_lock(&prog->aux->dst_mutex);
-  3022	
-  3023		/* There are a few possible cases here:
-  3024		 *
-  3025		 * - if prog->aux->dst_key is set, the program was just loaded
-  3026		 *   and not yet attached to anything, so we can use the values stored
-  3027		 *   in prog->aux
-  3028		 *
-  3029		 * - if prog->aux->dst_key is NULL, the program has already been
-  3030	         *   attached to a target and its initial target was cleared (below)
-  3031		 *
-  3032		 * - if tgt_prog != NULL, the caller specified tgt_prog_fd +
-  3033		 *   target_btf_id using the link_create API.
-  3034		 *
-  3035		 * - if tgt_prog == NULL when this function was called using the old
-  3036		 *   raw_tracepoint_open API, and we need a target from prog->aux
-  3037		 *
-  3038		 * - if prog->aux->dst_key and tgt_prog is NULL, the program
-  3039		 *   was detached and is going for re-attachment.
-  3040		 */
-  3041		if (!prog->aux->dst_id && !tgt_prog) {
-  3042			/*
-  3043			 * Allow re-attach for TRACING and LSM programs. If it's
-  3044			 * currently linked, bpf_trampoline_link_prog will fail.
-  3045			 * EXT programs need to specify tgt_prog_fd, so they
-  3046			 * re-attach in separate code path.
-  3047			 */
-  3048			if (prog->type != BPF_PROG_TYPE_TRACING &&
-  3049			    prog->type != BPF_PROG_TYPE_LSM) {
-  3050				err = -EINVAL;
-  3051				goto out_unlock;
-  3052			}
-  3053			id = bpf_tramp_id_alloc();
-  3054			if (!id) {
-  3055				err = -ENOMEM;
-  3056				goto out_unlock;
-  3057			}
-  3058			btf_id = prog->aux->attach_btf_id;
-  3059			bpf_tramp_id_init(id, NULL, prog->aux->attach_btf, btf_id);
-  3060		}
-  3061	
-> 3062		if (!prog->aux->dst_id || !bpf_tramp_id_is_equal(id, prog->aux->dst_id)) {
-  3063			/* If there is no saved target, or the specified target is
-  3064			 * different from the destination specified at load time, we
-  3065			 * need a new trampoline and a check for compatibility
-  3066			 */
-  3067	
-  3068			err = bpf_check_attach_target(NULL, prog, tgt_prog, btf_id,
-  3069						      tgt_info);
-  3070			if (err)
-  3071				goto out_unlock;
-  3072		} else {
-  3073			/* The caller didn't specify a target, or the target was the
-  3074			 * same as the destination supplied during program load. This
-  3075			 * means we can reuse the trampoline and reference from program
-  3076			 * load time, and there is no need to allocate a new one. This
-  3077			 * can only happen once for any program, as the saved values in
-  3078			 * prog->aux are cleared below.
-  3079			 */
-  3080			id = prog->aux->dst_id;
-  3081			tgt_prog = prog->aux->dst_prog;
-  3082			tgt_info = &prog->aux->dst_tgt_info;
-  3083		}
-  3084	
-  3085		link->attach.id = id;
-  3086	
-  3087		err = bpf_link_prime(&link->link, &link_primer);
-  3088		if (err)
-  3089			goto out_unlock;
-  3090	
-  3091		err = bpf_trampoline_attach(&link->attach, tgt_info);
-  3092		if (err) {
-  3093			bpf_link_cleanup(&link_primer);
-  3094			link = NULL;
-  3095			goto out_unlock;
-  3096		}
-  3097	
-  3098		link->tgt_prog = tgt_prog;
-  3099	
-  3100		/* Always clear the trampoline and target prog from prog->aux to make
-  3101		 * sure the original attach destination is not kept alive after a
-  3102		 * program is (re-)attached to another target.
-  3103		 */
-  3104		if (prog->aux->dst_prog &&
-  3105		    (tgt_prog_fd || !bpf_tramp_id_is_equal(id, prog->aux->dst_id)))
-  3106			/* got extra prog ref from syscall, or attaching to different prog */
-  3107			bpf_prog_put(prog->aux->dst_prog);
-  3108	
-  3109		prog->aux->dst_prog = NULL;
-  3110		prog->aux->dst_id = NULL;
-  3111		mutex_unlock(&prog->aux->dst_mutex);
-  3112	
-  3113		return bpf_link_settle(&link_primer);
-  3114	out_unlock:
-  3115		mutex_unlock(&prog->aux->dst_mutex);
-  3116		kfree(link);
-  3117	out_put_prog:
-  3118		if (tgt_prog_fd && tgt_prog)
-  3119			bpf_prog_put(tgt_prog);
-  3120		return err;
-  3121	}
-  3122	
+:::::: The code at line 1488 was first introduced by commit
+:::::: 07888c665b405b1cd3577ddebfeb74f4717a84c4 block: pass a block_device and opf to bio_alloc
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
 
 -- 
 0-DAY CI Kernel Test Service

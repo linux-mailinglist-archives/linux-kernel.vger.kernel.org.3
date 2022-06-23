@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9847E557E35
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2F6557E37
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiFWOvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
+        id S231890AbiFWOvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiFWOvR (ORCPT
+        with ESMTP id S231467AbiFWOvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:51:17 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DD54707B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:51:13 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s10so23575592ljh.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:51:13 -0700 (PDT)
+        Thu, 23 Jun 2022 10:51:37 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD90C47AF3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:51:30 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z13so3298780lfj.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=openvz-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=k8OfFf3zteeGV4NoXsW7mYQBRm/UT3jxMOm3SilJFI0=;
-        b=hsg2w+abNmxBuNt4Iv4r+V21/tVetnU4U/D2SV+gm392hJCFDklntUJOdfxD3yiiPB
-         MvGH3he8zMgV8AYjS8QEzaWnf3xrJB9UhPqWdSpP+22GycMOwBSKrGK7aJI0AfhBEPL2
-         2NAxJyMQ816jqIBDzXSq4r4bLuH82L0hneLKdzdBxFx3SI+2TxhhWeT7s/0YEabpfnTG
-         6MBUo28BBuCeUwV6cMOrM0zubkHeEB1KFTTA4V0riTQBjXFDcFelIFctLJlb4yTs7sM7
-         XEx9XLZ9Sh20UTK7vVfDEkaniIvsLVt0dL4fjbigg+OME17vZ4F8f7WcUs3ubT10zDlJ
-         FNbw==
+        bh=waMbR4Vj3d2Yx3tC82MaoYQ2maUSxBJAR+0Iakz5FDI=;
+        b=YNvr4xo3AtwQzeXJO0a0Zs/pJf/cfhwOyUbueOMf0dW7rfYbzeNXzzeTckjXHZagnx
+         IL85gF0d8dj8iu8D/NKKFFpKBqeU48c+utRpVkVyvj5DixZAKXeknlRq8N2LyZGOTi+R
+         hGN8BepYHBGzguV4vsrHooHWcagsJSb29bCFzzGcw2QHmp3PiwCLs5lRYky96HtSBt7M
+         EA4L0Sp+aBwKz/fZyvAIqFUTbxk9l9Tji0K20GNE67AGI98/zeiTxuFXgKawjUa1NN+o
+         2Sces7CzSgUk2DMCdi7DOn11celMtSmNASSbOpBFHfM4AG9IAqxKziAlLGfROZMJkciM
+         MZ7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=k8OfFf3zteeGV4NoXsW7mYQBRm/UT3jxMOm3SilJFI0=;
-        b=e8m4VZCpp3xVVM+ktPz2evq4KHJbmyDxtRGHIavVR+rcZqD9YaxMR5RuaZkQwUM6T+
-         XsM4MSqCKCz7O7zkziKhKiI3sfecXYqNQeeKrBpimKHm5JT1CJSDWd9iBHnQ7TwUisO9
-         SVgwGM1bjxkY6tPFQQoIxOgqNVkHMxkBxAEYgNN9kmEcO819ATD7NC1RmiH0ZaVRK0b6
-         F0mgZL9JfSgwLrwFACrklcghGX4lKLE6zuIKxzVxpfnsk53FT7VZLrrdVNJXRAjx2TxI
-         sRYKfCG85gaQbLL6aWfU7INuaq8vjHpiOBFnKPq8m1FgDK+K6IOCM2wvFzf9Ccmjrkur
-         OCdw==
-X-Gm-Message-State: AJIora99Nu9waL7COVgsjMGafcDzOueRVX8Za3nsiiOVHynRFAWLiyKF
-        t9Cyn9kwJ9rnY5hYld+MLH/H9g==
-X-Google-Smtp-Source: AGRyM1vQgmT9L5cc+RG2sEr65xPeqzzwssWUnhh/SDAvla0mPtj3N0Dc6e5uRv4S9hq2r/hbwJI8Ug==
-X-Received: by 2002:a05:651c:11c1:b0:25a:8968:b834 with SMTP id z1-20020a05651c11c100b0025a8968b834mr4871877ljo.212.1655995872261;
-        Thu, 23 Jun 2022 07:51:12 -0700 (PDT)
+        bh=waMbR4Vj3d2Yx3tC82MaoYQ2maUSxBJAR+0Iakz5FDI=;
+        b=eVb7q0NciLN4dUwc27r/5JwctJmI3FoOSikRUmfjMBJ2wHmvFpR2wvjQcCyOea6pJw
+         imlsAQSQU8OQmI2zbINWuOtapJSnZAQgOvSnfjJ414CEp/x8yv6FK6qIB4i1BGOx2TpA
+         xRNcJZy++sk2CCTTsxg0LOX2xdathp5VzJXvAULjnpl0RaS9/P/pyLwFRPWOsxy9XtRa
+         LmwokIa7MwyQyqvbe/pawieX8VkMIbR0kFzgzPaVKMK20QlcBj1VrWYWTglIeGsmRnI+
+         up6C59z0AdlpbYX9/05TZ9+NBJWN1iwZjeBT7wesZD6xmhg2aTUYh0P1XhYL+kPSXVcE
+         42Ig==
+X-Gm-Message-State: AJIora9wtyX5ZONdLn5AvLtOPJe4PzE6FswCg4fGraW5ZDC13gOKVIlD
+        /xjI9n8XxTY0H3Gba/lvZPQmNA==
+X-Google-Smtp-Source: AGRyM1vjQLvKYp0+eENX0/rDukz52soKH3xoEj53Z2BfUrKic9B7uCsBN+XLEWAdw3JqKLyNVVN0kA==
+X-Received: by 2002:a05:6512:228c:b0:479:7a60:5e0c with SMTP id f12-20020a056512228c00b004797a605e0cmr5584521lfu.323.1655995890370;
+        Thu, 23 Jun 2022 07:51:30 -0700 (PDT)
 Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id a4-20020a19ca04000000b0047255d210dcsm2247637lfg.11.2022.06.23.07.51.11
+        by smtp.gmail.com with ESMTPSA id s16-20020a056512203000b0047fa40b5052sm354193lfs.62.2022.06.23.07.51.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 07:51:11 -0700 (PDT)
-Message-ID: <97e05495-d74e-275c-0739-8abff974cdc5@openvz.org>
-Date:   Thu, 23 Jun 2022 17:51:11 +0300
+        Thu, 23 Jun 2022 07:51:30 -0700 (PDT)
+Message-ID: <b837e43e-f05c-9ae7-a582-c6d2d5907ea5@openvz.org>
+Date:   Thu, 23 Jun 2022 17:51:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
 From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH mm v5 4/9] memcg: enable accounting for struct simple_xattr
+Subject: [PATCH mm v5 5/9] memcg: enable accounting for percpu allocation of
+ struct psi_group_cpu
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
@@ -68,7 +69,7 @@ References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
 Content-Language: en-US
 In-Reply-To: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -78,57 +79,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernfs nodes are quite small kernel objects, however there are few
-scenarios where it consumes significant piece of all allocated memory:
+struct pci_group_cpu is percpu allocated for each new cgroup and can
+consume a significant portion of all allocated memory on nodes with
+a large number of CPUs.
 
-1) creating a new netdevice allocates ~50Kb of memory, where ~10Kb
-   was allocated for 80+ kernfs nodes.
-
-2) cgroupv2 mkdir allocates ~60Kb of memory, ~10Kb of them are kernfs
-   structures.
-
-3) Shakeel Butt reports that Google has workloads which create 100s
-   of subcontainers and they have observed high system overhead
-   without memcg accounting of kernfs.
-
-Usually new kernfs node creates few other objects:
-
-Allocs  Alloc   Allocation
+Common part of the cgroup creation:
+Allocs  Alloc   $1*$2   Sum     Allocation
 number  size
 --------------------------------------------
-1   +  128      (__kernfs_new_node+0x4d)        kernfs node
-1   +   88      (__kernfs_iattrs+0x57)          kernfs iattrs
-1   +   96      (simple_xattr_alloc+0x28)       simple_xattr
-1       32      (simple_xattr_set+0x59)
-1       8       (__kernfs_new_node+0x30)
+16  ~   352     5632    5632    KERNFS
+1   +   4096    4096    9728    (cgroup_mkdir+0xe4)
+1       584     584     10312   (radix_tree_node_alloc.constprop.0+0x89)
+1       192     192     10504   (__d_alloc+0x29)
+2       72      144     10648   (avc_alloc_node+0x27)
+2       64      128     10776   (percpu_ref_init+0x6a)
+1       64      64      10840   (memcg_list_lru_alloc+0x21a)
+percpu:
+1   +   192     192     192     call_site=psi_cgroup_alloc+0x1e
+1   +   96      96      288     call_site=cgroup_rstat_init+0x5f
+2       12      24      312     call_site=percpu_ref_init+0x23
+1       6       6       318     call_site=__percpu_counter_init+0x22
 
-'+' -- to be accounted
-
-This patch enables accounting for struct simple_xattr. Size of this
-structure depends on userspace and can grow over 4Kb.
+ '+' -- to be accounted,
+ '~' -- partially accounted
 
 Signed-off-by: Vasily Averin <vvs@openvz.org>
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
 Acked-by: Shakeel Butt <shakeelb@google.com>
 Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- fs/xattr.c | 2 +-
+ kernel/sched/psi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/xattr.c b/fs/xattr.c
-index e8dd03e4561e..98dcf6600bd9 100644
---- a/fs/xattr.c
-+++ b/fs/xattr.c
-@@ -1001,7 +1001,7 @@ struct simple_xattr *simple_xattr_alloc(const void *value, size_t size)
- 	if (len < sizeof(*new_xattr))
- 		return NULL;
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index a337f3e35997..0da10159d3d9 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -957,7 +957,7 @@ int psi_cgroup_alloc(struct cgroup *cgroup)
+ 	if (static_branch_likely(&psi_disabled))
+ 		return 0;
  
--	new_xattr = kvmalloc(len, GFP_KERNEL);
-+	new_xattr = kvmalloc(len, GFP_KERNEL_ACCOUNT);
- 	if (!new_xattr)
- 		return NULL;
- 
+-	cgroup->psi.pcpu = alloc_percpu(struct psi_group_cpu);
++	cgroup->psi.pcpu = alloc_percpu_gfp(struct psi_group_cpu, GFP_KERNEL_ACCOUNT);
+ 	if (!cgroup->psi.pcpu)
+ 		return -ENOMEM;
+ 	group_init(&cgroup->psi);
 -- 
 2.36.1
 

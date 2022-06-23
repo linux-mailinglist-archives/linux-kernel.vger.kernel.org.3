@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88591558961
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E3B55895E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiFWToq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S231558AbiFWTot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiFWToW (ORCPT
+        with ESMTP id S229658AbiFWToW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Jun 2022 15:44:22 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2620EBF6B;
-        Thu, 23 Jun 2022 12:37:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E36BE033;
+        Thu, 23 Jun 2022 12:37:10 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 28B3066017E1;
-        Thu, 23 Jun 2022 20:37:06 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 09F7966017E9;
+        Thu, 23 Jun 2022 20:37:07 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656013027;
-        bh=SszYF29Xfhiq12kJBG1G1/y6Ph0MBRLy+lseB3tR5Bg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Z6O3cmIT9MDb6i9dCp+YmBKAakgPjcwqeZydaCw41M/aIXlJJyJLkODehzc4YAp2n
-         s0bxjA4iwc5oPI9PWj+HeVyKl8OWuoV+l0GVbG3qyE6PLThQ3RojLsTqXaX2SRPwjX
-         hUvA09udlN+lGjovbWQFFVCtM4sUhPswe+cf74h6BrQuBAzjz3rlu1Is4f6H12iAEj
-         NztBdH6+dJk3ULFsNwkCwF01I94Ej9Vk+1iLb4Yx+2kSwV4Uphl9HvjHiVjXXow2uv
-         73NdxlDNtzC0NVFHhGZAsiHA+h2J2IxQ4y29zvv9vEGdw/Mqi/P+xhf+coYoa5QbxD
-         8ovNqnRooD8eg==
+        s=mail; t=1656013029;
+        bh=lwViBhJmQ4/VLbe6swJu1r+MvFhkFBSR7vNRdATdHGM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZvZ2UyUNN7W3hH7fIv4ijJ4u54yR4ttyl7sF731m2+vrdlaGq11/BgdbNdx47Q7Fd
+         sJk8ScUQuYDXFWzYJQG577TfaibR87aK5291xkThfd63qkgcyCWzb9LotVSgQcWznl
+         eBHh9U5yG7UKezERUN4sEE3ttSaZE2OQiEEHgone5yNJgD4zctTzgdhfovXVM4dJz4
+         xAAbphNQoju41Jf+PZeefeFOIYVvkpeU2I+OB6fzQvQ59MWFCIuLYzzat2OwCCNqUC
+         eWU827r9gblwPaKQq264XTbx8GL4kuRDWNPORAAdSudIOSPeBi9ezLsxJL42bFU3xJ
+         PNp3BXGfJqtqQ==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -45,10 +45,12 @@ Cc:     AngeloGioacchino Del Regno
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: [PATCH v2 0/4] Fixes for dtbs_check warnings on Mediatek XHCI nodes
-Date:   Thu, 23 Jun 2022 15:36:58 -0400
-Message-Id: <20220623193702.817996-1-nfraprado@collabora.com>
+Subject: [PATCH v2 1/4] dt-bindings: usb: mtk-xhci: Allow wakeup interrupt-names to be optional
+Date:   Thu, 23 Jun 2022 15:36:59 -0400
+Message-Id: <20220623193702.817996-2-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220623193702.817996-1-nfraprado@collabora.com>
+References: <20220623193702.817996-1-nfraprado@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,41 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add missing "minItems: 1" to the interrupt-names property to allow the
+second interrupt-names, "wakeup", to be optional.
 
-The two first patches fix inconsistencies in the mtk-xhci dt-binding,
-while the last two tweak the Mediatek devicetrees to fill in the missing
-XHCI fixed clocks.
+Fixes: fe8e488058c4 ("dt-bindings: usb: mtk-xhci: add wakeup interrupt")
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-This series gets rid of a couple dtbs_check warnings on mt8192.dtsi and
-another on mt8195.dtsi.
+---
 
-v1: https://lore.kernel.org/all/20220617222916.2435618-1-nfraprado@collabora.com
+(no changes since v1)
 
-Changes in v2:
-- Made all clocks required in the binding
-- Instead of simply reordering the clocks on mt8192, added missing fixed
-  clocks for all arm64 dts
-- Added missing fixed clocks for all arm dts
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Nícolas F. R. A. Prado (4):
-  dt-bindings: usb: mtk-xhci: Allow wakeup interrupt-names to be
-    optional
-  dt-bindings: usb: mtk-xhci: Make all clocks required
-  arm64: dts: mediatek: Set fixed-clock for missing XHCI clocks
-  arm: dts: mediatek: Set fixed-clock for missing XHCI clocks
-
- .../bindings/usb/mediatek,mtk-xhci.yaml        |  5 ++---
- arch/arm/boot/dts/mt2701.dtsi                  | 14 ++++++++++----
- arch/arm/boot/dts/mt7623.dtsi                  | 14 ++++++++++----
- arch/arm/boot/dts/mt7629.dtsi                  |  6 ++++--
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi      | 18 ++++++++++++++----
- arch/arm64/boot/dts/mediatek/mt7622.dtsi       |  5 +++--
- arch/arm64/boot/dts/mediatek/mt8173.dtsi       |  9 +++++++--
- arch/arm64/boot/dts/mediatek/mt8183.dtsi       |  8 ++++++--
- arch/arm64/boot/dts/mediatek/mt8192.dtsi       |  9 ++++++---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi       | 18 ++++++++++++++----
- 10 files changed, 76 insertions(+), 30 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+index 892718459d25..63cbc2b62d18 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+@@ -57,6 +57,7 @@ properties:
+       - description: optional, wakeup interrupt used to support runtime PM
+ 
+   interrupt-names:
++    minItems: 1
+     items:
+       - const: host
+       - const: wakeup
 -- 
 2.36.1
 

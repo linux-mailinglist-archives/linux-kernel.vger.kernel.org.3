@@ -2,86 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CE9557F13
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51094557F17
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiFWPz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S232119AbiFWP4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbiFWPzo (ORCPT
+        with ESMTP id S231362AbiFWP4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:55:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF672E0A3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:55:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C630261EEF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 15:55:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22EB5C341C6;
-        Thu, 23 Jun 2022 15:55:38 +0000 (UTC)
-Date:   Thu, 23 Jun 2022 16:55:35 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v4 10/20] arm64: topology: Remove redundant setting of
- llc_id in CPU topology
-Message-ID: <YrSM9x0mokN2l/Zb@arm.com>
-References: <20220621192034.3332546-1-sudeep.holla@arm.com>
- <20220621192034.3332546-11-sudeep.holla@arm.com>
+        Thu, 23 Jun 2022 11:56:10 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A705E443D7;
+        Thu, 23 Jun 2022 08:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655999769; x=1687535769;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2sQkvPgRrN3KPlpmOwqAcm6EAu1OjxyKTvt647C45Gw=;
+  b=Zfx/u8fUriZFilCefwheZHtrDW/bmFNAyo+aEef2lNneYVZMk1hrtAvw
+   nzG+B6sFvtnQCvh9WU3XsZCYDgZTPEpX7doh4dfpelYSBKhV3+GX5nNkP
+   nPtDx/pSSPQtOuogcJb5jcUNCBl9ioZfDBim/MC4a9Klmo0DniV0y9nbV
+   Dtve7GjYT0N8IjUMaEEKwcUJnOFFt3T28h+RhSb1TkQrKA2zL7NeNsJf4
+   VkFrlvvaRer0LF1o3g4zEC4D4wm9yHzHI9ohAHOepObAj8jfCJf75r3fI
+   bOL2+HQySBd7Hraw99DOP/vu/1+OTQjSiVNbpomqDCVvH008iBn9lhsUr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="261190292"
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="261190292"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 08:56:09 -0700
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="563500760"
+Received: from ckeane-mobl1.amr.corp.intel.com (HELO [10.209.81.98]) ([10.209.81.98])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 08:56:08 -0700
+Message-ID: <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
+Date:   Thu, 23 Jun 2022 08:55:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621192034.3332546-11-sudeep.holla@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V1] x86/cstate: Add Zhaoxin/Centaur ACPI Cx FFH MWAIT
+ support
+Content-Language: en-US
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, LindaChai@zhaoxin.com,
+        LeoLiu@zhaoxin.com,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <0b583b7e-dcd3-be51-f367-1c12ac841d3f@zhaoxin.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <0b583b7e-dcd3-be51-f367-1c12ac841d3f@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 08:20:24PM +0100, Sudeep Holla wrote:
-> Since the cacheinfo LLC information is used directly in arch_topology,
-> there is no need to parse and fetch the LLC ID information only for
-> ACPI systems.
+On 6/22/22 18:26, Tony W Wang-oc wrote:
+> Recent Zhaoxin/Centaur CPUs support X86_FEATURE_MWAIT that implies
+> the MONITOR/MWAIT instructions can be used for ACPI Cx state.
+> The BIOS declares Cx state in _CST object to use FFH on Zhaoxin/Centaur
+> systems. So let function ffh_cstate_init() support These CPUs too.
 > 
-> Just drop the redundant parsing and setting of llc_id in CPU topology
-> from ACPI PPTT.
+> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+> ---
+>  arch/x86/kernel/acpi/cstate.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-
-> Hi Will/Catalin,
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index 7945eae..d4185e1 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
 > 
-> This is part of a series updating topology to get both ACPI and DT view
-> aligned. I have not cc-ed you assuming you won't be interested. Let me
-> know if you are. The parts affecting arm64 is just this patch removing
-> some unnecessary ACPI code that is now moved to core arch_topology.c
-> 
-> Please ack if you are happy with this and OK to take this as part of the
-> series.
+>      if (c->x86_vendor != X86_VENDOR_INTEL &&
+>          c->x86_vendor != X86_VENDOR_AMD &&
+> -        c->x86_vendor != X86_VENDOR_HYGON)
+> +        c->x86_vendor != X86_VENDOR_HYGON &&
+> +        c->x86_vendor != X86_VENDOR_CENTAUR &&
+> +        c->x86_vendor != X86_VENDOR_ZHAOXIN)
+>          return -1;
 
-Yeah, that's fine, keep it with the rest of the series.
+Many of the changelogs that add new vendors here go on about particular
+C states declared in the _CST object and contents of CPUID leaf 5.
 
--- 
-Catalin
+Why do we even _have_ a vendor check here?  Shouldn't the code just be
+going and doing the validation of the _CST object and CPUID that the
+changelogs blather on about?
+
+Intel certainly made the original sin on this one (see 991528d7348), but
+I hope _something_ changed in the 16 years since that patch went in.

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128F7558174
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA9855830B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbiFWRAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S233790AbiFWRX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbiFWQtY (ORCPT
+        with ESMTP id S233862AbiFWRWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:49:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E351A4D631;
-        Thu, 23 Jun 2022 09:47:44 -0700 (PDT)
+        Thu, 23 Jun 2022 13:22:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D33AB620F;
+        Thu, 23 Jun 2022 10:01:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4AD8CCE25CD;
-        Thu, 23 Jun 2022 16:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1B5C3411B;
-        Thu, 23 Jun 2022 16:47:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4712C61573;
+        Thu, 23 Jun 2022 17:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A4DCC3411B;
+        Thu, 23 Jun 2022 17:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656002861;
-        bh=GveS77NFMpQY+xaymSevlHEOIq7CUjT0HjuXcn/+YKY=;
+        s=korg; t=1656003679;
+        bh=MqY2zppr9N1x5Ik2eekxRzvKnzXsm5vnnjmfSLbrANk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K9LvRaz5UGeslEsUUZE2M6an7RhpzTWqws5WZoODr8+I4E3N8Rddra0y4EiUxXlDC
-         teZONmvqZd3HXYf9PUfcAG6g93YZxkfXDIAlywEbYpXpR4rr/rOG0TJgMyCs8pRfZE
-         qpRiXH9k5Z+rvpghcrRO6OkvkcSYOsj2lfdt+N6k=
+        b=t4Sn4OgnfwlhAdkasKTV+otYocdg+FeE/arr9DXwsXr2K18Ikye4wy65IhzTYSLDL
+         YCfLATlw936veopqJhOY9DQA6vREVYFhqeX9/pBhcxTKxtOQXVHJJR89jNyjozC/T+
+         s8ZFyTqaSplZG21q33tPmb5RJdoq9gaENe61yqy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Theodore Tso <tytso@mit.edu>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 051/264] lib/crypto: blake2s: move hmac construction into wireguard
-Date:   Thu, 23 Jun 2022 18:40:44 +0200
-Message-Id: <20220623164345.515548745@linuxfoundation.org>
+Subject: [PATCH 4.14 011/237] random: make CPU trust a boot parameter
+Date:   Thu, 23 Jun 2022 18:40:45 +0200
+Message-Id: <20220623164343.475260325@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,146 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Kees Cook <keescook@chromium.org>
 
-commit d8d83d8ab0a453e17e68b3a3bed1f940c34b8646 upstream.
+commit 9b25436662d5fb4c66eb527ead53cab15f596ee0 upstream.
 
-Basically nobody should use blake2s in an HMAC construction; it already
-has a keyed variant. But unfortunately for historical reasons, Noise,
-used by WireGuard, uses HKDF quite strictly, which means we have to use
-this. Because this really shouldn't be used by others, this commit moves
-it into wireguard's noise.c locally, so that kernels that aren't using
-WireGuard don't get this superfluous code baked in. On m68k systems,
-this shaves off ~314 bytes.
+Instead of forcing a distro or other system builder to choose
+at build time whether the CPU is trusted for CRNG seeding via
+CONFIG_RANDOM_TRUST_CPU, provide a boot-time parameter for end users to
+control the choice. The CONFIG will set the default state instead.
 
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-[Jason: for stable, skip the wireguard changes, since this kernel
- doesn't have wireguard.]
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/crypto/blake2s.h      |    3 ---
- lib/crypto/blake2s-selftest.c |   31 -------------------------------
- lib/crypto/blake2s.c          |   37 -------------------------------------
- 3 files changed, 71 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |    6 ++++++
+ drivers/char/Kconfig                            |    4 ++--
+ drivers/char/random.c                           |   11 ++++++++---
+ 3 files changed, 16 insertions(+), 5 deletions(-)
 
---- a/include/crypto/blake2s.h
-+++ b/include/crypto/blake2s.h
-@@ -100,7 +100,4 @@ static inline void blake2s(u8 *out, cons
- 	blake2s_final(&state, out);
- }
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3526,6 +3526,12 @@
+ 	ramdisk_size=	[RAM] Sizes of RAM disks in kilobytes
+ 			See Documentation/blockdev/ramdisk.txt.
  
--void blake2s256_hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen,
--		     const size_t keylen);
--
- #endif /* BLAKE2S_H */
---- a/lib/crypto/blake2s-selftest.c
-+++ b/lib/crypto/blake2s-selftest.c
-@@ -15,7 +15,6 @@
-  * #include <stdio.h>
-  *
-  * #include <openssl/evp.h>
-- * #include <openssl/hmac.h>
-  *
-  * #define BLAKE2S_TESTVEC_COUNT	256
-  *
-@@ -58,16 +57,6 @@
-  *	}
-  *	printf("};\n\n");
-  *
-- *	printf("static const u8 blake2s_hmac_testvecs[][BLAKE2S_HASH_SIZE] __initconst = {\n");
-- *
-- *	HMAC(EVP_blake2s256(), key, sizeof(key), buf, sizeof(buf), hash, NULL);
-- *	print_vec(hash, BLAKE2S_OUTBYTES);
-- *
-- *	HMAC(EVP_blake2s256(), buf, sizeof(buf), key, sizeof(key), hash, NULL);
-- *	print_vec(hash, BLAKE2S_OUTBYTES);
-- *
-- *	printf("};\n");
-- *
-  *	return 0;
-  *}
-  */
-@@ -554,15 +543,6 @@ static const u8 blake2s_testvecs[][BLAKE
-     0xd6, 0x98, 0x6b, 0x07, 0x10, 0x65, 0x52, 0x65, },
- };
++	random.trust_cpu={on,off}
++			[KNL] Enable or disable trusting the use of the
++			CPU's random number generator (if available) to
++			fully seed the kernel's CRNG. Default is controlled
++			by CONFIG_RANDOM_TRUST_CPU.
++
+ 	ras=option[,option,...]	[KNL] RAS-specific options
  
--static const u8 blake2s_hmac_testvecs[][BLAKE2S_HASH_SIZE] __initconst = {
--  { 0xce, 0xe1, 0x57, 0x69, 0x82, 0xdc, 0xbf, 0x43, 0xad, 0x56, 0x4c, 0x70,
--    0xed, 0x68, 0x16, 0x96, 0xcf, 0xa4, 0x73, 0xe8, 0xe8, 0xfc, 0x32, 0x79,
--    0x08, 0x0a, 0x75, 0x82, 0xda, 0x3f, 0x05, 0x11, },
--  { 0x77, 0x2f, 0x0c, 0x71, 0x41, 0xf4, 0x4b, 0x2b, 0xb3, 0xc6, 0xb6, 0xf9,
--    0x60, 0xde, 0xe4, 0x52, 0x38, 0x66, 0xe8, 0xbf, 0x9b, 0x96, 0xc4, 0x9f,
--    0x60, 0xd9, 0x24, 0x37, 0x99, 0xd6, 0xec, 0x31, },
--};
+ 		cec_disable	[X86]
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -602,5 +602,5 @@ config RANDOM_TRUST_CPU
+ 	that CPU manufacturer (perhaps with the insistence or mandate
+ 	of a Nation State's intelligence or law enforcement agencies)
+ 	has not installed a hidden back door to compromise the CPU's
+-	random number generation facilities.
 -
- bool __init blake2s_selftest(void)
++	random number generation facilities. This can also be configured
++	at boot with "random.trust_cpu=on/off".
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -779,6 +779,13 @@ static struct crng_state **crng_node_poo
+ 
+ static void invalidate_batched_entropy(void);
+ 
++static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
++static int __init parse_trust_cpu(char *arg)
++{
++	return kstrtobool(arg, &trust_cpu);
++}
++early_param("random.trust_cpu", parse_trust_cpu);
++
+ static void crng_initialize(struct crng_state *crng)
  {
- 	u8 key[BLAKE2S_KEY_SIZE];
-@@ -607,16 +587,5 @@ bool __init blake2s_selftest(void)
+ 	int		i;
+@@ -799,12 +806,10 @@ static void crng_initialize(struct crng_
  		}
+ 		crng->state[i] ^= rv;
  	}
- 
--	if (success) {
--		blake2s256_hmac(hash, buf, key, sizeof(buf), sizeof(key));
--		success &= !memcmp(hash, blake2s_hmac_testvecs[0], BLAKE2S_HASH_SIZE);
--
--		blake2s256_hmac(hash, key, buf, sizeof(key), sizeof(buf));
--		success &= !memcmp(hash, blake2s_hmac_testvecs[1], BLAKE2S_HASH_SIZE);
--
--		if (!success)
--			pr_err("blake2s256_hmac self-test: FAIL\n");
--	}
--
- 	return success;
+-#ifdef CONFIG_RANDOM_TRUST_CPU
+-	if (arch_init) {
++	if (trust_cpu && arch_init) {
+ 		crng_init = 2;
+ 		pr_notice("random: crng done (trusting CPU's manufacturer)\n");
+ 	}
+-#endif
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
  }
---- a/lib/crypto/blake2s.c
-+++ b/lib/crypto/blake2s.c
-@@ -59,43 +59,6 @@ void blake2s_final(struct blake2s_state
- }
- EXPORT_SYMBOL(blake2s_final);
  
--void blake2s256_hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen,
--		     const size_t keylen)
--{
--	struct blake2s_state state;
--	u8 x_key[BLAKE2S_BLOCK_SIZE] __aligned(__alignof__(u32)) = { 0 };
--	u8 i_hash[BLAKE2S_HASH_SIZE] __aligned(__alignof__(u32));
--	int i;
--
--	if (keylen > BLAKE2S_BLOCK_SIZE) {
--		blake2s_init(&state, BLAKE2S_HASH_SIZE);
--		blake2s_update(&state, key, keylen);
--		blake2s_final(&state, x_key);
--	} else
--		memcpy(x_key, key, keylen);
--
--	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
--		x_key[i] ^= 0x36;
--
--	blake2s_init(&state, BLAKE2S_HASH_SIZE);
--	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
--	blake2s_update(&state, in, inlen);
--	blake2s_final(&state, i_hash);
--
--	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
--		x_key[i] ^= 0x5c ^ 0x36;
--
--	blake2s_init(&state, BLAKE2S_HASH_SIZE);
--	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
--	blake2s_update(&state, i_hash, BLAKE2S_HASH_SIZE);
--	blake2s_final(&state, i_hash);
--
--	memcpy(out, i_hash, BLAKE2S_HASH_SIZE);
--	memzero_explicit(x_key, BLAKE2S_BLOCK_SIZE);
--	memzero_explicit(i_hash, BLAKE2S_HASH_SIZE);
--}
--EXPORT_SYMBOL(blake2s256_hmac);
--
- static int __init mod_init(void)
- {
- 	if (!IS_ENABLED(CONFIG_CRYPTO_MANAGER_DISABLE_TESTS) &&
 
 

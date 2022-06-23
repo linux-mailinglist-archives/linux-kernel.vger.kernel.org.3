@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AFE5575EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE2C5575F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiFWIwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S229788AbiFWIyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiFWIwF (ORCPT
+        with ESMTP id S229490AbiFWIyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:52:05 -0400
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401D4496A2;
-        Thu, 23 Jun 2022 01:52:04 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 906FD9C021C;
-        Thu, 23 Jun 2022 04:52:03 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id goANI2I5l6g7; Thu, 23 Jun 2022 04:52:03 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 24FD29C0229;
-        Thu, 23 Jun 2022 04:52:03 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 24FD29C0229
+        Thu, 23 Jun 2022 04:54:09 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9041B10559;
+        Thu, 23 Jun 2022 01:54:08 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so1931459pjz.1;
+        Thu, 23 Jun 2022 01:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-        t=1655974323; bh=YiOz7KlajIpUudqSOOIyp2/QebO/yeM7e3nDDXSt/jo=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=HBtP71sVGLSxC6ke7E37YPpMuzZNsOdpdUQVDJP48de8mrQkdfNc9zajkVmpdSCkZ
-         j3mrQSxIt9eKDtdsEnr8EjyL7SyUBQEbDoiM4zPWYlczusLD/XcfS0+RSS4Y2gAZ6K
-         rXNFb1uVUa6wH0NCA4iUNyT2W7/xnlJnFBiZp9E8etO19lNn6qk7S1b7bXQrLT+86t
-         wy4s1id4h1WsZh1OH547yV76tl7hPmHBlEUcHE6rBgEaLR53OM0eHmjxUd8fC68qq1
-         GN0pRK/0h/dgOYUZtT72UQRFC58HQOchN5VnCvoTkyx7nncuFM3AipfRw2w+9nGduq
-         79bPWxz/axlrw==
-X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0juuMgFNS0XS; Thu, 23 Jun 2022 04:52:03 -0400 (EDT)
-Received: from sfl-deribaucourt.rennes.sfl (lfbn-ren-1-676-174.w81-53.abo.wanadoo.fr [81.53.245.174])
-        by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 2A56E9C021C;
-        Thu, 23 Jun 2022 04:52:02 -0400 (EDT)
-From:   Enguerrand de Ribaucourt 
-        <enguerrand.de-ribaucourt@savoirfairelinux.com>
-To:     andrew@lunn.ch
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        hkallweit1@gmail.com,
-        Enguerrand de Ribaucourt 
-        <enguerrand.de-ribaucourt@savoirfairelinux.com>
-Subject: [PATCH 2/2] net: dp83822: disable rx error interrupt
-Date:   Thu, 23 Jun 2022 10:51:27 +0200
-Message-Id: <20220623085125.1426049-2-enguerrand.de-ribaucourt@savoirfairelinux.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <YqzAKguRaxr74oXh@lunn.ch>
-References: <YqzAKguRaxr74oXh@lunn.ch>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=CgKFu42pVNbutALOPAyFG9CSppEVlH9cLVPLNYXxSDc=;
+        b=TgWNIU0sVyugoVfuKJctmkNZR5g0jvh0wU5ej56Yfj8LnJBA9GMeWdwdhUSMYSgoXs
+         vQDKVqw/SQcLjxA6/cIeb94CZs1VsmNQ6GwJB6IJv0D225ciqF3j0ah5Dwf5EqDSVesa
+         CtyH9WAqCOdvoJk/R+N1Skk10gECKlAb6cb3lXNW1C/t3+kk7Y+WxD7UhsX5Rg34YvAD
+         ka98Ju44pZ9q5Uyu484L4Bu1HrO6aFYSqCJ4MbLOeuNZRKcysCfXRBVL6aNmIBRT68eB
+         ofV6E8LNIUBAeYDxaouMz9r1DAJmdqTBJA/as3Zg5s1BJrN41K9F11mCIQGtkPe6QYno
+         lVDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=CgKFu42pVNbutALOPAyFG9CSppEVlH9cLVPLNYXxSDc=;
+        b=P6STkgsi6t+yRoJNKGvwwsqqGAAor0X6/lv7QdmsshA7STrWGTV+kfEqnI+puH7nCZ
+         TfE/M0oKVd0rBvg0q1A3Eq/JEJkDOOlqJID1rOJw1qfWyYAcFAXyQa2hKLUKY5D5Ufqt
+         8wIbXLJYQtiZIiyacAaJUuj1wUUqprFRLlXTSnEKD5aXvydO8LyPbFtWhhMI14I9Wdtp
+         4PVL3rOab6tPK1zpPB/LC+5ruRbGulw5bEhFsS/kMatyiYehcU18QkxsQyTU0mjERatC
+         IPPjZy7H/Mb5pSOnvzq4p+LBUGU8rSnPZBG9vA7UaR0Edb6ZJTRKRKpMMLa6etmJdFvZ
+         Tt2g==
+X-Gm-Message-State: AJIora90Y4I9dMjoEHFOZhTz9dML/G4pJoLesQMiUmEpUWCLBQwqK85v
+        tujgDnYHUWh3zMfaE//PpNOfDk8WoBM=
+X-Google-Smtp-Source: AGRyM1tNpAW10PD5eKdQZl31km1eJxSPdtLnll6TymTdk56uqdX65PxOh8YNlwmE9ykHzAVYf+K1Sg==
+X-Received: by 2002:a17:903:120f:b0:15f:99f:9597 with SMTP id l15-20020a170903120f00b0015f099f9597mr38034320plh.45.1655974447951;
+        Thu, 23 Jun 2022 01:54:07 -0700 (PDT)
+Received: from carrot.localdomain (i114-185-17-44.s42.a014.ap.plala.or.jp. [114.185.17.44])
+        by smtp.gmail.com with ESMTPSA id c11-20020aa7952b000000b0052521fd273fsm8387644pfp.218.2022.06.23.01.54.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Jun 2022 01:54:05 -0700 (PDT)
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] nilfs2: fix incorrect masking of permission flags for symlinks
+Date:   Thu, 23 Jun 2022 17:54:01 +0900
+Message-Id: <1655974441-5612-1-git-send-email-konishi.ryusuke@gmail.com>
+X-Mailer: git-send-email 1.8.3.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some RX errors, notably when disconnecting the cable, increase the RCSR
-register. Once half full (0x7fff), an interrupt flood is generated. I
-measured ~3k/s interrupts even after the RX errors transfer was
-stopped.
+The permission flags of newly created symlinks are wrongly dropped on
+nilfs2 with the current umask value even though symlinks should have
+777 (rwxrwxrwx) permissions:
 
-Since we don't read and clear the RCSR register, we should disable this
-interrupt.
+ $ umask
+ 0022
+ $ touch file && ln -s file symlink; ls -l file symlink
+ -rw-r--r--. 1 root root 0 Jun 23 16:29 file
+ lrwxr-xr-x. 1 root root 4 Jun 23 16:29 symlink -> file
 
-Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirf=
-airelinux.com>
+This fixes the bug by inserting a missing check that excludes
+symlinks.
+
+Reported-by: Tommy Pettersson <ptp@lysator.liu.se>
+Reported-by: Ciprian Craciun <ciprian.craciun@gmail.com>
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 ---
- drivers/net/phy/dp83822.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/nilfs2/nilfs.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
-index 95ef507053a6..8549e0e356c9 100644
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -229,8 +229,7 @@ static int dp83822_config_intr(struct phy_device *phy=
-dev)
- 		if (misr_status < 0)
- 			return misr_status;
-=20
--		misr_status |=3D (DP83822_RX_ERR_HF_INT_EN |
--				DP83822_LINK_STAT_INT_EN |
-+		misr_status |=3D (DP83822_LINK_STAT_INT_EN |
- 				DP83822_ENERGY_DET_INT_EN |
- 				DP83822_LINK_QUAL_INT_EN);
-=20
---=20
-2.25.1
+diff --git a/fs/nilfs2/nilfs.h b/fs/nilfs2/nilfs.h
+index 1344f7d475d3..aecda4fc95f5 100644
+--- a/fs/nilfs2/nilfs.h
++++ b/fs/nilfs2/nilfs.h
+@@ -198,6 +198,9 @@ static inline int nilfs_acl_chmod(struct inode *inode)
+ 
+ static inline int nilfs_init_acl(struct inode *inode, struct inode *dir)
+ {
++	if (S_ISLNK(inode->i_mode))
++		return 0;
++
+ 	inode->i_mode &= ~current_umask();
+ 	return 0;
+ }
+-- 
+1.8.3.1
 

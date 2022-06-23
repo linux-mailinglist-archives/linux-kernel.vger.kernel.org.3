@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806035581DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3DF5581E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiFWRHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S230162AbiFWRHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiFWRFt (ORCPT
+        with ESMTP id S229928AbiFWRGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:05:49 -0400
+        Thu, 23 Jun 2022 13:06:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A44ABD0;
-        Thu, 23 Jun 2022 09:55:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D84651E50;
+        Thu, 23 Jun 2022 09:55:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4708260B21;
-        Thu, 23 Jun 2022 16:55:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A39C3411B;
-        Thu, 23 Jun 2022 16:55:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 652D560B20;
+        Thu, 23 Jun 2022 16:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37980C341C4;
+        Thu, 23 Jun 2022 16:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003339;
-        bh=4k4kIgS0QMh+Sn4nTF8ivrc8zVt7uVZQE9emfUfptec=;
+        s=korg; t=1656003342;
+        bh=1F6bZmAY5p4rpGT2E+2Q05yqO5+1LoIQ4CxLrpbvRZ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T02rTs/CgPjTKR8YNxLNT9OlKDCCYdCisu4oLccJd2PeEbYDVAj/f97eEHUhUP+kK
-         f9o+XKLEnO5qIqCaGjTCv+lyWQpTV2OJuDyVQcaVxq5pU54LkI20Ro04qkTUnpIefH
-         s/2rladlN4b4qu7RIWOSca0fUHzDpiyg12e7FQ/g=
+        b=LKlEzYrMCMwIOvdTs9Vh03qF6pNq6SGDOH0OOxPEV7/aygUL9Of6l2YynQhUTdgTj
+         SRdeVJ6laaaq598lT9ZfflPnzy6d35AQ7hu4yr1Bx0nNnOI13W1D8XWkTwS5THblQJ
+         U382m1QcSqbCToFqCFsXjCnL08Jr5V5qhBzbRSL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 205/264] random: credit architectural init the exact amount
-Date:   Thu, 23 Jun 2022 18:43:18 +0200
-Message-Id: <20220623164349.871173494@linuxfoundation.org>
+Subject: [PATCH 4.9 206/264] random: use static branch for crng_ready()
+Date:   Thu, 23 Jun 2022 18:43:19 +0200
+Message-Id: <20220623164349.899829694@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
 References: <20220623164344.053938039@linuxfoundation.org>
@@ -57,59 +58,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 12e45a2a6308105469968951e6d563e8f4fea187 upstream.
+commit f5bda35fba615ace70a656d4700423fa6c9bebee upstream.
 
-RDRAND and RDSEED can fail sometimes, which is fine. We currently
-initialize the RNG with 512 bits of RDRAND/RDSEED. We only need 256 bits
-of those to succeed in order to initialize the RNG. Instead of the
-current "all or nothing" approach, actually credit these contributions
-the amount that is actually contributed.
+Since crng_ready() is only false briefly during initialization and then
+forever after becomes true, we don't need to evaluate it after, making
+it a prime candidate for a static branch.
 
+One complication, however, is that it changes state in a particular call
+to credit_init_bits(), which might be made from atomic context, which
+means we must kick off a workqueue to change the static key. Further
+complicating things, credit_init_bits() may be called sufficiently early
+on in system initialization such that system_wq is NULL.
+
+Fortunately, there exists the nice function execute_in_process_context(),
+which will immediately execute the function if !in_interrupt(), and
+otherwise defer it to a workqueue. During early init, before workqueues
+are available, in_interrupt() is always false, because interrupts
+haven't even been enabled yet, which means the function in that case
+executes immediately. Later on, after workqueues are available,
+in_interrupt() might be true, but in that case, the work is queued in
+system_wq and all goes well.
+
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/char/random.c |   16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -892,9 +892,8 @@ early_param("random.trust_bootloader", p
-  */
- int __init random_init(const char *command_line)
- {
--	size_t i;
- 	ktime_t now = ktime_get_real();
--	bool arch_init = true;
-+	unsigned int i, arch_bytes;
- 	unsigned long rv;
- 
- #if defined(LATENT_ENTROPY_PLUGIN)
-@@ -902,11 +901,12 @@ int __init random_init(const char *comma
- 	_mix_pool_bytes(compiletime_seed, sizeof(compiletime_seed));
- #endif
- 
--	for (i = 0; i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
-+	for (i = 0, arch_bytes = BLAKE2S_BLOCK_SIZE;
-+	     i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
- 		if (!arch_get_random_seed_long_early(&rv) &&
- 		    !arch_get_random_long_early(&rv)) {
- 			rv = random_get_entropy();
--			arch_init = false;
-+			arch_bytes -= sizeof(rv);
- 		}
- 		_mix_pool_bytes(&rv, sizeof(rv));
- 	}
-@@ -917,8 +917,8 @@ int __init random_init(const char *comma
- 
- 	if (crng_ready())
- 		crng_reseed();
--	else if (arch_init && trust_cpu)
--		credit_init_bits(BLAKE2S_BLOCK_SIZE * 8);
-+	else if (trust_cpu)
-+		credit_init_bits(arch_bytes * 8);
- 
- 	return 0;
+@@ -78,8 +78,9 @@ static enum {
+ 	CRNG_EMPTY = 0, /* Little to no entropy collected */
+ 	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
+ 	CRNG_READY = 2  /* Fully initialized with POOL_READY_BITS collected */
+-} crng_init = CRNG_EMPTY;
+-#define crng_ready() (likely(crng_init >= CRNG_READY))
++} crng_init __read_mostly = CRNG_EMPTY;
++static DEFINE_STATIC_KEY_FALSE(crng_is_ready);
++#define crng_ready() (static_branch_likely(&crng_is_ready) || crng_init >= CRNG_READY)
+ /* Various types of waiters for crng_init->CRNG_READY transition. */
+ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+ static struct fasync_struct *fasync;
+@@ -109,6 +110,11 @@ bool rng_is_initialized(void)
  }
+ EXPORT_SYMBOL(rng_is_initialized);
+ 
++static void crng_set_ready(struct work_struct *work)
++{
++	static_branch_enable(&crng_is_ready);
++}
++
+ /* Used by wait_for_random_bytes(), and considered an entropy collector, below. */
+ static void try_to_generate_entropy(void);
+ 
+@@ -268,7 +274,7 @@ static void crng_reseed(void)
+ 		++next_gen;
+ 	WRITE_ONCE(base_crng.generation, next_gen);
+ 	WRITE_ONCE(base_crng.birth, jiffies);
+-	if (!crng_ready())
++	if (!static_branch_likely(&crng_is_ready))
+ 		crng_init = CRNG_READY;
+ 	spin_unlock_irqrestore(&base_crng.lock, flags);
+ 	memzero_explicit(key, sizeof(key));
+@@ -783,6 +789,7 @@ static void extract_entropy(void *buf, s
+ 
+ static void credit_init_bits(size_t nbits)
+ {
++	static struct execute_work set_ready;
+ 	unsigned int new, orig, add;
+ 	unsigned long flags;
+ 
+@@ -798,6 +805,7 @@ static void credit_init_bits(size_t nbit
+ 
+ 	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
+ 		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
++		execute_in_process_context(crng_set_ready, &set_ready);
+ 		process_random_ready_list();
+ 		wake_up_interruptible(&crng_init_wait);
+ 		kill_fasync(&fasync, SIGIO, POLL_IN);
+@@ -1307,7 +1315,7 @@ SYSCALL_DEFINE3(getrandom, char __user *
+ 	if (count > INT_MAX)
+ 		count = INT_MAX;
+ 
+-	if (!(flags & GRND_INSECURE) && !crng_ready()) {
++	if (!crng_ready() && !(flags & GRND_INSECURE)) {
+ 		int ret;
+ 
+ 		if (flags & GRND_NONBLOCK)
 
 

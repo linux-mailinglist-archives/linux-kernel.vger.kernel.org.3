@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960F6557FC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96366557FB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbiFWQ00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S231867AbiFWQZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiFWQ0Y (ORCPT
+        with ESMTP id S231744AbiFWQY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:26:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855CE44A19;
-        Thu, 23 Jun 2022 09:26:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 444791F37C;
-        Thu, 23 Jun 2022 16:26:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656001582; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BfdpS31BTnx0upscG9ltmSRSibzpIJMh1VIKXZtFzy8=;
-        b=LufHh/PdbNvvhLTzX1RWsvnJuM3y52l0dG9D43ioTReJGZFKFYUG8gZr79KxgrXTi8h0Ja
-        kjyYipDKbiTR3dQZjA2un27ED1YROrmJUCX2pHkcRRpIFenPpA2klysDHKFknPxpHr7ke0
-        Q99rJXpqTNuxDeCSsIfc/Wvik9/VqqM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 13DEE133A6;
-        Thu, 23 Jun 2022 16:26:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1w3gAy6UtGLtAwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 23 Jun 2022 16:26:22 +0000
-Date:   Thu, 23 Jun 2022 18:26:20 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH -next v5 4/8] blk-throttle: fix io hung due to config
- updates
-Message-ID: <20220623162620.GB16004@blackbody.suse.cz>
-References: <20220528064330.3471000-1-yukuai3@huawei.com>
- <20220528064330.3471000-5-yukuai3@huawei.com>
- <20220622172621.GA28246@blackbody.suse.cz>
- <f5165488-2461-8946-593f-14154e404850@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5165488-2461-8946-593f-14154e404850@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Thu, 23 Jun 2022 12:24:59 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85333A732
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:24:57 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id f16so80023pjj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dilger-ca.20210112.gappssmtp.com; s=20210112;
+        h=from:message-id:mime-version:subject:date:in-reply-to:cc:to
+         :references;
+        bh=bcyfxdYDvwFKE4FcRkASoG03KisaDjvMQmq4ODLZY6Y=;
+        b=Q6EkS8J9o1kRFWTS1Sz7yUZQrVb9iZj6pO/U9kzzfvvlgRxFnL50FsOu6QYctzx4Zj
+         4AFwrrYShyaBMbMo/S//DCItdhB6Xhidd85LbLLCxhVPWdWfApQ8g/jLGL/zYxjMnhmB
+         xugmETGHUFP/NTpUaNxC3LJ8uNd1GAVXJfdx/0rp85cdY7Ghk6qITrxSFopDdfiLvenO
+         RRWQfBglfzjZeMXnkcJFN4vOV1vf6TcRPzixwqDrnxZlAnKBAJNAfji+cLcxuPTwVecy
+         yQOMeWEt/s2lxyaOoO1+OBzNWKgwuofTfgyeF7a8/TNbKiIEVB21YyJebVkm9tDvvBw2
+         jkgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:mime-version:subject:date
+         :in-reply-to:cc:to:references;
+        bh=bcyfxdYDvwFKE4FcRkASoG03KisaDjvMQmq4ODLZY6Y=;
+        b=R9zytiTH6OTIUrvGap61jU22EaSFW6y0ltczFaWwYFdpGaB38BENc5jxDOuhFEpUiZ
+         0jb0Plr/2AKFSB02nB1seGRJwzMtvx7Nw75S6z1NJpcl80AchkFmTDbBlw0x0gNIEXhT
+         pUjRTSJytPa9LWBQxgUuSyCDz+Jx6BAbEJLR9vsYOdZETV+xBE/Tlqhs4kZn67fTYKvw
+         aV0mPb/VUkYlL2kQKo9CFJ1Fa+bI3UhQCEoYrvAa1ZCbj9OXA/CR48/02w2z9+EDkMNY
+         EYjmnRYZMWJr5/zli10yhuNOK1+mbarNou5by+u44kW5V6HD/YuM6oP0+NE3/6u29BCX
+         CdZQ==
+X-Gm-Message-State: AJIora+KvyUGJgv3l2kOyAZAV1zSq9PBKEZDuP7E7D26tr+WLyy1CPNM
+        7yzymZ3EhKn3ennyqEquj3v58w==
+X-Google-Smtp-Source: AGRyM1ukROTsV74eiDORs7U9DuEV5/TMYhdqOiMfNTcV5f2UeXO0T5u5WYzf57Iazk83XTH31glX2g==
+X-Received: by 2002:a17:90b:3b81:b0:1ec:e852:22db with SMTP id pc1-20020a17090b3b8100b001ece85222dbmr4865881pjb.77.1656001497135;
+        Thu, 23 Jun 2022 09:24:57 -0700 (PDT)
+Received: from cabot.adilger.int (S01061cabc081bf83.cg.shawcable.net. [70.77.221.9])
+        by smtp.gmail.com with ESMTPSA id jh21-20020a170903329500b0016a109c7606sm11075493plb.259.2022.06.23.09.24.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Jun 2022 09:24:56 -0700 (PDT)
+From:   Andreas Dilger <adilger@dilger.ca>
+Message-Id: <622BA3BB-03EA-4271-8A2E-2ADAFB574155@dilger.ca>
+Content-Type: multipart/signed;
+ boundary="Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [man-pages RFC PATCH] statx.2, open.2: document STATX_DIOALIGN
+Date:   Thu, 23 Jun 2022 10:27:19 -0600
+In-Reply-To: <YrSOm2murB4Bc1RQ@magnolia>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-man@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+References: <20220616202141.125079-1-ebiggers@kernel.org>
+ <YrSOm2murB4Bc1RQ@magnolia>
+X-Mailer: Apple Mail (2.3273)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,22 +77,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 08:27:11PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
-> > Here we may allow to dispatch a bio above current slice's
-> > calculate_bytes_allowed() if bytes_skipped is already >0.
+
+--Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset=us-ascii
+
+On Jun 23, 2022, at 10:02 AM, Darrick J. Wong <djwong@kernel.org> wrote:
 > 
-> Hi, I don't expect that to happen. For example, if a bio is still
-> throttled, then old slice is keeped with proper 'bytes_skipped',
-> then new wait time is caculated based on (bio_size - bytes_skipped).
+> On Thu, Jun 16, 2022 at 01:21:41PM -0700, Eric Biggers wrote:
+>> From: Eric Biggers <ebiggers@google.com>
+>> 
+>> @@ -244,8 +249,11 @@ STATX_SIZE	Want stx_size
+>> STATX_BLOCKS	Want stx_blocks
+>> STATX_BASIC_STATS	[All of the above]
+>> STATX_BTIME	Want stx_btime
+>> +STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+>> +         	This is deprecated and should not be used.
 > 
-> After the bio is dispatched(I assum that other bios can't preempt),
+> STATX_ALL is deprecated??  I was under the impression that _ALL meant
+> all the known bits for that kernel release, but...
 
-With this assumptions it adds up as you write. I believe we're in
-agreement.
+For userspace STATX_ALL doesn't make sense, and it isn't used by the kernel.
 
-It's the same assumption I made below (FIFO everywhere, i.e. no
-reordering). So the discussed difference shouldn't really be negative
-(and if the assumption didn't hold, so the modular arithmetic yields
-corerct bytes_skipped value).
+Firstly, that would be a compile-time value for an application, so it
+may be incorrect for the kernel the code is actually run on (either too
+many or too few bits could be set).
 
-Michal
+Secondly, it isn't really useful for an app to request "all attributes"
+if it doesn't know what they all mean, as that potentially adds useless
+overhead.  Better for it to explicitly request the attributes that it
+needs.  If that is fewer than the kernel could return it is irrelevant,
+since the app would ignore them anyway.
+
+The kernel will already ignore and mask attributes that *it* doesn't
+understand, so requesting more is fine and STATX_ALL doesn't help this.
+
+Cheers, Andreas
+
+
+
+
+
+
+--Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
+
+iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAmK0lGcACgkQcqXauRfM
+H+CkuA//avp4Tuh55VpE8yHOQ8z64y5vrwNesx7bZ8atQCuwyhbJlvdTGn27SVv1
+4j1+/hWy3q+Jsot1ja0njROgu9KlOetTJ7qK4tlq4buIjBuB1izLfyGtSUtRezui
+Z93g7NQEpOSFyNwknXMz2vTB4gOxgMd0V9jCkElXXC+EClReBJq/Jts+/qNH8cnU
+j2kdedwlaAg3zMbSWbygM0DxumX1YB0dCYuK/SyyAyjWr4I5mHFqHeyZf3ej2fVB
+g/wUfgv7Ku50XluSp4/deoA8R/TJbCkQikvKS4S9pI/LqMeOEZ6moyIJ8KRyWKSs
+wbSn8e2E49hUrxKO15kQx2vIs1BS1WLN1PWmv4TVnkTmfkuf7iUVVMxlU3Jfifcx
+qZXhYvTv7UvL/oV12MJHzQiYR/YUytHzdeliMC+sDa/tCyWE0UZMAZaKFgO9vV9h
+gdHfsvdNabGbFBE8ul5auWUT6QaqmytVQOk6239FD/gHD3Vw4ZVptZKDziYfwULV
+JgVDmWSi8RzmV3F+g3Lr9oGWqFbErsl+QWm80wXaC7yxHm3C2wKKqwPx6bfFbucT
+PuSiilxCV7qDXmDRISKNt/JMaLsxh8w+15v92wWhacEtgMzIyVsjudfePb2wiUtw
+bLbXOh9Pj4DCci4an5lxVhj8jEYThvOPq1FlB6e7qhrXwoGwugE=
+=83Nf
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15--

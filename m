@@ -2,122 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B49F5577B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A703557759
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiFWKRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
+        id S230501AbiFWKDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiFWKRq (ORCPT
+        with ESMTP id S229689AbiFWKDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:17:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32B24A3C1;
-        Thu, 23 Jun 2022 03:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655979458; x=1687515458;
-  h=from:to:cc:subject:date:message-id;
-  bh=NeJur9sIZ5lmTLg5cdWYNoS4OW5zTNJwPnCWv1GQGJQ=;
-  b=RKbywVx9PMGvPw04y8SV1yu8BppdGdSsdSPqWH2pmMt2bOt+zOwpHRSz
-   j27UOlgsLMdPwsDBfZM/fWHHcy/KB04hylR3pT6b8XzSbn6oRE7r3OdnX
-   ofvUoVbk3tCPPUdhSsCx7xo7eUwH8ogYXZ8rXZpbzqnF4TCNxvZFaE0Z5
-   Quih5e7b4xY3EHJl06xvQxR/0aU+5rHwRxVrMHvceYkX63jBV/aP6p0jw
-   y3CkAob2tUldRyB8xzI9zZ6NQHYnd1hZal0eHKntVusS/qtUwAM0dkQa9
-   6rGMiADDQguAfQTVhOQVLPuWYdG0c22mbQVruqOFQ1QQzwKTr4oGsTVWs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="269405571"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="269405571"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:17:35 -0700
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644669573"
-Received: from arthur-vostro-3668.sh.intel.com ([10.239.13.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:17:33 -0700
-From:   Zeng Guang <guang.zeng@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, Gao Chao <chao.gao@intel.com>,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Zeng Guang <guang.zeng@intel.com>
-Subject: [PATCH v2] KVM: selftest: Enhance handling WRMSR ICR register in x2APIC mode
-Date:   Thu, 23 Jun 2022 17:45:11 +0800
-Message-Id: <20220623094511.26066-1-guang.zeng@intel.com>
+        Thu, 23 Jun 2022 06:03:23 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E90BC0F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 03:03:18 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1655978521tbfj69q5
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 23 Jun 2022 18:01:57 +0800 (CST)
+X-QQ-SSF: 01000000008000B0C000B00A0000000
+X-QQ-FEAT: hOPADF7UwX4iFB/7g9JVub6CWGg5wL+Zwsx+9FUj+tJK97Ei0f+gQUuzavP5y
+        3z7R5vr7gKFIJejzAb+9iYRtSW4d8HJqBkBq4/II4Z5l9Otnt7GJRHqN9VKsayV8SDIBxjM
+        6BTqf+lUZ9Jt+Fy5r0VSv0TXD41wTiHW71aZO8rEDypAkFQBr3KMmQ3KLCId6AgcHfrEpkl
+        4PXCloDmexVIaHmRIcsyxZdvZEQLxHLFyWbMkGFO2RO32t6ai5zhNpJE+LQmxyRa6vFAXk0
+        95pT9AW5s+8h4sZPSpXHi3l8j6+URymXTd2HkbOJh+/fmZvTwYMrsoyTKYPVraZNON0+bXt
+        H9dmLnRsmoUWJXrClklHt8oQGZCoA==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     patrik.r.jakobsson@gmail.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] drm/gma500: drop unexpected word 'for' in comments
+Date:   Thu, 23 Jun 2022 18:01:55 +0800
+Message-Id: <20220623100155.24806-1-jiangjian@cdjrlc.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hardware would directly write x2APIC ICR register instead of software
-emulation in some circumstances, e.g when Intel IPI virtualization is
-enabled. This behavior requires normal reserved bits checking to ensure
-them input as zero, otherwise it will cause #GP. So we need mask out
-those reserved bits from the data written to vICR register.
+there is an unexpected word 'for' in the comments that need to be dropped
 
-Remove Delivery Status bit emulation in test case as this flag
-is invalid and not needed in x2APIC mode. KVM may ignore clearing
-it during interrupt dispatch which will lead to fake test failure.
+file - drivers/gpu/drm/gma500/oaktrail_crtc.c
+line - 312
 
-Opportunstically correct vector number for test sending IPI to
-non-existent vCPUs.
+/* Wait for for the pipe disable to take effect. */
 
-Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+changed to:
+
+/* Wait for the pipe disable to take effect. */
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 ---
- .../selftests/kvm/x86_64/xapic_state_test.c   | 20 ++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/gma500/oaktrail_crtc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-index 0792334ba243..df916c6f53f9 100644
---- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-@@ -70,13 +70,27 @@ static void ____test_icr(struct kvm_vm *vm, struct kvm_vcpu *vcpu, uint64_t val)
- 	vcpu_ioctl(vm, vcpu->id, KVM_GET_LAPIC, &xapic);
- 	icr = (u64)(*((u32 *)&xapic.regs[APIC_ICR])) |
- 	      (u64)(*((u32 *)&xapic.regs[APIC_ICR2])) << 32;
--	if (!vcpu->is_x2apic)
-+	if (!vcpu->is_x2apic) {
- 		val &= (-1u | (0xffull << (32 + 24)));
--	ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
-+		ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
-+	} else {
-+		ASSERT_EQ(icr & ~APIC_ICR_BUSY, val & ~APIC_ICR_BUSY);
-+	}
- }
+diff --git a/drivers/gpu/drm/gma500/oaktrail_crtc.c b/drivers/gpu/drm/gma500/oaktrail_crtc.c
+index 22398d34853a..407ce948bf68 100644
+--- a/drivers/gpu/drm/gma500/oaktrail_crtc.c
++++ b/drivers/gpu/drm/gma500/oaktrail_crtc.c
+@@ -309,7 +309,7 @@ static void oaktrail_crtc_dpms(struct drm_crtc *crtc, int mode)
+ 						   temp & ~PIPEACONF_ENABLE, i);
+ 				REG_READ_WITH_AUX(map->conf, i);
+ 			}
+-			/* Wait for for the pipe disable to take effect. */
++			/* Wait for the pipe disable to take effect. */
+ 			gma_wait_for_vblank(dev);
  
-+#define X2APIC_RSVED_BITS_MASK  (GENMASK_ULL(31,20) | \
-+				 GENMASK_ULL(17,16) | \
-+				 GENMASK_ULL(13,13))
-+
- static void __test_icr(struct kvm_vm *vm, struct kvm_vcpu *vcpu, uint64_t val)
- {
-+	if (vcpu->is_x2apic) {
-+		/* Hardware writing vICR register requires reserved bits 31:20,
-+		 * 17:16 and 13 kept as zero to avoid #GP exception. Data value
-+		 * written to vICR should mask out those bits above.
-+		 */
-+		val &= ~X2APIC_RSVED_BITS_MASK;
-+	}
- 	____test_icr(vm, vcpu, val | APIC_ICR_BUSY);
- 	____test_icr(vm, vcpu, val & ~(u64)APIC_ICR_BUSY);
- }
-@@ -100,7 +114,7 @@ static void test_icr(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
- 	icr = APIC_INT_ASSERT | 0xff;
- 	for (i = vcpu->id + 1; i < 0xff; i++) {
- 		for (j = 0; j < 8; j++)
--			__test_icr(vm, vcpu, i << (32 + 24) | APIC_INT_ASSERT | (j << 8));
-+			__test_icr(vm, vcpu, i << (32 + 24) | icr | (j << 8));
- 	}
- 
- 	/* And again with a shorthand destination for all types of IPIs. */
+ 			temp = REG_READ_WITH_AUX(map->dpll, i);
 -- 
-2.27.0
+2.17.1
 

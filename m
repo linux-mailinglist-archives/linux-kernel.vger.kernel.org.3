@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37EF557252
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB06557240
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbiFWErq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        id S232988AbiFWErU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243286AbiFWDsj (ORCPT
+        with ESMTP id S243327AbiFWDst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:48:39 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E423DA6B;
-        Wed, 22 Jun 2022 20:48:38 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id go6so12849263pjb.0;
-        Wed, 22 Jun 2022 20:48:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lsyht3sgmYYULn2BwalrpicmmuWuVQoiTQ1cDnovyZI=;
-        b=Fh9rVrgBgg+fJ064ccHdE04iqsy9AnKCfC82feNgD1xky08kEXIghlSvol19Zcn3zY
-         MT+AtuBjcHcBeXwAD5Mm69HjR/3mGQridJzrwikZX3v209h1zNGJA2w47JyJRFKZ3CKr
-         HDLGGYa+37TM2noPWQT6DPb8uRDRclJO94g2fjYZqDzIxYJsEQw0vMfdvNHyGMhaVePw
-         8JkNHOkcbpn6OYdbaj1jWZOYhdB6b89tdzDH2tUALF9/XEdisgpYjBUYUzeScqbfK0eF
-         qx+rLNRVy35BNSfLQYs3du6oruMoG0FzM0UZrIX+oweCxo66H01INSJ1eImBU8zf6FHK
-         AGVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lsyht3sgmYYULn2BwalrpicmmuWuVQoiTQ1cDnovyZI=;
-        b=BpYm3KpXiK+elhBhATzLEur2+xUJennhg5z7rZSerVKuk4eCiy6UlScqIs5v7cmhCL
-         TR4/+9vwMdoFQYeP82KQJDXI5ZkOp1mMfdj/WE5G7HQA3+j0UJtaUB8xxYmPbio2Qy+3
-         uTScHuvQ8b4EsTasuoG+4rOvJzYgo/SDxpW3oL6WN1b06uwN5rPQsQ62FWkWrkXf/bhp
-         GhQ42DE5UnabubcRjI6Qur2nwYYcdNjLj7T53CUj2RmF91OshYpoEHzANNSwcwU/RbMw
-         t9TMisahAIdxQ53pEPot+1jMZfyWo5A/hwRaD/nIAjtKqx27FU9Ov3TiRlOaq3zHoZ5S
-         mEUA==
-X-Gm-Message-State: AJIora8RahRR7QkeFtvHO2q9J7CnkI6NFXKFYyBSw2HZyAqC589rQt5l
-        WBQMLVBSxBlCB07L5ADN9DY/CjhHWwXuyeLL
-X-Google-Smtp-Source: AGRyM1vCa2ak1o1+dGrzb37ts8dOOOUuZPW8cwpz/w3NQQzFy5XARr/g9vaGJ+/GjmtfnnhQV4nytg==
-X-Received: by 2002:a17:90b:3a87:b0:1e8:8740:43e7 with SMTP id om7-20020a17090b3a8700b001e8874043e7mr1806964pjb.41.1655956118036;
-        Wed, 22 Jun 2022 20:48:38 -0700 (PDT)
-Received: from biggie.. ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id ga23-20020a17090b039700b001ec92575e83sm609865pjb.4.2022.06.22.20.48.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 20:48:37 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     shuah@kernel.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Make the usage formatting consistent in kselftest_deps.sh
-Date:   Thu, 23 Jun 2022 09:18:32 +0530
-Message-Id: <20220623034832.172505-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 22 Jun 2022 23:48:49 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F94E3DA6B;
+        Wed, 22 Jun 2022 20:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=EDunuY7O5hAPgL1BhKSksPMMhIIfJXz8txcUJNIwT/A=; b=erkQTTzYczL6JKF7+aS3kheQC7
+        Am8cmBiVmdHnbXS/z2EOVm39y3Ovj+pKNOVC1RDpRA6lhMm5krp/v/VW5NK0rksnSYPjxDEwkHfQQ
+        j3VYDgbmodwl5Z7t4S2qgItpkJAuBxg45OaEzhr0mqMrYJRk/iUDc3drmLccxCX/TugAVOf6QPgqs
+        mNibyIKdPnWBH7Nla73/rgAhZA/bZAPQ2FiP5MNps4HYT1EM1m+EuF1p7rpG9Ig2U7r9tqwcdElLs
+        5fzbETCMmB6F1GGmgl0BkwtJXTAX7VSzAsLT/GaK4BOz1BoSou0wehHH4jDWMS0uqaQJR7LZT/9V1
+        ZCB4oGxA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o4Dpk-003Pd1-W8;
+        Thu, 23 Jun 2022 03:48:45 +0000
+Date:   Thu, 23 Jun 2022 04:48:44 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     sunliming <kelulanainsley@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sunliming@kylino.cn
+Subject: Re: [PATCH] walk_component(): get inode in lookup_slow branch
+ statement block
+Message-ID: <YrPinPcHHNfv3E3B@ZenIV>
+References: <20220622085146.444516-1-sunliming@kylinos.cn>
+ <YrLwU27DNm0YWOvB@ZenIV>
+ <CAJncD7RuTTLoRS_pzvn729_SX5Xsv6Pub44eCD_RbbANjn9joA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJncD7RuTTLoRS_pzvn729_SX5Xsv6Pub44eCD_RbbANjn9joA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a colon in the "Optional" test usage message to ensure consistency
-with the "Default" test usage message.
+On Thu, Jun 23, 2022 at 11:44:29AM +0800, sunliming wrote:
+> Al Viro <viro@zeniv.linux.org.uk> 于2022年6月22日周三 18:35写道：
+> >
+> > On Wed, Jun 22, 2022 at 04:51:46PM +0800, sunliming wrote:
+> > > The inode variable is used as a parameter by the step_into function,
+> > > but is not assigned a value in the sub-lookup_slow branch path. So
+> > > get the inode in the sub-lookup_slow branch path.
+> >
+> > Take a good look at handle_mounts() and the things it does when
+> > *not* in RCU mode (i.e. LOOKUP_RCU is not set).  Specifically,
+> >                 *inode = d_backing_inode(path->dentry);
+> >                 *seqp = 0; /* out of RCU mode, so the value doesn't matter */
+> > this part.
+> >
+> > IOW, the values passed to step_into() in inode/seq are overridden unless
+> > we stay in RCU mode.  And if we'd been through lookup_slow(), we'd been
+> > out of RCU mode since before we called step_into().
+> 
+> It might be more appropriate and easier to understand to do this
+> before parameter passing in the top-level  walk_component function？
 
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
- tools/testing/selftests/kselftest_deps.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest_deps.sh b/tools/testing/selftests/kselftest_deps.sh
-index 00e60d6eb16b..708cb5429633 100755
---- a/tools/testing/selftests/kselftest_deps.sh
-+++ b/tools/testing/selftests/kselftest_deps.sh
-@@ -26,7 +26,7 @@ echo "  main Makefile when optional -p is specified."
- echo "- Prints pass/fail dependency check for each tests/sub-test."
- echo "- Prints pass/fail targets and libraries."
- echo "- Default: runs dependency checks on all tests."
--echo "- Optional test name can be specified to check dependencies for it."
-+echo "- Optional: test name can be specified to check dependencies for it."
- exit 1
- 
- }
--- 
-2.34.1
-
+It's possible to fall out of RCU mode *inside* step_into(), so we need
+it done there anyway.  Unfortunately ;-/

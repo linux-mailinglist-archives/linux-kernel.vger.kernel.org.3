@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E496558575
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1315A558191
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiFWR65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:58:57 -0400
+        id S232902AbiFWRCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:02:14 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbiFWRyC (ORCPT
+        with ESMTP id S233674AbiFWQ6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:54:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE6BAD19C;
-        Thu, 23 Jun 2022 10:14:57 -0700 (PDT)
+        Thu, 23 Jun 2022 12:58:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DA74EF49;
+        Thu, 23 Jun 2022 09:53:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E457B8249B;
-        Thu, 23 Jun 2022 17:14:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C628DC3411B;
-        Thu, 23 Jun 2022 17:14:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53367B82491;
+        Thu, 23 Jun 2022 16:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADECC3411B;
+        Thu, 23 Jun 2022 16:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004495;
-        bh=Sc7HKxEJeYEuVloFrvPH89U8hxLdJn0guLvJxiMmWjY=;
+        s=korg; t=1656003214;
+        bh=QoQwnZ21bn4rrh2FiWs98Uf5G6r93cAll2yBjM7S5iE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GPWn/zQfK9wnq6+a6Bry39EinShZrrvRrSKRZPRABwHRpSeotcaTbUyCXcpY/F/0T
-         20PHPHUDhE/YoD6kzymuDcm2Zx0pgb7nCapE9OZ8j6j9TJEsqd/MLhqmpiSMTdzbMx
-         et9NI3M74/If5JAhBKZh+jwLNDRN34F1Rj7LAUbE=
+        b=W57cYPpD//1eNI9GjNyiwJtTR1b71J3U5zir5oG6fbq5TnzJ393QI3HkzrI/xOII0
+         CR1ELI4LCSBQKHKVYOKPNAuDDTWkJjSBoRn7udn4SJlco5jVCvlKq3UBHlDlUgdALf
+         i7b/0B+Vo/e62rJ4jehmdZ/OhtkP6JEGSoLh/q2Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Jann Horn <jannh@google.com>, Theodore Tso <tytso@mit.edu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.19 056/234] random: initialize ChaCha20 constants with correct endianness
+Subject: [PATCH 4.9 130/264] random: deobfuscate irq u32/u64 contributions
 Date:   Thu, 23 Jun 2022 18:42:03 +0200
-Message-Id: <20220623164344.650084424@linuxfoundation.org>
+Message-Id: <20220623164347.744437426@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
-References: <20220623164343.042598055@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,64 +55,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit a181e0fdb2164268274453b5b291589edbb9b22d upstream.
+commit b2f408fe403800c91a49f6589d95b6759ce1b30b upstream.
 
-On big endian CPUs, the ChaCha20-based CRNG is using the wrong
-endianness for the ChaCha20 constants.
+In the irq handler, we fill out 16 bytes differently on 32-bit and
+64-bit platforms, and for 32-bit vs 64-bit cycle counters, which doesn't
+always correspond with the bitness of the platform. Whether or not you
+like this strangeness, it is a matter of fact.  But it might not be a
+fact you well realized until now, because the code that loaded the irq
+info into 4 32-bit words was quite confusing.  Instead, this commit
+makes everything explicit by having separate (compile-time) branches for
+32-bit and 64-bit types.
 
-This doesn't matter cryptographically, but technically it means it's not
-ChaCha20 anymore.  Fix it to always use the standard constants.
-
-Cc: linux-crypto@vger.kernel.org
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Jann Horn <jannh@google.com>
 Cc: Theodore Ts'o <tytso@mit.edu>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c     |    4 ++--
- include/crypto/chacha20.h |    8 ++++++++
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ drivers/char/random.c |   49 ++++++++++++++++++++++++++++---------------------
+ 1 file changed, 28 insertions(+), 21 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -817,7 +817,7 @@ static bool __init crng_init_try_arch_ea
+@@ -284,7 +284,10 @@ static void mix_pool_bytes(const void *i
+ }
  
- static void crng_initialize_secondary(struct crng_state *crng)
+ struct fast_pool {
+-	u32 pool[4];
++	union {
++		u32 pool32[4];
++		u64 pool64[2];
++	};
+ 	unsigned long last;
+ 	u16 reg_idx;
+ 	u8 count;
+@@ -295,10 +298,10 @@ struct fast_pool {
+  * collector.  It's hardcoded for an 128 bit pool and assumes that any
+  * locks that might be needed are taken by the caller.
+  */
+-static void fast_mix(struct fast_pool *f)
++static void fast_mix(u32 pool[4])
  {
--	memcpy(&crng->state[0], "expand 32-byte k", 16);
-+	chacha_init_consts(crng->state);
- 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
- 	crng_init_try_arch(crng);
- 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
-@@ -825,7 +825,7 @@ static void crng_initialize_secondary(st
+-	u32 a = f->pool[0],	b = f->pool[1];
+-	u32 c = f->pool[2],	d = f->pool[3];
++	u32 a = pool[0],	b = pool[1];
++	u32 c = pool[2],	d = pool[3];
  
- static void __init crng_initialize_primary(struct crng_state *crng)
- {
--	memcpy(&crng->state[0], "expand 32-byte k", 16);
-+	chacha_init_consts(crng->state);
- 	_extract_entropy(&input_pool, &crng->state[4], sizeof(__u32) * 12, 0);
- 	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
- 		invalidate_batched_entropy();
---- a/include/crypto/chacha20.h
-+++ b/include/crypto/chacha20.h
-@@ -24,4 +24,12 @@ int crypto_chacha20_setkey(struct crypto
- 			   unsigned int keysize);
- int crypto_chacha20_crypt(struct skcipher_request *req);
+ 	a += b;			c += d;
+ 	b = rol32(b, 6);	d = rol32(d, 27);
+@@ -316,9 +319,8 @@ static void fast_mix(struct fast_pool *f
+ 	b = rol32(b, 16);	d = rol32(d, 14);
+ 	d ^= a;			b ^= c;
  
-+static inline void chacha_init_consts(u32 *state)
-+{
-+	state[0]  = 0x61707865; /* "expa" */
-+	state[1]  = 0x3320646e; /* "nd 3" */
-+	state[2]  = 0x79622d32; /* "2-by" */
-+	state[3]  = 0x6b206574; /* "te k" */
-+}
+-	f->pool[0] = a;  f->pool[1] = b;
+-	f->pool[2] = c;  f->pool[3] = d;
+-	f->count++;
++	pool[0] = a;  pool[1] = b;
++	pool[2] = c;  pool[3] = d;
+ }
+ 
+ static void process_random_ready_list(void)
+@@ -834,29 +836,34 @@ void add_interrupt_randomness(int irq)
+ 	struct pt_regs *regs = get_irq_regs();
+ 	unsigned long now = jiffies;
+ 	cycles_t cycles = random_get_entropy();
+-	u32 c_high, j_high;
+-	u64 ip;
+ 
+ 	if (cycles == 0)
+ 		cycles = get_reg(fast_pool, regs);
+-	c_high = (sizeof(cycles) > 4) ? cycles >> 32 : 0;
+-	j_high = (sizeof(now) > 4) ? now >> 32 : 0;
+-	fast_pool->pool[0] ^= cycles ^ j_high ^ irq;
+-	fast_pool->pool[1] ^= now ^ c_high;
+-	ip = regs ? instruction_pointer(regs) : _RET_IP_;
+-	fast_pool->pool[2] ^= ip;
+-	fast_pool->pool[3] ^=
+-		(sizeof(ip) > 4) ? ip >> 32 : get_reg(fast_pool, regs);
+ 
+-	fast_mix(fast_pool);
++	if (sizeof(cycles) == 8)
++		fast_pool->pool64[0] ^= cycles ^ rol64(now, 32) ^ irq;
++	else {
++		fast_pool->pool32[0] ^= cycles ^ irq;
++		fast_pool->pool32[1] ^= now;
++	}
 +
- #endif
++	if (sizeof(unsigned long) == 8)
++		fast_pool->pool64[1] ^= regs ? instruction_pointer(regs) : _RET_IP_;
++	else {
++		fast_pool->pool32[2] ^= regs ? instruction_pointer(regs) : _RET_IP_;
++		fast_pool->pool32[3] ^= get_reg(fast_pool, regs);
++	}
++
++	fast_mix(fast_pool->pool32);
++	++fast_pool->count;
+ 
+ 	if (unlikely(crng_init == 0)) {
+ 		if (fast_pool->count >= 64 &&
+-		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
++		    crng_fast_load(fast_pool->pool32, sizeof(fast_pool->pool32)) > 0) {
+ 			fast_pool->count = 0;
+ 			fast_pool->last = now;
+ 			if (spin_trylock(&input_pool.lock)) {
+-				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
++				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+ 				spin_unlock(&input_pool.lock);
+ 			}
+ 		}
+@@ -870,7 +877,7 @@ void add_interrupt_randomness(int irq)
+ 		return;
+ 
+ 	fast_pool->last = now;
+-	_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
++	_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+ 	spin_unlock(&input_pool.lock);
+ 
+ 	fast_pool->count = 0;
 
 

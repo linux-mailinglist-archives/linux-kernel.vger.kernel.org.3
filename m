@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38815583C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD8955858D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiFWRea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S232658AbiFWR7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234616AbiFWRdG (ORCPT
+        with ESMTP id S235485AbiFWR4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:33:06 -0400
+        Thu, 23 Jun 2022 13:56:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CE9515A4;
-        Thu, 23 Jun 2022 10:05:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2611AAE98D;
+        Thu, 23 Jun 2022 10:15:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAB5BB824B5;
-        Thu, 23 Jun 2022 17:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438D4C3411B;
-        Thu, 23 Jun 2022 17:05:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABCDEB8249B;
+        Thu, 23 Jun 2022 17:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBA5C3411B;
+        Thu, 23 Jun 2022 17:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003945;
-        bh=tdJgFI6BSEbMlog94O8U41zIwpESdHgVPKAWwGejSCQ=;
+        s=korg; t=1656004526;
+        bh=aOprigIcG/hpSAFQqHtR2NrqFIOQ6+qE+2D3VkQdaoU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Oc5KoBEUUr+3iDCGV9nCU+b0d3+1+PUgmq6cuwvPzbPjHFisxk8Wk/vUcxuRPi3bD
-         UhjKdvidxVnN+N6WhT1WXrHS3MMNFuPbFU/CO8BGFtBs/TARoaIwPEO9BYFjmyIjFO
-         uHyxqdteOewZK+6zGd9At+p6F1h1DolVM0+vUpBo=
+        b=DfwJ0Uxz1RbPhhyJ5tpRjrsrjNRdXxEB2TeVNtwEbaimTT7Bc7PveA2Tbet1aNaLg
+         AJXQR+2T3QLYZUDIcAn4tz9T2iNy+ZFCg0bbEJNkUVmzBfn7qe/DUk2ogLb0FGYF9W
+         BBV8d+LvfNA/oQ1K0b5NfRNpJDLPVn2gwCtUaxpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 097/237] random: inline leaves of rand_initialize()
+Subject: [PATCH 4.19 064/234] random: remove unused extract_entropy() reserved argument
 Date:   Thu, 23 Jun 2022 18:42:11 +0200
-Message-Id: <20220623164345.940720469@linuxfoundation.org>
+Message-Id: <20220623164344.873552454@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,142 +57,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 8566417221fcec51346ec164e920dacb979c6b5f upstream.
+commit 8b2d953b91e7f60200c24067ab17b77cc7bfd0d4 upstream.
 
-This is a preparatory commit for the following one. We simply inline the
-various functions that rand_initialize() calls that have no other
-callers. The compiler was doing this anyway before. Doing this will
-allow us to reorganize this after. We can then move the trust_cpu and
-parse_trust_cpu definitions a bit closer to where they're actually used,
-which makes the code easier to read.
+This argument is always set to zero, as a result of us not caring about
+keeping a certain amount reserved in the pool these days. So just remove
+it and cleanup the function signatures.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   90 ++++++++++++++++++--------------------------------
- 1 file changed, 33 insertions(+), 57 deletions(-)
+ drivers/char/random.c |   17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -476,42 +476,6 @@ static DECLARE_WAIT_QUEUE_HEAD(crng_init
+@@ -519,7 +519,7 @@ struct entropy_store {
+ };
  
- static void invalidate_batched_entropy(void);
+ static ssize_t extract_entropy(struct entropy_store *r, void *buf,
+-			       size_t nbytes, int min, int rsvd);
++			       size_t nbytes, int min);
+ static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
+ 				size_t nbytes);
  
--static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
--static int __init parse_trust_cpu(char *arg)
--{
--	return kstrtobool(arg, &trust_cpu);
--}
--early_param("random.trust_cpu", parse_trust_cpu);
--
--static bool __init crng_init_try_arch_early(void)
--{
--	int i;
--	bool arch_init = true;
--	unsigned long rv;
--
--	for (i = 4; i < 16; i++) {
--		if (!arch_get_random_seed_long_early(&rv) &&
--		    !arch_get_random_long_early(&rv)) {
--			rv = random_get_entropy();
--			arch_init = false;
--		}
--		primary_crng.state[i] ^= rv;
--	}
--
--	return arch_init;
--}
--
--static void __init crng_initialize(void)
--{
--	extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
--	if (crng_init_try_arch_early() && trust_cpu && crng_init < 2) {
--		invalidate_batched_entropy();
--		crng_init = 2;
--		pr_notice("crng init done (trusting CPU's manufacturer)\n");
--	}
--	primary_crng.init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
--}
--
- /*
-  * crng_fast_load() can be called by code in the interrupt service
-  * path.  So we can't afford to dilly-dally. Returns the number of
-@@ -1220,17 +1184,28 @@ int __must_check get_random_bytes_arch(v
- }
- EXPORT_SYMBOL(get_random_bytes_arch);
+@@ -989,7 +989,7 @@ static void crng_reseed(struct crng_stat
+ 	} buf;
  
-+static bool trust_cpu __ro_after_init = IS_ENABLED(CONFIG_RANDOM_TRUST_CPU);
-+static int __init parse_trust_cpu(char *arg)
-+{
-+	return kstrtobool(arg, &trust_cpu);
-+}
-+early_param("random.trust_cpu", parse_trust_cpu);
-+
- /*
-- * init_std_data - initialize pool with system data
-- *
-- * This function clears the pool's entropy count and mixes some system
-- * data into the pool to prepare it for use. The pool is not cleared
-- * as that can only decrease the entropy in the pool.
-+ * Note that setup_arch() may call add_device_randomness()
-+ * long before we get here. This allows seeding of the pools
-+ * with some platform dependent data very early in the boot
-+ * process. But it limits our options here. We must use
-+ * statically allocated structures that already have all
-+ * initializations complete at compile time. We should also
-+ * take care not to overwrite the precious per platform data
-+ * we were given.
+ 	if (r) {
+-		num = extract_entropy(r, &buf, 32, 16, 0);
++		num = extract_entropy(r, &buf, 32, 16);
+ 		if (num == 0)
+ 			return;
+ 	} else {
+@@ -1327,8 +1327,7 @@ EXPORT_SYMBOL_GPL(add_disk_randomness);
+  * This function decides how many bytes to actually take from the
+  * given pool, and also debits the entropy count accordingly.
   */
--static void __init init_std_data(void)
-+int __init rand_initialize(void)
+-static size_t account(struct entropy_store *r, size_t nbytes, int min,
+-		      int reserved)
++static size_t account(struct entropy_store *r, size_t nbytes, int min)
  {
- 	int i;
- 	ktime_t now = ktime_get_real();
-+	bool arch_init = true;
- 	unsigned long rv;
+ 	int entropy_count, orig, have_bytes;
+ 	size_t ibytes, nfrac;
+@@ -1342,7 +1341,7 @@ retry:
+ 	/* never pull more than available */
+ 	have_bytes = entropy_count >> (ENTROPY_SHIFT + 3);
  
- 	mix_pool_bytes(&now, sizeof(now));
-@@ -1241,22 +1216,23 @@ static void __init init_std_data(void)
- 		mix_pool_bytes(&rv, sizeof(rv));
- 	}
- 	mix_pool_bytes(utsname(), sizeof(*(utsname())));
--}
+-	if ((have_bytes -= reserved) < 0)
++	if (have_bytes < 0)
+ 		have_bytes = 0;
+ 	ibytes = min_t(size_t, ibytes, have_bytes);
+ 	if (ibytes < min)
+@@ -1448,15 +1447,13 @@ static ssize_t _extract_entropy(struct e
+  * returns it in a buffer.
+  *
+  * The min parameter specifies the minimum amount we can pull before
+- * failing to avoid races that defeat catastrophic reseeding while the
+- * reserved parameter indicates how much entropy we must leave in the
+- * pool after each pull to avoid starving other readers.
++ * failing to avoid races that defeat catastrophic reseeding.
+  */
+ static ssize_t extract_entropy(struct entropy_store *r, void *buf,
+-				 size_t nbytes, int min, int reserved)
++				 size_t nbytes, int min)
+ {
+ 	trace_extract_entropy(r->name, nbytes, ENTROPY_BITS(r), _RET_IP_);
+-	nbytes = account(r, nbytes, min, reserved);
++	nbytes = account(r, nbytes, min);
+ 	return _extract_entropy(r, buf, nbytes);
+ }
  
--/*
-- * Note that setup_arch() may call add_device_randomness()
-- * long before we get here. This allows seeding of the pools
-- * with some platform dependent data very early in the boot
-- * process. But it limits our options here. We must use
-- * statically allocated structures that already have all
-- * initializations complete at compile time. We should also
-- * take care not to overwrite the precious per platform data
-- * we were given.
-- */
--int __init rand_initialize(void)
--{
--	init_std_data();
--	crng_initialize();
-+	extract_entropy(&primary_crng.state[4], sizeof(u32) * 12);
-+	for (i = 4; i < 16; i++) {
-+		if (!arch_get_random_seed_long_early(&rv) &&
-+		    !arch_get_random_long_early(&rv)) {
-+			rv = random_get_entropy();
-+			arch_init = false;
-+		}
-+		primary_crng.state[i] ^= rv;
-+	}
-+	if (arch_init && trust_cpu && crng_init < 2) {
-+		invalidate_batched_entropy();
-+		crng_init = 2;
-+		pr_notice("crng init done (trusting CPU's manufacturer)\n");
-+	}
-+	primary_crng.init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
-+
- 	if (ratelimit_disable) {
- 		urandom_warning.interval = 0;
- 		unseeded_warning.interval = 0;
 
 

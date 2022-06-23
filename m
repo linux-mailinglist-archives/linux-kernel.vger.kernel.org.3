@@ -2,184 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0D8558781
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83777558786
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiFWS2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        id S237280AbiFWS3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbiFWS1D (ORCPT
+        with ESMTP id S237070AbiFWS3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:27:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB86F50B0C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:28:56 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NH477J005821;
-        Thu, 23 Jun 2022 17:28:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=6OXl8nU3O0vsUUAHgJeBUoHNx37icdPhV3yLsSJhBsc=;
- b=Y3TA0mqgqSgd3CMi4ogddbNhPuhnxTaec8Vqyi9b/zcgWwAAMH+YcJA70VNHvCFGIiQN
- zR24VWmejEg/nI2tsC/OF1lcu123dFSKvIKHIbhdqHv2P+ExDf8QUM4whfD01WYA+aCR
- VZzufpxJkUnny3e8QJnownQFe8GW1Z210WiM21twHIas6/ubfst4vAlGMKqwtiIuNKVv
- LgVz+I5tGmGWfsd0MociXvBTL1/2y3m71f7CQAYm8Hv+MclFSw/nq5Ilr0gPvo1Lr3fb
- k/OLV/g+iYVOCU5nnn/FSNOuUF7ulqwMPtSUWS/FRJE320d/A0ZSmr97xfojlH1bCYaU RQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gvux4srfn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jun 2022 17:28:37 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25NGgZhI019666;
-        Thu, 23 Jun 2022 17:28:37 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gvux4srf1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jun 2022 17:28:36 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25NHKRpA001613;
-        Thu, 23 Jun 2022 17:28:35 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01dal.us.ibm.com with ESMTP id 3guk92nqty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jun 2022 17:28:35 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25NHSYCt33161502
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jun 2022 17:28:34 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F949136059;
-        Thu, 23 Jun 2022 17:28:34 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5EB9F13605D;
-        Thu, 23 Jun 2022 17:28:34 +0000 (GMT)
-Received: from localhost (unknown [9.211.80.5])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Jun 2022 17:28:34 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        haren@linux.vnet.ibm.com, npiggin@gmail.com
-Subject: Re: [PATCH v2 4/4] pseries/mobility: Set NMI watchdog factor during
- LPM
-In-Reply-To: <20220614135414.37746-5-ldufour@linux.ibm.com>
-References: <20220614135414.37746-1-ldufour@linux.ibm.com>
- <20220614135414.37746-5-ldufour@linux.ibm.com>
-Date:   Thu, 23 Jun 2022 12:28:34 -0500
-Message-ID: <87sfnvmgql.fsf@linux.ibm.com>
+        Thu, 23 Jun 2022 14:29:07 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB3D80533
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:30:53 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3176d94c236so1404647b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KOXrqOWcfMdTsdtXrpYVXi48JcFuUmjoexhlnfOOTGg=;
+        b=L4dJOWUZH8Ao72MwmMu0hlQebn/kw9JPayp5sizpod+mvJoa+Jk2c12U6dtGJw0ocL
+         FY0ahsSAadsHrWKiB46J+rcLToO2J7UvF9dIoPD0dwYD6fCgiC2WdrEctFh7m2vONz1A
+         i5kKXCDjiPHGInQZUAkTQeJKWzgc8xBF9HzM08vnWaL+MuxZ5JvD3IF2Be6NowkMVSgg
+         S+ucsFZ/JWQdteDBkGi0njXsklqZaAIz/FkVYezBWUTLcJOSi+wYLYWfkqidiVZs/Mft
+         8KjS3VdHIM1qyN71zTYrpDaez/WAciLANIBuy1v8KewlMSrgXXmZL/60tdhF7JlBxcPw
+         T2sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KOXrqOWcfMdTsdtXrpYVXi48JcFuUmjoexhlnfOOTGg=;
+        b=F2dkqbffjpVoNQqaEOzoS9irjeu2SF/ota7hub+mnHxUfPYfhdZk0V64rO3vLX8SM7
+         RH7DSgJ0oaVOZqpb/Z7nm5jFWeD4gCFpqqRCvbbH/7/7+sawIbGpj3+FeikyU+N1lQRb
+         5hLAvxOaMoYyAUvuqi32vyIeY6W9EjvZn5eO98+6VmTcrS7vYG10PduSZBtfSfVYk0xA
+         mrUj463ea/wr2w+rOtkLp+53QZ3zqbmEYVp6esyC2/QRgL3XBD7/69yy0YBdZ1/hHcCl
+         9V9G36kx6r53iHUI8okZqSfMzFet6zhDRWT0Uc/shfjNnl5bP6ZTAtv09bhH6+JsP0zb
+         tWiA==
+X-Gm-Message-State: AJIora88UE6k23ed5r3YQm4PwoW/bgztiHWTzxyeI+Ek4poNzH4XR1CR
+        c+S1WES419ueaOtcknn5dLw52eta0VtpDn2SqmiWYg==
+X-Google-Smtp-Source: AGRyM1ul3O6ILFZqI77UreHIjC0wH+ddqVeLDfmwfl1PMnWdistPwRhbAXTfwUjlgyKKpmHDt2j86FuzSHATEelndGs=
+X-Received: by 2002:a0d:dfd5:0:b0:317:f0d4:505b with SMTP id
+ i204-20020a0ddfd5000000b00317f0d4505bmr11413939ywe.518.1656005452363; Thu, 23
+ Jun 2022 10:30:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: REn_lZoZMpAj12V61_21I2CQkeWkN_5s
-X-Proofpoint-ORIG-GUID: Kp3KJByhFMvM2McxSTK861NMN4gk17Zz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-23_07,2022-06-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- spamscore=0 bulkscore=0 mlxlogscore=972 priorityscore=1501 phishscore=0
- clxscore=1015 lowpriorityscore=0 impostorscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206230067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220623080344.783549-1-saravanak@google.com> <20220623080344.783549-3-saravanak@google.com>
+ <20220623100421.GY1615@pengutronix.de> <YrSXKkYfr+Hinsuu@smile.fi.intel.com>
+In-Reply-To: <YrSXKkYfr+Hinsuu@smile.fi.intel.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 23 Jun 2022 10:30:16 -0700
+Message-ID: <CAGETcx8axPpXFv9Cc59nWrgW9_fYqZUYmNPUg83CTHTBZDC-ZA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when fw_devlink.strict=1
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     sascha hauer <sha@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        russell king <linux@armlinux.org.uk>,
+        "david s. miller" <davem@davemloft.net>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
-> index 179bbd4ae881..4284ceaf9060 100644
-> --- a/arch/powerpc/platforms/pseries/mobility.c
-> +++ b/arch/powerpc/platforms/pseries/mobility.c
-> @@ -48,6 +48,39 @@ struct update_props_workarea {
->  #define MIGRATION_SCOPE	(1)
->  #define PRRN_SCOPE -2
->  
-> +#ifdef CONFIG_PPC_WATCHDOG
-> +static unsigned int lpm_nmi_wd_factor = 200;
-> +
-> +#ifdef CONFIG_SYSCTL
-> +static struct ctl_table lpm_nmi_wd_factor_ctl_table[] = {
-> +	{
-> +		.procname	= "lpm_nmi_watchdog_factor",
+On Thu, Jun 23, 2022 at 9:39 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Jun 23, 2022 at 12:04:21PM +0200, sascha hauer wrote:
+> > On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
+>
+> ...
+>
+> > I wonder if it wouldn't be a better approach to just probe all devices
+> > and record the device(node) they are waiting on. Then you know that you
+> > don't need to probe them again until the device they are waiting for
+> > is available.
+>
+> There may be no device, but resource. And we become again to the something like
+> deferred probe ugly hack.
+>
+> The real solution is to rework device driver model in the kernel that it will
+> create a graph of dependencies and then simply follow it. But actually it should
+> be more than 1 graph, because there are resources and there are power, clock and
+> resets that may be orthogonal to the higher dependencies (like driver X provides
+> a resource to driver Y).
 
-Assuming the basic idea is acceptable, I suggest making the user-visible
-name more generic (e.g. "nmi_watchdog_factor") in case it makes sense to
-apply this to other contexts in the future.
+We already do this with fw_devlink for DT based systems and we do
+effectively just probe the devices in graph order (by deferring any
+attempts that happen too early and before it even gets to the driver).
+The problem is the knowledge of what's considered an optional vs
+mandatory dependency and that's affected by the global state of driver
+support in the kernel.
 
-> +		.data		= &lpm_nmi_wd_factor,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_douintvec_minmax,
-> +	},
-> +	{}
-> +};
-> +static struct ctl_table lpm_nmi_wd_factor_sysctl_root[] = {
-> +	{
-> +		.procname       = "kernel",
-> +		.mode           = 0555,
-> +		.child          = lpm_nmi_wd_factor_ctl_table,
-> +	},
-> +	{}
-> +};
-> +
-> +static int __init register_lpm_nmi_wd_factor_sysctl(void)
-> +{
-> +	register_sysctl_table(lpm_nmi_wd_factor_sysctl_root);
-> +
-> +	return 0;
-> +}
-> +device_initcall(register_lpm_nmi_wd_factor_sysctl);
-> +#endif /* CONFIG_SYSCTL */
-> +#endif /* CONFIG_PPC_WATCHDOG */
-> +
->  static int mobility_rtas_call(int token, char *buf, s32 scope)
->  {
->  	int rc;
-> @@ -702,6 +735,7 @@ static int pseries_suspend(u64 handle)
->  static int pseries_migrate_partition(u64 handle)
->  {
->  	int ret;
-> +	unsigned int factor = lpm_nmi_wd_factor;
->  
->  	ret = wait_for_vasi_session_suspending(handle);
->  	if (ret)
-> @@ -709,6 +743,13 @@ static int pseries_migrate_partition(u64 handle)
->  
->  	vas_migration_handler(VAS_SUSPEND);
->  
-> +#ifdef CONFIG_PPC_WATCHDOG
-> +	if (factor) {
-> +		pr_info("Set the NMI watchdog factor to %u%%\n", factor);
-> +		watchdog_nmi_set_lpm_factor(factor);
-> +	}
-> +#endif /* CONFIG_PPC_WATCHDOG */
-> +
->  	ret = pseries_suspend(handle);
->  	if (ret == 0) {
->  		post_mobility_fixup();
-> @@ -716,6 +757,13 @@ static int pseries_migrate_partition(u64 handle)
->  	} else
->  		pseries_cancel_migration(handle, ret);
->  
-> +#ifdef CONFIG_PPC_WATCHDOG
-> +	if (factor) {
-> +		pr_info("Restoring NMI watchdog timer\n");
-> +		watchdog_nmi_set_lpm_factor(0);
-> +	}
-> +#endif /* CONFIG_PPC_WATCHDOG */
-> +
-
-A couple more suggestions:
-
-* Move the prints into a single statement in watchdog_nmi_set_lpm_factor().
-
-* Add no-op versions of watchdog_nmi_set_lpm_factor for
-  !CONFIG_PPC_WATCHDOG so we can minimize the #ifdef here.
-
-Otherwise this looks fine to me.
+-Saravana

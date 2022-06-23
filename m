@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF5E55894F
+	by mail.lfdr.de (Postfix) with ESMTP id 8F72355894E
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiFWTl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S231714AbiFWTlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbiFWTlD (ORCPT
+        with ESMTP id S229477AbiFWTlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:41:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379CF443F8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:32:02 -0700 (PDT)
+        Thu, 23 Jun 2022 15:41:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F5748314
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:32:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9D3DB82164
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 19:32:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCACC36AEA;
-        Thu, 23 Jun 2022 19:31:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0D8B619AC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 19:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A561C341CA;
+        Thu, 23 Jun 2022 19:32:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656012719;
-        bh=0/j55yxemsyKEa0fWyDmGdq8+hj/hz1sDX4BWaTTnmQ=;
+        s=k20201202; t=1656012723;
+        bh=phMTE8CzqM5mBvwWHtWEHzVtgbVj6FCykiDNoK2d+oU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hqGmSrPpEcDQiAJw0NYXOc4USlHqP9J98E+VQiFzefxWRl4aVnpoJnr/EZOMoXwm7
-         jem8zWED4oWgYXTR5GABs4TWejZbFVH3tIhXfJXM1LhS/7DI7MvcKWTL9W39I69T7S
-         z8AH30rWojWt+TBUX3TgG/PQHbbhZAufcixMeSqaYwAdAd04nzsA0NS2TBMEORn6u6
-         n24xFvClOy37EiaDPJs26aHmfa9lkp8CfUu8skzVPg1MnD28+WZCkhcyqX+/jZLOv+
-         kOKFUozgNmIngF3LR5b9eL0o0dFGvKc4DUyN9rO6r2cflssdRtTZkxHzzIB/Z+/R1I
-         XmiWOYvI8OSUQ==
+        b=uGu6X7+W+gOcPWmM8juqj1oW0Rb8iSYd82y4LXnfFawxMY025/7DEQiZbWdJbtfeJ
+         6YzwgOtNO/odbyvRyfJ8KY62k2uz8XCbnO96voar4d9noZmX7v9gcMm/wB072vMxy8
+         spdCJnyMsx/Em1REU6MPKzKVmMVrr6ssp9lJcx4pUDJpBDisZdrSFUJXA/JCsN8kHp
+         pRtf+ZHRP655zARZZ8mlmJw+VL2qmwwMyukKbtT/wgzK9CqP7KzgmPKNPTLStQ5x2f
+         cCBzoa4x6Zm7RaQJiRU9PgS2GSSj2AoIGyq5ZCydCbBl6zyTddFlJqH/e1/STWcJ3q
+         kmQd1sFJ3GasQ==
 From:   Will Deacon <will@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, mark.rutland@arm.com
-Subject: Re: [PATCH] arm64: compat: Move kuser32.S to .rodata section
-Date:   Thu, 23 Jun 2022 20:31:35 +0100
-Message-Id: <165599650307.2989933.18162881906585322732.b4-ty@kernel.org>
+To:     Nick Terrell <terrelln@fb.com>, Jisheng Zhang <jszhang@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: boot: add zstd support
+Date:   Thu, 23 Jun 2022 20:31:37 +0100
+Message-Id: <165600561071.3000949.3078410310675163227.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220531015350.233827-1-chenzhongjin@huawei.com>
-References: <20220531015350.233827-1-chenzhongjin@huawei.com>
+In-Reply-To: <20220619170657.2657-1-jszhang@kernel.org>
+References: <20220619170657.2657-1-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,18 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 09:53:50 +0800, Chen Zhongjin wrote:
-> Kuser code should be inside .rodata.
-> 
-> Now code in kuser32.S is inside .text section and never executed.
-> Move it to .rodata.
+On Mon, 20 Jun 2022 01:06:57 +0800, Jisheng Zhang wrote:
+> Support build the zstd compressed Image.zst. Similar as other
+> compressed formats, the Image.zst is not self-decompressing and
+> the bootloader still needs to handle decompression before
+> launching the kernel image.
 > 
 > 
 
-Applied to arm64 (for-next/vdso), thanks!
+Applied to arm64 (for-next/misc), thanks!
 
-[1/1] arm64: compat: Move kuser32.S to .rodata section
-      https://git.kernel.org/arm64/c/2d304afaedc4
+[1/1] arm64: boot: add zstd support
+      https://git.kernel.org/arm64/c/9f6a503d5238
 
 Cheers,
 -- 

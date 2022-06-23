@@ -2,144 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57420558BBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63F3558BC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiFWXdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S230410AbiFWXea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiFWXdv (ORCPT
+        with ESMTP id S229454AbiFWXe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:33:51 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2F55639F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:33:49 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id a2so1566022lfg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:33:49 -0700 (PDT)
+        Thu, 23 Jun 2022 19:34:26 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4AC53A61;
+        Thu, 23 Jun 2022 16:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y5t2HdHgbQDM3fVs9f9inVKfPOgEozAtWYglMYVXHeo=;
-        b=RuFxaVmx5XYRY5cqHS6MXL8FQOv9P3Qc6bXQm6YEdOifK6a/lTAFCGFL2J4ATAQQFY
-         lwCKS6zC7RJM/DUvxNJJCHOVPnF/6IJjID28NEl412feqsYv1uZFexivMdsdVa+7tn2X
-         MGMfYO0AbTXmbcfSxsQPuGgp2ZmB8OmFzHZSms9FbzYCu1SojnuuERyeWei46ML1VAnI
-         f5+edDfn3TD/BIFurtpH6q80H076WYN2G7TkGUjrLTpAyNcYDfaVP63FXe76kdTu9nr2
-         KhrmWXUNpaXlUGfWHxfTczNfXxGUYutkiGRxGjmVn9kcsMYI2nS4Wkona1TX4gvI67M/
-         gwMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y5t2HdHgbQDM3fVs9f9inVKfPOgEozAtWYglMYVXHeo=;
-        b=kw8kNB15iC7lTM5PGSm1K6A8T3t3mOG85ka9bROCwY+I2+ttSC/9fIRyvYxhlpJW05
-         Est68HEtwsTL0lB22mlqBx32WCo0+YjYv65qzJXs/I26HZfAnC+1EDrGNfA7OGH985up
-         140a2L1kOlK3mhLCnsDECe4rHuqX6J3gQkvoaqN4v/C35zS7OpQ9ur3/Y0ukGCo8W1U4
-         phUwffOv7/AujbooeFa/VoFlRv3xBQN2nXH4bzAkM9H1ZgtZwrt54IPjyT61tImFlWzY
-         eftWJ0DGUeNQ58E4oEaD2Je+KEhTo9fAmVZ3O2sKxAkKwIVt6SqKXjVMHRi7XyANNb1t
-         N17A==
-X-Gm-Message-State: AJIora9yqepTKw+oQl5kN5Do6LbPCALJoO6U1Gy6QZEvmYJXJG1qzrCU
-        8NVv4MtNuvF24MGINDUts8RSJAQuXDwcO2maRS8mrA==
-X-Google-Smtp-Source: AGRyM1uUYWe4B92qbAxaSPcEuzt1Jad6zUUVtzIlYMTYhqB8ii9Dkg/YbHjka/rpdX0fYjsiE40wpIwNUslwOZjEXpY=
-X-Received: by 2002:a05:6512:3f9f:b0:47d:c87e:f8f3 with SMTP id
- x31-20020a0565123f9f00b0047dc87ef8f3mr6953750lfa.401.1656027227275; Thu, 23
- Jun 2022 16:33:47 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656027265; x=1687563265;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=/31sRhd3eMfjJCpxCgFwnrLmD7Dvnq2PU5xG/V6yQRQ=;
+  b=PaSBIZ1Y+/qQF6XoBVGbNNjb/sFwqVE44e9AhpQ0I5P+GnOyguNFMgRk
+   aKsW9hfvQYvXDfvpo2MqMnkbDWUSqyH6L80PI3PNYPyVQx2MyvGG+tzQj
+   eAGIxj9rr71MvWBm7GqHiIGMT2ooaTImUALJEPUB7rvUYkcwNrC4D6Gbo
+   Y=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Jun 2022 16:34:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 16:34:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 23 Jun 2022 16:34:24 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 23 Jun 2022 16:34:23 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dp:  no dp_hpd_unplug_handle() required for eDP
+Date:   Thu, 23 Jun 2022 16:34:16 -0700
+Message-ID: <1656027256-6552-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
- <YrMu5bdhkPzkxv/X@dev-arch.thelio-3990X> <CAHk-=wjTS9OJzggD8=tqtj0DoRCKhjjhpYWoB=bPQAv3QMa+eA@mail.gmail.com>
- <YrNQrPNF/XfriP99@debian> <CAHk-=wjje8UdsQ_mjGVF4Bc_TcjAWRgOps7E_Cytg4xTbXfyig@mail.gmail.com>
- <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
-In-Reply-To: <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 23 Jun 2022 16:33:35 -0700
-Message-ID: <CAKwvOdnfRnqBF8exO-Y1ooX=67TrO_8fSzgZwvUtidN_P31hzw@mail.gmail.com>
-Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 3:40 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Wed, Jun 22, 2022 at 10:49 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Wed, Jun 22, 2022 at 12:26 PM Sudip Mukherjee
-> > <sudipm.mukherjee@gmail.com> wrote:
-> > >
-> > > Tried it after applying your patch. There was no build failure, but some warnings:
-> >
-> > So some of those objtool warnings are, I think, because clang does odd
-> > and crazy things for when it decides "this is not reachable" code.
-> >
-> > I don't much like it, and neither does objtool, but it is what it is.
-> > When clang decides "I'm calling a function that cannot return", it
-> > will have a "call" instruction and then it will just fall off the face
-> > of the earth after that.
-> >
-> > That includes falling through to the next function, or just to random
-> > other labels after the function, and then objtool as a result
-> > complains about a stack state mismatch (when the fallthrough is the
-> > same function, but now the stack pointer is different in different
-> > parts), or of the "falls through to next function".
-> >
-> > I think it's a clang misfeature in that if something goes wrong, you
-> > basically execute random code. I'd much rather see clang insert a real
-> > 'ud' instruction or 'int3' or whatever. But it doesn't.
->
-> So adding `-mllvm -trap-unreachable` will turn these
-> `__builtin_unreachable()`'s into trapping instructions.  I think we
-> should just do that/enable that in the kernel.  The following patch
-> eliminates ALL of the fallthrough warnings observed from objtool on
-> x86_64 defconfig builds.
->
-> ```
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 87285b76adb2..1fbf8a8f3751 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -36,6 +36,7 @@ endif
->  # so they can be implemented or wrapped in cc-option.
->  CLANG_FLAGS    += -Werror=unknown-warning-option
->  CLANG_FLAGS    += -Werror=ignored-optimization-argument
-> +CLANG_FLAGS    += -mllvm -trap-unreachable
->  KBUILD_CFLAGS  += $(CLANG_FLAGS)
->  KBUILD_AFLAGS  += $(CLANG_FLAGS)
->  export CLANG_FLAGS
-> ```
->
-> There's more I need to do for LTO; `-mllvm` flags need to be passed to
-> the linker in that case.  Let me do a few more builds, collect
-> statistics on build size differences (guessing neglidgeable), then
-> will send out a more formal patch.
+eDP implementation does not reuried to support hpd signal. Therefore
+it only has either ST_DISPLAY_OFF or ST_CONNECTED state during normal
+operation. This patch remove unnecessary dp_hpd_unplug_handle() for
+eDP but still keep dp_hpd_plug_handle() to support eDP to either
+booting up or resume from ST_DISCONNECTED state.
 
-Looks like these are actually from calls to
-__ubsan_handle_divrem_overflow which is __noreturn when panic_on_warn
-is set by the corresponding config.  I wonder if we should be
-unconditionally adding __ubsan_handle_divrem_overflow to the allow
-list `global_noreturns` in tools/objtool/check.c?  It seems like the
-kconfig defines aren't passed through to the tools/ sources.
+Fixes: 391c96ff0555 ("drm/msm/dp: Support only IRQ_HPD and REPLUG interrupts for eDP")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-List of fallthrough warnings from allmodconfig for reference:
-https://lore.kernel.org/lkml/YrNQrPNF%2FXfriP99@debian/
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index da5c03a..ef9794e 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1666,7 +1666,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 		return;
+ 	}
+ 
+-	if (dp->is_edp)
++	if (dp->is_edp && dp_display->hpd_state == ST_DISCONNECTED)
+ 		dp_hpd_plug_handle(dp_display, 0);
+ 
+ 	mutex_lock(&dp_display->event_mutex);
+@@ -1737,9 +1737,6 @@ void dp_bridge_post_disable(struct drm_bridge *drm_bridge)
+ 
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 
+-	if (dp->is_edp)
+-		dp_hpd_unplug_handle(dp_display, 0);
+-
+ 	mutex_lock(&dp_display->event_mutex);
+ 
+ 	state = dp_display->hpd_state;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
---
-Thanks,
-~Nick Desaulniers

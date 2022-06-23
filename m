@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FF7557E46
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A88B557E55
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiFWOwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
+        id S232086AbiFWO4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbiFWOwH (ORCPT
+        with ESMTP id S232048AbiFWO4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:52:07 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893294833B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:52:04 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c30so23591400ljr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:52:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=GpreIe1vVrFK0GRTTTBCrmu4K38+/AoKp6X51SotBdU=;
-        b=2uzehPa+7Yh1/1yI1Z5UrlQSBeyJcy6RsaVimJTiqlPLLRwUTOoHga1Wb1egu6p0wr
-         H4yVijZAlfpr1xU4lEH1LNys0LFqKbKhTvHcKfJN0QQnqLklYEEUW4JNuFdZP9h1Zlmu
-         pgUzAi4h5gzZMlV5HEAx9NHHw8mHh72qr5FZF9tx+uUOCdvUuPNtzgsxyZItchwHqvwc
-         27BKuqvxrJvJkYcdvswWerNHUVfq4ecN5rBvXuLkqYoXEhXdLKw9vWYgZvIb6gFgw7Ec
-         QNjDw3kOBNAZtq1hleAu9lG2BqZJu4Y1MITm+G0yIj7c0AYmDdz9vRi8wuTMvlSLeK+8
-         uS0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=GpreIe1vVrFK0GRTTTBCrmu4K38+/AoKp6X51SotBdU=;
-        b=4QjUnY7JM4fxue/gTbuoLwmrzmVboF4cWm5TIW0mpDVNehUWKMOAryYKcIvMp22Ioh
-         GbMZs9b4iyhz/n8MUX9FCtCfQo7ACq6QewPJx2P/IYVk8QDY4jNgxeLUdLV+ZPggzKN6
-         0j20GMbT957DWrAT3skwLze3P4PQ1pCO6Mb5wE6HkfSjFLkp5+Y2b/E0sPpGlLSfq9gg
-         /fn2YXa1l/WgfDvXuW/uYJmo/PvEBCtSjLJfJzkS9Xa35ujnFz7DY5yUNiHoM7arDLJn
-         kalsHZAWoyR852o5haRJ9Yysznbl0XnCmmbTufgQQ05+ugh8E+4aA6h6w8bJcQt3ha+U
-         293A==
-X-Gm-Message-State: AJIora8Z6wlDWW7o/OgubcJwOmRsfwRSvZVrc6H5h8GTqVM7KjlLrxYa
-        2w6Nr2bAS5mkX/2WVXuINsBFNYUSCjSFQQ==
-X-Google-Smtp-Source: AGRyM1tPC+bd/t6EAqAmy50rsGPhX0wzCtEVeqe8450OaAKfA0Mm3KD6F91h0GbMVpg/lGxD+y3qSw==
-X-Received: by 2002:a2e:2e07:0:b0:25a:4bb3:a2c2 with SMTP id u7-20020a2e2e07000000b0025a4bb3a2c2mr5083546lju.450.1655995922945;
-        Thu, 23 Jun 2022 07:52:02 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id n16-20020a2e7210000000b0025a6f7000c0sm1547457ljc.11.2022.06.23.07.52.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 07:52:02 -0700 (PDT)
-Message-ID: <a4d96dd1-63ec-7a14-3039-9901d7e38244@openvz.org>
-Date:   Thu, 23 Jun 2022 17:52:01 +0300
+        Thu, 23 Jun 2022 10:56:16 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34229B5E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655996175; x=1687532175;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AT8JAPkS8YJRYuTDNqpAngPAp17BB/bvcfqew+27oho=;
+  b=hCU8lBo6Ey0rGXwn8k1+doy3x/VvmX0AnQ8J3iceaOJV+4vYGuoNIhBE
+   h910P+mCd5RHzq/taTBJNhnVD3RAtRZdiVjH64CN8YjgkcEJIOSZsL2Hm
+   nqdbIbb7fsbCuloDxjiZ4yFf7iyIo5G0xfarHqWP1i2YnxmHfD9drBRCI
+   yUNiU8hGBnyc4ehqbzxJkPzhI/F7qWjYop1L9RF4OryH5NJQuG/zFMplV
+   WkkiTOnxYVgTnEsnz9tWcxzryJzs0sTIDEfiYsve2aQSAuigmoO+yjZHH
+   NGkK8l4K1WPf0xHHEpi8/hZ7PSRQSFF2u8SmP3nGjiwCnuyL1q8kncGlw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281817793"
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="281817793"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 07:55:54 -0700
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="691055713"
+Received: from rames2-mobl.amr.corp.intel.com (HELO [10.213.181.118]) ([10.213.181.118])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 07:55:53 -0700
+Message-ID: <a861f3b2-dec4-982d-0939-1dfc18dd2f53@linux.intel.com>
+Date:   Thu, 23 Jun 2022 09:54:36 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH mm v5 9/9] memcg: enable accounting for perpu allocation of
- struct rt_rq
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH] soundwire: bus_type: fix remove and shutdown support
 Content-Language: en-US
-In-Reply-To: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
+        sanyog.r.kale@intel.com, bard.liao@intel.com
+References: <20220610015105.25987-1-yung-chuan.liao@linux.intel.com>
+ <YrQca7YH8v6XCl02@matsya>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <YrQca7YH8v6XCl02@matsya>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If enabled in config, alloc_rt_sched_group() is called for each new
-cpu cgroup and allocates a huge (~1700 bytes) percpu struct rt_rq.
-This significantly exceeds the size of the percpu allocation in the
-common part of cgroup creation.
 
-Memory allocated during new cpu cgroup creation
-(with enabled RT_GROUP_SCHED):
-common part:    ~11Kb   +   318 bytes percpu
-cpu cgroup:     ~2.5Kb  + ~2800 bytes percpu
 
-Accounting for this memory helps to avoid misuse inside memcg-limited
-containers.
+On 6/23/22 02:55, Vinod Koul wrote:
+> On 10-06-22, 09:51, Bard Liao wrote:
+>> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+>>
+>> The bus sdw_drv_remove() and sdw_drv_shutdown() helpers are used
+>> conditionally, if the driver provides these routines.
+>>
+>> These helpers already test if the driver provides a .remove or
+>> .shutdown callback, so there's no harm in invoking the
+>> sdw_drv_remove() and sdw_drv_shutdown() unconditionally.
+> 
+> Okay sounds good
+> 
+>> In addition, the current code is imbalanced with
+>> dev_pm_domain_attach() called from sdw_drv_probe(), but
+>> dev_pm_domain_detach() called from sdw_drv_remove() only if the driver
+>> provides a .remove callback.
+> 
+> Am not sure I follow what is imbalance, pm_domain_attach/detach?
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
-Acked-by: Shakeel Butt <shakeelb@google.com>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
----
- kernel/sched/rt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, the dev_pm_domain_detach() is done conditionally, depending on the
+presence of a driver .remove callback, that's not so good.
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 8c9ed9664840..44a8fc096e33 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -256,7 +256,7 @@ int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
- 
- 	for_each_possible_cpu(i) {
- 		rt_rq = kzalloc_node(sizeof(struct rt_rq),
--				     GFP_KERNEL, cpu_to_node(i));
-+				     GFP_KERNEL_ACCOUNT, cpu_to_node(i));
- 		if (!rt_rq)
- 			goto err;
- 
--- 
-2.36.1
+>> Fixes: 9251345dca24b ("soundwire: Add SoundWire bus type")
+> 
+> How is this a fix is still unclear to me. At best I think this is code
+> optimization and removing checks which maybe redundant.
 
+I think the Fixes tag is appropriate for the dev_pm_domain_detach()
+problem, but if you want to drop it that's fine with me.
+
+
+>> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+>> Reviewed-by: Rander Wang <rander.wang@intel.com>
+>> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+>> ---
+>>  drivers/soundwire/bus_type.c | 8 ++------
+>>  1 file changed, 2 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
+>> index 893296f3fe39..b81e04dd3a9f 100644
+>> --- a/drivers/soundwire/bus_type.c
+>> +++ b/drivers/soundwire/bus_type.c
+>> @@ -193,12 +193,8 @@ int __sdw_register_driver(struct sdw_driver *drv, struct module *owner)
+>>  
+>>  	drv->driver.owner = owner;
+>>  	drv->driver.probe = sdw_drv_probe;
+>> -
+>> -	if (drv->remove)
+>> -		drv->driver.remove = sdw_drv_remove;
+>> -
+>> -	if (drv->shutdown)
+>> -		drv->driver.shutdown = sdw_drv_shutdown;
+>> +	drv->driver.remove = sdw_drv_remove;
+>> +	drv->driver.shutdown = sdw_drv_shutdown;
+>>  
+>>  	return driver_register(&drv->driver);
+>>  }
+>> -- 
+>> 2.17.1
+> 

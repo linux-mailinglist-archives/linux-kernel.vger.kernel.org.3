@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0327558207
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90DB558461
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiFWRJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S234689AbiFWRlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbiFWRH3 (ORCPT
+        with ESMTP id S234693AbiFWRiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:07:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A974522DD;
-        Thu, 23 Jun 2022 09:56:13 -0700 (PDT)
+        Thu, 23 Jun 2022 13:38:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC8C51E61;
+        Thu, 23 Jun 2022 10:07:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 861BBB8248C;
-        Thu, 23 Jun 2022 16:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01EE8C3411B;
-        Thu, 23 Jun 2022 16:56:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A786F60B2C;
+        Thu, 23 Jun 2022 17:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C6BC3411B;
+        Thu, 23 Jun 2022 17:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003363;
-        bh=bRpfpTLbjOWFCMFLl0M5dzFYUWbGwOag7/SYxuGRWz4=;
+        s=korg; t=1656004053;
+        bh=wvyHoClL7ERvP595o/9+eYZSIUBBJhySOGYGJJR06BA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VnwHxOKjKNXa1VC376oKYuS/mFjXpaqom+EIvLsEJCLDxsm6xDxwfHr3P0XXAx1H8
-         jlBB7NvEkpsfghaubGX3kJbIW7T/758qhA9C9HVwIFNoUOgnsSkw8UA/VmMyYj7Mfw
-         g2tb9pg1nbMY9/5BGRgVnlqm6T7piHO324QrjaKI=
+        b=F8aTq9yiuHc7ZLQBSW+/3734a4imfVW3EtPFIdJ1rwIpitKuId4DJwnodkYgtw7wY
+         0pUgCKmEVxRi6/1NmcP3Q+2o2ydKvu2pUOChe5/WcHfAcLs60mqexh2Ucb6GqQs2tT
+         bQSAhfhJLE5BDLEGcGT74TAdy3qXEDOf9dmpraJM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 212/264] random: wire up fops->splice_{read,write}_iter()
-Date:   Thu, 23 Jun 2022 18:43:25 +0200
-Message-Id: <20220623164350.071845525@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.14 172/237] random: use proper jiffies comparison macro
+Date:   Thu, 23 Jun 2022 18:43:26 +0200
+Message-Id: <20220623164348.101232996@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 79025e727a846be6fd215ae9cdb654368ac3f9a6 upstream.
+commit 8a5b8a4a4ceb353b4dd5bafd09e2b15751bcdb51 upstream.
 
-Now that random/urandom is using {read,write}_iter, we can wire it up to
-using the generic splice handlers.
+This expands to exactly the same code that it replaces, but makes things
+consistent by using the same macro for jiffy comparisons throughout.
 
-Fixes: 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[Jason: added the splice_write path. Note that sendfile() and such still
- does not work for read, though it does for write, because of a file
- type restriction in splice_direct_to_actor(), which I'll address
- separately.]
-Cc: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1382,6 +1382,8 @@ const struct file_operations random_fops
- 	.unlocked_ioctl = random_ioctl,
- 	.fasync = random_fasync,
- 	.llseek = noop_llseek,
-+	.splice_read = generic_file_splice_read,
-+	.splice_write = iter_file_splice_write,
- };
+@@ -324,7 +324,7 @@ static bool crng_has_old_seed(void)
+ 			interval = max_t(unsigned int, CRNG_RESEED_START_INTERVAL,
+ 					 (unsigned int)uptime / 2 * HZ);
+ 	}
+-	return time_after(jiffies, READ_ONCE(base_crng.birth) + interval);
++	return time_is_before_jiffies(READ_ONCE(base_crng.birth) + interval);
+ }
  
- const struct file_operations urandom_fops = {
-@@ -1390,6 +1392,8 @@ const struct file_operations urandom_fop
- 	.unlocked_ioctl = random_ioctl,
- 	.fasync = random_fasync,
- 	.llseek = noop_llseek,
-+	.splice_read = generic_file_splice_read,
-+	.splice_write = iter_file_splice_write,
- };
- 
- 
+ /*
 
 

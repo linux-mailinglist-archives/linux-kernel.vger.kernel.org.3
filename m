@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02A85583BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903AE558215
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbiFWReJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
+        id S229674AbiFWRKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiFWRdB (ORCPT
+        with ESMTP id S233418AbiFWRHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:33:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999A45159D;
-        Thu, 23 Jun 2022 10:05:41 -0700 (PDT)
+        Thu, 23 Jun 2022 13:07:45 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C318252E55;
+        Thu, 23 Jun 2022 09:56:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90ECFB824B4;
-        Thu, 23 Jun 2022 17:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1363C3411B;
-        Thu, 23 Jun 2022 17:05:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DBA94CE24F9;
+        Thu, 23 Jun 2022 16:56:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF616C3411B;
+        Thu, 23 Jun 2022 16:56:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003936;
-        bh=nwXc3XpthjYp9ixcMlB2623mIkpfvu/MjJP9HCed4NU=;
+        s=korg; t=1656003369;
+        bh=jKwOCD3iF9wYPqRmpvf4Yrtz6v13f7791ZEt2uNgWrU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XDXbOmNcMOm3G25Cts3yvTwB3WKerhADZZait/L5z/TttEQ7+exTfjdjIaHS/63J2
-         S/rDyfaOPxQ6H2K8bgMMZvHIp+NXIE9/D26ZGYlWtMUbvDeHUJaYyomAVbNDtSB5sR
-         MxoxEegRPF9buyr7AWfEnOq8KgW18+uROhmtxW+8=
+        b=pY6i4KSe4TXM0PoXuCYZxi0mo2oWGwmE1FkNS06OF7Vc5HnUO2w3FS+9MhEG50kxE
+         T+tlWbvryiwg9hzvrhcoebQ9yb3+Qg4S5DnIBb6c5ATUzzGSufL9hLoSImYbCUB+b+
+         z7MEVxRl4cmF6QpphDaFfo6/o4rYHHitFt3zY2JM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 133/237] random: make consistent usage of crng_ready()
-Date:   Thu, 23 Jun 2022 18:42:47 +0200
-Message-Id: <20220623164346.980965593@linuxfoundation.org>
+Subject: [PATCH 4.9 175/264] random: document crng_fast_key_erasure() destination possibility
+Date:   Thu, 23 Jun 2022 18:42:48 +0200
+Message-Id: <20220623164349.017728063@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,89 +57,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit a96cfe2d427064325ecbf56df8816c6b871ec285 upstream.
+commit 8717627d6ac53251ee012c3c7aca392f29f38a42 upstream.
 
-Rather than sometimes checking `crng_init < 2`, we should always use the
-crng_ready() macro, so that should we change anything later, it's
-consistent. Additionally, that macro already has a likely() around it,
-which means we don't need to open code our own likely() and unlikely()
-annotations.
+This reverts 35a33ff3807d ("random: use memmove instead of memcpy for
+remaining 32 bytes"), which was made on a totally bogus basis. The thing
+it was worried about overlapping came from the stack, not from one of
+its arguments, as Eric pointed out.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+But the fact that this confusion even happened draws attention to the
+fact that it's a bit non-obvious that the random_data parameter can
+alias chacha_state, and in fact should do so when the caller can't rely
+on the stack being cleared in a timely manner. So this commit documents
+that.
+
+Reported-by: Eric Biggers <ebiggers@kernel.org>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ drivers/char/random.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -125,18 +125,13 @@ static void try_to_generate_entropy(void
+@@ -319,6 +319,13 @@ static void crng_reseed(void)
+  * the resultant ChaCha state to the user, along with the second
+  * half of the block containing 32 bytes of random data that may
+  * be used; random_data_len may not be greater than 32.
++ *
++ * The returned ChaCha state contains within it a copy of the old
++ * key value, at index 4, so the state should always be zeroed out
++ * immediately after using in order to maintain forward secrecy.
++ * If the state cannot be erased in a timely manner, then it is
++ * safer to set the random_data parameter to &chacha_state[4] so
++ * that this function overwrites it before returning.
   */
- int wait_for_random_bytes(void)
- {
--	if (likely(crng_ready()))
--		return 0;
--
--	do {
-+	while (!crng_ready()) {
- 		int ret;
- 		ret = wait_event_interruptible_timeout(crng_init_wait, crng_ready(), HZ);
- 		if (ret)
- 			return ret > 0 ? 0 : ret;
--
- 		try_to_generate_entropy();
--	} while (!crng_ready());
--
-+	}
- 	return 0;
- }
- EXPORT_SYMBOL(wait_for_random_bytes);
-@@ -291,7 +286,7 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	if (crng_init < 2) {
-+	if (!crng_ready()) {
- 		crng_init = 2;
- 		finalize_init = true;
- 	}
-@@ -359,7 +354,7 @@ static void crng_make_state(u32 chacha_s
- 	 * ready, we do fast key erasure with the base_crng directly, because
- 	 * this is what crng_pre_init_inject() mutates during early init.
- 	 */
--	if (unlikely(!crng_ready())) {
-+	if (!crng_ready()) {
- 		bool ready;
- 
- 		spin_lock_irqsave(&base_crng.lock, flags);
-@@ -799,7 +794,7 @@ static void credit_entropy_bits(size_t n
- 		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
- 
--	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
-+	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
- 		crng_reseed();
- }
- 
-@@ -956,7 +951,7 @@ int __init rand_initialize(void)
- 	extract_entropy(base_crng.key, sizeof(base_crng.key));
- 	++base_crng.generation;
- 
--	if (arch_init && trust_cpu && crng_init < 2) {
-+	if (arch_init && trust_cpu && !crng_ready()) {
- 		crng_init = 2;
- 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
- 	}
-@@ -1545,7 +1540,7 @@ static long random_ioctl(struct file *f,
- 	case RNDRESEEDCRNG:
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
--		if (crng_init < 2)
-+		if (!crng_ready())
- 			return -ENODATA;
- 		crng_reseed();
- 		return 0;
+ static void crng_fast_key_erasure(u8 key[CHACHA20_KEY_SIZE],
+ 				  u32 chacha_state[CHACHA20_BLOCK_SIZE / sizeof(u32)],
 
 

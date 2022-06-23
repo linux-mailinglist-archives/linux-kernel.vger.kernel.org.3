@@ -2,319 +2,992 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B8B558013
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EFB55805A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiFWQjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S232539AbiFWQss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiFWQjr (ORCPT
+        with ESMTP id S232491AbiFWQry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:39:47 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F7340E60
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:46 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ay16so22906267ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:39:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7HOqbuGc0f6x9tR+0yfA94PilmjI5YMqHeIZhNb7JEk=;
-        b=Il6aX5XnfiBoN5/6z3oP/ymABRj2BA2uoxnaLliYWTBPBwdl8eqFAp9ZpjbrjZyupq
-         wH8eLjEulpuQGkxplvsnxcmlhAiK56A1WmcFtXzyw0TJZGgMP01Q1Y15ZUS7JpsUF0sj
-         dPHMCe8aQRIJhhDjV86FpC8q7iL3GIfFhA5TnxkQLKDQk/ujMr/bWiplBlHzhliAdYKo
-         +c8QmZ1nRnM4DQ+CjRjMU87vRDwxfioIOjnYykUk59iaATiu7sRzb9csT9FFZx/qb4A9
-         1AQ+SSPtjJCzL6mOsZvJcJsQvjFf2f4rwcjLMD5KBQj6Vy/1m04Ofu7FxtaAY/ATzgbM
-         JKUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7HOqbuGc0f6x9tR+0yfA94PilmjI5YMqHeIZhNb7JEk=;
-        b=S3wuriAY310CEb71VhiJLwIEO3sqe3z1ZXLpsqRwiODboiiF0tCl4eTkhESi5UZWVD
-         qslMHK4BSVdbSzlpcrjbNRwNImMjZ+HuQACtDJPBbnBwKK62JV1I56eP6OdQXPJwQGLe
-         k3OdZQqiZTOWUHeGqXqL67VfQiSQSoHG/cQZPJGOHd8Zf5nJferMeIHFu0Oqq2xk/SVG
-         HzYmeMAOWd/0saL3+7SlBjUcH2G3VTD/o8yaSb5bn81e+yKDuSwjuLP6KCdGpsh1CCsB
-         qsA6yDFcEI/UbtUUJu2RPmiWJiaTSQ1VCuICR4GIZobL+jcWXoxx+MggrHWTA5ZkOqkT
-         tXpQ==
-X-Gm-Message-State: AJIora+zUT/a1CE9FYgWT0m3NAtRm2t1vViEy+0S8ztTF4XEwKLiYA+q
-        S20FllV18kXT6PXAyhbLVphtRh9pbWwhsrONpq8vDA==
-X-Google-Smtp-Source: AGRyM1tWKdVnzorRNk1pbcV2JwtPhWlStbDp0MhxShE77OmEIITnC87yPYKgp2O/R4E8tdNt78Jlvk3MzDbBzgAzgKE=
-X-Received: by 2002:a17:907:6ea0:b0:726:2b0e:9e5e with SMTP id
- sh32-20020a1709076ea000b007262b0e9e5emr1985377ejc.189.1656002384514; Thu, 23
- Jun 2022 09:39:44 -0700 (PDT)
+        Thu, 23 Jun 2022 12:47:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187E74B1C5;
+        Thu, 23 Jun 2022 09:47:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C68061F90;
+        Thu, 23 Jun 2022 16:47:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F319C3411B;
+        Thu, 23 Jun 2022 16:47:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656002846;
+        bh=eG4eGpbM790CLVQ38C1QEBfY/Kc67o7abMm7TR6zcqY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zgtRA0Y0mJxcxCWyPQvAsNCPX8Z8AB8PthiZvY4X2Edu6OZw+MLADxNgzh/LZqLLS
+         utQVeYOKjg7zU6/NC82KX9PstfJ8slG1LIEAFJMVKYeEYJTmC6849yNgIoxlzLwUwu
+         YqO2Qhs2mlek1sc1UKZZ51gLxhFCmf2ZS6cGVHps=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.9 000/264] 4.9.320-rc1 review
+Date:   Thu, 23 Jun 2022 18:39:53 +0200
+Message-Id: <20220623164344.053938039@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220622041040.202737-1-tzungbi@kernel.org> <20220622041040.202737-7-tzungbi@kernel.org>
-In-Reply-To: <20220622041040.202737-7-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 23 Jun 2022 09:39:33 -0700
-Message-ID: <CABXOdTe=-YCrVz_oL0oS46LiH51+ytX21=dE3j4GqEV0Q3pkUg@mail.gmail.com>
-Subject: Re: [PATCH 6/7] platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.320-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.9.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.9.320-rc1
+X-KernelTest-Deadline: 2022-06-25T16:43+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 9:11 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> cros_ec_get_sensor_count() gets number of MEMS sensors.
->
-> Add Kunit tests for cros_ec_get_sensor_count().
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+This is the start of the stable review cycle for the 4.9.320 release.
+There are 264 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
+Anything received after that time might be too late.
 
-> ---
->  drivers/platform/chrome/cros_ec_proto_test.c | 153 +++++++++++++++++++
->  drivers/platform/chrome/cros_kunit_util.c    |  22 +++
->  drivers/platform/chrome/cros_kunit_util.h    |   7 +
->  3 files changed, 182 insertions(+)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index 93c1700deaef..6b26ce3104f4 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -2442,6 +2442,156 @@ static void cros_ec_proto_test_check_features_not_cached(struct kunit *test)
->         }
->  }
->
-> +static void cros_ec_proto_test_get_sensor_count_normal(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       struct ec_xfer_mock *mock;
-> +       int ret;
-> +       struct cros_ec_dev ec;
-> +
-> +       ec_dev->max_request = 0xff;
-> +       ec_dev->max_response = 0xee;
-> +       ec.ec_dev = ec_dev;
-> +       ec.dev = ec_dev->dev;
-> +       ec.cmd_offset = 0;
-> +
-> +       /* For EC_CMD_MOTION_SENSE_CMD. */
-> +       {
-> +               struct ec_response_motion_sense *data;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +
-> +               data = (struct ec_response_motion_sense *)mock->o_data;
-> +               data->dump.sensor_count = 0xbf;
-> +       }
-> +
-> +       ret = cros_ec_get_sensor_count(&ec);
-> +       KUNIT_EXPECT_EQ(test, ret, 0xbf);
-> +
-> +       /* For EC_CMD_MOTION_SENSE_CMD. */
-> +       {
-> +               struct ec_params_motion_sense *data;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_motion_sense));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
-> +
-> +               data = (struct ec_params_motion_sense *)mock->i_data;
-> +               KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
-> +       }
-> +}
-> +
-> +static void cros_ec_proto_test_get_sensor_count_xfer_error(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       struct ec_xfer_mock *mock;
-> +       int ret;
-> +       struct cros_ec_dev ec;
-> +
-> +       ec_dev->max_request = 0xff;
-> +       ec_dev->max_response = 0xee;
-> +       ec.ec_dev = ec_dev;
-> +       ec.dev = ec_dev->dev;
-> +       ec.cmd_offset = 0;
-> +
-> +       /* For EC_CMD_MOTION_SENSE_CMD. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_addx(test, -EPROTO, EC_RES_SUCCESS, 0);
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +       }
-> +
-> +       ret = cros_ec_get_sensor_count(&ec);
-> +       KUNIT_EXPECT_EQ(test, ret, -EPROTO);
-> +
-> +       /* For EC_CMD_MOTION_SENSE_CMD. */
-> +       {
-> +               struct ec_params_motion_sense *data;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_motion_sense));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
-> +
-> +               data = (struct ec_params_motion_sense *)mock->i_data;
-> +               KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
-> +       }
-> +}
-> +
-> +static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       struct ec_xfer_mock *mock;
-> +       int ret, i;
-> +       struct cros_ec_dev ec;
-> +       struct {
-> +               u8 readmem_data;
-> +               int expected_result;
-> +       } test_data[] = {
-> +               { 0, 0 },
-> +               { EC_MEMMAP_ACC_STATUS_PRESENCE_BIT, 2 },
-> +       };
-> +
-> +       ec_dev->max_request = 0xff;
-> +       ec_dev->max_response = 0xee;
-> +       ec_dev->cmd_readmem = cros_kunit_readmem_mock;
-> +       ec.ec_dev = ec_dev;
-> +       ec.dev = ec_dev->dev;
-> +       ec.cmd_offset = 0;
-> +
-> +       for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
-> +               /* For EC_CMD_MOTION_SENSE_CMD. */
-> +               {
-> +                       mock = cros_kunit_ec_xfer_mock_addx(test, -EPROTO, EC_RES_SUCCESS, 0);
-> +                       KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +               }
-> +
-> +               /* For readmem. */
-> +               {
-> +                       cros_kunit_readmem_mock_data = kunit_kzalloc(test, 1, GFP_KERNEL);
-> +                       KUNIT_ASSERT_PTR_NE(test, cros_kunit_readmem_mock_data, NULL);
-> +                       cros_kunit_readmem_mock_data[0] = test_data[i].readmem_data;
-> +
-> +                       cros_kunit_ec_xfer_mock_default_ret = 1;
-> +               }
-> +
-> +               ret = cros_ec_get_sensor_count(&ec);
-> +               KUNIT_EXPECT_EQ(test, ret, test_data[i].expected_result);
-> +
-> +               /* For EC_CMD_MOTION_SENSE_CMD. */
-> +               {
-> +                       struct ec_params_motion_sense *data;
-> +
-> +                       mock = cros_kunit_ec_xfer_mock_next();
-> +                       KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +                       KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
-> +                       KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
-> +                       KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                                       sizeof(struct ec_response_motion_sense));
-> +                       KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
-> +
-> +                       data = (struct ec_params_motion_sense *)mock->i_data;
-> +                       KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
-> +               }
-> +
-> +               /* For readmem. */
-> +               {
-> +                       KUNIT_EXPECT_EQ(test, cros_kunit_readmem_mock_offset, EC_MEMMAP_ACC_STATUS);
-> +               }
-> +       }
-> +}
-> +
->  static void cros_ec_proto_test_release(struct device *dev)
->  {
->  }
-> @@ -2537,6 +2687,9 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
->         KUNIT_CASE(cros_ec_proto_test_get_host_event_normal),
->         KUNIT_CASE(cros_ec_proto_test_check_features_cached),
->         KUNIT_CASE(cros_ec_proto_test_check_features_not_cached),
-> +       KUNIT_CASE(cros_ec_proto_test_get_sensor_count_normal),
-> +       KUNIT_CASE(cros_ec_proto_test_get_sensor_count_xfer_error),
-> +       KUNIT_CASE(cros_ec_proto_test_get_sensor_count_legacy),
->         {}
->  };
->
-> diff --git a/drivers/platform/chrome/cros_kunit_util.c b/drivers/platform/chrome/cros_kunit_util.c
-> index 3ede971e82ee..d37c334b416d 100644
-> --- a/drivers/platform/chrome/cros_kunit_util.c
-> +++ b/drivers/platform/chrome/cros_kunit_util.c
-> @@ -105,6 +105,24 @@ struct ec_xfer_mock *cros_kunit_ec_xfer_mock_next(void)
->  }
->  EXPORT_SYMBOL_GPL(cros_kunit_ec_xfer_mock_next);
->
-> +int cros_kunit_readmem_mock_offset;
-> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock_offset);
-> +u8 *cros_kunit_readmem_mock_data;
-> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock_data);
-> +int cros_kunit_readmem_mock_ret;
-> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock_ret);
-> +
-> +int cros_kunit_readmem_mock(struct cros_ec_device *ec_dev, unsigned int offset,
-> +                           unsigned int bytes, void *dest)
-> +{
-> +       cros_kunit_readmem_mock_offset = offset;
-> +
-> +       memcpy(dest, cros_kunit_readmem_mock_data, bytes);
-> +
-> +       return cros_kunit_readmem_mock_ret;
-> +}
-> +EXPORT_SYMBOL_GPL(cros_kunit_readmem_mock);
-> +
->  void cros_kunit_mock_reset(void)
->  {
->         cros_kunit_ec_xfer_mock_default_ret = 0;
-> @@ -112,6 +130,10 @@ void cros_kunit_mock_reset(void)
->         cros_kunit_ec_pkt_xfer_mock_called = 0;
->         INIT_LIST_HEAD(&cros_kunit_ec_xfer_mock_in);
->         INIT_LIST_HEAD(&cros_kunit_ec_xfer_mock_out);
-> +
-> +       cros_kunit_readmem_mock_offset = 0;
-> +       cros_kunit_readmem_mock_data = NULL;
-> +       cros_kunit_readmem_mock_ret = 0;
->  }
->  EXPORT_SYMBOL_GPL(cros_kunit_mock_reset);
->
-> diff --git a/drivers/platform/chrome/cros_kunit_util.h b/drivers/platform/chrome/cros_kunit_util.h
-> index ae4080cb13f1..88134c9f1acf 100644
-> --- a/drivers/platform/chrome/cros_kunit_util.h
-> +++ b/drivers/platform/chrome/cros_kunit_util.h
-> @@ -35,6 +35,13 @@ struct ec_xfer_mock *cros_kunit_ec_xfer_mock_addx(struct kunit *test,
->                                                   int ret, int result, size_t size);
->  struct ec_xfer_mock *cros_kunit_ec_xfer_mock_next(void);
->
-> +extern int cros_kunit_readmem_mock_offset;
-> +extern u8 *cros_kunit_readmem_mock_data;
-> +extern int cros_kunit_readmem_mock_ret;
-> +
-> +int cros_kunit_readmem_mock(struct cros_ec_device *ec_dev, unsigned int offset,
-> +                           unsigned int bytes, void *dest);
-> +
->  void cros_kunit_mock_reset(void);
->
->  #endif
-> --
-> 2.37.0.rc0.104.g0611611a94-goog
->
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.320-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.9.320-rc1
+
+Willy Tarreau <w@1wt.eu>
+    tcp: drop the hash_32() part from the index calculation
+
+Willy Tarreau <w@1wt.eu>
+    tcp: increase source port perturb table to 2^16
+
+Willy Tarreau <w@1wt.eu>
+    tcp: dynamically allocate the perturb table used by source ports
+
+Willy Tarreau <w@1wt.eu>
+    tcp: add small random increments to the source port
+
+Willy Tarreau <w@1wt.eu>
+    tcp: use different parts of the port_offset for index and offset
+
+Willy Tarreau <w@1wt.eu>
+    secure_seq: use the 64 bits of the siphash for port offset calculation
+
+Eric Dumazet <edumazet@google.com>
+    tcp: add some entropy in __inet_hash_connect()
+
+Eric Dumazet <edumazet@google.com>
+    tcp: change source port randomizarion at connect() time
+
+Miklos Szeredi <mszeredi@redhat.com>
+    fuse: fix pipe buffer lifetime for direct_io
+
+Linus Torvalds <torvalds@linux-foundation.org>
+    Reinstate some of "swiotlb: rework "fix info leak with DMA_FROM_DEVICE""
+
+Halil Pasic <pasic@linux.ibm.com>
+    swiotlb: fix info leak with DMA_FROM_DEVICE
+
+Colin Ian King <colin.king@canonical.com>
+    xprtrdma: fix incorrect header size calculations
+
+Christian Borntraeger <borntraeger@linux.ibm.com>
+    s390/mm: use non-quiescing sske for KVM switch to keyed guest
+
+James Chapman <jchapman@katalix.com>
+    l2tp: fix race in pppol2tp_release with session object destroy
+
+James Chapman <jchapman@katalix.com>
+    l2tp: don't use inet_shutdown on ppp session destroy
+
+Zhang Yi <yi.zhang@huawei.com>
+    ext4: add reserved GDT blocks check
+
+Ding Xiang <dingxiang@cmss.chinamobile.com>
+    ext4: make variable "count" signed
+
+Baokun Li <libaokun1@huawei.com>
+    ext4: fix bug_on ext4_mb_use_inode_pa
+
+Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+    serial: 8250: Store to lsr_save_flags after lsr read
+
+Miaoqian Lin <linmq006@gmail.com>
+    usb: gadget: lpc32xx_udc: Fix refcount leak in lpc32xx_udc_probe
+
+Robert Eckelmann <longnoserob@gmail.com>
+    USB: serial: io_ti: add Agilent E5805A support
+
+Slark Xiao <slark_xiao@163.com>
+    USB: serial: option: add support for Cinterion MV31 with new baseline
+
+Ian Abbott <abbotti@mev.co.uk>
+    comedi: vmk80xx: fix expression for tx buffer size
+
+zijun_hu <zijun_hu@htc.com>
+    irqchip/gic-v3: Iterate over possible CPUs by for_each_possible_cpu()
+
+Miaoqian Lin <linmq006@gmail.com>
+    irqchip/gic/realview: Fix refcount leak in realview_gic_of_init
+
+Miaoqian Lin <linmq006@gmail.com>
+    misc: atmel-ssc: Fix IRQ check in ssc_probe
+
+Trond Myklebust <trond.myklebust@hammerspace.com>
+    pNFS: Don't keep retrying if the server replied NFS4ERR_LAYOUTUNAVAILABLE
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: credit cpu and bootloader seeds by default
+
+Chen Lin <chen45464546@163.com>
+    net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
+
+Wang Yufen <wangyufen@huawei.com>
+    ipv6: Fix signed integer overflow in l2tp_ip6_sendmsg
+
+Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+    nfc: nfcmrvl: Fix memory leak in nfcmrvl_play_deferred
+
+chengkaitao <pilgrimtao@gmail.com>
+    virtio-mmio: fix missing put_device() when vm_cmdline_parent registration failed
+
+James Smart <jsmart2021@gmail.com>
+    scsi: lpfc: Fix port stuck in bypassed state after LIP in PT2PT topology
+
+Wentao Wang <wwentao@vmware.com>
+    scsi: vmw_pvscsi: Expand vcpuHint to 16 bits
+
+Adam Ford <aford173@gmail.com>
+    ASoC: wm8962: Fix suspend while playing music
+
+Sergey Shtylyov <s.shtylyov@omp.ru>
+    ata: libata-core: fix NULL pointer deref in ata_host_alloc_pinfo()
+
+Charles Keepax <ckeepax@opensource.cirrus.com>
+    ASoC: cs42l56: Correct typo in minimum level for SX volume controls
+
+Charles Keepax <ckeepax@opensource.cirrus.com>
+    ASoC: cs42l52: Correct TLV for Bypass Volume
+
+Charles Keepax <ckeepax@opensource.cirrus.com>
+    ASoC: cs53l30: Correct number of volume levels on SX controls
+
+Charles Keepax <ckeepax@opensource.cirrus.com>
+    ASoC: cs42l52: Fix TLV scales for mixer controls
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: account for arch randomness in bits
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: mark bootloader randomness code as __init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: avoid checking crng_ready() twice in random_init()
+
+Nicolai Stange <nstange@suse.de>
+    crypto: drbg - make reseeding from get_random_bytes() synchronous
+
+Stephan Müller <smueller@chronox.de>
+    crypto: drbg - always try to free Jitter RNG instance
+
+Nicolai Stange <nstange@suse.de>
+    crypto: drbg - move dynamic ->reseed_threshold adjustments to __drbg_seed()
+
+Nicolai Stange <nstange@suse.de>
+    crypto: drbg - track whether DRBG was seeded with !rng_is_initialized()
+
+Nicolai Stange <nstange@suse.de>
+    crypto: drbg - prepare for more fine-grained tracking of seeding state
+
+Stephan Müller <smueller@chronox.de>
+    crypto: drbg - always seeded with SP800-90B compliant noise source
+
+Stephan Mueller <smueller@chronox.de>
+    crypto: drbg - add FIPS 140-2 CTRNG for noise source
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    Revert "random: use static branch for crng_ready()"
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signals after page of pool writes
+
+Jens Axboe <axboe@kernel.dk>
+    random: wire up fops->splice_{read,write}_iter()
+
+Jens Axboe <axboe@kernel.dk>
+    random: convert to using fops->write_iter()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move randomize_page() into mm where it belongs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move initialization functions out of hot pages
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper return types on get_random_{int,long}_wait()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove extern from functions in header
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use static branch for crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: credit architectural init the exact amount
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: handle latent entropy and command line from random_init()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper jiffies comparison macro
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove ratelimiting for in-kernel unseeded randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: avoid initializing twice in credit race
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use symbolic constants for crng_init states
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    siphash: use one source of truth for siphash permutations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: help compiler out with fast_mix() by using simpler arguments
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use input pool from hard IRQs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: order timer entropy functions below interrupt functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not pretend to handle premature next security model
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use batches when !crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: insist on random_get_entropy() existing in order to simplify
+
+Yury Norov <yury.norov@gmail.com>
+    uapi: rename ext2_swab() to swab() and share globally in swab.h
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    xtensa: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    sparc: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    um: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    x86/tsc: Use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    nios2: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    arm: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    mips: use fallback for random_get_entropy() instead of just c0 random
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    m68k: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    timekeeping: Add raw clock fallback for random_get_entropy()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    alpha: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    parisc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    s390: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    ia64: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    init: call time_init() before rand_initialize()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: fix sysctl documentation nits
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: document crng_fast_key_erasure() destination possibility
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make random_get_entropy() return an unsigned long
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+
+Jann Horn <jannh@google.com>
+    random: check for signal_pending() outside of need_resched() check
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not allow user to keep crng key around on stack
+
+Jan Varho <jan.varho@gmail.com>
+    random: do not split fast init input in add_hwgenerator_randomness()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: mix build-time latent entropy into pool at init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: re-add removed comment about get_random_{u32,u64} reseeding
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: treat bootloader trust toggle the same way as cpu trust toggle
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: skip fast_init if hwrng provides large chunk of entropy
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signal and try earlier when generating entropy
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: reseed more often immediately after booting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make consistent usage of crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use SipHash as interrupt entropy accumulator
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: replace custom notifier chain with standard one
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: don't let 644 read-only sysctls be written to
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: give sysctl_random_min_urandom_seed a more sensible value
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do crng pre-init loading in worker rather than irq
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify cycles_t and jiffies usage and types
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup UUID handling
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: only wake up writers after zap if threshold was passed
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: round-robin registers as ulong, not u32
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: clear fast pool, crng, and batches in cpuhp bring up
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: pull add_hwgenerator_randomness() declaration into random.h
+
+Harald Freudenberger <freude@linux.vnet.ibm.com>
+    hwrng: remember rng chosen by user
+
+Harald Freudenberger <freude@linux.vnet.ibm.com>
+    hwrng: use rng source with best quality
+
+Corentin LABBE <clabbe.montjoie@gmail.com>
+    hwrng: core - remove unused PFX macro
+
+Corentin LABBE <clabbe.montjoie@gmail.com>
+    hwrng: core - Move hwrng miscdev minor number to include/linux/miscdevice.h
+
+Corentin LABBE <clabbe.montjoie@gmail.com>
+    hwrng: core - Rewrite the header
+
+Corentin LABBE <clabbe.montjoie@gmail.com>
+    hwrng: core - rewrite better comparison to NULL
+
+Corentin LABBE <clabbe.montjoie@gmail.com>
+    hwrng: core - do not use multiple blank lines
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for crng_init == 0 in add_device_randomness()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify early init crng load accounting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not take pool spinlock at boot
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: defer fast pool mixing to worker
+
+Tejun Heo <tj@kernel.org>
+    workqueue: make workqueue available early during boot
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: rewrite header introductory comment
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group sysctl functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group userspace read/write functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group entropy collection functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group entropy extraction functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group initialization wait functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove whitespace and reorder includes
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove useless header comment
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: introduce drain_entropy() helper to declutter crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: deobfuscate irq u32/u64 contributions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: add proper SPDX header
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove unused tracepoints
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove ifdef'd out interrupt bench
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: tie batched entropy generation to base_crng generation
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: zero buffer after reading entropy from userspace
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove outdated INT_MAX >> 6 check in urandom_read()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use hash function for crng_slow_load()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: absorb fast pool into input pool after fast load
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not xor RDRAND when writing into /dev/random
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: ensure early RDSEED goes through mixer on init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: inline leaves of rand_initialize()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use RDSEED instead of RDRAND in entropy extraction
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: fix locking in crng_fast_load()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove batched entropy locking
+
+Eric Biggers <ebiggers@google.com>
+    random: remove use_input_pool parameter from crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make credit_entropy_bits() always safe
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: always wake up entropy writers after extraction
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use linear min-entropy accumulation crediting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: simplify entropy debiting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use computational hash for entropy extraction
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: only call crng_finalize_init() for primary_crng
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: access primary_pool directly rather than through pointer
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: continually use hwgenerator randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: simplify arithmetic function flow in account()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: access input_pool_data directly rather than through pointer
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup fractional entropy shift constants
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: prepend remaining pool constants with POOL_
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: de-duplicate INPUT_POOL constants
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove unused OUTPUT_POOL constants
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: rather than entropy_store abstraction, use global
+
+Linus Torvalds <torvalds@linux-foundation.org>
+    random: try to actively add entropy rather than passively wait for it
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove unused extract_entropy() reserved argument
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove incomplete last_data logic
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup integer types
+
+Eric Biggers <ebiggers@google.com>
+    crypto: chacha20 - Fix chacha20_block() keystream alignment (again)
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup poolinfo abstraction
+
+Schspa Shi <schspa@gmail.com>
+    random: fix typo in comments
+
+Jann Horn <jannh@google.com>
+    random: don't reset crng_init_cnt on urandom_read()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: avoid superfluous call to RDRAND in CRNG extraction
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: early initialization of ChaCha constants
+
+Eric Biggers <ebiggers@google.com>
+    random: initialize ChaCha20 constants with correct endianness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use IS_ENABLED(CONFIG_NUMA) instead of ifdefs
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: harmonize "crng init done" messages
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: mix bootloader randomness into pool
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not re-init if crng_reseed completes before primary init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not sign extend bytes for rotation when mixing
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use BLAKE2s instead of SHA1 in extraction
+
+Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    random: remove unused irq_flags argument from add_interrupt_randomness()
+
+Mark Brown <broonie@kernel.org>
+    random: document add_hwgenerator_randomness() with other input functions
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - adjust include guard naming
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - include <linux/bug.h> instead of <asm/bug.h>
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    MAINTAINERS: co-maintain random.c
+
+Eric Biggers <ebiggers@google.com>
+    random: remove dead code left over from blocking pool
+
+Ard Biesheuvel <ardb@kernel.org>
+    random: avoid arch_get_random_seed_long() when collecting IRQ randomness
+
+Mark Rutland <mark.rutland@arm.com>
+    random: add arch_get_random_*long_early()
+
+Richard Henderson <richard.henderson@linaro.org>
+    powerpc: Use bool in archrandom.h
+
+Richard Henderson <richard.henderson@linaro.org>
+    linux/random.h: Mark CONFIG_ARCH_RANDOM functions __must_check
+
+Richard Henderson <richard.henderson@linaro.org>
+    linux/random.h: Use false with bool
+
+Richard Henderson <richard.henderson@linaro.org>
+    linux/random.h: Remove arch_has_random, arch_has_random_seed
+
+Richard Henderson <richard.henderson@linaro.org>
+    powerpc: Remove arch_has_random, arch_has_random_seed
+
+Richard Henderson <richard.henderson@linaro.org>
+    x86: Remove arch_has_random, arch_has_random_seed
+
+Mark Rutland <mark.rutland@arm.com>
+    random: avoid warnings for !CONFIG_NUMA builds
+
+Mark Rutland <mark.rutland@arm.com>
+    random: split primary/secondary crng init paths
+
+Yangtao Li <tiny.windzz@gmail.com>
+    random: remove some dead code of poolinfo
+
+Yangtao Li <tiny.windzz@gmail.com>
+    random: fix typo in add_timer_randomness()
+
+Yangtao Li <tiny.windzz@gmail.com>
+    random: Add and use pr_fmt()
+
+Yangtao Li <tiny.windzz@gmail.com>
+    random: convert to ENTROPY_BITS for better code readability
+
+Yangtao Li <tiny.windzz@gmail.com>
+    random: remove unnecessary unlikely()
+
+Andy Lutomirski <luto@kernel.org>
+    random: remove kernel.random.read_wakeup_threshold
+
+Andy Lutomirski <luto@kernel.org>
+    random: delete code to pull data into pools
+
+Andy Lutomirski <luto@kernel.org>
+    random: remove the blocking pool
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: fix crash on multiple early calls to add_bootloader_randomness()
+
+Andy Lutomirski <luto@kernel.org>
+    random: make /dev/random be almost like /dev/urandom
+
+Andy Lutomirski <luto@kernel.org>
+    random: ignore GRND_RANDOM in getentropy(2)
+
+Andy Lutomirski <luto@kernel.org>
+    random: add GRND_INSECURE to return best-effort non-cryptographic bytes
+
+Andy Lutomirski <luto@kernel.org>
+    random: Add a urandom_read_nowait() for random APIs that don't warn
+
+Andy Lutomirski <luto@kernel.org>
+    random: Don't wake crng_init_wait when crng_init == 1
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    lib/crypto: sha1: re-roll loops to reduce code size
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    lib/crypto: blake2s: move hmac construction into wireguard
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    crypto: blake2s - generic C library implementation and selftest
+
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+    crypto: Deduplicate le32_to_cpu_array() and cpu_to_le32_array()
+
+Herbert Xu <herbert@gondor.apana.org.au>
+    Revert "hwrng: core - Freeze khwrng thread during suspend"
+
+Borislav Petkov <bp@alien8.de>
+    char/random: Add a newline at the end of the file
+
+Stephen Boyd <swboyd@chromium.org>
+    random: Use wait_event_freezable() in add_hwgenerator_randomness()
+
+Hsin-Yi Wang <hsinyi@chromium.org>
+    fdt: add support for rng-seed
+
+Stephen Boyd <swboyd@chromium.org>
+    random: Support freezable kthreads in add_hwgenerator_randomness()
+
+Theodore Ts'o <tytso@mit.edu>
+    random: fix soft lockup when trying to read from an uninitialized blocking pool
+
+Vasily Gorbik <gor@linux.ibm.com>
+    latent_entropy: avoid build error when plugin cflags are not set
+
+George Spelvin <lkml@sdf.org>
+    random: document get_random_int() family
+
+Kees Cook <keescook@chromium.org>
+    random: move rand_initialize() earlier
+
+Theodore Ts'o <tytso@mit.edu>
+    random: only read from /dev/random after its pool has received 128 bits
+
+Rasmus Villemoes <linux@rasmusvillemoes.dk>
+    drivers/char/random.c: make primary_crng static
+
+Rasmus Villemoes <linux@rasmusvillemoes.dk>
+    drivers/char/random.c: remove unused stuct poolinfo::poolbits
+
+Rasmus Villemoes <linux@rasmusvillemoes.dk>
+    drivers/char/random.c: constify poolinfo_table
+
+Kees Cook <keescook@chromium.org>
+    random: make CPU trust a boot parameter
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: Make crng state queryable
+
+Ingo Molnar <mingo@elte.hu>
+    random: remove preempt disabled region
+
+Theodore Ts'o <tytso@mit.edu>
+    random: add a config option to trust the CPU's hwrng
+
+Tobin C. Harding <me@tobin.cc>
+    random: Return nbytes filled from hw RNG
+
+Tobin C. Harding <me@tobin.cc>
+    random: Fix whitespace pre random-bytes work
+
+Rasmus Villemoes <linux@rasmusvillemoes.dk>
+    drivers/char/random.c: remove unused dont_count_entropy
+
+Andi Kleen <ak@linux.intel.com>
+    random: optimize add_interrupt_randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: always fill buffer in get_random_bytes_wait
+
+Eric Biggers <ebiggers@google.com>
+    crypto: chacha20 - Fix keystream alignment for chacha20_block()
+
+Eric Biggers <ebiggers@google.com>
+    random: fix data race on crng_node_pool
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: always use batched entropy for get_random_u{32,64}
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Revert "char/random: silence a lockdep splat with printk()"
+
+Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+    char/random: silence a lockdep splat with printk()
+
+Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    random: add a spinlock_t to struct batched_entropy
+
+Theodore Ts'o <tytso@mit.edu>
+    random: rate limit unseeded randomness warnings
+
+Theodore Ts'o <tytso@mit.edu>
+    random: fix possible sleeping allocation from irq context
+
+Theodore Ts'o <tytso@mit.edu>
+    random: set up the NUMA crng instances after the CRNG is fully initialized
+
+Theodore Ts'o <tytso@mit.edu>
+    random: use a different mixing algorithm for add_device_randomness()
+
+Helge Deller <deller@gmx.de>
+    random: fix warning message on ia64 and parisc
+
+Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    random: reorder READ_ONCE() in get_random_uXX
+
+Theodore Ts'o <tytso@mit.edu>
+    random: suppress spammy warnings about unseeded randomness
+
+Kees Cook <keescook@chromium.org>
+    random: do not ignore early device randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: warn when kernel uses unseeded randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: add get_random_{bytes,u32,u64,int,long,once}_wait family
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: add wait_for_random_bytes() API
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: silence compiler warnings and fix race
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: invalidate batched entropy after crng init
+
+Fabio Estevam <fabio.estevam@nxp.com>
+    random: move random_min_urandom_seed into CONFIG_SYSCTL ifdef block
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: convert get_random_int/long into get_random_u32/u64
+
+Stephan Müller <smueller@chronox.de>
+    random: fix comment for unused random_min_urandom_seed
+
+Stephan Müller <smueller@chronox.de>
+    random: remove variable limit
+
+Stephan Müller <smueller@chronox.de>
+    random: remove stale urandom_init_wait
+
+Stephan Mueller <stephan.mueller@atsec.com>
+    random: remove stale maybe_reseed_primary_crng
+
+Al Viro <viro@zeniv.linux.org.uk>
+    9p: missing chunk of "fs/9p: Don't update file type when updating file attributes"
+
+
+-------------
+
+Diffstat:
+
+ Documentation/kernel-parameters.txt         |   12 +
+ Documentation/sysctl/kernel.txt             |   35 +-
+ MAINTAINERS                                 |    1 +
+ Makefile                                    |    4 +-
+ arch/alpha/include/asm/timex.h              |    1 +
+ arch/arm/include/asm/timex.h                |    1 +
+ arch/ia64/include/asm/timex.h               |    1 +
+ arch/m68k/include/asm/timex.h               |    2 +-
+ arch/mips/include/asm/timex.h               |   17 +-
+ arch/nios2/include/asm/timex.h              |    3 +
+ arch/parisc/include/asm/timex.h             |    3 +-
+ arch/powerpc/include/asm/archrandom.h       |   27 +-
+ arch/powerpc/include/asm/timex.h            |    1 +
+ arch/s390/include/asm/timex.h               |    1 +
+ arch/s390/mm/pgtable.c                      |    2 +-
+ arch/sparc/include/asm/timex_32.h           |    4 +-
+ arch/um/include/asm/timex.h                 |    9 +-
+ arch/x86/include/asm/archrandom.h           |   12 +-
+ arch/x86/include/asm/timex.h                |    9 +
+ arch/x86/include/asm/tsc.h                  |    7 +-
+ arch/xtensa/include/asm/timex.h             |    6 +-
+ crypto/chacha20_generic.c                   |    3 +-
+ crypto/drbg.c                               |  220 +-
+ crypto/md4.c                                |   17 -
+ crypto/md5.c                                |   17 -
+ drivers/ata/libata-core.c                   |    4 +-
+ drivers/char/Kconfig                        |   38 +-
+ drivers/char/hw_random/core.c               |   93 +-
+ drivers/char/random.c                       | 2891 ++++++++++-----------------
+ drivers/hv/vmbus_drv.c                      |    2 +-
+ drivers/irqchip/irq-gic-realview.c          |    1 +
+ drivers/irqchip/irq-gic-v3.c                |    8 +-
+ drivers/misc/atmel-ssc.c                    |    4 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c |   21 +-
+ drivers/nfc/nfcmrvl/usb.c                   |   16 +-
+ drivers/of/fdt.c                            |   14 +-
+ drivers/scsi/lpfc/lpfc_nportdisc.c          |    3 +-
+ drivers/scsi/vmw_pvscsi.h                   |    4 +-
+ drivers/staging/comedi/drivers/vmk80xx.c    |    2 +-
+ drivers/tty/serial/8250/8250_port.c         |    2 +
+ drivers/usb/gadget/udc/lpc32xx_udc.c        |    1 +
+ drivers/usb/serial/io_ti.c                  |    2 +
+ drivers/usb/serial/io_usbvend.h             |    1 +
+ drivers/usb/serial/option.c                 |    6 +
+ drivers/virtio/virtio_mmio.c                |    1 +
+ fs/9p/vfs_inode_dotl.c                      |   10 +-
+ fs/ext4/mballoc.c                           |    9 +
+ fs/ext4/namei.c                             |    3 +-
+ fs/ext4/resize.c                            |   10 +
+ fs/fuse/dev.c                               |   12 +-
+ fs/fuse/file.c                              |    1 +
+ fs/fuse/fuse_i.h                            |    2 +
+ fs/nfs/pnfs.c                               |    6 +
+ include/crypto/blake2s.h                    |  102 +
+ include/crypto/chacha20.h                   |   17 +-
+ include/crypto/drbg.h                       |   18 +-
+ include/crypto/internal/blake2s.h           |   19 +
+ include/linux/byteorder/generic.h           |   17 +
+ include/linux/cpuhotplug.h                  |    2 +
+ include/linux/hw_random.h                   |    2 -
+ include/linux/miscdevice.h                  |    1 +
+ include/linux/mm.h                          |    2 +
+ include/linux/net.h                         |    2 +
+ include/linux/once.h                        |    2 +
+ include/linux/prandom.h                     |   23 +-
+ include/linux/random.h                      |  133 +-
+ include/linux/siphash.h                     |   28 +
+ include/linux/swab.h                        |    1 +
+ include/linux/timex.h                       |   10 +-
+ include/linux/uuid.h                        |    1 +
+ include/linux/workqueue.h                   |    7 +-
+ include/net/inet_hashtables.h               |    2 +-
+ include/net/secure_seq.h                    |    4 +-
+ include/trace/events/random.h               |  315 ---
+ include/uapi/linux/random.h                 |    4 +-
+ include/uapi/linux/swab.h                   |   10 +
+ init/main.c                                 |   22 +
+ kernel/cpu.c                                |   11 +
+ kernel/irq/handle.c                         |    2 +-
+ kernel/time/timekeeping.c                   |   16 +
+ kernel/workqueue.c                          |   76 +-
+ lib/Kconfig.debug                           |   27 +
+ lib/Makefile                                |    2 +
+ lib/chacha20.c                              |    6 +-
+ lib/crypto/Makefile                         |    7 +
+ lib/crypto/blake2s-generic.c                |  111 +
+ lib/crypto/blake2s-selftest.c               |  591 ++++++
+ lib/crypto/blake2s.c                        |   78 +
+ lib/find_bit.c                              |   16 +-
+ lib/random32.c                              |   15 +-
+ lib/sha1.c                                  |   95 +-
+ lib/siphash.c                               |   32 +-
+ lib/swiotlb.c                               |   11 +-
+ mm/util.c                                   |   33 +
+ net/core/secure_seq.c                       |    4 +-
+ net/ipv4/inet_hashtables.c                  |   46 +-
+ net/ipv6/inet6_hashtables.c                 |    4 +-
+ net/l2tp/l2tp_ip6.c                         |    5 +-
+ net/l2tp/l2tp_ppp.c                         |   60 +-
+ net/sunrpc/xprtrdma/rpc_rdma.c              |    4 +-
+ sound/soc/codecs/cs42l52.c                  |    8 +-
+ sound/soc/codecs/cs42l56.c                  |    4 +-
+ sound/soc/codecs/cs53l30.c                  |   16 +-
+ sound/soc/codecs/wm8962.c                   |    1 +
+ 104 files changed, 2966 insertions(+), 2641 deletions(-)
+
+

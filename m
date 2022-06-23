@@ -2,476 +2,533 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16675578A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BF55578A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiFWLYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 07:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S231346AbiFWLZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiFWLYU (ORCPT
+        with ESMTP id S231222AbiFWLZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:24:20 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007814BB8B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:24:16 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-101d2e81bceso17424351fac.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:24:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e+TW875kuc7WhE5hvP+7KCPhrsMc2XaCOXp0AILpfWs=;
-        b=g2DlpKqJAUeXoYfJ/qcD+0bYrbudlcu/GOSRpswSroUQuBOpDfLjKel56H8M+PNFOO
-         fLrs+3byDeWCE/L4gaHXFg/KgKirLa8KO3i4TZrLypXMrBe3OnX+iPZSgt75Xig9TGsN
-         u4f8fbdeuVPhBaBjJwLEPFT2Gs+muLrAEUPIVuP6/qlJ1isNmLViy/awzSR4ZtCIRTLF
-         BeK9fSyd5BJaVYnzJatqO57o5E59P28v3jLk2+KqbpUlKNLRMcltD09eVgHSZ4GZb5nZ
-         i7oTSWOoEwedgId7gf/HZobBKTNHsiUgPIfNXMCI7YfVyLNslTlfelhk0dCxyh2G4clO
-         Tibw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e+TW875kuc7WhE5hvP+7KCPhrsMc2XaCOXp0AILpfWs=;
-        b=Fjt39pj4WVuLzNa5pbQ9bRcIFCk558VfM4/eJoBb4bL/pp3hmHA8YZZeYir5aQB7Ec
-         y0Uf09LizwHotN3CaUN53p7j6OzxGPQCBU1v/9THX5HjCSQDpzJ/+SrOfrvMGoFZ6V5X
-         bfUFt7F88S6Z74ab+IRio0KtAYNLz0MpPQZuwkHGf/Uptv0JHzGk0M7nUADsKEgSmv2r
-         aqH224OcWLG9aCRHQRNUA7fwJr/so/qWex6wfVNXTlKSu5qm5WM7TreWthaHcYabmpjH
-         WQPA7jo+VTqwg/OP5MxsbH/zSR+VsZSNS5zjxUZUccvv8Z2Z0g/ymMwkpw31B2PiE5mK
-         WCwg==
-X-Gm-Message-State: AJIora+/bCkq7Ss5dE0Kj/QVWIbxGaHrbMGf4ocCKrpAkHsHc/s9IGlE
-        N+XEbbg9EGoRmrQmhb/h7yzA+w==
-X-Google-Smtp-Source: AGRyM1tNSCO4caV3dp2xpO360WSS9JLtDxyoZonoCvjAZR7U+5iYfTn2+CWq2/ZDSeYwmdcpxun4Rw==
-X-Received: by 2002:a05:6870:4727:b0:101:c72f:e1e0 with SMTP id b39-20020a056870472700b00101c72fe1e0mr2216989oaq.251.1655983456238;
-        Thu, 23 Jun 2022 04:24:16 -0700 (PDT)
-Received: from eze-laptop ([186.13.97.222])
-        by smtp.gmail.com with ESMTPSA id r24-20020a9d30d8000000b006060322124csm12706503otg.28.2022.06.23.04.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 04:24:14 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 08:24:05 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        heiko@sntech.de, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-Subject: Re: [PATCH v2] media: hantro: Be more accurate on pixel formats
- step_width constraints
-Message-ID: <YrRNVXDAqkWQPJAf@eze-laptop>
-References: <20220517122629.522211-1-benjamin.gaignard@collabora.com>
+        Thu, 23 Jun 2022 07:25:25 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13FF4BBB6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 04:25:23 -0700 (PDT)
+X-UUID: aa4e2ac7066e447fab4061637efea02f-20220623
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:ddd74267-e790-4f5d-9238-e03b5d5dd88a,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:e3654938-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: aa4e2ac7066e447fab4061637efea02f-20220623
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yee.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 898816188; Thu, 23 Jun 2022 19:25:16 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 23 Jun 2022 19:25:15 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 23 Jun 2022 19:25:15 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 23 Jun 2022 19:25:15 +0800
+Message-ID: <10660122efb538669144e4c46558b83400125d79.camel@mediatek.com>
+Subject: Re: [PATCH v4 3/4] mm: kmemleak: add rbtree and store physical
+ address for objects allocated with PA
+From:   Yee Lee <yee.lee@mediatek.com>
+To:     Patrick Wang <patrick.wang.shcn@gmail.com>,
+        <catalin.marinas@arm.com>, <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Date:   Thu, 23 Jun 2022 19:25:15 +0800
+In-Reply-To: <09d9066b3e55966c108670219711482791d38880.camel@mediatek.com>
+References: <20220611035551.1823303-1-patrick.wang.shcn@gmail.com>
+         <20220611035551.1823303-4-patrick.wang.shcn@gmail.com>
+         <09d9066b3e55966c108670219711482791d38880.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517122629.522211-1-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
-
-On Tue, May 17, 2022 at 02:26:29PM +0200, Benjamin Gaignard wrote:
-> On Hantro G2 decoder on IMX8MQ strides requirements aren't the same
-> for NV12_4L4 and NV12 pixel formats. The first one use a 4 bytes padding
-> while the last one needs 8 bytes.
-> To be sure to provide the correct stride in all cases we need:
-> - to relax the constraints on codec formats so set step_width to 4
-> - use capture queue format and not the output queue format when applying
->   the pixel format constraints.
-> - put the correct step_width constraints on each pixel format.
+On Thu, 2022-06-23 at 16:45 +0800, Yee Lee wrote:
+> Now we have seperated rb_tree for phys and virts addresses. But why
+> can't we have kmemleak_free_phys()? It may apply the same format to
+> delete_object_full(). 
 > 
-> Move HEVC SPS validation in hantro_hevc.c to be able to perform it
-> when setting sps control and when starting to decode the bitstream.
-> Add a new test in HEVC SPS validation function to check if resolution
-> is still matching the hardware constraints.
+> Some users would request to remove the kmemleak object from the phys
+> tree but we don't have this one.
+
+Please check this, an issue happened at kfence with the latest kmemleak
+patches. kfence pool allocated memory from memblock but have no way to
+free it from the phys tree.
+https://lkml.org/lkml/2022/6/23/486
+
 > 
-> With this SAODBLK_A_MainConcept_4 and SAODBLK_B_MainConcept_4 conformance
-> tests files are correctly decoded with both NV12 and NV12_4L4 pixel formats.
-> These two files have a resolution of 1016x760.
-> If step_width = 16 for the both pixel formats the selected capture
-> resolution is 1024x768 which is wrong for NV12_4L4 (which expect 1016x760)
-> on Hantro G2 on IMX8MQ (but correct for NV12).
-> 
-> For other variants than Hantro G2 on IMX8M keep the same step_width to avoid
-> regressions.
-> 
-> Fluster HEVC test score is now 128/147 vs 126/147 with the both pixel
-> formats as decoder output.
-> Fluster VP9 test score stay at 147/303.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
-> version 2:
-> - Add a HEVC SPS validation function to be used when
->   setting the control and start decoding.
->   I hope that is what Nicolas expects in his remark on v1.
-> 
->  drivers/staging/media/hantro/hantro_drv.c     | 12 +++---
->  drivers/staging/media/hantro/hantro_hevc.c    | 28 +++++++++++++
->  drivers/staging/media/hantro/hantro_hw.h      |  2 +
->  drivers/staging/media/hantro/hantro_v4l2.c    |  2 +-
->  drivers/staging/media/hantro/imx8m_vpu_hw.c   | 40 +++++++++++++++++--
->  .../staging/media/hantro/rockchip_vpu_hw.c    | 32 +++++++++++++++
->  .../staging/media/hantro/sama5d4_vdec_hw.c    | 16 ++++++++
->  drivers/staging/media/hantro/sunxi_vpu_hw.c   | 16 ++++++++
->  8 files changed, 137 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> index 377dcc1d19de..5aac3a090480 100644
-> --- a/drivers/staging/media/hantro/hantro_drv.c
-> +++ b/drivers/staging/media/hantro/hantro_drv.c
-> @@ -253,6 +253,11 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
->  
->  static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->  {
-> +	struct hantro_ctx *ctx;
-> +
-> +	ctx = container_of(ctrl->handler,
-> +			   struct hantro_ctx, ctrl_handler);
-> +
->  	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
->  		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
->  
-> @@ -268,12 +273,7 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
->  	} else if (ctrl->id == V4L2_CID_STATELESS_HEVC_SPS) {
->  		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
->  
-> -		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-> -			/* Luma and chroma bit depth mismatch */
-> -			return -EINVAL;
-> -		if (sps->bit_depth_luma_minus8 != 0)
-> -			/* Only 8-bit is supported */
-> -			return -EINVAL;
-> +		return hantro_hevc_validate_sps(ctx, sps);
+> On Sat, 2022-06-11 at 11:55 +0800, Patrick Wang wrote:
+> > Add object_phys_tree_root to store the objects allocated with
+> > physical address. Distinguish it from object_tree_root by
+> > OBJECT_PHYS flag or function argument. The physical address
+> > is stored directly in those objects.
+> > 
+> > Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > ---
+> >  mm/kmemleak.c | 133 ++++++++++++++++++++++++++++++++++------------
+> > ----
+> >  1 file changed, 91 insertions(+), 42 deletions(-)
+> > 
+> > diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+> > index d82d8db0e8df..155f50e1a604 100644
+> > --- a/mm/kmemleak.c
+> > +++ b/mm/kmemleak.c
+> > @@ -14,14 +14,16 @@
+> >   * The following locks and mutexes are used by kmemleak:
+> >   *
+> >   * - kmemleak_lock (raw_spinlock_t): protects the object_list
+> > modifications and
+> > - *   accesses to the object_tree_root. The object_list is the main
+> > list
+> > - *   holding the metadata (struct kmemleak_object) for the
+> > allocated
+> > memory
+> > - *   blocks. The object_tree_root is a red black tree used to
+> > look-
+> > up
+> > - *   metadata based on a pointer to the corresponding memory
+> > block.  The
+> > - *   kmemleak_object structures are added to the object_list and
+> > - *   object_tree_root in the create_object() function called from
+> > the
+> > - *   kmemleak_alloc() callback and removed in delete_object()
+> > called
+> > from the
+> > - *   kmemleak_free() callback
+> > + *   accesses to the object_tree_root (or object_phys_tree_root).
+> > The
+> > + *   object_list is the main list holding the metadata (struct
+> > kmemleak_object)
+> > + *   for the allocated memory blocks. The object_tree_root and
+> > object_phys_tree_root
+> > + *   are red black trees used to look-up metadata based on a
+> > pointer
+> > to the
+> > + *   corresponding memory block. The object_phys_tree_root is for
+> > objects
+> > + *   allocated with physical address. The kmemleak_object
+> > structures
+> > are
+> > + *   added to the object_list and object_tree_root (or
+> > object_phys_tree_root)
+> > + *   in the create_object() function called from the
+> > kmemleak_alloc() (or
+> > + *   kmemleak_alloc_phys()) callback and removed in
+> > delete_object()
+> > called from
+> > + *   the kmemleak_free() callback
+> >   * - kmemleak_object.lock (raw_spinlock_t): protects a
+> > kmemleak_object.
+> >   *   Accesses to the metadata (e.g. count) are protected by this
+> > lock. Note
+> >   *   that some members of this structure may be protected by other
+> > means
+> > @@ -195,7 +197,9 @@ static int mem_pool_free_count =
+> > ARRAY_SIZE(mem_pool);
+> >  static LIST_HEAD(mem_pool_free_list);
+> >  /* search tree for object boundaries */
+> >  static struct rb_root object_tree_root = RB_ROOT;
+> > -/* protecting the access to object_list and object_tree_root */
+> > +/* search tree for object (with OBJECT_PHYS flag) boundaries */
+> > +static struct rb_root object_phys_tree_root = RB_ROOT;
+> > +/* protecting the access to object_list, object_tree_root (or
+> > object_phys_tree_root) */
+> >  static DEFINE_RAW_SPINLOCK(kmemleak_lock);
+> >  
+> >  /* allocation caches for kmemleak internal data */
+> > @@ -287,6 +291,9 @@ static void hex_dump_object(struct seq_file
+> > *seq,
+> >  	const u8 *ptr = (const u8 *)object->pointer;
+> >  	size_t len;
+> >  
+> > +	if (WARN_ON_ONCE(object->flags & OBJECT_PHYS))
+> > +		return;
+> > +
+> >  	/* limit the number of lines to HEX_MAX_LINES */
+> >  	len = min_t(size_t, object->size, HEX_MAX_LINES *
+> > HEX_ROW_SIZE);
+> >  
+> > @@ -380,9 +387,11 @@ static void dump_object_info(struct
+> > kmemleak_object *object)
+> >   * beginning of the memory block are allowed. The kmemleak_lock
+> > must
+> > be held
+> >   * when calling this function.
+> >   */
+> > -static struct kmemleak_object *lookup_object(unsigned long ptr,
+> > int
+> > alias)
+> > +static struct kmemleak_object *__lookup_object(unsigned long ptr,
+> > int alias,
+> > +					       bool is_phys)
+> >  {
+> > -	struct rb_node *rb = object_tree_root.rb_node;
+> > +	struct rb_node *rb = is_phys ? object_phys_tree_root.rb_node :
+> > +			     object_tree_root.rb_node;
+> >  	unsigned long untagged_ptr = (unsigned
+> > long)kasan_reset_tag((void *)ptr);
+> >  
+> >  	while (rb) {
+> > @@ -408,6 +417,12 @@ static struct kmemleak_object
+> > *lookup_object(unsigned long ptr, int alias)
+> >  	return NULL;
+> >  }
+> >  
+> > +/* Look-up a kmemleak object which allocated with virtual address.
+> > */
+> > +static struct kmemleak_object *lookup_object(unsigned long ptr,
+> > int
+> > alias)
+> > +{
+> > +	return __lookup_object(ptr, alias, false);
+> > +}
+> > +
+> >  /*
+> >   * Increment the object use_count. Return 1 if successful or 0
+> > otherwise. Note
+> >   * that once an object's use_count reached 0, the RCU freeing was
+> > already
+> > @@ -517,14 +532,15 @@ static void put_object(struct kmemleak_object
+> > *object)
+> >  /*
+> >   * Look up an object in the object search tree and increase its
+> > use_count.
+> >   */
+> > -static struct kmemleak_object *find_and_get_object(unsigned long
+> > ptr, int alias)
+> > +static struct kmemleak_object *__find_and_get_object(unsigned long
+> > ptr, int alias,
+> > +						     bool is_phys)
+> >  {
+> >  	unsigned long flags;
+> >  	struct kmemleak_object *object;
+> >  
+> >  	rcu_read_lock();
+> >  	raw_spin_lock_irqsave(&kmemleak_lock, flags);
+> > -	object = lookup_object(ptr, alias);
+> > +	object = __lookup_object(ptr, alias, is_phys);
+> >  	raw_spin_unlock_irqrestore(&kmemleak_lock, flags);
+> >  
+> >  	/* check whether the object is still available */
+> > @@ -535,28 +551,39 @@ static struct kmemleak_object
+> > *find_and_get_object(unsigned long ptr, int alias)
+> >  	return object;
+> >  }
+> >  
+> > +/* Look up and get an object which allocated with virtual address.
+> > */
+> > +static struct kmemleak_object *find_and_get_object(unsigned long
+> > ptr, int alias)
+> > +{
+> > +	return __find_and_get_object(ptr, alias, false);
+> > +}
+> > +
+> >  /*
+> > - * Remove an object from the object_tree_root and object_list.
+> > Must
+> > be called
+> > - * with the kmemleak_lock held _if_ kmemleak is still enabled.
+> > + * Remove an object from the object_tree_root (or
+> > object_phys_tree_root)
+> > + * and object_list. Must be called with the kmemleak_lock held
+> > _if_
+> > kmemleak
+> > + * is still enabled.
+> >   */
+> >  static void __remove_object(struct kmemleak_object *object)
+> >  {
+> > -	rb_erase(&object->rb_node, &object_tree_root);
+> > +	rb_erase(&object->rb_node, object->flags & OBJECT_PHYS ?
+> > +				   &object_phys_tree_root :
+> > +				   &object_tree_root);
+> >  	list_del_rcu(&object->object_list);
+> >  }
+> >  
+> >  /*
+> >   * Look up an object in the object search tree and remove it from
+> > both
+> > - * object_tree_root and object_list. The returned object's
+> > use_count
+> > should be
+> > - * at least 1, as initially set by create_object().
+> > + * object_tree_root (or object_phys_tree_root) and object_list.
+> > The
+> > + * returned object's use_count should be at least 1, as initially
+> > set
+> > + * by create_object().
+> >   */
+> > -static struct kmemleak_object *find_and_remove_object(unsigned
+> > long
+> > ptr, int alias)
+> > +static struct kmemleak_object *find_and_remove_object(unsigned
+> > long
+> > ptr, int alias,
+> > +						      bool is_phys)
+> >  {
+> >  	unsigned long flags;
+> >  	struct kmemleak_object *object;
+> >  
+> >  	raw_spin_lock_irqsave(&kmemleak_lock, flags);
+> > -	object = lookup_object(ptr, alias);
+> > +	object = __lookup_object(ptr, alias, is_phys);
+> >  	if (object)
+> >  		__remove_object(object);
+> >  	raw_spin_unlock_irqrestore(&kmemleak_lock, flags);
+> > @@ -574,7 +601,8 @@ static int __save_stack_trace(unsigned long
+> > *trace)
+> >  
+> >  /*
+> >   * Create the metadata (struct kmemleak_object) corresponding to
+> > an
+> > allocated
+> > - * memory block and add it to the object_list and
+> > object_tree_root.
+> > + * memory block and add it to the object_list and object_tree_root
+> > (or
+> > + * object_phys_tree_root).
+> >   */
+> >  static struct kmemleak_object *__create_object(unsigned long ptr,
+> > size_t size,
+> >  					     int min_count, gfp_t gfp,
+> > @@ -631,9 +659,16 @@ static struct kmemleak_object
+> > *__create_object(unsigned long ptr, size_t size,
+> >  	raw_spin_lock_irqsave(&kmemleak_lock, flags);
+> >  
+> >  	untagged_ptr = (unsigned long)kasan_reset_tag((void *)ptr);
+> > -	min_addr = min(min_addr, untagged_ptr);
+> > -	max_addr = max(max_addr, untagged_ptr + size);
+> > -	link = &object_tree_root.rb_node;
+> > +	/*
+> > +	 * Only update min_addr and max_addr with object
+> > +	 * storing virtual address.
+> > +	 */
+> > +	if (!is_phys) {
+> > +		min_addr = min(min_addr, untagged_ptr);
+> > +		max_addr = max(max_addr, untagged_ptr + size);
+> > +	}
+> > +	link = is_phys ? &object_phys_tree_root.rb_node :
+> > +		&object_tree_root.rb_node;
+> >  	rb_parent = NULL;
+> >  	while (*link) {
+> >  		rb_parent = *link;
+> > @@ -657,7 +692,8 @@ static struct kmemleak_object
+> > *__create_object(unsigned long ptr, size_t size,
+> >  		}
+> >  	}
+> >  	rb_link_node(&object->rb_node, rb_parent, link);
+> > -	rb_insert_color(&object->rb_node, &object_tree_root);
+> > +	rb_insert_color(&object->rb_node, is_phys ?
+> > &object_phys_tree_root :
+> > +					  &object_tree_root);
+> >  
+> >  	list_add_tail_rcu(&object->object_list, &object_list);
+> >  out:
+> > @@ -707,7 +743,7 @@ static void delete_object_full(unsigned long
+> > ptr)
+> >  {
+> >  	struct kmemleak_object *object;
+> >  
+> > -	object = find_and_remove_object(ptr, 0);
+> > +	object = find_and_remove_object(ptr, 0, false);
+> >  	if (!object) {
+> >  #ifdef DEBUG
+> >  		kmemleak_warn("Freeing unknown object at 0x%08lx\n",
+> > @@ -723,12 +759,12 @@ static void delete_object_full(unsigned long
+> > ptr)
+> >   * delete it. If the memory block is partially freed, the function
+> > may create
+> >   * additional metadata for the remaining parts of the block.
+> >   */
+> > -static void delete_object_part(unsigned long ptr, size_t size)
+> > +static void delete_object_part(unsigned long ptr, size_t size,
+> > bool
+> > is_phys)
+> >  {
+> >  	struct kmemleak_object *object;
+> >  	unsigned long start, end;
+> >  
+> > -	object = find_and_remove_object(ptr, 1);
+> > +	object = find_and_remove_object(ptr, 1, is_phys);
+> >  	if (!object) {
+> >  #ifdef DEBUG
+> >  		kmemleak_warn("Partially freeing unknown object at
+> > 0x%08lx (size %zu)\n",
+> > @@ -746,10 +782,10 @@ static void delete_object_part(unsigned long
+> > ptr, size_t size)
+> >  	end = object->pointer + object->size;
+> >  	if (ptr > start)
+> >  		__create_object(start, ptr - start, object->min_count,
+> > -			      GFP_KERNEL, object->flags & OBJECT_PHYS);
+> > +			      GFP_KERNEL, is_phys);
+> >  	if (ptr + size < end)
+> >  		__create_object(ptr + size, end - ptr - size, object-
+> > > min_count,
+> > 
+> > -			      GFP_KERNEL, object->flags & OBJECT_PHYS);
+> > +			      GFP_KERNEL, is_phys);
+> >  
+> >  	__delete_object(object);
+> >  }
+> > @@ -770,11 +806,11 @@ static void paint_it(struct kmemleak_object
+> > *object, int color)
+> >  	raw_spin_unlock_irqrestore(&object->lock, flags);
+> >  }
+> >  
+> > -static void paint_ptr(unsigned long ptr, int color)
+> > +static void paint_ptr(unsigned long ptr, int color, bool is_phys)
+> >  {
+> >  	struct kmemleak_object *object;
+> >  
+> > -	object = find_and_get_object(ptr, 0);
+> > +	object = __find_and_get_object(ptr, 0, is_phys);
+> >  	if (!object) {
+> >  		kmemleak_warn("Trying to color unknown object at
+> > 0x%08lx as %s\n",
+> >  			      ptr,
+> > @@ -792,16 +828,16 @@ static void paint_ptr(unsigned long ptr, int
+> > color)
+> >   */
+> >  static void make_gray_object(unsigned long ptr)
+> >  {
+> > -	paint_ptr(ptr, KMEMLEAK_GREY);
+> > +	paint_ptr(ptr, KMEMLEAK_GREY, false);
+> >  }
+> >  
+> >  /*
+> >   * Mark the object as black-colored so that it is ignored from
+> > scans
+> > and
+> >   * reporting.
+> >   */
+> > -static void make_black_object(unsigned long ptr)
+> > +static void make_black_object(unsigned long ptr, bool is_phys)
+> >  {
+> > -	paint_ptr(ptr, KMEMLEAK_BLACK);
+> > +	paint_ptr(ptr, KMEMLEAK_BLACK, is_phys);
+> >  }
+> >  
+> >  /*
+> > @@ -1007,7 +1043,7 @@ void __ref kmemleak_free_part(const void
+> > *ptr,
+> > size_t size)
+> >  	pr_debug("%s(0x%p)\n", __func__, ptr);
+> >  
+> >  	if (kmemleak_enabled && ptr && !IS_ERR(ptr))
+> > -		delete_object_part((unsigned long)ptr, size);
+> > +		delete_object_part((unsigned long)ptr, size, false);
+> >  }
+> >  EXPORT_SYMBOL_GPL(kmemleak_free_part);
+> >  
+> > @@ -1095,7 +1131,7 @@ void __ref kmemleak_ignore(const void *ptr)
+> >  	pr_debug("%s(0x%p)\n", __func__, ptr);
+> >  
+> >  	if (kmemleak_enabled && ptr && !IS_ERR(ptr))
+> > -		make_black_object((unsigned long)ptr);
+> > +		make_black_object((unsigned long)ptr, false);
+> >  }
+> >  EXPORT_SYMBOL(kmemleak_ignore);
+> >  
+> > @@ -1153,7 +1189,7 @@ void __ref kmemleak_alloc_phys(phys_addr_t
+> > phys, size_t size, gfp_t gfp)
+> >  		 * Create object with OBJECT_PHYS flag and
+> >  		 * assume min_count 0.
+> >  		 */
+> > -		create_object_phys((unsigned long)__va(phys), size, 0,
+> > gfp);
+> > +		create_object_phys((unsigned long)phys, size, 0, gfp);
+> >  }
+> >  EXPORT_SYMBOL(kmemleak_alloc_phys);
+> >  
+> > @@ -1166,8 +1202,10 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
+> >   */
+> >  void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+> >  {
+> > +	pr_debug("%s(0x%pa)\n", __func__, &phys);
+> > +
+> >  	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) <
+> > max_low_pfn)
+> > -		kmemleak_free_part(__va(phys), size);
+> > +		delete_object_part((unsigned long)phys, size, true);
+> >  }
+> >  EXPORT_SYMBOL(kmemleak_free_part_phys);
+> >  
+> > @@ -1178,8 +1216,10 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
+> >   */
+> >  void __ref kmemleak_ignore_phys(phys_addr_t phys)
+> >  {
+> > +	pr_debug("%s(0x%pa)\n", __func__, &phys);
+> > +
+> >  	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) <
+> > max_low_pfn)
+> > -		kmemleak_ignore(__va(phys));
+> > +		make_black_object((unsigned long)phys, true);
+> >  }
+> >  EXPORT_SYMBOL(kmemleak_ignore_phys);
+> >  
+> > @@ -1190,6 +1230,9 @@ static bool update_checksum(struct
+> > kmemleak_object *object)
+> >  {
+> >  	u32 old_csum = object->checksum;
+> >  
+> > +	if (WARN_ON_ONCE(object->flags & OBJECT_PHYS))
+> > +		return false;
+> > +
+> >  	kasan_disable_current();
+> >  	kcsan_disable_current();
+> >  	object->checksum = crc32(0, kasan_reset_tag((void *)object-
+> > > pointer), object->size);
+> > 
+> > @@ -1343,6 +1386,7 @@ static void scan_object(struct
+> > kmemleak_object
+> > *object)
+> >  {
+> >  	struct kmemleak_scan_area *area;
+> >  	unsigned long flags;
+> > +	void *obj_ptr;
+> >  
+> >  	/*
+> >  	 * Once the object->lock is acquired, the corresponding memory
+> > block
+> > @@ -1354,10 +1398,15 @@ static void scan_object(struct
+> > kmemleak_object *object)
+> >  	if (!(object->flags & OBJECT_ALLOCATED))
+> >  		/* already freed object */
+> >  		goto out;
+> > +
+> > +	obj_ptr = object->flags & OBJECT_PHYS ?
+> > +		  __va((phys_addr_t)object->pointer) :
+> > +		  (void *)object->pointer;
+> > +
+> >  	if (hlist_empty(&object->area_list) ||
+> >  	    object->flags & OBJECT_FULL_SCAN) {
+> > -		void *start = (void *)object->pointer;
+> > -		void *end = (void *)(object->pointer + object->size);
+> > +		void *start = obj_ptr;
+> > +		void *end = obj_ptr + object->size;
+> >  		void *next;
+> >  
+> >  		do {
 
-This doesn't work. You cannot check the decoded format (vpu_dst_fmt) in .try_ctrl.
-
-See:
-https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-stateless-decoder.html.
-
-The CAPTURE format is set (VIDIOC_S_FMT) only after SPS is set (VIDIOC_S_EXT_CTRLS).
-
->  	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
->  		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
->  
-> diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-> index 7fdec50dc853..6abef810b285 100644
-> --- a/drivers/staging/media/hantro/hantro_hevc.c
-> +++ b/drivers/staging/media/hantro/hantro_hevc.c
-> @@ -154,6 +154,30 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
->  	return -ENOMEM;
->  }
->  
-> +int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc_sps *sps)
-> +{
-> +	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-> +		/* Luma and chroma bit depth mismatch */
-> +		return -EINVAL;
-> +	if (sps->bit_depth_luma_minus8 != 0)
-> +		/* Only 8-bit is supported */
-> +		return -EINVAL;
-> +
-> +	/* for tile pixel format check if the width and height match
-> +	 * hardware constraints */
-> +	if (ctx->vpu_dst_fmt->fourcc == V4L2_PIX_FMT_NV12_4L4) {
-> +		if (ctx->dst_fmt.width !=
-> +		    ALIGN(sps->pic_width_in_luma_samples, ctx->vpu_dst_fmt->frmsize.step_width))
-> +			return -EINVAL;
-> +
-> +		if (ctx->dst_fmt.height !=
-> +		    ALIGN(sps->pic_height_in_luma_samples, ctx->vpu_dst_fmt->frmsize.step_height))
-> +			return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx)
->  {
->  	struct hantro_hevc_dec_hw_ctx *hevc_ctx = &ctx->hevc_dec;
-> @@ -177,6 +201,10 @@ int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx)
->  	if (WARN_ON(!ctrls->sps))
->  		return -EINVAL;
->  
-> +	ret = hantro_hevc_validate_sps(ctx, ctrls->sps);
-> +	if (ret)
-
-This doesn't look correct, validations shouldn't happen here,
-since this is the .run callback.
-
-All validations need to happen as a result of TRY_FMT, TRY_CTRLS.
-
-> +		return ret;
-> +
->  	ctrls->pps =
->  		hantro_get_ctrl(ctx, V4L2_CID_STATELESS_HEVC_PPS);
->  	if (WARN_ON(!ctrls->pps))
-> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-> index 994547fe41b9..0bba6378212d 100644
-> --- a/drivers/staging/media/hantro/hantro_hw.h
-> +++ b/drivers/staging/media/hantro/hantro_hw.h
-> @@ -341,6 +341,8 @@ int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
->  void hantro_hevc_ref_init(struct hantro_ctx *ctx);
->  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
->  int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
-> +int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc_sps *sps);
-> +
->  
->  static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
->  {
-> diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-> index 71a6279750bf..93d0dcf69f4a 100644
-> --- a/drivers/staging/media/hantro/hantro_v4l2.c
-> +++ b/drivers/staging/media/hantro/hantro_v4l2.c
-> @@ -260,7 +260,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
->  	} else if (ctx->is_encoder) {
->  		vpu_fmt = ctx->vpu_dst_fmt;
->  	} else {
-> -		vpu_fmt = ctx->vpu_src_fmt;
-> +		vpu_fmt = fmt;
-
-Seems this is the core of the fix, right?
-
-Instead of using the OUTPUT queue always, we now use the right queue.
-I wonder why we select any queue in the first place.
-
-Thanks,
-Ezequiel
-
->  		/*
->  		 * Width/height on the CAPTURE end of a decoder are ignored and
->  		 * replaced by the OUTPUT ones.
-> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> index 9802508bade2..b6b2bf65e56d 100644
-> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> @@ -83,6 +83,14 @@ static const struct hantro_fmt imx8m_vpu_postproc_fmts[] = {
->  		.fourcc = V4L2_PIX_FMT_YUYV,
->  		.codec_mode = HANTRO_MODE_NONE,
->  		.postprocessed = true,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 3840,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 2160,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  };
->  
-> @@ -90,6 +98,14 @@ static const struct hantro_fmt imx8m_vpu_dec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 3840,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 2160,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  	{
->  		.fourcc = V4L2_PIX_FMT_MPEG2_SLICE,
-> @@ -137,6 +153,14 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
->  		.fourcc = V4L2_PIX_FMT_NV12,
->  		.codec_mode = HANTRO_MODE_NONE,
->  		.postprocessed = true,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 3840,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 2160,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  };
->  
-> @@ -144,6 +168,14 @@ static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12_4L4,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 3840,
-> +			.step_width = 4,
-> +			.min_height = 48,
-> +			.max_height = 2160,
-> +			.step_height = 4,
-> +		},
->  	},
->  	{
->  		.fourcc = V4L2_PIX_FMT_HEVC_SLICE,
-> @@ -152,10 +184,10 @@ static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
->  		.frmsize = {
->  			.min_width = 48,
->  			.max_width = 3840,
-> -			.step_width = MB_DIM,
-> +			.step_width = 4,
->  			.min_height = 48,
->  			.max_height = 2160,
-> -			.step_height = MB_DIM,
-> +			.step_height = 4,
->  		},
->  	},
->  	{
-> @@ -165,10 +197,10 @@ static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
->  		.frmsize = {
->  			.min_width = 48,
->  			.max_width = 3840,
-> -			.step_width = MB_DIM,
-> +			.step_width = 4,
->  			.min_height = 48,
->  			.max_height = 2160,
-> -			.step_height = MB_DIM,
-> +			.step_height = 4,
->  		},
->  	},
->  };
-> diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-> index fc96501f3bc8..efba7fcdf207 100644
-> --- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
-> +++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-> @@ -63,6 +63,14 @@ static const struct hantro_fmt rockchip_vpu1_postproc_fmts[] = {
->  		.fourcc = V4L2_PIX_FMT_YUYV,
->  		.codec_mode = HANTRO_MODE_NONE,
->  		.postprocessed = true,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 1920,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 1088,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  };
->  
-> @@ -70,6 +78,14 @@ static const struct hantro_fmt rk3066_vpu_dec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 1920,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 1088,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  	{
->  		.fourcc = V4L2_PIX_FMT_H264_SLICE,
-> @@ -116,6 +132,14 @@ static const struct hantro_fmt rk3288_vpu_dec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 4096,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 2304,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  	{
->  		.fourcc = V4L2_PIX_FMT_H264_SLICE,
-> @@ -162,6 +186,14 @@ static const struct hantro_fmt rk3399_vpu_dec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 1920,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 1088,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  	{
->  		.fourcc = V4L2_PIX_FMT_H264_SLICE,
-> diff --git a/drivers/staging/media/hantro/sama5d4_vdec_hw.c b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
-> index b2fc1c5613e1..07ee804e706b 100644
-> --- a/drivers/staging/media/hantro/sama5d4_vdec_hw.c
-> +++ b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
-> @@ -16,6 +16,14 @@ static const struct hantro_fmt sama5d4_vdec_postproc_fmts[] = {
->  		.fourcc = V4L2_PIX_FMT_YUYV,
->  		.codec_mode = HANTRO_MODE_NONE,
->  		.postprocessed = true,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 1280,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 720,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  };
->  
-> @@ -23,6 +31,14 @@ static const struct hantro_fmt sama5d4_vdec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 1280,
-> +			.step_width = MB_DIM,
-> +			.min_height = 48,
-> +			.max_height = 720,
-> +			.step_height = MB_DIM,
-> +		},
->  	},
->  	{
->  		.fourcc = V4L2_PIX_FMT_MPEG2_SLICE,
-> diff --git a/drivers/staging/media/hantro/sunxi_vpu_hw.c b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-> index c0edd5856a0c..c2392c08febb 100644
-> --- a/drivers/staging/media/hantro/sunxi_vpu_hw.c
-> +++ b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-> @@ -14,6 +14,14 @@ static const struct hantro_fmt sunxi_vpu_postproc_fmts[] = {
->  		.fourcc = V4L2_PIX_FMT_NV12,
->  		.codec_mode = HANTRO_MODE_NONE,
->  		.postprocessed = true,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 3840,
-> +			.step_width = 32,
-> +			.min_height = 48,
-> +			.max_height = 2160,
-> +			.step_height = 32,
-> +		},
->  	},
->  };
->  
-> @@ -21,6 +29,14 @@ static const struct hantro_fmt sunxi_vpu_dec_fmts[] = {
->  	{
->  		.fourcc = V4L2_PIX_FMT_NV12_4L4,
->  		.codec_mode = HANTRO_MODE_NONE,
-> +		.frmsize = {
-> +			.min_width = 48,
-> +			.max_width = 3840,
-> +			.step_width = 32,
-> +			.min_height = 48,
-> +			.max_height = 2160,
-> +			.step_height = 32,
-> +		},
->  	},
->  	{
->  		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
-> -- 
-> 2.32.0
-> 

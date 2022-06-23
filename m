@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9455570F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6283D5570F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238420AbiFWCMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 22:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S1377361AbiFWCPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 22:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiFWCMm (ORCPT
+        with ESMTP id S230296AbiFWCPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 22:12:42 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B9B2DAA0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:12:40 -0700 (PDT)
-X-UUID: 5c88b84ab1e44ff8a0e15fee5939852a-20220623
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:5eb5f367-5a71-4b8e-8560-c83c262d8b7c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:0e6c3938-5e4b-44d7-80b2-bb618cb09d29,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 5c88b84ab1e44ff8a0e15fee5939852a-20220623
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1641060623; Thu, 23 Jun 2022 10:12:33 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 23 Jun 2022 10:12:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 23 Jun 2022 10:12:31 +0800
-Message-ID: <561adc680c9af8e8813baf698f2f6ba67ce046e9.camel@mediatek.com>
-Subject: Re: [PATCH v2 2/5] iommu/mediatek: Add error path for loop of
- mm_dts_parse
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>,
-        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
-        <xueqi.zhang@mediatek.com>, Guenter Roeck <groeck@chromium.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Date:   Thu, 23 Jun 2022 10:12:31 +0800
-In-Reply-To: <22c40a7f-d759-5b4a-f554-cf679102d91f@gmail.com>
-References: <20220616054203.11365-1-yong.wu@mediatek.com>
-         <20220616054203.11365-3-yong.wu@mediatek.com>
-         <22c40a7f-d759-5b4a-f554-cf679102d91f@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 22 Jun 2022 22:15:50 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C98133A22
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:15:47 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3137316bb69so180462937b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5C+XiHaOAuGr9ITlyPSDvgchDu5ILHwN6mWwq8+shYQ=;
+        b=RMUg4hFqzCPu+TwayaHdoFw1lEbENOR5xl7OVHaaEiPmKSiuW3Kv90JlK7sqZ6l10G
+         l+HgfjYGmez3OLT2bYaEshICznR44QsKw3PKKnmd8QUZJYNxScpifo0BsC5K6dOw9iwA
+         BkpzezUlxh2ElDJoRYqiE4r9vZhA/WX22xWN223+4yKu7xAMTnQtD0d8v4qMtoTPnEze
+         8ZhCJxsH6zs2HBu2lZ7BLoTq7y/QdEVDrOs6WLZ496MQeB2kHV9ALEEu3SVZfsObKgYW
+         3o84Af8L9ggU9AQ7/Amd/kLnSEULTzT5zFqxvz1HM+aAuIV/aTvcSAz9pvB9xBrcmuzZ
+         az1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5C+XiHaOAuGr9ITlyPSDvgchDu5ILHwN6mWwq8+shYQ=;
+        b=dWBx0FS5pYJgEoOb5uJqPYNQdHdSUL2kYWKCRth/G4ExxwWvH+2HfIbFBDWhHydfh8
+         +0O/EVUesd7DuAHkIRpMSWDCLv7gN8+xkWTftR2hgk1bCsFsHZsV8lSL10uiFOa25n6c
+         RSTp9Aw73wxZhMiMKTax7AbAnBg+nZ9ftpbhGWuBeNsfN2tda/gPSl4NZX0WVbOgDx94
+         zfynHKkLb4hgUEHJBMbjTBhMGQ6tL15s840VgIqGMC8QtSuRwoxudcnEqdr4QHSlBieQ
+         5R5EYFmeyJs4KnSueHBd5tUTgsMcgYlGqYhleITEuOa1oB+ykuUTRyeQTtsU5JVm2qsr
+         2cIQ==
+X-Gm-Message-State: AJIora/x+X/JEKgsC+ZvIss5fnxYNC7HPlsayBcwduBzsde3g7xoZ2GV
+        Ip0NZsUfxw5PcJyQjDi8wxzQYW7A6PFGgHQLQfWynQ==
+X-Google-Smtp-Source: AGRyM1tLIkOQVRgWFenL32+zjV3O6TY+8dBQMEHu+tQIvlvZxfX6Z8ZhPGrxlxJ98TDk6yZ4UWzV9dtLUCpv4I232TE=
+X-Received: by 2002:a81:2fd8:0:b0:314:eaa:bbc1 with SMTP id
+ v207-20020a812fd8000000b003140eaabbc1mr8055504ywv.141.1655950546326; Wed, 22
+ Jun 2022 19:15:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220622153815.6f2e671a@canb.auug.org.au> <CAMZfGtVQr=7pUevVbbNK9teskfGsjcoif2sfHQ-YrDx5qHNiXg@mail.gmail.com>
+ <20220622115917.5268aeea70b22a566c90be8c@linux-foundation.org>
+In-Reply-To: <20220622115917.5268aeea70b22a566c90be8c@linux-foundation.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 23 Jun 2022 10:15:09 +0800
+Message-ID: <CAMZfGtUQonnzoUOgZBnt5AoTbG6PGo00C-86TBQYM7DqPdLHVQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the mm tree with the folio tree
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-16 at 15:49 +0200, Matthias Brugger wrote:
-> 
-> On 16/06/2022 07:42, Yong Wu wrote:
-> > The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the
-> > i+1
-> > larb is parsed fail(return -EINVAL), we should of_node_put for the
-> > 0..i
-> > larbs. In the fail path, one of_node_put matches with
-> > of_parse_phandle in
-> > it.
-> > 
-> > Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with
-> > the MM TYPE")
-> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> > ---
-> >   drivers/iommu/mtk_iommu.c | 21 ++++++++++++++++-----
-> >   1 file changed, 16 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> > index 3b2489e8a6dd..ab24078938bf 100644
-> > --- a/drivers/iommu/mtk_iommu.c
-> > +++ b/drivers/iommu/mtk_iommu.c
-> > @@ -1071,12 +1071,12 @@ static int mtk_iommu_mm_dts_parse(struct
-> > device *dev, struct component_match **m
-> >   
-> 
-> Don't we need to call the goto also on error case of:
-> 
-> larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
+On Thu, Jun 23, 2022 at 2:59 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Wed, 22 Jun 2022 15:22:35 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> > > Today's linux-next merge of the mm tree got a conflict in:
+> > >
+> > >   mm/vmscan.c
+> > >
+> > > between commit:
+> > >
+> > >   15077be8badc ("vmscan: Add check_move_unevictable_folios()")
+> >
+> > Sorry for the conflicts, I didn't see this change in the mm-unstable branch
+> > yesterday. Based on this commit, I have reworked the following commit
+> > (see attachment, mainly changes are about check_move_unevictable_folios()).
+> > Andrew can pick it up if he wants to replace the original patch with
+> > the new one.
+>
+> Your comments in
+> https://lkml.kernel.org/r/YrM2XCwzu65cb81r@FVFYT0MHHV2J.googleapis.com
+> make me wonder whether simply dropping cca700a8e695 ("mm: lru: use
+> lruvec lock to serialize memcg changes") would be best?
+>
 
-Thanks very much.
+Hi Andrew,
 
-exactly right. I will add in next version.
+Well, I think we can drop this now. After memcg reparenting work stabilizes,
+I will resend this patch again.
 
-> Regards,
-> Matthias
-
+Thanks.

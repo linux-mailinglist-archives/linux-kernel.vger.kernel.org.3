@@ -2,154 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45213557A0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 593DB557A11
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiFWMLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S231550AbiFWMO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiFWMLO (ORCPT
+        with ESMTP id S229916AbiFWMOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:11:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568694DF6F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:11:13 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LTJvL5Y5wzhYc9;
-        Thu, 23 Jun 2022 20:09:02 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 20:11:09 +0800
-Subject: Re: [PATCH 13/16] mm/huge_memory: add helper
- __get_deferred_split_queue
-To:     Muchun Song <songmuchun@bytedance.com>
-CC:     <akpm@linux-foundation.org>, <shy828301@gmail.com>,
-        <willy@infradead.org>, <zokeefe@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220622170627.19786-1-linmiaohe@huawei.com>
- <20220622170627.19786-14-linmiaohe@huawei.com>
- <YrQQNs42R519/P8X@FVFYT0MHHV2J.usts.net>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <a07cb5cc-eb8c-3a01-38a8-b06c7d5427c1@huawei.com>
-Date:   Thu, 23 Jun 2022 20:11:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 23 Jun 2022 08:14:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9655B2DAB6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:14:53 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4LjV-0003Qz-PU; Thu, 23 Jun 2022 14:14:49 +0200
+Message-ID: <3c088a9a511762f7868b10dbe431942d3724917a.camel@pengutronix.de>
+Subject: Re: DMA-buf and uncached system memory
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Thu, 23 Jun 2022 14:14:48 +0200
+In-Reply-To: <34a1efd9-5447-848b-c08c-de75b48e997e@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
+         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
+         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+         <20220623101326.18beeab3@eldfell>
+         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
+         <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
+         <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
+         <05814ddb-4f3e-99d8-025a-c31db7b2c46b@amd.com>
+         <708e27755317a7650ca08ba2e4c14691ac0d6ba2.camel@pengutronix.de>
+         <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
+         <f3c32cdd2ab4e76546c549b0cebba8e1d19d1cb0.camel@pengutronix.de>
+         <34a1efd9-5447-848b-c08c-de75b48e997e@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-In-Reply-To: <YrQQNs42R519/P8X@FVFYT0MHHV2J.usts.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/23 15:03, Muchun Song wrote:
-> On Thu, Jun 23, 2022 at 01:06:24AM +0800, Miaohe Lin wrote:
->> Add helper __get_deferred_split_queue to remove the duplicated codes of
->> getting ds_queue. No functional change intended.
->>
+Am Donnerstag, dem 23.06.2022 um 13:54 +0200 schrieb Christian König:
+> Am 23.06.22 um 13:29 schrieb Lucas Stach:
+> > [SNIP]
+> > > Well then the existing DMA-buf framework is not what you want to use for
+> > > this.
+> > > 
+> > Sorry, but this is just ignoring reality. You try to flag 8+ years of
+> > DMA-buf usage on non-coherent arches as "you shouldn't do this". At
+> > this point there are probably a lot more users (drivers) of DMA-buf in
+> > the kernel for devices, which are used on non-coherent arches, than
+> > there are on coherent arches.
 > 
-> Sorry, I suggest dropping this change since I have reworked the code here [1].
+> Well, it's my reality that people come up with bug reports about that 
+> and we have been pushing back on this with the explanation "Hey this is 
+> not supported" as long as I can think about it.
+> 
+> I mean I even had somebody from ARM which told me that this is not going 
+> to work with our GPUs on a specific SoC. That there are ARM internal use 
+> cases which just seem to work because all the devices are non-coherent 
+> is completely new to me.
+> 
+Yes, trying to hook up a peripheral that assumes cache snooping in some
+design details to a non coherent SoC may end up exploding in various
+ways. On the other hand you can work around most of those assumptions
+by marking the memory as uncached to the CPU, which may tank
+performance, but will work from a correctness PoV.
 
-That's all right. Thanks for your work. :)
+> I'm as much surprised as you are about this lack of agreement about such 
+> fundamental stuff.
+> 
+> > > > Non-coherent without explicit domain transfer points is just not going
+> > > > to work. So why can't we solve the issue for DMA-buf in the same way as
+> > > > the DMA API already solved it years ago: by adding the equivalent of
+> > > > the dma_sync calls that do cache maintenance when necessary? On x86 (or
+> > > > any system where things are mostly coherent) you could still no-op them
+> > > > for the common case and only trigger cache cleaning if the importer
+> > > > explicitly says that is going to do a non-snooping access.
+> > > Because DMA-buf is a framework for buffer sharing between cache coherent
+> > > devices which don't signal transitions.
+> > > 
+> > > We intentionally didn't implemented any of the dma_sync_* functions
+> > > because that would break the intended use case.
+> > > 
+> > Non coherent access, including your non-snoop scanout, and no domain
+> > transition signal just doesn't go together when you want to solve
+> > things in a generic way.
+> 
+> Yeah, that's the stuff I totally agree on.
+> 
+> See we absolutely do have the requirement of implementing coherent 
+> access without domain transitions for Vulkan and OpenGL+extensions.
+> 
+Coherent can mean 2 different things:
+1. CPU cached with snooping from the IO device
+2. CPU uncached
 
+The Vulkan and GL "coherent" uses are really coherent without explicit
+domain transitions, so on non coherent arches that require the
+transitions the only way to implement this is by making the memory CPU
+uncached. Which from a performance PoV will probably not be what app
+developers expect, but will still expose the correct behavior.
+
+> When we now have to introduce domain transitions to get non coherent 
+> access working we are essentially splitting all the drivers into 
+> coherent and non-coherent ones.
 > 
-> [1] https://lore.kernel.org/all/20220621125658.64935-7-songmuchun@bytedance.com/
+> That doesn't sounds like it would improve interop.
 > 
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/huge_memory.c | 35 ++++++++++++-----------------------
->>  1 file changed, 12 insertions(+), 23 deletions(-)
->>
->> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index 0030b4f67cd9..de8155ff584c 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -555,25 +555,23 @@ pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
->>  	return pmd;
->>  }
->>  
->> -#ifdef CONFIG_MEMCG
->> -static inline struct deferred_split *get_deferred_split_queue(struct page *page)
->> +static inline struct deferred_split *__get_deferred_split_queue(struct pglist_data *pgdat,
->> +								struct mem_cgroup *memcg)
->>  {
->> -	struct mem_cgroup *memcg = page_memcg(compound_head(page));
->> -	struct pglist_data *pgdat = NODE_DATA(page_to_nid(page));
->> -
->> +#ifdef CONFIG_MEMCG
->>  	if (memcg)
->>  		return &memcg->deferred_split_queue;
->> -	else
->> -		return &pgdat->deferred_split_queue;
->> +#endif
->> +	return &pgdat->deferred_split_queue;
->>  }
->> -#else
->> +
->>  static inline struct deferred_split *get_deferred_split_queue(struct page *page)
->>  {
->> +	struct mem_cgroup *memcg = page_memcg(compound_head(page));
->>  	struct pglist_data *pgdat = NODE_DATA(page_to_nid(page));
->>  
->> -	return &pgdat->deferred_split_queue;
->> +	return __get_deferred_split_queue(pgdat, memcg);
->>  }
->> -#endif
->>  
->>  void prep_transhuge_page(struct page *page)
->>  {
->> @@ -2774,31 +2772,22 @@ void deferred_split_huge_page(struct page *page)
->>  static unsigned long deferred_split_count(struct shrinker *shrink,
->>  		struct shrink_control *sc)
->>  {
->> -	struct pglist_data *pgdata = NODE_DATA(sc->nid);
->> -	struct deferred_split *ds_queue = &pgdata->deferred_split_queue;
->> +	struct deferred_split *ds_queue;
->>  
->> -#ifdef CONFIG_MEMCG
->> -	if (sc->memcg)
->> -		ds_queue = &sc->memcg->deferred_split_queue;
->> -#endif
->> +	ds_queue = __get_deferred_split_queue(NODE_DATA(sc->nid), sc->memcg);
->>  	return READ_ONCE(ds_queue->split_queue_len);
->>  }
->>  
->>  static unsigned long deferred_split_scan(struct shrinker *shrink,
->>  		struct shrink_control *sc)
->>  {
->> -	struct pglist_data *pgdata = NODE_DATA(sc->nid);
->> -	struct deferred_split *ds_queue = &pgdata->deferred_split_queue;
->> +	struct deferred_split *ds_queue;
->>  	unsigned long flags;
->>  	LIST_HEAD(list), *pos, *next;
->>  	struct page *page;
->>  	int split = 0;
->>  
->> -#ifdef CONFIG_MEMCG
->> -	if (sc->memcg)
->> -		ds_queue = &sc->memcg->deferred_split_queue;
->> -#endif
->> -
->> +	ds_queue = __get_deferred_split_queue(NODE_DATA(sc->nid), sc->memcg);
->>  	spin_lock_irqsave(&ds_queue->split_queue_lock, flags);
->>  	/* Take pin on all head pages to avoid freeing them under us */
->>  	list_for_each_safe(pos, next, &ds_queue->split_queue) {
->> -- 
->> 2.23.0
->>
->>
-> .
+> > Remember that in a fully (not only IO) coherent system the CPU isn't
+> > the only agent that may cache the content you are trying to access
+> > here. The dirty cacheline could reasonably still be sitting in a GPU or
+> > VPU cache, so you need some way to clean those cachelines, which isn't
+> > a magic "importer knows how to call CPU cache clean instructions".
 > 
+> IIRC we do already have/had a SYNC_IOCTL for cases like this, but (I 
+> need to double check as well, that's way to long ago) this was kicked 
+> out because of the requirements above.
+> 
+The DMA_BUF_IOCTL_SYNC is available in upstream, with the explicit
+documentation that "userspace can not rely on coherent access".
+
+> > > You can of course use DMA-buf in an incoherent environment, but then you
+> > > can't expect that this works all the time.
+> > > 
+> > > This is documented behavior and so far we have bluntly rejected any of
+> > > the complains that it doesn't work on most ARM SoCs and I don't really
+> > > see a way to do this differently.
+> > Can you point me to that part of the documentation? A quick grep for
+> > "coherent" didn't immediately turn something up within the DMA-buf
+> > dirs.
+> 
+> Search for "cache coherency management". It's quite a while ago, but I 
+> do remember helping to review that stuff.
+> 
+That only turns up the lines in DMA_BUF_IOCTL_SYNC doc, which are
+saying the exact opposite of the DMA-buf is always coherent.
+
+I also don't see why you think that both world views are so totally
+different. We could just require explicit domain transitions for non-
+snoop access, which would probably solve your scanout issue and would
+not be a problem for most ARM systems, where we could no-op this if the
+buffer is already in uncached memory and at the same time keep the "x86
+assumes cached + snooped access by default" semantics.
+
+Regards,
+Lucas
+
 

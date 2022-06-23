@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFB6557C4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E21557C58
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiFWM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
+        id S231846AbiFWM6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiFWM5H (ORCPT
+        with ESMTP id S232078AbiFWM6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:57:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BF44B87B;
-        Thu, 23 Jun 2022 05:57:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5564321B17;
-        Thu, 23 Jun 2022 12:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655989025; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IwQIdTPOL0hcDLLiZO+ZnH1H9mqh4iSUrszqHqXfKJc=;
-        b=BNfNzZISdwN6dTOvSVYKGZafp2YfIvseJA0TCW0PiO4whijnaYKYDM8hVcwHRGoZ4QTfVk
-        leCP35Oaw2HuejLPN93Q5mccJnMwjK/L6qfssXBkWzjy3y7dtoelT1JpXUNNaRmZXuX2EG
-        bIeKBExMFKB5AvuTchIeVoPJ5rAmt6E=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1570113461;
-        Thu, 23 Jun 2022 12:57:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Jf+GAyFjtGJqGQAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 23 Jun 2022 12:57:05 +0000
-Message-ID: <88ca4ce6-0f8a-0084-9074-7e72a341536b@suse.com>
-Date:   Thu, 23 Jun 2022 14:57:04 +0200
+        Thu, 23 Jun 2022 08:58:31 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4F4A3DA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:58:30 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ge10so9375494ejb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=m/hz+H8zpOsqdq2iKPbughSwBYMoaruSRt5PQDIHbSc=;
+        b=CFkyLPAOqxgKb1ubuX9QDvfoqC4QGmlCmmI2kuzxmnihmSbUTYsgJypMud0fdrXuJh
+         if4c0LFekjFXMJ3kApfk1JSvMTvklIAHuKOrIeO0Tiq8JH676g9PVv2pVyq5XQQlSOrv
+         8l5KBp7nx9EXciIScArJIUoa9CHMuSvFInvg2kvzWsw/UPrDqXwxKnyUjTsac6UONywy
+         VTi1x6U7lYQ9pTiDyZiYyF+TQDBKw6TMf6q7BdegduE0+WCFNl7bPn0Wa5LHytIgW/Hh
+         MK2jsVwX8rVEXykP+GZGoX5D5HEIZh7i4cG/cgpYI3q8zhv/jKbQs2HebHX+7nyky4r8
+         oibg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m/hz+H8zpOsqdq2iKPbughSwBYMoaruSRt5PQDIHbSc=;
+        b=l6EJqe3/yL6IXiVJ/UFbiHETUVqFbGLu9YTZUdM2bW+gncdjz/Gm9m8jYpgz/3DUt3
+         /MZT6KFN9Y8zMC3sInpvl98M+rvBukTX/tiX/YE2pXAWCwKkqTmREKSPusCpZ4W/v0XF
+         M7AQnP9XmMgL67XpXjRruU23xJjBqE4po1USh1GbtrWARmjdn67D85/p4ob/WHO7Qe7S
+         Lx8le3M8srCOX91AmM94oSIMk3YcTnYnCEBRTDsa54UlUbba4etKvn9l7IZFGlbBDRTV
+         aI6h4z2fD2yVbUDLbM2aCh9AgVs3phl0EG8l7gCMuccfA7pURxegL5TfD215c8Eg8UUG
+         BePg==
+X-Gm-Message-State: AJIora+2x4NSkpgN5Ca1ZZZiBfbFb8LNfud1znHgPb8FA/AwAgpWRJgt
+        vY7N7X5l0BVz+KvCMeCSyA4JcQ==
+X-Google-Smtp-Source: AGRyM1u9g+U5RCvJJp7ZC1dPupZQ78/Srp7ghZYVffnzDcHg7uXkIjgpV/X4gN+yOZpeqRnOIVgE/g==
+X-Received: by 2002:a17:907:7781:b0:6fe:4398:47b3 with SMTP id ky1-20020a170907778100b006fe439847b3mr8075969ejc.513.1655989108643;
+        Thu, 23 Jun 2022 05:58:28 -0700 (PDT)
+Received: from [192.168.0.230] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id cb17-20020a170906a45100b00722fb3c99bcsm1804658ejb.203.2022.06.23.05.58.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 05:58:28 -0700 (PDT)
+Message-ID: <23320e3c-40c3-12bb-0a1c-7e659a1961f2@linaro.org>
+Date:   Thu, 23 Jun 2022 14:58:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4] xen/gntdev: Avoid blocking in unmap_grant_pages()
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
 Content-Language: en-US
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        David Vrabel <david.vrabel@citrix.com>,
-        Jennifer Herbert <jennifer.herbert@citrix.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220622022726.2538-1-demi@invisiblethingslab.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220622022726.2538-1-demi@invisiblethingslab.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------MjLJ9LQCj5UmEMxFvomyfUd0"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>
+References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+ <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
+ <bc423d7b-df03-d4e2-2898-0873db710943@quicinc.com>
+ <64eb52ee-b3ac-3d94-cfce-ceb1c88dddb6@linaro.org>
+ <042cb765-113b-9335-edae-595addf50dd0@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <042cb765-113b-9335-edae-595addf50dd0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,139 +85,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------MjLJ9LQCj5UmEMxFvomyfUd0
-Content-Type: multipart/mixed; boundary="------------CM7Lbh2cN3VZwePM0uCnSORv";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Demi Marie Obenour <demi@invisiblethingslab.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- David Vrabel <david.vrabel@citrix.com>,
- Jennifer Herbert <jennifer.herbert@citrix.com>
-Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Message-ID: <88ca4ce6-0f8a-0084-9074-7e72a341536b@suse.com>
-Subject: Re: [PATCH v4] xen/gntdev: Avoid blocking in unmap_grant_pages()
-References: <20220622022726.2538-1-demi@invisiblethingslab.com>
-In-Reply-To: <20220622022726.2538-1-demi@invisiblethingslab.com>
+On 23/06/2022 08:48, Rajendra Nayak wrote:
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>>> index 83e8b63f0910..adffb9c70566 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>>>> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
+>>>>    			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>>>>    		};
+>>>>    
+>>>> +		pmu@1436400 {
+>>>> +			compatible = "qcom,sdm845-cpu-bwmon";
+>>>> +			reg = <0 0x01436400 0 0x600>;
+>>>> +
+>>>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+>>>> +
+>>>> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+>>>> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+>>>> +			interconnect-names = "ddr", "l3c";
+>>>
+>>> Is this the pmu/bwmon instance between the cpu and caches or the one between the caches and DDR?
+>>
+>> To my understanding this is the one between CPU and caches.
+> 
+> Ok, but then because the OPP table lists the DDR bw first and Cache bw second, isn't the driver
+> ending up comparing the bw values thrown by the pmu against the DDR bw instead of the Cache BW?
 
---------------CM7Lbh2cN3VZwePM0uCnSORv
-Content-Type: multipart/mixed; boundary="------------EZrvq5EHS1RGY5UKrUtgHHZI"
+I double checked now and you're right.
 
---------------EZrvq5EHS1RGY5UKrUtgHHZI
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> Atleast with my testing on sc7280 I found this to mess things up and I always was ending up at
+> higher OPPs even while the system was completely idle. Comparing the values against the Cache bw
+> fixed it.(sc7280 also has a bwmon4 instance between the cpu and caches and a bwmon5 between the cache
+> and DDR)
 
-T24gMjIuMDYuMjIgMDQ6MjcsIERlbWkgTWFyaWUgT2Jlbm91ciB3cm90ZToNCj4gdW5tYXBf
-Z3JhbnRfcGFnZXMoKSBjdXJyZW50bHkgd2FpdHMgZm9yIHRoZSBwYWdlcyB0byBubyBsb25n
-ZXIgYmUgdXNlZC4NCj4gSW4gaHR0cHM6Ly9naXRodWIuY29tL1F1YmVzT1MvcXViZXMtaXNz
-dWVzL2lzc3Vlcy83NDgxLCB0aGlzIGxlYWQgdG8gYQ0KPiBkZWFkbG9jayBhZ2FpbnN0IGk5
-MTU6IGk5MTUgd2FzIHdhaXRpbmcgZm9yIGdudGRldidzIE1NVSBub3RpZmllciB0bw0KPiBm
-aW5pc2gsIHdoaWxlIGdudGRldiB3YXMgd2FpdGluZyBmb3IgaTkxNSB0byBmcmVlIGl0cyBw
-YWdlcy4gIEkgYWxzbw0KPiBiZWxpZXZlIHRoaXMgaXMgcmVzcG9uc2libGUgZm9yIHZhcmlv
-dXMgZGVhZGxvY2tzIEkgaGF2ZSBleHBlcmllbmNlZCBpbg0KPiB0aGUgcGFzdC4NCj4gDQo+
-IEF2b2lkIHRoZXNlIHByb2JsZW1zIGJ5IG1ha2luZyB1bm1hcF9ncmFudF9wYWdlcyBhc3lu
-Yy4gIFRoaXMgcmVxdWlyZXMNCj4gbWFraW5nIGl0IHJldHVybiB2b2lkLCBhcyBhbnkgZXJy
-b3JzIHdpbGwgbm90IGJlIGF2YWlsYWJsZSB3aGVuIHRoZQ0KPiBmdW5jdGlvbiByZXR1cm5z
-LiAgRm9ydHVuYXRlbHksIHRoZSBvbmx5IHVzZSBvZiB0aGUgcmV0dXJuIHZhbHVlIGlzIGEN
-Cj4gV0FSTl9PTigpLCB3aGljaCBjYW4gYmUgcmVwbGFjZWQgYnkgYSBXQVJOX09OIHdoZW4g
-dGhlIGVycm9yIGlzDQo+IGRldGVjdGVkLiAgQWRkaXRpb25hbGx5LCBhIGZhaWxlZCBjYWxs
-IHdpbGwgbm90IHByZXZlbnQgZnVydGhlciBjYWxscw0KPiBmcm9tIGJlaW5nIG1hZGUsIGJ1
-dCB0aGlzIGlzIGhhcm1sZXNzLg0KPiANCj4gQmVjYXVzZSB1bm1hcF9ncmFudF9wYWdlcyBp
-cyBub3cgYXN5bmMsIHRoZSBncmFudCBoYW5kbGUgd2lsbCBiZSBzZW50IHRvDQo+IElOVkFM
-SURfR1JBTlRfSEFORExFIHRvbyBsYXRlIHRvIHByZXZlbnQgbXVsdGlwbGUgdW5tYXBzIG9m
-IHRoZSBzYW1lDQo+IGhhbmRsZS4gIEluc3RlYWQsIGEgc2VwYXJhdGUgYm9vbCBhcnJheSBp
-cyBhbGxvY2F0ZWQgZm9yIHRoaXMgcHVycG9zZS4NCj4gVGhpcyB3YXN0ZXMgbWVtb3J5LCBi
-dXQgc3R1ZmZpbmcgdGhpcyBpbmZvcm1hdGlvbiBpbiBwYWRkaW5nIGJ5dGVzIGlzDQo+IHRv
-byBmcmFnaWxlLiAgRnVydGhlcm1vcmUsIGl0IGlzIG5lY2Vzc2FyeSB0byBncmFiIGEgcmVm
-ZXJlbmNlIHRvIHRoZQ0KPiBtYXAgYmVmb3JlIG1ha2luZyB0aGUgYXN5bmNocm9ub3VzIGNh
-bGwsIGFuZCByZWxlYXNlIHRoZSByZWZlcmVuY2Ugd2hlbg0KPiB0aGUgY2FsbCByZXR1cm5z
-Lg0KPiANCj4gSXQgaXMgYWxzbyBuZWNlc3NhcnkgdG8gZ3VhcmQgYWdhaW5zdCByZWVudHJh
-bmN5IGluIGdudGRldl9tYXBfcHV0KCksDQo+IGFuZCB0byBoYW5kbGUgdGhlIGNhc2Ugd2hl
-cmUgdXNlcnNwYWNlIHRyaWVzIHRvIG1hcCBhIG1hcHBpbmcgd2hvc2UNCj4gY29udGVudHMg
-aGF2ZSBub3QgYWxsIGJlZW4gZnJlZWQgeWV0Lg0KPiANCj4gRml4ZXM6IDc0NTI4MjI1NmM3
-NSAoInhlbi9nbnRkZXY6IHNhZmVseSB1bm1hcCBncmFudHMgaW4gY2FzZSB0aGV5IGFyZSBz
-dGlsbCBpbiB1c2UiKQ0KPiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiBTaWduZWQt
-b2ZmLWJ5OiBEZW1pIE1hcmllIE9iZW5vdXIgPGRlbWlAaW52aXNpYmxldGhpbmdzbGFiLmNv
-bT4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0K
-DQpKdWVyZ2VuDQo=
---------------EZrvq5EHS1RGY5UKrUtgHHZI
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+In my case it exposes different issue - under performance. Somehow the
+bwmon does not report bandwidth high enough to vote for high bandwidth.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+After removing the DDR interconnect and bandwidth OPP values I have for:
+sysbench --threads=8 --time=60 --memory-total-size=20T --test=memory
+--memory-block-size=4M run
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+1. Vanilla: 29768 MB/s
+2. Vanilla without CPU votes: 8728 MB/s
+3. Previous bwmon (voting too high): 32007 MB/s
+4. Fixed bwmon 24911 MB/s
+Bwmon does not vote for maximum L3 speed:
+bwmon report 9408 MB/s (thresholds set: <9216000 15052801>
+)
+osm l3 aggregate 14355 MBps -> 897 MHz, level 7, bw 14355 MBps
 
---------------EZrvq5EHS1RGY5UKrUtgHHZI--
+Maybe that's just problem with missing governor which would vote for
+bandwidth rounding up or anticipating higher needs.
 
---------------CM7Lbh2cN3VZwePM0uCnSORv--
+>>> Depending on which one it is, shouldn;t we just be scaling either one and not both the interconnect paths?
+>>
+>> The interconnects are the same as ones used for CPU nodes, therefore if
+>> we want to scale both when scaling CPU, then we also want to scale both
+>> when seeing traffic between CPU and cache.
+> 
+> Well, they were both associated with the CPU node because with no other input to decide on _when_
+> to scale the caches and DDR, we just put a mapping table which simply mapped a CPU freq to a L3 _and_
+> DDR freq. So with just one input (CPU freq) we decided on what should be both the L3 freq and DDR freq.
+> 
+> Now with 2 pmu's, we have 2 inputs, so we can individually scale the L3 based on the cache PMU
+> counters and DDR based on the DDR PMU counters, no?
+> 
+> Since you said you have plans to add the other pmu support as well (bwmon5 between the cache and DDR)
+> how else would you have the OPP table associated with that pmu instance? Would you again have both the
+> L3 and DDR scale based on the inputs from that bwmon too?
 
---------------MjLJ9LQCj5UmEMxFvomyfUd0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Good point, thanks for sharing. I think you're right. I'll keep only the
+l3c interconnect path.
 
------BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmK0YyAFAwAAAAAACgkQsN6d1ii/Ey9/
-pgf/eNQa9Pf7E8x2YxUld0WpDOH6NxiTgM+wwHd/VsfBNuwXmthu0iGFvImOHIPJ21gD7Ibz1N4N
-JFOp4Dh60QJ04EjrnT8SDaz7Mu9lsA1dHr6MMXokdbSRTijHVhzpMphN63AnZOvHCJn2FUzp+UvE
-riOxkKCB3yIohXFV3oajCQHmZBb83wMizl02J/hA7pAez4pen8JiQYMnkq7djZ+vXc1E0PAcZf17
-5QPSXEbR4ghoUqkd8rFVq4vUClmyqRJwsOtuYdSd6VS3U1vjg1MW712MBTyT/snO+5snXZp53jE7
-QRHhn7aLmtPAt/nC6Gf+lmgxBdtpdIah0mJByVQixA==
-=t+Ri
------END PGP SIGNATURE-----
-
---------------MjLJ9LQCj5UmEMxFvomyfUd0--
+Best regards,
+Krzysztof

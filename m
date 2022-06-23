@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F3D55720E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB6F55721F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbiFWEuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S233343AbiFWEty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344351AbiFWEVZ (ORCPT
+        with ESMTP id S1345956AbiFWEVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 00:21:25 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C72D1E9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:21:24 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id q6so1460810eji.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:21:24 -0700 (PDT)
+        Thu, 23 Jun 2022 00:21:55 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E4D2D1E9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:21:54 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3178996424dso129412327b3.21
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 21:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UvEF84n19lSXOqhpJPPSQblDfpd6XZf1X0P1snbWIog=;
-        b=Vl9rLwUwaeKipQIahhDvfesL7mLKD5q5lG+qEJ+AyqMb/Xw5nUurD3i3YIkSpsfHF9
-         Ypp7wduhLoSWdVOuDBEF3w86EKbL650iusZN0MRzJoARloBjmDf7l63cuUCYDebI/DgM
-         6bQ+eSHEKrXqoiO59CBd0G8idqfUVJvpjOdomBL3X2rKwXFDhVxd7NH42QsOFXAjt3eQ
-         B9mKPH0NufWSXD7/QLoqk2z8vHtLn5g3GTwuADCAqpKTeYg1XJRZWdC71MwrGKJ14JQE
-         EhWzEQS3SzdDkmR4d2Lncqw6Q9t3D9MnWfYAuqq9rakTfgbv0HKvjHANVFAEO7H9Sh5k
-         79ZQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=PpsZDxpmLv6+/qqx3+rvSnNv1wpv3+TXqYxnLrVDMiw=;
+        b=pm+EavrBSxygW9wvzqLjGcfKXhCGr/dBXeZRdOmzCF8Zi1nye/Et5+WVIO1C4lauO9
+         M0leCRvfLM2AJxgg46x5MH/oEn1eoCecvj8b0+RU+zFimw9DruYrsNqaEk0hos+bVQaC
+         SARmWkMTypjPWRsL0ayNGI2DgIqA5OCS0y3o62U2/708BVGIrsONfu1coiyFRA+io8YS
+         cANR+cfjv8GyXTbIpXJz7EUfWGU8InNlh0Y/ctR3fdIgwsVQI0GT5yLT4wPJzW1aOwqI
+         IK29lat5TnM27KQlno2Ueg4IGlB4lf5r0qXh84LqRLK3/eYdbCtqW8XEw50eTOexFIRE
+         iGqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UvEF84n19lSXOqhpJPPSQblDfpd6XZf1X0P1snbWIog=;
-        b=ICUW2uqpayw/c4jMr4Y3pMgDWFO3YrQnajfniw8orbhHaD/1qYCu56Cc5oGOKddZcI
-         pU8peAOTeqdrZYTdOd43UB+fHDfdPXhZRkCxr57FFvytyj/5UoFXbdQrWMN7fj0mMCnv
-         AHVu0N3hbNYCSdecMCpUJmN8IO9yGaAjqKOhfPwprhz+JF+nhaLlSmgZ+EwYWfUDrDRM
-         gk0XLrBVyOn1Wwbhzr6lMa9fB+dC/ze96KpIcBcUmjPnWtghMS/u7Lu4l4OZ5v+Fll+c
-         6JSa+0xZyPu0FKmfZ4mxPk3xhflgucy7xhJe44gQvHGSCQ43s9ermdsv94erTappMO15
-         sVOA==
-X-Gm-Message-State: AJIora+VIQfCPRzHOlKP4pm4Fs5l1DxaUV8FyxHQqipspNRg4Fsq8EEl
-        bty48ak35gCwT254lL810Fnz9tMrS4Y=
-X-Google-Smtp-Source: AGRyM1tcKwNKAopT/HBbeTPOpaKjfT3ou8JklgW1MgoCthPWnzDd8ytOhYyfoiOuT1VAZsPHz51DLw==
-X-Received: by 2002:a17:906:7292:b0:712:3880:3e7b with SMTP id b18-20020a170906729200b0071238803e7bmr6143374ejl.118.1655958083170;
-        Wed, 22 Jun 2022 21:21:23 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2e:6923:8d97:93cc:4023:b7a9? (p200300c78f2e69238d9793cc4023b7a9.dip0.t-ipconnect.de. [2003:c7:8f2e:6923:8d97:93cc:4023:b7a9])
-        by smtp.gmail.com with ESMTPSA id w26-20020a50fa9a000000b0043575ae2051sm10806022edr.62.2022.06.22.21.21.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 21:21:22 -0700 (PDT)
-Message-ID: <be6cc1a5-3eab-d0d0-fd93-68afeed7d7a1@gmail.com>
-Date:   Thu, 23 Jun 2022 06:21:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] staging: r8188eu: Make rtw_signal_stat_timer_hdl a static
- function
-Content-Language: en-US
-To:     Chang Yu <marcus.yu.56@gmail.com>, Larry.Finger@lwfinger.net
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220623022425.395000-1-marcus.yu.56@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220623022425.395000-1-marcus.yu.56@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=PpsZDxpmLv6+/qqx3+rvSnNv1wpv3+TXqYxnLrVDMiw=;
+        b=QWknw0q/Pryih8s7B8UH0ZRh3SS4ImUR4YLOLLVtAlaYkKvRkVRUuz3hFs6aejz8xQ
+         tCs+5qFjmOQzg/WFmKFCv4Hepx8xEckb42Sdd5ng6JwvYRE7MChSoTf1n6HRgNWvRj2A
+         Hj0tBt+y9qc2OngLC3QyeSBciOisKB/Biw//lF7HAzf6dnb0I68Gp4VORBl6QaSHXYTf
+         aY6omokBEXUGQ9PLdNMVdCiJdVHrCsdzxtRmJK+EVm1M44iYLKR2KtItq3Skx2eyQprl
+         b+zB/x2oGULrgq1B4ZDM1XopJcdqLGOm91gWYyP3Fvb2OYDJc+aI8yWgHbo6xa9nnMeQ
+         t9+A==
+X-Gm-Message-State: AJIora//VQggLRExg/XkzofufCXReey0+m3EPKrR/yhOIi0qZ1vtzHbR
+        AFIqfJBI2ojpj1xOeiEyOfVEJUqEv2FVmZQ=
+X-Google-Smtp-Source: AGRyM1sw4pfSqRlLWjCBS1hEyjS9ZkZZkdnqpUsYZum7q8zUnQM5xufoFVhVU+O40bAUjXvk3LspzoM/oI94neU=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:be1f:89ac:a37d:6bb4])
+ (user=saravanak job=sendgmr) by 2002:a05:6902:84:b0:63d:4a3d:eb5 with SMTP id
+ h4-20020a056902008400b0063d4a3d0eb5mr7368682ybs.145.1655958114239; Wed, 22
+ Jun 2022 21:21:54 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 21:21:50 -0700
+Message-Id: <20220623042150.762330-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v1] driver core: Ignore driver_async_probe cmdline param for
+ module drivers
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +66,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 04:24, Chang Yu wrote:
-> Make rtw_signal_stat_timer_hdl a static function instead of a global
-> function.
-> 
-> Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
-> ---
->   drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-> index cc91638a085d..599d3e55be76 100644
-> --- a/drivers/staging/r8188eu/core/rtw_recv.c
-> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-> @@ -24,7 +24,7 @@ static u8 rtw_rfc1042_header[] = {
->   	0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00
->   };
->   
-> -void rtw_signal_stat_timer_hdl(struct timer_list *t);
-> +static void rtw_signal_stat_timer_hdl(struct timer_list *t);
->   
->   void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
->   {
+If the module's async_probe option isn't set, the module loading code
+will do a async_synchronize_full() before returning to userspace. This
+effectively negates any benefits of driver_async_probe listing the
+module's driver.
 
-Hi,
+If the module's async_probe is set, then we already do async probe for
+that module's driver even if driver_async_probe does not list that
+driver. So, again, the driver_async_probe's value doesn't matter for a
+module's driver.
 
-thanks for your patch. I think you need the "static" for the declaration 
-and the definition of the function. So it is missing in line 1789.
+So this change ignores the driver_async_probe for module drivers to
+avoid useless async probes.
 
-Thanks for your support.
+In addition, if driver_async_probe lists a module's driver and the
+driver's async probe ends up calling request_module() in the async
+thread context, that's going to trigger a spurious WARNING stack dump
+without any real benefits of async probing. So this will avoid that
+unnecessary warning in that situation.
 
-Bye Philipp
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ drivers/base/dd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index e600dd2afc35..f1ac28a4ce62 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -823,7 +823,7 @@ bool driver_allows_async_probing(struct device_driver *drv)
+ 		return false;
+ 
+ 	default:
+-		if (cmdline_requested_async_probing(drv->name))
++		if (cmdline_requested_async_probing(drv->name) && drv->owner == NULL)
+ 			return true;
+ 
+ 		if (module_requested_async_probing(drv->owner))
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

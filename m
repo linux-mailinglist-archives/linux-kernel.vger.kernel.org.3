@@ -2,177 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFF05579FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0275557A02
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiFWMIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S231759AbiFWMIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiFWMId (ORCPT
+        with ESMTP id S231734AbiFWMIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:08:33 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860BB4B1E2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:08:32 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id y77so681098oia.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:08:32 -0700 (PDT)
+        Thu, 23 Jun 2022 08:08:45 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF424B403;
+        Thu, 23 Jun 2022 05:08:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=gyZqQXrE1oAKL67wT+hGw2Pl78mZ0Dy0a81L+pVfTtc=;
-        b=DKgz1RggJTNYg8Dh1902smt3bH0UGIFYKcHYFKRGkzuvs80CrNqI5yZb3+GylkCtk7
-         dlAUgmGrhFVkrHTPD4wPXdSysV+wzxK0FrBgQ6/REZPbGECiqQMMEh9FbYNVQON1sZzD
-         snu6YRfeac+U0ym+SP2G60Y2YATG3QCnCD2qRT0wtKyx4FGBeg4WJZk6wi3pcBHe0ZXW
-         XiVRyLeAey5VlrvW/TuN4EJQFxwUs+ovERwxxgQW7CX3HW5rETYckCc8OS6F3bntNjav
-         DogQrTRKAPV4MoGoX0LfYapMV4KahxUv7fLtFBxMlD4ShX7w8q2ruNWs+q5SBE80yOKP
-         5Blw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gyZqQXrE1oAKL67wT+hGw2Pl78mZ0Dy0a81L+pVfTtc=;
-        b=KF0BHe+BnAz+YGgqDysdoiJI5joiRfUDHef9oNSviGocZz4kOccepSs/48U9/dqDkN
-         kAoc660HKuDTVbjI+sZitJMWktMHSNQ6/VC40Ob99dWxfgq9xVM5INzxPD1NUbRNg7BW
-         pQpbk0nwWhvSSbKmS61dYc+mpFsEwKP4bsRVmolKq88LtleQ5R3/FOtwk9JD/RZ7wfCc
-         kWK/O5ZwrgrIRXhuj5VHp95ZY34rx/i/CeCl0UjmGXd5LcBy75DiDjVnQ0FwZV/QyG+s
-         CEmShYSSs6Bb+sxoz3X328iq8kUsYtBgIppVKRwsVcG1yjB6j4PrQjSnATmTPBYRyE9q
-         jisg==
-X-Gm-Message-State: AJIora+3ikbgFcOAwWoxpmmYUrrtmkZ8zv2Y8OKvW+wamFpKgOfBJYFv
-        QZUR+Vlef3tOb0JUtXJubgyzjbZKtx373aJIWpMBvg==
-X-Google-Smtp-Source: AGRyM1sN1Kc805BDBrcC6gBTpk9T04QLNUFNK7mehzsjqN7Ui2L8ULNfuMmkwDLeKdm60BdDNLtwxJcA5CpCTlqmXQA=
-X-Received: by 2002:a05:6808:120a:b0:333:54f1:351 with SMTP id
- a10-20020a056808120a00b0033354f10351mr2055076oil.70.1655986111699; Thu, 23
- Jun 2022 05:08:31 -0700 (PDT)
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1655986122; x=1687522122;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9/CCr0snWfftSFhkeAYUhF2+vCU0/VTKAyn0ef5b+1M=;
+  b=RfLwjfKgpEQJskz0RHl1y/wsjOtM21oPgA41GOcm36Prlk0L+V6Lt+ae
+   jxD/4pLS5An/DikbhT92gC1r0r3pZlHOir14EHNaWyaX6585ZZoI5+tc6
+   eam11olTQOYvdbXOq+Xu9iSL3RsSWyZDBJ+kxstTdCyOrw+3c+Rlzm/To
+   ZgjU4ZAVxLK/nSgHoKbv9o1zeFfONkeabUw22LWSSeGD/ndYGt0jRpzJH
+   A/D4nJ8F5GiI6828iI9n3umJFtbZnfGSguJB1xsMMAvpEiFXXVUjBsK9J
+   kcObcbG9vysqfGvdILhrn9dnYrbAuw4H38YiOudt78jtrRD3Hw2FJTIUR
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,216,1650924000"; 
+   d="scan'208";a="24631790"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 23 Jun 2022 14:08:39 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 23 Jun 2022 14:08:39 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 23 Jun 2022 14:08:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1655986119; x=1687522119;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9/CCr0snWfftSFhkeAYUhF2+vCU0/VTKAyn0ef5b+1M=;
+  b=HqDs5ssF8L1EkiBFh2ujtpvauytr8wW9ynjPp2xOnD4EQm4zS6BPcHVl
+   lxCOGE9jVnfEHBD/8sdZQllqvQTP/1hCMj4QZY6SY4Dsotw+F09xiTIbq
+   kPGuT6sVq23fcovCydMWi8mwrwIkHuq0JdWTnYE+8HL1BZeE7m/EB/0Z2
+   jXy8EAKffPqzrkqqO6YcQzKY7pIfLm1sMMrgzEp3d8Y8kwIXrn9ZM9Ms+
+   zqG3kEyie1oOETmmWcRSdR2GYyqnkSUJwZUXPsUDFrdSKw9PLlNJufhlU
+   z97RAyDul51fuxwcMhrOWtYtivSC6bw3XtK+NKpUAday6W/pIZCXrl64Z
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,216,1650924000"; 
+   d="scan'208";a="24631789"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 23 Jun 2022 14:08:39 +0200
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C37F4280056;
+        Thu, 23 Jun 2022 14:08:38 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Saravana Kannan <saravanak@google.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+Date:   Thu, 23 Jun 2022 14:08:38 +0200
+Message-ID: <4799738.LvFx2qVVIh@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <YrFzK6EiVvXmzVG6@atomide.com>
+References: <20220601070707.3946847-1-saravanak@google.com> <20220601070707.3946847-2-saravanak@google.com> <YrFzK6EiVvXmzVG6@atomide.com>
 MIME-Version: 1.0
-References: <20220619104712.125364-1-renzhijie2@huawei.com>
-In-Reply-To: <20220619104712.125364-1-renzhijie2@huawei.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Jun 2022 14:07:54 +0200
-Message-ID: <CAPDyKFp7+wwdUO6=0fqMHeNKsZ5LQqk4fC4RMwrir4g6R+pTpQ@mail.gmail.com>
-Subject: Re: [PATCH -next] mmc: sdhci-pci-gli: Fix build error unused-function
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     adrian.hunter@intel.com, reniuschengl@gmail.com,
-        jasonlai.genesyslogic@gmail.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 19 Jun 2022 at 12:48, Ren Zhijie <renzhijie2@huawei.com> wrote:
->
-> If CONFIG_PM is not set.
->
-> make ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu-, will be failed, lik=
-e this:
->
-> drivers/mmc/host/sdhci-pci-gli.c:834:13: error: =E2=80=98gl9763e_set_low_=
-power_negotiation=E2=80=99 defined but not used [-Werror=3Dunused-function]
->  static void gl9763e_set_low_power_negotiation(struct sdhci_pci_slot *slo=
-t, bool enable)
->              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> make[3]: *** [drivers/mmc/host/sdhci-pci-gli.o] Error 1
->
-> To fix building warning, wrap all related code with CONFIG_PM.
->
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 78fe993ae714("mmc: host: Improve I/O read/write performance for GL=
-9763E")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+Hi,
 
-Applied for next, thanks!
+Am Dienstag, 21. Juni 2022, 09:28:43 CEST schrieb Tony Lindgren:
+> Hi,
+> 
+> * Saravana Kannan <saravanak@google.com> [700101 02:00]:
+> > Now that fw_devlink=on by default and fw_devlink supports
+> > "power-domains" property, the execution will never get to the point
+> > where driver_deferred_probe_check_state() is called before the supplier
+> > has probed successfully or before deferred probe timeout has expired.
+> > 
+> > So, delete the call and replace it with -ENODEV.
+> 
+> Looks like this causes omaps to not boot in Linux next. With this
+> simple-pm-bus fails to probe initially as the power-domain is not
+> yet available. On platform_probe() genpd_get_from_provider() returns
+> -ENOENT.
+> 
+> Seems like other stuff is potentially broken too, any ideas on
+> how to fix this?
 
-Kind regards
-Uffe
+I think I'm hit by this as well, although I do not get a lockup.
+In my case I'm using arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts 
+and probing of 38320000.blk-ctrl fails as the power-domain is not (yet) 
+registed. See the (filtered) dmesg output:
+
+> [    0.744245] PM: Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@0 [    0.744756] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@2 [    0.745012] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@3 [    0.745268] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@4 [    0.746121] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@7 [    0.746400] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@8 [    0.746665] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@9 [    0.746927] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@a [    0.748870]
+> imx8m-blk-ctrl 38320000.blk-ctrl: error -ENODEV: failed to attach bus power
+> domain [    1.265279] PM: Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@5 [    1.265861] PM:
+> Added domain provider from
+> /soc@0/bus@30000000/gpc@303a0000/pgc/power-domain@6
+
+blk-ctrl@38320000 requires the power-domain 'pgc_vpu', which is power-domain@6 
+in pgc.
+
+Best regards,
+Alexander
+
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> > 
+> >  drivers/base/power/domain.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 739e52cd4aba..3e86772d5fac 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev,
+> > struct device *base_dev,> 
+> >  		mutex_unlock(&gpd_list_lock);
+> >  		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+> >  		
+> >  			__func__, PTR_ERR(pd));
+> > 
+> > -		return driver_deferred_probe_check_state(base_dev);
+> > +		return -ENODEV;
+> > 
+> >  	}
+> >  	
+> >  	dev_dbg(dev, "adding to PM domain %s\n", pd->name);
 
 
-> ---
->  drivers/mmc/host/sdhci-pci-gli.c | 50 ++++++++++++++++----------------
->  1 file changed, 25 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pc=
-i-gli.c
-> index a76506adc206..4d509f656188 100644
-> --- a/drivers/mmc/host/sdhci-pci-gli.c
-> +++ b/drivers/mmc/host/sdhci-pci-gli.c
-> @@ -831,31 +831,6 @@ static void sdhci_gl9763e_dumpregs(struct mmc_host *=
-mmc)
->         sdhci_dumpregs(mmc_priv(mmc));
->  }
->
-> -static void gl9763e_set_low_power_negotiation(struct sdhci_pci_slot *slo=
-t, bool enable)
-> -{
-> -       struct pci_dev *pdev =3D slot->chip->pdev;
-> -       u32 value;
-> -
-> -       pci_read_config_dword(pdev, PCIE_GLI_9763E_VHS, &value);
-> -       value &=3D ~GLI_9763E_VHS_REV;
-> -       value |=3D FIELD_PREP(GLI_9763E_VHS_REV, GLI_9763E_VHS_REV_W);
-> -       pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
-> -
-> -       pci_read_config_dword(pdev, PCIE_GLI_9763E_CFG, &value);
-> -
-> -       if (enable)
-> -               value &=3D ~GLI_9763E_CFG_LPSN_DIS;
-> -       else
-> -               value |=3D GLI_9763E_CFG_LPSN_DIS;
-> -
-> -       pci_write_config_dword(pdev, PCIE_GLI_9763E_CFG, value);
-> -
-> -       pci_read_config_dword(pdev, PCIE_GLI_9763E_VHS, &value);
-> -       value &=3D ~GLI_9763E_VHS_REV;
-> -       value |=3D FIELD_PREP(GLI_9763E_VHS_REV, GLI_9763E_VHS_REV_R);
-> -       pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
-> -}
-> -
->  static void sdhci_gl9763e_cqe_pre_enable(struct mmc_host *mmc)
->  {
->         struct cqhci_host *cq_host =3D mmc->cqe_private;
-> @@ -991,6 +966,31 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *s=
-lot)
->  }
->
->  #ifdef CONFIG_PM
-> +static void gl9763e_set_low_power_negotiation(struct sdhci_pci_slot *slo=
-t, bool enable)
-> +{
-> +       struct pci_dev *pdev =3D slot->chip->pdev;
-> +       u32 value;
-> +
-> +       pci_read_config_dword(pdev, PCIE_GLI_9763E_VHS, &value);
-> +       value &=3D ~GLI_9763E_VHS_REV;
-> +       value |=3D FIELD_PREP(GLI_9763E_VHS_REV, GLI_9763E_VHS_REV_W);
-> +       pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
-> +
-> +       pci_read_config_dword(pdev, PCIE_GLI_9763E_CFG, &value);
-> +
-> +       if (enable)
-> +               value &=3D ~GLI_9763E_CFG_LPSN_DIS;
-> +       else
-> +               value |=3D GLI_9763E_CFG_LPSN_DIS;
-> +
-> +       pci_write_config_dword(pdev, PCIE_GLI_9763E_CFG, value);
-> +
-> +       pci_read_config_dword(pdev, PCIE_GLI_9763E_VHS, &value);
-> +       value &=3D ~GLI_9763E_VHS_REV;
-> +       value |=3D FIELD_PREP(GLI_9763E_VHS_REV, GLI_9763E_VHS_REV_R);
-> +       pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
-> +}
-> +
->  static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
->  {
->         struct sdhci_pci_slot *slot =3D chip->slots[0];
-> --
-> 2.17.1
->
+
+

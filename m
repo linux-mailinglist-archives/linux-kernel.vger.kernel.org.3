@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620FB557785
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6504F557786
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiFWKKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S231508AbiFWKKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbiFWKKH (ORCPT
+        with ESMTP id S231420AbiFWKKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:10:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9C249C8E;
+        Thu, 23 Jun 2022 06:10:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C266549CBA;
         Thu, 23 Jun 2022 03:10:07 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 892C666017D1;
-        Thu, 23 Jun 2022 11:10:05 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 36FD566017D0;
+        Thu, 23 Jun 2022 11:10:06 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1655979006;
-        bh=ArWDB16Gc91tVSWokUuwuvangO7rCvezoVWw+007RDo=;
+        bh=ZgzmMPSygjLJDHZK16WVrb6boCW48PbwILdNxmzVx4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+VlilDqcFJfuiZNeFUzVfy19TIIdmZyQrqcwbm0C5oiznKm+2WoqBKMTB78nm/Ya
-         S6Ggl+YSv1lT2DrAmfTXeX9lV8aXrkUI3/r0DXVe2pchDedAjnZNq5MPHEOBD5iP3+
-         ySUtIuYVk7vYTEZCmemo5FaDesfv/wBPqadqGY528bMIJksgidERS0HHajvx3R3dbW
-         sLOSLLM6ANkwGSKcrRRdNSSxuHzf9yFULxB4yQGdz8Q0jset7C0NPoYkmOArXG4jpF
-         isQPEpwGAFxUVHoMOduqZGkWlI/2eRmsV/iGQxDPRRce/Tj8vCx9k01VFlDQTww4il
-         ukVy4Rpw7YiYg==
+        b=b5OyyYCZT9D/A+T06gMVb/yfzIImNPIFoiDSaLXV7pCtC7jU0XBbKh2GzOSlIQmME
+         Qs0f4Xqi+zl93TDWEQzkMHrunxW/5YaAMorotCo3mbNBI2WUFdWbp6kQaS9ndcxiYF
+         ITIVZOlPzV8KKrwTxgDLu7jibHCZFYvQcP2+mqCEyhSbzcL/UZrISOlsW5MwR08jz1
+         QMp4o72jSPLlmWk1fbdjJC8YZicdctiqDkQxj/5uVmvOEFuMUpdgcT0R4pfXsc/1KK
+         TfNLq/StExqA7YQo+jXRDe1fzmP0S4GC8BJJMEtvypmOi58ZmMqBIvd7nzu4Oaa9ma
+         OPv4QeDWmruqQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -41,9 +41,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         wenst@chromium.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 4/5] soc: mediatek: mt8186-pm-domains: Allow probing vreg supply on MFG1
-Date:   Thu, 23 Jun 2022 12:09:50 +0200
-Message-Id: <20220623100951.21153-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 5/5] arm64: dts: mediatek: mt8183-kukui: Assign sram supply to mfg_async pd
+Date:   Thu, 23 Jun 2022 12:09:51 +0200
+Message-Id: <20220623100951.21153-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220623100951.21153-1-angelogioacchino.delregno@collabora.com>
 References: <20220623100951.21153-1-angelogioacchino.delregno@collabora.com>
@@ -58,27 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the MTK_SCPD_DOMAIN_SUPPLY cap to the MFG1 power domain in MT8186
-to allow voting for sram regulators on/off.
+Add a phandle to the MT8183_POWER_DOMAIN_MFG_ASYNC power domain and
+assign the GPU VSRAM supply to this in mt8183-kukui: this allows to
+keep the sram powered up while the GPU is used.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/soc/mediatek/mt8186-pm-domains.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/mediatek/mt8186-pm-domains.h b/drivers/soc/mediatek/mt8186-pm-domains.h
-index bf2dd0cdc3a8..108af61854a3 100644
---- a/drivers/soc/mediatek/mt8186-pm-domains.h
-+++ b/drivers/soc/mediatek/mt8186-pm-domains.h
-@@ -51,7 +51,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8186[] = {
- 				MT8186_TOP_AXI_PROT_EN_1_CLR,
- 				MT8186_TOP_AXI_PROT_EN_1_STA),
- 		},
--		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY,
- 	},
- 	[MT8186_POWER_DOMAIN_MFG2] = {
- 		.name = "mfg2",
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index 89e4358f140a..33f3bf277ce9 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -821,6 +821,10 @@ cros_ec {
+ 	};
+ };
+ 
++&mfg_async {
++	domain-supply = <&mt6358_vsram_gpu_reg>;
++};
++
+ &mfg {
+ 	domain-supply = <&mt6358_vgpu_reg>;
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 9485c1efc87c..9d32871973a2 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -788,7 +788,7 @@ power-domain@MT8183_POWER_DOMAIN_CONN {
+ 					#power-domain-cells = <0>;
+ 				};
+ 
+-				power-domain@MT8183_POWER_DOMAIN_MFG_ASYNC {
++				mfg_async: power-domain@MT8183_POWER_DOMAIN_MFG_ASYNC {
+ 					reg = <MT8183_POWER_DOMAIN_MFG_ASYNC>;
+ 					clocks = <&topckgen CLK_TOP_MUX_MFG>;
+ 					clock-names = "mfg";
 -- 
 2.35.1
 

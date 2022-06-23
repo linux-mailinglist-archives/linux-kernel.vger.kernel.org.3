@@ -2,101 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62A3557C7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2678557C92
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiFWNIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S231287AbiFWNKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiFWNIK (ORCPT
+        with ESMTP id S230415AbiFWNKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:08:10 -0400
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA1F4A3D9;
-        Thu, 23 Jun 2022 06:08:07 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id B547C9C022D;
-        Thu, 23 Jun 2022 09:08:06 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id bjSWMopkvg3c; Thu, 23 Jun 2022 09:08:06 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 497559C024D;
-        Thu, 23 Jun 2022 09:08:06 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 497559C024D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-        t=1655989686; bh=nhSEKtgsyRwyL8XAN2d+CQz9eyJV9mv1KvBp5hYE1q0=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=VELUfRT0pslpWvNx6sLe+HJASaTbFJs4X8Mg0YMm9q6GeahHFxhFAUTDLrmUEnWFb
-         L9PPOOnF1q818fAp0rQurErhrLXnJN2ncPvKNL7XqJKrksAEqd8tB8D7kvxjrbJ4n5
-         M3DSpZgZfLv50epPtWmEpcMUNxq/1tOUKpzqyTV44DeJ7H1t780SHsXCrYUC+9pB79
-         /vYcFdFTzktE4YH8OgLMFk2xgoj/spJclCp24k3KcCqznUGuK9O5Y+IK0aLkTUXB4H
-         llRToJk4Fs/k8jzOsApednpAqhUs4yq6P8g4H19lYYRKhwYC4eUKgMa4PW6zK9zar7
-         o+pMlK8e0V/7g==
-X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EaLrX2CHWYws; Thu, 23 Jun 2022 09:08:06 -0400 (EDT)
-Received: from sfl-deribaucourt.rennes.sfl (lfbn-ren-1-676-174.w81-53.abo.wanadoo.fr [81.53.245.174])
-        by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 4F9539C022D;
-        Thu, 23 Jun 2022 09:08:05 -0400 (EDT)
-From:   Enguerrand de Ribaucourt 
-        <enguerrand.de-ribaucourt@savoirfairelinux.com>
-To:     andrew@lunn.ch
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        hkallweit1@gmail.com,
-        Enguerrand de Ribaucourt 
-        <enguerrand.de-ribaucourt@savoirfairelinux.com>
-Subject: [PATCH v2 2/2] net: dp83822: disable rx error interrupt
-Date:   Thu, 23 Jun 2022 15:06:54 +0200
-Message-Id: <20220623130651.1805615-3-enguerrand.de-ribaucourt@savoirfairelinux.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220623130651.1805615-1-enguerrand.de-ribaucourt@savoirfairelinux.com>
-References: <YqzAKguRaxr74oXh@lunn.ch>
- <20220623130651.1805615-1-enguerrand.de-ribaucourt@savoirfairelinux.com>
+        Thu, 23 Jun 2022 09:10:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55122FFF4;
+        Thu, 23 Jun 2022 06:10:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D6C9B82343;
+        Thu, 23 Jun 2022 13:10:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C56C3411D;
+        Thu, 23 Jun 2022 13:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655989833;
+        bh=0zY1CcAGOodqFHYKrqKnel8P6Pk0ezfsNJ9fjtuoE6c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dkxkUTGX7gPCpPUD/3XJ0uFa9iOVbPV6YLXAzKvyPQG4i+qjIJIb4P4Im/bi4bn61
+         GrdcSjE+U2DoBBEpyWKD5X5CHrSv2SXktJ+frq9tem568cj3uiEKtIGt2ajsCxb4rg
+         hOWCUs4zn3ZYp8xf3Kx29RT97RfViDCmu7CkeP5yv5FaM+okjowWULwPsfgQuEniwc
+         BPoscgORoMF0j939cFADYXzPbqhMHzbPNL+kG4rKBYDhHvoKYEXa1AZu+1wvPMLTR8
+         Gw9PxTdQkaHaiVisWEExgiBBOAvJAtOYYdL7afAqFOQZExmd5sD+DuWsUencNsLvnA
+         NXOzESRCwtLwg==
+Received: by pali.im (Postfix)
+        id C548C79F; Thu, 23 Jun 2022 15:10:29 +0200 (CEST)
+Date:   Thu, 23 Jun 2022 15:10:29 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
+ interrupt handler
+Message-ID: <20220623131029.e4tyegjmvhy5xxxw@pali>
+References: <20220524122817.7199-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220524122817.7199-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some RX errors, notably when disconnecting the cable, increase the RCSR
-register. Once half full (0x7fff), an interrupt flood is generated. I
-measured ~3k/s interrupts even after the RX errors transfer was
-stopped.
+On Tuesday 24 May 2022 14:28:17 Pali Rohár wrote:
+> Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
+> chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
+> instead of chained IRQ handler in pci-mvebu.c driver.
+> 
+> This change fixes affinity support and allows to pin interrupts from
+> different PCIe controllers to different CPU cores.
+> 
+> Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
 
-Since we don't read and clear the RCSR register, we should disable this
-interrupt.
+PING?
 
-Signed-off-by: Enguerrand de Ribaucourt <enguerrand.de-ribaucourt@savoirf=
-airelinux.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/phy/dp83822.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
-index 95ef507053a6..8549e0e356c9 100644
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -229,8 +229,7 @@ static int dp83822_config_intr(struct phy_device *phy=
-dev)
- 		if (misr_status < 0)
- 			return misr_status;
-
--		misr_status |=3D (DP83822_RX_ERR_HF_INT_EN |
--				DP83822_LINK_STAT_INT_EN |
-+		misr_status |=3D (DP83822_LINK_STAT_INT_EN |
- 				DP83822_ENERGY_DET_INT_EN |
- 				DP83822_LINK_QUAL_INT_EN);
-
---
-2.25.1
+> Hello Bjorn! This is basically same issue as for pci-aardvark.c:
+> https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
+> 
+> I tested this patch with pci=nomsi in cmdline (to force kernel to use
+> legacy intx instead of MSI) on A385 and checked that I can set affinity
+> via /proc/irq/XX/smp_affinity file for every mvebu pcie controller to
+> different CPU and legacy interrupts from different cards/controllers
+> were handled by different CPUs.
+> 
+> I think that this is important on Armada XP platforms which have many
+> independent PCIe controllers (IIRC up to 10) and many cores (up to 4).
+> ---
+>  drivers/pci/controller/pci-mvebu.c | 30 +++++++++++++++++-------------
+>  1 file changed, 17 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> index 8f76d4bda356..de67ea39fea5 100644
+> --- a/drivers/pci/controller/pci-mvebu.c
+> +++ b/drivers/pci/controller/pci-mvebu.c
+> @@ -1017,16 +1017,13 @@ static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
+>  	return 0;
+>  }
+>  
+> -static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+> +static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
+>  {
+> -	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
+> -	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	struct mvebu_pcie_port *port = arg;
+>  	struct device *dev = &port->pcie->pdev->dev;
+>  	u32 cause, unmask, status;
+>  	int i;
+>  
+> -	chained_irq_enter(chip, desc);
+> -
+>  	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+>  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+>  	status = cause & unmask;
+> @@ -1040,7 +1037,7 @@ static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+>  			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
+>  	}
+>  
+> -	chained_irq_exit(chip, desc);
+> +	return status ? IRQ_HANDLED : IRQ_NONE;
+>  }
+>  
+>  static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+> @@ -1490,9 +1487,20 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
+>  				mvebu_pcie_powerdown(port);
+>  				continue;
+>  			}
+> -			irq_set_chained_handler_and_data(irq,
+> -							 mvebu_pcie_irq_handler,
+> -							 port);
+> +
+> +			ret = devm_request_irq(dev, irq, mvebu_pcie_irq_handler,
+> +					       IRQF_SHARED | IRQF_NO_THREAD,
+> +					       port->name, port);
+> +			if (ret) {
+> +				dev_err(dev, "%s: cannot register interrupt handler: %d\n",
+> +					port->name, ret);
+> +				irq_domain_remove(port->intx_irq_domain);
+> +				pci_bridge_emul_cleanup(&port->bridge);
+> +				devm_iounmap(dev, port->base);
+> +				port->base = NULL;
+> +				mvebu_pcie_powerdown(port);
+> +				continue;
+> +			}
+>  		}
+>  
+>  		/*
+> @@ -1599,7 +1607,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+>  
+>  	for (i = 0; i < pcie->nports; i++) {
+>  		struct mvebu_pcie_port *port = &pcie->ports[i];
+> -		int irq = port->intx_irq;
+>  
+>  		if (!port->base)
+>  			continue;
+> @@ -1615,9 +1622,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+>  		/* Clear all interrupt causes. */
+>  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+>  
+> -		if (irq > 0)
+> -			irq_set_chained_handler_and_data(irq, NULL, NULL);
+> -
+>  		/* Remove IRQ domains. */
+>  		if (port->intx_irq_domain)
+>  			irq_domain_remove(port->intx_irq_domain);
+> -- 
+> 2.20.1
+> 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1009255819C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE7E558196
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiFWRB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S232706AbiFWRCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbiFWQ5p (ORCPT
+        with ESMTP id S233520AbiFWQ5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:57:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31ED4DF5F;
-        Thu, 23 Jun 2022 09:53:30 -0700 (PDT)
+        Thu, 23 Jun 2022 12:57:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E394EDD1;
+        Thu, 23 Jun 2022 09:53:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBC1B61FC3;
-        Thu, 23 Jun 2022 16:53:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89440C3411B;
-        Thu, 23 Jun 2022 16:53:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D82EC61FBF;
+        Thu, 23 Jun 2022 16:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2FCC341CF;
+        Thu, 23 Jun 2022 16:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003205;
-        bh=57SbyPKMHG44GOEQhal2/dWHCZGuGBAKpNxfCh5ah0k=;
+        s=korg; t=1656003208;
+        bh=Bg9ECFE1CKePOK7lsrlIrQAb49dhB0JOAbwxVSGLmxg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ox1q93al8OwGwkE5t4YUB0GGJTG2k6p2brF+lvUtnqiqw/1/p6GLMG8mWBXDurhXQ
-         E6A2YzS41/V8jwepE2CHUtN4ht+tvtnVVXOlW6qGStBM+XRjZM3ibgUOpmAgsIdF+L
-         jkLbyLfN6/eQw+cDpfy6jbeTRPuKJz+D+xuJwzW4=
+        b=JwFYcGz7Z0u+OJPS8IptX8REzN8++m10CH52zw730N0dot/7caektlaPrRVMaQa4b
+         49JKlFuep99Zq8WjFedHZ4P7ZAmijXXUU/PM1lIK84O9wXgMlSvc5z5jiMZtJXiz4b
+         atMeNnAP2yEKJVfACb4DNM3vsC392NULWyJy2O9I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 163/264] random: make consistent usage of crng_ready()
-Date:   Thu, 23 Jun 2022 18:42:36 +0200
-Message-Id: <20220623164348.676582900@linuxfoundation.org>
+Subject: [PATCH 4.9 164/264] random: reseed more often immediately after booting
+Date:   Thu, 23 Jun 2022 18:42:37 +0200
+Message-Id: <20220623164348.704828555@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
 References: <20220623164344.053938039@linuxfoundation.org>
@@ -57,89 +57,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit a96cfe2d427064325ecbf56df8816c6b871ec285 upstream.
+commit 7a7ff644aeaf071d433caffb3b8ea57354b55bd3 upstream.
 
-Rather than sometimes checking `crng_init < 2`, we should always use the
-crng_ready() macro, so that should we change anything later, it's
-consistent. Additionally, that macro already has a likely() around it,
-which means we don't need to open code our own likely() and unlikely()
-annotations.
+In order to chip away at the "premature first" problem, we augment our
+existing entropy accounting with more frequent reseedings at boot.
+
+The idea is that at boot, we're getting entropy from various places, and
+we're not very sure which of early boot entropy is good and which isn't.
+Even when we're crediting the entropy, we're still not totally certain
+that it's any good. Since boot is the one time (aside from a compromise)
+that we have zero entropy, it's important that we shepherd entropy into
+the crng fairly often.
+
+At the same time, we don't want a "premature next" problem, whereby an
+attacker can brute force individual bits of added entropy. In lieu of
+going full-on Fortuna (for now), we can pick a simpler strategy of just
+reseeding more often during the first 5 minutes after boot. This is
+still bounded by the 256-bit entropy credit requirement, so we'll skip a
+reseeding if we haven't reached that, but in case entropy /is/ coming
+in, this ensures that it makes its way into the crng rather rapidly
+during these early stages.
+
+Ordinarily we reseed if the previous reseeding is 300 seconds old. This
+commit changes things so that for the first 600 seconds of boot time, we
+reseed if the previous reseeding is uptime / 2 seconds old. That means
+that we'll reseed at the very least double the uptime of the previous
+reseeding.
 
 Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ drivers/char/random.c |   28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -126,18 +126,13 @@ static void try_to_generate_entropy(void
-  */
- int wait_for_random_bytes(void)
- {
--	if (likely(crng_ready()))
--		return 0;
--
--	do {
-+	while (!crng_ready()) {
- 		int ret;
- 		ret = wait_event_interruptible_timeout(crng_init_wait, crng_ready(), HZ);
- 		if (ret)
- 			return ret > 0 ? 0 : ret;
--
- 		try_to_generate_entropy();
--	} while (!crng_ready());
--
+@@ -337,6 +337,28 @@ static void crng_fast_key_erasure(u8 key
+ }
+ 
+ /*
++ * Return whether the crng seed is considered to be sufficiently
++ * old that a reseeding might be attempted. This happens if the last
++ * reseeding was CRNG_RESEED_INTERVAL ago, or during early boot, at
++ * an interval proportional to the uptime.
++ */
++static bool crng_has_old_seed(void)
++{
++	static bool early_boot = true;
++	unsigned long interval = CRNG_RESEED_INTERVAL;
++
++	if (unlikely(READ_ONCE(early_boot))) {
++		time64_t uptime = ktime_get_seconds();
++		if (uptime >= CRNG_RESEED_INTERVAL / HZ * 2)
++			WRITE_ONCE(early_boot, false);
++		else
++			interval = max_t(unsigned int, 5 * HZ,
++					 (unsigned int)uptime / 2 * HZ);
 +	}
- 	return 0;
- }
- EXPORT_SYMBOL(wait_for_random_bytes);
-@@ -292,7 +287,7 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	if (crng_init < 2) {
-+	if (!crng_ready()) {
- 		crng_init = 2;
- 		finalize_init = true;
++	return time_after(jiffies, READ_ONCE(base_crng.birth) + interval);
++}
++
++/*
+  * This function returns a ChaCha state that you may use for generating
+  * random data. It also returns up to 32 bytes on its own of random data
+  * that may be used; random_data_len may not be greater than 32.
+@@ -369,10 +391,10 @@ static void crng_make_state(u32 chacha_s
  	}
-@@ -360,7 +355,7 @@ static void crng_make_state(u32 chacha_s
- 	 * ready, we do fast key erasure with the base_crng directly, because
- 	 * this is what crng_pre_init_inject() mutates during early init.
+ 
+ 	/*
+-	 * If the base_crng is more than 5 minutes old, we reseed, which
+-	 * in turn bumps the generation counter that we check below.
++	 * If the base_crng is old enough, we try to reseed, which in turn
++	 * bumps the generation counter that we check below.
  	 */
--	if (unlikely(!crng_ready())) {
-+	if (!crng_ready()) {
- 		bool ready;
- 
- 		spin_lock_irqsave(&base_crng.lock, flags);
-@@ -800,7 +795,7 @@ static void credit_entropy_bits(size_t n
- 		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
- 
--	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
-+	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
+-	if (unlikely(time_after(jiffies, READ_ONCE(base_crng.birth) + CRNG_RESEED_INTERVAL)))
++	if (unlikely(crng_has_old_seed()))
  		crng_reseed();
- }
  
-@@ -957,7 +952,7 @@ int __init rand_initialize(void)
- 	extract_entropy(base_crng.key, sizeof(base_crng.key));
- 	++base_crng.generation;
- 
--	if (arch_init && trust_cpu && crng_init < 2) {
-+	if (arch_init && trust_cpu && !crng_ready()) {
- 		crng_init = 2;
- 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
- 	}
-@@ -1546,7 +1541,7 @@ static long random_ioctl(struct file *f,
- 	case RNDRESEEDCRNG:
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
--		if (crng_init < 2)
-+		if (!crng_ready())
- 			return -ENODATA;
- 		crng_reseed();
- 		return 0;
+ 	local_irq_save(flags);
 
 

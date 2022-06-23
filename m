@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695EC558097
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD98C55831D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbiFWQwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S233944AbiFWRYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbiFWQvs (ORCPT
+        with ESMTP id S233518AbiFWRXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC22FD11;
-        Thu, 23 Jun 2022 09:50:31 -0700 (PDT)
+        Thu, 23 Jun 2022 13:23:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C6F4F9C7;
+        Thu, 23 Jun 2022 10:02:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89A33B82493;
-        Thu, 23 Jun 2022 16:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33A5C341C5;
-        Thu, 23 Jun 2022 16:50:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E98CD6159A;
+        Thu, 23 Jun 2022 17:01:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3833C3411B;
+        Thu, 23 Jun 2022 17:01:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003029;
-        bh=x9iWFYc6ywzpL8ONHopaPPY7f/VQ7Xo4jKXCi7xFPqw=;
+        s=korg; t=1656003717;
+        bh=/34Tt39GUWSoy+Q3pQqNRnI1EB/UlCXitZI7zQwu2Ss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y4m2HKleWBRVCEkj5MAJWOepIpjO1xVera/PWHeFMrNwJfmsZFyc+zj9qXXLW5n9L
-         yN4wslkWc7NxZ22H5wg4vzXYLNo1pGUaYrih5nncrjO9v0pDmK3iUbPW5vPqbVOy3+
-         4iX1XI2D/EPgBirDfyUMtn8cY6Fq/B5b2H0mRCgk=
+        b=CWd6hmyMC/kmWnOu7UQMvPtVVWmhVYd1s0fGZ2NWem2m9SEH1bILos4IOXtlf1afH
+         MWtR5dv/8cme+ixiOMVuyl+X6X81VMtKr8xp7fBU1PFlrQt26BVAV+G79o9bUzHHuj
+         egTlDE1h5pUTgBAcgtvF6vodyhLpYrekhGGOrIP4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 106/264] random: simplify arithmetic function flow in account()
+Subject: [PATCH 4.14 065/237] random: harmonize "crng init done" messages
 Date:   Thu, 23 Jun 2022 18:41:39 +0200
-Message-Id: <20220623164347.069392524@linuxfoundation.org>
+Message-Id: <20220623164345.026612457@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit a254a0e4093fce8c832414a83940736067eed515 upstream.
+commit 161212c7fd1d9069b232785c75492e50941e2ea8 upstream.
 
-Now that have_bytes is never modified, we can simplify this function.
-First, we move the check for negative entropy_count to be first. That
-ensures that subsequent reads of this will be non-negative. Then,
-have_bytes and ibytes can be folded into their one use site in the
-min_t() function.
+We print out "crng init done" for !TRUST_CPU, so we should also print
+out the same for TRUST_CPU.
 
-Suggested-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1344,7 +1344,7 @@ EXPORT_SYMBOL_GPL(add_disk_randomness);
-  */
- static size_t account(size_t nbytes, int min)
- {
--	int entropy_count, orig, have_bytes;
-+	int entropy_count, orig;
- 	size_t ibytes, nfrac;
- 
- 	BUG_ON(input_pool.entropy_count > POOL_FRACBITS);
-@@ -1352,20 +1352,15 @@ static size_t account(size_t nbytes, int
- 	/* Can we pull enough? */
- retry:
- 	entropy_count = orig = READ_ONCE(input_pool.entropy_count);
--	ibytes = nbytes;
--	/* never pull more than available */
--	have_bytes = entropy_count >> (POOL_ENTROPY_SHIFT + 3);
--
--	if (have_bytes < 0)
--		have_bytes = 0;
--	ibytes = min_t(size_t, ibytes, have_bytes);
--	if (ibytes < min)
--		ibytes = 0;
--
- 	if (WARN_ON(entropy_count < 0)) {
- 		pr_warn("negative entropy count: count %d\n", entropy_count);
- 		entropy_count = 0;
+@@ -832,7 +832,7 @@ static void __init crng_initialize_prima
+ 		invalidate_batched_entropy();
+ 		numa_crng_init();
+ 		crng_init = 2;
+-		pr_notice("crng done (trusting CPU's manufacturer)\n");
++		pr_notice("crng init done (trusting CPU's manufacturer)\n");
  	}
-+
-+	/* never pull more than available */
-+	ibytes = min_t(size_t, nbytes, entropy_count >> (POOL_ENTROPY_SHIFT + 3));
-+	if (ibytes < min)
-+		ibytes = 0;
- 	nfrac = ibytes << (POOL_ENTROPY_SHIFT + 3);
- 	if ((size_t)entropy_count > nfrac)
- 		entropy_count -= nfrac;
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
 
 

@@ -2,122 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0804C558AD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91705558AD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiFWViH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        id S230152AbiFWVhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiFWViD (ORCPT
+        with ESMTP id S230086AbiFWVhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:38:03 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56B1B78D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:38:00 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id E9AA8240108
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:37:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1656020278; bh=o+zEnjZneqzTskv0wxGKR7oSFYyBticMFCftbUGH1Ig=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fDhojbkUqGTnsp5YKlJUpWEjbmepgeiSxyaVB9ZcMowt5cbfP8JsahOhMee9x6Ou2
-         Rba2VMlwScFo+pE9IxammdExCoh3jT2OrGo5nufTnLxCY2fkkRB8jJgRCMFC9JQQbB
-         Wcqly3lwK8A9zGZAZNub0uqYhKpYRjzmc9qbVpsAew1mgtuybrQnBAADm4KKdSUGpw
-         ZWWE+UTC3jfIwQJdUgAJ62tXxy2TzPOCpVHh0oOVSfWwWZeXlE37rHD5ElwNQu7txQ
-         cfyzF54z8pjhhBhFwL1fNSzWhua8e0iYhb6Qj80vLkbNXDxs0qVuIcGznwLeXLsddA
-         BxnT7G5w7s+3A==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4LTYWp2XHgz6tmR;
-        Thu, 23 Jun 2022 23:37:58 +0200 (CEST)
-Date:   Thu, 23 Jun 2022 21:37:06 +0000
-From:   Tom Schwindl <schwindl@posteo.de>
-To:     corbet@lwn.net
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] docs: driver-api: gpio: Fix some typos
-Message-ID: <YrTdAv3YPlCiDr2u@posteo.de>
+        Thu, 23 Jun 2022 17:37:46 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F734F459
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656020265; x=1687556265;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E8wB6O69E2hwNJsBuwQVf0rnXqcBJCCWtVbyLuzM2uY=;
+  b=L4/Ih2KsRdDrog9r/pFo9pmjI6h8PE4OYmCQZwgueLeVWiP5HXWWCKiX
+   5VpIYmLbdLTkQpDYxxI4+XwoWvQDKzspabI3BKLK0IdB2ufoqngsifoCF
+   kGTKWFUfmc0eL4cqDyR4ZlguEYnFx1NRC2/Qi3R+w2rMpiW4+OEij+L7N
+   ENQu4FTKffd/FHInwJzIH0RVzALQPeyM5mIYdrSwmMZcKLSElbUbss1ya
+   CqTwcOg1/ep29150VXcM7h/n/Ar9pHJ58aABygdqkyAgGYgyL8TmIly2J
+   tKDGFOXb1EEaHaTJPmRozOOSwrsQgEFT5d5MsYHG++mdO5LZwsp7ys2u5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="269574035"
+X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
+   d="scan'208";a="269574035"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 14:37:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
+   d="scan'208";a="678246115"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jun 2022 14:37:43 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4UWE-0003C1-GO;
+        Thu, 23 Jun 2022 21:37:42 +0000
+Date:   Fri, 24 Jun 2022 05:37:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [jirislaby:lto 40/45] drivers/cpufreq/amd-pstate.c:127:15: warning:
+ no previous prototype for 'do_amd_pstate_enable'
+Message-ID: <202206240521.RzAbNYZb-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct some simple spelling mistakes in consumer.rst, driver.rst
-and using-gpio.rst.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git lto
+head:   8047611082d70c5263114fabce8c80a4c3d251fa
+commit: d6c599165eddb7f2b0f4caa0b5be6c3913bf5cfb [40/45] cpufreq, amd-pstate, lto: Fix for gcc LTO
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220624/202206240521.RzAbNYZb-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=d6c599165eddb7f2b0f4caa0b5be6c3913bf5cfb
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby lto
+        git checkout d6c599165eddb7f2b0f4caa0b5be6c3913bf5cfb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
 
-Signed-off-by: Tom Schwindl <schwindl@posteo.de>
----
- Documentation/driver-api/gpio/consumer.rst   | 2 +-
- Documentation/driver-api/gpio/driver.rst     | 6 +++---
- Documentation/driver-api/gpio/using-gpio.rst | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/Documentation/driver-api/gpio/consumer.rst b/Documentation/driver-api/gpio/consumer.rst
-index 72bcf5f5e3a2..de6fc79ad6f0 100644
---- a/Documentation/driver-api/gpio/consumer.rst
-+++ b/Documentation/driver-api/gpio/consumer.rst
-@@ -114,7 +114,7 @@ For a function using multiple GPIOs all of those can be obtained with one call::
- 
- This function returns a struct gpio_descs which contains an array of
- descriptors.  It also contains a pointer to a gpiolib private structure which,
--if passed back to get/set array functions, may speed up I/O proocessing::
-+if passed back to get/set array functions, may speed up I/O processing::
- 
- 	struct gpio_descs {
- 		struct gpio_array *info;
-diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/driver-api/gpio/driver.rst
-index 70ff43ac4fcc..6baaeab79534 100644
---- a/Documentation/driver-api/gpio/driver.rst
-+++ b/Documentation/driver-api/gpio/driver.rst
-@@ -119,7 +119,7 @@ GPIO lines with debounce support
- Debouncing is a configuration set to a pin indicating that it is connected to
- a mechanical switch or button, or similar that may bounce. Bouncing means the
- line is pulled high/low quickly at very short intervals for mechanical
--reasons. This can result in the value being unstable or irqs fireing repeatedly
-+reasons. This can result in the value being unstable or irqs firing repeatedly
- unless the line is debounced.
- 
- Debouncing in practice involves setting up a timer when something happens on
-@@ -219,7 +219,7 @@ use a trick: when a line is set as output, if the line is flagged as open
- drain, and the IN output value is low, it will be driven low as usual. But
- if the IN output value is set to high, it will instead *NOT* be driven high,
- instead it will be switched to input, as input mode is high impedance, thus
--achieveing an "open drain emulation" of sorts: electrically the behaviour will
-+achieving an "open drain emulation" of sorts: electrically the behaviour will
- be identical, with the exception of possible hardware glitches when switching
- the mode of the line.
- 
-@@ -642,7 +642,7 @@ In this case the typical set-up will look like this:
- 
- As you can see pretty similar, but you do not supply a parent handler for
- the IRQ, instead a parent irqdomain, an fwnode for the hardware and
--a funcion .child_to_parent_hwirq() that has the purpose of looking up
-+a function .child_to_parent_hwirq() that has the purpose of looking up
- the parent hardware irq from a child (i.e. this gpio chip) hardware irq.
- As always it is good to look at examples in the kernel tree for advice
- on how to find the required pieces.
-diff --git a/Documentation/driver-api/gpio/using-gpio.rst b/Documentation/driver-api/gpio/using-gpio.rst
-index 64c8d3f76c3a..894d88855d73 100644
---- a/Documentation/driver-api/gpio/using-gpio.rst
-+++ b/Documentation/driver-api/gpio/using-gpio.rst
-@@ -44,7 +44,7 @@ These devices will appear on the system as ``/dev/gpiochip0`` thru
- found in the kernel tree ``tools/gpio`` subdirectory.
- 
- For structured and managed applications, we recommend that you make use of the
--libgpiod_ library. This provides helper abstractions, command line utlities
-+libgpiod_ library. This provides helper abstractions, command line utilities
- and arbitration for multiple simultaneous consumers on the same GPIO chip.
- 
- .. _libgpiod: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
+All warnings (new ones prefixed by >>):
+
+>> drivers/cpufreq/amd-pstate.c:127:15: warning: no previous prototype for 'do_amd_pstate_enable' [-Wmissing-prototypes]
+     127 | __visible int do_amd_pstate_enable(bool enable)
+         |               ^~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/amd-pstate.c:152:15: warning: no previous prototype for 'do_amd_pstate_init_perf' [-Wmissing-prototypes]
+     152 | __visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+         |               ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/amd-pstate.c:200:16: warning: no previous prototype for 'do_amd_pstate_update_perf' [-Wmissing-prototypes]
+     200 | __visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/do_amd_pstate_enable +127 drivers/cpufreq/amd-pstate.c
+
+   126	
+ > 127	__visible int do_amd_pstate_enable(bool enable)
+   128	{
+   129		return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
+   130	}
+   131	
+   132	static int cppc_enable(bool enable)
+   133	{
+   134		int cpu, ret = 0;
+   135	
+   136		for_each_present_cpu(cpu) {
+   137			ret = cppc_set_enable(cpu, enable);
+   138			if (ret)
+   139				return ret;
+   140		}
+   141	
+   142		return ret;
+   143	}
+   144	
+   145	DEFINE_STATIC_CALL(amd_pstate_enable, do_amd_pstate_enable);
+   146	
+   147	static inline int amd_pstate_enable(bool enable)
+   148	{
+   149		return static_call(amd_pstate_enable)(enable);
+   150	}
+   151	
+ > 152	__visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+   153	{
+   154		u64 cap1;
+   155	
+   156		int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+   157					     &cap1);
+   158		if (ret)
+   159			return ret;
+   160	
+   161		/*
+   162		 * TODO: Introduce AMD specific power feature.
+   163		 *
+   164		 * CPPC entry doesn't indicate the highest performance in some ASICs.
+   165		 */
+   166		WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+   167	
+   168		WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
+   169		WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
+   170		WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
+   171	
+   172		return 0;
+   173	}
+   174	
+   175	static int cppc_init_perf(struct amd_cpudata *cpudata)
+   176	{
+   177		struct cppc_perf_caps cppc_perf;
+   178	
+   179		int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+   180		if (ret)
+   181			return ret;
+   182	
+   183		WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+   184	
+   185		WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+   186		WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+   187			   cppc_perf.lowest_nonlinear_perf);
+   188		WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
+   189	
+   190		return 0;
+   191	}
+   192	
+   193	DEFINE_STATIC_CALL(amd_pstate_init_perf, do_amd_pstate_init_perf);
+   194	
+   195	static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+   196	{
+   197		return static_call(amd_pstate_init_perf)(cpudata);
+   198	}
+   199	
+ > 200	__visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+   201				       u32 des_perf, u32 max_perf, bool fast_switch)
+   202	{
+   203		if (fast_switch)
+   204			wrmsrl(MSR_AMD_CPPC_REQ, READ_ONCE(cpudata->cppc_req_cached));
+   205		else
+   206			wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
+   207				      READ_ONCE(cpudata->cppc_req_cached));
+   208	}
+   209	
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

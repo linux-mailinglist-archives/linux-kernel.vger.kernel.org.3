@@ -2,117 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E975574B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5605574B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiFWIAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
+        id S231154AbiFWIAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiFWIAb (ORCPT
+        with ESMTP id S229734AbiFWIAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:00:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D2D4706F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655971230; x=1687507230;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gEmi4IGiEfTut6Thi+VJyyW3msIRy1Zh9LcZovJqofQ=;
-  b=G9q7xNCLq0oijbU2zQvR8QKBUfKWoezN9Kou2c7lpQ/bP+rXuY61OBzq
-   9Lk26+KIdpiRniHBwl57/snkAEpj0KzZ6s7+klde0cPHvxl+Dvs2DvtJu
-   c8p6XUveAcFDL68jsYCoptooE4xwAU6gzveRaf3EUKjhY9sLvsAKhjW9j
-   R/TyP29vsG4AMphjnHQJdYp26gtT1MAQkI0IblHCFUfjb2eKjgd0MUE5a
-   cSY25Q2YFjX64YutOpE8aMGJQp9qEqlLW+Uhr21ZSkBtHZAPPbfUNoF5J
-   oZW2YWKBCJp4wUjAEJAyQtV9BkpmlfpoVOMCG23LO299m6YUCtzttOLEI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281733713"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="281733713"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 01:00:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644618978"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Jun 2022 01:00:23 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4HlH-0000uj-0h;
-        Thu, 23 Jun 2022 08:00:23 +0000
-Date:   Thu, 23 Jun 2022 15:59:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ben Widawsky <bwidawsk@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [cxl:preview 38/49] include/linux/memregion.h:19:6: warning: no
- previous prototype for 'memregion_free'
-Message-ID: <202206231509.bXt14BdC-lkp@intel.com>
+        Thu, 23 Jun 2022 04:00:15 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9536746CB2;
+        Thu, 23 Jun 2022 01:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1655971214;
+  x=1687507214;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y6qmbNorIhVgztbdVRKjKcyLbrdYuGj36PW0vcE3Cwc=;
+  b=YHU19ZN/4MSnVcyn1UV3Rshv1q3ntIf6kcvL0ZpBsj1g0LIeEWpdk2Cb
+   qBdDZi04w+a5AhkZR4ghtAkNiJpDGjYMj8v+uycysxsiSWW/cROo/ABg7
+   q0e93oOtc7ZbIvvhlsYjxGztvJgxTBpMe9ILMAFnukVzeVuQZ7EnEikMY
+   ZjLXaCqWFlMCGwNz6Zwprv0wEXEOqEYFEgPfdm8yh2a3N7XPn1BquJg1G
+   bRGHfgE6FMuAHXFyMYmx9Gz82olgVR2hcTtWV1FRy/N/K2hMDBG23BWPe
+   0vL/AYV7bd1rgiiuMEQaJaoXKOlHb+3CFsw8Fa+HxcmeUlHBd4CIY7idC
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mmc: core: Allow speed modes to be adjusted via module param
+Date:   Thu, 23 Jun 2022 10:00:09 +0200
+Message-ID: <20220623080009.1775574-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-head:   b2d4fd5c97b59f622e6c45ac51020cdcd66bb022
-commit: e4b2a6ac46c3288f73b88e0aa69afd2a815930d7 [38/49] cxl/region: Add region creation support
-config: alpha-randconfig-r022-20220623 (https://download.01.org/0day-ci/archive/20220623/202206231509.bXt14BdC-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=e4b2a6ac46c3288f73b88e0aa69afd2a815930d7
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl preview
-        git checkout e4b2a6ac46c3288f73b88e0aa69afd2a815930d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/cxl/core/
+During board verification, there is a need to test the various supported
+eMMC/SD speed modes.  However, since the framework chooses the best mode
+supported by the card and the host controller's caps, this currently
+necessitates changing the devicetree for every iteration.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+To make changing the modes easier, allow the various host controller
+capabilities to be cleared via a module parameter.  (A per-controller
+debugfs wouldn't work since the controller needs to be re-probed to
+trigger re-init of cards.  A module parameter is used instead of a
+global debugfs to allow this to be also set via the kernel command
+line.)
 
-All warnings (new ones prefixed by >>):
+The values to be written are the raw MMC_CAP* values from
+include/linux/mmc/host.h.  This is rather low-level, and these defines
+are not guaranteed to be stable, but it is perhaps good enough for the
+indented use case.  A warning is emitted when the caps clearing is in
+effect.
 
-   In file included from drivers/cxl/core/port.c:4:
->> include/linux/memregion.h:19:6: warning: no previous prototype for 'memregion_free' [-Wmissing-prototypes]
-      19 | void memregion_free(int id)
-         |      ^~~~~~~~~~~~~~
+Example of use:
 
+ # grep timing /sys/kernel/debug/mmc0/ios
+ timing spec:	9 (mmc HS200)
 
-vim +/memregion_free +19 include/linux/memregion.h
+ // MMC_CAP2_HS200_1_8V_SDR
+ # echo $((1 << 5)) > /sys/module/mmc_core/parameters/caps2_clear
 
-a6c7f4c6aea5f4c Dan Williams 2019-11-06  10  
-33dd70752cd76f4 Dan Williams 2019-11-06  11  #ifdef CONFIG_MEMREGION
-33dd70752cd76f4 Dan Williams 2019-11-06  12  int memregion_alloc(gfp_t gfp);
-33dd70752cd76f4 Dan Williams 2019-11-06  13  void memregion_free(int id);
-33dd70752cd76f4 Dan Williams 2019-11-06  14  #else
-33dd70752cd76f4 Dan Williams 2019-11-06  15  static inline int memregion_alloc(gfp_t gfp)
-33dd70752cd76f4 Dan Williams 2019-11-06  16  {
-33dd70752cd76f4 Dan Williams 2019-11-06  17  	return -ENOMEM;
-33dd70752cd76f4 Dan Williams 2019-11-06  18  }
-33dd70752cd76f4 Dan Williams 2019-11-06 @19  void memregion_free(int id)
+ # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/unbind
+ # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/bind
+ # grep timing /sys/kernel/debug/mmc0/ios
+ timing spec:	8 (mmc DDR52)
 
-:::::: The code at line 19 was first introduced by commit
-:::::: 33dd70752cd76f4d883a165a674f13121a4155ed lib: Uplevel the pmem "region" ida to a global allocator
+ // MMC_CAP_1_8V_DDR
+ # echo $((1 << 12)) > /sys/module/mmc_core/parameters/caps_clear
 
-:::::: TO: Dan Williams <dan.j.williams@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+ # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/unbind
+ # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/bind
+ # grep timing /sys/kernel/debug/mmc0/ios
+ timing spec:	1 (mmc high-speed)
 
+ # echo 0 > /sys/module/mmc_core/parameters/caps2_clear
+
+ # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/unbind
+ # echo 16d40000.mmc > /sys/bus/platform/drivers/dwmmc_exynos/bind
+ # grep timing /sys/kernel/debug/mmc0/ios
+ timing spec:	9 (mmc HS200)
+
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/mmc/core/host.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+index 2ed2b4d5e5a5..37971b7c7f62 100644
+--- a/drivers/mmc/core/host.c
++++ b/drivers/mmc/core/host.c
+@@ -34,6 +34,10 @@
+ #define cls_dev_to_mmc_host(d)	container_of(d, struct mmc_host, class_dev)
+ 
+ static DEFINE_IDA(mmc_host_ida);
++static unsigned int caps_clear, caps2_clear;
++
++module_param(caps_clear, uint, 0644);
++module_param(caps2_clear, uint, 0644);
+ 
+ #ifdef CONFIG_PM_SLEEP
+ static int mmc_host_class_prepare(struct device *dev)
+@@ -411,6 +415,14 @@ int mmc_of_parse(struct mmc_host *host)
+ 		host->caps2 &= ~(MMC_CAP2_HS400_1_8V | MMC_CAP2_HS400_1_2V |
+ 				 MMC_CAP2_HS400_ES);
+ 
++	if (caps_clear || caps2_clear)
++		dev_warn(host->parent,
++			 "clearing host controller caps %#x caps2 %#x\n",
++			 caps_clear, caps2_clear);
++
++	host->caps &= ~caps_clear;
++	host->caps2 &= ~caps2_clear;
++
+ 	/* Must be after "non-removable" check */
+ 	if (device_property_read_u32(dev, "fixed-emmc-driver-type", &drv_type) == 0) {
+ 		if (host->caps & MMC_CAP_NONREMOVABLE)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

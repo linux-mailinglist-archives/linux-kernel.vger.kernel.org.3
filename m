@@ -2,154 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C57557E0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D303A557E0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiFWOqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
+        id S231899AbiFWOqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 10:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiFWOqS (ORCPT
+        with ESMTP id S230330AbiFWOqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:46:18 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5156377D6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:46:17 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id u37so19315508pfg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:46:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XoO7ESB32RV6It/bv3sCZc7jqSp5ygArn4dp49/Te3Y=;
-        b=m+vseIWPrJS5h+yWXbxnAASP7WipdB/WdQ35XDIZvwyp3G004IaTSBgX2iXZMmcUrz
-         JgPMn1V93+cwvO3PgmFiNhLS8twBBeZ+4eLyyTaGrs9FT/1k2yGwD0aHuExMbdEtCxOc
-         +DHrh7GM8eByAUsQC7rkUATDrxiKLgkO1tNDdUosATZ6Af/WD6RPfOGfWelNquNZdqI4
-         vHqxdVDqKJYB02A5HZQsnb9TadnpDN6qZY7ChVaJpbf6B/k64VTXjP89bMXjqCX79N0m
-         lzaLLcdniS2tHbb68OmhEQxV6lIjZ66dbN9J4G9aantCrHoecOy1GQ5Y2lCklYEIHtw8
-         Zk3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XoO7ESB32RV6It/bv3sCZc7jqSp5ygArn4dp49/Te3Y=;
-        b=mjWUJ+02s6yCO8o+g3LfdhXWbbnqgAN2d4Ng44HRDMiqyULEwTOkevSyJXEVcDZpv1
-         83efpT2Oo4UO4+w3ar7XHBIbHE3tGZ6GTu4Mj9eW7/jQKpYjoTFbf+6q53N2BvGhx3FH
-         d0SrlN9+P18ISMPN/P1ZnILbk90/h+aDQKy1XCqOxZ5ckVfVqq/H8SgSHBOSf6MSliZE
-         3B0ujiwF9s7sVoNwaukx03ECZsFhiJ2PRfei2O+tX+z842IQamQ7DOqiJPfrIfDuZaZq
-         JGFwsRLye61L3TTQwSHhtnT98k65HsL5xNMbIRNuafL8JUroW/9Cn7Co4+gtY55rlMnI
-         mGTA==
-X-Gm-Message-State: AJIora9wWN4pkZrKRpR8SHX3rIFCvjSv9YQHG80yxZyuZEX4asdUKyFI
-        +MFQDxsdcvb6QVIQM9CeaKvWvQ==
-X-Google-Smtp-Source: AGRyM1tK3xPVSaeZB/nRQExRDbnxBwwsb/ysSZCcGTt7qU3WXdtH5Qv2rC7HnwpCIfde7rX9RyVKGg==
-X-Received: by 2002:a05:6a02:117:b0:3fa:de2:357a with SMTP id bg23-20020a056a02011700b003fa0de2357amr7805740pgb.169.1655995572571;
-        Thu, 23 Jun 2022 07:46:12 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id d12-20020a17090abf8c00b001ec839fff50sm1990244pjs.34.2022.06.23.07.46.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 07:46:12 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 14:46:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>
-Subject: Re: [PATCH 4/4] kvm/x86: Allow to respond to generic signals during
- slow page faults
-Message-ID: <YrR8sKap6KHT22Dx@google.com>
-References: <20220622213656.81546-1-peterx@redhat.com>
- <20220622213656.81546-5-peterx@redhat.com>
+        Thu, 23 Jun 2022 10:46:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701F44578F;
+        Thu, 23 Jun 2022 07:46:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D55A61E61;
+        Thu, 23 Jun 2022 14:46:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E3CC3411B;
+        Thu, 23 Jun 2022 14:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655995600;
+        bh=gLtSEKNeH4ode8uSzhAq8jIlify+j9XHrfLNKbaIkxc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SX/K98zneuEP7DgTVrnJMtOMTg9KJyHkEhywfbwL/OOS1m0gg7wbFGDQhyYm8VS7C
+         4TFrcKLUQgc7xR/OBPZu0lJiZIKewhgDbatEv8djw9rwdHE9TCTFFbj1jiaQrhZN9i
+         HwUHBZVq9ruZgxDjN52TAov+ikryhfNktgYRsUb1DdG0m0+psdvj4f+NOzyUx8jpVv
+         Q7PDSs1y7T1MvfHFXhWDsunSsf687BwWswmuSPZ+Z0TKrQ6MCaKyyFgSjGcw/ejH9j
+         j/meT+JZJ1ecgo5tFgTWRUFYUe7D0v6GSwtkh8jx+27lciVFsB+7o2qp5IEuhks9lO
+         m9Rk9IXbZKcVw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DE1C84096F; Thu, 23 Jun 2022 11:46:36 -0300 (-03)
+Date:   Thu, 23 Jun 2022 11:46:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Raul Silvera <rsilvera@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] perf: Adjust perf-inject output data offset for
+ backward compatibility
+Message-ID: <YrR8zDls7y//T7zI@kernel.org>
+References: <20220621152725.2668041-1-rsilvera@google.com>
+ <b7de807d-5ec3-3d8d-59ba-4058e1193a96@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622213656.81546-5-peterx@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <b7de807d-5ec3-3d8d-59ba-4058e1193a96@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022, Peter Xu wrote:
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index e92f1ab63d6a..b39acb7cb16d 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
->  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->  			       unsigned int access)
->  {
-> +	/* NOTE: not all error pfn is fatal; handle intr before the other ones */
-> +	if (unlikely(is_intr_pfn(fault->pfn))) {
-> +		vcpu->run->exit_reason = KVM_EXIT_INTR;
-> +		++vcpu->stat.signal_exits;
-> +		return -EINTR;
-> +	}
-> +
->  	/* The pfn is invalid, report the error! */
->  	if (unlikely(is_error_pfn(fault->pfn)))
->  		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
-> @@ -4017,6 +4024,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  		}
->  	}
->  
-> +	/* Allow to respond to generic signals in slow page faults */
-
-"slow" is being overloaded here.  The previous call __gfn_to_pfn_memslot() will
-end up in hva_to_pfn_slow(), but because of passing a non-null async it won't wait.
-This code really should have a more extensive comment irrespective of the interruptible
-stuff, now would be a good time to add that.
-
-Comments aside, isn't this series incomplete from the perspective that there are
-still many flows where KVM will hang if gfn_to_pfn() gets stuck in gup?  E.g. if
-KVM is retrieving a page pointed at by vmcs12.
-
-> +	flags |= KVM_GTP_INTERRUPTIBLE;
->  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, flags, NULL,
->  					  &fault->map_writable, &fault->hva);
->  	return RET_PF_CONTINUE;
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 4f84a442f67f..c8d98e435537 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1163,6 +1163,7 @@ typedef unsigned int __bitwise kvm_gtp_flag_t;
->  
->  #define  KVM_GTP_WRITE          ((__force kvm_gtp_flag_t) BIT(0))
->  #define  KVM_GTP_ATOMIC         ((__force kvm_gtp_flag_t) BIT(1))
-> +#define  KVM_GTP_INTERRUPTIBLE  ((__force kvm_gtp_flag_t) BIT(2))
->  
->  kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
->  			       kvm_gtp_flag_t gtp_flags, bool *async,
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 952400b42ee9..b3873cac5672 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2462,6 +2462,8 @@ static int hva_to_pfn_slow(unsigned long addr, bool *async,
->  		flags |= FOLL_WRITE;
->  	if (async)
->  		flags |= FOLL_NOWAIT;
-> +	if (gtp_flags & KVM_GTP_INTERRUPTIBLE)
-> +		flags |= FOLL_INTERRUPTIBLE;
->  
->  	npages = get_user_pages_unlocked(addr, 1, &page, flags);
->  	if (npages != 1)
-> @@ -2599,6 +2601,8 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, kvm_gtp_flag_t gtp_flags, bool *async,
->  	npages = hva_to_pfn_slow(addr, async, gtp_flags, writable, &pfn);
->  	if (npages == 1)
->  		return pfn;
-> +	if (npages == -EINTR)
-> +		return KVM_PFN_ERR_INTR;
->  
->  	mmap_read_lock(current->mm);
->  	if (npages == -EHWPOISON ||
-> -- 
-> 2.32.0
+Em Wed, Jun 22, 2022 at 11:36:58AM +0300, Adrian Hunter escreveu:
+> On 21/06/22 18:27, Raul Silvera wrote:
+> > When perf inject creates a new file, it reuses the data offset from the
+> > input file. If there has been a change on the size of the header, as
+> > happened in v5.12 -> v5.13, the new offsets will be wrong, resulting in
+> > a corrupted output file.
+> > 
+> > This change adds the function perf_session__data_offset to compute the
+> > data offset based on the current header size, and uses that instead of
+> > the offset from the original input file.
+> > 
+> > Signed-off-by: Raul Silvera <rsilvera@google.com>
 > 
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> > ---
+> > Changes since v1:
+> >  - Use the adjusted header->data_offset in do_write_header instead of
+> >    recomputing it.
+> > ---
+> >  tools/perf/builtin-inject.c |  2 +-
+> >  tools/perf/util/header.c    | 14 ++++++++++++++
+> >  tools/perf/util/header.h    |  2 ++
+> >  3 files changed, 17 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> > index a75bf11585b5..1dfdcef36607 100644
+> > --- a/tools/perf/builtin-inject.c
+> > +++ b/tools/perf/builtin-inject.c
+> > @@ -916,7 +916,7 @@ static int __cmd_inject(struct perf_inject *inject)
+> >  		inject->tool.tracing_data = perf_event__repipe_tracing_data;
+> >  	}
+> >  
+> > -	output_data_offset = session->header.data_offset;
+> > +	output_data_offset = perf_session__data_offset(session->evlist);
+> >  
+> >  	if (inject->build_id_all) {
+> >  		inject->tool.mmap	  = perf_event__repipe_buildid_mmap;
+> > diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+> > index 53332da100e8..6ad629db63b7 100644
+> > --- a/tools/perf/util/header.c
+> > +++ b/tools/perf/util/header.c
+> > @@ -3686,6 +3686,20 @@ int perf_session__write_header(struct perf_session *session,
+> >  	return perf_session__do_write_header(session, evlist, fd, at_exit, NULL);
+> >  }
+> >  
+> > +size_t perf_session__data_offset(const struct evlist *evlist)
+> > +{
+> > +	struct evsel *evsel;
+> > +	size_t data_offset;
+> > +
+> > +	data_offset = sizeof(struct perf_file_header);
+> > +	evlist__for_each_entry(evlist, evsel) {
+> > +		data_offset += evsel->core.ids * sizeof(u64);
+> > +	}
+> > +	data_offset += evlist->core.nr_entries * sizeof(struct perf_file_attr);
+> > +
+> > +	return data_offset;
+> > +}
+> > +
+> >  int perf_session__inject_header(struct perf_session *session,
+> >  				struct evlist *evlist,
+> >  				int fd,
+> > diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
+> > index 08563c1f1bff..56916dabce7b 100644
+> > --- a/tools/perf/util/header.h
+> > +++ b/tools/perf/util/header.h
+> > @@ -136,6 +136,8 @@ int perf_session__inject_header(struct perf_session *session,
+> >  				int fd,
+> >  				struct feat_copier *fc);
+> >  
+> > +size_t perf_session__data_offset(const struct evlist *evlist);
+> > +
+> >  void perf_header__set_feat(struct perf_header *header, int feat);
+> >  void perf_header__clear_feat(struct perf_header *header, int feat);
+> >  bool perf_header__has_feat(const struct perf_header *header, int feat);
+
+-- 
+
+- Arnaldo

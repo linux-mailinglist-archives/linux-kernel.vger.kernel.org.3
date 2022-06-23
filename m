@@ -2,107 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CB95572B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C315572BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiFWFx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 01:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
+        id S229647AbiFWF5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 01:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiFWFx0 (ORCPT
+        with ESMTP id S229437AbiFWF5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 01:53:26 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3049F3E5D4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 22:53:25 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id c65so3914952edf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 22:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kcwJ6iz0WSRqkk4otNBkZUgi8EG0jqf80hBxBcLJjoI=;
-        b=fw1jQ2idkZYe6jKTepYjZZxhD5giE5xmrVbaEL98EFHaGhs4KpxpLZgXV2E+ZzgVeE
-         oMMh+qhpElWo0b5AGkujeZNW/sJx3VlXvuAowr+oxIq4cV1DfMKSr74Yhjhd5Tx2Zhqh
-         uh2/CSeRAyVHmBcX0HZR3VHrdsyiaAKqPjCbJwnmWW1aeam455jrHGHKwZSaQbkgPYt1
-         VoSy90kfmNFRVeLRDKB7NmN/6G9taLBkyCb28b0IRgfe8pRR7Y4AXn1e887kVoRJ9DAQ
-         ainC/Q4GSwL56yLXeKNcZDrMdHyFWEi1GnSUUCyq8+Bst+wlT8I4Gf7kmRcWlWSLX5AL
-         8aLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kcwJ6iz0WSRqkk4otNBkZUgi8EG0jqf80hBxBcLJjoI=;
-        b=UWDcQ58ePI1Yq33VnmObVo94z/K2oD6ULavKjBlS5uWLus9nft4OUbuQBAbVVsqAWw
-         otomIlLmnVj8qaV99R/qipAn0wLulmNNomNuqnkHnsi/4SNGv2SL1s85UKumhv6tMJvu
-         jybsGXBmZzGPlBnIedefJh37GsfbRkwLGTPRoAN/Me5EvvMGEoXsNW7lSd35F20RMCtw
-         Armn/mrDH5XsXuS5tyaRsYv3NOY28DdioHQ2xyehh+S25DKHmXgS/me19ARy7M8k064T
-         E1Xa1knciSF2YQMtUQkxwXlE2E9FdDVrCFxxzm0rmAYXPd2r38aW8fMkX19OmRDo62EI
-         akEw==
-X-Gm-Message-State: AJIora+jAqgi+TtNRy1oandiz9XRscNjJf+P62kgj0oOE6cunlpsrQy7
-        /dePSUlXuuvQl4EqyqnG8LTR53UthAQ=
-X-Google-Smtp-Source: AGRyM1u/0UVLNbC6rm1zOkyTAmn61viyenIsLAhw8yIHE1PtF2FEAPRS8XTizxeuck1l8LAh4MgbJw==
-X-Received: by 2002:a05:6402:274a:b0:435:9807:7752 with SMTP id z10-20020a056402274a00b0043598077752mr8606211edd.63.1655963603696;
-        Wed, 22 Jun 2022 22:53:23 -0700 (PDT)
-Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906318a00b00711aed17047sm10162207ejy.28.2022.06.22.22.53.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 22:53:23 -0700 (PDT)
-Message-ID: <02cc4538-73c4-9f0f-45d9-29f867143df7@gmail.com>
-Date:   Thu, 23 Jun 2022 07:53:21 +0200
+        Thu, 23 Jun 2022 01:57:23 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A69343ED1;
+        Wed, 22 Jun 2022 22:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655963842; x=1687499842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8pd8Oamgron657/1QMJs6kHNOEmzKM8mE2Gr1jHf/Cw=;
+  b=gCX9loaARlZxJbDfH/ng2wN84EO33TIDS5qMBrmQn5Po2jPiNkCb5wu5
+   K0JMDITIROGmnesgFuITKn+e4koDfEGWjOw4f4j0TkX2n11n1bXYX4XZT
+   9PehWH8GHxmLAfeX8H+3R9P1O14GGv9ebJ2sq2fze6darz0E2+t1zsbNf
+   jHqhGqPHkKNuv7S65ilYw1uHZpMJFJHdlJwH1lJ9/VZ3n5hZfFcNLwX/a
+   ngGGP6587YRy9aZf6HCcgi2IT777cq+eVJJSxZ6Mu0oZ9QYxsh0hUyWoL
+   DTSZgYoW43czp6RBFVqESykr+X39RGBk+YVZirRjV9LjETTxoCdhA+ZYj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="306092389"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="306092389"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 22:57:22 -0700
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="644570302"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 22:57:18 -0700
+Date:   Thu, 23 Jun 2022 13:57:03 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Subject: Re: [PATCH v5 01/22] x86/virt/tdx: Detect TDX during kernel boot
+Message-ID: <20220623055658.GA2934@gao-cwp>
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <062075b36150b119bf2d0a1262de973b0a2b11a7.1655894131.git.kai.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] staging: r8188eu: combine nested if statements into
- one
-Content-Language: en-US
-To:     Chang Yu <marcus.yu.56@gmail.com>, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220623051404.410632-1-marcus.yu.56@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220623051404.410632-1-marcus.yu.56@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <062075b36150b119bf2d0a1262de973b0a2b11a7.1655894131.git.kai.huang@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 07:14, Chang Yu wrote:
-> Combine two nested if statements into a single one
-> 
-> Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
-> ---
-> Changes in v2:
-> Added a pair of parentheses to make operator precedence explicit.
-> 
->   drivers/staging/r8188eu/core/rtw_recv.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-> index 6564e82ddd66..020bc212532f 100644
-> --- a/drivers/staging/r8188eu/core/rtw_recv.c
-> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-> @@ -166,10 +166,8 @@ int rtw_free_recvframe(struct recv_frame *precvframe, struct __queue *pfree_recv
->   
->   	list_add_tail(&precvframe->list, get_list_head(pfree_recv_queue));
->   
-> -	if (padapter) {
-> -		if (pfree_recv_queue == &precvpriv->free_recv_queue)
-> -				precvpriv->free_recvframe_cnt++;
-> -	}
-> +	if (padapter && (pfree_recv_queue == &precvpriv->free_recv_queue))
-> +		precvpriv->free_recvframe_cnt++;
->   
->   	spin_unlock_bh(&pfree_recv_queue->lock);
->   
+On Wed, Jun 22, 2022 at 11:15:30PM +1200, Kai Huang wrote:
+>Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
+>host and certain physical attacks.  TDX introduces a new CPU mode called
+>Secure Arbitration Mode (SEAM) and a new isolated range pointed by the
+						    ^ perhaps, range of memory
 
+>SEAM Ranger Register (SEAMRR).  A CPU-attested software module called
+>'the TDX module' runs inside the new isolated range to implement the
+>functionalities to manage and run protected VMs.
+>
+>Pre-TDX Intel hardware has support for a memory encryption architecture
+>called MKTME.  The memory encryption hardware underpinning MKTME is also
+>used for Intel TDX.  TDX ends up "stealing" some of the physical address
+>space from the MKTME architecture for crypto-protection to VMs.  BIOS is
+>responsible for partitioning the "KeyID" space between legacy MKTME and
+>TDX.  The KeyIDs reserved for TDX are called 'TDX private KeyIDs' or
+>'TDX KeyIDs' for short.
+>
+>To enable TDX, BIOS needs to configure SEAMRR (core-scope) and TDX
+>private KeyIDs (package-scope) consistently for all packages.  TDX
+>doesn't trust BIOS.  TDX ensures all BIOS configurations are correct,
+>and if not, refuses to enable SEAMRR on any core.  This means detecting
+>SEAMRR alone on BSP is enough to check whether TDX has been enabled by
+>BIOS.
+>
+>To start to support TDX, create a new arch/x86/virt/vmx/tdx/tdx.c for
+>TDX host kernel support.  Add a new Kconfig option CONFIG_INTEL_TDX_HOST
+>to opt-in TDX host kernel support (to distinguish with TDX guest kernel
+>support).  So far only KVM is the only user of TDX.  Make the new config
+>option depend on KVM_INTEL.
+>
+>Use early_initcall() to detect whether TDX is enabled by BIOS during
+>kernel boot, and add a function to report that.  Use a function instead
+>of a new CPU feature bit.  This is because the TDX module needs to be
+>initialized before it can be used to run any TDX guests, and the TDX
+>module is initialized at runtime by the caller who wants to use TDX.
+>
+>Explicitly detect SEAMRR but not just only detect TDX private KeyIDs.
+>Theoretically, a misconfiguration of TDX private KeyIDs can result in
+>SEAMRR being disabled, but the BSP can still report the correct TDX
+>KeyIDs.  Such BIOS bug can be caught when initializing the TDX module,
+>but it's better to do more detection during boot to provide a more
+>accurate result.
+>
+>Also detect the TDX KeyIDs.  This allows userspace to know how many TDX
+>guests the platform can run w/o needing to wait until TDX is fully
+>functional.
+>
+>Signed-off-by: Kai Huang <kai.huang@intel.com>
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Reviewed-by: Chao Gao <chao.gao@intel.com>
+
+But some cosmetic comments below ...
+
+>---
+>+
+>+static u32 tdx_keyid_start __ro_after_init;
+>+static u32 tdx_keyid_num __ro_after_init;
+>+
+...
+
+>+static int detect_tdx_keyids(void)
+>+{
+>+	u64 keyid_part;
+>+
+>+	rdmsrl(MSR_IA32_MKTME_KEYID_PARTITIONING, keyid_part);
+
+how about:
+	rdmsr(MSR_IA32_MKTME_KEYID_PARTITIONING, tdx_keyid_start, tdx_keyid_num);
+	tdx_keyid_start++;
+
+Then TDX_KEYID_NUM/START can be dropped.
+
+>+
+>+	tdx_keyid_num = TDX_KEYID_NUM(keyid_part);
+>+	tdx_keyid_start = TDX_KEYID_START(keyid_part);
+>+
+>+	pr_info("TDX private KeyID range: [%u, %u).\n",
+>+			tdx_keyid_start, tdx_keyid_start + tdx_keyid_num);
+>+
+>+	/*
+>+	 * TDX guarantees at least two TDX KeyIDs are configured by
+>+	 * BIOS, otherwise SEAMRR is disabled.  Invalid TDX private
+>+	 * range means kernel bug (TDX is broken).
+
+Maybe it is better to have a comment for why TDX/kernel guarantees
+there should be at least 2 TDX keyIDs.
+
+>+
+>+/*
+>+ * This file contains both macros and data structures defined by the TDX
+>+ * architecture and Linux defined software data structures and functions.
+>+ * The two should not be mixed together for better readability.  The
+>+ * architectural definitions come first.
+>+ */
+>+
+>+/*
+>+ * Intel Trusted Domain CPU Architecture Extension spec:
+>+ *
+>+ * IA32_MTRRCAP:
+>+ *   Bit 15:	The support of SEAMRR
+>+ *
+>+ * IA32_SEAMRR_PHYS_MASK (core-scope):
+>+ *   Bit 10:	Lock bit
+>+ *   Bit 11:	Enable bit
+>+ */
+>+#define MTRR_CAP_SEAMRR			BIT_ULL(15)
+
+Can you move this bit definition to arch/x86/include/asm/msr-index.h
+right after MSR_MTRRcap definition there?

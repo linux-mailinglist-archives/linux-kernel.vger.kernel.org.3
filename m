@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882E15589CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81155589D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiFWUC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S229485AbiFWUHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiFWUCN (ORCPT
+        with ESMTP id S229449AbiFWUHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:02:13 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82F0393DB;
-        Thu, 23 Jun 2022 13:01:56 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id t21so612350pfq.1;
-        Thu, 23 Jun 2022 13:01:56 -0700 (PDT)
+        Thu, 23 Jun 2022 16:07:08 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C11B15826
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:07:05 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id n10so240250plp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 13:07:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y4tznLyjxyRj5zk1E6PeHZzqPO/sNCMAtjchxumNe1Y=;
-        b=BbH1MBpDHaRkpF8Z8rM+CP6ibTKJj/tDxSpSDho1WXB85DfucOOvrwRPzhTS8WbS3/
-         KpOySyJu6KYTIUWRChDyDOoadYGrYinyqhJtJ5Nxz/MwvVD+WlDWeBU9ipTDlpBORUHh
-         qF8DpqJKrvZJetTc1LsdSYmziMyQhpfJS8ZW8lK94FAqlMieRSH9kfB8yq/wx3Jptco8
-         UjF1DIEAXTSy/f0YxJ+MgdT1AB0Hj15pKb+QK/EAmIcJzWXg/I/ryKKFhWElP43g9RrQ
-         YXiAHih4MbYHWZB/8N2GbW07eETiKjFGydG3UAGPJvoMp7BnxB2RIg8QwA6vGQDNPMCQ
-         KBAw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iv5jva5TUOt2ku2nB7C0OTsUP7d83IExGKqGEiymvsc=;
+        b=e1F6IgK+yYSsHs8pHQthv2V6RjdQQldw5p5m1hjIJdzXou3wx7+X4vB23gfg5Hwmgc
+         AY/p1NkQWT6Xv76NktOc7f49to6KwwLUZsTKaxW8DpsjtfWPo9BjR6HPlgNdE3W0ddvW
+         Z0gwq4RYiXQPgDLn6AO5FUfjWPEpD0JpLU3ydxlfIoOTWVO0zzWvnu8enNYS1jIvQ8G9
+         Au+Q7jZfh2S2qABO1HrBiXSi23MpL8HpwONA2bwCIwA7C28d5rAjm1Unc7xcJUaQ//ui
+         nAr/4XQUU7S9+1TeBPY39D7mexDzfj95Zi6CWTthGSWUDYIGMbTyzsVkRfLPuGsP71c7
+         tP5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y4tznLyjxyRj5zk1E6PeHZzqPO/sNCMAtjchxumNe1Y=;
-        b=yHbU7DxqlPr9LvR7YdLJJlGtC1f6k0ES3MwBVxv63sZmwPTK5pAy7wD7I3JuF5stvZ
-         U8//7x7+X12qWYDyAEnvu1xGZdqVGv4Mi1bQTwq678AW1ZsnIpwqBKXaXjQFspkIPLsX
-         7wsj+T1cBDvO3fUI9RODTjiRRo6ircPyLE494Aasg28iNd3Hi43idJ5Ba3z7KLg6FF06
-         9lgxOXBwK6qVLiiffUu4x9XE4udUKYv4OzNnZEM78xGpLH9sT9OTUCSAii5sw3fWvBYZ
-         8StjaJPt89CzFQeuW6K5YY2q+EBfOCY9MjFfORkD43+i9ncda2drQxiQWnLt1ycjn3wK
-         P+hA==
-X-Gm-Message-State: AJIora/zuf7ObiMqCu1656HsGHFsoRJsEajQiqxnIB2GyRbPD2hKTKNC
-        KpHOakJGTs+mxZGVJ/YLxlQ=
-X-Google-Smtp-Source: AGRyM1s7G2i9gt13ZWjCE4JOzq+uUMd+xtg+Gm/E+cpPpenShkKjT6y+zC3VaFW7G2/NL4NOtQA+EA==
-X-Received: by 2002:a05:6a00:ad2:b0:4f1:2734:a3d9 with SMTP id c18-20020a056a000ad200b004f12734a3d9mr42367101pfl.61.1656014516174;
-        Thu, 23 Jun 2022 13:01:56 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d4-20020a170902f14400b0015e8d4eb2d1sm169042plb.283.2022.06.23.13.01.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 13:01:55 -0700 (PDT)
-Message-ID: <2638a5f5-3f4d-d23a-4ebb-827eaae89844@gmail.com>
-Date:   Thu, 23 Jun 2022 13:01:53 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iv5jva5TUOt2ku2nB7C0OTsUP7d83IExGKqGEiymvsc=;
+        b=YdpR9ltk01dOrDEeIIQwF64DkQmZ3PUNvk/9DKsPk3K1VOXWWoCR58oGk+S1LGblLd
+         As4rmto1KzyadR2/9zdDozHcEdLL73Cw+2phBN3P3AEJOHMld1CUqxFhBDGjcgyC/5RX
+         KwFymNHjlbt9b363zO5CEj5xtFMIK2l1b5ZzRVqIEuiv0IgXzDuP5heUFuogl0voTFrT
+         yarGtKQkgKavCbO7GcQVjkoVsmLYuUemrLCGCYH1QSgLgkDAfrG6E6WVPCwfhaSZDu10
+         JMUI5Ls3xgXGYv9MEFi3esBCd1lMHPEMrtZA7nAunrZ+zLp66mM3dXhb8hIlOnZ4oPQK
+         30sg==
+X-Gm-Message-State: AJIora+eeEJE6G1I62fs58TnWPEYc+fDBhQvlPCHoEp1iCUAzQoh1aB8
+        IdkcXOF9ELyhFKIwm7tFjqIaTg==
+X-Google-Smtp-Source: AGRyM1t7UmjSfrw8HFzilsNA3C/f4EmxNXPzQ2pS+mk2EDomXk1Yc1oDdfr7iKBQ0z8tLOvc9qqoRw==
+X-Received: by 2002:a17:90b:4a92:b0:1e8:2c09:d008 with SMTP id lp18-20020a17090b4a9200b001e82c09d008mr5734848pjb.169.1656014824610;
+        Thu, 23 Jun 2022 13:07:04 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id w16-20020a1709026f1000b0016160b3331bsm168701plk.305.2022.06.23.13.07.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 13:07:04 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 20:07:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>
+Subject: Re: [PATCH 4/4] kvm/x86: Allow to respond to generic signals during
+ slow page faults
+Message-ID: <YrTH5ARKVEmy1bUj@google.com>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-5-peterx@redhat.com>
+ <YrR8sKap6KHT22Dx@google.com>
+ <YrS/kegBGqsSLO7y@xz-m1.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.15 0/9] 5.15.50-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220623164322.288837280@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220623164322.288837280@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrS/kegBGqsSLO7y@xz-m1.local>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,27 +80,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 09:44, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.50 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Jun 23, 2022, Peter Xu wrote:
+> Hi, Sean,
 > 
-> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
-> Anything received after that time might be too late.
+> On Thu, Jun 23, 2022 at 02:46:08PM +0000, Sean Christopherson wrote:
+> > On Wed, Jun 22, 2022, Peter Xu wrote:
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index e92f1ab63d6a..b39acb7cb16d 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> > >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> > >  			       unsigned int access)
+> > >  {
+> > > +	/* NOTE: not all error pfn is fatal; handle intr before the other ones */
+> > > +	if (unlikely(is_intr_pfn(fault->pfn))) {
+> > > +		vcpu->run->exit_reason = KVM_EXIT_INTR;
+> > > +		++vcpu->stat.signal_exits;
+> > > +		return -EINTR;
+> > > +	}
+> > > +
+> > >  	/* The pfn is invalid, report the error! */
+> > >  	if (unlikely(is_error_pfn(fault->pfn)))
+> > >  		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
+> > > @@ -4017,6 +4024,8 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> > >  		}
+> > >  	}
+> > >  
+> > > +	/* Allow to respond to generic signals in slow page faults */
+> > 
+> > "slow" is being overloaded here.  The previous call __gfn_to_pfn_memslot() will
+> > end up in hva_to_pfn_slow(), but because of passing a non-null async it won't wait.
+> > This code really should have a more extensive comment irrespective of the interruptible
+> > stuff, now would be a good time to add that.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.50-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Yes I agree, especially the "async" parameter along with "atomic" makes it
+> even more confusing as you said.  But isn't that also means the "slow" here
+> is spot-on?  I mean imho it's the "elsewhere" needs cleanup not this
+> comment itself since it's really stating the fact that this is the real
+> slow path?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+No, because atomic=false here, i.e. KVM will try hva_to_pfn_slow() if hva_to_pfn_fast()
+fails.  So even if we agree that the "wait for IO" path is the true slow path,
+when reading KVM code the vast, vast majority of developers will associate "slow"
+with hva_to_pfn_slow().
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> Or any other suggestions greatly welcomed on how I should improve this
+> comment.
+
+Something along these lines?
+
+	/*
+	 * Allow gup to bail on pending non-fatal signals when it's also allowed
+	 * to wait for IO.  Note, gup always bails if it is unable to quickly
+	 * get a page and a fatal signal, i.e. SIGKILL, is pending.
+	 */
+> 
+> > 
+> > Comments aside, isn't this series incomplete from the perspective that there are
+> > still many flows where KVM will hang if gfn_to_pfn() gets stuck in gup?  E.g. if
+> > KVM is retrieving a page pointed at by vmcs12.
+> 
+> Right.  The thing is I'm not confident I can make it complete easily in one
+> shot..
+> 
+> I mentioned some of that in cover letter or commit message of patch 1, in
+> that I don't think all the gup call sites are okay with being interrupted
+> by a non-fatal signal.
+> 
+> So what I want to do is doing it step by step, at least by introducing
+> FOLL_INTERRUPTIBLE and having one valid user of it that covers a very valid
+> use case.  I'm also pretty sure the page fault path is really the most
+> cases that will happen with GUP, so it already helps in many ways for me
+> when running with a patched kernel.
+> 
+> So when the complete picture is non-trivial to achieve in one shot, I think
+> this could be one option we go for.  With the facility (and example code on
+> x86 slow page fault) ready, hopefully we could start to convert many other
+> call sites to be signal-aware, outside page faults, or even outside x86,
+> because it's really a more generic problem, which I fully agree.
+> 
+> Does it sound reasonable to you?
+
+Yep.  In fact, I'd be totally ok keeping this to just the page fault path.  I
+missed one cruicial detail on my first read through: gup already bails on SIGKILL,
+it's only these technically-not-fatal signals that gup ignores by default.  In
+other words, using FOLL_INTERRUPTIBLE is purely opportunsitically as userspace
+can always resort to SIGKILL if the VM really needs to die.
+
+It would be very helpful to explicit call that out in the changelog, that way
+it's (hopefully) clear that KVM uses FOLL_INTERRUPTIBLE to be user friendly when
+it's easy to do so, and that it's not required for correctness/robustness.

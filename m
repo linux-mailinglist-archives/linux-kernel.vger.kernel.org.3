@@ -2,156 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AFF5575B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693765575B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiFWIkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S230247AbiFWIme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiFWIko (ORCPT
+        with ESMTP id S229704AbiFWImc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:40:44 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E40A46171;
-        Thu, 23 Jun 2022 01:40:43 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so11843041ejc.10;
-        Thu, 23 Jun 2022 01:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=Gxfs28NCgaT1KK7q9k8b2039RiscWCWCivTIgFrxDBU=;
-        b=gxSk4u8ysJxAOXacJuZwJkB7czs3FmWyuVLgoH6HI7RH5vA4ScAG+rSgzqy3OmO+KU
-         p01q1KOyD1SaEjkIZssgsr3QqVe/5NGk2Jis2SssiX/U0v/9izrbUwjgd337D2rM37lL
-         KNicf4UodEQEmxaRKUcoV+s22UP9/z7RuE2L6jwwJMn3vjpmxiw7ZSPTX9YCwBaVmccs
-         wUouTR7FM+e/v76tZSxnB2C0jc6rjKqBltqDQLE7Cn3KR+To2ilooaNdT8dNabQlKliJ
-         9IXFTbYfAcTzKRswjgw+CSi3XIgk1/VqmAvwwUTsK30QOXZut5uO1wo/m2Jy0qLQ32FJ
-         +K8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Gxfs28NCgaT1KK7q9k8b2039RiscWCWCivTIgFrxDBU=;
-        b=s+Z6MH3ts7g8adfesWM6aSZXm8//s6oajPvDciS/GO2lUtTRotR7awlM5i3BTyMdO4
-         BSw43F/FcyGxnl+xsEdL4It1DP6vbHMBfWmZ938m2uFIxSEU1sbgyHDrpPaYqoLBslAC
-         izHGBV6V4Me0/Y2hP5puILeJZd4Ne/LPtuz4DEk1OGiFPcRij7dTRnHNAuUVc2SSB3oS
-         PpOq0fK0W89W46+HlcKXh1i9KjxkISEFmv/olinzCCLnPTxQbJlpv7zNssgG4Y3Aej/Q
-         Ay7HDcgyFe2NI5e6o4m/y7JmPRwb7NrkhaHjaZCqeYpdmqxK+wsYqpApcuJSU/YVjgIz
-         sDfw==
-X-Gm-Message-State: AJIora88Ckzp9Eip4aHC/IBNmuSnStBHfzj681r31rFx/SBJbXnZxSNl
-        v8X961z7IIxcr0DDPwRqwGE=
-X-Google-Smtp-Source: AGRyM1tDbJPC0thCEd0Mm2R7mqhy16EEbGVrGjVD/VqQdJFu4VirGqvM30RF4GV1gecpSuYPryYCyA==
-X-Received: by 2002:a17:907:2ce3:b0:722:e1b0:68b7 with SMTP id hz3-20020a1709072ce300b00722e1b068b7mr6968740ejc.14.1655973642047;
-        Thu, 23 Jun 2022 01:40:42 -0700 (PDT)
-Received: from [192.168.1.143] (host-87-242-32-154.prtelecom.hu. [87.242.32.154])
-        by smtp.gmail.com with ESMTPSA id d21-20020a056402517500b00435640c141esm14007129ede.93.2022.06.23.01.40.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 01:40:41 -0700 (PDT)
-Message-ID: <20080287-29d1-3f91-9406-29c56ac945cb@gmail.com>
-Date:   Thu, 23 Jun 2022 10:40:40 +0200
+        Thu, 23 Jun 2022 04:42:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D9248E74;
+        Thu, 23 Jun 2022 01:42:31 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 968FB6601792;
+        Thu, 23 Jun 2022 09:42:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655973749;
+        bh=a3qg+o/OwgqXslU/4j4RlR9cUNoRYrfj19YE44y2v3E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XKQK0beGg3vTWSmevrEBFXfg7Q50EHWuJlc9pwCXzaWUO+VBLRPh9p4Oy3qQRBUsS
+         2W7qVoYtzbfrOv/1RrewUg21ryne4VDHhJZdOO+WEWkFcAQl8p6YG9Y+YzRVi4CRh7
+         77J6K81IQ+QSFtfhS/4wVHmTXZUfaz5CxrZSyP/VVqdmpOArk9s+lvIvrNdEEYSOfr
+         CBDGOw97CVusucf5EYiBq65amZ8Ldr1FtzeutiCuujc2zWnCK1610hxEMZth5xs6pP
+         VkcNlnAigF0gFT5diFw0gsC73kN0Q+5Xn4BKM5vlj5aMhsn+c4uYuAv4ZZxidv0ULF
+         dzHKBOcezZn1w==
+Message-ID: <c379dca6-88a7-8ed6-c585-714ea411bd02@collabora.com>
+Date:   Thu, 23 Jun 2022 10:42:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH] libata: add horkage for M88V29
+Subject: Re: [PATCH v2] Bluetooth: btmtksdio: Add in-band wakeup support
 Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>, zboszor@pr.hu,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org
-References: <20220204125750.1771303-1-zboszor@pr.hu>
- <f726e9e1-bdad-ac8a-368b-aae423a00676@opensource.wdc.com>
- <78c29f43-3b67-8e70-0711-14e997f3efb1@gmail.com>
- <09091cc4-f652-0978-bb6a-b63f24fdcf49@opensource.wdc.com>
- <bbfeb862-9e1f-79c2-89dd-7db9515471e4@gmail.com>
-From:   =?UTF-8?B?QsO2c3rDtnJtw6lueWkgWm9sdMOhbg==?= <zboszor@gmail.com>
-In-Reply-To: <bbfeb862-9e1f-79c2-89dd-7db9515471e4@gmail.com>
+To:     sean.wang@mediatek.com, marcel@holtmann.org,
+        johan.hedberg@gmail.com
+Cc:     Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
+        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
+        Deren.Wu@mediatek.com, km.lin@mediatek.com,
+        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
+        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yake Yang <yake.yang@mediatek.com>
+References: <52b63a1be094a1ccbb20f2c89472580d95f0652a.1655934689.git.objelf@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <52b63a1be094a1ccbb20f2c89472580d95f0652a.1655934689.git.objelf@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022. 06. 23. 10:38 keltezéssel, Böszörményi Zoltán írta:
-> 2022. 06. 23. 10:22 keltezéssel, Damien Le Moal írta:
->> On 6/23/22 16:47, Böszörményi Zoltán wrote:
->>> 2022. 02. 08. 9:07 keltezéssel, Damien Le Moal írta:
->>>> On 2/4/22 21:57, zboszor@pr.hu wrote:
->>>>> From: Zoltán Böszörményi <zboszor@gmail.com>
->>>>>
->>>>> This device is a CF card, or possibly an SSD in CF form factor.
->>>>> It supports NCQ and high speed DMA.
->>>>>
->>>>> While it also advertises TRIM support, I/O errors are reported
->>>>> when the discard mount option fstrim is used. TRIM also fails
->>>>> when disabling NCQ and not just as an NCQ command.
->>>>>
->>>>> TRIM must be disabled for this device.
->>>>>
->>>>> Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
->>>>> ---
->>>>>    drivers/ata/libata-core.c | 1 +
->>>>>    1 file changed, 1 insertion(+)
->>>>>
->>>>> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
->>>>> index 67f88027680a..4a7f58fcc411 100644
->>>>> --- a/drivers/ata/libata-core.c
->>>>> +++ b/drivers/ata/libata-core.c
->>>>> @@ -4028,6 +4028,7 @@ static const struct ata_blacklist_entry ata_device_blacklist 
->>>>> [] = {
->>>>>           /* devices that don't properly handle TRIM commands */
->>>>>        { "SuperSSpeed S238*",        NULL, ATA_HORKAGE_NOTRIM, },
->>>>> +    { "M88V29*",            NULL,    ATA_HORKAGE_NOTRIM, },
->>>>>           /*
->>>>>         * As defined, the DRAT (Deterministic Read After Trim) and RZAT
->>>> Applied to for-5.17-fixes. Thanks !
->>> Thank you. However, I have second thoughts about this patch.
->>> The device advertises this:
->>>
->>> # hdparm -iI /dev/sda
->>> ...
->>>    Enabled Supported
->>>       *    Data Set Management TRIM supported (limit 1 block)
->>> ...
->>>
->>> but the I/O failures always reported higher number of blocks,
->>> IIRC the attempted number of block was 8 or so.
->>>
->>> Can the kernel limit or split TRIM commands according to the
->>> advertised limit? If not (or not yet) then the quirk is good for now.
->> Yes, the kernel does that. See the sysfs queue attributes
->> discard_max_bytes and discard_max_hw_bytes. What are the values for your
->> device ? I think that the "limit 1 block" indicated by hdparm is simply to
->> say that the DSM command (to trim the device) accept only at most a 1
->> block (512 B) list of sectors to trim. That is not the actual trim limit
->> for each sector range in that list.
->
-> With the quirk in effect (TRIM disabled) I have these:
->
-> [root@chef queue]# pwd
-> /sys/block/sda/queue
-> [root@chef queue]# cat discard_granularity
-> 0
-> [root@chef queue]# cat discard_max_bytes
-> 0
-> [root@chef queue]# cat discard_max_hw_bytes
-> 0
+Il 22/06/22 23:56, sean.wang@mediatek.com ha scritto:
+> From: Sean Wang <sean.wang@mediatek.com>
+> 
+> Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")
+> adds the wake on bluethooth via a dedicated GPIO.
+> 
+> Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup),
+> when supported by the SDIO host driver.
+> 
+> Co-developed-by: Yake Yang <yake.yang@mediatek.com>
+> Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> ---
+> v2: enhance the patch description and comments
+> ---
+>   drivers/bluetooth/btmtksdio.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+> index d6700efcfe8c..9d79c9107b3a 100644
+> --- a/drivers/bluetooth/btmtksdio.c
+> +++ b/drivers/bluetooth/btmtksdio.c
+> @@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
+>   #define BTMTKSDIO_FUNC_ENABLED		3
+>   #define BTMTKSDIO_PATCH_ENABLED		4
+>   #define BTMTKSDIO_HW_RESET_ACTIVE	5
+> +#define BTMTKSDIO_INBAND_WAKEUP		6
+>   
+>   struct mtkbtsdio_hdr {
+>   	__le16	len;
+> @@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
+>   		.wakeup_delay = cpu_to_le16(0x20),
+>   	};
+>   
+> +	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
+> +		return may_wakeup;
+> +
 
-And also this, which seems to match the sector limit:
+Uhm... this flag is either *always* set, or *always not set*... and we decide that
+during probe time... and we use it in just one function as well.
 
-[root@chef queue]# cat max_discard_segments
-1
+At this point, I would just avoid the addition of the BTMTKSDIO_INBAND_WAKEUP flag
+and add a new function for handling the .wakeup() callback - something like:
 
->
->>
->>> Best regards,
->>> Zoltán Böszörményi
->>>
->>
->
+static bool btmtksdio_sdio_inband_wakeup(struct hci_dev *hdev)
+{
+	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
 
+	return device_may_wakeup(bdev->dev);
+}
+
+static int btmtksdio_probe(...)
+{
+	.... code ....
+
+	/*
+	 * If SDIO controller supports wake on Bluetooth, sending a wakeon
+	 * command is not necessary.
+	 */
+	if (device_can_wakeup(func->card->host->parent))
+		hdev->wakeup = btmtksdio_sdio_inband_wakeup;
+	else
+		hdev->wakeup = btmtksdio_sdio_wakeup;
+
+	.... etc ....
+}
+
+Regards,
+Angelo

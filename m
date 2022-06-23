@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB995579F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C45F5579F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiFWMFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S231158AbiFWMFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiFWMFW (ORCPT
+        with ESMTP id S229734AbiFWMFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:05:22 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4584B40E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:05:21 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id sb34so11535205ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PppxL2KUqFlV+/8Q6Av1eKZ6SPqrPZYPPPP8wnWzrpI=;
-        b=qDAFx0FRaVkJCKKl6seZsibKMWsEzBDitPBMd/GIuG1a72QpBhz66kEQ6gMOwhuDJQ
-         EN3cTlJljisc+k6oA5802OBA5maMZQ+2ohdH++0RW7+KS6V+++CmTTIjB45REHrGbanS
-         YmRIQcLENNCJHioVVdSwrfb65soYBGDNvoOH8C5PopdroXuPOY6qJEgN37IbY7SVy71C
-         AeTRyzZaFpev4v9SBXnWIpRrBrdhOWJhRyMFi0PIFOJa7TbLCTeZy8c/ZtmA+D9ELkgp
-         hVfpxt8beJrkmrE8UfT68+GXPITtsYPiDTY73X1RDQT41dqbwIKyYDAPtJCLQlgIZZDk
-         vKrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PppxL2KUqFlV+/8Q6Av1eKZ6SPqrPZYPPPP8wnWzrpI=;
-        b=pXg9FbPUel+NbTR/Itfj5uNBHb4IaUVhaaoMl2n6u5RLXReMpZYf4O6nBICgwXCSEl
-         HdWADZbgi0GXKr9Kyq1rSLgpCn1yRQpl+y9ZHiEWXNI2i8MYygDaan+jNIVAoKIbycbV
-         rk3ueB+uvI7OnknI0mVreywYebFgsd1DW090ntfIyNGowF8Pribyqi1qaeUZyiwhA7tC
-         DkUMS6BFzfhQIWfzExX3m2aGUAMky+COXKEIksMjBMudpis9fmrFFW5SXiwYBEi+vwXr
-         1kWtlcnguQmnCjsAKgFe4Ov2aNvYdmkMi/pT3jUKuMzypPvbJAy8kgXcw4NCyE2CK0GL
-         Stww==
-X-Gm-Message-State: AJIora9fIG6hMGkbuhYOhqH/YgH4pmRIfV5Tp916aQTdpKsg/rq6Su3X
-        vzawZla6OMSq5w+FwxXcdy5g2A==
-X-Google-Smtp-Source: AGRyM1vsUBr3PdB0hhAURyeHMPTDJEWaOUR4fFilhHFdevtuR+Szbs2SytIwDzsrjRR2URuwf5x2xw==
-X-Received: by 2002:a17:906:6485:b0:712:10cd:e3b7 with SMTP id e5-20020a170906648500b0071210cde3b7mr7618453ejm.557.1655985919875;
-        Thu, 23 Jun 2022 05:05:19 -0700 (PDT)
-Received: from [192.168.0.230] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b00711d5baae0esm10838324ejg.145.2022.06.23.05.05.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 05:05:19 -0700 (PDT)
-Message-ID: <a2c5cdec-632e-3d90-c90d-1c3c0503e825@linaro.org>
-Date:   Thu, 23 Jun 2022 14:05:18 +0200
+        Thu, 23 Jun 2022 08:05:45 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F71B4B43C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:05:43 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-146-HnQgmSMqM4G6rapeFXaBOQ-1; Thu, 23 Jun 2022 13:05:41 +0100
+X-MC-Unique: HnQgmSMqM4G6rapeFXaBOQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Thu, 23 Jun 2022 13:05:40 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Thu, 23 Jun 2022 13:05:40 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Philipp Hortmann' <philipp.g.hortmann@gmail.com>,
+        Chang Yu <marcus.yu.56@gmail.com>,
+        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>
+CC:     "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] staging: r8188eu: combine nested if statements into one
+Thread-Topic: [PATCH] staging: r8188eu: combine nested if statements into one
+Thread-Index: AQHYhr/Y2ulJ9o927EK/4or2W1xFka1c4+jQ
+Date:   Thu, 23 Jun 2022 12:05:40 +0000
+Message-ID: <06893216a5a04d7e84dfe3e132d333f6@AcuMS.aculab.com>
+References: <20220623031515.402691-1-marcus.yu.56@gmail.com>
+ <d50c16c1-0bc2-fdc4-16ab-0c27df824ffb@gmail.com>
+In-Reply-To: <d50c16c1-0bc2-fdc4-16ab-0c27df824ffb@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: clock: r9a07g043-cpg: Add Renesas
- RZ/Five CPG Clock and Reset Definitions
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220622181723.13033-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220622181723.13033-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220622181723.13033-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 20:17, Lad Prabhakar wrote:
-> Renesas RZ/Five SoC has almost the same clock structure compared to the
-> Renesas RZ/G2UL SoC, re-use the r9a07g043-cpg.h header file and just
-> amend the RZ/Five CPG clock and reset definitions.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  include/dt-bindings/clock/r9a07g043-cpg.h | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
+Li4uDQo+IFNlZW1zIHRvIHdvcmsuIEJ1dCB0aGUgcnVsZXMgd2hpY2ggb3BlcmF0aW9uIGlzIGRv
+bmUgZmlyc3QgJiYgb3IgPT0gYXJlDQo+IG5vdCB0b28gZWFzeS4NCg0KVGhleSBhcmUgdGhlIHdh
+eSBhcm91bmQgeW91IHdhbnQgdGhlbSB0byBiZS4NCj09IGdlbmVyYXRlcyBhIHRydXRoIHZhbHVl
+Lg0KJiYgYW5kIHx8IGNvbXBhcmUgdHJ1dGggdmFsdWVzLA0KDQpUaGUgb25seSAnd3JvbmcnIG9w
+ZXJhdG9yIHByaW9yaXRpZXMgYXJlICYgYW5kIHwuDQpUaGUgc2hvcnQtY2lyY3VpdGluZyAmJiBh
+bmQgfHwgd2VyZW4ndCBpbiB0aGUgdmVyeSBlYXJseQ0KdmVyc2lvbnMgb2YgQyAtIHRoZSBiaXR3
+aXNlICYgYW5kIHwgd2VyZSB1c2VkLg0KV2hlbiBLJlIgYWRkZWQgJiYgYW5kIHx8IHRoZXkgbGVm
+dCB0aGUgcHJpb3JpdGllcyBvZiAmIGFuIHwgYWxvbmUuDQpJIHRoZXkgdGhleSd2ZSBsYXRlciBz
+YWlkIHRoZXkgc2hvdWxkIGhhdmUgYml0dGVuIHRoZSBidWxsZXQNCmFuZCBjaGFuZ2VkIHRoZSBw
+cmlvcml0aWVzIGFuZCBhbGwgdGhlIGV4aXN0aW5nIEMgY29kZQ0KDQo+IEkgd291bGQgcHJlZmVy
+IHRvIGhhdmU6DQo+IA0KPiBpZiAocGFkYXB0ZXIgJiYgKHBmcmVlX3JlY3ZfcXVldWUgPT0gZnJl
+ZV9yZWN2X3F1ZXVlKSkNCj4gDQo+IFNvIGl0IGlzIHZlcnkgZWFzeSB0byByZWFkIHdoYXQgaXMg
+ZXZhbHVhdGVkIGZpcnN0Lg0KDQpUaGF0IGp1c3Qgc3RhcnRzIGFkZGluZyB0b28gbWFueSAoKSBh
+bmQgbWFrZXMgbW9yZSBjb21wbGV4DQpjb25kaXRpb25hbHMgaGFyZCB0byByZWFkLg0KDQoJRGF2
+aWQNCg0KPiANCj4gQnV0IHRoaXMgaXMganVzdCBteSBvcGluaW9uIGFuZCBkb2VzIG5vdCBoYXZl
+IHRvIGJlIHJpZ2h0Lg0KPiANCj4gVGhhbmtzIGZvciB5b3VyIHBhdGNoLg0KPiANCj4gQnllIFBo
+aWxpcHANCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1v
+dW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEz
+OTczODYgKFdhbGVzKQ0K
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

@@ -2,100 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF503557A7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDCD557A81
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiFWMjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S231680AbiFWMl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiFWMjN (ORCPT
+        with ESMTP id S231511AbiFWMlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:39:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795BE48E7B;
-        Thu, 23 Jun 2022 05:39:12 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D572B66017D2;
-        Thu, 23 Jun 2022 13:39:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655987951;
-        bh=ZgzmMPSygjLJDHZK16WVrb6boCW48PbwILdNxmzVx4o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ls/Kus62omyS2oWsKbe3AP8qdUos5qBFpIZgx0qErociP16Ku3MzkoIYnIVJ2eLPN
-         0x0n7H1QGqUwFqN/s42jvnQ4MplaX/JvI+IJ19IMLzOBlhcNAHW64vPV8eMQp5U9dl
-         lgW4kvRLQkJcbLhJ5NpdHZ36SJ68uxub5ebRTNt9pKCrA16VpUZausPdbhxapuLxzO
-         BYNf/8tp91p+T6iw+Lr40/Gy6+nm9UMNcXxpMxvRbqAmngcmojfXVQx8NXNHIYfDzj
-         CJAqocdlH48y/cy1NYn/NigwXknA0dFhKuplEPoQ4pUCaytzxbqzXaTJJ1Hh/EuFgj
-         OSGGhE6CGjxGg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wenst@chromium.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 2/2] arm64: dts: mediatek: mt8183-kukui: Assign sram supply to mfg_async pd
-Date:   Thu, 23 Jun 2022 14:38:50 +0200
-Message-Id: <20220623123850.110225-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220623123850.110225-1-angelogioacchino.delregno@collabora.com>
-References: <20220623123850.110225-1-angelogioacchino.delregno@collabora.com>
+        Thu, 23 Jun 2022 08:41:24 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05ED4991D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:41:22 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id z9so10951841wmf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YKuhlfeie/APuzN1zX50F9wlajDVarix+gW9JqPWiT0=;
+        b=UMP6RCyZP4CD6hOpGQbkX9Cj3bPk1ibYJbn4nsdNdndZTqQfI3/vZ8bIRLgJSIms8u
+         CPePjkJfaFGkLpAH9WY7iFv9pbNYvYe5jqqSz8sj+2Qf4GfYVFiKObOiaJ7J+qH1bGvP
+         VbLXbFzeDNL3kV5xpFgi8EPl9utzHo/yeUTmYj0EJVSqHBEOLi9N+dZTEkBtSiT1ZYoV
+         E4fQE+A+R2BHBwNPUeWkzfyaoJLLBH+EMoSWnr4Qer7+DC8yHJI0iUtL7cob5S1ocket
+         H2qCHNsne4oMOwFRLI9UMKSLvjNlpdi8dU2fdlh1bFht6a2RH8lnI13E785t9rZnNwvq
+         L5OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YKuhlfeie/APuzN1zX50F9wlajDVarix+gW9JqPWiT0=;
+        b=IOtPN8utTORE8RgD98r5piwxi0FP/vP3RysKkolQrWKGEEphl9fr7Ry87iG/Hjc7sc
+         62bsXJ+sxvcWmnB/uDabnoOxTxVY/MLXv/Gz504fFaYgchXqKn1Ip1M5b3f/OsWZzgA2
+         keENm6GxMGkCoQJI9vBOLgPYuumlItRqgAXQgWF0jD162NxdhFcfKGDljjtoEFww/Hyl
+         kGYHJrUl2PbgmujI0EBBDHJvHfrILWv8hiQbbA3gIZ6U4qW/POWQqvSYWasXM105fNQR
+         NDoFTLeMdmgdo1qa+r9A3at8wHIHMd/ebESMxoEaDDu0OamcEfgxQZS/hWif8Ss1JB9X
+         7eCw==
+X-Gm-Message-State: AJIora8228UbZFhNI/RPJ+aNQviK6smcF3LGkLmtvhQpQlRXnQaqnvhI
+        eMj9LQeRquqqdJEMysck2Zzdiw==
+X-Google-Smtp-Source: AGRyM1sX86vrrjVPPP1yUcwx/sZIRbQprpzXl44FYJKuAjsvw6TD5Ua2hBw6xE35bd62RibFYqBp1g==
+X-Received: by 2002:a05:600c:2c46:b0:39c:55a0:9533 with SMTP id r6-20020a05600c2c4600b0039c55a09533mr4015082wmg.104.1655988081094;
+        Thu, 23 Jun 2022 05:41:21 -0700 (PDT)
+Received: from [192.168.149.129] ([80.233.63.220])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d4201000000b0021a36955493sm23104159wrq.74.2022.06.23.05.41.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 05:41:20 -0700 (PDT)
+Message-ID: <4a76c7aa-62e8-385c-15a0-9992ec566de5@conchuod.ie>
+Date:   Thu, 23 Jun 2022 13:41:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
+ spi-{r,t}x-bus-width for dwc-ssi
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>, Conor.Dooley@microchip.com
+Cc:     damien.lemoal@opensource.wdc.com, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
+        sam@ravnborg.org, Eugeniy.Paltsev@synopsys.com, vkoul@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org, daniel.lezcano@linaro.org,
+        palmer@dabbelt.com, palmer@rivosinc.com, tglx@linutronix.de,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        masahiroy@kernel.org, geert@linux-m68k.org, niklas.cassel@wdc.com,
+        dillon.minfei@gmail.com, jee.heng.sia@intel.com,
+        joabreu@synopsys.com, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220618123035.563070-1-mail@conchuod.ie>
+ <20220618123035.563070-7-mail@conchuod.ie>
+ <20220620205654.g7fyipwytbww5757@mobilestation>
+ <61b0fb86-078d-0262-b142-df2984ce0f97@microchip.com>
+ <9a1fcb40-9267-d8e6-b3b6-3b03fd789822@opensource.wdc.com>
+ <a2d85598-76d1-c9dc-d50d-e5aa815997cf@conchuod.ie>
+ <c272728f-f610-77df-bd9b-c9fee6b727f8@opensource.wdc.com>
+ <bd2547f8-e069-60a2-a223-9f694457636d@microchip.com>
+ <20220623102502.jiksqr3m6y733haq@mobilestation>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220623102502.jiksqr3m6y733haq@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a phandle to the MT8183_POWER_DOMAIN_MFG_ASYNC power domain and
-assign the GPU VSRAM supply to this in mt8183-kukui: this allows to
-keep the sram powered up while the GPU is used.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
- arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 89e4358f140a..33f3bf277ce9 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -821,6 +821,10 @@ cros_ec {
- 	};
- };
- 
-+&mfg_async {
-+	domain-supply = <&mt6358_vsram_gpu_reg>;
-+};
-+
- &mfg {
- 	domain-supply = <&mt6358_vgpu_reg>;
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 9485c1efc87c..9d32871973a2 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -788,7 +788,7 @@ power-domain@MT8183_POWER_DOMAIN_CONN {
- 					#power-domain-cells = <0>;
- 				};
- 
--				power-domain@MT8183_POWER_DOMAIN_MFG_ASYNC {
-+				mfg_async: power-domain@MT8183_POWER_DOMAIN_MFG_ASYNC {
- 					reg = <MT8183_POWER_DOMAIN_MFG_ASYNC>;
- 					clocks = <&topckgen CLK_TOP_MUX_MFG>;
- 					clock-names = "mfg";
--- 
-2.35.1
+On 23/06/2022 11:25, Serge Semin wrote:
+> On Tue, Jun 21, 2022 at 04:06:21PM +0000, Conor.Dooley@microchip.com wrote:
+>> On 21/06/2022 00:17, Damien Le Moal wrote:
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>
+>>> On 6/21/22 07:49, Conor Dooley wrote:
+>>>>
+>> ---8<---
+>>>>>>
+>>>>>> hmm, well I'll leave that up to people that have Canaan hardware!
+>>>>>
+>>>>> I will test this series.
+>>>>>
+>>>>
+>>>> Cool, thanks.
+>>>> I'll try to get a respin out tomorrow w/ the memory node "unfixed".
+>>>
+>>> OK. I will test that then :)
+>>
+>> Since the memory node hit that dt-schema snag, I have not sent a v2.
+>> Going to be AFK for a few days, so I dropped the memory node change,
+>> changed the spi binding & put the series on:
+>> git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ canaan
+>>
+> 
+>> If you get a chance to look at it great, if not I'll send a v2 once
+>> the memory node is figured out.
+> 
+> commit 84df6ca0f277 ("spi: dt-bindings: dw-apb-ssi: update
+> spi-{r,t}x-bus-width") looks good to me. Feel free to add my ack tag
+> to v2 of that patch.
 
+Sure, thanks!

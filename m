@@ -2,108 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E439E558ABB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2FA558AB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiFWV3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S229808AbiFWV3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiFWV3f (ORCPT
+        with ESMTP id S229464AbiFWV3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:29:35 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EE6527FC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:29:33 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31780ad7535so6892527b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RlRmZ+LNINHQ0A4AK2ESdVrqQY5sFyzwJMR41lo+PS0=;
-        b=D46X38KI4V4bLqQrvhwC0HZidzVCUrkJgWhfTTDo1V77zEnLjnevErQGc+xq7+WCN5
-         i14fZrnQu7NWwiaPNsaakoiZKW8FZZ6tv3tY7gQ2KBQvbOzCox68WdIC24LuhE8949n0
-         5Hbu5qqqFij/aAyKngVquo2EZp+l9Q47Szw2P1ogPhiCuQf+SjbG1C/He99wX/gqXC8j
-         m0+NXYF32++mQ/+0uai9Xggk7srpmvninUIdtQP6QAzVVDxOhpWhQAZmTaVwQsSgLpfM
-         TQZn2z0YRpD9PW0alZNqA+yHryTqziO2Hh4PvxFnt8ji1dFvdj7imFd45X9spaMu6uqg
-         2lIQ==
+        Thu, 23 Jun 2022 17:29:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A4775251F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656019758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6PfW9sxpQj/mvhni+b0KRiNmHNGj39/jQBs8n3G3n/E=;
+        b=i2rZEXo49QwUmz7rTW1PNtwpd4ROnXA+jCSsz1p39sdzBjX/XxsNkdCcXUy0Y/FX65Qssh
+        gAcDQMllb+ZUoZ+lc83TeQfuMn5G2+KZPvVbfOOHSuV9QRvM53VJk00Uk6XtNebUvj4exW
+        YVuLVuY2r/rbvJOLeDK8qr+Tlf8+vS4=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-578-vc2GWJ_YOGWIurpiz4FtMw-1; Thu, 23 Jun 2022 17:29:17 -0400
+X-MC-Unique: vc2GWJ_YOGWIurpiz4FtMw-1
+Received: by mail-il1-f198.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so185803ile.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:29:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RlRmZ+LNINHQ0A4AK2ESdVrqQY5sFyzwJMR41lo+PS0=;
-        b=cGW6j7qll0tph/oV3spZc32cSNpR61yGCswEgeiOQzS3zw5xW0IelJCmYCD+bKQk+7
-         u97LfgTqDUSnopAmfOiLmL48bCVOZw34XdUVZe+7CFJjlyqsII/+VApvh7Ua6gHjePT1
-         jXtQVa8awnQe4D4PUcBUhAf3qJlE6/62bw9FVPPulcK5sSaomXxuJu4rI/9MhdZZc6FT
-         bkuls2y4Pvhn0k2aGJAJ7XEoEfNXbO448eYy9JuOn0nGX/usRB2YKS0QWEkFOSgcwawk
-         trw4+lgnZkII5PR9TLCMfB4ZnjSQV7jXdUKI1tl4E3fh1EzRss1E5q7eT2gH03CiCLtA
-         PLVQ==
-X-Gm-Message-State: AJIora+q47v2BcjVlrG6vbAvxdjK34f3CVb4clhNwc+FWN5pwA+Jn9bX
-        6NBTFy+XyO3WT442OrCXW4gvXQFdgKOfs892ttOdnQ==
-X-Google-Smtp-Source: AGRyM1tKXIf7skJkbZ0Jt4ZId9hoRWdp5Q8Pt4jHVkRbzdTwfvr/3OUmPekxJ+PYT/zD3ZsbOrI0kk7lMccgy//k9bw=
-X-Received: by 2002:a81:7557:0:b0:317:6536:d404 with SMTP id
- q84-20020a817557000000b003176536d404mr12390732ywc.459.1656019772443; Thu, 23
- Jun 2022 14:29:32 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6PfW9sxpQj/mvhni+b0KRiNmHNGj39/jQBs8n3G3n/E=;
+        b=YHhMAQehGlX6EiX6BtZ0nRr95lmFAhGQozdm/kBrhy06yZyITcmvpoB4aL88Tjw/wN
+         Y9O3vc1Wxo16tLCUC7W0qohn95FkAGEAcxStK65zrtVaL1E2DxzyHNyqamPBU3v4tSzA
+         9yDuJ7MlCHe/WNAh15CU37zoK3QCV/kc4IWOgF1KU2mL5ap0yxe+0K7fUmM8PCnnKAhW
+         Q4TokkKZEezUcDR94fchhYGbxzZ2RcSyHrPRJi8DtOxCfnwqD5XgEoZrRS1R06jY7E91
+         JHBaUvEMlp3Uw7db44RKZ9u3w8VWdQRaYOjeh8plKkodWTALNJiAhEJssLMflhii8g3D
+         e6rA==
+X-Gm-Message-State: AJIora/jqnWrUUXnpdWB+f+HwAXsaZVbFrKPJXOmL73Vf07dLcfhOa5E
+        aWe5xZXIOpeDndi0tMBhn0svanf2teJ7Bh7Yx1taA5y3p5wPH+Yba2hqNGVNeKtl+bGKTYup4qL
+        DZxhdqNKbju48xqj8TqcTLl5W
+X-Received: by 2002:a05:6602:13c3:b0:672:6e5b:f91d with SMTP id o3-20020a05660213c300b006726e5bf91dmr5280345iov.68.1656019755998;
+        Thu, 23 Jun 2022 14:29:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vtJvEhlzlRfOF8b92vaohNpblje8osM0+m8TcPa0obERTPPu0deqheKeigL7E2U8Aqg0jxfg==
+X-Received: by 2002:a05:6602:13c3:b0:672:6e5b:f91d with SMTP id o3-20020a05660213c300b006726e5bf91dmr5280339iov.68.1656019755753;
+        Thu, 23 Jun 2022 14:29:15 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id h7-20020a0566380f0700b00339cfcf4a49sm202645jas.141.2022.06.23.14.29.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 14:29:15 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 17:29:13 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>
+Subject: Re: [PATCH 2/4] kvm: Merge "atomic" and "write" in
+ __gfn_to_pfn_memslot()
+Message-ID: <YrTbKaRe497n8M0o@xz-m1.local>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-3-peterx@redhat.com>
+ <YrR9i3yHzh5ftOxB@google.com>
+ <YrTDBwoddwoY1uSV@xz-m1.local>
+ <YrTNGVpT8Cw2yrnr@google.com>
 MIME-Version: 1.0
-References: <20220622062027.994614-1-peng.fan@oss.nxp.com> <20220622072435.GT1615@pengutronix.de>
- <CAGETcx9JpTbYtGFoKttWLeiBB73QzzBM1o-OL0o-XuFouLcEog@mail.gmail.com>
- <CAOMZO5DFX72xuxWwAPsuk4Q667Ap7Dk+pR89cWDQJkzT0D2osA@mail.gmail.com>
- <CAOMZO5Ccu_v_G9DEwrEfVHq83-hfrXCP_h20Rv0=oFTLux5AkQ@mail.gmail.com>
- <CAGETcx85z_hkhKFHUwnihqcD0UQG3xtSZjw=BZxqwQB0D1CMgw@mail.gmail.com>
- <CAOMZO5A6Zn=6tXU2VQ+-cj=50mpxCmoZ8c437=w1Spd34k7T6A@mail.gmail.com>
- <CAGETcx-_nwrzJzaY3yc80g4AfydV5J9-JYE5h1m+5TT05jyKOw@mail.gmail.com> <CAOMZO5BvnBCza5HQVNUQqDBZR9WsXiK4RuVPh654GJGb2jw+1g@mail.gmail.com>
-In-Reply-To: <CAOMZO5BvnBCza5HQVNUQqDBZR9WsXiK4RuVPh654GJGb2jw+1g@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 23 Jun 2022 14:28:56 -0700
-Message-ID: <CAGETcx8EsTWVQCFrw8vSs91i1LXj7Z1qW962ShxBDXwORwbHwA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mp: drop dmas property for uart console
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, hvilleneuve@dimonoff.com,
-        Lucas Stach <l.stach@pengutronix.de>,
-        abbaraju.manojsai@amarulasolutions.com,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Matteo Lisi <matteo.lisi@engicam.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Teresa Remmet <t.remmet@phytec.de>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, t.remmet@phytec.deh,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YrTNGVpT8Cw2yrnr@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 1:51 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> On Thu, Jun 23, 2022 at 3:58 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> > Will do. I'm looking at the serial console code and I don't see a
-> > difference between earlycon= vs console= handling. And I know that
-> > earlycon= doesn't go through the driver core and isn't affected by any
-> > of this. If you have additional pointers on where console= is parsed,
-> > feel free to pass it on. I'll continue poking at this.
->
-> It seems to be parsed at uart_parse_earlycon() inside
-> drivers/tty/serial/serial_core.c.
+On Thu, Jun 23, 2022 at 08:29:13PM +0000, Sean Christopherson wrote:
+> This is what I came up with for splitting @async into a pure input (no_wait) and
+> a return value (KVM_PFN_ERR_NEEDS_IO).
 
-Turns out it's kernel/printk/printk.c
+The attached patch looks good to me.  It's just that..
 
--Saravana
+[...]
+
+>  kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
+> -			       bool atomic, bool *async, bool write_fault,
+> +			       bool atomic, bool no_wait, bool write_fault,
+>  			       bool *writable, hva_t *hva)
+
+.. with this patch on top we'll have 3 booleans already.  With the new one
+to add separated as suggested then it'll hit 4.
+
+Let's say one day we'll have that struct, but.. are you sure you think
+keeping four booleans around is nicer than having a flag, no matter whether
+we'd like to have a struct or not?
+
+  kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
+			       bool atomic, bool no_wait, bool write_fault,
+                               bool interruptible, bool *writable, hva_t *hva);
+
+What if the booleans goes to 5, 6, or more?
+
+/me starts to wonder what'll be the magic number that we'll start to think
+a bitmask flag will be more lovely here. :)
+
+-- 
+Peter Xu
+

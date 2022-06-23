@@ -2,178 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C315572BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D286A5572C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 07:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiFWF5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 01:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S229659AbiFWF7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 01:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiFWF5X (ORCPT
+        with ESMTP id S229543AbiFWF7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 01:57:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A69343ED1;
-        Wed, 22 Jun 2022 22:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655963842; x=1687499842;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8pd8Oamgron657/1QMJs6kHNOEmzKM8mE2Gr1jHf/Cw=;
-  b=gCX9loaARlZxJbDfH/ng2wN84EO33TIDS5qMBrmQn5Po2jPiNkCb5wu5
-   K0JMDITIROGmnesgFuITKn+e4koDfEGWjOw4f4j0TkX2n11n1bXYX4XZT
-   9PehWH8GHxmLAfeX8H+3R9P1O14GGv9ebJ2sq2fze6darz0E2+t1zsbNf
-   jHqhGqPHkKNuv7S65ilYw1uHZpMJFJHdlJwH1lJ9/VZ3n5hZfFcNLwX/a
-   ngGGP6587YRy9aZf6HCcgi2IT777cq+eVJJSxZ6Mu0oZ9QYxsh0hUyWoL
-   DTSZgYoW43czp6RBFVqESykr+X39RGBk+YVZirRjV9LjETTxoCdhA+ZYj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="306092389"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="306092389"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 22:57:22 -0700
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644570302"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 22:57:18 -0700
-Date:   Thu, 23 Jun 2022 13:57:03 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Subject: Re: [PATCH v5 01/22] x86/virt/tdx: Detect TDX during kernel boot
-Message-ID: <20220623055658.GA2934@gao-cwp>
-References: <cover.1655894131.git.kai.huang@intel.com>
- <062075b36150b119bf2d0a1262de973b0a2b11a7.1655894131.git.kai.huang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <062075b36150b119bf2d0a1262de973b0a2b11a7.1655894131.git.kai.huang@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 01:59:41 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 889B34475D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 22:59:37 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.82.161])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCHV8gwAbRiBPKyAA--.23207S2;
+        Thu, 23 Jun 2022 13:59:20 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-staging@lists.linux.dev, gregkh@linuxfoundation.org
+Cc:     davem@davemloft.net, alexander.deucher@amd.com, kuba@kernel.org,
+        broonie@kernel.org, linux-kernel@vger.kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH v2] staging: rtl8192u: Fix sleep in atomic context bug in dm_fsync_timer_callback
+Date:   Thu, 23 Jun 2022 13:59:12 +0800
+Message-Id: <20220623055912.84138-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCHV8gwAbRiBPKyAA--.23207S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKF15Wr15trykGw1fAry5urg_yoW7Kry3p3
+        ya9w1xAr4UZF4jk3WDAa1DZF1rK3ykGas3G3WkJw4FvrnavF1DXa4vyryUJFW5XrZ09w13
+        Z348ZF43u3WDKr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
+        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GrWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUP5rcUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgsKAVZdtaW8yQAKsm
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:15:30PM +1200, Kai Huang wrote:
->Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
->host and certain physical attacks.  TDX introduces a new CPU mode called
->Secure Arbitration Mode (SEAM) and a new isolated range pointed by the
-						    ^ perhaps, range of memory
+There are sleep in atomic context bugs when dm_fsync_timer_callback is
+executing. The root cause is that the memory allocation functions with
+GFP_KERNEL or GFP_NOIO parameters are called in dm_fsync_timer_callback
+which is a timer handler. The call paths that could trigger bugs are
+shown below:
 
->SEAM Ranger Register (SEAMRR).  A CPU-attested software module called
->'the TDX module' runs inside the new isolated range to implement the
->functionalities to manage and run protected VMs.
->
->Pre-TDX Intel hardware has support for a memory encryption architecture
->called MKTME.  The memory encryption hardware underpinning MKTME is also
->used for Intel TDX.  TDX ends up "stealing" some of the physical address
->space from the MKTME architecture for crypto-protection to VMs.  BIOS is
->responsible for partitioning the "KeyID" space between legacy MKTME and
->TDX.  The KeyIDs reserved for TDX are called 'TDX private KeyIDs' or
->'TDX KeyIDs' for short.
->
->To enable TDX, BIOS needs to configure SEAMRR (core-scope) and TDX
->private KeyIDs (package-scope) consistently for all packages.  TDX
->doesn't trust BIOS.  TDX ensures all BIOS configurations are correct,
->and if not, refuses to enable SEAMRR on any core.  This means detecting
->SEAMRR alone on BSP is enough to check whether TDX has been enabled by
->BIOS.
->
->To start to support TDX, create a new arch/x86/virt/vmx/tdx/tdx.c for
->TDX host kernel support.  Add a new Kconfig option CONFIG_INTEL_TDX_HOST
->to opt-in TDX host kernel support (to distinguish with TDX guest kernel
->support).  So far only KVM is the only user of TDX.  Make the new config
->option depend on KVM_INTEL.
->
->Use early_initcall() to detect whether TDX is enabled by BIOS during
->kernel boot, and add a function to report that.  Use a function instead
->of a new CPU feature bit.  This is because the TDX module needs to be
->initialized before it can be used to run any TDX guests, and the TDX
->module is initialized at runtime by the caller who wants to use TDX.
->
->Explicitly detect SEAMRR but not just only detect TDX private KeyIDs.
->Theoretically, a misconfiguration of TDX private KeyIDs can result in
->SEAMRR being disabled, but the BSP can still report the correct TDX
->KeyIDs.  Such BIOS bug can be caught when initializing the TDX module,
->but it's better to do more detection during boot to provide a more
->accurate result.
->
->Also detect the TDX KeyIDs.  This allows userspace to know how many TDX
->guests the platform can run w/o needing to wait until TDX is fully
->functional.
->
->Signed-off-by: Kai Huang <kai.huang@intel.com>
+    (interrupt context)
+dm_fsync_timer_callback
+  write_nic_byte
+    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
+    usb_control_msg
+      kmalloc(.., GFP_NOIO); //may sleep
+  write_nic_dword
+    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
+    usb_control_msg
+      kmalloc(.., GFP_NOIO); //may sleep
 
-Reviewed-by: Chao Gao <chao.gao@intel.com>
+This patch uses delayed work to replace timer and moves the operations
+that may sleep into the delayed work in order to mitigate bugs.
 
-But some cosmetic comments below ...
+Fixes: 8fc8598e61f6 ("Staging: Added Realtek rtl8192u driver to staging")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v2:
+  - Use delayed work to replace timer.
 
->---
->+
->+static u32 tdx_keyid_start __ro_after_init;
->+static u32 tdx_keyid_num __ro_after_init;
->+
-...
+ drivers/staging/rtl8192u/r8192U.h    |  2 +-
+ drivers/staging/rtl8192u/r8192U_dm.c | 38 +++++++++++++---------------
+ drivers/staging/rtl8192u/r8192U_dm.h |  2 +-
+ 3 files changed, 20 insertions(+), 22 deletions(-)
 
->+static int detect_tdx_keyids(void)
->+{
->+	u64 keyid_part;
->+
->+	rdmsrl(MSR_IA32_MKTME_KEYID_PARTITIONING, keyid_part);
+diff --git a/drivers/staging/rtl8192u/r8192U.h b/drivers/staging/rtl8192u/r8192U.h
+index 14ca00a2789..1942cb84937 100644
+--- a/drivers/staging/rtl8192u/r8192U.h
++++ b/drivers/staging/rtl8192u/r8192U.h
+@@ -1013,7 +1013,7 @@ typedef struct r8192_priv {
+ 	bool		bis_any_nonbepkts;
+ 	bool		bcurrent_turbo_EDCA;
+ 	bool		bis_cur_rdlstate;
+-	struct timer_list fsync_timer;
++	struct delayed_work fsync_work;
+ 	bool bfsync_processing;	/* 500ms Fsync timer is active or not */
+ 	u32	rate_record;
+ 	u32	rateCountDiffRecord;
+diff --git a/drivers/staging/rtl8192u/r8192U_dm.c b/drivers/staging/rtl8192u/r8192U_dm.c
+index 725bf5ca9e3..0fcfcaa6500 100644
+--- a/drivers/staging/rtl8192u/r8192U_dm.c
++++ b/drivers/staging/rtl8192u/r8192U_dm.c
+@@ -2578,19 +2578,20 @@ static void dm_init_fsync(struct net_device *dev)
+ 	priv->ieee80211->fsync_seconddiff_ratethreshold = 200;
+ 	priv->ieee80211->fsync_state = Default_Fsync;
+ 	priv->framesyncMonitor = 1;	/* current default 0xc38 monitor on */
+-	timer_setup(&priv->fsync_timer, dm_fsync_timer_callback, 0);
++	INIT_DELAYED_WORK(&priv->fsync_work, dm_fsync_work_callback);
+ }
+ 
+ static void dm_deInit_fsync(struct net_device *dev)
+ {
+ 	struct r8192_priv *priv = ieee80211_priv(dev);
+ 
+-	del_timer_sync(&priv->fsync_timer);
++	cancel_delayed_work_sync(&priv->fsync_work);
+ }
+ 
+-void dm_fsync_timer_callback(struct timer_list *t)
++void dm_fsync_work_callback(struct work_struct *work)
+ {
+-	struct r8192_priv *priv = from_timer(priv, t, fsync_timer);
++	struct r8192_priv *priv =
++	    container_of(work, struct r8192_priv, fsync_work.work);
+ 	struct net_device *dev = priv->ieee80211->dev;
+ 	u32 rate_index, rate_count = 0, rate_count_diff = 0;
+ 	bool		bSwitchFromCountDiff = false;
+@@ -2657,17 +2658,16 @@ void dm_fsync_timer_callback(struct timer_list *t)
+ 			}
+ 		}
+ 		if (bDoubleTimeInterval) {
+-			if (timer_pending(&priv->fsync_timer))
+-				del_timer_sync(&priv->fsync_timer);
+-			priv->fsync_timer.expires = jiffies +
+-				msecs_to_jiffies(priv->ieee80211->fsync_time_interval*priv->ieee80211->fsync_multiple_timeinterval);
+-			add_timer(&priv->fsync_timer);
++			cancel_delayed_work_sync(&priv->fsync_work);
++			schedule_delayed_work(&priv->fsync_work,
++					      msecs_to_jiffies(priv
++					      ->ieee80211->fsync_time_interval *
++					      priv->ieee80211->fsync_multiple_timeinterval));
+ 		} else {
+-			if (timer_pending(&priv->fsync_timer))
+-				del_timer_sync(&priv->fsync_timer);
+-			priv->fsync_timer.expires = jiffies +
+-				msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
+-			add_timer(&priv->fsync_timer);
++			cancel_delayed_work_sync(&priv->fsync_work);
++			schedule_delayed_work(&priv->fsync_work,
++					      msecs_to_jiffies(priv
++					      ->ieee80211->fsync_time_interval));
+ 		}
+ 	} else {
+ 		/* Let Register return to default value; */
+@@ -2695,7 +2695,7 @@ static void dm_EndSWFsync(struct net_device *dev)
+ 	struct r8192_priv *priv = ieee80211_priv(dev);
+ 
+ 	RT_TRACE(COMP_HALDM, "%s\n", __func__);
+-	del_timer_sync(&(priv->fsync_timer));
++	cancel_delayed_work_sync(&priv->fsync_work);
+ 
+ 	/* Let Register return to default value; */
+ 	if (priv->bswitch_fsync) {
+@@ -2736,11 +2736,9 @@ static void dm_StartSWFsync(struct net_device *dev)
+ 		if (priv->ieee80211->fsync_rate_bitmap &  rateBitmap)
+ 			priv->rate_record += priv->stats.received_rate_histogram[1][rateIndex];
+ 	}
+-	if (timer_pending(&priv->fsync_timer))
+-		del_timer_sync(&priv->fsync_timer);
+-	priv->fsync_timer.expires = jiffies +
+-			msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
+-	add_timer(&priv->fsync_timer);
++	cancel_delayed_work_sync(&priv->fsync_work);
++	schedule_delayed_work(&priv->fsync_work,
++			      msecs_to_jiffies(priv->ieee80211->fsync_time_interval));
+ 
+ 	write_nic_dword(dev, rOFDM0_RxDetector2, 0x465c12cd);
+ }
+diff --git a/drivers/staging/rtl8192u/r8192U_dm.h b/drivers/staging/rtl8192u/r8192U_dm.h
+index 0b2a1c68859..2159018b4e3 100644
+--- a/drivers/staging/rtl8192u/r8192U_dm.h
++++ b/drivers/staging/rtl8192u/r8192U_dm.h
+@@ -166,7 +166,7 @@ void dm_force_tx_fw_info(struct net_device *dev,
+ void dm_init_edca_turbo(struct net_device *dev);
+ void dm_rf_operation_test_callback(unsigned long data);
+ void dm_rf_pathcheck_workitemcallback(struct work_struct *work);
+-void dm_fsync_timer_callback(struct timer_list *t);
++void dm_fsync_work_callback(struct work_struct *work);
+ void dm_cck_txpower_adjust(struct net_device *dev, bool  binch14);
+ void dm_shadow_init(struct net_device *dev);
+ void dm_initialize_txpower_tracking(struct net_device *dev);
+-- 
+2.17.1
 
-how about:
-	rdmsr(MSR_IA32_MKTME_KEYID_PARTITIONING, tdx_keyid_start, tdx_keyid_num);
-	tdx_keyid_start++;
-
-Then TDX_KEYID_NUM/START can be dropped.
-
->+
->+	tdx_keyid_num = TDX_KEYID_NUM(keyid_part);
->+	tdx_keyid_start = TDX_KEYID_START(keyid_part);
->+
->+	pr_info("TDX private KeyID range: [%u, %u).\n",
->+			tdx_keyid_start, tdx_keyid_start + tdx_keyid_num);
->+
->+	/*
->+	 * TDX guarantees at least two TDX KeyIDs are configured by
->+	 * BIOS, otherwise SEAMRR is disabled.  Invalid TDX private
->+	 * range means kernel bug (TDX is broken).
-
-Maybe it is better to have a comment for why TDX/kernel guarantees
-there should be at least 2 TDX keyIDs.
-
->+
->+/*
->+ * This file contains both macros and data structures defined by the TDX
->+ * architecture and Linux defined software data structures and functions.
->+ * The two should not be mixed together for better readability.  The
->+ * architectural definitions come first.
->+ */
->+
->+/*
->+ * Intel Trusted Domain CPU Architecture Extension spec:
->+ *
->+ * IA32_MTRRCAP:
->+ *   Bit 15:	The support of SEAMRR
->+ *
->+ * IA32_SEAMRR_PHYS_MASK (core-scope):
->+ *   Bit 10:	Lock bit
->+ *   Bit 11:	Enable bit
->+ */
->+#define MTRR_CAP_SEAMRR			BIT_ULL(15)
-
-Can you move this bit definition to arch/x86/include/asm/msr-index.h
-right after MSR_MTRRcap definition there?

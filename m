@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC2A5578C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4540D5578C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiFWLdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 07:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S231465AbiFWLds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiFWLdo (ORCPT
+        with ESMTP id S230078AbiFWLdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:33:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F503336F;
-        Thu, 23 Jun 2022 04:33:41 -0700 (PDT)
+        Thu, 23 Jun 2022 07:33:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2FD2C67A;
+        Thu, 23 Jun 2022 04:33:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6C12B8224D;
-        Thu, 23 Jun 2022 11:33:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595B3C341C7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F261760FB7;
+        Thu, 23 Jun 2022 11:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F71C341C6;
         Thu, 23 Jun 2022 11:33:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1655984019;
-        bh=rF+KnkI8TrvuBOWUOKxZrJzbKbUt+JURZ8zGL45kkxs=;
+        bh=xprJTN5w5gXBlNSXfX5SAAvt9W561yQWJjzVR1zxOVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f31BjyG3rUQD5UMRNzPEvh6jmBF8vkqf3MgFOKD1wvcbTfM0XrSwXr85kmFd6aMif
-         sLG7i4v0Df/TpIGNn50+q4w9Y386n5yEcjP4PoTjsx/SWCDpmxC2yvbaneNdnt3aeP
-         PcOqQMdDNW4SPC2wiE+8wXH+emXMJvzhVozCrjc8qu+DbzLdqu95Wm896fvCZEPvbm
-         z6ezr2lYK/epWpI446emHB6gwJz+iDT65N78UmQcdptQ43ullzZzUYsm6b1jw9rlzk
-         vGwXg8EYWINeprBEKy14Sc0EHOJDIPYUG6Du10lcvOniI+LD/nayokD6/e4tmiSqRB
-         WRtX1CfVruapw==
+        b=C6vhk84cdEDrKkEXXkhZsMXaP1x3L5Mstd9vY/jiTd4AzlqwpWR8h/HXBap3E9eff
+         NSm3qkTADJNuXKzXBOM9hmr2FRCNnC1T0uTaAzP2l9LsLOHAxoF6NQSy9copZoAJ/s
+         4TNtG1pe4cZcMRY2e2A3HCBjq6aK/2iQIph42IvWukXaDdIzcnh86tPsYZx3dgElXF
+         3PrTjXqyIZXv1CgkUhbVjxMtW4YPkulVN3mAwfH8eCb3rccAVH7FYGJ//HLAWE4JJJ
+         hXh4dna9xDJd6fNyC6kzlQFKgCHgiazuNEcNMfrW5uoz3ClF+fVbqvGmpnkastKxwX
+         CnsN+JLCvtfeg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1o4L5c-0007kL-Kr; Thu, 23 Jun 2022 13:33:36 +0200
+        id 1o4L5c-0007kN-NL; Thu, 23 Jun 2022 13:33:36 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -44,9 +44,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 1/3] phy: qcom-qmp-pcie: drop obsolete pipe clock type check
-Date:   Thu, 23 Jun 2022 13:33:12 +0200
-Message-Id: <20220623113314.29761-2-johan+linaro@kernel.org>
+Subject: [PATCH 2/3] phy: qcom-qmp-pcie-msm8996: drop obsolete pipe clock type check
+Date:   Thu, 23 Jun 2022 13:33:13 +0200
+Message-Id: <20220623113314.29761-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220623113314.29761-1-johan+linaro@kernel.org>
 References: <20220623113314.29761-1-johan+linaro@kernel.org>
@@ -68,14 +68,14 @@ longer needed since splitting the PHY driver.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 19 ++-----------------
+ .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  | 19 ++-----------------
  1 file changed, 2 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index b2cd0cf965d8..385ea3d8de08 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -2210,26 +2210,11 @@ int qcom_qmp_phy_pcie_create(struct device *dev, struct device_node *np, int id,
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
+index 48ea1de81d7c..812d14afb5ec 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
+@@ -904,26 +904,11 @@ int qcom_qmp_phy_pcie_msm8996_create(struct device *dev, struct device_node *np,
  	if (!qphy->pcs_misc)
  		dev_vdbg(dev, "PHY pcs_misc-reg not used\n");
  
@@ -103,7 +103,7 @@ index b2cd0cf965d8..385ea3d8de08 100644
 +				     "failed to get lane%d pipe clock\n", id);
  	}
  
- 	generic_phy = devm_phy_create(dev, np, &qcom_qmp_phy_pcie_ops);
+ 	/* Get lane reset, if any */
 -- 
 2.35.1
 

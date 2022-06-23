@@ -2,155 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56E8556F6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 02:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D27556FE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358717AbiFWAZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 20:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S1349738AbiFWB2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 21:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357211AbiFWAZr (ORCPT
+        with ESMTP id S1343614AbiFWB2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 20:25:47 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD907653
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 17:25:46 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id w24so9003923pjg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 17:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SygWKchO0k+y7yXsZh0lg7LZ0sosds739AKDKHLdzm8=;
-        b=b3st9LQI8EUcf4vRZkN9FuY8JTgqSsuawrFH9hFAlJZTkVCtFxFALeeL3f82fotnXr
-         6LDOe5qKxy8Vz+vQ0mmD1l7s+y6QJmxrb/atmlIsrpBBGx6kLWqfcw1LvOF5iyJO1MCP
-         c2DKMugV/35nUO1ROV12YG7FUQWLGIYSHRSiQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SygWKchO0k+y7yXsZh0lg7LZ0sosds739AKDKHLdzm8=;
-        b=uKFgyjOqPW2h43WBujGmbQe0IG5tlUrmePz5fXbQcmfkRGN0KU/U4tgryj34dh4s85
-         vdHWuzHWtYxlJyvLQqEcmH2SnPHG/69tvPf3tSovsmGb/8s4EWrjiqUyKNS52rqcIPVu
-         9/fc8Ygs+3UKzU0KLQu+Oq7xiRql5FnqA4ZBAk+1P8J4gbFaaKoP6XTqS435/Kf/4Pv0
-         OjBF7LGbdQillIv4ATJgT8CPcMijXKz8V1xE4dBAUjGvDYOuBJWGkVSdqaDs3V7uswX4
-         tPMTpNFqpljIa9C3OWl34DO8A4CSJbvwbFG7Vn8pXrqwOIcLK5bqvpxM2UcdVCjW66Fj
-         zuPA==
-X-Gm-Message-State: AJIora/1Lj6Q8XU2UnviWGPEbVbB47lAUB//wYF8eH9Nqjgnv3bDwqT2
-        VtsaR6LcxutRca1WgZR68mxyww==
-X-Google-Smtp-Source: AGRyM1vljkq/ZMbBKLNrU/5jd/GiIb1Avw040L4R6xvEuHNHC8lbPLZXn68o6WxIfLbKiAsrJ+bvnw==
-X-Received: by 2002:a17:902:b216:b0:16a:854:e641 with SMTP id t22-20020a170902b21600b0016a0854e641mr29379561plr.154.1655943946136;
-        Wed, 22 Jun 2022 17:25:46 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:f28c:6f86:743c:1c04])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170903024100b00163fbb1eec5sm13332705plh.229.2022.06.22.17.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 17:25:45 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Sean Paul <sean@poorly.run>, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-Subject: [PATCH v2 3/3] drm/msm/dp: Get rid of dp_ctrl_on_stream_phy_test_report()
-Date:   Wed, 22 Jun 2022 17:25:40 -0700
-Message-Id: <20220623002540.871994-4-swboyd@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-In-Reply-To: <20220623002540.871994-1-swboyd@chromium.org>
-References: <20220623002540.871994-1-swboyd@chromium.org>
+        Wed, 22 Jun 2022 21:28:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6688C1758A;
+        Wed, 22 Jun 2022 18:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655947684; x=1687483684;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FVJa2+JGTCHuOb6NnEu37R8kKk2s4YcOMsTCEJXQcog=;
+  b=nfK/ZSbT8CgjOScdaM/5lU3+AFNNAHdVtN63K59q6p/2ndNOu+jQ0QxF
+   crmKLVR5FMXrDzw35gYybMUWf8uMIa/X1drK+3Sze5WjRWiZCBHQ+AdQZ
+   exrm3rdZ65qyUnOubB9ssJDCbLhu858mwwaLVF8v6BeBnWFSTd+sWve8C
+   q5slLBfgVZzEANLm4AYG2A8KT2/UzEKVZBObiNCieOmB1X0ASvpcysuhZ
+   0K3EZkLqC975pBk+PvIDO4Lzl8dHjTHSw7TR5HtYChOeuMC+cTAOqhbNF
+   7m2mtUPnKOg6nDVk/sbcJhHGhYyil9p+mVsPjDRqJElW9BwatCvKE7Ao/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="263625916"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="263625916"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 18:28:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="730624806"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Jun 2022 18:27:59 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4BdW-0000Fq-N0;
+        Thu, 23 Jun 2022 01:27:58 +0000
+Date:   Thu, 23 Jun 2022 08:25:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, quic_msavaliy@quicinc.com,
+        dianders@chromium.org, mka@chromium.org, swboyd@chromium.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: Re: [PATCH] tty: serial: qcom-geni-serial: Fix get_clk_div_rate()
+ which otherwise could return a sub-optimal clock rate.
+Message-ID: <202206230849.dxzRCvaU-lkp@intel.com>
+References: <1655834239-20812-1-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655834239-20812-1-git-send-email-quic_vnivarth@quicinc.com>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This API isn't really more than a couple lines now that we don't store
-the pixel_rate to the struct member. Inline it into the caller.
+Hi Vijaya,
 
-Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 44 ++++++++++++--------------------
- 1 file changed, 17 insertions(+), 27 deletions(-)
+Thank you for the patch! Yet something to improve:
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index feb26d4d6e97..e475f4ca078a 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1564,36 +1564,15 @@ static bool dp_ctrl_send_phy_test_pattern(struct dp_ctrl_private *ctrl)
- 	return success;
- }
- 
--static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-+static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
- {
- 	int ret;
--	struct dp_ctrl_private *ctrl;
- 	unsigned long pixel_rate;
- 
--	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
--
--	pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
--	dp_ctrl_set_clock_rate(ctrl, DP_STREAM_PM, "stream_pixel", pixel_rate * 1000);
--
--	ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, true);
--	if (ret) {
--		DRM_ERROR("Unable to start pixel clocks. ret=%d\n", ret);
--		return ret;
--	}
--
--	dp_ctrl_send_phy_test_pattern(ctrl);
--
--	return 0;
--}
--
--static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
--{
--	int ret = 0;
--
- 	if (!ctrl->link->phy_params.phy_test_pattern_sel) {
- 		drm_dbg_dp(ctrl->drm_dev,
- 			"no test pattern selected by sink\n");
--		return ret;
-+		return 0;
- 	}
- 
- 	/*
-@@ -1608,12 +1587,23 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
- 	}
- 
- 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
--	if (!ret)
--		ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
--	else
-+	if (ret) {
- 		DRM_ERROR("failed to enable DP link controller\n");
-+		return ret;
-+	}
- 
--	return ret;
-+	pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-+	dp_ctrl_set_clock_rate(ctrl, DP_STREAM_PM, "stream_pixel", pixel_rate * 1000);
-+
-+	ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, true);
-+	if (ret) {
-+		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	dp_ctrl_send_phy_test_pattern(ctrl);
-+
-+	return 0;
- }
- 
- void dp_ctrl_handle_sink_request(struct dp_ctrl *dp_ctrl)
+[auto build test ERROR on tty/tty-testing]
+[also build test ERROR on linus/master v5.19-rc3 next-20220622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220622-015826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+config: arm-randconfig-r016-20220622 (https://download.01.org/0day-ci/archive/20220623/202206230849.dxzRCvaU-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/668659f1481053090a9dbe9c83bd769de527a5c2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/tty-serial-qcom-geni-serial-Fix-get_clk_div_rate-which-otherwise-could-return-a-sub-optimal-clock-rate/20220622-015826
+        git checkout 668659f1481053090a9dbe9c83bd769de527a5c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arm-linux-gnueabi-ld: arm-linux-gnueabi-ld: DWARF error: could not find abbrev number 121
+   drivers/tty/serial/qcom_geni_serial.o: in function `find_clk_rate_in_tol':
+>> qcom_geni_serial.c:(.text+0x764): undefined reference to `__aeabi_uldivmod'
+
 -- 
-https://chromeos.dev
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

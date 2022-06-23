@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0854F5587C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D907B5587C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiFWSkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S232586AbiFWSne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiFWSkj (ORCPT
+        with ESMTP id S233796AbiFWSnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:40:39 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB960DE939;
-        Thu, 23 Jun 2022 10:44:03 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id n15so12550951ljg.8;
-        Thu, 23 Jun 2022 10:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kLUchrIOubSs10x5xtiDZcRvEe4xc2YtaLT4q8v3KIc=;
-        b=HoyHPkXcI6iJBV1lvnAjM0fOa/XVWhe7zBsqVuDWL78EzMB3yfd2EoJe0Rd4CN4cBb
-         9/5z0w0Sr949FJSwskmtonupgvM7FbBB4KFcUMvhWeTJ3gt4OXNgs3LPlFpTj1T2ZR6N
-         xIP+4x3W9NE+SDa3wO3K0N4iyDYOCYWxp1S1nzACvfrzKCkNudEEUsyzZU7X6Eqru2gC
-         DMrr6ayRkLnirAEeIAwc7EfXqQGc74kLi8xbP6wecJA6ug/+19D5jp8OPsKNcuahGdFg
-         LgaUyuGh/t9LR/6MCohaIqhI/QVhACp49G27yLsJxGlCVaPfnqtWnhdcH/t1qQGU4BEE
-         DmwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kLUchrIOubSs10x5xtiDZcRvEe4xc2YtaLT4q8v3KIc=;
-        b=oXmKbzoy3HLm858B2/TTHJ+zMqXYPHr55S18iECJLj/83G4sszYl0umr+RzLmurfcC
-         Ev1M0NVEwAPsxOkUAgsPrb16ZpVseoi7pk8HV+U4sDW1LV81MsyY0cg4kYjEa6qnTrer
-         gEFrVnN8t4R9MGbeF9XLDqWDYLRQMNb6MZ6PexV7QApSC5UCZR4R87sVRnWOcKHMC0BB
-         hcjdApQbxPrUalf/vw73lEBOwGHv+EKY8EEcDUliqHwkEuXcM0EzNMK//FsI1ogmv6QG
-         mG1YOfDpvy4KfDzKB66J0tXqZPVF3xCxTdxDkvrUsnhs2LO+BPbOh1FHEGD4PqV9qvtP
-         REww==
-X-Gm-Message-State: AJIora8N1Jca+lFcWI3OGJaO3L6oJeMl48QldZi1M2yUUT5gNbkw0C8L
-        91ydYhE+mJVRp4h+Y9VrDa0=
-X-Google-Smtp-Source: AGRyM1sw3nkreR+af3BGIXfmPlInMWhWOBgFsXexGlQHCAxWOgx4Qj+rYioCaAVPEd17nNChvoqpeg==
-X-Received: by 2002:a05:651c:1202:b0:25a:6096:bd7e with SMTP id i2-20020a05651c120200b0025a6096bd7emr5308591lja.304.1656006241352;
-        Thu, 23 Jun 2022 10:44:01 -0700 (PDT)
-Received: from sakura.myxoz.lan (2-248-181-228-no2390.tbcn.telia.com. [2.248.181.228])
-        by smtp.gmail.com with ESMTPSA id h10-20020a056512054a00b0047f834120a3sm1139273lfl.33.2022.06.23.10.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 10:44:01 -0700 (PDT)
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chris Down <chris@chrisdown.name>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Oleksandr Natalenko <oleksandr@redhat.com>
-Subject: Re: [PATCH 0/2] Kconfig: -O3 enablement
-Date:   Thu, 23 Jun 2022 19:44:10 +0200
-Message-ID: <4765633.31r3eYUQgx@sakura.myxoz.lan>
-In-Reply-To: <CAK7LNAQ_4QUfBxRu2HpPS99Ay7JTcqFTHsrBmrPk+d8So5tjOQ@mail.gmail.com>
-References: <20220621133526.29662-1-mikoxyzzz@gmail.com> <2650588.mvXUDI8C0e@sakura.myxoz.lan> <CAK7LNAQ_4QUfBxRu2HpPS99Ay7JTcqFTHsrBmrPk+d8So5tjOQ@mail.gmail.com>
+        Thu, 23 Jun 2022 14:43:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2719F3CE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656006343; x=1687542343;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kruoeecJbcbp4F95d35APFVprxdw2Nf0/sR6Tvn7Ivc=;
+  b=fPG7w+bkq8bwmKG0RZ0UOXIpUmGjzNTVvmdfufrpUUI9+gXWVZQimouu
+   gnm9LRjCnk1EInTEAx+PXcOYC0zbWfRfRClCVfFXFdbFvtj5LR6nDMJr+
+   nn769Zussdl+PWWEZ3RkT5Mjbdatw+vtocLjWAmvoHqpeXFNxyvs5vEDj
+   wRKl/V9Inp0oyJBfokyOhUvY0BAr2Y5MHy6tyVa7cwL2TS3bxhLEA/oOY
+   FjBOydDqU8YhMFDEjbfwVJG7jF78K569dknG4h0WnCnQXTmy/9NDy17rh
+   NyQzVRzCJoCu2cux1oCUxkVl0D8V64/5oY/FRZfRbx7QQ4Cc33n1VP7Xz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="342476594"
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="342476594"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 10:45:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="678165491"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jun 2022 10:45:18 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4QtK-0002Uq-AH;
+        Thu, 23 Jun 2022 17:45:18 +0000
+Date:   Fri, 24 Jun 2022 01:44:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     marxin <mliska@suse.cz>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andi Kleen <andi@firstfloor.org>
+Subject: [jirislaby:lto 4/45] kernel/static_call_inline.c:504:15: warning: no
+ previous prototype for 'func_a'
+Message-ID: <202206240131.GMBBDfhI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, 23 June 2022 19:15:14 CEST Masahiro Yamada wrote:
-> On Fri, Jun 24, 2022 at 2:00 AM Miko Larsson <mikoxyzzz@gmail.com> wrote:
-> > On Thursday, 23 June 2022 17:44:57 CEST Masahiro Yamada wrote:
-> > > On Fri, Jun 24, 2022 at 12:42 AM Miko Larsson <mikoxyzzz@gmail.com> 
-wrote:
-> > > > On Wednesday, 22 June 2022 03:57:34 CEST Masahiro Yamada wrote:
-> > > > > If you want to say "use this option carefully",
-> > > > > EXPERT might be another option.
-> > > > > 
-> > > > >     depends on ARC || EXPERT
-> > > > 
-> > > > Yeah, this would be a fair compromise, though I think it would be
-> > > > better to use "visible if" instead of "depends on". I can get a v2 of
-> > > > the series together if this is desired.
-> > > 
-> > > Why is "visible if" better than "depends on"?
-> > 
-> > Technically it most likely doesn't matter, but logically it makes more
-> > sense, since we'd make CC_OPTIMIZE_FOR_PERFORMANCE_O3 be visible if
-> > we're on ARC or if we have EXPERT enabled, instead of depending on
-> > them. But yeah, it probably doesn't matter.
-> 
-> Did you write and test the code?
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git lto
+head:   8047611082d70c5263114fabce8c80a4c3d251fa
+commit: e99286245556c2e8709aaa23124b9a7a10fa975b [4/45] static_call: Make static call functions visible
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220624/202206240131.GMBBDfhI-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=e99286245556c2e8709aaa23124b9a7a10fa975b
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby lto
+        git checkout e99286245556c2e8709aaa23124b9a7a10fa975b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Admittedly, I didn't, since I had falsely assumed that "visible if" was
-just an "alternative" to "depends on".
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> "visible if" is only supported for "menu".
-> This is clearly documented at line 207
-> of Documentation/kbuild/kconfig-language.rst
-> 
-> 
-> Using "visible if" for config entry will just
-> result in the syntax error.
->
+All warnings (new ones prefixed by >>):
 
-Oops, yeah, I wasn't aware of this. Sorry.
-
---
-~miko
+>> kernel/static_call_inline.c:504:15: warning: no previous prototype for 'func_a' [-Wmissing-prototypes]
+     504 | int __visible func_a(int x)
+         |               ^~~~~~
+>> kernel/static_call_inline.c:509:15: warning: no previous prototype for 'func_b' [-Wmissing-prototypes]
+     509 | int __visible func_b(int x)
+         |               ^~~~~~
 
 
+vim +/func_a +504 kernel/static_call_inline.c
+
+   503	
+ > 504	int __visible func_a(int x)
+   505	{
+   506		return x+1;
+   507	}
+   508	
+ > 509	int __visible func_b(int x)
+   510	{
+   511		return x+2;
+   512	}
+   513	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

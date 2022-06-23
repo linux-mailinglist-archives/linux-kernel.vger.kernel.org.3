@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015E45589E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2A05589E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 22:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiFWUQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 16:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        id S229609AbiFWURu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 16:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFWUQu (ORCPT
+        with ESMTP id S229451AbiFWURs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:16:50 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED422527E1;
-        Thu, 23 Jun 2022 13:16:49 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id o43so1685216qvo.4;
-        Thu, 23 Jun 2022 13:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YWrCQp6H9wIltSv1NIBwWayinjF3IWxeRXdz64C/6O8=;
-        b=H0iRj/c6MpY2eSSDDZgyYSk4nDUWmxYHRjgj/m/4qUypbcJDTPIYhuazKHcWobrHr5
-         gzMxPmUZ9TfzoBSbDy93yX8ibOTfAgZvUQ9nlTwbpwBobAafrndImc/rjqlIdrsjGgIU
-         f939IpzQVfemTQC12tvKJFYdtEcTrC9hRKFPx1sxB9nFhDjPgJUcZl+Gj7cuYk5uqdlc
-         Wuhk8GAWrGirtvCXM2trIZbiskzbpJqoWnkSSuLaP6YZXRsHMIp2vx68N6kkGoejR9Bc
-         OnLAZPnHxE1tdrKATsSqZJRPMxMIxGVQ7N5PWXw8NOaCt9IJo+MjipZvs8RqUkY5as6R
-         kA+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YWrCQp6H9wIltSv1NIBwWayinjF3IWxeRXdz64C/6O8=;
-        b=t5iY1kIaeAGt94QrZdjRrTwAdd3Wsai7H3+/OsB/LM3FwgXoOQrKXXeNg9Dw146R/P
-         l842nbLuuPhT2jnnVvOkoVedttM99TnpnL52yikM/yU1YqWirgPBnIJ0XV35ednPXHb9
-         jMkO769m64sv9aM9NTyFbIQP4qzleVHC3DC1fY76lS1z3493jQqZKnld+G7nbj4+HMvA
-         2fE693NGq30L7tiGCxujn1/apjr40D5vS06wMqVV9WvzMREY3ZUZsBz2EsaCLik8PiA6
-         E4aet7uZegq5zge21kFyDeyH2FB8/VfP9S24Z+vLDWnCoTpCQRlP1PVJbY58XO1FVgTA
-         9adg==
-X-Gm-Message-State: AJIora84HQ1fgUyO59de1hyMboiahQTCeQg0fzTGsy1VaZRZCXA/B1V3
-        evtY5Ph1zUtt2y30hy4GIdNrHn1pAlRqBerXZDc=
-X-Google-Smtp-Source: AGRyM1uOtTXMj9r/qGMK6GqGlRRTsCptlK8dfpB68zWK8onR9QisCok7v5sadUPaTDEsbVzVvhUCa+H87ScWox2/GG4=
-X-Received: by 2002:ac8:5dce:0:b0:305:300e:146d with SMTP id
- e14-20020ac85dce000000b00305300e146dmr10167380qtx.546.1656015409065; Thu, 23
- Jun 2022 13:16:49 -0700 (PDT)
+        Thu, 23 Jun 2022 16:17:48 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22CE527E1;
+        Thu, 23 Jun 2022 13:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656015429;
+        bh=nY3T1c4qM2yuOPGpKm22MzL3Dp3XOLAxfo8t3uAnMW0=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=JhLO6qnJxCl0lmcSHO6IKOx03XJ3Fz7SXGOquKNagpFHTkwZGNUyXJ3dy11kr2JPC
+         vpxOEePRoXsleVtG3vIldIcF42WgH1HLdkYkjwcbMGnhbDQIyZ59ctm9kH8IR9BNcU
+         2zQTa3x1v/49WlIr+r1OC8WNrUkELMq1V4h22P64=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.3.134]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MqJqN-1nIoS62r3r-00nRIC; Thu, 23
+ Jun 2022 22:17:09 +0200
+Subject: Re: [PATCH 5/8] dt_bindings: rs485: Correct delay values
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vz@mleia.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukas@wunner.de, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
+ <20220622154659.8710-6-LinoSanfilippo@gmx.de>
+ <YrSU4eL9hgISg3Y1@smile.fi.intel.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <6c50fdca-aac4-aaf5-ad34-18a60fcc0aa0@gmx.de>
+Date:   Thu, 23 Jun 2022 22:17:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220621135339.1269409-1-robimarko@gmail.com> <a194d4c5-8e31-ecd9-ecd0-0c96af03485b@linaro.org>
- <CAOX2RU6fBo5f6cxAUgLKj3j+_oP7nSm7awCpr_yiO_p3NssWkQ@mail.gmail.com> <60ee4aa5-4fef-24e0-0ccf-b93eee1db876@linaro.org>
-In-Reply-To: <60ee4aa5-4fef-24e0-0ccf-b93eee1db876@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Thu, 23 Jun 2022 22:16:38 +0200
-Message-ID: <CAOX2RU7da_bUNM0Zr-YA1eQN96ENcfsKLD9C2PVVNijN6Y2hNw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: ath11k: add new DT entry
- for board ID
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kalle Valo <kvalo@kernel.org>, davem@davemloft.net,
-        Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
-        pabeni@redhat.com, Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YrSU4eL9hgISg3Y1@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Xk8oEt/xNT1GDPlq/rAOTCmrF9KpcAvXJypRogcgblZ/lBlQDNG
+ V5hmtsdw9JALPfQi8KdnUe/KpwuzryvlCwVJpHDFvUkVxS0uhU41KsyCVGCt5EqA8aeJmEq
+ Ih42FbW9f4g3j4M256sHtglAbrRZNAZt7yFCFmY8fh4aQ+bqZGfxmHKYkpEKk+WesuSIx/f
+ 6uc2PaZZhGloIUoIoqsyQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Y6DaKaIxa2Y=:CVrHPL9qHm+9vkTj1nWlAa
+ xxfgQ982InBhWVOrVVf4Q/9y5WfQbA8vk0xsteo7Y+MACpjcFimjn767zhSvCOFdBLfFOK15/
+ w4oQDm6OXe4rpgV0pVIUH8A0B8d5ZHlEL+4I++KmGo7h/fOAVPlqK7ypbrbBDgNE1qLZk/RJS
+ oIjSrnQjXsZahbH+TX1GlAIqM8oLtWVbbU2q/AvDfiUmfIwuF7QPPVgFiihWrLHGgwAYWMQIz
+ B5zuN0zHmBMvNexRsaFFFwDII7qJSrK8umIXT4aYqFeLUzZgCxktHOFslxLbdfbr87Wrx+7Xc
+ kUQ4ftQAwvExD0/g8niddw7OwwZpHAvNuKDes56gIqCYOGSKsQgHkoFGusKJxRcvwbcxyWwdt
+ 4QYrI8zAZDObtMO408hzl7tOHVEsScZ4YsGBMkqSlbc2i81bZafF6Dz9tV0M4mAcKtiTtAFSe
+ kiihklyTAkXDxLavxvaehhQsTQOrkSJQDdfquoGfeIgWKyqsZZ6LD2FU1XnfcXy0UPrcR4lkC
+ rECkWUXDrsixmvu3K+JymE4fh0XT4k4ZzmPFHGzcU8rW5JqA00GiYuG4u9Nl1ldovPRWVJw51
+ OAiFqLfAeyowM+ETke5RE1l/z+3BG+6npeDV1KqyirdBRTkf5G/y4zOwG+kg+NPlBUjg9RyKE
+ p8REHwAHoYoyN6q6WRq5WTEASnHdWKdH5EUoNtObvxOlFWzLv9oedBIG6R4c4WePVuvI+9nvP
+ UvCN+CWcUs3KytOKNUqQ3L3YQ9Gtfq8BF9731R/tN9QLYsVcRfRx1xXpuQQCPYZBRMceaznAb
+ gVqYwwjgoX9UcLkbCDMjSUwUh/aLT3AqeG4KFTtpk7Hkl/NC8IW59IdSpmn0ePLCZ1xgIgjha
+ ZEjnY5yACTGCI2U3Vfhi+2RIYQ2iFTOHd6vXEzLgIn5x1cys6yai+9BLj9w+yL+NtkV8J5XRr
+ on5VjGXm4a2r3AQlfxUdsjPT/gU+HEcjwrLHDfiQbafTqF/8+hSwztoZHYPsZhplheFiaYr6p
+ sg1DvZsnTtfMzpZ9tZtiGojeU65V4LFbE6oZekXWaVik0dIs+PZe8bpMdgR9yqZWnsKmW/2tP
+ d0ceY7t+raWJymXSgWmspGPtRAtCQ7UrwYqJj1qiILNzX8EgJ88i3LsHg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,75 +79,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 at 16:55, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On 23.06.22 at 18:29, Andy Shevchenko wrote:
+> On Wed, Jun 22, 2022 at 05:46:56PM +0200, Lino Sanfilippo wrote:
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> The maximum allowed delay for RTS before and RTS after send is 100 ms.
+>> Adjust the documentation accordingly.
 >
-> On 21/06/2022 20:47, Robert Marko wrote:
-> > On Tue, 21 Jun 2022 at 17:58, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 21/06/2022 15:53, Robert Marko wrote:
-> >>> bus + qmi-chip-id + qmi-board-id and optionally the variant are currently
-> >>> used for identifying the correct board data file.
-> >>>
-> >>> This however is sometimes not enough as all of the IPQ8074 boards that I
-> >>> have access to dont have the qmi-board-id properly fused and simply return
-> >>> the default value of 0xFF.
-> >>>
-> >>> So, to provide the correct qmi-board-id add a new DT property that allows
-> >>> the qmi-board-id to be overridden from DTS in cases where its not set.
-> >>> This is what vendors have been doing in the stock firmwares that were
-> >>> shipped on boards I have.
-> >>>
-> >>> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> >>
-> >> Thank you for your patch. There is something to discuss/improve.
-> >>
-> >>> ---
-> >>>  .../devicetree/bindings/net/wireless/qcom,ath11k.yaml     | 8 ++++++++
-> >>>  1 file changed, 8 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> >>> index a677b056f112..fe6aafdab9d4 100644
-> >>> --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> >>> +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> >>> @@ -41,6 +41,14 @@ properties:
-> >>>          * reg
-> >>>          * reg-names
-> >>>
-> >>> +  qcom,ath11k-board-id:
-> >>
-> >> The "board" a bit confuses me because in the context of entire system it
-> >> means the entire hardware running Qualcomm SoC. This is sometimes
-> >> encoded as qcom,board-id property.
-> >
-> > Hi Krzysztof,
-> > I agree that the name is a bit confusing, it's not the same as
-> > qcom,board-id AFAIK
-> > and QCA as well as vendors are using a similar property in the wifi
-> > node to override
-> > the default qmi-board-id to the correct one as its rarely properly fused.
-> >
-> > I assume it would be better-called qcom,ath11k-qmi-board-id as you
-> > dont even have
-> > to be using a Qualcomm SoC as the same is used by PCI ath11k cards as well.
-> >
 >
-> Thanks for the explanation. What is the "board" in that context? The
-> card/hardware with ath11k? Then maybe qcom,ath11k-qmi-id or
-> qcom,ath11k-qmi-hw-id?
+> Is it only documentation issue? If the code allows this to be set higher
+> than 100, we may not change the documentation since this an ABI (from
+> firmware <--> kernel perspective) we need to support old variants.
+>
 
-Hi,
+Well currently the documentation claims that a maximum of 1000 msecs is al=
+lowed but
+nothing actually checks the values read from device tree/ACPI and so it is=
+ possible
+to set much higher values (note that the UART drivers dont check the delay=
+s read from
+DT/ACPI either, the only exception I found is max310x which clamps it to 1=
+5 ms).
 
-I assume it started off as a numerical value to match the board design and was
-then simply carried off to the PCI cards as well.
+We already have a maximum of 100 ms defined for RTS delays set via TIOCSRS=
+485. To be
+consistent with TIOCSRS485 the same limit is used for DT/ACPI values in th=
+is patch.
 
-qcom,ath11k-qmi-hw-id is fine by me, will just expand the description to make
-it clear.
+I am aware that this changes the firmware/kernel ABI. But we had a similar=
+ situation when
+the sanity checks for TIOCSRS485 were introduced
+(see https://lore.kernel.org/all/20220410104642.32195-2-LinoSanfilippo@gmx=
+.de/)
+since before we did not have those limits for all drivers (some drivers cl=
+amped the
+values itself but many did not care).
+Furthermore 100 ms is already a very high value for RTS delays (which are =
+usually rather
+in usecs range). So IMHO the risk is very low to break anything when value=
+s are clamped
+that are higher than that.
+
 
 Regards,
-Robert
+Lino
 
->
-> Best regards,
-> Krzysztof
+
+

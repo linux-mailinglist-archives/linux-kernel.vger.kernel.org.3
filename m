@@ -2,156 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FF25572E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961905572E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 08:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiFWGJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 02:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S229761AbiFWGKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 02:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFWGJz (ORCPT
+        with ESMTP id S229692AbiFWGKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:09:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9215519F;
-        Wed, 22 Jun 2022 23:09:54 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id eq6so19644551edb.6;
-        Wed, 22 Jun 2022 23:09:54 -0700 (PDT)
+        Thu, 23 Jun 2022 02:10:02 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567B463BE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:10:01 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id k14so5787899plh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 23:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OqGyQJ3vy7PFybuXdaUB9y/gte3aocvZWTw7e9ixzAM=;
-        b=lfk6qyQ2fHmok7eXGaiDcxvHYiLHGIceYW1LPAad5yb6Ay6jih9ZhoKkeGTZ40xkic
-         OgsbLla2SyPpwu4KFIjE9FOVcwQex/sr8vG4L7sk4MsLLMGKB2/fgenkEkHzT+a+kUTQ
-         X7lDtbiyR9z8BbBAwo/xTBitKPzbw++ToQr9P9S9tS4uBQNIUquj3tXF7rq36LK/ewTk
-         IiAwYpgj+njfWm4i7tVO9HbwL7bq0/KV2TsB8dVgpJXy2nDmbzDdRPtxbBM/bkepTui6
-         rSgnKd/NhSMrG6C8cSRVKO2qFvYaz4yz68wG4N+TckRnnpjScrXn/+mLX4cs1y71jVEl
-         AxQQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e8tI85riZMOHfa3k8p/ytOZ+RJHDFY9LmShQDBd6b6I=;
+        b=SARoOkbEBf5QYfK+kRxLw37L+QQB/x0IGUpe+lXNKkPPiKNupFPO+530fzS1KWdgi6
+         TrCm+F6wWiCV0QkfuRhEmM/gmZ+WfjgE06mqgTlCMKSrwMTM9XSXGiqe9Pqi01eGNsob
+         RUHT3oXSWiMOJXbP9jYtrMglqweDdrOnyAeQSSSdaAbzmgF1l28jeGhPebgZk9W8GqmH
+         4sRga2f8V3IA+2Nrn9j4/kPc8watpE8yNcdGHRYCB8908vRO/7wABbP90AUXYPosfKId
+         Yr3p67UFSZjkXVcZdMPlkgQyOhs1bD0EH0AEuk8BuIG9v2dlEPBndM6TfKZ5qnaclGQ1
+         R6og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OqGyQJ3vy7PFybuXdaUB9y/gte3aocvZWTw7e9ixzAM=;
-        b=Bn/ea0dKagsVaMOZHcJNr9oac5TBRAELpmIko6d3CRKiywPqty1JYZHkw2FuY3P1EL
-         qfjVLIFKNLL1mjFoFSXdmKWLLJYnDEDXDxk9hGPvxP7XAzJq+zknbkD6asoPcAHob/x5
-         TjFZpAqWYUkOzZTgvSBoWULm5BQbr+K4UnvLfNpXs1JslwK+PMLHNc/zUj63UYppAEVE
-         AK/R5TosDLV1m1SJ9PwXSR1BPqVFCSGgJaDyC2rUHxNjCdmdAymFM8b9dUbtu6Qr8mjC
-         JS7FjY7H6vbUpUERZB7+ILIv/UovD4PxEuuxVm66hSrDPYBDX04DzpDESopeNJ/z50P+
-         U0ZA==
-X-Gm-Message-State: AJIora90wO38LBb5tzM+5rSxED3ht1rBoAlSULp/j/zP4vsoNe6M0aK+
-        Z13a9iUhgcvECHLX5pfRWHOsQjOpq6XHIceksNE=
-X-Google-Smtp-Source: AGRyM1tX7/C4TnqkwnjThVlTdE+GzhG4vp86mMRor/sZYWYPxI83UaXFp/FMuDnRrnE63mmfJGJ240OuBGkPpMXORCI=
-X-Received: by 2002:a05:6402:24a4:b0:434:e43e:2462 with SMTP id
- q36-20020a05640224a400b00434e43e2462mr8577471eda.312.1655964593015; Wed, 22
- Jun 2022 23:09:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e8tI85riZMOHfa3k8p/ytOZ+RJHDFY9LmShQDBd6b6I=;
+        b=DlKRQcUOrLafD7NrV4m9GCMNKZOglC7K8F8lRJJy7nsj2pB0pC8wicv/Usk/KyIC0z
+         MSSu360aQcDyBS9YC/2PS4k4BMV7mEe2nhKybfHcrKeLm2iE+U1elOIpZ9Q8aeJiS27o
+         M9xa3UCtsDSerBuLRd+AVRrQI7tfs6ScTL0HRakmSqlgIQqbFKxxgWeVx19ss1KwAZF3
+         NNK5dkDkNXEYTAy4T4B7qCOlM5+uI4XXc1v8rZ2cTPnnaMe371m4q5yTxKKzUcibz6BM
+         f+EOhHHtM3of8w1Jk658Ryy6fvAzoMAq0PBo6umRa7Owfb7D3QbBmps895f5FAQturPb
+         +y5A==
+X-Gm-Message-State: AJIora9gaJUdlf6l+w9WnPSgxC1Mb6pD9UTsL/EuB2AjwDSnINUiergg
+        HFJiUdavkfbcxrWPEuXoBeQ/U9a/q0vC7Q==
+X-Google-Smtp-Source: AGRyM1tURR2mWC91RwhGJJ7NdxfnCWsglo8eyFMK8qSWXsfbR3txPvvVUsY0tq+OhaZBG3rVIzzzXA==
+X-Received: by 2002:a17:902:d2cb:b0:16a:2efb:d03e with SMTP id n11-20020a170902d2cb00b0016a2efbd03emr15555823plc.81.1655964600838;
+        Wed, 22 Jun 2022 23:10:00 -0700 (PDT)
+Received: from FVFDK26JP3YV.bytedance.net ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id s3-20020a170903200300b0016a11750b50sm9782080pla.16.2022.06.22.23.09.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 Jun 2022 23:10:00 -0700 (PDT)
+From:   Lei He <helei.sig11@bytedance.com>
+To:     davem@davemloft.net, herbert@gondor.apana.org.au,
+        dhowells@redhat.com
+Cc:     mst@redhat.com, kbuild-all@lists.01.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        berrange@redhat.com, pizhenwei@bytedance.com,
+        lei he <helei.sig11@bytedance.com>
+Subject: [PATCH v2 0/4] virtio-crypto: support ECDSA algorithm
+Date:   Thu, 23 Jun 2022 14:09:47 +0800
+Message-Id: <20220623060951.77641-1-helei.sig11@bytedance.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20220621073233.53776-1-nashuiliang@gmail.com> <62b3dfeae3f40_6a3b2208a3@john.notmuch>
-In-Reply-To: <62b3dfeae3f40_6a3b2208a3@john.notmuch>
-From:   Chuang W <nashuiliang@gmail.com>
-Date:   Thu, 23 Jun 2022 14:09:41 +0800
-Message-ID: <CACueBy5ia2VhgNiyQnjsrjY=b7kBUKuN4Lv38cXHymdWHYiuVQ@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: Cleanup the kprobe_event on failed add_kprobe_event_legacy()
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jingren Zhou <zhoujingren@didiglobal.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, John. Thanks, I will resubmit V3 soon, and supplement the commit
-information.
+From: lei he <helei.sig11@bytedance.com>
 
-On Thu, Jun 23, 2022 at 11:37 AM John Fastabend
-<john.fastabend@gmail.com> wrote:
->
-> Chuang W wrote:
-> > Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
-> > livepatch"), in a scenario where livepatch and kprobe coexist on the
-> > same function entry, the creation of kprobe_event using
-> > add_kprobe_event_legacy() will be successful, at the same time as a
-> > trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
-> > perf_event_open() will return an error because both livepatch and kprobe
-> > use FTRACE_OPS_FL_IPMODIFY.
-> >
-> > With this patch, whenever an error is returned after
-> > add_kprobe_event_legacy(), this ensures that the created kprobe_event is
-> > cleaned.
-> >
-> > Signed-off-by: Chuang W <nashuiliang@gmail.com>
-> > Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> I think we want to improve the commit message otherwise I'm sure we will
-> stumble on this in the future and from just above its tricky to follow.
-> I would suggest almost verbatim the description you gave in reply to
-> my question. Just cut'n'pasting your text together with minor edit
-> glue,
->
-> "
->  The legacy kprobe API (i.e. tracefs API) has two steps:
->
->  1) register_kprobe
->
->  $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
->
->  This will create a trace event of mykprobe and register a disable
->  kprobe that waits to be activated.
->
->  2) enable_kprobe
->
->  2.1) using syscall perf_event_open as the following code,
->  perf_event_kprobe_open_legacy (file: tools/lib/bpf/libbpf.c):
->  ---
->  attr.type = PERF_TYPE_TRACEPOINT;
->  pfd = syscall(__NR_perf_event_open, &attr,
->                pid < 0 ? -1 : pid, /* pid */
->                pid == -1 ? 0 : -1, /* cpu */
->                -1 /* group_fd */,  PERF_FLAG_FD_CLOEXEC);
->  ---
->
->  In the implementation code of perf_event_open, enable_kprobe() will be executed.
->
->  2.2) using shell
->
->  $ echo 1 > /sys/kernel/debug/tracing/events/kprobes/mykprobe/enable
->
->  As with perf_event_open, enable_kprobe() will also be executed.
->
->  When using the same function XXX, kprobe and livepatch cannot coexist,
->  that is, step 2) will return an error (ref: arm_kprobe_ftrace()),
->  however, step 1) is ok! The new kprobe API (i.e. perf kprobe API)
->  aggregates register_kprobe and enable_kprobe, internally fixes the
->  issue on failed enable_kprobe.
->
->  To fix: before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
->  livepatch"), in a scenario where livepatch and kprobe coexist on the
->  same function entry, the creation of kprobe_event using
->  add_kprobe_event_legacy() will be successful, at the same time as a
->  trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
->  perf_event_open() will return an error because both livepatch and kprobe
->  use FTRACE_OPS_FL_IPMODIFY.
->
->  With this patch, whenever an error is returned after
->  add_kprobe_event_legacy(), this ensures that the created kprobe_event is
->  cleaned.
-> "
->
-> Thanks,
-> John
+This patch supports the ECDSA algorithm for virtio-crypto.
+
+V1 -> V2:
+- explicitly specified an appropriate base commit.
+- fixed the link error reported by kernel test robot <lkp@intl.com>.
+- removed irrelevant commits.
+
+V1:
+- fixed the problem that the max_signature_size of ECDSA is
+incorrectly calculated.
+- make pkcs8_private_key_parser can identify ECDSA private keys.
+- implement ECDSA algorithm for virtio-crypto device
+
+
+lei he (4):
+  crypto: fix the calculation of max_size for ECDSA
+  crypto: pkcs8 parser support ECDSA private keys
+  crypto: remove unused field in pkcs8_parse_context
+  virtio-crypto: support ECDSA algorithm
+
+ crypto/Kconfig                                |   1 +
+ crypto/Makefile                               |   2 +
+ crypto/akcipher.c                             |  10 +
+ crypto/asymmetric_keys/pkcs8.asn1             |   2 +-
+ crypto/asymmetric_keys/pkcs8_parser.c         |  46 +++-
+ crypto/ecdsa.c                                |   3 +-
+ crypto/ecdsa_helper.c                         |  45 +++
+ drivers/crypto/virtio/Kconfig                 |   1 +
+ .../virtio/virtio_crypto_akcipher_algs.c      | 259 ++++++++++++++++--
+ include/crypto/internal/ecdsa.h               |  15 +
+ include/linux/asn1_encoder.h                  |   2 +
+ lib/asn1_encoder.c                            |   3 +-
+ 12 files changed, 361 insertions(+), 28 deletions(-)
+ create mode 100644 crypto/ecdsa_helper.c
+ create mode 100644 include/crypto/internal/ecdsa.h
+
+
+base-commit: 018ab4fabddd94f1c96f3b59e180691b9e88d5d8
+-- 
+2.20.1
+

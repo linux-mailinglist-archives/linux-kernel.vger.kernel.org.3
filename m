@@ -2,136 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41DF557636
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A91557640
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiFWJDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S230078AbiFWJFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiFWJDv (ORCPT
+        with ESMTP id S229935AbiFWJFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:03:51 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129B31034;
-        Thu, 23 Jun 2022 02:03:50 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id s10so22453207ljh.12;
-        Thu, 23 Jun 2022 02:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ozaotd6LY3ERvzpwuGvbQZTaC8kPny1azl5sB1Hldp8=;
-        b=N+E4E6aBHykbEoIC0lGs7IRiK7feaBLf/CkLd78oSXziwtTtGtoy3tXA3mN4u+M1+H
-         2lEeyKhEQm7uMBzKjVgfV32iv3ycYBLlXefCytlCiYeWvc1vlkkqeVdHyvQa/4I7awPw
-         +yqS6OsEIt1tCt5xFxEtaCt0oLEVSvoZwtAwW4dIcdORniXK5c03omQkgHXW3VVUbG5+
-         pCxDaxADdI5OOyGHM8VigOdxW8fFm9ClSBdiUkl8+LnNLmV81U1i7QDLpG5qCPGM/ib4
-         ezVP1RIDjW8Fye2pDE0ph9F+Vj4aLCnvOMeonKSMKU9+nmoEZVsNcW8/ABtqbLZ0wEk1
-         ujjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ozaotd6LY3ERvzpwuGvbQZTaC8kPny1azl5sB1Hldp8=;
-        b=ST7gKjaVJZOeD90Q9EPyW/QaPZRPgHCYBzo+5KyYdKaIYc31SycMLjyzh48hBHYsDe
-         QIYYJj8NK8MHtL7aswKOqapRG6eIZhvvblK7Yi0A9QarMy7OUQNtm7On8D5gju8wfDRq
-         PlSvcFH9ZHkNvybprFPB1X4e6vbM7g0ygZDhpnSWjgK0+cE8Qd5Nk+lore75hCO6EawN
-         X8dLXrBG33xPHZEF2zYVrm/Bfeo0mH+q64r6RiBq4ZXH2hRaj9UirZdGAu8eS9/wT1zb
-         UOZjScmNlUxd8HODkLVwKdmuZkTfK+7z2iLlef+1kWurvba5R4I/mjH/dsiiC1yYXMjc
-         Tmuw==
-X-Gm-Message-State: AJIora9PZdFD7g29azr+qUAcUMhw5sb0VreDBvDSBY0c6iVRHT7BZmBB
-        VgSTw5wiN+njt+1c5c51SFA=
-X-Google-Smtp-Source: AGRyM1vF1zU4Gj87rqZsJvaSlU5/WAIf+VWD8fk9zG8OB0wQ+t7uncoazUPPDPmBI+qN6/ToK7aL7g==
-X-Received: by 2002:a05:651c:1609:b0:25a:86a5:9eab with SMTP id f9-20020a05651c160900b0025a86a59eabmr4055972ljq.61.1655975028288;
-        Thu, 23 Jun 2022 02:03:48 -0700 (PDT)
-Received: from [172.16.189.61] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05651c201000b0025a73f7aa3bsm1153452ljo.96.2022.06.23.02.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 02:03:47 -0700 (PDT)
-Message-ID: <415e6876-9304-9493-369e-d5eca0238bea@gmail.com>
-Date:   Thu, 23 Jun 2022 12:03:43 +0300
+        Thu, 23 Jun 2022 05:05:09 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033DF22530;
+        Thu, 23 Jun 2022 02:05:07 -0700 (PDT)
+X-UUID: 99a9c4c7b75245d292a059857a6c50f6-20220623
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:eb5c520e-6b4d-44ff-9d62-08aeaf099ebb,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:491451ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 99a9c4c7b75245d292a059857a6c50f6-20220623
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1587169448; Thu, 23 Jun 2022 17:05:03 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 23 Jun 2022 17:05:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 23 Jun 2022 17:05:02 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 23 Jun 2022 17:04:58 +0800
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v13 0/3] mmc: mediatek: add support for SDIO async IRQ
+Date:   Thu, 23 Jun 2022 17:04:42 +0800
+Message-ID: <20220623090445.1401-1-axe.yang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 02/49] regmap-irq: Fix offset/index mismatch in
- read_sub_irq_data()
-Content-Language: en-US
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, broonie@kernel.org
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        srinivas.kandagatla@linaro.org, bgoswami@codeaurora.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        cw00.choi@samsung.com, krzysztof.kozlowski@linaro.org,
-        b.zolnierkie@samsung.com, myungjoo.ham@samsung.com,
-        michael@walle.cc, linus.walleij@linaro.org, brgl@bgdev.pl,
-        tglx@linutronix.de, maz@kernel.org, lee.jones@linaro.org,
-        mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
-        tharvey@gateworks.com, rjones@gateworks.com,
-        mazziesaccount@gmail.com, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        jernej.skrabec@gmail.com, samuel@sholland.org, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org
-References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
- <20220620200644.1961936-3-aidanmacdonald.0x0@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20220620200644.1961936-3-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 23:05, Aidan MacDonald wrote:
-> We need to divide the sub-irq status register offset by register
-> stride to get an index for the status buffer to avoid an out of
-> bounds write when the register stride is greater than 1.
-> 
-> Fixes: a2d21848d921 ("regmap: regmap-irq: Add main status register support")
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->   drivers/base/regmap/regmap-irq.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-> index 4f785bc7981c..a6db605707b0 100644
-> --- a/drivers/base/regmap/regmap-irq.c
-> +++ b/drivers/base/regmap/regmap-irq.c
-> @@ -387,6 +387,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
->   		subreg = &chip->sub_reg_offsets[b];
->   		for (i = 0; i < subreg->num_regs; i++) {
->   			unsigned int offset = subreg->offset[i];
-> +			unsigned int index = offset / map->reg_stride;
->   
->   			if (chip->not_fixed_stride)
->   				ret = regmap_read(map,
-> @@ -395,7 +396,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
->   			else
->   				ret = regmap_read(map,
->   						chip->status_base + offset,
-> -						&data->status_buf[offset]);
-> +						&data->status_buf[index]);
->   
->   			if (ret)
->   				break;
+Changes in v13:
+- remove state_dat1 related description in mtk-sd.yaml
+- move device_init_wakeup() to probe stage
+- remove redundancy SDC_CFG_SDIOIDE bit control in msdc_runtime_suspend()
+- replace SDC_CFG_SDIOIDE control with __msdc_enable_sdio_irq() function to
+  disable sdio irq when sdio_irq_claimed() return true in msdc_runtime_resume()
+- restore to use pm_runtime_force_resume|suspend(), to avoid go out directly
+  in force resume, bump up runtime PM usage counter before force suspend. 
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Changes in v12:
+- assign NULL to pins_eint directly instead of using kfree()
+
+Changes in v11:
+- remove '_irq' suffix in interrupts-names property
+- fix yaml example build error
+- refactor msdc_enable_sdio_irq(), free pins_eint if async irq is not supported
+
+Changes in v10:
+- add sample node for SDIO host which support wakeup interrupt in yaml
+- skip MMC_PM_WAKE_SDIO_IRQ check before enable SDIO async interrupt
+- add MMC_PM_KEEP_POWER check before SDIO eint pinstate parsing
+- use dev_pm_set_dedicated_wake_irq_reverse() to correct irq control sequence
+- set dedicated irq in msdc_enable_sdio_irq() rather than msdc_drv_probe()
+- remove unnecessary wake irq control, rpm/dpm system shall manage that
+- move wake irq/msdc irq control back to system suspend phase, use rpm_suspend
+  and rpm_resume to ensure irq control sequence:
+     disable msdc irq -> enable wake irq -> disable wake irq -> enable msdc irq
+- simplify variables, check pins_eint to know whether wakeup settings are managed
+
+Changes in v9:
+- remove pinctrl "state_dat1"
+
+Changes in v8:
+- remove maxItems property under pinctrl-names property
+
+Changes in v7:
+- add device_init_wakeup() to register SDIO host as wakeup source
+
+Changes in v6:
+- abandon cap-sdio-async-irq flag, use wakeup-source flag instead
+- extend interrupts and pinctrls in mediatek mmc host controller DT documents
+- add mmc_card_enable_async_irq() to access enable_async_irq flag
+- simplify wakeup irq implementation with dedicate wake up irq related interface
+
+Changes in v5:
+- resort variables to reversed xmas tree order
+- restore old copyright year range and add current year back
+
+Changes in v4:
+- add MMC_CAP2_SDIO_ASYNC_IRQ judge before lookup eint pinctrl
+- replace spin_lock_irqsave() variant with spin_lock() in eint irq handler
+
+Changes in v3:
+- correct abbreviations with capital letters in commit message
+- replace copyright year with 2022 in mtk-sd.c
+- remove unnessary pointer casting
+- adjust variable order to reversed xmas tree
+- remove a redundant blank line
+- refine if statement, following standard pattern
+
+Changes in v2:
+- change flag name from 'cap-sdio-async-int' to 'cap-sdio-async-irq'
+- change corresponding macro names from xxx_INT to xxx_IRQ
+- resort new member in msdc_host structure
+- refine function msdc_request_dat1_eint_irq()
+- rename msdc_{suspend,resume} function names, add suffix '_noirq'
+- add MMC_CAP2_NO_SDIO judgement before parse eint related pin setting
+
+Axe Yang (3):
+  dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
+  mmc: core: Add support for SDIO wakeup interrupt
+  mmc: mediatek: add support for SDIO eint wakup IRQ
+
+ .../devicetree/bindings/mmc/mtk-sd.yaml       | 50 ++++++++++-
+ drivers/mmc/core/sdio.c                       | 14 ++++
+ drivers/mmc/host/mtk-sd.c                     | 84 +++++++++++++++++--
+ include/linux/mmc/card.h                      |  8 +-
+ include/linux/mmc/sdio.h                      |  5 ++
+ 5 files changed, 153 insertions(+), 8 deletions(-)
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+2.25.1
 
-~~ When things go utterly wrong vim users can always type :help! ~~
 
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));

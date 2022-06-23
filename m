@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC74558751
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9668F5585DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236862AbiFWSYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S235912AbiFWSFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237347AbiFWSWb (ORCPT
+        with ESMTP id S235747AbiFWSEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:22:31 -0400
+        Thu, 23 Jun 2022 14:04:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AC768C79;
-        Thu, 23 Jun 2022 10:25:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7A7B85A6;
+        Thu, 23 Jun 2022 10:17:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E4FD61DC6;
-        Thu, 23 Jun 2022 17:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA58C3411B;
-        Thu, 23 Jun 2022 17:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656005123;
-        bh=G8RvLNKUb/5NcSJr+pWqANeKbiDipPRXt8onOMoUFNQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DVWavz+i9wBxZBsRbl2Zfygn4y9zAZ3xnubHA2IqyymPneVmGBuoJyDBMXYW+2Wow
-         v0DKa9Rcxs3F/qQiBf0181hBlr3o1gZuDz8QCBDfvppSATYTmB7wDHYf3FhvlEQqc8
-         lD6QrcYr5uH0SCGaBoBvvN9VA7XUx7+crgFJ+9uU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Anderson <sean.anderson@seco.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH 5.18 11/11] dt-bindings: nvmem: sfp: Add clock properties
-Date:   Thu, 23 Jun 2022 18:45:23 +0200
-Message-Id: <20220623164322.643045783@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164322.315085512@linuxfoundation.org>
-References: <20220623164322.315085512@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A17D61E48;
+        Thu, 23 Jun 2022 17:17:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AC4C3411B;
+        Thu, 23 Jun 2022 17:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656004641;
+        bh=ECl0+thSGaC6aSTo4aDyPUB/qSChvQhdGO/voCXF0rw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZDCUMclpM1j1gNt6R5tv7+I6GS+Uen+mRM4eVYaL3jd1t98CZBGVgF5FUBEC+7UgL
+         rc0ScSbWK5cIvvH+s9C4CwFPCteIXHLfYtz0CIQEe4WOarBKQ9qpGqTb2RHRhVhIeq
+         oII0mlUrL8XXsxxRIPaEfrLk60a+jXmymeJQ07RKTlG/n8HzFlvNhagWNKBDny4Yen
+         U4Bdd+j7QdoUNQRcTMxSnusu0QAGAtVuDPR7wYybD2WrTwBMXz2JpkDn33fFjBhnO8
+         rEP8UgQkNPDebXQJfkG7yzfmdOKNsxnlsF2mFvAbg3YfTpzKOrLTUlmJxEqjGESkS1
+         8Ox+pt32FSUow==
+Date:   Thu, 23 Jun 2022 10:17:19 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64/crypto: Select AEAD2 for GHASH_ARM64_CE
+Message-ID: <YrSgH//ysOd/Qumo@sol.localdomain>
+References: <20220622142557.144536-1-quic_qiancai@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622142557.144536-1-quic_qiancai@quicinc.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,59 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <sean.anderson@seco.com>
+On Wed, Jun 22, 2022 at 10:25:57AM -0400, Qian Cai wrote:
+> Otherwise, we could fail to compile.
+> 
+> ld: arch/arm64/crypto/ghash-ce-glue.o: in function 'ghash_ce_mod_exit':
+> ghash-ce-glue.c:(.exit.text+0x24): undefined reference to 'crypto_unregister_aead'
+> ld: arch/arm64/crypto/ghash-ce-glue.o: in function 'ghash_ce_mod_init':
+> ghash-ce-glue.c:(.init.text+0x34): undefined reference to 'crypto_register_aead'
+> 
+> Fixes: 37b6aab68fae ("crypto: arm64/ghash - drop PMULL based shash")
 
-commit 8cb0cd68bef75af5ac8ef93f3314d4f8dc8767a3 upstream.
+I don't see how the Fixes commit is related.  Hasn't this been a problem since
+commit 537c1445ab0b, which added an AEAD algorithm to this module?
 
-To program fuses, it is necessary to set the fuse programming time. This
-is determined based on the value of the platform clock. Add a clock
-property.
+> diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
+> index 4391a463abd7..6b2ecc193bc0 100644
+> --- a/arch/arm64/crypto/Kconfig
+> +++ b/arch/arm64/crypto/Kconfig
+> @@ -71,6 +71,7 @@ config CRYPTO_GHASH_ARM64_CE
+>  	select CRYPTO_HASH
+>  	select CRYPTO_GF128MUL
+>  	select CRYPTO_LIB_AES
+> +	select CRYPTO_AEAD2
 
-Because this property is necessary for programming, it is made
-mandatory. Since these bindings have not yet been present in a stable
-release (though they are on track for 5.18), it is not an ABI break to
-change them in this manner.
+I don't think CRYPTO_AEAD2 is meant to be selected directly.  It should be
+CRYPTO_AEAD instead.
 
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220429162701.2222-13-srinivas.kandagatla@linaro.org
-Cc: Michael Walle <michael@walle.cc>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml |   14 ++++++++++
- 1 file changed, 14 insertions(+)
-
---- a/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
-@@ -24,15 +24,29 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  clocks:
-+    maxItems: 1
-+    description:
-+      The SFP clock. Typically, this is the platform clock divided by 4.
-+
-+  clock-names:
-+    const: sfp
-+
- required:
-   - compatible
-   - reg
-+  - clock-names
-+  - clocks
- 
- unevaluatedProperties: false
- 
- examples:
-   - |
-+    #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
-     efuse@1e80000 {
-         compatible = "fsl,ls1028a-sfp";
-         reg = <0x1e80000 0x8000>;
-+        clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
-+                            QORIQ_CLK_PLL_DIV(4)>;
-+        clock-names = "sfp";
-     };
-
-
+- Eric

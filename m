@@ -2,63 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F21557734
+	by mail.lfdr.de (Postfix) with ESMTP id 14ED6557733
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiFWJzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S231316AbiFWJzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiFWJzt (ORCPT
+        with ESMTP id S231289AbiFWJzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:55:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE21C2E9C3;
-        Thu, 23 Jun 2022 02:55:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63F23B82236;
-        Thu, 23 Jun 2022 09:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63210C3411B;
-        Thu, 23 Jun 2022 09:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655978144;
-        bh=3tgSj2b7F5bqM8rHpJ7bzxzD2TUoAE/bbCKa8uujIzc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZgvzyZeua6gp2AlwNoBJJfJCKKDtkcP0jOcabqo4Ve6xzhfqozU3hvrBwzHaUJyql
-         Kn69u/AcTlTOq4NG6WmG9HOBfZc+myqE7DJETCuRE9/61tGz20fCKrR3Vc/Re7eWk2
-         YKVg1yFopUitiP8xoZYB171/fITa9+k7OIhhtfos=
-Date:   Thu, 23 Jun 2022 11:55:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kevin Hilman <khilman@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Default async probing for DT based systems
-Message-ID: <YrQ4naL9SJGbh+yJ@kroah.com>
-References: <CGME20220616032522eucas1p19a6c8718f01fa61c2fee795fb8945a92@eucas1p1.samsung.com>
- <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
- <d5796286-ec24-511a-5910-5673f8ea8b10@samsung.com>
- <CAGETcx8e0QDbaqHGm1O8y6zwrBCwRitsRFXeUPt0w6uFx9k6+g@mail.gmail.com>
- <CAGETcx-MHwex8tHLB1d71MAP01-3OPDZSNCUBb3iT+BtrugJmQ@mail.gmail.com>
+        Thu, 23 Jun 2022 05:55:50 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68A12F3A9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655978149; x=1687514149;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=XXpmfGITyPHZs6FZ5fvy9HEUGUmVlfFW8Va4Xmp7y8k=;
+  b=ha2URw/ZcGC06Lw/9IgUxCgFJdpoaPRVD84ge33xIPHqEXH73/DyxB+k
+   NZZ8RtgdpyRJHP0+I7aCrL82yiglzLZMji3jEElDkJ7D00nWfulLiVmU2
+   2M/njGoJam6o9ozuAROhMzp3wv1CCGH9lMF3d8WmUO+IksR0/xugKWBeS
+   3FEtV+RSttTKRwV1Y5dda2Wq3YbDkYlkxSibg7/hlp7tVRY1i1F9NtyPa
+   QcO5ZFkn6hvub4yWVZp7MRGQyO4abpH6cXGr+Ln01iaJ042hRhODldAim
+   DcWDROZT2qeZDcJyOQxJBH5HU7A4q8rLfXaTbYjqC9mSWd/EQxHHoootv
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,215,1650902400"; 
+   d="scan'208";a="308235323"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 23 Jun 2022 17:55:45 +0800
+IronPort-SDR: cXErdpdBjE/u4mAhYhHQkwgPeJJHfkr+8HczKsoNr7u3Nzjyh3abA9lXv+bZIjHGcPZ9i930RC
+ Ptxhp97V7aKhYdIQI/5Wfsm+NXM1qkrHEp28uVBa5ZT3u0XXSeYaLf5lQbefVjmfYrcAgpVgpt
+ HI0dcGwSfSc5lLz9v4UMYiJiayOeb6qr3POvsFaj8cLCqwD3o3OqxaOBwtuMy1JvCGg4TZCaC1
+ jZ9qtsvzEGb5LILeUWbKA2gbMIcff2ycReqXOyLOFeqeDXF/WKKudiotfC4nOcUxctNTWYxkyX
+ kdVH26PQKz7F9SCuR7epQV+d
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jun 2022 02:13:32 -0700
+IronPort-SDR: qfVH/bvYrlex066ZOzDbvXZ0SePVyTqacb+ZAKVTojgSIK7uGgCLac4IPAN4+8jdNJHpK5sE9F
+ mZIiMLLBOdSZRjqa7j/ACscSFYSKD1hXZTda2pLNeAW38Q59YMvn3ZXHpD1RtohHmIVE2JNgdN
+ yUmME+GeDqpXBjz3LuRI4VSX82pNvYsLNuq71Bh3u2098WvgAIC781bOvhP74XbZVxv/ekm1SF
+ qj+yvqinc/7kAEqRKVdXCeu1w079SxME2OslfgXmiSioOXlLlD4JirZ6xV7Bae5gGgi3CMNx1G
+ wAU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jun 2022 02:55:46 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LTFxY3xMhz1Rwnl
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:55:45 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655978144; x=1658570145; bh=XXpmfGITyPHZs6FZ5fvy9HEUGUmVlfFW8Va
+        4Xmp7y8k=; b=e+LTVpJ8vC7V7YcBAQSmvUX383ihhrA0xxjfohzckdc8UIozi8m
+        EJ6U4DKqhPIFJyLFnDnhQNNmjW3fGoO7vW4NXnVKsg4wE6xn9Egof1eqXSv/DASU
+        J4HcCBI6ESujHK7pRwosb/MiK58Y2Ol4RLvGVNNBjcxm/IuMkhgkVNpPJlenoiB1
+        f9qd59xDISIYuZjq1MVmah+3EL6yV+9DwZty+5uBxVxt5+4dXY8BAV0R1lWNkiJO
+        T+1xHSnSogbZbHB7NkUNRUEdPAC29dpx5noKZB++fdeOqOR8DwyT5J2+LEk7Kjsu
+        kK/8v2XN6oGAqhTHqSg6VkhkbNcbb8Xzkfg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id TyuCcm-r_YHm for <linux-kernel@vger.kernel.org>;
+        Thu, 23 Jun 2022 02:55:44 -0700 (PDT)
+Received: from [10.225.163.90] (unknown [10.225.163.90])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LTFxW6vFvz1RtVk;
+        Thu, 23 Jun 2022 02:55:43 -0700 (PDT)
+Message-ID: <5dad0eb6-10e3-8319-ca86-f5059a7bd185@opensource.wdc.com>
+Date:   Thu, 23 Jun 2022 18:55:42 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx-MHwex8tHLB1d71MAP01-3OPDZSNCUBb3iT+BtrugJmQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] libata: add horkage for M88V29
+Content-Language: en-US
+To:     =?UTF-8?B?QsO2c3rDtnJtw6lueWkgWm9sdMOhbg==?= <zboszor@gmail.com>,
+        zboszor@pr.hu, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org
+References: <20220204125750.1771303-1-zboszor@pr.hu>
+ <f726e9e1-bdad-ac8a-368b-aae423a00676@opensource.wdc.com>
+ <78c29f43-3b67-8e70-0711-14e997f3efb1@gmail.com>
+ <09091cc4-f652-0978-bb6a-b63f24fdcf49@opensource.wdc.com>
+ <bbfeb862-9e1f-79c2-89dd-7db9515471e4@gmail.com>
+ <7f086930-ff6c-da99-212b-46c4479247cb@opensource.wdc.com>
+ <c678589c-cb30-35a3-cc7f-ad4065863640@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <c678589c-cb30-35a3-cc7f-ad4065863640@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,62 +104,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 07:36:24PM -0700, Saravana Kannan wrote:
-> On Fri, Jun 17, 2022 at 11:04 AM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Fri, Jun 17, 2022 at 2:04 AM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
-> > >
-> > > Hi Saravana,
-> > >
-> > > On 16.06.2022 05:24, Saravana Kannan wrote:
-> > > > Hi,
-> > > >
-> > > > TL;DR: I want to improve boot times by enabling async probing by
-> > > > default for DT based systems. Can you give it a shot please?
-> > >
-> > > Yes, I've gave it a try on my test systems. It looks that there are a
-> > > few issues. The first one, the most obvious to notice, is related to
-> > > __request_module() calls from various drivers and frameworks. Here are
-> > > some examples:
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 3 PID: 73 at kernel/kmod.c:136 __request_module+0x230/0x600
-> > > Modules linked in:
-> > > CPU: 3 PID: 73 Comm: kworker/u12:5 Not tainted 5.19.0-rc2-next-20220615+
-> > > #5203
-> > > Hardware name: ARM Juno development board (r1) (DT)
-> > > Workqueue: events_unbound async_run_entry_fn
-> > > pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > UDC core: g_ether: couldn't find an available UDC
-> > > pc : __request_module+0x230/0x600
-> > > lr : __request_module+0x228/0x600
-> >
-> > Ah, I think I know what these might be. Going by memory,
-> > __request_module() from asyc thread context has some issues for module
-> > loading. So I think a check was added like this. And I think the check
-> > is triggering when it shouldn't (this isn't module context here).
-> 
-> My memory was right and this is indeed the spurious warning that was
-> meant to cover a potential deadlock in a module load path. I was
-> trying to disable this warning till we hit the point in the boot flow
-> where request_module() can actually succeed. But I got stuck trying to
-> figure it out.
-> 
-> It looks like the usermode helper that's used for module loading
-> triggered by request_module() is enabled in populate_rootfs() that
-> runs well before most of the initcalls are done. I was under the
-> impression that init with pid 0 would be the first userspace thread
-> that can start. But I don't see anything obvious that prevents the
-> usermode helper from running and loading a module before init process
-> has been exec'ed after we set system_state to SYSTEM_RUNNING.
-> 
-> Can someone clarify when is the earliest request_module() can succeed?
+On 6/23/22 18:32, B=C3=B6sz=C3=B6rm=C3=A9nyi Zolt=C3=A1n wrote:
+> 2022. 06. 23. 10:46 keltez=C3=A9ssel, Damien Le Moal =C3=ADrta:
+>> On 6/23/22 17:38, B=C3=B6sz=C3=B6rm=C3=A9nyi Zolt=C3=A1n wrote:
+>>> 2022. 06. 23. 10:22 keltez=C3=A9ssel, Damien Le Moal =C3=ADrta:
+>>>> On 6/23/22 16:47, B=C3=B6sz=C3=B6rm=C3=A9nyi Zolt=C3=A1n wrote:
+>>>>> 2022. 02. 08. 9:07 keltez=C3=A9ssel, Damien Le Moal =C3=ADrta:
+>>>>>> On 2/4/22 21:57, zboszor@pr.hu wrote:
+>>>>>>> From: Zolt=C3=A1n B=C3=B6sz=C3=B6rm=C3=A9nyi <zboszor@gmail.com>
+>>>>>>>
+>>>>>>> This device is a CF card, or possibly an SSD in CF form factor.
+>>>>>>> It supports NCQ and high speed DMA.
+>>>>>>>
+>>>>>>> While it also advertises TRIM support, I/O errors are reported
+>>>>>>> when the discard mount option fstrim is used. TRIM also fails
+>>>>>>> when disabling NCQ and not just as an NCQ command.
+>>>>>>>
+>>>>>>> TRIM must be disabled for this device.
+>>>>>>>
+>>>>>>> Signed-off-by: Zolt=C3=A1n B=C3=B6sz=C3=B6rm=C3=A9nyi <zboszor@gm=
+ail.com>
+>>>>>>> ---
+>>>>>>>     drivers/ata/libata-core.c | 1 +
+>>>>>>>     1 file changed, 1 insertion(+)
+>>>>>>>
+>>>>>>> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.=
+c
+>>>>>>> index 67f88027680a..4a7f58fcc411 100644
+>>>>>>> --- a/drivers/ata/libata-core.c
+>>>>>>> +++ b/drivers/ata/libata-core.c
+>>>>>>> @@ -4028,6 +4028,7 @@ static const struct ata_blacklist_entry ata=
+_device_blacklist [] =3D {
+>>>>>>>    =20
+>>>>>>>     	/* devices that don't properly handle TRIM commands */
+>>>>>>>     	{ "SuperSSpeed S238*",		NULL,	ATA_HORKAGE_NOTRIM, },
+>>>>>>> +	{ "M88V29*",			NULL,	ATA_HORKAGE_NOTRIM, },
+>>>>>>>    =20
+>>>>>>>     	/*
+>>>>>>>     	 * As defined, the DRAT (Deterministic Read After Trim) and =
+RZAT
+>>>>>> Applied to for-5.17-fixes. Thanks !
+>>>>> Thank you. However, I have second thoughts about this patch.
+>>>>> The device advertises this:
+>>>>>
+>>>>> # hdparm -iI /dev/sda
+>>>>> ...
+>>>>>    =C2=A0Enabled Supported
+>>>>>    =C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0=C2=A0 Data Set Management TRIM =
+supported (limit 1 block)
+>>>>> ...
+>>>>>
+>>>>> but the I/O failures always reported higher number of blocks,
+>>>>> IIRC the attempted number of block was 8 or so.
+>>>>>
+>>>>> Can the kernel limit or split TRIM commands according to the
+>>>>> advertised limit? If not (or not yet) then the quirk is good for no=
+w.
+>>>> Yes, the kernel does that. See the sysfs queue attributes
+>>>> discard_max_bytes and discard_max_hw_bytes. What are the values for =
+your
+>>>> device ? I think that the "limit 1 block" indicated by hdparm is sim=
+ply to
+>>>> say that the DSM command (to trim the device) accept only at most a =
+1
+>>>> block (512 B) list of sectors to trim. That is not the actual trim l=
+imit
+>>>> for each sector range in that list.
+>>> With the quirk in effect (TRIM disabled) I have these:
+>>>
+>>> [root@chef queue]# pwd
+>>> /sys/block/sda/queue
+>>> [root@chef queue]# cat discard_granularity
+>>> 0
+>>> [root@chef queue]# cat discard_max_bytes
+>>> 0
+>>> [root@chef queue]# cat discard_max_hw_bytes
+>>> 0
+>> Yes, expected. What are the values without the quirk applied ?
+>=20
+> I built 5.18.6 with removing the quirk.
+>=20
+> [root@chef queue]# pwd
+> /sys/block/sda/queue/
+> [root@chef queue]# cat discard_granularity
+> 512
+> [root@chef queue]# cat discard_max_bytes
+> 2147450880
+> [root@chef queue]# cat discard_max_hw_bytes
+> 2147450880
+> [root@chef queue]# cat max_discard_segments
+> 1
 
-It can succeed very very early, when we have the initial ramfs mounted
-before init runs as you sometimes need the modules there to be able to
-load the device that init is on.
+All normal. This is 65535 sectors at most per trim range times 64 ranges
+at most (64 range in at most 1 512B range list).
+65535*512*64=3D2147450880
 
-thanks,
+So if that is not working, then it means that DSM TRIM are not working
+correctly on that device. Have you tried disabling NCQ trim ?
+Use libata.force noncqtrim option.
 
-greg k-h
+>=20
+>> With 5.19, you can use libata.force to disable/enable it. See
+>> Documentation/admin-guide/kernel-parameters.txt for details.
+>> You could try disabling DSM TRIM (queued trim) and see if the non-ncq =
+trim
+>> work.
+>>
+>=20
+
+
+--=20
+Damien Le Moal
+Western Digital Research

@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A7F557CA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3486557CB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiFWNMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S231463AbiFWNP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiFWNMR (ORCPT
+        with ESMTP id S230052AbiFWNPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:12:17 -0400
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE98E41F88;
-        Thu, 23 Jun 2022 06:12:13 -0700 (PDT)
-Received: by mail-pj1-f41.google.com with SMTP id d14so15295164pjs.3;
-        Thu, 23 Jun 2022 06:12:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CSfPRsek6TY0ETOoUksAgDlvP5eJ2iNIFz8xmTeCdD8=;
-        b=hcv58u59jUGUW3r8SvvukxUSOrgEHqwfWDgds7x0j7IWgSsQx8TOABH/65fNQZgwKO
-         PssZ1RqSisuDC5G43o0NpWu6OtYGdCAODTCeQVbZfpzcpBYDPeuIaBfQQKc4CBQgntfH
-         T7a5YBCqjowmejiXsj55n4F7rQdvEz3XWjWzf0eLbTkrWsmZsu1FKlgPs1WfEnVGItTm
-         PxhD+7FBO8W9WeF/0kMAnbsom2TKzefXTDOR/0qq2x/5dVqC9IYBOslz9orNG5vtFZu2
-         0r4Ha+SkWqxdl5IYR1EulTKzIiwAtoqB85OILbi7U45VK4v5vR0TLEomAtRtIjQLuNRN
-         yo5A==
-X-Gm-Message-State: AJIora9av5U9wtPrkBWGSrare7tJeLbq9PpqutLjxJGxaGtDTUJ3+Yq0
-        XSN3vpXBbZxf8t8Bwa2zK6/myh1ghm0=
-X-Google-Smtp-Source: AGRyM1tYEwNFwAtN9BR7ToQECHxeTpniI+ubUdkmlhs5UOA+4VbnyarnXYp4aWf6C5UR5DIsVBXrjw==
-X-Received: by 2002:a17:903:234c:b0:16a:4d9d:ed09 with SMTP id c12-20020a170903234c00b0016a4d9ded09mr6999802plh.120.1655989933067;
-        Thu, 23 Jun 2022 06:12:13 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id w15-20020a170902a70f00b0016a106cb221sm3694381plq.243.2022.06.23.06.12.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 06:12:12 -0700 (PDT)
-Message-ID: <2a124ef2-d46a-0888-0ba9-4890f3581c81@acm.org>
-Date:   Thu, 23 Jun 2022 06:12:10 -0700
+        Thu, 23 Jun 2022 09:15:07 -0400
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7813B577;
+        Thu, 23 Jun 2022 06:15:05 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.savoirfairelinux.com (Postfix) with ESMTP id 647DA9C022D;
+        Thu, 23 Jun 2022 09:15:04 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id nlpuuJNTcEw4; Thu, 23 Jun 2022 09:15:04 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.savoirfairelinux.com (Postfix) with ESMTP id EB04C9C024D;
+        Thu, 23 Jun 2022 09:15:03 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com EB04C9C024D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+        t=1655990104; bh=gpgbbHnx61/VSrtvu1HJxF7I/adoakDNkdIUpMMgnVY=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=tKW11FkvEMyfh1ANpcjzkN5caT1S9aDWbZARwLYYxJaXM1uqlVdAJx0tHRViYMGyV
+         0XVly0ODQC3A8IhVb+cehLkfD8QQoeiVHU4vddovBav231eKzsmqxushry4eYv4C/n
+         HMxSzl3yAydGCAMc317RVEyYBINXdXNzKZF5Sjn26KggvuTAKImTZNokXgz2+PUnSn
+         /7sqG4g9n3tlmN74PM4Wl4nAj79JApv1Fcfnq132+IOIigYxtgZtXUJRefPyhK1+nw
+         4/j3wWrojL8KD55s8XqERx2pFVjSFQoqISIA63mW3F1gbsQ6rtDsLTCfNm66M4cNQk
+         gGxd/NapyTzhA==
+X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id X5gmuRiM5Lq1; Thu, 23 Jun 2022 09:15:03 -0400 (EDT)
+Received: from sfl-deribaucourt.rennes.sfl (lfbn-ren-1-676-174.w81-53.abo.wanadoo.fr [81.53.245.174])
+        by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 003689C022D;
+        Thu, 23 Jun 2022 09:15:02 -0400 (EDT)
+From:   Enguerrand de Ribaucourt 
+        <enguerrand.de-ribaucourt@savoirfairelinux.com>
+To:     andrew@lunn.ch
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        hkallweit1@gmail.com
+Subject: [PATCH v2 0/2] net: dp83822: fix interrupt floods
+Date:   Thu, 23 Jun 2022 15:14:51 +0200
+Message-Id: <20220623131453.1853406-1-enguerrand.de-ribaucourt@savoirfairelinux.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YqzAKguRaxr74oXh@lunn.ch>
+References: <YqzAKguRaxr74oXh@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 5/6] blk-mq: Drop 'reserved' arg of busy_tag_iter_fn
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, hch@lst.de, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hare@suse.de, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com
-Cc:     linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mpi3mr-linuxdrv.pdl@broadcom.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nbd@other.debian.org
-References: <1655810143-67784-1-git-send-email-john.garry@huawei.com>
- <1655810143-67784-6-git-send-email-john.garry@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1655810143-67784-6-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/22 04:15, John Garry wrote:
-> We no longer use the 'reserved' arg in busy_tag_iter_fn for any iter
-> function so it may be dropped.
+The false carrier and RX error counters, once half full, produce interrup=
+t
+floods. Since we do not use these counters, these interrupts should be di=
+sabled.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: YqzAKguRaxr74oXh@lunn.ch
+Fixes: 87461f7a58ab694e638ac52afa543b427751a9d0
+
+

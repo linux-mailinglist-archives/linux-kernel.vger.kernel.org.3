@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85871558183
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E496558575
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiFWRBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S236204AbiFWR65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbiFWQzl (ORCPT
+        with ESMTP id S235310AbiFWRyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:55:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4D949C96;
-        Thu, 23 Jun 2022 09:53:01 -0700 (PDT)
+        Thu, 23 Jun 2022 13:54:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE6BAD19C;
+        Thu, 23 Jun 2022 10:14:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58E1A61FBF;
-        Thu, 23 Jun 2022 16:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3076DC3411B;
-        Thu, 23 Jun 2022 16:53:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E457B8249B;
+        Thu, 23 Jun 2022 17:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C628DC3411B;
+        Thu, 23 Jun 2022 17:14:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003180;
-        bh=m1t48f8J1t5GlS2HZ+kgwhOatWjtlZrYDKKdcmlt4Co=;
+        s=korg; t=1656004495;
+        bh=Sc7HKxEJeYEuVloFrvPH89U8hxLdJn0guLvJxiMmWjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rjFgrAhPuJkM7/Daai4/WAx0DEAt97gwG3K05wMcefy+t6TuiLXlRoH9mKVJ7RZQl
-         1kEy37gTVpuokiGb6o6EbFWB3D17e9p+jxdH2JT7YoxXl+jkz8ABWOaWAo6z7psLW+
-         8XJtombx3jx6ovKCHTA7gABAsGGELUGKTWqh5szU=
+        b=GPWn/zQfK9wnq6+a6Bry39EinShZrrvRrSKRZPRABwHRpSeotcaTbUyCXcpY/F/0T
+         20PHPHUDhE/YoD6kzymuDcm2Zx0pgb7nCapE9OZ8j6j9TJEsqd/MLhqmpiSMTdzbMx
+         et9NI3M74/If5JAhBKZh+jwLNDRN34F1Rj7LAUbE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Jann Horn <jannh@google.com>, Theodore Tso <tytso@mit.edu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 129/264] random: add proper SPDX header
-Date:   Thu, 23 Jun 2022 18:42:02 +0200
-Message-Id: <20220623164347.716505368@linuxfoundation.org>
+Subject: [PATCH 4.19 056/234] random: initialize ChaCha20 constants with correct endianness
+Date:   Thu, 23 Jun 2022 18:42:03 +0200
+Message-Id: <20220623164344.650084424@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit a07fdae346c35c6ba286af1c88e0effcfa330bf9 upstream.
+commit a181e0fdb2164268274453b5b291589edbb9b22d upstream.
 
-Convert the current license into the SPDX notation of "(GPL-2.0 OR
-BSD-3-Clause)". This infers GPL-2.0 from the text "ALTERNATIVELY, this
-product may be distributed under the terms of the GNU General Public
-License, in which case the provisions of the GPL are required INSTEAD OF
-the above restrictions" and it infers BSD-3-Clause from the verbatim
-BSD 3 clause license in the file.
+On big endian CPUs, the ChaCha20-based CRNG is using the wrong
+endianness for the ChaCha20 constants.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
+This doesn't matter cryptographically, but technically it means it's not
+ChaCha20 anymore.  Fix it to always use the standard constants.
+
+Cc: linux-crypto@vger.kernel.org
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Jann Horn <jannh@google.com>
 Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   37 +------------------------------------
- 1 file changed, 1 insertion(+), 36 deletions(-)
+ drivers/char/random.c     |    4 ++--
+ include/crypto/chacha20.h |    8 ++++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1,44 +1,9 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- /*
-- * random.c -- A strong random number generator
-- *
-  * Copyright (C) 2017-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-- *
-  * Copyright Matt Mackall <mpm@selenic.com>, 2003, 2004, 2005
-- *
-  * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All
-  * rights reserved.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, and the entire permission notice in its entirety,
-- *    including the disclaimer of warranties.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
-- * 3. The name of the author may not be used to endorse or promote
-- *    products derived from this software without specific prior
-- *    written permission.
-- *
-- * ALTERNATIVELY, this product may be distributed under the terms of
-- * the GNU General Public License, in which case the provisions of the GPL are
-- * required INSTEAD OF the above restrictions.  (This clause is
-- * necessary due to a potential bad interaction between the GPL and
-- * the restrictions contained in a BSD-style copyright.)
-- *
-- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
-- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
-- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
-- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
-- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
-- * DAMAGE.
-  */
+@@ -817,7 +817,7 @@ static bool __init crng_init_try_arch_ea
  
- /*
+ static void crng_initialize_secondary(struct crng_state *crng)
+ {
+-	memcpy(&crng->state[0], "expand 32-byte k", 16);
++	chacha_init_consts(crng->state);
+ 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
+ 	crng_init_try_arch(crng);
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+@@ -825,7 +825,7 @@ static void crng_initialize_secondary(st
+ 
+ static void __init crng_initialize_primary(struct crng_state *crng)
+ {
+-	memcpy(&crng->state[0], "expand 32-byte k", 16);
++	chacha_init_consts(crng->state);
+ 	_extract_entropy(&input_pool, &crng->state[4], sizeof(__u32) * 12, 0);
+ 	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
+ 		invalidate_batched_entropy();
+--- a/include/crypto/chacha20.h
++++ b/include/crypto/chacha20.h
+@@ -24,4 +24,12 @@ int crypto_chacha20_setkey(struct crypto
+ 			   unsigned int keysize);
+ int crypto_chacha20_crypt(struct skcipher_request *req);
+ 
++static inline void chacha_init_consts(u32 *state)
++{
++	state[0]  = 0x61707865; /* "expa" */
++	state[1]  = 0x3320646e; /* "nd 3" */
++	state[2]  = 0x79622d32; /* "2-by" */
++	state[3]  = 0x6b206574; /* "te k" */
++}
++
+ #endif
 
 

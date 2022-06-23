@@ -2,148 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96366557FB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD92557FC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiFWQZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
+        id S232202AbiFWQ2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiFWQY7 (ORCPT
+        with ESMTP id S230372AbiFWQ1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:24:59 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85333A732
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:24:57 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id f16so80023pjj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dilger-ca.20210112.gappssmtp.com; s=20210112;
-        h=from:message-id:mime-version:subject:date:in-reply-to:cc:to
-         :references;
-        bh=bcyfxdYDvwFKE4FcRkASoG03KisaDjvMQmq4ODLZY6Y=;
-        b=Q6EkS8J9o1kRFWTS1Sz7yUZQrVb9iZj6pO/U9kzzfvvlgRxFnL50FsOu6QYctzx4Zj
-         4AFwrrYShyaBMbMo/S//DCItdhB6Xhidd85LbLLCxhVPWdWfApQ8g/jLGL/zYxjMnhmB
-         xugmETGHUFP/NTpUaNxC3LJ8uNd1GAVXJfdx/0rp85cdY7Ghk6qITrxSFopDdfiLvenO
-         RRWQfBglfzjZeMXnkcJFN4vOV1vf6TcRPzixwqDrnxZlAnKBAJNAfji+cLcxuPTwVecy
-         yQOMeWEt/s2lxyaOoO1+OBzNWKgwuofTfgyeF7a8/TNbKiIEVB21YyJebVkm9tDvvBw2
-         jkgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:mime-version:subject:date
-         :in-reply-to:cc:to:references;
-        bh=bcyfxdYDvwFKE4FcRkASoG03KisaDjvMQmq4ODLZY6Y=;
-        b=R9zytiTH6OTIUrvGap61jU22EaSFW6y0ltczFaWwYFdpGaB38BENc5jxDOuhFEpUiZ
-         0jb0Plr/2AKFSB02nB1seGRJwzMtvx7Nw75S6z1NJpcl80AchkFmTDbBlw0x0gNIEXhT
-         pUjRTSJytPa9LWBQxgUuSyCDz+Jx6BAbEJLR9vsYOdZETV+xBE/Tlqhs4kZn67fTYKvw
-         aV0mPb/VUkYlL2kQKo9CFJ1Fa+bI3UhQCEoYrvAa1ZCbj9OXA/CR48/02w2z9+EDkMNY
-         EYjmnRYZMWJr5/zli10yhuNOK1+mbarNou5by+u44kW5V6HD/YuM6oP0+NE3/6u29BCX
-         CdZQ==
-X-Gm-Message-State: AJIora+KvyUGJgv3l2kOyAZAV1zSq9PBKEZDuP7E7D26tr+WLyy1CPNM
-        7yzymZ3EhKn3ennyqEquj3v58w==
-X-Google-Smtp-Source: AGRyM1ukROTsV74eiDORs7U9DuEV5/TMYhdqOiMfNTcV5f2UeXO0T5u5WYzf57Iazk83XTH31glX2g==
-X-Received: by 2002:a17:90b:3b81:b0:1ec:e852:22db with SMTP id pc1-20020a17090b3b8100b001ece85222dbmr4865881pjb.77.1656001497135;
-        Thu, 23 Jun 2022 09:24:57 -0700 (PDT)
-Received: from cabot.adilger.int (S01061cabc081bf83.cg.shawcable.net. [70.77.221.9])
-        by smtp.gmail.com with ESMTPSA id jh21-20020a170903329500b0016a109c7606sm11075493plb.259.2022.06.23.09.24.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Jun 2022 09:24:56 -0700 (PDT)
-From:   Andreas Dilger <adilger@dilger.ca>
-Message-Id: <622BA3BB-03EA-4271-8A2E-2ADAFB574155@dilger.ca>
-Content-Type: multipart/signed;
- boundary="Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
-Subject: Re: [man-pages RFC PATCH] statx.2, open.2: document STATX_DIOALIGN
-Date:   Thu, 23 Jun 2022 10:27:19 -0600
-In-Reply-To: <YrSOm2murB4Bc1RQ@magnolia>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-man@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-References: <20220616202141.125079-1-ebiggers@kernel.org>
- <YrSOm2murB4Bc1RQ@magnolia>
-X-Mailer: Apple Mail (2.3273)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 23 Jun 2022 12:27:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C1345505;
+        Thu, 23 Jun 2022 09:27:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D571D61F29;
+        Thu, 23 Jun 2022 16:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56B7C3411B;
+        Thu, 23 Jun 2022 16:27:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656001669;
+        bh=mQ/fn0p8cPl4WB2QzHrDHEEQ5APApuVeWejOBIseoBo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CXItkpNMNvxD7QoYxGuICkZjHYpIyeXGmsSznqc6onqqP9Yaogh5wQYLy0mxK2SVF
+         0kF1LS4itKDyL9o3aZhGuI0wM3MCK8biKylavp+HpFWn2vsGhpiL+zWOa10zykwDmK
+         nhW0o8lNSvfxT/J55BKAXCKYOa0eLKlIhzlBD1+YQu6RlN5QrqxMSUjKm3Cf8yMmzv
+         QC1/YK6hYvvHSQWiUzqofQzI1LMRnUaIcq837L4Y9YYCRlLbXKTJ9hDoyLrU/xI65N
+         v7je9R4R6Y9pUMRJjMsJK5hjkHIZXBOwqDDUBMSWpN3RhhqDiRUc1R/75LFE8U4bLZ
+         ltz0W0KD8CtaA==
+Date:   Thu, 23 Jun 2022 11:27:47 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
+ interrupt handler
+Message-ID: <20220623162747.GA1455992@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220524122817.7199-1-pali@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
+> Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
+> chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
+> instead of chained IRQ handler in pci-mvebu.c driver.
+>
+> This change fixes affinity support and allows to pin interrupts from
+> different PCIe controllers to different CPU cores.
 
---Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain;
-	charset=us-ascii
+Several other drivers use irq_set_chained_handler_and_data().  Do any
+of them need similar changes?  The commit log suggests that using
+chained IRQ handlers breaks affinity support.  But perhaps that's not
+the case and the real culprit is some other difference between mvebu
+and the other drivers.
 
-On Jun 23, 2022, at 10:02 AM, Darrick J. Wong <djwong@kernel.org> wrote:
+> Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+> Hello Bjorn! This is basically same issue as for pci-aardvark.c:
+> https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
 > 
-> On Thu, Jun 16, 2022 at 01:21:41PM -0700, Eric Biggers wrote:
->> From: Eric Biggers <ebiggers@google.com>
->> 
->> @@ -244,8 +249,11 @@ STATX_SIZE	Want stx_size
->> STATX_BLOCKS	Want stx_blocks
->> STATX_BASIC_STATS	[All of the above]
->> STATX_BTIME	Want stx_btime
->> +STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
->> +         	This is deprecated and should not be used.
+> I tested this patch with pci=nomsi in cmdline (to force kernel to use
+> legacy intx instead of MSI) on A385 and checked that I can set affinity
+> via /proc/irq/XX/smp_affinity file for every mvebu pcie controller to
+> different CPU and legacy interrupts from different cards/controllers
+> were handled by different CPUs.
 > 
-> STATX_ALL is deprecated??  I was under the impression that _ALL meant
-> all the known bits for that kernel release, but...
-
-For userspace STATX_ALL doesn't make sense, and it isn't used by the kernel.
-
-Firstly, that would be a compile-time value for an application, so it
-may be incorrect for the kernel the code is actually run on (either too
-many or too few bits could be set).
-
-Secondly, it isn't really useful for an app to request "all attributes"
-if it doesn't know what they all mean, as that potentially adds useless
-overhead.  Better for it to explicitly request the attributes that it
-needs.  If that is fewer than the kernel could return it is irrelevant,
-since the app would ignore them anyway.
-
-The kernel will already ignore and mask attributes that *it* doesn't
-understand, so requesting more is fine and STATX_ALL doesn't help this.
-
-Cheers, Andreas
-
-
-
-
-
-
---Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename=signature.asc
-Content-Type: application/pgp-signature;
-	name=signature.asc
-Content-Description: Message signed with OpenPGP
-
------BEGIN PGP SIGNATURE-----
-Comment: GPGTools - http://gpgtools.org
-
-iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAmK0lGcACgkQcqXauRfM
-H+CkuA//avp4Tuh55VpE8yHOQ8z64y5vrwNesx7bZ8atQCuwyhbJlvdTGn27SVv1
-4j1+/hWy3q+Jsot1ja0njROgu9KlOetTJ7qK4tlq4buIjBuB1izLfyGtSUtRezui
-Z93g7NQEpOSFyNwknXMz2vTB4gOxgMd0V9jCkElXXC+EClReBJq/Jts+/qNH8cnU
-j2kdedwlaAg3zMbSWbygM0DxumX1YB0dCYuK/SyyAyjWr4I5mHFqHeyZf3ej2fVB
-g/wUfgv7Ku50XluSp4/deoA8R/TJbCkQikvKS4S9pI/LqMeOEZ6moyIJ8KRyWKSs
-wbSn8e2E49hUrxKO15kQx2vIs1BS1WLN1PWmv4TVnkTmfkuf7iUVVMxlU3Jfifcx
-qZXhYvTv7UvL/oV12MJHzQiYR/YUytHzdeliMC+sDa/tCyWE0UZMAZaKFgO9vV9h
-gdHfsvdNabGbFBE8ul5auWUT6QaqmytVQOk6239FD/gHD3Vw4ZVptZKDziYfwULV
-JgVDmWSi8RzmV3F+g3Lr9oGWqFbErsl+QWm80wXaC7yxHm3C2wKKqwPx6bfFbucT
-PuSiilxCV7qDXmDRISKNt/JMaLsxh8w+15v92wWhacEtgMzIyVsjudfePb2wiUtw
-bLbXOh9Pj4DCci4an5lxVhj8jEYThvOPq1FlB6e7qhrXwoGwugE=
-=83Nf
------END PGP SIGNATURE-----
-
---Apple-Mail=_1B6FC5B2-556F-4A2D-9F1C-A60D36468C15--
+> I think that this is important on Armada XP platforms which have many
+> independent PCIe controllers (IIRC up to 10) and many cores (up to 4).
+> ---
+>  drivers/pci/controller/pci-mvebu.c | 30 +++++++++++++++++-------------
+>  1 file changed, 17 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> index 8f76d4bda356..de67ea39fea5 100644
+> --- a/drivers/pci/controller/pci-mvebu.c
+> +++ b/drivers/pci/controller/pci-mvebu.c
+> @@ -1017,16 +1017,13 @@ static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
+>  	return 0;
+>  }
+>  
+> -static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+> +static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
+>  {
+> -	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
+> -	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	struct mvebu_pcie_port *port = arg;
+>  	struct device *dev = &port->pcie->pdev->dev;
+>  	u32 cause, unmask, status;
+>  	int i;
+>  
+> -	chained_irq_enter(chip, desc);
+> -
+>  	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+>  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+>  	status = cause & unmask;
+> @@ -1040,7 +1037,7 @@ static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+>  			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
+>  	}
+>  
+> -	chained_irq_exit(chip, desc);
+> +	return status ? IRQ_HANDLED : IRQ_NONE;
+>  }
+>  
+>  static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+> @@ -1490,9 +1487,20 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
+>  				mvebu_pcie_powerdown(port);
+>  				continue;
+>  			}
+> -			irq_set_chained_handler_and_data(irq,
+> -							 mvebu_pcie_irq_handler,
+> -							 port);
+> +
+> +			ret = devm_request_irq(dev, irq, mvebu_pcie_irq_handler,
+> +					       IRQF_SHARED | IRQF_NO_THREAD,
+> +					       port->name, port);
+> +			if (ret) {
+> +				dev_err(dev, "%s: cannot register interrupt handler: %d\n",
+> +					port->name, ret);
+> +				irq_domain_remove(port->intx_irq_domain);
+> +				pci_bridge_emul_cleanup(&port->bridge);
+> +				devm_iounmap(dev, port->base);
+> +				port->base = NULL;
+> +				mvebu_pcie_powerdown(port);
+> +				continue;
+> +			}
+>  		}
+>  
+>  		/*
+> @@ -1599,7 +1607,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+>  
+>  	for (i = 0; i < pcie->nports; i++) {
+>  		struct mvebu_pcie_port *port = &pcie->ports[i];
+> -		int irq = port->intx_irq;
+>  
+>  		if (!port->base)
+>  			continue;
+> @@ -1615,9 +1622,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+>  		/* Clear all interrupt causes. */
+>  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+>  
+> -		if (irq > 0)
+> -			irq_set_chained_handler_and_data(irq, NULL, NULL);
+> -
+>  		/* Remove IRQ domains. */
+>  		if (port->intx_irq_domain)
+>  			irq_domain_remove(port->intx_irq_domain);
+> -- 
+> 2.20.1
+> 

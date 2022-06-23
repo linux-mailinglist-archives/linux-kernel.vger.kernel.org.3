@@ -2,135 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032FE5574D6
+	by mail.lfdr.de (Postfix) with ESMTP id 63C2D5574D7
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiFWIE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
+        id S231208AbiFWIFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiFWIEy (ORCPT
+        with ESMTP id S231150AbiFWIE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:04:54 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA69243ED8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:04:52 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id i15so29627560ybp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aJdGY8if0kKaADIOnNz/K5T0O1hT/jUoomceGsgv8qg=;
-        b=VTQtFvKLR234TeEsJG9hJ1cv/fTlg/g75r8DUnXK6ZHcXDiNZlsJYB9CHo/M+MtXXm
-         kHxKIuNF0rtlBZTftpqriI4HPVkNAF8Kgf2nEavzZoQhhOEgRbl56Yidg8QEwndgSNmo
-         guDcAYV+JbY07aCqXNXOm0MAQ374EyPk3ywDSm8OW4cMFCwWkHtQXObbRqfIV1Au2qL/
-         2xJX/OVUmoI0Ru+JwXOHrC9gjW8I3BqdmxJTIj+bkS/ZKg4cBj3SDMQZSf2iggQyehVV
-         s0m81yWPr2B/Nu8wqEz2Z07cBjk9Ng0bbJAp4gpara4efxy5PPr9RgZdjjBJiDIEtWTH
-         KYew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aJdGY8if0kKaADIOnNz/K5T0O1hT/jUoomceGsgv8qg=;
-        b=dQoJz19hLsHA/JBqYrEEK2/RWi4WcVfZqymsJuc0fueLRUKOG0E2mxoAwbxAOeFwy2
-         WzhVooTMzOT6lrSGtaxoof5KOkKNibAFVk5k3p6dfA7XvbbvqDMQmnVJrqtGodRXtGvx
-         54a//QkeU757xuA9eH3D+cnY0zaA9rH5BoMstMq76VVFfuJjeMBlgthqdKTFGtseMRwd
-         2wGOjmVkgIVKkG1LZ+xladPTw+Bjjo1fKWe2y51ZxWXMIPFyRGLillcinxRCyCEE/HqL
-         pXvmoLW8Q29E0y9hunzX+emYHnQe4ehJ2RktHsIYV4DjY0sVQGIBijnj/w8Xc9qL/JNQ
-         qO8w==
-X-Gm-Message-State: AJIora/oud2M2BmpZiF5nV9PQIRBoNEUcMfwbwFDV3TAwP2l8iPCeYb9
-        frjfOUQ7JaVXaqJQHG25bjT/1Y856+1DiTcq7Xz/Fw==
-X-Google-Smtp-Source: AGRyM1vSa06Bo2VNf1pFNqSEQ2ygrs7ov2BN88IdRJyYwpujxiov2K55jHdtpFFoYamFYqbsbeU9U6O7j7pmqWeF7uU=
-X-Received: by 2002:a25:d8c8:0:b0:669:5f5b:7d75 with SMTP id
- p191-20020a25d8c8000000b006695f5b7d75mr8205442ybg.80.1655971491674; Thu, 23
- Jun 2022 01:04:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220622215912.550419-1-saravanak@google.com> <20220622215912.550419-2-saravanak@google.com>
- <20220623065031.GX1615@pengutronix.de>
-In-Reply-To: <20220623065031.GX1615@pengutronix.de>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 23 Jun 2022 01:04:14 -0700
-Message-ID: <CAGETcx_TaR+_Z9bf-Gsx3pXC9QwSUT85TTwALj5KjaOY1oNK8g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] driver core: fw_devlink: Allow firmware to mark
- devices as best effort
-To:     Sascha Hauer <sha@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+        Thu, 23 Jun 2022 04:04:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B9043ED8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:04:55 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4Hpc-00035t-7h; Thu, 23 Jun 2022 10:04:52 +0200
+Message-ID: <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+Subject: Re: DMA-buf and uncached system memory
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Thu, 23 Jun 2022 10:04:49 +0200
+In-Reply-To: <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
+         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
+         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+         <20220623101326.18beeab3@eldfell>
+         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:50 PM Sascha Hauer <sha@pengutronix.de> wrote:
->
-> On Wed, Jun 22, 2022 at 02:59:10PM -0700, Saravana Kannan wrote:
-> > When firmware sets the FWNODE_FLAG_BEST_EFFORT flag for a fwnode,
-> > fw_devlink will do a best effort ordering for that device where it'll
-> > only enforce the probe/suspend/resume ordering of that device with
-> > suppliers that have drivers. The driver of that device can then decide
-> > if it wants to defer probe or probe without the suppliers.
-> >
-> > This will be useful for avoid probe delays of the console device that
-> > were caused by commit 71066545b48e ("driver core: Set
-> > fw_devlink.strict=1 by default").
-> >
-> > Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > Reported-by: Sascha Hauer <sha@pengutronix.de>
-> > Reported-by: Peng Fan <peng.fan@nxp.com>
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >  drivers/base/core.c    | 3 ++-
-> >  include/linux/fwnode.h | 4 ++++
-> >  2 files changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index 839f64485a55..61edd18b7bf3 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -968,7 +968,8 @@ static void device_links_missing_supplier(struct device *dev)
-> >
-> >  static bool dev_is_best_effort(struct device *dev)
-> >  {
-> > -     return fw_devlink_best_effort && dev->can_match;
-> > +     return (fw_devlink_best_effort && dev->can_match) ||
-> > +             dev->fwnode->flags & FWNODE_FLAG_BEST_EFFORT;
->
-> Check for dev->fwnode first. I am running in a NULL pointer exception
-> here for a device that doesn't have a fwnode.
+Am Donnerstag, dem 23.06.2022 um 09:26 +0200 schrieb Christian König:
+> Am 23.06.22 um 09:13 schrieb Pekka Paalanen:
+> > On Thu, 23 Jun 2022 08:59:41 +0200
+> > Christian König <christian.koenig@amd.com> wrote:
+> > 
+> > > The exporter isn't doing anything wrong here. DMA-buf are supposed to be
+> > > CPU cached and can also be cache hot.
+> > Hi,
+> > 
+> > what is that statement based on?
+> 
+> On the design documentation of DMA-buf and the actual driver 
+> implementations.
+> 
+> Coherency and snooping of the CPU cache is mandatory for devices and 
+> root complexes in the PCI specification. Incoherent access is just an 
+> extension.
+> 
+> We inherited that by basing DMA-buf on the Linux kernel DMA-API which in 
+> turn is largely based on the PCI specification.
+> 
+> > Were the (mandatory for CPU access) cpu_access_begin/end functions &
+> > ioctls not supposed to ensure that CPU cache is up-to-date / CPU cache
+> > is fully flushed out?
+> 
+> No, those functions are to inform the exporter that the importer has 
+> started and finished accessing the buffer using the CPU.
+> 
+> There is no signaling in the other direction. In other words the 
+> exporter doesn't inform the importer about CPU accesses because it is 
+> the owner of the buffer.
+> 
+> It's the responsibility of the importer to make sure that it can 
+> actually access the data in the buffer. If it can't guarantee that the 
+> importer shouldn't import the buffer in the first place.
 
-Oops. Fixed and sent out a v2.
+This is not really correct. DMA-buf inherited the the map/unmap part
+from the DMA API, which on cache coherent architecture is mostly a no-
+op or ties into the IOMMU implementation to set up the pagetables for
+the translation. On non cache coherent architectures this is the point
+where any any necessary cache maintenance happens. DRM breaks this
+model by caching the DMA-buf mapping for performance reasons.
 
--Saravana
+In the DMA API keeping things mapped is also a valid use-case, but then
+you need to do explicit domain transfers via the dma_sync_* family,
+which DMA-buf has not inherited. Again those sync are no-ops on cache
+coherent architectures, but do any necessary cache maintenance on non
+coherent arches.
+
+Regards,
+Lucas
+

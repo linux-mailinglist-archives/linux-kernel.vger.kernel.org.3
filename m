@@ -2,226 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECE2558B98
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5719558B9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiFWXOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
+        id S230016AbiFWXOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 19:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiFWXOA (ORCPT
+        with ESMTP id S230109AbiFWXOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:14:00 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32035D129
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:13:57 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3177e60d980so8544157b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:13:57 -0700 (PDT)
+        Thu, 23 Jun 2022 19:14:48 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C05D127
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:14:47 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-101ec2d6087so1495023fac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 16:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q4rQdhnWLSWo14RnjtXWJNi2g5jmxMvqoaFVDnX2E5Q=;
-        b=cmIBzn0GUySKMskyqJKDVgDVN/8vHWzNfjJ+BREUrbPM7OiFQy/ATX7aLRhZ8MANv1
-         DeCxgq5hoHNltsRta4mLMJ5CVkKh4hfP6LVOwSV/7ivHGPCIqDCrcZofNe4RU/N40PFA
-         084lsyuhYt6X1dulYD/2vojMLUtCUUuNjPCYYrjag+23v4QnctG6vuufvkN8P84KHpsZ
-         1smdglM09EjAq6n/VWxttVgTknSAAilZfUXcBMOYhadXU9RaXikEWNdJ2rEO52JTzByf
-         AZX6K773hR1jhsQBFWv6Jdd8yXumqgqHK9g5FERmM19ObNBe6obaPeOOW1hv8UESqekO
-         6hJw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=u2JKqHVyLSRZBXOkaIltewzMrD4pEO849tuySbHDpwc=;
+        b=ThCoMRZVlzD3JZVM5bQQPX5vhiupuoW4v/3wdvco6scQqVAZitzrddJfdkyplTyehS
+         JZ9k9G7cKpXJ/MFoQT6dYLK4JpoYjT15t00LJpVSVZybSphePavVdLh80M5BW8KApsg2
+         IFawMA9OkxkM3dk/SZcOeeDwiYToFJUww13y4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q4rQdhnWLSWo14RnjtXWJNi2g5jmxMvqoaFVDnX2E5Q=;
-        b=3WVfSyrf90DXl8dI7tKCxDUeIOIhgFQgpiXnXewO9CRw/VOgyN7pOQE0vVlLDmyUVp
-         SFtoPfso02iglRWn3AYuEkA/HBF1uuVq7TMvx+AdF7+kNpf/sbgmuGgrUwGIIwqfv/ov
-         E6gC6TquRoiydQOnEjRwKDl/c5E+OzaSQRRmEKP3rhQR5gA9FZWxN5E2EPD5R6lu2pAP
-         mjePAnt4LvFpVUXuGCweezsWpwBjBb9x6w/BB60fjRZM8Jy5h8SQyLoeK1HabD83Ldas
-         0GzUdpu9/g9SePZcmd0WC9ueieI12mW9Mda/9kz112iOcX9CQvxhsXZ4zfdn+rxaBoEc
-         10KA==
-X-Gm-Message-State: AJIora+Wu4j8IVoVxU+E3xP7rRHgc4PwjatxqRM1nXGzdiKeCje/KJn3
-        1bCVdc3thbsBEYOWXqC34raQLVMW8V6ln3byUtVNzg==
-X-Google-Smtp-Source: AGRyM1tmOAvKbstD4mNEDSzf5ARhyGW/aO0E7tWlKoUjb1ZKcoDOPfJmrPrA9mjxTsX3Z0whnYeMEFOcEVoRWtE94Ys=
-X-Received: by 2002:a0d:dfd5:0:b0:317:f0d4:505b with SMTP id
- i204-20020a0ddfd5000000b00317f0d4505bmr12968633ywe.518.1656026036778; Thu, 23
- Jun 2022 16:13:56 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=u2JKqHVyLSRZBXOkaIltewzMrD4pEO849tuySbHDpwc=;
+        b=ImMIA334yPwd39VkdKyW/2p4NNUOIhIeMZhdFIOqoWWM14Q9mV1re2WQgScW1AZhVR
+         /Hwhju1MCGoEha20cgdDgZ12KOk2LCMpC09pYesPI5MxV4l3OxnvYrabsUoc9cIiwB9b
+         JOe5k8rGEc3/HUjpu9mkKKtrfbr/hKqIoSmBE4bUTtHR7fL2IvSD1HQo4+KEo6uKzUXa
+         d6wkjIIZfSTUOjExO4JdMBMXTdmDUcZBUraW19BftgKv3xZpkM3k+EYxaGrDmjmOoxLu
+         B7FDlMq3SuDqRDiY/m9L6nb8DC47k97u6zPrHgMyeV8GigRaQWhRNuvKRljF5TN7I9L3
+         3PZg==
+X-Gm-Message-State: AJIora8XaUUAI2uCCNKo+0OpenGiVokMvLEuqiikUuS1x3V2BvWAFTC6
+        Vy2nw/rtbrJRfVpomoRmwqDabJrMxT+l3WCp0t1qzQ==
+X-Google-Smtp-Source: AGRyM1vGcj9wdhnXfYcW15SE2elwZofl+K6gam8C4ktPrjNMjEUlSOW18Z8GsUBiy0N2iC9aY8GH6El/ZS/RoeZfOmI=
+X-Received: by 2002:a05:6870:b627:b0:102:f25:a460 with SMTP id
+ cm39-20020a056870b62700b001020f25a460mr227480oab.193.1656026086919; Thu, 23
+ Jun 2022 16:14:46 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 23 Jun 2022 16:14:46 -0700
 MIME-Version: 1.0
-References: <20220623080344.783549-1-saravanak@google.com> <20220623080344.783549-3-saravanak@google.com>
- <20220623100421.GY1615@pengutronix.de> <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
- <20220623203716.GA1615@pengutronix.de>
-In-Reply-To: <20220623203716.GA1615@pengutronix.de>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 23 Jun 2022 16:13:20 -0700
-Message-ID: <CAGETcx-mCu+M0HhhX+bTNpzEswviJj2U8eCefLv3ezr29Nd+wA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when fw_devlink.strict=1
-To:     sascha hauer <sha@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+In-Reply-To: <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
+ <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 23 Jun 2022 16:14:46 -0700
+Message-ID: <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        russell king <linux@armlinux.org.uk>,
-        "david s. miller" <davem@davemloft.net>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 1:37 PM sascha hauer <sha@pengutronix.de> wrote:
->
-> On Thu, Jun 23, 2022 at 10:26:46AM -0700, Saravana Kannan wrote:
-> > On Thu, Jun 23, 2022 at 3:05 AM sascha hauer <sha@pengutronix.de> wrote:
-> > >
-> > > On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
-> > > > Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > > > enabled iommus and dmas dependency enforcement by default. On some
-> > > > systems, this caused the console device's probe to get delayed until the
-> > > > deferred_probe_timeout expires.
-> > > >
-> > > > We need consoles to work as soon as possible, so mark the console device
-> > > > node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
-> > > > the probe of the console device for suppliers without drivers. The
-> > > > driver can then make the decision on where it can probe without those
-> > > > suppliers or defer its probe.
-> > > >
-> > > > Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > > > Reported-by: Sascha Hauer <sha@pengutronix.de>
-> > > > Reported-by: Peng Fan <peng.fan@nxp.com>
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > Tested-by: Peng Fan <peng.fan@nxp.com>
-> > > > ---
-> > > >  drivers/of/base.c | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/drivers/of/base.c b/drivers/of/base.c
-> > > > index d4f98c8469ed..a19cd0c73644 100644
-> > > > --- a/drivers/of/base.c
-> > > > +++ b/drivers/of/base.c
-> > > > @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
-> > > >                       of_property_read_string(of_aliases, "stdout", &name);
-> > > >               if (name)
-> > > >                       of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
-> > > > +             if (of_stdout)
-> > > > +                     of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
-> > >
-> > > The device given in the stdout-path property doesn't necessarily have to
-> > > be consistent with the console= parameter. The former is usually
-> > > statically set in the device trees contained in the kernel while the
-> > > latter is dynamically set by the bootloader. So if you change the
-> > > console uart in the bootloader then you'll still run into this trap.
-> > >
-> > > It's problematic to consult only the device tree for dependencies. I
-> > > found several examples of drivers in the tree for which dma support
-> > > is optional. They use it if they can, but continue without it when
-> > > not available. "hwlock" is another property which consider several
-> > > drivers as optional. Also consider SoCs in early upstreaming phases
-> > > when the device tree is merged with "dmas" or "hwlock" properties,
-> > > but the corresponding drivers are not yet upstreamed. It's not nice
-> > > to defer probing of all these devices for a long time.
-> > >
-> > > I wonder if it wouldn't be a better approach to just probe all devices
-> > > and record the device(node) they are waiting on. Then you know that you
-> > > don't need to probe them again until the device they are waiting for
-> > > is available.
+Quoting Prashant Malani (2022-06-23 12:08:21)
+> On Thu, Jun 23, 2022 at 11:30 AM Stephen Boyd <swboyd@chromium.org> wrote:
 > >
-> > That actually breaks things in a worse sense. There are cases where
-> > the consumer driver is built in and the optional supplier driver is
-> > loaded at boot. Without fw_devlink and the deferred probe timeout, we
-> > end up probing the consumer with limited functionality. With the
-> > current setup, sure we delay some probes a bit but at least everything
-> > works with the right functionality. And you can reduce or remove the
-> > delay if you want to optimize it.
+> > Quoting Prashant Malani (2022-06-22 10:34:30)
+> > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > new file mode 100644
+> > > index 000000000000..78b0190c8543
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > @@ -0,0 +1,74 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+[...]
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +    description: OF graph binding modelling data lines to the Type-C switch.
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: Link between the switch and a Type-C connector.
+> >
+> > Is there an update to the usb-c-connector binding to accept this port
+> > connection?
 >
-> We have optional and mandatory resources. In this situation a driver has
-> to decide what to do. Either it continues with limited resources or it
-> defers probing. Some drivers try to allocate the optional resources at
-> open time so that they are able to use them once they are available.  We
-> could even think of an asynchronous callback into a driver when a
-> resource becomes available. Whether we put this decision what is
-> optional or not into the driver or in the framework doesn't make a
-> difference to the problem, it is still the same: When a resource is not
-> yet available we have no idea if and when it becomes available, if it's
-> worth waiting for it or not.
+> Not at this time. I don't think we should enforce that either.
+> (Type-C data-lines could theoretically be routed through intermediate
+> hardware like retimers/repeaters)
+
+I'm mostly wondering if having such a connection to the usb-c-connector,
+or even through some retimer/repeater, would be sufficient to detect how
+many type-c ports are connected to the device. If the type-c pin
+assignments only support two or four lanes for DP then it seems like we
+should describe the two lanes or four lanes as one graph endpoint
+"output" and then have some 'data-lanes' property in case the DP lanes
+are flipped while being sent to the retimer or usb-c-connector. This
+would of course depend on the capability of the device, i.e. if it can
+remap DP lanes or only has 2 lanes of DP, etc.
+
+> > > +  - |
+> > > +    drm-bridge {
+> > > +        usb-switch {
+> > > +            compatible = "typec-switch";
+> >
+> > I still don't understand the subnode design here. usb-switch as a
+> > container node indicates to me that this is a bus, but in earlier rounds
+> > of this series it was stated this isn't a bus.
 >
-> The difference is that with my proposal (which isn't actually mine but
-> from my collegue Lucas) a driver can decide very fine grained how it
-> wants to deal with the situation. With fw_devlink we try to put this
-> intelligence into the framework and it seems there are quite some quirks
-> necessary to get that running for everyone.
+> I am not aware of this as a requirement. Can you please point me to the
+> documentation that states this needs to be the case?
 
-That's one possible solution, but for that to work, all drivers with
-optional suppliers would need to be changed to take advantage of this
-callback to work correctly when the optional suppliers become
-available. We could add this callback, but it would be a long time
-before the callback handles all/most cases of optional suppliers.
+I'm not aware of any documentation for the dos and don'ts here. Are
+there any examples in the bindings directory that split up a device into
+subnodes that isn't in bindings/mfd? I just know from experience that
+any time I try to make a child node of an existing node that I'm
+supposed to be describing a bus, unless I'm adding some sort of
+exception node like a graph binding or an opp table. Typically a node
+corresponds 1:1 with a device in the kernel. I'll defer to Rob for any
+citations.
 
-One of the goals of fw_devlink is so that people can stop having to
-play initcall chicken where they try to tune their initcall levels wrt
-to the chain of suppliers to avoid probe failures or minimize deferred
-probed. Technically with deferred probes and proper error handling,
-people shouldn't have to play initcall chicken, but we still have a
-lot of those. Adding this callback is just going to make writing
-drivers even harder. And there are tons of drivers that can't do
-proper clean up and some drivers can't even be unbound once they are
-bound.
+>
+> > Why doesn't it work to
+> > merge everything inside usb-switch directly into the drm-bridge node?
+>
+> I attempted to explain the rationale in the previous version [1], but
+> using a dedicated sub-node means the driver doesn't haven't to
+> inspect individual ports to determine which of them need switches
+> registered for them. If it sees a `typec-switch`, it registers a
+> mode-switch and/or orientation-switch. IMO it simplifies the hardware
+> device binding too.
 
-Also, if I'm not mistaken (I could be), stuff like pinctrl is setup
-before we even get to driver->probe(). So when the pinctrl supplier
-becomes available, the driver would need to unbind fully and rebind.
-What if there's a current user of the device?
+How is that any harder than hard-coding that detail into the driver
+about which port and endpoint is possibly connected to the
+usb-c-connector (or retimer)? All of that logic could be behind some API
+that registers a typec-switch based on a graph port number that's passed
+in, ala drm_of_find_panel_or_bridge()'s design.
 
-> Anyway, we have fw_devlink now and actually I think the dependency graph
-> that we have with fw_devlink is quite nice to resolve the natural probe
-> order. But why do we have to put an extra penalty on drivers whose
-> resources are not yet available?  Probe devices with complete resources
-> as long as you find them, execute more initcalls as long as there are
-> any, but when there are no more left, you could start probing devices
-> with incomplete resources, why wait for another ten seconds?
+Coming from a DT writer's perspective, I just want to go through the
+list of output pins in the datasheet and match them up to the ports
+binding for this device. If it's a pure DP bridge, where USB hardware
+isn't an input or an output like the ITE chip, then I don't want to have
+to describe a port graph binding for the case when it's connected to a
+dp-connector (see dp-connector.yaml) in the top-level node and then have
+to make an entirely different subnode for the usb-c-connector case with
+a whole other set of graph ports.
 
-The timeout is defining how long after the most recent module load
-that we give up waiting for more modules to be loaded. On a Pixel 6
-with serial console output, the timeout of 5 seconds would work
-because the worst case gap between two module loads is ~2.8 seconds
-(so 5 seconds for some margin). The default is this high to
-accommodate slow storage devices where mounting all the filesystems
-can take time (think HDD or network FS). The default is configured for
-correctness so that we can maximize functionality across systems, but
-people can optimize for the specific case.
+How would I even know which two differential pairs correspond to port0
+or port1 in this binding in the ITE case? Ideally we make the graph
+binding more strict for devices by enforcing that their graph ports
+exist. Otherwise we're not fully describing the connections between
+devices and our dtb checkers are going to let things through where the
+driver most likely will fail because it can't figure out what to do,
+e.g. display DP on 4 lanes or play some DP lane rerouting games to act
+as a mux.
 
-> For me it's no problem when the UART probes late, we have earlycon which
-> can be used to debug problems that arise before the UART probes, but
-> what nags is the ten seconds delay. zero would be a much saner value for
-> me.
+>
+> It also maps with the internal block diagram for these hardware
+> components (for ex. the anx7625 crosspoint switch is a separate
+> sub-block within anx7625).
 
-Having said all that, I empathize with your annoyance at the delay.
-Open to ideas of making this better without making the default
-functionality worse.
+We don't make DT bindings for sub-components like this very often. It
+would make more sense to me to have a subnode if a typec switch was some
+sort of off the shelf hard macro that the hardware engineer placed down
+inside the IC that they delivered. Then we could have a completely
+generic driver that binds to the generic binding that knows how to drive
+the hardware, because it's an unchangeable hard macro with a well
+defined programming interface.
 
--Saravana
+>
+> [1] https://lore.kernel.org/linux-usb/CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com/
+
+I looked at the fsa4480 driver and the device has a publicly available
+datasheet[2]. That device is designed for "audio accessory mode" but I
+guess it's being used to simply mux SBU lines? There isn't an upstream
+user of the binding so far, but it also doesn't look like a complete
+binding. I'd expect to see DN_L/R as a graph output connected to the
+usb-c-connector and probably have a usb2.0 input port and a 'sound-dai'
+property to represent the input audio path.
+
+Finally, simply connecting to the typec controller node isn't sufficient
+because a typec controller can be controlling many usb-c-connectors so I
+don't see how the graph binding would be able to figure out how many
+usb-c-connectors are connected to a mux like device, unless we took the
+approach of this patch. Is that why you're proposing this binding? To
+avoid describing a graph binding in the usb-c-connector and effectively
+"pushing" the port count up to the mux?
+
+[2] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2A0558312
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5045580B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233862AbiFWRYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S232276AbiFWQxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233987AbiFWRW7 (ORCPT
+        with ESMTP id S233908AbiFWQvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:22:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3795B62A0;
-        Thu, 23 Jun 2022 10:01:30 -0700 (PDT)
+        Thu, 23 Jun 2022 12:51:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8E622528;
+        Thu, 23 Jun 2022 09:51:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7661E61408;
-        Thu, 23 Jun 2022 17:01:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4973FC3411B;
-        Thu, 23 Jun 2022 17:01:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7CCC61F99;
+        Thu, 23 Jun 2022 16:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911BCC3411B;
+        Thu, 23 Jun 2022 16:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003688;
-        bh=nvgdiBJ7BD3uKpg5Q+GCBeISfW/+zmEsuUGDmnbJQAg=;
+        s=korg; t=1656003104;
+        bh=YeNRPLQirCRMpKZCkSJM58Mq2rDxBOANPUcuKe7qKZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xQ3F8pW0bSC/Du/rUUfY0Q/L93GmEgJ1ulhPYbzhcuCuFNMEvsehjz5WKc33GRMXl
-         F1yGj0n80gmc4peXLkl6FlZI8YKkY1umxb4rJSJsr/cxjb0+S6CYpoX91jupczO3Y0
-         +oYHvRZLrUXA9m7/vYxI/ElEhnMkE43qsD+IjuZ0=
+        b=UwaI/4wtUMb0iaPV1r7DsDpGm4KH1n26Wx3xxW07lAYPHbWMeoxxYT6hI4VAYnd4q
+         YPGjXOezcue0OKDGSkbKSEY5+/oNgKVQwlEm+Qnmg6wJFq3RkZuP5n9CrD5Tr+5hM+
+         4GZbAiVMsc+RTgdo9XiM/r0J/BfQaUMRwaokbVX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Mark Brown <broonie@kernel.org>, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 048/237] s390: Remove arch_has_random, arch_has_random_seed
-Date:   Thu, 23 Jun 2022 18:41:22 +0200
-Message-Id: <20220623164344.535968271@linuxfoundation.org>
+Subject: [PATCH 4.9 090/264] random: early initialization of ChaCha constants
+Date:   Thu, 23 Jun 2022 18:41:23 +0200
+Message-Id: <20220623164346.617837400@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Henderson <richard.henderson@linaro.org>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit 5e054c820f59bbb9714d5767f5f476581c309ca8 upstream.
+commit 96562f286884e2db89c74215b199a1084b5fb7f7 upstream.
 
-These symbols are currently part of the generic archrandom.h
-interface, but are currently unused and can be removed.
+Previously, the ChaCha constants for the primary pool were only
+initialized in crng_initialize_primary(), called by rand_initialize().
+However, some randomness is actually extracted from the primary pool
+beforehand, e.g. by kmem_cache_create(). Therefore, statically
+initialize the ChaCha constants for the primary pool.
 
-Signed-off-by: Richard Henderson <rth@twiddle.net>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20200110145422.49141-4-broonie@kernel.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: <linux-crypto@vger.kernel.org>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/include/asm/archrandom.h |   12 ------------
- 1 file changed, 12 deletions(-)
+ drivers/char/random.c     |    5 ++++-
+ include/crypto/chacha20.h |   15 +++++++++++----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
---- a/arch/s390/include/asm/archrandom.h
-+++ b/arch/s390/include/asm/archrandom.h
-@@ -26,18 +26,6 @@ static void s390_arch_random_generate(u8
- 	atomic64_add(nbytes, &s390_arch_random_counter);
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -459,6 +459,10 @@ struct crng_state {
+ 
+ static struct crng_state primary_crng = {
+ 	.lock = __SPIN_LOCK_UNLOCKED(primary_crng.lock),
++	.state[0] = CHACHA_CONSTANT_EXPA,
++	.state[1] = CHACHA_CONSTANT_ND_3,
++	.state[2] = CHACHA_CONSTANT_2_BY,
++	.state[3] = CHACHA_CONSTANT_TE_K,
+ };
+ 
+ /*
+@@ -825,7 +829,6 @@ static void crng_initialize_secondary(st
+ 
+ static void __init crng_initialize_primary(struct crng_state *crng)
+ {
+-	chacha_init_consts(crng->state);
+ 	_extract_entropy(&input_pool, &crng->state[4], sizeof(__u32) * 12, 0);
+ 	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
+ 		invalidate_batched_entropy();
+--- a/include/crypto/chacha20.h
++++ b/include/crypto/chacha20.h
+@@ -24,12 +24,19 @@ int crypto_chacha20_setkey(struct crypto
+ int crypto_chacha20_crypt(struct blkcipher_desc *desc, struct scatterlist *dst,
+ 			  struct scatterlist *src, unsigned int nbytes);
+ 
++enum chacha_constants { /* expand 32-byte k */
++	CHACHA_CONSTANT_EXPA = 0x61707865U,
++	CHACHA_CONSTANT_ND_3 = 0x3320646eU,
++	CHACHA_CONSTANT_2_BY = 0x79622d32U,
++	CHACHA_CONSTANT_TE_K = 0x6b206574U
++};
++
+ static inline void chacha_init_consts(u32 *state)
+ {
+-	state[0]  = 0x61707865; /* "expa" */
+-	state[1]  = 0x3320646e; /* "nd 3" */
+-	state[2]  = 0x79622d32; /* "2-by" */
+-	state[3]  = 0x6b206574; /* "te k" */
++	state[0]  = CHACHA_CONSTANT_EXPA;
++	state[1]  = CHACHA_CONSTANT_ND_3;
++	state[2]  = CHACHA_CONSTANT_2_BY;
++	state[3]  = CHACHA_CONSTANT_TE_K;
  }
  
--static inline bool arch_has_random(void)
--{
--	if (static_branch_likely(&s390_arch_random_available))
--		return true;
--	return false;
--}
--
--static inline bool arch_has_random_seed(void)
--{
--	return arch_has_random();
--}
--
- static inline bool arch_get_random_long(unsigned long *v)
- {
- 	if (static_branch_likely(&s390_arch_random_available)) {
+ #endif
 
 

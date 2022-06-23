@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F90255846C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB83558222
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbiFWRmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        id S229455AbiFWRLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234817AbiFWRiT (ORCPT
+        with ESMTP id S234090AbiFWRIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:38:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5210E5251E;
-        Thu, 23 Jun 2022 10:08:28 -0700 (PDT)
+        Thu, 23 Jun 2022 13:08:45 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2855534F;
+        Thu, 23 Jun 2022 09:57:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF3C761408;
-        Thu, 23 Jun 2022 17:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE600C3411B;
-        Thu, 23 Jun 2022 17:08:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5DC05CE25DE;
+        Thu, 23 Jun 2022 16:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D513C3411B;
+        Thu, 23 Jun 2022 16:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004107;
-        bh=ZIGf3OIICc/ZkZtAiW0hV2LGkW+W99wy51TwniPPSIY=;
+        s=korg; t=1656003421;
+        bh=o/jyu2ROdm31y2b8cgGf9XEmM2oEVHame+hPgu7jdd4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y+q+Dpy+u/Pqh6A4oUpMof/3BPACWqnPC9OmQN18M4UGPSz9osElInHEWWVHDmXlY
-         jYvKFNY9YDQ1bQ7JxhSKl2mydL5oCs18EMYyliVn/YFlyPrCr9arE8Spy5/+MH4zgz
-         DtMGKBuo0PIGmVlYspw5oxq+bOcUIvOoLNgL/Zbk=
+        b=s/659mShPveaWlfWI3+G09saMyth9PAPDPD7yU7GvSytw1szXvKc2pcgSupeCL6b0
+         yHOeV9ogzTxfhf3IzZoxynqOfVgonH0LtslZycNfCuvTjBa9eyUm0EwIFxBQmjokst
+         vXKC7cjDeGpauUzl2nwz5HAh2FMHvvZzTGfgzr4g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 191/237] random: avoid checking crng_ready() twice in random_init()
-Date:   Thu, 23 Jun 2022 18:43:45 +0200
-Message-Id: <20220623164348.642402435@linuxfoundation.org>
+        stable@vger.kernel.org, chengkaitao <pilgrimtao@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 233/264] virtio-mmio: fix missing put_device() when vm_cmdline_parent registration failed
+Date:   Thu, 23 Jun 2022 18:43:46 +0200
+Message-Id: <20220623164350.670172215@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
-References: <20220623164343.132308638@linuxfoundation.org>
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: chengkaitao <pilgrimtao@gmail.com>
 
-commit 9b29b6b20376ab64e1b043df6301d8a92378e631 upstream.
+[ Upstream commit a58a7f97ba11391d2d0d408e0b24f38d86ae748e ]
 
-The current flow expands to:
+The reference must be released when device_register(&vm_cmdline_parent)
+failed. Add the corresponding 'put_device()' in the error handling path.
 
-    if (crng_ready())
-       ...
-    else if (...)
-        if (!crng_ready())
-            ...
-
-The second crng_ready() call is redundant, but can't so easily be
-optimized out by the compiler.
-
-This commit simplifies that to:
-
-    if (crng_ready()
-        ...
-    else if (...)
-        ...
-
-Fixes: 560181c27b58 ("random: move initialization functions out of hot pages")
-Cc: stable@vger.kernel.org
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: chengkaitao <pilgrimtao@gmail.com>
+Message-Id: <20220602005542.16489-1-chengkaitao@didiglobal.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/virtio/virtio_mmio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -834,7 +834,7 @@ int __init random_init(const char *comma
- 	if (crng_ready())
- 		crng_reseed();
- 	else if (trust_cpu)
--		credit_init_bits(arch_bytes * 8);
-+		_credit_init_bits(arch_bytes * 8);
- 
- 	return 0;
- }
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index 50840984fbfa..f62da3b7c27b 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -630,6 +630,7 @@ static int vm_cmdline_set(const char *device,
+ 	if (!vm_cmdline_parent_registered) {
+ 		err = device_register(&vm_cmdline_parent);
+ 		if (err) {
++			put_device(&vm_cmdline_parent);
+ 			pr_err("Failed to register parent device!\n");
+ 			return err;
+ 		}
+-- 
+2.35.1
+
 
 

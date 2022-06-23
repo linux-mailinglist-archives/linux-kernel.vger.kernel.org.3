@@ -2,139 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693765575B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6C95575BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiFWIme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S230397AbiFWImy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiFWImc (ORCPT
+        with ESMTP id S229704AbiFWImw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:42:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D9248E74;
-        Thu, 23 Jun 2022 01:42:31 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 23 Jun 2022 04:42:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231B848E7C;
+        Thu, 23 Jun 2022 01:42:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 968FB6601792;
-        Thu, 23 Jun 2022 09:42:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655973749;
-        bh=a3qg+o/OwgqXslU/4j4RlR9cUNoRYrfj19YE44y2v3E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XKQK0beGg3vTWSmevrEBFXfg7Q50EHWuJlc9pwCXzaWUO+VBLRPh9p4Oy3qQRBUsS
-         2W7qVoYtzbfrOv/1RrewUg21ryne4VDHhJZdOO+WEWkFcAQl8p6YG9Y+YzRVi4CRh7
-         77J6K81IQ+QSFtfhS/4wVHmTXZUfaz5CxrZSyP/VVqdmpOArk9s+lvIvrNdEEYSOfr
-         CBDGOw97CVusucf5EYiBq65amZ8Ldr1FtzeutiCuujc2zWnCK1610hxEMZth5xs6pP
-         VkcNlnAigF0gFT5diFw0gsC73kN0Q+5Xn4BKM5vlj5aMhsn+c4uYuAv4ZZxidv0ULF
-         dzHKBOcezZn1w==
-Message-ID: <c379dca6-88a7-8ed6-c585-714ea411bd02@collabora.com>
-Date:   Thu, 23 Jun 2022 10:42:26 +0200
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D70CD21DAB;
+        Thu, 23 Jun 2022 08:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655973769; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sD3bTgg438R/xlPh35R/pRi8nACfuVU2+pQ/XzpwbpE=;
+        b=yOLt126VjwmgVhVtMJvQXIfxMSX3pTDHUj7eZiO5LikO24ep+OKG5uvJ4V3HvSLa5nPeG+
+        JrZrdbeHH5RgrOLNBLlLA5XgsJGFOCxt5qJiBajjGpnuLepfcDFpSe7Ia8GHht7Lah0yzg
+        k/WhDVbmHjBEuSgZRTtxDSGOThqfboQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655973769;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sD3bTgg438R/xlPh35R/pRi8nACfuVU2+pQ/XzpwbpE=;
+        b=ENyeTl/Jo1Vi+HvfHE/2AhjgCXvcI37V1VlY55RmaH8FvXHIJTvj1HEyYAheiD1Dqtmg5c
+        ChKL5hVQjn1sN7Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AFEB013461;
+        Thu, 23 Jun 2022 08:42:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gIYAKokntGLuDQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 23 Jun 2022 08:42:49 +0000
+Message-ID: <4988ab02-dbdb-e452-7106-771c2a1ebbca@suse.de>
+Date:   Thu, 23 Jun 2022 10:42:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2] Bluetooth: btmtksdio: Add in-band wakeup support
+Subject: Re: DMA-buf and uncached system memory
 Content-Language: en-US
-To:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com
-Cc:     Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yake Yang <yake.yang@mediatek.com>
-References: <52b63a1be094a1ccbb20f2c89472580d95f0652a.1655934689.git.objelf@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <52b63a1be094a1ccbb20f2c89472580d95f0652a.1655934689.git.objelf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org, lkml <linux-kernel@vger.kernel.org>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+ <58e11013-01ab-8a2c-732e-860ae83a3df6@suse.de>
+ <dbf87831-1b14-d18f-f8ca-b5fe1f850190@amd.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <dbf87831-1b14-d18f-f8ca-b5fe1f850190@amd.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------OFTYXzYkyT04oFpF7yLvli0j"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/06/22 23:56, sean.wang@mediatek.com ha scritto:
-> From: Sean Wang <sean.wang@mediatek.com>
-> 
-> Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")
-> adds the wake on bluethooth via a dedicated GPIO.
-> 
-> Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup),
-> when supported by the SDIO host driver.
-> 
-> Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-> Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> ---
-> v2: enhance the patch description and comments
-> ---
->   drivers/bluetooth/btmtksdio.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-> index d6700efcfe8c..9d79c9107b3a 100644
-> --- a/drivers/bluetooth/btmtksdio.c
-> +++ b/drivers/bluetooth/btmtksdio.c
-> @@ -118,6 +118,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
->   #define BTMTKSDIO_FUNC_ENABLED		3
->   #define BTMTKSDIO_PATCH_ENABLED		4
->   #define BTMTKSDIO_HW_RESET_ACTIVE	5
-> +#define BTMTKSDIO_INBAND_WAKEUP		6
->   
->   struct mtkbtsdio_hdr {
->   	__le16	len;
-> @@ -1294,6 +1295,9 @@ static bool btmtksdio_sdio_wakeup(struct hci_dev *hdev)
->   		.wakeup_delay = cpu_to_le16(0x20),
->   	};
->   
-> +	if (test_bit(BTMTKSDIO_INBAND_WAKEUP, &bdev->tx_state))
-> +		return may_wakeup;
-> +
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------OFTYXzYkyT04oFpF7yLvli0j
+Content-Type: multipart/mixed; boundary="------------myyGSpB720BVRwpnx5jni6sb";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ linux-media <linux-media@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org,
+ lkml <linux-kernel@vger.kernel.org>
+Cc: "Sharma, Shashank" <Shashank.Sharma@amd.com>
+Message-ID: <4988ab02-dbdb-e452-7106-771c2a1ebbca@suse.de>
+Subject: Re: DMA-buf and uncached system memory
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+ <58e11013-01ab-8a2c-732e-860ae83a3df6@suse.de>
+ <dbf87831-1b14-d18f-f8ca-b5fe1f850190@amd.com>
+In-Reply-To: <dbf87831-1b14-d18f-f8ca-b5fe1f850190@amd.com>
 
-Uhm... this flag is either *always* set, or *always not set*... and we decide that
-during probe time... and we use it in just one function as well.
+--------------myyGSpB720BVRwpnx5jni6sb
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-At this point, I would just avoid the addition of the BTMTKSDIO_INBAND_WAKEUP flag
-and add a new function for handling the .wakeup() callback - something like:
+SGkNCg0KQW0gMjMuMDYuMjIgdW0gMTA6MjYgc2NocmllYiBDaHJpc3RpYW4gS8O2bmlnOg0K
+PiBBbSAyMy4wNi4yMiB1bSAxMDoxMyBzY2hyaWViIFRob21hcyBaaW1tZXJtYW5uOg0KPj4g
+SGkgQ2hyaXN0aWFuDQo+Pg0KPj4gQW0gMTUuMDIuMjEgdW0gMDk6NTggc2NocmllYiBDaHJp
+c3RpYW4gS8O2bmlnOg0KPj4+IEhpIGd1eXMsDQo+Pj4NCj4+PiB3ZSBhcmUgY3VycmVudGx5
+IHdvcmtpbmcgYW4gRnJlZXN5bmMgYW5kIGRpcmVjdCBzY2FuIG91dCBmcm9tIHN5c3RlbSAN
+Cj4+PiBtZW1vcnkgb24gQU1EIEFQVXMgaW4gQStBIGxhcHRvcHMuDQo+Pj4NCj4+PiBPbiBw
+cm9ibGVtIHdlIHN0dW1ibGVkIG92ZXIgaXMgdGhhdCBvdXIgZGlzcGxheSBoYXJkd2FyZSBu
+ZWVkcyB0byANCj4+PiBzY2FuIG91dCBmcm9tIHVuY2FjaGVkIHN5c3RlbSBtZW1vcnkgYW5k
+IHdlIGN1cnJlbnRseSBkb24ndCBoYXZlIGEgDQo+Pj4gd2F5IHRvIGNvbW11bmljYXRlIHRo
+YXQgdGhyb3VnaCBETUEtYnVmLg0KPj4+DQo+Pj4gRm9yIG91ciBzcGVjaWZpYyB1c2UgY2Fz
+ZSBhdCBoYW5kIHdlIGFyZSBnb2luZyB0byBpbXBsZW1lbnQgc29tZXRoaW5nIA0KPj4+IGRy
+aXZlciBzcGVjaWZpYywgYnV0IHRoZSBxdWVzdGlvbiBpcyBzaG91bGQgd2UgaGF2ZSBzb21l
+dGhpbmcgbW9yZSANCj4+PiBnZW5lcmljIGZvciB0aGlzPw0KPj4NCj4+IEkgaGFkIGEgcGF0
+Y2hzZXQgaGVyZSB0aGF0IGV4dGVuZHMgaW9zeXMtbWFwIChmb3JtZXIgZG1hLWJ1Zi1tYXAp
+IHdpdGggDQo+PiBjYWNoaW5nIGluZm9ybWF0aW9uLiBJJ2xsIHBvc3QgYSBjb3B5Lg0KPiAN
+Cj4gT2gsIG5pY2UuIEJ1dCB3aHkgb24gaW9zeXMtbWFwPyBXZSBuZWVkIHRoYXQgcGVyIERN
+QS1idWYuDQoNCkl0J3MgcmV0dXJuZWQgdmlhIHRoZSBkbWEtYnVmJ3Mgdm1hcCBjYWxsIHdp
+dGhpbiB0aGUgaW9zeXMtbWFwIA0Kc3RydWN0dXJlLiBJZiB0aGUgZG1hLWJ1ZiBtb3Zlcywg
+dGhlIGZvbGxvd2luZyB2bWFwIGNhbGxzIGFsd2F5cyByZXR1cm4gDQp1cGRhdGVkIGNhY2hp
+bmcgaW5mb3JtYXRpb24uIE1heWJlIGl0J3Mgbm90IHF1aXRlIHdoYXQgeW91IG5lZWQgZm9y
+IA0KRnJlZXN5bmM/DQoNCkknbGwgdXNlIHRoaXMgZm9yIGZvcm1hdC1jb252ZXJzaW9uIGhl
+bHBlcnMsIHdoaWNoIGRvIHNvbWUgb3B0aW1pemF0aW9ucyANCmZvciB1bmNhY2hlZCBtZW1v
+cnkuDQoNCkFueXdheSwgSSBoYXZlIHRvIGxvb2sgZm9yIHRoYXQgcGF0Y2guLi4NCg0KQmVz
+dCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gVGhhbmtzLA0KPiBDaHJpc3RpYW4uDQo+IA0K
+Pj4NCj4+IFNvcnJ5IGZvciBiZWluZyBsYXRlIHRvIHJlcGx5Lg0KPj4NCj4+IEJlc3QgcmVn
+YXJkcw0KPj4gVGhvbWFzDQo+Pg0KPj4+DQo+Pj4gQWZ0ZXIgYWxsIHRoZSBzeXN0ZW0gbWVt
+b3J5IGFjY2VzcyBwYXR0ZXJuIGlzIGEgUENJZSBleHRlbnNpb24gYW5kIGFzIA0KPj4+IHN1
+Y2ggc29tZXRoaW5nIGdlbmVyaWMuDQo+Pj4NCj4+PiBSZWdhcmRzLA0KPj4+IENocmlzdGlh
+bi4NCj4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xw0KPj4+IGRyaS1kZXZlbCBtYWlsaW5nIGxpc3QNCj4+PiBkcmktZGV2ZWxAbGlzdHMuZnJl
+ZWRlc2t0b3Aub3JnDQo+Pj4gaHR0cHM6Ly9saXN0cy5mcmVlZGVza3RvcC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9kcmktZGV2ZWwNCj4+DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5u
+DQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBH
+ZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0K
+KEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rl
+dg0K
 
-static bool btmtksdio_sdio_inband_wakeup(struct hci_dev *hdev)
-{
-	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
+--------------myyGSpB720BVRwpnx5jni6sb--
 
-	return device_may_wakeup(bdev->dev);
-}
+--------------OFTYXzYkyT04oFpF7yLvli0j
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-static int btmtksdio_probe(...)
-{
-	.... code ....
+-----BEGIN PGP SIGNATURE-----
 
-	/*
-	 * If SDIO controller supports wake on Bluetooth, sending a wakeon
-	 * command is not necessary.
-	 */
-	if (device_can_wakeup(func->card->host->parent))
-		hdev->wakeup = btmtksdio_sdio_inband_wakeup;
-	else
-		hdev->wakeup = btmtksdio_sdio_wakeup;
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmK0J4kFAwAAAAAACgkQlh/E3EQov+B7
+YRAApxYE2c7ND8+f3+6Pb52FGy24VVNeAU84N4QiFMoEpWR+3aKnxm+vJ5ATwT/rgBltjQzuGi0P
+4IEQeDvjSQfFEYcICM9RaI8LHgIZ0aLGNcETRI/hRDtmcoYuxI5bHG4ZlE8rMjgyDDsuv0wDr06P
+PdrLMoIPTbTsQFHvVhJnJN6Ma5U1gr+5LHtl4v1aqNoKM4SB01gqARjjRuqCf6TjNK20OtiXrf6j
+UTFDmV+nIGnaqVv1Vsnyo4LDuQG56Euqukj000STCSq7HJBFnR+XYpxUw+PUREZghbrh6nDSwxmP
+seHg5qW7DT0nVaHv7J2AnecNKsUtdOfag0m+AtRcbIfTDtnUqetSmRcOgjYyqLQ09uWVQX62NGPA
+l0SXUrC0/FeVmnr09gZPKBLMOYXkIW4bwYAUogUxjqtZNvCeS3obrQ+yA90KRK8t4G+S6WRUtadh
+tOCU+8dSQ1wqVOd0YXbzFbC6B+NHMiZdKQc2w3PBOB5fUUE2TqWKffzX+GWKH2siDi0OZjm4mpxt
+eca8KcyqeTesewXKr/Pvda2qhvivA0t9vzwnc/dyqrHVxarav/qEsXkKbdyOr8XpOEPnT8QjbqKU
+XERka4C+OWYvfmHa329/3lgkaBMW9EFDguDb6nNcCEd/sToOJEJM+4mhs+WZGaoQaXK3XYIZkV8f
+sQ0=
+=Nj+f
+-----END PGP SIGNATURE-----
 
-	.... etc ....
-}
-
-Regards,
-Angelo
+--------------OFTYXzYkyT04oFpF7yLvli0j--

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813CA55819D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9BE5583B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbiFWRCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S234195AbiFWRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbiFWQ6H (ORCPT
+        with ESMTP id S234298AbiFWRcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:58:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624774ECEC;
-        Thu, 23 Jun 2022 09:53:46 -0700 (PDT)
+        Thu, 23 Jun 2022 13:32:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53737794D9;
+        Thu, 23 Jun 2022 10:05:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1880861F99;
-        Thu, 23 Jun 2022 16:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE47C341CA;
-        Thu, 23 Jun 2022 16:53:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9ED72B82490;
+        Thu, 23 Jun 2022 17:05:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053F0C3411B;
+        Thu, 23 Jun 2022 17:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003217;
-        bh=M/IUnOHbECY2+i0S5JihLZ2sBBNn7J6lnIdzKb5aEuI=;
+        s=korg; t=1656003912;
+        bh=DJOfc8IEF1VN/EqCHdagr52Mi4FS6cladU3yklwt0is=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpGL4mb0pfXE6O8J63jTxfd6hnh6ptN1NK+kbhYKopTBIC/LKXuS+A6RjRt4WhPc1
-         fNw8d9+4ZJJYIEfReHGVTx2eVHRkgdckk3rh3jJ2RSd6lTckbB3dyOi0YW+FxrvfbR
-         3ecYvyKYpBk8FQi1cV05PZwpN712OS0pOefp0VMs=
+        b=dr7HuVYc/GWAUVbC+d0+pH4OSzGU/QyLPZxPpd/hBtuvpO5cIAIgLVpJVWtQPULCs
+         RcS1huTyb1rFechbmuvHq2kiYSlov/xWi7ycNxlal8iKzbk9Tj4fDJvAEgv7kbcose
+         xW/r0YrL1Sl5rRfc3b61jYAovK3c33EmPpCMf3t8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 166/264] random: skip fast_init if hwrng provides large chunk of entropy
-Date:   Thu, 23 Jun 2022 18:42:39 +0200
-Message-Id: <20220623164348.761271106@linuxfoundation.org>
+Subject: [PATCH 4.14 126/237] random: cleanup UUID handling
+Date:   Thu, 23 Jun 2022 18:42:40 +0200
+Message-Id: <20220623164346.779975900@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,38 +57,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit af704c856e888fb044b058d731d61b46eeec499d upstream.
+commit 64276a9939ff414f2f0db38036cf4e1a0a703394 upstream.
 
-At boot time, EFI calls add_bootloader_randomness(), which in turn calls
-add_hwgenerator_randomness(). Currently add_hwgenerator_randomness()
-feeds the first 64 bytes of randomness to the "fast init"
-non-crypto-grade phase. But if add_hwgenerator_randomness() gets called
-with more than POOL_MIN_BITS of entropy, there's no point in passing it
-off to the "fast init" stage, since that's enough entropy to bootstrap
-the real RNG. The "fast init" stage is just there to provide _something_
-in the case where we don't have enough entropy to properly bootstrap the
-RNG. But if we do have enough entropy to bootstrap the RNG, the current
-logic doesn't serve a purpose. So, in the case where we're passed
-greater than or equal to POOL_MIN_BITS of entropy, this commit makes us
-skip the "fast init" phase.
+Rather than hard coding various lengths, we can use the right constants.
+Strings should be `char *` while buffers should be `u8 *`. Rather than
+have a nonsensical and unused maxlength, just remove it. Finally, use
+snprintf instead of sprintf, just out of good hygiene.
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+As well, remove the old comment about returning a binary UUID via the
+binary sysctl syscall. That syscall was removed from the kernel in 5.5,
+and actually, the "uuid_strategy" function and related infrastructure
+for even serving it via the binary sysctl syscall was removed with
+894d2491153a ("sysctl drivers: Remove dead binary sysctl support") back
+in 2.6.33.
+
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |   29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1121,7 +1121,7 @@ void rand_initialize_disk(struct gendisk
- void add_hwgenerator_randomness(const void *buffer, size_t count,
- 				size_t entropy)
+@@ -1654,22 +1654,25 @@ const struct file_operations urandom_fop
+ static int sysctl_random_min_urandom_seed = 60;
+ static int sysctl_random_write_wakeup_bits = POOL_MIN_BITS;
+ static int sysctl_poolsize = POOL_BITS;
+-static char sysctl_bootid[16];
++static u8 sysctl_bootid[UUID_SIZE];
+ 
+ /*
+  * This function is used to return both the bootid UUID, and random
+- * UUID.  The difference is in whether table->data is NULL; if it is,
++ * UUID. The difference is in whether table->data is NULL; if it is,
+  * then a new UUID is generated and returned to the user.
+- *
+- * If the user accesses this via the proc interface, the UUID will be
+- * returned as an ASCII string in the standard UUID format; if via the
+- * sysctl system call, as 16 bytes of binary data.
+  */
+ static int proc_do_uuid(struct ctl_table *table, int write,
+ 			void __user *buffer, size_t *lenp, loff_t *ppos)
  {
--	if (unlikely(crng_init == 0)) {
-+	if (unlikely(crng_init == 0 && entropy < POOL_MIN_BITS)) {
- 		size_t ret = crng_pre_init_inject(buffer, count, true);
- 		mix_pool_bytes(buffer, ret);
- 		count -= ret;
+-	struct ctl_table fake_table;
+-	unsigned char buf[64], tmp_uuid[16], *uuid;
++	u8 tmp_uuid[UUID_SIZE], *uuid;
++	char uuid_string[UUID_STRING_LEN + 1];
++	struct ctl_table fake_table = {
++		.data = uuid_string,
++		.maxlen = UUID_STRING_LEN
++	};
++
++	if (write)
++		return -EPERM;
+ 
+ 	uuid = table->data;
+ 	if (!uuid) {
+@@ -1684,12 +1687,8 @@ static int proc_do_uuid(struct ctl_table
+ 		spin_unlock(&bootid_spinlock);
+ 	}
+ 
+-	sprintf(buf, "%pU", uuid);
+-
+-	fake_table.data = buf;
+-	fake_table.maxlen = sizeof(buf);
+-
+-	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
++	snprintf(uuid_string, sizeof(uuid_string), "%pU", uuid);
++	return proc_dostring(&fake_table, 0, buffer, lenp, ppos);
+ }
+ 
+ extern struct ctl_table random_table[];
+@@ -1725,13 +1724,11 @@ struct ctl_table random_table[] = {
+ 	{
+ 		.procname	= "boot_id",
+ 		.data		= &sysctl_bootid,
+-		.maxlen		= 16,
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_do_uuid,
+ 	},
+ 	{
+ 		.procname	= "uuid",
+-		.maxlen		= 16,
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_do_uuid,
+ 	},
 
 

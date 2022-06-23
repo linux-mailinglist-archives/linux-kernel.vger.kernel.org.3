@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925A355845C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEA455845A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbiFWRlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S234670AbiFWRlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiFWRiF (ORCPT
+        with ESMTP id S234682AbiFWRiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Jun 2022 13:38:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBA2522CD;
-        Thu, 23 Jun 2022 10:07:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA3B92B68;
+        Thu, 23 Jun 2022 10:07:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44C0261D11;
-        Thu, 23 Jun 2022 17:07:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFDBC3411B;
-        Thu, 23 Jun 2022 17:07:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76F276159A;
+        Thu, 23 Jun 2022 17:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DA15C3411B;
+        Thu, 23 Jun 2022 17:07:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656004044;
-        bh=I35YHQ+tJXZ0rZvYAE79Eog11E1+vzz57XprisZyxYE=;
+        s=korg; t=1656004047;
+        bh=S6Z2YbLFfMIg2ntUa7Kq61N1Hh/pySifdolHTwUZwt4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OA1BYjL8Fh1s0bVm9C5N7c/8npF8HImRuUTacwI5SksPw6Sq2751dq59lQD4GkuHV
-         +Ttly8I8aXt7iFaXsm/gvdTyzNwtFpU2W3+xdxShdSCB+EbE8wKvQmnrrxPX8kSki2
-         9tL8ch4FRV3c5BW2oziT9VlB3DwViZabEoSBlhDI=
+        b=0JyKvpLiXCrgdQyYCucVle+oYSERRBWM1XeypZRLecPEDeu5QE6UFMfUFAni9Z/wf
+         4U5glnWHk9XtfGUq0CxS/bkjT1gGbq7WvBJi0UBfMWVZC/aID/2D0/mZ5rwA4aLzoU
+         nLk1LlH0f396TXYKwnym5IfJfC0g+3r6IYMIFpAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
-        Joe Perches <joe@perches.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 169/237] random: use symbolic constants for crng_init states
-Date:   Thu, 23 Jun 2022 18:43:23 +0200
-Message-Id: <20220623164348.015902998@linuxfoundation.org>
+Subject: [PATCH 4.14 170/237] random: avoid initializing twice in credit race
+Date:   Thu, 23 Jun 2022 18:43:24 +0200
+Message-Id: <20220623164348.044150513@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
 References: <20220623164343.132308638@linuxfoundation.org>
@@ -58,123 +57,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit e3d2c5e79a999aa4e7d6f0127e16d3da5a4ff70d upstream.
+commit fed7ef061686cc813b1f3d8d0edc6c35b4d3537b upstream.
 
-crng_init represents a state machine, with three states, and various
-rules for transitions. For the longest time, we've been managing these
-with "0", "1", and "2", and expecting people to figure it out. To make
-the code more obvious, replace these with proper enum values
-representing the transition, and then redocument what each of these
-states mean.
+Since all changes of crng_init now go through credit_init_bits(), we can
+fix a long standing race in which two concurrent callers of
+credit_init_bits() have the new bit count >= some threshold, but are
+doing so with crng_init as a lower threshold, checked outside of a lock,
+resulting in crng_reseed() or similar being called twice.
+
+In order to fix this, we can use the original cmpxchg value of the bit
+count, and only change crng_init when the bit count transitions from
+below a threshold to meeting the threshold.
 
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Joe Perches <joe@perches.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ drivers/char/random.c |   48 ++++++++++++++++++++++--------------------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -70,16 +70,16 @@
-  *********************************************************************/
+@@ -264,7 +264,6 @@ static void crng_reseed(void)
+ 	unsigned long flags;
+ 	unsigned long next_gen;
+ 	u8 key[CHACHA20_KEY_SIZE];
+-	bool finalize_init = false;
  
- /*
-- * crng_init =  0 --> Uninitialized
-- *		1 --> Initialized
-- *		2 --> Initialized from input_pool
-- *
-  * crng_init is protected by base_crng->lock, and only increases
-- * its value (from 0->1->2).
-+ * its value (from empty->early->ready).
-  */
--static int crng_init = 0;
--#define crng_ready() (likely(crng_init > 1))
--/* Various types of waiters for crng_init->2 transition. */
-+static enum {
-+	CRNG_EMPTY = 0, /* Little to no entropy collected */
-+	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
-+	CRNG_READY = 2  /* Fully initialized with POOL_READY_BITS collected */
-+} crng_init = CRNG_EMPTY;
-+#define crng_ready() (likely(crng_init >= CRNG_READY))
-+/* Various types of waiters for crng_init->CRNG_READY transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
- static DEFINE_SPINLOCK(random_ready_chain_lock);
-@@ -282,7 +282,7 @@ static void crng_reseed(void)
+ 	extract_entropy(key, sizeof(key));
+ 
+@@ -281,28 +280,10 @@ static void crng_reseed(void)
+ 		++next_gen;
  	WRITE_ONCE(base_crng.generation, next_gen);
  	WRITE_ONCE(base_crng.birth, jiffies);
- 	if (!crng_ready()) {
--		crng_init = 2;
-+		crng_init = CRNG_READY;
- 		finalize_init = true;
- 	}
+-	if (!crng_ready()) {
++	if (!crng_ready())
+ 		crng_init = CRNG_READY;
+-		finalize_init = true;
+-	}
  	spin_unlock_irqrestore(&base_crng.lock, flags);
-@@ -376,7 +376,7 @@ static void crng_make_state(u32 chacha_s
- 	 * For the fast path, we check whether we're ready, unlocked first, and
- 	 * then re-check once locked later. In the case where we're really not
- 	 * ready, we do fast key erasure with the base_crng directly, extracting
--	 * when crng_init==0.
-+	 * when crng_init is CRNG_EMPTY.
- 	 */
- 	if (!crng_ready()) {
- 		bool ready;
-@@ -384,7 +384,7 @@ static void crng_make_state(u32 chacha_s
+ 	memzero_explicit(key, sizeof(key));
+-	if (finalize_init) {
+-		process_random_ready_list();
+-		wake_up_interruptible(&crng_init_wait);
+-		kill_fasync(&fasync, SIGIO, POLL_IN);
+-		pr_notice("crng init done\n");
+-		if (unseeded_warning.missed) {
+-			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
+-				  unseeded_warning.missed);
+-			unseeded_warning.missed = 0;
+-		}
+-		if (urandom_warning.missed) {
+-			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
+-				  urandom_warning.missed);
+-			urandom_warning.missed = 0;
+-		}
+-	}
+ }
+ 
+ /*
+@@ -818,7 +799,7 @@ static void extract_entropy(void *buf, s
+ 
+ static void credit_init_bits(size_t nbits)
+ {
+-	unsigned int init_bits, orig, add;
++	unsigned int new, orig, add;
+ 	unsigned long flags;
+ 
+ 	if (crng_ready() || !nbits)
+@@ -828,13 +809,28 @@ static void credit_init_bits(size_t nbit
+ 
+ 	do {
+ 		orig = READ_ONCE(input_pool.init_bits);
+-		init_bits = min_t(unsigned int, POOL_BITS, orig + add);
+-	} while (cmpxchg(&input_pool.init_bits, orig, init_bits) != orig);
++		new = min_t(unsigned int, POOL_BITS, orig + add);
++	} while (cmpxchg(&input_pool.init_bits, orig, new) != orig);
+ 
+-	if (!crng_ready() && init_bits >= POOL_READY_BITS)
+-		crng_reseed();
+-	else if (unlikely(crng_init == CRNG_EMPTY && init_bits >= POOL_EARLY_BITS)) {
++	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
++		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
++		process_random_ready_list();
++		wake_up_interruptible(&crng_init_wait);
++		kill_fasync(&fasync, SIGIO, POLL_IN);
++		pr_notice("crng init done\n");
++		if (unseeded_warning.missed) {
++			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
++				  unseeded_warning.missed);
++			unseeded_warning.missed = 0;
++		}
++		if (urandom_warning.missed) {
++			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
++				  urandom_warning.missed);
++			urandom_warning.missed = 0;
++		}
++	} else if (orig < POOL_EARLY_BITS && new >= POOL_EARLY_BITS) {
  		spin_lock_irqsave(&base_crng.lock, flags);
- 		ready = crng_ready();
- 		if (!ready) {
--			if (crng_init == 0)
-+			if (crng_init == CRNG_EMPTY)
- 				extract_entropy(base_crng.key, sizeof(base_crng.key));
- 			crng_fast_key_erasure(base_crng.key, chacha_state,
- 					      random_data, random_data_len);
-@@ -735,8 +735,8 @@ EXPORT_SYMBOL(get_random_bytes_arch);
- 
- enum {
- 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
--	POOL_INIT_BITS = POOL_BITS, /* No point in settling for less. */
--	POOL_FAST_INIT_BITS = POOL_INIT_BITS / 2
-+	POOL_READY_BITS = POOL_BITS, /* When crng_init->CRNG_READY */
-+	POOL_EARLY_BITS = POOL_READY_BITS / 2 /* When crng_init->CRNG_EARLY */
- };
- 
- static struct {
-@@ -831,13 +831,13 @@ static void credit_init_bits(size_t nbit
- 		init_bits = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.init_bits, orig, init_bits) != orig);
- 
--	if (!crng_ready() && init_bits >= POOL_INIT_BITS)
-+	if (!crng_ready() && init_bits >= POOL_READY_BITS)
- 		crng_reseed();
--	else if (unlikely(crng_init == 0 && init_bits >= POOL_FAST_INIT_BITS)) {
-+	else if (unlikely(crng_init == CRNG_EMPTY && init_bits >= POOL_EARLY_BITS)) {
- 		spin_lock_irqsave(&base_crng.lock, flags);
--		if (crng_init == 0) {
-+		if (crng_init == CRNG_EMPTY) {
++		/* Check if crng_init is CRNG_EMPTY, to avoid race with crng_reseed(). */
+ 		if (crng_init == CRNG_EMPTY) {
  			extract_entropy(base_crng.key, sizeof(base_crng.key));
--			crng_init = 1;
-+			crng_init = CRNG_EARLY;
- 		}
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
- 	}
-@@ -1510,7 +1510,7 @@ const struct file_operations urandom_fop
-  *
-  * - write_wakeup_threshold - the amount of entropy in the input pool
-  *   below which write polls to /dev/random will unblock, requesting
-- *   more entropy, tied to the POOL_INIT_BITS constant. It is writable
-+ *   more entropy, tied to the POOL_READY_BITS constant. It is writable
-  *   to avoid breaking old userspaces, but writing to it does not
-  *   change any behavior of the RNG.
-  *
-@@ -1525,7 +1525,7 @@ const struct file_operations urandom_fop
- #include <linux/sysctl.h>
- 
- static int sysctl_random_min_urandom_seed = CRNG_RESEED_INTERVAL / HZ;
--static int sysctl_random_write_wakeup_bits = POOL_INIT_BITS;
-+static int sysctl_random_write_wakeup_bits = POOL_READY_BITS;
- static int sysctl_poolsize = POOL_BITS;
- static u8 sysctl_bootid[UUID_SIZE];
- 
+ 			crng_init = CRNG_EARLY;
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9800A5582A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508A9558301
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiFWRRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S233366AbiFWRXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiFWRLn (ORCPT
+        with ESMTP id S233626AbiFWRWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:11:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B43517AB7;
-        Thu, 23 Jun 2022 09:50:47 -0700 (PDT)
+        Thu, 23 Jun 2022 13:22:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E781B90FA3;
+        Thu, 23 Jun 2022 10:01:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10C8261FBF;
-        Thu, 23 Jun 2022 16:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E83F5C3411B;
-        Thu, 23 Jun 2022 16:50:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08DE0B8248C;
+        Thu, 23 Jun 2022 17:01:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502F5C3411B;
+        Thu, 23 Jun 2022 17:01:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003046;
-        bh=NngK8zJ9xOgR7UIyAU/43ZE+nhhVWSxmb/OOH9fQejc=;
+        s=korg; t=1656003663;
+        bh=OmzC7V4eFcpWTGj4IkCutE4YTGLbRDKXs5Xy15gQa+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nnSsJX18XgOwVTCTD99q6/zwGBt6hRCvaLVCQ4HXhJGWaBr0hmxdtLsf5woJ49Iqn
-         7cRKHImwgRGekNGjytWwRsDjRzT8rKK6+avBV8NZM0/MDwvmw5iUKoHhMACqhvGlvT
-         86dCiDeSLKAs+heGDyNF3Ri4euLOXLz6cKp4KYaQ=
+        b=Boh8dPTV/bXFJoMtVWR/UUq+tL86COvbRMHF5epFy7gHk2TxAT59JnLEQBSb0cZLp
+         FG0EWtUPg1b/QXwSXKyUU8MB2V5yMJYnrwi3hL3t7gwI2vg4Aa5HgETLVfay6p1bLE
+         78FAC6HVtmKhKr7+OvES5/LW5VXQ3oK/TXaT6r0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Theodore Tso <tytso@mit.edu>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 085/264] random: do not re-init if crng_reseed completes before primary init
-Date:   Thu, 23 Jun 2022 18:41:18 +0200
-Message-Id: <20220623164346.474751240@linuxfoundation.org>
+Subject: [PATCH 4.14 045/237] random: avoid warnings for !CONFIG_NUMA builds
+Date:   Thu, 23 Jun 2022 18:41:19 +0200
+Message-Id: <20220623164344.450645767@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
+References: <20220623164343.132308638@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,23 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Mark Rutland <mark.rutland@arm.com>
 
-commit 9c3ddde3f811aabbb83778a2a615bf141b4909ef upstream.
+commit ab9a7e27044b87ff2be47b8f8e095400e7fccc44 upstream.
 
-If the bootloader supplies sufficient material and crng_reseed() is called
-very early on, but not too early that wqs aren't available yet, then we
-might transition to crng_init==2 before rand_initialize()'s call to
-crng_initialize_primary() made. Then, when crng_initialize_primary() is
-called, if we're trusting the CPU's RDRAND instructions, we'll
-needlessly reinitialize the RNG and emit a message about it. This is
-mostly harmless, as numa_crng_init() will allocate and then free what it
-just allocated, and excessive calls to invalidate_batched_entropy()
-aren't so harmful. But it is funky and the extra message is confusing,
-so avoid the re-initialization all together by checking for crng_init <
-2 in crng_initialize_primary(), just as we already do in crng_reseed().
+As crng_initialize_secondary() is only called by do_numa_crng_init(),
+and the latter is under ifdeffery for CONFIG_NUMA, when CONFIG_NUMA is
+not selected the compiler will warn that the former is unused:
 
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+| drivers/char/random.c:820:13: warning: 'crng_initialize_secondary' defined but not used [-Wunused-function]
+|   820 | static void crng_initialize_secondary(struct crng_state *crng)
+|       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+Stephen reports that this happens for x86_64 noallconfig builds.
+
+We could move crng_initialize_secondary() and crng_init_try_arch() under
+the CONFIG_NUMA ifdeffery, but this has the unfortunate property of
+separating them from crng_initialize_primary() and
+crng_init_try_arch_early() respectively. Instead, let's mark
+crng_initialize_secondary() as __maybe_unused.
+
+Link: https://lore.kernel.org/r/20200310121747.GA49602@lakrids.cambridge.arm.com
+Fixes: 5cbe0f13b51a ("random: split primary/secondary crng init paths")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -80,14 +90,14 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -829,7 +829,7 @@ static void __init crng_initialize_prima
+@@ -800,7 +800,7 @@ static bool crng_init_try_arch(struct cr
+ 	return arch_init;
+ }
+ 
+-static void crng_initialize_secondary(struct crng_state *crng)
++static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
  {
  	memcpy(&crng->state[0], "expand 32-byte k", 16);
- 	_extract_entropy(&input_pool, &crng->state[4], sizeof(__u32) * 12, 0);
--	if (crng_init_try_arch_early(crng) && trust_cpu) {
-+	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
- 		invalidate_batched_entropy();
- 		numa_crng_init();
- 		crng_init = 2;
+ 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
 
 

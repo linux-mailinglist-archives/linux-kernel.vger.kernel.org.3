@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395B1557A49
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CB7557A4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 14:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiFWM0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 08:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+        id S230429AbiFWM1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 08:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiFWM0x (ORCPT
+        with ESMTP id S229741AbiFWM1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:26:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65935DFC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 05:26:52 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LTKCw652rzShK9;
-        Thu, 23 Jun 2022 20:23:24 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Thu, 23 Jun 2022 08:27:17 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B7D3CA40;
+        Thu, 23 Jun 2022 05:27:15 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LTKHg0JJqzDsPx;
+        Thu, 23 Jun 2022 20:26:39 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 20:26:49 +0800
-Subject: Re: [PATCH 14/16] mm/huge_memory: fix comment of page_deferred_list
-To:     Muchun Song <songmuchun@bytedance.com>
-CC:     <akpm@linux-foundation.org>, <shy828301@gmail.com>,
-        <willy@infradead.org>, <zokeefe@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220622170627.19786-1-linmiaohe@huawei.com>
- <20220622170627.19786-15-linmiaohe@huawei.com>
- <YrQVOcF4PirjGa/M@FVFYT0MHHV2J.usts.net>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <0b1a1633-2e07-87df-b707-3058353f5609@huawei.com>
-Date:   Thu, 23 Jun 2022 20:26:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2375.24; Thu, 23 Jun 2022 20:27:13 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 23 Jun 2022 20:27:12 +0800
+Subject: Re: [PATCH -next v5 4/8] blk-throttle: fix io hung due to config
+ updates
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220528064330.3471000-1-yukuai3@huawei.com>
+ <20220528064330.3471000-5-yukuai3@huawei.com>
+ <20220622172621.GA28246@blackbody.suse.cz>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <f5165488-2461-8946-593f-14154e404850@huawei.com>
+Date:   Thu, 23 Jun 2022 20:27:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <YrQVOcF4PirjGa/M@FVFYT0MHHV2J.usts.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
+In-Reply-To: <20220622172621.GA28246@blackbody.suse.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -53,55 +57,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/23 15:24, Muchun Song wrote:
-> On Thu, Jun 23, 2022 at 01:06:25AM +0800, Miaohe Lin wrote:
->> The current comment is confusing because if global or memcg deferred list
->> in the second tail page is occupied by compound_head, why we still use
->> page[2].deferred_list here? I think it wants to say that Global or memcg
->> deferred list in the first tail page is occupied by compound_mapcount and
->> compound_pincount so we use the second tail page's deferred_list instead.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  include/linux/huge_mm.h | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
->> index 12b297f9951d..2e8062b3417a 100644
->> --- a/include/linux/huge_mm.h
->> +++ b/include/linux/huge_mm.h
->> @@ -294,8 +294,8 @@ static inline bool thp_migration_supported(void)
->>  static inline struct list_head *page_deferred_list(struct page *page)
->>  {
->>  	/*
->> -	 * Global or memcg deferred list in the second tail pages is
->> -	 * occupied by compound_head.
->> +	 * Global or memcg deferred list in the first tail page is
->> +	 * occupied by compound_mapcount and compound_pincount.
->>  	 */
+Hi,
+
+在 2022/06/23 1:26, Michal Koutný 写道:
+> (Apologies for taking so long before answering.)
 > 
-> The structure of "struct page" seems to have told us the information that
-> we resue the 2nd tail page to be used as deferred_list. I am not sure the
-
-Yes, it does.
-
-> value of those comments. Maybe better to remove them?
-
-IMHO above comment tries to tell us why deferred list in the second tail page is used
-instead of first tail page. But it should be fine to remove the above comments as they
-don't seem to provide much info (thought I'm not really sure).
-
-Thanks.
-
-> 
-> Thanks.
-> 
->>  	return &page[2].deferred_list;
->>  }
->> -- 
->> 2.23.0
+> On Sat, May 28, 2022 at 02:43:26PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
+>> Some simple test:
+>> 1)
+>> cd /sys/fs/cgroup/blkio/
+>> echo $$ > cgroup.procs
+>> echo "8:0 2048" > blkio.throttle.write_bps_device
+>> {
+>>          sleep 2
+>>          echo "8:0 1024" > blkio.throttle.write_bps_device
+>> } &
+>> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
 >>
+>> 2)
+>> cd /sys/fs/cgroup/blkio/
+>> echo $$ > cgroup.procs
+>> echo "8:0 1024" > blkio.throttle.write_bps_device
+>> {
+>>          sleep 4
+>>          echo "8:0 2048" > blkio.throttle.write_bps_device
+>> } &
+>> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
 >>
-> .
+>> test results: io finish time
+>> 	before this patch	with this patch
+>> 1)	10s			6s
+>> 2)	8s			6s
+> 
+> I agree these are consistent and correct times.
+> 
+> And the new implementation won't make it worse (in terms of delaying a
+> bio) than configuring minimal limits from the beginning, AFACT.
+> 
+>> @@ -801,7 +836,8 @@ static bool tg_with_in_iops_limit(struct throtl_grp *tg, struct bio *bio,
+>>   
+>>   	/* Round up to the next throttle slice, wait time must be nonzero */
+>>   	jiffy_elapsed_rnd = roundup(jiffy_elapsed + 1, tg->td->throtl_slice);
+>> -	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd);
+>> +	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd) +
+>> +		     tg->io_skipped[rw];
+>>   	if (tg->io_disp[rw] + 1 <= io_allowed) {
+>>   		if (wait)
+>>   			*wait = 0;
+>> @@ -838,7 +874,8 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
+>>   		jiffy_elapsed_rnd = tg->td->throtl_slice;
+>>   
+>>   	jiffy_elapsed_rnd = roundup(jiffy_elapsed_rnd, tg->td->throtl_slice);
+>> -	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd);
+>> +	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd) +
+>> +			tg->bytes_skipped[rw];
+>>   	if (tg->bytes_disp[rw] + bio_size <= bytes_allowed) {
+>>   		if (wait)
+>>   			*wait = 0;
+>>
+> 
+> Here we may allow to dispatch a bio above current slice's
+> calculate_bytes_allowed() if bytes_skipped is already >0.
+
+Hi, I don't expect that to happen. For example, if a bio is still
+throttled, then old slice is keeped with proper 'bytes_skipped',
+then new wait time is caculated based on (bio_size - bytes_skipped).
+
+After the bio is dispatched(I assum that other bios can't preempt),
+if new slice is started, then 'bytes_skipped' is cleared, there should
+be no problem; If old slice is extended, note that we only wait
+for 'bio_size - bytes_skipped' bytes, while 'bio_size' bytes is added
+to 'tg->bytes_disp'. I think this will make sure new bio won't be
+dispatched above slice.
+
+What do you think?
+> 
+> bytes_disp + bio_size <= calculate_bytes_allowed() + bytes_skipped
+> 
+> Then on the next update
+> 
+>> [shuffle]
+>> +static void __tg_update_skipped(struct throtl_grp *tg, bool rw)
+>> +{
+>> +	unsigned long jiffy_elapsed = jiffies - tg->slice_start[rw];
+>> +	u64 bps_limit = tg_bps_limit(tg, rw);
+>> +	u32 iops_limit = tg_iops_limit(tg, rw);
+>> +
+>> +	if (bps_limit != U64_MAX)
+>> +		tg->bytes_skipped[rw] +=
+>> +			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
+>> +			tg->bytes_disp[rw];
+>> +	if (iops_limit != UINT_MAX)
+>> +		tg->io_skipped[rw] +=
+>> +			calculate_io_allowed(iops_limit, jiffy_elapsed) -
+>> +			tg->io_disp[rw];
+>> +}
+> 
+> the difference(s) here could be negative. bytes_skipped should be
+> reduced to account for the additionally dispatched bio.
+> This is all unsigned so negative numbers underflow, however, we add them
+> again to the unsigned, so thanks to modular arithmetics the result is
+> correctly updated bytes_skipped.
+> 
+> Maybe add a comment about this (unsigned) intention?
+
+Of course I can do that.
+> 
+> (But can this happen? The discussed bio would have to outrun another bio
+> (the one which defined the current slice_end) but since blk-throttle
+> uses queues (FIFO) everywhere this shouldn't really happen. But it's
+> good to know this works as intended.)
+I can also mention that in comment.
+> 
+> This patch can have
+> Reviewed-by: Michal Koutný <mkoutny@suse.com>
 > 
 
+Thanks for the review!
+Kuai

@@ -2,118 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146F0558022
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808BB5581AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbiFWQnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S230255AbiFWRDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbiFWQm5 (ORCPT
+        with ESMTP id S232971AbiFWRAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:42:57 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE56BB96
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:42:55 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id r1so18618750plo.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 09:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S6hz8M8YZFqPg+rrGciN8Bxo8th0Vg1fhfElGS1vnuI=;
-        b=d0K9ZioXVT08tRoikYi6GqBEGr4BS/wf+DoeVBqJLLTdCIAWr2FXnOm1S10GPbwYnM
-         jrKEFElgWZVEh9MFxB04cMQUnbFUjkYQF6r3Et+6GwNx4sd5TBWgPLocKlQVjWZCRrB2
-         ARU20yfQHyYNbhYUYT2fRgUV0lQ7hAEbQm5Ecu28CgITIPYzepsNEyC3MQT7q4lzyOMG
-         BEb4FpUhSQqobA9Pob8eUcmRKpHq4Ba+ObD0fZeq4cfioNCAyrTlL4Kk4vln7x4X3x3m
-         v9Qe2nr8fIcROwb84JZkX3RO0rTyNxbolLnY4WvgiXdA9lJ95b7oDT7ySZKqmCCazPDA
-         3LVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S6hz8M8YZFqPg+rrGciN8Bxo8th0Vg1fhfElGS1vnuI=;
-        b=iNPN17QIDGxSPMm0l60DEsJBeumSU+YAJzM77NzRJdM4YRxLqC+qG7hPquKnrXh5tS
-         f2cm0KKXIwNxyJoCoo/iRm0ew5S30lZS/KNIL8O/XXMbH5NLPC9unyfzg5DamGlWqAO4
-         nrMbrwam7FPEHfFktsuyQlpQVX/Rii7fX5QVfCeWpFhSL7YmzYLARBBhPP5AZs+84xvK
-         Xkm/SxgKrEhx3xK5wJTmD+YaS3djxkmcSW5TuD1TlPd+0rBZRfSwS7yzfPOrIWM+hIHD
-         TKgFbIH6SVmrRNMFGFS1Xjx0iCSNl0rOPMeDOUOlcvPJ8ivdqYigWOs8q4x8hyl6L3/s
-         Emyg==
-X-Gm-Message-State: AJIora80pNVMhLtpSU25hTSbq5FVap2RhvYndh9uoUeUpSNHTHDSobQp
-        T9g+ap+WWEO0Plqef1w/sPWmdzpRuxRa1KvDodpQ1Q==
-X-Google-Smtp-Source: AGRyM1tIkL+FeUm4IWfsd5tVJ0yduL2FFqQQW4NwI9yBKuUe8peXkhFsv/YnlRQe9BGM49zGFj3XXDX46gMWXqEYh4o=
-X-Received: by 2002:a17:903:2cb:b0:14f:4fb6:2fb0 with SMTP id
- s11-20020a17090302cb00b0014f4fb62fb0mr39330727plk.172.1656002575066; Thu, 23
- Jun 2022 09:42:55 -0700 (PDT)
+        Thu, 23 Jun 2022 13:00:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70FF4F1C3;
+        Thu, 23 Jun 2022 09:54:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4CE361F8D;
+        Thu, 23 Jun 2022 16:54:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD217C341CC;
+        Thu, 23 Jun 2022 16:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656003248;
+        bh=zKzsyeV+YUgO1OfzDfPItn2viW+5rIZVKooAhYmAh70=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KNn8ic4rR/0EC0IrRAUx1DKDsToLJnIVcVJqhfclvnmpg8TmjXij3h0b3AlBE3P4R
+         Q8tfpUNtijbCJWrVlcVcbFQxRGKpS3XqGz6D7ckh1Kj013jxzYzSuUQlsCYHyECxHI
+         KSM68q9wMI+ADxkHFk93aRFGt6ZQA6QBKalnCLPU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jan Varho <jan.varho@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.9 170/264] random: do not split fast init input in add_hwgenerator_randomness()
+Date:   Thu, 23 Jun 2022 18:42:43 +0200
+Message-Id: <20220623164348.874095017@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
+References: <20220623164344.053938039@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-References: <20220623000530.1194226-1-yosryahmed@google.com>
- <YrQe5A+FXnbgOR1f@dhcp22.suse.cz> <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
- <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz> <CAJD7tkadsLOV7GMFAm+naX4Y1WpZ-4=NkAhAMxNw60iaRPWx=w@mail.gmail.com>
- <YrSWruhPlJV1X9kp@dhcp22.suse.cz>
-In-Reply-To: <YrSWruhPlJV1X9kp@dhcp22.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 23 Jun 2022 09:42:43 -0700
-Message-ID: <CALvZod6eLa1X1FJ2Qi6FXhFA-qBCP4mN2SB31MSgjj+g8hKo6Q@mail.gmail.com>
-Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
- memory pressure
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 23-06-22 09:22:35, Yosry Ahmed wrote:
-> > On Thu, Jun 23, 2022 at 2:43 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Thu 23-06-22 01:35:59, Yosry Ahmed wrote:
-> [...]
-> > > > In our internal version of memory.reclaim that we recently upstreamed,
-> > > > we do not account vmpressure during proactive reclaim (similar to how
-> > > > psi is handled upstream). We want to make sure this behavior also
-> > > > exists in the upstream version so that consolidating them does not
-> > > > break our users who rely on vmpressure and will start seeing increased
-> > > > pressure due to proactive reclaim.
-> > >
-> > > These are good reasons to have this patch in your tree. But why is this
-> > > patch benefitial for the upstream kernel? It clearly adds some code and
-> > > some special casing which will add a maintenance overhead.
-> >
-> > It is not just Google, any existing vmpressure users will start seeing
-> > false pressure notifications with memory.reclaim. The main goal of the
-> > patch is to make sure memory.reclaim does not break pre-existing users
-> > of vmpressure, and doing it in a way that is consistent with psi makes
-> > sense.
->
-> memory.reclaim is v2 only feature which doesn't have vmpressure
-> interface. So I do not see how pre-existing users of the upstream kernel
-> can see any breakage.
->
+From: Jan Varho <jan.varho@gmail.com>
 
-Please note that vmpressure is still being used in v2 by the
-networking layer (see mem_cgroup_under_socket_pressure()) for
-detecting memory pressure.
+commit 527a9867af29ff89f278d037db704e0ed50fb666 upstream.
 
-Though IMO we should deprecate vmpressure altogether.
+add_hwgenerator_randomness() tries to only use the required amount of input
+for fast init, but credits all the entropy, rather than a fraction of
+it. Since it's hard to determine how much entropy is left over out of a
+non-unformly random sample, either give it all to fast init or credit
+it, but don't attempt to do both. In the process, we can clean up the
+injection code to no longer need to return a value.
+
+Signed-off-by: Jan Varho <jan.varho@gmail.com>
+[Jason: expanded commit message]
+Fixes: 73c7733f122e ("random: do not throw away excess input to crng_fast_load")
+Cc: stable@vger.kernel.org # 5.17+, requires af704c856e88
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/char/random.c |   23 ++++++-----------------
+ 1 file changed, 6 insertions(+), 17 deletions(-)
+
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -438,11 +438,8 @@ static void crng_make_state(u32 chacha_s
+  * This shouldn't be set by functions like add_device_randomness(),
+  * where we can't trust the buffer passed to it is guaranteed to be
+  * unpredictable (so it might not have any entropy at all).
+- *
+- * Returns the number of bytes processed from input, which is bounded
+- * by CRNG_INIT_CNT_THRESH if account is true.
+  */
+-static size_t crng_pre_init_inject(const void *input, size_t len, bool account)
++static void crng_pre_init_inject(const void *input, size_t len, bool account)
+ {
+ 	static int crng_init_cnt = 0;
+ 	struct blake2s_state hash;
+@@ -453,18 +450,15 @@ static size_t crng_pre_init_inject(const
+ 	spin_lock_irqsave(&base_crng.lock, flags);
+ 	if (crng_init != 0) {
+ 		spin_unlock_irqrestore(&base_crng.lock, flags);
+-		return 0;
++		return;
+ 	}
+ 
+-	if (account)
+-		len = min_t(size_t, len, CRNG_INIT_CNT_THRESH - crng_init_cnt);
+-
+ 	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
+ 	blake2s_update(&hash, input, len);
+ 	blake2s_final(&hash, base_crng.key);
+ 
+ 	if (account) {
+-		crng_init_cnt += len;
++		crng_init_cnt += min_t(size_t, len, CRNG_INIT_CNT_THRESH - crng_init_cnt);
+ 		if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
+ 			++base_crng.generation;
+ 			crng_init = 1;
+@@ -475,8 +469,6 @@ static size_t crng_pre_init_inject(const
+ 
+ 	if (crng_init == 1)
+ 		pr_notice("fast init done\n");
+-
+-	return len;
+ }
+ 
+ static void _get_random_bytes(void *buf, size_t nbytes)
+@@ -1134,12 +1126,9 @@ void add_hwgenerator_randomness(const vo
+ 				size_t entropy)
+ {
+ 	if (unlikely(crng_init == 0 && entropy < POOL_MIN_BITS)) {
+-		size_t ret = crng_pre_init_inject(buffer, count, true);
+-		mix_pool_bytes(buffer, ret);
+-		count -= ret;
+-		buffer += ret;
+-		if (!count || crng_init == 0)
+-			return;
++		crng_pre_init_inject(buffer, count, true);
++		mix_pool_bytes(buffer, count);
++		return;
+ 	}
+ 
+ 	/*
+
+

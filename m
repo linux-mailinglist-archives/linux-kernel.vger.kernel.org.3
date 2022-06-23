@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB445570DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC645570DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377606AbiFWCEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 22:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S1377604AbiFWCJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 22:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiFWCEK (ORCPT
+        with ESMTP id S231310AbiFWCI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 22:04:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D7D21E17;
-        Wed, 22 Jun 2022 19:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655949824;
-        bh=rL6VxwOlcQhp3wySuLV2AVqCnX+m+t3FXl4nhTKJ5ws=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=ZZwmaEkfEIryCj9VqC7uZKxRfBg1xVaL+Asbg5SQZSd2PKLffCEJAyA7+6d5DPPEy
-         SHKQ8Jcb+ke+izHiwfZaeGCZI04sSEFZVNQBXaiZkVxsSYwH5cVUGGGt3shBXkY3QM
-         igo9R5ZiOHICwehDeIhdxupqsmYf4Ep2x+E5m/00=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.181]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNKhs-1oIzDR3xIg-00OstY; Thu, 23
- Jun 2022 04:03:44 +0200
-Subject: Re: [PATCH 2/8] serial: core, 8250: set RS485 termination gpio in
- serial core
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vz@mleia.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukas@wunner.de, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-3-LinoSanfilippo@gmx.de>
- <YrNMMQUYdgDz45Jc@smile.fi.intel.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <7f502ad0-8c86-5029-8801-238402c48d0e@gmx.de>
-Date:   Thu, 23 Jun 2022 04:03:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 22 Jun 2022 22:08:57 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B5913D3F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:08:56 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id jb13so3324439plb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gFNqrvmdrehhVYe9abTr2VyL7ULkOZ03V3dAQM99o3U=;
+        b=SGChNjh3wO0ObI0jHGsZTaKlJj3CIJcWvDAzyZMCNJ5hj6FLxOS4qy55ap+u2LUvCI
+         bqwQXvR7CapH0pFjzh3BET+HiW/z0nRkjuDUl0QOQfI81Be6/vScx1BbC9yeyb/eVQ3A
+         vDTpwmZdpT7QKGSGK2nSVt2kcRy9ZwpW7LmeWROAoG6mtXYuBB25F0uJm3wJBfG+gUzQ
+         1EYKlZZHIYqfk3D5ttHKbgtOETES9idlfX8AG+9sp5OtAldbsXf7Usx1nVc2QZFHhzGh
+         24kgaU6LFPQt9MVUXtBTLAtmx4R+v7KNqM48J5/No/GwBj3Rn1fdYH1GOI4Pf6byNsC5
+         QARA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gFNqrvmdrehhVYe9abTr2VyL7ULkOZ03V3dAQM99o3U=;
+        b=vdnDQo9EuhyF3TswEL3yj7CfqOQyOSSNvCyIMqqP1VjOlnMqmCnaSopAWyF03s8+XS
+         7jqazlkCtNcWo7zziPsi5whRV/HCMnCShYdJlGgGO8hu4VgHYlLRU76EOhtKO/WV2pJC
+         lmzIjH/uRqKd8SyyOMEoDddc83qMWqzx8dTXy0XE+ojOdh25KLsVN5ow+IcKB4LF6n9B
+         gshAiAXmkJ8Q6M36bC111nMe2S0lO2ke+pzauUb2xnCD/czIfML2fWjyYrFmO2x/oDw/
+         mTojq9mVtP60/ilbgpKI0xCgps4CCRPeg3giIjcEt/x5iFhi0XXng6Ik91xcqTFyP2pu
+         ubrw==
+X-Gm-Message-State: AJIora+nTXPmbYa/ORgrhLmkfCt7u9rWbHhJhpmlELjsJoWFv8xLCTLv
+        Y5x9X5vZjJ5QdifyGo9R6udJcY3w93o=
+X-Google-Smtp-Source: AGRyM1ut5eimvJbLkUkpUbKtQdua0qme/fASO93DfJczTES2Dr+mvKAK+7WB1CaD9RFgVQRi3RXVcw==
+X-Received: by 2002:a17:90a:f314:b0:1ec:91a9:3256 with SMTP id ca20-20020a17090af31400b001ec91a93256mr1430541pjb.155.1655950136037;
+        Wed, 22 Jun 2022 19:08:56 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id jg4-20020a17090326c400b001663cf001besm13090011plb.174.2022.06.22.19.08.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 19:08:55 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     akpm@linux-foundation.org, willy@infradead.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH v2] mm/page_alloc: make the annotations of available memory more accurate
+Date:   Thu, 23 Jun 2022 02:08:34 +0000
+Message-Id: <20220623020833.972979-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YrNMMQUYdgDz45Jc@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:BHxZUtz7aL7d4oKsWy5vYNIC67j+odc8NKypfMy1GloZQ3bEmOb
- ThmaeUBb1M4nT3ehnOa/eJ0ynUyqQwiSPkZxaHMn4NOlADvT2+9BBBYd/F/hIicZgJWcvQq
- RVV8l/6cGIQ7SwC7vP5L5lfB0mhgKhZnEmN3Dj/Xjg0aODb+pAYzhwoziO/sPfbVHpaPhiY
- ndFlH5HGRFb54+BCrIZrg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EtEHicE+FI8=:yUFwRsuReLOQVavO9hKK1d
- uvdYBUGK8F3iZi6GoL+aNxZkFYun6mOL3Ub+zJBbwxSxTzxH1Fd/KmTfmoGspV+CR1EZYsJBo
- 4yduTQQBprc5gAzmGLlifyhCw3nZ8qCUPlLMAgDX2aJkB6e6ckGaBZhvBMaHKFnqY3+037+fc
- ilc4eIfEtzWvfDP5lF+DLQs7pT5XaB0adr8hzRAqa5d01hY9xwPO9BdwA/vTgJFTnsfC6a3BL
- OLnLOJCiec2wPB3j0qYgv04D1nnp6hs6vNvixo4rGXF48rO6dG9evq/1afG0YWe80ju3EV4eJ
- nSr5kkGVuEaK8xmTPpd8QVFq0T6I96ivchOTSPFK/KA5LLloNnaIiKVN8MnLpNluk0R6zR5AT
- vCx9YCUCAYQHzr8ynJeJFDeteP1NiRSpULmnO50j03axY3zXXRJxtD2wmG5t83uSAn+v/qngO
- ZOMExJ+n7YFcF3gmpKiouSwfyakxPQP8eSx6mezq2VIELAqRyxYLcGywX9nsbkEUCncTQVDv2
- sB7o2wyMUdPw89ZSqKxLYIMeW5Glk0Dy2nj1LSEkwQjhk8np1+KKmfN2egkFBUYDqc+/tz2TC
- crQz7N9nEjiQBK4tDRY0c2gRU9/Dijh5fjqzhFuXb43V5Y0cCn9YIml50D+TNXG/YPzyiT6k4
- pEeP+l/d3XvjuO+j/vztY+hRNwb/xG+Ng7xJ1G7eg+8z8mqgMnIpIFvcgQwukaOJAbDMSW3ba
- QN+kXOOLYAk1xZzXytuHjfMO33GmIBrVsy0HmUL18CsYxxSDKLCo+rZK9uOjs1mE70DnKNr92
- btitCvr8ZLzpV7pSwJEww23hcBqQDk2pgMGSxdKJ8xt6Yuyehr3Bz4XRD7169vh+C5y0KALl9
- ckXFnRYuY0RcKv9GODEdtYfiSRFltT9ZI07LJaCS1gUO3IYGlrZDfNgvhucKTS0g2jrszyZ0J
- A8FB+1Q9i3QpEDPrr2Sc9OzyDKOCFIW5KU7D+cNKJbR8yTHpBCuQKqAy5T/c7zpJCq/kMBJ3/
- R69HGuocmsFmh+OIip9HnKQJKnBi9F/CxIYa35/RDhv6VRTk4ZF5/mHLvMdaHcolZ73nBGZdW
- tgODXSbx1j4Fd3EelYHn0gXiQlI5Vi7pH/QMNHsblr+m+XQDQuuuLtrQw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,39 +70,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.22 at 19:06, Andy Shevchenko wrote:
-> On Wed, Jun 22, 2022 at 05:46:53PM +0200, Lino Sanfilippo wrote:
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> In serial8250_em485_config() the termination GPIO is set with the uart_=
-port
->> spinlock held. This is an issue if setting the GPIO line can sleep (e.g=
-.
->> since the concerning GPIO expander is connected via SPI or I2C).
->>
->> Fix this by setting the termination line outside of the uart_port spinl=
-ock
->> in the serial core.
->
-> This doesn't describe that this patch is actually changing GPIO to suppo=
-rt
-> sleep mode. So, it doesn't fix anything. Please rephrase the commit mess=
-age
-> accordingly.
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-Good point, I will adjust the commit message in the next version.
+Not all the systems use swap, so estimating available memory would
+help to prevent swapping or OOM of system that not use swap.
 
->> This also makes setting the termination GPIO generic for all uart drive=
-rs.
->
-> UART
->
+And we need to reserve some page cache to prevent swapping or
+thrashing. If somebody is accessing the pages in pagecache,
+and if too much would be freed, most accesses might mean
+reading data from disk, i.e. thrashing.
 
-Right, upper letters should be used.
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+v2:
+- add signoff
+---
+ mm/page_alloc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks a lot for the review!
-
-Regards,
-Lino
-
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e538dde2c1c0..233f68d31cdd 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5889,14 +5889,14 @@ long si_mem_available(void)
+ 
+ 	/*
+ 	 * Estimate the amount of memory available for userspace allocations,
+-	 * without causing swapping.
++	 * without causing swapping or OOM.
+ 	 */
+ 	available = global_zone_page_state(NR_FREE_PAGES) - totalreserve_pages;
+ 
+ 	/*
+ 	 * Not all the page cache can be freed, otherwise the system will
+-	 * start swapping. Assume at least half of the page cache, or the
+-	 * low watermark worth of cache, needs to stay.
++	 * start swapping or thrashing. Assume at least half of the page
++	 * cache, or the low watermark worth of cache, needs to stay.
+ 	 */
+ 	pagecache = pages[LRU_ACTIVE_FILE] + pages[LRU_INACTIVE_FILE];
+ 	pagecache -= min(pagecache / 2, wmark_low);
+-- 
+2.25.1
 

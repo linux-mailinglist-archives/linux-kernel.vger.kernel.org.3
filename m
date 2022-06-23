@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F951557D0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BB9557D0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 15:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiFWNat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 09:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S231664AbiFWNar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 09:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiFWNaB (ORCPT
+        with ESMTP id S230306AbiFWNaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 09:30:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25C8349CA5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655990989;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XEH3C0zuHNcT1lLHRvIHFRNJqbbdr5eW+BQfgJT/gP0=;
-        b=EhGc1ri4oiPatSrhqnKuWpOfftRweBJztFZWpH2y5WBXuVAt5zRFY7qoevR6AjobsOYK2R
-        3yVZQ824iboyf5VWyGTriu1zMgqpLkPCpAERqhI3xcsvILenyz4XRNqe8uTgbFqTHy7lin
-        8V3nueWZNqgoGXNa1//vKKORIf8q53U=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-e5OfKFrNNve4nDMqPAd9-g-1; Thu, 23 Jun 2022 09:29:48 -0400
-X-MC-Unique: e5OfKFrNNve4nDMqPAd9-g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 283E73C11054;
-        Thu, 23 Jun 2022 13:29:48 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A48340CF8EE;
-        Thu, 23 Jun 2022 13:29:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [RFC PATCH 8/8] rxrpc: Set call security params in sendmsg() cmsg
-From:   David Howells <dhowells@redhat.com>
-To:     linux-afs@lists.infradead.org
-Cc:     dhowells@redhat.com, Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 23 Jun 2022 14:29:46 +0100
-Message-ID: <165599098652.1827880.6539943845908900391.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165599093190.1827880.6407599132975295152.stgit@warthog.procyon.org.uk>
-References: <165599093190.1827880.6407599132975295152.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Thu, 23 Jun 2022 09:30:00 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD9947AC7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:29:49 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ge10so9570329ejb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 06:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ePFuz9gjvneLUbo3iN6/MzxTmZntguROUvpcqfx6Iwo=;
+        b=kilEQhJrekBj3tVAycBQpE9BNm+Hip30HCPN/XSCTP2U3wbVhI+hKk23MdWIJ3Dypl
+         qffhEEQuVyFUbz5J/1MdRBYKZboWhtStOI0k9d4Aup1BGLOrMrpYY+seBOosUnKwLsVL
+         MR8LYhAjJ7oxOGmAxEiBhJVdCYG5Px8Hk5taqdBpD4drG+ZVVNZdVDHoKm/h/QUZCtRE
+         S/rsZcWp/qiddxN66KL5ZRoB7s5KVyCOidfIT7Tj2vaZ3puYEijJfvMh3qbsM5C2CTmU
+         wm6I50k0AELikWo0VYYaG0KVFje/4tZd3tKtvxfUODluU2IRXxgw5OElq49HM1lYwZfp
+         tMQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ePFuz9gjvneLUbo3iN6/MzxTmZntguROUvpcqfx6Iwo=;
+        b=F73Yip10Vl20Y2VoJf0Ol7UR655sqgv8O6olpsc1oByV8rOUE9Mn4xBgghVNuamHxu
+         SIUvG4InPJCR+uMcyBczr1G+qzmDFBhf5juHrH9DYSvAHrMgch2UkzGl/Kw+qpXV8nkS
+         COoaEKJQxqecRBRC545iQnpVEDVU+4hD0noQUMmpTE4T4p984vndRlKRu72ayrK0fJV+
+         vZKbCXeqE/A6800MNou/J182UxYeM2Cl8lWirvGJvTxTsqnoZIXWlIHiUcUb9HEgydWc
+         AV/XcVlyXJsQPLCWvZAL+fHE3n30Gn9R1Po48Ua9JKQyeD64pS36aRGYKht3jLelTASG
+         WTNA==
+X-Gm-Message-State: AJIora+HLFMVVSebAiokzo3vOqOmgG0+3UQGCCcSIUlJvN7T7PWXwngW
+        xaKZOz0S3/z0x1ANMCnDy9Y6rQ==
+X-Google-Smtp-Source: AGRyM1vKuGTywgyEw2jM3zmPBBBXUc+7mwZ7taGR4hWf4ZepG7VJH9Yci4kWlWodvrYiVNk2KnX7tA==
+X-Received: by 2002:a17:907:e93:b0:722:e082:2787 with SMTP id ho19-20020a1709070e9300b00722e0822787mr8647094ejc.618.1655990988030;
+        Thu, 23 Jun 2022 06:29:48 -0700 (PDT)
+Received: from [192.168.0.230] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ff10-20020a1709069c0a00b006fec69696a0sm10604906ejc.220.2022.06.23.06.29.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 06:29:47 -0700 (PDT)
+Message-ID: <ddfae1cc-ec28-3433-8c3c-24f63a1ad0a8@linaro.org>
+Date:   Thu, 23 Jun 2022 15:29:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: display: ti,am65x-dss: Add am625 dss
+ compatible
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>
+References: <20220623103504.26866-1-a-bhatia1@ti.com>
+ <20220623103504.26866-2-a-bhatia1@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220623103504.26866-2-a-bhatia1@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,188 +86,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow a call's security parameters to be overridden from the socket
-defaults by placing appropriate control messages in control message buffer.
+On 23/06/2022 12:35, Aradhya Bhatia wrote:
+> Add ti,am625-dss compatible string.
+> The DSS IP on TI's AM625 SoC is an update from the DSS on TI's AM65X
+> SoC. The former has an additional OLDI TX to enable a 2K resolution on
+> OLDI displays or enable 2 duplicated displayw with a smaller resolution.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
----
+s/displayw/displays/
 
- include/uapi/linux/rxrpc.h |    2 ++
- net/rxrpc/af_rxrpc.c       |    2 +-
- net/rxrpc/ar-internal.h    |    6 +++++-
- net/rxrpc/key.c            |   26 ++++++++++++++++++++++++--
- net/rxrpc/sendmsg.c        |   39 +++++++++++++++++++++++++++++++++++----
- 5 files changed, 67 insertions(+), 8 deletions(-)
+> 
+> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+> Reviewed-by: Rahul T R <r-ravikumar@ti.com>
+> ---
+>  .../devicetree/bindings/display/ti/ti,am65x-dss.yaml          | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> index 5c7d2cbc4aac..0fc77674eb50 100644
+> --- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> +++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> @@ -19,7 +19,9 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    const: ti,am65x-dss
+> +    enum:
+> +      - ti,am65x-dss
+> +      - ti,am625-dss
 
-diff --git a/include/uapi/linux/rxrpc.h b/include/uapi/linux/rxrpc.h
-index b4bbaa809b78..2e1a05b83be7 100644
---- a/include/uapi/linux/rxrpc.h
-+++ b/include/uapi/linux/rxrpc.h
-@@ -59,6 +59,8 @@ enum rxrpc_cmsg_type {
- 	RXRPC_TX_LENGTH		= 12,	/* s-: Total length of Tx data */
- 	RXRPC_SET_CALL_TIMEOUT	= 13,	/* s-: Set one or more call timeouts */
- 	RXRPC_CHARGE_ACCEPT	= 14,	/* s-: Charge the accept pool with a user call ID */
-+	RXRPC_SET_SECURITY_KEY	= 15,	/* s-: Set the security key description for the call */
-+	RXRPC_SET_SECURITY_LEVEL = 16,	/* s-: Set the security level for the call */
- 	RXRPC__SUPPORTED
- };
- 
-diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-index bf2bb1b99890..8b7e8ad6e020 100644
---- a/net/rxrpc/af_rxrpc.c
-+++ b/net/rxrpc/af_rxrpc.c
-@@ -920,7 +920,7 @@ static int rxrpc_setsockopt(struct socket *sock, int level, int optname,
- 			ret = -EISCONN;
- 			if (rx->sk.sk_state != RXRPC_UNBOUND)
- 				goto error;
--			ret = rxrpc_request_key(rx, optval, optlen);
-+			ret = rxrpc_set_key(rx, optval, optlen);
- 			goto error;
- 
- 		case RXRPC_SECURITY_KEYRING:
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 526169effe89..b80a9136e978 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -777,6 +777,9 @@ struct rxrpc_send_params {
- 	enum rxrpc_command	command : 8;	/* The command to implement */
- 	bool			exclusive;	/* Shared or exclusive call */
- 	bool			upgrade;	/* If the connection is upgradeable */
-+	unsigned int		sec_level;	/* Security level */
-+	unsigned int		key_desc_len;
-+	char			*key_desc;	/* Description of key to use (or NULL) */
- };
- 
- #include <trace/events/rxrpc.h>
-@@ -950,7 +953,8 @@ extern const struct rxrpc_security rxrpc_no_security;
-  */
- extern struct key_type key_type_rxrpc;
- 
--int rxrpc_request_key(struct rxrpc_sock *, sockptr_t , int);
-+struct key *rxrpc_request_key(struct rxrpc_sock *, const char *, int);
-+int rxrpc_set_key(struct rxrpc_sock *, const sockptr_t, int);
- int rxrpc_get_server_data_key(struct rxrpc_connection *, const void *, time64_t,
- 			      u32);
- 
-diff --git a/net/rxrpc/key.c b/net/rxrpc/key.c
-index bbb270a01810..4ab1ec62ad2f 100644
---- a/net/rxrpc/key.c
-+++ b/net/rxrpc/key.c
-@@ -443,9 +443,31 @@ static void rxrpc_describe(const struct key *key, struct seq_file *m)
- }
- 
- /*
-- * grab the security key for a socket
-+ * Look up a security key
-  */
--int rxrpc_request_key(struct rxrpc_sock *rx, sockptr_t optval, int optlen)
-+struct key *rxrpc_request_key(struct rxrpc_sock *rx, const char *name, int len)
-+{
-+	struct key *key;
-+	char *description;
-+
-+	_enter("");
-+
-+	if (len <= 0 || len > PAGE_SIZE - 1)
-+		return ERR_PTR(-EINVAL);
-+
-+	description = kmemdup_nul(name, len, GFP_KERNEL);
-+	if (IS_ERR(description))
-+		return ERR_PTR(-ENOMEM);
-+
-+	key = request_key_net(&key_type_rxrpc, description, sock_net(&rx->sk), NULL);
-+	kfree(description);
-+	return key;
-+}
-+
-+/*
-+ * Set the security key for a socket
-+ */
-+int rxrpc_set_key(struct rxrpc_sock *rx, sockptr_t optval, int optlen)
- {
- 	struct key *key;
- 	char *description;
-diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
-index 77699008c428..9153baf33635 100644
---- a/net/rxrpc/sendmsg.c
-+++ b/net/rxrpc/sendmsg.c
-@@ -560,6 +560,19 @@ static int rxrpc_sendmsg_cmsg(struct msghdr *msg, struct rxrpc_send_params *p)
- 				return -ERANGE;
- 			break;
- 
-+		case RXRPC_SET_SECURITY_KEY:
-+			p->key_desc = CMSG_DATA(cmsg);
-+			p->key_desc_len = len;
-+			break;
-+
-+		case RXRPC_SET_SECURITY_LEVEL:
-+			if (len != sizeof(p->sec_level))
-+				return -EINVAL;
-+			memcpy(&p->sec_level, CMSG_DATA(cmsg), sizeof(p->sec_level));
-+			if (p->sec_level > RXRPC_SECURITY_ENCRYPT)
-+				return -EINVAL;
-+			break;
-+
- 		default:
- 			return -EINVAL;
- 		}
-@@ -587,6 +600,7 @@ rxrpc_new_client_call_for_sendmsg(struct rxrpc_sock *rx, struct msghdr *msg,
- 	struct rxrpc_conn_parameters cp;
- 	struct rxrpc_call *call;
- 	struct key *key;
-+	bool put_key = false;
- 
- 	DECLARE_SOCKADDR(struct sockaddr_rxrpc *, srx, msg->msg_name);
- 
-@@ -597,14 +611,27 @@ rxrpc_new_client_call_for_sendmsg(struct rxrpc_sock *rx, struct msghdr *msg,
- 		return ERR_PTR(-EDESTADDRREQ);
- 	}
- 
--	key = rx->key;
--	if (key && !rx->key->payload.data[0])
--		key = NULL;
-+	if (p->key_desc) {
-+		if (!*p->key_desc) {
-+			key = NULL;
-+		} else {
-+			key = rxrpc_request_key(rx, p->key_desc, p->key_desc_len);
-+			if (IS_ERR(key)) {
-+				release_sock(&rx->sk);
-+				return ERR_CAST(key);
-+			}
-+			put_key = true;
-+		}
-+	} else  {
-+		key = rx->key;
-+		if (key && !rx->key->payload.data[0])
-+			key = NULL;
-+	}
- 
- 	memset(&cp, 0, sizeof(cp));
- 	cp.local		= rx->local;
- 	cp.key			= rx->key;
--	cp.security_level	= rx->min_sec_level;
-+	cp.security_level	= p->sec_level;
- 	cp.exclusive		= rx->exclusive | p->exclusive;
- 	cp.upgrade		= p->upgrade;
- 	cp.service_id		= srx->srx_service;
-@@ -613,6 +640,8 @@ rxrpc_new_client_call_for_sendmsg(struct rxrpc_sock *rx, struct msghdr *msg,
- 	/* The socket is now unlocked */
- 
- 	rxrpc_put_peer(cp.peer);
-+	if (put_key)
-+		key_put(key);
- 	_leave(" = %p\n", call);
- 	return call;
- }
-@@ -640,6 +669,8 @@ int rxrpc_do_sendmsg(struct rxrpc_sock *rx, struct msghdr *msg, size_t len)
- 		.command		= RXRPC_CMD_SEND_DATA,
- 		.exclusive		= false,
- 		.upgrade		= false,
-+		.sec_level		= rx->min_sec_level,
-+		.key_desc		= NULL,
- 	};
- 
- 	_enter("");
+Alphabetical order? Avoids conflicts...
 
-
+Best regards,
+Krzysztof

@@ -2,88 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D4E557573
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4DA557579
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiFWI11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S229813AbiFWIbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiFWI1W (ORCPT
+        with ESMTP id S229672AbiFWIbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:27:22 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2547488B1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:27:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id lw20so17096419ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fpmetajmsJ4rrJ1uUdIUWn56HzIzZWmFHeYAu5H2Gt0=;
-        b=M4ZfhkcjVpvuaIAvXUrj65RGAjFAW+y0F5PTl5yD5J8IMGGgiqjVF5zenCecEX0E+9
-         Bh5Lq0vQqJ2KbWl4ijIIaUtlNbJKt70ht8BBvtcgLxahH3cHFeEgOkKBy+t5eK1brgQH
-         StNrZbq8yvAtVf04NO9SXrEYNUh3OBXnF6IGTdNzsVR73AS3IOhvge0OdBz2As3uymkt
-         9Q4hvroq5n9m/aRKd5MjDzIrQXQHCURYPRnHy5CvxmFiGumoV0v3st4FTxLcQ+keDr7W
-         sTGL4IbK3wjyoVnxlQejPTLk+Nm0a+vG0m7IJ3wwx6AK5y7jQvkiSQ3ONL7hUO+nSeeV
-         sGXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fpmetajmsJ4rrJ1uUdIUWn56HzIzZWmFHeYAu5H2Gt0=;
-        b=1zt+p5RxDvS8I9u40Ytu6KyndRyZAeKrZcVJqvcnqd6pr1fKJinJVTlnWvo/RO4FZQ
-         dVQV36CMy+cKWxOA9p+MyHDWeA0GKrUQd3Rx/HuZqF8D2iUHUR8C6MUs7X9qRaDsTjf3
-         8qlD1GSoc2tjBhGGu2/dESoc6XZ1rKOrsJz89Gpe2KUQ1xF2SeoqtT6XWKkIhplulSvE
-         oaINugNPNJj8HTP+ljENilzo049EW5YlVgXd3LJFJ/Ujtt37OB8ykGd08OWRNpGu3m2K
-         bqTRMcSAKEsEMP9tYOpOm1HHmUFtqV1gvOFRK9fxMPnBly/D0JOxu0KgwF14DFKaXtG1
-         kdHg==
-X-Gm-Message-State: AJIora/L0UEYDvol7agqEwSEdJEysPqoN1kZZyDo/Rr0Ho20a6GhnLjq
-        IHXOI0BiqSK2d5hTgBV7uDjiDQ==
-X-Google-Smtp-Source: AGRyM1tZv+K5hRKI5w7fu0Lxi1WUmhuxNv1jzLNi+L8O27+mxhh+O51XRIjzfct25OE/e/V5ZJyAhw==
-X-Received: by 2002:a17:906:974c:b0:722:eaa7:5e5d with SMTP id o12-20020a170906974c00b00722eaa75e5dmr6565989ejy.541.1655972840190;
-        Thu, 23 Jun 2022 01:27:20 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906328400b00722d5b26ecesm5003426ejw.205.2022.06.23.01.27.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 01:27:19 -0700 (PDT)
-Message-ID: <aa5c28c8-85c8-3867-69d0-2eba693594ea@linaro.org>
-Date:   Thu, 23 Jun 2022 10:27:18 +0200
+        Thu, 23 Jun 2022 04:31:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AF248881
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:30:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE6D9B82208
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E10C341C8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655973056;
+        bh=F5UR30hB3x0X8hdoOCoBr2Sxf6O6bd2Ool5zcZGjk54=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PITc58SLVQX6+OIXxpvKXrYmMz5ioJtqqdMDq/mVS+wq9Hzrq6vbceIYxwei51e1H
+         1bdhOQCXXfEuASliJ4yB4KQmj2/mwGVZgrlmWJS9w4oBz2cOVaMl5Fy6dxtZfsxqd4
+         YgzL1mzesjUDMGc9pcRSfQqqOsGl0I8FXMbaAn5S90V7AVFbOBOepEwh9dBSTnTgK9
+         7jjxoEXSmqmAu6AbEG3Ud8tj36I332As0K24M005Q2St/6chODoHoB1XuFZsAnfMEj
+         GBM3z+2FX4WIFolnXQfxmjsbCoy8+efqx0WNgq1sMSPsJcOqoJUeP/F51YqlttrjKU
+         4r3NirXf2rqjw==
+Received: by mail-vs1-f51.google.com with SMTP id j1so9827513vsj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 01:30:56 -0700 (PDT)
+X-Gm-Message-State: AJIora8bq19+L9atwxnw8f4Uv9F6mkA7Ir/2aAX2+aYguqzEMOc0AUwX
+        /jkODhNNTeVwQVdNadNVLKwpoGQodlNnJgge9o4=
+X-Google-Smtp-Source: AGRyM1verVHsmB1e+p9XI5PjTAf8+ZIMXrCBSK8X3iGprjf7BgWHigdYt49CgBd/v4JodAETXNH9E5JaqCTKyF3/LUk=
+X-Received: by 2002:a05:6102:f8b:b0:354:57e8:4c1b with SMTP id
+ e11-20020a0561020f8b00b0035457e84c1bmr4477837vsv.8.1655973055484; Thu, 23 Jun
+ 2022 01:30:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
-Content-Language: en-US
-To:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>
-Cc:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-References: <CGME20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p5>
- <20220622072159epcms2p52a21560a7e60cffd13ea70e55ac15428@epcms2p5>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220622072159epcms2p52a21560a7e60cffd13ea70e55ac15428@epcms2p5>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220623074315.3814826-1-xianting.tian@linux.alibaba.com>
+In-Reply-To: <20220623074315.3814826-1-xianting.tian@linux.alibaba.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 23 Jun 2022 16:30:44 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS0SW6GDmLb0iLv3Lux-jHv0EiN0pTErbBCFDB5G70SuQ@mail.gmail.com>
+Message-ID: <CAJF2gTS0SW6GDmLb0iLv3Lux-jHv0EiN0pTErbBCFDB5G70SuQ@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: use __smp_processor_id() instead of smp_processor_id()
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Alex Ghiti <alex@ghiti.fr>,
+        Liao Chang <liaochang1@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,65 +67,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2022 09:21, Wangseok Lee wrote:
-> On 21/06/2022 21:44, Krzysztof Kozlowski wrote:
->>  On 21/06/2022 09:42, Wangseok Lee wrote:
->>>>>   
->>>>>   samsung,syscon-bus-s-fsys:
->>>>>     description:
->>>>>       Phandle to bus-s path of fsys block, this register
->>>>>       are used for enabling bus-s.
->>>>>     $ref: /schemas/types.yaml#/definitions/phandle
->>>>>   
->>>>>   samsung,syscon-bus-p-fsys:
->>>>>     description:
->>>>>       Phandle to bus-p path of fsys block, this register
->>>>>       are used for enabling bus-p.
->>>>>     $ref: /schemas/types.yaml#/definitions/phandle
->>>>
->>>>  This two look unspecific and hacky workaround for missing drivers. Looks
->>>>  like instead of implementing interconnect or clock driver, you decided
->>>>  to poke some other registers. Why this cannot be an interconnect driver?
->>>>
->>>>
->>>  
->>>  bus-s, bus-p is a register that exists in the sysreg of the fsys block.
->>>  It is the same block as "fsys-sysreg" but is separated separately in
->>>  hardware.
->>  
->>  Two points here:
->>  1. If it is in FSYS, why it cannot be accessed with samsung,fsys-sysreg?
->>  2. If it is only register, shuld be described like this. You must
->>  describe item:
->>  https://protect2.fireeye.com/v1/url?k=0f529a57-50c9a332-0f531118-000babff32e3-50938d8198077d59&q=1&e=32284e69-bbed-4d09-b6d6-0a43428aebf5&u=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18-rc1%2Fsource%2FDocumentation%2Fdevicetree%2Fbindings%2Fsoc%2Fsamsung%2Fexynos-usi.yaml%23L42
->>  
-> 
-> It would be better to access with fsys-sysreg, but their h/w address are
-> far from each other. The fsys block consists of a system register and an
-> additional control system register. "bus-s-fsys" and "bus-p-fsys" are
-> additional control system register. sysreg and additional control sysreg
-> addresses are far from each other and there are h/w registers that perform
-> different functions between them.
-> 
->>>  So, get resource is performed separately from "fsys-sysreg".
->>>  They set pcie slave, dbi related control settings,
->>>  naming "bus-x" seems to be interconnect.
->>>  I will add this description to property.
->>>  I don't think it need to use the interconnect driver,
->>>  so please let me know your opinion.
->>  
->>  Please document both in the bindings and in the driver usage of this
->>  register. Writing there "0" or "1" is not enough. If the documentation
->>  is good, I am fine with it. If the explanation is obfuscated/not
->>  sufficient, it will look like avoiding to implement a driver, which I
->>  don't want to accept.
->>  
-> 
-> I think i should add enough description. Is it sufficient to modify
-> the name and description of property like this?
-> 
+On Thu, Jun 23, 2022 at 3:43 PM Xianting Tian
+<xianting.tian@linux.alibaba.com> wrote:
+>
+> Use __smp_processor_id() to avoid check the preemption context when
+> CONFIG_DEBUG_PREEMPT enabled, as we will enter crash kernel and no
+> return.
+>
+> Without the patch,
+> [  103.781044] sysrq: Trigger a crash
+> [  103.784625] Kernel panic - not syncing: sysrq triggered crash
+> [  103.837634] CPU1: off
+> [  103.889668] CPU2: off
+> [  103.933479] CPU3: off
+> [  103.939424] Starting crashdump kernel...
+> [  103.943442] BUG: using smp_processor_id() in preemptible [00000000] code: sh/346
+> [  103.950884] caller is debug_smp_processor_id+0x1c/0x26
+> [  103.956051] CPU: 0 PID: 346 Comm: sh Kdump: loaded Not tainted 5.10.113-00002-gce03f03bf4ec-dirty #149
+> [  103.965355] Call Trace:
+> [  103.967805] [<ffffffe00020372a>] walk_stackframe+0x0/0xa2
+> [  103.973206] [<ffffffe000bcf1f4>] show_stack+0x32/0x3e
+> [  103.978258] [<ffffffe000bd382a>] dump_stack_lvl+0x72/0x8e
+> [  103.983655] [<ffffffe000bd385a>] dump_stack+0x14/0x1c
+> [  103.988705] [<ffffffe000bdc8fe>] check_preemption_disabled+0x9e/0xaa
+> [  103.995057] [<ffffffe000bdc926>] debug_smp_processor_id+0x1c/0x26
+> [  104.001150] [<ffffffe000206c64>] machine_kexec+0x22/0xd0
+> [  104.006463] [<ffffffe000291a7e>] __crash_kexec+0x6a/0xa4
+> [  104.011774] [<ffffffe000bcf3fa>] panic+0xfc/0x2b0
+> [  104.016480] [<ffffffe000656ca4>] sysrq_reset_seq_param_set+0x0/0x70
+> [  104.022745] [<ffffffe000657310>] __handle_sysrq+0x8c/0x154
+> [  104.028229] [<ffffffe0006577e8>] write_sysrq_trigger+0x5a/0x6a
+> [  104.034061] [<ffffffe0003d90e0>] proc_reg_write+0x58/0xd4
+> [  104.039459] [<ffffffe00036cff4>] vfs_write+0x7e/0x254
+> [  104.044509] [<ffffffe00036d2f6>] ksys_write+0x58/0xbe
+> [  104.049558] [<ffffffe00036d36a>] sys_write+0xe/0x16
+> [  104.054434] [<ffffffe000201b9a>] ret_from_syscall+0x0/0x2
+> [  104.067863] Will call new kernel at ecc00000 from hart id 0
+> [  104.074939] FDT image at fc5ee000
+> [  104.079523] Bye...
+>
+> With the patch we can got clear output,
+> [   67.740553] sysrq: Trigger a crash
+> [   67.744166] Kernel panic - not syncing: sysrq triggered crash
+> [   67.809123] CPU1: off
+> [   67.865210] CPU2: off
+> [   67.909075] CPU3: off
+> [   67.919123] Starting crashdump kernel...
+> [   67.924900] Will call new kernel at ecc00000 from hart id 0
+> [   67.932045] FDT image at fc5ee000
+> [   67.935560] Bye...
+>
+> Fixes: 0e105f1d0037 ("riscv: use hart id instead of cpu id on machine_kexec")
+> Co-developed-by: Guo Ren <guoren@kernel.org>
 
-Looks ok. Thank you.
+- Co-developed-by: Guo Ren <guoren@kernel.org>
++ Reviewed-by: Guo Ren <guoren@kernel.org>
 
-Best regards,
-Krzysztof
+Thx
+
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> ---
+>  arch/riscv/kernel/machine_kexec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
+> index df8e24559035..86d1b5f9dfb5 100644
+> --- a/arch/riscv/kernel/machine_kexec.c
+> +++ b/arch/riscv/kernel/machine_kexec.c
+> @@ -171,7 +171,7 @@ machine_kexec(struct kimage *image)
+>         struct kimage_arch *internal = &image->arch;
+>         unsigned long jump_addr = (unsigned long) image->start;
+>         unsigned long first_ind_entry = (unsigned long) &image->head;
+> -       unsigned long this_cpu_id = smp_processor_id();
+> +       unsigned long this_cpu_id = __smp_processor_id();
+>         unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+>         unsigned long fdt_addr = internal->fdt_addr;
+>         void *control_code_buffer = page_address(image->control_code_page);
+> --
+> 2.17.1
+>
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

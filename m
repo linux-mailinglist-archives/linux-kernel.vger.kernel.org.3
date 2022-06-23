@@ -2,80 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8CC5576BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DCE5576C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiFWJgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S231132AbiFWJhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiFWJgT (ORCPT
+        with ESMTP id S229787AbiFWJhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:36:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C9294969B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655976976;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1RblD6lamHOJLDi1sp3XifpeL6OnTDlCisZUrk4lRDo=;
-        b=Gj+UQIIkeBjy7X2nHuvzjshQ/D4Rofe77/uUceBUBg+e3fz4l+r2YuzaAfHSaL9qvDdCHR
-        3LVw5R7KeQHRIowA0xjeu2Wp0HGRVuhJXtqonAceNdfRSCRzw5/MsfOjjGPHSGV73JJs0t
-        ccAEmnYjCLIaIO2uwolY5cH5+a067RE=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-gtEzD1mpN-OUOBfPrnzYRw-1; Thu, 23 Jun 2022 05:36:15 -0400
-X-MC-Unique: gtEzD1mpN-OUOBfPrnzYRw-1
-Received: by mail-ej1-f72.google.com with SMTP id qf29-20020a1709077f1d00b00722e68806c4so3408505ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:36:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1RblD6lamHOJLDi1sp3XifpeL6OnTDlCisZUrk4lRDo=;
-        b=oalgQUp73AAZ2oIjj7SGw6chQABMpHiZNIUfLHfRm/nhbSVkZw4IG/67nQinSeqy7H
-         1PbmdVNRGO3Vmw2EZ5wLFY6EgHV8OAL5j4CxonKuHScm5FfpuY7TjXfcFI68AEmcxiJn
-         kT+nT3sSYitRwmgS0xEdXjOfCbCUq3VvW6SUrRthF2VKkQGlfIBtLiNpioDkejsrgFQA
-         VwJb/W6OeQa5MVvmHr+wRWV2Oc6TQiOpX7IvqeyYpaGIqTR2GNii9iO2RYiY47NjqVjd
-         JNHMYPRCAJ+IO8X+6cZ2aYTGiW2F2iIUIffD1Ui0JEdR1pssV7EwmD94H+hBivF9EXlz
-         i9Hw==
-X-Gm-Message-State: AJIora/mDCHa8QiHoBlq0lg/fxPvz8ESppazORbFOk0BFJm2uxbprQvQ
-        WdwAohYhqboOf71ruEjmYfv3qTowiJHwlZ217+VRuJs53jMEXkJdfjWzv821UUBcMRx0pzwnoNl
-        Tw5oeZIzur3QBxMB9pIug8Y9e
-X-Received: by 2002:a05:6402:4301:b0:42d:e8fb:66f7 with SMTP id m1-20020a056402430100b0042de8fb66f7mr9602023edc.229.1655976973844;
-        Thu, 23 Jun 2022 02:36:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uYpECn/thoY0XIWFSz+dMXhvG0PPUcN4aI5tKYgxwH0S0jUsq58NWOhEqiFhmN/8fk3wxAoQ==
-X-Received: by 2002:a05:6402:4301:b0:42d:e8fb:66f7 with SMTP id m1-20020a056402430100b0042de8fb66f7mr9601992edc.229.1655976973569;
-        Thu, 23 Jun 2022 02:36:13 -0700 (PDT)
-Received: from [10.39.193.30] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id f16-20020a17090631d000b006f3ef214d9fsm10437263ejf.5.2022.06.23.02.36.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Jun 2022 02:36:13 -0700 (PDT)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     "Rosemarie O'Riorden" <roriorden@redhat.com>
-Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, i.maximets@ovn.org,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [PATCH net] net: openvswitch: fix parsing of nw_proto
- for IPv6 fragments
-Date:   Thu, 23 Jun 2022 11:36:11 +0200
-X-Mailer: MailMate (1.14r5899)
-Message-ID: <509C48AE-595C-4C21-91CD-33D2893F3577@redhat.com>
-In-Reply-To: <20220621204845.9721-1-roriorden@redhat.com>
-References: <20220621204845.9721-1-roriorden@redhat.com>
+        Thu, 23 Jun 2022 05:37:23 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CC2D4705E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:37:22 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id E06C31E80D14;
+        Thu, 23 Jun 2022 17:37:02 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CGLm8S3ZuZgU; Thu, 23 Jun 2022 17:37:00 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.64.61.33])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 01ED21E80C85;
+        Thu, 23 Jun 2022 17:36:59 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     rpeterso@redhat.com, agruenba@redhat.com
+Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] gfs2: Fix spelling mistake
+Date:   Thu, 23 Jun 2022 17:37:16 +0800
+Message-Id: <20220623093716.13338-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,75 +46,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Change 'accomodate' to 'accommodate'.
 
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ fs/gfs2/lock_dlm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 21 Jun 2022, at 22:48, Rosemarie O'Riorden wrote:
-
-> When a packet enters the OVS datapath and does not match any existing
-> flows installed in the kernel flow cache, the packet will be sent to
-> userspace to be parsed, and a new flow will be created. The kernel and
-> OVS rely on each other to parse packet fields in the same way so that
-> packets will be handled properly.
->
-> As per the design document linked below, OVS expects all later IPv6
-> fragments to have nw_proto=3D44 in the flow key, so they can be correct=
-ly
-> matched on OpenFlow rules. OpenFlow controllers create pipelines based
-> on this design.
->
-> This behavior was changed by the commit in the Fixes tag so that
-> nw_proto equals the next_header field of the last extension header.
-> However, there is no counterpart for this change in OVS userspace,
-> meaning that this field is parsed differently between OVS and the
-> kernel. This is a problem because OVS creates actions based on what is
-> parsed in userspace, but the kernel-provided flow key is used as a matc=
-h
-> criteria, as described in Documentation/networking/openvswitch.rst. Thi=
-s
-> leads to issues such as packets incorrectly matching on a flow and thus=
-
-> the wrong list of actions being applied to the packet. Such changes in
-> packet parsing cannot be implemented without breaking the userspace.
->
-> The offending commit is partially reverted to restore the expected
-> behavior.
->
-> The change technically made sense and there is a good reason that it wa=
-s
-> implemented, but it does not comply with the original design of OVS.
-> If in the future someone wants to implement such a change, then it must=
-
-> be user-configurable and disabled by default to preserve backwards
-> compatibility with existing OVS versions.
->
-> Cc: stable@vger.kernel.org
-> Fixes: fa642f08839b ("openvswitch: Derive IP protocol number for IPv6 l=
-ater frags")
-> Link: https://docs.openvswitch.org/en/latest/topics/design/#fragments
-> Signed-off-by: Rosemarie O'Riorden <roriorden@redhat.com>
-> ---
->  net/openvswitch/flow.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
-> index 372bf54a0ca9..e20d1a973417 100644
-> --- a/net/openvswitch/flow.c
-> +++ b/net/openvswitch/flow.c
-> @@ -407,7 +407,7 @@ static int parse_ipv6hdr(struct sk_buff *skb, struc=
-t sw_flow_key *key)
->  	if (flags & IP6_FH_F_FRAG) {
->  		if (frag_off) {
->  			key->ip.frag =3D OVS_FRAG_TYPE_LATER;
-> -			key->ip.proto =3D nexthdr;
-> +			key->ip.proto =3D NEXTHDR_FRAGMENT;
->  			return 0;
->  		}
->  		key->ip.frag =3D OVS_FRAG_TYPE_FIRST;
-> -- =
-
-> 2.35.3
-
-Thanks Rosemarie, for fixing this. The change looks good to me!
-
-Acked-by: Eelco Chaudron <echaudro@redhat.com>
+diff --git a/fs/gfs2/lock_dlm.c b/fs/gfs2/lock_dlm.c
+index 2559a79cf14b..6ce369b096d4 100644
+--- a/fs/gfs2/lock_dlm.c
++++ b/fs/gfs2/lock_dlm.c
+@@ -1058,7 +1058,7 @@ static int control_first_done(struct gfs2_sbd *sdp)
+ 
+ /*
+  * Expand static jid arrays if necessary (by increments of RECOVER_SIZE_INC)
+- * to accomodate the largest slot number.  (NB dlm slot numbers start at 1,
++ * to accommodate the largest slot number.  (NB dlm slot numbers start at 1,
+  * gfs2 jids start at 0, so jid = slot - 1)
+  */
+ 
+-- 
+2.25.1
 
